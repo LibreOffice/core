@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 15:04:23 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include "xcl97esc.hxx"
 #include "xcl97rec.hxx"
 
-#ifndef _SC_XCLEXPCHARTS_HXX
+#ifndef SC_XCLEXPCHARTS_HXX
 #include "XclExpCharts.hxx"
 #endif
 
@@ -411,7 +411,7 @@ UINT16 XclEscherClientAnchor::GetMoveSizeFlag( const SdrObject& rObj )
 void XclEscherClientAnchor::Init( const Rectangle& rRect )
 {
     const ScDocument* pDoc = pRootData->pDoc;
-    const USHORT nTab = *pRootData->pAktTab;
+    const USHORT nTab = pRootData->pER->GetScTab();
 
     long nWidth = 0;
     ColX( nCol1, nX1, 0, nWidth, rRect.TopLeft().X(), pDoc, nTab );

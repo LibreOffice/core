@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:35:55 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #include "compiler.hxx"
 #include "rangenam.hxx"
 #include "attrib.hxx"
-#include "FilterTools.hxx"
+#include "ftools.hxx"
 
 
 //------------------------------------------------------------------------

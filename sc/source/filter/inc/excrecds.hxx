@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-08 12:41:57 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,17 @@
 #include "rangelst.hxx"
 #endif
 
-#ifndef _SC_FILTERTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_XLSTYLE_HXX
+#include "xlstyle.hxx"
 #endif
-#ifndef _SC_XCLEXPHELPER_HXX
-#include "XclExpHelper.hxx"
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
+#endif
+#ifndef SC_XERECORD_HXX
+#include "xerecord.hxx"
+#endif
+#ifndef SC_XEHELPER_HXX
+#include "xehelper.hxx"
 #endif
 
 #ifndef _ROOT_HXX
@@ -141,154 +147,23 @@ class ExcUPN;
 
 //----------------------------------------------------------- class ExcRecord -
 
-class ExcRecord
+class ExcRecord : public XclExpRecord
 {
-protected:
-    virtual void            SaveCont( XclExpStream& rStrm );
-
 public:
-    virtual                 ~ExcRecord();
-
     virtual void            Save( XclExpStream& rStrm );
 
     virtual UINT16          GetNum() const = 0;
     virtual ULONG           GetLen() const = 0;
-};
 
-
-// XclExpRecordBase ===========================================================
-
-/** Base class for all Excel records. Derive from this class to implement any
-    functionality to perform during saving the records expect really writing a
-    record (i.e. write a list of records contained in the class). Derive from
-    XclExpRecord instead from this class to write common records. */
-class XclExpRecordBase : public ExcRecord
-{
-private:
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt32          GetLen() const;
-
-public:
-    virtual                     ~XclExpRecordBase();
-
-    /** Overwrite this method to do any operation on saving the record list. */
-    virtual void                Save( XclExpStream& rStrm );
-};
-
-
-// XclExpRecord ===============================================================
-
-/** Base class for single records. This class handles writing the record
-    header. Derived classes only have to write the record body. Calculating the
-    record size before saving optimizes the write process (the stream does not
-    have to seek back and update the written record size). But it is not
-    required to calculate a valid size (maybe it would be too complex or just
-    impossible until the record is really written). */
-class XclExpRecord : public XclExpRecordBase
-{
-private:
-    sal_uInt16                  mnRecId;        /// The record ID.
-    sal_uInt32                  mnRecSize;      /// The predicted record size.
-
-    /** Writes the body of the record (without record header). Usually this
-        method will be overwritten by derived classes. */
-    virtual void                WriteBody( XclExpStream& rStrm );
-
-public:
-    /** @param nRecId  The record ID of this record. May be set later with SetRecId().
-        @param nRecSize  The predicted record size. May be set later with SetRecSize(). */
-                                XclExpRecord(
-                                    sal_uInt16 nRecId = EXC_ID_UNKNOWN,
-                                    sal_uInt32 nRecSize = 0 );
-
-    virtual                     ~XclExpRecord();
-
-    /** @return  The current record ID. */
-    inline sal_uInt16           GetRecId() const                    { return mnRecId; }
-    /** Sets a new record ID. */
-    inline void                 SetRecId( sal_uInt16 nRecId )       { mnRecId = nRecId; }
-
-    /** @return  The current record size prediction. */
-    inline sal_uInt32           GetRecSize() const                  { return mnRecSize; }
-    /** Sets a new record size prediction. */
-    inline void                 SetRecSize( sal_uInt32 nRecSize )   { mnRecSize = nRecSize; }
-
-    /** Writes the record header and calls WriteContent(). */
-    virtual void                Save( XclExpStream& rStrm );
-};
-
-
-// XclExpEmptyRecord ==========================================================
-
-/** A record without body. Only the record ID and the size 0 will be written. */
-class XclExpEmptyRecord : public XclExpRecord
-{
-public:
-    /** @param nRecId  The record ID of this record. */
-    inline                      XclExpEmptyRecord( sal_uInt16 nRecId );
-};
-
-
-inline XclExpEmptyRecord::XclExpEmptyRecord( sal_uInt16 nRecId ) :
-    XclExpRecord( nRecId, 0 )
-{
-}
-
-
-// XclExpUInt16Record =========================================================
-
-/** A record with an unsigned 16-bit value. */
-class XclExpUInt16Record : public XclExpRecord
-{
 protected:
-    sal_uInt16                  mnValue16;      /// The 16-bit record body.
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 private:
-    /** Writes the 16-bit body of the record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
-
-public:
-    /** @param nRecId  The record ID of this record.
-        @param nValue  The value for the record body. */
-    inline                      XclExpUInt16Record( sal_uInt16 nRecId, sal_uInt16 nValue = 0 );
-
-    /** @return  The value of the record. */
-    inline sal_uInt16           GetValue() const                { return mnValue16; }
-    /** Sets a new record value. */
-    inline void                 SetValue( sal_uInt16 nValue )   { mnValue16 = nValue; }
+    /** Writes the body of the record. */
+    virtual void            WriteBody( XclExpStream& rStrm );
 };
 
 
-inline XclExpUInt16Record::XclExpUInt16Record( sal_uInt16 nRecId, sal_uInt16 nValue ) :
-    XclExpRecord( nRecId, 2 ),
-    mnValue16( nValue )
-{
-}
-
-
-// XclExpRecordList ===========================================================
-
-/** A list of Excel record objects. Provides saving the compete list. This
-    class is derived from XclExpRecordBase, so it can be used as record in
-    another record list. The class RecType must contain a
-    Save( XclExpStream& ) method. */
-template< typename RecType >
-class XclExpRecordList : public XclExpRecordBase, public ScfObjList< RecType >
-{
-public:
-    /** Writes the complete record list. */
-    virtual void                Save( XclExpStream& rStrm );
-};
-
-template< typename RecType >
-void XclExpRecordList< RecType >::Save( XclExpStream& rStrm )
-{
-    for( RecType* pRec = First(); pRec; pRec = Next() )
-        pRec->Save( rStrm );
-}
-
-
-// ============================================================================
 //--------------------------------------------------------- class ExcEmptyRec -
 
 class ExcEmptyRec : public ExcRecord
@@ -471,69 +346,6 @@ class Exc1904 : public ExcBoolRecord
 public:
                             Exc1904( ScDocument& rDoc );
     virtual UINT16          GetNum( void ) const;
-};
-
-
-//------------------------------------------------------------- class ExcFont -
-
-class ExcPalette2;
-
-class ExcFont : public ExcRecord
-{
-private:
-    String                  sName;
-    UINT16                  nNameLen;
-    UINT16                  nHeight;
-    UINT16                  nAttr;      // italic, strikeout, outline, shadow
-    UINT32                  nColorSer;
-    UINT16                  nWeight;
-    UINT8                   nUnder;
-    UINT8                   nFamily;
-    UINT8                   nCharset;
-    BOOL                    bIgnoreCol;
-    UINT32                  nSign;      // quick ==
-    BiffTyp                 eBiff;
-    CharSet                 eCharSet;
-    static ExcPalette2*     pPalette2;
-#ifdef DBG_UTIL
-    static UINT16           nObjCnt;
-#endif
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            ExcFont( RootData& rRootData );
-                            ExcFont( Font* pFont, RootData& rRootData );
-    virtual                 ~ExcFont();
-
-    BOOL                    operator==( const ExcFont& rRef ) const;
-    inline BOOL             operator!=( const ExcFont& rRef ) const
-                                { return !(*this == rRef); }
-
-    static void             SetPalette( ExcPalette2& rPalette2 );
-    void                    SetName( const String& rName );
-    void                    SetColor( UINT32 nSerial );
-    inline void             SetHeightPt( float fHt )                { nHeight = (UINT16)(fHt * EXC_FONTHGHT_COEFF); }
-    inline void             SetHeight( UINT16 nHt )                 { nHeight = nHt; }
-    inline void             SetItalic( BOOL bItalic )               { if( bItalic ) nAttr |= EXC_FONTATTR_ITALIC; }
-    inline void             SetStrikeout( BOOL bStrikeout )         { if( bStrikeout ) nAttr |= EXC_FONTATTR_STRIKEOUT; }
-    inline void             SetOutline( BOOL bOutline )             { if( bOutline ) nAttr |= EXC_FONTATTR_OUTLINE; }
-    inline void             SetShadow( BOOL bShadow )               { if( bShadow ) nAttr |= EXC_FONTATTR_SHADOW; }
-    inline void             SetWeight( FontWeight eWeight )         { nWeight = GetWeight( eWeight ); }
-    inline void             SetUnderline( FontUnderline eUnder )    { nUnder = GetUnderline( eUnder ); }
-    inline void             SetFamily( FontFamily eFamily )         { nFamily = GetFamily( eFamily ); }
-    inline void             SetCharSet( rtl_TextEncoding eCharset ) { nCharset = GetCharSet( eCharset ); }
-
-    inline BOOL             HasIgnoreCol() const    { return bIgnoreCol; }
-    inline UINT32           GetColor() const        { return nColorSer; }
-
-    static UINT16           GetWeight( const FontWeight eWeight );
-    static UINT8            GetUnderline( const FontUnderline eUnder );
-    static UINT8            GetFamily( const FontFamily eFamily );
-    static UINT8            GetCharSet( const rtl_TextEncoding eCharset );
-
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
 };
 
 
@@ -1299,11 +1111,9 @@ public:
 
 //--------------------------------------------------------------- class ExcXf -
 
-class ExcXf : public ExcRecord
+class ExcXf : public ExcRecord, protected XclExpRoot
 {
 protected:
-    static ExcPalette2*     pPalette2;
-
     UINT16                  nIfnt;
     UINT16                  nIfmt;
 
@@ -1345,7 +1155,8 @@ protected:
     virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
-                            ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr*, BOOL& rbLineBreak,
+                            ExcXf( const XclExpRoot& rRoot,
+                                    UINT16 nFont, UINT16 nForm, const ScPatternAttr*, BOOL& rbLineBreak,
                                     BOOL bStyle = FALSE );
                                 // rbLineBreak = TRUE erzwingt Wrap,
                                 // return von rbLineBreak enthaelt immer tatsaechliches Wrap
@@ -1356,9 +1167,7 @@ public:
     virtual UINT16          GetNum( void ) const;
     virtual ULONG           GetLen( void ) const;
 
-    static void             SetPalette( ExcPalette2& rPalette2 );
-
-    static void             ScToExcBorderLine( const SvxBorderLine*, UINT32& rIcvSer, UINT16& rDg );
+    static void             ScToExcBorderLine( XclExpPalette& rPalette, const SvxBorderLine*, UINT32& rIcvSer, UINT16& rDg );
 };
 
 
@@ -1389,112 +1198,6 @@ public:
     virtual UINT16              GetNum( void ) const;
     virtual ULONG               GetLen( void ) const;
 };
-
-
-
-//--------------------------------------------------------- class ExcPalette2 -
-// a new class for PALETTE record, supports color reduction
-
-class ExcPal2Entry : private Color
-{
-private:
-    UINT32                  nSerial;
-    UINT32                  nWeight;
-
-protected:
-public:
-    inline                  ExcPal2Entry( const Color& rCol, UINT32 nSer );
-
-                            Color::GetRed;
-                            Color::GetGreen;
-                            Color::GetBlue;
-                            Color::GetColor;
-    inline UINT32           GetSerial() const       { return nSerial; }
-    inline UINT32           GetWeighting() const    { return nWeight; }
-    inline BOOL             IsGreater( const Color& rCol ) const;
-    inline BOOL             IsEqual( const Color& rCol ) const;
-
-    void                    UpdateEntry( UINT16 nColorType );
-    inline void             AddWeighting( const ExcPal2Entry& rEntry );
-    void                    AddColor( const ExcPal2Entry& rEntry );
-
-    void                    Save( XclExpStream& rStrm );
-};
-
-inline ExcPal2Entry::ExcPal2Entry( const Color& rCol, UINT32 nSer ) :
-        Color( rCol ),
-        nSerial( nSer ),
-        nWeight( 0 )
-{   }
-
-inline BOOL ExcPal2Entry::IsGreater( const Color& rCol ) const
-{
-    return mnColor > rCol.GetColor();
-}
-
-inline BOOL ExcPal2Entry::IsEqual( const Color& rCol ) const
-{
-    return mnColor == rCol.GetColor();
-}
-
-inline void ExcPal2Entry::AddWeighting( const ExcPal2Entry& rEntry )
-{
-    nWeight += rEntry.GetWeighting();
-}
-
-
-
-class ExcPalette2 : private List, public ExcRecord
-{
-private:
-    ColorBuffer&            rColBuff;       // defaults
-    UINT32                  nLastInd;
-    UINT32                  nMaxSerial;
-    UINT32*                 pColorIndex;
-    Color*                  pColors;
-    Color*                  pExportColors;
-    bool*                   pbExportUsed;
-
-    inline ExcPal2Entry*    _First()    { return (ExcPal2Entry*) List::First(); }
-    inline ExcPal2Entry*    _Next()     { return (ExcPal2Entry*) List::Next(); }
-    inline ExcPal2Entry*    _Get( UINT32 nIndex ) const;
-
-    void                    SearchEntry( const Color& rCol, UINT32& nIndex, BOOL& bIsEqual ) const;
-    ExcPal2Entry*           CreateEntry( const Color& rCol, UINT32 nIndex );
-    void                    RecalcColorIndex( UINT32 nKeep, UINT32 nRemove );
-    void                    MergeColors( UINT32 nKeep, UINT32 nRemove );
-    UINT32                  GetRemoveColor() const;
-    UINT32                  GetNearestColor( const Color& rCol, UINT32 nIgnore ) const;
-    UINT32                  GetNearestColor( UINT32 nIndex ) const;
-
-    INT32                   GetNearExportColors( UINT32& rnFirst, UINT32& rnSecond, const Color& rCol ) const;
-    INT32                   GetNearestExportColor( UINT32& rnIndex, const Color& rCol, bool bIgnoreUsed ) const;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            ExcPalette2( ColorBuffer& rCB );
-    virtual                 ~ExcPalette2();
-
-    UINT32                  InsertColor( const Color& rCol, UINT16 nColorType );
-    UINT32                  InsertFontColor( const Color& rCol, UINT16 nColorType );
-    UINT32                  InsertIndex( UINT16 nIndex );
-    void                    ReduceColors();
-    UINT16                  GetColorIndex( const Color& rCol ) const;
-    UINT16                  GetFontColorIndex( const Color& rCol ) const;
-    UINT16                  GetColorIndex( UINT32 nSerial ) const;
-    void                    GetMixedColors( UINT32 nForeSer, UINT32 nBackSer,
-                                UINT16& rForeInd, UINT16& rBackInd, UINT16& rPatt ) const;
-    ColorData               GetRGBValue( UINT16 nIndex ) const;
-
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
-};
-
-inline ExcPal2Entry* ExcPalette2::_Get( UINT32 nIndex ) const
-{
-    return (ExcPal2Entry*) List::GetObject( nIndex );
-}
 
 
 
@@ -1617,25 +1320,6 @@ public:
 };
 
 
-//-------------------------------------------------------- class UsedFontList -
-// a list of FONT records
-
-class UsedFontList : public UsedList, public ExcRoot
-{
-private:
-    inline ExcFont*         _First()    { return (ExcFont*) List::First(); }
-    inline ExcFont*         _Next()     { return (ExcFont*) List::Next(); }
-
-public:
-    inline                  UsedFontList( RootData& rRootData ) : ExcRoot( &rRootData ) {}
-    virtual                 ~UsedFontList();
-
-    BOOL                    Find( ExcFont* pExcFont, UINT16& rIndex );
-    UINT16                  Add( ExcFont* pExcFont );   // add and forget
-    UINT16                  Add( Font* pFont );
-};
-
-
 //-------------------------------------------------------- class UsedFormList -
 // a list of FORMAT records
 
@@ -1677,8 +1361,7 @@ private:
     inline ENTRY*           _First()    { return (ENTRY*) List::First(); }
     inline ENTRY*           _Next()     { return (ENTRY*) List::Next(); }
 
-    ExcPalette2&            rPalette2;
-    UsedFontList&           rFntLst;
+    XclExpFontBuffer&       rFntLst;
     UsedFormList&           rFrmLst;
 
     void                    AddNewXF( const ScPatternAttr* pAttr,
@@ -1687,8 +1370,7 @@ private:
                                 BOOL bForceAltNumForm = FALSE );
 
 public:
-                            UsedAttrList( RootData* pRD, ExcPalette2&,
-                                UsedFontList&, UsedFormList& );
+                            UsedAttrList( RootData* pRD, UsedFormList& );
     virtual                 ~UsedAttrList();
     UINT16                  Find( const ScPatternAttr* pSearch, const BOOL bStyle = FALSE,
                                     const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
@@ -1733,23 +1415,13 @@ public:
 
 // Header/Footer ==============================================================
 
-// XclExpHeaderFooter ---------------------------------------------------------
-
 /** Base class for header/footer contents. Constructs the complete format string
     based on the given which IDs. */
 class XclExpHeaderFooter : public XclExpRecord, public ExcRoot
 {
 private:
     String                      maFormatString;     /// The content of the header/footer.
-    sal_Bool                    mbUnicode;          /// <TRUE/> = write Unicode string.
-
-    /** Constructs the contents of one text portion (left, center or right). */
-    static void                 GetFormatString( String& rString, RootData& rRootData, const EditTextObject& rEdTxtObj );
-    /** Constructs the contents of the complete header/footer. */
-    static void                 GetFormatString( String& rString, RootData& rRootData, sal_uInt16 nWhich );
-
-    /** Writes the string (Byte or Unicode, depending on mbUnicode). */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    bool                        mbUnicode;          /// true = write Unicode string.
 
 public:
     /** @param nHFSetWhichId  The which ID of the SetItem of the header/footer.
@@ -1762,10 +1434,15 @@ public:
 
     /** Writes the record, if the text is not empty. */
     virtual void                Save( XclExpStream& rStrm );
+
+private:
+    /** Constructs the contents of the complete header/footer. */
+    static void                 GetFormatString( String& rString, RootData& rRootData, sal_uInt16 nWhich );
+
+    /** Writes the string (Byte or Unicode, depending on mbUnicode). */
+    virtual void                WriteBody( XclExpStream& rStrm );
 };
 
-
-// XclExpHeader ---------------------------------------------------------------
 
 /** Contains the header text of a sheet. */
 class XclExpHeader : public XclExpHeaderFooter
@@ -1774,8 +1451,6 @@ public:
                                 XclExpHeader( RootData& rRootData );
 };
 
-
-// XclExpFooter ---------------------------------------------------------------
 
 /** Contains the footer text of a sheet. */
 class XclExpFooter : public XclExpHeaderFooter
@@ -1944,48 +1619,62 @@ public:
 };
 
 
-//----------------------------------------------------------- class ExcMargin -
+// ----------------------------------------------------------------------------
 
-class ExcMargin : public ExcRecord
+/** Stores the margin value of one border of the page. */
+class XclExpMargin : public XclExpDoubleRecord
 {
-private:
-    UINT16                  nVal;
-    UINT16                  nId;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-protected:
 public:
-                            ExcMargin( long nMargin, XclMarginType eSide );
-
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    /** @param nMargin  The margin value in twips.
+        @param eSide  The page border identifier. */
+                                XclExpMargin( sal_Int32 nMargin, XclMarginType eSide );
 };
 
 
-//---------------------------------------------------- class XclExpPageBreaks -
+// Manual page breaks =========================================================
 
-class XclExpPageBreaks : public ExcRecord
+/** Stores an array of manual page breaks for columns or rows. */
+class XclExpPagebreaks : public XclExpRecord
 {
-private:
-    UINT16                  nRecNum;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
 protected:
-    ScfUInt16List           aPageBreaks;
+    ScfUInt16List               maPagebreaks;   /// Array of manual page breaks.
 
 public:
-    enum ExcPBOrientation   { pbHorizontal, pbVertical };
+                                XclExpPagebreaks(
+                                    RootData& rRootData,
+                                    sal_uInt16 nScTab,
+                                    XclPBOrientation eOrient );
 
-                            XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
-    virtual                 ~XclExpPageBreaks();
+    /** Writes the record, if the list is not empty. */
+    virtual void                Save( XclExpStream& rStrm );
 
-    virtual void            Save( XclExpStream& rStrm );
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+private:
+    /** Writes the page break list. */
+    virtual void                WriteBody( XclExpStream& rStrm );
 };
 
 
+// ----------------------------------------------------------------------------
+
+/** Stores an array of manual page breaks for columns or rows (BIFF8). */
+class XclExpPagebreaks8 : public XclExpPagebreaks
+{
+private:
+    sal_uInt16                  mnRangeMax;     /// Index of last row/column.
+
+public:
+                                XclExpPagebreaks8(
+                                    RootData& rRootData,
+                                    sal_uInt16 nScTab,
+                                    XclPBOrientation eOrient );
+
+private:
+    /** Writes the page break list. */
+    virtual void                WriteBody( XclExpStream& rStrm );
+};
+
+
+// ============================================================================
 //------------------------ class ExcArray, class ExcArrays, class ExcShrdFmla -
 
 class ExcArray : public ExcRecord

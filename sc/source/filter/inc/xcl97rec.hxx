@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-16 09:26:41 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,28 +67,6 @@
 
 struct SingleRefData;
 struct ScExtTabOptions;
-
-//___________________________________________________________________
-
-/// SST recod (Shared string table). Contains all strings in the document and writes the SST.
-class XclExpSst : public ExcEmptyRec, private List
-{
-private:
-    inline XclExpUniString*     First() { return static_cast< XclExpUniString* >( List::First() ); }
-    inline XclExpUniString*     Next()  { return static_cast< XclExpUniString* >( List::Next() ); }
-
-public:
-    inline                      XclExpSst() {}
-    virtual                     ~XclExpSst();
-
-                                /** Insert a new string.
-                                    @return  the index of the string in the SST. */
-    sal_uInt32                  Insert( XclExpUniString* pString );
-
-                                /// Write the SST and EXTSST records.
-    virtual void                Save( XclExpStream& rStrm );
-};
-
 
 //___________________________________________________________________
 
@@ -483,35 +461,6 @@ public:
                                 ExcBofC8();
 };
 
-#if 0
-//! unused
-// --- class ExcLabel8 -----------------------------------------------
-
-class ExcLabel8 : public ExcCell
-{
-private:
-    XclExpRichString            aText;
-
-    virtual void                SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
-    virtual ULONG               GetDiffLen() const;
-
-public:
-                                ExcLabel8(
-                                    const ScAddress&        rPos,
-                                    const ScPatternAttr*    pAttr,
-                                    RootData&               rRoot,
-                                    const String&           rText );
-                                ExcLabel8(
-                                    const ScAddress&        rPos,
-                                    const ScPatternAttr*    pAttr,
-                                    RootData&               rRoot,
-                                    const ScEditCell&       rEdCell );
-    virtual                     ~ExcLabel8();
-
-    virtual UINT16              GetNum() const;
-};
-
-#endif
 // --- class ExcLabelSst ---------------------------------------------
 
 class ExcLabelSst : public ExcCell
@@ -558,7 +507,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                ExcXf8( UINT16 nFont, UINT16 nForm,
+                                ExcXf8( const XclExpRoot& rRoot, UINT16 nFont, UINT16 nForm,
                                     const ScPatternAttr* pPattAttr,
                                     BOOL& rbLineBreak, BOOL bStyle = FALSE );
 
@@ -625,10 +574,9 @@ public:
 
 // --- class ExcWindow28 ---------------------------------------------
 
-class ExcWindow28 : public ExcRecord
+class ExcWindow28 : public ExcRecord, protected XclExpRoot
 {
 private:
-    ExcPalette2&                rPalette;
     ExcPane8*                   pPaneRec;
     UINT32                      nGridColorSer;
     UINT16                      nFlags;
@@ -642,7 +590,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                ExcWindow28( RootData& rRootData, UINT16 nTab );
+                                ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab );
     virtual                     ~ExcWindow28();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -683,12 +631,10 @@ public:
 
 
 
-class XclCf : public ExcRecord
+class XclCf : public ExcRecord, protected XclExpRoot
 {
 private:
     friend XclCondFormat;
-
-    ExcPalette2&                rPalette2;
 
     sal_Char*                   pVarData;       // formats + formulas
     UINT16                      nVarLen;        // len of attributes + formulas
@@ -728,7 +674,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                XclCf( const ScCondFormatEntry&, RootData& );
+                                XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& );
     virtual                     ~XclCf();
 
     virtual UINT16              GetNum() const;
@@ -906,46 +852,6 @@ public:
 };
 
 
-// ---- class XclHlink -----------------------------------------------
-
-class SvMemoryStream;
-class SvxURLField;
-
-class XclHlink : public ExcRecord
-{
-private:
-    UINT16                      nColFirst;
-    UINT16                      nRowFirst;
-    UINT32                      nFlags;
-    String*                     pRepr;
-
-    static const BYTE           pStaticData[];
-    SvMemoryStream*             pVarData;
-
-    static inline ULONG         GetStaticLen();             // -> xcl97rec.cxx!
-    inline ULONG                GetVarLen() const;          // -> xcl97rec.cxx!
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                XclHlink( RootData& rRootData, const SvxURLField& rField );
-    virtual                     ~XclHlink();
-
-    inline void                 SetPosition( const ScAddress& rPos );
-
-    inline const String*        GetRepr() const     { return pRepr; }
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-};
-
-inline void XclHlink::SetPosition( const ScAddress& rPos )
-{
-    nColFirst = rPos.Col();
-    nRowFirst = rPos.Row();
-}
-
-
 // ---- class XclProtection ------------------------------------------
 
 class XclProtection : public ExcDummyRec
@@ -957,65 +863,6 @@ private:
 public:
     virtual ULONG               GetLen( void ) const;
     virtual const BYTE*         GetData( void ) const;
-};
-
-
-// ---- class XclBGPic -----------------------------------------------
-
-class XclBGPic : public ExcEmptyRec
-{
-private:
-    const Graphic*              pGr;
-
-public:
-                                XclBGPic( RootData& );
-    virtual                     ~XclBGPic();
-
-    virtual void                Save( XclExpStream& rStrm );
-};
-
-
-// ---- class XclExpPageBreaks8 --------------------------------------
-
-class XclExpPageBreaks8 : public XclExpPageBreaks
-{
-private:
-    UINT16                      nRangeMax;
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                XclExpPageBreaks8( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
-    virtual                     ~XclExpPageBreaks8();
-
-    virtual ULONG               GetLen() const;
-};
-
-
-// ---- class XclExpWebQuery -----------------------------------------
-
-class XclExpWebQuery : public ExcEmptyRec
-{
-private:
-    XclExpUniString             aRangeName;
-    XclExpUniString             aURL;
-    XclExpUniString*            pQryTables;
-    INT16                       nRefresh;
-    BOOL                        bEntireDoc;
-
-// mode 1 - entire document:    pQryTables==NULL, bEntireDoc==TRUE
-// mode 2 - all tables:         pQryTables==NULL, bEntireDoc==FALSE
-// mode 3 - range list:         pQryTables!=NULL, bEntireDoc==FALSE
-
-public:
-                                XclExpWebQuery(
-                                    const String& rRangeName,
-                                    const String& rURL,
-                                    const String& rSource,
-                                    sal_Int32 nRefrSecs );
-    virtual                     ~XclExpWebQuery();
-
-    virtual void                Save( XclExpStream& rStrm );
 };
 
 

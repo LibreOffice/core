@@ -1,0 +1,221 @@
+/*************************************************************************
+ *
+ *  $RCSfile: xlroot.hxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:11:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+// ============================================================================
+
+#ifndef SC_XLROOT_HXX
+#define SC_XLROOT_HXX
+
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
+
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
+#endif
+
+
+// Global data ================================================================
+
+class ScEditEngineDefaulter;
+class ScHeaderEditEngine;
+class XclAddInNameTranslator;
+
+struct RootData;//!
+
+/** Stores global buffers and data needed elsewhere in the Excel filters. */
+struct XclRootData
+{
+    typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEngineDefaulterPtr;
+    typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEditEnginePtr;
+    typedef ::std::auto_ptr< XclAddInNameTranslator >   XclAddInNameTranslatorPtr;
+
+    XclBiff                     meBiff;         /// Current BIFF version.
+    ScDocument&                 mrDoc;          /// The source or destination document.
+    String                      maBasePath;     /// Base path of imported/exported file.
+    CharSet                     meCharSet;      /// Character set to import/export byte strings.
+    LanguageType                meLang;         /// Document language.
+    ScAddress                   maScMaxPos;     /// Highest Calc cell position.
+    ScAddress                   maXclMaxPos;    /// Highest Excel cell position.
+    sal_uInt16                  mnScTab;        /// Current Calc sheet index.
+    bool                        mbTruncated;    /// Flag for the table truncated warning box.
+
+    ScEditEngineDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
+    ScHeaderEditEnginePtr       mpHFEditEngine; /// Edit engine for header/footer.
+    XclAddInNameTranslatorPtr   mpAddInNames;   /// Translates Excel/Calc add-in function names.
+
+    ::std::auto_ptr< RootData > mpRDP;//!
+
+    explicit                    XclRootData(
+                                    XclBiff eBiff,
+                                    ScDocument& rDocument,
+                                    const String& rBasePath,
+                                    CharSet eCharSet );
+    virtual                     ~XclRootData();
+};
+
+
+// ----------------------------------------------------------------------------
+
+class SfxObjectShell;
+class ScModelObj;
+class SfxPrinter;
+class SvNumberFormatter;
+class ScRangeName;
+
+/** Access to global data from other classes. */
+class XclRoot
+{
+private:
+    mutable XclRootData&        mrData;     /// Reference to the global data struct.
+
+public:
+                                XclRoot( const XclRoot& rRoot );
+    virtual                     ~XclRoot();
+
+    XclRoot&                    operator=( const XclRoot& rRoot );
+
+    RootData*                   mpRD;//!
+
+    /** Returns the current BIFF version of the importer/exporter. */
+    inline XclBiff              GetBiff() const { return mrData.meBiff; }
+    /** Returns the document language. */
+    inline LanguageType         GetLanguage() const { return mrData.meLang; }
+    /** Returns the default language from ScGlobal. */
+    inline LanguageType         GetDefLanguage() const { return ScGlobal::eLnge; }
+    /** Returns the current Calc sheet index. */
+    inline sal_uInt16           GetScTab() const { return mrData.mnScTab; }
+    /** Returns whether the "some cells have been cut" warning box should show. */
+    inline bool                 IsTruncated() const { return mrData.mbTruncated; }
+
+    /** Returns the base path of the imported/exported file. */
+    inline const String&        GetBasePath() const { return mrData.maBasePath; }
+    /** Returns the character set to import/export byte strings. */
+    inline CharSet              GetCharSet() const { return mrData.meCharSet; }
+
+    /** Returns the destination document (import) or source document (export). */
+    inline ScDocument&          GetDoc() const { return mrData.mrDoc; }
+    /** Returns the object shell of the Calc document. May be NULL (i.e. import from clipboard). */
+    SfxObjectShell*             GetDocShell() const;
+    /** Returns the object model of the Calc document. */
+    ScModelObj*                 GetDocModelObj() const;
+    /** Returns pointer to the printer of the Calc document. */
+    SfxPrinter*                 GetPrinter() const;
+    /** Returns the number formatter of the Calc document. */
+    SvNumberFormatter&          GetFormatter() const;
+    /** Returns the defined names container of the Calc document. */
+    ScRangeName&                GetNamedRanges() const;
+
+    /** Returns the edit engine for import/export of rich strings etc. */
+    ScEditEngineDefaulter&      GetEditEngine() const;
+    /** Returns the edit engine for import/export of headers/footers. */
+    ScHeaderEditEngine&         GetHFEditEngine() const;
+
+    /** Returns the translator for Excel/Calc add-in function names. */
+    XclAddInNameTranslator&     GetAddInNames() const;
+
+    /** Returns the highest possible cell address in a Calc document. */
+    inline const ScAddress&     GetScMaxPos() const { return mrData.maScMaxPos; }
+    /** Returns the highest possible cell address in an Excel document (using current BIFF version). */
+    inline const ScAddress&     GetXclMaxPos() const { return mrData.maXclMaxPos; }
+
+protected:
+    explicit                    XclRoot( XclRootData& rRootData );
+
+    /** Sets the BIFF version. */
+    void                        SetBiff( XclBiff eBiff );
+    /** Sets the character set to import/export byte strings. */
+    inline void                 SetLanguage( LanguageType eLang ) { mrData.meLang = eLang; }
+    /** Sets the character set to import/export byte strings. */
+    inline void                 SetCharSet( CharSet eCharSet ) { mrData.meCharSet = eCharSet; }
+    /** Increases the current Calc sheet index by 1. */
+    inline void                 IncScTab() { ++mrData.mnScTab; }
+
+    /** Checks if the passed cell address is valid.
+        @descr  Sets the internal flag that produces a warning box, if the cell is
+        outside the passed maximum position.
+        @param rPos  The cell address to check.
+        @param rMaxPos  Highest valid cell address.
+        @return  true = cell address is valid. */
+    bool                        CheckCellAddress( const ScAddress& rPos, const ScAddress rMaxPos ) const;
+    /** Checks and eventually crops the cell range to passed dimensions.
+        @descr  Sets the internal flag that produces a warning box, if the cell range
+        contains invalid cells. If the range is partly valid, this function sets
+        the warning flag, corrects the range and returns true.
+        @param rRange  (In/out) The cell range to check.
+        @param rMaxPos  Highest valid cell address.
+        @return  true = rRange contains a valid cell range (original or cropped). */
+    bool                        CheckCellRange( ScRange& rRange, const ScAddress rMaxPos ) const;
+    /** Checks and eventually crops the cell ranges to passed dimensions.
+        @descr  Sets the internal flag that produces a warning box, if at least one
+        cell range contains invalid cells. If the range is partly valid, this function
+        sets the warning flag and corrects the range. Cell ranges which do not fit
+        full or partly will be removed from the list.
+        @param rRangeList  (In/out) The cell range list to check.
+        @param rMaxPos  Highest valid cell address. */
+    void                        CheckCellRangeList( ScRangeList& rRanges, const ScAddress& rMaxPos ) const;
+};
+
+
+// ============================================================================
+
+#endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:30:26 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 //___________________________________________________________________
 
-#ifndef _SC_XCLIMPCHANGETRACK_HXX
+#ifndef SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"
 #endif
 
@@ -90,8 +90,9 @@
 #ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
 #endif
-#ifndef _SC_XCLIMPEXTERNSHEET_HXX
-#include "XclImpExternsheet.hxx"
+
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
 #endif
 
 //___________________________________________________________________
@@ -112,11 +113,6 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
     bGlobExit( sal_False ),
     eNestedMode( nmBase )
 {
-    DBG_ASSERT( pExcRoot && pExcRoot->pImpTabIdBuffer && pExcRoot->pExtsheetBuffer,
-        "XclImpChangeTrack::XclImpChangeTrack - root data incomplete" );
-    if( !pExcRoot || !pExcRoot->pImpTabIdBuffer || !pExcRoot->pExtsheetBuffer )
-        return;
-
     String sStreamName( pRevLogStreamName, RTL_TEXTENCODING_ASCII_US );
     SvStorage& rStorage = *pExcRoot->pRootStorage;
 
@@ -131,18 +127,13 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
         if( (pInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != ~((ULONG)0)) )
         {
             pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            pStrm = new XclImpStream( *pInStrm, pExcRoot->pCharset );
-            if( pStrm )
-            {
-                pChangeTrack = new ScChangeTrack( pExcRoot->pDoc );
-                if( pChangeTrack )
-                {
-                    sOldUsername = pChangeTrack->GetUser();
-                    pChangeTrack->SetUseFixDateTime( TRUE );
+            pStrm = new XclImpStream( *pInStrm, *pExcRoot->pIR );
+            pChangeTrack = new ScChangeTrack( pExcRoot->pDoc );
 
-                    ReadRecords();
-                }
-            }
+            sOldUsername = pChangeTrack->GetUser();
+            pChangeTrack->SetUseFixDateTime( TRUE );
+
+            ReadRecords();
         }
     }
 }
@@ -193,7 +184,7 @@ void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
 
 sal_uInt16 XclImpChangeTrack::ReadTabNum()
 {
-    return pExcRoot->pImpTabIdBuffer->GetIndex( pStrm->ReaduInt16(), nTabIdCount );
+    return pExcRoot->pIR->GetTabIdBuffer().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
 }
 
 void XclImpChangeTrack::ReadDateTime( DateTime& rDateTime )
@@ -228,21 +219,21 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16&
     {
         // internal ref - read tab num and return sc tab num (position in TABID list)
         pStrm->Ignore( 3 );
-        rFirstTab = pExcRoot->pImpTabIdBuffer->GetIndex( pStrm->ReaduInt16(), nTabIdCount );
+        rFirstTab = pExcRoot->pIR->GetTabIdBuffer().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
         sal_uInt8 nFillByte = pStrm->ReaduInt8();
         rLastTab = (nFillByte == 0x00) ?
-            pExcRoot->pImpTabIdBuffer->GetIndex( pStrm->ReaduInt16(), nTabIdCount ) : rFirstTab;
+            pExcRoot->pIR->GetTabIdBuffer().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) : rFirstTab;
     }
     else
     {
         // external ref - read doc and tab name and find sc tab num
-        String aDocName, aTabName;
-        BOOL bSelf;
-        XclImpSupbook::ReadDocName( *pStrm, *pExcRoot, aDocName, bSelf );
+        String aUrl, aTabName;
+        bool bSelf;
+        XclImpSupbook::ReadUrl( *pStrm, aUrl, bSelf );
         pStrm->Ignore( 1 );
         XclImpSupbook::ReadTabName( *pStrm, aTabName );
         pStrm->Ignore( 1 );
-        const XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( aDocName );
+        const XclImpSupbook* pSupbook = pExcRoot->pIR->GetLinkManager().GetSupbook( aUrl );
         rFirstTab = rLastTab = pSupbook ? pSupbook->GetScTabNum( aTabName ) : EXC_TAB_INVALID;
     }
     return sal_True;
@@ -262,7 +253,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     SvMemoryStream aMemStrm;
     aMemStrm << (sal_uInt16) 0x0001 << nFmlSize;
     pStrm->CopyToStream( aMemStrm, nFmlSize );
-    XclImpStream aFmlaStrm( aMemStrm, pExcRoot->pCharset );
+    XclImpStream aFmlaStrm( aMemStrm, *pExcRoot->pIR );
     aFmlaStrm.StartNextRecord();
     XclImpChTrFmlConverter aFmlConv( pExcRoot, aFmlaStrm, *this );
 
@@ -314,7 +305,7 @@ void XclImpChangeTrack::ReadCell(
             if( pStrm->IsValid() )
             {
                 rpCell = new ScValueCell( fValue );
-                rFormat = pExcRoot->pFormTable->GetStandardFormat( NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
+                rFormat = pExcRoot->pIR->GetFormatter().GetStandardFormat( NUMBERFORMAT_LOGICAL, pExcRoot->pIR->GetDefLanguage() );
             }
         }
         break;
@@ -510,7 +501,7 @@ void XclImpChangeTrack::ReadRecords()
 
     while( !bExitLoop && !bGlobExit && pStrm->StartNextRecord() )
     {
-        switch( pStrm->GetRecNum() )
+        switch( pStrm->GetRecId() )
         {
             case 0x000A:    bGlobExit = sal_True;           break;
             case 0x0137:    ReadChTrInsert();               break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-09 12:01:12 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,15 @@
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
 #endif
-#ifndef _SC_XCLIMPSTREAM_HXX
-#include "XclImpStream.hxx"
-#endif
-#ifndef _SC_XCLIMPEXTERNSHEET_HXX
-#include "XclImpExternsheet.hxx"
+
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
 #endif
 
 
-ExcelToSc8::ExcelToSc8( RootData* pRD, XclImpStream& aStr, const UINT16& rOrgTab ) :
-    ExcelToSc( pRD, aStr, rOrgTab ),
-    rExtsheetBuffer( *pExcRoot->pExtsheetBuffer )
+ExcelToSc8::ExcelToSc8( RootData* pRD, XclImpStream& aStr ) :
+    ExcelToSc( pRD, aStr ),
+    rLinkMan( pRD->pIR->GetLinkManager() )
 {
 }
 
@@ -106,12 +104,12 @@ BOOL ExcelToSc8::Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab )
     UINT16 nIxti;
     aIn >> nIxti;
 
-    const XclImpXti*        pXti = rExtsheetBuffer.GetXti( nIxti );
-    const XclImpSupbook*    pSupbook = rExtsheetBuffer.GetSupbook( nIxti );
+    const XclImpXti*        pXti = rLinkMan.GetXti( nIxti );
+    const XclImpSupbook*    pSupbook = rLinkMan.GetSupbook( nIxti );
     if( pXti && pSupbook )
     {
-        rFirstTab = pSupbook->GetScTabNum( pXti->nFirst );
-        rLastTab = pSupbook->GetScTabNum( pXti->nLast );
+        rFirstTab = pSupbook->GetScTabNum( pXti->mnFirst );
+        rLastTab = pSupbook->GetScTabNum( pXti->mnLast );
         bRet = TRUE;
     }
     return bRet;
@@ -653,7 +651,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 sal_uInt16 nXti, nName;
                 aIn >> nXti >> nName;
                 aIn.Ignore( 2 );
-                const XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( nXti );
+                const XclImpSupbook* pSupbook = rLinkMan.GetSupbook( nXti );
                 if( !pSupbook || pSupbook->IsSelf() )
                     aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nName ] );
                 else
@@ -662,7 +660,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                     if( pExtName )
                     {
                         String aAppl, aExtDoc;
-                        if( (pExtName->GetType() == xienDDE) && pSupbook->GetLink( aAppl, aExtDoc ) )
+                        if( (pExtName->GetType() == xlExtDDE) && pSupbook->GetLink( aAppl, aExtDoc ) )
                         {
                             TokenId nPar1 = aPool.Store( aAppl );
                             TokenId nPar2 = aPool.Store( aExtDoc );
@@ -1087,14 +1085,14 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
 
                 aIn >> nIxti >> nRw >> nGrbitCol;
 
-                pXti = rExtsheetBuffer.GetXti( nIxti );
-                const XclImpSupbook* pSbE = rExtsheetBuffer.GetSupbook( nIxti );
+                pXti = rLinkMan.GetXti( nIxti );
+                const XclImpSupbook* pSbE = rLinkMan.GetSupbook( nIxti );
 
                 if( pXti && pSbE )
                 {// in aktuellem Workbook
 //                  if( pSbE->IsSameSheet() )
-                    UINT16  nTabFirst = pXti->nFirst;
-                    UINT16  nTabLast = pXti->nLast;
+                    UINT16  nTabFirst = pXti->mnFirst;
+                    UINT16  nTabLast = pXti->mnLast;
 
                     aSRD.nTab = nTabFirst;
                     aSRD.SetFlag3D( TRUE );
@@ -1123,13 +1121,13 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
 
                 aIn >> nIxti >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
 
-                pXti = rExtsheetBuffer.GetXti( nIxti );
-                const XclImpSupbook* pSbE = rExtsheetBuffer.GetSupbook( nIxti );
+                pXti = rLinkMan.GetXti( nIxti );
+                const XclImpSupbook* pSbE = rLinkMan.GetSupbook( nIxti );
 
                 if( pXti && pSbE )
                 {
-                    UINT16  nTabFirst = pXti->nFirst;
-                    UINT16  nTabLast = pXti->nLast;
+                    UINT16  nTabFirst = pXti->mnFirst;
+                    UINT16  nTabLast = pXti->mnLast;
 
                     SingleRefData   &rR1 = aCRD.Ref1;
                     SingleRefData   &rR2 = aCRD.Ref2;
@@ -1216,7 +1214,7 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
         // T A B
         // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = *pExcRoot->pAktTab;
+            rSRD.nTab = pExcRoot->pIR->GetScTab();
     }
     else
     {
@@ -1265,7 +1263,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
 
                 nRow2 = nRow1;
                 nCol2 = nCol1;
-                nTab1 = nTab2 = *pExcRoot->pAktTab;
+                nTab1 = nTab2 = pExcRoot->pIR->GetScTab();
                 goto _common;
             case 0x45:
             case 0x65:
@@ -1276,7 +1274,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
                        // Area Reference Within a Shared Formula[    274]
                 aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
-                nTab1 = nTab2 = *pExcRoot->pAktTab;
+                nTab1 = nTab2 = pExcRoot->pIR->GetScTab();
                 goto _common;
             case 0x5A:
             case 0x7A:
@@ -1293,11 +1291,11 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
                 aIn >> nIxti >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
     _3d_common:
-                pXti = rExtsheetBuffer.GetXti( nIxti );
+                pXti = rLinkMan.GetXti( nIxti );
                 if( pXti )
                 {
-                    nTab1 = pXti->nFirst;
-                    nTab2 = pXti->nLast;
+                    nTab1 = pXti->mnFirst;
+                    nTab2 = pXti->mnLast;
                 }
                 else
                     break;

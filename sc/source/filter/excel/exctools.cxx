@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:27:56 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
-#include <vcl/svapp.hxx>
 
 #include "document.hxx"
 #include "patattr.hxx"
@@ -83,77 +82,28 @@
 #include "globstr.hrc"
 #include "scextopt.hxx"
 #include "progress.hxx"
-#include "editutil.hxx"
-#include "addincol.hxx"
 #include "rangenam.hxx"
+#include "editutil.hxx"
 
 #include "root.hxx"
 #include "imp_op.hxx"
-#include "fontbuff.hxx"
 #include "excimp8.hxx"
 #include "otlnbuff.hxx"
 #include "fltprgrs.hxx"
-#include "excsst.hxx"
 #include "excrecds.hxx"
 #include "xcl97rec.hxx"
-#include "XclAddInNameTrans.hxx"
 
-#ifndef _SC_XCLIMPSTYLEBUFFER_HXX
-#include "XclImpStyleBuffer.hxx"
-#endif
-#ifndef _SC_XCLIMPEXTERNSHEET_HXX
-#include "XclImpExternsheet.hxx"
-#endif
-#ifndef _SC_XCLIMPPIVOTTABES_HXX
+#ifndef SC_XCLIMPPIVOTTABES_HXX
 #include "XclImpPivotTables.hxx"
 #endif
-#ifndef _SC_XCLEXPEXTERNSHEET_HXX
-#include "XclExpExternsheet.hxx"
+#ifndef SC_XECONTENT_HXX
+#include "xecontent.hxx"
 #endif
-#ifndef _SC_XCLEXPPIVOTTABES_HXX
+#ifndef SC_XCLEXPPIVOTTABES_HXX
 #include "XclExpPivotTables.hxx"
 #endif
 
 // - ALLGEMEINE ----------------------------------------------------------
-
-ScEditEngineDefaulter& RootData::GetEdEng( void )
-{
-    if( !pEdEng )
-    {
-        ScEditEngineDefaulter* p = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
-
-        p->SetRefMapMode( MAP_100TH_MM );
-        p->SetEditTextObjectPool( pDoc->GetEditPool() );
-        p->SetUpdateMode( FALSE );
-        p->EnableUndo( FALSE );
-        p->SetControlWord( ( p->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS ) );
-
-        pEdEng = p;
-    }
-
-    return *pEdEng;
-}
-
-
-ScEditEngineDefaulter& RootData::GetEdEngForHF( void )
-{
-    if( !pEdEngHF )
-    {
-        //  can't use document's edit engine pool here,
-        //  because pool must have twips as default metric
-        ScEditEngineDefaulter* p = new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE );
-
-        p->SetRefMapMode( MAP_TWIP );       // headers/footers are in twips
-        p->SetUpdateMode( FALSE );
-        p->EnableUndo( FALSE );
-        p->SetControlWord( ( p->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS ) );
-
-        pEdEngHF = p;
-    }
-
-    return *pEdEngHF;
-}
-
 
 String RootData::GetCondFormStyleName( const UINT16 n )
 {
@@ -176,33 +126,20 @@ RootData::RootData( void )
 {
     fColScale = fRowScale = 1.0;
     pDoc = NULL;
-    pFormTable = NULL;
     pScRangeName = NULL;
-    pColor = NULL;
 
-    pFontBuffer = NULL;
-    pNumFmtBuffer = NULL;
-    pXFBuffer = NULL;
-
-    eDefLanguage = ScGlobal::eLnge;
     eDateiTyp = eHauptDateiTyp = BiffX;
     pExtSheetBuff = NULL;
     pTabNameBuff = NULL;
     pRNameBuff = NULL;
     pShrfmlaBuff = NULL;
     pExtNameBuff = NULL;
-    pAktTab = NULL;
     pCharset = NULL;
     pExtDocOpt = NULL;
-
-    pEdEng = pEdEngHF = NULL;
 
     bCellCut = FALSE;
     bBreakSharedFormula = TRUE;
     bDefaultPage = bChartTab = FALSE;
-
-    pExtsheetBuffer = NULL;
-    pImpTabIdBuffer = NULL;
 
     pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
     pImpPivotCacheList = NULL;
@@ -211,22 +148,16 @@ RootData::RootData( void )
     nLastCond = 0;
 
     pRootStorage = NULL;
-    pAddInNameTranslator = NULL;
-    pTabBuffer = NULL;
     pTabId = NULL;
     pUserBViewList = NULL;
     pCellMerging = NULL;
     pNameList = NULL;
     pScNameList = NULL;
-    pPalette2 = NULL;
-    pFontRecs = NULL;
     pFormRecs = NULL;
     pXFRecs = NULL;
     pExtSheetCntAndRecs = NULL;
     nRowMax = 0;
 
-    pSstRecs = NULL;
-    pExternsheetRecs = NULL;
     pObjRecs = NULL;
     pNoteRecs = NULL;
     pEscher = NULL;
@@ -234,46 +165,29 @@ RootData::RootData( void )
     pPivotCacheList = NULL;
 
     bWriteVBAStorage = FALSE;
-    nCodenames = 0;
 
     pStyleSheet = NULL;
     pStyleSheetItemSet = NULL;
 
     pLastHlink = NULL;
-    bStoreRel = FALSE;
+
+    pIR = NULL;
+    pER = NULL;
 }
 
 
 RootData::~RootData()
 {
-    delete pColor;
     delete pExtSheetBuff;
     delete pTabNameBuff;
     delete pRNameBuff;
     delete pShrfmlaBuff;
     delete pExtNameBuff;
 
-    delete pXFBuffer;
-    delete pNumFmtBuffer;
-    delete pFontBuffer;
-
-    if( pAddInNameTranslator )
-        delete pAddInNameTranslator;
-    if( pTabBuffer )
-        delete pTabBuffer;
     if( pScNameList )
         delete pScNameList;
-    if( pEdEng )
-        delete pEdEng;
-    if( pEdEngHF )
-        delete pEdEngHF;
     if( pExtSheetCntAndRecs )
         delete pExtSheetCntAndRecs;
-
-    if( pExtsheetBuffer )
-        delete pExtsheetBuffer;
-    if( pImpTabIdBuffer )
-        delete pImpTabIdBuffer;
 
     if( pImpPivotCacheList )
         delete pImpPivotCacheList;
@@ -527,7 +441,7 @@ FilterProgressBar::FilterProgressBar( SvStream& rStream ) : pStr( &rStream ), pX
 
 FilterProgressBar::FilterProgressBar( XclImpStream& rStream ) : pStr( NULL ), pXIStr( &rStream )
 {
-    Init( rStream.GetStreamPos(), rStream.GetStreamLen(), STR_LOAD_DOC );
+    Init( rStream.Tell(), rStream.GetStreamSize(), STR_LOAD_DOC );
 }
 
 
@@ -572,7 +486,7 @@ void FilterProgressBar::Progress( void )
         if( pStr )
             nNewState = pStr->Tell();
         else if( pXIStr )
-            nNewState = pXIStr->GetStreamPos();
+            nNewState = pXIStr->Tell();
         else
         {
             nCnt++;
@@ -585,208 +499,6 @@ void FilterProgressBar::Progress( void )
             nNextUnit += nUnitSize;
         }
     }
-}
-
-
-
-
-ShStrTabEntry::ShStrTabEntry( const String& r ) : aString( r )
-{
-}
-
-
-ShStrTabEntry::~ShStrTabEntry()
-{
-}
-
-
-BOOL ShStrTabEntry::HasFormats( void ) const
-{
-    return FALSE;
-}
-
-
-EditTextObject* ShStrTabEntry::CreateEditTextObject( ScEditEngineDefaulter&, XclImpFontBuffer& ) const
-{
-    return NULL;
-}
-
-
-
-
-struct ShStrTabFormData
-{
-    EditTextObject*     pEdTxtObj;
-    UINT16*             pForms;
-    UINT16              nFormCnt;
-
-                        ShStrTabFormData( XclImpStream& rIn, UINT16 nFormCnt );
-                            // wenn Ctor fehlschlaegt, ist pForms NULL!
-                        ~ShStrTabFormData();
-};
-
-
-ShStrTabFormData::ShStrTabFormData( XclImpStream& r, UINT16 n )
-{
-    pEdTxtObj = NULL;
-    if( n )
-    {
-        pForms = new UINT16[ n * 2 ];
-        nFormCnt = n;
-
-        UINT16*     p = pForms;
-
-        while( n )
-        {
-            r >> *p;
-            p++;
-            r >> *p;
-            p++;
-            n--;
-        }
-    }
-    else
-        pForms = NULL;
-}
-
-
-ShStrTabFormData::~ShStrTabFormData()
-{
-    if( pEdTxtObj )
-        delete pEdTxtObj;
-
-    if( pForms )
-        delete[] pForms;
-}
-
-
-
-
-ShStrTabFormEntry::ShStrTabFormEntry( const String& r, XclImpStream& rIn, const UINT16 nFormCnt ) :
-    ShStrTabEntry( r )
-{
-    pData = new ShStrTabFormData( rIn, nFormCnt );
-    if( !pData->pForms )
-    {
-        delete pData;
-        pData = NULL;
-    }
-}
-
-
-ShStrTabFormEntry::~ShStrTabFormEntry()
-{
-    if( pData )
-        delete pData;
-}
-
-
-BOOL ShStrTabFormEntry::HasFormats( void ) const
-{
-    return pData && pData->pForms;
-}
-
-
-
-
-#define READFORM()      nChar = *pRead; pRead++; nFont = *pRead; pRead++; nAnzFrms--;
-
-
-EditTextObject* ShStrTabFormEntry::CreateEditTextObject( ScEditEngineDefaulter& rEdEng, XclImpFontBuffer& rFB ) const
-{
-    if( !pData || !pData->pForms )
-        return NULL;
-
-    if( !pData->pEdTxtObj )
-    {
-        rEdEng.SetText( aString );
-
-        SfxItemSet          aItemSet( rEdEng.GetEmptyItemSet() );
-
-        UINT16              nChar, nFont;
-        const sal_Unicode*  pAktChar = aString.GetBuffer();
-        sal_Unicode         cAkt = *pAktChar;
-        UINT16              nCnt = 0;
-        const UINT16*       pRead = pData->pForms;
-        UINT32              nAnzFrms = pData->nFormCnt;
-
-        READFORM();
-
-        ESelection          aSel( 0, 0 );
-
-        while( cAkt )
-        {
-            if( nCnt >= nChar )
-            {// neuer Item-Set
-                rEdEng.QuickSetAttribs( aItemSet, aSel );
-
-                aItemSet.ClearItem( 0 );
-
-                rFB.FillToItemSet( nFont, aItemSet, xlFontEEIDs );
-                if( nAnzFrms )
-                {
-                    READFORM();
-                }
-                else
-                    nChar = 0xFFFF;
-
-                aSel.nStartPara = aSel.nEndPara;
-                aSel.nStartPos = aSel.nEndPos;
-            }
-
-            if( cAkt == '\n' )
-            {// new Paragraph
-                aSel.nEndPara++;
-                aSel.nEndPos = 0;
-            }
-            else
-                aSel.nEndPos++;
-
-            pAktChar++;
-            cAkt = *pAktChar;
-            nCnt++;
-        }
-
-        // letzten ItemSet setzten
-        rEdEng.QuickSetAttribs( aItemSet, aSel );
-
-        pData->pEdTxtObj = rEdEng.CreateTextObject();
-    }
-
-    return pData->pEdTxtObj->Clone();
-}
-
-
-
-
-SharedStringTable::SharedStringTable( void )
-{
-}
-
-
-SharedStringTable::~SharedStringTable()
-{
-    Clear();
-}
-
-
-void SharedStringTable::Append( ShStrTabEntry* p )
-{
-    List::Insert( p, LIST_APPEND );
-}
-
-
-void SharedStringTable::Clear( void )
-{
-    ShStrTabEntry*      p = ( ShStrTabEntry* ) List::First();
-
-    while( p )
-    {
-        delete p;
-        p = ( ShStrTabEntry* ) List::Next();
-    }
-
-    List::Clear();
 }
 
 
@@ -811,7 +523,7 @@ void ExcScenarioCell::SetValue( const String& r )
 #define EXCSCNEXT()             ((ExcScenarioCell*)List::Next())
 
 
-ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( *rR.pAktTab )
+ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetScTab() )
 {
     UINT16          nCref;
     UINT8           nName, nComment;
@@ -937,93 +649,4 @@ void ExcScenarioList::Apply( ScDocument& r )
     }
 }
 
-
-XclAddInNameTranslator::XclAddInNameTranslator( void ) : rAddInColl( *ScGlobal::GetAddInCollection() )
-{
-    eLng = Application::GetSettings().GetUILanguage();
-}
-
-
-XclAddInNameTranslator::~XclAddInNameTranslator()
-{
-}
-
-
-String XclAddInNameTranslator::GetScName( const String& rExcelName )
-{
-    String  aRet;
-
-    if( rAddInColl.GetCalcName( rExcelName, aRet ) )
-        return aRet;
-    else
-        return rExcelName;
-}
-
-
-String XclAddInNameTranslator::GetXclName( const String& rScName )
-{
-    String  aRet;
-
-    if( rAddInColl.GetExcelName( rScName, eLng, aRet ) )
-        return aRet;
-    else
-        return rScName;
-}
-
-
-struct CountryLanguageEntry
-{
-    UINT16          nCntry;
-    LanguageType    eLng;
-};
-
-
-BOOL XclAddInNameTranslator::SetLanguage( UINT16 n )
-{
-    static const CountryLanguageEntry   aTransTab[] =
-    {
-        {   1, LANGUAGE_ENGLISH_US },
-        {   2, LANGUAGE_ENGLISH_CAN },
-        {   3, LANGUAGE_SPANISH },              // Latin Americam except Brasil
-        {  31, LANGUAGE_DUTCH },
-        {  32, LANGUAGE_DUTCH_BELGIAN },        // Belgium
-        {  33, LANGUAGE_FRENCH },
-        {  34, LANGUAGE_SPANISH },
-        {  39, LANGUAGE_ITALIAN },
-        {  41, LANGUAGE_GERMAN_SWISS },
-        {  43, LANGUAGE_GERMAN_AUSTRIAN },
-        {  44, LANGUAGE_ENGLISH_UK },
-        {  45, LANGUAGE_DANISH },
-        {  46, LANGUAGE_SWEDISH },
-        {  47, LANGUAGE_NORWEGIAN },
-        {  49, LANGUAGE_GERMAN },
-        {  52, LANGUAGE_SPANISH_MEXICAN },
-        {  55, LANGUAGE_PORTUGUESE_BRAZILIAN },
-        {  61, LANGUAGE_ENGLISH_AUS },
-        {  64, LANGUAGE_ENGLISH_NZ },
-        {  81, LANGUAGE_JAPANESE },
-        {  82, LANGUAGE_KOREAN },
-        { 351, LANGUAGE_PORTUGUESE },
-        { 354, LANGUAGE_ICELANDIC },
-        { 358, LANGUAGE_SWEDISH_FINLAND },
-        { 785, LANGUAGE_ARABIC_SAUDI_ARABIA },
-        { 886, LANGUAGE_CHINESE },
-        { 972, LANGUAGE_HEBREW },               // Israel
-        NULL
-    };
-
-    const CountryLanguageEntry*     p = aTransTab;
-
-    while( p )
-    {
-        if( p->nCntry == n )
-        {
-            eLng = p->eLng;
-            return TRUE;
-        }
-        p++;
-    }
-
-    return FALSE;
-}
 

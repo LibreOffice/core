@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-05 12:23:16 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,17 +129,13 @@
 #include "editutil.hxx"
 
 #include "imp_op.hxx"
-#include "fontbuff.hxx"
 #include "fltprgrs.hxx"
 #include "scmsocximexp.hxx"
 
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
 #endif
-#ifndef _SC_XCLIMPEXTERNSHEET_HXX
-#include "XclImpExternsheet.hxx"
-#endif
-#ifndef _SC_XCLIMPCHARTS_HXX
+#ifndef SC_XCLIMPCHARTS_HXX
 #include "XclImpCharts.hxx"
 #endif
 
@@ -173,6 +169,8 @@ void ImportExcel::Obj()
     BOOL bBiff5 = BOOL( pExcRoot->eHauptDateiTyp == Biff5 );
     short nReserved = bBiff5 ? 6 : 2;
     aIn.Ignore( nReserved );
+
+    sal_uInt16 nTab = GetScTab();
 
     Point aUL(  XclTools::CalcX( nTab, nCol1, nColOff1, HMM_PER_TWIPS, pD ),
                 XclTools::CalcY( nTab, nRow1, nRowOff1, HMM_PER_TWIPS, pD ) );
@@ -211,10 +209,7 @@ void ImportExcel::Obj()
 void ImportExcel::SetLineStyle( SfxItemSet& rSet, short nColor, short nStyle, short nWidth )
 {
     if( nColor >= 0 )
-    {
-        const SvxColorItem* pColor = pExcRoot->pColor->GetColor( nColor );
-        rSet.Put( XLineColorItem( String(), pColor->GetValue() ) );
-    }
+        rSet.Put( XLineColorItem( String(), GetPalette().GetColor( nColor ) ) );
     if( nStyle >= 0 )
     {
         XLineStyle eStyle = ( nStyle == 1 || nStyle == 2 )
@@ -229,10 +224,7 @@ void ImportExcel::SetLineStyle( SfxItemSet& rSet, short nColor, short nStyle, sh
 void ImportExcel::SetFillStyle( SfxItemSet& rSet, short nBg, short nFg, short nStyle )
 {
     if( nBg >= 0 )
-    {
-        const SvxColorItem* pColor = pExcRoot->pColor->GetColor( nFg );
-        rSet.Put( XFillColorItem( String(), pColor->GetValue() ) );
-    }
+        rSet.Put( XFillColorItem( String(), GetPalette().GetColor( nFg ) ) );
     if( nStyle >= 0 )
         // Entweder mit Farbe oder leer, keine Patterns!
         rSet.Put( XFillStyleItem( nStyle ? XFILL_SOLID : XFILL_NONE ) );
@@ -276,7 +268,7 @@ SdrObject* ImportExcel::BeginChartObj( SfxItemSet&, const Point& rUL, const Poin
         >> nLWeight >> fAuto2 >> nFRS;
     aIn.Ignore( 18 );
 
-    ExcelChartData* pData = new ExcelChartData( pD, rUL, rLR, nTab );
+    ExcelChartData* pData = new ExcelChartData( pD, rUL, rLR, GetScTab() );
     SetLineStyle( *pData->pAttrs, nLc, nLStyle, nLWeight );
     SetFillStyle( *pData->pAttrs, nBg, nFg, nPat );
     pData->pNext = pChart;
@@ -395,13 +387,13 @@ void ImportExcel::ChartSelection( void )
                     nCol2 &= 0x3FFF;
                 }
 
-                const XclImpXti*        pXti = pExcRoot->pExtsheetBuffer->GetXti( nIxti );
-                const XclImpSupbook*    pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( nIxti );
+                const XclImpXti* pXti = pExcRoot->pIR->GetLinkManager().GetXti( nIxti );
+                const XclImpSupbook* pSupbook = pExcRoot->pIR->GetLinkManager().GetSupbook( nIxti );
 
                 if( pXti && pSupbook /*&& pSupbook->IsSameSheet()*/ )
                 {// in aktuellem Workbook
-                    nTab1 = pXti->nFirst;
-                    nTab2 = pXti->nLast;
+                    nTab1 = pXti->mnFirst;
+                    nTab2 = pXti->mnLast;
                     bValues = TRUE;
                 }
             }

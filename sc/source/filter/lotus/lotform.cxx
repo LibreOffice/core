@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:07:41 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 #include "root.hxx"
-#include "FilterTools.hxx"
+#include "ftools.hxx"
 #include "tool.h"
 
 extern WKTYP                eTyp;

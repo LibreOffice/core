@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 #include "imp_op.hxx"
 #include "flttypes.hxx"
-#include "FilterTools.hxx"
+#include "ftools.hxx"
 #include "lotform.hxx"
 #include "lotattr.hxx"
 
@@ -85,6 +85,7 @@ private:
     SvStream*           pIn;            // benoetigt wegen multiplem Read()!
     LotusFontBuffer*    pFontBuff;
     LotusToSc           aConv;
+    UINT16              nTab;           // z.Zt. bearbeitete Tabelle
     INT32               nExtTab;
     // -------------------------------------------------------------------
     // in WK?-Datei

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-07 09:49:48 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,32 +79,24 @@
 #include "scerrors.hxx"
 #endif
 
-#ifndef _SC_XCLIMPSTREAM_HXX
-#include "XclImpStream.hxx"
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
 #endif
-#ifndef _IMP_OP_HXX
-#include "imp_op.hxx"
+#ifndef SC_XICONTENT_HXX
+#include "xicontent.hxx"
 #endif
-#ifndef _EXCIMP8_HXX
-#include "excimp8.hxx"
-#endif
-#ifndef _SC_XCLIMPEXTERNSHEET_HXX
-#include "XclImpExternsheet.hxx"
-#endif
-#ifndef _SC_XCLIMPCHARTS_HXX
+
+#ifndef SC_XCLIMPCHARTS_HXX
 #include "XclImpCharts.hxx"
 #endif
-#ifndef _SC_XCLIMPCHANGETRACK_HXX
+#ifndef SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"
 #endif
 
 #include "root.hxx"
 #include "biffdump.hxx"
-#include "fontbuff.hxx"
-
-#ifdef DBG_UTIL
-ByteString& AddRecordName( UINT16 nOpcode, ByteString& rRet );
-#endif
+#include "imp_op.hxx"
+#include "excimp8.hxx"
 
 
 FltError ImportExcel::Read( void )
@@ -156,14 +148,14 @@ FltError ImportExcel::Read( void )
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
-    ScfProgressBar* pProgress = new ScfProgressBar( STR_LOAD_DOC );
-    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamLen() );
+    ::std::auto_ptr< ScfProgressBar > pProgress( new ScfProgressBar( ScGlobal::GetRscString( STR_LOAD_DOC ) ) );
+    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamSize() );
     pProgress->ActivateSegment( nStreamSeg );
 
     while( eAkt != Z_Ende )
     {
         aIn.StartNextRecord();
-        nOpcode = aIn.GetRecNum();
+        nOpcode = aIn.GetRecId();
 
         if( !aIn.IsValid() )
         {
@@ -172,7 +164,7 @@ FltError ImportExcel::Read( void )
         }
 
         if( eAkt != Z_Biff5Pre && eAkt != Z_Biff5WPre )
-            pProgress->Progress( aIn.GetStreamPos() );
+            pProgress->Progress( aIn.Tell() );
 
         switch( eAkt )
         {
@@ -183,7 +175,6 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x09:                          // BOF          [ 2   ]
                         Bof2();
-                        pExcRoot->pColor->SetDefaults();
                         if( pExcRoot->eDateiTyp == Biff2 )
                         {
                             eAkt = Z_Biff2;
@@ -193,7 +184,6 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x0209:                        // BOF          [  3  ]
                         Bof3();
-                        pExcRoot->pColor->SetDefaults();
                         if( pExcRoot->eDateiTyp == Biff3 )
                         {
                             eAkt = Z_Biff3;
@@ -203,7 +193,6 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x0409:                        // BOF          [   4 ]
                         Bof4();
-                        pExcRoot->pColor->SetDefaults();
                         if( pExcRoot->eDateiTyp == Biff4 )
                         {
                             eAkt = Z_Biff4;
@@ -219,14 +208,13 @@ FltError ImportExcel::Read( void )
                     case 0x0809:                        // BOF          [    5]
                     {
                         Bof5();
-                        pExcRoot->pColor->SetDefaults();
                         if( pExcRoot->eDateiTyp == Biff5W )
                         {
                             eAkt = Z_Biff5WPre;
 
                             nBdshtTab = 0;
 
-                            aIn.StoreUserPosition();    // und Position merken
+                            aIn.StoreGlobalPosition(); // und Position merken
                         }
 
                         DBG_ASSERT( pExcRoot->eDateiTyp != Biff5,
@@ -260,7 +248,7 @@ FltError ImportExcel::Read( void )
                     case 0x18:  Name25(); break;        // NAME         [ 2  5]
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
-                    case 0x1E:  pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff2 );break;
+                    case 0x1E:  GetNumFmtBuffer().ReadFormat( maStrm );         break;
                     case 0x20:  Columndefault(); break; // COLUMNDEFAULT[ 2   ]
                     case 0x21:  Array25(); break;       // ARRAY        [ 2  5]
                     case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
@@ -278,10 +266,10 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Ende;
                         }
                         break;
-                    case 0x31:  pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff2 );break;
+                    case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
-                    case 0x43:  pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff2 );    break;
+                    case 0x43:  GetXFBuffer().ReadXF( maStrm );                 break;
                     case 0x44:  Ixfe(); break;          // IXFE         [ 2   ]
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
                 }
@@ -304,7 +292,7 @@ FltError ImportExcel::Read( void )
                     case 0x1B:  Horizontalpagebreaks(); break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
-                    case 0x1E:  pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff3 );break;
+                    case 0x1E:  GetNumFmtBuffer().ReadFormat( maStrm );         break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x26:  Leftmargin(); break;    // LEFTMARGIN   [ 2345]
                     case 0x27:  Rightmargin(); break;   // RIGHTMARGIN  [ 2345]
@@ -337,9 +325,9 @@ FltError ImportExcel::Read( void )
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff3 );break;
+                    case 0x0231: GetFontBuffer().ReadFont( maStrm );            break;
                     case 0x023E: Window2_5(); break;    // WINDOW       [    5]
-                    case 0x0243: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff3 );   break;
+                    case 0x0243: GetXFBuffer().ReadXF( maStrm );                break;
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                 }
             }
@@ -388,12 +376,12 @@ FltError ImportExcel::Read( void )
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
+                    case 0x0231: GetFontBuffer().ReadFont( maStrm );            break;
                     case 0x023E: Window2_5(); break;    // WINDOW       [    5]
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
-                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff4 );break;
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
+                    case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
+                    case 0x0443: GetXFBuffer().ReadXF( maStrm );                break;
                 }
             }
                 break;
@@ -423,7 +411,7 @@ FltError ImportExcel::Read( void )
                     case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
+                    case 0x0231: GetFontBuffer().ReadFont( maStrm );            break;
                     case 0x0409:                        // BOF          [   4 ]
                         Bof4();
                         if( pExcRoot->eDateiTyp == Biff4 )
@@ -434,8 +422,8 @@ FltError ImportExcel::Read( void )
                         else
                             eAkt = Z_Ende;
                         break;
-                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff4 );break;
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
+                    case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
+                    case 0x0443: GetXFBuffer().ReadXF( maStrm );                break;
                 }
 
             }
@@ -448,7 +436,7 @@ FltError ImportExcel::Read( void )
                     case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff4E;
-                        nTab++;
+                        IncScTab();
                         break;
                     case 0x14:  Header(); break;        // HEADER       [ 2345]
                     case 0x15:  Footer(); break;        // FOOTER       [ 2345]
@@ -500,7 +488,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff4T;
                         break;
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
+                    case 0x0231: GetFontBuffer().ReadFont( maStrm );            break;
                     case 0x027E:                        // RK           [  34 ]
                         Rk();
                         eAkt = Z_Biff4T;
@@ -508,8 +496,8 @@ FltError ImportExcel::Read( void )
                     case 0x0406:                        // FORMULA      [   4 ]
                         Formula4();
                         eAkt = Z_Biff4T;
-                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff4 );break;
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
+                    case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
+                    case 0x0443: GetXFBuffer().ReadXF( maStrm );                break;
                         break;
                 }
 
@@ -522,7 +510,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         EndSheet();
-                        nTab++;
+                        IncScTab();
                         eAkt = Z_Biff4E;
                         break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
@@ -573,7 +561,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff5W;
-                        aIn.SeekUserPosition(); // und zurueck an alte Position
+                        aIn.SeekGlobalPosition();  // und zurueck an alte Position
                         break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
@@ -597,7 +585,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff5E;
                         break;
                     case 0x18:  Name25(); break;        // NAME         [ 2  5]
-                    case 0x1E:  pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff5 );break;
+                    case 0x1E:  GetNumFmtBuffer().ReadFormat( maStrm );         break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2   ]
                     case 0x2F:                          // FILEPASS     [ 2345]
@@ -607,7 +595,7 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Ende;
                         }
                         break;
-                    case 0x31:  pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff5 );break;
+                    case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
@@ -615,13 +603,10 @@ FltError ImportExcel::Read( void )
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xDE:  Olesize(); break;
-                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff5 );    break;
+                    case 0xE0:  GetXFBuffer().ReadXF( maStrm );                 break;
                     case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
-                    case 0x0243: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff3 );   break;
-                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff5 );break;
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
+                    case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
                 }
 
             }
@@ -654,7 +639,7 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff5E;
-                        nTab++;
+                        IncScTab();
                         break;
                     case 0x14:  Header(); break;        // HEADER       [ 2345]
                     case 0x15:  Footer(); break;        // FOOTER       [ 2345]
@@ -774,7 +759,7 @@ FltError ImportExcel::Read( void )
                     case 0x07:  RecString(); break;     // STRING       [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
                         EndSheet();
-                        nTab++;
+                        IncScTab();
                         eAkt = Z_Biff5E;
                         break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
@@ -832,7 +817,7 @@ FltError ImportExcel::Read( void )
                                 pColRowBuff->Reset();
                                 nBofLevel = 0;
 
-                                aIn.StoreUserPosition();    // und Position merken
+                                aIn.StoreGlobalPosition(); // und Position merken
                                 break;
                             case Biff5C:
                                 eAkt = Z_Biff5C;
@@ -842,7 +827,7 @@ FltError ImportExcel::Read( void )
                             case Biff5V:
                             default:
                                 NeueTabelle();
-                                pD->SetVisible( nTab, FALSE );
+                                pD->SetVisible( GetScTab(), FALSE );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
@@ -868,8 +853,8 @@ FltError ImportExcel::Read( void )
                         case 0x08:  Row25(); break;         // ROW          [ 2  5]
                         case 0x0A:                          // EOF          [ 2345]
                             eAkt = Z_Biff5I;
-                            aIn.SeekUserPosition(); // und zurueck an alte Position
-                            pColRowBuff->Apply( nTab );
+                            aIn.SeekGlobalPosition(); // und zurueck an alte Position
+                            pColRowBuff->Apply( GetScTab() );
                             break;
                         case 0x1A:  Verticalpagebreaks(); break;
                         case 0x1B:  Horizontalpagebreaks(); break;
@@ -970,7 +955,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = ePrev;
-                        nTab++;
+                        IncScTab();
                         break;
                 }
 
@@ -1000,12 +985,12 @@ FltError ImportExcel::Read( void )
         for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
             pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
 
-        DELETEZ( pProgress );
+        pProgress.reset();
 
         AdjustRowHeight();
         PostDocLoad();
 
-        if( bTabTruncated )
+        if( bTabTruncated || IsTruncated() )
             eLastErr = eERR_RNGOVRFLW;
     }
 
@@ -1052,8 +1037,8 @@ FltError ImportExcel8::Read( void )
     DBG_ASSERT( &aIn != NULL,
         "-ImportExcel8::Read(): Kein Stream - wie dass?!" );
 
-    ScfProgressBar* pProgress = new ScfProgressBar( STR_LOAD_DOC );
-    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamLen() );
+    ::std::auto_ptr< ScfProgressBar > pProgress( new ScfProgressBar( ScGlobal::GetRscString( STR_LOAD_DOC ) ) );
+    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamSize() );
     pProgress->ActivateSegment( nStreamSeg );
 
     bObjSection = FALSE;
@@ -1061,7 +1046,7 @@ FltError ImportExcel8::Read( void )
     while( eAkt != Z_Ende )
     {
         aIn.StartNextRecord();
-        nOpcode = aIn.GetRecNum();
+        nOpcode = aIn.GetRecId();
         if( !aIn.IsValid() )
         {
             eAkt = Z_Ende;
@@ -1069,9 +1054,9 @@ FltError ImportExcel8::Read( void )
         }
 
         if( eAkt != Z_Biff8Pre && eAkt != Z_Biff8WPre )
-            pProgress->Progress( aIn.GetStreamPos() );
+            pProgress->Progress( aIn.Tell() );
 
-        if( nOpcode != EXC_CONT )
+        if( nOpcode != EXC_ID_CONT )
         {
             aIn.InitializeRecord( TRUE );       // enable internal CONTINUE handling
             bObjSection =
@@ -1091,15 +1076,13 @@ FltError ImportExcel8::Read( void )
                     case 0x0809:                        // BOF          [    5 8 ]
                     {
                         Bof5();
-
-                        pExcRoot->pColor->SetDefaults();
                         if( pExcRoot->eHauptDateiTyp == Biff8 )
                         {
                             eAkt = Z_Biff8WPre;
 
                             nBdshtTab = 0;
 
-                            aIn.StoreUserPosition();
+                            aIn.StoreGlobalPosition();
                         }
 
                         DBG_ASSERT( pExcRoot->eDateiTyp != Biff8,
@@ -1115,7 +1098,7 @@ FltError ImportExcel8::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345   ]
                         eAkt = Z_Biff8W;
-                        aIn.SeekUserPosition();         // und zurueck an alte Position
+                        aIn.SeekGlobalPosition();          // und zurueck an alte Position
                         break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         if( Filepass() )
@@ -1138,36 +1121,36 @@ FltError ImportExcel8::Read( void )
                     case 0x0A:                          // EOF          [ 2345   ]
                         eAkt = Z_Biff8E;
                         break;
-                    case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345 8 ]
                     case 0x18:  Name(); break;          // NAME         [ 2  5 8 ]
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
-                    case 0x23:  Externname(); break;    // EXTERNNAME   [      8 ]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2      ]
-                    case 0x31:  pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff8 );break;
+                    case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x51:  Dconref(); break;       // DCONREF                ##++##
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
-                    case 0x59:  Xct(); break;           // XCT          [      8 ]
-                    case 0x5A:  Crn(); break;           // CRN          [      8 ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
                     case 0x92:  Palette(); break;       // PALETTE      [  345   ]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
                     case 0xD3:  bHasBasic = TRUE; break;
                     case 0xD5:  SXIdStm(); break;       // SXIDSTM                ##++##
                     case 0xDE:  Olesize(); break;
-                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff8 );    break;
+                    case 0xE0:  GetXFBuffer().ReadXF( maStrm );                 break;
                     case 0xE3:  SXVs(); break;          // SXVS                   ##++##
                     case 0xEB:  Msodrawinggroup(); break;
-                    case 0xFC:  Sst(); break;           // SST      [      8 ]
-                    case 0x013D: Tabid(); break;        // TABID        [      8 ] // for change tracking
-                    case 0x01AE: Supbook(); break;      // SUPBOOK      [      8 ]
                     case 0x01BA: Codename( TRUE ); break;
                     case 0x0218: Name(); break;         // NAME         [      8 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
-                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
-                    case 0x0293: pExcRoot->pXFBuffer->ReadStyle( aIn, xlBiff8 );break;
-                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff8 );break;
+                    case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
+                    case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
+
+                    case EXC_ID_SST:            GetSst().ReadSst( maStrm );                 break;
+                    case EXC_ID_TABID:          GetTabIdBuffer().ReadTabid( maStrm );       break;
+                    case EXC_ID_EXTERNSHEET:    GetLinkManager().ReadExternsheet( maStrm ); break;
+                    case EXC_ID_SUPBOOK:        GetLinkManager().ReadSupbook( maStrm );     break;
+                    case EXC_ID_XCT:            GetLinkManager().ReadXct( maStrm );         break;
+                    case EXC_ID_CRN:            GetLinkManager().ReadCrn( maStrm, *pFormConv );break;
+                    case EXC_ID_EXTERNNAME:     GetLinkManager().ReadExternname( maStrm );  break;
                 }
 
             }
@@ -1190,7 +1173,6 @@ FltError ImportExcel8::Read( void )
                         case 0x0014:    Header();               break;  // HEADER       [ 2345   ]
                         case 0x0015:    Footer();               break;  // FOOTER       [ 2345   ]
                         case 0x001D:    Selection();            break;  // SELECTION    [ 2345   ]
-                        case 0x0023:    Externname25();         break;  // EXTERNNAME   [ 2  5   ]
                         case 0x0026:    Leftmargin();           break;  // LEFTMARGIN   [ 2345   ]
                         case 0x0027:    Rightmargin();          break;  // RIGHTMARGIN  [ 2345   ]
                         case 0x0028:    Topmargin();            break;  // TOPMARGIN    [ 2345   ]
@@ -1255,13 +1237,8 @@ FltError ImportExcel8::Read( void )
                         case 0x00EC:    Msodrawing();           break;  // MSODRAWING
                         case 0x00ED:    Msodrawingselection();  break;  // MSODRAWINGSELECTION
                         case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
-                        case 0x015F:    Labelranges();          break;  // LABELRANGES
-                        case 0x01AD:    Qsi();                  break;  // QSI
                         case 0x01B0:    Condfmt();              break;  // CONDFMT
-                        case 0x01B2:    Dval();                 break;  // DVAL
                         case 0x01B6:    Txo();                  break;  // TXO
-                        case 0x01B8:    Hlink();                break;  // HLINK
-                        case 0x01BE:    Dv();                   break;  // DV
                         case 0x0201:    Blank34();              break;  // BLANK        [  34    ]
                         case 0x0203:    Number34();             break;  // NUMBER       [  34    ]
                         case 0x0204:    Label();                break;  // LABEL        [  34    ]
@@ -1269,6 +1246,18 @@ FltError ImportExcel8::Read( void )
                         case 0x0236:    TableOp();              break;  // TABLE
                         case 0x0021:    Array25();              break;  // ARRAY        [ 2  5   ]
                         case 0x0221:    Array34();              break;  // ARRAY        [  34    ]
+
+                        case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );           break;
+                        case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm );   break;
+                        case EXC_ID_DVAL:           XclImpValidation::ReadDval( maStrm, *this );    break;
+                        case EXC_ID_DV:             XclImpValidation::ReadDv( maStrm, *pFormConv ); break;
+
+                        case EXC_ID_QSI:            GetWebQueryBuffer().ReadQsi( maStrm );          break;
+                        case EXC_ID_SXSTRING:       GetWebQueryBuffer().ReadSxstring( maStrm );     break;
+                        case EXC_ID_PQRY:           GetWebQueryBuffer().ReadParamqry( maStrm );     break;
+                        case EXC_ID_WQSETT:         GetWebQueryBuffer().ReadWqsettings( maStrm );   break;
+                        case EXC_ID_WQTABLES:       GetWebQueryBuffer().ReadWqtables( maStrm );     break;
+
                         default:
                             bFound = FALSE;
                     }
@@ -1292,8 +1281,6 @@ FltError ImportExcel8::Read( void )
                         case 0x00B5:    SXLi();                 break;  // SXLI
                         case 0x00B6:    SXPi();                 break;  // SXPI
                         case 0x00C5:    SXDi();                 break;  // SXDI
-                        case 0x00CD:    SXString();             break;  // SXSTRING
-                        case 0x00DC:    SXExt_ParamQry();       break;  // SXEXT or PARAMQRY
                         case 0x00F0:    SXRule();               break;  // SXRULE
                         case 0x00F1:    SXEx();                 break;  // SXEX
                         case 0x00F2:    SXFilt();               break;  // SXFILT
@@ -1301,8 +1288,6 @@ FltError ImportExcel8::Read( void )
                         case 0x0100:    SXVdex();               break;  // SXVDEX
                         case 0x01B1:    Cf();                   break;  // CF
                         case 0x0207:    RecString();            break;  // STRING       [ 2345   ]
-                        case 0x0803:    WebQrySettings();       break;  // WEBQRYSETTINGS
-                        case 0x0804:    WebQryTables();         break;  // WEBQRYTABLES
                         case 0x0809:                                    // BOF          [    5   ]
                         {
                             Bof5();
@@ -1333,7 +1318,7 @@ FltError ImportExcel8::Read( void )
                         {
                             EndSheet();
                             eAkt = Z_Biff8E;
-                            nTab++;
+                            IncScTab();
                         }
                         break;
                         case 0x002F:                            // FILEPASS     [ 2345   ]
@@ -1357,7 +1342,7 @@ FltError ImportExcel8::Read( void )
                 {
                     case 0x0809:                        // BOF          [    5   ]
                     {
-                        if( nTab > MAXTAB )    // ignore tables >255
+                        if( GetScTab() > MAXTAB )    // ignore tables >255
                         {
                             ePrev = eAkt;
                             eAkt = Z_Biffn0;
@@ -1377,7 +1362,7 @@ FltError ImportExcel8::Read( void )
                                 pColRowBuff->Reset();
                                 nBofLevel = 0;
 
-                                aIn.StoreUserPosition();
+                                aIn.StoreGlobalPosition();
                                 break;
                             case Biff8C:
                                 aObjManager.SetNewCurrObjChart();
@@ -1385,11 +1370,11 @@ FltError ImportExcel8::Read( void )
                                 ReadChart8( *pProgress, TRUE );
                                 pExcRoot->bChartTab = FALSE;
                                 EndSheet();
-                                nTab++;
+                                IncScTab();
                                 break;
                             case Biff8V:
                             default:
-                                pD->SetVisible( nTab, FALSE );
+                                pD->SetVisible( GetScTab(), FALSE );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
@@ -1415,15 +1400,13 @@ FltError ImportExcel8::Read( void )
                         case 0x08:  Row25(); break;         // ROW          [ 2  5   ]
                         case 0x0A:                          // EOF          [ 2345   ]
                             eAkt = Z_Biff8I;
-                            aIn.SeekUserPosition();         // und zurueck an alte Position
-                            pColRowBuff->Apply( nTab );
+                            aIn.SeekGlobalPosition();         // und zurueck an alte Position
+                            pColRowBuff->Apply( GetScTab() );
                             break;
                         case 0x12:  Protect(); break;
                         case 0x1A:  Verticalpagebreaks(); break;
                         case 0x1B:  Horizontalpagebreaks(); break;
                         case 0x1D:  Selection(); break;     // SELECTION    [ 2345   ]
-                        case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345   ]
-                        case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5   ]
                         case 0x41:  Pane(); break;          // PANE         [ 2345   ]
                         case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                         case 0x55:  DefColWidth(); break;
@@ -1434,14 +1417,14 @@ FltError ImportExcel8::Read( void )
                         case 0x9B:  FilterMode(); break;    // FILTERMODE
                         case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
                         case 0x9E:  AutoFilter(); break;    // AUTOFILTER
-                        case 0xE9:  BGPic(); break;
                         case 0x01BA: Codename( FALSE ); break;
                         case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345   ]
                         case 0x0208: Row34(); break;        // ROW          [  34    ]
-                        case 0x0223: Externname25(); break; // EXTERNNAME   [  34    ]
                         case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                         case 0x023E: Window2_5(); break;    // WINDOW       [    5]
                         case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5   ]
+
+                        case EXC_ID_BITMAP:     XclImpBitmap::ReadBitmap( maStrm );             break;
                     }
                 }
             }
@@ -1464,7 +1447,7 @@ FltError ImportExcel8::Read( void )
                         else
                         {
                             eAkt = ePrev;
-                            nTab++;
+                            IncScTab();
                         }
                     }
                     break;
@@ -1491,7 +1474,7 @@ FltError ImportExcel8::Read( void )
         for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
             pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
 
-        DELETEZ( pProgress );
+        pProgress.reset();
 
         AdjustRowHeight();
         PostDocLoad();
@@ -1500,7 +1483,7 @@ FltError ImportExcel8::Read( void )
         XclImpChangeTrack aImpChTr( pExcRoot );
         aImpChTr.Apply();
 
-        if( bTabTruncated )
+        if( bTabTruncated || IsTruncated() )
             eLastErr = eERR_RNGOVRFLW;
     }
 
@@ -1526,9 +1509,9 @@ FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab
         {
             bLoop = aIn.StartNextRecord();
             if( bLoop )
-                bLoop = (aIn.GetRecNum() != 0x000A);
+                bLoop = (aIn.GetRecId() != 0x000A);
         }
-        rProgress.Progress( aIn.GetStreamPos() );
+        rProgress.Progress( aIn.Tell() );
 
         return eERR_OK;
     }
@@ -1537,9 +1520,9 @@ FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab
     while( bLoop )
     {
         bLoop = aIn.StartNextRecord();
-        nOpcode = aIn.GetRecNum();
+        nOpcode = aIn.GetRecId();
 
-        rProgress.Progress( aIn.GetStreamPos() );
+        rProgress.Progress( aIn.Tell() );
 
         switch( nOpcode )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #include "root.hxx"
 #endif
 
-#ifndef _SC_FILTERTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
 #endif
 
 // ----- forwards --------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:27:57 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,17 +80,18 @@
 #include "root.hxx"
 #include "exp_op.hxx"
 #include "excdoc.hxx"
-#include "fontbuff.hxx"
 
 #include "xcl97esc.hxx"
-#include "XclAddInNameTrans.hxx"
 
 #include "document.hxx"
 #include "rangenam.hxx"
 #include "filtopt.hxx"
 
-#ifndef _SC_XCLEXPEXTERNSHEET_HXX
-#include "XclExpExternsheet.hxx"
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
+#endif
+#ifndef SC_XELINK_HXX
+#include "xelink.hxx"
 #endif
 
 extern const sal_Char*  pVBAStorageName;
@@ -99,31 +100,25 @@ extern const sal_Char*  pVBASubStorageName;
 
 
 
-ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eDest ):
-    ExportTyp( aStream, pDoc, eDest )
+ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eDest, bool bRelUrl ):
+    XclExpRootData( xlBiff5, *pDoc, rBasePath, eDest, bRelUrl ),
+    ExportTyp( aStream, pDoc, eDest ),
+    XclExpRoot( static_cast< XclExpRootData& >( *this ) )
     // Excel immer Windoofs, Quelle (SC) immer System
 {
     DBG_ASSERT( pDoc, "-ExportBiff5::ExportBiff5(): No Null-Document!" );
 
     // nur Teil der Root-Daten gebraucht
-    pExcRoot = new RootData;
+    pExcRoot = mpRD;
     pExcRoot->pDoc = pDoc;
-    pExcRoot->pTabBuffer = new XclExpTabNumBuffer( *pDoc );
+    pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
     pExcRoot->pScNameList = new ScRangeName;
-    pExcRoot->pAktTab = NULL;
     pExcRoot->bCellCut = FALSE;
-    pExcRoot->pFontRecs = NULL;
-    pExcRoot->pSstRecs = NULL;
-    pExcRoot->pEdEng = NULL;
     pExcRoot->eHauptDateiTyp = Biff5;
     pExcRoot->eDateiTyp = Biff5;
     pExcRoot->nColMax = XCL_COLMAX;
     pExcRoot->nRowMax = EXC5_ANZROW;
-    pExcRoot->pFormTable = pDoc->GetFormatTable();
     pExcRoot->pRootStorage = &rRootStorage;
-
-    pExcRoot->pColor = new ColorBuffer( pExcRoot );
-    pExcRoot->pColor->SetDefaults();
 
     pExcRoot->pCharset = &eZielChar;
 
@@ -150,16 +145,14 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
         fColScale *= 1.027027027027;    // adjustment for export of calc documents
     }
     pExcRoot->fColScale = fColScale;
-    pExcRoot->aBasePath = rBasePath;
 
-    pExcDoc = new ExcDocument( pExcRoot );
+    pExcDoc = new ExcDocument( *this );
 }
 
 
 ExportBiff5::~ExportBiff5()
 {
     delete pExcDoc;
-    delete pExcRoot;
 }
 
 
@@ -204,7 +197,7 @@ FltError ExportBiff5::Write()
     SfxDocumentInfo&    rInfo = rDocShell.GetDocInfo();
     rInfo.SavePropertySet( pExcRoot->pRootStorage );
 
-    if( pExcRoot->bCellCut )
+    if( pExcRoot->bCellCut || IsTruncated() )
         return SCWARN_EXPORT_MAXROW;
     else
         return eERR_OK;
@@ -212,19 +205,14 @@ FltError ExportBiff5::Write()
 
 
 
-ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eZ, BOOL bStoreRel ) :
-    ExportBiff5( rRootStorage, aStream, pDoc, rBasePath, eZ )
+ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eZ, bool bRelUrl ) :
+    ExportBiff5( rRootStorage, aStream, pDoc, rBasePath, eZ, bRelUrl )
 {
+    SetBiff( xlBiff8 );
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
     pExcRoot->nRowMax = XCL8_ROWMAX;
     pExcRoot->pEscher = new XclEscher( pDoc->GetTableCount(), *pExcRoot );
-
-    pExcRoot->pColor->SetDefaults();
-
-    pExcRoot->bStoreRel = bStoreRel;
-
-    pExcRoot->pAddInNameTranslator = new XclAddInNameTranslator;
 }
 
 

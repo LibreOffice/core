@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:29:29 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _ROOT_HXX
 #include "root.hxx"
 #endif
-#ifndef _EXCSST_HXX
-#include "excsst.hxx"
-#endif
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
 #endif
@@ -88,10 +85,13 @@
 #include "excdefs.hxx"
 #endif
 
-#ifndef _SC_XCLIMPPIVOTTABLES_HXX
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
+#endif
+#ifndef SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
 #endif
-#ifndef _SC_XCLIMPOBJECTS_HXX
+#ifndef SC_XCLIMPOBJECTS_HXX
 #include "XclImpObjects.hxx"
 #endif
 
@@ -104,16 +104,16 @@ class ScDBData;
 
 class XclImpStream;
 class XclImpAutoFilterBuffer;
+
 class XclImpWebQueryBuffer;
 
 class FilterProgressBar;
 
 
 
-class ExcCondForm : protected ExcRoot//, List
+class ExcCondForm : private ExcRoot, private XclImpRoot
 {
     private:
-        UINT16                  nTab;
         UINT16                  nNumOfConds;
         UINT16                  nCondCnt;
         UINT16                  nCol;
@@ -123,7 +123,7 @@ class ExcCondForm : protected ExcRoot//, List
         ScConditionalFormat*    pScCondForm;
     protected:
     public:
-                                ExcCondForm( RootData* pRootData );
+                                ExcCondForm( RootData* p, const XclImpRoot& rRoot );
         virtual                 ~ExcCondForm();
 
         void                    Read( XclImpStream& rIn );
@@ -151,13 +151,8 @@ class ExcCondFormList : protected List
 class ImportExcel8 : public ImportExcel
 {
     protected:
-        static String           aSstErrTxt;
-
-        SharedStringTable       aSharedStringTable;
-
         XclImpObjectManager     aObjManager;
         BOOL                    bObjSection;
-        ScfUInt32List           maIgnoreObjList;
 
         ExcScenarioList         aScenList;
 
@@ -169,7 +164,6 @@ class ImportExcel8 : public ImportExcel
         ExcCondFormList*        pCondFormList;
 
         XclImpAutoFilterBuffer* pAutoFilterBuffer;  // ranges for autofilter and advanced filter
-        XclImpWebQueryBuffer*   pWebQBuffer;        // data for web queries
 
         BOOL                    bHasBasic;
 
@@ -184,12 +178,8 @@ class ImportExcel8 : public ImportExcel
         void                    Horizontalpagebreaks( void );   // 0x1B
         void                    Note( void );                   // 0x1C
         void                    Format( void );                 // 0x1E
-        void                    Externsheet( void );            // 0x17
-        void                    Externname( void );             // 0x23
         void                    Cont( void );                   // 0x3C
         void                    Dconref( void );                // 0x51
-        void                    Xct( void );                    // 0x59
-        void                    Crn( void );                    // 0x5A
         void                    Obj( void );                    // 0x5D
         void                    Boundsheet( void );             // 0x85
         void                    FilterMode( void );             // 0x9B
@@ -204,12 +194,9 @@ class ImportExcel8 : public ImportExcel
         void                    SXLi( void );                   // 0xB5
         void                    SXPi( void );                   // 0xB6
         void                    SXDi( void );                   // 0xC5
-        void                    SXString( void );               // 0xCD
         void                    SXIdStm( void );                // 0xD5
-        void                    SXExt_ParamQry( void );         // 0xDC
         void                    SXVs( void );                   // 0xE3
         void                    Cellmerging( void );            // 0xE5     geraten...
-        void                    BGPic( void );                  // 0xE9     background picture (guess so, no documentation)
         void                    Msodrawinggroup( void );        // 0xEB
         void                    Msodrawing( void );             // 0xEC
         void                    Msodrawingselection( void );    // 0xED
@@ -217,31 +204,18 @@ class ImportExcel8 : public ImportExcel
         void                    SXEx( void );                   // 0xF1
         void                    SXFilt( void );                 // 0xF2
         void                    SXSelect( void );               // 0xF7
-        void                    Sst( void );                    // 0xFC
-                                                                // liefert Pos vom Folgerecord
-        ScBaseCell*             CreateCellFromShStrTabEntry( const ShStrTabEntry*,
-                                                                const UINT16 nXF );
         void                    Labelsst( void );               // 0xFD
         void                    Rstring( void );                // 0xD6
         void                    SXVdex( void );                 // 0x0100
-        void                    Labelranges();                  // 0x015F
         void                    Label( void );                  // 0x0204
 
-        void                    Tabid( void );                  // 0x013D
-        void                    Qsi( void );                    // 0x01AD
-        void                    Supbook( void );                // 0x01AE
         void                    Condfmt( void );                // 0x01B0
         void                    Cf( void );                     // 0x01B1
-        void                    Dval( void );                   // 0x01B2
         void                    Txo( void );                    // 0x01B6
         void                    Hlink( void );                  // 0x01B8
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
-        void                    Dv( void );                     // 0x01BE
         void                    Dimensions( void );             // 0x0200
         void                    Name( void );                   // 0x0218
-
-        void                    WebQrySettings( void );         // 0x0803
-        void                    WebQryTables( void );           // 0x0804
 
         void                    ChartEof( void );               // 0x000A
         void                    ChartScl( void );               // 0x00A0
@@ -266,43 +240,6 @@ class ImportExcel8 : public ImportExcel
         virtual                 ~ImportExcel8( void );
 
         virtual FltError        Read( void );
-};
-
-
-
-//___________________________________________________________________
-// web queries
-
-enum XclImpWebQueryMode         { xiwqUnknown, xiwqDoc, xiwqAllTables, xiwqSpecTables };
-
-class XclImpWebQuery
-{
-public:
-    String                      aFilename;
-    String                      aTables;
-    ScRange                     aDestRange;
-    XclImpWebQueryMode          eMode;
-    UINT16                      nRefresh;
-
-    inline                      XclImpWebQuery() : eMode( xiwqUnknown ), nRefresh( 0 ) {}
-    BOOL                        IsValid();
-
-    void                        ConvertTableNames();
-};
-
-class XclImpWebQueryBuffer : private List
-{
-public:
-    virtual                     ~XclImpWebQueryBuffer();
-
-    inline XclImpWebQuery*      First() { return (XclImpWebQuery*) List::First(); }
-    inline XclImpWebQuery*      Next()  { return (XclImpWebQuery*) List::Next(); }
-    inline XclImpWebQuery*      Last()  { return (XclImpWebQuery*) List::Last(); }
-
-    inline void                 Append( XclImpWebQuery* pQuery )
-                                    { List::Insert( pQuery, LIST_APPEND ); }
-
-    void                        Apply( ScDocument* pDoc );
 };
 
 

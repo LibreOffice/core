@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:29:30 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,37 +86,22 @@ class SvStorage;
 class SvNumberFormatter;
 class ScRangeName;
 
-class ColorBuffer;
 class NameBuffer;
 class RangeNameBuffer;
 class RangeNameBufferWK3;
 class ShrfmlaBuffer;
 class ExtNameBuff;
 class ExtSheetBuffer;
-//class FontBuffer;
 class ExcExternDup;
 class ScExtDocOptions;
-class ScEditEngineDefaulter;
 
-class FilterProgressBar;
-
-class XclImpFontBuffer;
-class XclImpNumFmtBuffer;
-class XclImpXFBuffer;
-class XclImpExtsheetBuffer;
-class XclImpTabIdBuffer;
 class XclImpPivotCacheList;
 
-class XclExpSst;
-class XclExpTabNumBuffer;
-class XclExpExtsheetBuffer;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 class XclExpCellMerging;
 
 class ExcNameList;
-class ExcPalette2;
-class UsedFontList;
 class UsedFormList;
 class UsedAttrList;
 class XclObjList;
@@ -125,9 +110,10 @@ class XclEscher;
 class XclPivotCacheList;
 class SfxStyleSheet;
 class ExcRecordList;
-//class SvxURLField;
-class XclHlink;
-class XclAddInNameTranslator;
+class XclExpHyperlink;
+
+class XclImpRoot;
+class XclExpRoot;
 
 // ---------------------------------------------------------- Excel Imp~/Exp~ -
 
@@ -137,15 +123,8 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     double              fColScale;              // Skalierungs-Faktoren fuer
     double              fRowScale;              //  Spaltenbreiten / Zeilenhoehen
     ScDocument*         pDoc;
-    SvNumberFormatter*  pFormTable;
     ScRangeName*        pScRangeName;
-    ColorBuffer*        pColor;
 
-    XclImpFontBuffer*   pFontBuffer;
-    XclImpNumFmtBuffer* pNumFmtBuffer;
-    XclImpXFBuffer*     pXFBuffer;
-
-    LanguageType        eDefLanguage;
     String              aStandard;              // Schluessel fuer Exc-Standard-Format
     BiffTyp             eDateiTyp;              // feine Differenzierung
     BiffTyp             eHauptDateiTyp;         // grobe Klassifizierung
@@ -154,12 +133,8 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     RangeNameBuffer*    pRNameBuff;
     ShrfmlaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
-    USHORT*             pAktTab;                // Zeiger auf aktuelle Tab-Nummer
     const CharSet*      pCharset;               // actual charset (im- / export!)
     ScExtDocOptions*    pExtDocOpt;
-
-    ScEditEngineDefaulter*  pEdEng;             // for rstrings, etc
-    ScEditEngineDefaulter*  pEdEngHF;           // special for header and footer
 
     BOOL                bCellCut;               // bei Ueberlauf max. Cols / Rows
     BOOL                bBreakSharedFormula;    // SharedFormula bei Export aufbrechen?
@@ -167,36 +142,23 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
-    XclImpExtsheetBuffer*   pExtsheetBuffer;        // supbooks and externsheet list
-    XclImpTabIdBuffer*      pImpTabIdBuffer;        // table id's for change tracking
-
     SvStorage*              pPivotCacheStorage;
     XclImpPivotCacheList*   pImpPivotCacheList;     // pivot caches for import
 
     SvStorageRef        xCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
 //  SvStorage*          pCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
 
-    ScEditEngineDefaulter&  GetEdEng( void );       // -> exctools.cxx
-    ScEditEngineDefaulter&  GetEdEngForHF( void );  // -> exctools.cxx
-
     UINT32              nCondRangeCnt;
     UINT16              nLastCond;
     String              GetCondFormStyleName( const UINT16 nCondCnt );  // -> exctools.cxx
 
-    XclAddInNameTranslator* pAddInNameTranslator;
-
     // Erweiterungen fuer Export
-    XclExpTabNumBuffer*     pTabBuffer;
-    XclExpSst*              pSstRecs;           // pointer to rec list, do not destroy
-    XclExpExtsheetBuffer*   pExternsheetRecs;   // pointer to rec list, do not destroy
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
     XclExpCellMerging*      pCellMerging;       // pointer to rec list, do not destroy
 
     ExcNameList*        pNameList;
     ScRangeName*        pScNameList;        // stores range names and DB ranges
-    ExcPalette2*        pPalette2;
-    UsedFontList*       pFontRecs;
     UsedFormList*       pFormRecs;
     UsedAttrList*       pXFRecs;
     ExcExternDup*       pExtSheetCntAndRecs;
@@ -212,15 +174,14 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     BOOL                bWriteVBAStorage;
 
-    UINT16              nCodenames;
-
     SfxStyleSheet*      pStyleSheet;
     SfxItemSet*         pStyleSheetItemSet;
 
 //  const SvxURLField*  pLastHlink;             // last found hyperlink
-    XclHlink*           pLastHlink;
-    BOOL                bStoreRel;
-    String              aBasePath;
+    XclExpHyperlink*    pLastHlink;
+
+    XclImpRoot*         pIR;
+    XclExpRoot*         pER;
 
                         RootData( void );       // -> exctools.cxx
                         ~RootData();            // -> exctools.cxx

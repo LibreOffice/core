@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XCLEXPCHANGETRACK_HXX
-#define _SC_XCLEXPCHANGETRACK_HXX
+#ifndef SC_XCLEXPCHANGETRACK_HXX
+#define SC_XCLEXPCHANGETRACK_HXX
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -79,11 +79,11 @@
 #include "chgtrack.hxx"
 #endif
 
-#ifndef _SC_FILTERTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
 #endif
-#ifndef _SC_XCLEXPEXTERNSHEET_HXX
-#include "XclExpExternsheet.hxx"
+#ifndef SC_XELINK_HXX
+#include "xelink.hxx"
 #endif
 
 #ifndef _EXCRECDS_HXX
@@ -406,7 +406,7 @@ private:
     sal_Bool                    bAccepted;
 
 protected:
-    const XclExpTabNumBuffer&   rTabBuffer;     // for table num export (sc num -> xcl num)
+    const XclExpTabIdBuffer&    rTabBuffer;     // for table num export (sc num -> xcl num)
     const XclExpChTrTabIdBuffer& rIdBuffer;     // for table num export (xcl num -> tab id)
     sal_uInt32                  nLength;        // this is not the record size
     sal_uInt16                  nOpCode;        // EXC_CHTR_OP_***
@@ -475,7 +475,7 @@ inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& 
 
 inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, sal_uInt16 nTab ) const
 {
-    rStrm << rIdBuffer.GetId( rTabBuffer.GetExcTable( nTab ) );
+    rStrm << rIdBuffer.GetId( rTabBuffer.GetXclTab( nTab ) );
 }
 
 //___________________________________________________________________
@@ -485,7 +485,7 @@ struct XclExpChTrData
 {
     XclExpUniString*            pString;
     ExcUPN*                     pUPN;
-    ScfUInt16List*              pRefList;
+    XclExpRefLogVec             aRefLog;
     double                      fValue;
     sal_Int32                   nRKValue;
     sal_uInt16                  nType;
@@ -508,7 +508,6 @@ struct XclExpChTrData
 inline XclExpChTrData::XclExpChTrData() :
     pString( NULL ),
     pUPN( NULL ),
-    pRefList( NULL ),
     fValue( 0.0 ),
     nRKValue( 0 ),
     nType( EXC_CHTR_TYPE_EMPTY ),
@@ -702,5 +701,5 @@ public:
 
 //___________________________________________________________________
 
-#endif // _SC_XCLEXPCHANGETRACK_HXX
+#endif
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: sab $ $Date: 2002-01-18 10:09:23 $
+#   last change: $Author: dr $ $Date: 2002-11-21 12:23:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -203,6 +203,7 @@ LIB4FILES=	\
     $(SLB)$/rtf.lib \
     $(SLB)$/xml.lib \
     $(SLB)$/accessibility.lib \
+    $(SLB)$/ftools.lib \
     $(SLB)$/scflt.lib
 
 LIB5TARGET=$(LB)$/sclib.lib

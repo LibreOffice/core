@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-15 15:00:09 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
 #endif
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
@@ -256,7 +256,7 @@ static void __AddPureBin( ByteString& r, UINT32 nVal )
 inline static void __AddDec( ByteString& r, UINT32 n )
 {
     sal_Char    p[ 32 ];
-    ultoa( n, p, 10 );
+    sprintf( p, "%u", n );
 
     r += p;
 }
@@ -277,7 +277,7 @@ inline static void __AddDec( ByteString& r, UINT8 n )
 inline static void __AddDec( ByteString& r, INT32 n )
 {
     sal_Char    p[ 32 ];
-    ltoa( n, p, 10 );
+    sprintf( p, "%d", n );
 
     r += p;
 }
@@ -546,7 +546,7 @@ static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL 
 
     UINT32  nExtLen;
     UINT16  nCrun;
-    BOOL    b16Bit, bFarEast, bRichString;
+    bool    b16Bit, bFarEast, bRichString;
     ULONG   nSeek = rStrm.ReadUniStringExtHeader( b16Bit, bRichString, bFarEast, nCrun, nExtLen, nGrbit );
 
     rStr += "[l=";
@@ -897,7 +897,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
     BOOL                bDec = FALSE;
     ByteString          aTmp;
     UINT16              __nFlags;
-    const UINT16        nR = pIn->GetRecNum();
+    const UINT16        nR = pIn->GetRecId();
     const ByteString*   pName = GetName( nR );
 
     // set CONTINUE handling mode
@@ -913,7 +913,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
         default:
             pIn->InitializeRecord( bReadContRecs );
     }
-    const ULONG         nL = pIn->GetRecLen();
+    const ULONG         nL = pIn->GetRecSize();
 
     switch( nR )
     {
@@ -977,7 +977,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
         if( !bSkipOffset )
         {
             aT += " :";
-            __AddHex( aT, UINT32(pIn->GetStreamPos() - 2 * sizeof(UINT16)) );
+            __AddHex( aT, UINT32(pIn->Tell() - 2 * sizeof(UINT16)) );
             aT += ':';
         }
 
@@ -2016,7 +2016,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddDec( t, nTabIndexCnt, 3 );
                 nTabIndexCnt++;
                 ADDTEXT( " (index list):" );
-                for( UINT16 iIndex = 0; iIndex < rIn.GetRecLen(); iIndex++ )
+                for( UINT16 iIndex = 0; iIndex < rIn.GetRecSize(); iIndex++ )
                 {
                     ADDTEXT( " " );
                     ADDHEX( 1 );
@@ -4444,7 +4444,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( nL );
                 break;
             case 0x1066:        // ChartGelframe
-                rIn.SetAltContinueId( 0x1066 );
+                rIn.InitializeRecord( true, 0x1066 );
                 EscherDump( nL );
                 break;
             case 0x1067:        // ChartBoppcustom
@@ -4505,8 +4505,7 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
     Print( sOutput );
 
     XclImpStream* pOldStream = pIn;
-    CharSet eCharSet = RTL_TEXTENCODING_MS_1252;
-    pIn = new XclImpStream( *pStream, &eCharSet );
+    pIn = new XclImpStream( *pStream, *pExcRoot->pIR );
     XclImpStream& rIn = *pIn;
     rIn.SetWarningMode( bWarnings );
 
@@ -4516,7 +4515,7 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
 
     while( bLoop && rIn.StartNextRecord() )
     {
-        nId = rIn.GetRecNum();
+        nId = rIn.GetRecId();
         if( HasModeDump( nId ) )
             RecDump( TRUE );
 
@@ -5601,10 +5600,10 @@ const XclDumpFunc* lcl_GetFuncData( sal_uInt16 nIndex )
 
 
 /// Stack to create a human readable formula from UPN.
-class XclDumpFormulaStack : private ScfObjStack< ByteString >
+class XclDumpFormulaStack : private ScfDelStack< ByteString >
 {
 public:
-                                ScfObjStack< ByteString >::Top;
+                                ScfDelStack< ByteString >::Top;
 
     void                        PushOperand( const ByteString& rName );
     void                        PushOperand( const sal_Char* pName );
@@ -6227,7 +6226,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
     }
     t.Erase();
     t += "  Formula = ";
-    t += aStack.Top() ? *aStack.Top() : "ERROR IN STACK";
+    if( aStack.Top() ) t += *aStack.Top(); else t += "ERROR IN STACK";
     Print( t );
     pIn->Seek( nAfterPos );
 }
@@ -7547,16 +7546,16 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
             {
                 const sal_uInt32 nBufLen = 0xFFFF;
                 sal_uInt8 pBuffer[ nBufLen ];
-                r.StoreUserPosition();
+                r.StoreGlobalPosition();
                 while( r.StartNextRecord() )
                 {
                     r.InitializeRecord( false );
-                    sal_uInt16 nRecLen = (sal_uInt16) Min( r.GetRecLen(), nBufLen );
-                    aBook << r.GetRecNum() << nRecLen;
-                    r.Read( pBuffer, nRecLen );
-                    aBook.Write( pBuffer, nRecLen );
+                    sal_uInt16 nRecSize = (sal_uInt16) Min( r.GetRecSize(), nBufLen );
+                    aBook << r.GetRecId() << nRecSize;
+                    r.Read( pBuffer, nRecSize );
+                    aBook.Write( pBuffer, nRecSize );
                 }
-                r.SeekUserPosition();
+                r.SeekGlobalPosition();
             }
         }
 
@@ -7566,7 +7565,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
             *pDumpStream << pTitle->GetBuffer();
 
         pIn = &r;
-        r.StoreUserPosition();
+        r.StoreGlobalPosition();
         r.SetWarningMode( bWarnings );
 
         FilterProgressBar*  pPrgrsBar = new FilterProgressBar( r );
@@ -7575,7 +7574,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         {
             pPrgrsBar->Progress();
 
-            if( HasModeDump( r.GetRecNum() ) )
+            if( HasModeDump( r.GetRecId() ) )
                 RecDump();
         }
 
@@ -7584,7 +7583,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         pIn = NULL;
         delete pPrgrsBar;
 
-        r.SeekUserPosition();
+        r.SeekGlobalPosition();
         r.SetWarningMode( TRUE );
 
         pPivotCache = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <tools/solar.h>
 #endif
 
-#ifndef _SC_FILTERTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
 #endif
 
 #ifndef _EXCRECDS_HXX
@@ -99,51 +99,35 @@ class XclExpChangeTrack;
 
 //--------------------------------------------------- class ExcRecordListRefs -
 
-#ifndef MAC
-class ExcRecordListRefs : protected List
-#else
 class ExcRecordListRefs : public List
-#endif
 {
 private:
 protected:
 public:
     virtual                     ~ExcRecordListRefs();
-    inline void                 Append( ExcRecord* );
-    inline ExcRecord*           First( void );
-    inline ExcRecord*           Next( void );
+    inline void                 Append( XclExpRecordBase* );
+    inline XclExpRecordBase*    First();
+    inline XclExpRecordBase*    Next();
                                 List::Count;
 };
 
 
-inline void ExcRecordListRefs::Append( ExcRecord* pER )
+inline void ExcRecordListRefs::Append( XclExpRecordBase* pER )
 {
     List::Insert( pER, CONTAINER_APPEND );
 }
 
 
-inline ExcRecord* ExcRecordListRefs::First( void )
+inline XclExpRecordBase* ExcRecordListRefs::First()
 {
-    return ( ExcRecord* ) List::First();
+    return ( XclExpRecordBase* ) List::First();
 }
 
 
-inline ExcRecord* ExcRecordListRefs::Next( void )
+inline XclExpRecordBase* ExcRecordListRefs::Next()
 {
-    return ( ExcRecord* ) List::Next();
+    return ( XclExpRecordBase* ) List::Next();
 }
-
-
-//--------------------------------------------------- class ExcRecordListInst -
-
-class ExcRecordListInst : public ExcRecordListRefs
-{
-private:
-protected:
-public:
-    virtual                     ~ExcRecordListInst();
-};
-
 
 
 //----------------------------------------------------------- class DefRowXFs -
@@ -184,10 +168,10 @@ inline void DefRowXFs::Get( UINT32 nVal, UINT16& rR, UINT16& rXF )
 
 //------------------------------------------------------------ class ExcTable -
 
-class ExcTable : public ExcRoot
+class ExcTable : public XclExpRecordBase, public ExcRoot
 {
 private:
-    ExcRecordListInst           aRecList;
+    XclExpRecordList<>          aRecList;
     UINT16                      nScTab;     // table number SC document
     UINT16                      nExcTab;    // table number Excel document
     UINT16                      nAktRow;    // fuer'n Iterator
@@ -199,12 +183,10 @@ private:
     void                        Clear();
     void                        NullTab( const String* pCodename = NULL );
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
-    inline void                 Add( ExcRecord *pRec );
+    inline void                 Add( XclExpRecordBase* pRec );
 
     void                        AddRow( ExcRow* pRow );
     void                        AddUsedRow( ExcRow*& rpRow );   // Add() or delete
-
-    void                        AddWebQueries();
 
 public:
                                 ExcTable( RootData* pRD );
@@ -221,17 +203,16 @@ public:
 };
 
 
-inline void ExcTable::Add( ExcRecord* pRec )
+inline void ExcTable::Add( XclExpRecordBase* pRec )
 {
     DBG_ASSERT( pRec, "-ExcTable::Add(): pRec ist NULL!" );
-
     aRecList.Append( pRec );
 }
 
 
 //--------------------------------------------------------- class ExcDocument -
 
-class ExcDocument : private List, public ExcRoot
+class ExcDocument : protected XclExpRoot
 {
 friend class ExcTable;
 
@@ -239,17 +220,18 @@ private:
     ExcRecordListRefs   aBundleSheetRecList;
     ExcTable            aHeader;
 
+    XclExpRecordList< ExcTable > maTableList;
+
     ScProgress*         pPrgrsBar;
 
     static NameBuffer*  pTabNames;
 
     XclExpChangeTrack*  pExpChangeTrack;
 
-    void                Clear( void );
-    void                Add( UINT16 nScTab );
 public:
-                        ExcDocument( RootData* pRD/*, ExportFormatExcel*/ );
-                        ~ExcDocument();
+    explicit                    ExcDocument( const XclExpRoot& rRoot );
+    virtual                     ~ExcDocument();
+
     void                ReadDoc( void );
     void                Write( SvStream& rSvStrm );
 };

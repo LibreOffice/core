@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dr $ $Date: 2002-05-22 11:11:18 $
+#   last change: $Author: dr $ $Date: 2002-11-21 12:16:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,23 +81,26 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/FilterTools.obj				\
-        $(SLO)$/FilterProgressBar.obj		\
-        $(SLO)$/FilterApiHelper.obj			\
-        $(SLO)$/XclTools.obj				\
+        $(SLO)$/xltools.obj					\
+        $(SLO)$/xlroot.obj					\
+        $(SLO)$/xlstyle.obj					\
+        $(SLO)$/xistream.obj				\
+        $(SLO)$/xiroot.obj					\
+        $(SLO)$/xihelper.obj				\
+        $(SLO)$/xilink.obj					\
+        $(SLO)$/xicontent.obj				\
+        $(SLO)$/xistyle.obj					\
+        $(SLO)$/xestream.obj				\
+        $(SLO)$/xerecord.obj				\
+        $(SLO)$/xeroot.obj					\
+        $(SLO)$/xehelper.obj				\
+        $(SLO)$/xelink.obj					\
+        $(SLO)$/xecontent.obj				\
+        $(SLO)$/xestyle.obj					\
         $(SLO)$/XclChartsApiHelper.obj		\
-        $(SLO)$/XclImpStream.obj			\
-        $(SLO)$/XclImpHelper.obj			\
-        $(SLO)$/XclImpDocContent.obj		\
-        $(SLO)$/XclImpExternsheet.obj		\
-        $(SLO)$/XclImpStyleBuffer.obj		\
         $(SLO)$/XclImpObjects.obj			\
         $(SLO)$/XclImpCharts.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
-        $(SLO)$/XclExpStream.obj			\
-        $(SLO)$/XclExpHelper.obj			\
-        $(SLO)$/XclExpDocContent.obj		\
-        $(SLO)$/XclExpExternsheet.obj		\
         $(SLO)$/XclExpCharts.obj			\
         $(SLO)$/read.obj					\
         $(SLO)$/impop.obj					\
@@ -121,7 +124,6 @@ SLOFILES =	\
         $(SLO)$/biffdump.obj
 
 EXCEPTIONSFILES = \
-        $(SLO)$/FilterApiHelper.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpCharts.obj
 

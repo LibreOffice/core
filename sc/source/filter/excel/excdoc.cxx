@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-11 13:41:40 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,6 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustring>
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/sheet/XAreaLinks.hpp>
-#include <com/sun/star/sheet/XAreaLink.hpp>
-
 #include "drwlayer.hxx"
 
 #include "cell.hxx"
@@ -119,24 +112,22 @@
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
 
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
+#ifndef SC_XELINK_HXX
+#include "xelink.hxx"
 #endif
-#ifndef _SC_XCLEXPDOCCONTENT_HXX
-#include "XclExpDocContent.hxx"
+#ifndef SC_XESTYLE_HXX
+#include "xestyle.hxx"
 #endif
-#ifndef _SC_XCLEXPEXTERNSHEET_HXX
-#include "XclExpExternsheet.hxx"
-#endif
-#ifndef _SC_XCLEXPPIVOTTABLES_HXX
-#include "XclExpPivotTables.hxx"
-#endif
-#ifndef _SC_XCLEXPCHANGETRACK_HXX
-#include "XclExpChangeTrack.hxx"
+#ifndef SC_XECONTENT_HXX
+#include "xecontent.hxx"
 #endif
 
-using namespace ::com::sun::star;
-using namespace ::rtl;
+#ifndef SC_XCLEXPPIVOTTABLES_HXX
+#include "XclExpPivotTables.hxx"
+#endif
+#ifndef SC_XCLEXPCHANGETRACK_HXX
+#include "XclExpChangeTrack.hxx"
+#endif
 
 
 NameBuffer*     ExcDocument::pTabNames = NULL;
@@ -155,19 +146,6 @@ static String lcl_GetVbaTabName( UINT16 n )
 
 ExcRecordListRefs::~ExcRecordListRefs()
 {
-}
-
-
-
-
-ExcRecordListInst::~ExcRecordListInst()
-{
-    ExcRecord*  pDel = ( ExcRecord* ) List::First();
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( ExcRecord* ) List::Next();
-    }
 }
 
 
@@ -224,7 +202,7 @@ ExcTable::ExcTable( RootData* pRD ) :
 ExcTable::ExcTable( RootData* pRD, UINT16 nScTable ) :
     ExcRoot( pRD ),
     nScTab( nScTable ),
-    nExcTab( pRD->pTabBuffer->GetExcTable( nScTable ) ),
+    nExcTab( pRD->pER->GetTabIdBuffer().GetXclTab( nScTable ) ),
     pDefRowXFs( NULL )
 {   }
 
@@ -266,84 +244,6 @@ void ExcTable::AddUsedRow( ExcRow*& rpRow )
 }
 
 
-void ExcTable::AddWebQueries()
-{
-    SfxObjectShell* pShell = pExcRoot->pDoc->GetDocumentShell();
-    if( !pShell ) return;
-
-    uno::Reference< frame::XModel > xModel( pShell->GetModel() );
-    uno::Reference< beans::XPropertySet > xPropSet( xModel, uno::UNO_QUERY );
-    if( !xPropSet.is() ) return;
-
-    uno::Reference< sheet::XAreaLinks > xAreaLinks;
-    uno::Any aAny( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_AREALINKS ) ) ) );
-    if( !(aAny >>= xAreaLinks) ) return;
-
-    uno::Reference< container::XIndexAccess > xLinksIAccess( xAreaLinks, uno::UNO_QUERY );
-    if( !xLinksIAccess.is() ) return;
-
-    const OUString aPropFilter( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTER ) );
-//  const OUString aPropFilterOpt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTOPT ) );
-    const OUString aPropURL( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_LINKURL ) );
-    const OUString aPropRefresh( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_REFDELAY ) );
-    OUString aFilter, /*aFilterOpt,*/ aURL;
-    OUString aWebQueryFilter( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
-    String aRangeName;
-    sal_Int32 nRefresh;
-
-    sal_Int32 nCount = xLinksIAccess->getCount();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        uno::Reference< sheet::XAreaLink > xAreaLink;
-        uno::Any aLinkAny( xLinksIAccess->getByIndex( nIndex ) );
-        if( aLinkAny >>= xAreaLink )
-        {
-            table::CellRangeAddress aDestRange( xAreaLink->getDestArea() );
-            if( aDestRange.Sheet == nScTab )
-            {
-                uno::Reference< beans::XPropertySet > xLinkProp( xAreaLink, uno::UNO_QUERY );
-                if( xLinkProp.is() )
-                {
-                    aLinkAny = xLinkProp->getPropertyValue( aPropFilter );
-                    aLinkAny >>= aFilter;
-                    if( aFilter == aWebQueryFilter )
-                    {
-                        // get properties
-//                      aLinkAny = xLinkProp->getPropertyValue( aPropFilterOpt );
-//                      aLinkAny >>= aFilterOpt;
-                        aLinkAny = xLinkProp->getPropertyValue( aPropURL );
-                        aLinkAny >>= aURL;
-                        aLinkAny = xLinkProp->getPropertyValue( aPropRefresh );
-                        aLinkAny >>= nRefresh;
-                        String aAbsDoc( ScGlobal::GetAbsDocName( aURL, pExcRoot->pDoc->GetDocumentShell() ) );
-                        INetURLObject aURLObj( aAbsDoc );
-                        String aWebQueryURL( aURLObj.getFSysPath( INetURLObject::FSYS_DOS ) );
-                        if( !aWebQueryURL.Len() )
-                            aWebQueryURL = aAbsDoc;
-
-                        // find range or create a new range
-                        ScRange aScDestRange;
-                        ScUnoConversion::FillScRange( aScDestRange, aDestRange );
-                        ScRangeData* pRangeData = pExcRoot->pDoc->GetRangeName()->GetRangeAtBlock( aScDestRange );
-                        if( pRangeData )
-                            aRangeName = pRangeData->GetName();
-                        else
-                        {
-                            ExcName* pExcName = new ExcName( *pExcRoot, aScDestRange, aURLObj.getBase() );
-                            aRangeName = pExcName->GetName();
-                            pExcRoot->pNameList->InsertSorted( *pExcRoot, pExcName, nScTab );
-                        }
-
-                        // create the web query record
-                        Add( new XclExpWebQuery( aRangeName, aWebQueryURL, xAreaLink->getSourceArea(), nRefresh ) );
-                    }
-                }
-            }
-        }
-    }
-}
-
-
 void ExcTable::SetDefRowXF( UINT16 nXF, UINT16 n )
 {
     if( !pDefRowXFs )
@@ -355,9 +255,9 @@ void ExcTable::SetDefRowXF( UINT16 nXF, UINT16 n )
 
 void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 {
-    RootData&           rR          = *pExcRoot;
-    ScDocument&         rDoc        = *rR.pDoc;
-    XclExpTabNumBuffer& rTabBuffer  = *rR.pTabBuffer;
+    RootData&           rR              = *pExcRoot;
+    ScDocument&         rDoc            = *rR.pDoc;
+    XclExpTabIdBuffer&  rTabBuffer      = rR.pER->GetTabIdBuffer();
 
     if ( rR.eDateiTyp < Biff8 )
         Add( new ExcBofW );
@@ -367,32 +267,18 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     UINT16  nC;
     String  aTmpString;
     UINT16  nScTabCount     = rTabBuffer.GetScTabCount();
-    UINT16  nExcTabCount    = rTabBuffer.GetExcTabCount();
-    UINT16  nCodenames      = rR.nCodenames;
-
-    XclExpSst*              pSstRecs            = NULL;
-    XclExpExtsheetBuffer*   pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
-    if ( rR.eDateiTyp >= Biff8 )
-    {
-        rR.pSstRecs         = pSstRecs          = new XclExpSst;
-        rR.pExternsheetRecs = pExternsheetRecs  = new XclExpExtsheetBuffer( rR );
-    }
+    UINT16  nExcTabCount    = rTabBuffer.GetXclTabCount();
+    UINT16  nCodenames      = rTabBuffer.GetCodenameCount();
 
     ExcNameList*    pNameList   = rR.pNameList  = new ExcNameList( rR );
-    ExcPalette2*    pPalette2   = rR.pPalette2  = new ExcPalette2( *rR.pColor );
-    UsedFontList*   pFontRecs   = rR.pFontRecs  = new UsedFontList( rR );
     UsedFormList*   pFormRecs   = rR.pFormRecs  = new UsedFormList( rR );
-    UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR, *pPalette2, *pFontRecs, *pFormRecs );
+    UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR, *pFormRecs );
 
     rR.pObjRecs = NULL;             // per sheet
     rR.pNoteRecs = NULL;            // per sheet
 
-    pFontRecs->SetBaseIndex( 6 );   // 6 statt 5 wegen Ausfall von 4!
     pFormRecs->SetBaseIndex( 164 ); // siehe auch ValueFormBuffer::nNewFormats
     pXFRecs->SetBaseIndex( 21 );
-
-    ExcFont::SetPalette( *pPalette2 );
-    ExcXf::SetPalette( *pPalette2 );
 
     if( rR.eDateiTyp < Biff8 )
         Add( new ExcDummy_00 );
@@ -464,8 +350,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy_041 );
         // Font
-        Add( new ExcDummy_01 );
-        Add( pFontRecs );
+        Add( new XclExpRefRecord( rR.pER->GetFontBuffer() ) );
         // Format
         Add( new ExcDummy_Fm );
         Add( pFormRecs );
@@ -475,7 +360,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // Style
         Add( new ExcDummy_Style );
         // Colors
-        Add( pPalette2 );
+        Add( new XclExpRefRecord( rR.pER->GetPalette() ) );
 
         // Bundlesheet
         ExcBundlesheetBase* pBS;
@@ -494,8 +379,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy8_041 );
         // Font
-        Add( new ExcDummy8_01 );
-        Add( pFontRecs );
+        Add( new XclExpRefRecord( rR.pER->GetFontBuffer() ) );
         // Format
         Add( new ExcDummy8_Fm );
         Add( pFormRecs );
@@ -521,7 +405,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         }
 
         // Colors
-        Add( pPalette2 );
+        Add( new XclExpRefRecord( rR.pER->GetPalette() ) );
 
         // Change tracking
         if( rDoc.GetChangeTrack() )
@@ -554,14 +438,14 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // COUNTRY always Germany
         Add( new ExcDummy8_Country );
         // SUPBOOKs, XCTs, CRNs, EXTERNSHEET
-        Add( pExternsheetRecs );
+        Add( new XclExpRefRecord( rR.pER->GetLinkManager() ) );
         // NAMEs
         Add( pNameList );
 
         // MSODRAWINGGROUP per-document data
         Add( new XclMsodrawinggroup( rR, ESCHER_DggContainer ) );
         // SST, EXTSST
-        Add( pSstRecs );
+        Add( new XclExpRefRecord( rR.pER->GetSst() ) );
     }
 
     Add( new ExcEof );
@@ -572,7 +456,7 @@ void ExcTable::FillAsTable( void )
 {
     RootData&           rR          = *pExcRoot;
     ScDocument&         rDoc        = *rR.pDoc;
-    XclExpTabNumBuffer& rTabBuffer  = *rR.pTabBuffer;
+    XclExpTabIdBuffer&  rTabBuffer  = rR.pER->GetTabIdBuffer();
 
     if( nScTab >= rTabBuffer.GetScTabCount() )
     {
@@ -600,7 +484,7 @@ void ExcTable::FillAsTable( void )
     UINT16                  nMaxFlagRow = rDoc.GetLastFlaggedRow( nScTab );
 
     ExcCell*                pAktExcCell;
-    SvNumberFormatter&      rFormatter = *rR.pFormTable;
+    SvNumberFormatter&      rFormatter = *rR.pDoc->GetFormatTable();
     const BiffTyp           eDateiTyp = rR.eDateiTyp;
 
     SfxStyleSheet*          pStSh = ( SfxStyleSheet* ) rDoc.GetStyleSheetPool()->Find(
@@ -610,7 +494,7 @@ void ExcTable::FillAsTable( void )
     SfxItemSet*             pStyleSheetItemSet = pStSh? &pStSh->GetItemSet() : NULL;
     rR.pStyleSheetItemSet = pStyleSheetItemSet;
 
-    ExcRecordList*          pHlinks = new ExcRecordList;
+    XclExpHyperlinkList*    pHlinks = new XclExpHyperlinkList;
     XclExpTableOpManager    aTableOpList;
     XclExpTableOp*          pTableOpRec = NULL;
 
@@ -620,7 +504,7 @@ void ExcTable::FillAsTable( void )
     ExcArrays               aShrdFmlaList;
     ExcShrdFmla*            pShrdFmla = NULL;
 
-    XclExpRecDval*          pRecDval = NULL;        // data validation
+    XclExpDval*             pRecDval = NULL;        // data validation
 
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
     DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
@@ -706,8 +590,8 @@ void ExcTable::FillAsTable( void )
         Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
         Add( new ExcDummy_02c );
         Add( new XclExpWsbool( rR ) );
-        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
-        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbVertical ) );
+        Add( new XclExpPagebreaks( rR, nScTab, xlPBHorizontal ) );
+        Add( new XclExpPagebreaks( rR, nScTab, xlPBVertical ) );
     }
     else
     {
@@ -722,8 +606,8 @@ void ExcTable::FillAsTable( void )
         // GUTS (count & size of outline icons)
         Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
         Add( new XclExpWsbool( rR ) );
-        Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
-        Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbVertical ) );
+        Add( new XclExpPagebreaks8( rR, nScTab, xlPBHorizontal ) );
+        Add( new XclExpPagebreaks8( rR, nScTab, xlPBVertical ) );
     }
 
     Add( new XclExpHeader( rR ) );
@@ -733,17 +617,17 @@ void ExcTable::FillAsTable( void )
 
     // margins
     const SvxLRSpaceItem&   rLRSpaceItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
-    Add( new ExcMargin( rLRSpaceItem.GetLeft(), xlLeftMargin ) );
-    Add( new ExcMargin( rLRSpaceItem.GetRight(), xlRightMargin ) );
+    Add( new XclExpMargin( rLRSpaceItem.GetLeft(), xlLeftMargin ) );
+    Add( new XclExpMargin( rLRSpaceItem.GetRight(), xlRightMargin ) );
         const SvxULSpaceItem&   rULSpaceItem = ( const SvxULSpaceItem& ) pStyleSheetItemSet->Get( ATTR_ULSPACE );
-    Add( new ExcMargin( rULSpaceItem.GetUpper(), xlTopMargin ) );
-    Add( new ExcMargin( rULSpaceItem.GetLower(), xlBottomMargin ) );
+    Add( new XclExpMargin( rULSpaceItem.GetUpper(), xlTopMargin ) );
+    Add( new XclExpMargin( rULSpaceItem.GetLower(), xlBottomMargin ) );
 
     Add( new ExcSetup( &rR ) );
 
     if( eDateiTyp >= Biff8 )
     {
-        Add( new XclBGPic( rR ) );
+        Add( new XclExpBitmap( *rR.pER ) );
 
         if( rDoc.IsTabProtected( nScTab ) )
             Add( new XclProtection() );
@@ -932,7 +816,7 @@ void ExcTable::FillAsTable( void )
                     else
                         pAktExcCell = new ExcLabelSst( aScPos, pPatt, rR, *((ScEditCell*) pAktScCell) );
 
-                    XclHlink*&      rpHlink = rR.pLastHlink;
+                    XclExpHyperlink*& rpHlink = rR.pLastHlink;
                     if( rpHlink )
                     {
                         rpHlink->SetPosition( aScPos );
@@ -1045,7 +929,7 @@ void ExcTable::FillAsTable( void )
             {
                 sal_uInt32 nHandle = ((const SfxUInt32Item*)pItem)->GetValue();
                 if( !pRecDval )
-                    pRecDval = new XclExpRecDval( rR );
+                    pRecDval = new XclExpDval( *rR.pER );
                 ScRange aRange( aScPos );
                 aRange.aEnd.SetCol( aIterator.GetEndCol() );
                 pRecDval->InsertCellRange( aRange, nHandle );
@@ -1088,7 +972,7 @@ void ExcTable::FillAsTable( void )
     rR.pCellMerging = NULL;
     // label ranges
     if( rR.eDateiTyp >= Biff8 )
-        Add( new XclExpRecLabelranges( rR ) );
+        Add( new XclExpLabelranges( *rR.pER ) );
     // insert data validation
     if( pRecDval )
         Add( pRecDval );
@@ -1140,13 +1024,13 @@ void ExcTable::FillAsTable( void )
         }
 
         // WINDOW2
-        Add( new ExcWindow28( rR, nScTab ) );
+        Add( new ExcWindow28( *rR.pER, nScTab ) );
     }
 
     if( rR.eDateiTyp >= Biff8 )
     {
         // web queries
-        AddWebQueries();
+        Add( new XclExpWebQueryBuffer( *rR.pER ) );
 
         // conditional formats
         const ScConditionalFormatList*  pCondFormList = rDoc.GetCondFormList();
@@ -1253,7 +1137,7 @@ void ExcTable::NullTab( const String* pCodename )
         }
         // WINDOW2
 
-        Add( new ExcWindow28( rR, nScTab ) );
+        Add( new ExcWindow28( *rR.pER, nScTab ) );
     }
     Add( new ExcEof );
 }
@@ -1269,48 +1153,29 @@ BOOL ExcTable::ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF )
 
 void ExcTable::Write( XclExpStream& rStr )
 {
-    ExcRecord*          pAkt = aRecList.First();
-
-    while( pAkt )
-    {
-        pAkt->Save( rStr );
-        pAkt = aRecList.Next();
-    }
+    aRecList.Save( rStr );
 }
 
 
 
 
-void ExcDocument::Clear( void )
-{
-    ExcTable*           pDelTab = ( ExcTable* ) List::First();
-    while( pDelTab )
-    {
-        delete pDelTab;
-        pDelTab = ( ExcTable * ) List::Next();
-    }
-    List::Clear();
-}
-
-
-ExcDocument::ExcDocument( RootData* pRD ) :
-    ExcRoot( pRD ),
-    aHeader( pRD ),
+ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
+    aHeader( rRoot.mpRD ),
     pExpChangeTrack( NULL )
 {
     pTabNames = new NameBuffer( 0, 16 );
 
     pPrgrsBar = new ScProgress(
         NULL, ScGlobal::GetRscString(STR_SAVE_DOC),
-        ( UINT32 ) pExcRoot->pDoc->GetCellCount() * 2 );
+        ( UINT32 ) GetDoc().GetCellCount() * 2 );
     ExcCell::SetPrgrsBar( *pPrgrsBar );
 }
 
 
 ExcDocument::~ExcDocument()
 {
-    Clear();
-
+    maTableList.Clear();    //! for the following assertion
     DBG_ASSERT( ExcCell::_nRefCount == 0, "*ExcDocument::~ExcDocument(): Ein'n hab'n wir noch!" );
 
     delete pTabNames;
@@ -1321,76 +1186,59 @@ ExcDocument::~ExcDocument()
     delete pPrgrsBar;
     ExcCell::ClearPrgrsBar();
 
-    if( pExpChangeTrack )
-        delete pExpChangeTrack;
+    delete pExpChangeTrack;
 }
 
 
 void ExcDocument::ReadDoc( void )
 {
-    pExcRoot->nCodenames = pExcRoot->pTabBuffer->GetCodenameCount();
-
     aHeader.FillAsHeader( aBundleSheetRecList );
 
-    UINT16          nTabs = pExcRoot->pTabBuffer->GetMaxScTabCount();
-    UINT16          nTabCnt;
-    pExcRoot->pAktTab = &nTabCnt;
+    sal_uInt16 nScTabCount = GetTabIdBuffer().GetMaxScTabCount();
+    while( GetScTab() < nScTabCount )
+    {
+        if( GetTabIdBuffer().IsExportTable( GetScTab() ) )
+        {
+            ExcTable* pTab = new ExcTable( mpRD, GetScTab() );
+            maTableList.Append( pTab );
+            pTab->FillAsTable();
+        }
+        IncScTab();
+    }
 
-    for( nTabCnt = 0 ; nTabCnt < nTabs ; nTabCnt++ )
-        Add( nTabCnt );
-
-    pExcRoot->pAktTab = NULL;
-
-    if ( pExcRoot->eDateiTyp >= Biff8 )
+    if ( GetBiff() >= xlBiff8 )
     {
         // complete temporary Escher stream
-        pExcRoot->pEscher->GetEx()->EndDocument();
+        mpRD->pEscher->GetEx()->EndDocument();
 
         // change tracking
-        if ( pExcRoot->pDoc->GetChangeTrack() )
-            pExpChangeTrack = new XclExpChangeTrack( pExcRoot );
-    }
-}
-
-
-void ExcDocument::Add( UINT16 nScTab )
-{
-    if( pExcRoot->pTabBuffer->IsExportTable( nScTab ) )
-    {
-        ExcTable* pTab = new ExcTable( pExcRoot, nScTab );
-        List::Insert( pTab, LIST_APPEND );
-        pTab->FillAsTable();
+        if ( GetDoc().GetChangeTrack() )
+            pExpChangeTrack = new XclExpChangeTrack( mpRD );
     }
 }
 
 
 void ExcDocument::Write( SvStream& rSvStrm )
 {
-    if( List::Count() > 0 )
+    if( !maTableList.Empty() )
     {
-        ULONG nMaxRecordLen;
-        if ( pExcRoot->eDateiTyp >= Biff8 )
-        {
-            pExcRoot->pEscher->GetStrm().Seek(0);   // ready for take off
-            nMaxRecordLen = EXC_MAXRECLEN_BIFF8;
-        }
-        else
-            nMaxRecordLen = EXC_MAXRECLEN_BIFF5;
+        if ( GetBiff() >= xlBiff8 )
+            mpRD->pEscher->GetStrm().Seek(0);   // ready for take off
 
-        pExcRoot->pPalette2->ReduceColors();
+        GetPalette().ReduceColors();
 
-        XclExpStream        aXclStrm( rSvStrm, nMaxRecordLen );
-        ExcTable*           pAktTab = ( ExcTable* ) List::First();
+        XclExpStream        aXclStrm( rSvStrm, *this );
+        ExcTable*           pTab = maTableList.First();
         ExcBundlesheetBase* pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
 
         aHeader.Write( aXclStrm );
 
-        while( pAktTab )
+        while( pTab )
         {
             DBG_ASSERT( pAktBS, "-ExcDocument::Write(): BundleSheetRecs und Tabs passen nicht zusammen!" );
             pAktBS->SetStreamPos( aXclStrm.GetStreamPos() );
-            pAktTab->Write( aXclStrm );
-            pAktTab = ( ExcTable* ) List::Next();
+            pTab->Write( aXclStrm );
+            pTab = maTableList.Next();
             pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.Next();
         }
 
@@ -1405,8 +1253,8 @@ void ExcDocument::Write( SvStream& rSvStrm )
         }
 
     }
-    if( pExcRoot->pPivotCacheList )
-        pExcRoot->pPivotCacheList->Write();
+    if( mpRD->pPivotCacheList )
+        mpRD->pPivotCacheList->Write();
     if( pExpChangeTrack )
         pExpChangeTrack->Write();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef _EXCFORM_HXX
 #define _EXCFORM_HXX
 
-#ifndef _XCLTOOLS_HXX
-#include "XclTools.hxx"
+#ifndef _XLTOOLS_HXX
+#include "xltools.hxx"
 #endif
 
 #ifndef _FORMEL_HXX
@@ -99,7 +99,7 @@ protected:
     void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData&, const BOOL bName );
 
 public:
-                        ExcelToSc( RootData* pRD, XclImpStream& aStr, const UINT16& rOrgTab );
+                        ExcelToSc( RootData* pRD, XclImpStream& aStr );
     virtual             ~ExcelToSc();
     virtual ConvErr     Convert( const ScTokenArray*&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
@@ -139,12 +139,12 @@ inline BOOL ExcelToSc::IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 )
 }
 
 
-
+class XclImpLinkManager;
 
 class ExcelToSc8 : public ExcelToSc
 {
 private:
-    const XclImpExtsheetBuffer& rExtsheetBuffer;
+    const XclImpLinkManager&    rLinkMan;
 
     void                ExcRelToScRel( UINT16 nRow, UINT16 nCol, SingleRefData&,
                             const BOOL bName );
@@ -153,7 +153,7 @@ private:
     virtual BOOL        Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab );
 
 public:
-                        ExcelToSc8( RootData* pRD, XclImpStream& aStr, const UINT16& rOrgTab );
+                        ExcelToSc8( RootData* pRD, XclImpStream& aStr );
     virtual             ~ExcelToSc8();
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );

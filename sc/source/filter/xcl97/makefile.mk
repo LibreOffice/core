@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dr $ $Date: 2001-11-23 19:34:23 $
+#   last change: $Author: dr $ $Date: 2002-11-21 12:22:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ SLOFILES =	\
         $(SLO)$/XclImpChangeTrack.obj		\
         $(SLO)$/XclExpPivotTables.obj		\
         $(SLO)$/XclExpChangeTrack.obj
-
 
 # --- Targets -------------------------------------------------------
 

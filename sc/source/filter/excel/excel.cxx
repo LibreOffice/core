@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:27:55 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,28 @@
 
 #pragma hdrstop
 
+// ============================================================================
+
+#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#include <svtools/saveopt.hxx>
+#endif
+#ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
-#include <tools/globname.hxx>
-//#include <segmentc.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
+#endif
+#ifndef _GLOBNAME_HXX
+#include <tools/globname.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
 #endif
 
 #ifndef SC_ITEMS_HXX
@@ -85,10 +96,9 @@
 #include <svtools/stritem.hxx>
 #endif
 
-// wenn definiert, erzeugt Excel-Import nur Dumps ueber die DBG_TRACE-Funktion
-//#define __DUMPER__
-
-#include <filter.hxx>
+#ifndef SC_FILTER_HXX
+#include "filter.hxx"
+#endif
 
 #include "scerrors.hxx"
 #include "root.hxx"
@@ -320,18 +330,17 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
 
             InitFuncData( bBiff8 );
 
+            SvtSaveOptions aSaveOpt;
+            bool bRelUrl = TRUE == (rOutMedium.IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys());
+
             if ( bBiff8 )
             {
-                SvtSaveOptions aSaveOpt;
-                BOOL            bStoreRel = rOutMedium.IsRemote()?
-                                                aSaveOpt.IsSaveRelINet() :
-                                                aSaveOpt.IsSaveRelFSys();
-                ExportBiff8     aFilter( *pStorage, *xStStream, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bStoreRel );
+                ExportBiff8     aFilter( *pStorage, *xStStream, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
             else
             {
-                ExportBiff5     aFilter( *pStorage, *xStStream, pDocument, lcl_GetBasePath( rOutMedium ), eNach );
+                ExportBiff5     aFilter( *pStorage, *xStStream, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_op.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:29:30 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #include "root.hxx"
 #endif
 
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
+#endif
+
+
 class ScDocument;
 class ScPatternAttr;
 class ScFormulaCell;
@@ -134,7 +139,7 @@ public:
 
 
 
-class ExportBiff5 : public ExportTyp
+class ExportBiff5 : private XclExpRootData, public ExportTyp, public XclExpRoot
 {
 private:
     ExcDocument*        pExcDoc;
@@ -143,7 +148,7 @@ protected:
     RootData*           pExcRoot;
 
 public:
-                        ExportBiff5( SvStorage&, SvStream&, ScDocument*, const String& rBasePath, CharSet eDest );
+                        ExportBiff5( SvStorage&, SvStream&, ScDocument*, const String& rBasePath, CharSet eDest, bool bRelUrl );
     virtual             ~ExportBiff5();
     FltError            Write();
 };
@@ -154,7 +159,7 @@ public:
 class ExportBiff8 : public ExportBiff5
 {
 public:
-                        ExportBiff8( SvStorage&, SvStream&, ScDocument*, const String& rBasePath, CharSet eDest, BOOL bStoreRel );
+                        ExportBiff8( SvStorage&, SvStream&, ScDocument*, const String& rBasePath, CharSet eDest, bool bRelUrl );
     virtual             ~ExportBiff8();
 };
 

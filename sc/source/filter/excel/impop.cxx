@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-15 14:52:35 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 
 #include <so3/embobj.hxx>
 #include <sfx2/objsh.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include "docuno.hxx"
 
 #if defined( WNT ) || defined( WIN )
@@ -118,18 +117,14 @@
 #include "filtopt.hxx"
 #include "scerrors.hxx"
 
-#ifndef _SC_FILTERTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
 #endif
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
-#endif
-#ifndef _SC_XCLIMPHELPER_HXX
-#include "XclImpHelper.hxx"
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
 #endif
 
 #include "excimp8.hxx"
-#include "fontbuff.hxx"
 #include "excform.hxx"
 
 using namespace ::com::sun::star;
@@ -139,7 +134,7 @@ const double ImportExcel::fExcToTwips =
     ( double ) TWIPS_PER_CHAR / 256.0;
 
 
-ImportTyp::ImportTyp( SvStream& aStream, ScDocument* pDoc, CharSet eQ ): aIn( aStream, &eQuellChar )
+ImportTyp::ImportTyp( ScDocument* pDoc, CharSet eQ )
 {
     eQuellChar = eQ;
     pD = pDoc;
@@ -185,8 +180,12 @@ ScExtDocOptions &ImportTyp::GetExtOpt( void )
 
 
 
-ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc, const String& rBasePath ):
-    ImportTyp( aStream, pDoc, RTL_TEXTENCODING_MS_1252 ),
+ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rBasePath ):
+    XclImpRootData( xlBiffUnknown, *pDoc, rBasePath, RTL_TEXTENCODING_MS_1252 ),
+    ImportTyp( pDoc, RTL_TEXTENCODING_MS_1252 ),
+    XclImpRoot( static_cast< XclImpRootData& >( *this ) ),
+    maStrm( rSvStrm, *this ),
+    aIn( maStrm ),
     aColOutlineBuff( MAXCOL + 1 ),
     aRowOutlineBuff( MAXROW + 1 ),
     bFitToPage( sal_False ),
@@ -195,7 +194,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc, const String& rBa
 {
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
 
-    nTab = nBdshtTab = 0;
+    nBdshtTab = 0;
     nFirstVisTab = 0xFFFF;
     nIxfeIndex = 0;     // zur Sicherheit auf 0
 
@@ -205,13 +204,10 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc, const String& rBa
     pStyleSheetItemSet = NULL;
 
     // Root-Daten fuellen - nach new's ohne Root als Parameter
-
-    pExcRoot = new RootData;
+    pExcRoot = mpRD;
     pExcRoot->pDoc = pDoc;
-    pExcRoot->pFormTable = pDoc->GetFormatTable();
+    pExcRoot->pIR = this;   // ExcRoot -> XclImpRoot
     pExcRoot->pScRangeName = pDoc->GetRangeName();
-    pExcRoot->pColor = new ColorBuffer( pExcRoot );
-    pExcRoot->eDefLanguage = ScGlobal::eLnge;   //LANGUAGE_SYSTEM;
     pExcRoot->aStandard.AssignAscii( "General" );
     pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = BiffX;
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
@@ -219,19 +215,11 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc, const String& rBa
     pExcRoot->pRNameBuff = new RangeNameBuffer( pExcRoot );     //&aRangeNameBuff;
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( pExcRoot );
-    pExcRoot->pAktTab = &nTab;          // nicht schoen, aber einfach
     pExcRoot->pCharset = &eQuellChar;   // dto.
     pExcRoot->pExtDocOpt = new ScExtDocOptions;
     if( pDoc->GetExtDocOptions() )
         *pExcRoot->pExtDocOpt = *pDoc->GetExtDocOptions();
     pExcRoot->pExtDocOpt->SetChanged( TRUE );
-    pExcRoot->pEdEng = NULL;
-    pExcRoot->pEdEngHF = NULL;
-
-    pExcRoot->pFontBuffer = new XclImpFontBuffer( *pExcRoot );
-    pExcRoot->pNumFmtBuffer = new XclImpNumFmtBuffer( *pExcRoot,
-        pExcRoot->pFormTable->GetStandardFormat( ScGlobal::eLnge ) );
-    pExcRoot->pXFBuffer = new XclImpXFBuffer( *pExcRoot );
 
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
     pExtNameBuff->SetBase( 1 );
@@ -243,9 +231,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc, const String& rBa
     // ab Biff8
     pExcRoot->nCondRangeCnt = ( UINT32 ) -1;    // GetCondFormStyleName() starts with increment!
 
-    pCellStyleBuffer = new XclImpCellStyleBuffer( *pExcRoot );
-
-    pFormConv = new ExcelToSc( pExcRoot, aIn, nTab );
+    pFormConv = new ExcelToSc( pExcRoot, aIn );
 
     bTabTruncated = FALSE;
 
@@ -273,8 +259,6 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc, const String& rBa
     aDocOpt.SetIgnoreCase( TRUE );              // always in Excel
     aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
     pD->SetDocOptions( aDocOpt );
-
-    pExcRoot->aBasePath = rBasePath;
 }
 
 
@@ -283,16 +267,12 @@ ImportExcel::~ImportExcel( void )
     delete pPrintRanges;
     delete pPrintTitles;
 
-    pExcRoot->pDoc->SetSrcCharSet( eQuellChar );
+    GetDoc().SetSrcCharSet( GetCharSet() );
 
     delete pExtNameBuff;
     delete pColRowBuff;
 
     delete pFormConv;
-
-    delete pCellStyleBuffer;
-
-    delete pExcRoot;
 }
 
 
@@ -304,7 +284,7 @@ void ImportExcel::Dimensions( void )
 
     if( aIn.IsValid() )
         pColRowBuff->SetDimension(
-            ScRange( nColFirst, nRowFirst, nTab, nColLast, nRowLast, nTab ) );
+            ScRange( nColFirst, nRowFirst, GetScTab(), nColLast, nRowLast, GetScTab() ) );
 }
 
 
@@ -325,7 +305,7 @@ void ImportExcel::Blank25( void )
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetBlankXF( nCol, nRow, nXF );
+        GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -337,18 +317,22 @@ void ImportExcel::Blank25( void )
 void ImportExcel::Integer( void )
 {
     UINT16 nRow, nCol, nInt;
+    sal_uInt8 nXFData;
 
-    aIn >> nRow >> nCol;
-    aIn.Ignore( 3 );
+    aIn >> nRow >> nCol >> nXFData;
+    aIn.Ignore( 2 );
     aIn >> nInt;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        ScValueCell* pZelle = new ScValueCell( nInt );
+        sal_uInt16 nXF = nXFData & 0x3F;
+        if( nXF == 63 ) nXF = nIxfeIndex;
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
-        pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL) TRUE );
+        ScBaseCell* pCell = new ScValueCell( nInt );
+        GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetXF( nCol, nRow, 0 );
     }
     else
         bTabTruncated = TRUE;
@@ -376,12 +360,12 @@ void ImportExcel::Number25( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        ScValueCell* pZelle = new ScValueCell( fValue );
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
-        pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL) TRUE );
+        ScBaseCell* pCell = new ScValueCell( fValue );
+        GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+
         pColRowBuff->Used( nCol, nRow );
-
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -393,7 +377,7 @@ void ImportExcel::Number25( void )
 void ImportExcel::Label25( void )
 {
     UINT16  nR, nC, nXF;
-    BOOL    b16BitLen;
+    bool    b16BitLen;
 
     if( pExcRoot->eHauptDateiTyp == Biff2 )
     {// nur fuer BIFF2
@@ -406,13 +390,13 @@ void ImportExcel::Label25( void )
             // IXFE-record stand davor
             nXF = nIxfeIndex;
 
-        b16BitLen = FALSE;
+        b16BitLen = false;
     }
     else
     {
         aIn >> nR >> nC >> nXF;
 
-        b16BitLen = TRUE;
+        b16BitLen = true;
     }
 
     String aTmpStr( aIn.ReadByteString( b16BitLen ) );
@@ -443,6 +427,8 @@ void ImportExcel::Boolerr25( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+
         double              fVal;
         const ScTokenArray  *pErgebnis;
 
@@ -450,17 +436,12 @@ void ImportExcel::Boolerr25( void )
 
         // Simulation ueber Formelzelle!
         pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
-
-        ScFormulaCell *pZelle = new ScFormulaCell(
-            pD, ScAddress( nCol, nRow, nTab ), pErgebnis );
-
-        pZelle->SetDouble( fVal );
-
-        pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
+        ScFormulaCell* pCell = new ScFormulaCell(
+            pD, ScAddress( nCol, nRow, GetScTab() ), pErgebnis );
+        pCell->SetDouble( fVal );
+        GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
-
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -515,26 +496,20 @@ void ImportExcel::Row25( void )
 
 void ImportExcel::Bof2( void )
 {
-    //POST: eDateiTyp = Biff2
-    UINT16 nTyp;
-
-    aIn.Ignore( 2 );
-    aIn >> nTyp;
+    sal_uInt16 nSubType;
+    maStrm.UseDecryption( false );
+    maStrm.Ignore( 2 );
+    maStrm >> nSubType;
+    SetBiff( xlBiff2 );
+    maStrm.UseDecryption( true );
 
     pExcRoot->eHauptDateiTyp = Biff2;
-
-    if( nTyp == 0x0010 )        // Worksheet?
-    {
+    if( nSubType == 0x0010 )        // Worksheet?
         pExcRoot->eDateiTyp = Biff2;
-    }
-    else if( nTyp == 0x0020 )   // Chart?
-    {
+    else if( nSubType == 0x0020 )   // Chart?
         pExcRoot->eDateiTyp = Biff2C;
-    }
-    else if( nTyp == 0x0040 )   // Macro?
-    {
+    else if( nSubType == 0x0040 )   // Macro?
         pExcRoot->eDateiTyp = Biff2M;
-    }
     else
     {
         pExcRoot->eDateiTyp = BiffX;
@@ -547,7 +522,7 @@ void ImportExcel::Eof( void )
 {
     //  POST: darf nur nach einer GUELTIGEN Tabelle gerufen werden!
     EndSheet();
-    nTab++;
+    IncScTab();
 }
 
 
@@ -584,13 +559,12 @@ void ImportExcel::Footer( void )
 
 void ImportExcel::Externsheet( void )
 {
-    String      aFile;
-    String      aTabName;
-    BOOL        bSameWorkBook = FALSE;
-
-    XclImpURLDecoder::DecodeURLByte( aIn, *pExcRoot, aFile, aTabName, bSameWorkBook );
+    String aEncodedUrl, aUrl, aTabName;
+    bool bSameWorkBook;
+    aIn.AppendByteString( aEncodedUrl, false );
+    XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
     ScfTools::ConvertName( aTabName );
-    pExcRoot->pExtSheetBuff->Add( aFile, aTabName, bSameWorkBook );
+    pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
 }
 
 
@@ -719,7 +693,7 @@ void ImportExcel::Note( void )
     aIn >> nRow >> nCol;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
-        pD->SetNote( nCol, nRow, nTab, aIn.ReadByteString( TRUE ) );
+        pD->SetNote( nCol, nRow, GetScTab(), aIn.ReadByteString( TRUE ) );
     else
         bTabTruncated = TRUE;
 
@@ -741,8 +715,8 @@ void ImportExcel::Selection( void )
         nNumRefs--;
         aIn.Ignore( nNumRefs * 6 );     // nur letzte Selektion interessiert
         aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-        pColRowBuff->SetSelection( ScRange( ( UINT16 ) nFirstCol, nFirstRow, nTab,
-                                            ( UINT16 ) nLastCol, nLastRow, nTab ) );
+        pColRowBuff->SetSelection( ScRange( ( UINT16 ) nFirstCol, nFirstRow, GetScTab(),
+                                            ( UINT16 ) nLastCol, nLastRow, GetScTab() ) );
     }
 }
 
@@ -796,13 +770,13 @@ void ImportExcel::Array25( void )
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
 
-        pFormConv->Reset( ScAddress( nFirstCol, nFirstRow, nTab ) );
+        pFormConv->Reset( ScAddress( nFirstCol, nFirstRow, GetScTab() ) );
         pFormConv->Convert( pErgebnis, nFormLen );
 
         DBG_ASSERT( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
 
         ScMarkData          aMarkData;
-        aMarkData.SelectOneTable( nTab );
+        aMarkData.SelectOneTable( GetScTab() );
         pD->InsertMatrixFormula(
             nFirstCol, nFirstRow, nLastCol, nLastRow, aMarkData,
             EMPTY_STRING, pErgebnis );
@@ -940,12 +914,34 @@ void ImportExcel::Prntgrdlns( void )
 
 BOOL ImportExcel::Filepass( void )
 {
-    // POST: return = TRUE, wenn Password <> 0
-    UINT32  nPasswd;
+    if( pExcRoot->eHauptDateiTyp <= Biff5 )
+    {
+        aIn.UseDecryption( false );
+        sal_uInt16 nKey, nHash;
+        aIn >> nKey >> nHash;
 
-    aIn >> nPasswd;
+        bool bValid = (maPassword.Len() > 0);
+        if( !bValid )
+        {
+            if( (nKey == 0xB359) && (nHash == 0x9A0A) )
+            {
+                // Workbook protection -> password is encoded in PASSWORD record
+                maPassword.AssignAscii( "VelvetSweatshop" );
+                bValid = true;
+            }
+        }
 
-    return nPasswd != 0x00000000;
+        if( bValid )
+        {
+            XclImpBiff5Decrypter* pDecrypter = new XclImpBiff5Decrypter( maPassword, nKey, nHash );
+            bValid = pDecrypter->IsValid();     // validates password
+            aIn.EnableDecryption( pDecrypter );
+        }
+        return !bValid;
+    }
+    else
+        // POST: return = TRUE, wenn Password <> 0
+        return aIn.ReaduInt32() != 0;
 }
 
 
@@ -964,19 +960,19 @@ void ImportExcel::Codepage( void )
     switch( nPage )
     {
         case 0x01B5:    // IBM PC 437 (Multiplan)
-            eQuellChar = RTL_TEXTENCODING_IBM_437;
-            break;
+            SetCharSet( RTL_TEXTENCODING_IBM_437 );
+        break;
         case 0x0352:    // Herkunft ?
-            eQuellChar = RTL_TEXTENCODING_IBM_850;
-            break;
+            SetCharSet( RTL_TEXTENCODING_IBM_850 );
+        break;
         case 0x8000:    // Apple Macintosh
         case 0x2710:    // ???????????????????????????????????????????????
-            eQuellChar = RTL_TEXTENCODING_APPLE_ROMAN;
-            break;
+            SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
+        break;
         case 0x04E4:    // ANSI (Windows ) Biff4+5
         case 0x8001:    // ANSI (Windows ) Biff2+3
-            eQuellChar = RTL_TEXTENCODING_MS_1252;
-            break;
+            SetCharSet( RTL_TEXTENCODING_MS_1252 );
+        break;
     }
 }
 
@@ -1034,12 +1030,12 @@ void ImportExcel::Rk( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        ScValueCell*    pZelle = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
-        pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
+        ScBaseCell* pCell = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
+        GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+
         pColRowBuff->Used( nCol, nRow );
-
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1053,10 +1049,10 @@ void ImportExcel::Wsbool( void )
     UINT16 nFlags;
     aIn >> nFlags;
 
-    aRowOutlineBuff.SetButtonMode( hasFlag( nFlags, EXC_WSBOOL_ROWBELOW ) );
-    aColOutlineBuff.SetButtonMode( hasFlag( nFlags, EXC_WSBOOL_COLBELOW ) );
+    aRowOutlineBuff.SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_ROWBELOW ) );
+    aColOutlineBuff.SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_COLBELOW ) );
 
-    bFitToPage = hasFlag( nFlags, EXC_WSBOOL_FITTOPAGE );
+    bFitToPage = HasFlag( nFlags, EXC_WSBOOL_FITTOPAGE );
 }
 
 
@@ -1121,94 +1117,18 @@ void ImportExcel::Boundsheet( void )
 
 void ImportExcel::Country( void )
 {
-    UINT16  nCountry, nWinIni;
+    sal_uInt16 nCountry, nWinIni;
+    maStrm >> nCountry >> nWinIni;
 
-    aIn >> nCountry >> nWinIni;
+    LanguageType eLanguage;
 
-    switch( nWinIni )
-    {
-        case 1:     // USA
-            pExcRoot->eDefLanguage = LANGUAGE_ENGLISH_US;
-            break;
-        case 2:     // Canada
-            pExcRoot->eDefLanguage = LANGUAGE_ENGLISH_CAN;
-            break;
-        case 3:     // Latin America, except Brazil
-            pExcRoot->eDefLanguage = LANGUAGE_SPANISH;
-            break;
-        case 31:    // Netherlands
-            pExcRoot->eDefLanguage = LANGUAGE_DUTCH;
-            break;
-        case 32:    // Belgium
-            pExcRoot->eDefLanguage = LANGUAGE_DUTCH_BELGIAN;
-            break;
-        case 33:    // France
-            pExcRoot->eDefLanguage = LANGUAGE_FRENCH;
-            break;
-        case 34:    // Spain
-            pExcRoot->eDefLanguage = LANGUAGE_SPANISH;
-            break;
-        case 39:    // Italy
-            pExcRoot->eDefLanguage = LANGUAGE_ITALIAN;
-            break;
-        case 41:    // Switzerland
-            pExcRoot->eDefLanguage = LANGUAGE_GERMAN_SWISS;
-            break;
-        case 43:    // Austria
-            pExcRoot->eDefLanguage = LANGUAGE_GERMAN_AUSTRIAN;
-            break;
-        case 44:    // United Kingdom
-            pExcRoot->eDefLanguage = LANGUAGE_ENGLISH_UK;
-            break;
-        case 45:    // Denmark
-            pExcRoot->eDefLanguage = LANGUAGE_DANISH;
-            break;
-        case 46:    // Sweden
-            pExcRoot->eDefLanguage = LANGUAGE_SWEDISH;
-            break;
-        case 47:    // Norway
-            pExcRoot->eDefLanguage = LANGUAGE_NORWEGIAN;
-            break;
-        case 49:    // Germany
-            pExcRoot->eDefLanguage = LANGUAGE_GERMAN;
-            break;
-        case 52:    // Mexico
-            pExcRoot->eDefLanguage = LANGUAGE_SPANISH_MEXICAN;
-            break;
-        case 55:    // Brazil
-            pExcRoot->eDefLanguage = LANGUAGE_PORTUGUESE_BRAZILIAN;
-            break;
-        case 61:    // Australia
-            pExcRoot->eDefLanguage = LANGUAGE_ENGLISH_AUS;
-            break;
-        case 64:    // New Zealand
-            pExcRoot->eDefLanguage = LANGUAGE_ENGLISH_NZ;
-            break;
-        case 81:    // Japan
-            pExcRoot->eDefLanguage = LANGUAGE_JAPANESE;
-            break;
-        case 82:    // South Korea
-            pExcRoot->eDefLanguage = LANGUAGE_KOREAN;
-            break;
-        case 351:   // Portugal
-            pExcRoot->eDefLanguage = LANGUAGE_PORTUGUESE;
-            break;
-        case 354:   // Iceland
-            pExcRoot->eDefLanguage = LANGUAGE_ICELANDIC;
-            break;
-        case 358:   // Finland
-            pExcRoot->eDefLanguage = LANGUAGE_FINNISH;
-            break;
-        case 785:   // Arabic
-            pExcRoot->eDefLanguage = LANGUAGE_ARABIC;
-            break;
-        case 886:   // Republic of China
-            pExcRoot->eDefLanguage = LANGUAGE_CHINESE;
-            break;
-        case 972:   // Israel
-            pExcRoot->eDefLanguage = LANGUAGE_HEBREW;
-            break;
-    }
+    // Store system language in XclRoot
+    if( XclTools::GetScLanguage( eLanguage, nWinIni ) )
+        SetLanguage( eLanguage );
+
+    // Set Excel UI language in add-in name translator
+    if( XclTools::GetScLanguage( eLanguage, nCountry ) )
+        GetAddInNames().SetLanguage( eLanguage );
 }
 
 
@@ -1255,18 +1175,7 @@ void ImportExcel::Bundleheader( void )
 
 void ImportExcel::Palette( void )
 {
-    UINT16  nAnz;
-    BYTE    nRed, nGreen, nBlue, nDummy;
-
-    aIn >> nAnz;
-
-    for( UINT16 nC = 0 ; nC < nAnz ; nC++ )
-    {
-        aIn >> nRed >> nGreen >> nBlue >> nDummy;
-        pExcRoot->pColor->NewColor( nRed, nGreen, nBlue );
-    }
-
-    DBG_ASSERT( aIn.IsValid() && (aIn.GetRecLeft() == 0), "*ImportExcel::Palette(): wrong len" );
+    GetPalette().ReadPalette( maStrm );
 }
 
 
@@ -1483,7 +1392,7 @@ void ImportExcel::Shrfmla( void )
     DBG_ASSERT( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
 
     pExcRoot->pShrfmlaBuff->Store(
-            ScRange( nFirstCol, nFirstRow, nTab, nLastCol, nLastRow, nTab ),
+            ScRange( nFirstCol, nFirstRow, GetScTab(), nLastCol, nLastRow, GetScTab() ),
             *pErgebnis );
 
     pLastFormCell = NULL;
@@ -1505,11 +1414,12 @@ void ImportExcel::Mulrk( void )
 
             if( nCol <= MAXCOL )
             {
-                ScValueCell* pZelle = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
+                GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
-                pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
+                ScBaseCell* pCell = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
+                GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+
                 pColRowBuff->Used( nCol, nRow );
-                pCellStyleBuffer->SetXF( nCol, nRow, nXF );
             }
         }
         DBG_ASSERT( aIn.GetRecLeft() == 2, "+ImportExcel::Mulrk(): Was'n das?!!!" );
@@ -1536,7 +1446,7 @@ void ImportExcel::Mulblank( void )
             if( nCol <= MAXCOL )
             {
                 pColRowBuff->Used( nCol, nRow );
-                pCellStyleBuffer->SetBlankXF( nCol, nRow, nXF );
+                GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
             }
         }
         aIn >> nRow;    // nRow zum Testen von letzter Col missbraucht
@@ -1565,14 +1475,14 @@ void ImportExcel::Rstring( void )
         {
             EditTextObject* pTextObj = CreateFormText( nCount, aString, nXF );
 
-            ScBaseCell*     pZelle = new ScEditCell( pTextObj, pD, GetEdEng().GetEditTextObjectPool() );
+            ScBaseCell*     pZelle = new ScEditCell( pTextObj, pD, GetEditEngine().GetEditTextObjectPool() );
 
             delete pTextObj;
 
-            pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
+            GetDoc().PutCell( nCol, nRow, GetScTab(), pZelle );
         }
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1600,7 +1510,7 @@ void ImportExcel::Blank34( void )
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetBlankXF( nCol, nRow, nXF );
+        GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1618,12 +1528,12 @@ void ImportExcel::Number34( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        ScValueCell* pZelle = new ScValueCell( fValue );
-        DBG_ASSERT( pZelle != NULL, "ImportExcel::Number34(): Nix Zelle!" );
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
-        pD->PutCell( nCol, nRow, nTab, pZelle, ( BOOL )TRUE );
+        ScBaseCell* pCell = new ScValueCell( fValue );
+        GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1663,13 +1573,13 @@ void ImportExcel::Boolerr34( void )
         pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
 
         ScFormulaCell*      pZelle = new ScFormulaCell(
-            pD, ScAddress( nCol, nRow, nTab ), pErgebnis );
+            pD, ScAddress( nCol, nRow, GetScTab() ), pErgebnis );
 
         pZelle->SetDouble( fVal );
 
-        pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
+        GetDoc().PutCell( nCol, nRow, GetScTab(), pZelle );
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1698,29 +1608,29 @@ void ImportExcel::Row34( void )
         pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
 
         if( nGrbit & EXC_ROW_GHOSTDIRTY )
-            pCellStyleBuffer->SetRowDefXF( nRow, nXF & EXC_ROW_XFMASK );
+            GetXFIndexBuffer().SetRowDefXF( nRow, nXF & EXC_ROW_XFMASK );
     }
 }
 
 
 void ImportExcel::Bof3( void )
 {
-    UINT16      nTyp;
+    sal_uInt16 nSubType;
+    maStrm.UseDecryption( false );
+    maStrm.Ignore( 2 );
+    maStrm >> nSubType;
+    SetBiff( xlBiff3 );
+    maStrm.UseDecryption( true );
 
-    aIn.Ignore( 2 );
-    aIn >> nTyp;
-
-    DBG_ASSERT( nTyp != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
-
+    DBG_ASSERT( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
     pExcRoot->eHauptDateiTyp = Biff3;
-
-    if( nTyp == 0x0010 )        // Sheet?
+    if( nSubType == 0x0010 )        // Sheet?
         pExcRoot->eDateiTyp = Biff3;
-    else if( nTyp == 0x0100 )   // Book?
+    else if( nSubType == 0x0100 )   // Book?
         pExcRoot->eDateiTyp = Biff3W;
-    else if( nTyp == 0x0020 )   // Chart?
+    else if( nSubType == 0x0020 )   // Chart?
         pExcRoot->eDateiTyp = Biff3C;
-    else if( nTyp == 0x0040 )   // Macro?
+    else if( nSubType == 0x0040 )   // Macro?
         pExcRoot->eDateiTyp = Biff3M;
     else
     {
@@ -1805,13 +1715,13 @@ void ImportExcel::Array34( void )
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
 
-        pFormConv->Reset( ScAddress( nFirstCol, nFirstRow, nTab ) );
+        pFormConv->Reset( ScAddress( nFirstCol, nFirstRow, GetScTab() ) );
         pFormConv->Convert( pErgebnis, nFormLen );
 
         DBG_ASSERT( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
 
         ScMarkData          aMarkData;
-        aMarkData.SelectOneTable( nTab );
+        aMarkData.SelectOneTable( GetScTab() );
         pD->InsertMatrixFormula( nFirstCol, nFirstRow, nLastCol, nLastRow, aMarkData, EMPTY_STRING, pErgebnis);
 
 /*      UINT16              nRowCnt, nColCnt;
@@ -1866,6 +1776,7 @@ void ImportExcel::TableOp( void )
             aTabOpParam.nMode = (nGrbit & EXC_TABOP_BOTH) ? 2 : ((nGrbit & EXC_TABOP_ROW) ? 1 : 0 );
             USHORT nCol = nFirstCol - 1;
             USHORT nRow = nFirstRow - 1;
+            sal_uInt16 nTab = GetScTab();
             switch( aTabOpParam.nMode )
             {
                 case 0:     // COL
@@ -1912,18 +1823,14 @@ void ImportExcel::Window2_5( void )
     pColRowBuff->SetVisCorner( nCol, nRow );
 
     if( nOpt & EXC_WIN2_DISPLAYED )
-        rExtOpt.SetActTab( nTab );
+        rExtOpt.SetActTab( GetScTab() );
     pColRowBuff->SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
     pColRowBuff->SetFrozen( TRUEBOOL( nOpt & EXC_WIN2_FROZEN ) );
 
-    if( nTab == nFirstVisTab )     // import from first visible sheet
+    if( GetScTab() == nFirstVisTab )     // import from first visible sheet
     {
         if( !( nOpt & EXC_WIN2_DEFAULTCOLOR ) )
-        {
-            const SvxColorItem* pColorItem = pExcRoot->pColor->GetColor( (UINT16) nColorIndex );
-            if( pColorItem )
-                rExtOpt.SetGridCol( pColorItem->GetValue() );
-        }
+            rExtOpt.SetGridCol( GetPalette().GetColor( static_cast< sal_Int16 >( nColorIndex ) ) );
 
         ScViewOptions aOpts( pD->GetViewOptions() );
         aOpts.SetOption( VOPT_FORMULAS, TRUEBOOL( nOpt & EXC_WIN2_SHOWFORMULAS ) );
@@ -1938,30 +1845,22 @@ void ImportExcel::Window2_5( void )
 
 void ImportExcel::Bof4( void )
 {
-    //POST: eDateiTyp = Biff4
-    UINT16  nTyp;
-
-    aIn.Ignore( 2 );
-    aIn >> nTyp;
+    sal_uInt16 nSubType;
+    maStrm.UseDecryption( false );
+    maStrm.Ignore( 2 );
+    maStrm >> nSubType;
+    SetBiff( xlBiff4 );
+    maStrm.UseDecryption( true );
 
     pExcRoot->eHauptDateiTyp = Biff4;
-
-    if( nTyp == 0x0010 )        // Sheet?
-    {
+    if( nSubType == 0x0010 )        // Sheet?
         pExcRoot->eDateiTyp = Biff4;
-    }
-    else if( nTyp == 0x0100 )   // Book?
-    {
+    else if( nSubType == 0x0100 )   // Book?
         pExcRoot->eDateiTyp = Biff4W;
-    }
-    else if( nTyp == 0x0020 )   // Chart?
-    {
+    else if( nSubType == 0x0020 )   // Chart?
         pExcRoot->eDateiTyp = Biff4C;
-    }
-    else if( nTyp == 0x0040 )   // Macro?
-    {
+    else if( nSubType == 0x0040 )   // Macro?
         pExcRoot->eDateiTyp = Biff4M;
-    }
     else
     {
         pExcRoot->eDateiTyp = BiffX;
@@ -1977,7 +1876,10 @@ void ImportExcel::Bof5( void )
     BiffTyp     eHaupt = Biff5;
     BiffTyp     eDatei;
 
-    aIn >> nVers >> nSubType;
+    maStrm.UseDecryption( false );
+    maStrm >> nVers >> nSubType;
+    SetBiff( (nVers == 0x0600) ? xlBiff8 : xlBiff5 );
+    maStrm.UseDecryption( true );
 
     switch( nSubType )
     {
@@ -2025,17 +1927,17 @@ void ImportExcel::ResetBof( void )
 
 void ImportExcel::EndSheet( void )
 {   // mach 'Gemarmel' am Ende eines Sheets
-    aColOutlineBuff.SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetColArray() );
+    aColOutlineBuff.SetOutlineArray( pD->GetOutlineTable( GetScTab(), TRUE )->GetColArray() );
     aColOutlineBuff.MakeScOutline();
     aColOutlineBuff.Reset();
 
-    aRowOutlineBuff.SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetRowArray() );
+    aRowOutlineBuff.SetOutlineArray( pD->GetOutlineTable( GetScTab(), TRUE )->GetRowArray() );
     aRowOutlineBuff.MakeScOutline();
     aRowOutlineBuff.Reset();
 
-    pColRowBuff->Apply( nTab );
+    pColRowBuff->Apply( GetScTab() );
 
-    pCellStyleBuffer->Apply( nTab );
+    GetXFIndexBuffer().Apply();
 
     pExcRoot->pExtSheetBuff->Reset();
 
@@ -2046,6 +1948,7 @@ void ImportExcel::EndSheet( void )
 
 void ImportExcel::NeueTabelle( void )
 {
+    sal_uInt16 nTab = GetScTab();
     if( nTab > 0 && !pD->HasTable( nTab ) )
         pD->MakeTable( nTab );
 
@@ -2071,371 +1974,47 @@ const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, do
 }
 
 
-void lcl_EESetAttribs( EditEngine& rEE, ESelection& rSel, const XclImpFont& rFont )
-{
-    // attributes
-    SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
-    rFont.FillToItemSet( aItemSet, xlFontHFIDs );
-    rEE.QuickSetAttribs( aItemSet, rSel );
-    rSel.nStartPara = rSel.nEndPara;
-    rSel.nStartPos = rSel.nEndPos;
-}
-
-void lcl_EEInsertText( EditEngine& rEE, String& rText, ESelection& rSel, const XclImpFont& rFont )
-{
-    if( rText.Len() )
-    {
-        rEE.QuickInsertText( rText, rSel );
-        rSel.nEndPos += rText.Len();
-        rText.Erase();
-        lcl_EESetAttribs( rEE, rSel, rFont );
-    }
-}
-
-void lcl_EEInsertNewLine( EditEngine& rEE, ESelection& rSel, const XclImpFont& rFont )
-{
-    rEE.QuickInsertText( String( '\n' ), rSel );
-    ++rSel.nEndPara;
-    rSel.nEndPos = 0;
-    lcl_EESetAttribs( rEE, rSel, rFont );
-}
-
-void lcl_EEInsertField( EditEngine& rEE, const SvxFieldItem& rFieldItem, ESelection& rSel, const XclImpFont& rFont )
-{
-    rEE.QuickInsertField( rFieldItem, rSel );
-    ++rSel.nEndPos;
-    lcl_EESetAttribs( rEE, rSel, rFont );
-}
-
-void ImportExcel::ScanHeadFootParts( const String& rIn, EditTextObject*& rpLeft,
-    EditTextObject*& rpMid, EditTextObject*& rpRight )
-{
-    enum State { SearchFunc, AddLeft, AddMid, AddRight, ScanSize, ScanFont };
-
-    EditEngine& rEdEng = pExcRoot->GetEdEngForHF();
-    ESelection aSel;
-
-    rEdEng.SetText( EMPTY_STRING );     //NN: wenn nur ein Feld belegt ist, kommt kein &C
-
-    const sal_Unicode*  pAct = rIn.GetBuffer();
-
-    State eAct = AddMid;
-    State ePrev = AddMid;
-    String aTmpString;
-    String aTmpFont;
-    sal_uInt16 nTmpHeight;
-
-    XclImpFont aFont( *pExcRoot );
-    const XclImpFont* pFirstFont = pExcRoot->pFontBuffer->GetFont( 0 );
-    if( pFirstFont )
-        aFont = *pFirstFont;
-
-    String aFontName( aFont.GetFontData().aName );
-    String aStyleName;
-    sal_uInt16 nHeight = aFont.GetFontData().nHeight;   // twips
-    XclUnderline eUnderl = aFont.GetFontData().eUnderline;
-    XclEscapement eEscapem = aFont.GetFontData().eEscapem;
-    sal_Bool bStrike = aFont.GetFontData().bStrikeout;
-
-    while( *pAct )
-    {
-        switch( eAct )
-        {
-            case SearchFunc:            // auf Funktionen verteilen
-            {
-                sal_Bool bNewFormat = sal_False;
-                switch( *pAct )
-                {
-                    case '&':               // the '&' character
-                        aTmpString += '&';
-                        eAct = ePrev;
-                        break;
-                    case 'C':               // Start mittlerer Teil
-                        if( ePrev == AddLeft )
-                        {
-                            delete rpLeft;
-                            rpLeft = rEdEng.CreateTextObject();
-                        }
-                        else if( ePrev == AddRight )
-                        {
-                            delete rpRight;
-                            rpRight = rEdEng.CreateTextObject();
-                        }
-
-                        if( !rpMid )
-                        {
-                            rEdEng.SetText( EMPTY_STRING );
-                            rpMid = rEdEng.CreateTextObject();
-                        }
-                        else
-                            rEdEng.SetText( *rpMid );
-
-                        eAct = ePrev = AddMid;
-                        break;
-                    case 'L':               // Start linker Teil
-                        if( ePrev == AddMid )
-                        {
-                            delete rpMid;
-                            rpMid = rEdEng.CreateTextObject();
-                        }
-                        else if( ePrev == AddRight )
-                        {
-                            delete rpRight;
-                            rpRight = rEdEng.CreateTextObject();
-                        }
-
-                        if( !rpLeft )
-                        {
-                            rEdEng.SetText( EMPTY_STRING );
-                            rpLeft = rEdEng.CreateTextObject();
-                        }
-                        else
-                            rEdEng.SetText( *rpLeft );
-
-                        eAct = ePrev = AddLeft;
-                        break;
-                    case 'R':               // Start rechter Teil
-                        if( ePrev == AddMid )
-                        {
-                            delete rpMid;
-                            rpMid = rEdEng.CreateTextObject();
-                        }
-                        else if( ePrev == AddLeft )
-                        {
-                            delete rpLeft;
-                            rpLeft = rEdEng.CreateTextObject();
-                        }
-
-                        if( !rpRight )
-                        {
-                            rEdEng.SetText( EMPTY_STRING );
-                            rpRight = rEdEng.CreateTextObject();
-                        }
-                        else
-                            rEdEng.SetText( *rpRight );
-
-                        eAct = ePrev = AddRight;
-                        break;
-                    case 'P':               // Seitennummer
-                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxPageField() ), aSel, aFont );
-                        eAct = ePrev;
-                        break;
-                    case 'N':               // Seitenzahl
-                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxPagesField() ), aSel, aFont );
-                        eAct = ePrev;
-                        break;
-                    case 'D':               // Datum
-                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxDateField() ), aSel, aFont );
-                        eAct = ePrev;
-                        break;
-                    case 'T':               // Zeit
-                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxTimeField() ), aSel, aFont );
-                        eAct = ePrev;
-                        break;
-                    case 'F':               // Datei
-                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxExtFileField() ), aSel, aFont );
-                        eAct = ePrev;
-                        break;
-                    case 'A':               // Tabellen-Name
-                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxTableField() ), aSel, aFont );
-                        eAct = ePrev;
-                        break;
-                    case 'U':               // underline
-                        eUnderl = (eUnderl == xlUnderlSingle) ? xlUnderlNone : xlUnderlSingle;
-                        bNewFormat = sal_True;
-                        break;
-                    case 'E':               // double underline
-                        eUnderl = (eUnderl == xlUnderlDouble) ? xlUnderlNone : xlUnderlDouble;
-                        bNewFormat = sal_True;
-                        break;
-                    case 'S':               // strikeout
-                        bStrike = !bStrike;
-                        bNewFormat = sal_True;
-                        break;
-                    case 'X':               // superscript
-                        eEscapem = (eEscapem == xlEscSuper) ? xlEscNone : xlEscSuper;
-                        bNewFormat = sal_True;
-                        break;
-                    case 'Y':               // subsrcipt
-                        eEscapem = (eEscapem == xlEscSub) ? xlEscNone : xlEscSub;
-                        bNewFormat = sal_True;
-                        break;
-                    case '\"':              // Font
-                        aTmpFont.Erase();
-                        eAct = ScanFont;
-                        break;
-                    default:
-                        if( *pAct >= '0' && *pAct <= '9' )  // Font Size
-                        {
-                            nTmpHeight = *pAct - '0';
-                            eAct = ScanSize;
-                        }
-                        else
-                            eAct = ePrev;
-                }
-
-                if( bNewFormat )
-                {
-                    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
-                    aFont.SetHFData( aFontName, aStyleName, nHeight, eUnderl, eEscapem, bStrike );
-                    eAct = ePrev;
-                }
-            }
-                break;
-            case AddLeft:               // linkes Drittel fuellen
-            case AddMid:                // mittleres Drittel fuellen
-            case AddRight:              // rechtes Drittel fuellen
-                if( *pAct == '&' )
-                {
-                    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
-                    eAct = SearchFunc;
-                }
-                else if( *pAct == '\n' )
-                {
-                    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
-                    lcl_EEInsertNewLine( rEdEng, aSel, aFont );
-                }
-                else
-                    aTmpString += *pAct;
-                break;
-            case ScanFont:              // Font ueberlesen
-                if( *pAct == '\"' )
-                {
-                    if( aTmpFont.Len() )
-                    {
-                        xub_StrLen nPos = aTmpFont.Search( ',' );
-                        lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
-                        aFontName = aTmpFont.Copy( 0, nPos );
-                        aStyleName = aTmpFont.Copy( nPos + 1 );
-                        aFont.SetHFData( aFontName, aStyleName, nHeight, eUnderl, eEscapem, bStrike );
-                    }
-                    eAct = ePrev;
-                }
-                else
-                    aTmpFont += *pAct;
-                break;
-            case ScanSize:              // Font Size ueberlesen
-                if( *pAct >= '0' && *pAct <= '9' )
-                {
-                    if( nTmpHeight != 0xFFFF )
-                    {
-                        nTmpHeight *= 10;
-                        nTmpHeight += (*pAct - '0');
-                        if( nTmpHeight > 1600 )  // not more than 1600pt = 32000twips
-                            nTmpHeight = 0xFFFF;
-                    }
-                }
-                else
-                {
-                    if( (nTmpHeight != 0) && (nTmpHeight != 0xFFFF) )
-                    {
-                        lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
-                        nHeight = 20 * nTmpHeight;
-                        aFont.SetHFData( aFontName, aStyleName, nHeight, eUnderl, eEscapem, bStrike );
-                    }
-
-                    if( *pAct == '&' )
-                    {
-                        lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
-                        eAct = SearchFunc;
-                    }
-                    else
-                    {
-                        aTmpString += *pAct;
-                        eAct = ePrev;
-                    }
-                }
-                break;
-            default:
-                DBG_ERROR( "*ImportExcel::ScanHeadFootParts(): State vergessen!" );
-        }
-        pAct++;
-    }
-
-    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
-
-    switch( ePrev )
-    {
-        case AddMid:
-            delete rpMid;
-            rpMid = rEdEng.CreateTextObject();
-            break;
-        case AddLeft:
-            delete rpLeft;
-            rpLeft = rEdEng.CreateTextObject();
-            break;
-        case AddRight:
-            delete rpRight;
-            rpRight = rEdEng.CreateTextObject();
-            break;
-    }
-
-    //NN: Calc kommt durcheinander, wenn nicht alle 3 Pointer gesetzt sind:
-    if( !rpMid || !rpLeft || !rpRight )
-    {
-        rEdEng.SetText( EMPTY_STRING );
-        if( !rpMid )
-            rpMid = rEdEng.CreateTextObject();
-        if( !rpLeft )
-            rpLeft = rEdEng.CreateTextObject();
-        if( !rpRight )
-            rpRight = rEdEng.CreateTextObject();
-    }
-}
-
-
 void ImportExcel::GetHF( BOOL bHeader )
 {
-    String              aExcHF;
-    EditTextObject*     pLeft = NULL;
-    EditTextObject*     pMid = NULL;
-    EditTextObject*     pRight = NULL;
-
+    String aExcHF;
     GetHFString( aExcHF );
 
-    ScanHeadFootParts( aExcHF, pLeft, pMid, pRight );
-
-    ScPageHFItem*       pHFItemLeft;
-    ScPageHFItem*       pHFItemRight;
+    ::std::auto_ptr< ScPageHFItem > pHFItemLeft, pHFItemRight;
     if( bHeader )
-    {   // erzeuge Header
-        pHFItemLeft = new ScPageHFItem( ATTR_PAGE_HEADERLEFT );
-        pHFItemRight = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
+    {
+        pHFItemLeft.reset( new ScPageHFItem( ATTR_PAGE_HEADERLEFT ) );
+        pHFItemRight.reset( new ScPageHFItem( ATTR_PAGE_HEADERRIGHT ) );
     }
     else
-    {   // erzeuge Footer
-        pHFItemLeft = new ScPageHFItem( ATTR_PAGE_FOOTERLEFT );
-        pHFItemRight = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
+    {
+        pHFItemLeft.reset( new ScPageHFItem( ATTR_PAGE_FOOTERLEFT ) );
+        pHFItemRight.reset( new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT ) );
+    }
+
+    XclImpHFConverter aHFConv( *this );
+    aHFConv.ParseString( aExcHF );
+    const EditTextObject* pTextObj = aHFConv.GetTextObject( xlHFLeft );
+    if( pTextObj )
+    {
+        pHFItemLeft->SetLeftArea( *pTextObj );
+        pHFItemRight->SetLeftArea( *pTextObj );
+    }
+    pTextObj = aHFConv.GetTextObject( xlHFCenter );
+    if( pTextObj )
+    {
+        pHFItemLeft->SetCenterArea( *pTextObj );
+        pHFItemRight->SetCenterArea( *pTextObj );
+    }
+    pTextObj = aHFConv.GetTextObject( xlHFRight );
+    if( pTextObj )
+    {
+        pHFItemLeft->SetRightArea( *pTextObj );
+        pHFItemRight->SetRightArea( *pTextObj );
     }
 
     DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::SetHF(): kein Set, keine Kopfer/Fusser!" );
-
-    if( pLeft )
-    {
-        pHFItemLeft->SetLeftArea( *pLeft );
-        pHFItemRight->SetLeftArea( *pLeft );
-        delete pLeft;
-    }
-
-    if( pMid )
-    {
-        pHFItemLeft->SetCenterArea( *pMid );
-        pHFItemRight->SetCenterArea( *pMid );
-        delete pMid;
-    }
-
-    if( pRight )
-    {
-        pHFItemLeft->SetRightArea( *pRight );
-        pHFItemRight->SetRightArea( *pRight );
-        delete pRight;
-    }
-
     pStyleSheetItemSet->Put( *pHFItemLeft );
     pStyleSheetItemSet->Put( *pHFItemRight );
-
-    delete pHFItemLeft;
-    delete pHFItemRight;
 }
 
 
@@ -2465,12 +2044,12 @@ String ImportExcel::GetPageStyleName( UINT16 nTab )
 
 EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, const UINT16 nXF )
 {
-    EditEngine&     rEdEng = GetEdEng();
+    EditEngine&     rEdEng = GetEditEngine();
 
     rEdEng.SetText( rS );
 
     SfxItemSet      aItemSet( rEdEng.GetEmptyItemSet() );
-    pExcRoot->pFontBuffer->FillToItemSet( pExcRoot->pXFBuffer->GetFontIndex( nXF ), aItemSet, xlFontEEIDs );
+    GetFontBuffer().FillToItemSet( GetXFBuffer().GetFontIndex( nXF ), aItemSet, xlFontEEIDs );
 
     ESelection      aSel( 0, 0 );
 
@@ -2492,7 +2071,7 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
 
                 aItemSet.ClearItem( 0 );
 
-                pExcRoot->pFontBuffer->FillToItemSet( nFont, aItemSet, xlFontEEIDs );
+                GetFontBuffer().FillToItemSet( nFont, aItemSet, xlFontEEIDs );
                 if( nAnzFrms )
                 {
                     aIn >> nChar >> nFont;
@@ -2531,28 +2110,17 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
 }
 
 
-ScEditEngineDefaulter& ImportExcel::GetEdEng( void ) const
-{
-    return pExcRoot->GetEdEng();
-}
-
-
 void ImportExcel::AdjustRowHeight()
 {
     // #93255# speed up chart import: import all sheets without charts, then
     // update row heights (here), last load all charts -> do not any longer
     // update inside of ScDocShell::ConvertFrom() (causes update of existing
     // charts during each and every change of row height)
-    SfxObjectShell* pShell = pD->GetDocumentShell();
-    if( pShell )
+    ScModelObj* pDocObj = GetDocModelObj();
+    if( pDocObj )
     {
-        uno::Reference< frame::XModel > xModel( pShell->GetModel() );
-        ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
-        if( pDocObj )
-        {
-            for( USHORT nTab = 0; nTab < pD->GetTableCount(); ++nTab )
-                pDocObj->AdjustRowHeight( 0, MAXROW, nTab );
-        }
+        for( sal_uInt16 nTab = 0; nTab < GetDoc().GetTableCount(); ++nTab )
+            pDocObj->AdjustRowHeight( 0, MAXROW, nTab );
     }
 }
 
@@ -2560,22 +2128,17 @@ void ImportExcel::AdjustRowHeight()
 void ImportExcel::PostDocLoad( void )
 {
     // visible area if embedded OLE
-    SfxObjectShell* pShell = pD->GetDocumentShell();
-    if( pShell )
+    ScModelObj* pDocObj = GetDocModelObj();
+    if( pDocObj )
     {
-        uno::Reference< frame::XModel > xModel( pShell->GetModel() );
-        ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
-        if( pDocObj )
+        SvEmbeddedObject* pEmbObj = pDocObj->GetEmbeddedObject();
+        const ScRange* pOleSize = pExcRoot->pExtDocOpt->GetOleSize();
+        if( pEmbObj && pOleSize )
         {
-            SvEmbeddedObject* pEmbObj = pDocObj->GetEmbeddedObject();
-            const ScRange* pOleSize = pExcRoot->pExtDocOpt->GetOleSize();
-            if( pEmbObj && pOleSize )
-            {
-                pEmbObj->SetVisArea( pD->GetMMRect(
-                    pOleSize->aStart.Col(), pOleSize->aStart.Row(),
-                    pOleSize->aEnd.Col(), pOleSize->aEnd.Row(), pExcRoot->pExtDocOpt->nActTab ) );
-                pD->SetVisibleTab( pExcRoot->pExtDocOpt->nActTab );
-            }
+            pEmbObj->SetVisArea( GetDoc().GetMMRect(
+                pOleSize->aStart.Col(), pOleSize->aStart.Row(),
+                pOleSize->aEnd.Col(), pOleSize->aEnd.Row(), pExcRoot->pExtDocOpt->nActTab ) );
+            GetDoc().SetVisibleTab( pExcRoot->pExtDocOpt->nActTab );
         }
     }
 
@@ -2585,7 +2148,7 @@ void ImportExcel::PostDocLoad( void )
 
     EndAllChartObjects();
 
-    pD->UpdateAllCharts();
+    GetDoc().UpdateAllCharts();
 
     const UINT16        nLast = pD->GetTableCount();
     const ScRange*      p;
@@ -2675,21 +2238,21 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
         {
             ScBaseCell*             pZelle;
 
-            if( pExcRoot->pXFBuffer->HasEscapement( nXF ) )
+            if( GetXFBuffer().HasEscapement( nXF ) )
             {// jetzt kommt 'ne Edit-Engine in's Spiel!
                 EditTextObject*     pTObj = CreateFormText( 0, r, nXF );
 
-                pZelle = new ScEditCell( pTObj, pD, GetEdEng().GetEditTextObjectPool() );
+                pZelle = new ScEditCell( pTObj, pD, GetEditEngine().GetEditTextObjectPool() );
 
                 delete pTObj;
             }
             else
                 pZelle = ScBaseCell::CreateTextCell( r, pD );
 
-            pD->PutCell( nC, nR, nTab, pZelle, ( BOOL ) TRUE );
+            GetDoc().PutCell( nC, nR, GetScTab(), pZelle );
         }
         pColRowBuff->Used( nC, nR );
-        pCellStyleBuffer->SetXF( nC, nR, nXF );
+        GetXFIndexBuffer().SetXF( nC, nR, nXF );
     }
     else
         bTabTruncated = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-09 12:00:21 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ void ImportExcel::Formula25()
 
     nLastXF = nXF;
 
-    Formula( nCol, nRow, nTab, nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
+    Formula( nCol, nRow, GetScTab(), nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
 }
 
 
@@ -142,7 +142,7 @@ void ImportExcel::Formula4()
 
     nLastXF = nXF;
 
-    Formula( nCol, nRow, nTab, nXF, nFormLen, fCurVal, nFlag0, FALSE );
+    Formula( nCol, nRow, GetScTab(), nXF, nFormLen, fCurVal, nFlag0, FALSE );
 }
 
 
@@ -203,7 +203,7 @@ void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
         else
             pLastFormCell = NULL;
 
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
+        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -215,7 +215,7 @@ void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
 ExcelToSc::~ExcelToSc() {}
 
 
-ExcelToSc::ExcelToSc( RootData* pRD, XclImpStream& aStr, const UINT16& rOrgTab ) :
+ExcelToSc::ExcelToSc( RootData* pRD, XclImpStream& aStr ) :
     ExcelConverterBase( aStr, 512 ),
     ExcRoot( pRD )
 {
@@ -2364,7 +2364,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
         // T A B
         // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = *pExcRoot->pAktTab;
+            rSRD.nTab = pExcRoot->pIR->GetScTab();
     }
     else
     {
@@ -2448,7 +2448,7 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, UINT32 nFormulaLen 
             aIn >> nRow >> nCol;
 
             aStack << aPool.Store( pExcRoot->pShrfmlaBuff->Find(
-                ScAddress( nCol, nRow, *pExcRoot->pAktTab ) ) );
+                ScAddress( nCol, nRow, pExcRoot->pIR->GetScTab() ) ) );
 
             bRet = TRUE;
         }

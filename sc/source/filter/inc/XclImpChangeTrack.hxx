@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XCLIMPCHANGETRACK_HXX
-#define _SC_XCLIMPCHANGETRACK_HXX
+#ifndef SC_XCLIMPCHANGETRACK_HXX
+#define SC_XCLIMPCHANGETRACK_HXX
 
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
 #endif
 
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
 #endif
-#ifndef _SC_XCLIMPSTREAM_HXX
-#include "XclImpStream.hxx"
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
 #endif
 #ifndef _EXCFORM_HXX
 #include "excform.hxx"
@@ -229,7 +229,6 @@ class XclImpChTrFmlConverter : public ExcelToSc8
 {
 private:
     XclImpChangeTrack&          rChangeTrack;
-    UINT16                      nDummy;
 
     virtual BOOL                Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab );
 
@@ -245,12 +244,12 @@ inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
         RootData* pRootData,
         XclImpStream& rStrm,
         XclImpChangeTrack& rXclChTr ) :
-    ExcelToSc8( pRootData, rStrm, nDummy ),
+    ExcelToSc8( pRootData, rStrm ),
     rChangeTrack( rXclChTr )
 {
 }
 
 //___________________________________________________________________
 
-#endif // _SC_XCLIMPCHANGETRACK_HXX
+#endif
 

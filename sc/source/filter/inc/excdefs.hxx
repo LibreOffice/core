@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-14 12:00:15 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,270 +62,30 @@
 #ifndef _EXCDEFS_HXX
 #define _EXCDEFS_HXX
 
-// excdefs.hxx: defines for Excel import/export ===============================
-
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-// unicode strings ============================================================
-
-#define EXC_STR_16BIT               0x01
-#define EXC_STR_FAREAST             0x04
-#define EXC_STR_RICH                0x08
-#define EXC_STR_UNKNOWN             0xF2
-
-// in/out stream ==============================================================
-
-const sal_uInt32 RECORD_SEEK_TO_BEGIN       = 0UL;
-const sal_uInt32 RECORD_SEEK_TO_END         = ~0UL;
-
-const sal_uInt16 EXC_MAXRECLEN_BIFF5        = 2080;
-const sal_uInt16 EXC_MAXRECLEN_BIFF8        = 8224;
-
-const sal_uInt16 EXC_ID_UNKNOWN             = 0xFFFF;
-
-// cached values list (EXTERNNAME, ptgArray, ...) =============================
-
-#define EXC_CACHEDVAL_EMPTY         0x00
-#define EXC_CACHEDVAL_DOUBLE        0x01
-#define EXC_CACHEDVAL_STRING        0x02
-#define EXC_CACHEDVAL_BOOL          0x04
-#define EXC_CACHEDVAL_ERROR         0x10
-
 // Supbooks, ExcETabNumBuffer =================================================
 
-#define EXC_TAB_INVALID             0xFFFF      // Deleted refs
-#define EXC_TAB_EXTERNAL            0xFFFE      // Addins, DDE, OLE
 #define EXC_TABBUF_INVALID          0xFFFF
-#define EXC_TABBUF_MASKTAB          0x0000FFFFUL
-#define EXC_TABBUF_MASKFLAGS        0xFFFF0000UL
-#define EXC_TABBUF_FLAGIGNORE       0x00010000UL
-#define EXC_TABBUF_FLAGEXT          0x00020000UL
 
 // Style info =================================================================
 
-/** Horizontal alignment of cell contents. */
-enum XclHorAlign
-{
-    xlHAlignGeneral                 = 0x00,
-    xlHAlignLeft                    = 0x01,
-    xlHAlignCenter                  = 0x02,
-    xlHAlignRight                   = 0x03,
-    xlHAlignFill                    = 0x04,
-    xlHAlignJustify                 = 0x05,
-    xlHAlignCenterAcrSel            = 0x06,
-    xlHAlignParent                  = 0xFF
-};
-
-/** Vertical alignment of cell contents. */
-enum XclVerAlign
-{
-    xlVAlignTop                     = 0x00,
-    xlVAlignCenter                  = 0x01,
-    xlVAlignBottom                  = 0x02,
-    xlVAlignJustify                 = 0x03,
-    xlVAlignParent                  = 0xFF
-};
-
-/** Text orientation. */
-enum XclTextOrient
-{
-    xlTextOrientNoRot               = 0x00,
-    xlTextOrientTopBottom           = 0x01,
-    xlTextOrient90ccw               = 0x02,
-    xlTextOrient90cw                = 0x03,
-    xlTextOrientRot                 = 0x04,
-    xlTextOrientParent              = 0xFF
-};
-
-/** Text wrap (automatic line break). */
-enum XclTextWrap
-{
-    xlTextWrapNo                    = 0x00,
-    xlTextWrapYes                   = 0x01,
-    xlTextWrapParent                = 0xFF
-};
-
-/** CTL text direction. */
-enum XclTextDirection
-{
-    xlTextDirContext                = 0x00,
-    xlTextDirLTR                    = 0x01,
-    xlTextDirRTL                    = 0x02,
-    xlTextDirParent                 = 0xFF
-};
-
 #define EXC_ROT_STACKED             0xFF
 
-
-// (0x0014, 0x0015) HEADER, FOOTER ============================================
-
-const sal_uInt16 EXC_ID_HEADER              = 0x0014;
-const sal_uInt16 EXC_ID_FOOTER              = 0x0015;
-
-// (0x0018, 0x0218) NAME ======================================================
-
-// flags
-#define EXC_NAME_HIDDEN             0x0001
-#define EXC_NAME_FUNC               0x0002
-#define EXC_NAME_VB                 0x0004
-#define EXC_NAME_PROC               0x0008
-#define EXC_NAME_CALCEXP            0x0010
-#define EXC_NAME_BUILTIN            0x0020
-#define EXC_NAME_FGROUPMASK         0x0FC0
-#define EXC_NAME_BIG                0x1000
-
-// "BuiltIn" names
-#define EXC_BUILTIN_CONSOLIDATEAREA 0x00
-#define EXC_BUILTIN_AUTOOPEN        0x01
-#define EXC_BUILTIN_AUTOCLOSE       0x02
-#define EXC_BUILTIN_EXTRACT         0x03
-#define EXC_BUILTIN_DATABASE        0x04
-#define EXC_BUILTIN_CRITERIA        0x05
-#define EXC_BUILTIN_PRINTAREA       0x06
-#define EXC_BUILTIN_PRINTTITLES     0x07
-#define EXC_BUILTIN_RECORDER        0x08
-#define EXC_BUILTIN_DATAFORM        0x09
-#define EXC_BUILTIN_AUTOACTIVATE    0x0A
-#define EXC_BUILTIN_AUTODEACTIVATE  0x0B
-#define EXC_BUILTIN_SHEETTITLE      0x0C
-#define EXC_BUILTIN_AUTOFILTER      0x0D
-#define EXC_BUILTIN_UNKNOWN         0x0E
 
 // (0x001C) NOTE ==============================================================
 
 #define EXC_NOTE5_MAXTEXT           2048
 
-// (0x0023) EXTERNNAME ========================================================
-
-#define EXC_EXTN_BUILTIN            0x0001
-#define EXC_EXTN_OLE                0x0010
-
-// (0x0026, 0x0027, 0x0028, 0x0029) LEFT-, RIGHT-, TOP-, BOTTOMMARGIN =========
-
-const sal_uInt16 EXC_ID_LEFTMARGIN          = 0x0026;
-const sal_uInt16 EXC_ID_RIGHTMARGIN         = 0x0027;
-const sal_uInt16 EXC_ID_TOPMARGIN           = 0x0028;
-const sal_uInt16 EXC_ID_BOTTOMMARGIN        = 0x0029;
-
-/** The type of a margin value. */
-enum XclMarginType
-{
-    xlLeftMargin,
-    xlRightMargin,
-    xlTopMargin,
-    xlBottomMargin
-};
-
 // (0x0031) FONT ==============================================================
-
-// attributes
-#define EXC_FONTATTR_NONE           0x0000
-#define EXC_FONTATTR_BOLD           0x0001
-#define EXC_FONTATTR_ITALIC         0x0002
-#define EXC_FONTATTR_UNDERLINE      0x0004
-#define EXC_FONTATTR_STRIKEOUT      0x0008
-#define EXC_FONTATTR_OUTLINE        0x0010
-#define EXC_FONTATTR_SHADOW         0x0020
 
 // color
 #define EXC_FONTCOL_IGNORE          0x7FFF
 
-// weight
-#define EXC_FONTWGHT_DONTKNOW       0
-#define EXC_FONTWGHT_THIN           100
-#define EXC_FONTWGHT_ULTRALIGHT     200
-#define EXC_FONTWGHT_LIGHT          300
-#define EXC_FONTWGHT_SEMILIGHT      350
-#define EXC_FONTWGHT_NORMAL         400
-#define EXC_FONTWGHT_MEDIUM         500
-#define EXC_FONTWGHT_SEMIBOLD       600
-#define EXC_FONTWGHT_BOLD           700
-#define EXC_FONTWGHT_ULTRABOLD      800
-#define EXC_FONTWGHT_BLACK          900
-
 // height
 #define EXC_FONTHGHT_COEFF          20.0
-
-/** Text underline style. */
-enum XclUnderline
-{
-    xlUnderlNone                    = 0x00,
-    xlUnderlSingle                  = 0x01,
-    xlUnderlDouble                  = 0x02,
-    xlUnderlSingleAcc               = 0x21,
-    xlUnderlDoubleAcc               = 0x22
-};
-
-/** Super-/subscript type. */
-enum XclEscapement
-{
-    xlEscNone                       = 0x00,
-    xlEscSuper                      = 0x01,
-    xlEscSub                        = 0x02
-};
-
-// families
-#define EXC_FONTFAM_DONTKNOW        0x00
-#define EXC_FONTFAM_ROMAN           0x01
-#define EXC_FONTFAM_SWISS           0x02
-#define EXC_FONTFAM_SYSTEM          EXC_FONTFAM_SWISS
-#define EXC_FONTFAM_MODERN          0x03
-#define EXC_FONTFAM_SCRIPT          0x04
-#define EXC_FONTFAM_DECORATIVE      0x05
-
-// charsets
-#define EXC_FONTCSET_DONTKNOW       0x00
-#define EXC_FONTCSET_MS_1252        0x00
-#define EXC_FONTCSET_APPLE_ROMAN    0x00
-#define EXC_FONTCSET_IBM_437        0x00
-#define EXC_FONTCSET_IBM_850        0xFF
-#define EXC_FONTCSET_IBM_860        0x00
-#define EXC_FONTCSET_IBM_861        0x00
-#define EXC_FONTCSET_IBM_863        0x00
-#define EXC_FONTCSET_IBM_865        0x00
-#define EXC_FONTCSET_SYSTEM         0x00
-#define EXC_FONTCSET_SYMBOL         0x02
-
-// (0x003C) CONTINUE ==========================================================
-
-#define EXC_CONT                    0x003C
-
-// (0x0043, 0x00E0) XF ========================================================
-
-#define EXC_XF_LOCKED               0x0001
-#define EXC_XF_HIDDEN               0x0002
-#define EXC_XF_STYLE                0x0004
-
-#define EXC_XF_DIFF_VALFMT          0x0400
-#define EXC_XF_DIFF_FONT            0x0800
-#define EXC_XF_DIFF_ALIGN           0x1000
-#define EXC_XF_DIFF_BORDER          0x2000
-#define EXC_XF_DIFF_AREA            0x4000
-#define EXC_XF_DIFF_PROT            0x8000
-
-#define EXC_XF2_LLINE               0x08
-#define EXC_XF2_RLINE               0x10
-#define EXC_XF2_TLINE               0x20
-#define EXC_XF2_BLINE               0x40
-#define EXC_XF2_VALFMT_MASK         0x3F
-#define EXC_XF2_LOCKED              0x40
-#define EXC_XF2_HIDDEN              0x80
-
-#define EXC_XF8_SHRINKTOFIT         0x0010
-#define EXC_XF8_MERGE               0x0020
-
-#define EXC_XF_GETPARENT(nFlag)         static_cast< sal_uInt16 >( (nFlag & 0xFFF0) >> 4 )
-#define EXC_XF_GETHORALIGN(nFlag)       static_cast< XclHorAlign >( nFlag & 0x0007 )
-#define EXC_XF_GETVERALIGN(nFlag)       static_cast< XclVerAlign >( (nFlag & 0x0030) >> 4 )
-#define EXC_XF_GETTEXTWRAP(nFlag)       static_cast< XclTextWrap >( (nFlag & 0x0008) >> 3 )
-#define EXC_XF4_GETTEXTORIENT(nFlag)    static_cast< XclTextOrient >( (nFlag & 0x00C0) >> 6 )
-#define EXC_XF5_GETTEXTORIENT(nFlag)    static_cast< XclTextOrient >( (nFlag & 0x0300) >> 8 )
-
-#define EXC_XF8_GETINDENT(nFlag)        (static_cast< sal_uInt16 >( nFlag & 0x000F ) * 200)
-#define EXC_XF8_GETROT(nFlag)           static_cast< sal_uInt8 >( (nFlag & 0xFF00) >> 8 )
-#define EXC_XF8_GETTEXTDIR(nFlag)       static_cast< XclTextDirection >( (nFlag & 0x00C0) >> 6 )
 
 // (0x005D) OBJ ===============================================================
 
@@ -340,51 +100,13 @@ enum XclEscapement
 #define EXC_OBJT_NOTE               0x19
 #define EXC_OBJT_DRAWING            0x1E
 
-// (0x007E) RK ================================================================
-
-#define EXC_RK_100FLAG              0x01
-#define EXC_RK_INTFLAG              0x02
-
-#define EXC_RK_DBL                  0x00
-#define EXC_RK_DBL100               EXC_RK_100FLAG
-#define EXC_RK_INT                  EXC_RK_INTFLAG
-#define EXC_RK_INT100               (EXC_RK_100FLAG|EXC_RK_INTFLAG)
-
-// (0x0081) WSBOOL ============================================================
-
-const sal_uInt16 EXC_ID_WSBOOL              = 0x0081;
-
-const sal_uInt16 EXC_WSBOOL_ROWBELOW        = 0x0040;
-const sal_uInt16 EXC_WSBOOL_COLBELOW        = 0x0080;
-const sal_uInt16 EXC_WSBOOL_FITTOPAGE       = 0x0100;
-
-const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
-
 // (0x0092) PALETTE ===========================================================
-
-// color types
-#define EXC_COLOR_CELLTEXT          0x0001
-#define EXC_COLOR_CELLBORDER        0x0002
-#define EXC_COLOR_CELLBGROUND       0x0003
-#define EXC_COLOR_CHARTTEXT         0x0011
-#define EXC_COLOR_CHARTLINE         0x0012
-#define EXC_COLOR_CHARTAREA         0x0013
-#define EXC_COLOR_GRID              0x0101
 
 // special color indices
 #define EXC_COLIND_AUTOTEXT         77
 #define EXC_COLIND_AUTOLINE         77
 #define EXC_COLIND_AUTOFILLBG       77
 #define EXC_COLIND_AUTOFILLFG       78
-
-// internal
-#define EXC_PAL2_INDEXBASE          0xFFFF0000
-#define EXC_PAL2_IGNORE             0xFFFFFFFF
-
-// (0x0093) STYLE =============================================================
-
-#define EXC_STYLE_BUILTIN           0x8000
-#define EXC_STYLE_MASK              0x0FFF
 
 // (0x009B, 0x009D, 0x009E) AUTOFILTER ========================================
 
@@ -420,25 +142,10 @@ const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 // (0x00AE, 0x00AF) SCENARIO, SCENMAN =========================================
 
 #define EXC_SCEN_MAXCELL            32
-#define EXC_SCEN_MAXSTRINGLEN       0xFF
 
 // (0x00E5) CELLMERGING =======================================================
 
 #define EXC_MERGE_MAXCOUNT          1024
-
-// (0x01B8) HLINK =============================================================
-
-const sal_uInt16 EXC_ID_HLINK               = 0x01B8;
-
-const sal_uInt32 EXC_HLINK_BODY             = 0x00000001;   // contains file link or URL
-const sal_uInt32 EXC_HLINK_ABS              = 0x00000002;   // absolute path
-const sal_uInt32 EXC_HLINK_DESCR            = 0x00000014;   // description
-const sal_uInt32 EXC_HLINK_MARK             = 0x00000008;   // text mark
-const sal_uInt32 EXC_HLINK_FRAME            = 0x00000080;   // target frame
-const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   // UNC path
-
-const sal_uInt32 EXC_HLINK_GUID_FILE        = 0x00000303;   // start of file moniker GUID
-const sal_uInt32 EXC_HLINK_GUID_URL         = 0x79EAC9E0;   // start of URL moniker GUID
 
 // (0x007D) COLINFO ===========================================================
 
@@ -488,49 +195,6 @@ const sal_uInt32 EXC_HLINK_GUID_URL         = 0x79EAC9E0;   // start of URL moni
 #define EXC_WIN2_FROZENNOSPLIT      0x0100
 #define EXC_WIN2_SELECTED           0x0200
 #define EXC_WIN2_DISPLAYED          0x0400
-
-// (0x015F) LABELRANGES =======================================================
-
-const sal_uInt16 EXC_ID_LABELRANGES         = 0x015F;
-
-// (0x01B2) DVAL, (0x01BE) DV =================================================
-
-const sal_uInt16 EXC_ID_DVAL                = 0x01B2;
-const sal_uInt16 EXC_ID_DV                  = 0x01BE;
-
-// data validation flags
-const sal_uInt32 EXC_DV_IGNOREBLANK         = 0x00000100;
-const sal_uInt32 EXC_DV_SUPPRESSDROPDOWN    = 0x00000200;
-const sal_uInt32 EXC_DV_SHOWPROMPT          = 0x00040000;
-const sal_uInt32 EXC_DV_SHOWERROR           = 0x00080000;
-
-// data validation data mode
-const sal_uInt32 EXC_DV_MODE_MASK           = 0x0000000F;
-const sal_uInt32 EXC_DV_MODE_ANY            = 0x00000000;
-const sal_uInt32 EXC_DV_MODE_WHOLE          = 0x00000001;
-const sal_uInt32 EXC_DV_MODE_DECIMAL        = 0x00000002;
-const sal_uInt32 EXC_DV_MODE_LIST           = 0x00000003;
-const sal_uInt32 EXC_DV_MODE_DATE           = 0x00000004;
-const sal_uInt32 EXC_DV_MODE_TIME           = 0x00000005;
-const sal_uInt32 EXC_DV_MODE_TEXTLEN        = 0x00000006;
-const sal_uInt32 EXC_DV_MODE_CUSTOM         = 0x00000007;
-
-// data validation conditions
-const sal_uInt32 EXC_DV_COND_MASK           = 0x00F00000;
-const sal_uInt32 EXC_DV_COND_BETWEEN        = 0x00000000;
-const sal_uInt32 EXC_DV_COND_NOTBETWEEN     = 0x00100000;
-const sal_uInt32 EXC_DV_COND_EQUAL          = 0x00200000;
-const sal_uInt32 EXC_DV_COND_NOTEQUAL       = 0x00300000;
-const sal_uInt32 EXC_DV_COND_GREATER        = 0x00400000;
-const sal_uInt32 EXC_DV_COND_LESS           = 0x00500000;
-const sal_uInt32 EXC_DV_COND_EQGREATER      = 0x00600000;
-const sal_uInt32 EXC_DV_COND_EQLESS         = 0x00700000;
-
-// data validation error style
-const sal_uInt32 EXC_DV_ERROR_MASK          = 0x00000070;
-const sal_uInt32 EXC_DV_ERROR_STOP          = 0x00000000;
-const sal_uInt32 EXC_DV_ERROR_WARNING       = 0x00000010;
-const sal_uInt32 EXC_DV_ERROR_INFO          = 0x00000020;
 
 // Specials for outlines ======================================================
 
@@ -587,22 +251,6 @@ const sal_uInt32 EXC_DV_ERROR_INFO          = 0x00000020;
 #define EXC_SXFIELD_16BIT           0x0200
 
 #define EXC_SXITEM_
-
-// defines for web queries ====================================================
-// (0x00DC) SXEXT, PARAMQRY, (0x0803) WEBQRYSETTINGS
-
-#define EXC_WEBQRY_FILTER           "calc_HTML_WebQuery"
-
-#define EXC_QSI_COMMON              0x0349      // common flags for export
-
-#define EXC_PQRY_TABLES             0x0100
-#define EXC_PQRY_COMMON             0x0044      // common flags for export
-
-#define EXC_WQSETT_SPECTABLES       0x0002
-#define EXC_WQSETT_COMMON           0x0023      // common flags for export
-#define EXC_WQSETT_NOFORMAT         0x0001
-#define EXC_WQSETT_FORMATRTF        0x0002
-#define EXC_WQSETT_FORMATFULL       0x0003
 
 // defines for change tracking ================================================
 

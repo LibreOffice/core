@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:07:41 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 
-#ifndef _SC_FILTERTTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
 #endif
 
 #pragma optimize("",off)

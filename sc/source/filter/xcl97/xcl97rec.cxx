@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:30:26 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@
 #ifndef _TOOLS_SOLMATH_HXX      // DoubleToString()
 #include <tools/solmath.hxx>
 #endif
-#ifndef _URLOBJ_HXX             // INetURLObject
-#include <tools/urlobj.hxx>
-#endif
 #ifndef _ZFORMAT_HXX            // SvNumberformat
 #include <svtools/zformat.hxx>
 #endif
@@ -111,30 +108,25 @@
 #include "xcl97esc.hxx"
 #include "excupn.hxx"
 
-#ifndef _SC_FILTERTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_XECONTENT_HXX
+#include "xecontent.hxx"
 #endif
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
-#endif
-#ifndef _SC_XCLEXPSTREAM_HXX
-#include "XclExpStream.hxx"
+#ifndef SC_XESTYLE_HXX
+#include "xestyle.hxx"
 #endif
 
 #include "scitems.hxx"
 
 #include <offmgr/app.hxx>
 #include <offmgr/fltrcfg.hxx>
-#include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/boxitem.hxx>
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
-#include <vcl/bmpacc.hxx>
 
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
-#include <svx/flditem.hxx>
 #include <svx/msoleexp.hxx>
 
 #include <svtools/useroptions.hxx>
@@ -152,70 +144,6 @@
 #include "scextopt.hxx"
 #include "docoptio.hxx"
 #include "patattr.hxx"
-
-//___________________________________________________________________
-// class XclExpSst
-
-XclExpSst::~XclExpSst()
-{
-    for( XclExpUniString* pString = First(); pString; pString = Next() )
-        delete pString;
-}
-
-sal_uInt32 XclExpSst::Insert( XclExpUniString* pString )
-{
-    List::Insert( pString, LIST_APPEND );
-    return List::Count() - 1;
-}
-
-void XclExpSst::Save( XclExpStream& rStrm )
-{
-    if ( !List::Count() ) return;
-
-    SvMemoryStream aExtSst( 8192 );
-
-    sal_uInt32 nCount = List::Count();
-
-    sal_uInt32 nBucket = nCount;
-    while( nBucket > 0x0100 )
-        nBucket /= 2;
-
-    sal_uInt16 nPerBucket = static_cast< sal_uInt16 >( Max( 8UL, nBucket ) );
-    sal_uInt16 nBucketIndex = 0;
-
-    // *** write the SST record ***
-
-    rStrm.StartRecord( 0x00FC, 8 );
-
-    rStrm << nCount << nCount;
-    for( XclExpUniString* pString = First(); pString; pString = Next() )
-    {
-        if( !nBucketIndex )
-            // write bucket info before string to get correct record position
-            aExtSst << (sal_uInt32) rStrm.GetStreamPos()    // stream position
-                    << (sal_uInt16) (rStrm.GetRecPos() + 4) // position from start of SST or CONTINUE
-                    << (sal_uInt16) 0x0000;                 // reserved
-
-        pString->Write( rStrm );
-
-        if( ++nBucketIndex == nPerBucket )
-            nBucketIndex = 0;
-    }
-
-    rStrm.EndRecord();
-
-    // *** write the EXTSST record ***
-
-    rStrm.StartRecord( 0x00FF, 0 );
-
-    rStrm << nPerBucket;
-    rStrm.SetSliceLen( 8 );     // size of one bucket info
-    aExtSst.Seek( STREAM_SEEK_TO_BEGIN );
-    rStrm.CopyFromStream( aExtSst );
-
-    rStrm.EndRecord();
-}
-
 
 //___________________________________________________________________
 
@@ -703,19 +631,17 @@ ULONG XclObjDropDown::GetLen() const
 
 // --- class XclTxo --------------------------------------------------
 
-XclTxo::XclTxo( const String& rStr )
-            :
-            aText( rStr ),
-            nGrbit(0),
-            nRot(0)
+XclTxo::XclTxo( const String& rStr ) :
+    aText( rStr ),
+    nGrbit(0),
+    nRot(0)
 {
 }
 
 
-XclTxo::XclTxo( const SdrTextObj& rTextObj )
-            :
-            nGrbit(0),
-            nRot(0)
+XclTxo::XclTxo( const SdrTextObj& rTextObj ) :
+    nGrbit(0),
+    nRot(0)
 {
     String aStr;
     const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject();
@@ -802,13 +728,13 @@ void XclTxo::Save( XclExpStream& rStrm )
     if ( nTextLen )
     {
         // CONTINUE text
-        rStrm.StartRecord( EXC_CONT, aText.GetBufferByteCount() + 1 );
-        aText.WriteFlags( rStrm );
+        rStrm.StartRecord( EXC_ID_CONT, aText.GetBufferByteCount() + 1 );
+        aText.WriteFlagField( rStrm );
         aText.WriteBuffer( rStrm );
         rStrm.EndRecord();
 
         // CONTINUE formatting runs
-        rStrm.StartRecord( EXC_CONT, nFormatLen );
+        rStrm.StartRecord( EXC_ID_CONT, nFormatLen );
         // write at least two dummy TXORUNs
         rStrm
             << UINT16(0)    // first character
@@ -915,7 +841,7 @@ void XclObjOle::SaveCont( XclExpStream& rStrm )
             rStrm   << UINT16(ftPictFmla) << nSubRecLen
                     << nFmlaLen;
             rStrm.Write( pData, sizeof(pData) );
-            aName.Write( rStrm );
+            rStrm   << aName;
             if( nPadLen )
                 rStrm << UINT8(0);      // pad byte
             rStrm   << nPictureId;
@@ -1029,11 +955,10 @@ void XclNoteList::Save( XclExpStream& rStrm )
 
 // --- class XclNote -------------------------------------------------
 
-XclNote::XclNote( RootData& rRoot, const ScAddress& rPos, const String& rNoteText, const String& rNoteAuthor )
-            :
-            aAuthor( rNoteAuthor ),
-            aPos( rPos ),
-            nGrbit(0)
+XclNote::XclNote( RootData& rRoot, const ScAddress& rPos, const String& rNoteText, const String& rNoteAuthor ) :
+    aAuthor( rNoteAuthor ),
+    aPos( rPos ),
+    nGrbit(0)
 {
     XclObjComment* pObj = new XclObjComment( rRoot, rPos, rNoteText );
     nObjId = rRoot.pObjRecs->Add( pObj );
@@ -1047,9 +972,9 @@ XclNote::~XclNote()
 
 void XclNote::SaveCont( XclExpStream& rStrm )
 {
-    rStrm << (UINT16) aPos.Row() << (UINT16) aPos.Col() << nGrbit << nObjId;
-    aAuthor.Write( rStrm );
-    rStrm << UINT8(0);      // pad byte goes here (everytime)
+    rStrm   << (UINT16) aPos.Row() << (UINT16) aPos.Col() << nGrbit << nObjId
+            << aAuthor
+            << UINT8(0);      // pad byte goes here (always)
 }
 
 
@@ -1127,56 +1052,6 @@ ExcBofC8::ExcBofC8()
     nDocType = 0x0020;
 }
 
-#if 0
-// --- class ExcLabel8 -----------------------------------------------
-
-ExcLabel8::ExcLabel8(
-        const ScAddress& rPos,
-        const ScPatternAttr* pAttr,
-        RootData& rRoot,
-        const String& rNewText ) :
-    ExcCell( rPos, pAttr, rRoot ),
-    aText( rNewText, 255 )
-{
-}
-
-
-ExcLabel8::ExcLabel8(
-        const ScAddress& rPos,
-        const ScPatternAttr* pAttr,
-        RootData& rRoot,
-        const ScEditCell& rEdCell ) :
-    ExcCell( rPos, pAttr, rRoot )
-{
-    String aStr;
-    aText.SetRichData( new ExcRichStr( *this, aStr, pAttr, rEdCell, rRoot, 255 ) );
-    aText.Assign( aStr, 255 );
-}
-
-
-ExcLabel8::~ExcLabel8()
-{
-}
-
-
-void ExcLabel8::SaveDiff( XclExpStream& rStrm )
-{
-    aText.Write( rStrm );
-}
-
-
-UINT16 ExcLabel8::GetNum() const
-{
-    return 0x0204;
-}
-
-
-ULONG ExcLabel8::GetDiffLen() const
-{   // Text bytes max 2 * 255 chars + 2 * 2 * 255 forms
-    return aText.GetByteCount();
-}
-
-#endif
 // --- class ExcLabelSst ---------------------------------------------
 
 ExcLabelSst::ExcLabelSst(
@@ -1186,7 +1061,7 @@ ExcLabelSst::ExcLabelSst(
         const String& rNewText ) :
     ExcCell( rPos, pAttr, rRoot )
 {
-    nIsst = rRoot.pSstRecs->Insert( new XclExpUniString( rNewText ) );
+    nIsst = rRoot.pER->GetSst().Insert( new XclExpUniString( rNewText ) );
 }
 
 
@@ -1197,11 +1072,11 @@ ExcLabelSst::ExcLabelSst(
         const ScEditCell& rEdCell ) :
     ExcCell( rPos, pAttr, rRoot )
 {
-    XclExpRichString* pRS = new XclExpRichString;
-    String aStr;
-    pRS->SetRichData( new ExcRichStr( *this, aStr, pAttr, rEdCell, rRoot, 0xFFFF ) );
-    pRS->Assign( aStr );
-    nIsst = rRoot.pSstRecs->Insert( pRS );
+    XclExpString* pStr = XclExpStringHelper::CreateString( *rRoot.pER, rEdCell, pAttr );
+    UsedAttrList& rXFBuffer = *rRoot.pXFRecs;
+    const ScPatternAttr& rAttr = pAttr ? *pAttr : *rRoot.pER->GetDoc().GetDefPattern();
+    SetXF( pStr->IsWrapped() ? rXFBuffer.FindWithLineBreak( &rAttr ) : rXFBuffer.Find( &rAttr ) );
+    nIsst = rRoot.pER->GetSst().Insert( pStr );
 }
 
 
@@ -1231,9 +1106,9 @@ ULONG ExcLabelSst::GetDiffLen() const
 
 // --- class ExcXf8 --------------------------------------------------
 
-ExcXf8::ExcXf8( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
+ExcXf8::ExcXf8( const XclExpRoot& rRoot, UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
                 BOOL& rbLineBreak, BOOL bSt ) :
-        ExcXf( nFont, nForm, pPattAttr, rbLineBreak, bSt ),
+        ExcXf( rRoot, nFont, nForm, pPattAttr, rbLineBreak, bSt ),
         eTextDir( xlTextDirContext ),
         nTrot( 0 ),
         nCIndent( 0 ),
@@ -1297,18 +1172,18 @@ void ExcXf8::SaveCont( XclExpStream& rStrm )
     nTmp |= nDgBottom << 12;
     rStrm << nTmp;
 
-    nTmp = pPalette2->GetColorIndex( nIcvLftSer );      // Offs 16
-    nTmp |= pPalette2->GetColorIndex( nIcvRigSer ) << 7;
+    nTmp = GetPalette().GetColorIndex( nIcvLftSer );       // Offs 16
+    nTmp |= GetPalette().GetColorIndex( nIcvRigSer ) << 7;
     nTmp |= nGrbitDiag << 14;
     rStrm << nTmp;
 
-    nTmp32 = pPalette2->GetColorIndex( nIcvTopSer );    // Offs 18
-    nTmp32 |= (UINT32) pPalette2->GetColorIndex( nIcvBotSer ) << 7;
-    nTmp32 |= (UINT32) pPalette2->GetColorIndex( nIcvDiagSer ) << 14;
+    nTmp32 = GetPalette().GetColorIndex( nIcvTopSer );   // Offs 18
+    nTmp32 |= (UINT32) GetPalette().GetColorIndex( nIcvBotSer ) << 7;
+    nTmp32 |= (UINT32) GetPalette().GetColorIndex( nIcvDiagSer ) << 14;
     nTmp32 |= (UINT32) nDgDiag << 21;
 
     UINT16 nForeInd, nBackInd;
-    pPalette2->GetMixedColors( nIcvForeSer, nIcvBackSer, nForeInd, nBackInd, nFls );
+    GetPalette().GetMixedColors( nForeInd, nBackInd, nFls, nIcvForeSer, nIcvBackSer );
 
     nTmp32 |= (UINT32) nFls << 26;
     rStrm << nTmp32;
@@ -1341,13 +1216,13 @@ ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, UINT16 nTab ) :
 {
     String sTabName;
     rRootData.pDoc->GetName( nTab, sTabName );
-    aUnicodeName.Assign( sTabName, 255 );
+    aUnicodeName.Assign( sTabName, EXC_STR_8BITLENGTH );
 }
 
 
 ExcBundlesheet8::ExcBundlesheet8( const String& rString ) :
     ExcBundlesheetBase(),
-    aUnicodeName( rString, 255 )
+    aUnicodeName( rString, EXC_STR_8BITLENGTH )
 {
 }
 
@@ -1355,9 +1230,8 @@ ExcBundlesheet8::ExcBundlesheet8( const String& rString ) :
 void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 {
     nOwnPos = rStrm.GetStreamPos();
-    rStrm   << (UINT32) 0x00000000          // dummy position
-            << nGrbit;
-    aUnicodeName.Write( rStrm, FALSE );     // 8 bit length
+    // write dummy position, real position comes later
+    rStrm << sal_uInt32( 0 ) << nGrbit << aUnicodeName;
 }
 
 
@@ -1436,8 +1310,8 @@ ULONG ExcPane8::GetLen() const
 
 // --- class ExcWindow28 ---------------------------------------------
 
-ExcWindow28::ExcWindow28( RootData& rRootData, UINT16 nTab ) :
-    rPalette( *rRootData.pPalette2 ),
+ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab ) :
+    XclExpRoot( rRoot ),
     pPaneRec( NULL ),
     nFlags( 0 ),
     nLeftCol( 0 ),
@@ -1447,17 +1321,18 @@ ExcWindow28::ExcWindow28( RootData& rRootData, UINT16 nTab ) :
     bHorSplit( FALSE ),
     bVertSplit( FALSE )
 {
-    const ScViewOptions& rViewOpt = rRootData.pDoc->GetViewOptions();
+    const ScViewOptions& rViewOpt = GetDoc().GetViewOptions();
     nFlags |= rViewOpt.GetOption( VOPT_FORMULAS ) ? EXC_WIN2_SHOWFORMULAS : 0;
     nFlags |= rViewOpt.GetOption( VOPT_GRID ) ? EXC_WIN2_SHOWGRID : 0;
     nFlags |= rViewOpt.GetOption( VOPT_HEADER ) ? EXC_WIN2_SHOWHEADINGS : 0;
     nFlags |= rViewOpt.GetOption( VOPT_NULLVALS ) ? EXC_WIN2_SHOWZEROS : 0;
     nFlags |= rViewOpt.GetOption( VOPT_OUTLINER ) ? EXC_WIN2_OUTLINE : 0;
 
-    ScExtDocOptions& rOpt = *rRootData.pExtDocOpt;
+    ScExtDocOptions& rOpt = *rRoot.mpRD->pExtDocOpt;
+    XclExpPalette& rPal = GetPalette();
     nFlags |= (nTab == rOpt.nActTab) ? (EXC_WIN2_DISPLAYED|EXC_WIN2_SELECTED) : 0;
     nFlags |= rOpt.pGridCol ? 0 : EXC_WIN2_DEFAULTCOLOR;
-    nGridColorSer = rOpt.pGridCol ? rPalette.InsertColor( *rOpt.pGridCol, EXC_COLOR_GRID ) : rPalette.InsertIndex( 64 );
+    nGridColorSer = rOpt.pGridCol ? rPal.InsertColor( *rOpt.pGridCol, xlColorGrid ) : rPal.InsertIndex( 64 );
 
     const ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nTab );
     if( pTabOpt )
@@ -1488,7 +1363,7 @@ void ExcWindow28::SaveCont( XclExpStream& rStrm )
     rStrm   << nFlags
             << nTopRow
             << nLeftCol
-            << (UINT32) rPalette.GetColorIndex( nGridColorSer )
+            << (UINT32) GetPalette().GetColorIndex( nGridColorSer )
             << (UINT32) 0
             << (UINT32) 0;
 }
@@ -1528,7 +1403,7 @@ XclCondFormat::XclCondFormat( const ScConditionalFormat& _rCF, ScRangeList* _pRL
                 rCF( _rCF )
 {
     pRL = _pRL;
-    nTabNum = *rER.pAktTab;
+    nTabNum = rER.pER->GetScTab();
     nComplLen = 0;
 
     USHORT                      n;
@@ -1539,7 +1414,7 @@ XclCondFormat::XclCondFormat( const ScConditionalFormat& _rCF, ScRangeList* _pRL
     {
         pCFE = _rCF.GetEntry( n );
         if( pCFE )
-            List::Insert( new XclCf( *pCFE, rER ), LIST_APPEND );
+            List::Insert( new XclCf( *rER.pER, *pCFE ), LIST_APPEND );
     }
 }
 
@@ -1616,8 +1491,8 @@ void XclCondFormat::Save( XclExpStream& rStrm )
 
 // --- class XclCf ---------------------------------------------------
 
-XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
-        rPalette2( *rRD.pPalette2 )
+XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
+    XclExpRoot( rRoot )
 {
     nType = 0x01;   // compare
     nFormatLen = 0;
@@ -1641,7 +1516,8 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     // creating formats
     const String&       rStyleName = r.GetStyle();
     SfxStyleSheetBase*  pStyle =
-        rRD.pDoc->GetStyleSheetPool()->Find( rStyleName, SFX_STYLE_FAMILY_PARA );
+        GetDoc().GetStyleSheetPool()->Find( rStyleName, SFX_STYLE_FAMILY_PARA );
+    XclExpPalette& rPal = GetPalette();
 
     bHasStyle = pStyle ? TRUE : FALSE;
     if( bHasStyle )
@@ -1696,13 +1572,13 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
             nFontData1 |= bStrikeOut ? 0x00000080 : 0;
 
             if( bHasWeight )
-                nFontData2 = ExcFont::GetWeight( aFont.GetWeight() );
+                nFontData2 = XclExpFont::GetXclWeight( aFont.GetWeight() );
             else
                 nFontData2 = bHasItalic ? 0x00000400 : 0;
-            nFontData3 = bHasUnderline ? ExcFont::GetUnderline( aFont.GetUnderline() ) : 0;
+            nFontData3 = bHasUnderline ? XclExpFont::GetXclUnderline( aFont.GetUnderline() ) : 0;
 
             if( bHasColor )
-                nIcvTextSer = rPalette2.InsertColor( aFont.GetColor(), EXC_COLOR_CELLTEXT );
+                nIcvTextSer = rPal.InsertColor( aFont.GetColor(), xlColorCellText );
 
             nFontData4 = bHasStrikeOut ? 0x00000018 : 0x00000098;
             nFontData4 |= (bHasWeight || bHasItalic) ? 0 : 0x00000002;
@@ -1716,10 +1592,10 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
             const SvxBoxItem&   rBox = ((const SvxBoxItem&)aAttr.GetItem( ATTR_BORDER ));
             UINT16              nDgTop, nDgBottom, nDgLeft, nDgRight;
 
-            ExcXf::ScToExcBorderLine( rBox.GetTop(), nIcvTopSer, nDgTop );
-            ExcXf::ScToExcBorderLine( rBox.GetBottom(), nIcvBotSer, nDgBottom );
-            ExcXf::ScToExcBorderLine( rBox.GetLeft(), nIcvLftSer, nDgLeft );
-            ExcXf::ScToExcBorderLine( rBox.GetRight(), nIcvRigSer, nDgRight );
+            ExcXf::ScToExcBorderLine( rPal, rBox.GetTop(), nIcvTopSer, nDgTop );
+            ExcXf::ScToExcBorderLine( rPal, rBox.GetBottom(), nIcvBotSer, nDgBottom );
+            ExcXf::ScToExcBorderLine( rPal, rBox.GetLeft(), nIcvLftSer, nDgLeft );
+            ExcXf::ScToExcBorderLine( rPal, rBox.GetRight(), nIcvRigSer, nDgRight );
 
             nLineData1 = (UINT8)((nDgLeft & 0x0F) | (nDgRight << 4));
             nLineData2 = (UINT8)((nDgTop & 0x0F) | (nDgBottom << 4));
@@ -1731,14 +1607,14 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
             const SvxBrushItem& rBrushItem = (const SvxBrushItem&)aAttr.GetItem( ATTR_BACKGROUND );
             Color aColor( rBrushItem.GetColor() );
             nPatt = aColor.GetTransparency() ? 0x0000 : 0x0001;
-            nIcvForeSer = rPalette2.InsertColor( aColor, EXC_COLOR_CELLBGROUND );
-            nIcvBackSer = rPalette2.InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLBGROUND );
+            nIcvForeSer = rPal.InsertColor( aColor, xlColorCellArea );
+            nIcvBackSer = rPal.InsertColor( Color( COL_BLACK ), xlColorCellArea );
         }
     }
 
     ScTokenArray*   pScTokArry1 = r.CreateTokenArry( 0 );
     EC_Codetype     eDummy;
-    ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, eDummy, NULL, TRUE );
+    ExcUPN*         pForm1      = new ExcUPN( mpRD, *pScTokArry1, eDummy, NULL, TRUE );
     nFormLen1 = pForm1->GetLen();
 
     ScTokenArray*   pScTokArry2 = NULL;
@@ -1748,7 +1624,7 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     else
     {
         pScTokArry2 = r.CreateTokenArry( 1 );
-        pForm2 = new ExcUPN( &rRD, *pScTokArry2, eDummy, NULL, TRUE );
+        pForm2 = new ExcUPN( mpRD, *pScTokArry2, eDummy, NULL, TRUE );
         nFormLen2 = pForm2->GetLen();
     }
 
@@ -1794,6 +1670,8 @@ void XclCf::SaveCont( XclExpStream& rStrm )
         0x00, 0xFF, 0xFF, 0xFF, 0x7F, 0x01, 0x00
     };
 
+    const XclExpPalette& rPal = GetPalette();
+
     rStrm << nType << nOp << nFormLen1 << nFormLen2;
     if( bHasStyle )
     {
@@ -1803,7 +1681,7 @@ void XclCf::SaveCont( XclExpStream& rStrm )
             rStrm.Write( pPre, 68 );
             rStrm << nFontData1 << nFontData2 << nFontData3;
             if( bHasColor )
-                rStrm << (UINT32) rPalette2.GetColorIndex( nIcvTextSer );
+                rStrm << (UINT32) rPal.GetColorIndex( nIcvTextSer );
             else
                 rStrm << (UINT32)0xFFFFFFFF;
             rStrm   << (UINT32)0x00000000 << nFontData4
@@ -1814,10 +1692,10 @@ void XclCf::SaveCont( XclExpStream& rStrm )
         if( bHasLine )
         {
             UINT16 nLineData3, nLineData4;
-            nLineData3 = rPalette2.GetColorIndex( nIcvLftSer ) & 0x007F;
-            nLineData3 |= (rPalette2.GetColorIndex( nIcvRigSer ) & 0x007F) << 7;
-            nLineData4 = rPalette2.GetColorIndex( nIcvTopSer ) & 0x007F;
-            nLineData4 |= (rPalette2.GetColorIndex( nIcvBotSer ) & 0x007F) << 7;
+            nLineData3 = rPal.GetColorIndex( nIcvLftSer ) & 0x007F;
+            nLineData3 |= (rPal.GetColorIndex( nIcvRigSer ) & 0x007F) << 7;
+            nLineData4 = rPal.GetColorIndex( nIcvTopSer ) & 0x007F;
+            nLineData4 |= (rPal.GetColorIndex( nIcvBotSer ) & 0x007F) << 7;
 
             rStrm   << nLineData1 << nLineData2 << nLineData3 << nLineData4
                     << (UINT16)0xBA00;
@@ -1825,7 +1703,7 @@ void XclCf::SaveCont( XclExpStream& rStrm )
         if( bHasPattern )
         {
             UINT16  nForeInd, nBackInd;
-            rPalette2.GetMixedColors( nIcvForeSer, nIcvBackSer, nForeInd, nBackInd, nPatt );
+            rPal.GetMixedColors( nForeInd, nBackInd, nPatt, nIcvForeSer, nIcvBackSer );
 
             UINT8   nPattData1 = (nPatt == 1) ? 0 : (UINT8) nPatt;
             UINT16  nPattData2 = ((nForeInd & 0x007F ) << 7) | (nBackInd & 0x007F);
@@ -1886,9 +1764,9 @@ void XclDConRef::SaveCont( XclExpStream& rStrm )
     rStrm   << (UINT16) aSourceRange.aStart.Row()
             << (UINT16) aSourceRange.aEnd.Row()
             << (UINT8)  aSourceRange.aStart.Col()
-            << (UINT8)  aSourceRange.aEnd.Col();
-    pWorkbook->Write( rStrm );      // normal unicode string
-    rStrm   << (UINT8)  0x00;
+            << (UINT8)  aSourceRange.aEnd.Col()
+            << *pWorkbook
+            << (UINT8)  0x00;
 }
 
 UINT16 XclDConRef::GetNum() const
@@ -1969,7 +1847,7 @@ XclCodename::XclCodename( const String& r ) : aName( r )
 
 void XclCodename::SaveCont( XclExpStream& rStrm )
 {
-    aName.Write( rStrm );       // normal unicode string
+    rStrm << aName;
 }
 
 
@@ -1991,7 +1869,7 @@ ULONG XclCodename::GetLen() const
 ExcEScenarioCell::ExcEScenarioCell( UINT16 nC, UINT16 nR, const String& rTxt ) :
         nCol( nC ),
         nRow( nR ),
-        sText( rTxt, EXC_SCEN_MAXSTRINGLEN )
+        sText( rTxt, EXC_STR_DEFAULT, 255 )
 {
 }
 
@@ -2002,7 +1880,7 @@ void ExcEScenarioCell::WriteAddress( XclExpStream& rStrm )
 
 void ExcEScenarioCell::WriteText( XclExpStream& rStrm )
 {
-    sText.Write( rStrm );       // normal unicode string
+    rStrm << sText;
 }
 
 
@@ -2018,18 +1896,18 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
     UINT16  nDummyFlags;
 
     rDoc.GetName( nTab, sTmpName );
-    sName.Assign( sTmpName, EXC_SCEN_MAXSTRINGLEN );
+    sName.Assign( sTmpName, EXC_STR_8BITLENGTH );
     nRecLen = 8 + sName.GetBufferByteCount();
 
     rDoc.GetScenarioData( nTab, sTmpComm, aDummyCol, nDummyFlags );
-    sComment.Assign( sTmpComm, EXC_SCEN_MAXSTRINGLEN );
+    sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
     if( sComment.GetLen() )
         nRecLen += sComment.GetByteCount();
 
     if( !sUsername.GetLen() )
     {
         SvtUserOptions aUserOpt;
-        sUsername.Assign( aUserOpt.GetLastName() );
+        sUsername.Assign( aUserOpt.GetLastName(), EXC_STR_DEFAULT, 255 );
     }
     if( !sUsername.GetLen() )
         sUsername.Assign( String::CreateFromAscii( "SC" ) );
@@ -2089,20 +1967,20 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
             << (UINT8) sName.GetLen()       // length of scen name
             << (UINT8) sComment.GetLen()    // length of comment
             << (UINT8) sUsername.GetLen();  // length of user name
-    sName.WriteFlags( rStrm );
+    sName.WriteFlagField( rStrm );
     sName.WriteBuffer( rStrm );
 
-    sUsername.Write( rStrm );
+    rStrm << sUsername;
 
     if( sComment.GetLen() )
-        sComment.Write( rStrm );
+        rStrm << sComment;
 
     ExcEScenarioCell* pCell;
     for( pCell = _First(); pCell; pCell = _Next() )
         pCell->WriteAddress( rStrm );           // pos of cell
     for( pCell = _First(); pCell; pCell = _Next() )
         pCell->WriteText( rStrm );              // string content
-    rStrm.SetSliceLen( 2 );
+    rStrm.SetSliceSize( 2 );
     rStrm.WriteZeroBytes( 2 * List::Count() );  // date format
 }
 
@@ -2173,175 +2051,6 @@ ULONG ExcEScenarioManager::GetLen() const
 
 
 
-//___________________________________________________________________
-// HLINK - hyperlinks
-
-const BYTE XclHlink::pStaticData[] =
-{
-    0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11,
-    0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B,
-    0x02, 0x00, 0x00, 0x00
-};
-
-inline ULONG XclHlink::GetStaticLen()
-{
-    return sizeof( pStaticData );
-}
-
-inline ULONG XclHlink::GetVarLen() const
-{
-    return pVarData->Seek( STREAM_SEEK_TO_END );
-}
-
-XclHlink::XclHlink( RootData& rRootData, const SvxURLField& rURLField ) :
-    pVarData( new SvMemoryStream ),
-    nFlags( 0 ),
-    pRepr( NULL )
-{
-    const String&       rURL = rURLField.GetURL();
-    const String&       rRepr = rURLField.GetRepresentation();
-    XclExpUniString*    pTextmark = NULL;
-    INetURLObject       aURLObj( rURL );
-    const INetProtocol  eProtocol = aURLObj.GetProtocol();
-    BOOL                bWithRepr = rRepr.Len() > 0;
-    XclExpStream        aXclStrm( *pVarData, 0xFFFFFFFF );
-
-    // description
-    if( bWithRepr )
-    {
-        XclExpUniString aDescr( rRepr, 255, TRUE );     // max 255 chars, force 16 bit
-        aXclStrm    << (UINT32) (aDescr.GetLen() + 1);  // string length + 1 trailing zero word
-        aDescr.WriteBuffer( aXclStrm );                 // NO flags
-        aXclStrm    << (UINT16) 0x0000;
-
-        nFlags |= EXC_HLINK_DESCR;
-        pRepr = new String( rRepr );
-    }
-
-    // file link or URL
-    if( eProtocol == INET_PROT_FILE )
-    {
-        String  aPathAndName( aURLObj.getFSysPath( INetURLObject::FSYS_DOS ) );
-        String  aOrigPaN( aPathAndName );
-        UINT16  nLevel = 0;
-        BOOL    bRel = rRootData.bStoreRel;
-
-        if( bRel )
-        {
-            aPathAndName = aURLObj.GetRelURL( rRootData.aBasePath, aPathAndName,
-                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
-
-            if( aPathAndName.SearchAscii( INET_FILE_SCHEME ) == 0 )
-            {   // not converted to rel -> make abs
-                aPathAndName = aOrigPaN;
-                bRel = FALSE;
-            }
-            else if( aPathAndName.SearchAscii( "./" ) == 0 )
-                aPathAndName.Erase( 0, 2 );
-            else
-            {
-                while( aPathAndName.SearchAndReplaceAscii( "../", EMPTY_STRING ) != STRING_NOTFOUND )
-                    nLevel++;
-            }
-        }
-        if( !bRel )
-            nFlags |= EXC_HLINK_ABS;
-        nFlags |= EXC_HLINK_BODY;
-
-        ByteString      aAsciiLink( aPathAndName, *rRootData.pCharset );
-        XclExpUniString aLink( aPathAndName, 255, TRUE );   // max 255 chars, force 16 bit
-        aXclStrm    << (UINT32) 0x00000303
-                     << (UINT32)    0x00000000
-                    << (UINT32) 0x000000C0
-                    << (UINT32) 0x46000000
-                    << nLevel
-                    << (UINT32) (aAsciiLink.Len() + 1);     // string length + 1 trailing zero byte
-        aXclStrm.Write( aAsciiLink.GetBuffer(), aAsciiLink.Len() );
-        aXclStrm    << (UINT8)  0x00
-                    << (UINT32) 0xDEADFFFF
-                    << (UINT32) 0x00000000
-                    << (UINT32) 0x00000000
-                    << (UINT32) 0x00000000
-                    << (UINT32) 0x00000000
-                    << (UINT32) 0x00000000
-                    << (UINT32) (aLink.GetBufferByteCount() + 6)
-                    << (UINT32) aLink.GetBufferByteCount()              // byte count, not string length
-                    << (UINT16) 0x0003;
-        aLink.WriteBuffer( aXclStrm );
-
-        if( !pRepr )
-            pRepr = new String( aPathAndName );
-    }
-    else if( eProtocol != INET_PROT_NOT_VALID )
-    {
-        XclExpUniString aURL( aURLObj.GetURLNoMark(), 255, TRUE );  // max 255 chars, force 16 bit
-        aXclStrm    << (UINT32) 0x79EAC9E0
-                    << (UINT32) 0x11CEBAF9
-                    << (UINT32) 0xAA00828C
-                    << (UINT32) 0x0BA94B00
-                    << (UINT32) (aURL.GetBufferByteCount() + 2);    // byte count + 1 trailing zero word
-        aURL.WriteBuffer( aXclStrm );
-        aXclStrm    << (UINT16) 0x0000;
-
-        nFlags |= EXC_HLINK_BODY | EXC_HLINK_ABS;
-        if( !pRepr )
-            pRepr = new String( rURL );
-    }
-    else if( rURL.GetChar( 0 ) == '#' )     // hack for #89066#
-    {
-        String aTextmark( rURL.Copy( 1 ) );
-        aTextmark.SearchAndReplace( '.', '!' );
-        pTextmark = new XclExpUniString( aTextmark, 255, TRUE );    // max 255 chars, force 16 bit
-    }
-
-    // text mark
-    if( !pTextmark && aURLObj.HasMark() )
-        pTextmark = new XclExpUniString( aURLObj.GetMark(), 255, TRUE );    // max 255 chars, force 16 bit
-
-    if( pTextmark )
-    {
-        aXclStrm    << (UINT32) (pTextmark->GetLen() + 1);   // string length + 1 trailing zero word
-        pTextmark->WriteBuffer( aXclStrm );
-        aXclStrm    << (UINT16) 0x0000;
-
-        nFlags |= EXC_HLINK_MARK;
-
-        delete pTextmark;
-        pTextmark = NULL;
-    }
-}
-
-XclHlink::~XclHlink()
-{
-    if( pVarData )
-        delete pVarData;
-    if( pRepr )
-        delete pRepr;
-}
-
-void XclHlink::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << nRowFirst << nRowFirst << nColFirst << nColFirst;
-    rStrm.Write( pStaticData, GetStaticLen() );
-    rStrm << nFlags;
-
-    pVarData->Seek( STREAM_SEEK_TO_BEGIN );
-    rStrm.CopyFromStream( *pVarData );
-}
-
-UINT16 XclHlink::GetNum() const
-{
-    return 0x01B8;
-}
-
-ULONG XclHlink::GetLen() const
-{
-    // 12 = cols/rows + flags
-    return 12 + GetStaticLen() + GetVarLen();
-}
-
-
-
 // ---- class XclProtection ------------------------------------------
 
 const BYTE      XclProtection::pMyData[] =
@@ -2365,208 +2074,9 @@ const BYTE* XclProtection::GetData( void ) const
 
 
 
-// ---- class XclBGPic -----------------------------------------------
-
-XclBGPic::XclBGPic( RootData& r )
-{
-    pGr = NULL;
-
-    SfxStyleSheet*  pStSh = r.pStyleSheet;
-
-    if( pStSh )
-        pGr = ( ( const SvxBrushItem& ) r.pStyleSheetItemSet->Get( ATTR_BACKGROUND ) ).GetGraphic();
-}
-
-
-XclBGPic::~XclBGPic()
-{
-}
-
-
-void XclBGPic::Save( XclExpStream& rStrm )
-{
-    if( pGr )
-    {
-        Bitmap                      aBmp( pGr->GetBitmap() );
-        if( aBmp.GetBitCount() != 24 )
-            aBmp.Convert( BMP_CONVERSION_24BIT );
-
-        BitmapReadAccess*           pAcc;
-
-        if( ( pAcc = aBmp.AcquireReadAccess() ) )
-        {
-            sal_uInt16              nWidth = (sal_uInt16)pAcc->Width();
-            sal_uInt16              nHeight = (sal_uInt16)pAcc->Height();
-            if( nWidth && nHeight )
-            {
-                rStrm.StartRecord( 0x00E9, 0 );     // real size calculated by XclExpStream
-
-                rStrm.SetMaxRecLen( 0x201C );       // copied from Excel
-                rStrm.SetMaxContLen( 0x2014 );      // copied from Excel
-
-                sal_uInt8           nPadding = (nWidth & 0x03);
-                sal_uInt32          nOverallSize = (sal_uInt32)((nWidth * 3 + nPadding) * nHeight + 12);
-
-                rStrm   << (sal_uInt32)0x00010009   // magic number
-                        << nOverallSize             // overall size after _this_
-                        << (sal_uInt32)12           // unknown2
-                        << nWidth                   // width
-                        << nHeight                  // height
-                        << (sal_uInt16)1            // planes
-                        << (sal_uInt16)24;          // bits per pixel
-
-                sal_uInt32          x, y, yg;
-                for( y = 0, yg = nHeight - 1 ; y < nHeight ; y++, yg-- )
-                {
-                    for( x = 0 ; x < nWidth ; x++ )
-                    {
-                        BitmapColor aColor( pAcc->GetPixel( yg, x ) );
-                        rStrm   << (sal_uInt8)( aColor.GetBlue() )
-                                << (sal_uInt8)( aColor.GetGreen() )
-                                << (sal_uInt8)( aColor.GetRed() );
-                    }
-                    rStrm.WriteZeroBytes( nPadding );
-                }
-
-                rStrm.EndRecord();
-            }
-            aBmp.ReleaseAccess( pAcc );
-        }
-    }
-}
 
 
 
-// ---- class XclExpPageBreaks8 --------------------------------------
-
-XclExpPageBreaks8::XclExpPageBreaks8( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
-    XclExpPageBreaks( rRootData, nScTab, eOrient ),
-    nRangeMax( (eOrient == pbHorizontal) ? rRootData.nColMax : rRootData.nRowMax )
-{
-}
-
-XclExpPageBreaks8::~XclExpPageBreaks8()
-{
-}
-
-void XclExpPageBreaks8::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << (UINT16) aPageBreaks.Count();
-    rStrm.SetSliceLen( 6 );
-    for( ULONG nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
-        rStrm << aPageBreaks.GetValue( nIndex ) << (UINT16) 0x0000 << nRangeMax;
-}
-
-ULONG XclExpPageBreaks8::GetLen() const
-{
-    return 2 + 6 * aPageBreaks.Count();
-}
-
-
-// ---- class XclExpWebQuery -----------------------------------------
-
-XclExpWebQuery::XclExpWebQuery(
-        const String& rRangeName,
-        const String& rURL,
-        const String& rSource,
-        sal_Int32 nRefrSecs ) :
-    aRangeName( rRangeName ),
-    aURL( rURL ),
-    pQryTables( NULL ),
-    bEntireDoc( FALSE )
-{
-    // refresh delay time in minutes
-    nRefresh = (INT16) Min( (sal_Int32)((nRefrSecs + 59) / 60), (sal_Int32) 0x7FFF );
-
-    // comma separated list of HTML table names or indexes
-    xub_StrLen nTokenCnt = rSource.GetTokenCount( ';' );
-    String aNewTables, aAppendTable;
-    xub_StrLen nStringIx = 0;
-    BOOL bExitLoop = FALSE;
-    for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bExitLoop; nToken++ )
-    {
-        String aToken( rSource.GetToken( 0, ';', nStringIx ) );
-        bEntireDoc = ScfTools::IsHTMLDocName( aToken );
-        bExitLoop = bEntireDoc || ScfTools::IsHTMLTablesName( aToken );
-        if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
-            ScfTools::AddToken( aNewTables, aAppendTable, ',' );
-    }
-
-    if( !bExitLoop )    // neither HTML_all nor HTML_tables found
-    {
-        if( aNewTables.Len() )
-            pQryTables = new XclExpUniString( aNewTables );
-        else
-            bEntireDoc = TRUE;
-    }
-}
-
-XclExpWebQuery::~XclExpWebQuery()
-{
-    if( pQryTables )
-        delete pQryTables;
-}
-
-void XclExpWebQuery::Save( XclExpStream& rStrm )
-{
-    DBG_ASSERT( !bEntireDoc || !pQryTables, "XclExpWebQuery::Save - illegal mode" );
-
-    // QSI record
-    rStrm.StartRecord( 0x01AD, 10 + aRangeName.GetByteCount() );
-    rStrm   << (UINT16) EXC_QSI_COMMON
-            << (UINT16) 0x0010
-            << (UINT16) 0x0012
-            << (UINT32) 0x00000000;
-    aRangeName.Write( rStrm );
-    rStrm.EndRecord();
-
-    // PARAMQRY record
-    rStrm.StartRecord( 0x00DC, 12 );
-    rStrm   << (UINT16) (EXC_PQRY_COMMON | (bEntireDoc ? 0x0000 : EXC_PQRY_TABLES))
-            << (UINT16) 0x0000
-            << (UINT16) 0x0001;
-    rStrm.WriteZeroBytes( 6 );
-    rStrm.EndRecord();
-
-    // SXSTRING record
-    rStrm.StartRecord( 0x00CD, aURL.GetByteCount() );
-    aURL.Write( rStrm );
-    rStrm.EndRecord();
-
-    // unknown record 0x0802
-    rStrm.StartRecord( 0x0802, 16 + aRangeName.GetByteCount() );
-    rStrm   << (UINT16) 0x0802;         // repeated record id ?!?
-    rStrm.WriteZeroBytes( 6 );
-    rStrm   << (UINT16) 0x0003
-            << (UINT32) 0x00000000
-            << (UINT16) 0x0010;
-    aRangeName.Write( rStrm );
-    rStrm.EndRecord();
-
-    // WEBQRYSETTINGS record
-    rStrm.StartRecord( 0x0803, 28 );
-    rStrm   << (UINT16) 0x0803          // repeated record id ?!?
-            << (UINT16) 0x0000
-            << (UINT16) 0x0004
-            << (UINT16) 0x0000
-            << (UINT16) EXC_WQSETT_COMMON
-            << (UINT16) (pQryTables ? EXC_WQSETT_SPECTABLES : 0x0000);
-    rStrm.WriteZeroBytes( 10 );
-    rStrm   << nRefresh                 // refresh delay in minutes
-            << (UINT16) EXC_WQSETT_FORMATFULL
-            << (UINT16) 0x0000;
-    rStrm.EndRecord();
-
-    // WEBQRYTABLES record
-    if( pQryTables )
-    {
-        rStrm.StartRecord( 0x0804, 4 + pQryTables->GetByteCount() );
-        rStrm   << (UINT16) 0x0804      // repeated record id ?!?
-                << (UINT16) 0x0000;
-        pQryTables->Write( rStrm );     // comma separated list of source tables
-        rStrm.EndRecord();
-    }
-}
 
 
 

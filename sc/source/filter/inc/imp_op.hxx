@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:29:30 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,14 @@
 #include <tools/gen.hxx>
 #endif
 
-#ifndef _SC_XCLIMPSTREAM_HXX
-#include "XclImpStream.hxx"
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
-#ifndef _SC_XCLIMPSTYLEBUFFER_HXX
-#include "XclImpStyleBuffer.hxx"
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
+#ifndef SC_XISTYLE_HXX
+#include "xistyle.hxx"
 #endif
 #ifndef _FLTTYPES_HXX
 #include "flttypes.hxx"
@@ -112,14 +115,12 @@ class ExcelToSc;
 class ImportTyp
 {
 protected:
-    XclImpStream        aIn;            // input stream
     CharSet             eQuellChar;     // Quell-Zeichensatz
     ScDocument*         pD;             // Dokument
     ScExtDocOptions*    pExtOpt;        // optionale extended Options
-    UINT16              nTab;           // z.Zt. bearbeitete Tabelle
 
 public:
-                        ImportTyp( SvStream&, ScDocument*, CharSet eSrc );
+                        ImportTyp( ScDocument*, CharSet eSrc );
     virtual             ~ImportTyp();
 
     virtual FltError    Read( void );
@@ -154,7 +155,7 @@ struct ExcelChartData
 
 
 
-class ImportExcel : public ImportTyp
+class ImportExcel : private XclImpRootData, public ImportTyp, public XclImpRoot
 {
 private:
     ExcelChartData*         pChart;             // aktuelle Chart-Daten
@@ -166,6 +167,10 @@ protected:
 
     RootData*               pExcRoot;
 
+    XclImpStream            maStrm;             // input stream
+    XclImpStream&           aIn;                // input stream
+    String                  maPassword;
+
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     _ScRangeListTabs*       pPrintRanges;
     _ScRangeListTabs*       pPrintTitles;
@@ -176,7 +181,6 @@ protected:
     OutlineBuffer           aColOutlineBuff;    // temporaere Puffer fuer Outline-
     OutlineBuffer           aRowOutlineBuff;    //  Angabe
     ColRowSettings*         pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
-    XclImpCellStyleBuffer*  pCellStyleBuffer;   // buffer for cell XF indexes
 
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
@@ -340,15 +344,12 @@ protected:
     void                    NeueTabelle( void );
     const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
                                 double& rVal );
-    void                    ScanHeadFootParts( const String& rIn, EditTextObject*& rpLeft,
-                                EditTextObject*& rpMid, EditTextObject*& rpRight );
     void                    GetHF( BOOL bHeader );
     virtual void            GetHFString( String& rStr );
 
                                 // nSide -> IMPEXC_MARGINSIDE_*
     String                  GetPageStyleName( UINT16 nTab );
     EditTextObject*         CreateFormText( BYTE, const String&, const UINT16 );
-    ScEditEngineDefaulter&  GetEdEng( void ) const;
     virtual void            EndAllChartObjects( void );     // -> excobj.cxx
 
     virtual void            AdjustRowHeight();
@@ -362,12 +363,15 @@ protected:
         @param rItemSet  The destination item set.
         @param fMargin  The Excel margin value in inches.
         @param eType  The margin type. */
-    void                        SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMarginType eType );
+    void                    SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMarginType eType );
 
 public:
                             ImportExcel( SvStream&, ScDocument*, const String& rBasePath );
 
     virtual                 ~ImportExcel( void );
+
+    /** Sets a password for stream decryption. */
+    inline void             SetPassword( const String& rPassword ) { maPassword = rPassword; }
 
     virtual FltError        Read( void );
 };

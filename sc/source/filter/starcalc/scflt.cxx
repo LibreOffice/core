@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:36:19 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 #include "viewopti.hxx"
 #include "fltprgrs.hxx"
 #include "globstr.hrc"
-#include "FilterTools.hxx"
+#include "ftools.hxx"
 
 
 using namespace com::sun::star;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@
 #include "document.hxx"
 #include "root.hxx"
 
-#ifndef _SC_FILTERTOOLS_HXX
-#include "FilterTools.hxx"
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
 #endif
-#ifndef _SC_XCLIMPSTREAM_HXX
-#include "XclImpStream.hxx"
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
 #endif
-#ifndef _SC_XCLIMPSTYLEBUFFER_HXX
-#include "XclImpStyleBuffer.hxx"
+#ifndef SC_XISTYLE_HXX
+#include "xistyle.hxx"
 #endif
 
 
@@ -337,8 +337,8 @@ void ColRowSettings::SetDefaultXF( UINT16 nColFirst, UINT16 nColLast, UINT16 nXF
         nColLast = MAXCOL;
 
     ScDocument&         rDoc = *pExcRoot->pDoc;
-    XclImpXFBuffer&     rXFBuff = *pExcRoot->pXFBuffer;
-    const UINT16        nTab = *pExcRoot->pAktTab;
+    XclImpXFBuffer&     rXFBuff = pExcRoot->pIR->GetXFBuffer();
+    const UINT16        nTab = pExcRoot->pIR->GetScTab();
 
     rDoc.ApplyPatternAreaTab( nColFirst, 0, nColLast, MAXROW, nTab, rXFBuff.GetPattern( nXF ) );
 }
@@ -384,7 +384,7 @@ void ColRowSettings::ReadSplit( XclImpStream& rIn )
     else
         pExtTabOpt->nActPane = rIn.ReaduInt8();
 
-    pExtTabOpt->nTabNum = *pExcRoot->pAktTab;
+    pExtTabOpt->nTabNum = pExcRoot->pIR->GetScTab();
 }
 
 
@@ -398,7 +398,7 @@ void ColRowSettings::SetVisCorner( UINT16 nCol, UINT16 nRow )
 
 void ColRowSettings::SetFrozen( const BOOL bFrozen )
 {
-    GetExtTabOpt().nTabNum = *pExcRoot->pAktTab;
+    GetExtTabOpt().nTabNum = pExcRoot->pIR->GetScTab();
     GetExtTabOpt().bFrozen = bFrozen;
 }
 
@@ -637,7 +637,7 @@ void ScExtDocOptions::SetZoom( UINT16 nZaehler, UINT16 nNenner )
 
 void ScExtDocOptions::Add( const ColRowSettings& rCRS )
 {
-    const UINT16 nTab = *rCRS.pExcRoot->pAktTab;
+    const UINT16 nTab = rCRS.pExcRoot->pIR->GetScTab();
 
     if( nTab <= MAXTAB )
     {

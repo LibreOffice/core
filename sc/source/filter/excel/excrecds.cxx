@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-19 13:12:39 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
@@ -117,17 +118,16 @@
 #include "excrecds.hxx"
 #include "excdoc.hxx"
 #include "root.hxx"
-#include "fontbuff.hxx"
 #include "excupn.hxx"
 
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
+#ifndef SC_XELINK_HXX
+#include "xelink.hxx"
 #endif
-#ifndef _SC_XCLEXPSTREAM_HXX
-#include "XclExpStream.hxx"
+#ifndef SC_XESTYLE_HXX
+#include "xestyle.hxx"
 #endif
-#ifndef _SC_XCLEXPEXTERNSHEET_HXX
-#include "XclExpExternsheet.hxx"
+#ifndef SC_XECONTENT_HXX
+#include "xecontent.hxx"
 #endif
 
 #include "xcl97rec.hxx"
@@ -332,12 +332,6 @@ const ULONG ExcDummy_02c::nMyLen = sizeof( ExcDummy_02c::pMyData );
 //---------------------------------------------------------
 
 
-ExcPalette2*    ExcFont::pPalette2 = NULL;
-#ifdef DBG_UTIL
-UINT16          ExcFont::nObjCnt = 0;
-#endif
-
-ExcPalette2*    ExcXf::pPalette2 = NULL;
 #ifdef DBG_UTIL
 UINT16          ExcXf::nObjCnt = 0;
 #endif
@@ -351,80 +345,23 @@ NfKeywordTable*     ExcFormat::pKeywordTable = 0;
 
 //----------------------------------------------------------- class ExcRecord -
 
-ExcRecord::~ExcRecord()
+void ExcRecord::Save( XclExpStream& rStrm )
 {
+    SetRecId( GetNum() );
+    SetRecSize( GetLen() );
+    XclExpRecord::Save( rStrm );
 }
-
 
 void ExcRecord::SaveCont( XclExpStream& rStrm )
 {
 }
 
-
-void ExcRecord::Save( XclExpStream& rStrm )
+void ExcRecord::WriteBody( XclExpStream& rStrm )
 {
-    rStrm.StartRecord( GetNum(), GetLen() );
     SaveCont( rStrm );
-    rStrm.EndRecord();
 }
 
 
-
-// XclExpRecordBase ===========================================================
-
-XclExpRecordBase::~XclExpRecordBase()
-{
-}
-
-void XclExpRecordBase::Save( XclExpStream& rStrm )
-{
-}
-
-sal_uInt16 XclExpRecordBase::GetNum() const
-{
-    return 0;
-}
-
-sal_uInt32 XclExpRecordBase::GetLen() const
-{
-    return 0;
-}
-
-
-// XclExpRecord ===============================================================
-
-XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_uInt32 nRecSize ) :
-    mnRecId( nRecId ),
-    mnRecSize( nRecSize )
-{
-}
-
-XclExpRecord::~XclExpRecord()
-{
-}
-
-void XclExpRecord::WriteBody( XclExpStream& rStrm )
-{
-}
-
-void XclExpRecord::Save( XclExpStream& rStrm )
-{
-    DBG_ASSERT( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - Record ID uninitialized" );
-    rStrm.StartRecord( mnRecId, mnRecSize );
-    WriteBody( rStrm );
-    rStrm.EndRecord();
-}
-
-
-// XclExpUInt16Record =========================================================
-
-void XclExpUInt16Record::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << mnValue16;
-}
-
-
-// ============================================================================
 //--------------------------------------------------------- class ExcEmptyRec -
 
 void ExcEmptyRec::Save( XclExpStream& rStrm )
@@ -659,214 +596,6 @@ Exc1904::Exc1904( ScDocument& rDoc )
 UINT16 Exc1904::GetNum( void ) const
 {
     return 0x0022;
-}
-
-
-
-//------------------------------------------------------------- class ExcFont -
-
-ExcFont::ExcFont( RootData& rRootData ) :
-        eBiff( rRootData.eDateiTyp ),
-        eCharSet( *rRootData.pCharset )
-{
-#ifdef DBG_UTIL
-    nObjCnt++;
-#endif
-    DBG_ASSERT( pPalette2, "*ExcFont::ExcFont() - Missing palette!" );
-
-    nNameLen = nHeight = nAttr = nWeight = 0;
-    nUnder = nCharset = 0;
-    nFamily = EXC_FONTFAM_SYSTEM;
-    nSign = 0;
-    bIgnoreCol = TRUE;
-    nColorSer = pPalette2->InsertIndex( EXC_FONTCOL_IGNORE );
-}
-
-
-ExcFont::ExcFont( Font* pFont, RootData& rRootData ) :
-        eBiff( rRootData.eDateiTyp ),
-        eCharSet( *rRootData.pCharset )
-{
-#ifdef DBG_UTIL
-    nObjCnt++;
-#endif
-    DBG_ASSERT( pPalette2, "*ExcFont::ExcFont() - Missing palette!" );
-    DBG_ASSERT( pFont, "*ExcFont::ExcFont() - Missing font!" );
-
-    SetName( pFont->GetName() );
-
-    // attributes
-    nAttr = EXC_FONTATTR_NONE;
-    SetItalic( pFont->GetItalic() != ITALIC_NONE );
-    SetStrikeout( pFont->GetStrikeout() != STRIKEOUT_NONE );
-    SetOutline( pFont->IsOutline() );
-    SetShadow( pFont->IsShadow() );
-
-    SetHeight( (UINT16) pFont->GetSize().Height() );
-    SetColor( pPalette2->InsertFontColor( pFont->GetColor(), EXC_COLOR_CELLTEXT ) );
-    SetWeight( pFont->GetWeight() );
-    SetUnderline( pFont->GetUnderline() );
-    SetFamily( pFont->GetFamily() );
-    SetCharSet( pFont->GetCharSet() );
-
-    // checksum for quick comparison
-    nSign = 0;
-    for( const sal_Unicode* pAkt = sName.GetBuffer(); *pAkt; pAkt++ )
-        nSign += (UINT16) *pAkt;
-    nSign += nWeight * 3;
-    nSign += nCharset * 5;
-    nSign += nNameLen * 7;
-    nSign += nHeight * 11;
-    nSign += nUnder * 13;
-    nSign += nAttr * 17;
-    nSign += nFamily * 19;
-}
-
-
-ExcFont::~ExcFont()
-{
-#ifdef DBG_UTIL
-    DBG_ASSERT( nObjCnt, "ExcFont::ExcFont() - nObjCnt underflow!" );
-    nObjCnt--;
-#endif
-}
-
-
-void ExcFont::SetName( const String& rName )
-{
-    sName.Assign( rName );
-    nNameLen = (UINT16) Min( sName.Len(), (xub_StrLen) 0xFFFF );
-}
-
-
-void ExcFont::SetColor( UINT32 nSerial )
-{
-    nColorSer = nSerial;
-    bIgnoreCol = FALSE;
-}
-
-
-void ExcFont::SaveCont( XclExpStream& rStrm )
-{
-    rStrm   << nHeight                                  // font height
-            << nAttr                                    // attributes
-            << pPalette2->GetColorIndex( nColorSer )    // color index
-            << nWeight                                  // boldeness - Biff5 only
-            << (UINT16)0                                // super-/subscript (none)
-            << nUnder                                   // underline
-            << nFamily                                  // family
-            << nCharset                                 // character set
-            << (BYTE) 0xA5;                             // original from Excel
-
-    // Name
-    DBG_ASSERT( nNameLen < 256, "ExcFont::SaveCont() - sName too long!" );
-    if ( eBiff < Biff8 )
-        rStrm.WriteByteString( ByteString( sName, eCharSet ) );     // 8 bit length, max 255 chars
-    else
-        XclExpUniString( sName, 255, TRUE ).Write( rStrm, FALSE );  //! 8 bit length, always 16-bit-chars
-}
-
-
-BOOL ExcFont::operator==( const ExcFont &rRef ) const
-{
-    if( nSign != rRef.nSign )
-        return FALSE;
-    if( (nColorSer != rRef.nColorSer) && !bIgnoreCol && !rRef.bIgnoreCol )
-        return FALSE;
-    return
-    (
-        (nNameLen == rRef.nNameLen) && (nHeight == rRef.nHeight)    &&
-        (nAttr == rRef.nAttr)       && (nWeight == rRef.nWeight)    &&
-        (nUnder == rRef.nUnder)     && (nFamily == rRef.nFamily)    &&
-        (nCharset == rRef.nCharset) && (sName == rRef.sName) );
-}
-
-
-void ExcFont::SetPalette( ExcPalette2& rPalette2 )
-{
-    pPalette2 = &rPalette2;
-}
-
-
-UINT16 ExcFont::GetWeight( const FontWeight eWeight )
-{
-    switch( eWeight )
-    {
-        case WEIGHT_DONTKNOW:   return EXC_FONTWGHT_DONTKNOW;   // DONTCARE
-        case WEIGHT_THIN:       return EXC_FONTWGHT_THIN;
-        case WEIGHT_ULTRALIGHT: return EXC_FONTWGHT_ULTRALIGHT;
-        case WEIGHT_LIGHT:      return EXC_FONTWGHT_LIGHT;
-        case WEIGHT_SEMILIGHT:  return EXC_FONTWGHT_SEMILIGHT;
-        case WEIGHT_NORMAL:     return EXC_FONTWGHT_NORMAL;
-        case WEIGHT_MEDIUM:     return EXC_FONTWGHT_MEDIUM;
-        case WEIGHT_SEMIBOLD:   return EXC_FONTWGHT_SEMIBOLD;
-        case WEIGHT_BOLD:       return EXC_FONTWGHT_BOLD;
-        case WEIGHT_ULTRABOLD:  return EXC_FONTWGHT_ULTRABOLD;
-        case WEIGHT_BLACK:      return EXC_FONTWGHT_BLACK;
-    }
-    return EXC_FONTWGHT_NORMAL;
-}
-
-
-UINT8 ExcFont::GetUnderline( const FontUnderline eUnder )
-{
-    switch( eUnder )
-    {
-        case UNDERLINE_SINGLE:  return static_cast< sal_uInt8 >( xlUnderlSingle );
-        case UNDERLINE_DOUBLE:  return static_cast< sal_uInt8 >( xlUnderlDouble );
-        case UNDERLINE_DOTTED:  return static_cast< sal_uInt8 >( xlUnderlSingleAcc );
-    }
-    return static_cast< sal_uInt8 >( xlUnderlNone );
-}
-
-
-UINT8 ExcFont::GetFamily( const FontFamily eFamily )
-{
-    switch( eFamily )
-    {
-        case FAMILY_DONTKNOW:   return EXC_FONTFAM_DONTKNOW;
-        case FAMILY_DECORATIVE: return EXC_FONTFAM_DECORATIVE;
-        case FAMILY_MODERN:     return EXC_FONTFAM_MODERN;
-        case FAMILY_ROMAN:      return EXC_FONTFAM_ROMAN;
-        case FAMILY_SCRIPT:     return EXC_FONTFAM_SCRIPT;
-        case FAMILY_SWISS:      return EXC_FONTFAM_SWISS;
-        case FAMILY_SYSTEM:     return EXC_FONTFAM_SYSTEM;
-    }
-    DBG_ERROR( "ExcFont::GetFamily() - unknown family!" );
-    return EXC_FONTFAM_DONTKNOW;
-}
-
-
-UINT8 ExcFont::GetCharSet( const rtl_TextEncoding eCharset )
-{
-    switch( eCharset )
-    {
-        case RTL_TEXTENCODING_DONTKNOW:     return EXC_FONTCSET_DONTKNOW;
-        case RTL_TEXTENCODING_MS_1252:      return EXC_FONTCSET_MS_1252;
-        case RTL_TEXTENCODING_APPLE_ROMAN:  return EXC_FONTCSET_APPLE_ROMAN;
-        case RTL_TEXTENCODING_IBM_437:      return EXC_FONTCSET_IBM_437;
-        case RTL_TEXTENCODING_IBM_850:      return EXC_FONTCSET_IBM_850;
-        case RTL_TEXTENCODING_IBM_860:      return EXC_FONTCSET_IBM_860;
-        case RTL_TEXTENCODING_IBM_861:      return EXC_FONTCSET_IBM_861;
-        case RTL_TEXTENCODING_IBM_863:      return EXC_FONTCSET_IBM_863;
-        case RTL_TEXTENCODING_IBM_865:      return EXC_FONTCSET_IBM_865;
-        case (rtl_TextEncoding) 9:          return EXC_FONTCSET_SYSTEM;
-        case RTL_TEXTENCODING_SYMBOL:       return EXC_FONTCSET_SYMBOL;
-    }
-
-    return EXC_FONTCSET_DONTKNOW;
-}
-
-
-UINT16 ExcFont::GetNum( void ) const
-{
-    return 0x0031;
-}
-
-
-ULONG ExcFont::GetLen( void ) const
-{
-    return 15 + ( eBiff < Biff8 ? nNameLen : 1 + 2 * nNameLen );
 }
 
 
@@ -1360,7 +1089,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
     eBiff( rRoot.eDateiTyp )
 {
     const EditTextObject*   p = rEdCell.GetData();
-    XclHlink*&              rpLastHlink = rRoot.pLastHlink;
+    XclExpHyperlink*& rpLastHlink = rRoot.pLastHlink;
 
     if( rpLastHlink )
     {
@@ -1370,7 +1099,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
 
     if( p )
     {
-        ScEditEngineDefaulter& rEdEng = rRoot.GetEdEng();
+        ScEditEngineDefaulter& rEdEng = rRoot.pER->GetEditEngine();
         const BOOL          bOldMode = rEdEng.GetUpdateMode();
         rEdEng.SetUpdateMode( TRUE );
         {
@@ -1395,14 +1124,12 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
         const sal_Unicode   cParSep = 0x0A;
         ESelection          aSel;
         ScPatternAttr       aPatAttr( rRoot.pDoc->GetPool() );
-        UsedFontList&       rFontList = *rRoot.pFontRecs;
+        XclExpFontBuffer&   rFontList = rRoot.pER->GetFontBuffer();
         String              sURLList;
         BOOL                bMultipleHlink = FALSE;
 
         // first font is the cell font, following font changes are stored in richstring
-        Font*               pFont = new Font;
-        pAttr->GetFont( *pFont, SC_AUTOCOL_RAW );
-        USHORT              nLastFontIndex = rFontList.Add( pFont );
+        USHORT              nLastFontIndex = rFontList.Insert( *pAttr );
 
         for( nPar = 0 ; nPar < nParCnt ; )
         {
@@ -1452,7 +1179,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                                         sURLList += cParSep;
                                     sURLList += rURLField.GetURL();
 
-                                    XclHlink* pNewHlink = new XclHlink( rRoot, rURLField );
+                                    XclExpHyperlink* pNewHlink = new XclExpHyperlink( *rRoot.pER, rURLField );
                                     const String* pReprString = pNewHlink->GetRepr();
                                     if( pReprString )
                                     {
@@ -1477,15 +1204,15 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                         aPatAttr.GetItemSet().ClearItem();
                         aPatAttr.GetFromEditItemSet( &aItemSet );
 
-                        Font* pFont = new Font;
-                        aPatAttr.GetFont( *pFont, SC_AUTOCOL_RAW );
+                        Font aFont;
+                        aPatAttr.GetFont( aFont, SC_AUTOCOL_RAW );
                         if( bWasHLink )
                         {
-                            pFont->SetColor( Color( COL_LIGHTBLUE ) );
-                            pFont->SetUnderline( UNDERLINE_SINGLE );
+                            aFont.SetColor( Color( COL_LIGHTBLUE ) );
+                            aFont.SetUnderline( UNDERLINE_SINGLE );
                         }
 
-                        UINT16 nFontIndex = rFontList.Add( pFont );
+                        UINT16 nFontIndex = rFontList.Insert( aFont );
 
                         if( nFontIndex > 255 && eBiff < Biff8 )
                             nFontIndex = 0;
@@ -1544,17 +1271,17 @@ void ExcRichStr::Write( XclExpStream& rStrm )
 
     if( eBiff >= Biff8 )
     {
-        rStrm.SetSliceLen( 4 );
+        rStrm.SetSliceSize( 4 );
         for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
             rStrm << aForms.GetValue( nIndex );
     }
     else
     {
-        rStrm.SetSliceLen( 2 );
+        rStrm.SetSliceSize( 2 );
         for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
             rStrm << (UINT8) aForms.GetValue( nIndex );
     }
-    rStrm.SetSliceLen( 0 );
+    rStrm.SetSliceSize( 0 );
 }
 
 
@@ -1919,7 +1646,7 @@ ExcNameListEntry::ExcNameListEntry() :
 ExcNameListEntry::ExcNameListEntry( RootData& rRootData, UINT16 nScTab, UINT8 nKey ) :
     pData( NULL ),
     nFormLen( 0 ),
-    nTabNum( rRootData.pTabBuffer->GetExcTable( nScTab ) + 1 ),
+    nTabNum( rRootData.pER->GetTabIdBuffer().GetXclTab( nScTab ) + 1 ),
     nBuiltInKey( nKey ),
     bDummy( FALSE )
 {
@@ -2139,8 +1866,8 @@ void ExcName::SaveCont( XclExpStream& rStrm )
         rStrm.WriteByteStringBuffer( ByteString( aName, *pExcRoot->pCharset ), nNameLen );
     else
     {
-        XclExpUniString aUni( aName, nNameLen );
-        aUni.WriteFlags( rStrm );
+        XclExpUniString aUni( aName, EXC_STR_8BITLENGTH );
+        aUni.WriteFlagField( rStrm );
         aUni.WriteBuffer( rStrm );
     }
 
@@ -2196,15 +1923,15 @@ XclPrintRange::XclPrintRange( RootData& rRootData, UINT16 nScTab ) :
 XclPrintTitles::XclPrintTitles( RootData& rRootData, UINT16 nScTab ) :
         XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTTITLES )
 {
-    UINT16 nExcTab = rRootData.pTabBuffer->GetExcTable( nScTab );
+    UINT16 nXclTab = rRootData.pER->GetTabIdBuffer().GetXclTab( nScTab );
     const ScRange* pRange = rRootData.pDoc->GetRepeatColRange( nScTab );
     if( pRange )
-        Append( ScRange( pRange->aStart.Col(), 0, nExcTab,
-            pRange->aEnd.Col(), rRootData.nRowMax, nExcTab ) );
+        Append( ScRange( pRange->aStart.Col(), 0, nXclTab,
+            pRange->aEnd.Col(), rRootData.nRowMax, nXclTab ) );
     pRange = rRootData.pDoc->GetRepeatRowRange( nScTab );
     if( pRange )
-        Append( ScRange( 0, pRange->aStart.Row(), nExcTab,
-            rRootData.nColMax, pRange->aEnd.Row(), nExcTab ) );
+        Append( ScRange( 0, pRange->aStart.Row(), nXclTab,
+            rRootData.nColMax, pRange->aEnd.Row(), nXclTab ) );
     CreateFormula( rRootData );
 }
 
@@ -2218,7 +1945,7 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
     nFirstOtherNameIx( 0 )
 {
     ScDocument&         rDoc = *rRootData.pDoc;
-    XclExpTabNumBuffer& rTabBuffer = *rRootData.pTabBuffer;
+    XclExpTabIdBuffer&  rTabBuffer = rRootData.pER->GetTabIdBuffer();
     USHORT              nCount, nIndex;
     UINT16              nScTab, nTab, nExpIx;
 
@@ -2226,14 +1953,14 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
     UINT16 nScTabCount = rTabBuffer.GetScTabCount();
     for( nTab = 0; nTab < nScTabCount; ++nTab )
     {
-        nScTab = rTabBuffer.GetRealSheetIndex( nTab ); // sorted -> real
+        nScTab = rTabBuffer.GetRealScTab( nTab ); // sorted -> real
         if( rTabBuffer.IsExportTable( nScTab ) )
             Append( new XclPrintRange( rRootData, nScTab ) );
     }
     nFirstPrintTitleIx = List::Count();
     for( nTab = 0; nTab < nScTabCount; ++nTab )
     {
-        nScTab = rTabBuffer.GetRealSheetIndex( nTab ); // sorted -> real
+        nScTab = rTabBuffer.GetRealScTab( nTab ); // sorted -> real
         if( rTabBuffer.IsExportTable( nScTab ) )
             Append( new XclPrintTitles( rRootData, nScTab ) );
     }
@@ -2303,7 +2030,7 @@ UINT16 ExcNameList::Append( ExcNameListEntry* pName )
 void ExcNameList::InsertSorted( RootData& rRootData, ExcNameListEntry* pName, sal_uInt16 nScTab )
 {
     // real -> sorted
-    sal_uInt32 nSortIx = rRootData.pTabBuffer->GetSortedSheetIndex( nScTab );
+    sal_uInt32 nSortIx = rRootData.pER->GetTabIdBuffer().GetSortedScTab( nScTab );
     List::Insert( pName, maNextInsVec[ nSortIx ] );
     for( sal_uInt32 nCount = maNextInsVec.size(); nSortIx < nCount; ++nSortIx )
         ++maNextInsVec[ nSortIx ];
@@ -2721,7 +2448,8 @@ ULONG ExcColinfo::GetLen( void ) const
 
 //--------------------------------------------------------------- class ExcXf -
 
-ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& rbWrap, BOOL bSt ) :
+ExcXf::ExcXf( const XclExpRoot& rRoot, UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& rbWrap, BOOL bSt ) :
+    XclExpRoot( rRoot ),
     bStyle( bSt )
 {
 #ifdef DBG_UTIL
@@ -2789,16 +2517,16 @@ ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& 
 
         nFls = aCol.GetTransparency()? 0x0000 : 0x0001;
 
-        nIcvForeSer = pPalette2->InsertColor( aCol, EXC_COLOR_CELLBGROUND );
-        nIcvBackSer = pPalette2->InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLBGROUND );
+        nIcvForeSer = GetPalette().InsertColor( aCol, xlColorCellArea );
+        nIcvBackSer = GetPalette().InsertColor( Color( COL_BLACK ), xlColorCellArea );
 
         // Umrandung
         const SvxBoxItem&   rBox = ((const SvxBoxItem&)pPattAttr->GetItem( ATTR_BORDER ));
 
-        ScToExcBorderLine( rBox.GetTop(), nIcvTopSer, nDgTop );
-        ScToExcBorderLine( rBox.GetLeft(), nIcvLftSer, nDgLeft );
-        ScToExcBorderLine( rBox.GetBottom(), nIcvBotSer, nDgBottom );
-        ScToExcBorderLine( rBox.GetRight(), nIcvRigSer, nDgRight );
+        ScToExcBorderLine( GetPalette(), rBox.GetTop(), nIcvTopSer, nDgTop );
+        ScToExcBorderLine( GetPalette(), rBox.GetLeft(), nIcvLftSer, nDgLeft );
+        ScToExcBorderLine( GetPalette(), rBox.GetBottom(), nIcvBotSer, nDgBottom );
+        ScToExcBorderLine( GetPalette(), rBox.GetRight(), nIcvRigSer, nDgRight );
 
         if( bSt )
         {
@@ -2836,8 +2564,8 @@ ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& 
         eOri = xlTextOrientNoRot;
         bFWrap = FALSE;
         nFls = 0x0000;
-        nIcvBackSer = pPalette2->InsertIndex( 65 );
-        nIcvForeSer = pPalette2->InsertIndex( 64 );
+        nIcvBackSer = GetPalette().InsertIndex( 65 );
+        nIcvForeSer = GetPalette().InsertIndex( 64 );
         nIcvTopSer = nIcvBotSer = nIcvLftSer = nIcvRigSer = 0;
         nDgTop = nDgLeft = nDgBottom = nDgRight = 0;
     }
@@ -2852,29 +2580,20 @@ ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& 
 ExcXf::~ExcXf()
 {
     nObjCnt--;
-
-    if( !nObjCnt )
-        pPalette2 = NULL;   // letzter macht das Licht aus...
 }
 #endif
 
 
-void ExcXf::SetPalette( ExcPalette2& rPalette2 )
-{
-    pPalette2 = &rPalette2;
-}
-
-
-void ExcXf::ScToExcBorderLine( const SvxBorderLine* pLine, UINT32& rIcvSer, UINT16& rDg )
+void ExcXf::ScToExcBorderLine( XclExpPalette& rPalette, const SvxBorderLine* pLine, UINT32& rIcvSer, UINT16& rDg )
 {
     if( !pLine )
     {
-        rIcvSer = pPalette2->InsertIndex( 0 );
+        rIcvSer = rPalette.InsertIndex( 0 );
         rDg = 0;
         return;
     }
 
-    rIcvSer = pPalette2->InsertColor( pLine->GetColor(), EXC_COLOR_CELLBORDER );
+    rIcvSer = rPalette.InsertColor( pLine->GetColor(), xlColorCellBorder );
 
     if( pLine->GetDistance() )
         // doppelte Linien
@@ -2909,7 +2628,7 @@ void ExcXf::SaveCont( XclExpStream& rStrm )
     rStrm << nTmp;
 
     UINT16 nForeInd, nBackInd;
-    pPalette2->GetMixedColors( nIcvForeSer, nIcvBackSer, nForeInd, nBackInd, nFls );
+    GetPalette().GetMixedColors( nForeInd, nBackInd, nFls, nIcvForeSer, nIcvBackSer );
     nTmp = nForeInd;                                    // Offs 12
     nTmp |= nBackInd << 7;
 
@@ -2919,17 +2638,17 @@ void ExcXf::SaveCont( XclExpStream& rStrm )
 
     nTmp = nFls;                                        // Offs 14
     nTmp += nDgBottom << 6;
-    nTmp |= pPalette2->GetColorIndex( nIcvBotSer ) << 9;
+    nTmp |= GetPalette().GetColorIndex( nIcvBotSer ) << 9;
     rStrm << nTmp;
 
     nTmp = nDgTop;                                      // Offs 16
     nTmp += nDgLeft << 3;
     nTmp += nDgRight << 6;
-    nTmp |= pPalette2->GetColorIndex( nIcvTopSer ) << 9;
+    nTmp |= GetPalette().GetColorIndex( nIcvTopSer ) << 9;
     rStrm << nTmp;
 
-    nTmp = pPalette2->GetColorIndex( nIcvLftSer );      // Offs 18
-    nTmp |= pPalette2->GetColorIndex( nIcvRigSer ) << 7;
+    nTmp = GetPalette().GetColorIndex( nIcvLftSer );     // Offs 18
+    nTmp |= GetPalette().GetColorIndex( nIcvRigSer ) << 7;
     rStrm << nTmp;
 }
 
@@ -3055,10 +2774,7 @@ void ExcFormat::SaveCont( XclExpStream& rStrm )
             ByteString( aFormStr, *pExcRoot->pCharset ), (BYTE)aFormStr.Len() );    // 8 bit length
     }
     else
-    {
-        rStrm << nIndex;
-        XclExpUniString( aFormStr, aFormStr.Len() ).Write( rStrm );     // normal unicode string
-    }
+        rStrm << nIndex << XclExpUniString( aFormStr );
 }
 
 
@@ -3075,467 +2791,6 @@ ULONG ExcFormat::GetLen( void ) const
 
 
 
-//--------------------------------------------------------- class ExcPalette2 -
-// ExcPal2Entry & ExcPalette2
-
-INT32 lcl_GetColorDistance( const Color& rCol1, const Color& rCol2 )
-{
-    INT32 nDist = rCol1.GetRed() - rCol2.GetRed();
-    nDist *= nDist * 77;
-    INT32 nDummy = rCol1.GetGreen() - rCol2.GetGreen();
-    nDist += nDummy * nDummy * 151;
-    nDummy = rCol1.GetBlue() - rCol2.GetBlue();
-    nDist += nDummy * nDummy * 28;
-    return nDist;
-}
-
-void lcl_SetMixedColor( Color& rDest, const Color& rSrc1, const Color& rSrc2 )
-{
-    rDest.SetRed( (UINT8)(((UINT16) rSrc1.GetRed() + rSrc2.GetRed()) >> 1) );
-    rDest.SetGreen( (UINT8)(((UINT16) rSrc1.GetGreen() + rSrc2.GetGreen()) >> 1) );
-    rDest.SetBlue( (UINT8)(((UINT16) rSrc1.GetBlue() + rSrc2.GetBlue()) >> 1) );
-}
-
-
-
-
-void ExcPal2Entry::UpdateEntry( UINT16 nColorType )
-{
-    switch( nColorType )
-    {
-        case EXC_COLOR_CHARTLINE:       nWeight++;      break;
-        case EXC_COLOR_CELLBORDER:
-        case EXC_COLOR_CHARTAREA:       nWeight += 2;   break;
-        case EXC_COLOR_CELLTEXT:
-        case EXC_COLOR_CHARTTEXT:       nWeight += 10;  break;
-        case EXC_COLOR_CELLBGROUND:     nWeight += 20;  break;
-        case EXC_COLOR_GRID:            nWeight += 50;  break;
-    }
-}
-
-void ExcPal2Entry::AddColor( const ExcPal2Entry& rEntry )
-{
-    UINT32  nWeight2 = rEntry.GetWeighting();
-    UINT32  nWeightSum = nWeight + nWeight2;
-    UINT32  nWeightSum2 = nWeightSum >> 1;
-    UINT32  nDummy;
-
-    nDummy = nWeight * GetRed() + nWeight2 * rEntry.GetRed() + nWeightSum2;
-    SetRed( (UINT8)(nDummy / nWeightSum) );
-    nDummy = nWeight * GetGreen() + nWeight2 * rEntry.GetGreen() + nWeightSum2;
-    SetGreen( (UINT8)(nDummy / nWeightSum) );
-    nDummy = nWeight * GetBlue() + nWeight2 * rEntry.GetBlue() + nWeightSum2;
-    SetBlue( (UINT8)(nDummy / nWeightSum) );
-
-    nWeight = nWeightSum;
-}
-
-void ExcPal2Entry::Save( XclExpStream& rStrm )
-{
-    rStrm << GetRed() << GetGreen() << GetBlue() << (UINT8)0x00;
-}
-
-
-
-
-ExcPalette2::ExcPalette2( ColorBuffer& rCB ) :
-        rColBuff( rCB ),
-        nLastInd( 0 ),
-        nMaxSerial( 0 ),
-        pColorIndex( NULL ),
-        pColors( NULL ),
-        pExportColors( new Color[ rCB.GetAnz() ] ),
-        pbExportUsed( new bool[ rCB.GetAnz() ] )
-{
-    InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLTEXT );
-
-    for( UINT16 nEntry = 0; nEntry < rColBuff.GetAnz(); ++nEntry )
-    {
-        pExportColors[ nEntry ] = rColBuff.GetColor( nEntry + ColorBuffer::GetIndCorrect() )->GetValue();
-        pbExportUsed[ nEntry ] = false;
-    }
-}
-
-ExcPalette2::~ExcPalette2()
-{
-    for( ExcPal2Entry* pEntry = _First(); pEntry; pEntry = _Next() )
-        delete pEntry;
-    delete[] pColorIndex;
-    delete[] pColors;
-    delete[] pExportColors;
-    delete[] pbExportUsed;
-}
-
-void ExcPalette2::SearchEntry( const Color& rCol, UINT32& rIndex, BOOL& rbIsEqual ) const
-{
-    rbIsEqual = FALSE;
-    rIndex = 0;
-    if( !Count() )
-        return;
-
-    ExcPal2Entry* pEntry = _Get( nLastInd );
-    if( pEntry )
-        if( pEntry->IsEqual( rCol ) )
-        {
-            rIndex = nLastInd;
-            rbIsEqual = TRUE;
-            return;
-        }
-
-    UINT32  nStart  = 0;
-    UINT32  nEnd    = List::Count() - 1;
-    UINT32  nNew;
-
-    while( !rbIsEqual && (nStart <= nEnd) )
-    {
-        nNew = (nStart + nEnd) >> 1;
-        pEntry = _Get( nNew );
-        rbIsEqual = pEntry->IsEqual( rCol );
-        if( !rbIsEqual )
-        {
-            if( pEntry->IsGreater( rCol ) )
-                nEnd = nNew - 1;
-            else
-            {
-                nStart = nNew + 1;
-                if( nStart > nEnd )
-                    nNew++;
-            }
-        }
-    }
-    rIndex = nNew;
-}
-
-ExcPal2Entry* ExcPalette2::CreateEntry( const Color& rCol, UINT32 nIndex )
-{
-    ExcPal2Entry* pEntry = new ExcPal2Entry( rCol, List::Count() );
-    List::Insert( pEntry, nIndex );
-    return pEntry;
-}
-
-UINT32 ExcPalette2::InsertColor( const Color& rCol, UINT16 nColorType )
-{
-    UINT32  nIndex;
-    BOOL    bIsEqual;
-    SearchEntry( rCol, nIndex, bIsEqual );
-
-    ExcPal2Entry*   pEntry = _Get( nIndex );
-    if( !pEntry || !bIsEqual )
-        pEntry = CreateEntry( rCol, nIndex );
-
-    pEntry->UpdateEntry( nColorType );
-    nLastInd = nIndex;
-    return pEntry->GetSerial();
-}
-
-UINT32 ExcPalette2::InsertFontColor( const Color& rCol, UINT16 nColorType )
-{
-    return (rCol.GetColor() == COL_AUTO) ?
-        InsertIndex( 0x7FFF ) : InsertColor( rCol, nColorType );
-}
-
-UINT32 ExcPalette2::InsertIndex( UINT16 nIndex )
-{
-    return EXC_PAL2_INDEXBASE | nIndex;
-}
-
-void ExcPalette2::RecalcColorIndex( UINT32 nKeep, UINT32 nRemove )
-{
-    UINT32  nInd;
-    UINT32* pColInd;
-    for( nInd = 0, pColInd = pColorIndex; nInd < nMaxSerial; nInd++, pColInd++ )
-    {
-        if( *pColInd == nRemove )
-            *pColInd = nKeep;
-        if( *pColInd > nRemove )
-            (*pColInd)--;
-    }
-}
-
-void ExcPalette2::MergeColors( UINT32 nKeep, UINT32 nRemove )
-{
-    if( nRemove == 0 )      // don't remove color 0
-    {
-        nRemove = nKeep;
-        nKeep = 0;
-    }
-
-    ExcPal2Entry*   pKeepEntry      = _Get( nKeep );
-    ExcPal2Entry*   pRemoveEntry    = _Get( nRemove );
-    if( pKeepEntry && pRemoveEntry )
-    {
-        if( nKeep == 0 )
-            pKeepEntry->AddWeighting( *pRemoveEntry );
-        else
-            pKeepEntry->AddColor( *pRemoveEntry );
-
-        List::Remove( nRemove );
-        delete pRemoveEntry;
-        RecalcColorIndex( nKeep, nRemove );
-    }
-}
-
-UINT32 ExcPalette2::GetRemoveColor() const
-{
-    UINT32 nFound   = 0;
-    UINT32 nMinW    = 0xFFFFFFFF;
-
-    for( UINT32 nInd = 0; nInd < List::Count(); nInd++ )
-    {
-        ExcPal2Entry* pEntry = _Get( nInd );
-        if( pEntry )
-            if( pEntry->GetWeighting() < nMinW )
-            {
-                nFound = nInd;
-                nMinW = pEntry->GetWeighting();
-            }
-    }
-    return nFound;
-}
-
-UINT32 ExcPalette2::GetNearestColor( const Color& rCol, UINT32 nIgnore ) const
-{
-    UINT32  nFound  = 0;
-    INT32   nMinD   = 0x7FFFFFFF;
-
-    for( UINT32 nInd = 0; nInd < List::Count(); nInd++ )
-        if( nInd != nIgnore )
-        {
-            ExcPal2Entry* pCheck = _Get( nInd );
-            if( pCheck )
-            {
-                Color aCheckColor( pCheck->GetColor() );
-                INT32 nDist = lcl_GetColorDistance( rCol, aCheckColor );
-                if( nDist < nMinD )
-                {
-                    nFound = nInd;
-                    nMinD = nDist;
-                }
-            }
-        }
-    return nFound;
-}
-
-UINT32 ExcPalette2::GetNearestColor( UINT32 nIndex ) const
-{
-    ExcPal2Entry* pEntry = _Get( nIndex );
-    if( !pEntry )
-        return 0;
-
-    Color aCol( pEntry->GetColor() );
-    return GetNearestColor( aCol, nIndex );
-}
-
-INT32 ExcPalette2::GetNearExportColors( UINT32& rnFirst, UINT32& rnSecond, const Color& rCol ) const
-{
-    rnFirst = rnSecond = 0;
-    INT32 nDist1 = 0x7FFFFFFF;
-    INT32 nDist2 = 0x7FFFFFFF;
-
-    for( UINT32 nInd = 0; nInd < rColBuff.GetAnz(); ++nInd )
-    {
-        INT32 nCurrDist = lcl_GetColorDistance( rCol, pExportColors[ nInd ] );
-        if( nCurrDist < nDist1 )
-        {
-            rnSecond = rnFirst;
-            nDist2 = nDist1;
-            rnFirst = nInd;
-            nDist1 = nCurrDist;
-        }
-        else if( nCurrDist < nDist2 )
-        {
-            rnSecond = nInd;
-            nDist2 = nCurrDist;
-        }
-    }
-    return nDist1;
-}
-
-INT32 ExcPalette2::GetNearestExportColor( UINT32& rnIndex, const Color& rCol, bool bIgnoreUsed ) const
-{
-    rnIndex = 0;
-    INT32 nDist = 0x7FFFFFFF;
-
-    for( UINT32 nInd = 0; nInd < rColBuff.GetAnz(); ++nInd )
-    {
-        if( !bIgnoreUsed || !pbExportUsed[ nInd ] )
-        {
-            INT32 nCurrDist = lcl_GetColorDistance( rCol, pExportColors[ nInd ] );
-            if( nCurrDist < nDist )
-            {
-                rnIndex = nInd;
-                nDist = nCurrDist;
-            }
-        }
-    }
-    return nDist;
-}
-
-void ExcPalette2::ReduceColors()
-{
-    nMaxSerial = List::Count();
-    if( !nMaxSerial )
-        return;
-
-    pColorIndex = new UINT32[ nMaxSerial ];
-    pColors = new Color[ nMaxSerial ];
-
-    for( UINT32 nInd = 0; nInd < nMaxSerial; nInd++ )
-    {
-        ExcPal2Entry* pEntry = _Get( nInd );
-        if( pEntry )
-        {
-            pColorIndex[ pEntry->GetSerial() ] = nInd;
-            pColors[ pEntry->GetSerial() ].SetColor( pEntry->GetColor() );
-        }
-    }
-
-    while( List::Count() > rColBuff.GetAnz() )
-    {
-        UINT32 nRemove = GetRemoveColor();
-        UINT32 nNearest = GetNearestColor( nRemove );
-        MergeColors( nNearest, nRemove );
-    }
-
-    // #104865# use default palette and replace colors with current colors
-    UINT32 nCount = List::Count();
-    UINT32* pnIndexMap = new UINT32[ nCount ];  // current list pos -> export index
-    UINT32* pnNearest = new UINT32[ nCount ];   // list color -> nearest export color
-    INT32* pnDist = new INT32[ nCount ];        // diff to nearest color
-    bool* pbProcessed = new bool[ nCount ];     // list entry already processed?
-    memset( pbProcessed, 0, sizeof( bool ) * nCount );
-
-    for( UINT32 nRun = 0; nRun < nCount; ++nRun )
-    {
-        UINT32 nIndex;
-        // find nearest unused default color for each unprocessed list color
-        for( nIndex = 0; nIndex < nCount; ++nIndex )
-            pnDist[ nIndex ] = pbProcessed[ nIndex ] ? 0x7FFFFFFF :
-                GetNearestExportColor( pnNearest[ nIndex ], Color( _Get( nIndex )->GetColor() ), true );
-        // find the list color which is nearest to a default color
-        UINT32 nFound = 0;
-        for( nIndex = 1; nIndex < nCount; ++nIndex )
-            if( pnDist[ nIndex ] < pnDist[ nFound ] )
-                nFound = nIndex;
-        // replace default color with list color
-        UINT32 nNearest = pnNearest[ nFound ];
-        DBG_ASSERT( _Get( nFound ), "ExcPalette2::ReduceColors - missing a color" );
-        DBG_ASSERT( nNearest < rColBuff.GetAnz(), "ExcPalette2::ReduceColors - algorithm error" );
-        pExportColors[ nNearest ].SetColor( _Get( nFound )->GetColor() );
-        pbExportUsed[ nNearest ] = true;
-        pnIndexMap[ nFound ] = nNearest;
-        pbProcessed[ nFound ] = true;
-    }
-
-    for( UINT32 nSer = 0; nSer < nMaxSerial; ++nSer )   // adjust pColorIndex map
-        pColorIndex[ nSer ] = pnIndexMap[ pColorIndex[ nSer ] ];
-
-    delete[] pnIndexMap;
-    delete[] pnNearest;
-    delete[] pnDist;
-    delete[] pbProcessed;
-}
-
-UINT16 ExcPalette2::GetColorIndex( const Color& rCol ) const
-{
-    UINT32 nIndex;
-    GetNearestExportColor( nIndex, rCol, false );
-    return (UINT16)(nIndex + ColorBuffer::GetIndCorrect());
-}
-
-UINT16 ExcPalette2::GetFontColorIndex( const Color& rCol ) const
-{
-    return (rCol.GetColor() == COL_AUTO) ? 0x7FFF : GetColorIndex( rCol );
-}
-
-UINT16 ExcPalette2::GetColorIndex( UINT32 nSerial ) const
-{
-    if( nSerial >= EXC_PAL2_INDEXBASE )
-        return (UINT16)(nSerial & ~EXC_PAL2_INDEXBASE);
-    if( (nSerial >= nMaxSerial) || !pColorIndex )
-        return 0;
-    return (UINT16)(pColorIndex[ nSerial ] + ColorBuffer::GetIndCorrect());
-}
-
-void ExcPalette2::GetMixedColors( UINT32 nForeSer, UINT32 nBackSer,
-                                UINT16& rForeInd, UINT16& rBackInd, UINT16& rPatt ) const
-{
-    if( (nForeSer >= EXC_PAL2_INDEXBASE) || (nBackSer >= EXC_PAL2_INDEXBASE) ||
-        ( !rPatt ) )        // <> 0x0000 -> non-solid brush
-    {
-        rForeInd = GetColorIndex( nForeSer );
-        rBackInd = GetColorIndex( nBackSer );
-        return;
-    }
-
-    rForeInd = rBackInd = 0;
-    if( (nForeSer >= nMaxSerial) || !pColors )
-        return;
-
-    UINT32  nIndex1, nIndex2;
-    INT32   nFirstDist = GetNearExportColors( nIndex1, nIndex2, pColors[ nForeSer ] );
-    if( (nIndex1 >= rColBuff.GetAnz()) || (nIndex2 >= rColBuff.GetAnz()) )
-        return;
-
-    Color aColorArr[ 5 ];
-    aColorArr[ 0 ] = pExportColors[ nIndex1 ];
-    aColorArr[ 4 ] = pExportColors[ nIndex2 ];
-    lcl_SetMixedColor( aColorArr[ 2 ], aColorArr[ 0 ], aColorArr[ 4 ] );
-    lcl_SetMixedColor( aColorArr[ 1 ], aColorArr[ 0 ], aColorArr[ 2 ] );
-    lcl_SetMixedColor( aColorArr[ 3 ], aColorArr[ 2 ], aColorArr[ 4 ] );
-
-    INT32   nMinDist    = nFirstDist;
-    UINT16  nMinIndex   = 0;
-    for( UINT16 nCnt = 1; nCnt < 4; nCnt++ )
-    {
-        INT32 nDist = lcl_GetColorDistance( pColors[ nForeSer ], aColorArr[ nCnt ] );
-        if( nDist < nMinDist )
-        {
-            nMinDist = nDist;
-            nMinIndex = nCnt;
-        }
-    }
-    rForeInd = (UINT16)(nIndex1 + ColorBuffer::GetIndCorrect());
-    rBackInd = (UINT16)(nIndex2 + ColorBuffer::GetIndCorrect());
-    if( nMinDist < nFirstDist )
-        switch( nMinIndex )
-        {
-            case 1: rPatt = 3; break;
-            case 2: rPatt = 2; break;
-            case 3: rPatt = 4; break;
-        }
-}
-
-ColorData ExcPalette2::GetRGBValue( UINT16 nIndex ) const
-{
-    if( (nIndex >= ColorBuffer::GetIndCorrect()) &&
-        (nIndex - ColorBuffer::GetIndCorrect() < rColBuff.GetAnz()) )
-        return pExportColors[ nIndex - ColorBuffer::GetIndCorrect() ].GetColor();
-    return 0;
-}
-
-void ExcPalette2::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << rColBuff.GetAnz();
-    for( UINT16 nInd = 0; nInd < rColBuff.GetAnz(); nInd++ )
-        rStrm   << pExportColors[ nInd ].GetRed()
-                << pExportColors[ nInd ].GetGreen()
-                << pExportColors[ nInd ].GetBlue()
-                << (UINT8)0x00;
-}
-
-UINT16 ExcPalette2::GetNum() const
-{
-    return 0x0092;
-}
-
-ULONG ExcPalette2::GetLen() const
-{
-    return 2 + 4 * rColBuff.GetAnz();
-}
-
-
-
 //------------------------------------------------------ class ExcExterncount -
 
 ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
@@ -3547,7 +2802,7 @@ ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
 
 void ExcExterncount::SaveCont( XclExpStream& rStrm )
 {
-    UINT16  nNumTabs = pExcRoot->pTabBuffer->GetExcTabCount();
+    UINT16  nNumTabs = pExcRoot->pER->GetTabIdBuffer().GetXclTabCount();
 
     if( nNumTabs && bTable )
         nNumTabs--;
@@ -3707,54 +2962,6 @@ void UsedList::Save( XclExpStream& rStrm )
 
 
 
-//-------------------------------------------------------- class UsedFontList -
-
-UsedFontList::~UsedFontList()
-{
-    for( ExcFont* pFont = _First(); pFont; pFont = _Next() )
-        delete pFont;
-}
-
-
-BOOL UsedFontList::Find( ExcFont* pExcFont, UINT16& rIndex )
-{
-    rIndex = nBaseIndex;
-    for( ExcFont* pCurr = _First(); pCurr; pCurr = _Next() )
-    {
-        if( *pCurr == *pExcFont )
-        {
-            if( !pExcFont->HasIgnoreCol() )
-                pCurr->SetColor( pExcFont->GetColor() );    // overwrite ignore flag
-            return TRUE;
-        }
-        rIndex++;
-    }
-    return FALSE;
-}
-
-
-UINT16 UsedFontList::Add( ExcFont* pExcFont )
-{
-    UINT16 nIndex;
-    if( Find( pExcFont, nIndex ) )
-    {
-        delete pExcFont;
-        return nIndex;
-    }
-
-    Insert( pExcFont, LIST_APPEND );
-
-    return (UINT16)(Count() - 1 + nBaseIndex);
-}
-
-
-UINT16 UsedFontList::Add( Font* pFont )
-{
-    return Add( new ExcFont( pFont, *pExcRoot ) );
-}
-
-
-
 //-------------------------------------------------------- class UsedFormList -
 
 UsedFormList::~UsedFormList()
@@ -3783,11 +2990,9 @@ UINT16 UsedFormList::Add( UINT32 nNewScIx )
 
 //-------------------------------------------------------- class UsedAttrList -
 
-UsedAttrList::UsedAttrList( RootData* pRD, ExcPalette2& rPal2,
-    UsedFontList& rUFntLst, UsedFormList& rUFrmLst ) :
+UsedAttrList::UsedAttrList( RootData* pRD, UsedFormList& rUFrmLst ) :
     ExcRoot( pRD ),
-    rPalette2( rPal2 ),
-    rFntLst( rUFntLst ),
+    rFntLst( pRD->pER->GetFontBuffer() ),
     rFrmLst( rUFrmLst )
 {
 }
@@ -3818,9 +3023,7 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
 
     if( pAttr )
     {
-        Font*       pFont = new Font;
-        pAttr->GetFont( *pFont, SC_AUTOCOL_RAW );
-        nFontIndex = rFntLst.Add( pFont );
+        nFontIndex = rFntLst.Insert( *pAttr );
 
         if ( bForceAltNumForm )
             nScForm = nAltNumForm;
@@ -3842,9 +3045,9 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
     UINT16          nFormatIndex = rFrmLst.Add( nScForm );
 
     if ( pExcRoot->eDateiTyp < Biff8 )
-        pData->pXfRec = new ExcXf( nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
+        pData->pXfRec = new ExcXf( *pExcRoot->pER, nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
     else
-        pData->pXfRec = new ExcXf8( nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
+        pData->pXfRec = new ExcXf8( *pExcRoot->pER, nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
 }
 
 
@@ -3909,7 +3112,7 @@ XclExpWsbool::XclExpWsbool( RootData& rRootData ) :
 {
     SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
     if( pItemSet && (pItemSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE ) == SFX_ITEM_SET) )
-        mnValue16 |= EXC_WSBOOL_FITTOPAGE;
+        SetValue( GetValue() | EXC_WSBOOL_FITTOPAGE );
 }
 
 
@@ -4020,7 +3223,7 @@ ExcSetup::ExcSetup( RootData* pExcRoot ) :
 
         nPageStart = ( UINT16 ) ( ( const SfxUInt16Item& ) rSet.Get( ATTR_PAGE_FIRSTPAGENO ) ).GetValue();
 
-        const UINT16    nTab = *pExcRoot->pAktTab;
+        const UINT16    nTab = pExcRoot->pER->GetScTab();
 
         if( nPageStart )
         {
@@ -4069,8 +3272,6 @@ ULONG ExcSetup::GetLen( void ) const
 
 // Header/Footer ==============================================================
 
-// XclExpHeaderFooter ---------------------------------------------------------
-
 XclExpHeaderFooter::XclExpHeaderFooter(
         sal_uInt16 nRecId,
         RootData& rRootData,
@@ -4095,154 +3296,6 @@ XclExpHeaderFooter::XclExpHeaderFooter(
     }
 }
 
-void XclExpHeaderFooter::GetFormatString( String& rString, RootData& rRootData, const EditTextObject& rEdTxtObj )
-{
-    const sal_Unicode cParSep = 0x000A;
-
-    ScDocument& rDoc = *rRootData.pDoc;
-    EditEngine& rEdEng = rRootData.GetEdEngForHF();
-    rEdEng.SetText( rEdTxtObj );
-
-    sal_uInt16 nParas = rEdEng.GetParagraphCount();
-
-    sal_Bool bOldUpdateMode = rEdEng.GetUpdateMode();
-    rEdEng.SetUpdateMode( sal_True );
-
-    XclFontData aFontData;
-    aFontData.nHeight = 200;
-    ScPatternAttr aAttr( rDoc.GetPool() );
-    const FontList* pFontList = NULL;
-
-    if( SfxObjectShell* pDocShell = rDoc.GetDocumentShell() )
-    {
-        if( const SvxFontListItem* pInfoItem = static_cast< const SvxFontListItem* >(
-            pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
-        {
-            pFontList = pInfoItem->GetFontList();
-        }
-    }
-
-    for( sal_uInt16 nPar = 0; nPar < nParas; ++nPar )
-    {
-        if( nPar )
-            rString += cParSep;
-
-        SvUShorts aPortions;
-        rEdEng.GetPortions( nPar, aPortions );
-
-        sal_uInt16 nCnt = aPortions.Count();
-        sal_uInt16 nStart = 0;
-
-        for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
-        {
-            sal_uInt16 nEnd = aPortions.GetObject( nPos );
-            if( nStart < nEnd )
-            {
-                ESelection aSel( nPar, nStart, nPar, nEnd );
-
-                // font attributes
-                SfxItemSet aSet( rEdEng.GetAttribs( aSel ) );
-                aAttr.GetItemSet().ClearItem();
-                aAttr.GetFromEditItemSet( &aSet );
-                Font aFont;
-                aAttr.GetFont( aFont, SC_AUTOCOL_RAW );
-
-                // font name and style
-                sal_uInt16 nWeight = (aFont.GetWeight() > WEIGHT_NORMAL) ? EXC_FONTWGHT_BOLD : EXC_FONTWGHT_NORMAL;
-                sal_Bool bItalic = (aFont.GetItalic() != ITALIC_NONE);
-                sal_Bool bNewFont = (aFontData.aName != aFont.GetName());
-                sal_Bool bNewStyle = (aFontData.nWeight != nWeight) || (aFontData.bItalic != bItalic);
-                if( bNewFont || (bNewStyle && pFontList) )
-                {
-                    rString.AppendAscii( "&\"" ).Append( aFont.GetName() );
-                    if( pFontList )
-                    {
-                        FontInfo aFontInfo( pFontList->Get(
-                            aFont.GetName(),
-                            (nWeight > EXC_FONTWGHT_NORMAL) ? WEIGHT_BOLD : WEIGHT_NORMAL,
-                            bItalic ? ITALIC_NORMAL : ITALIC_NONE ) );
-                        String aStyle( pFontList->GetStyleName( aFontInfo ) );
-                        if( aStyle.Len() )
-                            rString.Append( ',' ).Append( aStyle );
-                    }
-                    rString.Append( '"' );
-
-                    aFontData.aName = aFont.GetName();
-                    aFontData.nWeight = nWeight;
-                    aFontData.bItalic = bItalic;
-                }
-
-                // height
-                sal_uInt16 nHeight = (static_cast< const SvxFontHeightItem& >( aSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() + 10) / 20;
-                if( aFontData.nHeight != 20 * nHeight )
-                {
-                    rString.Append( '&' ).Append( String::CreateFromInt32( nHeight ) );
-                    aFontData.nHeight = 20 * nHeight;
-                }
-
-                // underline
-                XclUnderline eUnderl = xlUnderlNone;
-                switch( aFont.GetUnderline() )
-                {
-                    case UNDERLINE_NONE:    eUnderl = xlUnderlNone;     break;
-                    case UNDERLINE_SINGLE:  eUnderl = xlUnderlSingle;   break;
-                    case UNDERLINE_DOUBLE:  eUnderl = xlUnderlDouble;   break;
-                    default:                eUnderl = xlUnderlSingle;
-                }
-                if( aFontData.eUnderline != eUnderl )
-                {
-                    XclUnderline eTmpUnderl = (eUnderl == xlUnderlNone) ? aFontData.eUnderline : eUnderl;
-                    rString.AppendAscii( (eTmpUnderl == xlUnderlSingle) ? "&U" : "&E" );
-                    aFontData.eUnderline = eUnderl;
-                }
-
-                // strikeout
-                sal_Bool bStrikeout = (aFont.GetStrikeout() != STRIKEOUT_NONE);
-                if( aFontData.bStrikeout != bStrikeout )
-                {
-                    rString.AppendAscii( "&S" );
-                    aFontData.bStrikeout = bStrikeout;
-                }
-
-                // fields are single characters
-                const SfxPoolItem* pItem;
-                if( (nEnd == nStart + 1) && (aSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET) )
-                {
-                    const SvxFieldData* pField = ((const SvxFieldItem*) pItem)->GetField();
-
-                    if( pField )
-                    {
-                        const sal_Char* pText = "";
-                        if( pField->ISA( SvxPageField ) )
-                            pText = "&P";
-                        else if( pField->ISA( SvxPagesField ) )
-                            pText = "&N";
-                        else if( pField->ISA( SvxDateField ) )
-                            pText = "&D";
-                        else if( pField->ISA( SvxTimeField ) || pField->ISA( SvxExtTimeField ) )
-                            pText = "&T";
-                        else if( pField->ISA( SvxFileField ) || pField->ISA( SvxExtFileField ) )
-                            pText = "&F";
-                        else if( pField->ISA( SvxTableField ) )
-                            pText = "&A";
-
-                        rString.AppendAscii( pText );
-                    }
-                }
-                else
-                {
-                    String aPortion( rEdEng.GetText( aSel ) );
-                    aPortion.SearchAndReplaceAll( String( '&' ), String::CreateFromAscii( "&&" ) );
-                    rString += aPortion;
-                }
-            }
-
-            nStart = nEnd;
-        }
-    }
-    rEdEng.SetUpdateMode( bOldUpdateMode );
-}
-
 void XclExpHeaderFooter::GetFormatString( String& rString, RootData& rRootData, sal_uInt16 nWhich )
 {
     SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
@@ -4251,39 +3304,15 @@ void XclExpHeaderFooter::GetFormatString( String& rString, RootData& rRootData, 
 
     const ScPageHFItem& rHFItem = (const ScPageHFItem&) pItemSet->Get( nWhich );
 
-    const EditTextObject* pLeft = rHFItem.GetLeftArea();
-    if( pLeft )
-    {
-        String aTempStr;
-        GetFormatString( aTempStr, rRootData, *pLeft );
-        if( aTempStr.Len() )
-            rString.AppendAscii( "&L" ).Append( aTempStr );
-    }
-
-    const EditTextObject* pMid = rHFItem.GetCenterArea();
-    if( pMid )
-    {
-        String aTempStr;
-        GetFormatString( aTempStr, rRootData, *pMid );
-        if( aTempStr.Len() )
-            rString.AppendAscii( "&C" ).Append( aTempStr );
-    }
-
-    const EditTextObject* pRight = rHFItem.GetRightArea();
-    if( pRight )
-    {
-        String aTempStr;
-        GetFormatString( aTempStr, rRootData, *pRight );
-        if( aTempStr.Len() )
-            rString.AppendAscii( "&R" ).Append( aTempStr );
-    }
+    XclExpHFConverter aHFConv( *rRootData.pER );
+    rString = aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
 }
 
 void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
 {
     if( mbUnicode )
         // normal unicode string
-        XclExpUniString( maFormatString ).Write( rStrm );
+        rStrm << XclExpUniString( maFormatString );
     else
         // 8 bit length, max 255 chars
         rStrm.WriteByteString( ByteString( maFormatString, *pExcRoot->pCharset ), 255 );
@@ -4296,7 +3325,7 @@ void XclExpHeaderFooter::Save( XclExpStream& rStrm )
 }
 
 
-// XclExpHeader ---------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 XclExpHeader::XclExpHeader( RootData& rRootData ) :
     XclExpHeaderFooter( EXC_ID_HEADER, rRootData, ATTR_PAGE_HEADERSET, ATTR_PAGE_HEADERRIGHT )
@@ -4304,7 +3333,7 @@ XclExpHeader::XclExpHeader( RootData& rRootData ) :
 }
 
 
-// XclExpFooter ---------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 XclExpFooter::XclExpFooter( RootData& rRootData ) :
     XclExpHeaderFooter( EXC_ID_FOOTER, rRootData, ATTR_PAGE_FOOTERSET, ATTR_PAGE_FOOTERRIGHT )
@@ -4431,9 +3460,8 @@ void ExcFilterCondition::SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* 
     nOper = nOp;
     fVal = fV;
 
-    if( pText )
-        delete pText;
-    pText = pT ? new XclExpUniString( *pT, 255 ) : NULL;
+    delete pText;
+    pText = pT ? new XclExpUniString( *pT, EXC_STR_8BITLENGTH ) : NULL;
 }
 
 void ExcFilterCondition::Save( XclExpStream& rStrm )
@@ -4461,7 +3489,7 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
     if( nType == EXC_AFTYPE_STRING )
     {
         DBG_ASSERT( pText, "ExcFilterCondition::SaveText() -- pText is NULL!" );
-        pText->WriteFlags( rStrm );
+        pText->WriteFlagField( rStrm );
         pText->WriteBuffer( rStrm );
     }
 }
@@ -4749,99 +3777,85 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
 
 
 
-//----------------------------------------------------------- class ExcMargin -
+// ----------------------------------------------------------------------------
 
-ExcMargin::ExcMargin( long n, XclMarginType e ) : nVal( ( n < 0 )? 0 : ( UINT16 ) n )
+XclExpMargin::XclExpMargin( sal_Int32 nMargin, XclMarginType eSide ) :
+    XclExpDoubleRecord( EXC_ID_UNKNOWN, 0.0 )
 {
-    switch( e )
+    switch( eSide )
     {
-        case xlLeftMargin:      nId = 0x26;     break;
-        case xlRightMargin:     nId = 0x27;     break;
-        case xlTopMargin:       nId = 0x28;     break;
-        case xlBottomMargin:    nId = 0x29;     break;
-        default:
-            nId = 0x26;
-            DBG_WARNING( "ExcMargin::ExcMargin(): impossible enum state!" );
+        case xlLeftMargin:      SetRecId( EXC_ID_LEFTMARGIN );      break;
+        case xlRightMargin:     SetRecId( EXC_ID_RIGHTMARGIN );     break;
+        case xlTopMargin:       SetRecId( EXC_ID_TOPMARGIN );       break;
+        case xlBottomMargin:    SetRecId( EXC_ID_BOTTOMMARGIN );    break;
     }
+
+    SetValue( static_cast< double >( Max( nMargin, 0L ) ) / EXC_TWIPS_PER_INCH );
 }
 
 
-void ExcMargin::SaveCont( XclExpStream& rStrm )
+// Manual page breaks =========================================================
+
+XclExpPagebreaks::XclExpPagebreaks( RootData& rRootData, sal_uInt16 nScTab, XclPBOrientation eOrient ) :
+    XclExpRecord( (eOrient == xlPBHorizontal) ? EXC_ID_HORPAGEBREAKS : EXC_ID_VERTPAGEBREAKS )
 {
-    double  f = nVal;
-
-    f /= 1440.0;
-
-    rStrm << f;
-}
-
-
-UINT16 ExcMargin::GetNum() const
-{
-    return nId;
-}
-
-
-ULONG ExcMargin::GetLen() const
-{
-    return 8;
-}
-
-
-
-//---------------------------------------------------- class XclExpPageBreaks -
-
-XclExpPageBreaks::XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
-    nRecNum( (eOrient == pbHorizontal) ? 0x001B : 0x001A )
-{
-    BYTE nFlags;
-    if( eOrient == pbHorizontal )
+    sal_uInt8 nFlags;
+    if( eOrient == xlPBHorizontal )
     {
-        for( USHORT nIndex = 0; nIndex <= MAXROW; nIndex++ )
+        for( sal_uInt16 nIndex = 0; nIndex <= MAXROW; ++nIndex )
         {
             nFlags = rRootData.pDoc->GetRowFlags( nIndex, nScTab );
             if( nFlags & CR_MANUALBREAK )
-                aPageBreaks.Append( nIndex );
+                maPagebreaks.Append( nIndex );
         }
     }
     else
     {
-        for( USHORT nIndex = 0; nIndex <= MAXCOL; nIndex++ )
+        for( sal_uInt16 nIndex = 0; nIndex <= MAXCOL; ++nIndex )
         {
             nFlags = rRootData.pDoc->GetColFlags( nIndex, nScTab );
             if( nFlags & CR_MANUALBREAK )
-                aPageBreaks.Append( nIndex );
+                maPagebreaks.Append( nIndex );
         }
     }
+    SetRecSize( 2 + 2 * maPagebreaks.Count() );
 }
 
-XclExpPageBreaks::~XclExpPageBreaks()
+void XclExpPagebreaks::Save( XclExpStream& rStrm )
 {
+    if( !maPagebreaks.Empty() )
+        XclExpRecord::Save( rStrm );
 }
 
-void XclExpPageBreaks::Save( XclExpStream& rStrm )
+void XclExpPagebreaks::WriteBody( XclExpStream& rStrm )
 {
-    if( aPageBreaks.Count() )
-        ExcRecord::Save( rStrm );
+    sal_uInt16 nCount = static_cast< sal_uInt16 >( Min( maPagebreaks.Count(), 0xFFFFUL ) );
+    rStrm << nCount;
+    for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
+        rStrm << maPagebreaks.GetValue( nIndex );
 }
 
-void XclExpPageBreaks::SaveCont( XclExpStream& rStrm )
+
+// ----------------------------------------------------------------------------
+
+XclExpPagebreaks8::XclExpPagebreaks8( RootData& rRootData, sal_uInt16 nScTab, XclPBOrientation eOrient ) :
+    XclExpPagebreaks( rRootData, nScTab, eOrient ),
+    mnRangeMax( (eOrient == xlPBHorizontal) ? rRootData.nColMax : rRootData.nRowMax )
 {
-    rStrm << (UINT16) aPageBreaks.Count();
-    for( UINT32 nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
-        rStrm << aPageBreaks.GetValue( nIndex );
+    SetRecSize( 2 + 6 * maPagebreaks.Count() );
 }
 
-UINT16 XclExpPageBreaks::GetNum() const
+void XclExpPagebreaks8::WriteBody( XclExpStream& rStrm )
 {
-    return nRecNum;
+    sal_uInt16 nCount = static_cast< sal_uInt16 >( Min( maPagebreaks.Count(), 0xFFFFUL ) );
+    rStrm << nCount;
+    rStrm.SetSliceSize( 6 );
+    for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
+        rStrm << maPagebreaks.GetValue( nIndex ) << static_cast< sal_uInt16 >( 0 ) << mnRangeMax;
 }
 
-ULONG XclExpPageBreaks::GetLen() const
-{
-    return 2 + 2 * aPageBreaks.Count();
-}
 
+// ============================================================================
 
 
 //------------------------ class ExcArray, class ExcArrays, class ExcShrdFmla -

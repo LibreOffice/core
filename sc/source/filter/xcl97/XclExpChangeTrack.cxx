@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:42:22 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 
 //___________________________________________________________________
 
-#ifndef _SC_XCLEXPCHANGETRACK_HXX
+#ifndef SC_XCLEXPCHANGETRACK_HXX
 #include "XclExpChangeTrack.hxx"
 #endif
 
-#ifndef _SC_XCLTOOLS_HXX
-#include "XclTools.hxx"
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
 #endif
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
@@ -94,14 +94,14 @@ extern const sal_Char*  pUserNamesStreamName;
 
 void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 {
-    rStrm.SetSliceLen( 7 );
+    rStrm.SetSliceSize( 7 );
     rStrm   << (sal_uInt16) rDateTime.GetYear()
             << (sal_uInt8)  rDateTime.GetMonth()
             << (sal_uInt8)  rDateTime.GetDay()
             << (sal_uInt8)  rDateTime.GetHour()
             << (sal_uInt8)  rDateTime.GetMin()
             << (sal_uInt8)  rDateTime.GetSec();
-    rStrm.SetSliceLen( 0 );
+    rStrm.SetSliceSize( 0 );
 }
 
 // write string and fill rest of <nLength> with zero bytes
@@ -111,7 +111,7 @@ void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpUniString& rString, 
     ULONG nStrBytes = rString.GetBufferByteCount();
     DBG_ASSERT( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
     if( rString.GetLen() )
-        rString.Write( rStrm );
+        rStrm << rString;
     if( nLength > nStrBytes )
         rStrm.WriteZeroBytes( nLength - nStrBytes );
 }
@@ -124,10 +124,10 @@ inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
 
 inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
 {
-    rStrm.SetSliceLen( 16 );
+    rStrm.SetSliceSize( 16 );
     for( sal_uInt32 nIndex = 0; nIndex < 16; nIndex++ )
         rStrm << pGUID[ nIndex ];
-    rStrm.SetSliceLen( 0 );
+    rStrm.SetSliceSize( 0 );
 }
 
 //___________________________________________________________________
@@ -152,7 +152,7 @@ void XclExpUserBView::SaveCont( XclExpStream& rStrm )
             << (sal_uInt16) 0x0001
             << (sal_uInt16) 0x0000;
     if( sUsername.GetLen() )
-        sUsername.Write( rStrm );
+        rStrm << sUsername;
 }
 
 UINT16 XclExpUserBView::GetNum() const
@@ -285,7 +285,7 @@ ULONG XclExpChTr0x0198::GetLen() const
 
 void XclExpChTr0x0192::SaveCont( XclExpStream& rStrm )
 {
-    rStrm << (sal_uInt16) 0x0022;
+    rStrm << sal_uInt16( 0x0022 );
     rStrm.WriteZeroBytes( 510 );
 }
 
@@ -583,7 +583,7 @@ XclExpChTrAction::XclExpChTrAction(
     nIndex( 0 ),
     pAddAction( NULL ),
     bAccepted( rAction.IsAccepted() ),
-    rTabBuffer( *rRootData.pTabBuffer ),
+    rTabBuffer( rRootData.pER->GetTabIdBuffer() ),
     rIdBuffer( rTabIdBuffer ),
     nLength( 0 ),
     nOpCode( nNewOpCode ),
@@ -661,16 +661,9 @@ ULONG XclExpChTrAction::GetLen() const
 
 void XclExpChTrData::Clear()
 {
-    if( pString )
-        delete pString;
-    if( pUPN )
-        delete pUPN;
-    if( pRefList )
-        delete pRefList;
-
-    pString = NULL;
-    pUPN = NULL;
-    pRefList = NULL;
+    DELETEZ( pString );
+    DELETEZ( pUPN );
+    aRefLog.clear();
     fValue = 0.0;
     nRKValue = 0;
     nType = EXC_CHTR_TYPE_EMPTY;
@@ -687,37 +680,27 @@ void XclExpChTrData::WriteFormula(
     rStrm << nFmlSize;
     rStrm.Write( pUPN->GetData(), nFmlSize );
 
-    sal_uInt32 nIndex = 0;
-    while( nIndex < pRefList->Count() )
+    XclExpRefLogVec::const_iterator aEnd = aRefLog.end();
+    for( XclExpRefLogVec::const_iterator aIter = aRefLog.begin(); aIter != aEnd; ++aIter )
     {
-        sal_uInt16 nExcFirst = pRefList->GetValue( nIndex++ );
-        sal_uInt16 nExcLast = pRefList->GetValue( nIndex++ );
-        const XclExpUniString* pDocName = rRootData.pExternsheetRecs->GetDocumentName( nExcFirst );
-        const XclExpUniString* pTabName = rRootData.pExternsheetRecs->GetTableName( nExcFirst );
-        if( pDocName && pTabName )
-        {
-            pDocName->Write( rStrm );       // normal unicode string
-            rStrm << (sal_uInt8) 0x01;
-            pTabName->Write( rStrm );       // normal unicode string
-            rStrm << (sal_uInt8) 0x02;
-        }
+        sal_uInt16 nXclFirst = aIter->first;
+        sal_uInt16 nXclLast = aIter->second;
+        const XclExpUniString* pUrl = rRootData.pER->GetLinkManager().GetUrl( nXclFirst );
+        const XclExpUniString* pTabName = rRootData.pER->GetLinkManager().GetTableName( nXclFirst );
+        if( pUrl && pTabName )
+            rStrm << *pUrl << (sal_uInt8) 0x01 << *pTabName << (sal_uInt8) 0x02;
         else
         {
-            rStrm.SetSliceLen( (nExcFirst == nExcLast) ? 6 : 8 );
-            rStrm << (sal_uInt8) 0x01;
-            rStrm << (sal_uInt8) 0x02;
-            rStrm << (sal_uInt8) 0x00;
-            rStrm << rTabIdBuffer.GetId( nExcFirst );
-            if( nExcFirst == nExcLast )
+            rStrm.SetSliceSize( (nXclFirst == nXclLast) ? 6 : 8 );
+            rStrm << (sal_uInt8) 0x01 << (sal_uInt8) 0x02 << (sal_uInt8) 0x00;
+            rStrm << rTabIdBuffer.GetId( nXclFirst );
+            if( nXclFirst == nXclLast )
                 rStrm << (sal_uInt8) 0x02;
             else
-            {
-                rStrm << (sal_uInt8) 0x00;
-                rStrm << rTabIdBuffer.GetId( nExcLast );
-            }
+                rStrm << (sal_uInt8) 0x00 << rTabIdBuffer.GetId( nXclLast );
         }
     }
-    rStrm.SetSliceLen( 0 );
+    rStrm.SetSliceSize( 0 );
     rStrm << (sal_uInt8) 0x00;
 }
 
@@ -736,7 +719,7 @@ void XclExpChTrData::Write(
         break;
         case EXC_CHTR_TYPE_STRING:
             DBG_ASSERT( pString, "XclExpChTrData::Write - no string" );
-            pString->Write( rStrm );    // normal unicode string
+            rStrm << *pString;
         break;
         case EXC_CHTR_TYPE_FORMULA:
             WriteFormula( rStrm, rRootData, rTabIdBuffer );
@@ -824,7 +807,7 @@ void XclExpChTrCellContent::GetCellData(
                 ((const ScStringCell*) pScCell)->GetString( sCellStr );
             else
                 ((const ScEditCell*) pScCell)->GetString( sCellStr );
-            rpData->pString = new XclExpUniString( sCellStr, 32766 );
+            rpData->pString = new XclExpUniString( sCellStr, EXC_STR_DEFAULT, 32766 );
             rpData->nType = EXC_CHTR_TYPE_STRING;
             rpData->nSize = 3 + (sal_uInt16) rpData->pString->GetByteCount();
             rXclLength1 = 64 + (sCellStr.Len() << 1);
@@ -837,25 +820,27 @@ void XclExpChTrCellContent::GetCellData(
             const ScTokenArray* pTokenArray = pFmlCell->GetCode();
             if( pTokenArray )
             {
-                pExcRoot->pTabBuffer->StartRefLog();
+                XclExpTabIdBuffer& rTabBuffer = pExcRoot->pER->GetTabIdBuffer();
+                XclExpLinkManager& rLinkMan = pExcRoot->pER->GetLinkManager();
+
+                rTabBuffer.StartRefLog();
                 EC_Codetype eDummy;
                 rpData->pUPN = new ExcUPN( pExcRoot, *pTokenArray, eDummy, &pFmlCell->aPos );
-                pExcRoot->pTabBuffer->EndRefLog();
-                rpData->pRefList = new ScfUInt16List( pExcRoot->pTabBuffer->GetRefLog() );
+                rpData->aRefLog = rTabBuffer.EndRefLog();
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
                 sal_uInt32 nSize = rpData->pUPN->GetLen() + 3;
 
-                sal_uInt32 nIndex = 0;
-                while( nIndex < rpData->pRefList->Count() )
+                XclExpRefLogVec::const_iterator aEnd = rpData->aRefLog.end();
+                for( XclExpRefLogVec::const_iterator aIter = rpData->aRefLog.begin(); aIter != aEnd; ++aIter )
                 {
-                    sal_uInt16 nExcFirst = rpData->pRefList->GetValue( nIndex++ );
-                    sal_uInt16 nExcLast = rpData->pRefList->GetValue( nIndex++ );
-                    const XclExpUniString* pDocName = pExcRoot->pExternsheetRecs->GetDocumentName( nExcFirst );
-                    const XclExpUniString* pTabName = pExcRoot->pExternsheetRecs->GetTableName( nExcFirst );
-                    if( pDocName && pTabName )
-                        nSize += pDocName->GetByteCount() + pTabName->GetByteCount() + 2;
+                    sal_uInt16 nXclFirst = aIter->first;
+                    sal_uInt16 nXclLast = aIter->second;
+                    const XclExpUniString* pUrl = pExcRoot->pER->GetLinkManager().GetUrl( nXclFirst );
+                    const XclExpUniString* pTabName = pExcRoot->pER->GetLinkManager().GetTableName( nXclFirst );
+                    if( pUrl && pTabName )
+                        nSize += pUrl->GetByteCount() + pTabName->GetByteCount() + 2;
                     else
-                        nSize += (nExcFirst == nExcLast) ? 6 : 8;
+                        nSize += (nXclFirst == nXclLast) ? 6 : 8;
                 }
                 rpData->nSize = (sal_uInt16) Min( nSize, (sal_uInt32) 0x0000FFFF );
                 rXclLength1 = 0x00000052;
@@ -989,7 +974,7 @@ XclExpChTrInsertTab::~XclExpChTrInsertTab()
 void XclExpChTrInsertTab::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, nTab );
-    rStrm   << (sal_uInt32) 0x00000000;
+    rStrm << sal_uInt32( 0 );
     String sTabName;
     pExcRoot->pDoc->GetName( nTab, sTabName );
     lcl_WriteFixedString( rStrm, XclExpUniString( sTabName ), 127 );
@@ -1144,15 +1129,14 @@ XclExpChangeTrack::XclExpChangeTrack( RootData* pRootData ) :
     pHeader( NULL ),
     bValidGUID( sal_False )
 {
-    DBG_ASSERT( pExcRoot && pExcRoot->pTabBuffer && pExcRoot->pExternsheetRecs && pExcRoot->pTabId,
-        "XclExpChangeTrack::XclExpChangeTrack - root data incomplete" );
-    if( !pExcRoot || !pExcRoot->pTabBuffer || !pExcRoot->pExternsheetRecs || !pExcRoot->pTabId )
+    DBG_ASSERT( pExcRoot && pExcRoot->pTabId, "XclExpChangeTrack::XclExpChangeTrack - root data incomplete" );
+    if( !pExcRoot || !pExcRoot->pTabId )
         return;
 
     if( !CreateTempChangeTrack() )
         return;
 
-    pTabIdBuffer = new XclExpChTrTabIdBuffer( pExcRoot->pTabBuffer->GetExcTabCount() );
+    pTabIdBuffer = new XclExpChTrTabIdBuffer( pExcRoot->pER->GetTabIdBuffer().GetXclTabCount() );
     aTabIdBufferList.Append( pTabIdBuffer );
 
     // calculate final table order (tab id list)
@@ -1162,7 +1146,7 @@ XclExpChangeTrack::XclExpChangeTrack( RootData* pRootData ) :
         if( pScAction->GetType() == SC_CAT_INSERT_TABS )
         {
             sal_uInt16 nScTab = (sal_uInt16) pScAction->GetBigRange().aStart.Tab();
-            pTabIdBuffer->InitFill( pExcRoot->pTabBuffer->GetExcTable( nScTab ) );
+            pTabIdBuffer->InitFill( pExcRoot->pER->GetTabIdBuffer().GetXclTab( nScTab ) );
         }
     }
     pTabIdBuffer->InitFillup();
@@ -1300,7 +1284,7 @@ sal_Bool XclExpChangeTrack::WriteUserNamesStream()
     DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
     if( xSvStrm.Is() )
     {
-        XclExpStream aXclStrm( *xSvStrm, EXC_MAXRECLEN_BIFF8 );
+        XclExpStream aXclStrm( *xSvStrm, *pExcRoot->pER );
         XclExpChTr0x0191().Save( aXclStrm );
         XclExpChTr0x0198().Save( aXclStrm );
         XclExpChTr0x0192().Save( aXclStrm );
@@ -1323,7 +1307,7 @@ void XclExpChangeTrack::Write()
         DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
         if( xSvStrm.Is() )
         {
-            XclExpStream aXclStrm( *xSvStrm, EXC_MAXRECLEN_BIFF8 + 8 );
+            XclExpStream aXclStrm( *xSvStrm, *pExcRoot->pER, EXC_MAXRECSIZE_BIFF8 + 8 );
             aRecList.Save( aXclStrm );
             xSvStrm->Commit();
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:07:41 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ static NAMESPACE_VOS( OMutex )      aLotImpSemaphore;
 
 
 ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :
-    ImportTyp( aStream, pDoc, eQ ),
+    ImportTyp( pDoc, eQ ),
     pIn( &aStream ),
     aConv( *pIn, eQ )
 {

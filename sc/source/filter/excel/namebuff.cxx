@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-05 12:23:17 $
+ *  last change: $Author: dr $ $Date: 2002-11-21 12:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,13 @@
 #include "root.hxx"
 #include "tokstack.hxx"
 #include "flttools.hxx"
-#include "XclAddInNameTrans.hxx"
+
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
+#endif
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
+#endif
 
 
 const UINT16 RangeNameBuffer::nError = 0xFFFF;
@@ -532,9 +538,8 @@ void ExtNameBuff::AddOLE( const String& rName, UINT32 nStorageId )
 
 void ExtNameBuff::AddName( const String& rName )
 {
-    XclAddInNameTranslator*     pTrans = pExcRoot->pAddInNameTranslator;
-
-    ExtName*                    pNew = new ExtName( pTrans? pTrans->GetScName( rName ) : rName );
+    XclAddInNameTranslator& rTrans = pExcRoot->pER->GetAddInNames();
+    ExtName* pNew = new ExtName( rTrans.GetScName( rName ) );
     pNew->nFlags = 0x0004;
 
     List::Insert( pNew, LIST_APPEND );
