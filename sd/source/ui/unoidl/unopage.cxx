@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 10:38:19 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 20:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,17 +1292,17 @@ void SAL_CALL SdDrawPage::remove( const uno::Reference< drawing::XShape >& xShap
 void SdDrawPage::setBackground( const uno::Any& rValue )
     throw( lang::IllegalArgumentException )
 {
-    if( !rValue.hasValue() || rValue.getValue() == NULL )
+    uno::Reference< beans::XPropertySet > xSet;
+
+    if( !(rValue >>= xSet) && !rValue.hasValue() )
+        throw lang::IllegalArgumentException();
+
+    if( !xSet.is() )
     {
         // the easy case, clear the background obj
         mpPage->SetBackgroundObj( NULL );
         return;
     }
-
-    uno::Reference< beans::XPropertySet > xSet;
-
-    if( !::cppu::extractInterface( xSet, rValue ) )
-        throw lang::IllegalArgumentException();
 
     // prepare background object
     SdrObject* pObj = mpPage->GetBackgroundObj();
@@ -1568,7 +1568,10 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
 {
     // we need at least an beans::XPropertySet
     uno::Reference< beans::XPropertySet > xSet;
-    if( !::cppu::extractInterface( xSet, rValue ) )
+
+    rValue >>= xSet;
+
+    if( !xSet.is() )
         throw lang::IllegalArgumentException();
 
     if( mpModel && mpModel->IsImpressDocument() )
@@ -1576,37 +1579,40 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
         uno::Reference< container::XNameAccess >  xFamilies = mpModel->getStyleFamilies();
         uno::Any aAny( xFamilies->getByName( getName() ) );
 
-        uno::Reference< container::XNameAccess >  xFamily;
-        if( !::cppu::extractInterface( xFamily, rValue ) )
-            throw uno::RuntimeException();
+        uno::Reference< container::XNameAccess > xFamily;
 
-        OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
+        aAny >>= xFamily;
 
-        try
+        if( xFamily.is() )
         {
-            aAny = xFamily->getByName( aStyleName );
+            OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
 
-            uno::Reference< style::XStyle >  xStyle( *(uno::Reference< style::XStyle > *)aAny.getValue() );
-            uno::Reference< beans::XPropertySet >  xStyleSet( xStyle, uno::UNO_QUERY );
-            if( xStyleSet.is() )
+            try
             {
-                uno::Reference< beans::XPropertySetInfo >  xSetInfo( xSet->getPropertySetInfo() );
+                aAny = xFamily->getByName( aStyleName );
 
-                const SfxItemPropertyMap* pMap = ImplGetPageBackgroundPropertyMap();
-                while( pMap->pName )
+                uno::Reference< style::XStyle >  xStyle( *(uno::Reference< style::XStyle > *)aAny.getValue() );
+                uno::Reference< beans::XPropertySet >  xStyleSet( xStyle, uno::UNO_QUERY );
+                if( xStyleSet.is() )
                 {
-                    const OUString aPropName( OUString::createFromAscii(pMap->pName) );
-                    if( xSetInfo->hasPropertyByName( aPropName ) )
-                        xStyleSet->setPropertyValue( aPropName,
-                                xSet->getPropertyValue( aPropName ) );
+                    uno::Reference< beans::XPropertySetInfo >  xSetInfo( xSet->getPropertySetInfo() );
 
-                    ++pMap;
+                    const SfxItemPropertyMap* pMap = ImplGetPageBackgroundPropertyMap();
+                    while( pMap->pName )
+                    {
+                        const OUString aPropName( OUString::createFromAscii(pMap->pName) );
+                        if( xSetInfo->hasPropertyByName( aPropName ) )
+                            xStyleSet->setPropertyValue( aPropName,
+                                    xSet->getPropertyValue( aPropName ) );
+
+                        ++pMap;
+                    }
                 }
             }
-        }
-        catch(...)
-        {
-            //
+            catch(...)
+            {
+                //
+            }
         }
     }
     else
