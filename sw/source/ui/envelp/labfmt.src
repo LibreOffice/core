@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:48:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ TabPage TP_LAB_FMT
         Text[ russian ] = "Ëåâûé êğàé";
         Text[ polish ] = "Lewy margines";
         Text[ japanese ] = "¶—]”’(~L)";
-        Text[ chinese_traditional ] = "¥ª¦VÃä®Ø(~L)";
+        Text[ chinese_traditional ] = "¥ªÃä®Ø(~L)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
         Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
         Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
@@ -451,7 +451,7 @@ TabPage TP_LAB_FMT
         Text[ polish ] = "Zapisz...";
         Text[ portuguese_brazilian ] = "Save...";
         Text[ japanese ] = "•Û‘¶(~S)...";
-        Text[ korean ] = "ÀúÀå...";
+        Text[ korean ] = "ÀúÀå(~S)...";
         Text[ chinese_simplified ] = "´æÅÌ(~S)...";
         Text[ chinese_traditional ] = "Àx¦s(~S)...";
         Text[ turkish ] = "Save...";
@@ -588,7 +588,7 @@ String STR_LEFT
     Text[ russian ] = "Ëåâûé êğàé";
     Text[ polish ] = "Lewy margines";
     Text[ japanese ] = "¶—]”’";
-    Text[ chinese_traditional ] = "¥ª¦VÃä®Ø";
+    Text[ chinese_traditional ] = "¥ªÃä®Ø";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
     Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
     Text[ korean ] = "¿ŞÂÊ ¿©¹é";
@@ -704,7 +704,7 @@ ModalDialog DLG_SAVE_LABEL
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÉÌ±ê";
         Text[ russian ] = "Ìàğêà";
-        Text[ polish ] = "Znacznik";
+        Text[ polish ] = "Marka";
         Text[ japanese ] = "»‘¢Œ³";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "°Ó¼Ğ";
@@ -854,6 +854,7 @@ ModalDialog DLG_SAVE_LABEL
     Text[ catalan ] = "Guardar formato de etiqueta";
     Text[ finnish ] = "Etikettenformat speichern";
 };
+
 
 
 
