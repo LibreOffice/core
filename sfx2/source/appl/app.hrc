@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:33:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,12 @@
 #define RID_XMLSEC_DOCUMENTSIGNED               (RID_SFX_APP_START + 189)
 #define RID_XMLSEC_INFO_WRONGDOCFORMAT          (RID_SFX_APP_START + 190)
 #define RID_WARNING_MACROSDISABLED              (RID_SFX_APP_START + 191)
+
+#define STR_QUERY_UPDATE_LINKS                  (RID_SFX_APP_START + 192)
+#define STR_DDE_ERROR                           (RID_SFX_APP_START + 193)
+
+#define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
+
 
 #endif // #ifndef _SFX_APP_HRC
 
