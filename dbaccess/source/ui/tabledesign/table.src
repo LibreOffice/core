@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 14:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ String STR_VALUE_NONE
     Text[ greek ] = "<êáíÝíá>";
     Text[ korean ] = "<¾øÀ½>";
     Text[ turkish ] = "<yok>";
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = "";
 };
 
 String STR_TAB_FIELD_NAME
@@ -1057,8 +1057,8 @@ String STR_HELP_BOOL_DEFAULT
 String STR_HELP_DEFAULT_VALUE
 {
     Text = "Geben Sie hier einen Standardwert für das Feld an.\n\nWenn Sie später Daten in die Tabelle eingeben, wird in jedem neuen Datensatz diese Zeichenkette für das aktuelle Feld verwendet. Sie sollte deshalb der weiter unten einzugebenden Zellenformatierung genügen." ;
-    Text [ ENGLISH ] = "Enter a default value for this field." ;
-    Text [ english_us ] = "Enter a default value for this field.\n\nThis character chain, for the field currently selected is entered into each new record when data is entered into the table. It should, therefore, correspond to the cell format that needs to be entered below." ;
+    Text [ english ] = "Enter a default value for this field.\n\nThis string, for the field currently selected is entered into each new record when data is entered into the table. It should, therefore, correspond to the cell format that needs to be entered below." ;
+    Text [ english_us ] = "Enter a default value for this field.\n\nThis string, for the field currently selected is entered into each new record when data is entered into the table. It should, therefore, correspond to the cell format that needs to be entered below." ;
     Text [ portuguese_brazilian ] = "Geben Sie hier einen Standardwert fuer das Feld an." ;
     Text [ swedish ] = "Ange här ett standardvärde för fältet.\n\nNär Du matar in data i tabellen senare används den här teckensträngen för det aktuella fältet i varje datapost. Den bör därför motsvara cellformateringen som skall matas in nedan." ;
     Text [ danish ] = "Angiv her en standardværdi for dette felt.\n\nNår du senere indtaster data i denne tabel, bliver denne streng brugt i det aktuelle felt i hver ny datapost. Du bør derfor tage hensyn til den celleformatering der indtastes nedenfor." ;
