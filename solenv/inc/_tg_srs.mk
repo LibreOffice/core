@@ -8,7 +8,7 @@ $(HIDSRS1PARTICLE) : $(HID1FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID1FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID1FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -55,7 +55,7 @@ $(HIDSRS2PARTICLE) : $(HID2FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID2FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID2FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -102,7 +102,7 @@ $(HIDSRS3PARTICLE) : $(HID3FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID3FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID3FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -149,7 +149,7 @@ $(HIDSRS4PARTICLE) : $(HID4FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID4FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID4FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -196,7 +196,7 @@ $(HIDSRS5PARTICLE) : $(HID5FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID5FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID5FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -243,7 +243,7 @@ $(HIDSRS6PARTICLE) : $(HID6FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID6FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID6FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -290,7 +290,7 @@ $(HIDSRS7PARTICLE) : $(HID7FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID7FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID7FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -337,7 +337,7 @@ $(HIDSRS8PARTICLE) : $(HID8FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID8FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID8FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -384,7 +384,7 @@ $(HIDSRS9PARTICLE) : $(HID9FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID9FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID9FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
@@ -431,7 +431,7 @@ $(HIDSRS10PARTICLE) : $(HID10FILES)
         @echo ------------------------------
         @echo Making: $@
         @+if exist $@ rm $@
-        +$(TYPE) $(HID10FILES) > $@.$(ROUT).tmp
+        +$(TYPE) $(mktmp  $(subst,$/,/ $(HID10FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
 .IF "$(L10N_framework)"==""
