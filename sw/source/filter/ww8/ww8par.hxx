@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:21 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,11 +221,14 @@ SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 
 struct WW8OleMap
 {
-    UINT32 mnWWid;
-    SvInPlaceObject *mpWriterRef;
+    sal_uInt32 mnWWid;
+    String msStorageName;
 
-    WW8OleMap(UINT32 nWWid, SvInPlaceObject *pWriterRef = 0) :
-        mnWWid(nWWid), mpWriterRef(pWriterRef) {}
+    WW8OleMap(sal_uInt32 nWWid)
+        : mnWWid(nWWid) {}
+
+    WW8OleMap(sal_uInt32 nWWid, String sStorageName) :
+        mnWWid(nWWid), msStorageName(sStorageName) {}
 
     bool operator==(const WW8OleMap & rEntry) const
     {
@@ -294,6 +297,8 @@ private:
     //No copying
     SwWW8FltControlStack(const SwWW8FltControlStack&);
     SwWW8FltControlStack& operator=(const SwWW8FltControlStack&);
+    const SwNumFmt* GetNumFmtFromStack(const SwPosition &rPos,
+        const SwTxtNode &rTxtNode);
 protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry);
@@ -757,6 +762,29 @@ public:
         { }
 };
 
+class FtnDescriptor
+{
+public:
+    ManTypes meType;
+    bool mbAutoNum;
+    WW8_CP mnStartCp;
+    WW8_CP mnLen;
+};
+
+struct ApoTestResults
+{
+    bool mbStartApo;
+    bool mbStopApo;
+    const BYTE* mpSprm37;
+    const BYTE* mpSprm29;
+    WW8FlyPara* mpStyleApo;
+    ApoTestResults() :
+        mbStartApo(false), mbStopApo(false), mpSprm37(0), mpSprm29(0),
+        mpStyleApo(0) {}
+    bool HasStartStop() const { return (mbStartApo || mbStopApo); }
+    bool HasFrame() const { return (mpSprm29 || mpSprm37 || mpStyleApo); }
+};
+
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
@@ -823,6 +851,12 @@ friend class wwSectionManager;
     */
     std::deque<USHORT> maFieldStack;
     typedef std::deque<USHORT>::const_iterator mycFieldIter;
+
+    /*
+    A stack of open footnotes. Should only be one in it at any time.
+    */
+    std::deque<FtnDescriptor> maFtnStack;
+
 
     /*
     A queue of the ms sections in the document
@@ -905,7 +939,6 @@ friend class wwSectionManager;
     std::vector<String>* mpAtnNames;
 
     WW8AuthorInfos* pAuthorInfos;
-    WW8OleMaps* pOleMap;
 
     /*
     Tabstops on a paragraph need to be adjusted when the lrspace has been
@@ -958,7 +991,6 @@ friend class wwSectionManager;
 
     BYTE nSwNumLevel;           // LevelNummer fuer Outline / Nummerierung
     BYTE nWwNumType;            // Gliederung / Nummerg / Aufzaehlg
-    sal_Int8 nDrawHeaven, nDrawHell;
     BYTE nListLevel;
 
     BYTE nPgChpDelim;           // ChapterDelim from PageNum
@@ -1035,6 +1067,7 @@ friend class wwSectionManager;
     void DeleteRefStk()     { DeleteStk( pRefStck ); pRefStck = 0; }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
     bool AddTextToParagraph(const String& sAddString);
+    bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(long& rPos, long nEnd, long nCpOfs);
     bool ReadChars(long& rPos, long nNextAttr, long nTextEnd, long nCpOfs);
@@ -1101,15 +1134,11 @@ friend class wwSectionManager;
     void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
         WW8_FSPA *pF );
 
-    WW8FlyPara *ConstructApo(const BYTE* pSprm29,
-        const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos);
-    bool StartApo(const BYTE* pSprm29, const WW8FlyPara *pNowStyleApo,
-        WW8_TablePos *pTabPos);
+    WW8FlyPara *ConstructApo(const ApoTestResults &rApo, WW8_TablePos *pTabPos);
+    bool StartApo(const ApoTestResults &rApo, WW8_TablePos *pTabPos);
     void StopApo();
-    bool TestSameApo(const BYTE* pSprm29, const WW8FlyPara *pNowStyleApo,
-        WW8_TablePos *pTabPos);
-    const BYTE* TestApo(bool& rbStartApo, bool& rbStopApo,
-        WW8FlyPara* &pbNowStyleApo, int nCellLevel, bool bTableRowEnd,
+    bool TestSameApo(const ApoTestResults &rApo, WW8_TablePos *pTabPos);
+    ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
         WW8_TablePos *pTabPos);
 
     void EndSpecial();
@@ -1169,7 +1198,7 @@ friend class wwSectionManager;
 // verwaltet werden: rglst, hpllfo und hsttbListNames
 // die Strukturen hierfuer sind: LSTF, LVLF, LFO LFOLVL
 
-    void SetAnlvStrings(SwNumFmt* pNum, WW8_ANLV* pAV, const BYTE* pTxt,
+    void SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV, const BYTE* pTxt,
         bool bOutline);
     void SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel, bool bOutLine);
     void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel );
@@ -1221,6 +1250,7 @@ friend class wwSectionManager;
     SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, bool bOrgObjectWasReplace);
+    long GetSafePos(long nPos);
     bool MiserableRTLGraphicsHack(long &rLeft, long nWidth,
         SwHoriOrient eHoriOri, SwRelationOrient eHoriRel);
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
@@ -1300,6 +1330,7 @@ public:     // eigentlich private, geht aber leider nur public
     void ConvertUFName( String& rName );
 
     long Read_Ftn(WW8PLCFManResult* pRes);
+    sal_uInt16 End_Ftn();
     long Read_Field(WW8PLCFManResult* pRes);
     sal_uInt16 End_Field();
     long Read_Book(WW8PLCFManResult*);
@@ -1329,6 +1360,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_Emphasis(         USHORT, const BYTE* pData, short nLen );
     void Read_ScaleWidth(       USHORT, const BYTE* pData, short nLen );
     void Read_Relief(           USHORT, const BYTE* pData, short nLen);
+    void Read_TxtAnim(          USHORT, const BYTE* pData, short nLen);
 
     void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
 
@@ -1403,7 +1435,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,
         const String &rData);
-    const String &GetMappedBookmark(String &rOrigName);
+    String GetMappedBookmark(const String &rOrigName);
 
     // Felder
     eF_ResT Read_F_Input(WW8FieldDesc*, String& rStr);
@@ -1424,6 +1456,7 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_NoteReference( WW8FieldDesc* pF, String& rStr );
 
     eF_ResT Read_F_Tox( WW8FieldDesc* pF, String& rStr );
+    bool AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase);
     eF_ResT Read_F_Symbol( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Embedd( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr);
@@ -1486,7 +1519,7 @@ void SyncStyleIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode,
     const SwDoc &rDocb);
-
+String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(long &rLeft, long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize, bool bRTL);
