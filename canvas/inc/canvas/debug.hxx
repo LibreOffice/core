@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:58:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_DEBUG_HXX
-#define _SLIDESHOW_DEBUG_HXX
+#if ! defined(INCLUDED_CANVAS_DEBUG_HXX)
+#define INCLUDED_CANVAS_DEBUG_HXX
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
@@ -73,38 +76,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
+#include <boost/current_function.hpp>
+
 // Class invariants
 // ----------------
 #if OSL_DEBUG_LEVEL > 0
-
-/// @internal
-inline void debug_ensure_and_throw( bool bCondition, const char* pMsg )
-{
-    OSL_ENSURE(bCondition,pMsg);
-    if( !bCondition )
-        throw ::com::sun::star::uno::RuntimeException(
-            ::rtl::OUString::createFromAscii( pMsg ),
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
-}
-
-/// @internal
-inline void debug_check_and_throw( bool bCondition, const char* pMsg )
-{
-    OSL_ENSURE(bCondition,pMsg);
-    if( !bCondition )
-        throw ::com::sun::star::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii( pMsg ),
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(),
-            0 );
-}
-
-/// @internal
-inline bool debug_ensure_and_return( bool bCondition, const char* pMsg )
-{
-    OSL_ENSURE(bCondition,pMsg);
-
-    return bCondition;
-}
 
 /** This macro asserts the given condition, and throws an
     IllegalArgumentException afterwards.
@@ -113,7 +89,13 @@ inline bool debug_ensure_and_return( bool bCondition, const char* pMsg )
     IllegalArgumentException is thrown nevertheless (although without
     the given error string, to conserve space).
  */
-#define CHECK_AND_THROW(c, m)   debug_check_and_throw(c,m)
+#define CHECK_AND_THROW(c, m)   if( !(c) ) { \
+                                     OSL_ENSURE(false, m); \
+                                     throw ::com::sun::star::lang::IllegalArgumentException( \
+                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(), \
+                                     0 ); }
 
 /** This macro asserts the given condition, and throws an
     RuntimeException afterwards.
@@ -122,7 +104,12 @@ inline bool debug_ensure_and_return( bool bCondition, const char* pMsg )
     RuntimeException is thrown nevertheless (although without
     the given error string, to conserve space).
  */
-#define ENSURE_AND_THROW(c, m)   debug_ensure_and_throw(c,m)
+#define ENSURE_AND_THROW(c, m)   if( !(c) ) { \
+                                     OSL_ENSURE(false, m); \
+                                     throw ::com::sun::star::uno::RuntimeException( \
+                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
 
 /** This macro asserts the given condition, and returns false
     afterwards.
@@ -130,15 +117,24 @@ inline bool debug_ensure_and_return( bool bCondition, const char* pMsg )
     In production code, no assertion appears, but the return is issued
     nevertheless.
  */
-#define ENSURE_AND_RETURN(c, m)  if( !debug_ensure_and_return(c,m) ) return false
+#define ENSURE_AND_RETURN(c, m)  if( !(c) ) { \
+                                     OSL_ENSURE(false, m); \
+                                     return false; }
 
-#else
+#else // ! (OSL_DEBUG_LEVEL > 0)
 
 #define CHECK_AND_THROW(c, m)   if( !(c) )                                                  \
-                                     throw ::com::sun::star::lang::IllegalArgumentException()
+                                     throw ::com::sun::star::lang::IllegalArgumentException( \
+                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(), \
+                                     0 )
 
 #define ENSURE_AND_THROW(c, m)   if( !(c) )                                                     \
-                                     throw ::com::sun::star::uno::RuntimeException()
+                                     throw ::com::sun::star::uno::RuntimeException( \
+                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() )
 
 #define ENSURE_AND_RETURN(c, m)  if( !(c) )                                                     \
                                      return false
@@ -156,8 +152,8 @@ inline bool debug_ensure_and_return( bool bCondition, const char* pMsg )
 ::std::size_t find_unreachable_objects( bool );
 
 #ifdef VERBOSE
-#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s: Unreachable objects still use %d bytes", \
-                                           a,                                            \
+#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s\n%s: Unreachable objects still use %d bytes", \
+                                           BOOST_CURRENT_FUNCTION, a, \
                                            find_unreachable_objects(true) )
 #else
 /** This macro shows how much memory is still used by shared_ptrs
@@ -167,8 +163,8 @@ inline bool debug_ensure_and_return( bool bCondition, const char* pMsg )
     still contained in those objects, which quite possibly are prevented
     from deletion by circular references.
  */
-#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s: Unreachable objects still use %d bytes", \
-                                           a,                                            \
+#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s\n%s: Unreachable objects still use %d bytes", \
+                                           BOOST_CURRENT_FUNCTION, a, \
                                            find_unreachable_objects(false) )
 #endif
 
@@ -178,4 +174,4 @@ inline bool debug_ensure_and_return( bool bCondition, const char* pMsg )
 
 #endif
 
-#endif /* _SLIDESHOW_DEBUG_HXX */
+#endif // ! defined(INCLUDED_CANVAS_DEBUG_HXX)
