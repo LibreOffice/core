@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numhead.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: er $ $Date: 2002-07-01 10:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ ImpSvNumMultipleReadHeader::~ImpSvNumMultipleReadHeader()
     DBG_ASSERT( pMemStream->Tell() == pMemStream->GetSize(),
                 "Sizes nicht vollstaendig gelesen" );
     delete pMemStream;
-    delete pBuf;
+    delete [] pBuf;
 
     rStream.Seek(nEndPos);
 }
@@ -285,6 +285,9 @@ void ImpSvNumMultipleWriteHeader::StartEntry()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:59:03  hr
+    initial import
+
     Revision 1.9  2000/09/18 14:13:40  willem.vandorp
     OpenOffice header added.
 
