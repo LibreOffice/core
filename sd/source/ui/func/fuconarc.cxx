@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:11:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include "fuconarc.hxx"
 
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
@@ -92,19 +93,29 @@
 
 #include "app.hrc"
 
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "fuconarc.hxx"
 #include "res_bmp.hrc"
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 
 // #97016#
 #ifndef _SXCIAITM_HXX
 #include <svx/sxciaitm.hxx>
 #endif
 
-TYPEINIT1( FuConstArc, FuConstruct );
+namespace sd {
+
+TYPEINIT1( FuConstructArc, FuConstruct );
 
 /*************************************************************************
 |*
@@ -112,14 +123,15 @@ TYPEINIT1( FuConstArc, FuConstruct );
 |*
 \************************************************************************/
 
-FuConstArc::FuConstArc( SdViewShell*    pViewSh,
-                        SdWindow*       pWin,
-                        SdView*         pView,
-                        SdDrawDocument* pDoc,
-                        SfxRequest&     rReq )
+FuConstructArc::FuConstructArc (
+    ViewShell*  pViewSh,
+    ::sd::Window*       pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq )
     : FuConstruct( pViewSh, pWin, pView, pDoc, rReq )
 {
-    pViewShell->SwitchObjectBar(RID_DRAW_OBJ_TOOLBOX);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     const SfxItemSet *pArgs = rReq.GetArgs ();
 
@@ -155,7 +167,7 @@ FuConstArc::FuConstArc( SdViewShell*    pViewSh,
 |*
 \************************************************************************/
 
-FuConstArc::~FuConstArc()
+FuConstructArc::~FuConstructArc()
 {
 }
 
@@ -165,7 +177,7 @@ FuConstArc::~FuConstArc()
 |*
 \************************************************************************/
 
-BOOL FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
@@ -198,7 +210,7 @@ BOOL FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL FuConstArc::MouseMove( const MouseEvent& rMEvt )
+BOOL FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -209,7 +221,7 @@ BOOL FuConstArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+BOOL FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
     BOOL bReturn = FALSE;
     BOOL bCreated = FALSE;
@@ -248,7 +260,7 @@ BOOL FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL FuConstArc::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
@@ -260,7 +272,7 @@ BOOL FuConstArc::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void FuConstArc::Activate()
+void FuConstructArc::Activate()
 {
     SdrObjKind aObjKind;
 
@@ -310,14 +322,14 @@ void FuConstArc::Activate()
 |*
 \************************************************************************/
 
-void FuConstArc::Deactivate()
+void FuConstructArc::Deactivate()
 {
     FuConstruct::Deactivate();
 //  FuDraw::Deactivate();
 }
 
 // #97016#
-SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_ARC:
     // case SID_DRAW_CIRCLEARC:
@@ -376,3 +388,4 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
     return pObj;
 }
 
+} // end of namespace sd
