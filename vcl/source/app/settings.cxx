@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2223,7 +2223,7 @@ LanguageType AllSettings::GetLanguage() const
 LanguageType AllSettings::GetUILanguage() const
 {
     if ( mpData->meUILanguage == LANGUAGE_SYSTEM )
-        return GetSystemLanguage();
+        return GetSystemUILanguage();
 
     return mpData->meUILanguage;
 }
