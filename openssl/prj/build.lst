@@ -1,0 +1,2 @@
+ol	openssl	:	NULL
+ol	openssl						nmake	-	all	ol_mkout NULL
