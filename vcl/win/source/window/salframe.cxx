@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-30 17:27:03 $
+ *  last change: $Author: ssa $ $Date: 2001-10-31 19:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3177,8 +3177,8 @@ static void ImplCallMoveHdl( HWND hWnd )
         pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                     SALEVENT_MOVE, 0 );
         // Um doppelte Paints von VCL und SAL zu vermeiden
-        if ( IsWindowVisible( hWnd ) && !pFrame->maFrameData.mbInShow )
-            UpdateWindow( hWnd );
+        //if ( IsWindowVisible( hWnd ) && !pFrame->maFrameData.mbInShow )
+        //    UpdateWindow( hWnd );
     }
 }
 
@@ -3208,11 +3208,11 @@ static void ImplHandleMoveMsg( HWND hWnd )
 
             // Status merken
             ImplSaveFrameState( pFrame );
-            /*
+
             // Call Hdl
             //#93851 if we call this handler, VCL floating windows are not updated correctly
-            //ImplCallMoveHdl( hWnd );
-            */
+            ImplCallMoveHdl( hWnd );
+
         }
 
         ImplSalYieldMutexRelease();
