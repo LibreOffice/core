@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SOffice52ProxySettings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:04 $
+ *  last change:$Date: 2003-05-27 12:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ public class SOffice52ProxySettings extends TestCase {
      * </ul>
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         XInterface oObj = null;
 
         try {
