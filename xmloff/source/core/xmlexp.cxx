@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:12:09 $
+ *  last change: $Author: dvo $ $Date: 2001-10-16 12:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,35 +598,50 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArguments )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
+    // #93186# we need to queryInterface every single Any with any expected outcome. This variable hold the queryInterface results.
+
     const sal_Int32 nAnyCount = aArguments.getLength();
     const uno::Any* pAny = aArguments.getConstArray();
 
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
-        if( pAny->getValueType() == ::getCppuType((const uno::Reference< task::XStatusIndicator >*)0) )
+        Reference<XInterface> xValue;
+        *pAny >>= xValue;
+
+        // status indicator
+        uno::Reference<task::XStatusIndicator> xTmpStatus( xValue, UNO_QUERY );
+        if ( xTmpStatus.is() )
+            xStatusIndicator = xTmpStatus;
+
+        // graphic resolver
+        uno::Reference<document::XGraphicObjectResolver> xTmpGraphic(
+            xValue, UNO_QUERY );
+        if ( xTmpGraphic.is() )
+            xGraphicResolver = xTmpGraphic;
+
+        // object resolver
+        uno::Reference<document::XEmbeddedObjectResolver> xTmpObjectResolver(
+            xValue, UNO_QUERY );
+        if ( xTmpObjectResolver.is() )
+            xEmbeddedResolver = xTmpObjectResolver;
+
+        // document handler
+        uno::Reference<xml::sax::XDocumentHandler> xTmpDocHandler(
+            xValue, UNO_QUERY );
+        if( xTmpDocHandler.is() )
         {
-            *pAny >>= xStatusIndicator;
-        }
-        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XGraphicObjectResolver >*)0) )
-        {
-            *pAny >>= xGraphicResolver;
-        }
-        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XEmbeddedObjectResolver >*)0) )
-        {
-            *pAny >>= xEmbeddedResolver;
-        }
-        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< xml::sax::XDocumentHandler >*)0))
-        {
-            *pAny >>= xHandler;
+            xHandler = xTmpDocHandler;
             *pAny >>= xExtHandler;
 
             if (xNumberFormatsSupplier.is() && pNumExport == NULL)
                 pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
         }
-        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0))
-        {
-            *pAny >>= xExportInfo;
-        }
+
+        // property set to transport data across
+        uno::Reference<beans::XPropertySet> xTmpPropertySet(
+            xValue, UNO_QUERY );
+        if( xTmpPropertySet.is() )
+            xExportInfo = xTmpPropertySet;
     }
 }
 

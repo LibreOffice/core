@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:39:54 $
+ *  last change: $Author: dvo $ $Date: 2001-10-16 12:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,32 +725,36 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
-        if( pAny->getValueType() == ::getCppuType((const uno::Reference< task::XStatusIndicator >*)0))
+        Reference<XInterface> xValue;
+        *pAny >>= xValue;
+
+        uno::Reference<task::XStatusIndicator> xTmpStatusIndicator(
+            xValue, UNO_QUERY );
+        if( xTmpStatusIndicator.is() )
+            mxStatusIndicator = xTmpStatusIndicator;
+
+        uno::Reference<document::XGraphicObjectResolver> xTmpGraphicResolver(
+            xValue, UNO_QUERY );
+        if( xTmpGraphicResolver.is() )
+            xGraphicResolver = xTmpGraphicResolver;
+
+        uno::Reference<document::XEmbeddedObjectResolver> xTmpObjectResolver(
+            xValue, UNO_QUERY );
+        if( xTmpObjectResolver.is() )
+            xEmbeddedResolver = xTmpObjectResolver;
+
+        uno::Reference<beans::XPropertySet> xTmpPropSet( xValue, UNO_QUERY );
+        if( xTmpPropSet.is() )
         {
-            *pAny >>= mxStatusIndicator;
-        }
-        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XGraphicObjectResolver >*)0))
-        {
-            *pAny >>= xGraphicResolver;
-        }
-        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XEmbeddedObjectResolver >*)0))
-        {
-            *pAny >>= xEmbeddedResolver;
-        }
-        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0))
-        {
-            *pAny >>= xImportInfo;
-            if (xImportInfo.is())
+            xImportInfo = xTmpPropSet;
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+            if (xPropertySetInfo.is())
             {
-                uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
-                if (xPropertySetInfo.is())
+                OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
+                if (xPropertySetInfo->hasPropertyByName(sNumberStyles))
                 {
-                    OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
-                    if (xPropertySetInfo->hasPropertyByName(sNumberStyles))
-                    {
-                        uno::Any aAny = xImportInfo->getPropertyValue(sNumberStyles);
-                        aAny >>= xNumberStyles;
-                    }
+                    uno::Any aAny = xImportInfo->getPropertyValue(sNumberStyles);
+                    aAny >>= xNumberStyles;
                 }
             }
         }
