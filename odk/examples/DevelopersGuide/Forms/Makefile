@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:31:18 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:10:19 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -176,10 +176,10 @@ FormsExample : $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(APP4_JAR)
 
 	@echo Please use one of the following commands to run an example:
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP2_NAME).run
-	@echo make $(APP3_NAME).run
-	@echo make $(APP4_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP2_NAME).run
+	@echo $(MAKE) $(APP3_NAME).run
+	@echo $(MAKE) $(APP4_NAME).run
 	@echo -
 	@echo Note: The data awareness example needs a running data source whith name
 	@echo $(SQM)      $(SQM)"$(QM)OO_SDK_Demo_DB$(QM)". Make sure that you have created such a data source,
@@ -188,7 +188,7 @@ FormsExample : $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(APP4_JAR)
 	@echo how you can programmatically create form controls, and associated 
 	@echo scripts with certain events.
 	@echo -
-	@echo make ProgrammaticScriptAssignment.odt.load
+	@echo $(MAKE) ProgrammaticScriptAssignment.odt.load
 	@echo --------------------------------------------------------------------------------
 
 ProgrammaticScriptAssignment.odt.load : $(COMP_REGISTERFLAG)
