@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 11:14:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1796,13 +1796,13 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             aFilter.SetLayer(pObj->GetLayer());
             nInsAnz=aFilter.DoImport(pGraf->GetTransformedGraphic().GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
         }
-        if (pOle2!=NULL && pOle2->HasGDIMetaFile())
+        if ( pOle2!=NULL && pOle2->GetGraphic() )
         {
-            const GDIMetaFile* pMtf=pOle2->GetGDIMetaFile();
+            //const GDIMetaFile* pMtf=pOle2->GetGDIMetaFile();
             ImpSdrGDIMetaFileImport aFilter(*pMod);
             aFilter.SetScaleRect(pOle2->GetLogicRect());
             aFilter.SetLayer(pObj->GetLayer());
-            nInsAnz=aFilter.DoImport(*pMtf,*pOL,nInsPos,pProgrInfo);
+            nInsAnz=aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
         }
         if (nInsAnz!=0) {
             ULONG nObj=nInsPos;
