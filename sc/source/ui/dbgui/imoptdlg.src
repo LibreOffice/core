@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-25 12:51:22 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,23 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text = "Feste Spalten~breite";
         Text[ english ] = "Fixed column ~width";
         Text[ english_us ] = "Fixed column ~width";
+        Text[ portuguese ] = "Fixed text ~width";
+        Text[ russian ] = "Fixed text ~width";
+        Text[ greek ] = "Fixed text ~width";
+        Text[ dutch ] = "Fixed text ~width";
+        Text[ french ] = "Fixed text ~width";
+        Text[ spanish ] = "Fixed text ~width";
+        Text[ finnish ] = "Fixed text ~width";
+        Text[ italian ] = "Fixed text ~width";
+        Text[ danish ] = "Fixed text ~width";
+        Text[ swedish ] = "Fixed text ~width";
+        Text[ polish ] = "Fixed text ~width";
+        Text[ japanese ] = "Fixed text ~width";
+        Text[ korean ] = "Fixed text ~width";
+        Text[ chinese_simplified ] = "Fixed text ~width";
+        Text[ chinese_traditional ] = "Fixed text ~width";
+        Text[ turkish ] = "Fixed text ~width";
+        Text[ arabic ] = "Fixed text ~width";
     };
     OKButton BTN_OK
     {
