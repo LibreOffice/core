@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,23 +95,20 @@ cclass_Unicode::~cclass_Unicode() {
 
 OUString SAL_CALL
 cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
-    Sequence< sal_Int32 > offset( nCount );
     trans->setMappingType(MappingTypeToUpper, rLocale);
-    return trans->transliterate(Text, nPos, nCount, offset);
+    return trans->transliterateString2String(Text, nPos, nCount);
 }
 
 OUString SAL_CALL
 cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
-    Sequence< sal_Int32 > offset( nCount );
     trans->setMappingType(MappingTypeToLower, rLocale);
-    return trans->transliterate(Text, nPos, nCount, offset);
+    return trans->transliterateString2String(Text, nPos, nCount);
 }
 
 OUString SAL_CALL
 cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
-    Sequence< sal_Int32 > offset( nCount );
     trans->setMappingType(MappingTypeToTitle, rLocale);
-    return trans->transliterate(Text, nPos, nCount, offset);
+    return trans->transliterateString2String(Text, nPos, nCount);
 }
 
 sal_Int16 SAL_CALL
