@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:18:54 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/06/08 22:18:54  rt
+ *  Merge SRC633: 09.06.01 - 00:19:13
+ *
  *  Revision 1.13  2001/05/30 20:03:15  kz
  *  Merge SRC633: 30.05.01 - 22:02:21
  *
@@ -486,5 +489,6 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
 
 
