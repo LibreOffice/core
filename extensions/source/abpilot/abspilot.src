@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-24 10:53:00 $
+ *  last change: $Author: nf $ $Date: 2001-08-27 10:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ TabPage RID_PAGE_FIELDMAPPING
 
         Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche "
             "konkreten Daten enthalten.\n\n"
-            "Zum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"E-Mail\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\n"
+            "Zum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\n"
             "Sobald sie die unten befindliche schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen "
             "für Ihre Datenquelle vornehmen können.";
         Text [ english ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/08/24 10:53:00  rt
+ *  Merge SRC638: 24.08.01 - 12:52:46
+ *
  *  Revision 1.9  2001/08/23 08:12:47  nf
  *  Fixes for merge #87134#
  *
