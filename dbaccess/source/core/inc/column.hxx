@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:24:43 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -131,6 +125,11 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
 #endif
+#ifndef _DBA_CONFIGNODE_HXX_
+#include "confignode.hxx"
+#endif
+
+using namespace dbaccess;
 
 //************************************************************
 //  OColumn
@@ -211,7 +210,6 @@ public:
     /** return a pointer to the object which holds the UI-settings for this column, if any.
         @see    OColumnSettings
         @see    OColumns::loadSettings
-        @see    OColumns::storeSettings
     */
     virtual OColumnSettings*    getSettings() { return NULL; }
     virtual void fireValueChange(const ::com::sun::star::uno::Any& _rOldValue){}
@@ -256,11 +254,11 @@ public:
         @return                         sal_True, if anything has been written (i.e. there is at least one non-default property)
                                         sal_False else
     */
-    sal_Bool    writeUITo(const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigNode);
+    sal_Bool    writeUITo(const OConfigurationNode& _rConfigNode);
     /** read the connection independent information (i.e. te hidden flag or the column width) from the given configuration node.
         @param      _rxConfigNode       the configuratoin node to read from
     */
-    void        readUIFrom(const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigNode);
+    void        readUIFrom(const OConfigurationNode& _rConfigNode);
 };
 
 //============================================================
@@ -301,7 +299,7 @@ protected:
     ODBTable*                   m_pTable;       // in some cases this is the parent
 
     // configuration
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > m_xConfigurationNode;
+    OConfigurationNode          m_aConfigurationNode;
     // comes from the driver can be null
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDrvColumns;
 
@@ -353,55 +351,28 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // column settings persistence
-    /** load the columns UI information from the given configuration node. You can decide whether or not the current
-        location (aka configuration node) of the container is set to the given node afterwards.<BR>
+    /** load the columns UI information from the given configuration node.<p/>
         If the container does contain any columns when this method is called, the informations are merged by name,
         i.e. for each column under the node the routine tries to find a column with the same name and overwrites
         it's settings, else it creates a new one.
         @param  _rxLocation         the configuration node where the column UI informations are stored
         @param  _pColFactory        a factory for columns which have to be newly created. Must not be NULL.
-        @param  _bAdjustLocation    determines if the configuration node of the container should be set to _rxLocation
-                                    (this applies only on a successfull load)
         @see    OColumn::readUIFrom
         @see    storeSettings
     */
-    virtual void    loadSettings(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxLocation,
-            const IColumnFactory* _pColFactory,
-            sal_Bool _bAdjustLocation);
-    /** store the columns configuration information under the current configuration node.
-        @see    OColumn::writeUITo
-        @see    storeSettingsTo
-        @see    storeSettingsAs
-    */
-    virtual void    storeSettings();
-    /** store the columns UI information under the given configuration node. The current location (aka
-        configuration node) of the container is not affected.
-        @param  _rxLocation     the new location
-        @see    OColumn::writeUITo
-        @see    storeSettings
-        @see    storeSettingsAs
-    */
-    virtual void    storeSettingsTo(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxLocation);
-    /** store the columns UI information under the given configuration node, which becomes
-        the current node afterwards
-        @param  _rxLocation     the new location
-        @see    OColumn::writeUITo
-        @see    storeSettingsTo
-        @see    storeSettings
-    */
-    virtual void    storeSettingsAs(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxLocation);
+    virtual void    loadSettings(const OConfigurationNode& _rLocation, const IColumnFactory* _pColFactory);
 
-    /** return the configuration node where the column's UI informations are stored
+    /** store the columns configuration information under the current configuration node.
+        @param  _rCommitLocation        Since the current configuration does not support different types of
+                                        operations in one transaction, we have to commit before and after we
+                                        create new nodes, thus ensuring that every transaction we do contains
+                                        only one type of operation (insert/remove/update). Thus this commit node
+                                        needs to be given, so every creation of a new set child (which is an insert
+                                        operation) is flanked by two commits.
+        @see    OColumn::writeUITo
         @see    loadSettings
-        @see    storeSettings
-        @see    storeSettingsTo
-        @see    storeSettingsAs
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-                    getUILocation() const { return m_xConfigurationNode; }
+    virtual void    storeSettings(const OConfigurationNode& _rLocation, const OConfigurationTreeRoot& _rCommitLocation);
 
     // XAppend
     virtual void SAL_CALL appendByDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
@@ -412,243 +383,6 @@ public:
     void append(const ::rtl::OUString& rName, OColumn*);
     void clearColumns();
 };
-
-#if 0
-
-protected:
-    OColumn();
-    OColumn(const ::rtl::OUString& _rName);
-
-public:
-    OColumn(const OColumn& _rSource);
-    virtual ~OColumn();
-
-// com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
-// com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
-
-// cppu::OComponentHelper
-    virtual void SAL_CALL disposing(void);
-
-// com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// comphelper::OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-
-// cppu::OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                            ::com::sun::star::uno::Any & rConvertedValue,
-                            ::com::sun::star::uno::Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const ::com::sun::star::uno::Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue
-                                                 )
-                                                 throw (::com::sun::star::uno::Exception);
-    virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
-
-// ::com::sun::star::container::XNamed
-    virtual ::rtl::OUString SAL_CALL getName( ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// Helper
-//  void adjustTo(const OColumn& rCol);
-//  void setNameImpl(const rtl::OUString& rName) { m_sName = rName; }
-
-protected:
-    /** write the connection independent information (i.e. the hidden flag or the column width) to the given stream.
-        @param      _rxConfigNode       the configuratoin node to write to
-        @return                         sal_True, if anything has been written (i.e. there is at least one non-default property)
-                                        sal_False else
-    */
-    sal_Bool    writeUITo(const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigNode);
-    /** read the connection independent information (i.e. te hidden flag or the column width) from the given configuration node.
-        @param      _rxConfigNode       the configuratoin node to read from
-    */
-    void        readUIFrom(const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigNode);
-
-protected:
-    void construct();
-    void construct(const OColumn& _rSource);
-//  void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _rxSet, sal_Int32 _nRelativePosition);
-};
-
-
-
-//============================================================
-//= OColumns
-//============================================================
-typedef ::std::hash_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
-typedef ::std::vector<OColumn*> OColumnArray;
-
-typedef ::cppu::WeakImplHelper6< ::com::sun::star::lang::XServiceInfo,
-                                 ::com::sun::star::container::XEnumerationAccess,
-                                 ::com::sun::star::container::XNameAccess,
-                                 ::com::sun::star::container::XIndexAccess,
-                                 ::com::sun::star::sdbcx::XAppend,
-                                 ::com::sun::star::sdbcx::XDrop
-                                 > OColumns_Base;
-//------------------------------------------------------------
-class OColumns : public OColumns_Base
-{
-protected:
-    // parent access
-    ::cppu::OWeakObject&        m_rParent;      // used for ref counting
-    ::osl::Mutex&               m_rMutex;       // the parent mutex
-
-    // single column access
-    OColumnArray                m_aColArray;
-    OColumnMap*                 m_pColMap;
-
-    // configuration
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-                                m_xConfigurationNode;
-
-    sal_Bool                    m_bInitialized : 1;
-
-public:
-    sal_Bool    isCaseSensitive() const { return m_pColMap->key_comp().isCaseSensitive(); }
-    /** set the new case sensitivity flag. will delete all existing columns, so be sure you know what you're doing ...
-    */
-    void        setCaseSensitive(sal_Bool bCaseSensitive);
-
-    /** flag which determines whether the container is filled or not
-    */
-    sal_Bool    isInitialized() const { return m_bInitialized; }
-    void        setInitialized() {m_bInitialized = sal_True;}
-
-
-public:
-    /** constructs an empty container without configuration location.
-        @param      rParent             the parent object. This instance will be used for refcounting, so the parent
-                                        cannot die before the container does.
-        @param      _rMutex             the mutex of the parent.
-        @param      _bCaseSensitive     the initial case sensitivity flag
-        @see        setCaseSensitive
-    */
-    OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, sal_Bool _bCaseSensitive);
-    ~OColumns();
-
-    // dispatch the refcounting to the parent
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
-
-// ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::container::XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::container::XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::container::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::container::XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::sdbcx::XAppend
-    virtual void SAL_CALL appendByDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::sdbcx::XDrop
-    virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-
-// helper
-    /** returns the one-based (!) index of the column with the given name, if any.
-    */
-    sal_Int32 findColumn(const rtl::OUString& columnName) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-
-    /** load the columns UI information from the given configuration node. You can decide whether or not the current
-        location (aka configuration node) of the container is set to the given node afterwards.<BR>
-        If the container does contain any columns when this method is called, the informations are merged by name,
-        i.e. for each column under the node the routine tries to find a column with the same name and overwrites
-        it's settings, else it creates a new one.
-        @param  _rxLocation         the configuration node where the column UI informations are stored
-        @param  _bAdjustLocation    determines if the configuration node of the container should be set to _rxLocation
-                                    (this applies only on a successfull load)
-        @see    OColumn::readUIFrom
-        @see    storeSettings
-        @see    createColumn
-    */
-    virtual void    loadSettings(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxLocation,
-            sal_Bool _bAdjustLocation);
-    /** store the columns configuration information under the current configuration node.
-        @see    OColumn::writeUITo
-        @see    storeSettingsTo
-        @see    storeSettingsAs
-    */
-    virtual void    storeSettings();
-    /** store the columns UI information under the given configuration node. The current location (aka
-        configuration node) of the container is not affected.
-        @param  _rxLocation     the new location
-        @see    OColumn::writeUITo
-        @see    storeSettings
-        @see    storeSettingsAs
-    */
-    virtual void    storeSettingsTo(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxLocation);
-    /** store the columns UI information under the given configuration node, which becomes
-        the current node afterwards
-        @param  _rxLocation     the new location
-        @see    OColumn::writeUITo
-        @see    storeSettingsTo
-        @see    storeSettings
-    */
-    virtual void    storeSettingsAs(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxLocation);
-
-    /** return the configuration node where the column's UI informations are stored
-        @see    loadSettings
-        @see    storeSettings
-        @see    storeSettingsTo
-        @see    storeSettingsAs
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-                    getUILocation() const { return m_xConfigurationNode; }
-
-    /** delete all columns from the container
-    */
-    void    clearColumns();
-
-    virtual void disposing();
-//  const OColumn* at(const rtl::OUString& rName) const;
-//  OColumn* operator[] (sal_Int32 nIndex) {return m_aColArray[nIndex];}
-//  const OColumn* operator[] (sal_Int32 nIndex) const {return m_aColArray[nIndex];}
-
-protected:
-    /** creates an empty column. May be overwritten by derived classes.
-        The new object must not be aquired.
-    */
-    virtual OColumn* createColumn(const ::rtl::OUString& _rName) const { return new OColumn(_rName); }
-
-    void append(OColumn*);
-};
-
-#endif
 
 #endif // _DBA_COREAPI_COLUMN_HXX_
 
