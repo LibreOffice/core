@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2001-05-15 13:26:47 $
+ *  last change: $Author: af $ $Date: 2001-05-16 12:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 67  ) ;
+        Pos = MAP_APPFONT ( 76 , 67  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -218,7 +218,7 @@ ModalDialog DLG_COPY
     };
     FixedText FT_COPIES
     {
-        Pos = MAP_APPFONT ( 4 , 8  ) ;
+        Pos = MAP_APPFONT ( 6 , 8  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Anzahl an ~Kopien" ;
         Text [ ENGLISH ] = "Number of ~Copies" ;
@@ -247,7 +247,7 @@ ModalDialog DLG_COPY
     };
     FixedText FT_ANGLE
     {
-        Pos = MAP_APPFONT ( 6 , 69  ) ;
+        Pos = MAP_APPFONT ( 12 , 69  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Drehwinkel" ;
         Text [ ENGLISH ] = "~Angle" ;
@@ -276,7 +276,7 @@ ModalDialog DLG_COPY
     };
     FixedText FT_MOVE_X
     {
-        Pos = MAP_APPFONT ( 6 , 37  ) ;
+        Pos = MAP_APPFONT ( 12 , 37  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~X-Achse" ;
         Text [ ENGLISH ] = "~X-Axis" ;
@@ -306,7 +306,7 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_MOVE_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 35  ) ;
+        Pos = MAP_APPFONT ( 76 , 35  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -323,7 +323,7 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_MOVE_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 51  ) ;
+        Pos = MAP_APPFONT ( 76 , 51  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -340,7 +340,7 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 96  ) ;
+        Pos = MAP_APPFONT ( 76 , 96  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -357,7 +357,7 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 112  ) ;
+        Pos = MAP_APPFONT ( 76 , 112  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -373,7 +373,7 @@ ModalDialog DLG_COPY
     };
     FixedText FT_MOVE_Y
     {
-        Pos = MAP_APPFONT ( 6 , 53  ) ;
+        Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Y-Achse" ;
         Text [ ENGLISH ] = "~Y-Axis" ;
@@ -402,7 +402,7 @@ ModalDialog DLG_COPY
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 6 , 98  ) ;
+        Pos = MAP_APPFONT ( 12 , 98  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
@@ -431,7 +431,7 @@ ModalDialog DLG_COPY
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 6 , 114  ) ;
+        Pos = MAP_APPFONT ( 12 , 114  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
         Text = "Höh~e" ;
@@ -461,8 +461,8 @@ ModalDialog DLG_COPY
     };
     FixedLine GRP_MOVEMENT
     {
-        Pos = MAP_APPFONT ( 4 , 24  ) ;
-        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 24  ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
         Text = "Verschiebung" ;
         Text [ ENGLISH ] = "Movement" ;
         Text [ norwegian ] = "Bevegelse " ;
@@ -490,8 +490,8 @@ ModalDialog DLG_COPY
     };
     FixedLine GRP_ENLARGEMENT
     {
-        Pos = MAP_APPFONT ( 4 , 85  ) ;
-        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 85  ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Vergrößerung : Vergr÷˜erung */
         Text = "Vergrößerung" ;
         Text [ ENGLISH ] = "Enlargement" ;
@@ -520,8 +520,8 @@ ModalDialog DLG_COPY
     };
     FixedLine GRP_COLOR
     {
-        Pos = MAP_APPFONT ( 4 , 130  ) ;
-        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 130  ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
          //Pos = MAP_APPFONT( 6, 142 );
          //Size = MAP_APPFONT( 168, 48 );
         Text = "Farben" ;
@@ -553,7 +553,7 @@ ModalDialog DLG_COPY
         Border = TRUE ;
          //Pos = MAP_APPFONT( 57, 153 );
          //Size = MAP_APPFONT( 111, 56 );
-        Pos = MAP_APPFONT ( 72 , 141  ) ;
+        Pos = MAP_APPFONT ( 76 , 141  ) ;
         Size = MAP_APPFONT ( 50 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -563,7 +563,7 @@ ModalDialog DLG_COPY
     {
          //Pos = MAP_APPFONT( 12, 155 );
          //Size = MAP_APPFONT( 40, 10 );
-        Pos = MAP_APPFONT ( 6 , 143  ) ;
+        Pos = MAP_APPFONT ( 12 , 143  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Anfang" ;
         Text [ ENGLISH ] = "~Start" ;
@@ -594,7 +594,7 @@ ModalDialog DLG_COPY
         Border = TRUE ;
          //Pos = MAP_APPFONT( 57, 171 );
          //Size = MAP_APPFONT( 111, 56 );
-        Pos = MAP_APPFONT ( 72 , 157  ) ;
+        Pos = MAP_APPFONT ( 76 , 157  ) ;
         Size = MAP_APPFONT ( 50 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -604,7 +604,7 @@ ModalDialog DLG_COPY
     {
          //Pos = MAP_APPFONT( 12, 172 );
          //Size = MAP_APPFONT( 40, 10 );
-        Pos = MAP_APPFONT ( 6 , 159  ) ;
+        Pos = MAP_APPFONT ( 12 , 159  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "E~nde" ;
         Text [ ENGLISH ] = "~End" ;
@@ -642,6 +642,7 @@ ModalDialog DLG_COPY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Duplicar";
 };
+
 
 
 
