@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:53:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2578,7 +2578,7 @@ Resource RID_GLOBSTR
 
     String STR_UNDO_CHINESE_TRANSLATION
     {
-        Text [ de ]= "Chinesische Ãœbersetzung";
+        Text [ de ]= "Chinesische Übersetzung";
         Text [ en-US ] = "Chinese translation";
     };
 
