@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:46:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,31 +486,36 @@ BOOL ODbaseTable::ReadMemoHeader()
 // -------------------------------------------------------------------------
 String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _sName )
 {
-    ::rtl::OUString aURL;
+    ::rtl::OUString sURL;
     try
     {
         Reference< XResultSet > xDir = _pConnection->getDir()->getStaticResultSet();
         Reference< XRow> xRow(xDir,UNO_QUERY);
         ::rtl::OUString sName;
         ::rtl::OUString sExt;
-        ::rtl::OUString sNeededExt(_pConnection->getExtension());
-        sal_Int32 nExtLen = sNeededExt.getLength();
-        sal_Int32 nExtLenWithSep = nExtLen + 1;
+        INetURLObject aURL;
+        static const ::rtl::OUString s_sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
         xDir->beforeFirst();
         while(xDir->next())
         {
             sName = xRow->getString(1);
+            aURL.SetSmartProtocol(INET_PROT_FILE);
+            String sUrl = _pConnection->getURL() +  s_sSeparator + sName;
+            aURL.SetSmartURL( sUrl );
 
             // cut the extension
-            sExt = sName.copy(sName.getLength() - nExtLen);
-            sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
+            sExt = aURL.getExtension();
 
             // name and extension have to coincide
-            if ( ( sName == _sName ) && ( _pConnection->matchesExtension( sExt ) ) )
+            if ( _pConnection->matchesExtension( sExt ) )
             {
-                Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
-                aURL = xContentAccess->queryContentIdentifierString();
-                break;
+                sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
+                if ( sName == _sName )
+                {
+                    Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
+                    sURL = xContentAccess->queryContentIdentifierString();
+                    break;
+                }
             }
         }
         xDir->beforeFirst(); // move back to before first record
@@ -519,7 +524,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _s
     {
         OSL_ASSERT(0);
     }
-    return aURL;
+    return sURL;
 }
 // -------------------------------------------------------------------------
 void ODbaseTable::refreshColumns()
@@ -1813,6 +1818,11 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         OSL_ENSURE(0,"ODbaseTable::alterColumn: Exception occured!");
         throw;
     }
+}
+// -----------------------------------------------------------------------------
+Reference< XDatabaseMetaData> ODbaseTable::getMetaData() const
+{
+    return getConnection()->getMetaData();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
