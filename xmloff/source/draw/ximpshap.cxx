@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:16:54 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,10 @@
 #include "xmltoken.hxx"
 #endif
 
+#ifndef _ENHANCED_CUSTOMSHAPE_TOKEN_HXX
+#include "EnhancedCustomShapeToken.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
 #include "XMLImageMapContext.hxx"
 #endif
@@ -187,6 +191,10 @@
 #include "eventimp.hxx"
 #endif
 
+#ifndef _XMLOFF_XIMPCUSTOMSHAPE_HXX_
+#include "ximpcustomshape.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 #include "XMLEmbeddedObjectImportContext.hxx"
 #endif
@@ -194,6 +202,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+using namespace ::xmloff::EnhancedCustomShapeToken;
 
 SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
 {
@@ -2947,4 +2956,139 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
 void SdXMLFrameShapeContext::EndElement()
 {
     SetThumbnail();
+}
+
+TYPEINIT1( SdXMLCustomShapeContext, SdXMLShapeContext );
+
+SdXMLCustomShapeContext::SdXMLCustomShapeContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    uno::Reference< drawing::XShapes >& rShapes)
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SdXMLCustomShapeContext::~SdXMLCustomShapeContext()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_ENGINE ) )
+        {
+            maCustomShapeEngine = rValue;
+            return;
+        }
+        if ( IsXMLToken( rLocalName, XML_DATA ) )
+        {
+            maCustomShapeData = rValue;
+            return;
+        }
+    }
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    // create rectangle shape
+    AddShape("com.sun.star.drawing.CustomShape");
+    if ( mxShape.is() )
+    {
+        // Add, set Style and properties from base shape
+        SetStyle();
+        SetLayer();
+
+        // set pos, size, shear and rotate
+        SetTransformation();
+
+        try
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+            if( xPropSet.is() )
+            {
+                if ( maCustomShapeEngine.getLength() )
+                {
+                    uno::Any aAny;
+                    aAny <<= maCustomShapeEngine;
+                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), aAny );
+                }
+                if ( maCustomShapeData.getLength() )
+                {
+                    uno::Any aAny;
+                    aAny <<= maCustomShapeData;
+                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), aAny );
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+            DBG_ERROR( "could not set enhanced customshape geometry" );
+        }
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
+}
+
+void SdXMLCustomShapeContext::EndElement()
+{
+    if ( maCustomShapeGeometry.size() )
+    {
+        const rtl::OUString sCustomShapeGeometry    ( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+
+        // converting the vector to a sequence
+        uno::Sequence< beans::PropertyValue > aSeq( maCustomShapeGeometry.size() );
+        beans::PropertyValue* pValues = aSeq.getArray();
+        std::vector< beans::PropertyValue >::const_iterator aIter( maCustomShapeGeometry.begin() );
+        std::vector< beans::PropertyValue >::const_iterator aEnd( maCustomShapeGeometry.end() );
+        while ( aIter != aEnd )
+            *pValues++ = *aIter++;
+
+        try
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+            if( xPropSet.is() )
+            {
+                uno::Any aAny;
+                aAny <<= aSeq;
+                xPropSet->setPropertyValue( sCustomShapeGeometry, aAny );
+            }
+        }
+        catch( uno::Exception& )
+        {
+            DBG_ERROR( "could not set enhanced customshape geometry" );
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
+    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext* pContext = NULL;
+    if ( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if ( IsXMLToken( rLocalName, XML_ENHANCED_GEOMETRY ) )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( mxShape,uno::UNO_QUERY );
+            if ( xPropSet.is() )
+                pContext = new XMLEnhancedCustomShapeContext( GetImport(), nPrefix, rLocalName, maCustomShapeGeometry );
+        }
+    }
+    // delegate to parent class if no context could be created
+    if ( NULL == pContext )
+        pContext = SdXMLShapeContext::CreateChildContext( nPrefix, rLocalName,
+                                                         xAttrList);
+    return pContext;
 }
