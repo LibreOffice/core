@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FWS.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:11:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ WMSupportsFWS (Display *display, int screen)
     unsigned long   propItems;
     unsigned long   propBytesAfter;
     unsigned char   *propData;
-    char            propName[30];
+    char            propName[64];
 
     FWS_CLIENT         = XInternAtom(display, "_SUN_FWS_CLIENT",         False);
     FWS_COMM_WINDOW    = XInternAtom(display, "_SUN_FWS_COMM_WINDOW",    False);
@@ -133,7 +133,7 @@ WMSupportsFWS (Display *display, int screen)
     WM_PROTOCOLS       = XInternAtom(display, "WM_PROTOCOLS",            False);
     WM_CHANGE_STATE    = XInternAtom(display, "WM_CHANGE_STATE",         False);
 
-    sprintf (propName, "_SUN_FWS_NEXT_ICON_%d", screen);
+    snprintf (propName, sizeof(propName), "_SUN_FWS_NEXT_ICON_%d", screen);
     fwsIconAtom        = XInternAtom(display, propName, False);
 
     if (XGetWindowProperty (display, DefaultRootWindow (display),
