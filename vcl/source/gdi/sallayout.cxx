@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-02 17:44:48 $
+ *  last change: $Author: vg $ $Date: 2002-08-06 08:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,11 @@
 #endif // _SV_POLY_HXX
 
 #include <limits.h>
+
+#ifdef REMOTE_APPSERVER
+// TODO: cleanup
+#define SalGraphics ImplServerGraphics
+#endif
 
 // =======================================================================
 
