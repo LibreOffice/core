@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 12:43:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,16 @@ class QueueProcessorBase
 {
 public:
     QueueProcessorBase (void);
-    void Start (void);
+    /** Start the processor.  This implementation is timer based and waits
+        an defined amount of time that depends on the given argument before
+        the next entry in the queue is processed.
+        @param nPriorityClass
+            A priority class of 0 tells the processor that a high priority
+            request is waiting in the queue.  The time to wait is thus
+            shorter then that for a low priority request (denoted by a value
+            of 1.)  When the timer is already running it is not modified.
+    */
+    void Start (int nPriorityClass = 0);
     void Stop (void);
 
 protected:
@@ -90,7 +99,8 @@ protected:
 private:
     /// This time controls when to process the next element from the queue.
     Timer maTimer;
-    const ULONG mnTimeBetweenRequests;
+    const ULONG mnTimeBetweenHighPriorityRequests;
+    const ULONG mnTimeBetweenLowPriorityRequests;
     DECL_LINK(ProcessRequest, Timer*);
 };
 
@@ -193,16 +203,9 @@ template <class Queue,
         }
         if (bRequestIsValid)
         {
-#ifdef DEBUG
-            notes::TextLogger::Instance().AppendText (
-                "processing request for page ");
-            notes::TextLogger::Instance().AppendNumber (
-                pRequest->GetPage()->GetPageNum());
-            notes::TextLogger::Instance().AppendText (" with priority class ");
-            notes::TextLogger::Instance().AppendNumber (
+            OSL_TRACE ("processing request for page %d with priority class %d",
+                pRequest->GetPage()->GetPageNum(),
                 nPriorityClass);
-            notes::TextLogger::Instance().AppendText ("\n");
-#endif
             try
             {
                 ::osl::MutexGuard aGuard (maMutex);
@@ -223,11 +226,15 @@ template <class Queue,
             catch (...)
             {
             }
+
+            // Requests of lower priority are processed one at a time.
+            if (mrQueue.GetFrontPriorityClass() > 0)
+                break;
         }
     }
 
     if ( ! mrQueue.IsEmpty())
-        Start();
+        Start(mrQueue.GetFrontPriorityClass());
 }
 
 
