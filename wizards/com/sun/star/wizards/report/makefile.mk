@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: tv $ $Date: 2002-05-28 15:21:55 $
+#   last change: $Author: tv $ $Date: 2002-05-31 09:36:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ JAVAFILES=						\
     ReportDocument.java		\
     ReportWizard.java		\
     CallReportWizard.java	\
-    FillReportDocument.java	\
     tools.java			\
     UNODialogs.java
 
