@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linksrc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:45:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ BOOL SvLinkSource::IsDataComplete() const
     return TRUE;
 }
 
-BOOL SvLinkSource::Connect( SvBaseLink * )
+BOOL SvLinkSource::Connect( SvBaseLink* )
 {
     return TRUE;
 }
