@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localisationoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-31 10:40:38 $
+ *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0 
 SvtLocalisationOptions::SvtLocalisationOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Increase ouer refcount ...
     ++m_nRefCount;
     // ... and initialize ouer data container only if it not already exist!
@@ -422,7 +422,7 @@ SvtLocalisationOptions::SvtLocalisationOptions()
 SvtLocalisationOptions::~SvtLocalisationOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Decrease ouer refcount.
     --m_nRefCount;
     // If last instance was deleted ...
@@ -439,7 +439,7 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
 //*****************************************************************************************************************
 sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsAutoMnemonic();
 }
 
@@ -448,7 +448,7 @@ sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
 //*****************************************************************************************************************
 void SvtLocalisationOptions::SetAutoMnemonic( sal_Bool bState )
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetAutoMnemonic( bState );
 }
 
@@ -457,7 +457,7 @@ void SvtLocalisationOptions::SetAutoMnemonic( sal_Bool bState )
 //*****************************************************************************************************************
 sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetDialogScale();
 }
 
@@ -466,14 +466,14 @@ sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 //*****************************************************************************************************************
 void SvtLocalisationOptions::SetDialogScale( sal_Int32 nScale )
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetDialogScale( nScale );
 }
 
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Mutex& SvtLocalisationOptions::GetInitMutex()
+Mutex& SvtLocalisationOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
     static Mutex* pMutex = NULL;

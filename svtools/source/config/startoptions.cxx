@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-31 11:39:45 $
+ *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ class SvtStartOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool ShowIntro() const;
+        sal_Bool IsIntroEnabled() const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -277,7 +277,7 @@ SvtStartOptions_Impl::~SvtStartOptions_Impl()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtStartOptions_Impl::ShowIntro() const
+sal_Bool SvtStartOptions_Impl::IsIntroEnabled() const
 {
     return m_bShowIntro;
 }
@@ -312,7 +312,7 @@ sal_Int32               SvtStartOptions::m_nRefCount        = 0     ;
 SvtStartOptions::SvtStartOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Increase ouer refcount ...
     ++m_nRefCount;
     // ... and initialize ouer data container only if it not already!
@@ -328,7 +328,7 @@ SvtStartOptions::SvtStartOptions()
 SvtStartOptions::~SvtStartOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Decrease ouer refcount.
     --m_nRefCount;
     // If last instance was deleted ...
@@ -343,16 +343,16 @@ SvtStartOptions::~SvtStartOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtStartOptions::ShowIntro() const
+sal_Bool SvtStartOptions::IsIntroEnabled() const
 {
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->ShowIntro();
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsIntroEnabled();
 }
 
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Mutex& SvtStartOptions::GetInitMutex()
+Mutex& SvtStartOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
     static Mutex* pMutex = NULL;

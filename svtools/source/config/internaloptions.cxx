@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-31 10:38:47 $
+ *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,8 @@ class SvtInternalOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool UseSlotCFG     () const;
-        sal_Bool SendCrashMail  () const;
+        sal_Bool SlotCFGEnabled     () const;
+        sal_Bool CrashMailEnabled   () const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -289,7 +289,7 @@ SvtInternalOptions_Impl::~SvtInternalOptions_Impl()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::UseSlotCFG() const
+sal_Bool SvtInternalOptions_Impl::SlotCFGEnabled() const
 {
     return m_bSlotCFG;
 }
@@ -297,7 +297,7 @@ sal_Bool SvtInternalOptions_Impl::UseSlotCFG() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::SendCrashMail() const
+sal_Bool SvtInternalOptions_Impl::CrashMailEnabled() const
 {
     return m_bSendCrashMail;
 }
@@ -333,7 +333,7 @@ sal_Int32                   SvtInternalOptions::m_nRefCount     = 0     ;
 SvtInternalOptions::SvtInternalOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Increase ouer refcount ...
     ++m_nRefCount;
     // ... and initialize ouer data container only if it not already!
@@ -349,7 +349,7 @@ SvtInternalOptions::SvtInternalOptions()
 SvtInternalOptions::~SvtInternalOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Decrease ouer refcount.
     --m_nRefCount;
     // If last instance was deleted ...
@@ -364,25 +364,25 @@ SvtInternalOptions::~SvtInternalOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtInternalOptions::UseSlotCFG() const
+sal_Bool SvtInternalOptions::SlotCFGEnabled() const
 {
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->UseSlotCFG();
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->SlotCFGEnabled();
 }
 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtInternalOptions::SendCrashMail() const
+sal_Bool SvtInternalOptions::CrashMailEnabled() const
 {
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->SendCrashMail();
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->CrashMailEnabled();
 }
 
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Mutex& SvtInternalOptions::GetInitMutex()
+Mutex& SvtInternalOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
     static Mutex* pMutex = NULL;

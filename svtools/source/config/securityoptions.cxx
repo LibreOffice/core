@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-31 11:38:09 $
+ *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,14 @@
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+
+#ifndef _WLDCRD_HXX
+#include <tools/wldcrd.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -183,10 +191,12 @@ class SvtSecurityOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        Sequence< OUString >    GetSecureURLs   (                                           ) const ;
-        void                    SetSecureURLs   ( const Sequence< OUString >&   seqURLList  )       ;
-        EBasicSecurityMode      GetBasicMode    (                                           ) const ;
-        void                    SetBasicMode    ( EBasicSecurityMode            eMode       )       ;
+        Sequence< OUString >    GetSecureURLs   (                                               ) const ;
+        void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList  )       ;
+        EBasicSecurityMode      GetBasicMode    (                                               ) const ;
+        void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
+        sal_Bool                IsSecureURL     (   const   OUString&               sURL        ,
+                                                    const   OUString&               sReferer    ) const ;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -215,8 +225,8 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
     private:
 
-        Sequence< OUString >    m_seqSecureURL      ;
-        sal_Int32               m_nStarOfficeBasic  ;
+        Sequence< OUString >    m_seqSecureURLs     ;
+        EBasicSecurityMode      m_eBasicMode    ;
 };
 
 //_________________________________________________________________________________________________________________
@@ -230,8 +240,8 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_SECURITY         )
     // Init member then.
-    ,   m_seqSecureURL      ( DEFAULT_SECUREURL         )
-    ,   m_nStarOfficeBasic  ( DEFAULT_STAROFFICEBASIC   )
+    ,   m_seqSecureURLs     ( DEFAULT_SECUREURL         )
+    ,   m_eBasicMode    ( DEFAULT_STAROFFICEBASIC   )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -253,13 +263,15 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
         {
             case PROPERTYHANDLE_SECUREURL       :   {
                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nWho has changed the value type of \"Security\\SecureURL\"?" );
-                                                        seqValues[nProperty] >>= m_seqSecureURL;
+                                                        seqValues[nProperty] >>= m_seqSecureURLs;
                                                     }
                                                     break;
 
             case PROPERTYHANDLE_STAROFFICEBASIC :   {
                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nWho has changed the value type of \"Security\\StarOfficeBasic\"?" );
-                                                        seqValues[nProperty] >>= m_nStarOfficeBasic;
+                                                        sal_Int32 nMode;
+                                                        seqValues[nProperty] >>= nMode;
+                                                        m_eBasicMode = (EBasicSecurityMode)nMode;
                                                     }
                                                     break;
         }
@@ -299,13 +311,15 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
         if( seqPropertyNames[nProperty] == PROPERTYNAME_SECUREURL )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\SecureURL\"?" );
-            seqValues[nProperty] >>= m_seqSecureURL;
+            seqValues[nProperty] >>= m_seqSecureURLs;
         }
         else
         if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\StarOfficeBasic\"?" );
-            seqValues[nProperty] >>= m_nStarOfficeBasic;
+            sal_Int32 nMode;
+            seqValues[nProperty] >>= nMode;
+            m_eBasicMode = (EBasicSecurityMode)nMode;
         }
         #ifdef DEBUG
         else DBG_ASSERT( sal_False, "SvtSecurityOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
@@ -327,12 +341,12 @@ void SvtSecurityOptions_Impl::Commit()
         switch( nProperty )
         {
             case PROPERTYHANDLE_SECUREURL       :   {
-                                                        seqValues[nProperty] <<= m_seqSecureURL;
+                                                        seqValues[nProperty] <<= m_seqSecureURLs;
                                                     }
                                                     break;
 
             case PROPERTYHANDLE_STAROFFICEBASIC :   {
-                                                        seqValues[nProperty] <<= m_nStarOfficeBasic;
+                                                        seqValues[nProperty] <<= (sal_Int32)m_eBasicMode;
                                                     }
                                                     break;
         }
@@ -346,7 +360,7 @@ void SvtSecurityOptions_Impl::Commit()
 //*****************************************************************************************************************
 Sequence< OUString > SvtSecurityOptions_Impl::GetSecureURLs() const
 {
-    return m_seqSecureURL;
+    return m_seqSecureURLs;
 }
 
 //*****************************************************************************************************************
@@ -354,7 +368,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetSecureURLs() const
 //*****************************************************************************************************************
 void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLList )
 {
-    m_seqSecureURL = seqURLList;
+    m_seqSecureURLs = seqURLList;
     SetModified();
 }
 
@@ -363,7 +377,7 @@ void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLL
 //*****************************************************************************************************************
 EBasicSecurityMode SvtSecurityOptions_Impl::GetBasicMode() const
 {
-    return ((EBasicSecurityMode)m_nStarOfficeBasic);
+    return m_eBasicMode;
 }
 
 //*****************************************************************************************************************
@@ -371,8 +385,76 @@ EBasicSecurityMode SvtSecurityOptions_Impl::GetBasicMode() const
 //*****************************************************************************************************************
 void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
 {
-    m_nStarOfficeBasic = ((sal_Int32)eMode);
+    m_eBasicMode = eMode;
     SetModified();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
+                                                const   OUString&   sReferer) const
+{
+    // Set defult return value to "NO" ...
+    // If anything goes wrong at follow operations - it's better to say "THIS URL ISN'T SECURE!"! - I think so.
+    // Implement follow code to change these state to true only ...
+    // All cases which will return false too are "ignored" ...
+    sal_Bool bState = sal_False;
+
+    //  1)  Scripting completly impossible?
+    //      Don't check these state ... because we have set ouer return value to FALSE ...
+    //      See begin of method for further informations.
+
+    //  2)  Scripting always allowed!
+    //      Set return value to TRUE.
+    if( m_eBasicMode == eALWAYS_EXECUTE )
+    {
+        bState = sal_True;
+    }
+    else
+    //  3)  Scripting allowed if URL in list!
+    if( m_eBasicMode == eFROM_LIST )
+    {
+        // Check for uncritical protocols first!
+        // All protocols different from "macro..." and "slot..." are secure per definition and must not be checked.
+        // There exist two exceptions - "macro://#..." and "slot:5500"!
+        INetURLObject   aURL        ( sURL );
+        INetProtocol    aProtocol   = aURL.GetProtocol();
+        if  (
+                (
+                    ( aProtocol !=  INET_PROT_MACRO )   &&
+                    ( aProtocol !=  INET_PROT_SLOT  )
+                )   ||
+                ( aURL.GetMainURL().CompareIgnoreCaseToAscii( "macro://#", 9 )  ==  COMPARE_EQUAL   )   ||
+                ( aURL.GetMainURL().CompareIgnoreCaseToAscii( "slot:5500"    )  ==  COMPARE_EQUAL   )
+            )
+        {
+            bState = sal_True;
+        }
+        // All other URLs must checked in combination with referer and internal informations about security!
+        else
+        {
+            // Trusted referer given?
+            // NO  => bState will be false per default!
+            // YES => Search it in ouer internal url list.
+            if( sReferer.getLength() > 0 )
+            {
+                // Search in internal list ...
+                sal_uInt32 nCount = m_seqSecureURLs.getLength();
+                for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
+                {
+                    OUString sCheckURL = m_seqSecureURLs[nItem]+'*';
+                    if( WildCard( sCheckURL ).Matches( sReferer ) == sal_True )
+                    {
+                        bState = sal_True;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    // Return result of operation.
+    return bState;
 }
 
 //*****************************************************************************************************************
@@ -468,6 +550,16 @@ void SvtSecurityOptions::SetBasicMode( EBasicSecurityMode eMode )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetBasicMode( eMode );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtSecurityOptions::IsSecureURL(   const   OUString&   sURL        ,
+                                            const   OUString&   sReferer    ) const
+{
+    MutexGuard aGuard( GetInitMutex() );
+    return m_pDataContainer->IsSecureURL( sURL, sReferer );
 }
 
 //*****************************************************************************************************************

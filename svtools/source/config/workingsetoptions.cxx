@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workingsetoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-31 11:41:53 $
+ *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ sal_Int32                   SvtWorkingSetOptions::m_nRefCount       = 0     ;
 SvtWorkingSetOptions::SvtWorkingSetOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Increase ouer refcount ...
     ++m_nRefCount;
     // ... and initialize ouer data container only if it not already exist!
@@ -380,7 +380,7 @@ SvtWorkingSetOptions::SvtWorkingSetOptions()
 SvtWorkingSetOptions::~SvtWorkingSetOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Decrease ouer refcount.
     --m_nRefCount;
     // If last instance was deleted ...
@@ -397,7 +397,7 @@ SvtWorkingSetOptions::~SvtWorkingSetOptions()
 //*****************************************************************************************************************
 Sequence< OUString > SvtWorkingSetOptions::GetWindowList() const
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetWindowList();
 }
 
@@ -406,14 +406,14 @@ Sequence< OUString > SvtWorkingSetOptions::GetWindowList() const
 //*****************************************************************************************************************
 void SvtWorkingSetOptions::SetWindowList( const Sequence< OUString >& seqWindowList )
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetWindowList( seqWindowList );
 }
 
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Mutex& SvtWorkingSetOptions::GetInitMutex()
+Mutex& SvtWorkingSetOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
     static Mutex* pMutex = NULL;
