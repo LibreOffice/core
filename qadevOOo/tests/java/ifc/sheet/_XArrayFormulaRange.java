@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XArrayFormulaRange.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:32 $
+ *  last change:$Date: 2003-09-08 10:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,16 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.sheet.XArrayFormulaRange;
 import com.sun.star.sheet.XCellRangeAddressable;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.sheet.XArrayFormulaRange</code>
@@ -114,11 +115,9 @@ public class _XArrayFormulaRange extends MultiMethodTest {
         }
 
         boolean result = true;
-        boolean loc_result = true;
         double dresult = 11;
 
         log.println("setArrayFormula() ...");
-        String old_formula = oObj.getArrayFormula();
 
         oObj.setArrayFormula(formula);
 
@@ -205,6 +204,13 @@ public class _XArrayFormulaRange extends MultiMethodTest {
         }
 
         return p1 == s1.length() && p2 == s2.length() ;
+    }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
     }
 }
 
