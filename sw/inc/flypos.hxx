@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flypos.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,4 +94,4 @@ public:
 typedef SwPosFlyFrm* SwPosFlyFrmPtr;
 SV_DECL_PTRARR_SORT( SwPosFlyFrms, SwPosFlyFrmPtr, 0, 40 )
 
-#endif _FLYPOS_HXX
+#endif // _FLYPOS_HXX
