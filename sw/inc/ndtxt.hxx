@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:39:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,8 +386,6 @@ inline SwTxtFmtColl* SwTxtNode::GetTxtColl() const
 // fuer den IBM-Compiler nicht inlinen wg. 42876
 #ifndef ICC
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline       SwTxtNode   *SwNode::GetTxtNode()
 {
      return ND_TEXTNODE == nNodeType ? (SwTxtNode*)this : 0;
@@ -396,7 +394,6 @@ inline const SwTxtNode   *SwNode::GetTxtNode() const
 {
      return ND_TEXTNODE == nNodeType ? (const SwTxtNode*)this : 0;
 }
-#endif
 #endif
 
 inline void SwTxtNode::Cut(SwTxtNode *pDest, const SwIndex &rDestStart,
