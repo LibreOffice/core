@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-12 09:06:49 $
+ *  last change: $Author: pl $ $Date: 2002-09-12 12:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,10 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 // appends a double. PDF does not accept exponential format, only fixed point
 static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision = 5 )
 {
+    bool bNeg = false;
     if( fValue < 0.0 )
     {
-        rBuffer.append( '-' );
+        bNeg = true;
         fValue=-fValue;
     }
 
@@ -126,20 +127,24 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision 
         nInt++;
         fValue = 0.0;
     }
-    rBuffer.append( nInt );
+    sal_Int64 nFrac = 0;
     if( fValue )
     {
         fValue *= pow( 10.0, (double)nPrecision );
-        nInt = (sal_Int64)fValue;
-        while( nInt && ! (nInt % 10 ) )
-            nInt /= 10;
-        if( nInt )
-        {
-            rBuffer.append( '.' );
-            rBuffer.append( nInt );
-        }
+        nFrac = (sal_Int64)fValue;
+        while( nFrac && ! (nFrac % 10 ) )
+            nFrac /= 10;
     }
-}
+
+    if( bNeg && ( nInt || nFrac ) )
+        rBuffer.append( '-' );
+    rBuffer.append( nInt );
+    if( nFrac )
+    {
+        rBuffer.append( '.' );
+        rBuffer.append( nFrac );
+    }
+ }
 
 
 static void appendColor( const Color& rColor, OStringBuffer& rBuffer )
@@ -1521,6 +1526,14 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
 
 sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode* pUnicodes, int nGlyphs )
 {
+    int nMapped = 0, n = 0;
+    for( n = 0; n < nGlyphs; n++ )
+        if( pUnicodes[n] )
+            nMapped++;
+
+    if( nMapped == 0 )
+        return 0;
+
     sal_Int32 nStream = createObject();
     CHECK_RETURN( updateObject( nStream ) );
 
@@ -1540,22 +1553,29 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
                      "<0000> <FFFF>\r\n"
                      "endcodespacerange\r\n"
                      );
-    for( int n = 0; n < 3 && 100*n < nGlyphs; n++ )
+    int nCount = 0;
+    for( n = 0; n < nGlyphs; n++ )
     {
-        aContents.append( (sal_Int32)((nGlyphs > 100*(n+1)) ? 100 : nGlyphs-100*n ) );
-        aContents.append( " beginbfchar\r\n" );
-        for( int i = n*100; i < nGlyphs && i < (nGlyphs-100*n); i++ )
+        if( pUnicodes[n] )
         {
+            if( (nCount % 100) == 0 )
+            {
+                if( nCount )
+                    aContents.append( "endbfchar\r\n" );
+                aContents.append( (sal_Int32)((nMapped-nCount > 100) ? 100 : nMapped-nCount ) );
+                aContents.append( " beginbfchar\r\n" );
+            }
             aContents.append( '<' );
-            appendHex( (sal_Int8)pEncoding[i], aContents );
+            appendHex( (sal_Int8)pEncoding[n], aContents );
             aContents.append( "> <" );
-            appendHex( (sal_Int8)(pUnicodes[i] / 256), aContents );
-            appendHex( (sal_Int8)(pUnicodes[i] & 255), aContents );
+            appendHex( (sal_Int8)(pUnicodes[n] / 256), aContents );
+            appendHex( (sal_Int8)(pUnicodes[n] & 255), aContents );
             aContents.append( ">\r\n" );
+            nCount++;
         }
-        aContents.append( "endbfchar\r\n" );
     }
-    aContents.append( "endcmap\r\n"
+    aContents.append( "endbfchar\r\n"
+                      "endcmap\r\n"
                       "CMapName currentdict /CMap defineresource pop\r\n"
                       "end\r\n"
                       "end\r\n" );
@@ -2218,7 +2238,8 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
     sal_Unicode pUnicodes[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
-    long pAdvanceWidths[nMaxGlyphs];
+    long nAdvanceWidths[nMaxGlyphs];
+    long *pAdvanceWidths = m_aCurrentPDFState.m_aFont.IsVertical() ? nAdvanceWidths : NULL;
     long nGlyphFlags[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
@@ -2254,13 +2275,10 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         else if ( eAlign == ALIGN_TOP )
             aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
 
-        bool bSinglePlacement = false;
         for( int i = 0; i < nGlyphs; i++ )
         {
             nGlyphFlags[i] = (pGlyphs[i] & GF_FLAGMASK);
             pGlyphs[i] &= GF_IDXMASK;
-            if( nGlyphFlags[i] & GF_ROTMASK )
-                bSinglePlacement = true;
             if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
                 pUnicodes[i] = rText.GetChar( pCharPosAry[i] );
             else
@@ -2276,7 +2294,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         double fSin = sin( fAngle );
         double fCos = cos( fAngle );
 
-        if( m_aCurrentPDFState.m_aFont.IsVertical() && bSinglePlacement )
+        if( pAdvanceWidths )
         {
             // have to emit each glyph on its own
             long nXOffset = 0;
