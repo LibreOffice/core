@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-14 11:44:54 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 11:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,54 +630,57 @@ bool PrinterInfoManager::writePrinterConfig()
         if( ! it->second.m_aGroup.getLength() ) // probably a new printer
             it->second.m_aGroup = OString( it->first.getStr(), it->first.getLength(), RTL_TEXTENCODING_UTF8 );
 
-        Config* pConfig = files[ it->second.m_aFile ];
-        pConfig->DeleteGroup( it->second.m_aGroup ); // else some old keys may remain
-        pConfig->SetGroup( it->second.m_aGroup );
-
-        ByteString aValue( String( it->second.m_aInfo.m_aDriverName ), RTL_TEXTENCODING_UTF8 );
-        aValue += '/';
-        aValue += ByteString( String( it->first ), RTL_TEXTENCODING_UTF8 );
-        pConfig->WriteKey( "Printer", aValue );
-        pConfig->WriteKey( "DefaultPrinter", it->first == m_aDefaultPrinter ? "1" : "0" );
-        pConfig->WriteKey( "Location", ByteString( String( it->second.m_aInfo.m_aLocation ), RTL_TEXTENCODING_UTF8 ) );
-        pConfig->WriteKey( "Comment", ByteString( String( it->second.m_aInfo.m_aComment ), RTL_TEXTENCODING_UTF8 ) );
-        pConfig->WriteKey( "Command", ByteString( String( it->second.m_aInfo.m_aCommand ), RTL_TEXTENCODING_UTF8 ) );
-        pConfig->WriteKey( "Features", ByteString( String( it->second.m_aInfo.m_aFeatures ), RTL_TEXTENCODING_UTF8 ) );
-        pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
-        pConfig->WriteKey( "Scale", ByteString::CreateFromInt32( it->second.m_aInfo.m_nScale ) );
-        pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
-        pConfig->WriteKey( "PSLevel", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPSLevel ) );
-        pConfig->WriteKey( "ColorDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDevice ) );
-        pConfig->WriteKey( "ColorDepth", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDepth ) );
-        aValue = ByteString::CreateFromInt32( it->second.m_aInfo.m_nLeftMarginAdjust );
-        aValue += ',';
-        aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nRightMarginAdjust );
-        aValue += ',';
-        aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nTopMarginAdjust );
-        aValue += ',';
-        aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nBottomMarginAdjust );
-        pConfig->WriteKey( "MarginAdjust", aValue );
-
-        // write PPDContext
-        for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
+        if( files.find( it->second.m_aFile ) != files.end() )
         {
-            const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
-            ByteString aKey( "PPD_" );
-            aKey += ByteString( pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1 );
+            Config* pConfig = files[ it->second.m_aFile ];
+            pConfig->DeleteGroup( it->second.m_aGroup ); // else some old keys may remain
+            pConfig->SetGroup( it->second.m_aGroup );
 
-            const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
-            aValue = pValue ? ByteString( pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ) : ByteString( "*nil" );
-            pConfig->WriteKey( aKey, aValue );
-        }
+            ByteString aValue( String( it->second.m_aInfo.m_aDriverName ), RTL_TEXTENCODING_UTF8 );
+            aValue += '/';
+            aValue += ByteString( String( it->first ), RTL_TEXTENCODING_UTF8 );
+            pConfig->WriteKey( "Printer", aValue );
+            pConfig->WriteKey( "DefaultPrinter", it->first == m_aDefaultPrinter ? "1" : "0" );
+            pConfig->WriteKey( "Location", ByteString( String( it->second.m_aInfo.m_aLocation ), RTL_TEXTENCODING_UTF8 ) );
+            pConfig->WriteKey( "Comment", ByteString( String( it->second.m_aInfo.m_aComment ), RTL_TEXTENCODING_UTF8 ) );
+            pConfig->WriteKey( "Command", ByteString( String( it->second.m_aInfo.m_aCommand ), RTL_TEXTENCODING_UTF8 ) );
+            pConfig->WriteKey( "Features", ByteString( String( it->second.m_aInfo.m_aFeatures ), RTL_TEXTENCODING_UTF8 ) );
+            pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
+            pConfig->WriteKey( "Scale", ByteString::CreateFromInt32( it->second.m_aInfo.m_nScale ) );
+            pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
+            pConfig->WriteKey( "PSLevel", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPSLevel ) );
+            pConfig->WriteKey( "ColorDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDevice ) );
+            pConfig->WriteKey( "ColorDepth", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDepth ) );
+            aValue = ByteString::CreateFromInt32( it->second.m_aInfo.m_nLeftMarginAdjust );
+            aValue += ',';
+            aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nRightMarginAdjust );
+            aValue += ',';
+            aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nTopMarginAdjust );
+            aValue += ',';
+            aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nBottomMarginAdjust );
+            pConfig->WriteKey( "MarginAdjust", aValue );
 
-        // write font substitution table
-        pConfig->WriteKey( "PerformFontSubstitution", it->second.m_aInfo.m_bPerformFontSubstitution ? "true" : "false" );
-        for( ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
-             subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
-        {
-            ByteString aKey( "SubstFont_" );
-            aKey.Append( OUStringToOString( subst->first, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-            pConfig->WriteKey( aKey, OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
+            // write PPDContext
+            for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
+            {
+                const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
+                ByteString aKey( "PPD_" );
+                aKey += ByteString( pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1 );
+
+                const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
+                aValue = pValue ? ByteString( pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ) : ByteString( "*nil" );
+                pConfig->WriteKey( aKey, aValue );
+            }
+
+            // write font substitution table
+            pConfig->WriteKey( "PerformFontSubstitution", it->second.m_aInfo.m_bPerformFontSubstitution ? "true" : "false" );
+            for( ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
+                 subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
+            {
+                ByteString aKey( "SubstFont_" );
+                aKey.Append( OUStringToOString( subst->first, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                pConfig->WriteKey( aKey, OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
+            }
         }
     }
 
@@ -735,7 +738,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
 
 // -----------------------------------------------------------------
 
-bool PrinterInfoManager::removePrinter( const OUString& rPrinterName )
+bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bCheckOnly )
 {
     bool bSuccess = true;
 
@@ -748,14 +751,14 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName )
             // check writeability of config file
             if( ! checkWriteability( it->second.m_aFile ) )
                 bSuccess = false;
-            else
+            else if( ! bCheckOnly )
             {
                 Config aConfig( it->second.m_aFile );
                 aConfig.DeleteGroup( it->second.m_aGroup );
                 aConfig.Flush();
             }
         }
-        if( bSuccess )
+        if( bSuccess && ! bCheckOnly )
         {
             m_aPrinters.erase( it );
             // need this here because someone may call

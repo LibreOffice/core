@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:32 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 11:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,10 +185,12 @@ public:
     // or the driver does not exist
     bool addPrinter( const ::rtl::OUString& rPrinterName, const ::rtl::OUString& rDriverName );
 
-    // remove a namend printer
+    // remove a named printer
     // this fails if the config file belonging to this printer
     // is not writeable
-    bool removePrinter( const ::rtl::OUString& rPrinterName );
+    // if bCheckOnly is true, the printer is not really removed;
+    // this is for checking if the removal would fail
+    bool removePrinter( const ::rtl::OUString& rPrinterName, bool bCheckOnly = false );
 
     // save the changes to all printers. this fails if there
     // is no writable config file at all
