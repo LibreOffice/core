@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: th $ $Date: 2001-02-06 20:38:32 $
+ *  last change: $Author: th $ $Date: 2001-02-23 16:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,6 @@ DBG_NAMEEX( Font );
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
-
 
 // =======================================================================
 
@@ -1565,8 +1564,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     FontPitch ePitch            = rFont.GetPitch();
     short nOrientation          = (short)(rFont.GetOrientation() % 3600);
     BOOL bVertical              = rFont.IsVertical();
-    BOOL bShadow                = rFont.IsShadow();
-    BOOL bOutline               = rFont.IsOutline();
 
     // Groesse anpassen
     if ( nHeight < 0 )
@@ -2337,6 +2334,36 @@ void ImplMultiTextLineInfo::Clear()
 
 // =======================================================================
 
+static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont )
+{
+    FontEmphasisMark nEmphasisMark = rFont.GetEmphasisMark();
+
+    // If no Position is set, then calculate the default position, which
+    // depends on the language
+    if ( !(nEmphasisMark & (EMPHASISMARK_POS_ABOVE | EMPHASISMARK_POS_BELOW)) )
+    {
+        LanguageType eLang = rFont.GetLanguage();
+        // In Chinese Simplified the EmphasisMarks are below/left
+        if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) &&
+             (eLang == LANGUAGE_CHINESE_SINGAPORE) )
+            nEmphasisMark |= EMPHASISMARK_POS_BELOW;
+        else
+        {
+            eLang = rFont.GetCJKContextLanguage();
+            // In Chinese Simplified the EmphasisMarks are below/left
+            if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) &&
+                 (eLang == LANGUAGE_CHINESE_SINGAPORE) )
+                nEmphasisMark |= EMPHASISMARK_POS_BELOW;
+            else
+                nEmphasisMark |= EMPHASISMARK_POS_ABOVE;
+        }
+    }
+
+    return nEmphasisMark;
+}
+
+// =======================================================================
+
 void OutputDevice::ImplInitFont()
 {
     DBG_TESTSOLARMUTEX();
@@ -2510,6 +2537,21 @@ int OutputDevice::ImplNewFont()
     else
         mbKerning = FALSE;
 
+    // Calculate the EmphasisArea
+    mnEmphasisAscent = 0;
+    mnEmphasisDescent = 0;
+    if ( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
+    {
+        FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
+        long                nEmphasisHeight = (pFontEntry->mnLineHeight*200)/1000;
+        if ( nEmphasisHeight < 1 )
+            nEmphasisHeight = 1;
+        if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
+            mnEmphasisDescent = nEmphasisHeight;
+        else
+            mnEmphasisAscent = nEmphasisHeight;
+    }
+
     // Je nach TextAlign den TextOffset berechnen
     TextAlign eAlign = maFont.GetAlign();
     if ( eAlign == ALIGN_BASELINE )
@@ -2522,13 +2564,13 @@ int OutputDevice::ImplNewFont()
         if ( pFontEntry->mnOrientation )
         {
             mnTextOffX = 0;
-            mnTextOffY = pFontEntry->maMetric.mnAscent;
+            mnTextOffY = pFontEntry->maMetric.mnAscent+mnEmphasisAscent;
             ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
         }
         else
         {
             mnTextOffX = 0;
-            mnTextOffY = pFontEntry->maMetric.mnAscent;
+            mnTextOffY = pFontEntry->maMetric.mnAscent+mnEmphasisAscent;
         }
     }
     else // eAlign == ALIGN_BOTTOM
@@ -2536,19 +2578,20 @@ int OutputDevice::ImplNewFont()
         if ( pFontEntry->mnOrientation )
         {
             mnTextOffX = 0;
-            mnTextOffY = -pFontEntry->maMetric.mnDescent;
+            mnTextOffY = -pFontEntry->maMetric.mnDescent+mnEmphasisDescent;
             ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
         }
         else
         {
             mnTextOffX = 0;
-            mnTextOffY = -pFontEntry->maMetric.mnDescent;
+            mnTextOffY = -pFontEntry->maMetric.mnDescent+mnEmphasisDescent;
         }
     }
 
     mbTextLines     = ((maFont.GetUnderline() != UNDERLINE_NONE) && (maFont.GetUnderline() != UNDERLINE_DONTKNOW)) ||
                       ((maFont.GetStrikeout() != STRIKEOUT_NONE) && (maFont.GetStrikeout() != STRIKEOUT_DONTKNOW));
-    mbTextSpecial   = maFont.IsShadow() || maFont.IsOutline();
+    mbTextSpecial   = maFont.IsShadow() || maFont.IsOutline() ||
+                      (maFont.GetRelief() != RELIEF_NONE);
 
     if ( pOldEntry )
         mpFontCache->Release( pOldEntry );
@@ -2846,7 +2889,6 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
     return nWidth;
 }
 
-
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
@@ -2903,9 +2945,9 @@ void OutputDevice::ImplDrawTextBackground( long nX, long nY,
     mpGraphics->SetFillColor( ImplColorToSal( GetTextFillColor() ) );
     mbInitFillColor = TRUE;
 
-    ImplDrawTextRect( nX, nY, nX, nY-mpFontEntry->maMetric.mnAscent,
+    ImplDrawTextRect( nX, nY, nX, nY-mpFontEntry->maMetric.mnAscent-mnEmphasisAscent,
                       ImplGetTextWidth( pStr, nLen, pDXAry ),
-                      mpFontEntry->mnLineHeight );
+                      mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 #else
     Color aOldLineColor = GetLineColor();
     Color aOldFillColor = GetFillColor();
@@ -2915,9 +2957,9 @@ void OutputDevice::ImplDrawTextBackground( long nX, long nY,
         ImplInitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
-    ImplDrawTextRect( nX, nY, nX, nY-mpFontEntry->maMetric.mnAscent,
+    ImplDrawTextRect( nX, nY, nX, nY-mpFontEntry->maMetric.mnAscent-mnEmphasisAscent,
                       ImplGetTextWidth( pStr, nLen, pDXAry ),
-                      mpFontEntry->mnLineHeight );
+                      mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
 #endif
@@ -2929,7 +2971,7 @@ Rectangle OutputDevice::ImplGetTextBoundRect( long nX, long nY,
                                               const xub_Unicode* pStr, xub_StrLen nLen,
                                               const long* pDXAry )
 {
-    if( !nLen )
+    if ( !nLen )
         return Rectangle();
 
     if ( mbNewFont )
@@ -2939,9 +2981,10 @@ Rectangle OutputDevice::ImplGetTextBoundRect( long nX, long nY,
         ImplInitFont();
 
     long nBaseX = nX, nBaseY = nY;
-    long nWidth = ImplGetTextWidth( pStr, nLen, pDXAry ), nHeight = mpFontEntry->mnLineHeight;
+    long nWidth = ImplGetTextWidth( pStr, nLen, pDXAry );
+    long nHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
 
-    nY -= mpFontEntry->maMetric.mnAscent;
+    nY -= mpFontEntry->maMetric.mnAscent+mnEmphasisAscent;
 
     if ( mpFontEntry->mnOrientation )
     {
@@ -3662,7 +3705,7 @@ static BOOL ImplIsLineCharacter( sal_Unicode c )
     // !(Control+Space, C1-Control+HardSpace, General Space Punctuation)
     if ( ((c > 0x0020) && (c < 0x0080)) ||
          ((c > 0x00A0) && (c < 0x2000)) ||
-         ((c > 0x200F) && (c < 0x00FE)) )
+         (c > 0x200F) )
         return TRUE;
     return FALSE;
 }
@@ -3722,6 +3765,276 @@ void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, xub_Unicode c )
 
 // -----------------------------------------------------------------------
 
+void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
+                                        Rectangle& rRect1, Rectangle& rRect2,
+                                        long& rYOff, long& rWidth,
+                                        FontEmphasisMark eEmphasis,
+                                        long nHeight, short nOrient )
+{
+    static const BYTE aAccentPolyFlags[24] =
+    {
+        0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 0, 2, 0, 2, 2
+    };
+
+    static const long aAccentPos[48] =
+    {
+         78,      0,
+        348,     79,
+        599,    235,
+        843,    469,
+        938,    574,
+        990,    669,
+        990,    773,
+        990,    843,
+        964,    895,
+        921,    947,
+        886,    982,
+        860,    999,
+        825,    999,
+        764,    999,
+        721,    964,
+        686,    895,
+        625,    791,
+        556,    660,
+        469,    504,
+        400,    400,
+        261,    252,
+         61,     61,
+          0,     27,
+          9,      0
+    };
+
+    rWidth      = 0;
+    rYOff       = 0;
+    rPolyLine   = FALSE;
+
+    if ( !nHeight )
+        return;
+
+    FontEmphasisMark    nEmphasisStyle = eEmphasis & EMPHASISMARK_STYLE;
+    long                nDotSize = 0;
+    switch ( nEmphasisStyle )
+    {
+        case EMPHASISMARK_DOT:
+            // Dot has 50% of the height
+            nDotSize = (nHeight*500)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+            else
+            {
+                long nRad = nDotSize/2;
+                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                rPolyPoly.Insert( aPoly );
+            }
+            rYOff = ((nHeight*250)/1000)/2; // Center to the anthoer EmphasisMarks
+            rWidth = nDotSize;
+            break;
+
+        case EMPHASISMARK_CIRCLE:
+            // Dot has 75% of the height
+            nDotSize = (nHeight*750)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+            else
+            {
+                long nRad = nDotSize/2;
+                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                rPolyPoly.Insert( aPoly );
+                // BorderWidth is 15%
+                long nBorder = (nDotSize*150)/1000;
+                if ( nBorder <= 1 )
+                    rPolyLine = TRUE;
+                else
+                {
+                    Polygon aPoly2( Point( nRad, nRad ),
+                                    nRad-nBorder, nRad-nBorder );
+                    rPolyPoly.Insert( aPoly2 );
+                }
+            }
+            rWidth = nDotSize;
+            break;
+
+        case EMPHASISMARK_DISC:
+            // Dot has 75% of the height
+            nDotSize = (nHeight*750)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+            else
+            {
+                long nRad = nDotSize/2;
+                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                rPolyPoly.Insert( aPoly );
+            }
+            rWidth = nDotSize;
+            break;
+
+        case EMPHASISMARK_ACCENT:
+            // Dot has 75% of the height
+            nDotSize = (nHeight*750)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+            {
+                if ( nDotSize == 1 )
+                {
+                    rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+                    rWidth = nDotSize;
+                }
+                else
+                {
+                    rRect1 = Rectangle( Point(), Size( 1, 1 ) );
+                    rRect2 = Rectangle( Point( 1, 1 ), Size( 1, 1 ) );
+                }
+            }
+            else
+            {
+                Polygon aPoly( sizeof( aAccentPos ) / sizeof( long ) / 2,
+                               (const Point*)aAccentPos,
+                               NULL ); // aAccentPolyFlags );
+                double dScale = ((double)nDotSize)/1000.0;
+                aPoly.Scale( dScale, dScale );
+                Rectangle aBoundRect = aPoly.GetBoundRect();
+                rWidth = aBoundRect.GetWidth();
+                nDotSize = aBoundRect.GetHeight();
+                if ( nOrient )
+                    aPoly.Rotate( Point( 0, 0 ), nOrient );
+                rPolyPoly.Insert( aPoly );
+            }
+            break;
+    }
+
+    // Calculate Position
+    long nOffY = 1+(mnDPIY/300); // One visible pixel space
+    long nSpaceY = nHeight-nDotSize;
+    if ( nSpaceY >= nOffY*2 )
+        rYOff += nOffY;
+    if ( !(eEmphasis & EMPHASISMARK_POS_BELOW) )
+        rYOff += nDotSize;
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::ImplDrawEmphasisMark( long nX, long nY,
+                                         const PolyPolygon& rPolyPoly, BOOL bPolyLine,
+                                         const Rectangle& rRect1, const Rectangle& rRect2 )
+{
+    if ( rPolyPoly.Count() )
+    {
+        if ( bPolyLine )
+        {
+            Polygon aPoly = rPolyPoly.GetObject( 0 );
+            aPoly.Move( nX, nY );
+            DrawPolyLine( aPoly );
+        }
+        else
+        {
+            PolyPolygon aPolyPoly = rPolyPoly;
+            aPolyPoly.Move( nX, nY );
+            DrawPolyPolygon( aPolyPoly );
+        }
+    }
+
+    if ( !rRect1.IsEmpty() )
+    {
+        Rectangle aRect( Point( nX+rRect1.Left(),
+                                nY+rRect1.Top() ), rRect1.GetSize() );
+        DrawRect( aRect );
+    }
+
+    if ( !rRect2.IsEmpty() )
+    {
+        Rectangle aRect( Point( nX+rRect2.Left(),
+                                nY+rRect2.Top() ), rRect2.GetSize() );
+        DrawRect( aRect );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::ImplDrawEmphasisMarks( long nX, long nY,
+                                          const sal_Unicode* pStr, xub_StrLen nLen,
+                                          const long* pDXAry )
+{
+    Color               aOldColor       = GetTextColor();
+    Color               aOldLineColor   = GetLineColor();
+    Color               aOldFillColor   = GetFillColor();
+    BOOL                bOldMap         = mbMap;
+    GDIMetaFile*        pOldMetaFile    = mpMetaFile;
+    mpMetaFile = NULL;
+    mbMap = FALSE;
+
+    FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
+    PolyPolygon         aPolyPoly;
+    Rectangle           aRect1;
+    Rectangle           aRect2;
+    long                nEmphasisYOff;
+    long                nEmphasisWidth;
+    long                nEmphasisHeight;
+    BOOL                bPolyLine;
+
+    if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
+        nEmphasisHeight = mnEmphasisDescent;
+    else
+        nEmphasisHeight = mnEmphasisAscent;
+
+    ImplGetEmphasisMark( aPolyPoly, bPolyLine,
+                         aRect1, aRect2,
+                         nEmphasisYOff, nEmphasisWidth,
+                         nEmphasisMark,
+                         nEmphasisHeight, mpFontEntry->mnOrientation );
+
+    if ( bPolyLine )
+    {
+        SetLineColor( GetTextColor() );
+        SetFillColor();
+    }
+    else
+    {
+        SetLineColor();
+        SetFillColor( GetTextColor() );
+    }
+
+    long                nOffX = nX - mnOutOffX;
+    long                nOffY = nY - mnOutOffY;
+    long                nBaseX = nOffX;
+    long                nBaseY = nOffY;
+    xub_StrLen          i = 0;
+    if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
+        nOffY += mpFontEntry->maMetric.mnDescent+nEmphasisYOff;
+    else
+        nOffY -= mpFontEntry->maMetric.mnAscent+nEmphasisYOff;
+    while ( i < nLen )
+    {
+        if ( ImplIsLineCharacter( *(pStr+i) ) )
+        {
+            long nStartX = ImplGetTextWidth( pStr, i, pDXAry );
+            long nEndX = ImplGetTextWidth( pStr, i+1, pDXAry );
+            long nOutX = nOffX + nStartX + ((nEndX-nStartX-nEmphasisWidth)/2);
+            long nOutY = nOffY;
+            if ( mpFontEntry->mnOrientation )
+                ImplRotatePos( nBaseX, nBaseY, nOutX, nOutY, mpFontEntry->mnOrientation );
+            ImplDrawEmphasisMark( nOutX, nOutY,
+                                  aPolyPoly, bPolyLine,
+                                  aRect1, aRect2 );
+        }
+
+        i++;
+    }
+
+    SetLineColor( aOldLineColor );
+    SetFillColor( aOldFillColor );
+    mbMap = bOldMap;
+    mpMetaFile = pOldMetaFile;
+}
+
+// -----------------------------------------------------------------------
+
 BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
                                        const xub_Unicode* pStr, xub_StrLen nLen,
                                        const long* pDXAry )
@@ -3730,9 +4043,10 @@ BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
         ImplInitOutDevData();
     if ( !mpOutDevData->mpRotateDev )
         mpOutDevData->mpRotateDev = new VirtualDevice( *this, 1 );
+
     VirtualDevice*  pVDev = mpOutDevData->mpRotateDev;
     long            nWidth = ImplGetTextWidth( pStr, nLen, pDXAry );
-    long            nHeight = mpFontEntry->mnLineHeight;
+    long            nHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
     Size            aSize( nWidth, nHeight );
 
     if ( pVDev->SetOutputSizePixel( aSize ) )
@@ -3758,6 +4072,7 @@ BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
 
         aFont.SetShadow( FALSE );
         aFont.SetOutline( FALSE );
+        aFont.SetRelief( RELIEF_NONE );
         aFont.SetOrientation( 0 );
         aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
         pVDev->SetFont( aFont );
@@ -3791,7 +4106,7 @@ BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
             mbMap       = FALSE;
 
             DrawMask( Point( nX + aBound.Left(),
-                             nY + aBound.Top() - mpFontEntry->maMetric.mnAscent ),
+                             nY + aBound.Top() - (mpFontEntry->maMetric.mnAscent+mnEmphasisAscent) ),
                       aBmp, GetTextColor() );
 
             mnOutOffX   = nOldOffX;
@@ -3882,6 +4197,12 @@ void OutputDevice::ImplDrawTextDirect( long nX, long nY,
                                maFont.GetUnderline(),
                                maFont.IsWordLineMode() );
         }
+
+        // EmphasisMark
+        if ( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
+        {
+            ImplDrawEmphasisMarks( nX, nY, pStr, nLen, pDXAry );
+        }
     }
 }
 
@@ -3891,47 +4212,93 @@ void OutputDevice::ImplDrawSpecialText( long nX, long nY,
                                         const xub_Unicode* pStr, xub_StrLen nLen,
                                         const long* pDXAry )
 {
-    Color aOldColor = GetTextColor();
-    Color aOldTextLineColor = GetTextLineColor();
+    Color       aOldColor           = GetTextColor();
+    Color       aOldTextLineColor   = GetTextLineColor();
+    FontRelief  eRelief             = maFont.GetRelief();
 
-    if ( maFont.IsShadow() )
+    if ( eRelief != RELIEF_NONE )
     {
-        long nOff = 1 + ((mpFontEntry->mnLineHeight-24)/24);
-        if ( maFont.IsOutline() )
-            nOff++;
-        SetTextLineColor();
-        if ( GetTextColor().GetColor() == COL_BLACK )
-            SetTextColor( Color( COL_LIGHTGRAY ) );
-        else
-            SetTextColor( Color( COL_BLACK ) );
+        Color   aReliefColor( COL_LIGHTGRAY );
+        Color   aTextColor( aOldColor );
+        Color   aTextLineColor( aOldTextLineColor );
+
+        // We don't have a automatic Color, so Black is always drawn
+        // in White
+        if ( aTextColor.GetColor() == COL_BLACK )
+            aTextColor = Color( COL_WHITE );
+        if ( aTextLineColor.GetColor() == COL_BLACK )
+            aTextLineColor = Color( COL_WHITE );
+
+        // Relief-Color is Black for White Text, in all other cases
+        // we set this to LightGray
+        if ( aTextColor.GetColor() == COL_WHITE )
+            aReliefColor = Color( COL_BLACK );
+        SetTextLineColor( aReliefColor );
+        SetTextColor( aReliefColor );
         ImplInitTextColor();
+
+        // Calculate Offset - for High resolution printers the offset
+        // should be greater so that the effect is visible
+        long nOff = 1;
+        nOff += mnDPIX/300;
+
+        if ( eRelief == RELIEF_ENGRAVED )
+            nOff = -nOff;
         ImplDrawTextDirect( nX+nOff, nY+nOff, pStr, nLen, pDXAry, mbTextLines );
-        SetTextColor( aOldColor );
-        SetTextLineColor( aOldTextLineColor );
-        ImplInitTextColor();
 
-        if ( !maFont.IsOutline() )
-            ImplDrawTextDirect( nX, nY, pStr, nLen, pDXAry, mbTextLines );
-    }
-
-    if ( maFont.IsOutline() )
-    {
-        ImplDrawTextDirect( nX-1, nY+1, pStr, nLen, pDXAry, mbTextLines );
-        ImplDrawTextDirect( nX,   nY+1, pStr, nLen, pDXAry, mbTextLines );
-        ImplDrawTextDirect( nX+1, nY+1, pStr, nLen, pDXAry, mbTextLines );
-        ImplDrawTextDirect( nX-1, nY,   pStr, nLen, pDXAry, mbTextLines );
-        ImplDrawTextDirect( nX+1, nY,   pStr, nLen, pDXAry, mbTextLines );
-        ImplDrawTextDirect( nX-1, nY-1, pStr, nLen, pDXAry, mbTextLines );
-        ImplDrawTextDirect( nX,   nY-1, pStr, nLen, pDXAry, mbTextLines );
-        ImplDrawTextDirect( nX+1, nY-1, pStr, nLen, pDXAry, mbTextLines );
-
-        SetTextColor( Color( COL_WHITE ) );
-        SetTextLineColor( Color( COL_WHITE ) );
+        SetTextLineColor( aTextLineColor );
+        SetTextColor( aTextColor );
         ImplInitTextColor();
         ImplDrawTextDirect( nX, nY, pStr, nLen, pDXAry, mbTextLines );
-        SetTextColor( aOldColor );
+
         SetTextLineColor( aOldTextLineColor );
-        ImplInitTextColor();
+        if ( aTextColor != aOldColor )
+        {
+            SetTextColor( aOldColor );
+            ImplInitTextColor();
+        }
+    }
+    else
+    {
+        if ( maFont.IsShadow() )
+        {
+            long nOff = 1 + ((mpFontEntry->mnLineHeight-24)/24);
+            if ( maFont.IsOutline() )
+                nOff++;
+            SetTextLineColor();
+            if ( GetTextColor().GetColor() == COL_BLACK )
+                SetTextColor( Color( COL_LIGHTGRAY ) );
+            else
+                SetTextColor( Color( COL_BLACK ) );
+            ImplInitTextColor();
+            ImplDrawTextDirect( nX+nOff, nY+nOff, pStr, nLen, pDXAry, mbTextLines );
+            SetTextColor( aOldColor );
+            SetTextLineColor( aOldTextLineColor );
+            ImplInitTextColor();
+
+            if ( !maFont.IsOutline() )
+                ImplDrawTextDirect( nX, nY, pStr, nLen, pDXAry, mbTextLines );
+        }
+
+        if ( maFont.IsOutline() )
+        {
+            ImplDrawTextDirect( nX-1, nY+1, pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX,   nY+1, pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX+1, nY+1, pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX-1, nY,   pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX+1, nY,   pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX-1, nY-1, pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX,   nY-1, pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX+1, nY-1, pStr, nLen, pDXAry, mbTextLines );
+
+            SetTextColor( Color( COL_WHITE ) );
+            SetTextLineColor( Color( COL_WHITE ) );
+            ImplInitTextColor();
+            ImplDrawTextDirect( nX, nY, pStr, nLen, pDXAry, mbTextLines );
+            SetTextColor( aOldColor );
+            SetTextLineColor( aOldTextLineColor );
+            ImplInitTextColor();
+        }
     }
 }
 
@@ -4070,6 +4437,13 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 }
 
 // =======================================================================
+
+void OutputDevice::SetAntialiasing( USHORT nMode )
+{
+    mnAntialiasing = nMode;
+}
+
+// -----------------------------------------------------------------------
 
 void OutputDevice::SetFont( const Font& rNewFont )
 {
@@ -4608,7 +4982,7 @@ long OutputDevice::GetTextHeight() const
             return 0;
     }
 
-    long nHeight = mpFontEntry->mnLineHeight;
+    long nHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
 
     if ( mbMap )
         nHeight = ImplDevicePixelToLogicHeight( nHeight );
@@ -5885,10 +6259,10 @@ FontMetric OutputDevice::GetFontMetric() const
     // restliche Metricen setzen
     aMetric.mpImplMetric->meType        = pMetric->meType;
     aMetric.mpImplMetric->mbDevice      = pMetric->mbDevice;
-    aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent );
-    aMetric.mpImplMetric->mnDescent     = ImplDevicePixelToLogicHeight( pMetric->mnDescent );
-    aMetric.mpImplMetric->mnLeading     = ImplDevicePixelToLogicHeight( pMetric->mnLeading );
-    aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent );
+    aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent+mnEmphasisAscent );
+    aMetric.mpImplMetric->mnDescent     = ImplDevicePixelToLogicHeight( pMetric->mnDescent+mnEmphasisDescent );
+    aMetric.mpImplMetric->mnLeading     = ImplDevicePixelToLogicHeight( pMetric->mnLeading+mnEmphasisAscent );
+    aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
     aMetric.mpImplMetric->mnFirstChar   = pMetric->mnFirstChar;
     aMetric.mpImplMetric->mnLastChar    = pMetric->mnLastChar;
@@ -6020,114 +6394,6 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
             ((OutputDevice*)this)->SetFont( *pOldFont );
             delete pOldFont;
         }
-
-        if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
-        {
-            if ( bOptimize )
-            {
-                if ( mbNewFont )
-                    ImplNewFont();
-                if ( mbInitFont )
-                    ImplInitFont();
-            }
-
-            VirtualDevice*  pVDev = new VirtualDevice( 1 );
-            long            nWidth = ImplGetTextWidth( &cChar, 1, NULL );
-            long            nHeight = mpFontEntry->mnLineHeight;
-            Point           aOffset( nWidth >> 1, 8 );
-            Size            aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
-
-            if ( pVDev->SetOutputSizePixel( aSize ) )
-            {
-                Font    aFont( GetFont() );
-                Bitmap  aBmp;
-
-                aFont.SetShadow( FALSE );
-                aFont.SetOutline( FALSE );
-                aFont.SetOrientation( 0 );
-                aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
-
-                pVDev->SetFont( aFont );
-                pVDev->SetTextAlign( ALIGN_TOP );
-                pVDev->SetTextColor( Color( COL_BLACK ) );
-                pVDev->SetTextFillColor();
-                pVDev->ImplNewFont();
-                pVDev->ImplInitFont();
-                pVDev->ImplInitTextColor();
-                pVDev->ImplDrawText( aOffset.X(), aOffset.Y(), &cChar, 1, NULL );
-                aBmp = pVDev->GetBitmap( Point(), aSize );
-                delete pVDev;
-
-                BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
-
-                if ( pAcc )
-                {
-                    const long          nW = pAcc->Width();
-                    const long          nW1 = nW - 1L;
-                    const long          nH = pAcc->Height();
-                    long                nRight, nBottom;
-                    const BitmapColor   aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                    BOOL                bLineDone;
-
-                    nLeft = nW;
-                    nTop = nH;
-                    nRight = nBottom = -1L;
-
-                    for( long nY = 0L; nY < nH; nY++ )
-                    {
-                        bLineDone = FALSE;
-
-                        for( long nX = 0L; ( nX < nW ) && !bLineDone; nX++ )
-                        {
-                            if( pAcc->GetPixel( nY, nX ) == aBlack )
-                            {
-                                // find y minimum
-                                if( nY < nTop )
-                                    nTop = nY;
-
-                                // find y maximum
-                                if( nY > nBottom )
-                                    nBottom = nY;
-
-                                // find x minimum
-                                if( nX < nLeft )
-                                    nLeft = nX;
-
-                                // find x maximum (last pixel in line)
-                                for( long nX2 = nW1; nX2 >= nX; nX2-- )
-                                {
-                                    if( pAcc->GetPixel( nY, nX2 ) == aBlack )
-                                    {
-                                        if( nX2 > nRight )
-                                            nRight = nX2;
-
-                                        bLineDone = TRUE;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if( nLeft < nW && nTop < nH && nRight > -1L && nBottom > -1L )
-                    {
-                        nLeft -= aOffset.X(), nTop -= aOffset.Y();
-                        nRight -= aOffset.X(), nBottom -= aOffset.Y();
-
-                        nWidth = ImplDevicePixelToLogicWidth( nRight - nLeft + 1L );
-                        nHeight = ImplDevicePixelToLogicHeight( nBottom - nTop + 1L );
-                        nLeft = ImplDevicePixelToLogicWidth( nLeft );
-                        nTop = ImplDevicePixelToLogicHeight( nTop );
-                        rRect = Rectangle( Point( nLeft, nTop ), Size( nWidth, nHeight ) );
-                        bRet = TRUE;
-                    }
-
-                    aBmp.ReleaseAccess( pAcc );
-                }
-            }
-            else
-                delete pVDev;
-        }
     }
 #else
     if ( mbNewFont )
@@ -6144,8 +6410,116 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
                            Size( ImplDevicePixelToLogicWidth( rRect.GetWidth() ),
                                  ImplDevicePixelToLogicHeight( rRect.GetHeight() ) ) );
     }
-
 #endif
+
+    if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
+    {
+        if ( bOptimize )
+        {
+            if ( mbNewFont )
+                ImplNewFont();
+            if ( mbInitFont )
+                ImplInitFont();
+        }
+
+        VirtualDevice*  pVDev = new VirtualDevice( 1 );
+        long            nWidth = ImplGetTextWidth( &cChar, 1, NULL );
+        long            nHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
+        Point           aOffset( nWidth >> 1, 8 );
+        Size            aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
+
+        if ( pVDev->SetOutputSizePixel( aSize ) )
+        {
+            Font    aFont( GetFont() );
+            Bitmap  aBmp;
+
+            aFont.SetShadow( FALSE );
+            aFont.SetOutline( FALSE );
+            aFont.SetRelief( RELIEF_NONE );
+            aFont.SetOrientation( 0 );
+            aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
+
+            pVDev->SetFont( aFont );
+            pVDev->SetTextAlign( ALIGN_TOP );
+            pVDev->SetTextColor( Color( COL_BLACK ) );
+            pVDev->SetTextFillColor();
+            pVDev->ImplNewFont();
+            pVDev->ImplInitFont();
+            pVDev->ImplInitTextColor();
+            pVDev->ImplDrawText( aOffset.X(), aOffset.Y(), &cChar, 1, NULL );
+            aBmp = pVDev->GetBitmap( Point(), aSize );
+            delete pVDev;
+
+            BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
+
+            if ( pAcc )
+            {
+                const long          nW = pAcc->Width();
+                const long          nW1 = nW - 1L;
+                const long          nH = pAcc->Height();
+                long                nLeft, nTop, nRight, nBottom;
+                const BitmapColor   aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
+                BOOL                bLineDone;
+
+                nLeft = nW;
+                nTop = nH;
+                nRight = nBottom = -1L;
+
+                for( long nY = 0L; nY < nH; nY++ )
+                {
+                    bLineDone = FALSE;
+
+                    for( long nX = 0L; ( nX < nW ) && !bLineDone; nX++ )
+                    {
+                        if( pAcc->GetPixel( nY, nX ) == aBlack )
+                        {
+                            // find y minimum
+                            if( nY < nTop )
+                                nTop = nY;
+
+                            // find y maximum
+                            if( nY > nBottom )
+                                nBottom = nY;
+
+                            // find x minimum
+                            if( nX < nLeft )
+                                nLeft = nX;
+
+                            // find x maximum (last pixel in line)
+                            for( long nX2 = nW1; nX2 >= nX; nX2-- )
+                            {
+                                if( pAcc->GetPixel( nY, nX2 ) == aBlack )
+                                {
+                                    if( nX2 > nRight )
+                                        nRight = nX2;
+
+                                    bLineDone = TRUE;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if( nLeft < nW && nTop < nH && nRight > -1L && nBottom > -1L )
+                {
+                    nLeft -= aOffset.X(), nTop -= aOffset.Y();
+                    nRight -= aOffset.X(), nBottom -= aOffset.Y();
+
+                    nWidth = ImplDevicePixelToLogicWidth( nRight - nLeft + 1L );
+                    nHeight = ImplDevicePixelToLogicHeight( nBottom - nTop + 1L );
+                    nLeft = ImplDevicePixelToLogicWidth( nLeft );
+                    nTop = ImplDevicePixelToLogicHeight( nTop );
+                    rRect = Rectangle( Point( nLeft, nTop ), Size( nWidth, nHeight ) );
+                    bRet = TRUE;
+                }
+
+                aBmp.ReleaseAccess( pAcc );
+            }
+        }
+        else
+            delete pVDev;
+    }
 
     if ( !bRet )
         rRect.SetEmpty();
@@ -6270,72 +6644,6 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
             ((OutputDevice*)this)->SetFont( *pOldFont );
             delete pOldFont;
         }
-
-        if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
-        {
-            if ( bOptimize )
-            {
-                if( mbNewFont )
-                    ImplNewFont();
-                if( mbInitFont )
-                    ImplInitFont();
-            }
-
-            Font            aFont( GetFont() );
-            VirtualDevice*  pVDev = new VirtualDevice( 1 );
-            const Size      aFontSize( pVDev->LogicToPixel( Size( 0, GLYPH_FONT_HEIGHT ), MAP_POINT ) );
-            const long      nOrgWidth = ImplGetTextWidth( &cChar, 1, NULL );
-            const long      nOrgHeight = mpFontEntry->mnLineHeight;
-
-            aFont.SetShadow( FALSE );
-            aFont.SetOutline( FALSE );
-            aFont.SetOrientation( 0 );
-            aFont.SetSize( aFontSize );
-            pVDev->SetFont( aFont );
-            pVDev->SetTextAlign( ALIGN_TOP );
-            pVDev->SetTextColor( Color( COL_BLACK ) );
-            pVDev->SetTextFillColor();
-            pVDev->ImplNewFont();
-            pVDev->ImplInitFont();
-            pVDev->ImplInitTextColor();
-
-            const long      nWidth = pVDev->ImplGetTextWidth( &cChar, 1, NULL );
-            const long      nHeight = pVDev->mpFontEntry->mnLineHeight;
-            const Point     aOffset( nWidth >> 1, 8 );
-            const Size      aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
-            const double    fScaleX = ( nOrgWidth && nWidth )  ? ( (double) nOrgWidth / nWidth ) : 0.0;
-            const double    fScaleY = ( nOrgHeight && nHeight ) ?  ( (double) nOrgHeight / nHeight ) : 0.0;
-
-            if ( pVDev->SetOutputSizePixel( aSize ) )
-            {
-                Bitmap  aBmp;
-
-                pVDev->ImplDrawText( aOffset.X(), aOffset.Y(), &cChar, 1, NULL );
-                aBmp = pVDev->GetBitmap( Point(), aSize );
-                delete pVDev;
-
-                if( aBmp.Vectorize( rPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES ) )
-                {
-                    const long nOffX = aOffset.X(), nOffY = aOffset.Y();
-
-                    for( USHORT i = 0UL, nCount = rPolyPoly.Count(); i < nCount; i++ )
-                    {
-                        Polygon& rPoly = rPolyPoly[ i ];
-
-                        for( USHORT n = 0, nSize = rPoly.GetSize(); n < nSize; n++ )
-                        {
-                            Point& rPt = rPoly[ n ];
-                            rPt.X() = FRound( ImplDevicePixelToLogicWidth( rPt.X() - nOffX  ) * fScaleX );
-                            rPt.Y() = FRound( ImplDevicePixelToLogicHeight( rPt.Y() - nOffY ) * fScaleY );
-                        }
-                    }
-
-                    bRet = TRUE;
-                }
-            }
-            else
-                delete pVDev;
-        }
     }
 #else
     if ( mbNewFont )
@@ -6345,11 +6653,11 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
 
     bRet = mpGraphics->GetGlyphOutline( cChar, rPolyPoly, bOptimize );
 
-    if( bRet )
+    if ( bRet )
     {
         for( USHORT i = 0UL, nCount = rPolyPoly.Count(); i < nCount; i++ )
         {
-            Polygon& rPoly = rPolyPoly[ i ];
+            Polygon& rPoly = rPolyPoly[i];
 
             for( USHORT n = 0, nSize = rPoly.GetSize(); n < nSize; n++ )
             {
@@ -6359,8 +6667,74 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
             }
         }
     }
-
 #endif
+
+    if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
+    {
+        if ( bOptimize )
+        {
+            if ( mbNewFont )
+                ImplNewFont();
+            if ( mbInitFont )
+                ImplInitFont();
+        }
+
+        Font            aFont( GetFont() );
+        VirtualDevice*  pVDev = new VirtualDevice( 1 );
+        const Size      aFontSize( pVDev->LogicToPixel( Size( 0, GLYPH_FONT_HEIGHT ), MAP_POINT ) );
+        const long      nOrgWidth = ImplGetTextWidth( &cChar, 1, NULL );
+        const long      nOrgHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
+
+        aFont.SetShadow( FALSE );
+        aFont.SetOutline( FALSE );
+        aFont.SetRelief( RELIEF_NONE );
+        aFont.SetOrientation( 0 );
+        aFont.SetSize( aFontSize );
+        pVDev->SetFont( aFont );
+        pVDev->SetTextAlign( ALIGN_TOP );
+        pVDev->SetTextColor( Color( COL_BLACK ) );
+        pVDev->SetTextFillColor();
+        pVDev->ImplNewFont();
+        pVDev->ImplInitFont();
+        pVDev->ImplInitTextColor();
+
+        const long      nWidth = pVDev->ImplGetTextWidth( &cChar, 1, NULL );
+        const long      nHeight = pVDev->mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
+        const Point     aOffset( nWidth >> 1, 8 );
+        const Size      aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
+        const double    fScaleX = ( nOrgWidth && nWidth )  ? ( (double) nOrgWidth / nWidth ) : 0.0;
+        const double    fScaleY = ( nOrgHeight && nHeight ) ?  ( (double) nOrgHeight / nHeight ) : 0.0;
+
+        if ( pVDev->SetOutputSizePixel( aSize ) )
+        {
+            Bitmap  aBmp;
+
+            pVDev->ImplDrawText( aOffset.X(), aOffset.Y(), &cChar, 1, NULL );
+            aBmp = pVDev->GetBitmap( Point(), aSize );
+            delete pVDev;
+
+            if( aBmp.Vectorize( rPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES ) )
+            {
+                const long nOffX = aOffset.X(), nOffY = aOffset.Y();
+
+                for( USHORT i = 0UL, nCount = rPolyPoly.Count(); i < nCount; i++ )
+                {
+                    Polygon& rPoly = rPolyPoly[ i ];
+
+                    for( USHORT n = 0, nSize = rPoly.GetSize(); n < nSize; n++ )
+                    {
+                        Point& rPt = rPoly[ n ];
+                        rPt.X() = FRound( ImplDevicePixelToLogicWidth( rPt.X() - nOffX  ) * fScaleX );
+                        rPt.Y() = FRound( ImplDevicePixelToLogicHeight( rPt.Y() - nOffY ) * fScaleY );
+                    }
+                }
+
+                bRet = TRUE;
+            }
+        }
+        else
+            delete pVDev;
+    }
 
     if( !bRet )
         rPolyPoly = PolyPolygon();
