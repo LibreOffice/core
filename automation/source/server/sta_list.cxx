@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:06:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ USHORT StatementList::nUseBindings = 0;
 
 SmartId StatementList::aSubMenuId1 = SmartId(); // Untermenüs bei PopupMenus
 SmartId StatementList::aSubMenuId2 = SmartId(); // erstmal 2-Stufig
+SmartId StatementList::aSubMenuId3 = SmartId(); // and now even 3 levels #i31512#
 SystemWindow *StatementList::pMenuWindow = NULL;
 TTProperties *StatementList::pTTProperties = NULL;
 
@@ -138,6 +139,8 @@ USHORT StatementList::nMaxTypeKeysDelay = 0;
 BOOL StatementList::bDoTypeKeysDelay = FALSE;
 
 Window* StatementList::pFirstDocFrame = NULL;
+
+BOOL StatementList::bCatchGPF = TRUE;
 
 #define IS_WINP_CLOSING(pWin) (pWin->GetHelpId() == 4321 && pWin->GetUniqueId() == 1234)
 
@@ -206,21 +209,29 @@ void StatementList::QueStatement(StatementList *pAfterThis)
     bStatementInQue = TRUE;
     if ( pAfterThis )
     {
-        pNext = pAfterThis->pNext;
-        pAfterThis->pNext = this;
+        if ( pAfterThis->bStatementInQue )
+        {
+            pNext = pAfterThis->pNext;
+            pAfterThis->pNext = this;
+        }
+        else
+        {   // pAfterThis not in que -> already dequed -> add to front of list
+            pNext = pFirst;
+            pFirst = this;
+        }
     }
     else    // am Ende einfügen
     {
         pNext = NULL;
-        StatementList *pList;
         if( !pFirst )
             pFirst = this;
         else
         {
-           pList = pFirst;
-           while( pList->pNext )
-               pList = pList->pNext;
-           pList->pNext = this;
+            StatementList *pList;
+            pList = pFirst;
+            while( pList->pNext )
+                pList = pList->pNext;
+            pList->pNext = this;
         }
     }
 }
@@ -508,9 +519,13 @@ BOOL SearchRT::IsWinOK( Window *pWin )
     return FALSE;
 }
 
-Window* StatementList::GetWinByRT( Window *pBase, WindowType nRT, BOOL MaybeBase, USHORT nSkip )
+Window* StatementList::GetWinByRT( Window *pBase, WindowType nRT, BOOL MaybeBase, USHORT nSkip, BOOL bSearchAll )
 {
-    SearchRT aSearch( nRT, SEARCH_NOOVERLAP | SEARCH_NO_TOPLEVEL_WIN, nSkip );
+    SearchRT aSearch( nRT, 0, nSkip );
+    if ( bSearchAll )
+        aSearch.AddSearchFlags( SEARCH_FOCUS_FIRST | SEARCH_FIND_DISABLED );
+    else
+        aSearch.AddSearchFlags( SEARCH_NOOVERLAP | SEARCH_NO_TOPLEVEL_WIN );
 
     return SearchAllWin( pBase, aSearch, MaybeBase );
 }
@@ -552,7 +567,77 @@ Window* StatementList::GetPopupFloatingWin( BOOL MaybeBase )
     SearchPopupFloatingWin aSearch;
 
     return SearchAllWin( NULL, aSearch, MaybeBase );
-//  return NULL;
+}
+
+
+Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
+{
+    if ( pBaseMenu )
+    {
+        if ( pBaseMenu->GetWindow() == pWin )
+            return pBaseMenu;
+
+        USHORT i;
+//        while ( pBaseMenu )
+//        {
+            i = 0;
+            while ( i < pBaseMenu->GetItemCount() )
+            {
+                PopupMenu* pPopup = pBaseMenu->GetPopupMenu( pBaseMenu->GetItemId( i ) );
+                if ( pPopup && pPopup->GetWindow() )
+                {
+                    if ( pPopup->GetWindow() == pWin )
+                        return pPopup;
+                    else
+                    {
+                        pBaseMenu = pPopup;
+                        i = 0;
+                    }
+                }
+                else
+                    i++;
+            }
+//        }
+    }
+    else
+    {
+        if ( PopupMenu::GetActivePopupMenu() )
+        {
+            Menu* pMenu = GetMatchingMenu( pWin, PopupMenu::GetActivePopupMenu() );
+            if ( pMenu )
+                return pMenu;
+        }
+
+        USHORT nSkip = 0;
+        Window* pMenuBarWin = NULL;
+        while ( pMenuBarWin = GetWinByRT( NULL, WINDOW_MENUBARWINDOW, TRUE, nSkip++, TRUE ) )
+        {
+            Window* pParent = pMenuBarWin->GET_REAL_PARENT();
+            if ( pParent && pParent->GetType() == WINDOW_BORDERWINDOW && pParent->IsVisible() )
+            {
+                Menu* pMenu = NULL;
+                // find Menu of MenuBarWindow
+                USHORT nCount;
+                for ( nCount = 0 ; nCount < pParent->GetChildCount() ; nCount++ )
+                {
+                    if ( pParent->GetChild( nCount )->GetType() == WINDOW_WORKWINDOW )
+                        pMenu = ((WorkWindow*)(pParent->GetChild( nCount )))->GetMenuBar();
+                }
+                if ( pMenu )
+                {
+                    // check for menu bar in Task Window
+                    if ( pMenuBarWin == pWin )
+                        return pMenu;
+
+                    // search submenues
+                    pMenu = GetMatchingMenu( pWin, pMenu );
+                    if ( pMenu )
+                        return pMenu;
+                }
+            }
+        }
+    }
+    return NULL;
 }
 
 
