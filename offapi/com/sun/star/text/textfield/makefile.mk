@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-14 13:20:11 $
+#   last change: $Author: os $ $Date: 2000-11-16 12:22:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,13 +73,14 @@ PACKAGE=com$/sun$/star$/text$/textfield
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    Author.idl\
+    Bibliography.idl\
+    DateTime.idl\
     ConditionalText.idl\
     HiddenText.idl\
     Input.idl\
     InputUser.idl\
     GetReference.idl\
-    Author.idl\
-    DateTime.idl
 
 # ------------------------------------------------------------------
 
