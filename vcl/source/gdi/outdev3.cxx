@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 12:22:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 11:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5119,17 +5119,31 @@ void OutputDevice::SetFont( const Font& rNewFont )
     {
         // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
         // because SetTextColor() is used for this.
-        if ( ( aFont.GetColor() != COL_TRANSPARENT ) && ( maFont.GetColor() != aFont.GetColor() ) )
+        // #i28759# maTextColor might have been changed behind our back, commit then, too.
+        if ( ( aFont.GetColor() != COL_TRANSPARENT ) &&
+             ( maFont.GetColor() != aFont.GetColor() || aFont.GetColor() != maTextColor ) )
         {
             maTextColor = aFont.GetColor();
             mbInitTextColor = TRUE;
         }
         maFont      = aFont;
         mbNewFont   = TRUE;
-    }
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFont( rNewFont );
+        if( mpAlphaVDev )
+        {
+            // #i30463#
+            // Since SetFont might change the text color, apply that only
+            // selectively to alpha vdev (which normally paints opaque text
+            // with COL_BLACK)
+            if( aFont.GetColor() != COL_TRANSPARENT )
+            {
+                mpAlphaVDev->SetTextColor( COL_BLACK );
+                aFont.SetColor( COL_TRANSPARENT );
+            }
+
+            mpAlphaVDev->SetFont( aFont );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
