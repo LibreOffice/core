@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:59:53 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,8 +687,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
          < "자동" ; SFXSTYLEBIT_ALL ; > ;
-            < "사용된 템플릿" ; SFXSTYLEBIT_USED ; > ;
-            < "사용자 정의 템플릿." ; SFXSTYLEBIT_USERDEF ; > ;
+            < "사용된 스타일" ; SFXSTYLEBIT_USED ; > ;
+            < "사용자 정의 스타일" ; SFXSTYLEBIT_USERDEF ; > ;
             < "자동" ; SFXSTYLEBIT_AUTO ; > ;
             < "텍스트 템플릿" ; SWSTYLEBIT_TEXT ; > ;
             < "장 템플릿" ; SWSTYLEBIT_CHAPTER ; > ;
@@ -965,8 +965,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "전부" ; SFXSTYLEBIT_ALL ; > ;
-            < "사용된 템플릿" ; SFXSTYLEBIT_USED ; > ;
-            < "사용자 정의 템플릿" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "사용된 스타일" ; SFXSTYLEBIT_USED ; > ;
+            < "사용자 정의 스타일" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Karakter bi�imi";
             FilterList [ turkish ] =
@@ -1163,8 +1163,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "전부" ; SFXSTYLEBIT_ALL ; > ;
-            < "사용된 템플릿" ; SFXSTYLEBIT_USED ; > ;
-            < "사용자 정의 템플릿" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "사용된 스타일" ; SFXSTYLEBIT_USED ; > ;
+            < "사용자 정의 스타일" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "�er�eve bi�imi";
             FilterList [ turkish ] =
@@ -1350,7 +1350,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "自定样式" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ greek ] = "������� �������";
-            Text[ korean ] = "페이지 템플릿";
+            Text[ korean ] = "페이지 스타일";
             FilterList [ greek ] =
         {
             < "���" ; SFXSTYLEBIT_ALL ; > ;
@@ -1360,8 +1360,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "모두" ; SFXSTYLEBIT_ALL ; > ;
-            < "사용된 템플릿" ; SFXSTYLEBIT_USED ; > ;
-            < "사용자 정의 템플릿" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "사용된 스타일" ; SFXSTYLEBIT_USED ; > ;
+            < "사용자 정의 스타일" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Sayfa bi�imi";
             FilterList [ turkish ] =
@@ -1557,8 +1557,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "전체" ; SFXSTYLEBIT_ALL ; > ;
-            < "사용된 템플릿" ; SFXSTYLEBIT_USED ; > ;
-            < "사용자 정의 템플릿" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "사용된 스타일" ; SFXSTYLEBIT_USED ; > ;
+            < "사용자 정의 스타일" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Numaralama bi�imi";
             FilterList [ turkish ] =
