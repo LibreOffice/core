@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:46:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,13 @@
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
-#ifndef _SVX_FRMSEL_HXX
-#include <frmsel.hxx>
+#ifndef SVX_FRMSEL_HXX
+#include "frmsel.hxx"
 #endif
 // forward ---------------------------------------------------------------
 
 class SvxBorderLine;
 class XColorTable;
-class SvxFrameLine;
 
 // class SvxBorderTabPage ------------------------------------------------
 /*
@@ -134,7 +133,7 @@ private:
     FixedText           aDefaultFT;
     ValueSet            aWndPresets;
     FixedText           aUserDefFT;
-    SvxFrameSelector    aFrameSel;
+    svx::FrameSelector  aFrameSel;
 
     FixedLine           aFlSep1;
     FixedLine           aFlLine;
@@ -177,7 +176,12 @@ private:
 
     long                nMinValue;  // minimum distance
     BYTE                nSWMode;    // table, textframe, paragraph
-    BOOL                bIsTableBorder;
+
+    bool                mbHorEnabled;       /// true = Inner horizontal border enabled.
+    bool                mbVerEnabled;       /// true = Inner vertical border enabled.
+    bool                mbTLBREnabled;      /// true = Top-left to bottom-right border enabled.
+    bool                mbBLTREnabled;      /// true = Bottom-left to top-right border enabled.
+    bool                mbUseMarginItem;
 
     static BOOL         bSync;
 
@@ -191,16 +195,20 @@ private:
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
     DECL_LINK( SyncHdl_Impl, CheckBox*);
 
+    USHORT              GetPresetImageId( USHORT nValueSetIdx ) const;
+    USHORT              GetPresetStringId( USHORT nValueSetIdx ) const;
+
+    void                FillPresetVS();
+    void                FillShadowVS();
+    void                FillValueSets();
+
     // Filler
     void                FillLineListBox_Impl();
-    void                FillValueSets_Impl();
-    void                InitValueSets_Impl();
 
     // Setzen von einzelnen Frame-/Core-Linien
-    void                ResetFrameLine_Impl( const SvxBorderLine* pCurLine,
-                                             SvxFrameLine& rFrameLine );
-    void                SetCoreLine_Impl( const SvxFrameLine* pFrameLine,
-                                          SvxBorderLine*& rpCoreLine );
+    void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
+                                             const SvxBorderLine* pCurLine,
+                                             bool bValid );
 #endif
 };
 
