@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:04:58 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,8 @@ public:
     void    SetText( const ::rtl::OUString& rText ){ m_aText = rText; }
     ::rtl::OUString  GetText() const { return m_aText; }
     FmParentData* GetParent() const {return m_pParent;}
-    virtual Image GetImage() const;
+
+    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
 
 //========================================================================
@@ -208,7 +209,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & GetController(){return m_xController;}
     void SetCurrentPosition(sal_Int32 nCurrent){m_nCurrent = nCurrent;}
     sal_Int32 GetCurrentPosition() const {return m_nCurrent;}
-    virtual Image GetImage() const;
+    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
 
 //========================================================================
@@ -220,7 +221,7 @@ public:
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
 
     FmFilterItem* Find(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & xText) const;
-    virtual Image GetImage() const;
+    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
 
 //========================================================================
@@ -240,7 +241,7 @@ public:
     const ::rtl::OUString& GetFieldName() const {return m_aFieldName;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & GetTextComponent() const {return m_xText;}
 
-    virtual Image GetImage() const;
+    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
 
 //========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:05:59 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,6 @@ namespace svxform
         ,m_pEditEntry(NULL)
         ,m_nSelectLock(0)
         ,m_aTimerTriggered(-1,-1)
-        ,m_ilNavigatorImages( SVX_RES(RID_SVXIMGLIST_FMEXPL) )
         ,m_bRootSelected(sal_False)
         ,m_nFormsSelected(0)
         ,m_nControlsSelected(0)
@@ -205,15 +204,31 @@ namespace svxform
     {
         SetHelpId( HID_FORM_NAVIGATOR );
 
-        m_aRootImg = m_ilNavigatorImages.GetImage( RID_SVXIMG_FORMS );
-        Image m_aCollapsedNodeImg = m_ilNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE );
-        Image m_aExpandedNodeImg = m_ilNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE );
-        SetNodeBitmaps( m_aCollapsedNodeImg, m_aExpandedNodeImg );
+        {
+            ImageList aNodeBmps( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+            SetNodeBitmaps(
+                m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+                m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+                BMP_COLOR_NORMAL
+            );
+        }
+        {
+            ImageList aNodeBmps( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
+            SetNodeBitmaps(
+                m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+                m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+                BMP_COLOR_HIGHCONTRAST
+            );
+        }
+
+        m_aNavigatorImages = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        m_aNavigatorImagesHC = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
+
         SetDragDropMode(0xFFFF);
         EnableInplaceEditing( sal_True );
         SetSelectionMode(MULTIPLE_SELECTION);
 
-        m_pNavModel = new NavigatorTreeModel(m_ilNavigatorImages);
+        m_pNavModel = new NavigatorTreeModel( m_aNavigatorImages, m_aNavigatorImagesHC );
         Clear();
 
         StartListening( *m_pNavModel );
@@ -428,8 +443,8 @@ namespace svxform
 
                     // 'Neu'\'Formular' unter genau den selben Bedingungen
                     pSubMenuNew->EnableItem( SID_FM_NEW_FORM, bSingleSelection && (m_nFormsSelected || m_bRootSelected) );
-                    pSubMenuNew->SetItemImage(SID_FM_NEW_FORM, m_ilNavigatorImages.GetImage(RID_SVXIMG_FORM));
-                    pSubMenuNew->SetItemImage(SID_FM_NEW_HIDDEN, m_ilNavigatorImages.GetImage(RID_SVXIMG_HIDDEN));
+                    pSubMenuNew->SetItemImage(SID_FM_NEW_FORM, m_aNavigatorImages.GetImage(RID_SVXIMG_FORM));
+                    pSubMenuNew->SetItemImage(SID_FM_NEW_HIDDEN, m_aNavigatorImages.GetImage(RID_SVXIMG_HIDDEN));
 
                     // 'Neu'\'verstecktes...', wenn genau ein Formular selektiert ist
                     pSubMenuNew->EnableItem( SID_FM_NEW_HIDDEN, bSingleSelection && m_nFormsSelected );
@@ -438,15 +453,9 @@ namespace svxform
                     aContextMenu.EnableItem( SID_FM_DELETE, !m_bRootSelected );
 
                     // 'Cut', 'Copy' and 'Paste'
-#ifdef FS_PRIV_DEBUG_
                     aContextMenu.EnableItem( SID_CUT, implAllowExchange( DND_ACTION_MOVE ) );
                     aContextMenu.EnableItem( SID_COPY, implAllowExchange( DND_ACTION_COPY ) );
                     aContextMenu.EnableItem( SID_PASTE, implAcceptPaste( ) );
-#else
-                    aContextMenu.EnableItem( SID_CUT, sal_False );
-                    aContextMenu.EnableItem( SID_COPY, sal_False );
-                    aContextMenu.EnableItem( SID_PASTE, sal_False );
-#endif
 
                     // der TabDialog, wenn es genau ein Formular ist ...
                     aContextMenu.EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
@@ -647,8 +656,11 @@ namespace svxform
             SvLBoxEntry* pEntry = FindEntry( pData );
             if (pEntry)
             {   // das Image neu setzen
-                SetCollapsedEntryBmp(pEntry, pData->GetCollapsedImage());
-                SetExpandedEntryBmp(pEntry, pData->GetExpandedImage());
+                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+                SetExpandedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+
+                SetCollapsedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+                SetExpandedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
             }
         }
 
@@ -665,8 +677,16 @@ namespace svxform
 
             //////////////////////////////////////////////////////////////////////
             // Default-Eintrag "Formulare"
-            m_pRootEntry = InsertEntry( SVX_RES(RID_STR_FORMS), m_aRootImg, m_aRootImg,
+            Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
+            m_pRootEntry = InsertEntry( SVX_RES(RID_STR_FORMS), aRootImage, aRootImage,
                 NULL, sal_False, 0, NULL );
+
+            if ( m_pRootEntry )
+            {
+                Image aHCRootImage( m_aNavigatorImagesHC.GetImage( RID_SVXIMG_FORMS ) );
+                SetExpandedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+            }
         }
         else if (!m_bMarkingObjects && rHint.ISA(FmNavRequestSelectHint))
         {   // wenn m_bMarkingObjects sal_True ist, markiere ich gerade selber Objekte, und da der ganze Mechanismus dahinter synchron ist,
@@ -692,13 +712,19 @@ namespace svxform
 
         if( !pParentEntry )
             pNewEntry = InsertEntry( pEntryData->GetText(),
-                pEntryData->GetExpandedImage(), pEntryData->GetCollapsedImage(),
+                pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
                 m_pRootEntry, sal_False, nRelPos, pEntryData );
 
         else
             pNewEntry = InsertEntry( pEntryData->GetText(),
-                pEntryData->GetExpandedImage(), pEntryData->GetCollapsedImage(),
+                pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
                 pParentEntry, sal_False, nRelPos, pEntryData );
+
+        if ( pNewEntry )
+        {
+            SetExpandedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+            SetCollapsedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+        }
 
         //////////////////////////////////////////////////////////////////////
         // Wenn Root-Eintrag Root expandieren
@@ -1312,7 +1338,6 @@ namespace svxform
             return;
         }
 
-#ifdef FS_PRIV_DEBUG_
         // copy'n'paste?
         switch ( rCode.GetFunction() )
         {
@@ -1329,7 +1354,6 @@ namespace svxform
                 doCopy();
                 break;
         }
-#endif
 
         SvTreeListBox::KeyInput(rKEvt);
     }
@@ -1360,7 +1384,7 @@ namespace svxform
         if (!xNewForm.is())
             return;
 
-        FmFormData* pNewFormData = new FmFormData( xNewForm, m_ilNavigatorImages, pParentFormData );
+        FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, m_aNavigatorImagesHC, pParentFormData );
 
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
@@ -1373,10 +1397,10 @@ namespace svxform
         try
         {
             xPropertySet->setPropertyValue( FM_PROP_NAME, makeAny(aName) );
-        // a form should always have the command type table as default
+            // a form should always have the command type table as default
             xPropertySet->setPropertyValue( FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE)));
         }
-        catch(...)
+        catch ( const Exception& )
         {
             DBG_ERROR("NavigatorTree::NewForm : could not set esssential properties !");
         }
@@ -1423,7 +1447,7 @@ namespace svxform
         if (!xNewComponent.is())
             return NULL;
 
-        FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_ilNavigatorImages, pParentFormData );
+        FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, m_aNavigatorImagesHC, pParentFormData );
 
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
@@ -2149,6 +2173,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/05/16 15:05:59  fs
+ *  some major changes in preparation of #98725# (not enabled, yet)
+ *
  *  Revision 1.1  2002/05/08 07:06:03  fs
  *  initial checkin - outsourced the tree view from fmexpl.cxx
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:17:08 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,46 +832,54 @@ Menu RID_FMSHELL_CONVERSIONMENU
     };
 };
 
+#define NAVIGATOR_IMAGEIDS \
+    IdList = \
+    { \
+        RID_SVXIMG_BUTTON ; \
+        RID_SVXIMG_RADIOBUTTON ; \
+        RID_SVXIMG_CHECKBOX ; \
+        RID_SVXIMG_FIXEDTEXT ; \
+        RID_SVXIMG_GROUPBOX ; \
+        RID_SVXIMG_EDIT ; \
+        RID_SVXIMG_LISTBOX ; \
+        RID_SVXIMG_COMBOBOX ; \
+        RID_SVXIMG_URLBUTTON ; \
+        RID_SVXIMG_CONTROL ; \
+        RID_SVXIMG_FORM ; \
+        RID_SVXIMG_FORMS ; \
+        RID_SVXIMG_COLLAPSEDNODE ; \
+        RID_SVXIMG_EXPANDEDNODE ; \
+        RID_SVXIMG_IMAGEBUTTON ; \
+        RID_SVXIMG_FILECONTROL ; \
+        RID_SVXIMG_DATEFIELD ; \
+        RID_SVXIMG_TIMEFIELD ; \
+        RID_SVXIMG_NUMERICFIELD ; \
+        RID_SVXIMG_CURRENCYFIELD ; \
+        RID_SVXIMG_PATTERNFIELD ; \
+        RID_SVXIMG_HIDDEN ; \
+        RID_SVXIMG_IMAGECONTROL ; \
+        RID_SVXIMG_GRID ; \
+        RID_SVXIMG_FILTER ; \
+        RID_SVXIMG_FORMATTEDFIELD ; \
+        RID_SVXIMG_DATE_N_TIME_FIELDS ; \
+        RID_SVXIMG_FIELD ; \
+    }; \
+    IdCount = 28
+
 ImageList RID_SVXIMGLIST_FMEXPL
 {
     ImageBitmap = Bitmap { File = "sx_form.bmp" ; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-    IdList =
-    {
-        RID_SVXIMG_BUTTON ;
-        RID_SVXIMG_RADIOBUTTON ;
-        RID_SVXIMG_CHECKBOX ;
-        RID_SVXIMG_FIXEDTEXT ;
-        RID_SVXIMG_GROUPBOX ;
-        RID_SVXIMG_EDIT ;
-        RID_SVXIMG_LISTBOX ;
-        RID_SVXIMG_COMBOBOX ;
-        RID_SVXIMG_URLBUTTON ;
-        RID_SVXIMG_CONTROL ;
-        RID_SVXIMG_FORM ;
-        RID_SVXIMG_FORMS ;
-        RID_SVXIMG_COLLAPSEDNODE ;
-        RID_SVXIMG_EXPANDEDNODE ;
-        RID_SVXIMG_IMAGEBUTTON ;
-        RID_SVXIMG_FILECONTROL ;
-        RID_SVXIMG_DATEFIELD ;
-        RID_SVXIMG_TIMEFIELD ;
-        RID_SVXIMG_NUMERICFIELD ;
-        RID_SVXIMG_CURRENCYFIELD ;
-        RID_SVXIMG_PATTERNFIELD ;
-        RID_SVXIMG_HIDDEN ;
-        RID_SVXIMG_IMAGECONTROL ;
-        RID_SVXIMG_GRID ;
-        RID_SVXIMG_FILTER ;
-        RID_SVXIMG_FORMATTEDFIELD ;
-        RID_SVXIMG_DATE_N_TIME_FIELDS ;
-        RID_SVXIMG_FIELD ;
-        RID_SVXIMG_ERROR ;
-        RID_SVXIMG_WARNING ;
-        RID_SVXIMG_INFO ;
-    };
-    IdCount = 31 ;
+    NAVIGATOR_IMAGEIDS;
 };
+
+ImageList RID_SVXIMGLIST_FMEXPL_HC
+{
+    ImageBitmap = Bitmap { File = "sxh_form.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    NAVIGATOR_IMAGEIDS;
+};
+
 ModalDialog RID_SVXDLG_SETFORM
 {
     OutputSize = TRUE ;

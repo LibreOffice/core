@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:09:05 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,8 +386,8 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 {
     pChildList = new FmEntryDataList();
     aText = rEntryData.GetText();
-    aCollapsedImage = rEntryData.GetCollapsedImage();
-    aExpandedImage = rEntryData.GetExpandedImage();
+    m_aNormalImage = rEntryData.GetNormalImage();
+    m_aHCImage = rEntryData.GetHCImage();
     pParent = rEntryData.GetParent();
 
     FmEntryData* pChildData;
@@ -442,16 +442,16 @@ sal_Bool FmEntryData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 TYPEINIT1( FmFormData, FmEntryData );
 DBG_NAME(FmFormData);
 //------------------------------------------------------------------------
-FmFormData::FmFormData( Reference< XForm >  xForm, const ImageList& ilNavigatorImages, FmFormData* pParent )
-    :FmEntryData( pParent )
-    ,m_xForm( xForm )
+FmFormData::FmFormData( const Reference< XForm >& _rxForm, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
+    :FmEntryData( _pParent )
+    ,m_xForm( _rxForm )
 {
     DBG_CTOR(FmEntryData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
 
-    aCollapsedImage = ilNavigatorImages.GetImage( RID_SVXIMG_FORM );
-    aExpandedImage  = ilNavigatorImages.GetImage( RID_SVXIMG_FORM );
+    m_aNormalImage = _rNormalImages.GetImage( RID_SVXIMG_FORM );
+    m_aHCImage = _rHCImages.GetImage( RID_SVXIMG_FORM );
 
     //////////////////////////////////////////////////////////////////////
     // Titel setzen
@@ -509,15 +509,15 @@ sal_Bool FmFormData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 TYPEINIT1( FmControlData, FmEntryData );
 DBG_NAME(FmControlData);
 //------------------------------------------------------------------------
-FmControlData::FmControlData( Reference< XFormComponent >  xFormComponent, const ImageList& ilNavigatorImages, FmFormData* pParent )
-    :FmEntryData( pParent )
-    ,m_xFormComponent( xFormComponent )
+FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
+    :FmEntryData( _pParent )
+    ,m_xFormComponent( _rxComponent )
 {
     DBG_CTOR(FmControlData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
-    aCollapsedImage = GetImage(ilNavigatorImages);
-    aExpandedImage = GetImage(ilNavigatorImages);
+    m_aNormalImage = GetImage( _rNormalImages );
+    m_aHCImage = GetImage( _rHCImages );
 
     //////////////////////////////////////////////////////////////////////
     // Titel setzen
@@ -666,11 +666,12 @@ sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 }
 
 //------------------------------------------------------------------------
-void FmControlData::ModelReplaced(const Reference< XFormComponent > & xNew, const ImageList& ilNavigatorImages)
+void FmControlData::ModelReplaced( const Reference< XFormComponent >& _rxNew, const ImageList& _rNormalImages, const ImageList& _rHCImages )
 {
-    m_xFormComponent = xNew;
+    m_xFormComponent = _rxNew;
     // Images neu setzen
-    aCollapsedImage = aExpandedImage = GetImage(ilNavigatorImages);
+    m_aNormalImage = GetImage( _rNormalImages );
+    m_aHCImage = GetImage( _rHCImages );
 }
 
 //............................................................................

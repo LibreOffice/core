@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:04:04 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,9 +240,9 @@ class FmEntryDataList;
 class FmEntryData
 {
 protected:
-    Image           aCollapsedImage;
-    Image           aExpandedImage;
-    ::rtl::OUString          aText;
+    Image               m_aNormalImage;
+    Image               m_aHCImage;
+    ::rtl::OUString     aText;
 
     FmEntryDataList*    pChildList;
     FmEntryData*        pParent;
@@ -258,8 +258,9 @@ public:
     void    SetText( const ::rtl::OUString& rText ){ aText = rText; }
     void    SetParent( FmEntryData* pParentData ){ pParent = pParentData; }
 
-    Image           GetCollapsedImage() const { return aCollapsedImage; }
-    Image           GetExpandedImage() const { return aExpandedImage; }
+    const Image&    GetNormalImage() const { return m_aNormalImage; }
+    const Image&    GetHCImage() const { return m_aHCImage; }
+
     ::rtl::OUString          GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
     FmEntryDataList* GetChildList() const { return pChildList; }
@@ -310,7 +311,13 @@ class FmFormData : public FmEntryData
 public:
     TYPEINFO();
 
-    FmFormData( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm, const ImageList& ilNavigatorImages, FmFormData* pParent=NULL );
+    FmFormData(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+        const ImageList& _rNormalImages,
+        const ImageList& _rHCImages,
+        FmFormData* _pParent = NULL
+    );
+
     FmFormData( const FmFormData& rFormData );
     virtual ~FmFormData();
 
@@ -334,7 +341,12 @@ class FmControlData : public FmEntryData
 public:
     TYPEINFO();
 
-    FmControlData( ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xFormComponent, const ImageList& ilNavigatorImages, FmFormData* pParent );
+    FmControlData(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxComponent,
+        const ImageList& _rNormalImages,
+        const ImageList& _rHCImages,
+        FmFormData* _pParent
+    );
     FmControlData( const FmControlData& rControlData );
     virtual ~FmControlData();
 
@@ -343,7 +355,11 @@ public:
     virtual FmEntryData* Clone();
     virtual const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& GetElement() const { return m_xFormComponent;}
 
-    void ModelReplaced(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xNew, const ImageList& ilNavigatorImages);
+    void ModelReplaced(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxNew,
+        const ImageList& _rNormalImages,
+        const ImageList& _rHCImages
+    );
 };
 
 
@@ -404,9 +420,10 @@ namespace svxform
         FmFormShell*                m_pFormShell;
         FmFormPage*                 m_pFormPage;
         FmFormModel*                m_pFormModel;
-        OFormComponentObserver*  m_pPropChangeList;
+        OFormComponentObserver*     m_pPropChangeList;
 
-        const ImageList             m_ilNavigatorImages;
+        ImageList                   m_aNormalImages;
+        ImageList                   m_aHCImages;
 
         void Update( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
         FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
@@ -428,7 +445,7 @@ namespace svxform
             // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
 
     public:
-        NavigatorTreeModel(const ImageList& ilNavigatorImages);
+        NavigatorTreeModel( const ImageList& _rNormalImages, const ImageList& _rHCImages );
         virtual ~NavigatorTreeModel();
 
         void FillBranch( FmFormData* pParentData );
@@ -473,7 +490,8 @@ namespace svxform
         // die Meta-Daten ueber meine aktuelle Selektion
         SvLBoxEntrySortedArray  m_arrCurrentSelection;
         // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
-        ImageList           m_ilNavigatorImages;
+        ImageList           m_aNavigatorImages;
+        ImageList           m_aNavigatorImagesHC;
 
         ::svxform::OControlExchangeHelper   m_aControlExchange;
 
@@ -483,10 +501,6 @@ namespace svxform
         SvLBoxEntry*        m_pEditEntry;
 
         sal_uInt32              nEditEvent;
-
-        Image               m_aCollapsedNodeImg;
-        Image               m_aExpandedNodeImg;
-        Image               m_aRootImg;
 
         SELDATA_ITEMS       m_sdiState;
         Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde

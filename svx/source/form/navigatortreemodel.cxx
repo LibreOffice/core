@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortreemodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:05:59 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 08:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,11 +269,12 @@ namespace svxform
     //========================================================================
 
     //------------------------------------------------------------------------
-    NavigatorTreeModel::NavigatorTreeModel(const ImageList& ilNavigatorImages)
+    NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages, const ImageList& _rHCImages )
                     :m_pFormShell(NULL)
                     ,m_pFormPage(NULL)
                     ,m_pFormModel(NULL)
-                    ,m_ilNavigatorImages(ilNavigatorImages)
+                    ,m_aNormalImages( _rNormalImages )
+                    ,m_aHCImages( _rHCImages )
     {
         m_pPropChangeList = new OFormComponentObserver(this);
         m_pPropChangeList->acquire();
@@ -598,7 +599,7 @@ namespace svxform
                     "NavigatorTreeModel::FillBranch : the root container should supply only elements of type XForm");
 
                 xForms->getByIndex(i) >>= xSubForm;
-                pSubFormData = new FmFormData( xSubForm, m_ilNavigatorImages, pFormData );
+                pSubFormData = new FmFormData( xSubForm, m_aNormalImages, m_aHCImages, pFormData );
                 Insert( pSubFormData, LIST_APPEND );
 
                 //////////////////////////////////////////////////////////////
@@ -628,7 +629,7 @@ namespace svxform
 
                 if (xSubForm.is())
                 {   // die aktuelle Component ist eine Form
-                    pSubFormData = new FmFormData(xSubForm, m_ilNavigatorImages, pFormData);
+                    pSubFormData = new FmFormData(xSubForm, m_aNormalImages, m_aHCImages, pFormData);
                     Insert(pSubFormData, LIST_APPEND);
 
                     //////////////////////////////////////////////////////////////
@@ -637,7 +638,7 @@ namespace svxform
                 }
                 else
                 {
-                    pNewControlData = new FmControlData(xCurrentComponent, m_ilNavigatorImages, pFormData);
+                    pNewControlData = new FmControlData(xCurrentComponent, m_aNormalImages, m_aHCImages, pFormData);
                     Insert(pNewControlData, LIST_APPEND);
                 }
             }
@@ -659,7 +660,7 @@ namespace svxform
         if (xParentForm.is())
             pParentData = (FmFormData*)FindData( xParentForm, GetRootList() );
 
-        pFormData = new FmFormData( xForm, m_ilNavigatorImages, pParentData );
+        pFormData = new FmFormData( xForm, m_aNormalImages, m_aHCImages, pParentData );
         Insert( pFormData, nRelPos );
     }
 
@@ -676,7 +677,7 @@ namespace svxform
         FmFormData* pParentData = (FmFormData*)FindData( xForm, GetRootList() );
         if( !pParentData )
         {
-            pParentData = new FmFormData( xForm, m_ilNavigatorImages, NULL );
+            pParentData = new FmFormData( xForm, m_aNormalImages, m_aHCImages, NULL );
             Insert( pParentData, LIST_APPEND );
         }
 
@@ -684,7 +685,7 @@ namespace svxform
         {
             //////////////////////////////////////////////////////////
             // Neue EntryData setzen
-            FmEntryData* pNewEntryData = new FmControlData( xComp, m_ilNavigatorImages, pParentData );
+            FmEntryData* pNewEntryData = new FmControlData( xComp, m_aNormalImages, m_aHCImages, pParentData );
 
             //////////////////////////////////////////////////////////
             // Neue EntryData einfuegen
@@ -697,7 +698,7 @@ namespace svxform
     {
         FmEntryData* pData = FindData(xOld, GetRootList(), sal_True);
         DBG_ASSERT(pData && pData->ISA(FmControlData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
-        ((FmControlData*)pData)->ModelReplaced(xNew, m_ilNavigatorImages);
+        ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages, m_aHCImages );
 
         FmNavModelReplacedHint aReplacedHint( pData );
         Broadcast( aReplacedHint );
@@ -1116,6 +1117,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/05/16 15:05:59  fs
+ *  some major changes in preparation of #98725# (not enabled, yet)
+ *
  *  Revision 1.1  2002/05/08 07:06:16  fs
  *  initial checkin - outsourced the tree model from fmexpl.cxx
  *
