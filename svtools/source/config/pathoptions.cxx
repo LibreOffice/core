@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-06 12:58:10 $
+ *  last change: $Author: pb $ $Date: 2000-11-07 07:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocaleStr;
     if ( aLocale >>= aLocaleStr )
+#if SUPD < 613
         m_eLanguageType = ConvertIsoStringToLanguage( aLocaleStr, '_' );
+#else
+        m_eLanguageType = ConvertIsoStringToLanguage( aLocaleStr );
+#endif
     else
     {
         DBG_ERRORFILE( "wrong any type" );
