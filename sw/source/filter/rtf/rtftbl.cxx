@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:26:55 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,19 +395,25 @@ void SwRTFParser::ReadTable( int nToken )
                     SvxBoxItem prevaBox(prevpFmt->GetBox());
                     USHORT prevWidthRight=0;
                     USHORT currWidthLeft=0;
+                    bool bDoubleLine=false;
                     const SvxBorderLine*   brdrline ;
                     if(prevaBox.GetRight())
                     {
                         brdrline=prevaBox.GetRight();
                         prevWidthRight = brdrline->GetOutWidth();
+                        if(brdrline->GetInWidth())
+                            bDoubleLine=true;
                     }
                     if(aBox.GetLeft())
                     {
                         brdrline=aBox.GetLeft();
                         currWidthLeft = brdrline->GetOutWidth();
-
+                        if(brdrline->GetInWidth())
+                            bDoubleLine=true;
                     }
-                    if(currWidthLeft >0 || prevWidthRight >0 )
+
+                    if((currWidthLeft >0 || prevWidthRight >0) &&
+                        !bDoubleLine)
                     {
                         USHORT newBorderWidth=(currWidthLeft+prevWidthRight)/2 ;
                         if(newBorderWidth /2 ==DEF_LINE_WIDTH_0 )
@@ -441,6 +447,7 @@ void SwRTFParser::ReadTable( int nToken )
                     }
 
                 }
+
 
                 pFmt->SetAttr(aBox);
 
