@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 12:02:10 $
+ *  last change: $Author: fs $ $Date: 2002-04-10 06:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include <connectivity/PColumn.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 
@@ -278,8 +281,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
     OSL_ENSURE(_xConnection.is()," Connection cant be null!");
     OSL_ENSURE(_xTableSupplier.is(),"TableSupplier cant be null!");
 
-    Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    m_aLocale.Language = ::comphelper::getString(aValue);
+    m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats(m_xConnection,sal_True,m_xServiceFactory);
     Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
