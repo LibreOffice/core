@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022kr.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-23 09:42:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ sal_Size ImplConvertIso2022KrToUnicode(ImplTextConverterData const * pData,
               m_pKsX1001ToUnicodeData;
     ImplIso2022KrToUnicodeState eState
         = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
-    sal_uInt32 nRow;
+    sal_uInt32 nRow = 0;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
