@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-16 10:53:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ End
 File gid_File_Registry_Spool_Oo_Scripting_Python_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Office.Scripting-python.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Scripting;
+    Name = "/registry/spool/org/openoffice/Office/Scripting-python.xcu";
 End
 
 File gid_File_Lib_Python_So
