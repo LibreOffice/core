@@ -1,0 +1,263 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XConversionDictionary.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:58:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XConversionDictionary_idl__
+#define __com_sun_star_linguistic2_XConversionDictionary_idl__
+
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_ConversionDictionaryType_idl__
+#include <com/sun/star/linguistic2/ConversionDictionaryType.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_ConversionDirection_idl__
+#include <com/sun/star/linguistic2/ConversionDirection.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_container_ElementExistException_idl__
+#include <com/sun/star/container/ElementExistException.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** Allows the user to access a conversion dictionary.
+
+    <p>The dictionary consists of entries (pairs) of the form
+    ( aLeftText, aRightText ).
+    Those pairs can be added and removed. Also it can be looked
+    for all entries where the left text or the right text matches
+    a given text. Thus it can be used for conversions in both
+    directions.</p>
+
+    <p>Restrictions to what has to be the left and right text are usually
+    given by specific services implementing this interface.</p>
+
+    @see com::sun::star::linguistic2::ConversionDictionary
+    @see com::sun::star::linguistic2::HangulHanjaConversionDictionary
+*/
+interface XConversionDictionary : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the name of the dictionary.
+    */
+    string getName();
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the language supported by the dictionary.
+
+        @see    com::sun::star::lang::Locale
+    */
+    com::sun::star::lang::Locale getLocale();
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the conversion type supported by the dictionary.
+
+        @see    com::sun::star::linguistic2::ConversionDictionaryType
+    */
+    short getConversionType();
+
+    //-------------------------------------------------------------------------
+    /** specifies whether the dictionary should be used or not .
+
+        @param  bAcvtivate
+            <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
+
+    */
+    void setActive( [in] boolean bActivate );
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            <TRUE/> if the dictionary is active, <FALSE/> otherwise.
+    */
+    boolean isActive();
+
+    //-------------------------------------------------------------------------
+    /** removes all entries from the dictionary.
+    */
+    void clear();
+
+    //-------------------------------------------------------------------------
+    /** searches for entries or conversions that match the given text.
+
+        <p>The exact string to be looked for is the substring from the
+        aText parameter that starts at position nStartPos and has the
+        length nLength.</p>
+
+        @returns
+            the list of conversions found for the supplied text.
+            If no nothing was found, it is empty.
+
+        @param  aText
+            the text where the substring to be looked for will be taken from.
+            Depending on the conversion direction parameter it specifies
+            either the left text or the right text to look for.
+        @param  nStartPos
+            the starting pos of the substring to be looked for.
+        @param  nLength
+            the length of the substring to be looked for.
+
+        @param eConversionDirection
+            specifies the direction of the conversion to look for.
+            It is one of
+            <type scope="com::sun::star::linguistic2">ConversionDirection</type>.
+
+        @param nTextConversionOptions
+            Combination of <type scope="com::sun::star::i18n">TextConversionOptions</type>
+            values.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the locale is not supported by the dictionary or if
+            nTextConversionOptions is invalid for the given locale.
+    */
+    sequence< string > getConversions(
+            [in] string aText,
+            [in] long nStartPos,
+            [in] long nLength,
+            [in] com::sun::star::linguistic2::ConversionDirection eDirection,
+            [in] long nTextConversionOptions )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** is used to add a conversion pair to the dictionary.
+
+        @param  aLeftText
+            the left text of the pair to be added.
+
+        @param  aRightText
+            the right text of the pair to be added.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the arguments are invalid.
+            For example if the specifications defined by the service
+            implementing this object are not met.
+
+        @throws com::sun::star::container::ElementExistException
+            if such an entry already exists.
+    */
+    void addEntry(
+            [in] string     aLeftText,
+            [in] string     aRightText )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::ElementExistException);
+
+    //-------------------------------------------------------------------------
+    /** removes a conversion pair from the dictionary.
+
+        @param  aLeftText
+            the left text of the pair to be removed.
+
+        @param  aRightText
+            the right text of the pair to be removed.
+
+        @throws com::sun::star::container::NoSuchElementException
+            if there is no such entry.
+    */
+    void removeEntry(
+            [in] string     aLeftText,
+            [in] string     aRightText )
+        raises( com::sun::star::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------
+    /** returns the maximum number of characters used as left or right text
+        in entries.
+
+        @param eDirection
+            specifies if the left text or the right text of entries will
+            be used.
+
+        @see com::sun::star::linguistic2::ConversionDirection
+    */
+    short getMaxCharCount(
+            [in] com::sun::star::linguistic2::ConversionDirection eDirection );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
