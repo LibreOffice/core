@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_simplified ] = "´ÓÉÏ·½¿ªÊ¼´òÓ¡(~T)";
         Text[ russian ] = "Ïå÷àòàòü ñâåğõó";
         Text[ polish ] = "Drukuj od góry";
-        Text[ japanese ] = "ã‚©‚çˆóü(~T)";
+        Text[ japanese ] = "••“›‚Ì•\\‚ğã‚É‚·‚é(~T)";
         Text[ chinese_traditional ] = "±q¤W¤è¶}©l¦C¦L(~T)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÚáì";
         Text[ greek ] = "Åêôığùóç áğü ğÜíù";
@@ -158,7 +158,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_simplified ] = "´ÓÏÂ·½¿ªÊ¼´òÓ¡(~B)";
         Text[ russian ] = "Ïå÷àòàòü ñíèçó";
         Text[ polish ] = "Drukuj od do³u";
-        Text[ japanese ] = "‰º‚©‚çˆóü(~B)";
+        Text[ japanese ] = "••“›‚Ì•\\‚ğ‰º‚É‚·‚é(~B)";
         Text[ chinese_traditional ] = "±q¤U¤è¶}©l¦C¦L(~B)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÓİá";
         Text[ greek ] = "Åêôığùóç áğü êÜôù";
@@ -177,7 +177,7 @@ TabPage TP_ENV_PRT
         Text [ ENGLISH_US ] = "~Shift right" ;
         Text [ SPANISH ] = "Hacia la ~derecha" ;
         Text [ FINNISH ] = "Siirrõ oikealle" ;
-        Text [ FRENCH ] = "A ~droite" ;
+        Text [ FRENCH ] = "Vers la ~droite" ;
         Text [ ITALIAN ] = "Sposta a destra" ;
         Text [ DUTCH ] = "Naar re~chts" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Trocar Ó direita" ;
@@ -305,7 +305,7 @@ TabPage TP_ENV_PRT
         Text [ spanish ] = "Configurar..." ;
         Text [ french ] = "~Paramétrer..." ;
         Text [ dutch ] = "~Configureren..." ;
-        Text [ swedish ] = "Inrä~tta..." ;
+        Text [ swedish ] = "Ställ ~in..." ;
         Text [ danish ] = "Indstil..." ;
         Text [ portuguese_brazilian ] = "Einrichten..." ;
         Text [ portuguese ] = "~Configurar..." ;
