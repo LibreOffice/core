@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:17:38 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,9 +265,28 @@ void XMLFilterSettingsDialog::updateStates()
     bool bHasSelection = pSelectedEntry != NULL;
 
     bool bMultiSelection = bHasSelection && (mpFilterListBox->NextSelected( pSelectedEntry ) != NULL );
-    maPBEdit.Enable( bHasSelection && !bMultiSelection );
+    bool bIsReadonly = false;
+    bool bIsDefault = false;
+    if(pSelectedEntry)
+    {
+        filter_info_impl* pInfo = (filter_info_impl*)pSelectedEntry->GetUserData();
+        bIsReadonly = 0 != pInfo->mbReadonly;
+
+        sal_Int32 nFact = SvtModuleOptions::E_WRITER;
+        while(nFact <= SvtModuleOptions::E_BASIC)
+        {
+            ::rtl::OUString sDefault = maModuleOpt.GetFactoryDefaultFilter((SvtModuleOptions::EFactory)nFact);
+            if( sDefault == pInfo->maFilterName )
+            {
+                bIsDefault = true;
+                break;
+            }
+            ++nFact;
+        }
+    }
+    maPBEdit.Enable( bHasSelection && !bMultiSelection && !bIsReadonly);
     maPBTest.Enable( bHasSelection && !bMultiSelection );
-    maPBDelete.Enable( bHasSelection && !bMultiSelection );
+    maPBDelete.Enable( bHasSelection && !bMultiSelection && !bIsReadonly && !bIsDefault);
     maPBSave.Enable( bHasSelection );
 }
 
@@ -1252,6 +1271,10 @@ void XMLFilterSettingsDialog::initFilterList()
                                 {
                                     pValues->Value >>= pTempFilter->mnDocumentIconID;
                                 }
+                                else if(pValues->Name.equalsAscii( "Finalized" ))
+                                {
+                                    pValues->Value >>= pTempFilter->mbReadonly;
+                                }
                             }
                         }
                     }
@@ -1602,7 +1625,8 @@ String XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
 filter_info_impl::filter_info_impl()
 :   maFlags(0x00080040),
     maFileFormatVersion(0),
-    mnDocumentIconID(0)
+    mnDocumentIconID(0),
+    mbReadonly(sal_False)
 {
 }
 
@@ -1623,7 +1647,8 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maImportTemplate( rInfo.maImportTemplate ),
     maFlags( rInfo.maFlags ),
     maFileFormatVersion( rInfo.maFileFormatVersion ),
-    mnDocumentIconID( rInfo.mnDocumentIconID )
+    mnDocumentIconID( rInfo.mnDocumentIconID ),
+    mbReadonly( rInfo.mbReadonly )
 {
 }
 
