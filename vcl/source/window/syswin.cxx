@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-15 08:38:55 $
+ *  last change: $Author: ssa $ $Date: 2002-02-22 09:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,9 @@
 #ifndef _SV_SYSWIN_HXX
 #include <syswin.hxx>
 #endif
-
+#ifndef _SV_TASKPANELIST_HXX
+#include <taskpanelist.hxx>
+#endif
 #include <unowrap.hxx>
 
 #ifdef REMOTE_APPSERVER
@@ -136,6 +138,7 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mbSysChild          = FALSE;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
     mnIcon              = 0;
+    mpTaskPaneList      = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -163,7 +166,34 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
 
 long SystemWindow::PreNotify( NotifyEvent& rNEvt )
 {
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        if( mpTaskPaneList && mpTaskPaneList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
+            return TRUE;
+    }
     return Window::PreNotify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
+TaskPaneList* SystemWindow::GetTaskPaneList()
+{
+    if( mpTaskPaneList )
+        return mpTaskPaneList ;
+    else
+    {
+        mpTaskPaneList = new TaskPaneList();
+        MenuBar* pMBar = mpMenuBar;
+        if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+        {
+            SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
+            if ( pW )
+                pMBar = pW->GetMenuBar();
+        }
+        if( pMBar )
+            mpTaskPaneList->AddWindow( pMBar->ImplGetWindow() );
+        return mpTaskPaneList;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -698,6 +728,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
     {
         MenuBar* pOldMenuBar = mpMenuBar;
         Window*  pOldWindow;
+        Window*  pNewWindow=NULL;
         mpMenuBar = pMenuBar;
 
         if ( mpBorderWindow && (mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
@@ -709,13 +740,30 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
             if ( pMenuBar )
             {
                 DBG_ASSERT( !pMenuBar->pWindow, "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
-                ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarWindow( MenuBar::ImplCreate( mpBorderWindow, pOldWindow, pMenuBar ) );
+                ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarWindow( pNewWindow = MenuBar::ImplCreate( mpBorderWindow, pOldWindow, pMenuBar ) );
             }
             else
                 ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarWindow( NULL );
             ImplToBottomChild();
             if ( pOldMenuBar )
                 MenuBar::ImplDestroy( pOldMenuBar, pMenuBar == 0 );
+
+        }
+        else
+        {
+            if( pMenuBar )
+                pNewWindow = pMenuBar->ImplGetWindow();
+            if( pOldMenuBar )
+                pOldWindow = pOldMenuBar->ImplGetWindow();
+        }
+
+        // update taskpane list to make menubar accessible
+        if( mpTaskPaneList )
+        {
+            if( pOldWindow )
+                mpTaskPaneList->RemoveWindow( pOldWindow );
+            if( pNewWindow )
+                mpTaskPaneList->AddWindow( pNewWindow );
         }
 
         Application::GenerateAccessEvent( ACCESS_EVENT_MENUBAR );

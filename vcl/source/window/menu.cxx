@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-06 14:32:38 $
+ *  last change: $Author: ssa $ $Date: 2002-02-22 09:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,9 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
-
+#ifndef _SV_TASKPANELIST_HXX
+#include <taskpanelist.hxx>
+#endif
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -438,6 +440,7 @@ private:
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
     void            LoseFocus();
+    void            GetFocus();
 
 public:
                     MenuBarWindow( Window* pParent );
@@ -3393,7 +3396,23 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
     {
         ImplGetSVData()->maWinData.mbNoDeactivate = TRUE;
         if( !bStayActive )
-            nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+        {
+            if( nSaveFocusId )
+            {
+                if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
+                {
+                    // we didn't clean up last time
+                    Window::EndSaveFocus( nSaveFocusId, FALSE );    // clean up
+                    nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+                }
+                else
+                    ; // do nothing: we 're activated again from taskpanelist, focus was already saved
+            }
+            else
+            {
+                nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+            }
+        }
         else
             bStayActive = FALSE;
         pMenu->bInCallback = TRUE;  // hier schon setzen, falls Activate ueberladen
@@ -3406,10 +3425,13 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
         pMenu->bInCallback = TRUE;
         pMenu->Deactivate();
         pMenu->bInCallback = FALSE;
-        ULONG nTempFocusId = nSaveFocusId;
-        nSaveFocusId = 0;
         ImplGetSVData()->maWinData.mbNoDeactivate = FALSE;
-        Window::EndSaveFocus( nTempFocusId, bAllowRestoreFocus );
+        if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
+        {
+            ULONG nTempFocusId = nSaveFocusId;
+            nSaveFocusId = 0;
+            Window::EndSaveFocus( nTempFocusId, bAllowRestoreFocus );
+        }
     }
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
@@ -3467,6 +3489,15 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
 
     BOOL bDone = FALSE;
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
+
+    if( GetParent() )
+    {
+        SystemWindow *pSysWin = (SystemWindow*)GetParent()->GetWindow( WINDOW_CLIENT );
+        if( pSysWin->IsSystemWindow() && pSysWin->GetTaskPaneList() )
+            if( pSysWin->GetTaskPaneList()->HandleKeyEvent( rKEvent ) )
+                return TRUE;
+    }
+
     if ( nCode == KEY_MENU )
     {
         mbAutoPopup = FALSE;
@@ -3735,4 +3766,10 @@ void MenuBarWindow::LoseFocus()
 {
     if ( !HasChildPathFocus( TRUE ) )
         ChangeHighlightItem( ITEMPOS_INVALID, FALSE, FALSE );
+}
+
+void MenuBarWindow::GetFocus()
+{
+    if ( nHighlightedItem == ITEMPOS_INVALID )
+        ChangeHighlightItem( 0, FALSE );
 }
