@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:28:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
 
 #include <unowrap.hxx>
 
-#pragma hdrstop
+
 
 // =======================================================================
 
