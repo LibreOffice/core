@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:21:03 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,11 +187,12 @@ BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nIn
         {
             switch(nInd)
             {
-                case 0: aSourceRect = Rectangle(Point(72, 53), Size(13, 13)); break;
-                case 1: aSourceRect = Rectangle(Point(85, 53), Size(13, 13)); break;
-                case 2: aSourceRect = Rectangle(Point(72, 65), Size(13, 13)); break;
-                case 3: aSourceRect = Rectangle(Point(85, 65), Size(13, 13)); break;
-                case 4: aSourceRect = Rectangle(Point(98, 65), Size(13, 13)); break;
+                case 0: aSourceRect = Rectangle(Point(72, 66), Size(13, 13)); break;
+                case 1: aSourceRect = Rectangle(Point(85, 66), Size(13, 13)); break;
+                case 2: aSourceRect = Rectangle(Point(72, 78), Size(13, 13)); break;
+                case 3: aSourceRect = Rectangle(Point(85, 78), Size(13, 13)); break;
+                case 4: aSourceRect = Rectangle(Point(98, 78), Size(13, 13)); break;
+                case 5: aSourceRect = Rectangle(Point(98, 66), Size(13, 13)); break;
             }
 
             break;
@@ -204,6 +205,7 @@ BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nIn
         }
 
         case Circ_9x9:
+        case Customshape1:
         {
             aSourceRect = Rectangle(Point(34, nYPos), Size(9, 9));
             break;
@@ -259,13 +261,13 @@ BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nIn
 
         case Crosshair:
         {
-            aSourceRect = Rectangle(Point(0, 55), Size(15, 15));
+            aSourceRect = Rectangle(Point(0, 68), Size(15, 15));
             break;
         }
 
         case Glue:
         {
-            aSourceRect = Rectangle(Point(15, 61), Size(9, 9));
+            aSourceRect = Rectangle(Point(15, 74), Size(9, 9));
             break;
         }
 
@@ -273,7 +275,7 @@ BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nIn
         // #101688# AnchorTR for SW
         case AnchorTR:
         {
-            aSourceRect = Rectangle(Point(24, 55), Size(24, 23));
+            aSourceRect = Rectangle(Point(24, 68), Size(24, 23));
             break;
         }
 
@@ -281,7 +283,7 @@ BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nIn
         case AnchorPressed:
         case AnchorPressedTR:
         {
-            aSourceRect = Rectangle(Point(48, 55), Size(24, 23));
+            aSourceRect = Rectangle(Point(48, 68), Size(24, 23));
             break;
         }
     }
@@ -565,6 +567,14 @@ void SdrHdl::CreateB2dIAObject()
             case HDL_ANCHOR_TR:
             {
                 eKindOfMarker = AnchorTR;
+                break;
+            }
+
+            // for SJ and the CustomShapeHandles:
+            case HDL_CUSTOMSHAPE1:
+            {
+                eKindOfMarker = Customshape1;
+                eColIndex = Yellow;
                 break;
             }
         }
@@ -860,6 +870,7 @@ Pointer SdrHdl::GetPointer() const
                 case HDL_REF2 : ePtr=POINTER_REFHAND;   break;
                 case HDL_BWGT : ePtr=POINTER_MOVEBEZIERWEIGHT; break;
                 case HDL_GLUE : ePtr=POINTER_MOVEPOINT; break;
+                case HDL_CUSTOMSHAPE1 : ePtr=POINTER_HAND; break;
             }
         }
     }
@@ -907,6 +918,10 @@ BOOL SdrHdl::IsFocusHdl() const
         //case HDL_TRNS:        // interactive transparence
         //case HDL_GRAD:        // interactive gradient
         //case HDL_COLR:        // interactive color
+
+        // for SJ and the CustomShapeHandles:
+        case HDL_CUSTOMSHAPE1:
+
         case HDL_USER:
         {
             return TRUE;
