@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pushbuttonnavigation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:24:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ namespace pcr
             Reference< XPropertyState > xStateAccess( m_xControlModel, UNO_QUERY );
             if ( xStateAccess.is() )
             {
-                // let's say what the model says about the ButtonType property
+                // let's see what the model says about the ButtonType property
                 eState = xStateAccess->getPropertyState( PROPERTY_BUTTONTYPE );
                 if ( eState == PropertyState_DIRECT_VALUE )
                 {
