@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
+ *  last change: $Author: pw $ $Date: 2000-10-10 08:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,12 @@ __EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
         pChildWinContext( pChWinCtxt ),
         // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
         eDragType       ( NAVIGATOR_DRAGTYPE_EMBEDDED ),
-        bDocImported    ( FALSE )
+        bDocImported    ( FALSE ),
+        mpFocusWin      ( NULL )
 {
+    if( pParent )
+        mpFocusWin = pParent->GetParent();
+
     aTlbObjects.SetViewFrame( pBindings->GetDispatcher()->GetFrame() );
 
     FreeResource();
@@ -152,6 +156,7 @@ __EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
     // TreeListBox
     aTlbObjects.SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
     aTlbObjects.SetSelectionMode( SINGLE_SELECTION );
+    aTlbObjects.SetGetFocusHdl( LINK( this, SdNavigatorWin, GetFocusObjectsHdl ) );
 
     // DragTypeListBox
     aLbDocs.SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
@@ -238,6 +243,15 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
         eDT = NAVIGATOR_DRAGTYPE_NONE;
     }
     return( eDT );
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SdNavigatorWin, GetFocusObjectsHdl, void *, p )
+{
+    if( mpFocusWin )
+        mpFocusWin->GrabFocus();
+    return 0;
 }
 
 // -----------------------------------------------------------------------

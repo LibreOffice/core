@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:40 $
+ *  last change: $Author: pw $ $Date: 2000-10-10 08:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,9 +165,11 @@ private:
     SfxBindings*                pBindings;
     SdNavigatorControllerItem*  pNavigatorCtrlItem;
     SdPageNameControllerItem*   pPageNameCtrlItem;
+    Window* mpFocusWin;
 
     //------------------------------------
 
+    DECL_LINK( GetFocusObjectsHdl, void * );
     DECL_LINK( SelectToolboxHdl, void * );
     DECL_LINK( ClickToolboxHdl, ToolBox * );
     DECL_LINK( ClickPageHdl, void * );
