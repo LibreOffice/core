@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-11 15:52:35 $
+ *  last change: $Author: mtg $ $Date: 2001-03-15 10:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,14 +257,16 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
 void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
                                         const rtl::OUString& rName) const
 {
-    DBG_ASSERT(rName.getLength(), "no name");
+    //DBG_ASSERT(rName.getLength(), "no name");
     uno::Sequence<beans::PropertyValue> aProps;
-    if ((rAny >>= aProps) && aProps.getLength())
+    rAny >>= aProps;
+    sal_Int32 nLength = aProps.getLength();
+    if (nLength)
     {
         if (rName.getLength())
             rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
         SvXMLElementExport aEntryElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_entry, sal_True, sal_True);
-        for (sal_Int32 i = 0; i < aProps.getLength(); i++)
+        for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
     }
 }
@@ -292,12 +294,15 @@ void XMLSettingsExportHelper::exportIndexAccess(
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong NameAccess" );
-    rtl::OUString sEmpty;
+    rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
     if(aIndexed->hasElements())
     {
         SvXMLElementExport aIndexedElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_map_indexed, sal_True, sal_True);
-        for (sal_Int32 i = 0; i < aIndexed->getCount(); i++)
+        sal_Int32 nCount = aIndexed->getCount();
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
             exportMapEntry(aIndexed->getByIndex(i), sEmpty);
+        }
     }
 }
 
