@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:10:04 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ public:
     // used for breaking table rows:
     SwCellFrm* GetFollowCell() const;
     SwCellFrm* GetPreviousCell() const;
+
+    virtual void  CheckDirection( BOOL bVert );
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwCellFrm)
 };
