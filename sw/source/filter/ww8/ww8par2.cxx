@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:58:48 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     //unit no matter what else happens. So if we are not in a table at
     //all, or if we are in the first cell then test that the last frame
     //data is the same as the current one
-    if (bNowApo && !bTableRowEnd && InLocalApo())
+    if (bNowApo && InEqualApo(nCellLevel))
     {
         // two bordering eachother
         if (!TestSameApo(aRet, pTabPos))
@@ -1954,7 +1954,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
 
         //Does this row match up with the last row closely enough to be
         //considered part of the same table
-        ApoTestResults aApo = pIo->TestApo(pIo->nInTable, false, pTabPos);
+        ApoTestResults aApo = pIo->TestApo(pIo->nInTable + 1, false, pTabPos);
 
         /*
         ##513##, #79474# If this is not sufficent, then we should look at
@@ -2660,13 +2660,8 @@ void WW8TabDesc::FinishSwTable()
     aDup.Insert(*pIo->pPaM->GetPoint());
 
     pIo->bWasTabRowEnd = false;
-    if( pIo->rDoc.GetRootFrm() )
-    {
-        // exitiert schon ein Layout, dann muss an dieser Tabelle die
-        // BoxFrames neu erzeugt werden.
-        pTblNd->DelFrms();
-        pTblNd->MakeFrms( &pIo->pPaM->GetPoint()->nNode );
-    }
+
+    pIo->maInsertedTables.InsertTable(*pTblNd, *pIo->pPaM);
 
     MergeCells();
 
