@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSynchronousFrameLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:26:30 $
+ *  last change:$Date: 2003-09-08 10:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,20 @@
 
 package ifc.frame;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XSynchronousFrameLoader;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.*;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 import util.SOfficeFactory;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XSynchronousFrameLoader;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
 
 /**
  * Testing <code>com.sun.star.frame.XSynchronousFrameLoader</code>
@@ -162,7 +164,6 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
         descr[0].Value = urlS[0] ;
     }
 
-    private boolean loaded = false ;
 
     /**
      * Tries to load component to a frame. <p>
