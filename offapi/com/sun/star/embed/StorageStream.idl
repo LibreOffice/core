@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageStream.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:23:44 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,115 +84,187 @@
 
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/**  The <type>StorageStream</type> is a service that represents
-a stream that can be provided by <type>XStorage</type>::openStreamElement() call.
-In case a stream is open with readwrite access only one instance
-of the stream can exist.
+//============================================================================
+/**  This is a service that represents a stream that can be provided by
+    <type>XStorage</type>::openStreamElement() call.
+
+    <p>
+    In case a stream is open with readwrite access only one instance
+    of the stream can exist.
+    </p>
  */
 service StorageStream
 {
-    //================================================================
-    /** Allows to get access to <type>XInputStream</type> and <type>XOutputStream</type>
-    implementations. In case the storage stream is open readonly the returned reference
-    to <type>XOutputStream</type> will be empty.
+    // -----------------------------------------------------------------------
+    /** allows to get access to <type scope="com::sun::star::io">XInputStream</type>
+        and <type scope="com::sun::star::io">XOutputStream</type>
+        implementations.
+
+        <p>
+        In case the storage stream is open readonly the returned reference
+        to <type scope="com::sun::star::io">XOutputStream</type> will be
+        empty.
+        </p>
     */
     interface ::com::sun::star::io::XStream;
 
-    //================================================================
-    /** Allows to control object lifetime.
-    <p>
-        A storage stream is created by a storage and has a restrictions depending on the mode
-    the stream is open in. In case a stream is open with readwrite access only one instance
-    of the stream can exist. It means that the stream can not be reopened even for readonly
-    access until the readwrite instance is disposed.
-        From the other side it is possible to open multiple streams for readonly access. But because
-    of the rule mentioned above it will not be possible to open the stream for readwrite access
-    until all the readonly instances are disposed.
-    </p>
-    <p>
-        The stream must be disposed by <type>XComponent</type>::dispose() call or by explicit closing
-    of input and output ( if provided ) streams implementations with
-    <type>XInputStream</type>::closeInput() and <type>XOutputStream</type>::closeOutput() calls.
-    Until stream is not disposed the changes written to it will be ignored during commit of parent storage.
-        In case parent storage is disposed the stream is disposed automatically.
-    </p>
-    <p>
-        In case a stream is disposed any call to it's methods should result in <type>DisposedException</type>.
-    </p>
+    // -----------------------------------------------------------------------
+    /** allows to control object lifetime.
+
+        <p>
+        A storage stream is created by a storage and has a restrictions
+        depending on the mode the stream is opened in.
+        </p>
+
+        <p>
+        In case a stream is opened with read-write access only one instance of
+        the stream can exist. It means that the stream can not be reopened
+        even for readonly access until the readwrite instance is disposed.
+        From the other side it is possible to open multiple streams for
+        readonly access. But because of the rule mentioned above it will not
+        be possible to open the stream for read-write access until all the
+        readonly instances are disposed.
+        </p>
+
+        <p>
+        The stream must be disposed by
+        <member scope="com::sun::star::lang">XComponent::dispose()</member>
+        call or by explicit closing of input and output ( if provided )
+        streams implementations with
+        <member scope="com::sun::star::io">XInputStream::closeInput()</member>
+        and
+        <member scope="com::sun::star::io">XOutputStream::closeOutput()</member>
+        calls.
+        </p>
+
+        <p>
+        When a stream is disposed all the changes that were done for it are
+        automatically flashed, so that they becomes visible from parent
+        storage. It is also possible to flash the stream explicitly.
+        </p>
+
+        <p>
+        In case parent storage is disposed the stream is disposed
+        automatically.
+        </p>
+
+        <p>
+        In case a stream is disposed any call to it's methods should result in
+        <type scope="com::sun::star::lang">DisposedException</type>.
+        </p>
      */
     interface ::com::sun::star::lang::XComponent;
 
-    //================================================================
-    /** Allows to get access to stream properties.
+    // -----------------------------------------------------------------------
+    /** allows to get access to stream properties.
      */
     interface ::com::sun::star::beans::XPropertySet;
 
-    //================================================================
-    /** This interface must be supported in case either seekable readonly
-    or readwrite access is requested.
+    // -----------------------------------------------------------------------
+    /** allows to seek to a specified position within the stream.
+
+        <p>
+        This interface must be supported in case either seekable readonly
+        or read-write access is requested.
+        </p>
      */
     [optional]
     interface ::com::sun::star::io::XSeekable;
 
-    //================================================================
-    /** Allows to set encryption key to the stream.
+    // -----------------------------------------------------------------------
+    /** allows to set password to the stream.
 
-    <p>
+        <p>
         This interface must be supported by a stream with readwrite access
-    to allow to set an encryption key that should be used next time the stream is stored.
-    </p>
+        to allow to set a password that should be used next time the
+        stream is stored.
+        </p>
+
+        <p>
+        If the password is set or changed by this interface and the
+        stream is closed the new password should be used to get access to the
+        stream next time.
+        </p>
      */
     [optional]
     interface ::com::sun::star::embed::XEncryptionProtectedSource;
 
-    //================================================================
-    /** Allows to get and set media type of the stream.
+    // -----------------------------------------------------------------------
+    /** allows to get and set media type of the stream.
      */
     [property] string MediaType;
 
-    //================================================================
-    /** Specifies if the stream should be compressed next time it is stored.
+    // -----------------------------------------------------------------------
+    /** specifies if the stream should be compressed next time it is stored.
      */
-    [property] boolean Compressed;
+    [property] boolean IsCompressed;
 
-    //================================================================
-    /** Allows to detect if the stream is encrypted.
-    <p>
-        The property value <TRUE/> means that the stream is encrypted.
-    <FALSE/> - otherwise.
-    </p>
+    // -----------------------------------------------------------------------
+    /** allows to detect if the stream is encrypted.
 
-    <p>
-        In case stream is not encrypted and the property is set to <TRUE/> explicitly,
-    the key must be set before the property is changed, othewise changing will fail.
-    It can be own encryption key or a common storage encryption key. In case both are
-    set the own one is used.
-        Since setting of own key sets this property to <TRUE/> automatically, changing
-    of this property to <TRUE/> explicitly makes sence only to encrypt stream with common
-    storage encryption key. In this case the own key is set to the current common encryption
-    key value.
-    </p>
+        <p>
+        The property value <TRUE/> means that the stream is currently encrypted.
+        <FALSE/> - the stream is not encrypted.
+        </p>
 
-    <p>
-        In case stream is encrypted one and the value is set to <FALSE/>
-    the stream will not be encrypted next time it is stored. The data about
-    previously set encryption key ( if any ) will be removed.
-    </p>
+        <p>
+        If somebody sets a password explicitly by using
+        <type>XEncryptionProtectedSource</type> interface the value is
+        automatically set to <TRUE/>. If the interface is used to remove
+        the encryption - the value is automatically set to <FALSE/>.
+        </p>
+
      */
-    [property] boolean Encrypted;
+    [property, readonly] boolean IsEncrypted;
 
-    //================================================================
-    /** Allows to detect size of the stream.
+    // -----------------------------------------------------------------------
+    /** specifies whether the stream will become encrypted next time the
+        common storage password holder is commited.
+
+        <p>
+        The property value <TRUE/> means that the stream will become encrypted
+        after the closest storage in the parent hierarchy, that has common
+        storage password, is commited.
+        <FALSE/> - the stream will not react to commit of such a storage.
+        </p>
+
+        <p>
+        In case stream is not encrypted and the property is set to <TRUE/>,
+        the stream will stay nonencrypted until the closest storage
+        in the parent hierarchy, that has common storage password, is commited.
+        On the commit the stream will be encrypted with the common storage
+        password. If there is no such storage in the hierarchy the stream
+        will not be encrypted at all.
+        Thus this property must be set very carefully.
+        </p>
+
+        <p>
+        If somebody sets a password explicitly by using
+        <type>XEncryptionProtectedSource</type> interface the value is
+        automatically set to <FALSE/> and the stream becomes encrypted
+        with specified password immediatelly.
+        </p>
+
+        <p>
+        In case stream is encrypted one and the value is set to <TRUE/>
+        the stream becomes nonencrypted until the common storage password
+        holder is commited. The data about previously set password ( if any )
+        will be removed and the stream can be accessed as nonencrypted stream.
+        </p>
+     */
+    [property] boolean UseCommonStoragePasswordEncryption;
+
+    // -----------------------------------------------------------------------
+    /** allows to detect size of the stream in bytes.
      */
     [property, readonly] long Size;
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
