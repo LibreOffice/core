@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-20 21:17:46 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5778,7 +5778,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Text[ swedish ] = "Den h�r �tg�rden raderar listan med arbetssteg som\ng�r att �ngra. �ndringar som har\ngjorts hittills i dokumentet finns kvar men g�r\ninte att �ngra l�ngre. Vill du forts�tta\noch tilldela den nya sidformatmallen?";
         Text[ polish ] = "Akcja usuwa wykaz etap�w operacji, kt�re\nmo�na cofn��. Zmiany dokonane\nw dokumencie do tego momentu zostan� zachowane, nie mo�na\nich jednak cofn��. Kontynuowa�\n, korzystaj�c z nowego stylu strony?";
         Text[ portuguese_brazilian ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
-        Text[ japanese ] = "このアクションで、元に戻すのが可能な作業過程のリストは削除されてしまいます。\nいままでドキュメントで行った変更はそのまま残りますが、\n元に戻すことはできません。\n続行して新規ページスタイルを適用しますか。";
+        Text[ japanese ] = "このアクションで、元に戻すのが可能な作業過程のリストは削除されてしまいます。\nいままでドキュメントで行った変更はそのまま残りますが、\n元に戻すことはできません。\n続行して新規ページレイアウトを適用しますか。";
         Text[ korean ] = "이 동작은 실행을 취소할 수 있는 동작의 목록을 삭제할 것입니다.\n지금까지 문서에 대해 수행된 변경 사항이 유지됩니다.\n그러나 되돌릴 수 없습니다. 계속하고\n새 페이지 레이아웃을 지정하겠습니까?";
         Text[ chinese_simplified ] = "这项操作会删除用来撤消命令的工作步骤列单。\n至今为止您对文档所做的更改会被保存，\n但是您无法再撤消这些更改。\n要继续并使用新的页面样式？";
         Text[ chinese_traditional ] = "這個動作會刪除復原清單的項目。\n已經變更的內容將會被保留不變，但是不可以再復原所有的變更內容。\n要繼續並且使用這個新的頁面樣式？";
