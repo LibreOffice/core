@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:52:20 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 17:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1093,4 +1093,19 @@ BOOL StarBASIC::StoreData( SvStream& r ) const
 BOOL StarBASIC::LoadOldModules( SvStream& r )
 {
     return FALSE;
+}
+
+::osl::Mutex& StarBASIC::GetGlobalMutex()
+{
+    static ::osl::Mutex* s_pMutex = 0;
+    if ( !s_pMutex )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !s_pMutex )
+        {
+            static ::osl::Mutex s_aMutex;
+            s_pMutex = &s_aMutex;
+        }
+    }
+    return *s_pMutex;
 }
