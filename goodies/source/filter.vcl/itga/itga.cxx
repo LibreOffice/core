@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itga.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,15 +152,15 @@ public:
 //=================== Methoden von TGAReader ==============================
 
 TGAReader::TGAReader() :
-    mbStatus        ( TRUE ),
     mpAcc           ( NULL ),
     mpFileHeader    ( NULL ),
     mpFileFooter    ( NULL ),
     mpExtension     ( NULL ),
     mpColorMap      ( NULL ),
+    mbStatus        ( TRUE ),
+    mnTGAVersion    ( 1 ),
     mbIndexing      ( FALSE ),
-    mbEncoding      ( FALSE ),
-    mnTGAVersion    ( 1 )
+    mbEncoding      ( FALSE )
 {
 }
 
@@ -256,8 +256,11 @@ BOOL TGAReader::ImplReadHeader()
             mpFileFooter->nSignature[0] >> mpFileFooter->nSignature[1] >> mpFileFooter->nSignature[2] >>
                 mpFileFooter->nSignature[3] >> mpFileFooter->nPadByte >> mpFileFooter->nStringTerminator;
 
-        if ( mpFileFooter->nSignature[ 0 ] == 'TRUE' && mpFileFooter->nSignature[ 1 ] == 'VISI' &&
-            mpFileFooter->nSignature[ 2 ] == 'ON-X' && mpFileFooter->nSignature[ 3 ] == 'FILE' )
+        // check for TRUE, VISI, ON-X, FILE in the signatures
+        if ( mpFileFooter->nSignature[ 0 ] == 'T'<<24|'R'<<16|'U'<<8|'E' &&
+             mpFileFooter->nSignature[ 1 ] == 'V'<<24|'I'<<16|'S'<<8|'I' &&
+             mpFileFooter->nSignature[ 2 ] == 'O'<<24|'N'<<16|'-'<<8|'X' &&
+             mpFileFooter->nSignature[ 3 ] == 'F'<<24|'I'<<16|'L'<<8|'E' )
         {
             mpExtension = new TGAExtension;
             if ( mpExtension )
@@ -782,8 +785,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
