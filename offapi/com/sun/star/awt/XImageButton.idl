@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImageButton.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,29 +76,25 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XImageButton
 /** makes it possible to register for action events of an image button
-    and set the action command.
+    and sets the action command.
  */
 interface XImageButton: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageButton::addActionListener
     /** registers a listener for action events.
      */
     [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageButton::removeActionListener
     /** unregisters a listener for action events.
      */
     [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageButton::setActionCommand
     /** sets the action command string.
      */
     [oneway] void setActionCommand( [in] string Command );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGraphics.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,74 +92,61 @@ interface XDevice;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XGraphics
 /** provides the basic output operation of a device.
  */
 interface XGraphics: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XGraphics::getDevice
-    /** @returns
-                the device of this graphics.
+    /** returns the device of this graphics.
      */
     XDevice getDevice();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::getFontMetric
     /** returns the font metric of the current font.
      */
     SimpleFontMetric getFontMetric();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::setFont
     /** sets the font used by text operations.
      */
     [oneway] void setFont( [in] XFont xNewFont );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::selectFont
     /** creates a new font and sets the font.
      */
     [oneway] void selectFont( [in] FontDescriptor aDescription );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::setTextColor
     /** sets the text color used by text operations.
      */
     [oneway] void setTextColor( [in] long nColor );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::setTextFillColor
     /** sets the fill color used by text operations.
      */
     [oneway] void setTextFillColor( [in] long nColor );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::setLineColor
     /** sets the line color.
      */
     [oneway] void setLineColor( [in] long nColor );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::setFillColor
     /** sets the fill color.
      */
     [oneway] void setFillColor( [in] long nColor );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::setRasterOp
     /** sets the raster operation.
-
-
 
         <p>If the device does not support raster operations
         then this call is ignored.</p>
@@ -168,21 +155,18 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::setClipRegion
     /** sets the clip region to specified clipping.
      */
     [oneway] void setClipRegion( [in] XRegion Clipping );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::intersectClipRegion
     /** builds the intersection with the current region.
      */
     [oneway] void intersectClipRegion( [in] XRegion xClipping );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::push
     /** saves all current settings (Font, TextColor, TextFillColor,
         LineColor, FillColor, RasterOp, ClipRegion).
      */
@@ -190,14 +174,12 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::pop
     /** restores all previous saved settings.
      */
     [oneway] void pop();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::copy
     /** copies a rectangle of pixels from another device into this one.
      */
     [oneway] void copy( [in] XDevice xSource,
@@ -212,7 +194,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::draw
     /** draws a part of the specified bitmap to the output device.
      */
     [oneway] void draw( [in] XDisplayBitmap xBitmapHandle,
@@ -227,7 +208,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPixel
     /** sets a single pixel in the output device.
      */
     [oneway] void drawPixel( [in] long X,
@@ -235,7 +215,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawLine
     /** draws a line in the output device.
      */
     [oneway] void drawLine( [in] long X1,
@@ -245,7 +224,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawRect
     /** draws a rectangle in the output device.
      */
     [oneway] void drawRect( [in] long X,
@@ -255,7 +233,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawRoundedRect
     /** draws a rectangle with rounded corners in the output device.
      */
     [oneway] void drawRoundedRect( [in] long X,
@@ -267,7 +244,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPolyLine
     /** draws multiple lines in the output device at once.
      */
     [oneway] void drawPolyLine( [in] sequence<long> DataX,
@@ -275,7 +251,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPolygon
     /** draws a polygon line in the output device.
      */
     [oneway] void drawPolygon( [in] sequence<long> DataX,
@@ -283,7 +258,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPolyPolygon
     /** draws multiple polygons in the output device at once.
      */
     [oneway] void drawPolyPolygon( [in] sequence< sequence<long> > DataX,
@@ -291,7 +265,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawEllipse
     /** draws an ellipse in the output device.
      */
     [oneway] void drawEllipse( [in] long X,
@@ -301,7 +274,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawArc
     /** draws an arc (part of a circle) in the output device.
      */
     [oneway] void drawArc( [in] long X,
@@ -315,7 +287,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPie
     /** draws a circular area in the output device.
      */
     [oneway] void drawPie( [in] long X,
@@ -329,10 +300,7 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawChord
     /** draws a chord of a circular area in the output device.
-
-
 
         <p>A chord is a segment of a circle. You get two chords from a
         circle if you intersect the circle with a straight line
@@ -349,7 +317,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawGradient
     /** draws a color dispersion in the output device.
      */
     [oneway] void drawGradient( [in] long nX,
@@ -360,7 +327,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawText
     /** draws text in the output device.
      */
     [oneway] void drawText( [in] long X,
@@ -369,7 +335,6 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawTextArray
     /** draws texts in the output device using an explicit kerning table.
      */
     [oneway] void drawTextArray( [in] long X,

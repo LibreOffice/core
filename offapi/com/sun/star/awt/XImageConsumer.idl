@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImageConsumer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,24 +73,24 @@ interface XImageProducer;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XImageConsumer
-/** specifies a data sink for an image, or in other words, an interface
-    for a component which wants to display or just receive an image from
-    an image producer.@see XImageProducer
+/** specifies a data sink for an image.
+
+    <p>An image consumer is a component which wants to display or just
+    receive an image from an image producer.</p>
+
+    @see XImageProducer
  */
 interface XImageConsumer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::init
-    /** This initializes the consumer with image dimensions.
+    /** initializes the consumer with image dimensions.
      */
     [oneway] void init( [in] long Width,
              [in] long Height );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::setColorModel
     /** changes color model for next pixels
         typically called once after initialization.
      */
@@ -103,10 +103,7 @@ interface XImageConsumer: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::setPixelsByBytes
     /** delivers a chunk of pixels as <atom>long</atom> values.
-
-
 
         <p>The pixels of the image are delivered using one or more calls
         to this method.  Each call specifies the location and size of the
@@ -126,10 +123,7 @@ interface XImageConsumer: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::setPixelsByLongs
     /** delivers a chunk of pixels as <atom>byte</atom> values.
-
-
 
         <p>The pixels of the image are delivered using one or more calls
         to this method.  Each call specifies the location and size of the
@@ -137,7 +131,7 @@ interface XImageConsumer: com::sun::star::uno::XInterface
         The specified color model object should be used to convert
         the pixels into their corresponding color and alpha components.  Pixel
         (m,n) is stored in the pixels array at index (n * <var>nScanSize</var>
-        + m + nOffset).  </p>
+        + m + nOffset).</p>
      */
     [oneway] void setPixelsByLongs( [in] long nX,
              [in] long nY,
@@ -149,11 +143,8 @@ interface XImageConsumer: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::complete
     /** is called for the notification of the degree to which the
         image is delivered.
-
-
 
         <p>The complete method is called when the image producer
         has finished delivering all of the pixels that the source image
