@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 10:23:32 $
+ *  last change: $Author: hjs $ $Date: 2002-03-06 13:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <internalnode.hxx>
 #endif
 #define YYBISON   1
-#include <connectivity/sqlbison.hxx>
+#include <sqlbison.hxx>
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif

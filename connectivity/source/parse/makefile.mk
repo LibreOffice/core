@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-10 13:09:05 $
+#   last change: $Author: hjs $ $Date: 2002-03-06 13:18:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,11 +67,13 @@ TARGET=sql
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+YACCTARGET= $(MISC)$/sqlbison.cxx
+YACCFILES= sqlbison.y
+YACCFLAGS=-v -d -l -pSQLyy -bsql -o
 
 SLOFILES =  \
         $(SLO)$/sqlNoException.obj	\
@@ -94,13 +96,3 @@ EXCEPTIONSFILES =  \
 $(MISC)$/sqlflex.cxx:	sqlflex.l
     +flex -i -8 -PSQLyy -L -o$(MISC)$/sqlflex.cxx sqlflex.l
 
-$(MISC)$/sqlbison.cxx: sqlbison.y
-    +bison -v -d -pSQLyy -l -bsql -o$(MISC)$/sqlbison.cxx sqlbison.y
-    -$(MKDIR) $(OUT)$/inc$/connectivity
-    +$(COPY) $(MISC)$/sqlbison.cxx.h $(OUT)$/inc$/connectivity$/sqlbison.hxx
-
-$(SLO)$/sqlbison.obj : $(MISC)$/sqlbison.cxx
-
-$(SLO)$/sqlflex.obj : $(MISC)$/sqlflex.cxx
-
-sqliterator.cxx:	$(MISC)$/sqlbison.cxx
