@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jp $ $Date: 2001-03-29 18:13:17 $
+#   last change: $Author: vg $ $Date: 2001-04-10 17:43:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,7 +139,7 @@ SVXLIGHTOBJFILES=	\
         $(OBJ)$/e3ditem.obj \
         $(OBJ)$/numitem.obj \
         $(OBJ)$/grfitem.obj \
-        $(SLO)$/clipfmtitem.obj \
+        $(OBJ)$/clipfmtitem.obj
 
 .INCLUDE :	target.mk
 
