@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-07 08:43:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
         aTypeFilter[1] = s_sTableTypeTable;
         aTypeFilter[2] = sAll;  // just to be sure to include anything else ....
 
-        Reference< XResultSet > xRes = m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter);
+        Reference< XResultSet > xRes = m_xMetaData.is() ? m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter) : Reference< XResultSet >();
         if(xRes.is() && xRes->next())
         {
             Reference< XRow > xRow(xRes,UNO_QUERY);
@@ -409,9 +409,9 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
             if(xTable.is())
             {
-                if(m_xMetaData->supportsCatalogsInTableDefinitions())
+                if( m_xMetaData.is() && m_xMetaData->supportsCatalogsInTableDefinitions() )
                     xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-                if(m_xMetaData->supportsSchemasInTableDefinitions())
+                if( m_xMetaData.is() && m_xMetaData->supportsSchemasInTableDefinitions() )
                     xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
                 xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
