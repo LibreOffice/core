@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-18 11:51:47 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,14 @@
 #include <svx/svxacorr.hxx>
 #endif
 
-
+class SvStorageRef;
 class SwAutoCorrect : public SvxAutoCorrect
 {
 protected:
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
-    virtual BOOL GetLongText( SvStorage&, const String& rShort, String& rLong );
+    virtual BOOL GetLongText( SvStorageRef&, const String& rShort, String& rLong );
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
     virtual BOOL PutText( SvStorage&, const String& rShort, SfxObjectShell& ,
