@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:07:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,6 +719,17 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 #endif
 
         pContext = CreateContext( nPrefix, aLocalName, xAttrList );
+        if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
+            IS_TYPE( SvXMLImportContext, pContext ) )
+        {
+            OUString aMsg( RTL_CONSTASCII_USTRINGPARAM( "Root element unknown" ) );
+            Reference<xml::sax::XLocator> xDummyLocator;
+            Sequence < OUString > aParams(1);
+            aParams.getArray()[0] = rName;
+
+            SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNWON_ROOT,
+                      aParams, aMsg, xDummyLocator );
+        }
     }
 
     DBG_ASSERT( pContext, "SvXMLImport::startElement: missing context" );
@@ -1214,7 +1225,7 @@ sal_Bool SvXMLImport::IsPackageURL( const ::rtl::OUString& rURL ) const
         ++nPos;
     }
 
-    return sal_False;
+    return sal_True;
 }
 
 ::rtl::OUString SvXMLImport::ResolveGraphicObjectURL( const ::rtl::OUString& rURL,
