@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-31 14:05:46 $
+ *  last change: $Author: jp $ $Date: 2001-11-22 18:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1570,10 +1570,9 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
             pRead = ReadAscii;
             if( rData.GetString( nFmt, sData ) )
             {
-//              xStrm = new SotStorageStream( aEmptyStr );
                 pStream = new SvMemoryStream( (void*)sData.getStr(),
-                    ULONG( sData.getLength() + 1 ) * sizeof( sal_Unicode ),
-                    STREAM_READ );
+                            sData.getLength() * sizeof( sal_Unicode ),
+                            STREAM_READ );
 #ifdef __BIGENDIAN
                 pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
