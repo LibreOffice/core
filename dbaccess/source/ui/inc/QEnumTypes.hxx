@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QEnumTypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:18:28 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,8 @@ namespace dbaui
         tpAutoIncrement,
         tpBoolDefault,
         tpColumnName,
-        tpType
+        tpType,
+        tpAutoIncrementValue
     };
 
     enum EScrollDir
