@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:34:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,8 +378,8 @@ namespace dbaccess
             {
                 ::comphelper::disposeComponent(aFind->second->second.xMasterConnection);
                 m_aConnections.erase(aFind->second);
-                m_aSharedConnection.erase(aFind);
             }
+            m_aSharedConnection.erase(aFind);
         }
     }
 
@@ -730,7 +730,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         {
             Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(xDriver,m_pImpl->m_sConnectURL,m_pImpl->m_aInfo);
 
-            if ( m_pImpl->m_sConnectURL.compareToAscii("sdbc:embedded:",14) == 0 )
+            if ( m_pImpl->isEmbeddedDatabase() )
             {
                 sal_Int32 nCount = aDriverInfo.getLength();
                 aDriverInfo.realloc(nCount + 2 );
@@ -1086,7 +1086,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUS
 {
     Reference< XConnection > xConn;
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
-    DBG_ASSERT( xSdbcConn.is(), "ODatabaseSource::getConnection: invalid return value of buildLowLevelConnection!" );
+    DBG_ASSERT( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
     // buildLowLevelConnection is expected to always succeed
     if ( xSdbcConn.is() )
     {
