@@ -7157,3 +7157,4 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?registerFactories@FileDialogHelper@sfx2@@CAXV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@@Z
 ?s_pType_com_sun_star_container_XContentEnumerationAccess@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXContentEnumerationAccess@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?set@?$Reference@VXEnumeration@container@star@sun@com@@@uno@star@sun@com@@QAAEPAVXEnumeration@container@345@@Z
+?registerFactories@FileDialogHelper@sfx2@@SAXV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@@Z
