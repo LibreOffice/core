@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:10:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ public:
 
 // --- class ExcWindow28 ---------------------------------------------
 
-class ExcWindow28 : public ExcRecord, protected XclExpRoot
+class XclExpWindow28 : public XclExpRecord, protected XclExpRoot
 {
 private:
     ExcPane8*                   pPaneRec;
@@ -459,15 +459,13 @@ private:
     BOOL                        bHorSplit       : 1;
     BOOL                        bVertSplit      : 1;
 
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteBody( XclExpStream& rStrm );
 
 public:
-                                ExcWindow28( const XclExpRoot& rRoot, SCTAB nScTab );
-    virtual                     ~ExcWindow28();
+                                XclExpWindow28( const XclExpRoot& rRoot, SCTAB nScTab );
+    virtual                     ~XclExpWindow28();
 
     virtual void                Save( XclExpStream& rStrm );
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
 };
 
 
