@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-01 11:32:47 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 20:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModelessDialog RID_SCDLG_FILTER
     Text [ french ] = "Filtre standard" ;
     Text [ swedish ] = "Standardfilter" ;
     Text [ dutch ] = "Standaardfilter" ;
-    Text [ spanish ] = "Filtro est醤dar" ;
+    Text [ spanish ] = "Filtro predeterminado" ;
     Text [ english_us ] = "Standard Filter" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -1535,7 +1535,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ french ] = "La plage contient des en-t阾es de ~colonnes" ;
         Text [ swedish ] = "Omr錮e ~inneh錶ler kolumnhuvuden" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
-        Text [ spanish ] = "Area contiene t韙ulos de ~columnas" ;
+        Text [ spanish ] = "羠ea contiene t韙ulos de ~columnas" ;
         Text [ english_us ] = "Range contains ~column headers" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "区域包含列标题(~C)";
@@ -1997,7 +1997,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ french ] = "La plage contient des en-t阾es de ~colonnes" ;
         Text [ swedish ] = "Omr錮e ~inneh錶ler kolumnhuvuden" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
-        Text [ spanish ] = "Area contiene t韙ulos de ~columnas" ;
+        Text [ spanish ] = "羠ea contiene t韙ulos de ~columnas" ;
         Text [ english_us ] = "C~ontains column headers" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "区域包含列标题(~O)";
@@ -3646,6 +3646,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
 
