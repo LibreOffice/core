@@ -7,7 +7,7 @@ namespace DOM { namespace events
     {
     }
 
-    EventType SAL_CALL CEvent::getType() throw (RuntimeException)
+    OUString SAL_CALL CEvent::getType() throw (RuntimeException)
     {
         return m_eventType;
     }
@@ -44,13 +44,14 @@ namespace DOM { namespace events
 
     void SAL_CALL CEvent::stopPropagation() throw (RuntimeException)
     {
+        if (m_cancelable) m_canceled = sal_True;
     }
 
     void SAL_CALL CEvent::preventDefault() throw (RuntimeException)
     {
     }
 
-    void SAL_CALL CEvent::initEvent( EventType eventTypeArg, sal_Bool canBubbleArg, 
+    void SAL_CALL CEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
         sal_Bool cancelableArg) throw (RuntimeException)
     {
         m_eventType = eventTypeArg;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:15 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,15 @@
 #include <list>
 #include <sal/types.h>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XAttr.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
+#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
+#include <com/sun/star/xml/dom/events/XEvent.hpp>
 
 #include "node.hxx"
 
@@ -80,13 +83,14 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
+using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
     
     typedef std::list< Reference< XNode >* > nodereflist_t;
 
-    class CDocument : public cppu::ImplInheritanceHelper1< CNode, XDocument >
+    class CDocument : public cppu::ImplInheritanceHelper2< CNode, XDocument, XDocumentEvent >
     {
         friend class CNode;
     private:
@@ -340,7 +344,11 @@ namespace DOM
         return CNode::setPrefix(prefix);
     }
 
+    // XDocumentEvent
+    virtual Reference< XEvent > createEvent(const OUString& eventType) throw (RuntimeException);
+
     };
+
 }
 
 #endif

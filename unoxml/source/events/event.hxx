@@ -34,8 +34,11 @@ friend class CCharacterData;
 friend class CAttr;
 
 
+private:
+    sal_Bool m_canceled;
+
 protected:
-    EventType m_eventType;
+    OUString m_eventType;
     Reference< XEventTarget > m_target;
     Reference< XEventTarget > m_currentTarget;
     //xmlNodePtr m_target;
@@ -47,8 +50,10 @@ protected:
 
 public:
 
+    CEvent() : m_canceled(sal_False){}
+
     virtual ~CEvent();
-    virtual EventType SAL_CALL getType() throw (RuntimeException);
+    virtual OUString SAL_CALL getType() throw (RuntimeException);
     virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException);
     virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException);
     virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException);
@@ -58,10 +63,9 @@ public:
     virtual void SAL_CALL stopPropagation() throw (RuntimeException);
     virtual void SAL_CALL preventDefault() throw (RuntimeException);
     virtual void SAL_CALL initEvent(
-        EventType eventTypeArg, 
+        const OUString& eventTypeArg, 
         sal_Bool canBubbleArg, 
-        sal_Bool cancelableArg) 
-        throw (RuntimeException);    
+        sal_Bool cancelableArg)  throw (RuntimeException);    
 };
 }}
 #endif

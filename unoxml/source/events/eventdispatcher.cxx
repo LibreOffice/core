@@ -7,7 +7,7 @@ namespace DOM { namespace events {
     TypeListenerMap CEventDispatcher::captureListeners;
     TypeListenerMap CEventDispatcher::targetListeners;
 
-    void CEventDispatcher::addListener(xmlNodePtr pNode, EventType aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
+    void CEventDispatcher::addListener(xmlNodePtr pNode, OUString aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
     {
         TypeListenerMap* pTMap = &targetListeners;
         if (bCapture) pTMap = &captureListeners;
@@ -26,7 +26,7 @@ namespace DOM { namespace events {
             pMap->insert(ListenerMap::value_type(pNode, aListener));
     }
 
-    void CEventDispatcher::removeListener(xmlNodePtr pNode, EventType aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
+    void CEventDispatcher::removeListener(xmlNodePtr pNode, OUString aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
     {
         TypeListenerMap *pTMap = &targetListeners;
         if (bCapture) pTMap = &captureListeners;
@@ -53,7 +53,7 @@ namespace DOM { namespace events {
         }
     }
 
-    void CEventDispatcher::callListeners(xmlNodePtr pNode, EventType aType, const Reference< XEvent >& xEvent, sal_Bool bCapture)
+    void CEventDispatcher::callListeners(xmlNodePtr pNode, OUString aType, const Reference< XEvent >& xEvent, sal_Bool bCapture)
     {
         TypeListenerMap *pTMap = &targetListeners;
         if (bCapture) pTMap = &captureListeners;
@@ -80,81 +80,93 @@ namespace DOM { namespace events {
 
     sal_Bool CEventDispatcher::dispatchEvent(xmlNodePtr aNodePtr, const Reference< XEvent >& aEvent)
     {
-        EventType aType = aEvent->getType();
-        switch (aType)
+        CEvent *pEvent = 0; // pointer to internal event representation
+        Reference< XEvent > xEvent; // reference to the event being dispatched;
+
+        OUString aType = aEvent->getType();
+        if (aType.compareToAscii("DOMSubtreeModified")          == 0||
+            aType.compareToAscii("DOMNodeInserted")             == 0||
+            aType.compareToAscii("DOMNodeRemoved")              == 0||
+            aType.compareToAscii("DOMNodeRemovedFromDocument")  == 0||
+            aType.compareToAscii("DOMNodeInsertedIntoDocument") == 0||
+            aType.compareToAscii("DOMAttrModified")             == 0||
+            aType.compareToAscii("DOMCharacterDataModified")    == 0)
         {
-            case EventType_DOMSubtreeModified:
-            case EventType_DOMNodeInserted:
-            case EventType_DOMNodeRemoved:
-            case EventType_DOMNodeRemovedFromDocument:
-            case EventType_DOMNodeInsertedIntoDocument:
-            case EventType_DOMAttrModified:
-            case EventType_DOMCharacterDataModified:
-            {
                 Reference< XMutationEvent > aMEvent(aEvent, UNO_QUERY);
                 // dispatch a mutation event
                 // we need to clone the event in order to have complete control
                 // over the implementation
-                CMutationEvent* pEvent = new CMutationEvent;
-                pEvent->m_target = aEvent->getTarget();
-                pEvent->m_currentTarget = aEvent->getCurrentTarget();
-                pEvent->m_time = aEvent->getTimeStamp();
-                pEvent->initMutationEvent(
+                CMutationEvent* pMEvent = new CMutationEvent;
+                pMEvent->initMutationEvent(
                     aType, aMEvent->getBubbles(), aMEvent->getCancelable(),
                     aMEvent->getRelatedNode(), aMEvent->getPrevValue(),
                     aMEvent->getNewValue(), aMEvent->getAttrName(),
                     aMEvent->getAttrChange());
-                Reference< XEvent > xEvent(static_cast< CEvent* >(pEvent));
+                pEvent = pMEvent;
+        }
+        else // generic event
+        {
+            pEvent = new CEvent;
+            pEvent->initEvent(
+                aType, aEvent->getBubbles(), aEvent->getCancelable());
 
-                // build the path from target node to the root
-                NodeVector captureVector;
-                Reference< XUnoTunnel > aTunnel(xEvent->getTarget(), UNO_QUERY_THROW);
-                xmlNodePtr cur = (xmlNodePtr)aTunnel->getSomething(Sequence< sal_Int8 >());
-                while (cur != NULL)
-                {
-                    captureVector.push_back(cur);
-                    cur = cur->parent;
-                }
 
-                // the caputre vector now holds the node path from target to root
-                // first we must search for capture listernes in order root to
-                // to target. after that, any target listeners have to be called
-                // then bubbeling phase listeners are called in target to root
-                // order
-                NodeVector::const_iterator inode;
+        }
+        pEvent->m_target = Reference< XEventTarget >(DOM::CNode::get(aNodePtr));
+        pEvent->m_currentTarget = aEvent->getCurrentTarget();
+        pEvent->m_time = aEvent->getTimeStamp();
+        xEvent = Reference< XEvent >(static_cast< CEvent* >(pEvent));
 
-                // start at the root
-                inode = captureVector.end();
+
+        // build the path from target node to the root
+        NodeVector captureVector;
+        Reference< XUnoTunnel > aTunnel(xEvent->getTarget(), UNO_QUERY_THROW);
+        xmlNodePtr cur = (xmlNodePtr)aTunnel->getSomething(Sequence< sal_Int8 >());
+        while (cur != NULL)
+        {
+            captureVector.push_back(cur);
+            cur = cur->parent;
+        }
+
+        // the caputre vector now holds the node path from target to root
+        // first we must search for capture listernes in order root to
+        // to target. after that, any target listeners have to be called
+        // then bubbeling phase listeners are called in target to root
+        // order
+        NodeVector::const_iterator inode;
+
+        // start at the root
+        inode = captureVector.end();
+        inode--;
+        if (inode != captureVector.end())
+        {
+            // capturing phase:
+            pEvent->m_phase = PhaseType_CAPTURING_PHASE;
+            while (inode != captureVector.begin())
+            {
+                //pEvent->m_currentTarget = *inode;
+                pEvent->m_currentTarget = Reference< XEventTarget >(CNode::get(*inode));
+                callListeners(*inode, aType, xEvent, sal_True);
+                if  (pEvent->m_canceled) return sal_True;
                 inode--;
-                if (inode != captureVector.end())
-                {
-                    // capturing phase:
-                    pEvent->m_phase = PhaseType_CAPTURING_PHASE;
-                    while (inode != captureVector.begin())
-                    {
-                        //pEvent->m_currentTarget = *inode;
-                        pEvent->m_currentTarget = Reference< XEventTarget >(CNode::get(*inode));
-                        callListeners(*inode, aType, xEvent, sal_True);
-                        inode--;
-                    }
+            }
 
-                    // target phase
-                    pEvent->m_phase = PhaseType_AT_TARGET;
+            // target phase
+            pEvent->m_phase = PhaseType_AT_TARGET;
+            callListeners(*inode, aType, xEvent, sal_False);
+            if  (pEvent->m_canceled) return sal_True;
+            // bubbeling phase
+            inode++;
+            if (aEvent->getBubbles()) {
+                pEvent->m_phase = PhaseType_BUBBLING_PHASE;
+                while (inode != captureVector.end())
+                {
+                    pEvent->m_currentTarget = Reference< XEventTarget >(CNode::get(*inode));
                     callListeners(*inode, aType, xEvent, sal_False);
-                    // bubbeling phase
+                    if  (pEvent->m_canceled) return sal_True;
                     inode++;
-                    if (aEvent->getBubbles()) {
-                        pEvent->m_phase = PhaseType_BUBBLING_PHASE;
-                        while (inode != captureVector.end())
-                        {
-                            pEvent->m_currentTarget = Reference< XEventTarget >(CNode::get(*inode));
-                            callListeners(*inode, aType, xEvent, sal_False);
-                            inode++;
-                        }
-                    }
                 }
             }
-            break;
         }
         return sal_True;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,14 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-#include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
+#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
+#include <com/sun/star/xml/dom/events/XEvent.hpp>
+#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
+#include <com/sun/star/xml/dom/events/XUIEvent.hpp>
+#include <com/sun/star/xml/dom/events/XMouseEvent.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <libxml/tree.h>
 
@@ -295,12 +299,12 @@ namespace DOM
         virtual sal_Int64 SAL_CALL getSomething(const Sequence< sal_Int8 >& id) throw (RuntimeException);
 
         // --- XEventTarget
-        virtual void SAL_CALL addEventListener(EventType eventType, 
+        virtual void SAL_CALL addEventListener(const OUString& eventType, 
             const Reference< XEventListener >& listener, 
             sal_Bool useCapture)
             throw (RuntimeException);
 
-        virtual void SAL_CALL removeEventListener(EventType eventType, 
+        virtual void SAL_CALL removeEventListener(const OUString& eventType, 
             const Reference< XEventListener >& listener, 
             sal_Bool useCapture)
             throw (RuntimeException);

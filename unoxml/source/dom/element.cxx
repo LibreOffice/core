@@ -2,9 +2,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:15 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,12 +314,13 @@ namespace DOM
         {
             // attribute adition event
             // dispatch DOMAttrModified event
-            events::CMutationEvent *pEvent = new events::CMutationEvent;
-            pEvent->initMutationEvent(EventType_DOMAttrModified, sal_True, 
-                sal_False, Reference< XNode >(aAttr, UNO_QUERY),
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+            Reference< XMutationEvent > event(docevent->createEvent(
+                OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+                sal_True, sal_False, Reference< XNode >(aAttr, UNO_QUERY),
                 OUString(), aAttr->getValue(), aAttr->getName(), AttrChangeType_ADDITION);
-            pEvent->m_target = Reference< XEventTarget >(this);
-            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         }
         return aAttr;
     }
@@ -367,13 +368,13 @@ namespace DOM
 
             // dispatch DOMAttrModified event
             
-
-            events::CMutationEvent *pEvent = new events::CMutationEvent;
-            pEvent->initMutationEvent(EventType_DOMAttrModified, sal_True, 
-                sal_False, Reference< XNode >(getAttributeNode(name), UNO_QUERY),
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+            Reference< XMutationEvent > event(docevent->createEvent(
+                OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+                sal_True, sal_False, Reference< XNode >(getAttributeNode(name), UNO_QUERY),
                 oldValue, value, name, aChangeType);
-            pEvent->m_target = Reference< XEventTarget >(this);
-            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         }
     }
 
@@ -436,12 +437,13 @@ namespace DOM
                     xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
                 }
                 // dispatch DOMAttrModified event
-                events::CMutationEvent *pEvent = new events::CMutationEvent;
-                pEvent->initMutationEvent(EventType_DOMAttrModified, sal_True, sal_False, 
+                Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+                Reference< XMutationEvent > event(docevent->createEvent(
+                    OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+                event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"), sal_True, sal_False, 
                     Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
                     oldValue, value, qualifiedName, aChangeType);
-                pEvent->m_target = Reference< XEventTarget >(this);
-                dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+                dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
 
             } else {
                 // ambigious ns prefix

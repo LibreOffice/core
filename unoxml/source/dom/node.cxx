@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,12 +342,13 @@ namespace DOM
         // does bubble
         if (aNode.is())
         {
-            events::CMutationEvent *pEvent = new events::CMutationEvent;
-            pEvent->initMutationEvent(EventType_DOMNodeInserted, sal_True, 
-                sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+            Reference< XMutationEvent > event(docevent->createEvent(
+                OUString::createFromAscii("DOMNodeInserted")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMNodeInserted")
+                , sal_True, sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
-            pEvent->m_target = Reference< XEventTarget >(aNode, UNO_QUERY);
-            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         }
         return aNode;
     }
@@ -711,12 +712,13 @@ namespace DOM
          */
         if (oldChild.is())
         {
-            events::CMutationEvent *pEvent = new events::CMutationEvent;
-            pEvent->initMutationEvent(EventType_DOMNodeRemoved, sal_True, 
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+            Reference< XMutationEvent > event(docevent->createEvent(
+                OUString::createFromAscii("DOMNodeRemoved")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMNodeRemoved"), sal_True, 
                 sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
-            pEvent->m_target = Reference< XEventTarget >(oldChild, UNO_QUERY);
-            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         }
         return oldChild;
     }    
@@ -765,12 +767,13 @@ namespace DOM
 */
         // dispatch DOMSubtreeModified
         // target is _this_ node
-        events::CMutationEvent *pEvent = new events::CMutationEvent;
-        pEvent->initMutationEvent(EventType_DOMSubtreeModified, sal_True, 
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMSubtreeModified")), UNO_QUERY);
+        event->initMutationEvent(OUString::createFromAscii("DOMSubtreeModified"), sal_True, 
             sal_False, Reference< XNode >(),
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
-        pEvent->m_target = Reference< XEventTarget >(this);
-        dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
 
         return aNode;
     }
@@ -813,7 +816,7 @@ namespace DOM
 
 
         // --- XEventTarget
-    void SAL_CALL CNode::addEventListener(EventType eventType, 
+    void SAL_CALL CNode::addEventListener(const OUString& eventType, 
         const Reference< XEventListener >& listener, 
         sal_Bool useCapture)
         throw (RuntimeException)
@@ -821,7 +824,7 @@ namespace DOM
         events::CEventDispatcher::addListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
-    void SAL_CALL CNode::removeEventListener(EventType eventType, 
+    void SAL_CALL CNode::removeEventListener(const OUString& eventType, 
         const Reference< XEventListener >& listener, 
         sal_Bool useCapture)
         throw (RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:14 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include "characterdata.hxx"
-
 #include "../events/mutationevent.hxx"
 
 namespace DOM
@@ -71,12 +71,14 @@ namespace DOM
 
     void CCharacterData::_dispatchEvent(const OUString& prevValue, const OUString& newValue)
     {
-        events::CMutationEvent *pEvent = new events::CMutationEvent;
-        pEvent->initMutationEvent(EventType_DOMCharacterDataModified, sal_True, 
-                sal_False, Reference< XNode >(),
-                prevValue, newValue, OUString(), (AttrChangeType)0 );
-            pEvent->m_target = Reference< XEventTarget >(this);
-            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));        
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMCharacterDataModified")), UNO_QUERY);
+        event->initMutationEvent(
+                OUString::createFromAscii("DOMCharacterDataModified"), 
+                sal_True, sal_False, Reference< XNode >(),
+                prevValue, newValue, OUString(), (AttrChangeType)0 );        
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
     }
 
     void CCharacterData::init_characterdata(const xmlNodePtr aNodePtr)

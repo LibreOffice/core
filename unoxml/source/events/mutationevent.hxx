@@ -36,7 +36,8 @@ public:
     virtual OUString SAL_CALL getNewValue() throw (RuntimeException);
     virtual OUString SAL_CALL getAttrName() throw (RuntimeException);
     virtual AttrChangeType SAL_CALL getAttrChange() throw (RuntimeException);
-    virtual void SAL_CALL initMutationEvent(EventType typeArg, 
+    virtual void SAL_CALL initMutationEvent(
+                           const OUString& typeArg, 
                            sal_Bool canBubbleArg, 
                            sal_Bool cancelableArg, 
                            const Reference< XNode >& relatedNodeArg, 
@@ -46,7 +47,7 @@ public:
                            AttrChangeType attrChangeArg) throw (RuntimeException);
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    virtual EventType SAL_CALL getType() throw (RuntimeException);
+    virtual OUString SAL_CALL getType() throw (RuntimeException);
     virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException);
     virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException);
     virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException);
@@ -56,7 +57,7 @@ public:
     virtual void SAL_CALL stopPropagation() throw (RuntimeException);
     virtual void SAL_CALL preventDefault() throw (RuntimeException);
     virtual void SAL_CALL initEvent(
-        EventType eventTypeArg, 
+        const OUString& eventTypeArg, 
         sal_Bool canBubbleArg, 
         sal_Bool cancelableArg) 
         throw (RuntimeException);    

@@ -31,7 +31,7 @@ namespace DOM { namespace events
         return m_attrChangeType;
     }
 
-    void SAL_CALL CMutationEvent::initMutationEvent(EventType typeArg, 
+    void SAL_CALL CMutationEvent::initMutationEvent(const OUString& typeArg, 
         sal_Bool canBubbleArg, sal_Bool cancelableArg, 
         const Reference< XNode >& relatedNodeArg, const OUString& prevValueArg, 
         const OUString& newValueArg, const OUString& attrNameArg, 
@@ -46,7 +46,7 @@ namespace DOM { namespace events
     }
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    EventType SAL_CALL CMutationEvent::getType() throw (RuntimeException)
+    OUString SAL_CALL CMutationEvent::getType() throw (RuntimeException)
     {
         return CEvent::getType();
     }
@@ -91,7 +91,7 @@ namespace DOM { namespace events
         // no effect
     }
 
-    void SAL_CALL CMutationEvent::initEvent( EventType eventTypeArg, sal_Bool canBubbleArg, 
+    void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
         sal_Bool cancelableArg) throw (RuntimeException)
     {
         // base initializer

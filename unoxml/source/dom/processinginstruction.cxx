@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processinginstruction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,9 @@ namespace DOM
         }
         return aName;
     }
+    
     OUString SAL_CALL CProcessingInstruction::getNodeValue() throw (RuntimeException)
     {
-        return OUString();
+        return getData();
     }
 }

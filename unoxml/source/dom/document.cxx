@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:14 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "elementlist.hxx"
 #include "domimplementation.hxx"
 
+#include "../events/event.hxx"
 #include "../events/mutationevent.hxx"
 
 namespace DOM
@@ -512,12 +513,13 @@ namespace DOM
          */
         if (aNode.is())
         {
-            events::CMutationEvent *pEvent = new events::CMutationEvent;
-            pEvent->initMutationEvent(EventType_DOMNodeInsertedIntoDocument, sal_True, 
-                sal_False, Reference< XNode >(),
-                OUString(), OUString(), OUString(), (AttrChangeType)0 );
-            pEvent->m_target = Reference< XEventTarget >(aNode, UNO_QUERY);
-            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+            Reference< XMutationEvent > event(docevent->createEvent(
+                OUString::createFromAscii("DOMNodeInsertedIntoDocument")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMNodeInsertedIntoDocument")
+                , sal_True, sal_False, Reference< XNode >(),
+                OUString(), OUString(), OUString(), (AttrChangeType)0 );            
+            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         }
 
         return aNode;
@@ -530,4 +532,44 @@ namespace DOM
     {
         return OUString();
     }
+
+    Reference< XEvent > createEvent(const OUString& aType) throw (RuntimeException)        
+    {
+        events::CEvent *pEvent = 0;
+        if (
+            aType.compareToAscii("DOMSubtreeModified")          == 0||
+            aType.compareToAscii("DOMNodeInserted")             == 0||
+            aType.compareToAscii("DOMNodeRemoved")              == 0||
+            aType.compareToAscii("DOMNodeRemovedFromDocument")  == 0||
+            aType.compareToAscii("DOMNodeInsertedIntoDocument") == 0||
+            aType.compareToAscii("DOMAttrModified")             == 0||
+            aType.compareToAscii("DOMCharacterDataModified")    == 0)
+        {
+            events::CMutationEvent* pMEvent = new events::CMutationEvent;
+                pEvent = pMEvent;
+        } else if (
+            aType.compareToAscii("DOMFocusIn")  == 0||
+            aType.compareToAscii("DOMFocusOut") == 0||
+            aType.compareToAscii("DOMActivate") == 0)
+        {
+            // XXX UIEvents
+            throw RuntimeException();
+        } else if (
+            aType.compareToAscii("click")     == 0||
+            aType.compareToAscii("mousedown") == 0||
+            aType.compareToAscii("mouseup")   == 0||
+            aType.compareToAscii("mouseover") == 0||
+            aType.compareToAscii("mousemove") == 0||
+            aType.compareToAscii("mouseout")  == 0 )
+        {
+            // XXX MouseEvents
+            throw RuntimeException();
+        }
+        else // generic event
+        {
+            pEvent = new events::CEvent;
+        }
+        return Reference< XEvent >(pEvent);
+    } 
+
 }
