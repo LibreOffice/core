@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:01:06 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 12:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 }
 
 //-------------------------------------------------------------------
-
+#ifndef TF_SVDATA
 BOOL BrowserDataWin::Drop( const DropEvent& rEvt )
 {
     return GetParent()->Drop( BrowserDropEvent( this, rEvt ) );
@@ -606,7 +606,7 @@ BOOL BrowserDataWin::QueryDrop( DropEvent& rEvt )
     rEvt = aBrwDEvt;
     return bRet;
 }
-
+#endif // TF_SVDATA
 //===================================================================
 
 BrowseEvent::BrowseEvent( Window* pWindow,
@@ -621,7 +621,7 @@ BrowseEvent::BrowseEvent( Window* pWindow,
 }
 
 //===================================================================
-
+#ifndef TF_SVDATA
 BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWin,
                           const MouseEvent& rEvt ):
     MouseEvent(rEvt),
@@ -646,7 +646,7 @@ BrowserDropEvent::BrowserDropEvent( BrowserDataWin *pWin, const DropEvent& rEvt 
     ,BrowseEvent( pWin->CreateBrowseEvent( rEvt.GetPosPixel() ) )
 {
 }
-
+#endif
 //===================================================================
 
 BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWin, const AcceptDropEvent& rEvt )
