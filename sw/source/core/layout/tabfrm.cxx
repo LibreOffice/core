@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-28 13:51:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
 
     if ( !pRow )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ASSERT( FALSE, "Tablesplit out of rows?" );
 #endif
         pRow = Lower();
