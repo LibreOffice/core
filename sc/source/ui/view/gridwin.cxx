@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-10 10:06:06 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@
 #include "dpoutput.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "seltrans.hxx"
 #include "sizedev.hxx"
 
 using namespace com::sun::star;
@@ -1555,7 +1556,16 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         USHORT      nEditRow;
         pViewData->GetEditView( eWhich, pEditView, nEditCol, nEditRow );
         pEditView->MouseButtonUp( rMEvt );
-        pScMod->InputSelection( pEditView );            // fuer Klammern etc.
+
+        if ( rMEvt.IsMiddle() &&
+                 GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION )
+        {
+            //  EditView may have pasted from selection
+            pScMod->InputChanged( pEditView );
+        }
+        else
+            pScMod->InputSelection( pEditView );            // parentheses etc.
+
         pViewData->GetView()->InvalidateAttribs();
         rBindings.Invalidate( SID_HYPERLINK_GETLINK );
         bEEMouse = FALSE;
@@ -2232,6 +2242,20 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
+    if ( nCmd == COMMAND_PASTESELECTION )
+    {
+        if ( bEEMouse )
+        {
+            //  EditEngine handles selection in MouseButtonUp - no action
+            //  needed in command handler
+        }
+        else
+        {
+            PasteSelection( rCEvt.GetMousePosPixel() );
+        }
+        return;
+    }
+
     BOOL bDisable = pScMod->IsFormulaMode() ||
                     pScMod->IsModalMode(pViewData->GetSfxDocShell());
     if (bDisable)
@@ -2819,7 +2843,14 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
 
     ScModule* pScMod = SC_MOD();
     const ScDragData& rData = pScMod->GetDragData();
-    ScTransferObj* pTransObj = rData.pCellTransfer;
+
+    return DropTransferObj( rData.pCellTransfer, nDragStartX, nDragStartY,
+                                PixelToLogic(rEvt.maPosPixel), rEvt.mnAction );
+}
+
+sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, USHORT nDestPosX, USHORT nDestPosY,
+                                        const Point& rLogicPos, sal_Int8 nDndAction )
+{
     if ( !pTransObj )
         return 0;
 
@@ -2830,8 +2861,8 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
     USHORT nFlags = pTransObj->GetDragSourceFlags();
 
     BOOL bIsNavi = ( nFlags & SC_DROP_NAVIGATOR ) != 0;
-    BOOL bIsMove = ( rEvt.mnAction == DND_ACTION_MOVE && !bIsNavi );
-    BOOL bIsLink = ( rEvt.mnAction == DND_ACTION_LINK );
+    BOOL bIsMove = ( nDndAction == DND_ACTION_MOVE && !bIsNavi );
+    BOOL bIsLink = ( nDndAction == DND_ACTION_LINK );
 
     ScRange aSource = pTransObj->GetRange();
 
@@ -2857,9 +2888,8 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
         }
         else                                        // move/copy block
         {
-            Point aPos = rEvt.maPosPixel;
             String aChartName;
-            if (pThisDoc->HasChartAtPoint( nThisTab, PixelToLogic(aPos), &aChartName ))
+            if (pThisDoc->HasChartAtPoint( nThisTab, rLogicPos, &aChartName ))
             {
                 String aRangeName;
                 aSource.Format( aRangeName, SCR_ABS_3D, pThisDoc );
@@ -2870,11 +2900,11 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
                                             &aRangeItem, &aNameItem, (void*) NULL );
                 bDone = TRUE;
             }
-            else if ( nDragStartX != aSource.aStart.Col() || nDragStartY != aSource.aStart.Row() ||
+            else if ( nDestPosX != aSource.aStart.Col() || nDestPosY != aSource.aStart.Row() ||
                         nSourceTab != nThisTab )
             {
                 //  call with bApi = TRUE to avoid error messages in drop handler
-                ScAddress aDest( nDragStartX, nDragStartY, nThisTab );
+                ScAddress aDest( nDestPosX, nDestPosY, nThisTab );
                 if ( bIsLink )
                     bDone = pView->LinkBlock( aSource, aDest, TRUE );
                 else
@@ -2951,8 +2981,9 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
                 aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\")"));
 
                 pView->DoneBlockMode();
-                pView->InitBlockMode( nDragStartX, nDragStartY, nThisTab );
-                pView->MarkCursor( nDragEndX, nDragEndY, nThisTab );
+                pView->InitBlockMode( nDestPosX, nDestPosY, nThisTab );
+                pView->MarkCursor( nDestPosX + aSource.aEnd.Col() - aSource.aStart.Col(),
+                                   nDestPosY + aSource.aEnd.Row() - aSource.aStart.Row(), nThisTab );
 
                 pView->EnterMatrix( aFormula );
                 pView->CursorPosChanged();
@@ -2964,7 +2995,7 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
             //! HasSelectedBlockMatrixFragment without selected sheet?
             //! or don't start dragging on a part of a matrix
 
-            pView->SetCursor( nDragStartX, nDragStartY );
+            pView->SetCursor( nDestPosX, nDestPosY );
             pView->PasteFromClip( IDF_ALL, pTransObj->GetDocument() );      // clip-doc
             pViewData->GetMarkData().ResetMark();
             pView->CursorPosChanged();
@@ -2972,7 +3003,7 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
         }
     }
 
-    sal_Int8 nRet = bDone ? rEvt.mnAction : DND_ACTION_NONE;
+    sal_Int8 nRet = bDone ? nDndAction : DND_ACTION_NONE;
     return nRet;
 }
 
@@ -3090,6 +3121,58 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     sal_Int8 nRet = bDone ? rEvt.mnAction : DND_ACTION_NONE;
     return nRet;
+}
+
+//--------------------------------------------------------
+
+void ScGridWindow::PasteSelection( const Point& rPosPixel )
+{
+    Point aLogicPos = PixelToLogic( rPosPixel );
+
+    short   nPosX;
+    short   nPosY;
+    pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nPosX, nPosY );
+
+    ScSelectionTransferObj* pOwnSelection = SC_MOD()->GetSelectionTransfer();
+    if ( pOwnSelection )
+    {
+        //  within Calc
+
+        ScTransferObj* pCellTransfer = pOwnSelection->GetCellData();
+        if ( pCellTransfer )
+        {
+            // keep a reference to the data in case the selection is changed during paste
+            uno::Reference<datatransfer::XTransferable> xRef( pCellTransfer );
+            DropTransferObj( pCellTransfer, nPosX, nPosY, aLogicPos, DND_ACTION_COPY );
+        }
+        else
+        {
+            ScDrawTransferObj* pDrawTransfer = pOwnSelection->GetDrawData();
+            if ( pDrawTransfer )
+            {
+                // keep a reference to the data in case the selection is changed during paste
+                uno::Reference<datatransfer::XTransferable> xRef( pDrawTransfer );
+                pViewData->GetView()->PasteDraw( aLogicPos, pDrawTransfer->GetModel() );
+            }
+        }
+    }
+    else
+    {
+        //  get selection from system
+
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( this ) );
+        uno::Reference<datatransfer::XTransferable> xTransferable = aDataHelper.GetTransferable();
+        if ( xTransferable.is() )
+        {
+            ULONG nFormatId = lcl_GetDropFormatId( xTransferable );
+            if ( nFormatId )
+            {
+                bPasteIsDrop = TRUE;
+                pViewData->GetView()->PasteDataFormat( nFormatId, xTransferable, nPosX, nPosY, &aLogicPos );
+                bPasteIsDrop = FALSE;
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-05 19:11:08 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,279 +65,6 @@
 
 #pragma hdrstop
 
-//------------------------------------------------------------------
-
-#ifndef OS2
-#define _MACRODLG_HXX
-#define _BIGINT_HXX
-#define _SVCONTNR_HXX
-#define BASIC_NODIALOGS
-#define _SFXMNUITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _DLGCFG_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXBASIC_HXX
-#define _MODALDLG_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _BASE_DLGS_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXTBXCTRL_HXX
-#define _PASSWD_HXX
-//#define _SFXFILEDLG_HXX
-//#define _SFXREQUEST_HXX
-#define _SFXOBJFACE_HXX
-
-// TOOLS
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-#define _STACK_HXX
-#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-
-//SV
-//#define _CLIP_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-//#define _COLOR_HXX
-//#define _PAL_HXX
-//#define _BITMAP_HXX
-//#define _GDIOBJ_HXX
-//#define _POINTR_HXX
-//#define _ICON_HXX
-//#define _IMAGE_HXX
-//#define _KEYCOD_HXX
-//#define _EVENT_HXX
-#define _HELP_HXX
-//#define _APP_HXX
-//#define _MDIAPP_HXX
-//#define _TIMER_HXX
-//#define _METRIC_HXX
-//#define _REGION_HXX
-//#define _OUTDEV_HXX
-//#define _SYSTEM_HXX
-//#define _VIRDEV_HXX
-//#define _JOBSET_HXX
-//#define _PRINT_HXX
-//#define _WINDOW_HXX
-//#define _SYSWIN_HXX
-//#define _WRKWIN_HXX
-#define _MDIWIN_HXX
-//#define _FLOATWIN_HXX
-//#define _DOCKWIN_HXX
-//#define _CTRL_HXX
-//#define _SCRBAR_HXX
-//#define _BUTTON_HXX
-//#define _IMAGEBTN_HXX
-//#define _FIXED_HXX
-//#define _GROUP_HXX
-//#define _EDIT_HXX
-//#define _COMBOBOX_HXX
-#define _LSTBOX_HXX //???
-//#define _SELENG_HXX ***
-//#define _SPLIT_HXX ***
-#define _SPIN_HXX
-//#define _FIELD_HXX ***
-//#define _MOREBTN_HXX ***
-#define _TOOLBOX_HXX //???
-//#define _STATUS_HXX ***
-//#define _DIALOG_HXX ***
-#define _MSGBOX_HXX //???
-#define _SYSDLG_HXX //???
-#define _FILDLG_HXX
-#define _PRNDLG_HXX //???
-#define _COLDLG_HXX
-#define _TABDLG_HXX //???
-#ifdef WIN
-#define _MENU_HXX
-#endif
-//#define _GDIMTF_HXX ***
-//#define _POLY_HXX ***
-#define _ACCEL_HXX //???
-#define _GRAPH_HXX //???
-#define _SOUND_HXX
-
-
-
-#ifdef WIN
-#define _MENUBTN_HXX
-#endif
-
-//svtools
-#define _SCRWIN_HXX
-#define _RULER_HXX
-//#define _TABBAR_HXX  ***
-#define _VALUESET_HXX //???
-#define _STDMENU_HXX
-#define _STDCTRL_HXX
-#define _CTRLBOX_HXX
-#define _CTRLTOOL_HXX
-#define _EXTATTR_HXX
-#define _FRM3D_HXX
-
-//SVTOOLS
-#define _SVTREELIST_HXX
-#define _FILTER_HXX
-#define _SVLBOXITM_HXX
-#define _SVTREEBOX_HXX
-#define _SVICNVW_HXX
-#define _SVTABBX_HXX
-
-#define _SFX_DOCFILT_HXX //???
-#define _SFX_PRNMON_HXX
-#define _SFX_RESMGR_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXAPPWIN_HXX
-#define _SFXBASIC_HXX
-#define _SFXCTRLITEM
-#define _SFXDLGCFG_HXX
-//#define _SFXDISPATCH_HXX ***
-#define _SFXDOCFILE_HXX
-#define _SFXDOCMAN_HXX
-#define _SFXDOCMGR_HXX
-#define _SFXDOCTDLG_HXX
-#define _SFXFILEDLG_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXIPFRM_HXX
-#define _SFX_MACRO_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXMULTISEL_HXX
-//#define _SFXMSG_HXX ***
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXOBJFACE_HXX
-//#define _SFXOBJFAC_HXX ???
-#define _SFX_SAVEOPT_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXTBXMGR_HXX
-
-//sfxdoc.hxx
-//#define _SFX_OBJSH_HXX ***
-//#define _SFX_CLIENTSH_HXX ***
-#define _SFXDOCINF_HXX //???
-#define _SFX_DOCFILT_HXX
-//#define _SFXDOCFILE_HXX ***
-//#define _VIEWFAC_HXX ???
-//#define _SFXVIEWFRM_HXX  ***
-//#define _SFXVIEWSH_HXX ***
-//#define _MDIFRM_HXX ***
-#define _SFX_IPFRM_HXX
-#define _SFX_INTERNO_HXX
-
-//sfxdlg.hxx
-//#define _SFXTABDLG_HXX ***
-//#define _BASEDLGS_HXX ***
-#define _SFX_DINFDLG_HXX
-#define _SFXDINFEDT_HXX
-#define _SFX_MGETEMPL_HXX
-#define _SFX_TPLPITEM_HXX
-#define _SFX_STYLEDLG_HXX
-#define _NEWSTYLE_HXX
-//#define _SFXDOCTEMPL_HXX ***
-//#define _SFXDOCTDLG_HXX ***
-//#define _SFX_TEMPLDLG_HXX ***
-//#define _SFXNEW_HXX ***
-#define _SFXDOCMAN_HXX
-//#define _SFXDOCKWIN_HXX ***
-
-//sfxitems.hxx
-#define _SFX_WHMAP_HXX
-#define _ARGS_HXX
-//#define _SFXPOOLITEM_HXX ***
-//#define _SFXINTITEM_HXX ***
-//#define _SFXENUMITEM_HXX  ***
-#define _SFXFLAGITEM_HXX
-//#define _SFXSTRITEM_HXX ***
-#define _SFXPTITEM_HXX
-#define _SFXRECTITEM_HXX
-//#define _SFXITEMPOOL_HXX  ***
-//#define _SFXITEMSET_HXX  ***
-#define _SFXITEMITER_HXX
-#define _SFX_WHITER_HXX
-#define _SFXPOOLCACH_HXX
-#define _AEITEM_HXX
-#define _SFXRNGITEM_HXX
-#define _SFXSLSTITM_HXX
-//#define _SFXSTYLE_HXX ***
-
-//xout.hxx
-//#define _XENUM_HXX
-//#define _XPOLY_HXX
-//#define _XATTR_HXX
-#define _XOUTX_HXX
-//#define _XPOOL_HXX ***
-#define _XTABLE_HXX
-
-//svdraw.hxx
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-#define _SDR_NOOBJECTS
-//#define _SDR_NOVIEWS ***
-
-//#define _VCATTR_HXX
-#define _VCONT_HXX
-#define _SI_NOOTHERFORMS
-#define _VCTRLS_HXX
-#define _SI_NOCONTROL
-#define _SETBRW_HXX
-#define _VCBRW_HXX
-#define _SI_NOSBXCONTROLS
-#define _SVBOXITM_HXX
-
-#define _SVDRAG_HXX
-#define _SVINCVW_HXX
-#define _SV_MULTISEL_HXX
-#define _SVRTV_HXX
-#define _SVTABBX_HXX
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
-//#define _SI_HXX
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NOCONTROL
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-#define _VCATTR_HXX
-#define _VCONT_HXX
-
-#define _SDR_NOTRANSFORM
-#define _SDR_NOITEMS
-#define _SDR_NOOBJECTS
-#define _SVDXOUT_HXX
-#endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -364,6 +91,8 @@
 #include "drawview.hxx"
 #include "drwlayer.hxx"
 #include "fusel.hxx"                // Start-Function
+#include "seltrans.hxx"
+#include "scmod.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -433,6 +162,16 @@ void __EXPORT ScTabView::Init()
 __EXPORT ScTabView::~ScTabView()
 {
     USHORT i;
+
+    //  remove selection object
+    ScModule* pScMod = SC_MOD();
+    ScSelectionTransferObj* pOld = pScMod->GetSelectionTransfer();
+    if ( pOld && pOld->GetView() == this )
+    {
+        pOld->ForgetView();
+        pScMod->SetSelectionTransfer( NULL );
+        TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
+    }
 
     DELETEZ(pPageBreakData);
     DELETEZ(pHighlightRanges);

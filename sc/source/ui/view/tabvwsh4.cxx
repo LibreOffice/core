@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,10 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
             }
         }
     }
+
+    //  if something is selected, put it into X selection - not in ActivateView,
+    //  because it's also necessary for non-MDI Activate
+    CheckSelectionTransfer();
 
     //  Wenn Referenzeingabe-Tip-Hilfe hier wieder angezeigt werden soll (ShowRefTip),
     //  muss sie beim Verschieben der View angepasst werden (gibt sonst Probleme unter OS/2

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-08 14:20:01 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include "dpobject.hxx"
 #include "patattr.hxx"
 #include "dociter.hxx"
+#include "seltrans.hxx"
 //! hier und output2.cxx in irgendein Headerfile verschieben!
 #define SC_CLIPMARK_SIZE    64
 
@@ -247,6 +248,10 @@ void ScTabView::UpdateAutoFillMark()
         if (pRowBar[i] && pRowBar[i]->IsVisible())
             pRowBar[i]->SetMark( bMarked, aMarkRange.aStart.Row(), aMarkRange.aEnd.Row() );
     }
+
+    //  selection transfer object is checked together with AutoFill marks,
+    //  because it has the same requirement of a single continuous block.
+    CheckSelectionTransfer();   // update selection transfer object
 }
 
 void ScTabView::FakeButtonUp( ScSplitPos eWhich )
@@ -361,6 +366,43 @@ void ScTabView::SetCursor( USHORT nPosX, USHORT nPosY, BOOL bNew )
 #pragma optimize ( "", on )
 #endif
 
+void ScTabView::CheckSelectionTransfer()
+{
+    if ( aViewData.IsActive() )     // only for active view
+    {
+        ScModule* pScMod = SC_MOD();
+        ScSelectionTransferObj* pOld = pScMod->GetSelectionTransfer();
+        if ( pOld && pOld->GetView() == this && pOld->StillValid() )
+        {
+            // selection not changed - nothing to do
+        }
+        else
+        {
+            ScSelectionTransferObj* pNew = ScSelectionTransferObj::CreateFromView( this );
+            if ( pNew )
+            {
+                //  create new selection
+
+                if (pOld)
+                    pOld->ForgetView();
+
+                uno::Reference<datatransfer::XTransferable> xRef( pNew );
+                pScMod->SetSelectionTransfer( pNew );
+                pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
+            }
+            else if ( pOld && pOld->GetView() == this )
+            {
+                //  remove own selection
+
+                pOld->ForgetView();
+                pScMod->SetSelectionTransfer( NULL );
+                TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
+            }
+            // else: selection from outside: leave unchanged
+        }
+    }
+}
+
 // Eingabezeile / Menues updaten
 //  CursorPosChanged ruft SelectionChanged
 //  SelectionChanged ruft CellContentChanged
@@ -397,7 +439,7 @@ void ScTabView::SelectionChanged()
         }
     }
 
-    UpdateAutoFillMark();
+    UpdateAutoFillMark();   // also calls CheckSelectionTransfer
 
     SfxBindings& rBindings = aViewData.GetBindings();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-25 18:44:04 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,11 @@ void __EXPORT ScDrawView::MarkListHasChanged()
         if (pDev->GetOutDevType() == OUTDEV_WINDOW)
             ((Window*)pDev)->Update();
     }
+
+    //  update selection transfer object
+
+    pViewSh->CheckSelectionTransfer();
+
 }
 
 void __EXPORT ScDrawView::ModelHasChanged()
