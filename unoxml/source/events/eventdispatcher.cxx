@@ -68,15 +68,15 @@ namespace DOM { namespace events {
             ListenerMap::const_iterator iter = pMap->find(pNode);
             if( iter == pMap->end() ) return;
             ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
-            ListenerPairVector lv(iter, ibound);
-            ListenerPairVector::const_iterator liter = lv.begin();
-            while (liter != lv.end())
+            // ListenerPairVector lv(iter, ibound);
+            // ListenerPairVector::const_iterator liter = lv.begin();
+            while (iter->first < ibound->first)
             {
-                if((liter->second).is())
+                if((iter->second).is())
                 {
-                    (liter->second)->handleEvent(xEvent);
+                    (iter->second)->handleEvent(xEvent);
                 }
-                liter++;
+                iter++;
             }
         }
     }
@@ -178,7 +178,7 @@ namespace DOM { namespace events {
             while (inode != captureVector.begin())
             {
                 //pEvent->m_currentTarget = *inode;
-                pEvent->m_currentTarget = Reference< XEventTarget >(CNode::get(*inode));
+                pEvent->m_currentTarget = Reference< XEventTarget >(DOM::CNode::get(*inode));
                 callListeners(*inode, aType, xEvent, sal_True);
                 if  (pEvent->m_canceled) return sal_True;
                 inode--;
@@ -194,7 +194,7 @@ namespace DOM { namespace events {
                 pEvent->m_phase = PhaseType_BUBBLING_PHASE;
                 while (inode != captureVector.end())
                 {
-                    pEvent->m_currentTarget = Reference< XEventTarget >(CNode::get(*inode));
+                    pEvent->m_currentTarget = Reference< XEventTarget >(DOM::CNode::get(*inode));
                     callListeners(*inode, aType, xEvent, sal_False);
                     if  (pEvent->m_canceled) return sal_True;
                     inode++;
