@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 09:58:10 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ const SwTxtAttr* SwTxtSizeInfo::GetTwoLines( const xub_StrLen nPos ) const
         xub_StrLen nStart = *pRet->GetStart();
         if( nPos < nStart )
             break;
-        if( RES_TXTATR_TWO_LINES == pRet->Which()
+        if( RES_CHRATR_TWO_LINES == pRet->Which()
 #ifdef FOR_YOUR_OWN_RISK
             || RES_CHRATR_UNDERLINE == pRet->Which()
 #endif
