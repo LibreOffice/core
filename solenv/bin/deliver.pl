@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: vg $ $Date: 2004-05-04 10:25:05 $
+#   last change: $Author: vg $ $Date: 2004-05-10 07:55:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.58 $ ';
+$id_str = ' $Revision: 1.59 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -671,7 +671,7 @@ sub unstripped {
 
     if (-f $file_name && (( `file $file_name` ) =~ /not stripped/o)) {
         return '1' if ($file_name =~ /\.so\.*/o);
-        return '1' if (basename($file_name) != /\./o);
+        return '1' if (basename($file_name) !~ /\./o);
     };
     return '';
 }
