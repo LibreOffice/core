@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: sj $ $Date: 2004-04-23 09:31:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2174,7 +2174,8 @@ namespace xmloff { namespace token {
         TOKEN( "selected-page" ),                   // XML_SELECTED_PAGE
 
         // DVO, OD 01.10.2003 #i18732#
-        TOKEN( "flow-with-text" ),                  // XML_FLOW_WITH_TEXT
+        TOKEN( "flow-with-text" ),   // XML_FLOW_WITH_TEXT
+        TOKEN( "with-tab"),          // XML_WITH_TAB #i21237#
 
         TOKEN( "custom-shape" ),                    // XML_CUSTOM_SHAPE
         TOKEN( "engine" ),                          // XML_ENGINE
