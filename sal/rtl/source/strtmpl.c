@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-28 10:31:15 $
+ *  last change: $Author: dbo $ $Date: 2002-06-07 16:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,9 +1060,7 @@ static double IMPL_RTL_STRNAME( ImplStringToDouble )( const IMPL_RTL_STRCODE* pS
     double      fDiv        = 0.1;
 
     /* Skip whitespaces and leading zeros */
-    while ( *pStr &&
-            rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) &&
-            (*pStr == 0) )
+    while ( *pStr && (rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) || (*pStr == '0')) )
         pStr++;
 
     while ( *pStr )
@@ -1132,6 +1130,7 @@ static double IMPL_RTL_STRNAME( ImplStringToDouble )( const IMPL_RTL_STRCODE* pS
     if ( bNeg )
         return -fRet;
     else
+#
         return fRet;
 }
 
