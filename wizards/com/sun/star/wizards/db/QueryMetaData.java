@@ -2,9 +2,9 @@
 *
 *  $RCSfile: QueryMetaData.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:53:38 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:15:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
