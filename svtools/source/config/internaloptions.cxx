@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-12 09:19:51 $
+ *  last change: $Author: cd $ $Date: 2001-08-21 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,12 @@ using namespace ::com::sun::star::beans ;
 #define DEFAULT_SLOTCFG                     sal_False
 #define DEFAULT_SENDCRASHMAIL               sal_False
 #define DEFAULT_USEMAILUI                   sal_True
+#define DEFAULT_CURRENTTEMPURL              OUString(RTL_CONSTASCII_USTRINGPARAM(""))
 
 #define FIXPROPERTYNAME_SLOTCFG             OUString(RTL_CONSTASCII_USTRINGPARAM("Slot"                     ))
 #define FIXPROPERTYNAME_SENDCRASHMAIL       OUString(RTL_CONSTASCII_USTRINGPARAM("SendCrashMail"            ))
 #define FIXPROPERTYNAME_USEMAILUI           OUString(RTL_CONSTASCII_USTRINGPARAM("UseMailUI"                ))
+#define FIXPROPERTYNAME_CURRENTTEMPURL      OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentTempURL"           ))
 //#define FIXPROPERTYNAME_REMOVEMENUENTRYCLOSE           OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryClose"))
 //#define FIXPROPERTYNAME_REMOVEMENUENTRYBACKTOWEBTOP    OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryBackToWebtop"))
 //#define FIXPROPERTYNAME_REMOVEMENUENTRYNEWWEBTOP       OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryNewWebtop"))
@@ -126,12 +128,13 @@ using namespace ::com::sun::star::beans ;
 #define FIXPROPERTYHANDLE_SLOTCFG           0
 #define FIXPROPERTYHANDLE_SENDCRASHMAIL     1
 #define FIXPROPERTYHANDLE_USEMAILUI         2
+#define FIXPROPERTYHANDLE_CURRENTTEMPURL    3
 //#define FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE   3
 //#define FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP         4
 //#define FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP         5
 //#define FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT         6
 
-#define FIXPROPERTYCOUNT                    3
+#define FIXPROPERTYCOUNT                    4
 
 #define PROPERTYNAME_RECOVERYLIST           OUString(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"             ))
 #define PROPERTYNAME_URL                    OUString(RTL_CONSTASCII_USTRINGPARAM("URL"                      ))
@@ -189,6 +192,7 @@ class SvtInternalOptions_Impl : public ConfigItem
         sal_Bool                m_bSlotCFG          ;   /// cache "Slot" of Internal section
         sal_Bool                m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
         sal_Bool                m_bUseMailUI;
+        OUString                m_aCurrentTempURL   ;
         tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -266,6 +270,9 @@ class SvtInternalOptions_Impl : public ConfigItem
         sal_Bool    CrashMailEnabled    () const { return m_bSendCrashMail; }
         sal_Bool    MailUIEnabled       () const { return m_bUseMailUI; }
 
+        OUString    GetCurrentTempURL() const { return m_aCurrentTempURL; }
+        void        SetCurrentTempURL( const OUString& aNewCurrentTempURL );
+
         void        PushRecoveryItem    (   const   OUString&   sURL        ,
                                             const   OUString&   sFilter     ,
                                              const  OUString&   sTempName   );
@@ -308,9 +315,10 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_INTERNAL, CONFIG_MODE_IMMEDIATE_UPDATE )
     // Init member then.
-    ,   m_bSlotCFG          ( DEFAULT_SLOTCFG       )
-    ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL )
-    ,   m_bUseMailUI        ( DEFAULT_USEMAILUI )
+    ,   m_bSlotCFG          ( DEFAULT_SLOTCFG           )
+    ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL     )
+    ,   m_bUseMailUI        ( DEFAULT_USEMAILUI         )
+    ,   m_aCurrentTempURL   ( DEFAULT_CURRENTTEMPURL    )
     , m_bRemoveMenuEntryClose ( sal_False )
     , m_bRemoveMenuEntryBackToWebtop ( sal_False )
     , m_bRemoveMenuEntryNewWebtop ( sal_False )
@@ -341,6 +349,7 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     seqValues[FIXPROPERTYHANDLE_SLOTCFG         ] >>= m_bSlotCFG        ;
     seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL   ] >>= m_bSendCrashMail  ;
     seqValues[FIXPROPERTYHANDLE_USEMAILUI       ] >>= m_bUseMailUI  ;
+    seqValues[FIXPROPERTYHANDLE_CURRENTTEMPURL  ] >>= m_aCurrentTempURL ;
 //    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE ] >>= m_bRemoveMenuEntryClose  ;
 //    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ] >>= m_bRemoveMenuEntryBackToWebtop  ;
 //    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP ] >>= m_bRemoveMenuEntryNewWebtop  ;
@@ -385,7 +394,16 @@ SvtInternalOptions_Impl::~SvtInternalOptions_Impl()
 //*****************************************************************************************************************
 void SvtInternalOptions_Impl::Commit()
 {
-    // Our fix properties are readonly values(!) - don't write it back.
+    // We have to write our current temp URL
+    Sequence< OUString > aNames( 1 );
+    OUString* pNames = aNames.getArray();
+    Sequence< Any > aValues( 1 );
+    Any* pValues = aValues.getArray();
+
+    pNames[0] = FIXPROPERTYNAME_CURRENTTEMPURL;
+    pValues[0] <<= m_aCurrentTempURL;
+
+    PutProperties( aNames, aValues );
 
     // Write set of dynamic properties then.
     ClearNodeSet( PROPERTYNAME_RECOVERYLIST );
@@ -410,6 +428,15 @@ void SvtInternalOptions_Impl::Commit()
 
         SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
     }
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtInternalOptions_Impl::SetCurrentTempURL( const OUString& aNewCurrentTempURL )
+{
+    m_aCurrentTempURL = aNewCurrentTempURL;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -463,6 +490,7 @@ Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
     seqProperties[FIXPROPERTYHANDLE_SLOTCFG         ]   =   FIXPROPERTYNAME_SLOTCFG         ;
     seqProperties[FIXPROPERTYHANDLE_SENDCRASHMAIL   ]   =   FIXPROPERTYNAME_SENDCRASHMAIL   ;
     seqProperties[FIXPROPERTYHANDLE_USEMAILUI       ]   =   FIXPROPERTYNAME_USEMAILUI       ;
+    seqProperties[FIXPROPERTYHANDLE_CURRENTTEMPURL  ]   =   FIXPROPERTYNAME_CURRENTTEMPURL  ;
 //    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE        ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYCLOSE;
 //    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYBACKTOWEBTOP;
 //    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP    ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYNEWWEBTOP;
@@ -580,6 +608,18 @@ sal_Bool SvtInternalOptions::IsRemoveMenuEntryLogout() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsRemoveMenuEntryLogout();
+}
+
+OUString SvtInternalOptions::GetCurrentTempURL() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetCurrentTempURL();
+}
+
+void SvtInternalOptions::SetCurrentTempURL( const OUString& aNewCurrentTempURL )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetCurrentTempURL( aNewCurrentTempURL );
 }
 
 //*****************************************************************************************************************
