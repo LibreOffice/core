@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 08:50:55 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 #include <iostream>
 #include <vector>
 #include <memory> /* auto_ptr */
+
+#ifndef _SAL_MAIN_H_
+#include "sal/main.h"
+#endif
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
@@ -246,11 +250,8 @@ void endless()
 }
 
 // ----------------------------------- Main -----------------------------------
-#if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
-#else
-int _cdecl main( int argc, char* argv[] )
-#endif
+
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     static char* optionSet[] = {
         "-boom,         stop near error position, exception only",
@@ -294,7 +295,7 @@ int _cdecl main( int argc, char* argv[] )
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.15 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.16 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
