@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 20:39:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     };
 
-    class ORoadmapHyperLabel : public RoadmapTypes, public OutputDevice
+    class ORoadmapHyperLabel : public RoadmapTypes
     {
     private:
         ORoadmapIDHyperLabel* mpIDLabel;
@@ -144,7 +144,6 @@ namespace svt
 
         HyperLabel*             GetDescriptionHyperLabel() const { return mpDescHyperLabel;};
         void                    SetDescriptionHyperLabel(HyperLabel* _pDescriptionHyperLabel){mpDescHyperLabel = _pDescriptionHyperLabel;};
-
     };
 
 
@@ -193,6 +192,7 @@ namespace svt
         void            SetItemSelectHdl( const Link& _rHdl );
         Link            GetItemSelectHdl( ) const;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void    GetFocus();
 
 
     protected:
