@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-19 09:38:53 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 20:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,7 +1111,7 @@ TabPage PAGE_JDBC
         Text[ russian ] = "Íàáîğ çíàêîâ:" ;
         Text[ polish ] = "Zbiór znaków:" ;
         Text[ japanese ] = "•¶š—ñ(~C)" ;
-        Text[ chinese_traditional ] = "¦r«¬:" ;
+        Text[ chinese_traditional ] = "¦r«¬¡G" ;
         Text[ arabic ] = "ãÌãæÚÉ ÇáÃÍÑİ:" ;
         Text[ greek ] = "Óåô ÷áñáêôŞñùí:" ;
         Text[ korean ] = "¹®ÀÚÁıÇÕ(~C)" ;
@@ -2176,6 +2176,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/03/19 09:38:53  nf
+ *  Merge SRC625: 19.03.01 - 10:38:11 (NoBranch)
+ *
  *  Revision 1.30  2001/03/09 20:38:56  avy
  *  Merge SRC624: 03/09/01 - 21:38:33 (NoBranch)
  *
