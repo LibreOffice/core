@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:53:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ enum SchXMLPlotAreaAttrTokenMap
 
 enum SchXMLAxisAttrTokenMap
 {
-    XML_TOK_AXIS_CLASS,
+    XML_TOK_AXIS_DIMENSION,
     XML_TOK_AXIS_NAME,
     XML_TOK_AXIS_STYLE_NAME
 };
