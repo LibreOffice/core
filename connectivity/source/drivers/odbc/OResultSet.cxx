@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 06:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
     {
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
-        return any2bool(m_aRow[columnIndex]);
+        return m_aRow[columnIndex];
     }
 
 
@@ -451,7 +451,7 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
 
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
     }
     else
         OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nRet,sizeof nRet);
@@ -472,13 +472,15 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
         Sequence< sal_Int8 > nRet;
-        if(!(m_aRow[columnIndex] >>= nRet) && m_aRow[columnIndex].hasValue())
+        if(m_aRow[columnIndex].getTypeKind() != DataType::BINARY && m_aRow[columnIndex].getTypeKind() != DataType::VARBINARY)
         {   // something went wrong so we have another type here
-            OSL_ENSURE(TypeClass_STRING == m_aRow[columnIndex].getValueTypeClass(),"ONLY string types supported!");
+            //  OSL_ENSURE(TypeClass_STRING == m_aRow[columnIndex].getValueTypeClass(),"ONLY string types supported!");
             ::rtl::OUString sRet;
-            m_aRow[columnIndex] >>= sRet;
+            sRet = m_aRow[columnIndex].getString();
             nRet = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
         }
+        else
+            nRet = m_aRow[columnIndex];
         return nRet;
     }
 
@@ -510,7 +512,7 @@ Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, R
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
 
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
     }
     else
     {
@@ -539,7 +541,7 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
 
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
 
     }
     else
@@ -573,7 +575,7 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
     {
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
     }
     else
         OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nRet,sizeof nRet);
@@ -686,7 +688,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
 
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
 
     }
     else
@@ -708,7 +710,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     {
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
     }
     else
         nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
@@ -728,7 +730,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
     {
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
     }
     else
     {
@@ -755,7 +757,7 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLExc
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
 
-        m_aRow[columnIndex] >>= nRet;
+        nRet = m_aRow[columnIndex];
         //  return nRet;
     }
     else
@@ -973,7 +975,7 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return m_bFetchData ? !m_aRow[m_nLastColumnPos].hasValue() : m_bWasNull;
+    return m_bFetchData ? m_aRow[m_nLastColumnPos].isNull() : m_bWasNull;
 }
 // -------------------------------------------------------------------------
 
@@ -1652,7 +1654,10 @@ void OResultSet::getFastPropertyValue(
 void OResultSet::fillRow(sal_Int32 _nToColumn)
 {
     if((sal_Int32)m_aRow.size() <= _nToColumn)
+    {
         m_aRow.resize(_nToColumn+1);
+        m_aRow[_nToColumn].setBound(sal_True);
+    }
     m_bFetchData = sal_False;
     Reference< XResultSetMetaData > xMeta = getMetaData();
     for(sal_Int32 i=m_nLastColumnPos+1;i <= _nToColumn; ++i)
@@ -1661,49 +1666,49 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
-                m_aRow[i] <<= getString(i);
+                m_aRow[i] = getString(i);
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::BIGINT:
-                m_aRow[i] <<= getString(i);
+                m_aRow[i] = getString(i);
                 break;
             case DataType::DOUBLE:
-                m_aRow[i] <<= getDouble(i);
+                m_aRow[i] = getDouble(i);
                 break;
             case DataType::LONGVARCHAR:
-                m_aRow[i] <<= getString(i);
+                m_aRow[i] = getString(i);
                 break;
             case DataType::LONGVARBINARY:
-                m_aRow[i] <<= getBytes(i);
+                m_aRow[i] = getBytes(i);
                 break;
             case DataType::DATE:
-                m_aRow[i] <<= getDate(i);
+                m_aRow[i] = getDate(i);
                 break;
             case DataType::TIME:
-                m_aRow[i] <<= getTime(i);
+                m_aRow[i] = getTime(i);
                 break;
             case DataType::TIMESTAMP:
-                m_aRow[i] <<= getTimestamp(i);
+                m_aRow[i] = getTimestamp(i);
                 break;
             case DataType::BIT:
-                m_aRow[i] = bool2any(getBoolean(i));
+                m_aRow[i] = getBoolean(i);
                 break;
             case DataType::TINYINT:
-                m_aRow[i] <<= getByte(i);
+                m_aRow[i] = getByte(i);
                 break;
             case DataType::SMALLINT:
-                m_aRow[i] <<= getShort(i);
+                m_aRow[i] = getShort(i);
                 break;
             case DataType::INTEGER:
-                m_aRow[i] <<= getInt(i);
+                m_aRow[i] = getInt(i);
                 break;
             case DataType::REAL:
-                m_aRow[i] <<= getFloat(i);
+                m_aRow[i] = getFloat(i);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
-                m_aRow[i] <<= getBytes(i);
+                m_aRow[i] = getBytes(i);
                 break;
         }
     }

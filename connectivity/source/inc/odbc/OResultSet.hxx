@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:47 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 06:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include "FValue.hxx"
+#endif
 
 namespace connectivity
 {
@@ -147,7 +150,7 @@ namespace connectivity
             TVoidVector                                 m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
-            ::std::vector< ::com::sun::star::uno::Any>  m_aRow; // only used when SQLGetData can't be called in any order
+            ::std::vector< ORowSetValue>                m_aRow; // only used when SQLGetData can't be called in any order
             SQLHANDLE                                   m_aStatementHandle;
             SQLHANDLE                                   m_aConnectionHandle;
             OStatement_Base*                            m_pStatement;
