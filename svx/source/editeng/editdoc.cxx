@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
+ *  last change: $Author: mt $ $Date: 2000-11-30 08:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ DBG_NAME( EE_ContentNode );
 DBG_NAME( EE_CharAttribList );
 
 SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
+        { 0, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },
+        { 0, SFX_ITEM_POOLABLE },   // EE_PARA_ASIANCJKSPACING
         { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },     // EE_PARA_NUMBULL
         { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_HYPHENATE
         { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_BULLETSTATE
