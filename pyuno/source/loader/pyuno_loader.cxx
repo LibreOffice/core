@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_loader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2003-04-06 17:15:16 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 23:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,6 @@ static OUString getLibDir()
             if( osl::Module::getUrlFromAddress( reinterpret_cast<void*>(getLibDir) , libDir ) )
             {
                 libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
-                OUString name ( RTL_CONSTASCII_USTRINGPARAM( "PYTHONLOADERLIBDIR" ) );
-                rtl_bootstrap_set( name.pData, libDir.pData );
             }
             pLibDir = &libDir;
         }
