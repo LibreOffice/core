@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 14:27:37 $
+ *  last change: $Author: mba $ $Date: 2001-03-14 12:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,7 +1100,7 @@ void impl_initFilterHashNew2Old( TFilterNames& aHash )
     // Search for existing entry! Don't use index operato directly - he create a new entry if it not already exist automaticly!
     TConstConverterIterator pEntry = aConverterOld2New.find(sOldName);
     // Warn programmer if some filter names are not suported yet!
-    DBG_ASSERT( !(pEntry==aConverterOld2New.end()), "SfxFrameLoader::impl_getNewFilterName()\nUnsupported filter name detected ... Convertion failed!\n" );
+//    DBG_ASSERT( !(pEntry==aConverterOld2New.end()), "SfxFrameLoader::impl_getNewFilterName()\nUnsupported filter name detected ... Convertion failed!\n" );
     ::rtl::OUString sNewName;
     if( pEntry!=aConverterOld2New.end() )
     {
@@ -2610,7 +2610,7 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
 
             sal_Int32 nFilterFlags = 0, nClipId = 0, nDocIconId = 0, nVersion = 0;
             ::rtl::OUString aMimeType, aType, aUIName, aDefaultTemplate, aHumanName;
-            String aEmptyStr, aFilterName, aUserData;
+            String aFilterName, aUserData;
             String aExtension, aWildCard( DEFINE_CONST_UNICODE("*.") );
             BOOL bMatches = FALSE;
 
@@ -2724,8 +2724,8 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                 else
                     aFilterName = aName;
 
-                SfxFilter *pFilter = new SfxFilter( aFilterName, aExtension, nFilterFlags, nClipId, aEmptyStr,
-                        aEmptyStr, (USHORT) nDocIconId, aMimeType, this, aUserData );
+                SfxFilter *pFilter = new SfxFilter( aFilterName, aExtension, nFilterFlags, nClipId, aType,
+                        aType, (USHORT) nDocIconId, aMimeType, this, aUserData );
 
                 pFilter->SetUIName( aUIName );
                 pFilter->SetDefaultTemplate( aDefaultTemplate );
