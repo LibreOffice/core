@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 12:51:33 $
+ *  last change: $Author: mtg $ $Date: 2001-06-26 11:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #endif
+#ifndef _REFRESH_LISTENER_CONTAINER_HXX_
+#include <RefreshListenerContainer.hxx>
+#endif
 
 #define __IFC26 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
 Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26
@@ -255,6 +258,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     public SfxBaseModel
 {
     ActionContextArr        aActionArr;
+    SwRefreshListenerContainer  aRefreshCont;
 
     SfxItemPropertySet      aPropSet;
 
@@ -299,7 +303,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     public:
         SwXTextDocument(SwDocShell* pShell);
         virtual ~SwXTextDocument();
-
+    inline void notifyRefreshListeners() { aRefreshCont.Refreshed(); }
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
