@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:39:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,7 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
     int nRangeCount = 0;
     bool bHasUnicode = false;
+    bool bHasUnknownEncoding = false;
 
     // approximate unicode ranges from encodings
     sal_uInt32* pRange = pCodePairs;
@@ -562,15 +563,9 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
                 break;
 
             case RTL_TEXTENCODING_DONTKNOW:
-                break;
             default:
-                // *(pRange++) = 0x0020; *(pRange++) = 0xFFFF;
+                bHasUnknownEncoding = true;
                 break;
-        }
-
-        if( pRange == pOldRange )
-        {
-            *(pRange++) = 0x0020; *(pRange++) = 0xFFFF;
         }
 
         nRangeCount += (pRange - pOldRange) / 2;
@@ -578,14 +573,16 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 
     // unicode encoded fonts usually do not cover the entire unicode range
     // => only use them to determine coverage when no other encodings are available
-    if( bHasUnicode && !nRangeCount )
+    if( !nRangeCount && (bHasUnicode || bHasUnknownEncoding) )
     {
         if( pCodePairs )
         {
             pCodePairs[0] = 0x0020;
-            pCodePairs[1] = 0xFFFF;
+            pCodePairs[1] = 0xD800;
+            pCodePairs[2] = 0xE000;
+            pCodePairs[3] = 0xFFFE;
         }
-        return 1;
+        return 2;
     }
 
     // sort and merge the code pairs
