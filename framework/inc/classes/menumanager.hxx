@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-02 14:06:09 $
+ *  last change: $Author: cd $ $Date: 2001-04-09 08:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@
 #define RUNTIMEEXCEPTION                                ::com::sun::star::uno::RuntimeException
 #define EVENTOBJECT                                     ::com::sun::star::lang::EventObject
 
+#define BMKMENU_ITEMID_START    20000
+
 namespace framework
 {
 
@@ -124,7 +126,7 @@ class MenuManager : public XSTATUSLISTENER      ,
                     public ::cppu::OWeakObject
 {
     public:
-        MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren );
+        MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren, sal_Bool bIsBookmarkMenu = sal_False );
         virtual ~MenuManager();
 
         // XInterface
@@ -151,6 +153,8 @@ class MenuManager : public XSTATUSLISTENER      ,
         DECL_LINK( Deactivate, Menu * );
 
     private:
+        PopupMenu* CreateBookmarkMenu( const ::rtl::OUString aURL, const ::rtl::OUString aReferer );
+
         struct MenuItemHandler
         {
             MenuItemHandler( USHORT aItemId, MenuManager* pManager, REFERENCE< XDISPATCH >& rDispatch ) :
@@ -168,6 +172,7 @@ class MenuManager : public XSTATUSLISTENER      ,
         sal_Bool                            m_bDeleteMenu;
         sal_Bool                            m_bDeleteChildren;
         sal_Bool                            m_bActive;
+        sal_Bool                            m_bIsBookmarkMenu;
         Menu*                               m_pVCLMenu;
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;

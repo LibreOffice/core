@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cd $ $Date: 2001-04-02 14:10:06 $
+#   last change: $Author: cd $ $Date: 2001-04-09 08:10:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,8 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                 $(SLO)$/asyncquit.obj							\
                 $(SLO)$/targetfinder.obj						\
                 $(SLO)$/argumentanalyzer.obj						\
-                $(SLO)$/menumanager.obj
+                $(SLO)$/menumanager.obj							\
+                $(SLO)$/bmkmenu.obj
 
 # --- Targets ------------------------------------------------------
 

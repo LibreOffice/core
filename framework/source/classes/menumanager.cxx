@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-04 05:59:20 $
+ *  last change: $Author: cd $ $Date: 2001-04-09 08:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <classes/menumanager.hxx>
+#include <classes/bmkmenu.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -98,6 +99,14 @@
 #include <svtools/menuoptions.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+
 #include <vcl/svapp.hxx>
 
 #include <vos/mutex.hxx>
@@ -112,10 +121,16 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 
+
 namespace framework
 {
 
-MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
+#define SID_SFX_START           5000
+#define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
+#define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
+
+
+MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren, sal_Bool bIsBookmarkMenu ) :
     OMutexMember(), OWeakObject()
 {
     m_bActive           = sal_False;
@@ -124,7 +139,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_pVCLMenu          = pMenu;
     m_xFrame            = rFrame;
     m_bInitialized      = sal_False;
-
+    m_bIsBookmarkMenu   = bIsBookmarkMenu;
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
     int nItemCount = pMenu->GetItemCount();
@@ -144,7 +159,31 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
         }
         else
         {
-            if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
+            if ( nItemId == SID_NEWDOCDIRECT )
+            {
+                String sKey = SvtPathOptions().GetNewMenuPath();
+                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
+                PopupMenu* pSubMenu = CreateBookmarkMenu( sKey, sKey );
+                pMenu->SetPopupMenu( nItemId, pSubMenu );
+                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False, sal_True );
+                MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
+                                                            nItemId,
+                                                            pSubMenuManager,
+                                                            REFERENCE< XDISPATCH >() );
+            }
+            else if ( nItemId == SID_AUTOPILOTMENU )
+            {
+                String sKey = SvtPathOptions().GetAutoPilotPath();
+                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
+                PopupMenu* pSubMenu = CreateBookmarkMenu( sKey, sKey );
+                pMenu->SetPopupMenu( nItemId, pSubMenu );
+                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False, sal_True );
+                MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
+                                                            nItemId,
+                                                            pSubMenuManager,
+                                                            REFERENCE< XDISPATCH >() );
+            }
+            else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
                 m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() ));
         }
     }
@@ -224,22 +263,17 @@ throw ( RuntimeException )
 
     if ( pStatusChangedMenu )
     {
-        sal_Bool bMenuItemEnabled = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
-
-        if ( Event.IsEnabled != bMenuItemEnabled )
+        OGuard  aGuard( Application::GetSolarMutex() );
         {
-            OGuard  aGuard( Application::GetSolarMutex() );
+            sal_Bool bCheckmark         = sal_False;
+            sal_Bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
+
+            if ( Event.IsEnabled != bMenuItemEnabled )
             m_pVCLMenu->EnableItem( pStatusChangedMenu->nItemId, Event.IsEnabled );
-        }
 
-
-        sal_Bool bCheckmark = sal_False;
-
-        Event.State >>= bCheckmark;
-        if ( bCheckmark )
-        {
-            OGuard  aGuard( Application::GetSolarMutex() );
-            m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, sal_True );
+            Event.State >>= bCheckmark;
+            if ( bCheckmark )
+                m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, sal_True );
         }
 
         if ( Event.Requery )
@@ -347,8 +381,16 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                     xTrans->parseStrict( aTargetURL );
 
-                    REFERENCE< XDISPATCH > xMenuItemDispatch = xDispatchProvider->queryDispatch(
-                                                                    aTargetURL, ::rtl::OUString(), 0 );
+                    REFERENCE< XDISPATCH > xMenuItemDispatch;
+                    if ( m_bIsBookmarkMenu )
+                    {
+                        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+                            xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                        else
+                            xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
+                    }
+                    else
+                        xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
                     if ( xMenuItemDispatch.is() )
                     {
@@ -409,6 +451,11 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 IMPL_LINK( MenuManager, Highlight, Menu *, pMenu )
 {
     return 0;
+}
+
+PopupMenu* MenuManager::CreateBookmarkMenu( const ::rtl::OUString aURL, const ::rtl::OUString aReferer )
+{
+    return new BmkMenu( aURL, aReferer );
 }
 
 }
