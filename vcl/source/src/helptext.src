@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-27 20:04:16 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 13:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,11 @@ String SV_HELPTEXT_CLOSE
     TEXT[ english_us ] = "Close";
     TEXT[ russian ] = "Çàêğûòü";
     TEXT[ polish ] = "Zamknij";
-    TEXT[ japanese ] = "I—¹";
-    TEXT[ chinese_simplified ] = "¹Ø±Õ";
-    TEXT[ chinese_traditional ] = "Ãö³¬";
+    TEXT[ japanese ] = "çµ‚äº†";
+    TEXT[ chinese_simplified ] = "å…³é—­";
+    TEXT[ chinese_traditional ] = "é—œé–‰";
     TEXT[ greek ] = "Êëåßóéìï";
-    TEXT[ korean ] = "´İ±â";
+    TEXT[ korean ] = "ë‹«ê¸°";
     TEXT[ arabic ] = "ÅÛáÇŞ";
     TEXT[ turkish ] = "Kapat";
     TEXT[ language_user1 ] = " ";
@@ -107,11 +107,11 @@ String SV_HELPTEXT_MINIMIZE
     TEXT[ english_us ] = "Minimize";
     TEXT[ russian ] = "Ñâåğíóòü";
     TEXT[ polish ] = "Minimalizuj";
-    TEXT[ japanese ] = "Å¬‰»";
-    TEXT[ chinese_simplified ] = "×îĞ¡»¯";
-    TEXT[ chinese_traditional ] = "³Ì¤p¤Æ";
+    TEXT[ japanese ] = "æœ€å°åŒ–";
+    TEXT[ chinese_simplified ] = "æœ€å°åŒ–";
+    TEXT[ chinese_traditional ] = "æœ€å°åŒ–";
     TEXT[ greek ] = "Åëá÷éóôïğïßçóç";
-    TEXT[ korean ] = "ÃÖ¼ÒÈ­";
+    TEXT[ korean ] = "ìµœì†Œí™”";
     TEXT[ arabic ] = "ÇáÍÏ ÇáÃÏäì";
     TEXT[ turkish ] = "Simge durumuna küçült";
     TEXT[ language_user1 ] = " ";
@@ -134,11 +134,11 @@ String SV_HELPTEXT_MAXIMIZE
     TEXT[ english_us ] = "Maximize";
     TEXT[ russian ] = "Ğàçâåğíóòü";
     TEXT[ polish ] = "Maksymalizuj";
-    TEXT[ japanese ] = "Å‘å‰»";
-    TEXT[ chinese_simplified ] = "×î´ó»¯";
-    TEXT[ chinese_traditional ] = "³Ì¤j¤Æ";
+    TEXT[ japanese ] = "æœ€å¤§åŒ–";
+    TEXT[ chinese_simplified ] = "æœ€å¤§åŒ–";
+    TEXT[ chinese_traditional ] = "æœ€å¤§åŒ–";
     TEXT[ greek ] = "Ìåãéóôïğïßçóç";
-    TEXT[ korean ] = "ÃÖ´ëÈ­";
+    TEXT[ korean ] = "ìµœëŒ€í™”";
     TEXT[ arabic ] = "ÇáÍÏ ÇáÃŞÕì";
     TEXT[ turkish ] = "Ekranı kapla";
     TEXT[ language_user1 ] = " ";
@@ -161,11 +161,11 @@ String SV_HELPTEXT_RESTORE
     TEXT[ english_us ] = "Restore";
     TEXT[ russian ] = "Âîññòàíîâèòü";
     TEXT[ polish ] = "Przywróæ";
-    TEXT[ japanese ] = "‚â‚è’¼‚µ";
-    TEXT[ chinese_simplified ] = "»Ö¸´";
-    TEXT[ chinese_traditional ] = "«ì´_";
+    TEXT[ japanese ] = "ã‚„ã‚Šç›´ã—";
+    TEXT[ chinese_simplified ] = "æ¢å¤";
+    TEXT[ chinese_traditional ] = "æ¢å¾©";
     TEXT[ greek ] = "ÅğáíáöïñÜ";
-    TEXT[ korean ] = "º¹±¸";
+    TEXT[ korean ] = "ë³µêµ¬";
     TEXT[ arabic ] = "ÇÓÊÚÇÏÉ";
     TEXT[ turkish ] = "Başa al";
     TEXT[ language_user1 ] = " ";
@@ -188,11 +188,11 @@ String SV_HELPTEXT_ROLLDOWN
     TEXT[ english_us ] = "Drop down";
     TEXT[ russian ] = "Ğàñêğûòü";
     TEXT[ polish ] = "Otwórz";
-    TEXT[ japanese ] = "ŠJ‚¯‚é";
-    TEXT[ chinese_simplified ] = "À©Õ¹";
-    TEXT[ chinese_traditional ] = "ÂX®i";
+    TEXT[ japanese ] = "é–‹ã‘ã‚‹";
+    TEXT[ chinese_simplified ] = "æ‰©å±•";
+    TEXT[ chinese_traditional ] = "æ“´å±•";
     TEXT[ greek ] = "¢íïéãìá";
-    TEXT[ korean ] = "¿­±â";
+    TEXT[ korean ] = "ì—´ê¸°";
     TEXT[ arabic ] = "İÊÍ";
     TEXT[ turkish ] = "Aç";
     TEXT[ language_user1 ] = " ";
@@ -216,11 +216,11 @@ String SV_HELPTEXT_ROLLUP
     TEXT[ language_user1 ] = " ";
     TEXT[ russian ] = "Çàêğûòü";
     TEXT[ polish ] = "Ukryj";
-    TEXT[ japanese ] = "•Â‚¶‚é";
-    TEXT[ chinese_simplified ] = "ÒşÈë";
-    TEXT[ chinese_traditional ] = "Áô¤J";
+    TEXT[ japanese ] = "é–‰ã˜ã‚‹";
+    TEXT[ chinese_simplified ] = "éšå…¥";
+    TEXT[ chinese_traditional ] = "éš±å…¥";
     TEXT[ greek ] = "Áğüêñõøç";
-    TEXT[ korean ] = "´İ±â";
+    TEXT[ korean ] = "ë‹«ê¸°";
     TEXT[ arabic ] = "Øí";
     TEXT[ turkish ] = "Kapat";
     TEXT[ catalan ] = "Ocultar";
@@ -242,11 +242,11 @@ String SV_HELPTEXT_HELP
     TEXT[ english_us ] = "Help";
     TEXT[ russian ] = "Ñïğàâêà";
     TEXT[ polish ] = "Pomoc";
-    TEXT[ japanese ] = "ÍÙÌß";
-    TEXT[ chinese_simplified ] = "°ïÖú";
-    TEXT[ chinese_traditional ] = "»¡©ú";
+    TEXT[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿ";
+    TEXT[ chinese_simplified ] = "å¸®åŠ©";
+    TEXT[ chinese_traditional ] = "èªªæ˜";
     TEXT[ greek ] = "ÂïŞèåéá";
-    TEXT[ korean ] = "µµ¿ò¸»";
+    TEXT[ korean ] = "ë„ì›€ë§";
     TEXT[ arabic ] = "ãÓÇÚÏÉ";
     TEXT[ turkish ] = "Yardım";
     TEXT[ language_user1 ] = " ";
@@ -269,11 +269,11 @@ String SV_HELPTEXT_ALWAYSVISIBLE
     TEXT[ english_us ] = "Always visible";
     TEXT[ russian ] = "Ïîêàçûâàòü âñåãäà";
     TEXT[ polish ] = "Zawsze widoczny";
-    TEXT[ japanese ] = "í‚É•\\¦";
-    TEXT[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾";
-    TEXT[ chinese_traditional ] = "¦Û°ÊÅã¥Ü";
+    TEXT[ japanese ] = "å¸¸ã«è¡¨ç¤º";
+    TEXT[ chinese_simplified ] = "è‡ªåŠ¨æ˜¾ç¤º";
+    TEXT[ chinese_traditional ] = "è‡ªå‹•é¡¯ç¤º";
     TEXT[ greek ] = "ĞÜíôá ïñáôÜ";
-    TEXT[ korean ] = "Ç×»ó º¸ÀÓ";
+    TEXT[ korean ] = "í•­ìƒ ë³´ì„";
     TEXT[ arabic ] = "ãÑÆí ÏÇÆãÇğ";
     TEXT[ turkish ] = "Daima görünür";
     TEXT[ language_user1 ] = " ";
@@ -296,11 +296,11 @@ String SV_HELPTEXT_FADEIN
     TEXT[ english_us ] = "Show";
     TEXT[ russian ] = "Ïîêàçàòü";
     TEXT[ polish ] = "Poka¿";
-    TEXT[ japanese ] = "•\\¦";
-    TEXT[ chinese_simplified ] = "ÏÔÊ¾";
-    TEXT[ chinese_traditional ] = "Åã¥Ü";
+    TEXT[ japanese ] = "è¡¨ç¤º";
+    TEXT[ chinese_simplified ] = "æ˜¾ç¤º";
+    TEXT[ chinese_traditional ] = "é¡¯ç¤º";
     TEXT[ greek ] = "ÅìöÜíéóç";
-    TEXT[ korean ] = "º¸ÀÌ±â";
+    TEXT[ korean ] = "ë³´ì´ê¸°";
     TEXT[ arabic ] = "ÅÙåÇÑ";
     TEXT[ turkish ] = "Göster";
     TEXT[ language_user1 ] = " ";
@@ -323,11 +323,11 @@ String SV_HELPTEXT_FADEOUT
     TEXT[ english_us ] = "Hide";
     TEXT[ russian ] = "Ñêğûòü";
     TEXT[ polish ] = "Ukryj";
-    TEXT[ japanese ] = "”ñ•\\¦";
-    TEXT[ chinese_simplified ] = "ÒşÈë";
-    TEXT[ chinese_traditional ] = "Áô¤J";
+    TEXT[ japanese ] = "éè¡¨ç¤º";
+    TEXT[ chinese_simplified ] = "éšå…¥";
+    TEXT[ chinese_traditional ] = "éš±å…¥";
     TEXT[ greek ] = "Áğüêñõøç";
-    TEXT[ korean ] = "¼û±â±â";
+    TEXT[ korean ] = "ìˆ¨ê¸°ê¸°";
     TEXT[ arabic ] = "ÅÎİÇÁ";
     TEXT[ turkish ] = "Gizle";
     TEXT[ language_user1 ] = " ";
@@ -350,11 +350,11 @@ String SV_HELPTEXT_SPLITFLOATING
     TEXT[ english_us ] = "Floating";
     TEXT[ russian ] = "Çàâèñøèé";
     TEXT[ polish ] = "Ruchome";
-    TEXT[ japanese ] = "•‚“®";
-    TEXT[ chinese_simplified ] = "¸¡¶¯";
-    TEXT[ chinese_traditional ] = "¯B°Ê";
+    TEXT[ japanese ] = "æµ®å‹•";
+    TEXT[ chinese_simplified ] = "æµ®åŠ¨";
+    TEXT[ chinese_traditional ] = "æµ®å‹•";
     TEXT[ greek ] = "Êéíçôü";
-    TEXT[ korean ] = "°íÁ¤µÇÁö ¾ÊÀº";
+    TEXT[ korean ] = "ê³ ì •ë˜ì§€ ì•Šì€";
     TEXT[ arabic ] = "ÚÇÆã";
     TEXT[ turkish ] = "Serbest";
     TEXT[ language_user1 ] = " ";
@@ -377,17 +377,18 @@ String SV_HELPTEXT_SPLITFIXED
     TEXT[ english_us ] = "Stick";
     TEXT[ russian ] = "Ôèêñèğîâàòü";
     TEXT[ polish ] = "Przytwierdzone";
-    TEXT[ japanese ] = "ŒÅ’è";
-    TEXT[ chinese_simplified ] = "¹Ì¶¨";
-    TEXT[ chinese_traditional ] = "©T©w";
+    TEXT[ japanese ] = "å›ºå®š";
+    TEXT[ chinese_simplified ] = "å›ºå®š";
+    TEXT[ chinese_traditional ] = "å›ºå®š";
     TEXT[ greek ] = "Ğáãßùóç";
-    TEXT[ korean ] = "°íÁ¤";
+    TEXT[ korean ] = "ê³ ì •";
     TEXT[ arabic ] = "ÊËÈíÊ";
     TEXT[ turkish ] = "Sabitle";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Fijar";
     TEXT[ finnish ] = "Stick";
 };
+
 
 
 
