@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.32 $
+*   $Revision: 1.33 $
 *
-*   last change: $Author: rt $ $Date: 2004-07-06 13:38:42 $
+*   last change: $Author: hr $ $Date: 2004-08-02 16:28:56 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -751,12 +751,11 @@ namespace frm
                         if (xFieldsByIndex->getCount() <= nBoundColumn)
                             break;
 
-                        Reference<XPropertySet> xFieldAsSet;
-                        xFieldsByIndex->getByIndex(nBoundColumn) >>= xFieldAsSet;
+                        Reference<XPropertySet> xFieldAsSet(xFieldsByIndex->getByIndex(nBoundColumn),UNO_QUERY);
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aBoundFieldName;
                         nBoundColumn = 1;
 
-                        xFieldsByIndex->getByIndex(0) >>= xFieldAsSet;
+                        xFieldAsSet.set(xFieldsByIndex->getByIndex(0),UNO_QUERY);
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aFieldName;
                     }
                     else if (xFieldsByName.is())
@@ -815,7 +814,9 @@ namespace frm
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
                     aStatement += ::rtl::OUString::createFromAscii(" FROM ");
-                    aStatement += quoteTableName(xMeta, sListSource,::dbtools::eInDataManipulation);
+                    sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                    sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+                    aStatement += quoteTableName(xMeta, sListSource,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
 
                     xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, makeAny(aStatement));
                     bExecute = sal_True;
