@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:33:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@ class SwUINumRuleItem : public SfxPoolItem
     SwNumRule* pRule;
 
 public:
-    SwUINumRuleItem( const String& rName, const USHORT = FN_PARAM_ACT_NUMBER);
     SwUINumRuleItem( const SwNumRule& rRule, const USHORT = FN_PARAM_ACT_NUMBER);
     SwUINumRuleItem( const SwUINumRuleItem& rItem );
     virtual ~SwUINumRuleItem();
