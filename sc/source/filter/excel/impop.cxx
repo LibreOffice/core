@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-27 13:10:18 $
+ *  last change: $Author: dr $ $Date: 2002-10-01 11:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
 
     pExcRoot->pFontBuffer = new XclImpFontBuffer( *pExcRoot );
     pExcRoot->pNumFmtBuffer = new XclImpNumFmtBuffer( *pExcRoot,
-        pExcRoot->pFormTable->GetStandardFormat( pExcRoot->eDefLanguage ) );
+        pExcRoot->pFormTable->GetStandardFormat( ScGlobal::eLnge ) );
     pExcRoot->pXFBuffer = new XclImpXFBuffer( *pExcRoot );
 
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
