@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:46:26 $
+ *  last change: $Author: iha $ $Date: 2003-12-08 18:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,10 +127,10 @@ VDataSeries::VDataSeries()
     , m_XValues_Double()
     , m_YValues_Double()
 
-    , m_apCaption_Series(NULL)
+    , m_apLabel_Series(NULL)
     , m_apLabelPropNames_Series(NULL)
     , m_apLabelPropValues_Series(NULL)
-    , m_apCaption_AttributedPoint(NULL)
+    , m_apLabel_AttributedPoint(NULL)
     , m_apLabelPropNames_AttributedPoint(NULL)
     , m_apLabelPropValues_AttributedPoint(NULL)
 
@@ -180,10 +180,10 @@ VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries )
     , m_xData_YValues(NULL)
     , m_xData_ZValues(NULL)
 
-    , m_apCaption_Series(NULL)
+    , m_apLabel_Series(NULL)
     , m_apLabelPropNames_Series(NULL)
     , m_apLabelPropValues_Series(NULL)
-    , m_apCaption_AttributedPoint(NULL)
+    , m_apLabel_AttributedPoint(NULL)
     , m_apLabelPropNames_AttributedPoint(NULL)
     , m_apLabelPropValues_AttributedPoint(NULL)
 
@@ -389,39 +389,39 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
     return  uno::Reference<beans::XPropertySet>(m_xDataSeries, uno::UNO_QUERY );
 }
 
-::std::auto_ptr< DataPointLabel > getDataCaptionStyleFromPropertySet(
+::std::auto_ptr< DataPointLabel > getDataPointLabelFromPropertySet(
         const uno::Reference< beans::XPropertySet >& xProp )
 {
-    ::std::auto_ptr< DataPointLabel > apCaption( new DataPointLabel() );
+    ::std::auto_ptr< DataPointLabel > apLabel( new DataPointLabel() );
     try
     {
-        if( !(xProp->getPropertyValue( C2U( "DataPointLabel" ) ) >>= *apCaption) )
-            apCaption.reset();
+        if( !(xProp->getPropertyValue( C2U( "Label" ) ) >>= *apLabel) )
+            apLabel.reset();
     }
     catch( uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }
-    return apCaption;
+    return apLabel;
 }
 
-DataPointLabel* VDataSeries::getDataCaptionStyle( sal_Int32 index ) const
+DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
 {
     DataPointLabel* pRet = NULL;
     if( isAttributedDataPoint( index ) )
     {
-        if(!m_apCaption_AttributedPoint.get() || m_nCurrentAttributedPoint!=index)
+        if(!m_apLabel_AttributedPoint.get() || m_nCurrentAttributedPoint!=index)
         {
-            m_apCaption_AttributedPoint = getDataCaptionStyleFromPropertySet( this->getPropertiesOfPoint( index ) );
+            m_apLabel_AttributedPoint = getDataPointLabelFromPropertySet( this->getPropertiesOfPoint( index ) );
             m_nCurrentAttributedPoint = index;
         }
-        pRet = m_apCaption_AttributedPoint.get();
+        pRet = m_apLabel_AttributedPoint.get();
     }
     else
     {
-        if(!m_apCaption_Series.get())
-            m_apCaption_Series = getDataCaptionStyleFromPropertySet( this->getPropertiesOfPoint( index ) );
-        pRet = m_apCaption_Series.get();
+        if(!m_apLabel_Series.get())
+            m_apLabel_Series = getDataPointLabelFromPropertySet( this->getPropertiesOfPoint( index ) );
+        pRet = m_apLabel_Series.get();
     }
     return pRet;
 }

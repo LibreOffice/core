@@ -273,17 +273,17 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                     , const awt::Point& rScreenPosition2D )
 {
     //check wether the label needs to be created and how:
-    DataPointLabel* pCaption = rDataSeries.getDataCaptionStyle( nPointIndex );
+    DataPointLabel* pLabel = rDataSeries.getDataPointLabel( nPointIndex );
 
-    if( !pCaption || (!pCaption->ShowNumber && !pCaption->ShowNumberInPercent
-        && !pCaption->ShowCategoryName && !pCaption->ShowLegendSymbol ) )
+    if( !pLabel || (!pLabel->ShowNumber && !pLabel->ShowNumberInPercent
+        && !pLabel->ShowCategoryName && !pLabel->ShowLegendSymbol ) )
         return;
 
     //------------------------------------------------
     //prepare text
     ::rtl::OUStringBuffer aText;
     {
-        if(pCaption->ShowNumberInPercent)
+        if(pLabel->ShowNumberInPercent)
         {
             fValue = fValue*100.0/fSumValue;
             sal_Int32 nRound = static_cast< sal_Int32 >( fValue * 100.0 );
@@ -291,10 +291,10 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
             if( fValue < 0 )
                 fValue*=-1.0;
         }
-        if(pCaption->ShowCategoryName)
+        if(pLabel->ShowCategoryName)
             aText.append( rDataSeries.getCategoryString(nPointIndex) );
 
-        if(pCaption->ShowNumber || pCaption->ShowNumberInPercent)
+        if(pLabel->ShowNumber || pLabel->ShowNumberInPercent)
         {
             if(aText.getLength())
                 aText.append(sal_Unicode(' '));
@@ -310,7 +310,7 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                             ,false //bEraseTrailingDecZeros
                             ) );
         }
-        if(pCaption->ShowNumberInPercent)
+        if(pLabel->ShowNumberInPercent)
             aText.append(sal_Unicode('%'));
     }
     //------------------------------------------------

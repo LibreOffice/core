@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:46:22 $
+ *  last change: $Author: iha $ $Date: 2003-12-08 18:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ public:
     rtl::OUString       getLabelCID_Stub() const;
 
     ::drafts::com::sun::star::chart2::DataPointLabel*
-                        getDataCaptionStyle( sal_Int32 index ) const;
+                        getDataPointLabel( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
 private: //methods
@@ -185,12 +185,12 @@ private: //member
 
     //some cached values for data labels as they are very expensive
     mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataPointLabel >
-                                                    m_apCaption_Series;
+                                                    m_apLabel_Series;
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_Series;
     mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_Series;
 
     mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataPointLabel >
-                                                    m_apCaption_AttributedPoint;
+                                                    m_apLabel_AttributedPoint;
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_AttributedPoint;
     mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_AttributedPoint;
     mutable sal_Int32   m_nCurrentAttributedPoint;
