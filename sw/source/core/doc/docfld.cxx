@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:34:10 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@
 #include <poolfmt.hrc>      // fuer InitFldTypes
 #endif
 
+#include <SwUndoField.hxx> // #111840#
+
+using namespace com::sun::star::uno; // #111840#
 
 #ifndef SO2_DECL_SVLINKNAME_DEFINED
 #define SO2_DECL_SVLINKNAME_DEFINED
@@ -2869,6 +2872,121 @@ SwDocUpdtFld::~SwDocUpdtFld()
         delete aFldTypeTable[n];
 }
 
+// #111840#
+BOOL SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
+                      SwMsgPoolItem * pMsgHnt,
+                      BOOL bUpdateFlds)
+{
+    ASSERT(pDstTxtFld, "no field to update!");
+
+    BOOL bTblSelBreak = FALSE;
+
+    SwFmtFld * pDstFmtFld = (SwFmtFld*)&pDstTxtFld->GetFld();
+    SwField * pDstFld = pDstFmtFld->GetFld();
+    USHORT nFldWhich = rSrcFld.GetTyp()->Which();
+    SwNodeIndex aTblNdIdx(pDstTxtFld->GetTxtNode());
+
+    if (pDstFld->GetTyp()->Which() ==
+        rSrcFld.GetTyp()->Which())
+    {
+        if (DoesUndo())
+        {
+            SwPosition * pPos =
+                pDstTxtFld->GetPosition();
+
+            ASSERT(pPos, "SwTxtFld not in its SwTxtNode?");
+
+            AppendUndo(new SwUndoFieldFromDoc(*pPos, *pDstFld, rSrcFld,
+                                              pMsgHnt, bUpdateFlds));
+            delete pPos;
+        }
+
+        // Das gefundene Feld wird angepasst ...
+        //pDstFld->ChangeFormat( rSrcFld.GetFormat() );
+        //pDstFld->SetLanguage( rSrcFld.GetLanguage() );
+
+        SwField * pNewFld = rSrcFld.Copy();
+        pDstFmtFld->SetFld(pNewFld);
+
+        switch( nFldWhich )
+        {
+        case RES_SETEXPFLD:
+        case RES_GETEXPFLD:
+        case RES_HIDDENTXTFLD:
+        case RES_HIDDENPARAFLD:
+            UpdateExpFlds( pDstTxtFld );
+            break;
+
+        case RES_TABLEFLD:
+            {
+                const SwTableNode* pTblNd =
+                    IsIdxInTbl(aTblNdIdx);
+                if( pTblNd )
+                {
+                    SwTableFmlUpdate aTblUpdate( &pTblNd->
+                                                 GetTable() );
+                    if (bUpdateFlds)
+                        UpdateTblFlds( &aTblUpdate );
+                    else
+                        pNewFld->GetTyp()->Modify(0, &aTblUpdate);
+
+                    if (! bUpdateFlds)
+                        bTblSelBreak = TRUE;
+                }
+            }
+            break;
+
+        case RES_MACROFLD:
+            if( bUpdateFlds && pDstTxtFld->GetpTxtNode() )
+                (pDstTxtFld->GetpTxtNode())->
+                    Modify( 0, pDstFmtFld );
+            break;
+
+        case RES_DBNAMEFLD:
+        case RES_DBNEXTSETFLD:
+        case RES_DBNUMSETFLD:
+        case RES_DBSETNUMBERFLD:
+            ChgDBData(((SwDBNameInfField*) pNewFld)->GetRealDBData());
+            pNewFld->GetTyp()->UpdateFlds();
+
+            break;
+
+        case RES_DBFLD:
+            {
+                // JP 10.02.96: ChgValue aufrufen, damit
+                //die Format- aenderung den ContentString
+                //richtig setzt
+                SwDBField* pDBFld = (SwDBField*)pNewFld;
+                if (pDBFld->IsInitialized())
+                    pDBFld->ChgValue( pDBFld->GetValue(), TRUE );
+
+                pDBFld->ClearInitialized();
+                pDBFld->InitContent();
+            }
+            // kein break;
+
+        default:
+            pDstFmtFld->Modify( 0, pMsgHnt );
+        }
+
+        // Die Felder die wir berechnen koennen werden hier expli.
+        // zum Update angestossen.
+        if( nFldWhich == RES_USERFLD )
+            UpdateUsrFlds();
+    }
+
+    return bTblSelBreak;
+}
+
+BOOL SwDoc::PutValueToField(const SwPosition & rPos,
+                            const Any& rVal, BYTE nMId)
+{
+    Any aOldVal;
+    SwField * pField = GetField(rPos);
 
 
+    if (DoesUndo() && pField->QueryValue(aOldVal, nMId))
+        AppendUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nMId));
 
+    return pField->PutValue(rVal, nMId);
+}
