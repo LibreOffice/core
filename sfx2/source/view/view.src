@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:18:03 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String STR_NODEFPRINTER
     TEXT [ portuguese_brazilian ] = "Nenhuma impressora padr�o foi encontrada.\nEscolha uma impressora e tente novamente." ;
     TEXT [ portuguese ] = "Nenhuma impressora padr�o encontrada.\nEscolha uma impressora e tente novamente." ;
     TEXT [ finnish ] = "Oletustulostinta ei ole.\nValitse tulostin ja yrit� uudelleen." ;
-    TEXT [ danish ] = "Der blev ikke fundet nogen standardprinter.\nV�lg venligst en printer og pr�v igen." ;
+    TEXT [ danish ] = "Der blev ikke fundet en standardprinter.\nV�lg en printer og pr�v igen." ;
     TEXT [ french ] = "Impossible de d�tecter l'imprimante par d�faut.\nS�lectionnezr une imprimante et recommencez." ;
     TEXT [ swedish ] = "Ingen standardskrivare hittades.\nV�lj en skrivare och f�rs�k igen." ;
     TEXT [ dutch ] = "Geen standaardprinter gevonden.\nKies een printer en probeer het nogmaals." ;
@@ -96,6 +96,8 @@ String STR_NODEFPRINTER
     TEXT[ hebrew ] = "‮לא מוגדרת מדפסת ברירת מחדל.\nנא לבחור מדפסת ולנסות שוב.‬";
     TEXT[ hindi ] = "अनुपस्थिति मुद्रक नहीं मिला ।\nकृपया एक मुद्रक को चुनो और फिर से प्रयत्न करो ।";
     TEXT[ slovak ] = "Nebola nájdená žiadna východzia tlačiareň.\nProsím vyberte tlačiareň a skúste znovu.";
+    TEXT[ hungarian ] = "Nincs alapértelmezett nyomtató megadva. \nVálasszon egy nyomtatót, és próbálja meg újra.";
+    TEXT[ slovenian ] = "Ni mogoče najti privzetega tiskalnika.\nProsimo, izberite tiskalnik in poskusite znova.";
 };
 String STR_NOSTARTPRINTER
 {
@@ -128,6 +130,8 @@ String STR_NOSTARTPRINTER
     TEXT[ hebrew ] = "‮המדפסת לא מדפיסה משום מה.\nנא לבדוק תצורת המדפסת.‬";
     TEXT[ hindi ] = "मुद्रक को प्रारंभ नहीं कर सकते है । \nकृपया आपका मुद्रक का रूपरेखा को जाँच करो ।";
     TEXT[ slovak ] = "Nebolo možné inicializovať tlačiareň.\nProsím skontrolujte nastavenia tlačiarne.";
+    TEXT[ hungarian ] = "A nyomtató nem üzemkész. \nEllenőrizze a nyomtató beállításait!";
+    TEXT[ slovenian ] = "Ni mogoče zagnati tiskalnika.\nPreverite vašo konfiguracijo tiskalnika.";
 };
 String STR_PRINTER_NOTAVAIL
 {
@@ -160,6 +164,8 @@ String STR_PRINTER_NOTAVAIL
     TEXT[ hebrew ] = "‮מסמך זה נערך להדפסה על מדפסת $1 אשר אינה זמינה.\nהאם להשתמש במדפסת הרגילה $2?‬";
     TEXT[ hindi ] = "इस लेखपत्र को मुद्रक $1 केलिए रचना किया है । निर्दिष्ट की हुयी मुद्रक अनुपलब्ध है ।\nआप स्टान्डर्ड मुद्रक $2 को उपयोग करना चाहते है ?";
     TEXT[ slovak ] = "Tento dokument bol formátovaný pre tlačiareň $1. Určená tlačiareň nieje dostupná. \nPrajete si použiť štandardnú tlačiareň $2?";
+    TEXT[ hungarian ] = "Ez a dokumentum a(z) $1 nyomtató számára lett formázva. A megadott nyomtató nem elérhető. \nKívánja helyette a szabványos $2 nyomtatót használni?";
+    TEXT[ slovenian ] = "Ta dokument je bil oblikovan za tiskalnik $1. Navedeni tiskalnik ni na voljo. \nAli želite uporabiti standardni tiskalnik $2?";
 };
 String STR_MENU_NEWMAIL
 {
@@ -191,6 +197,8 @@ String STR_MENU_NEWMAIL
     Text[ hebrew ] = "‮הודעה חדשה‬";
     Text[ hindi ] = "नया ~मेइल";
     Text[ slovak ] = "Nová ~pošta";
+    Text[ hungarian ] = "Új ~levél";
+    Text[ slovenian ] = "Nova ~pošta";
 };
 String STR_PRINT_OPTIONS
 {
@@ -201,7 +209,7 @@ String STR_PRINT_OPTIONS
     Text [ portuguese_brazilian ] = "Op��es..." ;
     Text [ portuguese ] = "Op��es..." ;
     Text [ finnish ] = "Asetukset..." ;
-    Text [ danish ] = "Flere..." ;
+    Text [ danish ] = "Indstillinger..." ;
     Text [ french ] = "Options..." ;
     Text [ swedish ] = "Fler..." ;
     Text [ dutch ] = "Overige..." ;
@@ -223,6 +231,8 @@ String STR_PRINT_OPTIONS
     Text[ hebrew ] = "‮אפשרויות...‬";
     Text[ hindi ] = "विकल्प...";
     Text[ slovak ] = "Voľby...";
+    Text[ hungarian ] = "Beállítások...";
+    Text[ slovenian ] = "Možnosti...";
 };
 String STR_PRINT_OPTIONS_TITLE
 {
@@ -255,6 +265,8 @@ String STR_PRINT_OPTIONS_TITLE
     Text[ hebrew ] = "‮אפשרויות הדפסה‬";
     Text[ hindi ] = "मुद्रक विकल्प";
     Text[ slovak ] = "Možnosti tlačiarne";
+    Text[ hungarian ] = "Nyomtatási beállítások";
+    Text[ slovenian ] = "Možnosti tiskanja";
 };
 String STR_ERROR_PRINTER_BUSY
 {
@@ -287,6 +299,8 @@ String STR_ERROR_PRINTER_BUSY
     Text[ hebrew ] = "‮המדפסת תפוסה‬";
     Text[ hindi ] = "मुद्रक काम में निरत";
     Text[ slovak ] = "Tlačiareň je zaneprázdnená";
+    Text[ hungarian ] = "A nyomtató foglalt";
+    Text[ slovenian ] = "Tiskalnik je zaseden";
 };
 String STR_ERROR_PRINT
 {
@@ -319,6 +333,8 @@ String STR_ERROR_PRINT
     Text[ hebrew ] = "‮שגיאה בעת הדפסה‬";
     Text[ hindi ] = "छपाई करने के समय गलती";
     Text[ slovak ] = "Chyba pri tlači";
+    Text[ hungarian ] = "Hiba történt nyomtatás közben";
+    Text[ slovenian ] = "Napaka med tiskanjem";
 };
 String STR_PRINTING
 {
@@ -351,6 +367,8 @@ String STR_PRINTING
     Text[ hebrew ] = "‮הדפסה מתבצעת‬";
     Text[ hindi ] = "छपाई कर रहा है";
     Text[ slovak ] = "Prebieha tlač";
+    Text[ hungarian ] = "Nyomtatás";
+    Text[ slovenian ] = "Tiskanje";
 };
 String STR_PAGE
 {
@@ -383,6 +401,8 @@ String STR_PAGE
     Text[ hebrew ] = "‮דף ‬";
     Text[ hindi ] = "पृष्ठ ";
     Text[ slovak ] = "Strana ";
+    Text[ hungarian ] = "Oldal";
+    Text[ slovenian ] = "Stran ";
 };
 String STR_MDIFRAME_INTERFACE
 {
@@ -415,6 +435,8 @@ String STR_MDIFRAME_INTERFACE
     Text[ hebrew ] = "‮חלון MDI‬";
     Text[ hindi ] = "MDI विन्डो";
     Text[ slovak ] = "MDI okno";
+    Text[ hungarian ] = "MDI-ablak";
+    Text[ slovenian ] = "Okno MDI";
 };
 String STR_ERROR_SAVE_TEMPLATE
 {
@@ -447,6 +469,8 @@ String STR_ERROR_SAVE_TEMPLATE
     Text[ hebrew ] = "‮שגיאה בעת שמירת תבנית ‬";
     Text[ hindi ] = "नमूने को संचित करने के समय गलती ";
     Text[ slovak ] = "Chyba pri ukladaní šablóny ";
+    Text[ hungarian ] = "Hiba a sablon mentésekor.";
+    Text[ slovenian ] = "Napaka pri shranjevanju predloge ";
 };
 String STR_READONLY
 {
@@ -457,7 +481,7 @@ String STR_READONLY
     Text [ portuguese_brazilian ] = "(somente leitura)" ;
     Text [ portuguese ] = "(s� leitura)" ;
     Text [ finnish ] = " (vain luku)" ;
-    Text [ danish ] = "(skrivebeskyttet)" ;
+    Text [ danish ] = " (skrivebeskyttet)" ;
     Text [ french ] = "(en lecture seule)" ;
     Text [ swedish ] = "(skrivskyddad)" ;
     Text [ dutch ] = "(alleen-lezen)" ;
@@ -479,6 +503,8 @@ String STR_READONLY
     Text[ hebrew ] = "‮(קריאה בלבד)‬";
     Text[ hindi ] = " (केवल-पढने केलिए)";
     Text[ slovak ] = " (Iba na čítanie)";
+    Text[ hungarian ] = "(csak olvasható)";
+    Text[ slovenian ] = " (samo za branje)";
 };
 String STR_PRINT_NEWORI
 {
@@ -510,6 +536,8 @@ String STR_PRINT_NEWORI
     Text[ hebrew ] = "‮כיוון הדף שונה.\nהאם לשמור את הכיוון החדש\nבמסמך הפעיל?‬";
     Text[ hindi ] = "पृष्ठ अनुस्थापन को सुधार किया है ।\nक्रियाशील लेखपत्र में नया निर्धारण को\nसंचित करना चाहते है ?";
     Text[ slovak ] = "Orientácia stránky bola zmenená.\nMá byť nové nastavenie uložené\nv aktuálnom dokumente?";
+    Text[ hungarian ] = "A lap tájolása megváltozott. \nMenti az új beállításokat \naz aktív dokumentumba?";
+    Text[ slovenian ] = "Usmerjenost strani je bila spremenjena.\nAli naj bodo nove nastavitve shranjene \nv aktivnem dokumentu?";
 };
 String STR_PRINT_NEWSIZE
 {
@@ -541,6 +569,8 @@ String STR_PRINT_NEWSIZE
     Text[ hebrew ] = "‮מידות הדף שונו.\nהאם לשמור את המידות החדשות\nבמסמך הפעיל?‬";
     Text[ hindi ] = "पृष्ठ परिमाण को सुधार किया है ।\nक्रियाशील लेखपत्र में नया निर्धारण को\nसंचित करना चाहते है ?";
     Text[ slovak ] = "Veľkosť stránky bola zmenená.\nMá byť nové nastavenie uložené\nv aktuálnom dokumente?";
+    Text[ hungarian ] = "A lapméret megváltozott.\nMenti az új beállításokat \naz aktív dokumentumba?";
+    Text[ slovenian ] = "Velikost strani je bila spremenjena.\nAli naj bodo nove nastavitve shranjene \nv aktivnem dokumentu?";
 };
 String STR_PRINT_NEWORISIZE
 {
@@ -572,6 +602,8 @@ String STR_PRINT_NEWORISIZE
     Text[ hebrew ] = "‮מידות הדף וכיוונו שונו.\nהאם לשמור את המידות ואת הכיוון החדש\nבמסמך הפעיל?‬";
     Text[ hindi ] = "पृष्ठ परिमाण और अनुस्थापन को सुधार किया है ।\n आप क्रियाशील लेखपत्र का नया निर्धारणों\n को संचित करना चाहते है ?";
     Text[ slovak ] = "Veľkosť a orientácia stránky bola zmenená.\nMá byť nové nastavenie uložené\nv aktuálnom dokumente?";
+    Text[ hungarian ] = "A lapméret, illetve a tájolás megváltozott. \nMenti az új beállításokat az aktív dokumentumba?";
+    Text[ slovenian ] = "Velikost in usmerjenost strani sta bili spremenjeni.\nAli želite shraniti nove nastavitve v\naktivnem dokumentu?";
 };
 String STR_PLUGINVIEW
 {
@@ -593,7 +625,7 @@ String RID_EXPLORERTOOLSTOOLBOX
     Text [ portuguese ] = "Barra de ferramentas do Desktop" ;
     Text [ portuguese_brazilian ] = "Barra de ferramentas do Desktop" ;
     Text [ swedish ] = "Desktopverktygslist" ;
-    Text [ danish ] = "Desktop-v�rkt�jslinje" ;
+    Text [ danish ] = "Skrivebordsv�rkt�jslinje" ;
     Text [ italian ] = "Barra degli strumenti del desktop" ;
     Text [ spanish ] = "Barra de herramientas del escritorio" ;
     Text [ french ] = "Barre d'instruments Desktop" ;
@@ -615,6 +647,8 @@ String RID_EXPLORERTOOLSTOOLBOX
     Text[ hebrew ] = "‮סרגל הכלים של שולחן העבודה‬";
     Text[ hindi ] = "डेस्कटॉप् औज़ार पट्टी";
     Text[ slovak ] = "Panel pracovnej plochy";
+    Text[ hungarian ] = "Munkaasztal eszköztár";
+    Text[ slovenian ] = "Namizna orodna vrstica";
 };
 String STR_PREVIEW_DOCINFO
 {
@@ -646,6 +680,8 @@ String STR_PREVIEW_DOCINFO
     Text[ hebrew ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>‮כותרת:‬</b><dd>$(TITEL)<dt><b>‮נושא:‬</b><dd>$(THEME)<dt><b>‮מילות מפתח: ‬</b><dd>$(KEYWORDS)<dt><b>‮תאור:‬</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ hindi ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>उपाधि:</b><dd>$(TITEL)<dt><b>विषय:</b><dd>$(THEME)<dt><b>प्रधानशब्द:</b><dd>$(KEYWORDS)<dt><b>विवरण:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ slovak ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titulok:</b><dd>$(TITEL)<dt><b>Predmet:</b><dd>$(THEME)<dt><b>Kľúčové slová:</b><dd>$(KEYWORDS)<dt><b>Popis:</b><dd>$(TEXT)</dl></font></body></html>";
+    Text[ hungarian ] = " <html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Cím:</b><dd>$(TITEL)<dt><b>Tárgy:</b><dd>$(THEME)<dt><b>Kulcsszavak:</b><dd>$(KEYWORDS)<dt><b>Leírás:</b><dd>$(TEXT)</dl></font></body></html>";
+    Text[ slovenian ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Naslov:</b><dd>$(TITEL)<dt><b>Zadeva:</b><dd>$THEME<dt><b>Ključne besede:</b><dd>$(KEYWORDS)<dt><b>Opis:</b><dd>$(TEXT)</dl></font></body></html>";
 };
 String STR_PREVIEW_NODOCINFO
 {
@@ -677,6 +713,8 @@ String STR_PREVIEW_NODOCINFO
     Text[ hebrew ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>‮תכונות המסמך לא אותרו.‬</B></FONT></P></BODY></HTML>";
     Text[ hindi ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>कोई लेखपत्र विशेषतायें नहीं मिला ।</B></FONT></P></BODY></HTML>";
     Text[ slovak ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Žiadne vlastnosti dokumetu neboli nájdené.</B></FONT></P></BODY></HTML>";
+    Text[ hungarian ] = " <HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>A dokumentum tulajdonságai nem találhatók.</B></FONT></P></BODY></HTML>";
+    Text[ slovenian ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Ni mogoče najti lastnosti dokumenta.</B></FONT></P></BODY></HTML>";
 };
 String STR_EXPLORERVIEW
 {
@@ -685,7 +723,7 @@ String STR_EXPLORERVIEW
     Text [ english_us ] = "Explorer" ;
     Text [ portuguese_brazilian ] = "Explorer" ;
     Text [ swedish ] = "Explorer" ;
-    Text [ danish ] = "Explorer" ;
+    Text [ danish ] = "Oversigten" ;
     Text [ italian ] = "Explorer" ;
     Text [ spanish ] = "Explorador" ;
     Text [ french ] = "Explorer" ;
@@ -708,6 +746,8 @@ String STR_EXPLORERVIEW
     Text[ hebrew ] = "‮סייר‬";
     Text[ hindi ] = "ऐक्सप्लोरर";
     Text[ slovak ] = "Prieskumník";
+    Text[ hungarian ] = "Aktakukac";
+    Text[ slovenian ] = "Raziskovalec";
 };
  // -----------------------------------------------------------------------
 InfoBox MSG_CANT_CLOSE
@@ -720,7 +760,7 @@ InfoBox MSG_CANT_CLOSE
     Message [ french ] = "Impossible de fermer le document :\nl'imprimante est encore active." ;
     Message [ dutch ] = "Het document kan momenteel niet worden gesloten\nomdat er nog een afdrukopdracht wordt uitgevoerd." ;
     Message [ swedish ] = "Dokumentet kan inte st�ngas f�r tillf�llet\neftersom ett utskriftsjobb fortfarande utf�rs." ;
-    Message [ danish ] = "Dokumentet kan i �jeblikket ikke lukkes,\nda et udskriftsjob endnu ikke er afsluttet." ;
+    Message [ danish ] = "Dokumentet kan ikke lukkes,\nda et udskriftsjob endnu ikke er afsluttet." ;
     Message [ portuguese_brazilian ] = "O documento n�o pode ser fechado porque uma\n impress�o ainda est� ativa." ;
     Message [ portuguese ] = "De momento � imposs�vel fechar o documento,\n uma vez que a impressora ainda est� activa." ;
     Message[ chinese_simplified ] = "目前无法关闭这个文件，\n因为正在执行一个打印任务。";
@@ -740,6 +780,8 @@ InfoBox MSG_CANT_CLOSE
     Message[ hebrew ] = "‮לא ניתן לסגור מסמך בעת הדפסה.‬";
     Message[ hindi ] = "लेखपत्र को बन्द नहीं कर सकते है\n क्यों कि छपाई का कार्य हो रहा है ।";
     Message[ slovak ] = "Dokument nieje možné zatvoriť, pretože\npráve prebieha tlačová úloha.";
+    Message[ hungarian ] = "A dokumentum nem zárható be, mert\negy nyomtatási feladat fut.";
+    Message[ slovenian ] = "Dokumenta ni mogoče zapreti, ker\n se izvaja tiskalno opravilo.";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 
@@ -752,7 +794,7 @@ InfoBox MSG_CANT_CLOSE
     Text [ spanish ] = "Monitor de impresi�n" ; \
     Text [ french ] = "Moniteur d'impression" ; \
     Text [ swedish ] = "Utskriftsmonitor" ; \
-    Text [ danish ] = "Udskriftssk�rm" ; \
+    Text [ danish ] = "Udskriftsoversigt" ; \
     Text [ portuguese_brazilian ] = "Monitor de impress�o" ; \
     Text [ portuguese ] = "Monitor de impress�o" ; \
     TEXT [ finnish ] = "Tulostuksenvalvonta" ; \
@@ -770,7 +812,9 @@ InfoBox MSG_CANT_CLOSE
     TEXT[ czech ] = "Monitorování tisku"; \
     TEXT[ hebrew ] = "‮מנהל הדפסות‬"; \
     TEXT[ hindi ] = "छपाई मोनिटर";  \
-    TEXT[ slovak ] = "Monitorovanie tlače";
+    TEXT[ slovak ] = "Monitorovanie tlače"; \
+    TEXT[ hungarian ] = "Nyomtatás felügyelete"; \
+    TEXT[ slovenian ] = "Nadzornik tiskanja";
 
 ModelessDialog DLG_PRINTMONITOR
 {
@@ -820,6 +864,8 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ hebrew ] = "‮מודפס על‬";
         TEXT[ hindi ] = "में इसको छपाई किया गया";
         TEXT[ slovak ] = "sa tlačí na";
+        TEXT[ hungarian ] = "megy a nyomtatóra";
+        TEXT[ slovenian ] = "se tiska na";
     };
     FixedText FT_PRINTER
     {
@@ -853,7 +899,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ portuguese_brazilian ] = "Ocorreu um erro ao enviar a mensagem. Erros poss�veis podem ser uma conta de usu�rio desconhecida ou uma instala��o defeituosa.\nVerifique a configura��o de %PRODUCTNAME ou o de seu programa de e-mail." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
     MESSAGE [ finnish ] = "Virhe viesti� l�hetett�ess�. Syit� voivat olla puuttuva k�ytt�j�tili tai virheelliset asetukset.\nTarkista %PRODUCTNAMEn tai s�hk�postiohjelmasi asetukset." ;
-    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejl er en manglende brugerkonto eller en forkert ops�tning.\nKontroller indstillingerne i %PRODUCTNAME eller i dit e-mail-program." ;
+    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejlkilder er en manglende brugerkonto eller en forkert ops�tning.\nKontroller venligst indstillingerne i %PRODUCTNAME eller i dit e-mailprogram." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message. Erreurs possibles : compte d'utilisateur manquant ou Setup erron�.\nV�rifiez les param�tres de %PRODUCTNAME ou ceux du logiciel de messagerie." ;
     MESSAGE [ swedish ] = "Fel vid s�ndning av meddelande. M�jliga fel �r att ett anv�ndarkonto saknas eller en felaktig installation.\nKontrollera inst�llningarna i %PRODUCTNAME eller i ditt e-postprogram." ;
     MESSAGE [ dutch ] = "Fout bij verzenden van bericht. Mogelijke fouten zijn een ontbrekende gebruikersaccount of een defecte Setup.\nControleer de instellingen van %PRODUCTNAME of die van uw e-mailprogramma." ;
@@ -875,6 +921,8 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ hebrew ] = "‮ארעה שגיאה במשלוח ההודעה. יתכן שחסר חשבון משתמש או שגיאת תצורה אחרת.\nנא לבדוק את קביעת האפשרויות ל %PRODUCTNAME ואפשרויות תוכנית הדואר.‬";
     MESSAGE[ hindi ] = "संदेश को भेजने के समय एक गलती घटित हुआ । उपभोक्ता हिसाब अथवा दोषयुक्त सेटप अनुपस्थित होना संभवनीय गलतियाँ है ।\nकृपया %PRODUCTNAME निर्धारणों को अथवा आपका ई-मेइल प्रोग्राम निर्धारणों का जाँच कीजिए ।";
     MESSAGE[ slovak ] = "Nastala chyba pri posielaní správy. Problém môže byť spôsobený chýbajúcim užívateľským kontom alebo chybným nastavením.\nProsím skontrolujte nastavenia %PRODUCTNAME alebo nastavenia vášho programu pre posielanie e-mailových správ.";
+    MESSAGE[ hungarian ] = "Üzenetküldés közben hiba történt, ennek oka a hiányzó felhasználónév vagy egyéb hibás beállítás lehet.\nEllenőrizze az %PRODUCTNAME és levelezőprogramja beállításait.";
+    MESSAGE[ slovenian ] = "Med pošiljanjem sporočila je prišlo do napake. Možne napake so nepravilne nastavitve računa ali pa račun sploh ne obstaja.\nPreverite nastavitve poštnega programa v %PRODUCTNAME.";
 };
 
  // DLG_MAILDIALOG --------------------------------------------------------
@@ -891,7 +939,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message [ english_us ] = "Before sending mail or news messages, you must\nspecify your e-mail address and an SMTP server.\nPlease enter the required settings under \n\"Tools\\Options\\General...\\User Data\\E-Mail\" and\n\"Tools\\Options\\Internet\\Mail/News\\Outgoing Mail\".\nThen try sending this message again." ;
     Message [ portuguese_brazilian ] = "Antes de enviar um e-mail ou grupo de not�cias, voc� deve\nespecificar seu endere�o de e-mail e um servidor SMTP.\nPor favor, digite as defini��es requeridas em\n\"Ferramentas � Op��es � Geral... - Dados do Usu�rio - Correio\" e\n\"Ferramentas � Op��es -Geral... - Dados do Usu�rio - Correio de Sa�da\".\nTente ent�o enviar a mensagem novamente." ;
     Message [ swedish ] = "F�r att ett meddelande skall kunna skickas via Internet,\nbeh�vs din e-postadress och en SMTP-server.\nVar v�nlig och f�r in dessa inst�llningar under\n\"Verktyg\\Alternativ\\Allm�nt...\\Anv�ndardata\\E-post\" och\n\"Verktyg\\Alternativ\\Internet\\E-post/Nyheter\\Meddelandes�ndning\"\ninnan du skickar ett meddelande igen." ;
-    Message [ danish ] = "For at kunne sende en meddelelse over Internet\nkr�ves din e-mail-adresse og en SMTP-server.\nIndtast disse indstillinger under\n\"Funktioner\\Indstillinger\\Generelt...\\Brugerdata\\E-mail\" og\n\"Funktioner\\Indstillinger\\Internet\\E-mail/Nyheder/Nyhedsafsendelse\",\nf�r du igen sender en meddelelse." ;
+    Message [ danish ] = "F�r du kan sende en meddelelse over Internet,\nskal du angive din e-mailadresse og en SMTP-server.\nIndtast disse indstillinger under \n\"Funktioner\\Indstillinger\\Generelt...\\\\Brugerdata\\E-mail\" og\n\"Funktioner\\Indstillinger\\Internet\\E-mail/Nyhedsgruppe\\Udg�ende post\",\nf�r du sender en meddelelse igen." ;
     Message [ italian ] = "Per poter inviare un messaggio tramite Internet,\n� necessario un indirizzo di eMail e un server SMTP.\nSpecificate queste impostazioni in\n\"Strumenti\\Opzioni\\Generale...\\Dati utente\\eMail\" e in\n\"Strumenti\\Opzioni\\Internet\\Mail/News\\\\Invio messaggi\",\nprima di inviare nuovamente un messaggio." ;
     Message [ spanish ] = "Para enviar un mensaje a trav�s de Internet\nse necesitan su direcci�n de correo electr�nico y un servidor SMTP para el env�o.\nAntes de enviar el pr�ximo mensaje, introduzca por favor estas informaciones en\n\"Herramientas\\Opciones\\Generales...\\Datos de usuario\\E-mail y en\n\"Herramientas\\Opciones\\Internet\\Correo/Noticias\\Correo saliente\"." ;
     Message [ french ] = "Pour envoyer un message via Internet \nle programme n�cessite une adresse e-mail et un serveur SMTP.\nVeuillez indiquer ces param�tres sous \n\"Outils\\Options\\G�n�ral...\\Identit�\\E-mail\" et \"Outils\\Options\\Internet\\Mail/News\\Envoi de messages\" \n avant de refaire une tentative d'envoi de message." ;
@@ -914,6 +962,8 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message[ hebrew ] = "‮יש לציין את כתובת הדואר שלך ולציין שרת SMTP\nלפני שליחת דואר או הודעות לקבוצות חדשות.\nנא לציין את האפשרויות האלו תחת\n\"כלים\" > \"אפשרויות\" > \"כללי\" > \"פרטי משתמש\" > \"דואר\"\nו \"כלים\" > \"אפשרויות\" > \"אינטרנט\" > \"דואר\\חדשות\" > \"דואר יוצא\"\nואחר כך לנסות שוב לשלוח את ההודעה.‬";
     Message[ hindi ] = "संदेश अथवा समाचार संदेशों को भेजने से पहिले, अपना\nइ-मेइल पता और SMTP सर्वर को निर्दिष्ट कीजिए ।\nकृपया आवश्यक निर्धारणों को \n\"औज़ारें\\विकल्पें\\सामान्य...\\उपभोक्ता ड़ॉटा\\इ-मेइल\" और\n\"औज़ारें\\विकल्पें\\इन्टरनेट\\मेइल/समाचार\\बाहर जानेवाला मेइल\"\nके नीचे प्रविष्ट कीजिए । उसके बाद संदेश को पुनः भेजने का प्रयत्न कीजिए ।";
     Message[ slovak ] = "Pred posielaním e-mailov lebo news správ je potrebné\nnastaviť vašu e-mailovú adresu a tiež SMTP server pre odosielanie.\nProsím zadajte toto nastavenie voľbou \n\"Nástroje\\\\Voľby\\OpenOffice.org\\\\Údaje o užívateľovi\\E-Mail\" a\n\"Nástroje\\\\Voľby\\OpenOffice.org\\Externé programy\".\nPotom môžete znovu skúsiť poslať túto správu.";
+    Message[ hungarian ] = "Mielőtt levél-, vagy hírüzenetét elküldi, meg kell \nadnia e-mail címét, és egy SMTP-kiszolgálót. \nAdja meg a szükséges adatokat az \n\"Eszközök - Beállítások - OpenOffice.org - Felhasználó adatai - E-Mail\", és az \n\"Eszközök - Beállítások - Internet Mail/News kimenő levelek\" \nalatt, majd próbálja ismét elküldeni ezt a levelet!";
+    Message[ slovenian ] = "Preden pošljete poštno ali novično sporočilo, morate\nnavesti svoj e-poštni naslov in SMTP strežnik.\nZahtevane nastavitve vnesite v \n\"Orodja\\Možnosti\\\\Splošno...\\Uporabniški podatki\\E-pošta\" in\n\"Orodja\\Možnosti\\\\Pošta/Novice\\Odhajajoča pošta\".\nKo končate, znova poskusite poslati sporočilo.";
 };
 ErrorBox ERRBOX_SFX_NO_OUTBOX
 {
@@ -928,7 +978,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message [ italian ] = "Per effettuare l'operazione scelta dall'utente, si necessita della posta in uscita.\nPrima di provare a rieffettuare tale operazione creare una posta in uscita." ;
     Message [ spanish ] = "Se necesitar� una carpeta de salida para ejecutar esta acci�n.\nPor favor cree una carpeta de salida antes de reiniciar la acci�n." ;
     Message [ french ] = "Une bo�te d'envoi est n�cessaire pour ex�cuter cette action.\nCr�ez une bo�te d'envoi avant de r�essayer." ;
-    Message [ dutch ] = "Voor de door u verlangde activiteit is een postvak UIT nodig.\nMaak een postvak UIT voordat u deze opdracht opnieuw selecteert." ;
+    Message [ dutch ] = "Voor deze handeling is een postvak UIT nodig.\nMaak een postvak UIT aan, voordat u deze opdracht opnieuw selecteert." ;
     Message [ portuguese ] = "� necess�ria uma caixa de envio para executar esta ac��o.\nCrie primeiro uma caixa de envio e tente novamente." ;
     Message[ chinese_simplified ] = "执行这个操作的前提是已经建立了一个发件箱。\n请您在建立一个发件箱之后再重新执行这个命令。";
     Message[ russian ] = "��� ��������� �������� ���������� ����� \"������������\".\n������ ��� ��������� ��� ��������, �������� ����� \"������������\".";
@@ -947,6 +997,8 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message[ hebrew ] = "‮נדרש תא דואר יוצא על מנת לבצע פעולה זו.\nנא ליצור תא דואר יוצא לפני נסיון נוסף לבצע פעולה זו.‬";
     Message[ hindi ] = "इस कार्य के लिए एक औट्बॉक्स की आवश्यकता है ।\nकृपया फ़िर से इस कार्य को चलाने से पहिले एक औट्बॉक्स को उत्पन्न कीजिए ।";
     Message[ slovak ] = "Na vykonanie tejto akcie je potrebná schránka pre odchádzajúcu poštu.\nProsím vytvorte schránku pre odchádzajúcu poštu pred novým spustením tejto akcie.";
+    Message[ hungarian ] = "Ahhoz, hogy elvégezze ezt a műveletet, kimenőlevél-mappa szükséges. \nKészítsen ilyen mappát, mielőtt ezt a lépést végrehajtja.";
+    Message[ slovenian ] = "Za izvedbo tega dejanja je potreben outbox.\nPreden ponovno izvedete to dejanje, ustvarite outbox.";
 };
  // QueryBoxen ------------------------------------------------------------
 QueryBox MSG_QUERY_OPENASTEMPLATE
@@ -962,7 +1014,7 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message [ english_us ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
     Message [ portuguese_brazilian ] = "O documento n�o pode ser aberto para edi��o, possivelmente devido \n� falta de direitos de acesso. Deseja us�-lo como modelo\npara abrir um novo documento?" ;
     Message [ swedish ] = "Dokumentet kan inte redigeras (t.ex. d�rf�r att r�ttigheter saknas). Vill du arbeta med en kopia av dokumentet i st�llet?" ;
-    Message [ danish ] = "Det er ikke muligt at �bne dokumentet til redigering\n(muligvis har du ingen adgangsrettigheder). Skal det\nanvendes som skabelon for et nyt dokument?" ;
+    Message [ danish ] = "Det er ikke muligt at �bne dokumentet til redigering(muligvis har du ingen adgangsrettigheder). Skal det anvendes som skabelon for et nyt dokument?" ;
     Message [ italian ] = "Impossibile modificare il documento (probabilmente per la mancanza di diritti). Volete provare a modificare una copia del documento?" ;
     Message [ spanish ] = "Este documento no se puede editar, posiblemente los derechos de acceso no son suficientes. �Desea editar una copia del documento?" ;
     Message [ french ] = "Ce document ne peut pas �tre �dit� (droits d'acc�s insuffisants). Souhaitez-vous poursuivre votre travail avec une copie du document ?" ;
@@ -984,6 +1036,8 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message[ hebrew ] = "‮לא ניתן לערוך את המסמך הזה, כנראה עקב חוסר הרשאות כתיבה. האם לערוך עותק של המסמך?‬";
     Message[ hindi ] = "लेखपत्र को संपादन करने केलिए नहीं खोल सकते है, शायद प्रवेश करने का \nअधिकार नहीं है । आप इसको एक नमूने की तरह \nनया लेखपत्र में उपयोग करना चाहते है ?";
     Message[ slovak ] = "Dokument nemohol byť otvorený pre editáciu, pravdepodobne kvôli\nchýbajúcim právam. Želáte si ho použiť len ako šablónu\nna vytvorenie nového dokumentu?";
+    Message[ hungarian ] = "A dokumentumot nem lehet szerkeszteni, valószínűleg a hozzáférési jogosultság hiánya miatt. Szeretné a dokumentum másolatát szerkeszteni?";
+    Message[ slovenian ] = "Dokumenta ni mogoče odpreti za urejanje, morda zaradi manjkajočih dostopnih pravic. Ali želite urediti kopijo dokumenta?";
 };
 String STR_FRAMESIZE
 {
@@ -991,7 +1045,7 @@ String STR_FRAMESIZE
     Text [ english_us ] = "Frame Size" ;
     Text [ portuguese_brazilian ] = "Tamanho da moldura" ;
     Text [ swedish ] = "Ramstorlek" ;
-    Text [ danish ] = "Frame-st�rrelse" ;
+    Text [ danish ] = "Rammest�rrelse" ;
     Text [ italian ] = "Dimensione frame" ;
     Text [ spanish ] = "Tama�o del marco" ;
     Text [ french ] = "Taille du cadre" ;
@@ -1014,6 +1068,8 @@ String STR_FRAMESIZE
     Text[ hebrew ] = "‮גודל מסגרת‬";
     Text[ hindi ] = "फ़्रेम परिमाण";
     Text[ slovak ] = "Veľkosť rámca";
+    Text[ hungarian ] = "Keret mérete";
+    Text[ slovenian ] = "Velikost okvira";
 };
 String RID_EXTERNALFRAME_TOOLBOX
 {
@@ -1045,6 +1101,8 @@ String RID_EXTERNALFRAME_TOOLBOX
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फ़ंक्शन् पट्टी";
     Text[ slovak ] = "Panel funkcií";
+    Text[ hungarian ] = "Műveletek eszköztár";
+    Text[ slovenian ] = "Funkcijska vrstica";
 };
 ToolBox RID_EXTERNALFRAME_TOOLBOX
 {
@@ -1205,7 +1263,7 @@ String STR_FORWARDMAIL
     Text[ french ] = "Message transmis par r�gle.\nMessage d'origine en tant que fichier joint.";
     Text[ spanish ] = "Mensaje transmitido por regla.\nEl mensaje original como documento adjunto.";
     Text[ italian ] = "Messaggio inoltrato secondo una regola.\nMessaggio originale come allegato.";
-    Text[ danish ] = "Meddelelse som er blevet videresendt if�lge en regel.\nDen oprindelige meddelelse er vedh�ftet.";
+    Text[ danish ] = "Meddelelsen er videresendt if�lge en regel.\nDen oprindelige meddelelse er vedh�ftet.";
     Text[ swedish ] = "Meddelande som vidarebefordrats per regel.\nOriginalmeddelandet som bilaga.";
     Text[ polish ] = "Wiadomo�� przes�ana dalej wed�ug regu�y.\nOryginalna wiadomo�� jako za��cznik.";
     Text[ portuguese_brazilian ] = "Mensagem encaminhada por regra.\nMensagem original como anexo.";
@@ -1222,6 +1280,8 @@ String STR_FORWARDMAIL
     Text[ hebrew ] = "‮הודעה הועברה על ידי כלל.\nההודעה המקורית בתור נספח.‬";
     Text[ hindi ] = "एक नियम के अनुसार संदेश को भेजा गया है ।\nयथार्थ संदेश को बाँधकर भेजा गया है ।";
     Text[ slovak ] = "Správa bola preposlaná pravidlom.\nPôvodná správa bola pripojená ako príloha.";
+    Text[ hungarian ] = "Egy szabály által továbbított üzenet.\nAz eredeti üzenet csatolva.";
+    Text[ slovenian ] = "Sporočilo naj bo vedno posredovano.\nIzvirno sporočilo kot priloga.";
 };
 
 String STR_REPAIREDDOCUMENT
@@ -1239,10 +1299,10 @@ String STR_REPAIREDDOCUMENT
     Text[ slovak ] = " (opravený dokument)";
     Text[ portuguese_brazilian ] = " (documento reparado)";
     Text[ greek ] = " (repaired document)";
-    Text[ dutch ] = " (repaired document)";
+    Text[ dutch ] = " (gerepareerd document)";
     Text[ finnish ] = " (repaired document)";
     Text[ czech ] = " (opravený dokument)";
-    Text[ danish ] = " (repaired document)";
+    Text[ danish ] = " (repareret dokument)";
     Text[ arabic ] = " (repaired document)";
     Text[ hebrew ] = " (repaired document)";
     Text[ catalan ] = " (repaired document)";
@@ -1252,7 +1312,11 @@ String STR_REPAIREDDOCUMENT
     Text[ polish ] = " (repaired document)";
     Text[ turkish ] = " (repaired document)";
     Text[ thai ] = " (repaired document)";
+    Text[ hungarian ] = "(megjavított dokumentum)";
+    Text[ slovenian ] = " (popravljen dokument)";
 };
+
+
 
 
 
