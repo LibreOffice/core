@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:57:04 $
+#   last change: $Author: hr $ $Date: 2004-08-03 11:36:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ SLOFILES =	\
     $(SLO)$/fieldwnd.obj	\
     $(SLO)$/pvlaydlg.obj	\
     $(SLO)$/pvfundlg.obj	\
+    $(SLO)$/dpgroupdlg.obj	\
     $(SLO)$/dapitype.obj	\
     $(SLO)$/dapidata.obj	\
     $(SLO)$/consdlg.obj		\
@@ -117,6 +118,7 @@ SRS1NAME=$(TARGET)
 SRC1FILES =  \
         pivot.src		\
         pvfundlg.src	\
+        dpgroupdlg.src	\
         dapitype.src	\
         consdlg.src		\
         scendlg.src     \
@@ -128,13 +130,15 @@ SRC1FILES =  \
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES =  \
-         $(SLO)$/filtdlg.obj		\
+    $(SLO)$/filtdlg.obj		\
     $(SLO)$/sfiltdlg.obj	\
     $(SLO)$/foptmgr.obj		\
-       $(SLO)$/dbnamdlg.obj	\
+    $(SLO)$/dbnamdlg.obj	\
     $(SLO)$/expftext.obj	\
-           $(SLO)$/fieldwnd.obj	\
+    $(SLO)$/fieldwnd.obj	\
     $(SLO)$/pvlaydlg.obj	\
+    $(SLO)$/pvfundlg.obj	\
+    $(SLO)$/dpgroupdlg.obj	\
     $(SLO)$/consdlg.obj		\
     $(SLO)$/imoptdlg.obj	\
     $(SLO)$/csvsplits.obj	\
