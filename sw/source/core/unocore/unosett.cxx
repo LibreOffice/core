@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 13:02:00 $
+ *  last change: $Author: os $ $Date: 2000-10-25 13:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2484,7 +2484,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
             sal_Int32 nTmp; aValue >>= nTmp;
             if(nTmp < 0)
                 throw IllegalArgumentException();
-            nSepLineWidth = nTmp;
+            nSepLineWidth = MM100_TO_TWIP(nTmp);
         }
         break;
         case WID_TXTCOL_LINE_COLOR:
@@ -2525,7 +2525,7 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
     switch(pMap->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
-            aRet <<= nSepLineWidth;
+            aRet <<= TWIP_TO_MM100(nSepLineWidth);
         break;
         case WID_TXTCOL_LINE_COLOR:
             aRet <<= nSepLineColor;
