@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-08 16:15:06 $
+#   last change: $Author: vg $ $Date: 2003-04-24 11:01:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,17 +89,17 @@ UNOTYPES+= \
     com.sun.star.i18n.KParseTokens          \
     com.sun.star.i18n.KParseType            \
     com.sun.star.i18n.LocaleItem            \
-    com.sun.star.i18n.reservedWords         \
     com.sun.star.i18n.XCalendar             \
     com.sun.star.i18n.XCharacterClassification \
     com.sun.star.i18n.XCollator             \
+    com.sun.star.i18n.XExtendedTransliteration      \
     com.sun.star.i18n.XLocaleData           \
+    com.sun.star.i18n.XNativeNumberSupplier	\
     com.sun.star.i18n.XNumberFormatCode     \
     com.sun.star.i18n.XTransliteration      \
+    com.sun.star.i18n.reservedWords         \
     com.sun.star.util.SearchFlags           \
-    com.sun.star.util.XTextSearch			\
-    drafts.com.sun.star.i18n.XExtendedTransliteration      \
-    drafts.com.sun.star.i18n.XNativeNumberSupplier	
+    com.sun.star.util.XTextSearch
 
 
 # --- Files -------------------------------------
