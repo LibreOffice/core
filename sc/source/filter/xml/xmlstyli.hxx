@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
+ *  last change: $Author: sab $ $Date: 2001-05-08 07:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,8 @@ public:
     virtual void SetDefaults();
 
     virtual void Finish( sal_Bool bOverwrite );
+
+    void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
 };
 
 class XMLTableStylesContext : public SvXMLStylesContext
@@ -210,6 +212,9 @@ class XMLTableStylesContext : public SvXMLStylesContext
     const ::rtl::OUString sColumnStyleServiceName;
     const ::rtl::OUString sRowStyleServiceName;
     const ::rtl::OUString sTableStyleServiceName;
+    sal_Int32 nNumberFormatIndex;
+    sal_Int32 nConditionalFormatIndex;
+    sal_Int32 nCellStyleIndex;
     sal_Bool bAutoStyles : 1;
 
     UniReference < SvXMLImportPropertyMapper > xCellImpPropMapper;
@@ -259,6 +264,8 @@ public:
                     ::com::sun::star::container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const;
     virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
+
+    sal_Int32 GetIndex(const sal_Int16 nContextID);
 };
 
 class ScXMLMasterStylesContext : public SvXMLStylesContext

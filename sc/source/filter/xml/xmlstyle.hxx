@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-05-08 07:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define XML_SC_TYPE_BORDERBOTTOM                    (XML_SC_TYPES_START + 12)
 #define XML_SC_TYPE_VERTJUSTIFY                     (XML_SC_TYPES_START + 13)
 #define XML_SC_ISTEXTWRAPPED                        (XML_SC_TYPES_START + 14)
-//#define XML_SC_TYPE_NUMBERFORMAT                  (XML_SC_TYPES_START + 14)
 
 #define CTF_SC_HORIJUSTIFY                          (XML_SC_CTF_START +  1)
 #define CTF_SC_HORIJUSTIFY_SOURCE                   (XML_SC_CTF_START +  2)
@@ -132,6 +131,8 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_SC_MAP                                  (XML_SC_CTF_START + 19)
 #define CTF_SC_PARAINDENT                           (XML_SC_CTF_START + 20)
 #define CTF_SC_OLDTEXTBACKGROUND                    (XML_SC_CTF_START + 21)
+#define CTF_SC_IMPORT_MAP                           (XML_SC_CTF_START + 22)
+#define CTF_SC_CELLSTYLE                            (XML_SC_CTF_START + 23)
 
 #define CTF_SC_ROWHEIGHT                            (XML_SC_CTF_START + 50)
 #define CTF_SC_ROWOPTIMALHEIGHT                     (XML_SC_CTF_START + 51)

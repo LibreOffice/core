@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 11:07:43 $
+ *  last change: $Author: sab $ $Date: 2001-05-08 07:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,28 +303,33 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 sal_Int16 ScXMLTableRowCellContext::GetCellType(const rtl::OUString& sOUValue) const
 {
-    if (sOUValue.equals(GetScImport().sSC_float))
-        return util::NumberFormat::NUMBER;
-    else
-        if (sOUValue.equals(GetScImport().sSC_string))
-            return util::NumberFormat::TEXT;
+    if (sOUValue.getLength())
+    {
+        if (sOUValue.equals(GetScImport().sSC_float))
+            return util::NumberFormat::NUMBER;
         else
-            if (sOUValue.equals(GetScImport().sSC_time))
-                return util::NumberFormat::TIME;
+            if (sOUValue.equals(GetScImport().sSC_string))
+                return util::NumberFormat::TEXT;
             else
-                if (sOUValue.equals(GetScImport().sSC_date))
-                    return util::NumberFormat::DATETIME;
+                if (sOUValue.equals(GetScImport().sSC_time))
+                    return util::NumberFormat::TIME;
                 else
-                    if (sOUValue.equals(GetScImport().sSC_percentage))
-                        return util::NumberFormat::PERCENT;
+                    if (sOUValue.equals(GetScImport().sSC_date))
+                        return util::NumberFormat::DATETIME;
                     else
-                        if (sOUValue.equals(GetScImport().sSC_currency))
-                            return util::NumberFormat::CURRENCY;
+                        if (sOUValue.equals(GetScImport().sSC_percentage))
+                            return util::NumberFormat::PERCENT;
                         else
-                            if (sOUValue.equals(GetScImport().sSC_boolean))
-                                return util::NumberFormat::LOGICAL;
+                            if (sOUValue.equals(GetScImport().sSC_currency))
+                                return util::NumberFormat::CURRENCY;
                             else
-                                return 0;
+                                if (sOUValue.equals(GetScImport().sSC_boolean))
+                                    return util::NumberFormat::LOGICAL;
+                                else
+                                    return 0;
+    }
+    else
+        return util::NumberFormat::TEXT;
 }
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
@@ -843,7 +848,8 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
                 rtl::OUString sParentName = pStyle->GetParent();
                 uno::Any aStyleName;
                 aStyleName <<= sParentName;
-                xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
+                //xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
+                pStyle->AddProperty(CTF_SC_CELLSTYLE, aStyleName);
                 pStyle->FillPropertySet(xProperties);
             }
             else
@@ -871,7 +877,8 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
             rtl::OUString sParentName = pStyle->GetParent();
             uno::Any aStyleName;
             aStyleName <<= sParentName;
-            xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
+            //xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
+            pStyle->AddProperty(CTF_SC_CELLSTYLE, aStyleName);
             pStyle->FillPropertySet(xProperties);
         }
         else
