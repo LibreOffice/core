@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-24 11:56:40 $
+ *  last change: $Author: as $ $Date: 2000-10-26 15:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,12 @@ using namespace ::com::sun::star::uno   ;
 #define NOT_INSTALLED                   sal_False
 #define DEFAULT_INSTALLSTATE            NOT_INSTALLED
 
-#define PROPERTYNAME_MATH               OUString(RTL_CONSTASCII_USTRINGPARAM("Math"     ))
-#define PROPERTYNAME_CHART              OUString(RTL_CONSTASCII_USTRINGPARAM("Chart"    ))
-#define PROPERTYNAME_CALC               OUString(RTL_CONSTASCII_USTRINGPARAM("Calc"     ))
-#define PROPERTYNAME_DRAW               OUString(RTL_CONSTASCII_USTRINGPARAM("Draw"     ))
-#define PROPERTYNAME_WRITER             OUString(RTL_CONSTASCII_USTRINGPARAM("Writer"   ))
-#define PROPERTYNAME_IMPRESS            OUString(RTL_CONSTASCII_USTRINGPARAM("Impress"  ))
+#define PROPERTYNAME_MATH               OUString(RTL_CONSTASCII_USTRINGPARAM("Math/Install"     ))
+#define PROPERTYNAME_CHART              OUString(RTL_CONSTASCII_USTRINGPARAM("Chart/Install"    ))
+#define PROPERTYNAME_CALC               OUString(RTL_CONSTASCII_USTRINGPARAM("Calc/Install"     ))
+#define PROPERTYNAME_DRAW               OUString(RTL_CONSTASCII_USTRINGPARAM("Draw/Install"     ))
+#define PROPERTYNAME_WRITER             OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Install"   ))
+#define PROPERTYNAME_IMPRESS            OUString(RTL_CONSTASCII_USTRINGPARAM("Impress/Install"  ))
 
 #define PROPERTYHANDLE_MATH             0
 #define PROPERTYHANDLE_CHART            1
