@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:19:17 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,7 +1320,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         else
         {
             pTObj->SetMergedItem( SdrTextWordWrapItem( bWordWrap ) );
-            pTObj->SetMergedItem( SdrTextAutoGrowSizeItem( bFitShapeToText ) );
+            pTObj->SetMergedItem( SdrTextAutoGrowHeightItem( bFitShapeToText ) );
         }
 
             pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
@@ -1698,6 +1698,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                 ReadFontCollection();
 
             // reading TxPF, TxSI
+            PPTTextCharacterStyleAtomInterpreter    aTxCFStyle; // SJ: ToDo, this atom needs to be interpreted, it contains character default styles for standard objects (instance4)
             PPTTextParagraphStyleAtomInterpreter    aTxPFStyle;
             PPTTextSpecInfoAtomInterpreter          aTxSIStyle; // styles (default language setting ... )
 
@@ -1842,7 +1843,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                                 if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
                                     aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
 
-                                pE->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI );
+                                pE->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxCFStyle, aTxPFStyle, aTxSI );
                                 pDefaultSheet = pE->pStyleSheet;
                             }
                             if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
@@ -4231,7 +4232,9 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
 }
 
 PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, SdrPowerPointImport& rManager,
-                                const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle, const PPTTextSpecInfo& rTextSpecInfo ) :
+                                const PPTTextCharacterStyleAtomInterpreter& rTxCFStyle, const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle,
+                                    const PPTTextSpecInfo& rTextSpecInfo ) :
+
     maTxSI                  ( rTextSpecInfo ),
     PPTNumberFormatCreator  ( new PPTExtParaProv( rManager, rIn, &rSlideHd ) )
 {
@@ -4825,6 +4828,33 @@ PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
 {
     if ( ! ( --mpImplRuler->nRefCount ) )
         delete mpImplRuler;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+PPTTextCharacterStyleAtomInterpreter::PPTTextCharacterStyleAtomInterpreter() :
+    nFlags1 ( 0 ),
+    nFlags2 ( 0 ),
+    nFlags3 ( 0 )
+{
+}
+
+sal_Bool PPTTextCharacterStyleAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader& rRecHd )
+{
+    rRecHd.SeekToContent( rIn );
+
+    rIn >> nFlags1
+        >> nFlags2
+        >> nFlags3
+        >> n1
+        >> nFontHeight
+        >> nFontColor;
+
+    return sal_True;
+}
+
+PPTTextCharacterStyleAtomInterpreter::~PPTTextCharacterStyleAtomInterpreter()
+{
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
