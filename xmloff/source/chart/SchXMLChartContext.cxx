@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: bm $ $Date: 2001-09-28 14:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,21 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                         DBG_ERRORFILE( "Property missing" );
                     }
             }
+            break;
+
+        default:
+            // try importing as an additional shape
+            if( ! mxDrawPage.is())
+            {
+                uno::Reference< drawing::XDrawPageSupplier  > xSupp( xDoc, uno::UNO_QUERY );
+                if( xSupp.is())
+                    mxDrawPage = uno::Reference< drawing::XShapes >( xSupp->getDrawPage(), uno::UNO_QUERY );
+
+                DBG_ASSERT( mxDrawPage.is(), "Invalid Chart Page" );
+            }
+            if( mxDrawPage.is())
+                pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
+                    GetImport(), nPrefix, rLocalName, xAttrList, mxDrawPage );
             break;
     }
 

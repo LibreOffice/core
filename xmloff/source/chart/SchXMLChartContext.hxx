@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2001-06-08 14:57:28 $
+ *  last change: $Author: bm $ $Date: 2001-09-28 14:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,11 @@ namespace com { namespace sun { namespace star {
     }
     namespace xml { namespace sax {
         class XAttributeList;
-}}}}}
+    }}
+    namespace drawing {
+        class XShapes;
+    }
+}}}
 
 // ----------------------------------------
 
@@ -106,6 +110,8 @@ private:
     ::rtl::OUString msCategoriesAddress;
     ::rtl::OUString msChartAddress;
     ::rtl::OUString msTableNumberList;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxDrawPage;
 
 public:
     SchXMLChartContext( SchXMLImportHelper& rImpHelper,

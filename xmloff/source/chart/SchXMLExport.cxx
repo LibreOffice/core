@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-19 09:51:40 $
+ *  last change: $Author: bm $ $Date: 2001-09-28 14:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,18 @@
 #ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #endif
+
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
 #endif
 
 #include    "MultiPropertySetHandler.hxx"
@@ -204,6 +211,25 @@ SchXMLExportHelper::SchXMLExportHelper(
         rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_NAME ),
         mxExpPropMapper.get(),
         rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_PREFIX ));
+
+    // register shape family
+    mrAutoStylePool.AddFamily(
+        XML_STYLE_FAMILY_SD_GRAPHICS_ID,
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SD_GRAPHICS_NAME ),
+        mxExpPropMapper.get(),
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX ));
+    // register paragraph family also for shapes
+    mrAutoStylePool.AddFamily(
+        XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+        GetXMLToken( XML_PARAGRAPH ),
+        mxExpPropMapper.get(),
+        rtl::OUString( sal_Unicode( 'P' )));
+    // register text family also for shapes
+    mrAutoStylePool.AddFamily(
+        XML_STYLE_FAMILY_TEXT_TEXT,
+        GetXMLToken( XML_TEXT ),
+        mxExpPropMapper.get(),
+        rtl::OUString( sal_Unicode( 'T' )));
 }
 
 const rtl::OUString& SchXMLExportHelper::getChartCLSID()
@@ -218,12 +244,16 @@ void SchXMLExportHelper::exportAutoStyles()
         //ToDo: when embedded in calc/writer this is not necessary because the
         // numberformatter is shared between both documents
         mrExport.exportAutoDataStyles();
-        // export auto styles
+
+        // export chart auto styles
         mrAutoStylePool.exportXML(
             XML_STYLE_FAMILY_SCH_CHART_ID,
             mrExport.GetDocHandler(),
             mrExport.GetMM100UnitConverter(),
             mrExport.GetNamespaceMap());
+
+        // export auto styles for additional shapes
+        mrExport.GetShapeExport()->exportAutoStyles();
     }
 }
 
@@ -590,6 +620,78 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     // -----------------
     if( xDiagram.is())
         exportPlotArea( xDiagram, bExportContent, bIncludeTable );
+
+    // export additional shapes
+    // ------------------------
+    if( xDocPropSet.is() )
+    {
+        if( bExportContent )
+        {
+            if( mxAdditionalShapes.is())
+            {
+                // can't call exportShapes with all shapes because the
+                // initialisation happend with the complete draw page and not
+                // the XShapes object used here. Thus the shapes have to be
+                // exported one by one
+                UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
+                uno::Reference< drawing::XShape > xShape;
+                const sal_Int32 nShapeCount( mxAdditionalShapes->getCount());
+                for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
+                {
+                    mxAdditionalShapes->getByIndex( nShapeId ) >>= xShape;
+                    DBG_ASSERT( xShape.is(), "Shape without an XShape?" );
+                    if( ! xShape.is())
+                        continue;
+
+                    rShapeExport->exportShape( xShape );
+                }
+                // this would be the easier way if it worked:
+                //mrExport.GetShapeExport()->exportShapes( mxAdditionalShapes );
+            }
+        }
+        else
+        {
+            // get a sequence of non-chart shapes (inserted via clipboard)
+            uno::Any aShapesAny = xDocPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "AdditionalShapes" ));
+            aShapesAny >>= mxAdditionalShapes;
+
+            if( mxAdditionalShapes.is())
+            {
+                // seek shapes has to be called for the whole page because in
+                // the shape export the vector of shapes is accessed via the
+                // ZOrder which might be (actually is) larger than the number of
+                // shapes in mxAdditionalShapes
+                uno::Reference< drawing::XDrawPageSupplier > xSupplier( rChartDoc, uno::UNO_QUERY );
+                DBG_ASSERT( xSupplier.is(), "Cannot retrieve draw page to initialize shape export" );
+                if( xSupplier.is() )
+                {
+                    uno::Reference< drawing::XShapes > xDrawPage( xSupplier->getDrawPage(), uno::UNO_QUERY );
+                    DBG_ASSERT( xDrawPage.is(), "Invalid draw page for initializing shape export" );
+                    if( xDrawPage.is())
+                        mrExport.GetShapeExport()->seekShapes( xDrawPage );
+                }
+
+                // can't call collectShapesAutoStyles with all shapes because
+                // the initialisation happend with the complete draw page and
+                // not the XShapes object used here. Thus the shapes have to be
+                // exported one by one
+                UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
+                uno::Reference< drawing::XShape > xShape;
+                const sal_Int32 nShapeCount( mxAdditionalShapes->getCount());
+                for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
+                {
+                    mxAdditionalShapes->getByIndex( nShapeId ) >>= xShape;
+                    DBG_ASSERT( xShape.is(), "Shape without an XShape?" );
+                    if( ! xShape.is())
+                        continue;
+
+                    rShapeExport->collectShapeAutoStyles( xShape );
+                }
+                // this would be the easier way if it worked:
+                // mrExport.GetShapeExport()->collectShapesAutoStyles( mxAdditionalShapes );
+            }
+        }
+    }
 
     // table element
     // (is included as subelement of chart)
