@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     bCopyBack( sal_True ),
     bCopyStyles( sal_True ),
     bCopyFormulas( sal_True ),
-    bIsActive( sal_False )
+    bIsActive( sal_False ),
+    bProtected( sal_False )
 {
     rImport.LockSolarMutex();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -158,6 +159,11 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
                 sComment = sValue;
             }
             break;
+            case XML_TOK_TABLE_SCENARIO_ATTR_PROTECTED:
+            {
+                bProtected = IsXMLToken(sValue, XML_TRUE);
+            }
+            break;
         }
     }
 }
@@ -191,6 +197,8 @@ void ScXMLTableScenarioContext::EndElement()
             nFlags |= SC_SCENARIO_ATTRIB;
         if( !bCopyFormulas )
             nFlags |= SC_SCENARIO_VALUE;
+        if( bProtected )
+            nFlags |= SC_SCENARIO_PROTECT;
         pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
         for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); i++ )
         {
