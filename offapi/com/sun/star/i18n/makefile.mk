@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:17 $
+#   last change: $Author: er $ $Date: 2000-11-08 17:49:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,10 +73,18 @@ PACKAGE=com$/sun$/star$/i18n
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AmPmValue.idl \
+    Calendar.idl \
+    CalendarDisplayIndex.idl \
+    CalendarFieldIndex.idl \
+    CalendarItem.idl \
     Currency.idl \
     LanguageCountryInfo.idl \
     LocaleItem.idl \
+    Months.idl \
     NumberFormatIndex.idl \
+    Weekdays.idl \
+    XCalendar.idl \
     XCharacterClassification.idl \
     XLocaleData.idl \
     XNumberFormatCode.idl
