@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:06:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,10 +609,8 @@ SalDisplay::SalDisplay( Display *display, Colormap aColMap ) :
 #endif
     SalData *pSalData  = GetSalData();
 
-    if( !pSalData->GetDefDisp() )
-        pSalData->SetDefDisp( this );
-    if( !pSalData->GetCurDisp() )
-        pSalData->SetCurDisp( this );
+    DBG_ASSERT( ! pSalData->GetDisplay(), "Second SalDisplay created !!!\n" );
+    pSalData->SetSalDisplay( this );
 
 #ifdef _USE_PRINT_EXTENSION_
     pXLib_    = XSalIsDisplay( pDisp_ ) ? pSalData->GetLib() : NULL;
@@ -701,15 +699,11 @@ void SalDisplay::doDestruct()
     sn_display_unref( m_pSnDisplay );
 #endif /* HAVE_LIBSN */
 
-    pSalData->Remove( this );
-
     pVisual_        = (SalVisual*)ILLEGAL_POINTER;
     pRootVisual_    = (SalVisual*)ILLEGAL_POINTER;
 
-    if( pSalData->GetDefDisp() == this )
-        pSalData->SetDefDisp( NULL );
-    if( pSalData->GetCurDisp() == this )
-        pSalData->SetCurDisp( NULL );
+    if( pSalData->GetDisplay() == this )
+        pSalData->SetSalDisplay( NULL );
 }
 
 static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
@@ -778,8 +772,6 @@ void SalDisplay::Init( Colormap hXColmap, Visual *pVisual )
     if (!pVisual)
         pVisual = DefaultVisual( pDisp_, nScreen_ );
     sal_GetVisualInfo( pDisp_, XVisualIDFromVisual( pVisual ), aXVI );
-
-    GetSalData()->Insert( this );
 
     for( size_t i = 0; i < POINTER_COUNT; i++ )
         aPointerCache_[i] = None;
@@ -2319,7 +2311,7 @@ void SalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent
         m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
 
         // Notify SalXLib::Yield() of a pending event.
-        pXLib_->Wakeup();
+        pXLib_->PostUserEvent();
 
         osl_releaseMutex( hEventGuard_ );
     }
@@ -2413,22 +2405,28 @@ void SalX11Display::Yield( BOOL bWait )
     pXLib_->SetIgnoreXErrors( bIgnoreXErrors );
 }
 
-long SalDisplay::Dispatch( XEvent *pEvent )
+long SalX11Display::Dispatch( XEvent *pEvent )
 {
     if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )
-      {
+    {
         XLIB_Window aWindow = pEvent->xkey.window;
-        X11SalFrame* pFrame = NULL;
-        for( pFrame = GetSalData()->pFirstFrame_;
-             pFrame && pFrame->GetWindow() != aWindow && pFrame->GetShellWindow() != aWindow;
-             pFrame = pFrame->GetNextFrame() )
-            ;
-        if( pFrame ) {
-            XLIB_Window window= pFrame->GetWindow();
-            if ( mpInputMethod->FilterEvent( pEvent , window) )
+
+        std::list< SalFrame* >::const_iterator it;
+        for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
+        {
+            X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
+            if( pFrame->GetWindow() == aWindow || pFrame->GetShellWindow() == aWindow )
+            {
+                aWindow = pFrame->GetWindow();
+                break;
+            }
+        }
+        if( it != m_aFrames.end() )
+        {
+            if ( mpInputMethod->FilterEvent( pEvent , aWindow ) )
                 return 0;
         }
-      }
+    }
     else
         if ( mpInputMethod->FilterEvent( pEvent, None ) )
             return 0;
@@ -2453,12 +2451,9 @@ long SalDisplay::Dispatch( XEvent *pEvent )
             if( pEvent->xproperty.window == hRefWindow_ &&
                 pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
             {
-                X11SalFrame *pFrame = GetSalData()->pFirstFrame_;
-                while( pFrame )
-                {
-                    pFrame->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
-                    pFrame = pFrame->GetNextFrame();
-                }
+                std::list< SalFrame* >::const_iterator it;
+                for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
+                    (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
                 return 0;
             }
             break;
@@ -2480,10 +2475,10 @@ long SalDisplay::Dispatch( XEvent *pEvent )
             break;
     }
 
-    X11SalFrame *pFrame = GetSalData()->pFirstFrame_;
-
-    while( pFrame )
+    std::list< SalFrame* >::const_iterator it;
+    for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
     {
+        X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
         XLIB_Window aDispatchWindow = pEvent->xany.window;
         if( pFrame->GetWindow() == aDispatchWindow
             || pFrame->GetShellWindow() == aDispatchWindow
@@ -2496,7 +2491,6 @@ long SalDisplay::Dispatch( XEvent *pEvent )
         {
             return pFrame->Dispatch( pEvent );
         }
-        pFrame = pFrame->GetNextFrame();
     }
 
     // dispatch to salobjects
@@ -2812,6 +2806,33 @@ void SalDisplay::InitXinerama()
 #endif
 }
 
+void SalDisplay::registerFrame( SalFrame* pFrame )
+{
+    m_aFrames.push_front( pFrame );
+}
+
+void SalDisplay::deregisterFrame( SalFrame* pFrame )
+{
+    if( osl_acquireMutex( hEventGuard_ ) )
+    {
+        for( std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
+             it != m_aUserEvents.end(); ++it )
+        {
+            if( it->m_pFrame == pFrame )
+            {
+                std::list< SalUserEvent >::iterator rit = it++;
+                m_aUserEvents.erase( rit );
+            }
+        }
+        osl_releaseMutex( hEventGuard_ );
+    }
+    else
+        DBG_ERROR( "SalDisplay::deregisterFrame !acquireMutex\n" );
+
+    m_aFrames.remove( pFrame );
+}
+
+
 // -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVisual::SalVisual( const XVisualInfo* pXVI )
@@ -3113,7 +3134,7 @@ SalColormap::SalColormap( SalDisplay *pDisplay, Colormap hColormap )
 
 // PseudoColor
 SalColormap::SalColormap( const BitmapPalette &rPalette )
-    : pDisplay_( GetSalData()->GetCurDisp() ),
+    : pDisplay_( GetSalData()->GetDisplay() ),
       hColormap_( None ),
       pVisual_( NULL ),
       nUsed_( rPalette.GetEntryCount() ),
@@ -3138,7 +3159,7 @@ SalColormap::SalColormap( const BitmapPalette &rPalette )
 
 // MonoChrome
 SalColormap::SalColormap()
-    : pDisplay_( GetSalData()->GetCurDisp() ),
+    : pDisplay_( GetSalData()->GetDisplay() ),
       hColormap_( None ),
       pVisual_( NULL ),
       nUsed_( 2 ),
@@ -3154,7 +3175,7 @@ SalColormap::SalColormap()
 
 // TrueColor
 SalColormap::SalColormap( USHORT nDepth )
-    : pDisplay_( GetSalData()->GetCurDisp() ),
+    : pDisplay_( GetSalData()->GetDisplay() ),
       hColormap_( None ),
       pPalette_( NULL ),
       nUsed_( 1 << nDepth ),
@@ -3258,7 +3279,7 @@ SalColormap::~SalColormap()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalColormap::SetPalette( const BitmapPalette &rPalette )
 {
-    if( this != &GetSalData()->GetCurDisp()->GetColormap() )
+    if( this != &GetSalData()->GetDisplay()->GetColormap() )
     {
         nBlackPixel_ = 0xFFFFFFFF;
         nWhitePixel_ = 0xFFFFFFFF;
