@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:15:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,15 @@ bool SalFrameData::IsOverrideRedirect() const
         ;
 }
 
+bool SalFrameData::IsFloatGrabWindow() const
+{
+    static const char* pDisableGrab = getenv( "SAL_DISABLE_FLOATGRAB" );
+
+    return
+        ( ( !pDisableGrab || !*pDisableGrab ) &&
+          ((nStyle_ & SAL_FRAME_STYLE_FLOAT) && !(nStyle_ & SAL_FRAME_STYLE_TOOLTIP)) );
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
@@ -610,7 +619,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             if( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
             {
                 nDecoFlags |= WMAdaptor::decoration_Resize;
-                if( ! nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
+                if( ! (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
                     nDecoFlags |= WMAdaptor::decoration_MaximizeBtn;
             }
             if( nStyle_ & SAL_FRAME_STYLE_MOVEABLE )
@@ -622,6 +631,8 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             eType = WMAdaptor::windowType_Splash;
         if( mpParent && hPresentationWindow == None )
             eType = WMAdaptor::windowType_ModelessDialogue;
+        if( nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
+            eType = WMAdaptor::windowType_Utility;
 
         GetDisplay()->getWMAdaptor()->
             setFrameTypeAndDecoration( pFrame_,
@@ -728,7 +739,7 @@ void SalFrameData::passOnSaveYourSelf()
         // pass on SaveYourself
         SalFrame* pFrame = pSalData->pFirstFrame_;
         while( pFrame && ( ( pFrame->maFrameData.nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD) ) || pFrame->maFrameData.mpParent  ) )
-            pFrame->maFrameData.GetNextFrame();
+            pFrame = pFrame->maFrameData.GetNextFrame();
         s_pSaveYourselfFrame = pFrame;
         if( pFrame )
         {
@@ -881,8 +892,7 @@ void SalFrame::Enable( BOOL bEnable )
 
 void SalFrame::SetIcon( USHORT nIcon )
 {
-    if ( !( maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
-            && !( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+    if ( !( maFrameData.nStyle_ & (SAL_FRAME_STYLE_CHILD|SAL_FRAME_STYLE_FLOAT) ) )
     {
         maFrameData.mnIconID = nIcon;
 
@@ -1086,11 +1096,7 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
 
         XSync( _GetXDisplay(), False );
 
-        static const char* pDisableGrab = getenv( "SAL_DISABLE_FLOATGRAB" );
-
-        if( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT
-            && ! ( pDisableGrab && *pDisableGrab )
-            )
+        if( maFrameData.IsFloatGrabWindow() )
         {
             /*
              *  #95453#
@@ -1169,8 +1175,7 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
             XDeleteProperty( _GetXDisplay(), maFrameData.GetShellWindow(), _GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
         XWithdrawWindow( _GetXDisplay(), maFrameData.GetWindow(), _GetDisplay()->GetScreenNumber() );
         maFrameData.nShowState_ = SHOWSTATE_HIDDEN;
-        if( nVisibleFloats
-            && maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
+        if( maFrameData.IsFloatGrabWindow() && nVisibleFloats )
         {
             nVisibleFloats--;
             if( nVisibleFloats == 0  && ! _GetDisplay()->GetCaptureFrame() )
@@ -2428,7 +2433,7 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
             bool bInside = false;
              for( SalFrame* pFrame = GetSalData()->pFirstFrame_; pFrame; pFrame = pFrame->maFrameData.pNextFrame_ )
             {
-                if( ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )                     &&
+                if( pFrame->maFrameData.IsFloatGrabWindow()                                     &&
                     pFrame->maFrameData.bMapped_                                                &&
                     pEvent->xbutton.x_root >= pFrame->maGeometry.nX                             &&
                     pEvent->xbutton.x_root < pFrame->maGeometry.nX + (int)pFrame->maGeometry.nWidth &&
