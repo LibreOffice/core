@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,7 +1794,10 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 break;
             }
         }
-        if(bExcept && COMPARE_EQUAL == rProp.Name.compareToAscii("BulletRelSize"))
+        if(bExcept &&
+            (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BulletRelSize")) ||
+             rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BulletColor")) ) )
+
             bExcept = sal_False;
         PropValData* pData = new PropValData(rProp.Value, rProp.Name );
         aPropertyValues.Insert(pData, aPropertyValues.Count());
