@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopti.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-02 19:10:56 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,10 @@ enum ScVObjType
     VOBJ_TYPE_DRAW
 };
 
-#define MAX_OPT     (USHORT)VOPT_BIGHANDLES+1
-#define MAX_TYPE    (USHORT)VOBJ_TYPE_DRAW+1
+#define MAX_OPT             (USHORT)VOPT_BIGHANDLES+1
+#define MAX_TYPE            (USHORT)VOBJ_TYPE_DRAW+1
+
+#define SC_STD_GRIDCOLOR    COL_LIGHTGRAY
 
 //==================================================================
 // SvxGrid-Optionen mit Standard-Operatoren

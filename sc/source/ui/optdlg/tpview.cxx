@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,9 +410,9 @@ void ScTpContentOptions::InitGridOpt()
             aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
 
-        //  Standard-Gitterfarbe (hellgrau) immer
+        //  Standard-Gitterfarbe
 
-        Color aStdCol( COL_LIGHTGRAY );         // wie Default in ScViewOptions
+        Color aStdCol( SC_STD_GRIDCOLOR );          // wie Default in ScViewOptions
         if ( LISTBOX_ENTRY_NOTFOUND ==
                 aColorLB.GetEntryPos( aStdCol ) )
             aColorLB.InsertEntry( aStdCol, ScGlobal::GetRscString( STR_GRIDCOLOR ) );

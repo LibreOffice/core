@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-17 12:52:44 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _SCEXTOPT_HXX
+#include "scextopt.hxx"
+#endif
 #ifndef _ROOT_HXX
 #include "root.hxx"
 #endif
@@ -75,12 +78,9 @@
 
 
 // ----- forwards --------------------------------------------------------
+
 class XF_Buffer;
 class XclImpStream;
-class ScExtDocOptions;
-struct ScExtTabOptions;
-
-
 
 // ----------------------------------------------- class ColRowSettings --
 
@@ -134,10 +134,20 @@ public:
     inline void         SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
                                     // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
 
+    inline ScExtTabOptions& GetExtTabOpt()
+                            { if( !pExtTabOpt ) pExtTabOpt = new ScExtTabOptions; return *pExtTabOpt; }
+    inline UINT16       GetActivePane() const
+                            { return pExtTabOpt ? pExtTabOpt->nActPane : 3; }
+
+
     void                ReadSplit( XclImpStream& rIn );
     void                SetFrozen( const BOOL bFrozen );
-    void                SetSelection( const ScRange& rSel );
-    void                SetDimension( const ScRange& rDim );
+    inline void         SetTabSelected( const BOOL bSelected )
+                            { GetExtTabOpt().bSelected = bSelected; }
+    inline void         SetSelection( const ScRange& rSel );
+                            { GetExtTabOpt().SetSelection( rSel ); }
+    inline void         SetDimension( const ScRange& rDim )
+                            { GetExtTabOpt().SetDimension( rDim ); }
 
     void                SetHorizPagebreak( const UINT16 nRow );
     void                SetVertPagebreak( const UINT16 nCol );

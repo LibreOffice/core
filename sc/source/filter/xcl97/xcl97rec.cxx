@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:48:06 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@
 #include "conditio.hxx"
 #include "rangelst.hxx"
 #include "stlpool.hxx"
-
+#include "viewopti.hxx"
+#include "scextopt.hxx"
 
 // --- class XclSstList ----------------------------------------------
 
@@ -1810,25 +1811,150 @@ ULONG ExcBundlesheet8::GetLen() const
 
 
 
+// --- class ExcWindow18 ---------------------------------------------
+
+ExcWindow18::ExcWindow18( RootData& rRootData )
+{
+    ScExtDocOptions& rOpt = *rRootData.pExtDocOpt;
+    nCurrTable = rOpt.nActTab;
+    nSelTabs = rOpt.nSelTabs;
+}
+
+
+void ExcWindow18::SaveCont( XclExpStream& rStrm )
+{
+    rStrm   << (UINT16) 0x01E0
+            << (UINT16) 0x005A
+            << (UINT16) 0x3FCF
+            << (UINT16) 0x2A4E
+            << (UINT16) 0x0038
+            << nCurrTable
+            << (UINT16) 0x0000
+            << nSelTabs
+            << (UINT16) 0x0258;
+}
+
+
+UINT16 ExcWindow18::GetNum( void ) const
+{
+    return 0x003D;
+}
+
+
+ULONG ExcWindow18::GetLen( void ) const
+{
+    return 18;
+}
+
+
+// --- class ExcPane8 ------------------------------------------------
+
+ExcPane8::ExcPane8( const ScExtTabOptions& rTabOptions ) :
+    nSplitX( rTabOptions.nSplitX ),
+    nSplitY( rTabOptions.nSplitY ),
+    nLeftCol( rTabOptions.nLeftSplitCol ),
+    nTopRow( rTabOptions.nTopSplitRow ),
+    nActivePane( rTabOptions.nActPane )
+{
+}
+
+
+void ExcPane8::SaveCont( XclExpStream& rStrm )
+{
+    rStrm << nSplitX << nSplitY << nTopRow << nLeftCol << nActivePane;
+}
+
+
+UINT16 ExcPane8::GetNum() const
+{
+    return 0x0041;
+}
+
+
+ULONG ExcPane8::GetLen() const
+{
+    return 10;
+}
+
+
 // --- class ExcWindow28 ---------------------------------------------
+
+ExcWindow28::ExcWindow28( RootData& rRootData, UINT16 nTab ) :
+    rPalette( *rRootData.pPalette2 ),
+    pPaneRec( NULL ),
+    nFlags( 0 ),
+    nLeftCol( 0 ),
+    nTopRow( 0 ),
+    nActiveCol( 0 ),
+    nActiveRow( 0 ),
+    bHorSplit( FALSE ),
+    bVertSplit( FALSE )
+{
+    const ScViewOptions& rViewOpt = rRootData.pDoc->GetViewOptions();
+    nFlags |= rViewOpt.GetOption( VOPT_FORMULAS ) ? EXC_WIN2_SHOWFORMULAS : 0;
+    nFlags |= rViewOpt.GetOption( VOPT_GRID ) ? EXC_WIN2_SHOWGRID : 0;
+    nFlags |= rViewOpt.GetOption( VOPT_HEADER ) ? EXC_WIN2_SHOWHEADINGS : 0;
+    nFlags |= rViewOpt.GetOption( VOPT_NULLVALS ) ? EXC_WIN2_SHOWZEROS : 0;
+    nFlags |= rViewOpt.GetOption( VOPT_OUTLINER ) ? EXC_WIN2_OUTLINE : 0;
+
+    ScExtDocOptions& rOpt = *rRootData.pExtDocOpt;
+    nFlags |= (nTab == rOpt.nActTab) ? (EXC_WIN2_DISPLAYED|EXC_WIN2_SELECTED) : 0;
+    nFlags |= rOpt.pGridCol ? 0 : EXC_WIN2_DEFAULTCOLOR;
+    nGridColorSer = rOpt.pGridCol ? rPalette.InsertColor( *rOpt.pGridCol, EXC_COLOR_GRID ) : rPalette.InsertIndex( 64 );
+
+    const ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nTab );
+    if( pTabOpt )
+    {
+        nFlags |= pTabOpt->bSelected ? EXC_WIN2_SELECTED : 0;
+        nFlags |= pTabOpt->bFrozen ? (EXC_WIN2_FROZEN|EXC_WIN2_FROZENNOSPLIT) : 0;
+        nLeftCol = pTabOpt->nLeftCol;
+        nTopRow = pTabOpt->nTopRow;
+        nActiveCol = pTabOpt->aLastSel.aStart.Col();
+        nActiveRow = pTabOpt->aLastSel.aStart.Row();
+        bHorSplit = (pTabOpt->nSplitX != 0);
+        bVertSplit = (pTabOpt->nSplitY != 0);
+        if( bHorSplit || bVertSplit )
+            pPaneRec = new ExcPane8( *pTabOpt );
+    }
+}
+
+
+ExcWindow28::~ExcWindow28()
+{
+    if( pPaneRec )
+        delete pPaneRec;
+}
+
 
 void ExcWindow28::SaveCont( XclExpStream& rStrm )
 {
-    BYTE pData[] = {
-        0xb6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00
-    };
-    DBG_ASSERT( sizeof(pData) == GetLen(), "ExcWindow28::SaveCont: length mismatch" );
-    if ( GetTable() == 0 )
-        pData[1] |= 0x06;       // displayed and selected
-    rStrm.Write( pData, GetLen() );
+    rStrm   << nFlags
+            << nTopRow
+            << nLeftCol
+            << (UINT32) rPalette.GetColorIndex( nGridColorSer )
+            << (UINT32) 0
+            << (UINT32) 0;
+}
+
+
+void ExcWindow28::Save( XclExpStream& rStrm )
+{
+    ExcRecord::Save( rStrm );
+    if( pPaneRec )
+        pPaneRec->Save( rStrm );
+    ExcSelection( nActiveCol, nActiveRow, 3 ).Save( rStrm );
+    if( bHorSplit )
+        ExcSelection( nActiveCol, nActiveRow, 1 ).Save( rStrm );
+    if( bVertSplit )
+        ExcSelection( nActiveCol, nActiveRow, 2 ).Save( rStrm );
+    if( bHorSplit && bVertSplit )
+        ExcSelection( nActiveCol, nActiveRow, 0 ).Save( rStrm );
 }
 
 
 UINT16 ExcWindow28::GetNum() const
 {
-    return 0x023e;
+    return 0x023E;
 }
 
 

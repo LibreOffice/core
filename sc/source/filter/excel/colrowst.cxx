@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-17 12:51:46 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #endif
 
 #include "document.hxx"
-#include "scextopt.hxx"
 #include "XclImpStream.hxx"
 #include "root.hxx"
 #include "xfbuff.hxx"
@@ -376,11 +375,9 @@ void ColRowSettings::_SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeig
 
 void ColRowSettings::ReadSplit( XclImpStream& rIn )
 {
-    if( !pExtTabOpt )
-    {
-        pExtTabOpt = new ScExtTabOptions;
-        pExtTabOpt->bFrozen = FALSE;
-    }
+    GetExtTabOpt();
+
+    pExtTabOpt->bFrozen = FALSE;
 
     rIn >> pExtTabOpt->nSplitX >> pExtTabOpt->nSplitY >> pExtTabOpt->nTopSplitRow >> pExtTabOpt->nLeftSplitCol;
 
@@ -395,31 +392,10 @@ void ColRowSettings::ReadSplit( XclImpStream& rIn )
 
 void ColRowSettings::SetFrozen( const BOOL bFrozen )
 {
-    if( !pExtTabOpt )
-        pExtTabOpt = new ScExtTabOptions;
-
-    pExtTabOpt->nTabNum = *pExcRoot->pAktTab;
-    pExtTabOpt->bFrozen = bFrozen;
+    GetExtTabOpt().nTabNum = *pExcRoot->pAktTab;
+    GetExtTabOpt().bFrozen = bFrozen;
 }
 
-
-
-void ColRowSettings::SetSelection( const ScRange& rSel )
-{
-    if( pExtTabOpt )
-        pExtTabOpt->SetSelection( rSel );
-    else
-        pExtTabOpt = new ScExtTabOptions( rSel );
-}
-
-
-void ColRowSettings::SetDimension( const ScRange& rDim )
-{
-    if( !pExtTabOpt )
-        pExtTabOpt = new ScExtTabOptions;
-
-    pExtTabOpt->SetDimension( rDim );
-}
 
 
 void ColRowSettings::SetHorizPagebreak( const UINT16 n )
@@ -936,7 +912,7 @@ CodenameList::~CodenameList()
 ScExtDocOptions::ScExtDocOptions( void )
 {
     pGridCol = NULL;
-    nActTab = nVisLeftCol = nVisTopRow = 0;
+    nActTab = nSelTabs = nVisLeftCol = nVisTopRow = nCurCol = nCurRow = 0;
     nLinkCnt = 0;       // -> 'Root'-Dokument
     nZoom = 100;
 
@@ -975,8 +951,12 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
 {
     nLinkCnt = rCpy.nLinkCnt;
     nActTab = rCpy.nActTab;
+    nSelTabs = rCpy.nSelTabs;
     nVisLeftCol = rCpy.nVisLeftCol;
     nVisTopRow = rCpy.nVisTopRow;
+    nCurCol = rCpy.nCurCol;
+    nCurRow = rCpy.nCurRow;
+
     if( pGridCol )
     {
         if( rCpy.pGridCol )
@@ -1024,27 +1004,26 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
 }
 
 
-void ScExtDocOptions::SetGridCol( BYTE nR, BYTE nG, BYTE nB )
+void ScExtDocOptions::SetExtTabOptions( UINT16 nTabNum, ScExtTabOptions* pTabOpt )
 {
-    const static UINT16     nFakt = 257;    // 0...255 * 257 = 0...65535
+    if( ppExtTabOpts[ nTabNum ] )
+        delete ppExtTabOpts[ nTabNum ];
+    ppExtTabOpts[ nTabNum ] = pTabOpt;
+}
 
+
+void ScExtDocOptions::SetGridCol( const Color& rColor )
+{
     if( pGridCol )
-        delete pGridCol;
-
-    pGridCol = new Color( nFakt * nR, nFakt * nG, nFakt * nB );
+        pGridCol->SetColor( rColor.GetColor() );
+    else
+        pGridCol = new Color( rColor );
 }
 
 
 void ScExtDocOptions::SetActTab( UINT16 nTab )
 {
     nActTab = ( nTab <= MAXTAB )? nTab : MAXTAB;
-}
-
-
-void ScExtDocOptions::SetVisCorner( UINT16 nCol, UINT16 nRow )
-{
-    nVisLeftCol = ( nCol <= MAXCOL )? nCol : MAXCOL;
-    nVisTopRow = ( nRow <= MAXROW )? nRow : MAXROW;
 }
 
 

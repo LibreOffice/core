@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:57:04 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@
 #define EXC_COLOR_CHARTTEXT         0x0011
 #define EXC_COLOR_CHARTLINE         0x0012
 #define EXC_COLOR_CHARTAREA         0x0013
+#define EXC_COLOR_GRID              0x0101
 
 // special color indices
 #define EXC_COLIND_AUTOTEXT         77
@@ -325,6 +326,20 @@
 
 #define EXC_TABOP_ROW               0x0004
 #define EXC_TABOP_BOTH              0x0008
+
+//_________________________________________________________
+// (0x023E) WINDOW2
+
+#define EXC_WIN2_SHOWFORMULAS       0x0001
+#define EXC_WIN2_SHOWGRID           0x0002
+#define EXC_WIN2_SHOWHEADINGS       0x0004
+#define EXC_WIN2_FROZEN             0x0008
+#define EXC_WIN2_SHOWZEROS          0x0010
+#define EXC_WIN2_DEFAULTCOLOR       0x0020
+#define EXC_WIN2_OUTLINE            0x0080
+#define EXC_WIN2_FROZENNOSPLIT      0x0100
+#define EXC_WIN2_SELECTED           0x0200
+#define EXC_WIN2_DISPLAYED          0x0400
 
 //_________________________________________________________
 // Specials for outlines

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopti.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-02 19:12:16 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ void ScViewOptions::SetDefaults()
     aModeArr[VOBJ_TYPE_CHART] =
     aModeArr[VOBJ_TYPE_DRAW ] = VOBJ_MODE_SHOW;
 
-    aGridCol     = Color( COL_LIGHTGRAY );
+    aGridCol     = Color( SC_STD_GRIDCOLOR );
     aGridColName = ScGlobal::GetRscString( STR_GRIDCOLOR );
 
     aGridOpt.SetDefaults();

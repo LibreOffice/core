@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 14:17:26 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     else
     {
         Add( new ExcDummy8_040 );
+        Add( new ExcWindow18( rR ) );
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy8_041 );
         // Font
@@ -1126,7 +1127,10 @@ void ExcTable::FillAsTable( void )
     aTableOpList.UpdateCells();
 
     if( rR.eDateiTyp < Biff8 )
+    {
         Add( new ExcWindow2( nExcTab ) );
+        Add( new ExcSelection( 3, 0, 0 ) );
+    }
     else
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -1164,11 +1168,8 @@ void ExcTable::FillAsTable( void )
         }
 
         // WINDOW2
-        Add( new ExcWindow28( nExcTab ) );
+        Add( new ExcWindow28( rR, nScTab ) );
     }
-
-    // Default-Recs am Ende
-    Add( new ExcDummy_03 );
 
     if( rR.eDateiTyp >= Biff8 )
     {
@@ -1280,7 +1281,7 @@ void ExcTable::NullTab( const String* pCodename )
         }
         // WINDOW2
 
-        Add( new ExcWindow28( nExcTab ) );
+        Add( new ExcWindow28( rR, nScTab ) );
     }
     Add( new ExcEof );
 }

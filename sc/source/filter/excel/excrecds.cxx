@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:55:55 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,13 +430,7 @@ const ULONG ExcDummy_02::nMyLen = sizeof( ExcDummy_02::pMyData );
 //  /*0x09 +*/ 0x02 + 0x02 + /*0x22 +*/ /*0x02 + */15 * 4;
 
 
-//--------------------------------------------------------- class ExcDummy_03 -
-const BYTE      ExcDummy_03::pMyData[] = {
-    0x1d, 0x00, 0x0f, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00,   // SELECTION
-    0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00
-};
-const ULONG ExcDummy_03::nMyLen = sizeof( ExcDummy_03::pMyData );
+//---------------------------------------------------------
 
 
 ExcPalette2*    ExcFont::pPalette2 = NULL;
@@ -2176,21 +2170,6 @@ void ExcNameList::Save( XclExpStream& rStrm )
 
 
 
-//--------------------------------------------------------- class ExcDummy_03 -
-
-ULONG ExcDummy_03::GetLen( void ) const
-{
-    return nMyLen;
-}
-
-
-const BYTE* ExcDummy_03::GetData( void ) const
-{
-    return pMyData;
-}
-
-
-
 //------------------------------------------------------- class ExcDimensions -
 
 ExcDimensions::ExcDimensions( BiffTyp eBiffP )
@@ -2931,20 +2910,13 @@ void ExcPal2Entry::UpdateEntry( UINT16 nColorType )
 {
     switch( nColorType )
     {
-        case EXC_COLOR_CHARTLINE:
-            nWeight++;
-            break;
+        case EXC_COLOR_CHARTLINE:       nWeight++;      break;
         case EXC_COLOR_CELLBORDER:
-        case EXC_COLOR_CHARTAREA:
-            nWeight += 2;
-            break;
+        case EXC_COLOR_CHARTAREA:       nWeight += 2;   break;
         case EXC_COLOR_CELLTEXT:
-        case EXC_COLOR_CHARTTEXT:
-            nWeight += 10;
-            break;
-        case EXC_COLOR_CELLBGROUND:
-            nWeight += 20;
-            break;
+        case EXC_COLOR_CHARTTEXT:       nWeight += 10;  break;
+        case EXC_COLOR_CELLBGROUND:     nWeight += 20;  break;
+        case EXC_COLOR_GRID:            nWeight += 50;  break;
     }
 }
 
@@ -3442,6 +3414,31 @@ ULONG ExcWindow2::GetLen( void ) const
     return 10;
 }
 
+
+
+//-------------------------------------------------------- class ExcSelection -
+
+void ExcSelection::SaveCont( XclExpStream& rStrm )
+{
+    rStrm   << nPane                // pane
+            << nRow << nCol         // active cell
+            << (UINT16) 0           // index in ref array
+            << (UINT16) 1           // size of ref array
+            << nRow << nRow         // ref array (activ cell only)
+            << (UINT8) nCol << (UINT8) nCol;
+}
+
+
+UINT16 ExcSelection::GetNum( void ) const
+{
+    return 0x001D;
+}
+
+
+ULONG ExcSelection::GetLen( void ) const
+{
+    return 15;
+}
 
 
 //------------------------------------------------------------ class UsedList -

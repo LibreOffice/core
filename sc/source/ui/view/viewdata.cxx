@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 14:52:01 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1992,9 +1992,77 @@ void ScViewData::ReadUserData(const String& rData)
     RecalcPixPos();
 }
 
+void ScViewData::WriteExtOptions(ScExtDocOptions& rOpt)
+{
+    // for Excel export
+
+    // document settings
+    rOpt.SetActTab( GetTabNo() );
+    rOpt.nSelTabs = 0;
+    if( pOptions && (pOptions->GetGridColor().GetColor() != SC_STD_GRIDCOLOR) )
+        rOpt.SetGridCol( pOptions->GetGridColor() );
+
+    // table settings
+    USHORT nTabCount = pDoc->GetTableCount();
+    for( USHORT nTab = 0; nTab < nTabCount; nTab++ )
+    {
+        ScViewDataTable* pViewTab = pTabData[ nTab ];
+        if( pViewTab )
+        {
+            ScExtTabOptions* pTabOpt = new ScExtTabOptions;
+            pTabOpt->nTabNum = nTab;
+            pTabOpt->bSelected = GetMarkData().GetTableSelect( nTab );
+            if( pTabOpt->bSelected )
+                rOpt.nSelTabs++;
+
+            BOOL bHorSplit = (pViewTab->eHSplitMode != SC_SPLIT_NONE);
+            BOOL bVertSplit = (pViewTab->eVSplitMode != SC_SPLIT_NONE);
+            BOOL bNormalSplit = (pViewTab->eHSplitMode == SC_SPLIT_NORMAL) || (pViewTab->eVSplitMode == SC_SPLIT_NORMAL);
+            pTabOpt->bFrozen = (pViewTab->eHSplitMode == SC_SPLIT_FIX) || (pViewTab->eVSplitMode == SC_SPLIT_FIX);
+
+            if( bNormalSplit )
+            {
+                Point aPixel = Application::GetDefaultDevice()->PixelToLogic(
+                    Point( pViewTab->nHSplitPos, pViewTab->nVSplitPos ), MapMode( MAP_TWIP ) );
+                if ( pDocShell )
+                    aPixel.X() = (long)((double)aPixel.X() / pDocShell->GetOutputFactor());
+                pTabOpt->nSplitX = aPixel.X();
+                pTabOpt->nSplitY = aPixel.Y();
+            }
+            else if( pTabOpt->bFrozen )
+            {
+                pTabOpt->nSplitX = (pViewTab->eHSplitMode == SC_SPLIT_FIX) ? pViewTab->nFixPosX : 0;
+                pTabOpt->nSplitY = (pViewTab->eVSplitMode == SC_SPLIT_FIX) ? pViewTab->nFixPosY : 0;
+            }
+
+            pTabOpt->nLeftCol = pViewTab->nPosX[ SC_SPLIT_LEFT ];
+            pTabOpt->nLeftSplitCol = pViewTab->nPosX[ SC_SPLIT_RIGHT ];
+            pTabOpt->nTopRow = pViewTab->nPosY[ SC_SPLIT_TOP ];
+            pTabOpt->nTopSplitRow = pViewTab->nPosY[ SC_SPLIT_BOTTOM ];
+
+            switch( pViewTab->eWhichActive )
+            {
+                case SC_SPLIT_TOPLEFT:      pTabOpt->nActPane = 3;  break;
+                case SC_SPLIT_TOPRIGHT:     pTabOpt->nActPane = 1;  break;
+                case SC_SPLIT_BOTTOMLEFT:   pTabOpt->nActPane = 2;  break;
+                case SC_SPLIT_BOTTOMRIGHT:  pTabOpt->nActPane = 0;  break;
+            }
+            if( !bHorSplit )
+                pTabOpt->nActPane |= 2;
+            if( !bVertSplit )
+                pTabOpt->nActPane |= 1;
+
+            pTabOpt->aLastSel.aStart.Set( pViewTab->nCurX, pViewTab->nCurY, nTab );
+            pTabOpt->aLastSel.aEnd = pTabOpt->aLastSel.aStart;
+
+            rOpt.SetExtTabOptions( nTab, pTabOpt );
+        }
+    }
+}
+
 void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
 {
-    //  fuer Excel-Import
+    // for Excel import
 
     USHORT nTabCount = pDoc->GetTableCount();
     for (USHORT nTab=0; nTab<nTabCount; nTab++)
@@ -2006,18 +2074,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
                 pTabData[nTab] = new ScViewDataTable;
             ScViewDataTable* pViewTab = pTabData[nTab];
 
-#if 0
-            //  aDim ist nicht der sichtbare, sondern der belegte Bereich
-            //! GT sollte mal die linke obere Ecke des sichtbaren Bereichs herausruecken
-
-            if ( pExtTab->bValidDim )       // Scroll-Position muss vor Fixierung kommen
-            {
-                ScRange aVisRange = pExtTab->aDim;
-                pViewTab->nPosX[SC_SPLIT_LEFT] = aVisRange.aStart.Col();
-                ScVSplitPos eDefV = pExtTab->nSplitY ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
-                pViewTab->nPosY[eDefV] = aVisRange.aStart.Row();
-            }
-#endif
+            pViewTab->nPosX[SC_SPLIT_LEFT] = pExtTab->nLeftCol;
+            ScVSplitPos eDefV = pExtTab->nSplitY ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
+            pViewTab->nPosY[eDefV] = pExtTab->nTopRow;
 
             if ( pExtTab->nSplitX || pExtTab->nSplitY )
             {
@@ -2095,10 +2154,13 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
                 pViewTab->nCurX = aSelRange.aStart.Col();
                 pViewTab->nCurY = aSelRange.aStart.Row();
             }
+            GetMarkData().SelectTable( nTab, pExtTab->bSelected );
         }
     }
 
     SetTabNo( rOpt.nActTab );
+    if( pOptions && rOpt.pGridCol )
+        pOptions->SetGridColor( *rOpt.pGridCol, EMPTY_STRING );
 
     // RecalcPixPos oder so - auch nMPos - auch bei ReadUserData ??!?!
 }

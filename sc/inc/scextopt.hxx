@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-28 09:28:03 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,22 +86,24 @@ struct ScExtTabOptions
 {
     // Split -Info
     UINT16                      nTabNum;
-    UINT16                      nSplitX;            // horiz. Pos. in Twips, 0 = kein Split
-    UINT16                      nSplitY;            // vert. Pos. ~
-    UINT16                      nLeftSplitCol;      // linke sichtbare Col im rechten Teil
-    UINT16                      nTopSplitRow;       // obere sichtbare Row im unteren Teil
-    UINT16                      nActPane;           // 0: ur, 1: or, 2: ul, 3: ol
+    UINT16                      nSplitX;            // horiz. pos. in twips, 0 = no split
+    UINT16                      nSplitY;            // vert. pos. ~
+    UINT16                      nLeftCol;           // leftmost column visible
+    UINT16                      nTopRow;            // topmost row visible
+    UINT16                      nLeftSplitCol;      // leftmost column after horizontal split
+    UINT16                      nTopSplitRow;       // topmost row after vertical split
+    UINT16                      nActPane;           // 0: br, 1: tr, 2: bl, 3: tl
 
-    ScRange                     aLastSel;           // letzte Selektion
+    ScRange                     aLastSel;           // last selection
     BOOL                        bValidSel;
-    ScRange                     aDim;               // original Excel-Groesse
+    ScRange                     aDim;               // original Excel size
     BOOL                        bValidDim;
 
-    BOOL                        bFrozen;            // = TRUE -> nSplitX / nSplitY Anzahl
-                                                    //  sichtbarer Col/Row links bzw. oben
+    BOOL                        bSelected;
+    BOOL                        bFrozen;            // = TRUE -> nSplitX / nSplitY contain
+                                                    // count of visible columns/rows
 
     inline                      ScExtTabOptions( void );
-    inline                      ScExtTabOptions( const ScRange& rLastSel );
     inline                      ScExtTabOptions( const ScExtTabOptions& rCpy );
     inline void                 operator =( const ScExtTabOptions& rCpy );
 
@@ -148,8 +150,7 @@ public:
     UINT32                  nLinkCnt;       // Zaehlt die Rekursionstufe beim Laden
                                             //  von externen Dokumenten
     UINT16                  nActTab;        // aktuelle Tabelle
-    UINT16                  nVisLeftCol;    // linke Col des sichtbaren Tabellenteils
-    UINT16                  nVisTopRow;     // rechte Row des sichtbaren Tabellenteils
+    UINT16                  nSelTabs;       // count of selected sheets
     Color*                  pGridCol;       // Farbe Grid und Row-/Col-Heading
     UINT16                  nZoom;          // in %
     // Cursor
@@ -162,9 +163,10 @@ public:
 
     ScExtDocOptions&        operator =( const ScExtDocOptions& rCpy );
 
-    void                    SetGridCol( BYTE nR, BYTE nG, BYTE nB );
+    void                    SetExtTabOptions( UINT16 nTabNum, ScExtTabOptions* pTabOpt );
+
+    void                    SetGridCol( const Color& rColor );
     void                    SetActTab( UINT16 nTab );
-    void                    SetVisCorner( UINT16 nCol, UINT16 nRow );
     void                    SetCursor( UINT16 nCol, UINT16 nRow );
     void                    SetZoom( UINT16 nZaehler, UINT16 nNenner );
 
@@ -215,16 +217,9 @@ inline const String* CodenameList::Act( void ) const
 
 inline ScExtTabOptions::ScExtTabOptions( void )
 {
-    nSplitX = nSplitY = nLeftSplitCol = nTopSplitRow = nActPane = 0;
-    bFrozen = bValidSel = bValidDim = FALSE;
-}
-
-
-inline ScExtTabOptions::ScExtTabOptions( const ScRange& rLastSel ) : aLastSel( rLastSel )
-{
-    nTabNum = nSplitX = nSplitY = nLeftSplitCol = nTopSplitRow = nActPane = 0;
-    bFrozen = bValidDim = FALSE;
-    bValidSel = TRUE;
+    nTabNum = nSplitX = nSplitY = nLeftCol = nTopRow = nLeftSplitCol = nTopSplitRow = 0;
+    nActPane = 3;
+    bSelected = bFrozen = bValidSel = bValidDim = FALSE;
 }
 
 
@@ -233,11 +228,14 @@ inline ScExtTabOptions::ScExtTabOptions( const ScExtTabOptions& rCpy )
     nTabNum = rCpy.nTabNum;
     nSplitX = rCpy.nSplitX;
     nSplitY = rCpy.nSplitY;
+    nLeftCol = rCpy.nLeftCol;
+    nTopRow = rCpy.nTopRow;
     nLeftSplitCol = rCpy.nLeftSplitCol;
     nTopSplitRow = rCpy.nTopSplitRow;
     nActPane = rCpy.nActPane;
     aLastSel = rCpy.aLastSel;
     aDim = rCpy.aDim;
+    bSelected = rCpy.bSelected;
     bFrozen = rCpy.bFrozen;
     bValidSel = rCpy.bValidSel;
     bValidDim = rCpy.bValidDim;
@@ -249,11 +247,14 @@ inline void ScExtTabOptions::operator =( const ScExtTabOptions& rCpy )
     nTabNum = rCpy.nTabNum;
     nSplitX = rCpy.nSplitX;
     nSplitY = rCpy.nSplitY;
+    nLeftCol = rCpy.nLeftCol;
+    nTopRow = rCpy.nTopRow;
     nLeftSplitCol = rCpy.nLeftSplitCol;
     nTopSplitRow = rCpy.nTopSplitRow;
     nActPane = rCpy.nActPane;
     aLastSel = rCpy.aLastSel;
     aDim = rCpy.aDim;
+    bSelected = rCpy.bSelected;
     bFrozen = rCpy.bFrozen;
     bValidSel = rCpy.bValidSel;
     bValidDim = rCpy.bValidDim;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:57:26 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,20 +942,6 @@ public:
 };
 
 
-//--------------------------------------------------------- class ExcDummy_03 -
-// sheet record: SELECTION
-
-class ExcDummy_03 : public ExcDummyRec
-{
-private:
-    static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
-public:
-    virtual ULONG           GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
-};
-
-
 //------------------------------------------------------- class ExcDimensions -
 
 class ExcDimensions : public ExcRecord
@@ -1396,6 +1382,26 @@ private:
 public:
                             ExcWindow2( UINT16 nTable );
     inline  UINT16          GetTable() const    { return nTable; }
+
+    virtual UINT16          GetNum( void ) const;
+    virtual ULONG           GetLen( void ) const;
+};
+
+
+//-------------------------------------------------------- class ExcSelection -
+
+class ExcSelection : public ExcRecord
+{
+private:
+    UINT16                  nCol;
+    UINT16                  nRow;
+    UINT8                   nPane;
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
+public:
+    inline                  ExcSelection( UINT16 _nCol, UINT16 _nRow, UINT8 _nPane ) :
+                                nCol( _nCol ), nRow( _nRow ), nPane( _nPane ) {}
 
     virtual UINT16          GetNum( void ) const;
     virtual ULONG           GetLen( void ) const;

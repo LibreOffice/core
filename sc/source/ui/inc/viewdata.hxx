@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 08:54:27 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,7 @@ public:
 
     void            WriteUserData(String& rData);
     void            ReadUserData(const String& rData);
+    void            WriteExtOptions(ScExtDocOptions& rOpt);
     void            ReadExtOptions(const ScExtDocOptions& rOpt);
     void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
     void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);

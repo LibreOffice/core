@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:57:04 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #endif
 
 struct SingleRefData;
+struct ScExtTabOptions;
 
 // --- class XclSstList ----------------------------------------------
 
@@ -853,17 +854,68 @@ public:
 };
 
 
-// --- class ExcWindow28 ---------------------------------------------
+// --- class ExcWindow18 ---------------------------------------------
 
-class ExcWindow28 : public ExcWindow2
+class ExcWindow18 : public ExcRecord
 {
 private:
+    UINT16                  nCurrTable;
+    UINT16                  nSelTabs;
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
+public:
+                            ExcWindow18( RootData& rRootData );
+
+    virtual UINT16          GetNum( void ) const;
+    virtual ULONG           GetLen( void ) const;
+};
+
+
+// --- class ExcPane8 ------------------------------------------------
+
+class ExcPane8 : public ExcRecord
+{
+private:
+    UINT16                      nSplitX;
+    UINT16                      nSplitY;
+    UINT16                      nLeftCol;
+    UINT16                      nTopRow;
+    UINT16                      nActivePane;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                ExcWindow28( UINT16 nTab ) : ExcWindow2( nTab ) {}
+                                ExcPane8( const ScExtTabOptions& rTabOptions );
 
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
+};
+
+
+// --- class ExcWindow28 ---------------------------------------------
+
+class ExcWindow28 : public ExcRecord
+{
+private:
+    ExcPalette2&                rPalette;
+    ExcPane8*                   pPaneRec;
+    UINT32                      nGridColorSer;
+    UINT16                      nFlags;
+    UINT16                      nLeftCol;
+    UINT16                      nTopRow;
+    UINT16                      nActiveCol;
+    UINT16                      nActiveRow;
+    BOOL                        bHorSplit       : 1;
+    BOOL                        bVertSplit      : 1;
+
+    virtual void                SaveCont( XclExpStream& rStrm );
+
+public:
+                                ExcWindow28( RootData& rRootData, UINT16 nTab );
+    virtual                     ~ExcWindow28();
+
+    virtual void                Save( XclExpStream& rStrm );
     virtual UINT16              GetNum() const;
     virtual ULONG               GetLen() const;
 };

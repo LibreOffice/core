@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-10 14:11:39 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "drwlayer.hxx"
 #include "refreshtimer.hxx"
 #include "dbcolect.hxx"
+#include "scextopt.hxx"
 
 #include "docsh.hxx"
 
@@ -1693,6 +1694,16 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
              aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp))
     {
         WaitObject aWait( GetDialogParent() );
+
+        ScExtDocOptions* pExtDocOpt = NULL;
+        ScTabViewShell* pViewShell = GetBestViewShell();
+        if( pViewShell )
+        {
+            pExtDocOpt = new ScExtDocOptions;
+            pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
+        }
+        aDocument.SetExtDocOptions( pExtDocOpt );
+
         BOOL bFake97 = ( aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx97Temp) );
         FltError eError = ScExportExcel5( rMed, &aDocument, bFake97, RTL_TEXTENCODING_MS_1252 );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:46:14 $
+ *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>
+#include <svx/colritem.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
 
@@ -697,20 +698,17 @@ void ImportExcel::Note( void )
 void ImportExcel::Selection( void )
 {
     UINT16  nNumRefs, nFirstRow, nLastRow;
-    UINT8   nFirstCol, nLastCol;
+    UINT8   nPane, nFirstCol, nLastCol;
 
-    aIn.Ignore( 7 );
-
+    aIn >> nPane;
+    aIn.Ignore( 6 );
     aIn >> nNumRefs;
 
-    if( nNumRefs )
+    if( (nPane == aColRowBuff.GetActivePane()) && nNumRefs )
     {
         nNumRefs--;
-
         aIn.Ignore( nNumRefs * 6 );     // nur letzte Selektion interessiert
-
         aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-
         aColRowBuff.SetSelection( ScRange( ( UINT16 ) nFirstCol, nFirstRow, nTab,
                                             ( UINT16 ) nLastCol, nLastRow, nTab ) );
     }
@@ -2022,70 +2020,39 @@ void ImportExcel::TableOp( void )
 void ImportExcel::Window2_5( void )
 {
     ScExtDocOptions&    rExtOpt = *pExcRoot->pExtDocOpt;
-    UINT16              nOpt;
-    aIn >> nOpt;
+    UINT16              nOpt, nRow, nCol;
+    UINT32              nColorIndex;
 
-    if( nOpt & 0x0400 )
-    {// Paged
-        UINT16          nCol, nRow;
+    aIn >> nOpt >> nRow >> nCol >> nColorIndex;
 
-        aIn >> nRow >> nCol;
-        if( nRow > MAXROW )
-            nRow = MAXROW;
-        if( nCol > MAXCOL )
-            nCol = MAXCOL;
+    if( nOpt & EXC_WIN2_DISPLAYED )
+    {
+        nRow = Min( nRow, (UINT16)MAXROW );
+        nCol = Min( nCol, (UINT16)MAXCOL );
 
         rExtOpt.SetActTab( nTab );
         rExtOpt.SetVisCorner( nCol, nRow );
     }
+    aColRowBuff.SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
 
-    if( nOpt & 0x0008 )     // Frozen
+    if( nOpt & EXC_WIN2_FROZEN )        // Frozen
         aColRowBuff.SetFrozen( TRUE );
 
-    if( !( nOpt & 0x0020 ) )
-    {// Use RGB
-        BYTE            nGridR, nGridG, nGridB;
-
-        aIn >> nGridR >> nGridG >> nGridB;
-
-        rExtOpt.SetGridCol( nGridR, nGridG, nGridB );
+    if( !( nOpt & EXC_WIN2_DEFAULTCOLOR ) )
+    {
+        const SvxColorItem* pColorItem = pExcRoot->pColor->GetColor( (UINT16) nColorIndex );
+        if( pColorItem )
+            rExtOpt.SetGridCol( pColorItem->GetValue() );
     }
 
     if( !nTab )     // nur Tabelle 0 wird uebernommen!
     {
-        ScViewOptions   aOpts( pD->GetViewOptions() );
-
-        if( nOpt & 0x0001 )
-            // Display Formulas
-            aOpts.SetOption( VOPT_FORMULAS, TRUE );
-        else
-            aOpts.SetOption( VOPT_FORMULAS, FALSE );
-
-        if( nOpt & 0x0002 )
-            // Display Gridlines
-            aOpts.SetOption( VOPT_GRID, TRUE );
-        else
-            // Display No Gridlines
-            aOpts.SetOption( VOPT_GRID, FALSE );
-
-        if( nOpt & 0x0004 )
-            aOpts.SetOption( VOPT_HEADER, TRUE );
-        else
-            // No Row-/Col-Headings
-            aOpts.SetOption( VOPT_HEADER, FALSE );
-
-        if( nOpt & 0x0010 )
-            aOpts.SetOption( VOPT_NULLVALS, TRUE );
-        else
-            // Suppress Zero-Values
-            aOpts.SetOption( VOPT_NULLVALS, FALSE );
-
-        if( nOpt & 0x0080 )
-            aOpts.SetOption( VOPT_OUTLINER, TRUE );
-        else
-            // Hide Outline
-            aOpts.SetOption( VOPT_OUTLINER, FALSE );
-
+        ScViewOptions aOpts( pD->GetViewOptions() );
+        aOpts.SetOption( VOPT_FORMULAS, TRUEBOOL( nOpt & EXC_WIN2_SHOWFORMULAS ) );
+        aOpts.SetOption( VOPT_GRID, TRUEBOOL( nOpt & EXC_WIN2_SHOWGRID ) );
+        aOpts.SetOption( VOPT_HEADER, TRUEBOOL( nOpt & EXC_WIN2_SHOWHEADINGS ) );
+        aOpts.SetOption( VOPT_NULLVALS, TRUEBOOL( nOpt & EXC_WIN2_SHOWZEROS ) );
+        aOpts.SetOption( VOPT_OUTLINER, TRUEBOOL( nOpt & EXC_WIN2_OUTLINE ) );
         pD->SetViewOptions( aOpts );
     }
 }
