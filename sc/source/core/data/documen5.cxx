@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 20:51:15 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 17:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,7 +469,8 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
 
                         //  #72576# disable SetModified for readonly documents only
 
-                        BOOL bEnabled = ( pShell && pShell->IsReadOnly() &&
+                        BOOL bEnabled = ( ((pShell && pShell->IsReadOnly()) ||
+                                            IsImportingXML()) &&
                                             aIPObj->IsEnableSetModified() );
                         if (bEnabled)
                             aIPObj->EnableSetModified(FALSE);
