@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2004-03-19 14:18:23 $
+#   last change: $Date: 2004-04-21 11:57:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ = ..$/..$/..$/..$/..
 TARGET  = TypeDetection
 PRJNAME = $(TARGET)
@@ -105,23 +104,24 @@ CT_APP      = org.openoffice.Runner
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
-        $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props \
+        CHMOD $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props \
         $(CLASSDIR)$/$(PACKAGE)$/preselectedFilter.csv \
         $(CLASSDIR)$/$(PACKAGE)$/preselectedType.csv \
         $(CLASSDIR)$/$(PACKAGE)$/serviceName.csv \
         $(CLASSDIR)$/$(PACKAGE)$/files.csv : ALLTAR
 .ELSE
-        $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props \
+        CHMOD $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props \
         $(CLASSDIR)$/$(PACKAGE)$/preselectedFilter.csv \
         $(CLASSDIR)$/$(PACKAGE)$/preselectedType.csv \
         $(CLASSDIR)$/$(PACKAGE)$/serviceName.csv \
         $(CLASSDIR)$/$(PACKAGE)$/files.csv : ALLDEP
 .ENDIF
 
-.INCLUDE :  target.mk
 
-TST: $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props
-    @echo Hi.
+TST:
+    @echo "$(USE_SHELL)"
+
+.INCLUDE :  target.mk
 
 $(CLASSDIR)$/$(PACKAGE)$/preselectedFilter.csv : preselectedFilter.csv
     cp preselectedFilter.csv $(CLASSDIR)$/$(PACKAGE)$/preselectedFilter.csv
@@ -142,6 +142,19 @@ $(CLASSDIR)$/$(PACKAGE)$/files.csv : files.csv
 $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props : TypeDetection.props
     cp TypeDetection.props $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props
     jar uf $(CLASSDIR)$/$(JARTARGET) -C $(CLASSDIR) $(PACKAGE)$/TypeDetection.props
+
+# --- chmod --------------------------------------------------------
+
+.IF "$(USE_SHELL)" != "4nt"
+CHMOD :
+    chmod 444 $(CLASSDIR)$/$(PACKAGE)$/*.csv 
+    chmod 666 $(CLASSDIR)$/$(PACKAGE)$/*.props 
+.ELSE
+CHMOD :
+    echo erstmanix
+.ENDIF
+
+
 
 RUN: run
 
