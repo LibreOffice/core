@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-12 08:22:27 $
+ *  last change: $Author: mba $ $Date: 2002-04-12 10:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,96 +1528,12 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
     OUSTRING aFilterName;
     //sal_Bool aSaveAsTemplate = sal_False;
 
-    SfxItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+    SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
     aParams->Put( SfxStringItem( SID_FILE_NAME, String(sURL) ) );
     if ( bSaveTo )
         aParams->Put( SfxBoolItem( SID_SAVETO, sal_True ) );
 
-    // Parameter auswerten
-    for ( int n = 0; n < seqArguments.getLength(); ++n )
-    {
-        // get Property-Value from args
-        const PROPERTYVALUE &rProp = seqArguments.getConstArray()[n];
-
-        // FilterName-Property?
-        if ( rProp.Name.compareToAscii( "FilterName" ) == 0 )
-        {
-            OUSTRING sTemp;
-            if ( ( rProp.Value >>= sTemp ) == sal_True )
-            {
-                aParams->Put( SfxStringItem( SID_FILTER_NAME, String( sTemp ) ) );
-                aFilterName = sTemp;
-            }
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
-                throw ILLEGALARGUMENTIOEXCEPTION();
-        }
-
-        // FilterFlags-Property?
-        else if ( rProp.Name.compareToAscii( "FilterOptions" ) == 0 )
-        {
-            OUSTRING sTemp;
-            if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aParams->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, String( sTemp ) ) );
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
-                throw ILLEGALARGUMENTIOEXCEPTION();
-        }
-
-        // Version-Property?
-        else if ( rProp.Name.compareToAscii( "Version" ) == 0 )
-        {
-            OUSTRING sTemp ;
-            if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aParams->Put( SfxStringItem( SID_VERSION, String( sTemp ) ) );
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
-                throw ILLEGALARGUMENTIOEXCEPTION();
-        }
-
-        // Author-Property?
-        else if ( rProp.Name.compareToAscii( "Author" ) == 0 )
-        {
-            OUSTRING sTemp ;
-            if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aParams->Put( SfxStringItem( SID_DOCINFO_AUTHOR, String( sTemp ) ) );
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
-                throw ILLEGALARGUMENTIOEXCEPTION();
-        }
-
-        // Password-Property?
-        else if ( rProp.Name.compareToAscii( "Password" ) == 0 )
-        {
-            OUSTRING sTemp ;
-            if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aParams->Put( SfxStringItem( SID_PASSWORD, String( sTemp ) ) );
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
-                throw ILLEGALARGUMENTIOEXCEPTION();
-        }
-
-        // Overwrite-Property?
-        else if ( rProp.Name.compareToAscii( "Overwrite" ) == 0 )
-        {
-            sal_Bool bTemp ;
-            if ( ( rProp.Value >>= bTemp ) == sal_True )
-                aParams->Put( SfxBoolItem( SID_OVERWRITE, bTemp ) );
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
-                throw ILLEGALARGUMENTIOEXCEPTION();
-        }
-        // Unpacked-Property?
-        else if ( rProp.Name.compareToAscii( "Unpacked" ) == 0 )
-        {
-            sal_Bool bTemp ;
-            if ( ( rProp.Value >>= bTemp ) == sal_True )
-                aParams->Put( SfxBoolItem( SID_PACK, !bTemp ) );
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
-                throw ILLEGALARGUMENTIOEXCEPTION();
-        }
-
-        else
-        {
-            throw ::com::sun::star::beans::UnknownPropertyException(
-                    rProp.Name, *this );
-        }
-    }
-
+    TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
     sal_Bool aRet = pObjectShell->APISaveAs_Impl( sURL, aFilterName, aParams );
 
     sal_uInt32 nErrCode = pObjectShell->GetError() ? pObjectShell->GetError() : ERRCODE_IO_CANTWRITE;
