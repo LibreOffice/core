@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:48:41 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 14:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
     Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION a détecté une configuration java.ini défectueuse. %PRODUCTNAME requiert le fichier java.ini. Cliquez sur 'OK' pour lancer le Setup de Java et installer un JRE ou choisir parmi les JREs déjà installés.\nSi vous ne souhaitez pas installer de JRE, cliquez sur 'Annuler', ce qui annulera également l'opération en cours.";
     Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION ha detectado una configuración de java.ini defectuosa. %PRODUCTNAME requiere el archivo java.ini. Pulse en 'Aceptar' para iniciar el programa de instalación de Java e instalar un entorno de ejecución Java JRE (Java Runtime Environment) o para seleccionar uno ya instalado.\nSi no desea instalar un entorno de ejecución Java pulse en 'Cancelar'. Esta acción también cancelará la operación actual. ";
     Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION ha rilevato una configurazione difettosa di java.ini, che è un file necessario al funzionamento di %PRODUCTNAME. Fate click su 'OK' per avviare il setup di Java e installare un JRE (Java Runtime Environment) oppure per sceglierne uno già installato.\nSe preferite non installare JRE fate click su 'Annulla'. Quest'azione eliminerà la presente operazione.";
@@ -101,7 +101,7 @@ WarningBox WARNINGBOX_JAVADISABLED
     Message[ russian ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ greek ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ dutch ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ french ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
+    Message[ french ] = "L'opération en cours requiert Java, mais le support Java a été désactivé. Cliquez sur 'OK' pour activer le support Java. Pour interrompre l'opération en cours, cliquez sur 'Annuler'.";
     Message[ spanish ] = "Esta operación requiere Java, sin embargo el apoyo de Java está desactivado. Para volver a activarlo pulse en 'Aceptar'. Para finalizar la operación actual pulse en 'Cancelar'. ";
     Message[ finnish ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ italian ] = "Questa operazione richiede Java ma il supporto corrispondente è stato disattivato. Per riattivare il supporto Java fate click su 'OK'. Per terminare l'operazione cliccate 'Annulla'.";
@@ -130,7 +130,7 @@ WarningBox WARNINGBOX_MISSINGJAVARUNTIME
     Message[ russian ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ greek ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ dutch ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ french ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
+    Message[ french ] = "L'opération en cours requiert un Environnement Runtime Java (JRE). %PRODUCTNAME %PRODUCTVERSION a été configuré pour utiliser le JRE placé dans le dossier %s. Il est cependant impossible de détecter ce JRE.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'opération en cours, cliquez sur 'Annuler'.";
     Message[ spanish ] = "Esta operación requiere un entorno de ejecución Java (JRE). %PRODUCTNAME %PRODUCTVERSION se configuró para utilizar el entorno de ejecución Java (JRE) ubicado en la carpeta %s. Este JRE no se ha encontrado. Para iniciar el programa de instalación de Java pulse en 'Aceptar'. Para finalizar la operación actual pulse en 'Cancelar'.";
     Message[ finnish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). La configurazione di %PRODUCTNAME %PRODUCTVERSION utilizza JRE nella cartella %s. JRE non è stato trovato.\nCliccate 'OK' per avviare l'installazione di Java. Per terminare l'operazione fate click su 'Annulla'.";
@@ -159,7 +159,7 @@ WarningBox WARNINGBOX_JVMCREATIONFAILED
     Message[ russian ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ greek ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ dutch ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ french ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
+    Message[ french ] = "L'opération en cours requiert un Environnement Runtime Java (JRE). Le JRE détecté par %PRODUCTNAME %PRODUCTVERSION est cependant défectueux.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'opération en cours, cliquez sur 'Annuler'.";
     Message[ spanish ] = "Esta operación requiere un entorno de ejecución Java (Java Runtime Environment -JRE). Sin embargo el JRE que %PRODUCTNAME %PRODUCTVERSION ha detectado es defectuoso.\nPara iniciar el programa de instalación de Java pulse en 'Aceptar'. Para cancelar la operación pulse en 'Cancelar'.";
     Message[ finnish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). %PRODUCTNAME %PRODUCTVERSION ne ha rilevato una configurazione difettosa.\nFate click su 'OK' per avviare il setup di Java. Per terminare l'operazione cliccate 'Annulla'.";
@@ -188,7 +188,7 @@ WarningBox WARNINGBOX_JVMSETUPNOTSTARTED
     Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
+    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'a pas pu lancer le Setup de Java. Quittez %PRODUCTNAME et démarrez le Setup de %PRODUCTNAME %PRODUCTVERSION. Choisissez 'Réparation'.";
     Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no pudo iniciar el programa de instalación de Java. Cierre %PRODUCTNAME e inicie el programa de instalación de %PRODUCTNAME %PRODUCTVERSION. Seleccione 'Reparar'.";
     Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non è riuscito ad avviare l'installazione di Java. Chiudete %PRODUCTNAME e avviate il programma di installazione di %PRODUCTNAME %PRODUCTVERSION. Sceliete l'opzione 'Riparazione'.";
@@ -217,7 +217,7 @@ WarningBox WARNINGBOX_JAVALDXNOTSTARTED
     Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
+    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'a pas pu lancer Java LDX. Quittez %PRODUCTNAME et démarrez le Setup de %PRODUCTNAME %PRODUCTVERSION. Choisissez 'Réparation'.";
     Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no pudo iniciar Java LDX. Cierre %PRODUCTNAME e inicie el programa de instalación de %PRODUCTNAME %PRODUCTVERSION. Seleccione 'Repair'.";
     Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non è riuscito ad avviare Java LDX. Uscite da %PRODUCTNAME e avviate il programma di installazione di %PRODUCTNAME %PRODUCTVERSION. Scegliete l'opzione 'Riparazione'.";
@@ -698,7 +698,7 @@ String STR_SSO_REQUEST
     Text[ russian ] = "Please enter you Single Signon username and password. ";
     Text[ greek ] = "Please enter you Single Signon username and password. ";
     Text[ dutch ] = "Please enter you Single Signon username and password. ";
-    Text[ french ] = "Saisissez vos nom d'utilisateur et mot de passe. ";
+    Text[ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour accéder à vos paramètres personnels. ";
     Text[ spanish ] = "Introduzca el nombre de usuario y la contraseña para acceder a la configuración personalizada.";
     Text[ finnish ] = "Please enter you Single Signon username and password. ";
     Text[ italian ] = "Indicate il nome utente e la password per accedere alle impostazioni personalizzate. ";
@@ -725,7 +725,7 @@ String STR_WARNING_FAULTYJAVACFG
     Text[ russian ] = "Defective java.ini Configuration";
     Text[ greek ] = "Defective java.ini Configuration";
     Text[ dutch ] = "Defective java.ini Configuration";
-    Text[ french ] = "Defective java.ini Configuration";
+    Text[ french ] = "Configuration défectueuse de java.ini";
     Text[ spanish ] = "Configuración defectuosa de java.ini ";
     Text[ finnish ] = "Defective java.ini Configuration";
     Text[ italian ] = "Configurazione difettossa di java.ini";
@@ -752,7 +752,7 @@ String STR_WARNING_JAVADISABLED
     Text[ russian ] = "Java Support Disabled";
     Text[ greek ] = "Java Support Disabled";
     Text[ dutch ] = "Java Support Disabled";
-    Text[ french ] = "Java Support Disabled";
+    Text[ french ] = "Support Java désactivé";
     Text[ spanish ] = "Soporte Java desactivado";
     Text[ finnish ] = "Java Support Disabled";
     Text[ italian ] = "Supporto Java disattivato";
@@ -779,7 +779,7 @@ String STR_WARNING_MISSINGJAVARUNTIME
     Text[ russian ] = "Unable to Locate JRE";
     Text[ greek ] = "Unable to Locate JRE";
     Text[ dutch ] = "Unable to Locate JRE";
-    Text[ french ] = "Unable to Locate JRE";
+    Text[ french ] = "Impossible de détecter le JRE";
     Text[ spanish ] = "Imposible localizar JRE (Java Runtime Environment)";
     Text[ finnish ] = "Unable to Locate JRE";
     Text[ italian ] = "Impossibile trovare JRE (Java Runtime Environment)";
@@ -806,7 +806,7 @@ String STR_WARNING_FAULTYJAVAINSTALL
     Text[ russian ] = "Defective Java Installation";
     Text[ greek ] = "Defective Java Installation";
     Text[ dutch ] = "Defective Java Installation";
-    Text[ french ] = "Defective Java Installation";
+    Text[ french ] = "Installation défectueuse de Java";
     Text[ spanish ] = "Instalación de Java defectuosa";
     Text[ finnish ] = "Defective Java Installation";
     Text[ italian ] = "Installazione Java difettosa";
@@ -833,7 +833,7 @@ String STR_WARNING_CANNOTSTARTJVMSETUP
     Text[ russian ] = "Could Not Start Java Setup";
     Text[ greek ] = "Could Not Start Java Setup";
     Text[ dutch ] = "Could Not Start Java Setup";
-    Text[ french ] = "Could Not Start Java Setup";
+    Text[ french ] = "Impossible de lancer le Setup de Java !";
     Text[ spanish ] = "No se pudo iniciar el programa de instalación de Java";
     Text[ finnish ] = "Could Not Start Java Setup";
     Text[ italian ] = "Impossibile avviare l'installazione di Java";
@@ -860,7 +860,7 @@ String STR_WARNING_CANNOTSTARTJAVALDX
     Text[ russian ] = "Could Not Start Java LDX";
     Text[ greek ] = "Could Not Start Java LDX";
     Text[ dutch ] = "Could Not Start Java LDX";
-    Text[ french ] = "Could Not Start Java LDX";
+    Text[ french ] = "Impossible de démarrer Java LDX";
     Text[ spanish ] = "No se pudo iniciar Java LDX";
     Text[ finnish ] = "Could Not Start Java LDX";
     Text[ italian ] = "Impossibile avviare Java LDX";
