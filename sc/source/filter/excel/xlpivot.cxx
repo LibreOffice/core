@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:33:22 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-// ============================================================================
 
 #ifndef SC_XLPIVOT_HXX
 #include "xlpivot.hxx"
@@ -127,7 +125,7 @@ void XclPCItem::SetDouble( double fValue )
     //! TODO convert double to string
     maText.Erase();
     mfValue = fValue;
-    mnValue = ::lulimit< sal_Int16 >( fValue );
+    mnValue = limit_cast< sal_Int16 >( fValue );
     mnError = EXC_ERR_NULL;
     mbValue = fValue != 0.0;
 }
@@ -148,7 +146,7 @@ void XclPCItem::SetDate( double fDate )
     //! TODO convert date to string
     maText.Erase();
     mfValue = fDate;
-    mnValue = ::lulimit< sal_Int16 >( fDate );
+    mnValue = limit_cast< sal_Int16 >( fDate );
     mnError = EXC_ERR_NULL;
     mbValue = fDate != 0.0;
 }
@@ -159,7 +157,7 @@ void XclPCItem::SetError( sal_uInt16 nError )
     //! TODO convert error to string
     maText.Erase();
     mfValue = nError;
-    mnValue = ::lulimit< sal_Int16 >( nError );
+    mnValue = limit_cast< sal_Int16 >( nError );
     mnError = nError;
     mbValue = false;
 }
@@ -677,7 +675,7 @@ sal_Int32 XclPTFieldExtInfo::GetApiAutoShowCount() const
 
 void XclPTFieldExtInfo::SetApiAutoShowCount( sal_Int32 nShowCount )
 {
-    ::insert_value( mnFlags, ::lulimit< sal_uInt8 >( nShowCount ), 24, 8 );
+    ::insert_value( mnFlags, limit_cast< sal_uInt8 >( nShowCount ), 24, 8 );
 }
 
 sal_Int32 XclPTFieldExtInfo::GetApiLayoutMode() const
