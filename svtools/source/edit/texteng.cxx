@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:15:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,10 @@ String TextEngine::GetTextLines( LineEnd aSeparator ) const
         }
     }
     return aText;
+}
+void  TextEngine::ReplaceText(const TextSelection& rSel, const String& rText)
+{
+    ImpInsertText( rSel, rText );
 }
 
 String TextEngine::GetText( ULONG nPara ) const
@@ -2704,6 +2708,51 @@ void TextEngine::RemoveAttribs( ULONG nPara, BOOL bIdleFormatAndUpdate )
                 IdleFormatAndUpdate( NULL, 0xFFFF );
             else
                 FormatAndUpdate( NULL );
+        }
+    }
+}
+void TextEngine::RemoveAttribs( ULONG nPara, USHORT nWhich )
+{
+    if ( nPara < mpDoc->GetNodes().Count() )
+    {
+        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        if ( pNode->GetCharAttribs().Count() )
+        {
+            TextCharAttribList& rAttribs = pNode->GetCharAttribs();
+            USHORT nAttrCount = rAttribs.Count();
+            for(USHORT nAttr = nAttrCount; nAttr; --nAttr)
+            {
+                if(rAttribs.GetAttrib( nAttr - 1 )->Which() == nWhich)
+                    rAttribs.RemoveAttrib( nAttr -1 );
+            }
+            TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
+            pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().Len() );
+            mbFormatted = FALSE;
+            FormatAndUpdate( NULL );
+        }
+    }
+}
+void TextEngine::RemoveAttrib( ULONG nPara, const TextCharAttrib& rAttrib )
+{
+    if ( nPara < mpDoc->GetNodes().Count() )
+    {
+        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        if ( pNode->GetCharAttribs().Count() )
+        {
+            TextCharAttribList& rAttribs = pNode->GetCharAttribs();
+            USHORT nAttrCount = rAttribs.Count();
+            for(USHORT nAttr = nAttrCount; nAttr; --nAttr)
+            {
+                if(rAttribs.GetAttrib( nAttr - 1 ) == &rAttrib)
+                {
+                    rAttribs.RemoveAttrib( nAttr -1 );
+                    break;
+                }
+            }
+            TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
+            pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().Len() );
+            mbFormatted = FALSE;
+            FormatAndUpdate( NULL );
         }
     }
 }
