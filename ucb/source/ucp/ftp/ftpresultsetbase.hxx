@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpresultsetbase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:35 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,11 @@ namespace ftp {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
+            rtl::OUString ret;
             if( 0 <= m_nRow && m_nRow < m_aItems.size() )
-                return m_aItems[m_nRow]->getString( columnIndex );
-            else
-                return rtl::OUString();
+                ret = m_aItems[m_nRow]->getString( columnIndex );
+
+            return ret;
         }
 
         virtual sal_Bool SAL_CALL

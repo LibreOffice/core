@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-20 14:49:21 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
 
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME         "com.sun.star.ucb.FtpContentProvider"
+#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME         "com.sun.star.ucb.FTPContentProvider"
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  35
 #define MYUCP_URL_SCHEME        "ftp"
 #define MYUCP_URL_SCHEME_LENGTH 3
@@ -98,16 +98,16 @@
 namespace ftp {
 
 
-    class FtpLoaderThread;
+    class FTPLoaderThread;
 
 
-    class FtpContentProvider:
+    class FTPContentProvider:
         public ::ucb::ContentProviderImplHelper
     {
     public:
 
-        FtpContentProvider(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xMSF );
-        ~FtpContentProvider();
+        FTPContentProvider(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xMSF );
+        ~FTPContentProvider();
 
         // XInterface
         XINTERFACE_DECL()
@@ -148,12 +148,12 @@ namespace ftp {
     private:
 
         osl::Mutex m_aMutex;
-        FtpLoaderThread *m_ftpLoaderThread;
+        FTPLoaderThread *m_ftpLoaderThread;
         void init();
 
 
 
-    };  // end class FtpContentProvider
+    };  // end class FTPContentProvider
 
 }       // end namespace ftp
 

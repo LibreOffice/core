@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpinpstr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:24 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ namespace ftp {
     namespace css = com::sun::star;
 
 
-    class FtpInputStream
+    class FTPInputStream
         : public cppu::OWeakObject,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XSeekable
@@ -107,9 +107,9 @@ namespace ftp {
          *  on which the inputstream acts.
          */
 
-        FtpInputStream();
+        FTPInputStream();
 
-        ~FtpInputStream();
+        ~FTPInputStream();
 
         virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType)
             throw(css::uno::RuntimeException);
@@ -183,6 +183,8 @@ namespace ftp {
 
         const void* getBuffer() const throw();
 
+        void reset() throw();
+
     private:
 
         /** Don't hold more than 1MB in memory.
@@ -190,7 +192,7 @@ namespace ftp {
 
         const sal_uInt32 m_nMaxLen;
 
-        osl::Mutex m_aMutex;
+        mutable osl::Mutex m_aMutex;
 
         sal_uInt32 m_nLen,m_nWritePos,m_nReadPos;
         void* m_pBuffer;

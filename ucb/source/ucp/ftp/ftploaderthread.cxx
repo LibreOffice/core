@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftploaderthread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-24 15:17:55 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,24 +99,24 @@ extern "C" {
 
 /********************************************************************************/
 /*                                                                              */
-/*                  Member part of FtpLoaderThread                              */
+/*                  Member part of FTPLoaderThread                              */
 /*                                                                              */
 /********************************************************************************/
 
 
-FtpLoaderThread::FtpLoaderThread()
+FTPLoaderThread::FTPLoaderThread()
     : m_threadKey(osl_createThreadKey(delete_CURL)) {
 }
 
 
 
-FtpLoaderThread::~FtpLoaderThread() {
+FTPLoaderThread::~FTPLoaderThread() {
     osl_destroyThreadKey(m_threadKey);
 }
 
 
 
-CURL* FtpLoaderThread::handle() {
+CURL* FTPLoaderThread::handle() {
     CURL* ret;
     if(!(ret = osl_getThreadKeyData(m_threadKey))) {
         ret = curl_easy_init();

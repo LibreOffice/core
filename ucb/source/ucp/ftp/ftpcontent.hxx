@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:12:55 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace ftp
 //=========================================================================
 
 // UNO service name for the content.
-#define MYUCP_CONTENT_SERVICE_NAME "com.sun.star.ucb.FtpContent"
+#define MYUCP_CONTENT_SERVICE_NAME "com.sun.star.ucb.FTPContent"
 
 //=========================================================================
 
@@ -103,23 +103,23 @@ namespace ftp
 
 //=========================================================================
 
-    class FtpContentProvider;
+    class FTPContentProvider;
 
 //=========================================================================
 
-    class FtpContent
+    class FTPContent
         : public ::ucb::ContentImplHelper
     {
     public:
 
-        FtpContent( const ::com::sun::star::uno::Reference<
+        FTPContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                    FtpContentProvider* pProvider,
+                    FTPContentProvider* pProvider,
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier);
 
 
-        virtual ~FtpContent();
+        virtual ~FTPContent();
 
         // XInterface
         XINTERFACE_DECL()
@@ -152,7 +152,7 @@ namespace ftp
 
     private:
 
-        FtpContentProvider *m_pFCP;
+        FTPContentProvider *m_pFCP;
 
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
         getProperties( const com::sun::star::uno::Reference<
@@ -170,7 +170,9 @@ namespace ftp
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRow>
         getPropertyValues(
             const com::sun::star::uno::Sequence<
-            com::sun::star::beans::Property>& seqProp
+            com::sun::star::beans::Property>& seqProp,
+            const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment >& Environment
         );
 
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpdynresultset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:15 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ using namespace ftp;
 
 DynamicResultSet::DynamicResultSet(
     const Reference< XMultiServiceFactory >& rxSMgr,
-    const vos::ORef< FtpContent >& rxContent,
+    const vos::ORef< FTPContent >& rxContent,
     const OpenCommandArgument2& rCommand,
     const Reference< XCommandEnvironment >& rxEnv,
     ResultSetFactory* pFactory )

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: abi $ $Date: 2002-07-31 15:13:37 $
+#   last change: $Author: abi $ $Date: 2002-08-28 07:23:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,6 @@ UCPFTP_MAJOR=1
 SLOFILES=\
     $(SLO)$/ftpservices.obj  \
     $(SLO)$/ftpcontentprovider.obj  \
-    $(SLO)$/ftpurl.obj   \
     $(SLO)$/ftpcontent.obj   \
     $(SLO)$/ftpcontentidentifier.obj   \
     $(SLO)$/ftpcontentcaps.obj \
@@ -88,7 +87,10 @@ SLOFILES=\
     $(SLO)$/ftpresultsetI.obj \
     $(SLO)$/ftploaderthread.obj  \
     $(SLO)$/ftpinpstr.obj	\
-    $(SLO)$/ftpdirp.obj
+    $(SLO)$/ftpdirp.obj     \
+    $(SLO)$/ftpcfunc.obj     \
+    $(SLO)$/ftpurl.obj     \
+    $(SLO)$/debughelper.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
@@ -130,7 +132,10 @@ APP1OBJS=\
     $(SLO)$/ftpcontentidentifier.obj   \
     $(SLO)$/ftploaderthread.obj  \
     $(SLO)$/ftpinpstr.obj	\
-    $(SLO)$/ftpdirp.obj
+    $(SLO)$/ftpurl.obj     \
+    $(SLO)$/ftpdirp.obj     \
+    $(SLO)$/ftpcfunc.obj     \
+    $(SLO)$/debughelper.obj
 
 .IF "$(COMPHELPERLIB)"==""
 .IF "$(GUI)" == "UNX"

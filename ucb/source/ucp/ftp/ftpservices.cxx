@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpservices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-07 15:31:00 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,12 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     return pRegistryKey &&
 
         //////////////////////////////////////////////////////////////////////
-        // Ftp Content Provider.
+        // FTP Content Provider.
         //////////////////////////////////////////////////////////////////////
 
         writeInfo( pRegistryKey,
-                   FtpContentProvider::getImplementationName_Static(),
-                   FtpContentProvider::getSupportedServiceNames_Static() );
+                   FTPContentProvider::getImplementationName_Static(),
+                   FTPContentProvider::getSupportedServiceNames_Static() );
 }
 
 //=========================================================================
@@ -148,13 +148,13 @@ extern "C" void * SAL_CALL component_getFactory(
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     //////////////////////////////////////////////////////////////////////
-    // Ftp Content Provider.
+    // FTP Content Provider.
     //////////////////////////////////////////////////////////////////////
 
-    if ( FtpContentProvider::getImplementationName_Static().
+    if ( FTPContentProvider::getImplementationName_Static().
          compareToAscii( pImplName ) == 0 )
     {
-        xFactory = FtpContentProvider::createServiceFactory( xSMgr );
+        xFactory = FTPContentProvider::createServiceFactory( xSMgr );
     }
 
     if ( xFactory.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpdirp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:11 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ namespace ftp {
  *
  *======================================================================*/
 
-    enum FtpDirentryMode { INETCOREFTP_FILEMODE_UNKNOWN = 0x00,
+    enum FTPDirentryMode { INETCOREFTP_FILEMODE_UNKNOWN = 0x00,
                            INETCOREFTP_FILEMODE_READ = 0x01,
                            INETCOREFTP_FILEMODE_WRITE = 0x02,
                            INETCOREFTP_FILEMODE_ISDIR = 0x04,

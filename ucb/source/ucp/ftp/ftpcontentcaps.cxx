@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentcaps.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:12:57 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ using namespace rtl;
 using namespace ftp;
 
 // virtual
-Sequence< Property > FtpContent::getProperties(
+Sequence< Property > FTPContent::getProperties(
     const Reference< XCommandEnvironment > & xEnv
 )
 {
@@ -133,7 +133,7 @@ Sequence< Property > FtpContent::getProperties(
 
 //=========================================================================
 // virtual
-Sequence< CommandInfo > FtpContent::getCommands(
+Sequence< CommandInfo > FTPContent::getCommands(
     const Reference< XCommandEnvironment > & xEnv )
 {
 //  osl::MutexGuard aGuard( m_aMutex );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpresultsetI.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:29 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_UCB_COMMAND_HPP_
-#include <com/sun/star/ucb/Command.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
-#endif
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <vos/ref.hxx>
+#include <com/sun/star/ucb/Command.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include "ftpresultsetI.hxx"
 
 
@@ -120,7 +114,7 @@ ResultSetI::ResultSetI(const Reference< lang::XMultiServiceFactory >&  xMSF,
             else if(Name.compareToAscii("IsDocument") == 0)
                 xRow->appendBoolean(seqProp[i],
                                     ! sal_Bool(dirvec[n].m_nMode &
-                                             INETCOREFTP_FILEMODE_ISDIR));
+                                               INETCOREFTP_FILEMODE_ISDIR));
             else if(Name.compareToAscii("IsFolder") == 0)
                 xRow->appendBoolean(seqProp[i],
                                     sal_Bool(dirvec[n].m_nMode &
@@ -136,124 +130,4 @@ ResultSetI::ResultSetI(const Reference< lang::XMultiServiceFactory >&  xMSF,
         }
         m_aItems[n] = Reference<XRow>(xRow.getBodyPtr());
     }
-
-//      unsigned int i;
-//      vector< vector< rtl::OUString > > queryList;
-
-//      {
-//          sal_Int32 idx;
-//          rtl::OUString query = m_aURLParameter.get_query();
-//          while( query.getLength() )
-//          {
-//              idx = query.indexOf( sal_Unicode( ' ' ) );
-//              if( idx == -1 )
-//                  idx = query.getLength();
-
-//              vector< rtl::OUString > currentQuery;
-//              currentQuery.push_back( query.copy( 0,idx ) );
-//              queryList.push_back( currentQuery );
-//              query = query.copy( 1 + idx );
-//          }
-//      }
-
-//      rtl::OUString scope = m_aURLParameter.get_scope();
-//      StaticModuleInformation* inf =
-//          m_pDatabases->getStaticInformationForModule( m_aURLParameter.get_module(),
-//                                                       m_aURLParameter.get_language() );
-
-//      if( inf )
-//      {
-//          if( scope.compareToAscii( "Heading" ) == 0 )
-//              scope = inf->get_heading();
-//          else
-//              scope = inf->get_fulltext();
-//      }
-
-//      sal_Int32 hitCount = m_aURLParameter.get_hitCount();
-
-//      QueryResults* queryResults = 0;
-//      QueryHitIterator* it = 0;
-//      set< rtl::OUString > aSet,aCurrent,aResultSet;
-
-//      try
-//      {
-//          rtl::OUString idxDir =
-//              m_pDatabases->getInstallPathAsURL()                    +
-//              m_pDatabases->lang( m_aURLParameter.get_language() )   +
-//              rtl::OUString::createFromAscii( "/" )                  +
-//              m_aURLParameter.get_module()                           +
-//              rtl::OUString::createFromAscii( ".idx/" );
-
-//          for( i = 0; i < queryList.size(); ++i )
-//          {
-//              QueryProcessor queryProcessor(idxDir);
-//              QueryStatement queryStatement(hitCount,queryList[i],scope);
-//              queryResults = queryProcessor.processQuery( queryStatement );
-
-//              it = 0;
-//              if( queryResults )
-//                  it = queryResults->makeQueryHitIterator();
-
-//              aSet.clear();
-//              while( it && it->next() )
-//              {
-//                  QueryHitData* qhd = it->getHit( 0 /*PrefixTranslator*/ );
-//                  if(qhd)
-//                      aSet.insert(qhd->getDocument());
-//              }
-
-//              delete it;  // deletes also queryResults[i]
-
-//              // intersect
-//              if( i == 0 )
-//                  aResultSet = aSet;
-//              else
-//              {
-//                  aCurrent = aResultSet;
-//                  aResultSet.clear();
-//                  set_intersection( aSet.begin(),aSet.end(),
-//                                    aCurrent.begin(),aCurrent.end(),
-//                                    inserter(aResultSet,aResultSet.begin()));
-//              }
-//          }
-//      }
-//      catch( IOException )
-//      {
-//      }
-
-//      sal_Int32 replIdx = rtl::OUString::createFromAscii( "#HLP#" ).getLength();
-//      rtl::OUString replWith = rtl::OUString::createFromAscii( "vnd.sun.star.help://" );
-
-//      set< rtl::OUString >::const_iterator set_it = aResultSet.begin();
-//      while( set_it != aResultSet.end() )
-//      {
-//          m_aPath.push_back(replWith + set_it->copy(replIdx));
-//          ++set_it;
-//      }
-
-//      m_aItems.resize( m_aPath.size() );
-//      m_aIdents.resize( m_aPath.size() );
-
-//      Command aCommand;
-//      aCommand.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
-//      aCommand.Argument <<= m_sProperty;
-
-//      for( m_nRow = 0; m_nRow < m_aPath.size(); ++m_nRow )
-//      {
-//          m_aPath[m_nRow] =
-//              m_aPath[m_nRow]                                          +
-//              rtl::OUString::createFromAscii( "?Language=" )           +
-//              m_aURLParameter.get_language()                           +
-//              rtl::OUString::createFromAscii( "&System=" )             +
-//              m_aURLParameter.get_system();
-
-//          Reference< XContent > content = queryContent();
-//          if( content.is() )
-//          {
-//              Reference< XCommandProcessor > cmd( content,UNO_QUERY );
-//              if( ! ( cmd->execute( aCommand,0,Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[m_nRow] ) )
-//                  ;
-//          }
-//      }
-//      m_nRow = -1;
 }

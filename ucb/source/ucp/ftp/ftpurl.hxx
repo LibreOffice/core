@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ftploaderthread.hxx,v $
+ *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:14 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,46 +65,122 @@
 
  *************************************************************************/
 
-#ifndef _FTP_FTPLOADERTHREAD_HXX_
-#define _FTP_FTPLOADERTHREAD_HXX_
+#ifndef _FTP_FTPURL_HXX_
+#define _FTP_FTPURL_HXX_
 
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
-#ifndef __CURL_TYPES_H
-#include <curl/types.h>
-#endif
+#include <curl/curl.h>
+#include <curl/easy.h>
+#include <com/sun/star/io/XOutputStream.hpp>
 
+#include <rtl/ustring.hxx>
+#include <osl/mutex.hxx>
+#include <vector>
+
+#include "ftpdirp.hxx"
+#include "ftpcfunc.hxx"
 
 namespace ftp {
 
-    /** A loaderthread acts as factory for CURL-handles,
-     *  the key being ( implicit ) the threadid.
-     *  Owner is a FTPContentProvider-instance
+    /** Forward declarations.
      */
 
-    class FTPLoaderThread
+    class FTPContentProvider;
+
+
+
+    enum FTPErrorCode {
+        FTPCouldNotDetermineSystem = CURL_LAST + 1
+    };
+
+
+    class malformed_exception { };
+
+
+    class no_such_directory_exception
     {
     public:
 
-        FTPLoaderThread();
-        ~FTPLoaderThread();
+        no_such_directory_exception(sal_Int32 err)
+            : n_err(err) { }
 
-        CURL* handle();
+        sal_Int32 code() const { return n_err; }
 
 
     private:
 
-        /** Don't enable assignment and copy construction.
-         *  Not defined:
+        sal_Int32 n_err;
+    };
+
+
+    class FTPURL
+    {
+    public:
+
+        FTPURL(
+            const rtl::OUString& aIdent,
+            FTPContentProvider* pFCP = 0
+        )
+            throw(
+                malformed_exception
+            );
+
+
+        ~FTPURL();
+
+        rtl::OUString username() const { return m_aUsername; }
+
+        rtl::OUString password() const { return m_aPassword; }
+
+        rtl::OUString host() const { return m_aHost; }
+
+        sal_Int32 port() const { return m_nPort; }
+
+        /** This returns the URL, but cleaned from
+         *  unnessary ellipses.
          */
 
-        FTPLoaderThread(const FTPLoaderThread&);
-        FTPLoaderThread& operator=(const FTPLoaderThread&);
+        rtl::OUString ident() const;
 
-        oslThreadKey m_threadKey;
 
-    };  // end class FTPLoaderThread
+        std::vector<FTPDirentry> list(
+            sal_Int16 nMode
+        ) const
+            throw(
+                no_such_directory_exception
+            );
+
+        FTPDirentry direntry(
+            const rtl::OUString& passwd = rtl::OUString()
+        ) const
+            throw(
+                no_such_directory_exception
+            );
+
+
+    private:
+
+        osl::Mutex m_mutex;
+
+        FTPContentProvider *m_pFCP;
+
+        rtl::OUString m_aIdent;
+
+
+        rtl::OUString m_aUsername;
+        rtl::OUString m_aPassword;
+        rtl::OUString m_aHost;
+        sal_Int32    m_nPort;
+
+        /** Contains the decoded pathsegments of the url.
+         */
+        std::vector<rtl::OUString> m_aPathSegmentVec;
+
+        void parse()
+            throw(
+                malformed_exception
+            );
+
+    };
 
 }
 

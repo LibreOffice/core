@@ -1,58 +1,72 @@
 #include "ftpcontentidentifier.hxx"
 
 
-
 using namespace ftp;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
 
-FtpContentIdentifier::FtpContentIdentifier(const rtl::OUString& aIdent)
-    : m_aIdent(aIdent)
+FTPContentIdentifier::FTPContentIdentifier(
+    const rtl::OUString& aIdent,
+    FTPContentProvider* pFCP
+)
+    : m_pURL(new FTPURL(aIdent,pFCP))
+{
+}
+
+FTPContentIdentifier::FTPContentIdentifier(FTPURL* pURL)
+    : m_pURL(pURL)
 {
 }
 
 
+FTPContentIdentifier::~FTPContentIdentifier()
+{
+    delete m_pURL;
+}
+
+
 Any SAL_CALL
-FtpContentIdentifier::queryInterface(
+FTPContentIdentifier::queryInterface(
     const Type& rType
 )
     throw(
         RuntimeException
     )
 {
-    Any aRet = ::cppu::queryInterface(rType,
-                                      SAL_STATIC_CAST(XContentIdentifier*,this));
+    Any aRet =
+        ::cppu::queryInterface(rType,
+                               SAL_STATIC_CAST(XContentIdentifier*,this));
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
 
 
-void SAL_CALL FtpContentIdentifier::acquire( void ) throw() {
+void SAL_CALL FTPContentIdentifier::acquire( void ) throw() {
     OWeakObject::acquire();
 }
 
 
 
-void SAL_CALL FtpContentIdentifier::release( void ) throw() {
+void SAL_CALL FTPContentIdentifier::release( void ) throw() {
     OWeakObject::release();
 }
 
 
 ::rtl::OUString SAL_CALL
-FtpContentIdentifier::getContentIdentifier(
+FTPContentIdentifier::getContentIdentifier(
 )
     throw (
         ::com::sun::star::uno::RuntimeException
     )
 {
-    return m_aIdent;
+    return m_pURL->ident();
 }
 
 
 ::rtl::OUString SAL_CALL
-FtpContentIdentifier::getContentProviderScheme(
+FTPContentIdentifier::getContentProviderScheme(
 )
     throw (
         ::com::sun::star::uno::RuntimeException

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:38 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,12 @@ using namespace com::sun::star::io;
 
 
 
-class FtpThread
+class FTPThread
     : public osl::Thread
 {
 public:
 
-    FtpThread(const Reference<XContentProvider>& xProvider);
+    FTPThread(const Reference<XContentProvider>& xProvider);
 
 
 protected:
@@ -167,18 +167,18 @@ private:
 
 
 
-FtpThread::FtpThread(const Reference<XContentProvider>& xProvider)
+FTPThread::FTPThread(const Reference<XContentProvider>& xProvider)
     : m_xProvider(xProvider) { }
 
 
-void FtpThread::run() {
+void FTPThread::run() {
 //      Reference<XContentIdentifierFactory> xFactory(m_xProvider,
 //                                                    UNO_QUERY);
 //      xFactory->createContentIdentifier(
 //          rtl::OUString::createFromAscii("ftp://chagall/"));
 
     Reference<XContentIdentifier> xIdent(
-        new ftp::FtpContentIdentifier(
+        new ftp::FTPContentIdentifier(
             rtl::OUString::createFromAscii("ftp://chagall/")));
 
 
@@ -235,8 +235,8 @@ int main(int argc,char* argv[])
         comphelper::setProcessServiceFactory(xFac);
 
         Reference< XMultiServiceFactory > xFac(new Test_MultiServiceFactory());
-        Reference< XContentProvider> xProvider(new ftp::FtpContentProvider(xFac));
-        FtpThread aThread(xProvider);
+        Reference< XContentProvider> xProvider(new ftp::FTPContentProvider(xFac));
+        FTPThread aThread(xProvider);
         aThread.create();
         aThread.join();
 

@@ -1,26 +1,36 @@
 #ifndef _FTP_FTPCONTENTIDENTIFIER_HXX_
 #define _FTP_FTPCONTENTIDENTIFIER_HXX_
 
-#ifndef _CPPUHELPER_WEAK_HXX_
+#include <vector>
+#include <curl/curl.h>
+#include <curl/easy.h>
 #include <cppuhelper/weak.hxx>
-#endif
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIER_HPP_
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#endif
+#include <com/sun/star/io/XOutputStream.hpp>
 
+
+#include "ftpdirp.hxx"
+#include "ftpurl.hxx"
 
 namespace ftp {
 
-    class FtpContentIdentifier
+
+    class FTPContentProvider;
+
+
+    class FTPContentIdentifier
         : public cppu::OWeakObject,
           public com::sun::star::ucb::XContentIdentifier
     {
     public:
 
-        FtpContentIdentifier(const rtl::OUString& ident);
+        FTPContentIdentifier(const rtl::OUString& ident,
+                             FTPContentProvider* pFCP = 0);
+
+        FTPContentIdentifier(FTPURL *pURL);
+
+        ~FTPContentIdentifier();
 
         // XInterface
 
@@ -49,9 +59,10 @@ namespace ftp {
                 ::com::sun::star::uno::RuntimeException
             );
 
+
     private:
 
-        rtl::OUString m_aIdent;
+        FTPURL *m_pURL;
     };
 
 }

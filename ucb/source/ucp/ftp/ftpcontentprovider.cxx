@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:06 $
+ *  last change: $Author: abi $ $Date: 2002-08-28 07:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ using namespace com::sun::star::ucb;
 //=========================================================================
 //=========================================================================
 
-FtpContentProvider::FtpContentProvider(const Reference< XMultiServiceFactory >& rSMgr)
+FTPContentProvider::FTPContentProvider(const Reference< XMultiServiceFactory >& rSMgr)
     : ::ucb::ContentProviderImplHelper(rSMgr),
              m_ftpLoaderThread(NULL)
 {
@@ -99,7 +99,7 @@ FtpContentProvider::FtpContentProvider(const Reference< XMultiServiceFactory >& 
 
 //=========================================================================
 // virtual
-FtpContentProvider::~FtpContentProvider()
+FTPContentProvider::~FTPContentProvider()
 {
     delete m_ftpLoaderThread;
 }
@@ -110,7 +110,7 @@ FtpContentProvider::~FtpContentProvider()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_3( FtpContentProvider,
+XINTERFACE_IMPL_3( FTPContentProvider,
                    XTypeProvider,
                    XServiceInfo,
                    XContentProvider);
@@ -121,7 +121,7 @@ XINTERFACE_IMPL_3( FtpContentProvider,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_3( FtpContentProvider,
+XTYPEPROVIDER_IMPL_3( FTPContentProvider,
                          XTypeProvider,
                          XServiceInfo,
                          XContentProvider);
@@ -132,8 +132,8 @@ XTYPEPROVIDER_IMPL_3( FtpContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1(FtpContentProvider,
-                    rtl::OUString::createFromAscii("com.sun.star.comp.FtpContentProvider"),
+XSERVICEINFO_IMPL_1(FTPContentProvider,
+                    rtl::OUString::createFromAscii("com.sun.star.comp.FTPContentProvider"),
                     rtl::OUString::createFromAscii(MYUCP_CONTENT_PROVIDER_SERVICE_NAME));
 
 //=========================================================================
@@ -142,7 +142,7 @@ XSERVICEINFO_IMPL_1(FtpContentProvider,
 //
 //=========================================================================
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL(FtpContentProvider);
+ONE_INSTANCE_SERVICE_FACTORY_IMPL(FTPContentProvider);
 
 
 //=========================================================================
@@ -153,7 +153,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL(FtpContentProvider);
 
 // virtual
 Reference<XContent> SAL_CALL
-FtpContentProvider::queryContent(
+FTPContentProvider::queryContent(
     const Reference< XContentIdentifier >& xCanonicId
 )
     throw(
@@ -179,18 +179,18 @@ FtpContentProvider::queryContent(
         }
     }
 
-    xContent = new FtpContent(m_xSMgr,this,xCanonicId);
+    xContent = new FTPContent(m_xSMgr,this,xCanonicId);
     // may throw IllegalIdentifierException
     return xContent;
 }
 
 
-void FtpContentProvider::init() {
-    m_ftpLoaderThread = new FtpLoaderThread();
+void FTPContentProvider::init() {
+    m_ftpLoaderThread = new FTPLoaderThread();
 }
 
 
-CURL* FtpContentProvider::handle() {
+CURL* FTPContentProvider::handle() {
     // Cannot be zero if called from here;
     return m_ftpLoaderThread->handle();
 }
