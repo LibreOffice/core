@@ -326,8 +326,14 @@ public class Workbook implements org.openoffice.xmerge.Document {
 
         // Now the formatting is out of the way add the cell
         if(cellContents.startsWith("=")) {
-            Formula f = new Formula(row, col, cellContents, ixfe, fmt.getValue());
-            currentWS.addCell(f);
+            try {
+                Formula f = new Formula(row, col, cellContents, ixfe, fmt.getValue());
+                currentWS.addCell(f);
+            } catch(Exception e) {
+                Debug.log(Debug.TRACE, "Parsing Exception thrown : " + e.getMessage());
+                BoolErrCell errorCell = new BoolErrCell(row, col, ixfe, 0x2A, 1);
+                currentWS.addCell(errorCell);
+            }
         } else if(category.equalsIgnoreCase(OfficeConstants.CELLTYPE_FLOAT)) {
             FloatNumber num = new FloatNumber(row, col, cellContents, ixfe);
             currentWS.addCell(num);
