@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:31:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,49 +329,53 @@ public abstract class Component extends java.awt.Component {
 
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
-            switch (event.EventId) {
-                case AccessibleEventId.ACTION_CHANGED:
-                    firePropertyChange(accessibleContext.ACCESSIBLE_ACTION_PROPERTY,
-                        toNumber(event.OldValue), toNumber(event.NewValue));
-                    break;
-                case AccessibleEventId.NAME_CHANGED:
-                    // Set the accessible name for the corresponding context, which will fire a property
-                    // change event itself
-                    handleNameChangedEvent(event.NewValue);
-                    break;
-                case AccessibleEventId.DESCRIPTION_CHANGED:
-                    // Set the accessible description for the corresponding context, which will fire a property
-                    // change event itself - so do not set propertyName !
-                    handleDescriptionChangedEvent(event.NewValue);
-                    break;
-                case AccessibleEventId.CHILD:
-                    if (Build.DEBUG) {
-                        System.out.println("Unexpected child event for object of role " + getAccessibleContext().getAccessibleRole());
-                    }
-                    break;
-                case AccessibleEventId.STATE_CHANGED:
-                    // Update the internal state set and fire the appropriate PropertyChangedEvent
-                    handleStateChangedEvent(event.OldValue, event.NewValue);
-                    break;
-                case AccessibleEventId.VISIBLE_DATA_CHANGED:
-                case AccessibleEventId.BOUNDRECT_CHANGED:
-                    firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
-                    break;
-                case AccessibleEventId.TEXT_CHANGED:
-                    firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY,
-                                            AccessibleTextImpl.convertTextSegment(event.OldValue),
-                                            AccessibleTextImpl.convertTextSegment(event.NewValue));
-                    break;
-                case AccessibleEventId.CARET_CHANGED:
-                    firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
-                    break;
-                case AccessibleEventId.VALUE_CHANGED:
-                    firePropertyChange(accessibleContext.ACCESSIBLE_VALUE_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
-                default:
-                    // Warn about unhandled events
-                    if(Build.DEBUG) {
-                        System.out.println(this + ": unhandled accessibility event id=" + event.EventId);
-                    }
+
+            if ( !disposed ) {
+
+                switch (event.EventId) {
+                    case AccessibleEventId.ACTION_CHANGED:
+                        firePropertyChange(accessibleContext.ACCESSIBLE_ACTION_PROPERTY,
+                            toNumber(event.OldValue), toNumber(event.NewValue));
+                        break;
+                    case AccessibleEventId.NAME_CHANGED:
+                        // Set the accessible name for the corresponding context, which will fire a property
+                        // change event itself
+                        handleNameChangedEvent(event.NewValue);
+                        break;
+                    case AccessibleEventId.DESCRIPTION_CHANGED:
+                        // Set the accessible description for the corresponding context, which will fire a property
+                        // change event itself - so do not set propertyName !
+                        handleDescriptionChangedEvent(event.NewValue);
+                        break;
+                    case AccessibleEventId.CHILD:
+                        if (Build.DEBUG) {
+                            System.out.println("Unexpected child event for object of role " + getAccessibleContext().getAccessibleRole());
+                        }
+                        break;
+                    case AccessibleEventId.STATE_CHANGED:
+                        // Update the internal state set and fire the appropriate PropertyChangedEvent
+                        handleStateChangedEvent(event.OldValue, event.NewValue);
+                        break;
+                    case AccessibleEventId.VISIBLE_DATA_CHANGED:
+                    case AccessibleEventId.BOUNDRECT_CHANGED:
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
+                        break;
+                    case AccessibleEventId.TEXT_CHANGED:
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY,
+                                                AccessibleTextImpl.convertTextSegment(event.OldValue),
+                                                AccessibleTextImpl.convertTextSegment(event.NewValue));
+                        break;
+                    case AccessibleEventId.CARET_CHANGED:
+                        firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
+                        break;
+                    case AccessibleEventId.VALUE_CHANGED:
+                        firePropertyChange(accessibleContext.ACCESSIBLE_VALUE_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
+                    default:
+                        // Warn about unhandled events
+                        if(Build.DEBUG) {
+                            System.out.println(this + ": unhandled accessibility event id=" + event.EventId);
+                        }
+                }
             }
         }
 
