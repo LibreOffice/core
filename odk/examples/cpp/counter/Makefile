@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:06:25 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:15:23 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -138,7 +138,7 @@ CppCounterExample : $(OUT_BIN)/countermain$(EXE_EXT) $(COMPONENT_IMPL)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make countermain.run
+	@echo $(MAKE) countermain.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/countermain$(EXE_EXT) $(COMPONENT_IMPL)
