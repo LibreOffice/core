@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfigurationStorage.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:12:14 $
+ *  last change: $Date: 2005-03-01 20:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 package ifc.ui;
 
 import com.sun.star.embed.XStorage;
-import drafts.com.sun.star.ui.XUIConfigurationStorage;
+import com.sun.star.ui.XUIConfigurationStorage;
 import lib.MultiMethodTest;
 
 public class _XUIConfigurationStorage extends MultiMethodTest {
