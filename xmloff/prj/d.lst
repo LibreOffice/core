@@ -112,6 +112,9 @@ hedabu: ..\inc\xmlerror.hxx %_DEST%\inc%_EXT%\xmloff\xmlerror.hxx
 hedabu: ..\inc\SinglePropertySetInfoCache.hxx %_DEST%\inc%_EXT%\xmloff\SinglePropertySetInfoCache.hxx
 hedabu: ..\inc\PropertySetInfoHash.hxx %_DEST%\inc%_EXT%\xmloff\PropertySetInfoHash.hxx
 hedabu: ..\inc\PropertySetInfoKey.hxx %_DEST%\inc%_EXT%\xmloff\PropertySetInfoKey.hxx
+hedabu: ..\inc\controlpropertyhdl.hxx %_DEST%\inc%_EXT%\xmloff\controlpropertyhdl.hxx
+hedabu: ..\inc\ControlBorderHandler.hxx %_DEST%\inc%_EXT%\xmloff\ControlBorderHandler.hxx
+hedabu: ..\inc\XMLConstantsPropertyHandler.hxx %_DEST%\inc%_EXT%\xmloff\XMLConstantsPropertyHandler.hxx
 
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
