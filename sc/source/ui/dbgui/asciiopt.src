@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:47:42 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ spanish ] = "T~ipo de columna";
         Text[ finnish ] = "Saraket~yyppi";
         Text[ italian ] = "Tipo colonna";
-        Text[ danish ] = "Type";
+        Text[ danish ] = "Kolonnet~ype";
         Text[ swedish ] = "Kolumnt~yp";
         Text[ polish ] = "Rodzaj kolumny";
         Text[ portuguese_brazilian ] = "Typ";
@@ -288,7 +288,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ english_us ] = "Import" ;
         Text [ portuguese_brazilian ] = "Feldoptionen" ;
         Text [ swedish ] = "Import" ;
-        Text [ danish ] = "Import" ;
+        Text [ danish ] = "Importer" ;
         Text [ italian ] = "Importa" ;
         Text [ spanish ] = "Importación" ;
         Text [ french ] = "Import" ;
