@@ -113,4 +113,9 @@ shell GraphicObjectBar
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
+        SID_COLOR_SETTINGS
+        [
+                ExecMethod = Execute;
+                StateMethod = GetAttrState;
+        ]
 }
