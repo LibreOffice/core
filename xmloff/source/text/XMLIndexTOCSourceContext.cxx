@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
                                            aLevelNameTOCMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
-                                           aAllowedTokenTypesTOC);
+                                           aAllowedTokenTypesTOC, sal_True );
     }
     else
     {
