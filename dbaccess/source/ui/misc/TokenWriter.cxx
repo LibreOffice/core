@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 13:02:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ const static char __FAR_DATA sFontSize[]        = "font-size: ";
 
 DBG_NAME(ODatabaseImportExport);
 //======================================================================
-ODatabaseImportExport::ODatabaseImportExport(const Reference< XMultiServiceFactory >& _rM,
+ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+                                             const Reference< XMultiServiceFactory >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
     :m_pReader(NULL)
@@ -184,10 +185,34 @@ ODatabaseImportExport::ODatabaseImportExport(const Reference< XMultiServiceFacto
     ,m_xFactory(_rM)
     ,m_nCommandType(CommandType::TABLE)
     ,m_bDisposeConnection(sal_False)
+    ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
 
     DBG_CTOR(ODatabaseImportExport,NULL);
+
+    osl_incrementInterlockedCount( &m_refCount );
+    // get the information we need
+    m_sDataSourceName = _aDataDescriptor.getDataSource();
+    _aDataDescriptor[daCommandType] >>= m_nCommandType;
+    _aDataDescriptor[daCommand]     >>= m_sName;
+    // some additonal information
+    if(_aDataDescriptor.has(daConnection))
+        _aDataDescriptor[daConnection]  >>= m_xConnection;
+    if(_aDataDescriptor.has(daSelection))
+        _aDataDescriptor[daSelection]   >>= m_aSelection;
+
+    sal_Bool bBookmarkSelection = sal_True; // the default if not present
+    if ( _aDataDescriptor.has( daBookmarkSelection ) )
+    {
+        _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
+        DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
+    }
+
+
+    if(_aDataDescriptor.has(daCursor))
+        _aDataDescriptor[daCursor]  >>= m_xResultSet;
+
     xub_StrLen nCount = rExchange.GetTokenCount(char(11));
     if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
     {
@@ -216,6 +241,7 @@ ODatabaseImportExport::ODatabaseImportExport(   const ::com::sun::star::uno::Ref
 //-------------------------------------------------------------------
 ODatabaseImportExport::~ODatabaseImportExport()
 {
+    DBG_DTOR(ODatabaseImportExport,NULL);
     acquire();
 
     disposing();
@@ -223,11 +249,11 @@ ODatabaseImportExport::~ODatabaseImportExport()
     if(m_pReader)
         m_pReader->release();
     delete m_pRowMarker;
-    DBG_DTOR(ODatabaseImportExport,NULL);
 }
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::disposing()
 {
+    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     // remove me as listener
     Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
     if (xComponent.is())
@@ -245,13 +271,17 @@ void ODatabaseImportExport::disposing()
     m_xResultSetMetaData    = NULL;
     m_xResultSet            = NULL;
     m_xRow                  = NULL;
+
+    m_aDataSourceHolder.reset();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
 {
+    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if(m_xConnection.is() && m_xConnection == xCon)
     {
+        m_xConnection = NULL;
         disposing();
         if(!m_bInInitialize)
             initialize();
@@ -261,8 +291,9 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize(const ODataAccessDescriptor& _aDataDescriptor)
 {
+    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     // get the information we need
-    _aDataDescriptor[daDataSource]  >>= m_sDataSourceName;
+    m_sDataSourceName = _aDataDescriptor.getDataSource();
     _aDataDescriptor[daCommandType] >>= m_nCommandType;
     _aDataDescriptor[daCommand]     >>= m_sName;
     // some additonal information
@@ -287,12 +318,21 @@ void ODatabaseImportExport::initialize(const ODataAccessDescriptor& _aDataDescri
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize()
 {
+    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     m_bInInitialize = sal_True;
 
     if ( !m_xConnection.is() )
     {   // we need a connection
         OSL_ENSURE(m_sDataSourceName.getLength(),"There must be a datsource name!");
         Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+
+        try
+        {
+            m_aDataSourceHolder.reset(new ODataSourceHolder(Reference< com::sun::star::util::XCloseable>(xDatabaseContext->getByName(m_sDataSourceName),UNO_QUERY)));
+        }
+        catch(Exception)
+        {
+        }
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
         SQLExceptionInfo aInfo = ::dbaui::createConnection(m_sDataSourceName,xDatabaseContext,m_xFactory,xEvt,m_xConnection);
         if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::SQL_EXCEPTION)
@@ -341,12 +381,12 @@ void ODatabaseImportExport::initialize()
             // the result set may be already set with the datadescriptor
             if ( m_xResultSet.is() )
             {
-                m_xRow = Reference<XRow>(m_xResultSet,UNO_QUERY);
+                m_xRow.set(m_xResultSet,UNO_QUERY);
                 m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
             }
             else
             {
-                m_xResultSet = Reference< XResultSet >(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
+                m_xResultSet.set(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
                 Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
                 if(xProp.is())
                 {
@@ -355,7 +395,7 @@ void ODatabaseImportExport::initialize()
                     xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
                     Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
                     xRowSet->execute();
-                    m_xRow = Reference<XRow>(xRowSet,UNO_QUERY);
+                    m_xRow.set(xRowSet,UNO_QUERY);
                     m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
                 }
                 else
@@ -628,13 +668,17 @@ BOOL ORTFImportExport::Write()
 //-------------------------------------------------------------------
 BOOL ORTFImportExport::Read()
 {
-    m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
-    ((ORTFReader*)m_pReader)->AddRef();
-    if ( isCheckEnabled() )
-        m_pReader->enableCheckOnly();
-    SvParserState eState = ((ORTFReader*)m_pReader)->CallParser();
-    m_pReader->release();
-    m_pReader = NULL;
+    SvParserState eState = SVPAR_ERROR;
+    if ( m_pStream )
+    {
+        m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
+        ((ORTFReader*)m_pReader)->AddRef();
+        if ( isCheckEnabled() )
+            m_pReader->enableCheckOnly();
+        eState = ((ORTFReader*)m_pReader)->CallParser();
+        m_pReader->release();
+        m_pReader = NULL;
+    }
 
     return eState != SVPAR_ERROR;
 }
@@ -667,10 +711,11 @@ const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t
 #define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << ODatabaseImportExport::sNewLine)
 
 //-------------------------------------------------------------------
-OHTMLImportExport::OHTMLImportExport(const Reference< XMultiServiceFactory >& _rM,
+OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+                                     const Reference< XMultiServiceFactory >& _rM,
                                      const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                      const String& rExchange)
-        : ODatabaseImportExport(_rM,_rxNumberF,rExchange)
+        : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
 #if DBG_UTIL
     ,m_bCheckFont(FALSE)
@@ -699,13 +744,17 @@ BOOL OHTMLImportExport::Write()
 //-------------------------------------------------------------------
 BOOL OHTMLImportExport::Read()
 {
-    m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
-    ((OHTMLReader*)m_pReader)->AddRef();
-    if ( isCheckEnabled() )
-        m_pReader->enableCheckOnly();
-    SvParserState eState = ((OHTMLReader*)m_pReader)->CallParser();
-    m_pReader->release();
-    m_pReader = NULL;
+    SvParserState eState = SVPAR_ERROR;
+    if ( m_pStream )
+    {
+        m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
+        ((OHTMLReader*)m_pReader)->AddRef();
+        if ( isCheckEnabled() )
+            m_pReader->enableCheckOnly();
+        eState = ((OHTMLReader*)m_pReader)->CallParser();
+        m_pReader->release();
+        m_pReader = NULL;
+    }
 
     return eState != SVPAR_ERROR;
 }
