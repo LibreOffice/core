@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-05 20:29:55 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 10:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,7 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text = "Von lin~ks nach rechts, dann nach unten" ;
+        Text = "Von Lin~ks-nach-rechts, dann nach unten" ;
         Text [ ENGLISH ] = "Left to rig~ht, then to bottom" ;
         Text [ norwegian ] = "Left to rig~ht" ;
         Text [ italian ] = "Da sinistra a d~estra, poi in basso" ;
