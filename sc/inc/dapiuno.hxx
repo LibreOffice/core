@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:14:49 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_DPOBJECT_HXX
+#include "dpobject.hxx"
+#endif
+
 #ifndef SC_RANGEUTL_HXX
 #include "rangeutl.hxx"     // ScArea
 #endif
@@ -99,6 +103,9 @@
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDORIENTATION_HPP_
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XDATAPILOTFIEL_HPP_
+#include <com/sun/star/sheet/XDataPilotField.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -113,13 +120,15 @@
 #include <cppuhelper/implbase4.hxx>
 #endif
 
+#include<memory>
 
 class ScDocShell;
 class ScPivot;
+class ScDPSaveDimension;
 
 class ScDataPilotTableObj;
 class ScDataPilotFieldObj;
-
+class ScDataPilotItemObj;
 
 #define SC_FIELDORIENT_ALL  USHRT_MAX
 
@@ -204,6 +213,7 @@ public:
 
 //  ScDataPilotDescriptorBase is never instantiated directly
 class ScDataPilotDescriptorBase : public com::sun::star::sheet::XDataPilotDescriptor,
+                                  public com::sun::star::beans::XPropertySet,
                                   public com::sun::star::lang::XServiceInfo,
                                   public com::sun::star::lang::XUnoTunnel,
                                   public com::sun::star::lang::XTypeProvider,
@@ -211,6 +221,7 @@ class ScDataPilotDescriptorBase : public com::sun::star::sheet::XDataPilotDescri
                                   public SfxListener
 {
 private:
+    SfxItemPropertySet          aPropSet;
     ScDocShell*     pDocShell;
 
 public:
@@ -228,10 +239,8 @@ public:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
 
                             // in den Ableitungen:
-    virtual void            GetParam( ScPivotParam& rParam, ScQueryParam& rQuery,
-                                        ScArea& rSrcArea ) const = 0;
-    virtual void            SetParam( const ScPivotParam& rParam, const ScQueryParam& rQuery,
-                                        const ScArea& rSrcArea ) = 0;
+    virtual ScDPObject* GetDPObject() const = 0;
+    virtual void SetDPObject(ScDPObject* pDPObj) = 0;
 
                             // XDataPilotDescriptor
                             //  getName, setName, getTag, setTag in derived classes
@@ -255,6 +264,47 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
                             getHiddenFields() throw(::com::sun::star::uno::RuntimeException);
 
+                            // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                            SAL_CALL getPropertySetInfo(  )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::beans::PropertyVetoException,
+                                    ::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+                                    const ::rtl::OUString& PropertyName )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XPropertyChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
@@ -277,19 +327,14 @@ public:
 class ScDataPilotDescriptor : public ScDataPilotDescriptorBase
 {
 private:
-    ScPivotParam    aParam;
-    ScQueryParam    aQuery;
-    ScArea          aSrcArea;
-    String          aNameStr;
-    String          aTagStr;
+    ScDPObject*             mpDPObject;
 
 public:
                             ScDataPilotDescriptor(ScDocShell* pDocSh);
     virtual                 ~ScDataPilotDescriptor();
 
-    virtual void    GetParam( ScPivotParam& rParam, ScQueryParam& rQuery, ScArea& rSrcArea ) const;
-    virtual void    SetParam( const ScPivotParam& rParam,
-                                const ScQueryParam& rQuery, const ScArea& rSrcArea );
+    virtual ScDPObject* GetDPObject() const;
+    virtual void SetDPObject(ScDPObject* pDPObj);
 
                             // rest of XDataPilotDescriptor (incl. XNamed)
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -326,9 +371,8 @@ public:
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
 
-    virtual void    GetParam( ScPivotParam& rParam, ScQueryParam& rQuery, ScArea& rSrcArea ) const;
-    virtual void    SetParam( const ScPivotParam& rParam,
-                                const ScQueryParam& rQuery, const ScArea& rSrcArea );
+    virtual ScDPObject* GetDPObject() const;
+    virtual void SetDPObject(ScDPObject* pDPObj);
 
                             // rest of XDataPilotDescriptor (incl. XNamed)
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -369,7 +413,7 @@ private:
     ScDataPilotDescriptorBase*  pParent;
     USHORT                      nType;  // DataPilotFieldOrientation oder SC_FIELDORIENT_ALL
 
-    ScDataPilotFieldObj*    GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScDataPilotFieldObj*    GetObjectByIndex_Impl(SCCOLROW nIndex) const;
     ScDataPilotFieldObj*    GetObjectByName_Impl(const ::rtl::OUString& aName) const;
 
 public:
@@ -412,22 +456,24 @@ public:
 };
 
 
-class ScDataPilotFieldObj : public cppu::WeakImplHelper3<
+class ScDataPilotFieldObj : public cppu::WeakImplHelper4<
                                         com::sun::star::container::XNamed,
                                         com::sun::star::beans::XPropertySet,
+                                        com::sun::star::sheet::XDataPilotField,
                                         com::sun::star::lang::XServiceInfo>
 {
 private:
+    com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> xItems;
     SfxItemPropertySet          aPropSet;
     ScDataPilotDescriptorBase*  pParent;
-    USHORT                      nField;         // Spalte im Datenbereich
     USHORT                      nSourceType;
-    USHORT                      nSourcePos;
+    SCCOLROW                    nSourcePos;
     USHORT                      nLastFunc;      // valid while type is HIDDEN (or PAGE)
+
 
 public:
                             ScDataPilotFieldObj(ScDataPilotDescriptorBase* pPar,
-                                                    USHORT nF, USHORT nST, USHORT nSP);
+                                                    USHORT nST, SCCOLROW nSP);
     virtual                 ~ScDataPilotFieldObj();
 
                             // XNamed
@@ -476,11 +522,19 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
+                            // XDatePilotField
+    virtual com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> SAL_CALL
+                                getItems() throw (::com::sun::star::uno::RuntimeException);
+
                             // nur noch aus Property-Funktionen gerufen:
     com::sun::star::sheet::DataPilotFieldOrientation getOrientation(void) const;
     void setOrientation(com::sun::star::sheet::DataPilotFieldOrientation Orientation);
     com::sun::star::sheet::GeneralFunction getFunction(void) const;
     void setFunction(com::sun::star::sheet::GeneralFunction Function);
+    rtl::OUString getCurrentPage() const;
+    void setCurrentPage(const rtl::OUString& sPage);
+    sal_Bool getUseCurrentPage() const;
+    void setUseCurrentPage(sal_Bool bUse);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -491,6 +545,127 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+class ScDataPilotItemsObj : public cppu::WeakImplHelper4<
+                                        com::sun::star::container::XEnumerationAccess,
+                                        com::sun::star::container::XIndexAccess,
+                                        com::sun::star::container::XNameAccess,
+                                        com::sun::star::lang::XServiceInfo>
+{
+private:
+    ScDataPilotDescriptorBase*  pParent;
+    SCCOLROW                    nSourcePos; // of the field
+
+    ScDataPilotItemObj* GetObjectByIndex_Impl(SCCOLROW nIndex) const;
+
+public:
+                            ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, SCCOLROW nSP);
+    virtual                 ~ScDataPilotItemsObj();
+
+                            // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+};
+
+class ScDataPilotItemObj : public cppu::WeakImplHelper3<
+                                        com::sun::star::container::XNamed,
+                                        com::sun::star::beans::XPropertySet,
+                                        com::sun::star::lang::XServiceInfo>
+{
+private:
+    SfxItemPropertySet          aPropSet;
+    ScDataPilotDescriptorBase*  pParent;
+    SCCOLROW                    nSourcePos;
+    SCCOLROW                    nIndex;
+
+
+public:
+                            ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, SCCOLROW nSP, SCCOLROW nI);
+    virtual                 ~ScDataPilotItemObj();
+
+                            // XNamed
+    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                            SAL_CALL getPropertySetInfo(  )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::beans::PropertyVetoException,
+                                    ::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+                                    const ::rtl::OUString& PropertyName )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XPropertyChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+};
 
 #endif
 
