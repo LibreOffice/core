@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ inline SwTwips SwTxtFrm::GrowTst( const SwTwips nGrow )
     return Grow( nGrow, sal_True );
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 // fragt auf WYSIWYG DBG ab
 extern sal_Bool IsDbg( const SwTxtFrm *pFrm );
 #define DBTXTFRM aDbstream << "SwTxtFrm[" << GetFrmId() << "]"
