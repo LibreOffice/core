@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">StarWriter 3.0</value>
+            <value>StarWriter 3.0</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN 3RDPARTYFILTER</value></prop>
     </node>
