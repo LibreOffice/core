@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:24:45 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 
 #define GLOBALOVERFLOW
 
-#include <vector>
-#include <algorithm>
 
 #include <ide_pch.hxx>
 
@@ -287,10 +285,34 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         BOOL bHadPassword = aLibBox.GetBasicManager()->HasPassword( nLib );
         // Noch nicht geladen, falls gerade erst aktiviert.
         // Wuerde sonst erst beim Beenden des Dlg's geschehen.
+        /* old code
         if ( !aLibBox.GetBasicManager()->IsLibLoaded( nLib ) )
         {
             Application::EnterWait();
             aLibBox.GetBasicManager()->LoadLib( nLib );
+            Application::LeaveWait();
+        }
+        */
+
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( aLibBox.GetBasicManager() );
+        String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+        ::rtl::OUString aOULibName( aLibName );
+
+        // load module library (if not loaded)
+        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+        {
+            Application::EnterWait();
+            xModLibContainer->loadLibrary( aOULibName );
+            Application::LeaveWait();
+        }
+
+        // load dialog library (if not loaded)
+        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+        {
+            Application::EnterWait();
+            xDlgLibContainer->loadLibrary( aOULibName );
             Application::LeaveWait();
         }
 
@@ -684,41 +706,13 @@ void LibPage::SetCurLib()
         aLibBox.Clear();
         //Image aLockedImg( IDEResId( RID_IMG_LOCKED ) );
 
-        // create a sorted list of module library names
-        ::std::vector<String> aModLibList;
-        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
-        if ( xModLibContainer.is() )
-        {
-            Sequence< ::rtl::OUString > aModLibNames = xModLibContainer->getElementNames();
-            sal_Int32 nModLibCount = aModLibNames.getLength();
-            const ::rtl::OUString* pModLibNames = aModLibNames.getConstArray();
-            for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
-                aModLibList.push_back( pModLibNames[ i ] );
-            ::std::sort( aModLibList.begin() , aModLibList.end() , StringCompareLessThan );
-        }
+        // get a sorted list of library names
+        Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetLibraryNames( pShell );
+        sal_Int32 nLibCount = aLibNames.getLength();
+        const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
 
-        // create a sorted list of dialog library names
-        ::std::vector<String> aDlgLibList;
-        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
-        if ( xDlgLibContainer.is() )
-        {
-            Sequence< ::rtl::OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
-            sal_Int32 nDlgLibCount = aDlgLibNames.getLength();
-            const ::rtl::OUString* pDlgLibNames = aDlgLibNames.getConstArray();
-            for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
-                aDlgLibList.push_back( pDlgLibNames[ i ] );
-            ::std::sort( aDlgLibList.begin() , aDlgLibList.end() , StringCompareLessThan );
-        }
-
-        // merge both lists
-        ::std::vector<String> aLibList( aModLibList.size() + aDlgLibList.size() );
-        ::std::merge( aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(), aLibList.begin(), StringCompareLessThan );
-        ::std::vector<String>::iterator aIterEnd = ::std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
-        aLibList.erase( aIterEnd, aLibList.end() ); // remove duplicates
-
-        sal_Int32 nLibCount = aLibList.size();
         for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
-            ImpInsertLibEntry( aLibList[ i ], i );
+            ImpInsertLibEntry( pLibNames[ i ], i );
 
         aLibBox.SetCurEntry( aLibBox.GetEntry( 0 ) );
         /*

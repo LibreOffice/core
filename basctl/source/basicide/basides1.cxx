@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:18:32 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,14 +360,27 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             const SfxMacroInfoItem& rInfo = (const SfxMacroInfoItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO );
             BasicManager* pBasMgr = (BasicManager*)rInfo.GetBasicManager();
             DBG_ASSERT( pBasMgr, "Nichts selektiert im Basic-Baum ?" );
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
             StartListening( *pBasMgr, TRUE /* Nur einmal anmelden */ );
-            StarBASIC* pBasic = pBasMgr->GetLib( rInfo.GetLib() );
+            String aLibName( rInfo.GetLib() );
+            StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
             if ( !pBasic )
             {
                 // LoadOnDemand
-                USHORT nLib = pBasMgr->GetLibId( rInfo.GetLib() );
-                pBasMgr->LoadLib( nLib );
-                pBasic = pBasMgr->GetLib( nLib );
+                ::rtl::OUString aOULibName( aLibName );
+
+                // load module library (if not loaded)
+                Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+                if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+                    xModLibContainer->loadLibrary( aOULibName );
+
+                // load dialog library (if not loaded)
+                Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+                if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+                    xDlgLibContainer->loadLibrary( aOULibName );
+
+                // get Basic
+                pBasic = pBasMgr->GetLib( aLibName );
             }
             if ( !pBasic )
                 pBasic = pBasMgr->GetLib( 0 );
@@ -382,8 +395,6 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     if ( rInfo.GetModule().Len() || !pBasic->GetModules()->Count() )
                     {
-                        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-                        String aLibName = pBasic->GetName();
                         String aModName = rInfo.GetModule();
 
                         try
@@ -571,9 +582,22 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 if ( !pLib && ( nSlot == SID_BASICIDE_LIBSELECTED ) )
                 {
                     // LoadOnDemand
-                    USHORT nLib = pMgr->GetLibId( aLib );
-                    pMgr->LoadLib( nLib );
-                    pLib = pMgr->GetLib( nLib );
+                    SfxObjectShell* pShell = BasicIDE::FindDocShell( pMgr );
+                    ::rtl::OUString aOULibName( aLib );
+
+                    // load module library (if not loaded)
+                    Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+                    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+                        xModLibContainer->loadLibrary( aOULibName );
+
+                    // load dialog library (if not loaded)
+                    Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+                    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+                        xDlgLibContainer->loadLibrary( aOULibName );
+
+                    // get Basic
+                    pLib = pMgr->GetLib( aLib );
+
                     if ( !pLib )
                     {
                         ErrorBox( pCurWin, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
@@ -588,6 +612,9 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 // Keine Abfrage, ob pCurBasic == pLib,
                 // falls welche ausgeblendet waren.
                 BOOL bSet = TRUE;
+
+                // TODO: check password
+                /* old code
                 if ( pLib )
                 {
                     USHORT nLib = pMgr->GetLibId( pLib );
@@ -597,6 +624,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                         bSet = QueryPassword( pMgr, nLib );
                     }
                 }
+                */
                 if ( bSet )
                     SetCurBasic( pLib );
                 else    // alten Wert einstellen...

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:20:31 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,88 @@ Reference< ::com::sun::star::container::XNameContainer > BasicIDE::CreateDialogL
 
 //----------------------------------------------------------------------------
 
+Sequence< ::rtl::OUString > BasicIDE::GetDialogNames( SfxObjectShell* pShell, const String& rLibName )
+    throw(NoSuchElementException)
+{
+    Sequence< ::rtl::OUString > aSeqDlgNames;
+    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName );
+    if( xLib.is() )
+    {
+        Sequence< ::rtl::OUString > aDlgNames = xLib->getElementNames();
+        sal_Int32 nDlgCount = aDlgNames.getLength();
+        const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+
+        // sort dialog names
+        ::std::vector<String> aDlgList( nDlgCount );
+        for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+            aDlgList[ i ] = pDlgNames[ i ];
+        ::std::sort( aDlgList.begin() , aDlgList.end() , StringCompareLessThan );
+
+        // copy to sequence
+        aSeqDlgNames.realloc( nDlgCount );
+        for ( i = 0 ; i < nDlgCount ; i++ )
+            aSeqDlgNames.getArray()[ i ] = aDlgList[ i ];
+    }
+
+    return aSeqDlgNames;
+}
+
+//----------------------------------------------------------------------------
+
+BOOL BasicIDE::HasDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
+{
+    BOOL bHasDialog = FALSE;
+
+    Reference< container::XNameContainer > xLib;
+    try
+    {
+        // get library
+        xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+        // check if library has dialog
+        ::rtl::OUString aOUDlgName( rDlgName );
+        if( xLib.is() && xLib->hasByName( aOUDlgName ) )
+        {
+            bHasDialog = TRUE;
+        }
+    }
+    catch ( container::NoSuchElementException& e )
+    {
+        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aBStr.GetBuffer() );
+    }
+
+    return bHasDialog;
+}
+
+//----------------------------------------------------------------------------
+
+Reference< io::XInputStreamProvider > BasicIDE::GetDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
+    throw(NoSuchElementException)
+{
+    // get library
+    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+    // get dialog
+    Reference< io::XInputStreamProvider > xISP;
+    ::rtl::OUString aOUDlgName( rDlgName );
+    if( xLib.is() && xLib->hasByName( aOUDlgName ) )
+    {
+        Any aElement = xLib->getByName( aOUDlgName );
+        aElement >>= xISP;
+    }
+    else
+    {
+        throw NoSuchElementException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetDialog: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+
+    return xISP;
+}
+
+//----------------------------------------------------------------------------
+
 String BasicIDE::CreateDialogName( SfxObjectShell* pShell, const String& rLibName )
 {
     String aDlgName;
@@ -503,60 +585,6 @@ void BasicIDE::InsertDialog( SfxObjectShell* pShell, const String& rLibName, con
 
 //----------------------------------------------------------------------------
 
-BOOL BasicIDE::HasDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
-{
-    BOOL bHasDialog = FALSE;
-
-    Reference< container::XNameContainer > xLib;
-    try
-    {
-        // get library
-        xLib = GetDialogLibrary( pShell, rLibName, TRUE );
-
-        // check if library has dialog
-        ::rtl::OUString aOUDlgName( rDlgName );
-        if( xLib.is() && xLib->hasByName( aOUDlgName ) )
-        {
-            bHasDialog = TRUE;
-        }
-    }
-    catch ( container::NoSuchElementException& e )
-    {
-        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aBStr.GetBuffer() );
-    }
-
-    return bHasDialog;
-}
-
-//----------------------------------------------------------------------------
-
-Reference< io::XInputStreamProvider > BasicIDE::GetDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
-    throw(NoSuchElementException)
-{
-    // get library
-    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
-
-    // get dialog
-    Reference< io::XInputStreamProvider > xISP;
-    ::rtl::OUString aOUDlgName( rDlgName );
-    if( xLib.is() && xLib->hasByName( aOUDlgName ) )
-    {
-        Any aElement = xLib->getByName( aOUDlgName );
-        aElement >>= xISP;
-    }
-    else
-    {
-        throw NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetDialog: NoSuchElementException!") ),
-            Reference<XInterface>() );
-    }
-
-    return xISP;
-}
-
-//----------------------------------------------------------------------------
-
 StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
 {
     const SbxVariable* pSbx = pVar;
@@ -575,10 +603,13 @@ BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
     SfxObjectShell* pDocShell = 0;
     while ( pBasicMgr )
     {
-        USHORT nLibs = pBasicMgr->GetLibCount();
-        for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
+        Sequence< ::rtl::OUString > aLibNames = GetLibraryNames( pDocShell );
+        sal_Int32 nLibCount = aLibNames.getLength();
+        const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+
+        for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
         {
-            StarBASIC* pL = pBasicMgr->GetLib( nLib );
+            StarBASIC* pL = pBasicMgr->GetLib( pLibNames[ i ] );
             if ( pL == pLib )
                 return pBasicMgr;
         }
@@ -849,11 +880,14 @@ SvStrings* BasicIDE::CreateBasicLibBoxEntries()
             else
                 aBasMgr = Application::GetAppName();
 
-            USHORT nLibs = pBasicMgr->GetLibCount();
-            for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
+            // get a sorted list of library names
+            Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetLibraryNames( pDocShell );
+            sal_Int32 nLibCount = aLibNames.getLength();
+            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+
+            for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
             {
-                // Auch nicht geladene Libs anbieten...
-                String aLibName = pBasicMgr->GetLibName( nLib );
+                String aLibName = pLibNames[ i ];
                 String* pEntry = new String( CreateMgrAndLibStr( aBasMgr, aLibName ) );
                 pStrings->Insert( pEntry, pStrings->Count() );
             }

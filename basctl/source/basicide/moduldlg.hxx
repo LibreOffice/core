@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:26:11 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,9 +327,6 @@ protected:
     virtual void        DeactivatePage();
 
     TabDialog*          pTabDlg;
-
-    static BOOL         StringCompareLessThan( const String& rStr1, const String& rStr2 )
-                            { return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS); }
 
 public:
                         LibPage( Window* pParent );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:21:24 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <vector>
-#include <algorithm>
 
 #include <ide_pch.hxx>
 
@@ -129,52 +127,25 @@ void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
 
     // level 2: libraries (Standard, ...)
 
-    // create a sorted list of module library names
-    ::std::vector<String> aModLibList;
-    Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
-    if ( xModLibContainer.is() )
-    {
-        Sequence< ::rtl::OUString > aModLibNames = xModLibContainer->getElementNames();
-        sal_Int32 nModLibCount = aModLibNames.getLength();
-        const ::rtl::OUString* pModLibNames = aModLibNames.getConstArray();
-        for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
-            aModLibList.push_back( pModLibNames[ i ] );
-        ::std::sort( aModLibList.begin() , aModLibList.end() , StringCompareLessThan );
-    }
-
-    // create a sorted list of dialog library names
-    ::std::vector<String> aDlgLibList;
-    Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
-    if ( xDlgLibContainer.is() )
-    {
-        Sequence< ::rtl::OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
-        sal_Int32 nDlgLibCount = aDlgLibNames.getLength();
-        const ::rtl::OUString* pDlgLibNames = aDlgLibNames.getConstArray();
-        for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
-            aDlgLibList.push_back( pDlgLibNames[ i ] );
-        ::std::sort( aDlgLibList.begin() , aDlgLibList.end() , StringCompareLessThan );
-    }
-
-    // merge both lists
-    ::std::vector<String> aLibList( aModLibList.size() + aDlgLibList.size() );
-    ::std::merge( aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(), aLibList.begin(), StringCompareLessThan );
-    ::std::vector<String>::iterator aIterEnd = ::std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
-    aLibList.erase( aIterEnd, aLibList.end() ); // remove duplicates
-
-    sal_Int32 nLibCount = aLibList.size();
+    // get a sorted list of library names
+    Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetLibraryNames( pShell );
+    sal_Int32 nLibCount = aLibNames.getLength();
+    const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
 
     for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
-        String aLibName = aLibList[ i ];
+        String aLibName = pLibNames[ i ];
         ::rtl::OUString aOULibName( aLibName );
 
         // check, if the module library is loaded
         BOOL bModLibLoaded = FALSE;
+        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
             bModLibLoaded = TRUE;
 
         // check, if the dialog library is loaded
         BOOL bDlgLibLoaded = FALSE;
+        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
             bDlgLibLoaded = TRUE;
 
@@ -221,57 +192,39 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
         {
             try
             {
-                // get library
-                Reference< container::XNameContainer > xLib = BasicIDE::GetModuleLibrary( pShell, rLibName );
+                Image aModImage( aImages.GetImage( IMGID_MODULE ) );
 
-                if( xLib.is() )
+                // get a sorted list of module names
+                Sequence< ::rtl::OUString > aModNames = BasicIDE::GetModuleNames( pShell, rLibName );
+                sal_Int32 nModCount = aModNames.getLength();
+                const ::rtl::OUString* pModNames = aModNames.getConstArray();
+
+                for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
                 {
-                    Sequence< ::rtl::OUString > aModNames = xLib->getElementNames();
-                    sal_Int32 nModCount = aModNames.getLength();
-                    const ::rtl::OUString* pModNames = aModNames.getConstArray();
-
-                    // sort module names
-                    ::std::vector<String> aModList(nModCount);
-                    for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
-                        aModList[ i ] = pModNames[ i ];
-                    ::std::sort( aModList.begin() , aModList.end() , StringCompareLessThan );
-
-                    Image aModImage( aImages.GetImage( IMGID_MODULE ) );
-                    for ( i = 0 ; i < nModCount ; i++ )
+                    String aModName = pModNames[ i ];
+                    SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJTYPE_MODULE );
+                    if ( !pModuleEntry )
                     {
-                        String aModName = aModList[ i ];
-                        SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJTYPE_MODULE );
-                        if ( !pModuleEntry )
-                        {
-                            pModuleEntry = InsertEntry( aModName, aModImage, aModImage, pLibRootEntry, FALSE, LIST_APPEND );
-                            pModuleEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
-                        }
+                        pModuleEntry = InsertEntry( aModName, aModImage, aModImage, pLibRootEntry, FALSE, LIST_APPEND );
+                        pModuleEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
+                    }
 
-                        // methods
-                        if ( nMode & BROWSEMODE_SUBS )
-                        {
-                            try
-                            {
-                                Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodsFromModule( pShell, rLibName, aModName );
-                                sal_Int32 nCount = aNames.getLength();
-                                const ::rtl::OUString* pNames = aNames.getConstArray();
+                    // methods
+                    if ( nMode & BROWSEMODE_SUBS )
+                    {
+                        Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodNames( pShell, rLibName, aModName );
+                        sal_Int32 nCount = aNames.getLength();
+                        const ::rtl::OUString* pNames = aNames.getConstArray();
 
-                                Image aImage( aImages.GetImage( IMGID_MACRO ) );
-                                for ( sal_Int32 j = 0 ; j < nCount ; j++ )
-                                {
-                                    String aName = pNames[ j ];
-                                    SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJTYPE_METHOD );
-                                    if ( !pEntry )
-                                    {
-                                        pEntry = InsertEntry( aName, aImage, aImage, pModuleEntry, FALSE, LIST_APPEND );
-                                        pEntry->SetUserData( new BasicEntry( OBJTYPE_METHOD ) );
-                                    }
-                                }
-                            }
-                            catch ( container::NoSuchElementException& e )
+                        Image aImage( aImages.GetImage( IMGID_MACRO ) );
+                        for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                        {
+                            String aName = pNames[ j ];
+                            SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJTYPE_METHOD );
+                            if ( !pEntry )
                             {
-                                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                                DBG_ERROR( aBStr.GetBuffer() );
+                                pEntry = InsertEntry( aName, aImage, aImage, pModuleEntry, FALSE, LIST_APPEND );
+                                pEntry->SetUserData( new BasicEntry( OBJTYPE_METHOD ) );
                             }
                         }
                     }
@@ -294,31 +247,21 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
          {
             try
             {
-                // get library
-                Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( pShell, rLibName );
+                Image aDlgImage( aImages.GetImage( IMGID_OBJECT ) );
 
-                if( xLib.is() )
+                // get a sorted list of dialog names
+                Sequence< ::rtl::OUString > aDlgNames = BasicIDE::GetDialogNames( pShell, rLibName );
+                sal_Int32 nDlgCount = aDlgNames.getLength();
+                const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+
+                for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
                 {
-                    Sequence< ::rtl::OUString > aDlgNames = xLib->getElementNames();
-                    sal_Int32 nDlgCount = aDlgNames.getLength();
-                    const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
-
-                    // sort dialog names
-                    ::std::vector<String> aDlgList(nDlgCount);
-                    for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
-                        aDlgList[ i ] = pDlgNames[ i ];
-                    ::std::sort( aDlgList.begin() , aDlgList.end() , StringCompareLessThan );
-
-                    Image aDlgImage( aImages.GetImage( IMGID_OBJECT ) );
-                    for ( i = 0 ; i < nDlgCount ; i++ )
+                    String aDlgName = pDlgNames[ i ];
+                    SvLBoxEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJTYPE_OBJECT );
+                    if ( !pDialogEntry )
                     {
-                        String aDlgName = aDlgList[ i ];
-                        SvLBoxEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJTYPE_OBJECT );
-                        if ( !pDialogEntry )
-                        {
-                            pDialogEntry = InsertEntry( aDlgName, aDlgImage, aDlgImage, pLibRootEntry, TRUE, LIST_APPEND );
-                            pDialogEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
-                        }
+                        pDialogEntry = InsertEntry( aDlgName, aDlgImage, aDlgImage, pLibRootEntry, TRUE, LIST_APPEND );
+                        pDialogEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
                     }
                 }
             }
@@ -450,6 +393,8 @@ long BasicTreeListBox::ExpandingHdl()
         BasicManager* pBasicManager = GetSelectedSbx( aLib, aDummy1, aDummy2 );
         if ( aLib.Len() && !aDummy1.Len() && !aDummy2.Len() )
         {
+            // TODO: check password
+            /* old code
             // Beim expandieren einer Lib pruefen, ob Passwortschutz!
             USHORT nLib = pBasicManager->GetLibId( aLib );
             if ( pBasicManager->HasPassword( nLib ) &&
@@ -457,6 +402,7 @@ long BasicTreeListBox::ExpandingHdl()
             {
                 bOK = QueryPassword( pBasicManager, nLib );
             }
+            */
         }
     }
     return bOK;
@@ -470,11 +416,14 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
         String aLib, aDummy1, aDummy2, aDummy3;
         BasicManager* pBasicManager = GetSbx( pEntry, aLib, aDummy1, aDummy2, aDummy3 );
         USHORT nLib = pBasicManager->GetLibId( aLib );
+        // TODO: check password
+        /* old code
         if ( pBasicManager->HasPassword( nLib ) &&
                 !pBasicManager->IsPasswordVerified( nLib ) )
         {
             bProtected = TRUE;
         }
+        */
     }
     return bProtected;
 }

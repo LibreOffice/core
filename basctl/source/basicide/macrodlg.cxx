@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:23:52 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,8 @@ SbMethod* MacroChooser::CreateMacro()
         pModule = (SbModule*)pBasic->GetModules()->Get( 0 );
 
     SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-    if ( aLibName.Len() == 0 )
+
+    if ( aLibName != pBasic->GetName() )
         aLibName = pBasic->GetName();
     if ( aModName.Len() == 0 )
         aModName = pModule ? pModule->GetName() : BasicIDE::CreateModuleName( pShell, aLibName );

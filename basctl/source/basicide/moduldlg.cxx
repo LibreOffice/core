@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:25:29 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,11 +183,13 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     // don't drop on a library, which is not loaded or password protected
     if ( bValid && ( nDepth == 1 ) )
     {
-        String aLib = GetEntryText( pEntry );
-        String aMgr = GetEntryText( GetParent( pEntry ) );
-        BasicManager* pBasicManager = BasicIDE::FindBasicManager( aMgr );
-        if ( pBasicManager )
+        String aLibName = GetEntryText( pEntry );
+        String aBasMgrName = GetEntryText( GetParent( pEntry ) );
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( aBasMgrName );
+        if ( pBasMgr )
         {
+            // TODO: check password
+            /* old code
             USHORT nLib = pBasicManager->GetLibId( aLib );
             if ( !pBasicManager->IsLibLoaded( nLib ) || (
                     pBasicManager->HasPassword( nLib ) &&
@@ -195,6 +197,20 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
             {
                 bValid = FALSE;
             }
+            */
+
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            ::rtl::OUString aOULibName( aLibName );
+
+            // check if module library is loaded
+            Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+                bValid = FALSE;
+
+            // check if dialog library is loaded
+            Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+                bValid = FALSE;
         }
         else
             bValid = FALSE;

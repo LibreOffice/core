@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:15:59 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas,
         ,m_pShell( pShell )
         ,m_aLibName( aLibName )
         ,m_aModName( aModName )
-        ,m_aModule( aModule )       // not updated yet
+        ,m_aModule( aModule )
 {
     DBG_CTOR( ModulWindow, 0 );
     nValid = VALIDWINDOW;

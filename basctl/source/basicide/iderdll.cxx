@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 11:40:36 $
+ *  last change: $Author: tbe $ $Date: 2001-09-03 11:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,9 +256,10 @@ IMPL_LINK( BasicIDEData, GlobalBasicErrorHdl, StarBASIC *, pBasic )
         if ( pBasicManager )
         {
             USHORT nLib = pBasicManager->GetLibId( pBasic );
-            if ( !pBasicManager->HasPassword( nLib ) ||
-                    pBasicManager->IsPasswordVerified( nLib ) )
-            {
+            // TODO: check password
+            //if ( !pBasicManager->HasPassword( nLib ) ||
+            //      pBasicManager->IsPasswordVerified( nLib ) )
+            //{
                 pShell = IDE_DLL()->GetShell();
                 if ( !pShell )
                 {
@@ -271,7 +272,7 @@ IMPL_LINK( BasicIDEData, GlobalBasicErrorHdl, StarBASIC *, pBasic )
                     }
                     pShell = IDE_DLL()->GetShell();
                 }
-            }
+            //}
         }
     }
 
@@ -292,14 +293,17 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
         BasicManager* pBasicManager = BasicIDE::FindBasicManager( pBasic );
         if ( pBasicManager )
         {
+            // TODO: check password
+            /* old code
             USHORT nLib = pBasicManager->GetLibId( pBasic );
             // Hier lande ich zweimal, wenn Step into protected Basic
             // => schlecht, wenn Passwortabfrage 2x, ausserdem sieht man in
             // dem PasswordDlg nicht, fuer welche Lib...
             // => An dieser Stelle keine Passwort-Abfrage starten
             if ( !pBasicManager->HasPassword( nLib ) ||
-                    pBasicManager->IsPasswordVerified( nLib ) /* ||
-                    QueryPassword( pBasicManager, nLib ) */ )
+                    pBasicManager->IsPasswordVerified( nLib )
+                    //|| QueryPassword( pBasicManager, nLib )
+                    )
             {
                 return pShell->CallBasicBreakHdl( pBasic );
             }
@@ -308,6 +312,9 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
                 // Ein Step-Out muesste mich aus den geschuetzten Bereich befoerdern...
                 return SbDEBUG_STEPOUT;
             }
+            */
+            /* new code */
+            return pShell->CallBasicBreakHdl( pBasic );
         }
     }
 
