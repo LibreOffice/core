@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddropdown.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:25:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,28 @@
  *
  ************************************************************************/
 
+#include <flddropdown.hxx>
+
+#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
+
+#ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
+#endif
+
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
-#include <flddropdown.hxx>
+
+namespace css = com::sun::star;
+
+using rtl::OUString;
+using std::vector;
 
 static String aEmptyString;
 
@@ -147,7 +160,7 @@ void SwDropDownField::SetItems(const vector<String> & rItems)
     aSelectedItem = aEmptyString;
 }
 
-void SwDropDownField::SetItems(const Sequence<OUString> & rItems)
+void SwDropDownField::SetItems(const css::uno::Sequence<OUString> & rItems)
 {
     aValues.clear();
 
@@ -158,9 +171,9 @@ void SwDropDownField::SetItems(const Sequence<OUString> & rItems)
     aSelectedItem = aEmptyString;
 }
 
-Sequence<OUString> SwDropDownField::GetItemSequence() const
+css::uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
 {
-    Sequence<OUString> aSeq( aValues.size() );
+    css::uno::Sequence<OUString> aSeq( aValues.size() );
     OUString* pSeq = aSeq.getArray();
     int i = 0;
     vector<String>::const_iterator aIt;
@@ -188,7 +201,7 @@ const String & SwDropDownField::GetName() const
 BOOL SwDropDownField::SetSelectedItem(const String & rItem)
 {
     vector<String>::const_iterator aIt =
-        find(aValues.begin(), aValues.end(), rItem);
+        std::find(aValues.begin(), aValues.end(), rItem);
 
     if (aIt != aValues.end())
         aSelectedItem = *aIt;
@@ -203,7 +216,7 @@ void SwDropDownField::SetName(const String & rName)
     aName = rName;
 }
 
-BOOL SwDropDownField::QueryValue(Any &rVal, BYTE nMId)
+BOOL SwDropDownField::QueryValue(css::uno::Any &rVal, BYTE nMId)
     const
 {
     nMId &= ~CONVERT_TWIPS;
@@ -226,7 +239,7 @@ BOOL SwDropDownField::QueryValue(Any &rVal, BYTE nMId)
     return sal_True;
 }
 
-BOOL SwDropDownField::PutValue(const Any &rVal,
+BOOL SwDropDownField::PutValue(const css::uno::Any &rVal,
                                BYTE nMId)
 {
     nMId &= ~CONVERT_TWIPS;
@@ -252,7 +265,7 @@ BOOL SwDropDownField::PutValue(const Any &rVal,
 
     case FIELD_PROP_STRINGS:
         {
-            Sequence<OUString> aSeq;
+            css::uno::Sequence<OUString> aSeq;
             rVal >>= aSeq;
             SetItems(aSeq);
         }
