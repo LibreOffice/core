@@ -1,4 +1,4 @@
 # The bootstrap variable PYUNOLIBDIR will be set by the pyuno runtime library
 PYUNO_BINPATH=$PYUNOLIBDIR/../bin$UPDMINOREXT
-UNO_TYPES=$PYUNO_BINPATH/applicat.rdb
+UNO_TYPES=$PYUNO_BINPATH/types.rdb
 UNO_SERVICES=$PYUNO_BINPATH/pyuno_services.rdb

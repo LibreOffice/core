@@ -2,9 +2,9 @@
 #
 #   $RCSfile: uno.py,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jbu $ $Date: 2003-03-23 12:12:59 $
+#   last change: $Author: jbu $ $Date: 2003-03-30 13:32:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -58,7 +58,6 @@
 #
 #*************************************************************************
 import sys
-from types import UnicodeType, StringTypes
 
 import pyuno
 import __builtin__
@@ -137,8 +136,8 @@ class Enum:
 
     def __eq__(self, that):
         if not isinstance(that, Enum):
-            return 0
-        return (self.typeName == that.typeName ) and ( self.value == that.value)
+            return False
+        return (self.typeName == that.typeName) and (self.value == that.value)
 
 class Type:
     "Represents a UNO type, use an instance of this class to explicitly pass a boolean to UNO"
@@ -153,7 +152,7 @@ class Type:
 
     def __eq__(self, that):
         if not isinstance(that, Type):
-            return 0
+            return False
         return self.typeClass == that.typeClass and self.typeName == that.typeName
 
     def __hash__(self):
@@ -165,66 +164,80 @@ class Bool(object):
        Note: This class is deprecated. Use python's True and False directly instead
     """
     def __new__(cls, value):
-        if isinstance( value, type("") ) and value == "true":
+        if isinstance(value, (str, unicode)) and value == "true":
             return True
-        elif isinstance( value, type("") ) and value == "false":
+        if isinstance(value, (str, unicode)) and value == "false":
             return False
-        else:
-            if value:
-                return True
-            else:
-                return False
+        if value:
+            return True
+        return False
 
 class Char:
     "Represents a UNO char, use an instance of this class to explicitly pass a char to UNO"
     # @param value pass a Unicode string with length 1
     def __init__(self,value):
-        assert isinstance(value, UnicodeType)
+        assert isinstance(value, unicode)
         assert len(value) == 1
         self.value=value
 
     def __repr__(self):
-        return "<Char instance %s>" & (self.value)
+        return "<Char instance %s>" % (self.value, )
         
     def __eq__(self, that):
-        if isinstance(that, StringTypes):
+        if isinstance(that, (str, unicode)):
             if len(that) > 1:
-                return 0
+                return False
             return self.value == that[0]
-        elif isinstance(that, Char):        
+        if isinstance(that, Char):        
             return self.value == that.value
-        return 0        
+        return False
+
+# Suggested by Christian, but still some open problems which need to be solved first
+#
+#class ByteSequence(str):
+#
+#    def __repr__(self):
+#        return "<ByteSequence instance %s>" % str.__repr__(self)
+
+    # for a little bit compatitbility; setting value is not possible as 
+    # strings are immutable
+#    def _get_value(self):
+#        return self
+#
+#    value = property(_get_value)        
+
+
 
 class ByteSequence:
-    def __init__(self,value):
-        if isinstance( value, StringTypes ):
+    def __init__(self, value):
+        if isinstance(value, str):
             self.value = value
-        elif isinstance( value, ByteSequence ):
+        elif isinstance(value, ByteSequence):
             self.value = value.value
         else:
-            raise TypeError( "expected string or bytesequence" )
+            raise TypeError("expected string or bytesequence")
 
-    def __repr__( self):
-        return "<ByteSequence instance %s>" % (self.value )
+    def __repr__(self):
+        return "<ByteSequence instance '%s'>" % (self.value, )
 
-    def __eq__( self,that):
+    def __eq__(self, that):
         if isinstance( that, ByteSequence):
             return self.value == that.value
-        elif isinstance( that, StringTypes ):
+        if isinstance(that, str):
             return self.value == that
-        raise TypeError( "expected string or bytesequence for comparison" )
+        return False
 
-    def __len__( self ):
-        return len( self.value )
+    def __len__(self):
+        return len(self.value)
 
-    def __getitem__( self, index ):
+    def __getitem__(self, index):
         return self.value[index]
 
     def __iter__( self ):
         return self.value.__iter__()
 
     def __add__( self , b ):
-        if isinstance( b, StringTypes ):
+        if isinstance( b, str ):
             return ByteSequence( self.value + b )
         elif isinstance( b, ByteSequence ):
             return ByteSequence( self.value + b.value )
@@ -322,5 +335,5 @@ def _uno_struct__str__(self):
 def _uno_struct__eq__(self,cmp):
     if hasattr(cmp,"value"):
        return self.__dict__["value"] == cmp.__dict__["value"]
-    return 0
+    return False
      

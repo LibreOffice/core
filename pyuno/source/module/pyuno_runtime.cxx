@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:58 $
+ *  last change: $Author: jbu $ $Date: 2003-03-30 13:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,11 +370,11 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     {
         long l;
         a >>= l;
-        return PyRef( PyLong_FromLong (l), SAL_NO_ACQUIRE );
+        return PyRef( PyInt_FromLong (l), SAL_NO_ACQUIRE );
     }
     case typelib_TypeClass_UNSIGNED_LONG:
     {
-        unsigned long l;
+        sal_uInt32 l;
         a >>= l;
         return PyRef( PyLong_FromUnsignedLong (l), SAL_NO_ACQUIRE );
     }
@@ -622,7 +622,25 @@ Any Runtime::pyObject2Any ( const PyRef & source ) const
     else if (PyLong_Check (o))
     {
         sal_Int64 l = (sal_Int64)PyLong_AsLong (o);
-        a <<= l;
+        if( l < 128 && l >= -128 )
+        {
+            sal_Int8 b = (sal_Int8 ) l;
+            a <<= b;
+        }
+        else if( l <= 0x7fff && l >= -0x8000 )
+        {
+            sal_Int16 s = (sal_Int16) l;
+            a <<= s;
+        }
+        else if( l <= 0x7fffffff && l >= -0x80000000 )
+        {
+            sal_Int32 l32 = (sal_Int32) l;
+            a <<= l32;
+        }
+        else
+        {
+            a <<= l;
+        }
     }
     else if (PyFloat_Check (o))
     {
@@ -631,8 +649,20 @@ Any Runtime::pyObject2Any ( const PyRef & source ) const
     }
     else if (PyString_Check (o))
     {
+        // needed, if ByteSequence becomes a string
+//         Runtime runtime;
+//         if( PyObject_IsInstance( o, getByteSequenceClass( runtime ).get() ) )
+//         {
+//             // is it the byte sequence ?
+//             Sequence< sal_Int8 > seq;
+//             seq = Sequence<sal_Int8 > ((sal_Int8*) PyString_AsString(o) , PyString_Size(o));
+//             a <<= seq;
+//         }
+//         else
+//         {
         a <<= OUString(PyString_AsString (o), strlen( PyString_AsString(o)),
                        osl_getThreadTextEncoding());
+//         }
     }
     else if( PyUnicode_Check( o ) )
     {
@@ -668,6 +698,7 @@ Any Runtime::pyObject2Any ( const PyRef & source ) const
     else
     {
         Runtime runtime;
+        // should be removed, in case ByteSequence gets derived from String
         if( PyObject_IsInstance( o, getByteSequenceClass( runtime ).get() ) )
         {
             PyRef str(PyObject_GetAttrString( o , "value" ),SAL_NO_ACQUIRE);
@@ -679,7 +710,8 @@ Any Runtime::pyObject2Any ( const PyRef & source ) const
             }
             a <<= seq;
         }
-        else if( PyObject_IsInstance( o, getTypeClass( runtime ).get() ) )
+        else
+        if( PyObject_IsInstance( o, getTypeClass( runtime ).get() ) )
         {
             Type t = PyType2Type( o , runtime );
             a <<= t;
