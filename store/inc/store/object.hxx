@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:37:59 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_OBJECT_HXX_
-#define _STORE_OBJECT_HXX_ "$Revision: 1.2 $"
+#define _STORE_OBJECT_HXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -96,25 +96,6 @@ public:
 template<class store_handle_type>
 store_handle_type * SAL_CALL query (
     IStoreHandle * pHandle, store_handle_type *);
-
-
-/** Template helper class as type safe Reference to store_handle_type.
- */
-template<class store_handle_type>
-class OStoreHandle : public rtl::Reference<store_handle_type>
-{
-public:
-    OStoreHandle (store_handle_type * pHandle)
-        : rtl::Reference<store_handle_type> (pHandle)
-    {}
-
-    static store_handle_type * SAL_CALL query (void * pHandle)
-    {
-        return store::query (
-            static_cast<IStoreHandle*>(pHandle),
-            static_cast<store_handle_type*>(0));
-    }
-};
 
 /*========================================================================
  *
