@@ -2,28 +2,10 @@
 # This file have to updated/extended for other platforms.
 
 # test for the platform
-PLATFORM := $(shell uname -s)
+PLATFORM := $(shell $(PRJ)/config.guess | cut -d"-" -f3,4)
 
-# special check for windows because normally we have no uname under windows
+# config.guess is missing for windows. We rely on getting "" in this case.
 ifeq "$(PLATFORM)" ""
-PLATFORM = windows
-endif
-ifeq "$(PLATFORM)" "WINNT"
-PLATFORM = windows
-endif
-ifeq "$(PLATFORM)" "WindowsNT"
-PLATFORM = windows
-endif
-ifeq "$(PLATFORM)" "CYGWIN_NT-5.0"
-PLATFORM = windows
-endif
-ifeq "$(PLATFORM)" "CYGWIN_NT-5.1"
-PLATFORM = windows
-endif
-ifeq "$(PLATFORM)" "MINGW32_NT-5.0"
-PLATFORM = windows
-endif
-ifeq "$(PLATFORM)" "MINGW32_NT-5.1"
 PLATFORM = windows
 endif
 
@@ -133,10 +115,10 @@ endif
 # Solaris specific settings
 #
 ###########################################################################
-ifeq "$(PLATFORM)" "SunOS"
+ifneq (,$(findstring solaris,$(PLATFORM)))
 # Settings for Solaris using Sun Workshop compiler
 
-PROCTYPE := $(shell uname -p)
+PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
@@ -223,18 +205,18 @@ endif
 # Linux specific settings
 #
 ###########################################################################
-ifeq "$(PLATFORM)" "Linux"
+ifeq "$(PLATFORM)" "linux-gnu"
 # Settings for Linux using gcc compiler
 
-PROCTYPE := $(shell uname -m)
+PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1)
 
 # Default is linux on a intel machine    
 PLATFORM=linux
 PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
-
-ifeq "$(PROCTYPE)" "ppc"
+    
+ifeq "$(PROCTYPE)" "powerpc"
 PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
@@ -330,7 +312,7 @@ endif
 # MacOSX/Darwin specific settings
 #
 ###########################################################################
-ifeq "$(PLATFORM)" "Darwin"
+ifeq "$(PLATFORM)" "darwin"
 # Settings for MacOSX using gcc 3.3 compiler
     
 # Default is MacOSX on a ppc machine    
@@ -415,10 +397,10 @@ endif
 # FreeBSD specific settings
 #
 ###########################################################################
-ifeq "$(PLATFORM)" "FreeBSD"
+ifeq "$(PLATFORM)" "freebsd"
 # Settings for FreeBSD using gcc compiler
 
-PROCTYPE := $(shell uname -m)
+PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 
 # Default is freebsd on a intel machine    
 PLATFORM=FreeBSD
