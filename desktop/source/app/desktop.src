@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 15:47:14 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,7 +1788,7 @@ ModalDialog DLG_LICENSE
     Text[ portuguese_brazilian ] = "Contrato da Licenηa";
     Text[ japanese ] = "γƒ©γ‚¤γ‚»γƒ³γ‚Ήθ¨±θ«Ύζ›Έ";
     Text[ korean ] = "μ‚¬μ©κ¶ κ³„μ•½";
-    Text[ chinese_simplified ] = "η”¨ζ·θ®Έε―εθ®®";
+    Text[ chinese_simplified ] = "η”¨ζ·θ®Έε―θ―εθ®®";
     Text[ chinese_traditional ] = "δ½Ώη”¨θ¨±ε―ε”ε®";
     Text[ turkish ] = "Lisans Anlaώmasύ";
     Text[ arabic ] = "License Agreement";
@@ -1816,7 +1816,7 @@ ModalDialog DLG_LICENSE
         Text[ korean ] = "μ„¤μΉλ¥Ό κ³„μ† μ§„ν–‰ν•κΈ° μ„ν•΄ λ‹¤μ λ‹¨κ³„λ¥Ό μ‹¤ν–‰ν•΄μ£Όμ‹­μ‹μ¤:";
         Text[ chinese_traditional ] = "θ«‹ε·θ΅δΈ‹ε—ε‹•δ½οΌδ»¥ηΉΌηΊε®‰θ£οΌ";
         Text[ french ] = "Suivez les ιtapes suivantes pour procιder ΰ l'installation :";
-        Text[ chinese_simplified ] = "θ―·ζ‰§θ΅δ»¥δΈ‹η„ζ“δ½οΌδ»¥η»§η»­ε®‰θ£…οΌ";
+        Text[ chinese_simplified ] = "θ―·ζ‰§θ΅δ»¥δΈ‹η„ζ“δ½οΌη»§η»­ε®‰θ£…οΌ";
         Text[ portuguese ] = "Leia o seguinte contrato de licenηa com atenηγo. Se usar a barra de deslocamento poderα visualizar o texto completo.";
         Text[ russian ] = "Οπξχθςΰιςε, οξζΰλσιρςΰ, ρλεδσώωεε λθφενηθξννξε ρξγλΰψενθε. Θροξλόησιςε οξλξρσ οπξκπσςκθ, χςξαϋ σβθδεςό ξρςΰλόνσώ χΰρςό ςεκρςΰ.";
         Text[ greek ] = "Διαβάστε προσεκτικά την παρακάτω άδεια χρήσης. Χρησιμοποιήστε τη γραμμή κύλισης για δείτε ολόκληρο το κείμενο.";
@@ -1897,7 +1897,7 @@ ModalDialog DLG_LICENSE
         Text[ french ] = "Prenez connaissance du contrat de licence. Servez-vous de la barre de dιfilement ou du bouton %PAGEDOWN afin d'afficher le texte en entier.";
         Text[ spanish ] = "Lea el siguiente contrato de licencia. Utilice la barra de desplazamiento o el botσn 'AvPag' para visualizar el texto entero.";
         Text[ japanese ] = "ζ¬΅γ®γƒ©γ‚¤γ‚»γƒ³γ‚Ήζ΅ι …γ‚’εΏ…γγθª­γΏγγ γ•γ„γ€‚γ‚Ήγ‚―γƒ­γƒΌγƒ«γƒγƒΌγ‚’ε‹•γ‹γ™γ‹γ€[%PAGEDOWN] γƒγ‚Ώγƒ³γ‚’ζΌγ™γ¨ζ®‹γ‚γ®ζ–‡η« γθ΅¨η¤Ίγ•γ‚γΎγ™γ€‚";
-        Text[ chinese_simplified ] = "θ―·ι…θ―»θ®Έε―θ―εθ®®δΈ­η„ε…¨ιƒ¨ζ΅ζ¬Ύγ€‚ι€θΏ‡ε·ζ†ζ–η‚Ήε‡» %PAGEDOWN ζ‰ι’®οΌι…θ―»θ®Έε―θ―εθ®®η„ε…¨ιƒ¨ε†…ε®Ήγ€‚";
+        Text[ chinese_simplified ] = "θ―·ι…θ―»θ®Έε―θ―εθ®®δΈ­η„ε…¨ιƒ¨ζ΅ζ¬Ύγ€‚ι€θΏ‡ζ»ε¨ζ΅ζ–ε•ε‡» %PAGEDOWN ζ‰ι’®οΌι…θ―»θ®Έε―θ―εθ®®η„ε…¨ιƒ¨ε†…ε®Ήγ€‚";
         Text[ portuguese ] = "Clique no botγo '%1' se concordar com os termos do contrato de licenηa. Se nγo os aceitar clique no botγo '%2' e a instalaηγo serα cancelada.";
         Text[ russian ] = "Ερλθ βϋ οπθνθμΰεςε βρε σρλξβθÿ λθφενηθξννξγξ ρξγλΰψενθÿ, νΰζμθςε κνξοκσ '%1'. Ερλθ βϋ νε ρξγλΰρνϋ ρ ύςθμθ σρλξβθÿμθ, νΰζμθςε '%2', θ σρςΰνξβκΰ ασδες οπεκπΰωενΰ.";
         Text[ greek ] = "Αν αποδέχεστε όλους τους όρους της άδειας χρήσης, πατήστε '%1'. Διαφορετικά, πατήστε '%2' για να ακυρώσετε την εγκατάσταση.";
@@ -1937,7 +1937,7 @@ ModalDialog DLG_LICENSE
         Text[ portuguese_brazilian ] = "Prσx. Pαg.";
         Text[ japanese ] = "δΈ‹γΈ";
         Text[ korean ] = "μ•„λλ΅";
-        Text[ chinese_simplified ] = "η”»ιΆε‘δΈ‹";
+        Text[ chinese_simplified ] = "ι΅µιΆε‘δΈ‹";
         Text[ chinese_traditional ] = "ε‘δΈ‹δΈ€ι ";
         Text[ turkish ] = "Sayfa aώaπύ";
         Text[ arabic ] = "ΗαΥέΝΙ Εαμ ΓΣέα";
@@ -2003,7 +2003,7 @@ ModalDialog DLG_LICENSE
         Text[ portuguese_brazilian ] = "Aceitar o Contrato de Licenηa";
         Text[ japanese ] = "γƒ©γ‚¤γ‚»γƒ³γ‚Ήζ΅ι …γ«εζ„γ™γ‚‹γ€‚";
         Text[ korean ] = "μ‚¬μ©μ μ‚¬μ©κ¶ κ³„μ•½μ— λ™μν•μ‹­μ‹μ¤.";
-        Text[ chinese_simplified ] = "θ―·ζ‚¨ζ¥ε—θ®Έε―θ―εθ®®γ€‚";
+        Text[ chinese_simplified ] = "ζ¥ε—θ®Έε―θ―εθ®®γ€‚";
         Text[ chinese_traditional ] = "ζ¥ε—θ¨±ε―θ­‰ε”θ­°γ€‚";
         Text[ turkish ] = "Lisans Koώullarύnύ Kabul Et";
         Text[ arabic ] = "Accept the License Agreement.";
@@ -2061,7 +2061,7 @@ ModalDialog DLG_LICENSE
         Text [ swedish ] = "A~cceptera" ;
         Text [ danish ] = "Accepter" ;
         Text [ dutch ] = "~Accepteren" ;
-        Text[ chinese_simplified ] = "ζ¥ε—(~A)";
+        Text[ chinese_simplified ] = "ζ¥ε—";
         Text[ russian ] = "Οπθνθμΰώ";
         Text[ polish ] = "Zaakceptuj";
         Text[ japanese ] = "εζ„γ™γ‚‹(~A)";
