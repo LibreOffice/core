@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabDialog DLG_DROPCAPS
     Text [ English ] = "Drop Caps" ;
     Text [ norwegian ] = "Drop Caps" ;
     Text [ italian ] = "Capolettera" ;
-    Text [ portuguese_brazilian ] = "Capitulares descidas" ;
+    Text [ portuguese_brazilian ] = "Capitular" ;
     Text [ portuguese ] = "Capitulares" ;
     Text [ finnish ] = "Anfangit" ;
     Text [ danish ] = "Initialer" ;
@@ -95,7 +95,7 @@ TabDialog DLG_DROPCAPS
                 Text [ ENGLISH ] = "Drop Caps" ;
                 Text [ norwegian ] = "Drop Caps" ;
                 Text [ italian ] = "Capolettera" ;
-                Text [ portuguese_brazilian ] = "Capitulares descidas" ;
+                Text [ portuguese_brazilian ] = "Capitular" ;
                 Text [ portuguese ] = "Capitulares" ;
                 Text [ finnish ] = "Anfangit" ;
                 Text [ danish ] = "Initialer" ;
@@ -117,6 +117,9 @@ TabDialog DLG_DROPCAPS
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Caplletres";
                 Text[ thai ] = "ตัวอักษรขึ้นต้นที่มีขนาดใหญ่";
+                Text[ czech ] = "Iniciály";
+                Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
+                Text[ hindi ] = "बड़े अक्षरों को मिटाओ ";
             };
         };
     };
@@ -132,6 +135,9 @@ TabDialog DLG_DROPCAPS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Caplletres";
     Text[ thai ] = "ตัวอักษรขึ้นต้นที่มีขนาดใหญ่";
+    Text[ czech ] = "Iniciály";
+    Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
+    Text[ hindi ] = "बड़े अक्षरों को मिटाओ";
 };
  // TabPage ******************************************************************
 TabPage TP_DROPCAPS
@@ -152,21 +158,24 @@ TabPage TP_DROPCAPS
         Text [ dutch ] = "I~nitialen weergeven" ;
         Text [ swedish ] = "Visa a~nfanger" ;
         Text [ danish ] = "Vis initialer" ;
-        Text [ portuguese_brazilian ] = "Initialen anzeigen" ;
+        Text [ portuguese_brazilian ] = "Exibir capitula��o" ;
         Text [ portuguese ] = "Mostrar ~capitulares" ;
         Text[ chinese_simplified ] = "显示字首大写";
         Text[ russian ] = "�������� �������";
-        Text[ polish ] = "Po~ka� inicja�y";
+        Text[ polish ] = "Wy�wietl inicja�y";
         Text[ japanese ] = "ドロップキャップの表示";
         Text[ chinese_traditional ] = "顯示字首大寫";
         Text[ arabic ] = "����� ������ �����������";
         Text[ greek ] = "����~���� �������������";
         Text[ korean ] = "단락 첫문자 장식 표시";
-        Text[ turkish ] = "Ba� harfleri vurgula";
+        Text[ turkish ] = "Display drop caps";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Visualitza les caplletres";
         Text[ finnish ] = "N�yt� anfangit";
         Text[ thai ] = "แสดงผลตัวอักษรขึ้นต้นที่มีขนาดใหญ่";
+        Text[ czech ] = "Zobrazovat iniciály";
+        Text[ hebrew ] = "I~nitialen anzeigen";
+        Text[ hindi ] = "बड़े अक्षरों को मिटाकर दिखाओ";
     };
     CheckBox CB_WORD
     {
@@ -175,7 +184,7 @@ TabPage TP_DROPCAPS
         Text = "Ganzes ~Wort" ;
         Text [ English ] = "Whole Word" ;
         Text [ english_us ] = "~Whole word" ;
-        Text [ portuguese_brazilian ] = "Ganzes ~Wort" ;
+        Text [ portuguese_brazilian ] = "~Palavra inteira" ;
         Text [ swedish ] = "Helt ~ord" ;
         Text [ danish ] = "Helt ord" ;
         Text [ italian ] = "Parola intera" ;
@@ -185,7 +194,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese ] = "~Palavra inteira" ;
         Text[ chinese_simplified ] = "整个字(~W)";
         Text[ russian ] = "��� �����";
-        Text[ polish ] = "Ca�y wyraz";
+        Text[ polish ] = "~Ca�y wyraz";
         Text[ japanese ] = "単語(~W)";
         Text[ chinese_traditional ] = "整個字(~W)";
         Text[ arabic ] = "���� �����";
@@ -196,6 +205,9 @@ TabPage TP_DROPCAPS
         Text[ catalan ] = "~Tota la paraula";
         Text[ finnish ] = "~Koko sana";
         Text[ thai ] = "คำ~ทั้งหมด";
+        Text[ czech ] = "Celé slovo";
+        Text[ hebrew ] = "Ganzes ~Wort";
+        Text[ hindi ] = "~पूर्ण शब्द";
     };
     FixedText FT_DROPCAPS
     {
@@ -210,11 +222,11 @@ TabPage TP_DROPCAPS
         Text [ dutch ] = "~Aantal tekens" ;
         Text [ swedish ] = "Antal te~cken" ;
         Text [ danish ] = "Antal tegn" ;
-        Text [ portuguese_brazilian ] = "Anzahl der Ze~ichen" ;
+        Text [ portuguese_brazilian ] = "N�mero de ~caracteres:" ;
         Text [ portuguese ] = "N�mero de ~caracteres" ;
         Text[ chinese_simplified ] = "字符数目(~C)";
         Text[ russian ] = "���������� ��������";
-        Text[ polish ] = "Liczba znak�w";
+        Text[ polish ] = "~Liczba znak�w";
         Text[ japanese ] = "文字数(~C)";
         Text[ chinese_traditional ] = "字元數目(~C)";
         Text[ arabic ] = "��� ������";
@@ -225,6 +237,9 @@ TabPage TP_DROPCAPS
         Text[ catalan ] = "~Nombre car�cters";
         Text[ finnish ] = "~Merkkien m��r�";
         Text[ thai ] = "จำนวน~ตัวอักขระ:";
+        Text[ czech ] = "Počet znaků:";
+        Text[ hebrew ] = "Anzahl der Ze~ichen";
+        Text[ hindi ] = "~अक्षरों की संख्या:";
     };
     NumericField FLD_DROPCAPS
     {
@@ -260,7 +275,7 @@ TabPage TP_DROPCAPS
         Text [ english_us ] = "~Lines" ;
         Text[ chinese_simplified ] = "行(~L)";
         Text[ russian ] = "����~��";
-        Text[ polish ] = "Wiersze";
+        Text[ polish ] = "~Wiersze";
         Text[ japanese ] = "行(~L)";
         Text[ chinese_traditional ] = "行(~L)";
         Text[ arabic ] = "����";
@@ -270,6 +285,9 @@ TabPage TP_DROPCAPS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~L�nies";
         Text[ thai ] = "~บรรทัด";
+        Text[ czech ] = "Řádků";
+        Text[ hebrew ] = "Zei~len";
+        Text[ hindi ] = "~रेखाएँ";
     };
     NumericField FLD_LINES
     {
@@ -294,7 +312,7 @@ TabPage TP_DROPCAPS
         Text [ English ] = "D~istance" ;
         Text [ norwegian ] = "A~vstand" ;
         Text [ italian ] = "D~istanza dal testo" ;
-        Text [ portuguese_brazilian ] = "D~ist?ncia" ;
+        Text [ portuguese_brazilian ] = "Dist�ncia at� o corpo do texto" ;
         Text [ portuguese ] = "~Dist�ncia do texto" ;
         Text [ finnish ] = "Et�isyys tekstist�" ;
         Text [ danish ] = "Afstand til tekst" ;
@@ -315,6 +333,9 @@ TabPage TP_DROPCAPS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espai per al text";
         Text[ thai ] = "ระยะห่างข้อความ";
+        Text[ czech ] = "Vzdálenost k textu";
+        Text[ hebrew ] = "A~bstand zum Text";
+        Text[ hindi ] = "टेक्स्ट् के बीच अंतर";
     };
     MetricField FLD_DISTANCE
     {
@@ -341,7 +362,7 @@ TabPage TP_DROPCAPS
         Text [ English ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Impostazioni" ;
-        Text [ portuguese_brazilian ] = "Op??s" ;
+        Text [ portuguese_brazilian ] = "Defini��es" ;
         Text [ portuguese ] = "Defini��es" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -362,6 +383,9 @@ TabPage TP_DROPCAPS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuraci�";
         Text[ thai ] = "กำหนด";
+        Text[ czech ] = "Nastavení";
+        Text[ hebrew ] = "‮הגדרות‬";
+        Text[ hindi ] = "निर्धारण";
     };
     Control CNT_PICT
     {
@@ -389,7 +413,7 @@ TabPage TP_DROPCAPS
         Text [ english_us ] = "~Text" ;
         Text[ chinese_simplified ] = "字首大写(~T)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Tekst z inicja�ami";
+        Text[ polish ] = "~Tekst z inicja�ami";
         Text[ japanese ] = "ドロップキャップのテキスト(~T)";
         Text[ chinese_traditional ] = "大寫字(~T)";
         Text[ arabic ] = "����";
@@ -399,6 +423,9 @@ TabPage TP_DROPCAPS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Text";
         Text[ thai ] = "~ข้อความ";
+        Text[ czech ] = "Text";
+        Text[ hebrew ] = "Initialen~text";
+        Text[ hindi ] = "~टेक्स्ट्";
     };
     Edit EDT_TEXT
     {
@@ -418,7 +445,7 @@ TabPage TP_DROPCAPS
         Text [ English ] = "Character st~yle" ;
         Text [ norwegian ] = "M~al" ;
         Text [ italian ] = "Modello di carattere" ;
-        Text [ portuguese_brazilian ] = "Es~tilo" ;
+        Text [ portuguese_brazilian ] = "E~stilo do Caracter" ;
         Text [ portuguese ] = "Es~tilo de caracteres" ;
         Text [ finnish ] = "~Merkkityyli" ;
         Text [ danish ] = "Tegntypografi" ;
@@ -429,7 +456,7 @@ TabPage TP_DROPCAPS
         Text [ english_us ] = "Character St~yle" ;
         Text[ chinese_simplified ] = "字符样式(~Y)";
         Text[ russian ] = "~����� �������";
-        Text[ polish ] = "Styl znaku";
+        Text[ polish ] = "Styl ~znaku";
         Text[ japanese ] = "文字スタイル(~Y)";
         Text[ chinese_traditional ] = "字元樣式(~Y)";
         Text[ arabic ] = "��� ������";
@@ -439,6 +466,9 @@ TabPage TP_DROPCAPS
         Text[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "E~stil de car�cter";
         Text[ thai ] = "ลัก~ษณะตัวอักขระ";
+        Text[ czech ] = "Styl znaku:";
+        Text[ hebrew ] = "Zeichen~vorlage";
+        Text[ hindi ] = "अक्षर शै~ली";
     };
     ListBox BOX_TEMPLATE
     {
@@ -461,7 +491,7 @@ TabPage TP_DROPCAPS
         Text [ dutch ] = "Inhoud" ;
         Text [ swedish ] = "Inneh�ll" ;
         Text [ danish ] = "Indhold" ;
-        Text [ portuguese_brazilian ] = "Inhalt" ;
+        Text [ portuguese_brazilian ] = "�ndice" ;
         Text [ portuguese ] = "Conte�do" ;
         Text[ chinese_simplified ] = "内容";
         Text[ russian ] = "����������";
@@ -471,14 +501,26 @@ TabPage TP_DROPCAPS
         Text[ arabic ] = "���������";
         Text[ greek ] = "�����������";
         Text[ korean ] = "내용";
-        Text[ turkish ] = "��erik";
+        Text[ turkish ] = "��erikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contingut";
         Text[ finnish ] = "Sis�lt�";
         Text[ thai ] = "เนื้อหา";
+        Text[ czech ] = "Obsah";
+        Text[ hebrew ] = "‮תוכן עיניינים‬";
+        Text[ hindi ] = "विषयें";
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
