@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:38:56 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,9 @@ SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     int bReadNewDoc)
     : SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
     maParaStyleMapper(*pD), maCharStyleMapper(*pD), maSegments(*this),
-    aMergeBoxes(0, 5), aTblFmts(0, 10), mpBookmarkStart(0), pGrfAttrSet(0),
-    pTableNode(0), pOldTblNd(0), pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
+    maInsertedTables(*pD), aMergeBoxes(0, 5), aTblFmts(0, 10),
+    mpBookmarkStart(0), pGrfAttrSet(0), pTableNode(0), pOldTblNd(0),
+    pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
     pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)), nAktPageDesc(0),
     nAktFirstPageDesc(0), nAktBox(0), nInsTblRow(USHRT_MAX),
     nNewNumSectDef(USHRT_MAX)
@@ -1120,15 +1121,24 @@ void rtfSections::InsertSegments(bool bNewDoc)
         mrReader.pDoc->DelPageDesc(*aI);
 }
 
-SwRTFParser::~SwRTFParser()
+namespace sw{
+    namespace util{
+InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
+    : mbHasRoot(rDoc.GetRootFrm())
 {
-    for(::std::map<SwTableNode *, SwNodeIndex*>::iterator aIter
-        = maTables.begin(); aIter != maTables.end(); ++aIter)
+}
+
+void InsertedTablesManager::DelAndMakeTblFrms()
+{
+    if (!mbHasRoot)
+        return;
+    TblMapIter aEnd = maTables.end();
+    for (TblMapIter aIter = maTables.begin(); aIter != aEnd; ++aIter)
     {
-        // exitiert schon ein Layout, dann muss an dieser Tabelle die
-        // BoxFrames neu erzeugt
+        // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
+        // neu erzeugt
         SwTableNode *pTable = aIter->first;
-        ASSERT(pTable, "rtf: Why no expected table");
+        ASSERT(pTable, "Why no expected table");
         if (pTable)
         {
             SwNodeIndex *pIndex = aIter->second;
@@ -1136,6 +1146,22 @@ SwRTFParser::~SwRTFParser()
             pTable->MakeFrms(pIndex);
         }
     }
+}
+
+void InsertedTablesManager::InsertTable(SwTableNode &rTableNode, SwPaM &rPaM)
+{
+    if (!mbHasRoot)
+        return;
+    //Associate this tablenode with this after position, replace an //old
+    //node association if necessary
+    maTables.insert(TblMap::value_type(&rTableNode, &(rPaM.GetPoint()->nNode)));
+}
+}
+}
+
+SwRTFParser::~SwRTFParser()
+{
+    maInsertedTables.DelAndMakeTblFrms();
 
     delete pSttNdIdx;
     delete pRegionEndIdx;
@@ -1274,7 +1300,8 @@ void SwRTFParser::NextToken( int nToken )
     case RTF_NONSHPPICT:
         SkipGroup();
         break;
-
+#if 0
+        //Should not be used to set level of numbering, e.g. #i25677#
     case RTF_OUTLINELEVEL:
         {
             BYTE nLevel = MAXLEVEL <= nTokenValue ? MAXLEVEL - 1
@@ -1282,6 +1309,7 @@ void SwRTFParser::NextToken( int nToken )
             GetAttrSet().Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, nLevel ));
         }
         break;
+#endif
 
     case RTF_DEFFORMAT:
     case RTF_DEFTAB:
