@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpshttab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:26:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ public:
     BOOL            bRepeatIfEmpty;
     TypedStrCollection**    ppStrings;
     BOOL*           pDateDim;
-    USHORT          nNextRow;       // for iterator, within range
+    SCROW           nNextRow;       // for iterator, within range
 
     ScSheetDPData_Impl() {}
 };
@@ -114,9 +114,9 @@ ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc )
 
     pImpl->nNextRow = pImpl->aRange.aStart.Row() + 1;
 
-    long nEntryCount(pImpl->aQuery.GetEntryCount());
+    SCSIZE nEntryCount(pImpl->aQuery.GetEntryCount());
     pSpecial = new BOOL[nEntryCount];
-    for (long j = 0; j < nEntryCount; ++j )
+    for (SCSIZE j = 0; j < nEntryCount; ++j )
     {
         ScQueryEntry& rEntry = pImpl->aQuery.GetEntry(j);
         if (rEntry.bDoQuery)
@@ -179,13 +179,13 @@ const TypedStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
 
         //! document must have function to fill collection!!!
         String aDocStr;
-        USHORT nDocCol = (USHORT)(pImpl->aRange.aStart.Col() + nColumn);
-        USHORT nDocTab = pImpl->aRange.aStart.Tab();
-        USHORT nStartRow = pImpl->aRange.aStart.Row()+1;    // start of data
-        USHORT nEndRow = pImpl->aRange.aEnd.Row();
-        USHORT nStartCol = pImpl->aRange.aStart.Col();
-        USHORT nEndCol = pImpl->aRange.aEnd.Col();
-        for (USHORT nRow = nStartRow; nRow <= nEndRow; nRow++)
+        SCCOL nDocCol = (SCCOL)(pImpl->aRange.aStart.Col() + nColumn);
+        SCTAB nDocTab = pImpl->aRange.aStart.Tab();
+        SCROW nStartRow = pImpl->aRange.aStart.Row()+1; // start of data
+        SCROW nEndRow = pImpl->aRange.aEnd.Row();
+        SCCOL nStartCol = pImpl->aRange.aStart.Col();
+        SCCOL nEndCol = pImpl->aRange.aEnd.Col();
+        for (SCROW nRow = nStartRow; nRow <= nEndRow; nRow++)
         {
             if ( pImpl->bIgnoreEmptyRows &&
                     pImpl->pDoc->IsBlockEmpty( nDocTab, nStartCol, nRow, nEndCol, nRow ) )
@@ -240,9 +240,9 @@ String ScSheetDPData::getDimensionName(long nColumn)
     }
     else
     {
-        USHORT nDocCol = (USHORT)(pImpl->aRange.aStart.Col() + nColumn);
-        USHORT nDocRow = pImpl->aRange.aStart.Row();
-        USHORT nDocTab = pImpl->aRange.aStart.Tab();
+        SCCOL nDocCol = (SCCOL)(pImpl->aRange.aStart.Col() + nColumn);
+        SCROW nDocRow = pImpl->aRange.aStart.Row();
+        SCTAB nDocTab = pImpl->aRange.aStart.Tab();
         String aDocStr;
         pImpl->pDoc->GetString( nDocCol, nDocRow, nDocTab, aDocStr );
         return aDocStr;
@@ -279,7 +279,7 @@ BOOL ScSheetDPData::IsDateDimension(long nDim)
             ScRange aTestRange = pImpl->aRange;
             for (long i=0; i<pImpl->nColCount; i++)
             {
-                USHORT nCol = (USHORT)( pImpl->aRange.aStart.Col() + i );
+                SCCOL nCol = (SCCOL)( pImpl->aRange.aStart.Col() + i );
                 aTestRange.aStart.SetCol(nCol);
                 aTestRange.aEnd.SetCol(nCol);
                 pImpl->pDateDim[i] = lcl_HasDateFormat( pImpl->pDoc, aTestRange );
@@ -328,8 +328,8 @@ void ScSheetDPData::ResetIterator()
 }
 
 void lcl_GetStringOrValue( ScDPItemData& rData, ScDocument* pDoc,
-                            USHORT nCol, USHORT nRow, USHORT nTab,
-                            BOOL bRepeatIfEmpty, USHORT nFirstDataRow )
+                            SCCOL nCol, SCROW nRow, SCTAB nTab,
+                            BOOL bRepeatIfEmpty, SCROW nFirstDataRow )
 {
     if ( bRepeatIfEmpty )
     {
@@ -354,18 +354,18 @@ BOOL ScSheetDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
     if ( pImpl->nNextRow > pImpl->aRange.aEnd.Row() )
         return FALSE;
 
-    long i;
+    SCSIZE i;
     long nStartCol = pImpl->aRange.aStart.Col();
-    USHORT nDocTab = pImpl->aRange.aStart.Tab();
-    USHORT nFirstDataRow = pImpl->aRange.aStart.Row() + 1;
+    SCTAB nDocTab = pImpl->aRange.aStart.Tab();
+    SCROW nFirstDataRow = pImpl->aRange.aStart.Row() + 1;
 
     BOOL bFilteredOut;
     do
     {
         if ( pImpl->bIgnoreEmptyRows )
         {
-            USHORT nEndCol = pImpl->aRange.aEnd.Col();
-            while ( pImpl->pDoc->IsBlockEmpty( nDocTab, (USHORT)nStartCol, pImpl->nNextRow,
+            SCCOL nEndCol = pImpl->aRange.aEnd.Col();
+            while ( pImpl->pDoc->IsBlockEmpty( nDocTab, (SCCOL)nStartCol, pImpl->nNextRow,
                                                 nEndCol, pImpl->nNextRow ) )
             {
                 ++pImpl->nNextRow;
@@ -394,7 +394,7 @@ BOOL ScSheetDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
             rParam.pColData[i].SetString( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")) );
         else
             lcl_GetStringOrValue( rParam.pColData[i], pImpl->pDoc,
-                                    (USHORT)(nStartCol+nDim), pImpl->nNextRow, nDocTab,
+                                    (SCCOL)(nStartCol+nDim), pImpl->nNextRow, nDocTab,
                                     pImpl->bRepeatIfEmpty, nFirstDataRow );
     }
 
@@ -405,7 +405,7 @@ BOOL ScSheetDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
             rParam.pRowData[i].SetString( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")) );
         else
             lcl_GetStringOrValue( rParam.pRowData[i], pImpl->pDoc,
-                                    (USHORT)(nStartCol+nDim), pImpl->nNextRow, nDocTab,
+                                    (SCCOL)(nStartCol+nDim), pImpl->nNextRow, nDocTab,
                                     pImpl->bRepeatIfEmpty, nFirstDataRow );
     }
 
@@ -423,7 +423,7 @@ BOOL ScSheetDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
     for (i=0; i<rParam.nDatCount; i++)
     {
         long nDim = rParam.pDats[i];
-        ScAddress aPos( (USHORT)(nStartCol+nDim), pImpl->nNextRow, nDocTab );
+        ScAddress aPos( (SCCOL)(nStartCol+nDim), pImpl->nNextRow, nDocTab );
         ScBaseCell* pCell = pImpl->pDoc->GetCell( aPos );
         if ( !pCell || pCell->GetCellType() == CELLTYPE_NOTE )
             rParam.pValues[i].Set( 0.0, SC_VALTYPE_EMPTY );
