@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xoutbmp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:51:03 $
+ *  last change: $Author: sj $ $Date: 2002-06-21 14:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 // -----------
 // - Defines -
@@ -112,7 +118,8 @@ public:
 
     static USHORT       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const USHORT nFormat,
-                                       BOOL bIgnoreOptions );
+                                       BOOL bIgnoreOptions,
+                                       const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
 
     static Bitmap       DetectEdges( const Bitmap& rBmp, const BYTE cThreshold );
 

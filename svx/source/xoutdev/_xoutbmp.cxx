@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:55:06 $
+ *  last change: $Author: sj $ $Date: 2002-06-21 14:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 {
                     aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, TRUE );
+                    nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, TRUE, NULL );
                 }
             }
         }
@@ -526,7 +526,8 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
 USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const USHORT nFormat,
-                                  BOOL bIgnoreOptions )
+                                  BOOL bIgnoreOptions,
+                                  const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
 #ifndef SVX_LIGHT
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
@@ -540,7 +541,8 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
         pGrfFilter = &rFilter;
 
         if( bIgnoreOptions )
-            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pOStm, nFormat, bIgnoreOptions );
+            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ),
+                        *pOStm, nFormat, bIgnoreOptions, pFilterData );
         else
         {
             Graphic aGraphic;
@@ -576,7 +578,8 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
             }
             else
                 aGraphic = rGraphic;
-            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pOStm, nFormat, sal_False );
+            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ),
+                            *pOStm, nFormat, sal_False, pFilterData );
         }
 
         pGrfFilter = NULL;
