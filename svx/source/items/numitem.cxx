@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 11:48:57 $
+ *  last change: $Author: os $ $Date: 2001-07-26 13:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,12 +299,37 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
         cBullet = ByteString::ConvertToUnicode( cBullet,
                             (pBulletFont&&pBulletFont->GetCharSet()) ?  pBulletFont->GetCharSet()
                                         : RTL_TEXTENCODING_SYMBOL );
+    if(pBulletFont)
+    {
+        BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
+        if(bConvertBulletFont)
+        {
+
+            FontToSubsFontConverter pConverter =
+                        CreateFontToSubsFontConverter(pBulletFont->GetName(),
+                            FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS);
+            if(pConverter)
+            {
+                cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
+                String sFontName = GetFontToSubsFontName(pConverter);
+                pBulletFont->SetName(sFontName);
+                DestroyFontToSubsFontConverter(pConverter);
+            }
+        }
+    }
 }
 /* -----------------08.12.98 11:14-------------------
  *
  * --------------------------------------------------*/
-SvStream&   SvxNumberFormat::Store(SvStream &rStream)
+SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
 {
+    if(pConverter && pBulletFont)
+    {
+        cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
+        String sFontName = GetFontToSubsFontName(pConverter);
+        pBulletFont->SetName(sFontName);
+    }
+
     rStream << (USHORT)NUMITEM_VERSION_03;
 
     rStream << (USHORT)GetNumberingType();
@@ -731,18 +756,29 @@ SvStream&   SvxNumRule::Store(SvStream &rStream)
     rStream<<(USHORT)bContinuousNumbering;
     rStream<<(USHORT)eNumberingType;
 
+    FontToSubsFontConverter pConverter = 0;
+    BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
     for(USHORT i = 0; i < SVX_MAX_NUM; i++)
     {
         if(aFmts[i])
         {
             rStream << USHORT(1);
-            aFmts[i]->Store(rStream);
+            if(bConvertBulletFont && aFmts[i]->GetBulletFont())
+            {
+                if(!pConverter)
+                    pConverter =
+                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetName(),
+                                    FONTTOSUBSFONT_EXPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS);
+            }
+            aFmts[i]->Store(rStream, pConverter);
         }
         else
             rStream << USHORT(0);
     }
     //second save of nFeatureFlags for new versions
     rStream<<(USHORT)nFeatureFlags;
+    if(pConverter)
+        DestroyFontToSubsFontConverter(pConverter);
 
     return rStream;
 }
