@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-24 21:10:53 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
     Text [ dutch ] = "~Terugzetten" ; \
     Text [ english_us ] = "R~eset" ; \
     Text [ italian ] = "Ripris~tina" ; \
-    Text [ spanish ] = "~Restablecer" ; \
+    Text [ spanish ] = "Restablecer" ; \
     Text [ french ] = "Re~staurer" ; \
     Text [ swedish ] = "~Återställ" ; \
     Text [ danish ] = "Nulstil" ; \
@@ -625,7 +625,7 @@ TabPage TP_CONFIG_ACCEL
         Text = "~Tasten" ;
         Text [ ENGLISH ] = "~Keys" ;
         Text [ norwegian ] = "~Taster" ;
-        Text [ italian ] = "~Tasti" ;
+        Text [ italian ] = "Tasti" ;
         Text [ portuguese_brazilian ] = "~Teclas" ;
         Text [ portuguese ] = "~Teclas" ;
         Text [ finnish ] = "~Näppäimet" ;
