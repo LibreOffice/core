@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:47:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 16:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,8 +313,6 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_NAVIGATION,          "ShowNavigation" );
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,       "ShowRecordActions" );
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,          "ShowFilterSort" );
-
-    FORMS_CONSTASCII_STRING( PROPERTY_RICH_TEXT,                "RichText" );
 
     //--------------------------------------------------------------------------
     //- URLs
