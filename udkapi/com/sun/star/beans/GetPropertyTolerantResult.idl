@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GetPropertyTolerantResult.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:37:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef __com_sun_star_beans_GetPropertyTolerantResult_idl__
 #define __com_sun_star_beans_GetPropertyTolerantResult_idl__
 
-
 #ifndef __com_sun_star_beans_TolerantPropertySetResultType_idl__
 #include <com/sun/star/beans/TolerantPropertySetResultType.idl>
 #endif
@@ -81,7 +80,7 @@ module com {  module sun {  module star {  module beans {
 
     @see com::sun::star::beans::XTolerantMultiPropertySet
  */
-struct GetPropertyTolerantResult
+published struct GetPropertyTolerantResult
 {
     /** specifies a success or error code for the retrieval operation.
 
