@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-13 11:34:34 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,16 @@
 #include <svtools/saveopt.hxx>
 #endif
 #include <hash_set>
+
+// for locking SolarMutex: svapp + mutex
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -476,9 +486,15 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
 void SwXMLImport::startDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
+    // delegate to parent
+    SvXMLImport::startDocument();
+
     DBG_ASSERT( GetModel().is(), "model is missing" );
     if( !GetModel().is() )
         return;
+
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     // There only is a text cursor by now if we are in insert mode. In any
     // other case we have to create one at the start of the document.
@@ -562,6 +578,9 @@ void SwXMLImport::endDocument( void )
     DBG_ASSERT( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
     if( !GetModel().is() )
         return;
+
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     if( pGraphicResolver )
         SvXMLGraphicHelper::Destroy( pGraphicResolver );
@@ -741,6 +760,9 @@ void SwXMLImport::endDocument( void )
 
     delete pSttNdIdx;
     pSttNdIdx = 0;
+
+    // delegate to parent: takes care of error handling
+    SvXMLImport::endDocument();
 }
 
 
@@ -816,6 +838,10 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 {
     if (IsInsertMode() || IsStylesOnlyMode() || IsBlockMode() || IsOrganizerMode() || !GetModel().is() )
         return;
+
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,14 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+
+// for locking SolarMutex: svapp + mutex
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 
@@ -496,6 +504,9 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 {
     Reference<XTextCursor> xReturn;
 
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     // get RedlineInfo
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
     if (aRedlineMap.end() != aFind)
@@ -581,6 +592,9 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
     if (!bStart)
         return;
 
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
     if (aRedlineMap.end() != aFind)
     {
@@ -650,6 +664,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 {
     DBG_ASSERT(NULL != pRedlineInfo, "need redline info");
     DBG_ASSERT(IsReady(pRedlineInfo), "redline info not complete yet!");
+
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     // Insert the Redline as described by pRedlineInfo into the
     // document.  If we are in insert mode, don't insert any redlines

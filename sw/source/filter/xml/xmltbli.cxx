@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-30 10:01:59 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,14 @@
 #endif
 #ifndef _XMLTBLI_HXX
 #include "xmltbli.hxx"
+#endif
+
+// for locking SolarMutex: svapp + mutex
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 using namespace ::rtl;
@@ -1283,6 +1291,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pSharedBoxFormats(NULL)
 {
     OUString aName;
+
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -2498,6 +2509,11 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 
 void SwXMLTableContext::MakeTable()
 {
+    // this method will modify the document directly -> lock SolarMutex
+    // This will call all other MakeTable*(..) methods, so
+    // those don't need to be locked separately.
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     SwXMLImport& rSwImport = GetSwImport();
 
     SwFrmFmt *pFrmFmt = pTableNode->GetTable().GetFrmFmt();

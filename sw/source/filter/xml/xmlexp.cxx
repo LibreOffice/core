@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-12 17:27:25 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,15 @@
 #include <ForbiddenCharactersEnum.hxx>
 #endif
 
+// for locking SolarMutex: svapp + mutex
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+
 using namespace ::rtl;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -295,6 +304,9 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xTextTunnel.is() )
         return ERR_SWG_WRITE_ERROR;
+
+    // from here, we use core interfaces -> lock Solar-Mutex (#91949#)
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     SwXText *pText = (SwXText *)xTextTunnel->getSomething(
                                         SwXText::getUnoTunnelId() );

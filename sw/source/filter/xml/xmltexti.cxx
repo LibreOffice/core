@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:31:29 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,15 @@
 #include <ndnotxt.hxx>
 #endif
 
+// for locking SolarMutex: svapp + mutex
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
 
 
 using namespace ::rtl;
@@ -259,6 +268,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         const OUString& rTblName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     Reference < XPropertySet > xPropSet;
 
     sal_Int32 nPos = rHRef.indexOf( ':' );
@@ -485,6 +497,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         const OUString& rHRef,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     Reference < XPropertySet > xPropSet;
     Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
@@ -549,6 +564,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
         const OUString& rStyleName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     Reference < XPropertySet > xPropSet;
     Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
@@ -653,6 +671,9 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
         const Reference < XPropertySet > &rPropSet,
         ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > &rParamMap)
 {
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
     SwXFrame *pFrame =
