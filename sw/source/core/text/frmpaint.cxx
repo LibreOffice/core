@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 08:49:39 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,11 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             SwitchVerticalToHorizontal( (SwRect&)rRect );
 #endif
 
+#ifdef BIDI
+        SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
+        aLayoutModeModifier.Modify( sal_False );
+#endif
+
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect,
             rLineNum.GetStartValue(), eHor, bLineNum );
 
@@ -420,6 +425,11 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             OutputDevice *pOldRef = pSh->GetReferenzDevice();
             pSh->SetReferenzDevice( NULL );
             SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
+
+#ifdef BIDI
+            aLayoutModeModifier.Modify( sal_False );
+#endif
+
             pSh->SetReferenzDevice( pOldRef );
 
             SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );

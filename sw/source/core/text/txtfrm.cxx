@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:49:16 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,24 @@ void SwTxtFrm::SwitchLTRtoRTL( Point& rPoint ) const
 void SwTxtFrm::SwitchRTLtoLTR( Point& rPoint ) const
 {
     rPoint.X() = 2 * Frm().Left() + Frm().Width() - rPoint.X();
+}
+
+
+SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
+        rOut( rOutp ), nOldLayoutMode( rOutp.GetLayoutMode() )
+{
+}
+
+SwLayoutModeModifier::~SwLayoutModeModifier()
+{
+    ((OutputDevice&)rOut).SetLayoutMode( nOldLayoutMode );
+}
+
+SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
+{
+    ((OutputDevice&)rOut).SetLayoutMode( bChgToRTL ?
+                                         TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
+                                         TEXT_LAYOUT_COMPLEX_DISABLED );
 }
 
 SwScriptInfo* SwTxtFrm::GetScriptInfo()
