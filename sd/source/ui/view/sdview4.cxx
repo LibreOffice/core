@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-16 16:00:10 $
+ *  last change: $Author: ka $ $Date: 2001-10-23 15:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,8 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
 IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
 {
-    INetURLObject aURL( aDropFile );
+    INetURLObject   aURL( aDropFile );
+    BOOL            bOK = FALSE;
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
@@ -312,72 +313,62 @@ IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
         aURL = INetURLObject( aURLStr );
     }
 
-    // get adjusted DropFile name
     aDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-    BOOL        bOK = FALSE;
-    const       SfxFilter* pFilter = NULL;
-    SfxMedium   aSfxMedium( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-    ErrCode     nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFilter, SFX_FILTER_IMPORT,
-                                                                    SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+    GraphicFilter*  pGraphicFilter = GetGrfFilter();
+    FilterProgress* pFilterProgress = new FilterProgress( pGraphicFilter, pViewSh->GetDocSh() );
+    Graphic         aGraphic;
 
-    if (pFilter && !nErr)
+    if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
     {
-        GraphicFilter*  pGraphicFilter = GetGrfFilter();
-        const String    aFilterName( pFilter->GetFilterName() );
-        const String    aLowerAsciiFileName( aDropFile.ToLowerAscii() );
-        const USHORT    nFormat = pGraphicFilter->GetImportFormatNumber(aFilterName);
+        SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nAction, aDropPos, NULL, NULL );
 
-        if( aFilterName.EqualsAscii( "Text" )               ||
-            aFilterName.EqualsAscii( "Rich Text Format" )   ||
-            aFilterName.EqualsAscii( "HTML" )               ||
-            aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
-            aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
-            aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
-            aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
-            aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
-            aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
+        if( pGrafObj )
+            pGrafObj->SetGraphicLink( aDropFile, String() );
+
+        bOK = TRUE;
+    }
+
+    delete pFilterProgress;
+
+    if( !bOK )
+    {
+        const SfxFilter*    pFilter = NULL;
+        SfxMedium           aSfxMedium( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+        ErrCode             nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+
+        if( pFilter && !nErr )
         {
-            /******************************************************************
-            * Eigenes Format, Text oder RTF
-            ******************************************************************/
-            bOK = TRUE;
-            SdWindow* pWin = pViewSh->GetActiveWindow();
-            SfxRequest aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
-            SfxStringItem aItem1(ID_VAL_DUMMY0, aDropFile);
-            SfxStringItem aItem2(ID_VAL_DUMMY1, pFilter->GetFilterName());
-            aReq.AppendItem (aItem1);
-            aReq.AppendItem (aItem2);
-            FuInsertFile* pFunc = new FuInsertFile(pViewSh, pWin, this,
-                                                   pDoc, aReq);
-            delete pFunc;
-        }
-        else if( nFormat != GRFILTER_FORMAT_DONTKNOW )
-        {
-            /******************************************************************
-            * Graphik-Format
-            ******************************************************************/
-            FilterProgress  aFilterProgress(pGraphicFilter, pViewSh->GetDocSh());
-            Graphic         aGraphic;
+            const String    aFilterName( pFilter->GetFilterName() );
+            const String    aLowerAsciiFileName( aDropFile.ToLowerAscii() );
 
-            // keine native Tempdatei anlegen (DummyLink setzen)
-            aGraphic.SetLink( GfxLink() );
-
-            SvStream* pIStm = aSfxMedium.GetInStream();
-
-            if( pIStm && !pGraphicFilter->ImportGraphic( aGraphic, aDropFile, *pIStm, nFormat ) )
+            if( aFilterName.EqualsAscii( "Text" )               ||
+                aFilterName.EqualsAscii( "Rich Text Format" )   ||
+                aFilterName.EqualsAscii( "HTML" )               ||
+                aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
+                aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
+                aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
+                aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
+                aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
+                aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
             {
+                /******************************************************************
+                * Eigenes Format, Text oder RTF
+                ******************************************************************/
                 bOK = TRUE;
-
-                SdrGrafObj* pGrafObj = InsertGraphic(aGraphic, nAction, aDropPos, NULL, NULL);
-
-                if( pGrafObj )
-                    pGrafObj->SetGraphicLink( aDropFile, aFilterName );
+                SdWindow* pWin = pViewSh->GetActiveWindow();
+                SfxRequest aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
+                SfxStringItem aItem1(ID_VAL_DUMMY0, aDropFile);
+                SfxStringItem aItem2(ID_VAL_DUMMY1, pFilter->GetFilterName());
+                aReq.AppendItem (aItem1);
+                aReq.AppendItem (aItem2);
+                FuInsertFile* pFunc = new FuInsertFile(pViewSh, pWin, this, pDoc, aReq);
+                delete pFunc;
             }
         }
     }
 
-    if (!bOK)
+    if( !bOK )
     {
         String          aTmpStr;
         INetBookmark    aINetBookmark(aTmpStr, aTmpStr);
