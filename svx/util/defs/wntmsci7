@@ -17966,3 +17966,15 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?GetForbiddenCharsTable@SdrModel@@QBE?AV?$ORef@VSvxForbiddenCharactersTable@@@vos@@XZ
 ?ReformatAllTextObjects@SdrModel@@QAEXXZ
 ?SetForbiddenCharsTable@SdrModel@@QAEXV?$ORef@VSvxForbiddenCharactersTable@@@vos@@@Z
+??0RuntimeException@uno@star@sun@com@@QAE@XZ
+??0SvxUnoForbiddenCharsTable@@QAE@V?$ORef@VSvxForbiddenCharactersTable@@@vos@@@Z
+??1SvxUnoForbiddenCharsTable@@UAE@XZ
+?getForbiddenCharacters@SvxUnoForbiddenCharsTable@@UAA?AUForbiddenCharacters@i18n@star@sun@com@@ABULocale@lang@456@@Z
+?getImplementationId@?$WeakImplHelper2@VXForbiddenCharacters@i18n@star@sun@com@@VXSupportedLocales@linguistic2@345@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getLocales@SvxUnoForbiddenCharsTable@@UAA?AV?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@XZ
+?hasForbiddenCharacters@SvxUnoForbiddenCharsTable@@UAAEABULocale@lang@star@sun@com@@@Z
+?hasLocale@SvxUnoForbiddenCharsTable@@UAAEABULocale@lang@star@sun@com@@@Z
+?onChange@SvxUnoForbiddenCharsTable@@MAEXXZ
+?removeForbiddenCharacters@SvxUnoForbiddenCharsTable@@UAAXABULocale@lang@star@sun@com@@@Z
+?s_pType_com_sun_star_linguistic2_XSupportedLocales@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSupportedLocales@linguistic2@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?setForbiddenCharacters@SvxUnoForbiddenCharsTable@@UAAXABULocale@lang@star@sun@com@@ABUForbiddenCharacters@i18n@456@@Z
