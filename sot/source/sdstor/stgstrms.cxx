@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgstrms.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mm $ $Date: 2000-10-12 16:18:51 $
+ *  last change: $Author: mba $ $Date: 2002-07-22 12:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,7 +1099,7 @@ BOOL StgTmpStrm::Copy( StgTmpStrm& rSrc )
                 break;
             n -= nn;
         }
-        delete p;
+        delete [] p;
         rSrc.Seek( nCur );
         Seek( nCur );
         return BOOL( n == 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: mba $ $Date: 2002-07-22 12:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ StgPage::StgPage( StgCache* p, short n )
 
 StgPage::~StgPage()
 {
-    delete pData;
+    delete [] pData;
 }
 
 void StgPage::SetPage( short nOff, INT32 nVal )

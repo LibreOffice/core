@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgdir.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mm $ $Date: 2001-09-06 10:50:06 $
+ *  last change: $Author: mba $ $Date: 2002-07-22 12:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,7 @@ BOOL StgDirEntry::Tmp2Strm()
                     break;
                 n -= nn;
             }
-            delete p;
+            delete [] p;
             if( n )
             {
                 pTmpStrm->Seek( nPos );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storinfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+ *  last change: $Author: mba $ $Date: 2002-07-22 12:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ ULONG ReadClipboardFormat( SvStream & rStm )
         }
         else
             rStm.SetError( SVSTREAM_GENERALERROR );
-        delete p;
+        delete [] p;
     }
     else if( nLen == -1L )
         // Windows clipboard format

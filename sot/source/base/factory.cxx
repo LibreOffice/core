@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-30 10:22:08 $
+ *  last change: $Author: mba $ $Date: 2002-07-22 12:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ SotFactory::SotFactory( const SvGlobalName & rName,
 //=========================================================================
 SotFactory::~SotFactory()
 {
-    delete (void*)pSuperClasses;
+    delete [] pSuperClasses;
 }
 
 
@@ -276,7 +276,7 @@ void SotFactory::PutSuperClass( const SotFactory * pFact )
         const SotFactory ** pTmp = new const SotFactory * [ nSuperCount ];
         memcpy( (void *)pTmp, (void *)pSuperClasses,
                 sizeof( void * ) * (nSuperCount -1) );
-        delete (void *)pSuperClasses;
+        delete [] pSuperClasses;
         pSuperClasses = pTmp;
     }
     pSuperClasses[ nSuperCount -1 ] = pFact;

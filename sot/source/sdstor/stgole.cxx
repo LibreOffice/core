@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgole.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-01 11:39:03 $
+ *  last change: $Author: mba $ $Date: 2002-07-22 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ BOOL StgCompObjStream::Load()
         }
         else
             SetError( SVSTREAM_GENERALERROR );
-        delete p;
+        delete [] p;
     }
     return BOOL( GetError() == SVSTREAM_OK );
 }
