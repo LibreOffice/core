@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:29:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,15 +325,15 @@ typedef ::cppu::ImplHelper6<    ::com::sun::star::lang::XUnoTunnel
 //==================================================================
 // FmXFormController
 //==================================================================
-class FmXFormController     :public ::comphelper::OBaseMutex
-                            ,public FmXFormController_BASE1
-                            ,public FmXFormController_BASE2
-                            ,public FmXFormController_BASE3
-                            ,public ::cppu::OPropertySetHelper
-                            ,public FmDispatchInterceptor
-                            ,public ::comphelper::OAggregationArrayUsageHelper< FmXFormController >
-                            ,public ::svxform::OSQLParserClient
-                            ,public ::svx::IControllerFeatureInvalidation
+class SAL_DLLPRIVATE FmXFormController  :public ::comphelper::OBaseMutex
+                                        ,public FmXFormController_BASE1
+                                        ,public FmXFormController_BASE2
+                                        ,public FmXFormController_BASE3
+                                        ,public ::cppu::OPropertySetHelper
+                                        ,public FmDispatchInterceptor
+                                        ,public ::comphelper::OAggregationArrayUsageHelper< FmXFormController >
+                                        ,public ::svxform::OSQLParserClient
+                                        ,public ::svx::IControllerFeatureInvalidation
 {
     typedef ::std::map  <   sal_Int32,
                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
@@ -632,6 +632,11 @@ protected:
 
     /// update all our dispatchers
     void    updateAllDispatchers() const;
+
+    /** disposes all dispatchers in m_aFeatureDispatchers, empties m_aFeatureDispatchers,
+        and disposes m_aControllerFeatures
+    */
+    void    disposeAllFeaturesAndDispatchers() SAL_THROW(());
 
     void startFiltering();
     void stopFiltering();
