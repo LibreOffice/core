@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-14 10:17:31 $
+ *  last change: $Author: aw $ $Date: 2002-08-15 11:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,6 +844,12 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
                 pViewShell->ExecReq( aReq );
                 pViewShell->Invalidate();
                 pViewShell->ArrangeGUIElements();
+
+                // #101928# re-create handles to show new outfit
+                if(pViewShell->ISA(SdDrawViewShell))
+                {
+                    pViewShell->GetView()->AdjustMarkHdl();
+                }
             }
         }
 
