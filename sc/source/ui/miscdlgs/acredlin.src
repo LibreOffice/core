@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:33:56 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ chinese_simplified ] = "½ÓÊÜµÄ";
         Text[ russian ] = "Ïğèíÿòûå";
         Text[ polish ] = "Zaakceptowane";
-        Text[ japanese ] = "”F‚ß‚½";
+        Text[ japanese ] = "³”F";
         Text[ chinese_traditional ] = "±µ¨üªº";
         Text[ arabic ] = "ãŞÈæáÉ";
         Text[ dutch ] = "Geaccepteerde";
@@ -522,7 +522,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ chinese_simplified ] = "±»¾Ü¾øµÄ";
         Text[ russian ] = "Îòêëîíåííûå";
         Text[ polish ] = "Odrzucone";
-        Text[ japanese ] = "”F‚ß‚È‚¢";
+        Text[ japanese ] = "”jŠü";
         Text[ chinese_traditional ] = "³Q©Úµ´ªº";
         Text[ arabic ] = "ãÑİæÖÉ";
         Text[ dutch ] = "Geweigerde";
