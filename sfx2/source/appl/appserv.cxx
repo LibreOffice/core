@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:48:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,14 +96,11 @@
 #include <unotools/intlwrapper.hxx>
 #endif
 
-#ifndef _SV_CONFIG_HXX
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
 #endif
 #ifndef _SFXCANCEL_HXX //autogen
 #include <svtools/cancel.hxx>
