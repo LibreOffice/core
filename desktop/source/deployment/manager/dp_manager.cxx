@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:06:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
+#include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "com/sun/star/ucb/XContentAccess.hpp"
@@ -125,10 +126,9 @@ void PackageManagerImpl::initActivationLayer(
                                 false /* no throw */ ))
         {
             // scan for all entries in m_packagesDir:
-            OUString strTitle = OUSTR("Title");
             Reference<sdbc::XResultSet> xResultSet(
                 ucbContent.createCursor(
-                    Sequence<OUString>( &strTitle, 1 ),
+                    Sequence<OUString>( &StrTitle::get(), 1 ),
                     ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
             while (xResultSet->next())
             {
@@ -159,9 +159,9 @@ void PackageManagerImpl::initActivationLayer(
     }
     else
     {
-        // user|share
+        // user|share:
         OSL_ASSERT( m_activePackages.getLength() > 0 );
-        m_activePackages_expanded = expand_url( m_activePackages );
+        m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
         create_folder( 0, m_activePackages_expanded, xCmdEnv );
         m_activePackagesDB.reset(
             new PersistentMap(
@@ -172,11 +172,11 @@ void PackageManagerImpl::initActivationLayer(
             // clean up activation layer, scan for zombie temp dirs:
             t_string2string_map title2temp( m_activePackagesDB->getEntries() );
 
-            OUString strTitle = OUSTR("Title");
             ::ucb::Content tempFolder( m_activePackages_expanded, xCmdEnv );
             Reference<sdbc::XResultSet> xResultSet(
-                tempFolder.createCursor( Sequence<OUString>( &strTitle, 1 ),
-                                         ::ucb::INCLUDE_DOCUMENTS_ONLY ) );
+                tempFolder.createCursor(
+                    Sequence<OUString>( &StrTitle::get(), 1 ),
+                    ::ucb::INCLUDE_DOCUMENTS_ONLY ) );
             // get all temp directories:
             ::std::vector<OUString> tempEntries;
             while (xResultSet->next()) {
@@ -193,13 +193,13 @@ void PackageManagerImpl::initActivationLayer(
             for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
             {
                 OUString const & tempEntry = tempEntries[ pos ];
+                const MatchTempDir match( tempEntry );
                 if (::std::find_if( title2temp.begin(), title2temp.end(),
-                                    MatchTempDir( tempEntry ) ) ==
-                    title2temp.end())
+                                    match ) == title2temp.end())
                 {
                     // temp entry not needed anymore:
-                    OUString url(
-                        make_url( m_activePackages_expanded, tempEntry ) );
+                    const OUString url( makeURL( m_activePackages_expanded,
+                                                 tempEntry ) );
                     erase_path( url + OUSTR("_"),
                                 Reference<XCommandEnvironment>(),
                                 false /* no throw: ignore errors */ );
@@ -253,7 +253,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         stampURL = OUSTR("vnd.sun.star.expand:$UNO_"
                          "SHARED_PACKAGES_CACHE/stamp");
     }
-    else if (! context.matchIgnoreAsciiCaseAsciiL(
+    else if (! context.matchAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") )) {
         throw lang::IllegalArgumentException(
             OUSTR("invalid context given: ") + context,
@@ -429,6 +429,14 @@ OUString PackageManagerImpl::getContext() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
+Sequence< Reference<deployment::XPackageTypeInfo> >
+PackageManagerImpl::getSupportedPackageTypes() throw (RuntimeException)
+{
+    OSL_ASSERT( m_xRegistry.is() );
+    return m_xRegistry->getSupportedPackageTypes();
+}
+
+//______________________________________________________________________________
 void PackageManagerImpl::checkAborted(
     ::rtl::Reference<AbortChannel> const & abortChannel )
 {
@@ -483,27 +491,22 @@ OUString PackageManagerImpl::detectMediaType(
     }
     if (mediaType.getLength() == 0)
     {
-        if (title.endsWithIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
-            mediaType = OUSTR("application/vnd.sun.star.package-bundle");
-        else if (title.endsWithIgnoreAsciiCaseAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM(".zip") ))
-            mediaType = OUSTR("application/vnd.sun.star.legacy-package-bundle");
-        else
-        {
-            try {
-                Reference<deployment::XPackage> xPackage(
-                    m_xRegistry->bindPackage(
-                        url, OUString(), ucbContent.getCommandEnvironment() ) );
-                mediaType = xPackage->getMediaType();
-            }
-            catch (lang::IllegalArgumentException & exc) {
-                if (throw_exc)
-                    throw;
-                OSL_ENSURE( 0,
-                            ::rtl::OUStringToOString(
-                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-            }
+        try {
+            Reference<deployment::XPackage> xPackage(
+                m_xRegistry->bindPackage(
+                    url, OUString(), ucbContent.getCommandEnvironment() ) );
+            const Reference<deployment::XPackageTypeInfo> xPackageType(
+                xPackage->getPackageType() );
+            OSL_ASSERT( xPackageType.is() );
+            if (xPackageType.is())
+                mediaType = xPackageType->getMediaType();
+        }
+        catch (lang::IllegalArgumentException & exc) {
+            if (throw_exc)
+                throw;
+            (void) exc;
+            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
     return mediaType;
@@ -530,7 +533,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     else {
         tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
         // tweak user|share to macrofied url:
-        destFolder = make_url( m_activePackages, tempEntry );
+        destFolder = makeURL( m_activePackages, tempEntry );
     }
     destFolder += OUSTR("_");
 
@@ -595,16 +598,16 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     else
         xCmdEnv.set( xCmdEnv_ );
 
-    ProgressLevel progress( xCmdEnv );
     try {
         ::ucb::Content sourceContent;
         create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
-        OUString title( extract_throw<OUString>(
-                            sourceContent.getPropertyValue(OUSTR("Title")) ) );
-        OUString title_enc( ::rtl::Uri::encode(
-                                title, rtl_UriCharClassPchar,
-                                rtl_UriEncodeIgnoreEscapes,
-                                RTL_TEXTENCODING_UTF8 ) );
+        const OUString title( extract_throw<OUString>(
+                                  sourceContent.getPropertyValue(
+                                      StrTitle::get() ) ) );
+        const OUString title_enc( ::rtl::Uri::encode(
+                                      title, rtl_UriCharClassPchar,
+                                      rtl_UriEncodeIgnoreEscapes,
+                                      RTL_TEXTENCODING_UTF8 ) );
         OUString destFolder;
 
         OUString mediaType(mediaType_);
@@ -612,32 +615,45 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             mediaType = detectMediaType( title, sourceContent );
 
         {
-            ::osl::MutexGuard guard( getMutex() );
+            const ::osl::MutexGuard guard( getMutex() );
 
             if (m_activePackagesDB->has( title ))
             {
                 // package already deployed, interact --force:
-                interactContinuation_throw(
-                    deployment::DeploymentException(
+                Any nameClashResolveRequest(
+                    makeAny( NameClashResolveRequest(
+                                 getResourceString(
+                                     RID_STR_PACKAGE_ALREADY_ADDED ) + title,
+                                 static_cast<OWeakObject *>(this),
+                                 task::InteractionClassification_QUERY,
+                                 getDeployPath(title), title, OUString() ) ) );
+                bool replace = false, abort = false;
+                if (! interactContinuation(
+                        nameClashResolveRequest,
+                        XInteractionReplaceExistingData::static_type(),
+                        xCmdEnv, &replace, &abort )) {
+                    OSL_ASSERT( !replace && !abort );
+                    throw deployment::DeploymentException(
                         getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
                         static_cast<OWeakObject *>(this),
-                        makeAny(
-                            NameClashResolveRequest(
-                                getResourceString(
-                                    RID_STR_PACKAGE_ALREADY_ADDED ) + title,
-                                static_cast<OWeakObject *>(this),
-                                task::InteractionClassification_QUERY,
-                                getDeployPath(title), title, OUString() ) ) ),
-                    XInteractionReplaceExistingData::static_type(), xCmdEnv );
+                        nameClashResolveRequest );
+                }
+                if (abort || !replace)
+                    throw CommandFailedException(
+                        getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                        static_cast<OWeakObject *>(this),
+                        nameClashResolveRequest );
+
                 // remove clashing package before copying new version:
                 removePackage_(
-                    title, xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
+                    title, xAbortChannel,
+                    xCmdEnv_ /* unwrapped cmd env */ );
             }
             OSL_ASSERT( ! m_activePackagesDB->has( title ) );
 
             // copy file:
-            progress.update(
-                getResourceString(RID_STR_COPYING_PACKAGE) + title );
+            progressUpdate(
+                getResourceString(RID_STR_COPYING_PACKAGE) + title, xCmdEnv );
             if (m_activePackages.getLength() == 0)
             {
                 ::ucb::Content docFolderContent;
@@ -651,7 +667,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                         OUSTR("UCB transferContent() failed!"), 0 );
                 // set media-type:
                 ::ucb::Content docContent(
-                    make_url( m_context, title_enc ), xCmdEnv );
+                    makeURL( m_context, title_enc ), xCmdEnv );
                 docContent.setPropertyValue(
                     OUSTR("MediaType"), makeAny(mediaType) );
 
@@ -671,7 +687,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
 
         // bind activation package:
         Reference<deployment::XPackage> xPackage(
-            m_xRegistry->bindPackage( make_url( destFolder, title_enc ),
+            m_xRegistry->bindPackage( makeURL( destFolder, title_enc ),
                                       mediaType, xCmdEnv ) );
         OSL_ASSERT( xPackage.is() );
         // register package:
@@ -709,8 +725,7 @@ void PackageManagerImpl::removePackage_(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    ProgressLevel progress( xCmdEnv );
-    ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( getMutex() );
     Reference<deployment::XPackage> xPackage( getDeployedPackage_(
                                                   name, xCmdEnv ) );
     OSL_ASSERT( xPackage->getURL().equals( getDeployPath(name) ) );
@@ -805,16 +820,12 @@ OUString PackageManagerImpl::getDeployPath( OUString const & name,
         }
 
         ::rtl::OUStringBuffer buf;
-        if (m_activePackages.getLength() > 0) {
-            buf.append( m_activePackages );
-            buf.append( static_cast<sal_Unicode>('/') );
-        }
-        buf.append( val.copy( 0, semi ) );
+        buf.append( val.copy( 0, semi ) ); // tempEntry
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_/") );
         buf.append( ::rtl::Uri::encode( name, rtl_UriCharClassPchar,
                                         rtl_UriEncodeIgnoreEscapes,
                                         RTL_TEXTENCODING_UTF8 ) );
-        return buf.makeStringAndClear();
+        return makeURL( m_activePackages, buf.makeStringAndClear() );
     }
     throw lang::IllegalArgumentException(
         getResourceString(RID_STR_NO_SUCH_PACKAGE) + name,
@@ -875,7 +886,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        ::osl::MutexGuard guard( getMutex() );
+        const ::osl::MutexGuard guard( getMutex() );
         return getDeployedPackage_( name, xCmdEnv );
     }
     catch (RuntimeException &) {
@@ -920,7 +931,7 @@ PackageManagerImpl::getDeployedPackages(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        ::osl::MutexGuard guard( getMutex() );
+        const ::osl::MutexGuard guard( getMutex() );
         return getDeployedPackages_( xAbortChannel, xCmdEnv );
     }
     catch (RuntimeException &) {
@@ -982,16 +993,16 @@ void PackageManagerImpl::reinstallDeployedPackages(
         if (m_registryCache.getLength() > 0)
             erase_path( m_registryCache, xCmdEnv );
         initRegistryBackends( xCmdEnv );
+        Reference<util::XUpdatable> xUpdatable( m_xRegistry, UNO_QUERY );
+        if (xUpdatable.is())
+            xUpdatable->update();
 
         // reregister all:
-        ::osl::MutexGuard guard( getMutex() );
-        Sequence< Reference<deployment::XPackage> > packages(
+        const ::osl::MutexGuard guard( getMutex() );
+        const Sequence< Reference<deployment::XPackage> > packages(
             getDeployedPackages_( xAbortChannel, xCmdEnv ) );
-        Reference<deployment::XPackage> const * ppackages =
-            packages.getConstArray();
         for ( sal_Int32 pos = 0; pos < packages.getLength(); ++pos )
-            ppackages[ pos ]->registerPackage( xAbortChannel, xCmdEnv );
-
+            packages[ pos ]->registerPackage( xAbortChannel, xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
