@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 14:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
 
     ADORecordset *pRec=NULL;
     m_pADOConnection->OpenSchema(adSchemaProviderTypes,vsa,aEmpty,&pRec);
-    ADOS::ThrowException(*m_pADOConnection,*this);
+    //  ADOS::ThrowException(*m_pADOConnection,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRec);
     pResult->setTypeInfoMap();

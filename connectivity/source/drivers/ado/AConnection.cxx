@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:07:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 14:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    Reference< XResultSet> xRs = getMetaData ()->getTypeInfo ();
+    Reference< XResultSet> xRs = getMetaData()->getTypeInfo();
     Reference< XRow> xRow(xRs,UNO_QUERY);
     // Information for a single SQL type
 
