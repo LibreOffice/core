@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-02 13:56:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "tabvwsh.hxx"
 #include "drwlayer.hxx"
 #include "drawview.hxx"
+#include "document.hxx"
 #include "scresid.hxx"
 #include "progress.hxx"
 #include "sc.hrc"
@@ -141,19 +142,28 @@ void LimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
     if ( !rPage.Width() || !rPage.Height() )
         return;
 
-    if ( rSize.Width() > rPage.Width() || rSize.Height() > rPage.Height() )
+    Size aPageSize = rPage;
+    BOOL bNegative = aPageSize.Width() < 0;
+    if ( bNegative )
     {
-        double fX = rPage.Width()  / (double) rSize.Width();
-        double fY = rPage.Height() / (double) rSize.Height();
+        //  make everything positive temporarily
+        aPageSize.Width() = -aPageSize.Width();
+        rPos.X() = -rPos.X() - rSize.Width();
+    }
+
+    if ( rSize.Width() > aPageSize.Width() || rSize.Height() > aPageSize.Height() )
+    {
+        double fX = aPageSize.Width()  / (double) rSize.Width();
+        double fY = aPageSize.Height() / (double) rSize.Height();
 
         if ( fX < fY )
         {
-            rSize.Width()  = rPage.Width();
+            rSize.Width()  = aPageSize.Width();
             rSize.Height() = (long) ( rSize.Height() * fX );
         }
         else
         {
-            rSize.Height() = rPage.Height();
+            rSize.Height() = aPageSize.Height();
             rSize.Width()  = (long) ( rSize.Width() * fY );
         }
 
@@ -163,10 +173,13 @@ void LimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
             rSize.Height() = 1;
     }
 
-    if ( rPos.X() + rSize.Width() > rPage.Width() )
-        rPos.X() = rPage.Width() - rSize.Width();
-    if ( rPos.Y() + rSize.Height() > rPage.Height() )
-        rPos.Y() = rPage.Height() - rSize.Height();
+    if ( rPos.X() + rSize.Width() > aPageSize.Width() )
+        rPos.X() = aPageSize.Width() - rSize.Width();
+    if ( rPos.Y() + rSize.Height() > aPageSize.Height() )
+        rPos.Y() = aPageSize.Height() - rSize.Height();
+
+    if ( bNegative )
+        rPos.X() = -rPos.X() - rSize.Width();       // back to real position
 }
 
 //------------------------------------------------------------------------
@@ -197,6 +210,11 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
     SdrPageView* pPV  = pView->GetPageViewPvNum(0);
     SdrPage* pPage = pPV->GetPage();
     Point aInsertPos = pViewSh->GetInsertPos();
+
+    ScViewData* pData = pViewSh->GetViewData();
+    if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+        aInsertPos.X() -= aLogicSize.Width();       // move position to left edge
+
     LimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
     Rectangle aRect ( aInsertPos, aLogicSize );
