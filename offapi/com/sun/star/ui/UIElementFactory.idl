@@ -1,0 +1,40 @@
+#ifndef __com_sun_star_ui_UIElementFactory_idl__
+#define __com_sun_star_ui_UIElementFactory_idl__
+
+#ifndef __com_sun_star_ui_XUIElementFactory_idl__
+#include <com//sun/star/ui/XUIElementFactory.idl>
+#endif
+
+//=============================================================================
+
+/** specifies a user interface element factory that can create and initialize
+    a user interface element type.
+
+    <p>
+    It depends on the implementation which user interface element types can be
+    created. It is also possible that a factory is only able to create one
+    special user interface element. User interface element factories must be
+    registered at the single instance <type>UIElementFactoryManager</type>
+    service to provide access to itself.
+    </p>
+
+    @since OOo 2.0.0
+*/
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+service UIElementFactory
+{
+    /** this interface provides a function to create and initalize new
+        instances of user interface elements.
+
+        @see XUIElementFactory
+     */
+    interface com::sun::star::ui::XUIElementFactory;
+};
+
+}; }; }; };
+
+#endif
