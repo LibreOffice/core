@@ -2,9 +2,9 @@
  *
  *  $RCSfile: movedfwdfrmsbyobjpos.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:42:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@ class SwMovedFwdFrmsByObjPos
 
         void Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
                      const sal_uInt32 _nToPageNum );
+
+        // --> OD 2005-01-12 #i40155#
+        void Remove( const SwTxtFrm& _rTxtFrm );
+        // <--
 
         bool FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                   sal_uInt32& _ornToPageNum ) const;
