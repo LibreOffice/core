@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-29 13:10:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
     if ( !pValue )
     {
         pValue = getenv( "TMP" );
-#if defined(SOLARIS) || defined (LINUX)
+#if defined(SOLARIS) || defined (LINUX) || defined (FREEBSD)
         if ( !pValue )
             pValue = P_tmpdir;
 #endif
