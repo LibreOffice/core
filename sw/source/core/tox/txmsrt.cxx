@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-22 07:29:46 $
+ *  last change: $Author: fme $ $Date: 2002-08-23 08:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,6 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 #ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #endif
@@ -141,8 +132,8 @@
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
 #endif
-#ifndef _TOXHLP_HXX
-#include <toxhlp.hxx>
+#ifndef _TOXWRAP_HXX
+#include <toxwrap.hxx>
 #endif
 
 #ifndef _COMCORE_HRC
@@ -177,17 +168,15 @@ SwTOXInternational::SwTOXInternational( const SwTOXInternational& rIntl ) :
     sSortAlgorithm(rIntl.sSortAlgorithm),
     nOptions( rIntl.nOptions )
 {
-    Init();
+  Init();
 }
 
 void SwTOXInternational::Init()
 {
-    ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( eLang ));
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
+    pIndexWrapper = new IndexEntrySupplierWrapper();
 
-    pIndexWrapper = new IndexEntrySupplierWrapper( aLcl, xMSF );
+    const ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( eLang ) );
+    pIndexWrapper->SetLocale( aLcl );
 
     if(!sSortAlgorithm.Len())
     {

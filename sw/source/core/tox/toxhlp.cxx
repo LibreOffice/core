@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 09:32:38 $
+ *  last change: $Author: fme $ $Date: 2002-08-23 08:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,17 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _TOXHLP_HXX
-#include <toxhlp.hxx>
+#ifndef _TOXWRAP_HXX
+#include <toxwrap.hxx>
 #endif
 
 
-IndexEntrySupplierWrapper::IndexEntrySupplierWrapper(
-        const STAR_NMSPC::lang::Locale& rLcl,
-        STAR_REFERENCE( lang::XMultiServiceFactory )& rxMSF )
-    : aLcl( rLcl )
+IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
 {
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > rxMSF =
+                                    ::comphelper::getProcessServiceFactory();
+
     try {
         STAR_REFERENCE( uno::XInterface ) xI =
             rxMSF->createInstance( ::rtl::OUString::createFromAscii(
@@ -164,6 +165,25 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
     {
 #ifndef PRODUCT
         ByteString aMsg( "getAlgorithmList: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return sRet;
+}
+
+STAR_NMSPC::uno::Sequence < com::sun::star::lang::Locale >
+IndexEntrySupplierWrapper::GetLocaleList() const
+{
+    ::com::sun::star::uno::Sequence< com::sun::star::lang::Locale > sRet;
+
+    try {
+        sRet = xIES->getLocaleList();
+    }
+    catch ( UNO_NMSPC::Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "getLocaleList: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif

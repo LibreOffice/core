@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-03-05 08:04:38 $
+ *  last change: $Author: fme $ $Date: 2002-08-23 08:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,9 @@ public:
 /* -----------------14.07.99 12:17-------------------
 
  --------------------------------------------------*/
-class CollatorRessource;
+class IndexEntryRessource;
+class IndexEntrySupplierWrapper;
+
 class SwTOXSelectTabPage : public SfxTabPage
 {
     FixedLine       aTypeTitleFL;
@@ -301,7 +303,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     FixedText       aSortAlgorithmFT;
     ListBox         aSortAlgorithmLB;
 
-    CollatorRessource* pColRes;
+    IndexEntryRessource* pIndexRes;
 
     Point           aCBLeftPos1;
     Point           aCBLeftPos2;
@@ -312,6 +314,8 @@ class SwTOXSelectTabPage : public SfxTabPage
     String          sAutoMarkType;
     String          sAddStyleUser;
     String          sAddStyleContent;
+
+    const IndexEntrySupplierWrapper* pIndexEntryWrapper;
 
     BOOL            bFirstCall;
 
