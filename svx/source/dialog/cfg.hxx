@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:04:36 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
 #include <drafts/com/sun/star/ui/XImageManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
@@ -474,6 +477,7 @@ protected:
 
     virtual void            Init() = 0;
     virtual void            UpdateButtonStates() = 0;
+    virtual short           QueryReset() = 0;
 
     void            PositionContentsListBox();
 
@@ -485,7 +489,7 @@ protected:
                                         SvxConfigEntry* pParentData );
 
     SvLBoxEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
-                                        USHORT nPos = LIST_APPEND );
+                                        ULONG nPos = LIST_APPEND );
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
@@ -532,6 +536,7 @@ private:
 
     void            Init();
     void            UpdateButtonStates();
+    short           QueryReset();
     bool            DeleteSelectedContent();
     void            DeleteSelectedTopLevel();
 
@@ -636,6 +641,7 @@ private:
     DECL_LINK( MoveHdl, Button * );
 
     void            UpdateButtonStates();
+    short           QueryReset();
     void            Init();
     bool            DeleteSelectedContent();
     void            DeleteSelectedTopLevel();
@@ -757,10 +763,15 @@ private:
     HelpButton      aBtnHelp;
     PushButton      aBtnImport;
 
+    sal_Int32       m_nExpectedSize;
+
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::ui::XImageManager > m_xImageManager;
 
-    void ImportGraphic( const rtl::OUString& aURL );
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::graphic::XGraphicProvider > m_xGraphProvider;
+
+    bool ImportGraphic( const rtl::OUString& aURL );
 
     void ImportGraphics(
         const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
@@ -772,6 +783,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::ui::XImageManager >& rXImageManager
         );
+
+    ~SvxIconSelectorDialog();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
         GetSelectedIcon();
