@@ -1,10 +1,10 @@
-#/*************************************************************************
+/*************************************************************************
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:31:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 14:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,10 @@ ImageList::ImageList( const ResId& rResId ) :
             aUserImage = aResMgrName.copy( nPos, ( ( -1 != nSecondPos ) ? nSecondPos : aResMgrName.getLength() ) - nPos );
         }
 
-        if( !aImageTree->loadImage( aUserImage += String::CreateFromInt32( rResId.GetId() ), aBmpEx ) )
+        aUserImage += String::CreateFromInt32( rResId.GetId() );
+        aUserImage += String::CreateFromInt32( nCount );
+
+        if( !aImageTree->loadImage( aUserImage, aBmpEx ) )
         {
             BitmapEx    aWorkBmpEx;
             Size        aItemSizePixel;
@@ -622,7 +625,24 @@ ImageList::ImageList( const ResId& rResId ) :
                         bInit = true;
                     }
 
-                    DBG_ASSERT( aItemSizePixel == aWorkSizePixel, "Differerent dimensions in ItemList images" );
+#ifdef DBG_UTIL
+                    if( aItemSizePixel != aWorkSizePixel )
+                    {
+                        ByteString aStr( "Differerent dimensions in ItemList images: " );
+
+                        aStr += ByteString( String( pStringAry[ i ] ), RTL_TEXTENCODING_ASCII_US );
+                        aStr += " is ";
+                        aStr += ByteString::CreateFromInt32( aWorkSizePixel.Width() );
+                        aStr += "x";
+                        aStr += ByteString::CreateFromInt32( aWorkSizePixel.Height() );
+                        aStr += " but needs to be ";
+                        aStr += ByteString::CreateFromInt32( aItemSizePixel.Width() );
+                        aStr += "x";
+                        aStr += ByteString::CreateFromInt32( aItemSizePixel.Height() );
+
+                        DBG_ERROR( aStr.GetBuffer() );
+                    }
+#endif
 
                     const Rectangle aRectDst( Point( aItemSizePixel.Width() * i, 0 ), aItemSizePixel );
                     const Rectangle aRectSrc( Point( 0, 0 ), aWorkSizePixel );
@@ -667,44 +687,70 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
     DBG_CTOR( ImageList, NULL );
 
     static ImplImageTreeSingletonRef    aImageTree;
-    ::rtl::OUString                     aProjectName;
-    BitmapEx                            aBmpEx, aWorkBmpEx;
-    Size                                aItemSizePixel;
-    bool                                bInit = false;
+    ::rtl::OUString                     aUserImage( rPrefix );
+    BitmapEx                            aBmpEx;
 
-    for( int i = 0; i < rNameVector.size(); ++i )
+    aUserImage = aUserImage.replace( '/', '_' );
+
+    if( !rPrefix.getLength() || !rNameVector.size() || !aImageTree->loadImage( aUserImage += String::CreateFromInt32( rNameVector.size() ), aBmpEx ) )
     {
+        BitmapEx        aWorkBmpEx;
         ::rtl::OUString aImageName;
+        Size            aItemSizePixel;
+        bool            bInit = false;
 
-        aImageName = rPrefix.getLength() ?
-                     ( ( aImageName = rPrefix ) += rNameVector[ i ] ) :
-                     rNameVector[ i ];
-
-        if( aImageTree->loadImage( aImageName, aWorkBmpEx ) )
+        for( int i = 0; i < rNameVector.size(); ++i )
         {
-            const Size aWorkSizePixel( aWorkBmpEx.GetSizePixel() );
+            aImageName = rPrefix.getLength() ?
+                        ( ( aImageName = rPrefix ) += rNameVector[ i ] ) :
+                        rNameVector[ i ];
 
-            if( !bInit )
+            if( aImageTree->loadImage( aImageName, aWorkBmpEx, true ) )
             {
-                aItemSizePixel = aWorkSizePixel;
-                aBmpEx = Bitmap( Size( aWorkSizePixel.Width() * rNameVector.size(), aWorkSizePixel.Height() ), 24 );
-                bInit = true;
-            }
+                const Size aWorkSizePixel( aWorkBmpEx.GetSizePixel() );
 
-            DBG_ASSERT( aItemSizePixel == aWorkSizePixel, "Differerent dimensions in ItemList images" );
+                if( !bInit )
+                {
+                    aItemSizePixel = aWorkSizePixel;
+                    aBmpEx = Bitmap( Size( aWorkSizePixel.Width() * rNameVector.size(), aWorkSizePixel.Height() ), 24 );
+                    bInit = true;
+                }
 
-            const Rectangle aRectDst( Point( aItemSizePixel.Width() * i, 0 ), aItemSizePixel );
-            const Rectangle aRectSrc( Point( 0, 0 ), aWorkSizePixel );
-
-            aBmpEx.CopyPixel( aRectDst, aRectSrc, &aWorkBmpEx );
-        }
 #ifdef DBG_UTIL
-        else
-        {
-            ByteString aErrorStr( "ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const Color* pMaskColor  ): could not load image <" );
-            DBG_ERROR( ( ( aErrorStr += ByteString( String( aImageName ), RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
-        }
+                if( aItemSizePixel != aWorkSizePixel )
+                {
+                    ByteString aStr( "Differerent dimensions in ItemList images: " );
+
+                    aStr += ByteString( String( aImageName ), RTL_TEXTENCODING_ASCII_US );
+                    aStr += " is ";
+                    aStr += ByteString::CreateFromInt32( aWorkSizePixel.Width() );
+                    aStr += "x";
+                    aStr += ByteString::CreateFromInt32( aWorkSizePixel.Height() );
+                    aStr += " but needs to be ";
+                    aStr += ByteString::CreateFromInt32( aItemSizePixel.Width() );
+                    aStr += "x";
+                    aStr += ByteString::CreateFromInt32( aItemSizePixel.Height() );
+
+                    DBG_ERROR( aStr.GetBuffer() );
+                }
 #endif
+
+                const Rectangle aRectDst( Point( aItemSizePixel.Width() * i, 0 ), aItemSizePixel );
+                const Rectangle aRectSrc( Point( 0, 0 ), aWorkSizePixel );
+
+                aBmpEx.CopyPixel( aRectDst, aRectSrc, &aWorkBmpEx );
+            }
+#ifdef DBG_UTIL
+            else
+            {
+                ByteString aErrorStr( "ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const Color* pMaskColor  ): could not load image <" );
+                DBG_ERROR( ( ( aErrorStr += ByteString( String( aImageName ), RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
+            }
+#endif
+        }
+
+        if( !aBmpEx.IsEmpty() )
+            aImageTree->addUserImage( aUserImage, aBmpEx );
     }
 
     if( !aBmpEx.IsEmpty() && !aBmpEx.IsTransparent() && pMaskColor )
@@ -1035,10 +1081,10 @@ void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage
 {
     DBG_ASSERT( GetImagePos( rImageName ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageName already exists" );
 
+    USHORT i, nMax = 0;
+
     if( mpImplData )
     {
-        USHORT i, nMax = 0;
-
         for( i = 0; i < mpImplData->mnArySize; ++i )
         {
             if( mpImplData->mpAry[ i ].mnId > nMax )
@@ -1046,27 +1092,25 @@ void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage
                 nMax = mpImplData->mpAry[ i ].mnId;
             }
         }
+    }
 
-        if( nMax < USHRT_MAX )
+    if( nMax < USHRT_MAX )
+    {
+        AddImage( ++nMax, rImage );
+
+        for( i = 0; i < mpImplData->mnArySize; ++i )
         {
-            AddImage( ++nMax, rImage );
-
-            for( i = 0; i < mpImplData->mnArySize; ++i )
+            if( mpImplData->mpAry[ i ].mnId == nMax )
             {
-                if( mpImplData->mpAry[ i ].mnId == nMax )
-                {
-                    mpImplData->mpAry[ i ].maName = rImageName;
-                    break;
-                }
+                mpImplData->mpAry[ i ].maName = rImageName;
+                break;
             }
-        }
-        else
-        {
-            DBG_ERROR( "No free image id left" );
         }
     }
     else
-        AddImage( 1, rImage );
+    {
+        DBG_ERROR( "No free image id left" );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1128,7 +1172,10 @@ void ImageList::CopyImage( USHORT nId, USHORT nCopyId )
 
 void ImageList::CopyImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rCopyName )
 {
-    CopyImage( ImplGetImageId( rImageName ), ImplGetImageId( rCopyName ) );
+    const USHORT nId1 = ImplGetImageId( rImageName ), nId2 = ImplGetImageId( rCopyName );
+
+    if( nId1 && nId2 )
+        CopyImage( nId1, nId2 );
 }
 
 // -----------------------------------------------------------------------
@@ -1147,7 +1194,10 @@ void ImageList::ReplaceImage( USHORT nId, const Image& rImage )
 
 void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage )
 {
-    ReplaceImage( ImplGetImageId( rImageName ), rImage );
+    const USHORT nId = ImplGetImageId( rImageName );
+
+    if( nId )
+        ReplaceImage( nId, rImage );
 }
 
 // -----------------------------------------------------------------------
@@ -1190,7 +1240,10 @@ void ImageList::ReplaceImage( USHORT nId, USHORT nReplaceId )
 
 void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rReplaceName )
 {
-    ReplaceImage( ImplGetImageId( rImageName ), ImplGetImageId( rReplaceName ) );
+    const USHORT nId1 = ImplGetImageId( rImageName ), nId2 = ImplGetImageId( rReplaceName );
+
+    if( nId1 && nId2 )
+        ReplaceImage( nId1, nId2 );
 }
 
 // -----------------------------------------------------------------------
@@ -1230,7 +1283,10 @@ void ImageList::RemoveImage( USHORT nId )
 
 void ImageList::RemoveImage( const ::rtl::OUString& rImageName )
 {
-    RemoveImage( ImplGetImageId( rImageName ) );
+    const USHORT nId = ImplGetImageId( rImageName );
+
+    if( nId )
+        RemoveImage( nId );
 }
 
 // -----------------------------------------------------------------------
@@ -1276,7 +1332,12 @@ Image ImageList::GetImage( USHORT nId ) const
 
 Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
 {
-    return GetImage( ImplGetImageId( rImageName ) );
+    const USHORT nId = ImplGetImageId( rImageName );
+
+    if( nId )
+        return GetImage( nId );
+    else
+        return Image();
 }
 
 // -----------------------------------------------------------------------
