@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-30 09:43:20 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3093,6 +3093,19 @@ BYTE SwTxtNode::GetOutlineLevel() const
     }
 
     return aResult;
+}
+
+BYTE SwTxtNode::GetLevel() const
+{
+    return pNdNum ? pNdNum->GetRealLevel() : NO_NUMBERING;
+}
+
+void SwTxtNode::SetLevel(BYTE nLevel)
+{
+    if (pNdNum)
+    {
+        pNdNum->SetLevel(nLevel);
+    }
 }
 
 void SwTxtNode::SetOutlineLevel(BYTE nLevel)
