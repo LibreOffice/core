@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-23 11:51:04 $
+#   last change: $Author: hr $ $Date: 2004-11-09 13:58:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,15 +102,22 @@ LIB1OBJFILES= $(SLOFILES)
 LIB1TARGET=$(SLB)$/$(UNOCOMPONENT1).lib
 
 SHL1TARGET=	$(UNOCOMPONENT1)  
+
+
 SHL1STDLIBS= \
         $(CPPULIB) \
         $(CPPUHELPER) \
         $(SALLIB) \
         $(SALHELPERLIB)
+        
 
-.IF "$(OS)" == "WNT"
-SHL1STDLIBS += advapi32.lib
-.ENDIF # WNT
+.IF "$(GUI)" == "WNT"
+.IF "$(COM)"!="GCC"
+SHL1STDLIBS += uwinapi.lib advapi32.lib
+.ELSE
+SHL1STDLIBS += -luwinapi -ladvapi32 
+.ENDIF # GCC
+.ENDIF #WNT
 
 SHL1VERSIONMAP = sunjavaplugin.map
 SHL1DEPN=
