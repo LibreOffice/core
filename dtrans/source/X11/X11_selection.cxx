@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 08:45:46 $
+ *  last change: $Author: pl $ $Date: 2001-05-23 13:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ SelectionManager::SelectionManager() :
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_bDropEnterSent            = true;
+    m_aDragRunning.reset();
 }
 
 Cursor SelectionManager::createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY )
@@ -294,6 +295,8 @@ Cursor SelectionManager::createCursor( const char* pPointerData, const char* pMa
 
 void SelectionManager::initialize( const Sequence< Any >& arguments )
 {
+    MutexGuard aGuard(m_aMutex);
+
     if( ! m_xDisplayConnection.is() )
     {
         /*
@@ -463,6 +466,7 @@ SelectionManager::~SelectionManager()
     {
         osl_terminateThread( m_aDragExecuteThread );
         osl_joinWithThread( m_aDragExecuteThread );
+        m_aDragExecuteThread = NULL;
         // thread handle is freed in dragDoDispatch()
     }
 
@@ -478,6 +482,11 @@ SelectionManager::~SelectionManager()
         // destroy message window
         if( m_aWindow )
             XDestroyWindow( m_pDisplay, m_aWindow );
+
+        // paranoia setting, the drag thread should have
+        // done that already
+        XUngrabPointer( m_pDisplay, CurrentTime );
+        XUngrabKeyboard( m_pDisplay, CurrentTime );
 
         XCloseDisplay( m_pDisplay );
     }
@@ -951,9 +960,12 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     }
 
 #ifdef DEBUG
-    fprintf( stderr, "SelectionManager::getPasteDataTypes( %s ) = %s\n", OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), bSuccess ? "true" : "false" );
-    for( int i = 0; i < rTypes.getLength(); i++ )
-        fprintf( stderr, "type: %s\n", OUStringToOString( rTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    if( selection != m_nCLIPBOARDAtom )
+    {
+        fprintf( stderr, "SelectionManager::getPasteDataTypes( %s ) = %s\n", OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), bSuccess ? "true" : "false" );
+        for( int i = 0; i < rTypes.getLength(); i++ )
+            fprintf( stderr, "type: %s\n", OUStringToOString( rTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    }
 #endif
 
     return bSuccess;
@@ -1311,6 +1323,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             aEvent.Context      = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
             aEvent.LocationX    = m_nLastX;
             aEvent.LocationY    = m_nLastY;
+            aEvent.SourceActions = m_nSourceActions;
             if( m_nCurrentProtocolVersion < 2 )
                 aEvent.DropAction = DNDConstants::ACTION_COPY;
             else if( rMessage.data.l[4] == m_nXdndActionCopy )
@@ -1448,6 +1461,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
             nNewDragAction = DNDConstants::ACTION_LINK;
         else
             nNewDragAction = DNDConstants::ACTION_NONE;
+        nNewDragAction &= m_nSourceActions;
         if( nNewDragAction != m_nUserDragAction )
         {
             m_nUserDragAction = nNewDragAction;
@@ -1507,11 +1521,15 @@ bool SelectionManager::updateDragAction( int modifierState )
         nNewDropAction = DNDConstants::ACTION_LINK;
     if( m_nCurrentProtocolVersion < 0 && m_aDropWindow != None )
         nNewDropAction = DNDConstants::ACTION_COPY;
+    nNewDropAction &= m_nSourceActions;
 
     if( nNewDropAction != m_nUserDragAction )
     {
+#ifdef DEBUG
+        fprintf( stderr, "updateDragAction: %x -> %x\n", (int)m_nUserDragAction, (int)nNewDropAction );
+#endif
         bRet = true;
-        m_nUserDragAction = nNewDropAction & m_nSourceActions;
+        m_nUserDragAction = nNewDropAction;
 
         DragSourceDragEvent dsde;
         dsde.Source             = static_cast< OWeakObject* >(this);
@@ -2041,7 +2059,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
     dsde.Source             = static_cast< OWeakObject* >(this);
     dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
     dsde.DragSource         = static_cast< XDragSource* >(this);
-    dsde.DropAction         = nNewProtocolVersion >= 0 ? DNDConstants::ACTION_MOVE : DNDConstants::ACTION_COPY;
+    dsde.DropAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
     dsde.UserAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
 
     ::std::hash_map< Window, DropTargetEntry >::const_iterator it;
@@ -2100,6 +2118,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
                 dtde.LocationX              = nWinX;
                 dtde.LocationY              = nWinY;
                 dtde.DropAction             = m_nUserDragAction;
+                dtde.SourceActions          = m_nSourceActions;
                 dtde.SupportedDataFlavors   = m_xDragSourceTransferable->getTransferDataFlavors();
                 it->second.m_pTarget->dragEnter( dtde );
             }
@@ -2143,6 +2162,10 @@ void SelectionManager::startDrag(
     const Reference< XDragSourceListener >& listener
     )
 {
+#ifdef DEBUG
+    fprintf( stderr, "startDrag( sourceActions = %x )\n", (int)sourceActions );
+#endif
+
     DragSourceDropEvent aDragFailedEvent;
     aDragFailedEvent.Source             = static_cast< OWeakObject* >(this);
     aDragFailedEvent.DragSource         = static_cast< XDragSource* >(this);
@@ -2150,7 +2173,7 @@ void SelectionManager::startDrag(
     aDragFailedEvent.DropAction         = DNDConstants::ACTION_NONE;
     aDragFailedEvent.DropSuccess        = sal_False;
 
-    if( m_xDragSourceListener.is() || m_aDragExecuteThread )
+    if( m_aDragRunning.check() )
     {
         if( listener.is() )
             listener->dragDropEnd( aDragFailedEvent );
@@ -2228,6 +2251,7 @@ void SelectionManager::startDrag(
                 XUngrabPointer( m_pDisplay, CurrentTime );
             if( nKeyboardGrabSuccess == GrabSuccess )
                 XUngrabKeyboard( m_pDisplay, CurrentTime );
+            XFlush( m_pDisplay );
             if( listener.is() )
                 listener->dragDropEnd( aDragFailedEvent );
             return;
@@ -2251,6 +2275,10 @@ void SelectionManager::startDrag(
 
         m_nSourceActions                = sourceActions;
         m_nUserDragAction               = DNDConstants::ACTION_MOVE & m_nSourceActions;
+        if( ! m_nUserDragAction )
+            m_nUserDragAction           = DNDConstants::ACTION_COPY & m_nSourceActions;
+        if( ! m_nUserDragAction )
+            m_nUserDragAction           = DNDConstants::ACTION_LINK & m_nSourceActions;
         m_bDropSent                     = false;
         m_bDropSuccess                  = false;
         m_bWaitingForPrimaryConversion  = false;
@@ -2266,12 +2294,15 @@ void SelectionManager::startDrag(
             else if( aEvent.Buttons & MouseButton::MIDDLE )
                 m_nDragButton = Button2;
         }
-
+#ifdef DEBUG
+        fprintf( stderr, "m_nUserDragAction = %x\n", (int)m_nUserDragAction );
+#endif
         updateDragWindow( root_x, root_y, aRoot );
-        setCursor( cursor ? cursor : m_aMoveCursor, m_aDropWindow, m_nDropTimestamp );
+        m_nUserDragAction = ~0;
         updateDragAction( mask );
     }
 
+    m_aDragRunning.set();
     m_aDragExecuteThread = osl_createThread( runDragExecute, this );
 }
 
@@ -2299,9 +2330,6 @@ void SelectionManager::dragDoDispatch()
     fprintf( stderr, "end executeDrag dispatching\n" );
 #endif
     {
-        osl_freeThreadHandle( m_aDragExecuteThread );
-        m_aDragExecuteThread = None;
-
         MutexGuard aGuard(m_aMutex);
 
         if( m_xDragSourceListener.is() )
@@ -2336,6 +2364,14 @@ void SelectionManager::dragDoDispatch()
         m_xDragSourceTransferable.clear();
         XUngrabPointer( m_pDisplay, CurrentTime );
         XUngrabKeyboard( m_pDisplay, CurrentTime );
+        XFlush( m_pDisplay );
+
+        osl_freeThreadHandle( m_aDragExecuteThread );
+        m_aDragExecuteThread = NULL;
+        m_aDragRunning.reset();
+#ifdef DEBUG
+        fprintf( stderr, "thread cleaned up\n" );
+#endif
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
+ *  last change: $Author: pl $ $Date: 2001-05-23 13:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,7 @@ namespace x11 {
         Display*                    m_pDisplay;
         oslThread                   m_aThread;
         oslThread                   m_aDragExecuteThread;
+        ::osl::Condition            m_aDragRunning;
         Window                      m_aWindow;
         Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
