@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sessionlistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:55:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/internaloptions.hxx>
-
+#include <stdio.h>
 //_______________________________________________
 // interface includes
 
@@ -235,14 +235,14 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
     throw (css::uno::RuntimeException)
 {
-    if (event.FeatureURL.Main.compareToAscii("vendor.sun.star.autorecovery:/doSessionResore"))
+   if (event.FeatureURL.Complete.equalsAscii("vnd.sun.star.autorecovery:/doSessionRestore"))
     {
         if (event.FeatureDescriptor.compareToAscii("update")==0)
             m_bRestored = sal_True; // a document was restored
-        if (event.FeatureDescriptor.compareToAscii("stop")==0)
-            osl_setCondition(m_cRestoreDone); // done with restore
+        // if (event.FeatureDescriptor.compareToAscii("stop")==0)
+
     }
-    else if (event.FeatureURL.Main.compareToAscii("vendor.sun.star.autorecovery:/doSessionSave"))
+    else if (event.FeatureURL.Complete.equalsAscii("vnd.sun.star.autorecovery:/doSessionSave"))
     {
         if (event.FeatureDescriptor.compareToAscii("stop")==0)
         {
@@ -270,11 +270,11 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         if (!bCrash && bRecovery)
         {
             URL aURL;
-            aURL.Complete = OUString::createFromAscii("vendor.sun.star.autorecovery:/doSessionResore");
+            aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionRestore");
             Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
             xURLTransformer->parseStrict(aURL);
-            Sequence< PropertyValue > args(1);
-            args[0] = PropertyValue(OUString::createFromAscii("async"),-1,makeAny(sal_True),PropertyState_DIRECT_VALUE);
+            Sequence< PropertyValue > args;
+            xDispatch->addStatusListener(this, aURL);
             xDispatch->dispatch(aURL, args);
             m_bRestored = sal_True;
         }
@@ -297,17 +297,17 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool bCancelable 
         try
         {
             // xd create SERVICENAME_AUTORECOVERY -> XDispatch
-            // xd->dispatch("vendor.sun.star.autorecovery:/doSessionSave, async=true
+            // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=true
             // on stop event m_rSessionManager->saveDone(this);
 
             Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
             Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
             URL aURL;
-            aURL.Complete = OUString::createFromAscii("vendor.sun.star.autorecovery:/doSessionSave");
+            aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionSave");
             xURLTransformer->parseStrict(aURL);
             xDispatch->addStatusListener(this, aURL);
             Sequence< PropertyValue > args(1);
-            args[0] = PropertyValue(OUString::createFromAscii("async"),-1,makeAny(sal_True),PropertyState_DIRECT_VALUE);
+            args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(sal_True),PropertyState_DIRECT_VALUE);
             xDispatch->dispatch(aURL, args);
             bDispatched = sal_True;
             // on stop event set call m_rSessionManager->saveDone(this);
