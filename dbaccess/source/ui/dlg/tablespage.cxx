@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 14:08:08 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 08:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
+#include <com/sun/star/sdbcx/XAppend.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #endif
@@ -177,8 +180,12 @@ namespace dbaui
         ,m_aExplanation         (this, ResId(FT_FILTER_EXPLANATION))
         ,m_aColumnsLine         (this, ResId(FL_SEPARATOR2))
         ,m_aSuppressVersionColumns(this, ResId(CB_SUPPRESVERSIONCL))
-        ,m_bCatalogAtStart      (sal_True)
-        ,m_pAdminDialog         (NULL)
+        ,m_bCheckedAll          ( sal_False )
+        ,m_bCatalogAtStart      ( sal_True )
+        ,m_pAdminDialog         ( NULL )
+        ,m_bCanAddTables        ( sal_False )
+        ,m_bCanDropTables       ( sal_False )
+        ,m_bConnectionWriteable ( sal_False )
     {
         m_aTablesList.SetCheckHandler(getControlModifiedLink());
         m_aSuppressVersionColumns.SetClickHdl(getControlModifiedLink());
@@ -216,6 +223,7 @@ namespace dbaui
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
+        m_bConnectionWriteable = m_bCanAddTables = m_bCanDropTables = sal_False;
 
         retireNotifiers();
     }
@@ -404,10 +412,55 @@ namespace dbaui
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
+        m_bConnectionWriteable = m_bCanAddTables = m_bCanDropTables = sal_False;
 
         retireNotifiers();
 
         return nResult;
+    }
+
+    //------------------------------------------------------------------------
+    namespace {
+        static void lcl_addHint( String& _rItemText, sal_Bool _bActuallyNeedHint, const String& _rHint )
+        {
+            xub_StrLen nCurrentHintPos = _rItemText.SearchAscii( "  " );
+            sal_Bool bHaveHint = ( STRING_NOTFOUND != nCurrentHintPos );
+
+            if ( bHaveHint )
+            {   // remove the hint in any case - even if there currently is one, the new one may be different
+                _rItemText = _rItemText.Copy( 0, nCurrentHintPos );
+                bHaveHint = sal_False;
+            }
+
+            if ( !bHaveHint && _bActuallyNeedHint )
+            {
+                _rItemText.AppendAscii( "  " );
+                _rItemText += _rHint;
+            }
+        }
+        static void lcl_updateHint( ToolBox& _rTB, sal_uInt16 _nItemId, sal_Bool _bNeedHint, sal_uInt16 _nHintId )
+        {
+            // the current item text
+            String sText = _rTB.GetItemText( _nItemId );
+            // the hint (add or remove)
+            lcl_addHint( sText, _bNeedHint, String( ModuleRes( _nHintId ) ) );
+            // set as new item text
+            _rTB.SetItemText( _nItemId, sText );
+        }
+    }
+    //........................................................................
+    void OTableSubscriptionPage::implAdjustToolBoxTexts()
+    {
+        // in general, if the connection is read-only, all is disabled
+        lcl_updateHint( m_aActions, ID_NEW_TABLE_DESIGN,    !m_bConnectionWriteable, STR_HINT_READONLY_CONNECTION );
+        lcl_updateHint( m_aActions, ID_DROP_TABLE,          !m_bConnectionWriteable, STR_HINT_READONLY_CONNECTION );
+        lcl_updateHint( m_aActions, ID_EDIT_TABLE,          !m_bConnectionWriteable, STR_HINT_READONLY_CONNECTION );
+
+        if ( m_bConnectionWriteable )
+        {   // for add and drop, in case the connection is writeable in general, there are more options
+            lcl_updateHint( m_aActions, ID_DROP_TABLE, !m_bCanDropTables, STR_HINT_CONNECTION_NOT_CAPABLE );
+            lcl_updateHint( m_aActions, ID_EDIT_TABLE, !m_bCanAddTables, STR_HINT_CONNECTION_NOT_CAPABLE );
+        }
     }
 
     //------------------------------------------------------------------------
@@ -463,16 +516,61 @@ namespace dbaui
                     m_aTablesList.GetModel()->SetSortMode(SortAscending);
                     m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
-                    m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
+                    Reference< XDriver > xDriver;
+                    m_xCurrentConnection = m_aTablesList.UpdateTableList( sURL, aConnectionParams, xDriver );
                     if ( m_xCurrentConnection.is() )
                     {
                         if (m_pAdminDialog)
                             m_pAdminDialog->successfullyConnected();
                     }
+
+                    // collect some meta data about the connection
+                    Reference< XDatabaseMetaData > xMetaData;
+                    if ( m_xCurrentConnection.is() )
+                        xMetaData = m_xCurrentConnection->getMetaData();
+
+                    // is the connection writeable in general?
+                    m_bConnectionWriteable = xMetaData.is() && !xMetaData->isReadOnly();
+
+                    // for other infos we need to check the tables supplier
+                    Reference< XTablesSupplier > xSuppTables( m_xCurrentConnection, UNO_QUERY );
+                    if ( !xSuppTables.is() )
+                    {
+                        Reference< XDataDefinitionSupplier > xDataDefSupp( xDriver, UNO_QUERY );
+                        if ( xDataDefSupp.is() )
+                            xSuppTables = xSuppTables.query( xDataDefSupp->getDataDefinitionByConnection( m_xCurrentConnection ) );
+                    }
+
+                    if ( !xSuppTables.is() )
+                    {   // assume that we can do anything
+                        // The point is, we have a low-level connection here, not necessarily an SDB level connection
+                        // But when the user connects later on (using the XDataSource of a data source), (s)he gets
+                        // a SDB level connection which may support adding and dropping tables, though the underlying
+                        // low level connection isn't
+                        m_bCanDropTables = sal_True;
+                        m_bCanAddTables = sal_True;
+                    }
+                    else
+                    {
+                        // can we drop tables?
+                        Reference< XDrop > xDropTables;
+                        if ( xSuppTables.is() )
+                            xDropTables = xDropTables.query( xSuppTables->getTables() );
+                        m_bCanDropTables = xDropTables.is();
+
+                        // can we add tables?
+                        Reference< XAppend > xAppendTables;
+                        if ( xSuppTables.is() )
+                            xAppendTables = xAppendTables.query( xSuppTables->getTables() );
+                        m_bCanAddTables = xAppendTables.is();
+                    }
                 }
                 catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
                 catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
                 catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+
+                // adjust the toolbox texts according
+                implAdjustToolBoxTexts();
             }
 
             if (aErrorInfo.isValid())
@@ -583,11 +681,15 @@ namespace dbaui
             pSelected = m_aTablesList.NextSelected(pSelected);
         }
 
+        Reference< XDatabaseMetaData > xMetaData;
+        if ( m_xCurrentConnection.is() )
+            xMetaData = m_xCurrentConnection->getMetaData();
+
         // TODO: disable the EDIT for views
 
-        m_aActions.EnableItem(ID_NEW_TABLE_DESIGN,  bConnected);
-        m_aActions.EnableItem(ID_EDIT_TABLE,        bConnected && bSelectedOne &&   bLeafsOnly && bAllLeafsChecked);
-        m_aActions.EnableItem(ID_DROP_TABLE,        bConnected &&                   bLeafsOnly && bAllLeafsChecked);
+        m_aActions.EnableItem(ID_NEW_TABLE_DESIGN,  bConnected && m_bCanAddTables  && m_bConnectionWriteable);
+        m_aActions.EnableItem(ID_DROP_TABLE,        bConnected && m_bCanDropTables && m_bConnectionWriteable &&                 bLeafsOnly && bAllLeafsChecked);
+        m_aActions.EnableItem(ID_EDIT_TABLE,        bConnected &&                     m_bConnectionWriteable && bSelectedOne && bLeafsOnly && bAllLeafsChecked);
     }
 
     //------------------------------------------------------------------------
@@ -1314,6 +1416,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/08/15 14:08:08  fs
+ *  #88194# dropSelection: add the all button only if more than one table is left
+ *
  *  Revision 1.6  2001/08/15 08:50:24  fs
  *  #89822# doToolboxAction -> onToolBoxAction / enable KEY_DELETE
  *

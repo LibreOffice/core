@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 08:49:57 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 08:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,12 +103,17 @@ namespace dbaui
         FixedText               m_aExplanation;
         FixedLine               m_aColumnsLine;
         CheckBox                m_aSuppressVersionColumns;
-        sal_Bool                m_bCheckedAll : 1;
-        sal_Bool                m_bCatalogAtStart : 1;
+
         ::rtl::OUString         m_sCatalogSeparator;
         ODbAdminDialog*         m_pAdminDialog;     /** needed for translating an SfxItemSet into Sequence< PropertyValue >
                                                         (for building an XConnection)
                                                     */
+        sal_Bool                m_bCheckedAll : 1;
+        sal_Bool                m_bCatalogAtStart : 1;
+        sal_Bool                m_bConnectionWriteable : 1;
+        sal_Bool                m_bCanAddTables : 1;
+        sal_Bool                m_bCanDropTables : 1;
+
         DECLARE_STL_VECTOR( OContainerListenerAdapter*, AdapterArray );
         ::osl::Mutex            m_aNotifierMutex;
         AdapterArray            m_aNotifiers;
@@ -209,6 +214,9 @@ namespace dbaui
 
         void retireNotifiers();
 
+        // depending on the capabilities of the current connection, we slightly change the toolbox texts ....
+        void implAdjustToolBoxTexts();
+
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...
         void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter );
@@ -229,6 +237,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/08/15 08:49:57  fs
+ *  #89822# doToolboxAction -> onToolBoxAction (now virtual in the base class)
+ *
  *  Revision 1.3  2001/08/14 14:12:22  fs
  *  #86945# add notifiers to the tables container of newly opened table design components
  *
