@@ -207,7 +207,7 @@ double AreaChart::getMaximumZ()
     if( 3!=m_nDimension )
         return VSeriesPlotter::getMaximumZ();
 
-    return m_aXSlots.size();-0.5;
+    return m_aXSlots.size()-0.5;
 }
 
 //-----------------------------------------------------------------
@@ -355,7 +355,6 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     //return true if a line was created successfully
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xLogicTarget);
 
-    m_pPosHelper->getTransformedClipRect();
     drawing::PolyPolygonShape3D aPoly;
     if(CurveStyle_CUBIC_SPLINES==m_eCurveStyle)
     {
@@ -419,7 +418,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     //return true if an area was created successfully
 
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xLogicTarget);
-    double zValue = pSeries->m_fLogicZPos - 0.5;
+    double zValue = pSeries->m_fLogicZPos;
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
@@ -581,7 +580,7 @@ void AreaChart::createShapes()
                 uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xLogicTarget);
 
                 if(m_nDimension==3)
-                    fLogicZ = nZ;
+                    fLogicZ = nZ+0.5;
                 (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                 //collect data point information (logic coordinates, style ):
