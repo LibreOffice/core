@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-27 09:30:27 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 17:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ public class UnoApp {
 
             // Methods
             public String getImplementationName(  ) throws com.sun.star.uno.RuntimeException {
-                return getClass().getName();
+                return getClass().getName() + _serviceName;
             }
 
             public boolean supportsService( /*IN*/String ServiceName ) throws com.sun.star.uno.RuntimeException {
@@ -514,14 +514,12 @@ public class UnoApp {
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
-            System.err.println("##### " + getClass().getName() + "set:" + unoApp + " " + args[index[0]]);
-
             String arg = args[index[0] ++];
 
             if(arg.charAt(0) == '"')
                 arg = arg.substring(0, arg.length() - 1).substring(1);
 
-            String comps[] = new String[]{arg};
+            String comps[] = parseString(arg);
 
 
             XMultiServiceFactory xMultiServiceFactory = unoApp._xMultiServiceFactory;
