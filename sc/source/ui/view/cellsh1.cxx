@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:06:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         AbstractScDeleteContentsDlg* pDlg = pFact->CreateScDeleteContentsDlg( pTabViewShell->GetDialogParent(),ResId(RID_SCDLG_DELCONT) );
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                         ScDocument* pDoc = GetViewData()->GetDocument();
-                        USHORT nTab = GetViewData()->GetTabNo();
+                        SCTAB nTab = GetViewData()->GetTabNo();
                         if ( pDoc->IsTabProtected(nTab) )
                             pDlg->DisableObjects();
                         if (pDlg->Execute() == RET_OK)
@@ -560,12 +560,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_FILL_SERIES:
             {
-                USHORT nStartCol;
-                USHORT nStartRow;
-                USHORT nStartTab;
-                USHORT nEndCol;
-                USHORT nEndRow;
-                USHORT nEndTab;
+                SCCOL nStartCol;
+                SCROW nStartRow;
+                SCTAB nStartTab;
+                SCCOL nEndCol;
+                SCROW nEndRow;
+                SCTAB nEndTab;
                 USHORT nPossDir = FDS_OPT_NONE;
                 FillDir     eFillDir     = FILL_TO_BOTTOM;
                 FillCmd     eFillCmd     = FILL_LINEAR;
@@ -845,15 +845,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_FILL_AUTO:
             {
-                USHORT nStartCol;
-                USHORT nStartRow;
-                USHORT nEndCol;
-                USHORT nEndRow;
-                USHORT nStartTab, nEndTab;
+                SCCOL nStartCol;
+                SCROW nStartRow;
+                SCCOL nEndCol;
+                SCROW nEndRow;
+                SCTAB nStartTab, nEndTab;
 
                 GetViewData()->GetFillData( nStartCol, nStartRow, nEndCol, nEndRow );
-                USHORT nFillCol = GetViewData()->GetRefEndX();
-                USHORT nFillRow = GetViewData()->GetRefEndY();
+                SCCOL nFillCol = GetViewData()->GetRefEndX();
+                SCROW nFillRow = GetViewData()->GetRefEndY();
 
                 if( pReqArgs != NULL )
                 {
@@ -880,8 +880,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if ( nStartCol == nEndCol && nStartRow == nEndRow )
                     {
-                        USHORT nMergeCol = nStartCol;
-                        USHORT nMergeRow = nStartRow;
+                        SCCOL nMergeCol = nStartCol;
+                        SCROW nMergeRow = nStartRow;
                         if ( GetViewData()->GetDocument()->ExtendMerge(
                                 nStartCol, nStartRow, nMergeCol, nMergeRow,
                                 GetViewData()->GetTabNo() ) )
@@ -899,7 +899,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( nFillCol==nEndCol || nFillRow==nEndRow )
                     {
                         FillDir eDir;
-                        USHORT nCount = 0;
+                        SCCOLROW nCount = 0;
 
                         if ( nFillCol==nEndCol )
                         {
@@ -928,7 +928,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
                         }
 
-                        if ( nCount )
+                        if ( nCount != 0)
                         {
                             pTabViewShell->FillAuto( eDir, nStartCol, nStartRow, nEndCol, nEndRow, nCount );
 
@@ -1233,9 +1233,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     if ( pViewData->GetMarkData().GetTableSelect(
                                             pViewData->GetTabNo() ) )
                                     {
-                                        USHORT nPosX = pViewData->GetCurX();
-                                        USHORT nPosY = pViewData->GetCurY();
-                                        USHORT nClipStartX, nClipStartY, nClipSizeX, nClipSizeY;
+                                        SCCOL nPosX = pViewData->GetCurX();
+                                        SCROW nPosY = pViewData->GetCurY();
+                                        SCCOL nClipStartX, nClipSizeX;
+                                        SCROW  nClipStartY, nClipSizeY;
                                         pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
                                         // for CutMode, filtered rows can always be included
                                         pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, TRUE );
@@ -1516,9 +1517,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_TOGGLE_REL:
             {
                 BOOL bOk = FALSE;
-                USHORT nCol = GetViewData()->GetCurX();
-                USHORT nRow = GetViewData()->GetCurY();
-                USHORT nTab = GetViewData()->GetTabNo();
+                SCCOL nCol = GetViewData()->GetCurX();
+                SCROW nRow = GetViewData()->GetCurY();
+                SCTAB nTab = GetViewData()->GetTabNo();
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 CellType eType;
                 pDoc->GetCellType( nCol, nRow, nTab, eType );
@@ -1749,7 +1750,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 String aAuthorStr = aUserOpt.GetID();
                 ScPostIt aNote( aNoteStr, aDateStr, aAuthorStr );
 
-                USHORT nCol, nRow, nTab;
+                SCCOL nCol;
+                SCROW nRow;
+                SCTAB nTab;
 
                 //  #43343# immer Cursorposition
                 nCol = GetViewData()->GetCurX();
@@ -1764,9 +1767,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_INSERT_POSTIT:
             {
                 ScDocument* pDoc = GetViewData()->GetDocument();
-                USHORT      nCol = GetViewData()->GetCurX();
-                USHORT      nRow = GetViewData()->GetCurY();
-                USHORT      nTab = GetViewData()->GetTabNo();
+                SCCOL       nCol = GetViewData()->GetCurX();
+                SCROW       nRow = GetViewData()->GetCurY();
+                SCTAB       nTab = GetViewData()->GetTabNo();
                 ScPostIt    aNote;
 
                 if ( pReqArgs )
@@ -1791,9 +1794,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_NOTE_VISIBLE:
             {
                 ScDocument* pDoc = GetViewData()->GetDocument();
-                USHORT      nCol = GetViewData()->GetCurX();
-                USHORT      nRow = GetViewData()->GetCurY();
-                USHORT      nTab = GetViewData()->GetTabNo();
+                SCCOL       nCol = GetViewData()->GetCurX();
+                SCROW       nRow = GetViewData()->GetCurY();
+                SCTAB       nTab = GetViewData()->GetTabNo();
                 ScPostIt    aNote;
 
                 if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) )
