@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:49:09 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
 
 #pragma hdrstop
 
