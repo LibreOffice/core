@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-27 13:43:45 $
+#   last change: $Author: hr $ $Date: 2004-05-11 10:19:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=dialog
-
+LIBTARGET=no
 IMGLST_SRS=$(SRS)$/dialog.srs
 BMP_IN=$(PRJ)$/win/imglst
 
@@ -92,10 +92,35 @@ SLOFILES =  \
         $(SLO)$/ascfldlg.obj \
         $(SLO)$/docstdlg.obj \
         $(SLO)$/macassgn.obj \
-        $(SLO)$/regionsw.obj \
+        $(SLO)$/regionsw.obj	\
+        $(SLO)$/uiregionsw.obj	\
+        $(SLO)$/swabstdlg.obj	\
+        $(SLO)$/swuiexp.obj		\
+        $(SLO)$/swdlgfact.obj \
+        $(SLO)$/swwrtshitem.obj \
+        $(SLO)$/swdialmgr.obj  \
         $(SLO)$/wordcountdialog.obj
 
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =  \
+        $(SLO)$/macassgn.obj \
+        $(SLO)$/regionsw.obj \
+        $(SLO)$/swabstdlg.obj \
+        $(SLO)$/swwrtshitem.obj
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+$(INCCOM)$/swuilib.hxx: makefile.mk
+.IF "$(GUI)"=="UNX"
+    $(RM) $@
+    +echo \#define DLL_NAME \"libswui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE
+.IF "$(USE_SHELL)"!="4nt"
+    +echo \#define DLL_NAME \"swui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE          # "$(USE_SHELL)"!="4nt"
+    +echo #define DLL_NAME "swui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF          # "$(USE_SHELL)"!="4nt"
+.ENDIF
 
+$(SLO)$/swabstdlg.obj : $(INCCOM)$/swuilib.hxx
