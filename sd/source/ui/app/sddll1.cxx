@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-02 17:12:29 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,64 @@
 #include "sddll.hxx"
 #include "diactrl.hxx"
 #include "tbx_ww.hxx"
-#include "drtxtob.hxx"
-#include "drbezob.hxx"
-#include "drglueob.hxx"
-#include "drgrfob.hxx"
-#include "drstdob.hxx"
-#include "grstdob.hxx"
-#include "outlnvsh.hxx"
-#include "slidvish.hxx"
-#include "presvish.hxx"
-#include "prvwshll.hxx"
-#include "drviewsh.hxx"
-#include "grviewsh.hxx"
-#include "grdocsh.hxx"
+#ifndef SD_TEXT_OBJECT_BAR_HXX
+#include "TextObjectBar.hxx"
+#endif
+#ifndef SD_BEZIER_OBJECT_BAR_HXX
+#include "BezierObjectBar.hxx"
+#endif
+#ifndef SD_GLUE_POINTS_OBJECT_BAR_HXX
+#include "GluePointsObjectBar.hxx"
+#endif
+#ifndef SD_GRAPHIC_OBJECT_BAR_HXX
+#include "GraphicObjectBar.hxx"
+#endif
+#ifndef SD_DRAW_OBJECT_BAR_HXX
+#include "DrawObjectBar.hxx"
+#endif
+#ifndef SD_IMPRESS_OBJECT_BAR_HXX
+#include "ImpressObjectBar.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_PRESENTATION_VIEW_SHELL_BASE_HXX
+#include "PresentationViewShellBase.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_SLIDE_VIEW_SHELL_HXX
+#include "SlideViewShell.hxx"
+#endif
+#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
+#include "PresentationViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_BASE_HXX
+#include "OutlineViewShellBase.hxx"
+#endif
+#ifndef SD_PREVIEW_VIEW_SHELL_HXX
+#include "PreviewViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_VIEW_SHELL_BASE_HXX
+#include "GraphicViewShellBase.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
+#ifndef SD_FACTORY_IDS_HXX
+#include "FactoryIds.hxx"
+#endif
+#include "sdmod.hxx"
 #include "app.hrc"
 
 
@@ -93,21 +138,34 @@ void SdDLL::RegisterFactorys()
 {
     if (SvtModuleOptions().IsImpress())
     {
+        ::sd::ViewShellBase::RegisterFactory (::sd::IMPRESS_FACTORY_ID);
+        ::sd::OutlineViewShellBase::RegisterFactory (::sd::OUTLINE_FACTORY_ID);
+        ::sd::PresentationViewShellBase::RegisterFactory (::sd::PRESENTATION_FACTORY_ID);
+    }
+    if (SvtModuleOptions().IsDraw())
+    {
+        ::sd::GraphicViewShellBase::RegisterFactory (::sd::DRAW_FACTORY_ID);
+    }
+
+    /* af
+    if (SvtModuleOptions().IsImpress())
+    {
         // Impress
-        SdDrawViewShell::RegisterFactory(1);
-        SdSlideViewShell::RegisterFactory(2);
-        SdOutlineViewShell::RegisterFactory(3);
-        SdPresViewShell::RegisterFactory(4);
-        SdPreviewViewShell::RegisterFactory(5);
+        ::sd::DrawViewShell::RegisterFactory(1);
+        ::sd::SlideViewShell::RegisterFactory(2);
+        ::sd::OutlineViewShell::RegisterFactory(3);
+        ::sd::PresentationViewShell::RegisterFactory(4);
+        ::sd::PreviewViewShell::RegisterFactory(5);
     }
 
     if (SvtModuleOptions().IsDraw()) {
         // Draw
-        SdGraphicViewShell::RegisterFactory(1);
+        ::sd::GraphicViewShell::RegisterFactory(1);
 
         // #93468# Need preview view also for draw documents
-        SdPreviewViewShell::RegisterFactory(5);
+        ::sd::PreviewViewShell::RegisterFactory(5);
     }
+    */
 }
 
 
@@ -125,27 +183,30 @@ void SdDLL::RegisterInterfaces()
     SfxModule* pMod = SD_MOD();
     SdModule::RegisterInterface(pMod);
 
+    // View shell base.
+    ::sd::ViewShellBase::RegisterInterface(pMod);
+
     // DocShells
-    SdDrawDocShell::RegisterInterface(pMod);
-    SdGraphicDocShell::RegisterInterface(pMod);
+    ::sd::DrawDocShell::RegisterInterface(pMod);
+    ::sd::GraphicDocShell::RegisterInterface(pMod);
 
     // Impress ViewShells
-    SdDrawViewShell::RegisterInterface(pMod);
-    SdSlideViewShell::RegisterInterface(pMod);
-    SdOutlineViewShell::RegisterInterface(pMod);
-    SdPresViewShell::RegisterInterface(pMod);
-    SdPreviewViewShell::RegisterInterface(pMod);
+    ::sd::DrawViewShell::RegisterInterface(pMod);
+    ::sd::SlideViewShell::RegisterInterface(pMod);
+    ::sd::OutlineViewShell::RegisterInterface(pMod);
+    ::sd::PresentationViewShell::RegisterInterface(pMod);
+    ::sd::PreviewViewShell::RegisterInterface(pMod);
 
     // Draw ViewShell
-    SdGraphicViewShell::RegisterInterface(pMod);
+    ::sd::GraphicViewShell::RegisterInterface(pMod);
 
     // Impress ObjectShells
-    SdDrawStdObjectBar::RegisterInterface(pMod);
-    SdDrawBezierObjectBar::RegisterInterface(pMod);
-    SdDrawGluePointsObjectBar::RegisterInterface(pMod);
-    SdDrawTextObjectBar::RegisterInterface(pMod);
-    SdDrawGrafObjectBar::RegisterInterface(pMod);
+    ::sd::ImpressObjectBar::RegisterInterface(pMod);
+    ::sd::BezierObjectBar::RegisterInterface(pMod);
+    ::sd::GluePointsObjectBar::RegisterInterface(pMod);
+    ::sd::TextObjectBar::RegisterInterface(pMod);
+    ::sd::GraphicObjectBar::RegisterInterface(pMod);
 
     // Draw ObjectShell
-    SdGraphicStdObjectBar::RegisterInterface(pMod);
+    ::sd::DrawObjectBar::RegisterInterface(pMod);
 }
