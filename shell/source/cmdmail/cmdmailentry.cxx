@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailentry.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-26 08:48:12 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,9 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 
 namespace
 {
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
+    Reference< XInterface > SAL_CALL createInstance( const Reference< XComponentContext >& xContext )
     {
-        return Reference< XInterface >( static_cast< XSimpleMailClientSupplier* >( new CmdMailSuppl( rServiceManager ) ) );
+        return Reference< XInterface >( static_cast< XSimpleMailClientSupplier* >( new CmdMailSuppl( xContext ) ) );
     }
 }
 
@@ -141,46 +141,40 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
         try
         {
             Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey(
-                OUString::createFromAscii( COMP_REGKEY_NAME ) );
+            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( COMP_REGKEY_NAME ) ) );
+            return sal_True;
         }
         catch( InvalidRegistryException& )
         {
             OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-            bRetVal = sal_False;
         }
     }
 
-    return bRetVal;
+    return sal_False;
 }
 
 //----------------------------------------------------------------------
 // component_getFactory
-// returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
 void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
 {
-    void* pRet = 0;
+    Reference< XSingleComponentFactory > xFactory;
 
-    if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, COMP_IMPL_NAME ) ) )
+    if (0 == ::rtl_str_compare( pImplName, COMP_IMPL_NAME ))
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString::createFromAscii( COMP_SERVICE_NAME );
+        OUString serviceName( RTL_CONSTASCII_USTRINGPARAM(COMP_SERVICE_NAME) );
 
-        Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
-            OUString::createFromAscii( pImplName ),
+        xFactory = ::cppu::createSingleComponentFactory(
             createInstance,
-            aSNS ) );
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
+            OUString( RTL_CONSTASCII_USTRINGPARAM(COMP_IMPL_NAME) ),
+            Sequence< OUString >( &serviceName, 1 ) );
     }
 
-    return pRet;
+    if (xFactory.is())
+        xFactory->acquire();
+
+    return xFactory.get();
 }
 
 } // extern "C"
