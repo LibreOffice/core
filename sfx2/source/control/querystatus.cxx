@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querystatus.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:34:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/itemdel.hxx>
+#include <svtools/visitem.hxx>
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -91,6 +92,9 @@
 #ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATE_HPP_
 #include <com/sun/star/frame/status/ItemState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
+#endif
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -100,10 +104,43 @@ using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-SFX_IMPL_XINTERFACE_2( SfxQueryStatus, OWeakObject, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
-SFX_IMPL_XTYPEPROVIDER_2( SfxQueryStatus, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
+class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
+                            public ::com::sun::star::lang::XTypeProvider    ,
+                            public ::cppu::OWeakObject
+{
+    public:
+        SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
-SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand ) :
+        SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const rtl::OUString& aCommand );
+        virtual ~SfxQueryStatus_Impl();
+
+        // Query method
+        SfxItemState QueryState( SfxPoolItem*& pPoolItem );
+
+        // XEventListener
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
+
+    private:
+        SfxQueryStatus_Impl( const SfxQueryStatus& );
+        SfxQueryStatus_Impl();
+        SfxQueryStatus_Impl& operator=( const SfxQueryStatus& );
+
+        sal_Bool                                                                   m_bQueryInProgress;
+        SfxItemState                                                               m_eState;
+        SfxPoolItem*                                                               m_pItem;
+        USHORT                                                                     m_nSlotID;
+        osl::Condition                                                             m_aCondition;
+        ::com::sun::star::util::URL                                                m_aCommand;
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >         m_xDispatch;
+};
+
+SFX_IMPL_XINTERFACE_2( SfxQueryStatus_Impl, OWeakObject, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
+SFX_IMPL_XTYPEPROVIDER_2( SfxQueryStatus_Impl, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
+
+SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand ) :
     cppu::OWeakObject(),
     m_eState( SFX_ITEM_DISABLED ),
     m_pItem( 0 ),
@@ -119,17 +156,18 @@ SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchP
     m_aCondition.reset();
 }
 
-SfxQueryStatus::~SfxQueryStatus()
+SfxQueryStatus_Impl::~SfxQueryStatus_Impl()
 {
 }
 
-void SAL_CALL SfxQueryStatus::disposing( const EventObject& Source )
+void SAL_CALL SfxQueryStatus_Impl::disposing( const EventObject& Source )
 throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     m_xDispatch.clear();
 }
 
-void SAL_CALL SfxQueryStatus::statusChanged( const FeatureStateEvent& rEvent)
+void SAL_CALL SfxQueryStatus_Impl::statusChanged( const FeatureStateEvent& rEvent)
 throw( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -173,6 +211,12 @@ throw( RuntimeException )
             m_eState = aItemStatus.State;
             m_pItem = new SfxVoidItem( m_nSlotID );
         }
+        else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::Visibility*)0) )
+        {
+            Visibility aVisibilityStatus;
+            rEvent.State >>= aVisibilityStatus;
+            m_pItem = new SfxVisibilityItem( m_nSlotID, aVisibilityStatus.bVisible );
+        }
         else
         {
             m_eState = SFX_ITEM_UNKNOWN;
@@ -180,7 +224,8 @@ throw( RuntimeException )
         }
     }
 
-    DeleteItemOnIdle( m_pItem );
+    if ( m_pItem )
+        DeleteItemOnIdle( m_pItem );
 
     try
     {
@@ -194,8 +239,9 @@ throw( RuntimeException )
 }
 
 // Query method
-SfxItemState SfxQueryStatus::QueryState( SfxPoolItem*& rpPoolItem )
+SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !m_bQueryInProgress )
     {
         m_pItem  = NULL;
@@ -224,4 +270,24 @@ SfxItemState SfxQueryStatus::QueryState( SfxPoolItem*& rpPoolItem )
     m_bQueryInProgress = sal_False;
     rpPoolItem = m_pItem;
     return m_eState;
+}
+
+//*************************************************************************
+
+SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand )
+{
+    m_pSfxQueryStatusImpl = new SfxQueryStatus_Impl( rDispatchProvider, nSlotId, rCommand );
+    m_xStatusListener     = Reference< XStatusListener >(
+                                static_cast< cppu::OWeakObject* >( m_pSfxQueryStatusImpl ),
+                                UNO_QUERY );
+}
+
+SfxQueryStatus::~SfxQueryStatus()
+{
+}
+
+SfxItemState SfxQueryStatus::QueryState( SfxPoolItem*& rpPoolItem )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    return m_pSfxQueryStatusImpl->QueryState( rpPoolItem );
 }
