@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:46:40 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 08:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,25 +412,26 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         throw NoSuchElementException(elementName,*this);
 
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
+    sal_Bool bIsNew = sal_False;
     if(xTunnel.is())
     {
         OAdabasTable* pTable = (OAdabasTable*)xTunnel->getSomething(OAdabasTable:: getUnoTunnelImplementationId());
+        bIsNew = pTable->isNew();
+    }
+    if (!bIsNew)
+    {
+        OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
+        Reference< XStatement > xStmt = pConnection->createStatement(  );
 
-        if(!pTable->isNew())
-        {
-            OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
-            Reference< XStatement > xStmt = pConnection->createStatement(  );
-
-            ::rtl::OUString aName,aSchema;
-            sal_Int32 nLen = elementName.indexOf('.');
-            aSchema = elementName.copy(0,nLen);
-            aName   = elementName.copy(nLen+1);
-            ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP TABLE ");
-            aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
-            aSql = aSql + ::rtl::OUString::createFromAscii(".");
-            aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
-            xStmt->execute(aSql);
-        }
+        ::rtl::OUString aName,aSchema;
+        sal_Int32 nLen = elementName.indexOf('.');
+        aSchema = elementName.copy(0,nLen);
+        aName   = elementName.copy(nLen+1);
+        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP TABLE ");
+        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
+        aSql = aSql + ::rtl::OUString::createFromAscii(".");
+        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
+        xStmt->execute(aSql);
     }
 
     OCollection_TYPE::dropByName(elementName);
