@@ -1,0 +1,240 @@
+ /*************************************************************************
+ *
+ *  $RCSfile: mediacontrol.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2004-08-23 09:04:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.
+ *         - Sun Industry Standards Source License Version 1.
+ *
+ *  Sun Microsystems Inc., October,
+ *
+ *  GNU Lesser General Public License Version 2.
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+;5~ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "mediacontrol.hrc"
+
+String AVMEDIA_STR_OPEN
+{
+    Text[de] = "÷ffnen";
+    Text[en-us] = "Open";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_INSERT
+{
+    Text [ de ] = "Zuweisen" ;
+    Text [ en-us ] = "Apply" ;
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_PLAY
+{
+    Text[de] = "Abspielen";
+    Text[en-us] = "Play";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_PAUSE
+{
+    Text[de] = "Pause";
+    Text[en-us] = "Pause";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_STOP
+{
+    Text[de] = "Stopp";
+    Text[en-us] = "Stop";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_ENDLESS
+{
+    Text[de] = "Wiederholen";
+    Text[en-us] = "Repeat";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_MUTE
+{
+    Text[de] = "Stumm";
+    Text[en-us] = "Mute";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_ZOOM
+{
+    Text[de] = "Ansicht";
+    Text[en-us] = "View";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_ZOOM_50
+{
+    Text[de] = "50%";
+    Text[en-us] = "50%";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_ZOOM_100
+{
+    Text[de] = "100%";
+    Text[en-us] = "100%";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_ZOOM_200
+{
+    Text[de] = "200%";
+    Text[en-us] = "200%";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_ZOOM_FIT
+{
+    Text[de] = "Angepaﬂt";
+    Text[en-us] = "Scaled";
+};
+
+// ------------------------------------------------------------------------------
+
+String AVMEDIA_STR_MEDIAPLAYER
+{
+    Text[de] = "Mediaplayer";
+    Text[en-us] = "Media Player";
+};
+
+// ------------------------------------------------------------------------------
+
+ImageList AVMEDIA_IMGLST
+{
+    Prefix = "av";
+    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    IdList =
+    {
+        AVMEDIA_IMG_OPEN;
+        AVMEDIA_IMG_PLAY;
+        AVMEDIA_IMG_PAUSE;
+        AVMEDIA_IMG_STOP;
+        AVMEDIA_IMG_ENDLESS;
+        AVMEDIA_IMG_INSERT;
+        AVMEDIA_IMG_MUTE;
+    };
+    IdCount = 7;
+};
+
+// ------------------------------------------------------------------------------
+
+ImageList AVMEDIA_IMGLST_L
+{
+    Prefix = "avl";
+    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    IdList =
+    {
+        AVMEDIA_IMG_OPEN;
+        AVMEDIA_IMG_PLAY;
+        AVMEDIA_IMG_PAUSE;
+        AVMEDIA_IMG_STOP;
+        AVMEDIA_IMG_ENDLESS;
+        AVMEDIA_IMG_INSERT;
+        AVMEDIA_IMG_MUTE;
+    };
+    IdCount = 7;
+};
+
+// ------------------------------------------------------------------------------
+
+ImageList AVMEDIA_IMGLST_HC
+{
+    Prefix = "avh";
+    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    IdList =
+    {
+        AVMEDIA_IMG_OPEN;
+        AVMEDIA_IMG_PLAY;
+        AVMEDIA_IMG_PAUSE;
+        AVMEDIA_IMG_STOP;
+        AVMEDIA_IMG_ENDLESS;
+        AVMEDIA_IMG_INSERT;
+        AVMEDIA_IMG_MUTE;
+    };
+    IdCount = 7;
+};
+
+// ------------------------------------------------------------------------------
+
+ImageList AVMEDIA_IMGLST_L_HC
+{
+    Prefix = "avlh";
+    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
+    IdList =
+    {
+        AVMEDIA_IMG_OPEN;
+        AVMEDIA_IMG_PLAY;
+        AVMEDIA_IMG_PAUSE;
+        AVMEDIA_IMG_STOP;
+        AVMEDIA_IMG_ENDLESS;
+        AVMEDIA_IMG_INSERT;
+        AVMEDIA_IMG_MUTE;
+    };
+    IdCount = 7;
+};

@@ -1,0 +1,12 @@
+mkdir: %COMMON_DEST%\res%_EXT%
+..\%__SRC%\bin\avmedia*.dll %_DEST%\bin%_EXT%\avmedia*.dll
+..\source\java\avmedia.jar %_DEST%\bin%_EXT%\avmedia.jar
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\bin\avmedia*.res %_DEST%\bin%_EXT%\avmedia*.res
+
+mkdir: %_DEST%\inc%_EXT%\avmedia
+hedabu: ..\inc\mediawindow.hxx %_DEST%\inc%_EXT%\avmedia\mediawindow.hxx
+hedabu: ..\inc\mediaitem.hxx %_DEST%\inc%_EXT%\avmedia\mediaitem.hxx
+hedabu: ..\inc\mediaplayer.hxx %_DEST%\inc%_EXT%\avmedia\mediaplayer.hxx
+hedabu: ..\inc\mediatoolbox.hxx %_DEST%\inc%_EXT%\avmedia\mediatoolbox.hxx

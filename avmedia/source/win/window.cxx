@@ -1,0 +1,755 @@
+/*************************************************************************
+ *
+ *  $RCSfile: window.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <tools/prewin.h>
+#include <windows.h>
+#include <objbase.h>
+#include <strmif.h>
+#include <control.h>
+#include <dshow.h>
+#include <tools/postwin.h>
+#include <com/sun/star/awt/SystemPointer.hdl>
+
+#include "window.hxx"
+#include "player.hxx"
+
+#define AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Window_DirectX"
+#define AVMEDIA_WIN_WINDOW_SERVICENAME "com.sun.star.media.Window_DirectX"
+
+using namespace ::com::sun::star;
+
+namespace avmedia { namespace win {
+
+// -----------
+// - statics -
+// -----------
+
+static ::osl::Mutex& ImplGetOwnStaticMutex()
+{
+    static ::osl::Mutex* pMutex = NULL;
+
+    if( pMutex == NULL )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+
+        if( pMutex == NULL )
+        {
+            static ::osl::Mutex aMutex;
+            pMutex = &aMutex;
+        }
+    }
+
+    return *pMutex;
+}
+
+// -----------
+// - WndProc -
+// -----------
+
+LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
+{
+    Window* pWindow = (Window*) ::GetWindowLong( hWnd, 0 );
+    bool    bProcessed = true;
+
+    if( pWindow )
+    {
+        switch( nMsg )
+        {
+            case( WM_SETCURSOR ):
+                pWindow->updatePointer();
+            break;
+
+            case( WM_GRAPHNOTIFY ):
+                pWindow->processGraphEvent();
+            break;
+
+            case( WM_MOUSEMOVE ):
+            case( WM_LBUTTONDOWN ):
+            case( WM_MBUTTONDOWN ):
+            case( WM_RBUTTONDOWN ):
+            case( WM_LBUTTONUP ):
+            case( WM_MBUTTONUP ):
+            case( WM_RBUTTONUP ):
+            {
+                awt::MouseEvent aUNOEvt;
+                POINT           aWinPoint;
+
+                if( !::GetCursorPos( &aWinPoint ) || !::ScreenToClient( hWnd, &aWinPoint ) )
+                {
+                    aWinPoint.x = GET_X_LPARAM( nPar2 );
+                    aWinPoint.y = GET_Y_LPARAM( nPar2 );
+                }
+                aUNOEvt.Modifiers = 0;
+                aUNOEvt.Buttons = 0;
+                aUNOEvt.X = aWinPoint.x;
+                aUNOEvt.Y = aWinPoint.y;
+                aUNOEvt.PopupTrigger = false;
+
+                // Modifiers
+                if( nPar1 & MK_SHIFT )
+                    aUNOEvt.Modifiers |= awt::KeyModifier::SHIFT;
+
+                if( nPar1 & MK_CONTROL )
+                    aUNOEvt.Modifiers |= awt::KeyModifier::MOD1;
+
+                // Buttons
+                if( WM_LBUTTONDOWN == nMsg || WM_LBUTTONUP == nMsg )
+                    aUNOEvt.Buttons |= awt::MouseButton::LEFT;
+
+                if( WM_MBUTTONDOWN == nMsg || WM_MBUTTONUP == nMsg )
+                    aUNOEvt.Buttons |= awt::MouseButton::MIDDLE;
+
+                if( WM_RBUTTONDOWN == nMsg || WM_RBUTTONUP == nMsg )
+                    aUNOEvt.Buttons |= awt::MouseButton::RIGHT;
+
+                // event type
+                if( WM_LBUTTONDOWN == nMsg ||
+                    WM_MBUTTONDOWN == nMsg ||
+                    WM_RBUTTONDOWN == nMsg )
+                {
+                    aUNOEvt.ClickCount = 1;
+                    pWindow->fireMousePressedEvent( aUNOEvt );
+                }
+                else if( WM_LBUTTONUP == nMsg ||
+                         WM_MBUTTONUP == nMsg ||
+                         WM_RBUTTONUP == nMsg )
+                {
+                    aUNOEvt.ClickCount = 1;
+                    pWindow->fireMouseReleasedEvent( aUNOEvt );
+                }
+                else if( WM_MOUSEMOVE == nMsg )
+                {
+                    aUNOEvt.ClickCount = 0;
+                    pWindow->fireMouseMovedEvent( aUNOEvt );
+                    pWindow->updatePointer();
+                }
+            }
+            break;
+
+            case( WM_SETFOCUS ):
+            {
+                const awt::FocusEvent aUNOEvt;
+                pWindow->fireSetFocusEvent( aUNOEvt );
+            }
+            break;
+
+            default:
+                bProcessed = false;
+            break;
+        }
+    }
+    else
+        bProcessed = false;
+
+    return( bProcessed ? 0 : DefWindowProc( hWnd, nMsg, nPar1, nPar2 ) );
+}
+
+// ---------------
+// - Window -
+// ---------------
+
+WNDCLASS* Window::mpWndClass = NULL;
+
+// ------------------------------------------------------------------------------
+
+Window::Window( Player& rPlayer ) :
+    mrPlayer( rPlayer ),
+    meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
+    mnParentWnd( 0 ),
+    mnFrameWnd( 0 ),
+    maListeners( maMutex ),
+    mnPointerType( awt::SystemPointer::ARROW )
+{
+    ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
+
+    if( !mpWndClass )
+    {
+        mpWndClass = new WNDCLASS;
+
+        memset( mpWndClass, 0, sizeof( *mpWndClass ) );
+        mpWndClass->hInstance = GetModuleHandle( NULL );
+        mpWndClass->cbWndExtra = sizeof( DWORD );
+        mpWndClass->lpfnWndProc = MediaPlayerWndProc;
+        mpWndClass->lpszClassName = "com_sun_star_media_PlayerWnd";
+        mpWndClass->hbrBackground = (HBRUSH) ::GetStockObject( BLACK_BRUSH );
+        mpWndClass->hCursor = ::LoadCursor( NULL, IDC_ARROW );
+
+        ::RegisterClass( mpWndClass );
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+Window::~Window()
+{
+    if( mnFrameWnd )
+        ::DestroyWindow( (HWND) mnFrameWnd );
+}
+
+// ------------------------------------------------------------------------------
+
+void Window::ImplLayoutVideoWindow()
+{
+    if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel )
+    {
+        awt::Size           aPrefSize( mrPlayer.getPreferredPlayerWindowSize() );
+        awt::Rectangle      aRect = getPosSize();
+        int                 nW = aRect.Width, nH = aRect.Height;
+        int                 nVideoW = nW, nVideoH = nH;
+        int                 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+        bool                bDone = false, bZoom = false;
+
+        if( media::ZoomLevel_ORIGINAL == meZoomLevel )
+        {
+            bZoom = true;
+        }
+        else if( media::ZoomLevel_ZOOM_1_TO_4 == meZoomLevel )
+        {
+            aPrefSize.Width >>= 2;
+            aPrefSize.Height >>= 2;
+            bZoom = true;
+        }
+        else if( media::ZoomLevel_ZOOM_1_TO_2 == meZoomLevel )
+        {
+            aPrefSize.Width >>= 1;
+            aPrefSize.Height >>= 1;
+            bZoom = true;
+        }
+        else if( media::ZoomLevel_ZOOM_2_TO_1 == meZoomLevel )
+        {
+            aPrefSize.Width <<= 1;
+            aPrefSize.Height <<= 1;
+            bZoom = true;
+        }
+        else if( media::ZoomLevel_ZOOM_4_TO_1 == meZoomLevel )
+        {
+            aPrefSize.Width <<= 2;
+            aPrefSize.Height <<= 2;
+            bZoom = true;
+        }
+        else if( media::ZoomLevel_FIT_TO_WINDOW == meZoomLevel )
+        {
+            nWidth = nVideoW;
+            nHeight = nVideoH;
+            bDone = true;
+        }
+
+        if( bZoom )
+        {
+            if( ( aPrefSize.Width <= nVideoW ) && ( aPrefSize.Height <= nVideoH ) )
+            {
+                nX = ( nVideoW - aPrefSize.Width ) >> 1;
+                nY = ( nVideoH - aPrefSize.Height ) >> 1;
+                nWidth = aPrefSize.Width;
+                nHeight = aPrefSize.Height;
+                bDone = true;
+            }
+        }
+
+        if( !bDone )
+        {
+            if( aPrefSize.Width > 0 && aPrefSize.Height > 0 && nVideoW > 0 && nVideoH > 0 )
+            {
+                double fPrefWH = (double) aPrefSize.Width / aPrefSize.Height;
+
+                if( fPrefWH < ( (double) nVideoW / nVideoH ) )
+                    nVideoW = (int)( nVideoH * fPrefWH );
+                else
+                    nVideoH = (int)( nVideoW / fPrefWH );
+
+                nX = ( nW - nVideoW ) >> 1;
+                nY = ( nH - nVideoH ) >> 1;
+                nWidth = nVideoW;
+                nHeight = nVideoH;
+            }
+            else
+                nX = nY = nWidth = nHeight = 0;
+        }
+
+        IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
+
+        if( pVideoWindow )
+            pVideoWindow->SetWindowPosition( nX, nY, nWidth, nHeight );
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+bool Window::create( const uno::Sequence< uno::Any >& rArguments )
+{
+    IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
+
+    if( !mnFrameWnd && pVideoWindow && mpWndClass )
+    {
+        awt::Rectangle  aRect;
+        sal_Int32       nWnd;
+
+        rArguments[ 0 ] >>= nWnd;
+        rArguments[ 1 ] >>= aRect;
+
+        mnParentWnd = nWnd;
+        mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
+                                           WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+                                           aRect.X, aRect.Y, aRect.Width, aRect.Height,
+                                           (HWND) mnParentWnd, NULL, mpWndClass->hInstance, 0 );
+
+        if( mnFrameWnd )
+        {
+            ::SetWindowLong( (HWND) mnFrameWnd, 0, (DWORD) this );
+
+#ifdef DDRAW_TEST_OUTPUT
+            IDirectDraw7*           pDDraw;
+            IDirectDrawSurface7*    pDDSurface;
+            IDirectDrawClipper*     pDDClipper;
+
+            if( DD_OK == DirectDrawCreateEx( NULL, (void**) &pDDraw, IID_IDirectDraw7, NULL ) )
+            {
+                if( DD_OK == pDDraw->SetCooperativeLevel( (HWND) mnParentWnd, DDSCL_NORMAL ) )
+                {
+                    DDSURFACEDESC2 aDDDesc;
+
+                    memset( &aDDDesc, 0, sizeof( aDDDesc ) );
+                    aDDDesc.dwSize = sizeof( aDDDesc );
+                    aDDDesc.dwFlags = DDSD_CAPS;
+                    aDDDesc.ddsCaps.dwCaps |= DDSCAPS_PRIMARYSURFACE;
+
+                    if( DD_OK == pDDraw->CreateSurface( &aDDDesc, &pDDSurface, NULL ) )
+                    {
+                        if( DD_OK == pDDraw->CreateClipper( 0, &pDDClipper, NULL ) )
+                        {
+                            pDDClipper->SetHWnd( 0, (HWND) mnFrameWnd );
+                            pDDSurface->SetClipper( pDDClipper );
+                        }
+
+                        mrPlayer.setDDrawParams( (IDirectDraw*) pDDraw, (IDirectDrawSurface*) pDDSurface );
+#endif
+
+                        pVideoWindow->put_Owner( (OAHWND) mnFrameWnd );
+                        pVideoWindow->put_MessageDrain( (OAHWND) mnFrameWnd );
+                        pVideoWindow->put_WindowStyle( WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN );
+
+                        mrPlayer.setNotifyWnd( mnFrameWnd );
+
+                        meZoomLevel = media::ZoomLevel_ORIGINAL;
+                        ImplLayoutVideoWindow();
+#ifdef DDRAW_TEST_OUTPUT
+                    }
+                }
+            }
+#endif
+        }
+    }
+
+    return( mnFrameWnd != 0 );
+}
+
+// ------------------------------------------------------------------------------
+
+void Window::processGraphEvent()
+{
+    mrPlayer.processEvent();
+}
+
+// ------------------------------------------------------------------------------
+
+void Window::updatePointer()
+{
+    char* pCursorName;
+
+    switch( mnPointerType )
+    {
+        case( awt::SystemPointer::CROSS ): pCursorName = IDC_CROSS; break;
+        //case( awt::SystemPointer::HAND ): pCursorName = IDC_HAND; break;
+        case( awt::SystemPointer::MOVE ): pCursorName = IDC_SIZEALL; break;
+        case( awt::SystemPointer::WAIT ): pCursorName = IDC_WAIT; break;
+
+        default:
+            pCursorName = IDC_ARROW;
+        break;
+    }
+
+    ::SetCursor( ::LoadCursor( NULL, pCursorName ) );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::update(  )
+    throw (uno::RuntimeException)
+{
+    ::RedrawWindow( (HWND) mnFrameWnd, NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE  );
+}
+
+// ------------------------------------------------------------------------------
+
+sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
+    throw (uno::RuntimeException)
+{
+        boolean bRet = false;
+
+        if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
+            media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
+        {
+            if( eZoomLevel != meZoomLevel )
+            {
+                meZoomLevel = eZoomLevel;
+                ImplLayoutVideoWindow();
+            }
+
+            bRet = true;
+        }
+
+        return bRet;
+}
+
+// ------------------------------------------------------------------------------
+
+media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
+    throw (uno::RuntimeException)
+{
+    return meZoomLevel;
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
+    throw (uno::RuntimeException)
+{
+    mnPointerType = nPointerType;
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+    throw (uno::RuntimeException)
+{
+    if( mnFrameWnd )
+    {
+        ::SetWindowPos( (HWND) mnFrameWnd, HWND_TOP, X, Y, Width, Height, 0 );
+        ImplLayoutVideoWindow();
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+awt::Rectangle SAL_CALL Window::getPosSize()
+    throw (uno::RuntimeException)
+{
+    awt::Rectangle aRet;
+
+    if( mnFrameWnd )
+    {
+        ::RECT  aWndRect;
+        long    nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+
+        if( ::GetClientRect( (HWND) mnFrameWnd, &aWndRect ) )
+        {
+            aRet.X = aWndRect.left;
+            aRet.Y = aWndRect.top;
+            aRet.Width = aWndRect.right - aWndRect.left + 1;
+            aRet.Height = aWndRect.bottom - aWndRect.top + 1;
+        }
+    }
+
+    return aRet;
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::setVisible( sal_Bool bVisible )
+    throw (uno::RuntimeException)
+{
+    if( mnFrameWnd )
+    {
+        IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
+
+        if( pVideoWindow )
+            pVideoWindow->put_Visible( bVisible ? OATRUE : OAFALSE );
+
+        ::ShowWindow( (HWND) mnFrameWnd, bVisible ? SW_SHOW : SW_HIDE );
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::setEnable( sal_Bool bEnable )
+    throw (uno::RuntimeException)
+{
+    if( mnFrameWnd )
+        ::EnableWindow( (HWND) mnFrameWnd, bEnable );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::setFocus(  )
+    throw (uno::RuntimeException)
+{
+    if( mnFrameWnd )
+        ::SetFocus( (HWND) mnFrameWnd );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.addInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.addInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.addInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.addInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.addInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.addInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::dispose(  )
+    throw (uno::RuntimeException)
+{
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.addInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    maListeners.removeInterface( getCppuType( &xListener ), xListener );
+}
+
+// ------------------------------------------------------------------------------
+
+void Window::fireMousePressedEvent( const ::com::sun::star::awt::MouseEvent& rEvt )
+{
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XMouseListener >*) 0 ) );
+
+    if( pContainer )
+    {
+        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+
+        while( aIter.hasMoreElements() )
+            uno::Reference< awt::XMouseListener >( aIter.next(), uno::UNO_QUERY )->mousePressed( rEvt );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void Window::fireMouseReleasedEvent( const ::com::sun::star::awt::MouseEvent& rEvt )
+{
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XMouseListener >*) 0 ) );
+
+    if( pContainer )
+    {
+        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+
+        while( aIter.hasMoreElements() )
+            uno::Reference< awt::XMouseListener >( aIter.next(), uno::UNO_QUERY )->mouseReleased( rEvt );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void Window::fireMouseMovedEvent( const ::com::sun::star::awt::MouseEvent& rEvt )
+{
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XMouseMotionListener >*) 0 ) );
+
+    if( pContainer )
+    {
+        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+
+        while( aIter.hasMoreElements() )
+            uno::Reference< awt::XMouseMotionListener >( aIter.next(), uno::UNO_QUERY )->mouseMoved( rEvt );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void Window::fireSetFocusEvent( const ::com::sun::star::awt::FocusEvent& rEvt )
+{
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XFocusListener >*) 0 ) );
+
+    if( pContainer )
+    {
+        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+
+        while( aIter.hasMoreElements() )
+            uno::Reference< awt::XFocusListener >( aIter.next(), uno::UNO_QUERY )->focusGained( rEvt );
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+::rtl::OUString SAL_CALL Window::getImplementationName(  )
+    throw (uno::RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME ) );
+}
+
+// ------------------------------------------------------------------------------
+
+sal_Bool SAL_CALL Window::supportsService( const ::rtl::OUString& ServiceName )
+    throw (uno::RuntimeException)
+{
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_WIN_WINDOW_SERVICENAME ) );
+}
+
+// ------------------------------------------------------------------------------
+
+uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
+    throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aRet(1);
+    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_WIN_WINDOW_SERVICENAME ) );
+
+    return aRet;
+}
+
+} // namespace win
+} // namespace avmedia
