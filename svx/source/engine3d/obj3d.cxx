@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:05:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,22 @@
 #include <svx/sdr/properties/e3dcompoundproperties.hxx>
 #endif
 
+#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
+#include <basegfx/vector/b3dvector.hxx>
+#endif
+
+#ifndef _SVX_XLNDSIT_HXX
+#include <xlndsit.hxx>
+#endif
+
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 /*************************************************************************
@@ -353,10 +369,10 @@ sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 TYPEINIT1(E3dObject, SdrAttrObj);
 
 E3dObject::E3dObject() :
-    nLogicalGroup(0),
-    nObjTreeLevel(0),
-    eDragDetail(E3DDETAIL_ONEBOX),
-    nPartOfParent(0),
+    //BFS01nLogicalGroup(0),
+    //BFS01nObjTreeLevel(0),
+    //BFS01eDragDetail(E3DDETAIL_ONEBOX),
+    //BFS01nPartOfParent(0),
     bTfHasChanged(TRUE),
     bBoundVolValid(TRUE),
     bIsSelected(FALSE)
@@ -507,31 +523,31 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 |*
 \************************************************************************/
 
-SdrLayerID E3dObject::GetLayer() const
-{
-    FASTBOOL bFirst = TRUE;
-    E3dObjList* pOL = pSub;
-    ULONG       nObjCnt = pOL->GetObjCount();
-    SdrLayerID  nLayer = SdrLayerID(nLayerID);
+//BFS01SdrLayerID E3dObject::GetLayer() const
+//BFS01{
+    //BFS01FASTBOOL bFirst = TRUE;
+    //BFS01E3dObjList* pOL = pSub;
+    //BFS01ULONG       nObjCnt = pOL->GetObjCount();
+//BFS01 SdrLayerID  nLayer = SdrLayerID(nLayerID);
 
-    for ( ULONG i = 0; i < nObjCnt; i++ )
-    {
-        SdrLayerID nObjLayer;
-        if(pOL->GetObj(i)->ISA(E3dPolyObj))
-            nObjLayer = SdrLayerID(nLayerID);
-        else
-            nObjLayer = pOL->GetObj(i)->GetLayer();
+    //BFS01for ( ULONG i = 0; i < nObjCnt; i++ )
+    //BFS01{
+    //BFS01 SdrLayerID nObjLayer;
+    //BFS01 if(pOL->GetObj(i)->ISA(E3dPolyObj))
+    //BFS01     nObjLayer = SdrLayerID(nLayerID);
+    //BFS01 else
+    //BFS01     nObjLayer = pOL->GetObj(i)->GetLayer();
 
-        if (bFirst)
-        {
-            nLayer = nObjLayer;
-            bFirst = FALSE;
-        }
-        else if ( nObjLayer != nLayer )
-            return 0;
-    }
-    return nLayer;
-}
+    //BFS01 if (bFirst)
+    //BFS01 {
+    //BFS01     nLayer = nObjLayer;
+    //BFS01     bFirst = FALSE;
+    //BFS01 }
+    //BFS01 else if ( nObjLayer != nLayer )
+    //BFS01     return 0;
+    //BFS01}
+//BFS01 return nLayer;
+//BFS01}
 
 /*************************************************************************
 |*
@@ -724,7 +740,7 @@ void E3dObject::AddToHdlList(SdrHdlList& rHdlList) const
     E3dVolumeMarker* pVolMarker;
     USHORT           nPolyCnt;
 
-    ((E3dObject*) this)->ImpCreateWireframePoly(aXPP, E3DDETAIL_ONEBOX);
+    ((E3dObject*) this)->ImpCreateWireframePoly(aXPP/*BFS01, E3DDETAIL_ONEBOX*/);
     nPolyCnt = aXPP.Count();
 
     for ( USHORT i = 0; i < nPolyCnt; i += 3 )
@@ -756,7 +772,7 @@ FASTBOOL E3dObject::HasSpecialDrag() const
 |*
 \************************************************************************/
 
-void E3dObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
+void E3dObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
     const SdrPaintInfoRec& rInfoRec, UINT16 nDrawFlags)
 {
     if(pSub && pSub->GetObjCount())
@@ -817,7 +833,7 @@ void E3dObject::TakeContour3D(XPolyPolygon& rPoly)
 \************************************************************************/
 
 void E3dObject::DrawShadows(Base3D *pBase3D,
-    ExtOutputDevice& rXOut,
+    XOutputDevice& rXOut,
     const Rectangle& rBound, const Volume3D& rVolume,
     const SdrPaintInfoRec& rInfoRec)
 {
@@ -920,7 +936,7 @@ void E3dObject::StructureChanged(const E3dObject* p3DObj)
 void E3dObject::Insert3DObj(E3dObject* p3DObj)
 {
     DBG_ASSERT(p3DObj, "Insert3DObj mit NULL-Zeiger!");
-    p3DObj->SetObjTreeLevel(nObjTreeLevel + 1);
+//BFS01 p3DObj->SetObjTreeLevel(nObjTreeLevel + 1);
     SdrPage* pPg = pPage;
     pSub->InsertObject(p3DObj);
     pPage = pPg;
@@ -1006,7 +1022,30 @@ void E3dObject::RecalcBoundVolume()
     }
     else
     {
+        // use local value
         aBoundVol = aLocalBoundVol;
+
+        // detect if lines are displayed
+        const SfxItemSet& rSet = GetMergedItemSet();
+        XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+
+        if(aLineStyle != XLINE_NONE)
+        {
+            // expand BoundVolume with 1/2 line width
+            sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+
+            if(nLineWidth)
+            {
+                double fExpand = nLineWidth / 2.0;
+
+                Vector3D aExpand(fExpand, fExpand, fExpand);
+                Vector3D aMinVec(aBoundVol.MinVec() - aExpand);
+                Vector3D aMaxVec(aBoundVol.MaxVec() + aExpand);
+
+                aBoundVol.Union(aMinVec);
+                aBoundVol.Union(aMaxVec);
+            }
+        }
     }
 
     bBoundVolValid = TRUE;
@@ -1406,22 +1445,22 @@ void E3dObject::RotateZ(double fAng)
 |*
 \************************************************************************/
 
-void E3dObject::SetObjTreeLevel(USHORT nNewLevel)
-{
-    nObjTreeLevel = nNewLevel;
-    nNewLevel++;
-
-    E3dObjList* pOL = pSub;
-    ULONG nObjCnt = pOL->GetObjCount();
-
-    for (ULONG i = 0; i < nObjCnt; i++)
-    {
-        SdrObject* pObj = pOL->GetObj(i);
-        DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
-
-        ((E3dObject*) pObj)->SetObjTreeLevel(nNewLevel);
-    }
-}
+//BFS01void E3dObject::SetObjTreeLevel(USHORT nNewLevel)
+//BFS01{
+//BFS01 nObjTreeLevel = nNewLevel;
+//BFS01 nNewLevel++;
+//BFS01
+//BFS01 E3dObjList* pOL = pSub;
+//BFS01 ULONG nObjCnt = pOL->GetObjCount();
+//BFS01
+//BFS01 for (ULONG i = 0; i < nObjCnt; i++)
+//BFS01 {
+//BFS01     SdrObject* pObj = pOL->GetObj(i);
+//BFS01     DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
+//BFS01
+//BFS01     ((E3dObject*) pObj)->SetObjTreeLevel(nNewLevel);
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1429,10 +1468,10 @@ void E3dObject::SetObjTreeLevel(USHORT nNewLevel)
 |*
 \************************************************************************/
 
-void E3dObject::SetLogicalGroup(USHORT nGroup)
-{
-    nLogicalGroup = nGroup;
-}
+//BFS01void E3dObject::SetLogicalGroup(USHORT nGroup)
+//BFS01{
+//BFS01 nLogicalGroup = nGroup;
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1441,32 +1480,31 @@ void E3dObject::SetLogicalGroup(USHORT nGroup)
 |*
 \************************************************************************/
 
-void E3dObject::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf,
-    E3dDragDetail eDetail)
+void E3dObject::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf /*BFS01 , E3dDragDetail eDetail*/)
 {
-    if ( eDetail == E3DDETAIL_DEFAULT )
-        eDetail = eDragDetail;
+//BFS01 if ( eDetail == E3DDETAIL_DEFAULT )
+//BFS01     eDetail = eDragDetail;
 
-    if ( eDetail == E3DDETAIL_ALLBOXES || eDetail == E3DDETAIL_ALLLINES )
-    {
-        E3dObjList* pOL = pSub;
-        ULONG nObjCnt = pOL->GetObjCount();
+//BFS01 if ( eDetail == E3DDETAIL_ALLBOXES || eDetail == E3DDETAIL_ALLLINES )
+//BFS01 {
+//BFS01     E3dObjList* pOL = pSub;
+//BFS01     ULONG nObjCnt = pOL->GetObjCount();
+//BFS01
+//BFS01     for (ULONG i = 0; i < nObjCnt; i++)
+//BFS01     {
+//BFS01         E3dObject* pObj = (E3dObject*)pOL->GetObj(i);
+//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
+//BFS01
+//BFS01         Matrix4D aLocalTf(pObj->GetTransform());
+//BFS01         if(pTf)
+//BFS01             aLocalTf *= *pTf;
+//BFS01         pObj->CreateWireframe(rWirePoly, &aLocalTf, eDetail);
+//BFS01     }
 
-        for (ULONG i = 0; i < nObjCnt; i++)
-        {
-            E3dObject* pObj = (E3dObject*)pOL->GetObj(i);
-            DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
-
-            Matrix4D aLocalTf(pObj->GetTransform());
-            if(pTf)
-                aLocalTf *= *pTf;
-            pObj->CreateWireframe(rWirePoly, &aLocalTf, eDetail);
-        }
-
-        if(eDetail == E3DDETAIL_ALLBOXES && nObjCnt != 1)
-            GetBoundVolume().CreateWireframe(rWirePoly, pTf);
-    }
-    else
+//BFS01     if(eDetail == E3DDETAIL_ALLBOXES && nObjCnt != 1)
+//BFS01         GetBoundVolume().CreateWireframe(rWirePoly, pTf);
+//BFS01 }
+//BFS01 else
         GetBoundVolume().CreateWireframe(rWirePoly, pTf);
 }
 
@@ -1507,8 +1545,7 @@ void E3dObject::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
-void E3dObject::ImpCreateWireframePoly(XPolyPolygon& rXPP,
-    E3dDragDetail eDetail)
+void E3dObject::ImpCreateWireframePoly(XPolyPolygon& rXPP/*BFS01, E3dDragDetail eDetail*/)
 {
     // Neue Methode
     E3dScene* pScene = GetScene();
@@ -1517,7 +1554,7 @@ void E3dObject::ImpCreateWireframePoly(XPolyPolygon& rXPP,
     USHORT nPntCnt;
 
     // WireFrame herstellen
-    CreateWireframe(aPoly3D, NULL, eDetail);
+    CreateWireframe(aPoly3D, NULL/*BFS01, eDetail*/);
     nPntCnt = aPoly3D.GetPointCount();
 
     if(pScene)
@@ -1557,8 +1594,8 @@ void E3dObject::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL bDetail) const
 {
     rXPP.Clear();
     // Const mal wieder weg, da evtl. das BoundVolume neu generiert wird
-    static E3dDragDetail eDetail = E3DDETAIL_DEFAULT;
-    ((E3dObject*) this)->ImpCreateWireframePoly(rXPP, eDetail);
+    //BFS01static E3dDragDetail eDetail = E3DDETAIL_DEFAULT;
+    ((E3dObject*) this)->ImpCreateWireframePoly(rXPP/*BFS01, eDetail*/);
 }
 
 /*************************************************************************
@@ -1635,10 +1672,10 @@ void E3dObject::operator=(const SdrObject& rObj)
     aLocalBoundVol  = r3DObj.aLocalBoundVol;
 
     aTfMatrix       = r3DObj.aTfMatrix;
-    nLogicalGroup   = r3DObj.nLogicalGroup;
-    nObjTreeLevel   = r3DObj.nObjTreeLevel;
-    nPartOfParent   = r3DObj.nPartOfParent;
-    eDragDetail     = r3DObj.eDragDetail;
+    //BFS01nLogicalGroup   = r3DObj.nLogicalGroup;
+    //BFS01nObjTreeLevel   = r3DObj.nObjTreeLevel;
+    //BFS01nPartOfParent   = r3DObj.nPartOfParent;
+    //BFS01eDragDetail     = r3DObj.eDragDetail;
 
     // Da sich der Parent geaendert haben kann, Gesamttransformation beim
     // naechsten Mal auf jeden Fall neu bestimmen
@@ -1656,27 +1693,27 @@ void E3dObject::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
-void E3dObject::WriteOnlyOwnMembers(SvStream& rOut) const
-{
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-    aCompat.SetID("E3dObjectOwnMembers");
-#endif
-
-    rOut << aLocalBoundVol;
-
-    Old_Matrix3D aMat3D;
-    aMat3D = aTfMatrix;
-    rOut << aMat3D;
-
-    rOut << nLogicalGroup;
-    rOut << nObjTreeLevel;
-    rOut << nPartOfParent;
-    rOut << UINT16(eDragDetail);
-}
-#endif
+//BFS01#ifndef SVX_LIGHT
+//BFS01void E3dObject::WriteOnlyOwnMembers(SvStream& rOut) const
+//BFS01{
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("E3dObjectOwnMembers");
+//BFS01#endif
+//BFS01
+//BFS01 rOut << aLocalBoundVol;
+//BFS01
+//BFS01 Old_Matrix3D aMat3D;
+//BFS01 aMat3D = aTfMatrix;
+//BFS01 rOut << aMat3D;
+//BFS01
+//BFS01 rOut << nLogicalGroup;
+//BFS01 rOut << nObjTreeLevel;
+//BFS01 rOut << nPartOfParent;
+//BFS01 rOut << UINT16(eDragDetail);
+//BFS01}
+//BFS01#endif
 
 /*************************************************************************
 |*
@@ -1684,43 +1721,43 @@ void E3dObject::WriteOnlyOwnMembers(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void E3dObject::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    long position = rOut.Tell();
-    SdrAttrObj::WriteData(rOut);
-    position = rOut.Tell();
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-    aCompat.SetID("E3dObject");
-#endif
-
-    position = rOut.Tell();
-    pSub->Save(rOut);
-    position = rOut.Tell();
-
-    if (rOut.GetVersion() < 3560)
-    {
-        rOut << aLocalBoundVol;
-
-        Old_Matrix3D aMat3D;
-        aMat3D = aTfMatrix;
-        rOut << aMat3D;
-
-        rOut << nLogicalGroup;
-        rOut << nObjTreeLevel;
-        rOut << nPartOfParent;
-        rOut << UINT16(eDragDetail);
-    }
-    else
-    {
-        WriteOnlyOwnMembers(rOut);
-    }
-    position = rOut.Tell();
-#endif
-}
+//BFS01void E3dObject::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 long position = rOut.Tell();
+//BFS01 SdrAttrObj::WriteData(rOut);
+//BFS01 position = rOut.Tell();
+//BFS01
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("E3dObject");
+//BFS01#endif
+//BFS01
+//BFS01 position = rOut.Tell();
+//BFS01 pSub->Save(rOut);
+//BFS01 position = rOut.Tell();
+//BFS01
+//BFS01 if (rOut.GetVersion() < 3560)
+//BFS01 {
+//BFS01     rOut << aLocalBoundVol;
+//BFS01
+//BFS01     Old_Matrix3D aMat3D;
+//BFS01     aMat3D = aTfMatrix;
+//BFS01     rOut << aMat3D;
+//BFS01
+//BFS01     rOut << nLogicalGroup;
+//BFS01     rOut << nObjTreeLevel;
+//BFS01     rOut << nPartOfParent;
+//BFS01     rOut << UINT16(eDragDetail);
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     WriteOnlyOwnMembers(rOut);
+//BFS01 }
+//BFS01 position = rOut.Tell();
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1728,54 +1765,54 @@ void E3dObject::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void E3dObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    long position = rIn.Tell();
-    if (ImpCheckSubRecords (rHead, rIn))
-    {
-        position = rIn.Tell();
-        SdrAttrObj::ReadData(rHead, rIn);
-        position = rIn.Tell();
-        // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-        SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-        aCompat.SetID("E3dObject");
-#endif
-        pSub->Load(rIn, *pPage);
-
-        position = rIn.Tell();
-        if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
-        {
-            UINT16  nTmp16;
-
-            rIn >> aLocalBoundVol;
-
-            Old_Matrix3D aMat3D;
-            rIn >> aMat3D;
-            aTfMatrix = Matrix4D(aMat3D);
-
-            rIn >> nLogicalGroup;
-            rIn >> nObjTreeLevel;
-            rIn >> nPartOfParent;
-            rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
-        }
-        else
-        {
-            ReadOnlyOwnMembers(rHead, rIn);
-        }
-        position = rIn.Tell();
-
-        // Wie ein veraendertes Objekt behandeln
-        SetTransformChanged();
-        StructureChanged(this);
-
-        // BoundVolume muss neu berechnet werden
-        bBoundVolValid = FALSE;
-
-        // SnapRect auch
-        bSnapRectDirty = TRUE;
-    }
-}
+//BFS01void E3dObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 long position = rIn.Tell();
+//BFS01 if (ImpCheckSubRecords (rHead, rIn))
+//BFS01 {
+//BFS01     position = rIn.Tell();
+//BFS01     SdrAttrObj::ReadData(rHead, rIn);
+//BFS01     position = rIn.Tell();
+//BFS01     // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01     aCompat.SetID("E3dObject");
+//BFS01#endif
+//BFS01     pSub->Load(rIn, *pPage);
+//BFS01
+//BFS01     position = rIn.Tell();
+//BFS01     if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
+//BFS01     {
+//BFS01         UINT16  nTmp16;
+//BFS01
+//BFS01         rIn >> aLocalBoundVol;
+//BFS01
+//BFS01         Old_Matrix3D aMat3D;
+//BFS01         rIn >> aMat3D;
+//BFS01         aTfMatrix = Matrix4D(aMat3D);
+//BFS01
+//BFS01         rIn >> nLogicalGroup;
+//BFS01         rIn >> nObjTreeLevel;
+//BFS01         rIn >> nPartOfParent;
+//BFS01         rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         ReadOnlyOwnMembers(rHead, rIn);
+//BFS01     }
+//BFS01     position = rIn.Tell();
+//BFS01
+//BFS01     // Wie ein veraendertes Objekt behandeln
+//BFS01     SetTransformChanged();
+//BFS01     StructureChanged(this);
+//BFS01
+//BFS01     // BoundVolume muss neu berechnet werden
+//BFS01     bBoundVolValid = FALSE;
+//BFS01
+//BFS01     // SnapRect auch
+//BFS01     bSnapRectDirty = TRUE;
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1784,28 +1821,28 @@ void E3dObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 |*
 \************************************************************************/
 
-void E3dObject::ReadOnlyOwnMembers(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-    aCompat.SetID("E3dObjectOwnMembers");
-#endif
-    UINT16  nTmp16;
-
-    rIn >> aLocalBoundVol;
-
-    Old_Matrix3D aMat3D;
-    rIn >> aMat3D;
-    aTfMatrix = Matrix4D(aMat3D);
-
-    rIn >> nLogicalGroup;
-    rIn >> nObjTreeLevel;
-    rIn >> nPartOfParent;
-    rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
-
-    bBoundVolValid = FALSE;
-}
+//BFS01void E3dObject::ReadOnlyOwnMembers(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("E3dObjectOwnMembers");
+//BFS01#endif
+//BFS01 UINT16  nTmp16;
+//BFS01
+//BFS01 rIn >> aLocalBoundVol;
+//BFS01
+//BFS01 Old_Matrix3D aMat3D;
+//BFS01 rIn >> aMat3D;
+//BFS01 aTfMatrix = Matrix4D(aMat3D);
+//BFS01
+//BFS01 rIn >> nLogicalGroup;
+//BFS01 rIn >> nObjTreeLevel;
+//BFS01 rIn >> nPartOfParent;
+//BFS01 rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
+//BFS01
+//BFS01 bBoundVolValid = FALSE;
+//BFS01}
 
 
 /*************************************************************************
@@ -1814,12 +1851,12 @@ void E3dObject::ReadOnlyOwnMembers(const SdrObjIOHeader& rHead, SvStream& rIn)
 |*
 \************************************************************************/
 
-void E3dObject::AfterRead()
-{
-    SdrAttrObj::AfterRead();
-    if (pSub)
-        pSub->AfterRead();
-}
+//BFS01void E3dObject::AfterRead()
+//BFS01{
+//BFS01 SdrAttrObj::AfterRead();
+//BFS01 if (pSub)
+//BFS01     pSub->AfterRead();
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1870,32 +1907,32 @@ void E3dObject::RestGeoData(const SdrObjGeoData& rGeo)
 |*
 \************************************************************************/
 
-BOOL E3dObject::ImpCheckSubRecords (const SdrObjIOHeader& rHead,
-                                    SvStream&             rIn)
-{
-    BOOL bDoRead = FALSE;
-
-    if ( rIn.GetError() == SVSTREAM_OK )
-    {
-        if (rHead.GetVersion () <= 12)
-        {
-            ULONG nPos0 = rIn.Tell();
-            // Einen SubRecord ueberspringen (SdrObject)
-            { SdrDownCompat aCompat(rIn,STREAM_READ); }
-            // Nocheinen SubRecord ueberspringen (SdrAttrObj)
-            { SdrDownCompat aCompat(rIn,STREAM_READ); }
-            // Und nun muesste meiner kommen
-            bDoRead = rHead.GetBytesLeft() != 0;
-            rIn.Seek (nPos0); // FilePos wieder restaurieren
-        }
-        else
-        {
-            bDoRead = TRUE;
-        }
-    }
-
-    return bDoRead;
-}
+//BFS01BOOL E3dObject::ImpCheckSubRecords (const SdrObjIOHeader& rHead,
+//BFS01                                 SvStream&             rIn)
+//BFS01{
+//BFS01 BOOL bDoRead = FALSE;
+//BFS01
+//BFS01 if ( rIn.GetError() == SVSTREAM_OK )
+//BFS01 {
+//BFS01     if (rHead.GetVersion () <= 12)
+//BFS01     {
+//BFS01         ULONG nPos0 = rIn.Tell();
+//BFS01         // Einen SubRecord ueberspringen (SdrObject)
+//BFS01         { SdrDownCompat aCompat(rIn,STREAM_READ); }
+//BFS01         // Nocheinen SubRecord ueberspringen (SdrAttrObj)
+//BFS01         { SdrDownCompat aCompat(rIn,STREAM_READ); }
+//BFS01         // Und nun muesste meiner kommen
+//BFS01         bDoRead = rHead.GetBytesLeft() != 0;
+//BFS01         rIn.Seek (nPos0); // FilePos wieder restaurieren
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         bDoRead = TRUE;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 return bDoRead;
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1948,8 +1985,8 @@ E3dCompoundObject::E3dCompoundObject() : E3dObject()
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 
-    bBytesLeft = FALSE;
-    bCreateE3dPolyObj = FALSE;
+    //BFS01bBytesLeft = FALSE;
+    //BFS01bCreateE3dPolyObj = FALSE;
     bGeometryValid = FALSE;
     bFullTfIsPositive = TRUE;
 }
@@ -1959,8 +1996,8 @@ E3dCompoundObject::E3dCompoundObject(E3dDefaultAttributes& rDefault) : E3dObject
     // Defaults setzen
     SetDefaultAttributes(rDefault);
 
-    bBytesLeft = FALSE;
-    bCreateE3dPolyObj = FALSE;
+    //BFS01bBytesLeft = FALSE;
+    //BFS01bCreateE3dPolyObj = FALSE;
     bGeometryValid = FALSE;
 }
 
@@ -2125,72 +2162,72 @@ const Volume3D& E3dCompoundObject::GetBoundVolume()
 |*
 \************************************************************************/
 
-void E3dCompoundObject::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-#ifdef E3D_STREAMING
-
-    if (!aLocalBoundVol.IsValid() && aBoundVol.IsValid())
-    {
-        // Das aLocalBoundVol wird gespeichert.
-        // Ist dieses ungueltig, so wird das aBoundVol genommen
-        // (sollten beim E3dCompoundObject sowieso gleich sein)
-        ((E3dCompoundObject*) this)->aLocalBoundVol = aBoundVol;
-    }
-
-    E3dObject::WriteData(rOut);
-    if (rOut.GetVersion() < 3560)
-    {
-        // In diesem Fall passiert nichts, da vor der Version 4.0
-        // also im Falle der Revision 3.1
-    }
-    else
-    {
-        SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-        aCompat.SetID("E3dCompoundObject");
-#endif
-        rOut << BOOL(GetDoubleSided());
-#endif
-
-        // neue Parameter zur Geometrieerzeugung
-        rOut << BOOL(bCreateNormals);
-        rOut << BOOL(bCreateTexture);
-
-        sal_uInt16 nVal = GetNormalsKind();
-        rOut << BOOL(nVal > 0);
-        rOut << BOOL(nVal > 1);
-
-        nVal = GetTextureProjectionX();
-        rOut << BOOL(nVal > 0);
-        rOut << BOOL(nVal > 1);
-
-        nVal = GetTextureProjectionY();
-        rOut << BOOL(nVal > 0);
-        rOut << BOOL(nVal > 1);
-
-        rOut << BOOL(GetShadow3D());
-
-        // neu al 384:
-        rOut << GetMaterialAmbientColor();
-        rOut << GetMaterialColor();
-        rOut << GetMaterialSpecular();
-        rOut << GetMaterialEmission();
-        rOut << GetMaterialSpecularIntensity();
-
-        aBackMaterial.WriteData(rOut);
-
-        rOut << (UINT16)GetTextureKind();
-
-        rOut << (UINT16)GetTextureMode();
-
-        rOut << BOOL(GetNormalsInvert());
-
-        // neu ab 534: (hat noch gefehlt)
-        rOut << BOOL(GetTextureFilter());
-    }
-#endif
-}
+//BFS01void E3dCompoundObject::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01#ifdef E3D_STREAMING
+//BFS01
+//BFS01 if (!aLocalBoundVol.IsValid() && aBoundVol.IsValid())
+//BFS01 {
+//BFS01     // Das aLocalBoundVol wird gespeichert.
+//BFS01     // Ist dieses ungueltig, so wird das aBoundVol genommen
+//BFS01     // (sollten beim E3dCompoundObject sowieso gleich sein)
+//BFS01     ((E3dCompoundObject*) this)->aLocalBoundVol = aBoundVol;
+//BFS01 }
+//BFS01
+//BFS01 E3dObject::WriteData(rOut);
+//BFS01 if (rOut.GetVersion() < 3560)
+//BFS01 {
+//BFS01     // In diesem Fall passiert nichts, da vor der Version 4.0
+//BFS01     // also im Falle der Revision 3.1
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01     aCompat.SetID("E3dCompoundObject");
+//BFS01#endif
+//BFS01     rOut << BOOL(GetDoubleSided());
+//BFS01#endif
+//BFS01
+//BFS01     // neue Parameter zur Geometrieerzeugung
+//BFS01     rOut << BOOL(bCreateNormals);
+//BFS01     rOut << BOOL(bCreateTexture);
+//BFS01
+//BFS01     sal_uInt16 nVal = GetNormalsKind();
+//BFS01     rOut << BOOL(nVal > 0);
+//BFS01     rOut << BOOL(nVal > 1);
+//BFS01
+//BFS01     nVal = GetTextureProjectionX();
+//BFS01     rOut << BOOL(nVal > 0);
+//BFS01     rOut << BOOL(nVal > 1);
+//BFS01
+//BFS01     nVal = GetTextureProjectionY();
+//BFS01     rOut << BOOL(nVal > 0);
+//BFS01     rOut << BOOL(nVal > 1);
+//BFS01
+//BFS01     rOut << BOOL(GetShadow3D());
+//BFS01
+//BFS01     // neu al 384:
+//BFS01     rOut << GetMaterialAmbientColor();
+//BFS01     rOut << GetMaterialColor();
+//BFS01     rOut << GetMaterialSpecular();
+//BFS01     rOut << GetMaterialEmission();
+//BFS01     rOut << GetMaterialSpecularIntensity();
+//BFS01
+//BFS01     aBackMaterial.WriteData(rOut);
+//BFS01
+//BFS01     rOut << (UINT16)GetTextureKind();
+//BFS01
+//BFS01     rOut << (UINT16)GetTextureMode();
+//BFS01
+//BFS01     rOut << BOOL(GetNormalsInvert());
+//BFS01
+//BFS01     // neu ab 534: (hat noch gefehlt)
+//BFS01     rOut << BOOL(GetTextureFilter());
+//BFS01 }
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -2198,124 +2235,124 @@ void E3dCompoundObject::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if ( rIn.GetError() != SVSTREAM_OK )
-        return;
-
-    E3dObject::ReadData(rHead, rIn);
-
-      // Vor der Filerevision 13 wurde das Objekt nie geschrieben.
-      // auch kein Kompatibilitaetsrecord.
-    if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
-    {
-        return;
-    }
-
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-    aCompat.SetID("E3dCompoundObject");
-#endif
-
-    bBytesLeft = FALSE;
-    if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-    {
-        BOOL bTmp, bTmp2;
-        sal_uInt16 nTmp;
-
-        rIn >> bTmp;
-        GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
-
-        // neue Parameter zur Geometrieerzeugung
-        if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-        {
-            rIn >> bTmp;
-            bCreateNormals = bTmp;
-
-            rIn >> bTmp;
-            bCreateTexture = bTmp;
-
-            rIn >> bTmp;
-            rIn >> bTmp2;
-            if(bTmp == FALSE && bTmp2 == FALSE)
-                nTmp = 0;
-            else if(bTmp == TRUE && bTmp2 == FALSE)
-                nTmp = 1;
-            else
-                nTmp = 2;
-            GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
-
-            rIn >> bTmp;
-            rIn >> bTmp2;
-            if(bTmp == FALSE && bTmp2 == FALSE)
-                nTmp = 0;
-            else if(bTmp == TRUE && bTmp2 == FALSE)
-                nTmp = 1;
-            else
-                nTmp = 2;
-            GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
-
-            rIn >> bTmp;
-            rIn >> bTmp2;
-            if(bTmp == FALSE && bTmp2 == FALSE)
-                nTmp = 0;
-            else if(bTmp == TRUE && bTmp2 == FALSE)
-                nTmp = 1;
-            else
-                nTmp = 2;
-            GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
-
-            rIn >> bTmp;
-            GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
-
-            // Setze ein Flag fuer den Aufrufer, dass neues Format
-            // zu lesen ist
-            bBytesLeft = TRUE;
-        }
-
-        // neu al 384:
-        if (aCompat.GetBytesLeft () >= sizeof (B3dMaterial))
-        {
-            UINT16 nTmp;
-
-            Color aCol;
-
-            rIn >> aCol;
-            SetMaterialAmbientColor(aCol);
-
-            rIn >> aCol;
-            // do NOT use, this is the old 3D-Color(!)
-            // SetItem(XFillColorItem(String(), aCol));
-
-            rIn >> aCol;
-            GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
-
-            rIn >> aCol;
-            GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
-
-            rIn >> nTmp;
-            GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
-
-            aBackMaterial.ReadData(rIn);
-
-            rIn >> nTmp;
-            GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
-
-            rIn >> nTmp;
-            GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
-
-            rIn >> bTmp;
-            GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
-        }
-
-        // neu ab 534: (hat noch gefehlt)
-        if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-        {
-            rIn >> bTmp;
-            GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
-        }
-    }
-}
+//BFS01void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if ( rIn.GetError() != SVSTREAM_OK )
+//BFS01     return;
+//BFS01
+//BFS01 E3dObject::ReadData(rHead, rIn);
+//BFS01
+//BFS01   // Vor der Filerevision 13 wurde das Objekt nie geschrieben.
+//BFS01   // auch kein Kompatibilitaetsrecord.
+//BFS01 if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
+//BFS01 {
+//BFS01     return;
+//BFS01 }
+//BFS01
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("E3dCompoundObject");
+//BFS01#endif
+//BFS01
+//BFS01 bBytesLeft = FALSE;
+//BFS01 if (aCompat.GetBytesLeft () >= sizeof (BOOL))
+//BFS01 {
+//BFS01     BOOL bTmp, bTmp2;
+//BFS01     sal_uInt16 nTmp;
+//BFS01
+//BFS01     rIn >> bTmp;
+//BFS01     GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
+//BFS01
+//BFS01     // neue Parameter zur Geometrieerzeugung
+//BFS01     if (aCompat.GetBytesLeft () >= sizeof (BOOL))
+//BFS01     {
+//BFS01         rIn >> bTmp;
+//BFS01         bCreateNormals = bTmp;
+//BFS01
+//BFS01         rIn >> bTmp;
+//BFS01         bCreateTexture = bTmp;
+//BFS01
+//BFS01         rIn >> bTmp;
+//BFS01         rIn >> bTmp2;
+//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
+//BFS01             nTmp = 0;
+//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
+//BFS01             nTmp = 1;
+//BFS01         else
+//BFS01             nTmp = 2;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
+//BFS01
+//BFS01         rIn >> bTmp;
+//BFS01         rIn >> bTmp2;
+//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
+//BFS01             nTmp = 0;
+//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
+//BFS01             nTmp = 1;
+//BFS01         else
+//BFS01             nTmp = 2;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
+//BFS01
+//BFS01         rIn >> bTmp;
+//BFS01         rIn >> bTmp2;
+//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
+//BFS01             nTmp = 0;
+//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
+//BFS01             nTmp = 1;
+//BFS01         else
+//BFS01             nTmp = 2;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
+//BFS01
+//BFS01         rIn >> bTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
+//BFS01
+//BFS01         // Setze ein Flag fuer den Aufrufer, dass neues Format
+//BFS01         // zu lesen ist
+//BFS01         bBytesLeft = TRUE;
+//BFS01     }
+//BFS01
+//BFS01     // neu al 384:
+//BFS01     if (aCompat.GetBytesLeft () >= sizeof (B3dMaterial))
+//BFS01     {
+//BFS01         UINT16 nTmp;
+//BFS01
+//BFS01         Color aCol;
+//BFS01
+//BFS01         rIn >> aCol;
+//BFS01         SetMaterialAmbientColor(aCol);
+//BFS01
+//BFS01         rIn >> aCol;
+//BFS01         // do NOT use, this is the old 3D-Color(!)
+//BFS01         // SetItem(XFillColorItem(String(), aCol));
+//BFS01
+//BFS01         rIn >> aCol;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
+//BFS01
+//BFS01         rIn >> aCol;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
+//BFS01
+//BFS01         rIn >> nTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
+//BFS01
+//BFS01         aBackMaterial.ReadData(rIn);
+//BFS01
+//BFS01         rIn >> nTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
+//BFS01
+//BFS01         rIn >> nTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
+//BFS01
+//BFS01         rIn >> bTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
+//BFS01     }
+//BFS01
+//BFS01     // neu ab 534: (hat noch gefehlt)
+//BFS01     if (aCompat.GetBytesLeft () >= sizeof (BOOL))
+//BFS01     {
+//BFS01         rIn >> bTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
+//BFS01     }
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -2535,41 +2572,45 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void E3dCompoundObject::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+::basegfx::B3DPolyPolygon E3dCompoundObject::Get3DLineGeometry() const
 {
-    // use basic implementation here. Maybe optimized later.
-    rLinePolyPolygon.Clear();
+    ::basegfx::B3DPolyPolygon aRetval;
     B3dEntityBucket& rEntityBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetEntityBucket();
     GeometryIndexValueBucket& rIndexBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetIndexBucket();
-    sal_uInt32 nPolyCounter(0);
-    sal_uInt32 nEntityCounter(0);
+    sal_uInt32 nPolyCounter(0L);
+    sal_uInt32 nEntityCounter(0L);
 
     while(nPolyCounter < rIndexBucket.Count())
     {
         // next primitive
         sal_uInt32 nUpperBound(rIndexBucket[nPolyCounter++].GetIndex());
-        Vector3D aLastPoint;
+        ::basegfx::B3DPoint aLastPoint;
 
-        BOOL bLastLineVisible = rEntityBucket[nUpperBound - 1].IsEdgeVisible();
+        sal_Bool bLastLineVisible(rEntityBucket[nUpperBound - 1].IsEdgeVisible());
+
         if(bLastLineVisible)
-            aLastPoint = rEntityBucket[nUpperBound - 1].Point().GetVector3D();
+        {
+            Vector3D aVector(rEntityBucket[nUpperBound - 1].Point().GetVector3D());
+            aLastPoint = ::basegfx::B3DPoint(aVector.X(), aVector.Y(), aVector.Z());
+        }
 
         while(nEntityCounter < nUpperBound)
         {
-            Vector3D aNewPoint = rEntityBucket[nEntityCounter].Point().GetVector3D();
+            Vector3D aVector(rEntityBucket[nEntityCounter].Point().GetVector3D());
+            ::basegfx::B3DPoint aNewPoint(aVector.X(), aVector.Y(), aVector.Z());
 
             if(bLastLineVisible)
             {
                 if(aLastPoint != aNewPoint)
                 {
                     // fill polygon
-                    Polygon3D aNewPoly(2);
-                    aNewPoly[0] = aLastPoint;
-                    aNewPoly[1] = aNewPoint;
+                    ::basegfx::B3DPolygon aNewPoly;
+                    aNewPoly.append(aLastPoint);
+                    aNewPoly.append(aNewPoint);
 
                     // create line geometry for polygon in eye coor to
                     // have it always orthogonal to camera plane
-                    rLinePolyPolygon.Insert(aNewPoly);
+                    aRetval.append(aNewPoly);
                 }
             }
 
@@ -2577,6 +2618,8 @@ void E3dCompoundObject::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
             aLastPoint = aNewPoint;
         }
     }
+
+    return aRetval;
 }
 
 /*************************************************************************
@@ -2633,20 +2676,20 @@ void E3dCompoundObject::CreateGeometry()
     // Am Ende der Geometrieerzeugung das model an den erzeugten
     // PolyObj's setzen, d.h. beim ueberladen dieser Funktion
     // den parent am Ende rufen.
-    if(bCreateE3dPolyObj)
-        SetModel(pModel);
+    //BFS01if(bCreateE3dPolyObj)
+    //BFS01 SetModel(pModel);
 
     // Das Ende der Geometrieerzeugung anzeigen
     aDisplayGeometry.EndDescription();
 }
 
-void E3dCompoundObject::ReCreateGeometry(BOOL bCreateOldGeometry)
+void E3dCompoundObject::ReCreateGeometry(/*BFS01 BOOL bCreateOldGeometry*/)
 {
     // Geometrie zerstoeren
     DestroyGeometry();
 
     // Flag fuer Geometrieerzeugung setzen
-    bCreateE3dPolyObj = bCreateOldGeometry;
+    //BFS01bCreateE3dPolyObj = bCreateOldGeometry;
 
     // ... und neu erzeugen
     CreateGeometry();
@@ -2682,13 +2725,13 @@ void E3dCompoundObject::AddGeometry(const PolyPolygon3D& rPolyPolygon3D,
     if(rPolyPolygon3D.Count())
     {
         // eventuell alte Geometrie erzeugen (z.B. zum speichern)
-        if(bCreateE3dPolyObj)
-        {
-            E3dPolyObj* pObj = new E3dPolyObj(
-                rPolyPolygon3D, GetDoubleSided(), TRUE);
-            pObj->SetPartOfParent();
-            Insert3DObj(pObj);
-        }
+        //BFS01if(bCreateE3dPolyObj)
+        //BFS01{
+        //BFS01 E3dPolyObj* pObj = new E3dPolyObj(
+        //BFS01     rPolyPolygon3D, GetDoubleSided(), TRUE);
+        //BFS01 pObj->SetPartOfParent();
+        //BFS01 Insert3DObj(pObj);
+        //BFS01}
 
         // neue Geometrie erzeugen
         for(USHORT a = 0; a < rPolyPolygon3D.Count(); a++ )
@@ -2717,13 +2760,13 @@ void E3dCompoundObject::AddGeometry(
     if(rPolyPolygon3D.Count())
     {
         // eventuell alte Geometrie erzeugen (z.B. zum speichern)
-        if(bCreateE3dPolyObj)
-        {
-            E3dPolyObj* pObj = new E3dPolyObj(
-                rPolyPolygon3D, rPolyNormal3D, GetDoubleSided(), TRUE);
-            pObj->SetPartOfParent();
-            Insert3DObj(pObj);
-        }
+        //BFS01if(bCreateE3dPolyObj)
+        //BFS01{
+        //BFS01 E3dPolyObj* pObj = new E3dPolyObj(
+        //BFS01     rPolyPolygon3D, rPolyNormal3D, GetDoubleSided(), TRUE);
+        //BFS01 pObj->SetPartOfParent();
+        //BFS01 Insert3DObj(pObj);
+        //BFS01}
 
         // neue Geometrie erzeugen
         for(USHORT a = 0; a < rPolyPolygon3D.Count(); a++ )
@@ -2754,14 +2797,14 @@ void E3dCompoundObject::AddGeometry(
     if(rPolyPolygon3D.Count())
     {
         // eventuell alte Geometrie erzeugen (z.B. zum speichern)
-        if(bCreateE3dPolyObj)
-        {
-            E3dPolyObj* pObj = new E3dPolyObj(
-                rPolyPolygon3D, rPolyNormal3D,
-                rPolyTexture3D, GetDoubleSided(), TRUE);
-            pObj->SetPartOfParent();
-            Insert3DObj(pObj);
-        }
+        //BFS01if(bCreateE3dPolyObj)
+        //BFS01{
+        //BFS01 E3dPolyObj* pObj = new E3dPolyObj(
+        //BFS01     rPolyPolygon3D, rPolyNormal3D,
+        //BFS01     rPolyTexture3D, GetDoubleSided(), TRUE);
+        //BFS01 pObj->SetPartOfParent();
+        //BFS01 Insert3DObj(pObj);
+        //BFS01}
 
         // neue Geometrie erzeugen
         for(USHORT a = 0; a < rPolyPolygon3D.Count(); a++ )
@@ -3246,8 +3289,8 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
     bCreateNormals = r3DObj.bCreateNormals;
     bCreateTexture = r3DObj.bCreateTexture;
     bGeometryValid = r3DObj.bGeometryValid;
-    bBytesLeft = r3DObj.bBytesLeft;
-    bCreateE3dPolyObj = r3DObj.bCreateE3dPolyObj;
+    //BFS01bBytesLeft = r3DObj.bBytesLeft;
+    //BFS01bCreateE3dPolyObj = r3DObj.bCreateE3dPolyObj;
 
     // neu ab 383:
     aMaterialAmbientColor = r3DObj.aMaterialAmbientColor;
@@ -3262,7 +3305,7 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3D,
+void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D,
     BOOL& bDrawObject, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsFillDraft)
 {
     if(bIsFillDraft)
@@ -3696,7 +3739,7 @@ void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3
     }
 }
 
-void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3D,
+void E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D,
     BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsLineDraft, BOOL bIsFillDraft)
 {
     // do drawflags allow line drawing at all?
@@ -3763,7 +3806,7 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
     }
 }
 
-void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
+void E3dCompoundObject::SetBase3DParams(XOutputDevice& rOut, Base3D* pBase3D,
     BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted,
     BOOL bIsLineDraft, BOOL bIsFillDraft)
 {
@@ -3957,7 +4000,7 @@ BOOL E3dCompoundObject::DoDrawShadow()
 |*
 \************************************************************************/
 
-void E3dCompoundObject::DrawObjectWireframe(ExtOutputDevice& rXOut)
+void E3dCompoundObject::DrawObjectWireframe(XOutputDevice& rXOut)
 {
     UINT32 nPolyCounter = 0;
     UINT32 nEntityCounter = 0;
@@ -4526,7 +4569,132 @@ void E3dCompoundObject::SetUseDifferentBackMaterial(BOOL bNew)
 |*
 \************************************************************************/
 
-void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
+void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolygon& rLinePolyPolygon,
+    ::basegfx::B3DPolyPolygon& rAreaPolyPoly, ::basegfx::B3DPolyPolygon& rNormalPolyPoly)
+{
+    if(rLinePolyPolygon.count())
+    {
+        // detect if lines need to be drawn specifically
+        sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+        XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+
+        if(aLineStyle == XLINE_SOLID)
+        {
+            // add line segments without change
+            rAreaPolyPoly = rLinePolyPolygon;
+        }
+        else
+        {
+            // create dashed line segments
+            ::std::vector<double> aDotDashArray;
+            XDash aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetValue();
+            double fFullDashDotLen = ImpCreateDotDashArray(aDotDashArray, aDash, nLineWidth);
+
+            // convert to new polygon class
+            rAreaPolyPoly = rLinePolyPolygon;
+
+            // apply line dashing
+            rAreaPolyPoly = ::basegfx::tools::applyLineDashing(rAreaPolyPoly, aDotDashArray, fFullDashDotLen);
+        }
+
+        if(0L != nLineWidth)
+        {
+            // prepare rAreaPolyPoly for output data
+            const ::basegfx::B3DPolyPolygon aSourcePolyPolygon(rAreaPolyPoly);
+            rAreaPolyPoly.clear();
+            const double fDistance(nLineWidth / 2.0);
+
+            for(sal_uInt32 nInd(0L); nInd < aSourcePolyPolygon.count(); nInd++)
+            {
+                ::basegfx::B3DPolygon aLinePoly(aSourcePolyPolygon.getB3DPolygon(nInd));
+                const sal_uInt32 nOrigCount(aLinePoly.count());
+
+                if(nOrigCount)
+                {
+                    const sal_uInt32 nCount(aLinePoly.isClosed() ? nOrigCount : nOrigCount - 1L);
+
+                    for(sal_uInt32 a(0L); a < nCount; a++)
+                    {
+                        ::basegfx::B3DPoint aStart(aLinePoly.getB3DPoint(a));
+                        ::basegfx::B3DPoint aEnd(aLinePoly.getB3DPoint((a + 1L) % nOrigCount));
+                        ::basegfx::B3DVector aVector(aEnd - aStart);
+
+                        // test length using scalar with itself, gives the quadrat of the length
+                        const double fScalar(aVector.scalar(aVector));
+
+                        if(0.0 != fScalar)
+                        {
+                            // normalize vector, use known scalar
+                            if(1.0 != fScalar)
+                            {
+                                const double fLen(sqrt(fScalar));
+                                aVector.setX(aVector.getX() / fLen);
+                                aVector.setY(aVector.getY() / fLen);
+                                aVector.setZ(aVector.getZ() / fLen);
+                            }
+
+                            // calculate opposite vector and the two axes perpendicular
+                            // to it
+                            ::basegfx::B3DVector aOppositeVector(-aVector);
+                            ::basegfx::B3DVector aStartVec(-aVector.getY(), aVector.getZ(), aVector.getX());
+                            ::basegfx::B3DVector aXAxis = aVector.getPerpendicular(aStartVec);
+                            ::basegfx::B3DVector aYAxis = aVector.getPerpendicular(aXAxis);
+
+                            // prepare angle and angle increment
+                            double fAngle(0.0);
+                            const double fAngleIncrement(F_PI * (2.0 / 6.0));
+                            double fSin(sin(fAngle));
+                            double fCos(cos(fAngle));
+
+                            // prepare start vectors
+                            ::basegfx::B3DVector aCurrentVector((aXAxis * fCos) + (aYAxis * fSin));
+                            ::basegfx::B3DVector aOffset(aCurrentVector * fDistance);
+                            ::basegfx::B3DPoint aLeft(aStart + aOffset);
+                            ::basegfx::B3DPoint aRight(aEnd + aOffset);
+
+                            for(sal_uInt32 b(0L); b < 6; b++)
+                            {
+                                fAngle += fAngleIncrement;
+                                fSin = sin(fAngle);
+                                fCos = cos(fAngle);
+
+                                ::basegfx::B3DVector aNextVector((aXAxis * fCos) + (aYAxis * fSin));
+                                aOffset = ::basegfx::B3DVector(aNextVector * fDistance);
+                                ::basegfx::B3DPoint aNextLeft(aStart + aOffset);
+                                ::basegfx::B3DPoint aNextRight(aEnd + aOffset);
+                                ::basegfx::B3DPolygon aLine;
+                                ::basegfx::B3DPolygon aNormal;
+
+                                aLine.append(aStart);
+                                aLine.append(aNextLeft);
+                                aLine.append(aLeft);
+                                aLine.append(aNextRight);
+                                aLine.append(aRight);
+                                aLine.append(aEnd);
+
+                                aNormal.append(::basegfx::B3DPoint(aVector));
+                                aNormal.append(::basegfx::B3DPoint(aNextVector));
+                                aNormal.append(::basegfx::B3DPoint(aCurrentVector));
+                                aNormal.append(::basegfx::B3DPoint(aNextVector));
+                                aNormal.append(::basegfx::B3DPoint(aCurrentVector));
+                                aNormal.append(::basegfx::B3DPoint(aOppositeVector));
+
+                                rAreaPolyPoly.append(aLine);
+                                rNormalPolyPoly.append(aNormal);
+
+                                aLeft = aNextLeft;
+                                aRight = aNextRight;
+                                aCurrentVector = aNextVector;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void E3dCompoundObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
     const SdrPaintInfoRec& rInfoRec, UINT16 nDrawFlags)
 {
     // call parent, draw all subobjects
@@ -4545,9 +4713,9 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
         BOOL bDrawObject;
         BOOL bIsLineDraft((rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE) != 0);
         BOOL bIsFillDraft((rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL) != 0);
+        BOOL bGhosted((rInfoRec.pPV && rInfoRec.pPV->GetView().DoVisualizeEnteredGroup()) ? rInfoRec.bNotActive : FALSE);
         SetBase3DParams(rOut, pBase3D, bDrawObject, bDrawOutline, nDrawFlags,
-            (rInfoRec.pPV && rInfoRec.pPV->GetView().DoVisualizeEnteredGroup()) ? rInfoRec.bNotActive : FALSE,
-            bIsLineDraft, bIsFillDraft);
+            bGhosted, bIsLineDraft, bIsFillDraft);
 
         // Culling?
         pBase3D->SetCullMode(GetDoubleSided() ? Base3DCullNone : Base3DCullBack);
@@ -4568,45 +4736,117 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
         }
 
         // Outline ausgeben
-        if(bDrawOutline && pBase3D->GetLightGroup())
+        if(bDrawOutline)
         {
-            BOOL bLightingWasEnabled = pBase3D->GetLightGroup()->IsLightingEnabled();
-            pBase3D->GetLightGroup()->EnableLighting(FALSE);
-            pBase3D->SetLightGroup(pBase3D->GetLightGroup());
-
             // #79585#
             pBase3D->SetActiveTexture();
-
-            // #78972#
-            // detect if lines need to be drawn specifically
-            const SfxItemSet& rSet = GetObjectItemSet();
-            sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-            XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
-            BOOL bDrawLineSolidHair = (aLineStyle == XLINE_SOLID && nLineWidth == 0);
+            const SfxItemSet& rSet = GetMergedItemSet();
 
             // get line geometry
-            PolyPolygon3D aLinePolyPolygon;
-            GetLineGeometry(aLinePolyPolygon);
+            ::basegfx::B3DPolyPolygon aLinePolyPolygon(Get3DLineGeometry());
+            ::basegfx::B3DPolyPolygon aAreaPolyPolygon;
+            ::basegfx::B3DPolyPolygon aNormalPolyPolygon;
+            ImplGet3DLineGeometry(rSet, aLinePolyPolygon, aAreaPolyPolygon, aNormalPolyPolygon);
 
-            if(bDrawLineSolidHair)
+            if(aAreaPolyPolygon.count())
             {
-                // simply draw the object geometry as line (as done before)
-                // pBase3D->DrawPolygonGeometry(GetDisplayGeometry(), TRUE);
-                if(aLinePolyPolygon.Count())
+                if(aNormalPolyPolygon.count())
                 {
-                    // draw the line geometry as 3d lines
+                    // draw as 3d tubes
+                    pBase3D->SetRenderMode(Base3DRenderFill);
+
+                    // set line color as color
+                    {
+                        Color aColorLine = ((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetValue();
+                        sal_uInt16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
+
+                        if(bGhosted)
+                        {
+                            aColorLine = Color(
+                                (aColorLine.GetRed() >> 1) + 0x80,
+                                (aColorLine.GetGreen() >> 1) + 0x80,
+                                (aColorLine.GetBlue() >> 1) + 0x80);
+                        }
+
+                        // prepare custom colors for linear transparency and black/white mode
+                        Color aColorLineWithTransparency(aColorLine);
+                        aColorLineWithTransparency.SetTransparency((UINT8)(nLineTransparence * 255 / 100));
+
+                        // set base materials (if no drawmode is set)
+                        pBase3D->SetMaterial(GetMaterialSpecular(), Base3DMaterialSpecular);
+                        pBase3D->SetMaterial(GetMaterialEmission(), Base3DMaterialEmission);
+                        pBase3D->SetShininess(GetMaterialSpecularIntensity());
+
+                        // now test the different draw modes and cases
+                        if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_WHITEFILL) != 0)
+                        {
+                            Color aColorWhite(COL_WHITE);
+                            Color aColorWhiteWithTransparency(COL_WHITE);
+                            aColorWhiteWithTransparency.SetTransparency((UINT8)(nLineTransparence * 255 / 100));
+
+                            // set material to black and white mode
+                            pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient);
+                            pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse);
+                        }
+                        else if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSFILL) != 0)
+                        {
+                            Color aColorFill(Application::GetSettings().GetStyleSettings().GetWindowColor());
+                            Color aColorFillWithTransparency(aColorFill);
+                            aColorFillWithTransparency.SetTransparency((UINT8)(nLineTransparence * 255 / 100));
+
+                            // set material to black and white mode
+                            pBase3D->SetMaterial(aColorFill, Base3DMaterialAmbient);
+                            pBase3D->SetMaterial(aColorFillWithTransparency, Base3DMaterialDiffuse);
+                        }
+                        else
+                        {
+                            // set material to base color
+                            pBase3D->SetMaterial(aColorLine, Base3DMaterialAmbient);
+                            pBase3D->SetMaterial(aColorLineWithTransparency, Base3DMaterialDiffuse);
+                        }
+                    }
+
+                    for(sal_uInt32 a(0L); a < aAreaPolyPolygon.count(); a++)
+                    {
+                        // start new primitive
+                        ::basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
+                        ::basegfx::B3DPolygon aNormals(aNormalPolyPolygon.getB3DPolygon(a));
+                        pBase3D->StartPrimitive(Base3DTriangleStrip);
+
+                        for(sal_uInt32 b(0); b < aPolygon.count(); b++)
+                        {
+                            ::basegfx::B3DPoint aPoint(aPolygon.getB3DPoint(b));
+                            ::basegfx::B3DPoint aNormal(aNormals.getB3DPoint(b));
+
+                            Vector3D aVec(aPoint.getX(), aPoint.getY(), aPoint.getZ());
+                            Vector3D aNorm(aNormal.getX(), aNormal.getY(), aNormal.getZ());
+
+                            pBase3D->AddVertex(aVec, aNorm);
+                        }
+
+                        // draw primitive
+                        pBase3D->EndPrimitive();
+                    }
+                }
+                else
+                {
+                    // draw as lines
+                    BOOL bLightingWasEnabled = pBase3D->GetLightGroup()->IsLightingEnabled();
+                    pBase3D->GetLightGroup()->EnableLighting(FALSE);
+                    pBase3D->SetLightGroup(pBase3D->GetLightGroup());
                     pBase3D->SetRenderMode(Base3DRenderLine);
                     pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, TRUE);
 
-                    for(sal_uInt32 a(0); a < aLinePolyPolygon.Count(); a++)
+                    for(sal_uInt32 a(0L); a < aAreaPolyPolygon.count(); a++)
                     {
                         // start new primitive
-                        const Polygon3D& rPolygon = aLinePolyPolygon[(sal_uInt16)a];
+                        ::basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
                         pBase3D->StartPrimitive(Base3DLineStrip);
 
-                        for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
+                        for(sal_uInt32 b(0); b < aPolygon.count(); b++)
                         {
-                            Vector3D aVec = rPolygon[sal_uInt16(b)];
+                            ::basegfx::B3DPoint aPoint(aPolygon.getB3DPoint(b));
+                            Vector3D aVec(aPoint.getX(), aPoint.getY(), aPoint.getZ());
                             pBase3D->AddVertex(aVec);
                         }
 
@@ -4615,80 +4855,10 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
                     }
 
                     pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
+                    pBase3D->GetLightGroup()->EnableLighting(bLightingWasEnabled);
+                    pBase3D->SetLightGroup(pBase3D->GetLightGroup());
                 }
             }
-            else
-            {
-                // convert object geometry to line geometry and draw as polygons
-                // in 3D space
-                PolyPolygon3D aPolyPoly3D;
-                PolyPolygon3D aLinePoly3D;
-
-                // get ImpLineStyleParameterPack
-                ImpLineStyleParameterPack aLineAttr(rSet, FALSE, rOut.GetOutDev());
-                aLineAttr.ForceNoArrowsLeft(TRUE);
-                aLineAttr.ForceNoArrowsRight(TRUE);
-                ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, FALSE);
-
-                // get camera set
-                B3dTransformationSet* pTransSet = pBase3D->GetTransformationSet();
-
-                // get transform object geometry in eye coor
-                Matrix4D aMatObjectToEye = pTransSet->GetObjectTrans();
-                aMatObjectToEye *= pTransSet->GetOrientation();
-
-                for(sal_uInt16 nInd(0); nInd < aLinePolyPolygon.Count(); nInd++)
-                {
-                    // create line geometry for polygon in eye coor to
-                    // have it always orthogonal to camera plane
-                    Polygon3D aLinePoly = aLinePolyPolygon.GetObject(nInd);
-                    aLinePoly.Transform(aMatObjectToEye);
-                    aLineCreator.AddPolygon3D(aLinePoly);
-                }
-
-                // put together
-                aLinePoly3D.Insert(aPolyPoly3D);
-
-                if(aLinePoly3D.Count())
-                {
-                    pBase3D->SetCullMode(Base3DCullNone);
-                    for(sal_uInt32 a(0); a < aLinePoly3D.Count(); a++)
-                    {
-                        // start new primitive
-                        const Polygon3D& rPolygon = aLinePoly3D[(sal_uInt16)a];
-
-                        if(rPolygon.IsClosed())
-                        {
-                            pBase3D->SetRenderMode(Base3DRenderFill);
-                            pBase3D->StartPrimitive(Base3DPolygon);
-                        }
-                        else
-                        {
-                            pBase3D->SetRenderMode(Base3DRenderLine);
-                            pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, TRUE);
-                            pBase3D->StartPrimitive(Base3DLineStrip);
-                        }
-
-                        for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
-                        {
-                            Vector3D aVec = rPolygon[sal_uInt16(b)];
-                            aVec = pTransSet->EyeToObjectCoor(aVec);
-                            pBase3D->AddVertex(aVec);
-                        }
-
-                        // draw primitive
-                        pBase3D->EndPrimitive();
-
-                        if(!rPolygon.IsClosed())
-                        {
-                            pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
-                        }
-                    }
-                }
-            }
-
-            pBase3D->GetLightGroup()->EnableLighting(bLightingWasEnabled);
-            pBase3D->SetLightGroup(pBase3D->GetLightGroup());
         }
     }
 
@@ -4778,7 +4948,7 @@ void E3dCompoundObject::TakeContour3D(XPolyPolygon& rPoly)
 |*
 \************************************************************************/
 
-void E3dCompoundObject::DrawShadows(Base3D *pBase3D, ExtOutputDevice& rXOut,
+void E3dCompoundObject::DrawShadows(Base3D *pBase3D, XOutputDevice& rXOut,
     const Rectangle& rBound, const Volume3D& rVolume,
     const SdrPaintInfoRec& rInfoRec)
 {
@@ -4846,57 +5016,52 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
         }
     }
 
-    if(bDrawAsOutline || (nLineWidth != 0))
+    if(bDrawAsOutline || (XLINE_NONE != aLineStyle))
     {
-        // add 3D line drawing geometry
-        PolyPolygon3D aBasicLinePolyPoly;
-        GetLineGeometry(aBasicLinePolyPoly);
+        // get line geometry
+        ::basegfx::B3DPolyPolygon aBasicLinePolyPoly(Get3DLineGeometry());
+        ::basegfx::B3DPolyPolygon aAreaPolyPolygon;
+        ::basegfx::B3DPolyPolygon aNormalPolyPolygon;
+        ImplGet3DLineGeometry(rSet, aBasicLinePolyPoly, aAreaPolyPolygon, aNormalPolyPolygon);
 
-        // #78972# detect if lines need to be drawn with pattern
-        if(aLineStyle == XLINE_DASH || (aLineStyle == XLINE_SOLID && nLineWidth != 0))
+        if(aAreaPolyPolygon.count())
         {
-            PolyPolygon3D aPolyPoly3D;
-            PolyPolygon3D aLinePoly3D;
-
-            // get ImpLineStyleParameterPack, bForceHair==FALSE to create polygons
-            ImpLineStyleParameterPack aLineAttr(rSet, FALSE, NULL);
-            aLineAttr.ForceNoArrowsLeft(TRUE);
-            aLineAttr.ForceNoArrowsRight(TRUE);
-            ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, FALSE);
-
-            // get camera set and transform to eye coor
-            Matrix4D aMatObjectToEye = rTransSet.GetObjectTrans();
-            aMatObjectToEye *= rTransSet.GetOrientation();
-
-            for(sal_uInt16 nInd(0); nInd < aBasicLinePolyPoly.Count(); nInd++)
+            if(aNormalPolyPolygon.count())
             {
-                Polygon3D aLinePoly = aBasicLinePolyPoly.GetObject(nInd);
-                aLinePoly.Transform(aMatObjectToEye);
-                aLineCreator.AddPolygon3D(aLinePoly);
+                // draw as 3d tubes
+                for(sal_uInt32 a(0L); a < aAreaPolyPolygon.count(); a++)
+                {
+                    // start new primitive
+                    ::basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
+                    Polygon3D aNewPolygon(4);
+
+                    ::basegfx::B3DPoint aPointA(aPolygon.getB3DPoint(1));
+                    Vector3D aVecA(aPointA.getX(), aPointA.getY(), aPointA.getZ());
+
+                    ::basegfx::B3DPoint aPointB(aPolygon.getB3DPoint(3));
+                    Vector3D aVecB(aPointB.getX(), aPointB.getY(), aPointB.getZ());
+
+                    ::basegfx::B3DPoint aPointC(aPolygon.getB3DPoint(4));
+                    Vector3D aVecC(aPointC.getX(), aPointC.getY(), aPointC.getZ());
+
+                    ::basegfx::B3DPoint aPointD(aPolygon.getB3DPoint(2));
+                    Vector3D aVecD(aPointD.getX(), aPointD.getY(), aPointD.getZ());
+
+                    aNewPolygon[0] = aVecA;
+                    aNewPolygon[1] = aVecB;
+                    aNewPolygon[2] = aVecC;
+                    aNewPolygon[3] = aVecD;
+                    aNewPolygon.SetClosed(sal_True);
+
+                    aLinePolyPolygon.Insert(aNewPolygon);
+                }
             }
-
-            // prepare transform back to object coor
-            if(aLinePoly3D.Count() || aPolyPoly3D.Count())
-                aMatObjectToEye.Invert();
-
-            if(aLinePoly3D.Count())
+            else
             {
-                // transform and add all generated line polygons
-                aLinePoly3D.Transform(aMatObjectToEye);
-                aLinePolyPolygon.Insert(aLinePoly3D);
+                // draw as lines
+                aBasicLinePolyPoly = aAreaPolyPolygon;
+                aLinePolyPolygon.Insert(aBasicLinePolyPoly);
             }
-
-            if(aPolyPoly3D.Count())
-            {
-                // transform and add all generated polygons
-                aPolyPoly3D.Transform(aMatObjectToEye);
-                aLinePolyPolygon.Insert(aPolyPoly3D);
-            }
-        }
-        else
-        {
-            // simply add basic line geometry
-            aLinePolyPolygon.Insert(aBasicLinePolyPoly);
         }
     }
 
@@ -5066,7 +5231,7 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
     }
 }
 
-void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, ExtOutputDevice& rXOut)
+void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, XOutputDevice& rXOut)
 {
     Color aCol = GetShadowColor();
     OutputDevice *pDevice = rXOut.GetOutDev();
@@ -5233,4 +5398,4 @@ sal_Bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
     return sal_False;
 }
 
-// EOF
+// eof
