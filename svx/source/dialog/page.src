@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:20:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ greek ] = "Ìïñ~öÞ";
         Text[ dutch ] = "~Formaat";
         Text[ french ] = "~Format";
-        Text[ spanish ] = "~Format";
+        Text[ spanish ] = "~Formato";
         Text[ italian ] = "~Format";
         Text[ danish ] = "~Format";
         Text[ swedish ] = "~Format";
@@ -415,10 +415,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ spanish ] =
         {
-            < "Todos" ; Default ; > ;
+            < "Derecha e izquierda" ; Default ; > ;
             < "Reflejado" ; Default ; > ;
-            < "Derecha" ; Default ; > ;
-            < "Izquierda" ; Default ; > ;
+            < "Sólo derecha" ; Default ; > ;
+            < "Sólo izquierda" ; Default ; > ;
         };
         StringList [ english_us ] =
         {
@@ -742,7 +742,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ greek ] = "~ÌïñöÞ";
         Text[ dutch ] = "Op~maak";
         Text[ french ] = "For~mat";
-        Text[ spanish ] = "For~mat";
+        Text[ spanish ] = "For~mato";
         Text[ italian ] = "For~mat";
         Text[ danish ] = "For~mat";
         Text[ swedish ] = "For~mat";
