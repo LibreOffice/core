@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 11:21:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
