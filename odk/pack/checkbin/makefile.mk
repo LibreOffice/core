@@ -11,7 +11,7 @@ ODKCHECKFILE=$(MISC)$/$(TARGET).txt
 all: checkit
 
 checkit:
-    +touch $(ODKCHECKFILE)
+    +@echo "" > $(ODKCHECKFILE)
 # THE PERL SCRIPT DELETES THE CHECK FILE, WHEN AN ERROR OCCURS
     -diff -r $(DESTDIRBIN)  $(SOLARBINDIR) |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
      -diff -r $(DESTDIRLIB)  $(SOLARLIBDIR) |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)

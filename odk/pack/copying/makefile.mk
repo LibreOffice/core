@@ -476,11 +476,11 @@ remove_dk :
     +-$(RM)  $(DESTDIRBIN)$/udkapi.rdb >& $(NULLDEV)
 
 .IF "$(BUILD_SOSL)"!=""  
-$(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
+$(CONVERTTAGFLAG) : $(MISC)$/deltree.txt $(DOCUHTMLFILES)
     +$(PERL) $(CONVERTTAGSCRIPT) $(PRODUCT_NAME) $(PRODUCT_NAME) $(DOCUHTMLFILES)
-    touch $@
+    +@echo "tags converted" > $@
 .ELSE
 $(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
-    +echo no conversion necessary
-    touch $@
+    @echo no conversion necessary
+    +@echo "no conversion necessary" > $@
 .ENDIF
