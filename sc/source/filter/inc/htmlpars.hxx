@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:37:36 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,9 +318,6 @@ inline bool operator==( const ScHTMLSize& rSize1, const ScHTMLSize& rSize2 )
 /** A single entry containing a line of text or representing a table. */
 struct ScHTMLEntry : public ScEEParseEntry
 {
-private:
-    bool                        mbImportAlways; /// true = Always import this entry.
-
 public:
     explicit                    ScHTMLEntry(
                                     const SfxItemSet& rItemSet,
@@ -343,6 +340,14 @@ public:
     void                        AdjustEnd( const ImportInfo& rInfo );
     /** Deletes leading and trailing empty paragraphs from the entry. */
     void                        Strip( const EditEngine& rEditEngine );
+
+    /** Returns read/write access to the item set of this entry. */
+    inline SfxItemSet&          GetItemSet() { return aItemSet; }
+    /** Returns read-only access to the item set of this entry. */
+    inline const SfxItemSet&    GetItemSet() const { return aItemSet; }
+
+private:
+    bool                        mbImportAlways; /// true = Always import this entry.
 };
 
 
@@ -370,37 +375,6 @@ class ScHTMLTableMap;
     recursively in all nested tables. */
 class ScHTMLTable
 {
-private:
-    typedef ::std::auto_ptr< ScHTMLTableMap >           ScHTMLTableMapPtr;
-    typedef ::std::auto_ptr< SfxItemSet >               SfxItemSetPtr;
-    typedef ::std::vector< sal_uInt16 >                 ScSizeVec;
-    typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
-    typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
-    typedef ::std::auto_ptr< ScHTMLEntry >              ScHTMLEntryPtr;
-
-    ScHTMLTable*                mpParentTable;      /// Pointer to parent table.
-    ScHTMLTableMapPtr           mpNestedTables;     /// Table of nested HTML tables.
-    String                      maTableName;        /// Table name from <table id> option.
-    ScHTMLTableAutoId           maTableId;          /// Unique identifier of this table.
-    SfxItemSet                  maTableItemSet;     /// Items for the entire table.
-    SfxItemSetPtr               mpRowItemSet;       /// Items for the current table row.
-    SfxItemSetPtr               mpDataItemSet;      /// Items for the current cell.
-    ScRangeList                 maLockList;         /// Locked cells (needed for merged cells).
-    EditEngine&                 mrEditEngine;       /// Edit engine (from ScEEParser).
-    ScEEParseList&              mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
-    ScHTMLEntryMap              maEntryMap;         /// List of entries for each cell.
-    ScHTMLEntryList*            mpCurrEntryList;    /// Current entry list from map for faster access.
-    ScHTMLEntryPtr              mpCurrEntry;        /// Working entry, not yet inserted in a list.
-    ScSizeVec                   maSizes[ 2 ];       /// Calc cell count of each HTML table column/row.
-    ScHTMLSize                  maSize;             /// Size of the table.
-    ScHTMLPos                   maCurrCell;         /// Address of current cell to fill.
-    ScHTMLPos                   maDocBasePos;       /// Resulting base address in a Calc document.
-    bool                        mbBorderOn;         /// true = Table borders on.
-    bool                        mbPreFormText;      /// true = Table from preformatted text (<pre> tag).
-    bool                        mbRowOn;            /// true = Inside of <tr> </tr>.
-    bool                        mbDataOn;           /// true = Inside of <td> </td> or <th> </th>.
-    bool                        mbPushEmptyLine;    /// true = Insert empty line before current entry.
-
 public:
     /** Creates a new HTML table without content.
         @descr  Internally handles a current cell position. This position is invalid
@@ -421,7 +395,7 @@ public:
     /** Returns the table size. */
     inline const ScHTMLSize&    GetSize() const { return maSize; }
     /** Returns the cell spanning of the specified cell. */
-    ScHTMLSize                  GetSpan( const ScHTMLPos& rCellPos );
+    ScHTMLSize                  GetSpan( const ScHTMLPos& rCellPos ) const;
 
     /** Searches in all nested tables for the specified table.
         @param nTableId  Unique identifier of the table. */
@@ -478,6 +452,8 @@ public:
     sal_uInt16                  GetDocSize( ScHTMLOrient eOrient, sal_uInt16 nCellBegin, sal_uInt16 nCellEnd ) const;
     /** Returns the total document row/column count in the specified direction. */
     sal_uInt16                  GetDocSize( ScHTMLOrient eOrient ) const;
+    /** Returns the total document row/column count of the specified HTML cell. */
+    ScHTMLSize                  GetDocSize( const ScHTMLPos& rCellPos ) const;
 
     /** Returns the resulting Calc position of the top left edge of the table. */
     inline const ScHTMLPos&     GetDocPos() const { return maDocBasePos; }
@@ -485,13 +461,38 @@ public:
     sal_uInt16                  GetDocPos( ScHTMLOrient eOrient, sal_uInt16 nCellPos = 0 ) const;
     /** Calculates the resulting Calc position of the specified HTML cell. */
     ScHTMLPos                   GetDocPos( const ScHTMLPos& rCellPos ) const;
+
     /** Calculates the current Calc document area of this table. */
     void                        GetDocRange( ScRange& rRange ) const;
 
     /** Applies border formatting to the passed document. */
     void                        ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos ) const;
 
+protected:
+    /** Creates a new HTML table without parent.
+        @descr  This constructor is used to create the "global table". */
+    explicit                    ScHTMLTable(
+                                    SfxItemPool& rPool,
+                                    EditEngine& rEditEngine,
+                                    ScEEParseList& rEEParseList,
+                                    ScHTMLTableId& rnUnusedId );
+
+    /** Fills all empty cells in this and nested tables with dummy parse entries. */
+    void                        FillEmptyCells();
+    /** Recalculates the size of all columns/rows in the table, regarding nested tables. */
+    void                        RecalcDocSize();
+    /** Recalculates the position of all cell entries and nested tables.
+        @param rBasePos  The origin of the table in the Calc document. */
+    void                        RecalcDocPos( const ScHTMLPos& rBasePos );
+
 private:
+    typedef ::std::auto_ptr< ScHTMLTableMap >           ScHTMLTableMapPtr;
+    typedef ::std::auto_ptr< SfxItemSet >               SfxItemSetPtr;
+    typedef ::std::vector< sal_uInt16 >                 ScSizeVec;
+    typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
+    typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
+    typedef ::std::auto_ptr< ScHTMLEntry >              ScHTMLEntryPtr;
+
     /** Returns true, if the current cell does not contain an entry yet. */
     bool                        IsEmptyCell() const;
     /** Returns the item set from cell, row, or table, depending on current state. */
@@ -501,7 +502,7 @@ private:
     static bool                 IsSpaceCharInfo( const ImportInfo& rInfo );
 
     /** Creates and returns a new empty flying entry at position (0,0). */
-    ScHTMLEntry*                CreateEntry() const;
+    ScHTMLEntryPtr              CreateEntry() const;
     /** Creates a new flying entry.
         @param rInfo  Contains the initial edit engine selection for the entry. */
     void                        CreateNewEntry( const ImportInfo& rInfo );
@@ -564,22 +565,29 @@ private:
                                     ScHTMLOrient eOrient, sal_uInt16 nCellPos,
                                     sal_uInt16 nCellSpan, sal_uInt16 nRealDocSize );
 
-protected:
-    /** Creates a new HTML table without parent.
-        @descr  This constructor is used to create the "global table". */
-    explicit                    ScHTMLTable(
-                                    SfxItemPool& rPool,
-                                    EditEngine& rEditEngine,
-                                    ScEEParseList& rEEParseList,
-                                    ScHTMLTableId& rnUnusedId );
-
-    /** Fills all empty cells in this and nested tables with dummy parse entries. */
-    void                        FillEmptyCells();
-    /** Recalculates the size of all columns/rows in the table, regarding nested tables. */
-    void                        RecalcDocSize();
-    /** Recalculates the position of all cell entries and nested tables.
-        @param rBasePos  The origin of the table in the Calc document. */
-    void                        RecalcDocPos( const ScHTMLPos& rBasePos );
+private:
+    ScHTMLTable*                mpParentTable;      /// Pointer to parent table.
+    ScHTMLTableMapPtr           mpNestedTables;     /// Table of nested HTML tables.
+    String                      maTableName;        /// Table name from <table id> option.
+    ScHTMLTableAutoId           maTableId;          /// Unique identifier of this table.
+    SfxItemSet                  maTableItemSet;     /// Items for the entire table.
+    SfxItemSetPtr               mpRowItemSet;       /// Items for the current table row.
+    SfxItemSetPtr               mpDataItemSet;      /// Items for the current cell.
+    ScRangeList                 maLockList;         /// Locked cells (needed for merged cells).
+    EditEngine&                 mrEditEngine;       /// Edit engine (from ScEEParser).
+    ScEEParseList&              mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
+    ScHTMLEntryMap              maEntryMap;         /// List of entries for each cell.
+    ScHTMLEntryList*            mpCurrEntryList;    /// Current entry list from map for faster access.
+    ScHTMLEntryPtr              mpCurrEntry;        /// Working entry, not yet inserted in a list.
+    ScSizeVec                   maSizes[ 2 ];       /// Calc cell count of each HTML table column/row.
+    ScHTMLSize                  maSize;             /// Size of the table.
+    ScHTMLPos                   maCurrCell;         /// Address of current cell to fill.
+    ScHTMLPos                   maDocBasePos;       /// Resulting base address in a Calc document.
+    bool                        mbBorderOn;         /// true = Table borders on.
+    bool                        mbPreFormText;      /// true = Table from preformatted text (<pre> tag).
+    bool                        mbRowOn;            /// true = Inside of <tr> </tr>.
+    bool                        mbDataOn;           /// true = Inside of <td> </td> or <th> </th>.
+    bool                        mbPushEmptyLine;    /// true = Insert empty line before current entry.
 };
 
 
@@ -609,15 +617,6 @@ public:
     like pictures or column widths. */
 class ScHTMLQueryParser : public ScHTMLParser
 {
-private:
-    typedef ::std::auto_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
-
-    String                      maTitle;            /// The title of the document.
-    ScHTMLGlobalTablePtr        mpGlobTable;        /// Contains the entire imported document.
-    ScHTMLTable*                mpCurrTable;        /// Pointer to current table (performance).
-    ScHTMLTableId               mnUnusedId;         /// First unused table identifier.
-    bool                        mbTitleOn;          /// true = Inside of <title> </title>.
-
 public:
     explicit                    ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc );
     virtual                     ~ScHTMLQueryParser();
@@ -655,6 +654,15 @@ private:
     void                        PreOff( const ImportInfo& rInfo );
 
     DECL_LINK( HTMLImportHdl, const ImportInfo* );
+
+private:
+    typedef ::std::auto_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
+
+    String                      maTitle;            /// The title of the document.
+    ScHTMLGlobalTablePtr        mpGlobTable;        /// Contains the entire imported document.
+    ScHTMLTable*                mpCurrTable;        /// Pointer to current table (performance).
+    ScHTMLTableId               mnUnusedId;         /// First unused table identifier.
+    bool                        mbTitleOn;          /// true = Inside of <title> </title>.
 };
 
 
