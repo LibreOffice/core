@@ -79,14 +79,14 @@ public class Register{
             goodResult = command.exec("chmod a+x " + progpath + "pkgchk", null );
 
             if ( goodResult ){
-                        cmd = progpath + "pkgchk " + progpath + packages[i];
+                        cmd = progpath + "pkgchk -f " + progpath + packages[i];
 
                 System.err.println(cmd);
                         goodResult = command.exec(cmd, env);
                     }
                 }
             else {
-                    cmd = "\"" + progpath + "pkgchk.exe\" \"" + progpath +
+                    cmd = "\"" + progpath + "pkgchk.exe -f \" \"" + progpath +
                         packages[i] + "\"";
 
             System.err.println(cmd);
