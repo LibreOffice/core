@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: mmi $ $Date: 2004-07-19 11:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "secport.h"
 #include "secitem.h"
 #include "secder.h"
+#include "secerr.h"
 #include "limits.h"
 
 #include "xmlsec/xmlsec.h"
@@ -710,6 +711,154 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
     xmlFree( chCert ) ;
 
     return createCertificateFromRaw( rawCert ) ;
+}
+
+sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+    sal_Int32 validity ;
+    const X509Certificate_NssImpl* xcert ;
+    const CERTCertificate* cert ;
+
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
+    if( !xCertTunnel.is() ) {
+        throw RuntimeException() ;
+    }
+
+    xcert = ( X509Certificate_NssImpl* )xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ) ;
+    if( xcert == NULL ) {
+        throw RuntimeException() ;
+    }
+
+    cert = xcert->getNssCert() ;
+    if( cert != NULL ) {
+        int64 timeboundary ;
+        SECStatus status ;
+
+        //Get the system clock time
+        timeboundary = PR_Now() ;
+
+        if( m_pHandler != NULL ) {
+            status = CERT_VerifyCertificate( m_pHandler, ( CERTCertificate* )cert, PR_FALSE, (SECCertificateUsage)0, timeboundary , NULL, NULL, NULL ) ;
+        } else {
+            status = CERT_VerifyCertificate( CERT_GetDefaultCertDB(), ( CERTCertificate* )cert, PR_FALSE, (SECCertificateUsage)0, timeboundary , NULL, NULL, NULL ) ;
+        }
+
+        if( status == SECSuccess ) {
+            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_VALID ;
+        } else {
+            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+            switch( status ) {
+                case SEC_ERROR_BAD_SIGNATURE :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_SIGNATURE_INVALID ;
+                    break ;
+                case SEC_ERROR_EXPIRED_CERTIFICATE :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_TIMEOUT ;
+                    break ;
+                case SEC_ERROR_REVOKED_CERTIFICATE :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_REVOKED ;
+                    break ;
+                case SEC_ERROR_UNKNOWN_ISSUER :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ISSUER_UNKNOWN ;
+                    break ;
+                case SEC_ERROR_UNTRUSTED_ISSUER :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ISSUER_UNTRUSTED ;
+                    break ;
+                case SEC_ERROR_UNTRUSTED_CERT :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_UNTRUSTED ;
+                    break ;
+                case SEC_ERROR_CERT_VALID :
+                case SEC_ERROR_CERT_NOT_VALID :
+                    break ;
+                case SEC_ERROR_EXPIRED_ISSUER_CERTIFICATE :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ISSUER_INVALID ;
+                    break ;
+                case SEC_ERROR_CA_CERT_INVALID :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ROOT_INVALID ;
+                    break ;
+                case SEC_ERROR_UNKNOWN_CRITICAL_EXTENSION :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_EXTENSION_INVALID ;
+                    break ;
+                case SEC_ERROR_UNKNOWN_CERT :
+                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_CHAIN_INCOMPLETE ;
+                    break ;
+            }
+        }
+    } else {
+        validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+    }
+
+    return validity ;
+}
+
+sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+    sal_Int32 characters ;
+    const X509Certificate_NssImpl* xcert ;
+    const CERTCertificate* cert ;
+
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
+    if( !xCertTunnel.is() ) {
+        throw RuntimeException() ;
+    }
+
+    xcert = ( X509Certificate_NssImpl* )xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ) ;
+    if( xcert == NULL ) {
+        throw RuntimeException() ;
+    }
+
+    cert = xcert->getNssCert() ;
+
+    characters = 0x00000000 ;
+
+    //Firstly, make sentence whether or not the cert is self-signed.
+    if( SECITEM_CompareItem( &(cert->derIssuer), &(cert->derSubject) ) ) {
+        characters |= ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+    } else {
+        characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+    }
+
+    //Secondly, make sentence whether or not the cert has a private key.
+    {
+        SECKEYPrivateKey* priKey ;
+
+        priKey = PK11_FindPrivateKeyFromCert( cert->slot, ( CERTCertificate* )cert, NULL ) ;
+        if( priKey == NULL || m_pSlot != NULL )
+            priKey = PK11_FindPrivateKeyFromCert( m_pSlot, ( CERTCertificate* )cert, NULL ) ;
+
+        if( priKey != NULL ) {
+            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+
+            SECKEY_DestroyPrivateKey( priKey ) ;
+        } else {
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+        }
+    }
+
+    //Thirdly, make sentence whether or not the cert is trusted.
+    {
+        CERTCertificate* tempCert ;
+        CERTIssuerAndSN issuerAndSN ;
+
+        memset( &issuerAndSN, 0, sizeof( issuerAndSN ) ) ;
+
+        issuerAndSN.derIssuer.data = cert->derIssuer.data;
+        issuerAndSN.derIssuer.len = cert->derIssuer.len;
+
+        issuerAndSN.serialNumber.data = cert->serialNumber.data;
+        issuerAndSN.serialNumber.len = cert->serialNumber.len;
+
+        if( m_pSlot != NULL )
+            tempCert = PK11_FindCertByIssuerAndSN( &m_pSlot, &issuerAndSN, NULL ) ;
+        else
+            tempCert = NULL ;
+
+        if( tempCert != NULL ) {
+                characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+                CERT_DestroyCertificate( tempCert ) ;
+            } else {
+                characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            }
+    }
+
+    return characters ;
 }
 
 X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert )
