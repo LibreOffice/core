@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:17:25 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,20 @@
 #include "refdata.hxx"
 #endif
 
+#ifndef SC_MATRIX_HXX
+#include "scmatrix.hxx"
+#endif
 
+#ifndef SC_INTRUREF_HXX
+#include "intruref.hxx"
+#endif
+
+#ifndef _SVMEMPOOL_HXX
+#include <tools/mempool.hxx>
+#endif
+
+
+//! Fixed values!
 enum StackVarEnum
 {
     svByte,
@@ -87,6 +100,8 @@ enum StackVarEnum
 
     svFAP,                              // FormulaAutoPilot only, ever exported
 
+    svJumpMatrix,                       // 2003-07-02
+
     svMissing = 0x70,                   // 0 or ""
     svErr                               // unknown StackType
 };
@@ -100,7 +115,7 @@ typedef StackVarEnum StackVar;
 #endif
 
 
-class ScMatrix;
+class ScJumpMatrix;
 
 class ScToken
 {
@@ -140,14 +155,25 @@ public:
     inline  void                DecRef()                { if( !--nRefCnt ) Delete(); }
     inline  USHORT              GetRef() const          { return nRefCnt; }
 
-    // Dummy methods to avoid switches and casts where possible,
-    // the real token classes have to overload the appropriate method[s].
-    // The only method valid anytime if not overloaded is GetByte() since
-    // this represents the count of parameters to a function which of course
-    // is 0 on non-functions. ScByteToken and ScExternal do overload it.
-    // Any other non-overloaded method pops up an assertion.
+    /**
+        Dummy methods to avoid switches and casts where possible,
+        the real token classes have to overload the appropriate method[s].
+        The only methods valid anytime if not overloaded are:
+
+        - GetByte() since this represents the count of parameters to a function
+          which of course is 0 on non-functions. ScByteToken and ScExternal do
+          overload it.
+
+        - HasForceArray() since also this is only used for operators and
+          functions and is 0 for other tokens.
+
+        Any other non-overloaded method pops up an assertion.
+     */
+
     virtual BYTE                GetByte() const;
     virtual void                SetByte( BYTE n );
+    virtual bool                HasForceArray() const;
+    virtual void                SetForceArray( bool b );
     virtual double              GetDouble() const;
     virtual const String&       GetString() const;
     virtual const SingleRefData&    GetSingleRef() const;
@@ -165,6 +191,7 @@ public:
     virtual const String&       GetExternal() const;
     virtual BYTE*               GetUnknown() const;
     virtual ScToken*            GetFAPOrigToken() const;
+    virtual ScJumpMatrix*       GetJumpMatrix() const;
 
             ScToken*            Clone() const;
 
@@ -186,43 +213,35 @@ public:
 };
 
 
-class ScTokenRef
-{
-    ScToken* p;
-public:
-    inline ScTokenRef() { p = NULL; }
-    inline ScTokenRef( const ScTokenRef& r ) { if( ( p = r.p ) != NULL ) p->IncRef(); }
-    inline ScTokenRef( ScToken *t )          { if( ( p = t ) != NULL ) t->IncRef(); }
-    inline void Clear()                      { if( p ) p->DecRef(); }
-    inline ~ScTokenRef()                     { if( p ) p->DecRef(); }
-    inline ScTokenRef& operator=( const ScTokenRef& r ) { return *this = r.p; }
-    inline ScTokenRef& operator=( ScToken* t )
-    { if( t ) t->IncRef(); if( p ) p->DecRef(); p = t; return *this; }
-    inline BOOL Is() const                  { return p != NULL; }
-    inline BOOL operator ! () const         { return p == NULL; }
-    inline ScToken* operator&() const       { return p; }
-    inline ScToken* operator->() const      { return p; }
-    inline ScToken& operator*() const       { return *p; }
-    inline operator ScToken*() const        { return p; }
-};
+typedef ScSimpleIntrusiveReference< class ScToken > ScTokenRef;
 
 
 class ScByteToken : public ScToken
 {
 private:
             BYTE                nByte;
+            bool                bHasForceArray;
 protected:
-                                ScByteToken( OpCode e, BYTE n, StackVar v ) :
-                                    ScToken( e, v ), nByte( n ) {}
+                                ScByteToken( OpCode e, BYTE n, StackVar v, bool b ) :
+                                    ScToken( e, v ), nByte( n ),
+                                    bHasForceArray( b ) {}
 public:
+                                ScByteToken( OpCode e, BYTE n, bool b ) :
+                                    ScToken( e, svByte ), nByte( n ),
+                                    bHasForceArray( b ) {}
                                 ScByteToken( OpCode e, BYTE n ) :
-                                    ScToken( e, svByte ), nByte( n ) {}
+                                    ScToken( e, svByte ), nByte( n ),
+                                    bHasForceArray( false ) {}
                                 ScByteToken( OpCode e ) :
-                                    ScToken( e, svByte ), nByte( 0 ) {}
+                                    ScToken( e, svByte ), nByte( 0 ),
+                                    bHasForceArray( false ) {}
                                 ScByteToken( const ScByteToken& r ) :
-                                    ScToken( r ), nByte( r.nByte ) {}
+                                    ScToken( r ), nByte( r.nByte ),
+                                    bHasForceArray( r.bHasForceArray ) {}
     virtual BYTE                GetByte() const;
     virtual void                SetByte( BYTE n );
+    virtual bool                HasForceArray() const;
+    virtual void                SetForceArray( bool b );
     virtual BOOL                operator==( const ScToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScByteToken );
@@ -237,7 +256,8 @@ private:
             ScTokenRef          pOrigToken;
 public:
                                 ScFAPToken( OpCode e, BYTE n, ScToken* p ) :
-                                    ScByteToken( e, n, svFAP ), pOrigToken( p ) {}
+                                    ScByteToken( e, n, svFAP, false ),
+                                    pOrigToken( p ) {}
                                 ScFAPToken( const ScFAPToken& r ) :
                                     ScByteToken( r ), pOrigToken( r.pOrigToken ) {}
     virtual ScToken*            GetFAPOrigToken() const;
@@ -336,7 +356,7 @@ public:
 class ScMatrixToken : public ScToken
 {
 private:
-            ScMatrix*           pMatrix;
+            ScMatrixRef         pMatrix;
 public:
                                 ScMatrixToken( ScMatrix* p ) :
                                     ScToken( ocPush, svMatrix ), pMatrix( p ) {}
@@ -383,6 +403,22 @@ public:
                                 }
     virtual                     ~ScJumpToken();
     virtual short*              GetJump() const;
+    virtual BOOL                operator==( const ScToken& rToken ) const;
+};
+
+
+// Only created from within the interpreter, no conversion from ScRawToken,
+// never added to ScTokenArray!
+class ScJumpMatrixToken : public ScToken
+{
+private:
+            ScJumpMatrix*       pJumpMatrix;
+public:
+                                ScJumpMatrixToken( ScJumpMatrix* p ) :
+                                    ScToken( ocPush, svJumpMatrix ), pJumpMatrix( p ) {}
+                                ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
+                                    ScToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
+    virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual BOOL                operator==( const ScToken& rToken ) const;
 };
 
