@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2003-12-01 17:57:56 $
+#   last change: $Author: hr $ $Date: 2004-02-04 12:29:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,12 @@ TARGET = ure
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
+.IF "$(USE_SHELL)"!="4nt"
+ECHOQUOTE='
+.ELSE
+ECHOQUOTE=
+.ENDIF
+
 .IF "$(BUILD_FOR_CLI)" != ""
 
 ALLTAR : \
@@ -81,14 +87,14 @@ CSFILES = \
     uno$/util$/DisposeGuard.cs					\
     uno$/util$/WeakAdapter.cs					\
     uno$/util$/WeakBase.cs						\
-    uno$/util$/WeakComponentBase.cs					\
+    uno$/util$/WeakComponentBase.cs
 
 $(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
-    +echo \
+    +echo $(ECHOQUOTE) \
 [assembly:System.Reflection.AssemblyVersion( "3.2.0.0" )] \
 [assembly:System.Reflection.AssemblyDescription( "CLI-UNO Runtime Library" )] \
 [assembly:System.Reflection.AssemblyCompany( "Sun Microsystems, Inc." )] \
-[assembly:System.Reflection.AssemblyCopyright( "2003" )] \
+[assembly:System.Reflection.AssemblyCopyright( "2003" )]$(ECHOQUOTE) \
     > $(OUT)$/misc$/assembly.cs
     +$(WRAPCMD) csc $(CSCFLAGS) \
         -target:library \
