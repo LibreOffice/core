@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:56:09 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,7 +746,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
             rData.nSwHLo = cMinHdFtHeight;
     }
     else // kein Header -> Up einfach uebernehmen
-        rData.nSwUp = nWWUp;
+        rData.nSwUp = Abs(nWWUp);
 
     if( bFirst )
         rData.bHasFooter = (rSection.maSep.grpfIhdt &  WW8_FOOTER_FIRST) !=0;
@@ -773,7 +773,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
             rData.nSwFUp = cMinHdFtHeight;
     }
     else // kein Footer -> Lo einfach uebernehmen
-        rData.nSwLo = nWWLo;
+        rData.nSwLo = Abs(nWWLo);
 }
 
 void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
