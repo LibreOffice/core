@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 10:21:20 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 15:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,6 @@ void OFormattedModel::fillProperties(
                 Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(11)
-
         DECL_PROP1(NAME,                ::rtl::OUString,        BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,              READONLY, TRANSIENT);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
@@ -532,15 +531,16 @@ void OFormattedModel::fillProperties(
         DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
 
-        // den Value auf transient, damit das Dokument waehrend der Eingabe nicht als modifiziert gilt ....
-        // (und da der selbstverstaendlich nicht gespeichert werden muss)
-//              ModifyPropertyAttributes(_rAggregateProps, PROPERTY_EFFECTIVE_VALUE, com::sun::star::beans::PropertyAttribute::TRANSIENT, 0);
         // der Supplier ist fuer uns nur read-only
         ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATSSUPPLIER, com::sun::star::beans::PropertyAttribute::READONLY, 0);
         // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
         // - der kann Text oder Zahl sein - einen Sinn zu geben)
-                ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, com::sun::star::beans::PropertyAttribute::TRANSIENT);
-
+        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, com::sun::star::beans::PropertyAttribute::TRANSIENT);
+        RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
+            // no strict format property for formatted fields: it does not make sense, 'cause
+            // there is no general way to decide which characters/sub strings are allowed during the input of an
+            // arbitraryly formatted control
+            // 81441 - 12/07/00 - FS
     FRM_END_PROP_HELPER();
 }
 
