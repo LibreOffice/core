@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCreateCatalog.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 // DocMerge from xml: interface com::sun::star::sdbcx::XCreateCatalog
 /** may be implemented to hide the complexity of creating a database catalog.
  */
-interface XCreateCatalog: com::sun::star::uno::XInterface
+published interface XCreateCatalog: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbcx::XCreateCatalog::createCatalog

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataDefinitionSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,18 @@
 #endif
 
  module com {  module sun {  module star {  module sdbc {
-interface XConnection;
+ published interface XConnection;
 };};};};
 
  module com {  module sun {  module star {  module sdbcx {
 
-interface XTablesSupplier;
+ published interface XTablesSupplier;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::com::sun::star::sdbcx::XDataDefinitionSupplier
 /** provides the access to data definition beans from a connected database.
  */
-interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
+published interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::com::sun::star::sdbcx::XDataDefinitionSupplier::getDataDefinitionByConnection
