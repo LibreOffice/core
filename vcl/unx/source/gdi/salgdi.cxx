@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 08:13:36 $
+ *  last change: $Author: cp $ $Date: 2001-04-10 11:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,12 +523,18 @@ void SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // const
     {
     #endif
 
-    GetResolution ( rDPIX, rDPIY );
+    SalDisplay *pDisplay = _GetDisplay();
 
-    if( rDPIY < 108 )
+    const Size aSize = pDisplay->GetScreenSize();
+    int   nThreshold = aSize.Height() <= 768 ? 108 : 120;
+
+    rDPIX = pDisplay->GetResolution().A();
+    rDPIY = pDisplay->GetResolution().B();
+
+    if( rDPIY < nThreshold )
     {
-        rDPIX = Divide( rDPIX * 108, rDPIY );
-        rDPIY = 108;
+        rDPIX = Divide( rDPIX * nThreshold, rDPIY );
+        rDPIY = nThreshold;
     }
 
     #if defined(USE_PSPRINT)
