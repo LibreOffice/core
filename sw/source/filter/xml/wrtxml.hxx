@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 06:01:50 $
+ *  last change: $Author: mib $ $Date: 2002-06-24 12:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,23 +81,17 @@ namespace com { namespace sun { namespace start {
 
 class SwXMLWriter : public StgWriter
 {
-    sal_Bool bPlain;
-
     sal_uInt32 _Write();
 
 protected:
-    virtual sal_uInt32 WriteStream();
     virtual sal_uInt32 WriteStorage();
 
 public:
 
-    SwXMLWriter( sal_Bool bPl );
+    SwXMLWriter();
     virtual ~SwXMLWriter();
 
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
-
-    virtual sal_Bool IsStgWriter() const;
-
 
 private:
 

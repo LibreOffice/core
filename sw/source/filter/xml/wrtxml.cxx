@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-08 19:06:46 $
+ *  last change: $Author: mib $ $Date: 2002-06-24 12:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,7 @@ using namespace ::com::sun::star::lang;
 
 #define LOGFILE_AUTHOR "mb93740"
 
-SwXMLWriter::SwXMLWriter( sal_Bool bPl ) :
-    bPlain( bPl )
+SwXMLWriter::SwXMLWriter()
 {
 }
 
@@ -167,33 +166,19 @@ sal_uInt32 SwXMLWriter::_Write()
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
-    if( pStg )
-    {
-        pGraphicHelper = SvXMLGraphicHelper::Create( *pStg,
-                                                     GRAPHICHELPER_MODE_WRITE,
-                                                     sal_False );
-    }
-    else
-    {
-        pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_WRITE );
-    }
+    ASSERT( pStg, "Where is my storage?" );
+    pGraphicHelper = SvXMLGraphicHelper::Create( *pStg,
+                                                 GRAPHICHELPER_MODE_WRITE,
+                                                 sal_False );
     xGraphicResolver = pGraphicHelper;
 
     SvPersist *pPersist = pDoc->GetPersist();
     if( pPersist )
     {
-        if( pStg )
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                             *pStg, *pPersist,
-                                             EMBEDDEDOBJECTHELPER_MODE_WRITE,
-                                             sal_False );
-#if SUPD > 632
-        else
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                             *pPersist,
-                                             EMBEDDEDOBJECTHELPER_MODE_WRITE );
-#endif
-
+        pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                         *pStg, *pPersist,
+                                         EMBEDDEDOBJECTHELPER_MODE_WRITE,
+                                         sal_False );
         xObjectResolver = pObjectHelper;
     }
 
@@ -257,7 +242,7 @@ sal_uInt32 SwXMLWriter::_Write()
                 }
             }
         }
-        catch( const RuntimeException& e )
+        catch( const RuntimeException& )
         {
             xStatusIndicator = 0;
         }
@@ -348,96 +333,83 @@ sal_uInt32 SwXMLWriter::_Write()
     sal_Bool bWarn = sal_False, bErr = sal_False;
     String sWarnFile, sErrFile;
 
-    if (NULL != pStg)
+    if( !bOrganizerMode && !bBlock &&
+        SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
     {
-        if( !bOrganizerMode && !bBlock &&
-            SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
+        if( !WriteThroughComponent(
+                xModelComp, "meta.xml", xServiceFactory,
+                "com.sun.star.comp.Writer.XMLMetaExporter",
+                aEmptyArgs, aProps, sal_True ) )
+        {
+            bWarn = sal_True;
+            sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("meta.xml"),
+                                RTL_TEXTENCODING_ASCII_US );
+        }
+    }
+
+    if( !WriteThroughComponent(
+            xModelComp, "styles.xml", xServiceFactory,
+            "com.sun.star.comp.Writer.XMLStylesExporter",
+            aFilterArgs, aProps, sal_False ) )
+    {
+        bErr = sal_True;
+        sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
+                           RTL_TEXTENCODING_ASCII_US );
+    }
+
+    if( !bErr )
+    {
+        if( !bBlock )
         {
             if( !WriteThroughComponent(
-                    xModelComp, "meta.xml", xServiceFactory,
-                    "com.sun.star.comp.Writer.XMLMetaExporter",
-                    aEmptyArgs, aProps, sal_True ) )
+                xModelComp, "settings.xml", xServiceFactory,
+                "com.sun.star.comp.Writer.XMLSettingsExporter",
+                aEmptyArgs, aProps, sal_False ) )
             {
-                bWarn = sal_True;
-                sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("meta.xml"),
-                                    RTL_TEXTENCODING_ASCII_US );
-            }
-        }
-
-        if( !WriteThroughComponent(
-                xModelComp, "styles.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLStylesExporter",
-                aFilterArgs, aProps, sal_False ) )
-        {
-            bErr = sal_True;
-            sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
-                               RTL_TEXTENCODING_ASCII_US );
-        }
-
-        if( !bErr )
-        {
-            if( !bBlock )
-            {
-                if( !WriteThroughComponent(
-                    xModelComp, "settings.xml", xServiceFactory,
-                    "com.sun.star.comp.Writer.XMLSettingsExporter",
-                    aEmptyArgs, aProps, sal_False ) )
+                if( !bWarn )
                 {
-                    if( !bWarn )
-                    {
-                        bWarn = sal_True;
-                        sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("settings.xml"),
-                                            RTL_TEXTENCODING_ASCII_US );
-                    }
+                    bWarn = sal_True;
+                    sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("settings.xml"),
+                                        RTL_TEXTENCODING_ASCII_US );
                 }
             }
         }
+    }
 
-        if( !bOrganizerMode && !bErr )
+    if( !bOrganizerMode && !bErr )
+    {
+        if( !WriteThroughComponent(
+                xModelComp, "content.xml", xServiceFactory,
+                "com.sun.star.comp.Writer.XMLContentExporter",
+                aFilterArgs, aProps, sal_False ) )
         {
-            if( !WriteThroughComponent(
-                    xModelComp, "content.xml", xServiceFactory,
-                    "com.sun.star.comp.Writer.XMLContentExporter",
-                    aFilterArgs, aProps, sal_False ) )
-            {
-                bErr = sal_True;
-                sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
-                                   RTL_TEXTENCODING_ASCII_US );
-            }
-        }
-
-        if( pDoc->GetRootFrm() && pDoc->GetDocStat().nPage > 1 &&
-            !(bOrganizerMode || bBlock || bErr) )
-        {
-//          DBG_ASSERT( !pDoc->GetDocStat().bModified,
-//                      "doc stat is modified!" );
-            OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
-            SvStorageStreamRef xStrm =  pStg->OpenStream( sStreamName,
-                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-            DBG_ASSERT(xStrm.Is(), "Can't create output stream in package!");
-            if( xStrm.Is() )
-            {
-                xStrm->SetSize( 0 );
-                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-                OUString aMime( RTL_CONSTASCII_USTRINGPARAM("appication/binary") );
-                uno::Any aAny;
-                aAny <<= aMime;
-                xStrm->SetProperty( aPropName, aAny );
-                xStrm->SetBufferSize( 16*1024 );
-                pDoc->WriteLayoutCache( *xStrm );
-                xStrm->Commit();
-            }
+            bErr = sal_True;
+            sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
+                               RTL_TEXTENCODING_ASCII_US );
         }
     }
-    else
+
+    if( pDoc->GetRootFrm() && pDoc->GetDocStat().nPage > 1 &&
+        !(bOrganizerMode || bBlock || bErr) )
     {
-        // create single stream and do full export
-        Reference<io::XOutputStream> xOut =
-            new utl::OOutputStreamWrapper( *pStrm );
-        bErr = !WriteThroughComponent(
-                    xOut, xModelComp, xServiceFactory,
-                    "com.sun.star.comp.Writer.XMLExporter",
-                    aFilterArgs, aProps );
+//          DBG_ASSERT( !pDoc->GetDocStat().bModified,
+//                      "doc stat is modified!" );
+        OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
+        SvStorageStreamRef xStrm =  pStg->OpenStream( sStreamName,
+                               STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+        DBG_ASSERT(xStrm.Is(), "Can't create output stream in package!");
+        if( xStrm.Is() )
+        {
+            xStrm->SetSize( 0 );
+            String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+            OUString aMime( RTL_CONSTASCII_USTRINGPARAM("appication/binary") );
+            uno::Any aAny;
+            aAny <<= aMime;
+            xStrm->SetProperty( aPropName, aAny );
+            xStrm->SetBufferSize( 16*1024 );
+            pDoc->WriteLayoutCache( *xStrm );
+            xStrm->Commit();
+        }
     }
 
     if( pGraphicHelper )
@@ -482,11 +454,6 @@ sal_uInt32 SwXMLWriter::_Write()
     return 0;
 }
 
-sal_uInt32 SwXMLWriter::WriteStream()
-{
-    return _Write();
-}
-
 sal_uInt32 SwXMLWriter::WriteStorage()
 {
     return _Write();
@@ -498,11 +465,6 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     return IsStgWriter()
             ? ((StgWriter *)this)->Write( rPaM, *rMed.GetOutputStorage( sal_True ), pFileName )
             : ((Writer *)this)->Write( rPaM, *rMed.GetOutStream(), pFileName );
-}
-
-sal_Bool SwXMLWriter::IsStgWriter() const
-{
-    return !bPlain;
 }
 
 sal_Bool SwXMLWriter::WriteThroughComponent(
@@ -649,7 +611,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 
 void GetXMLWriter( const String& rName, WriterRef& xRet )
 {
-    xRet = new SwXMLWriter( rName.EqualsAscii( FILTER_XMLP ) );
+    xRet = new SwXMLWriter();
 }
 
 // -----------------------------------------------------------------------

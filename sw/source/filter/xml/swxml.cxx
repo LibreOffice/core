@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-29 15:42:20 $
+ *  last change: $Author: mib $ $Date: 2002-06-24 12:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ XMLReader::XMLReader()
 
 int XMLReader::GetReaderType()
 {
-    return SW_STORAGE_READER | SW_STREAM_READER;
+    return SW_STORAGE_READER;
 }
 
 /// read a component (file + filter version)
@@ -424,65 +424,22 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         pStorage = pMedium->GetStorage();
     else
         pStorage = pStg;
+
+    ASSERT( pStorage, "XML Reader can only read from storage" );
     if( !pStorage )
-    {
-        if( pMedium )
-        {
-            // if there is a medium and if this medium has a load environment,
-            // we get an active data source from the medium.
-            pMedium->GetInStream()->Seek( 0 );
-            xSource = pMedium->GetDataSource();
-            ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
-            if( !xSource.is() )
-                return ERR_SWG_READ_ERROR;
+        return ERR_SWG_READ_ERROR;
 
-            // get a pipe for connecting the data source to the parser
-            xPipe = xServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.io.Pipe") );
-            ASSERT( xPipe.is(),
-                    "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-            if( !xPipe.is() )
-                return ERR_SWG_READ_ERROR;
-
-            // connect pipe's output stream to the data source
-            Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
-            xSource->setOutputStream( xPipeOutput );
-
-            xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
-        }
-        else
-        {
-            pStrm->SetBufferSize( 16*1024 );
-            xInputStream = new utl::OInputStreamWrapper( *pStrm );
-        }
-    }
-
-    if( pStorage )
-    {
-        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
-                                                     GRAPHICHELPER_MODE_READ,
-                                                     sal_False );
-    }
-    else
-    {
-        pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
-    }
+    pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+                                                 GRAPHICHELPER_MODE_READ,
+                                                 sal_False );
     xGraphicResolver = pGraphicHelper;
     SvPersist *pPersist = rDoc.GetPersist();
     if( pPersist )
     {
-        if( pStorage )
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+        pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                         *pStorage, *pPersist,
                                         EMBEDDEDOBJECTHELPER_MODE_READ,
                                         sal_False );
-#if SUPD > 632
-        else
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                        *pPersist,
-                                        EMBEDDEDOBJECTHELPER_MODE_READ );
-#endif
-
         xObjectResolver = pObjectHelper;
     }
 
@@ -617,83 +574,60 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     // force redline mode to "none"
     rDoc.SetRedlineMode_intern( REDLINE_NONE );
 
-
-    if ( NULL != pStorage )
+    sal_uInt32 nWarn = 0;
+    sal_uInt32 nWarn2 = 0;
+    // read storage streams
+    if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
+          bInsertMode) )
     {
-        sal_uInt32 nWarn = 0;
-        sal_uInt32 nWarn2 = 0;
-        // read storage streams
-        if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
-              bInsertMode) )
-        {
-            nWarn = ReadThroughComponent(
-                pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLMetaImporter",
-                aEmptyArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
-                aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-                sal_False );
+        nWarn = ReadThroughComponent(
+            pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+            "com.sun.star.comp.Writer.XMLMetaImporter",
+            aEmptyArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
+            sal_False );
 
-            nWarn2 = ReadThroughComponent(
-                pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
-                "com.sun.star.comp.Writer.XMLSettingsImporter",
-                aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
-                aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-                IsOrganizerMode() );
-        }
-
-        nRet = ReadThroughComponent(
-            pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
-            "com.sun.star.comp.Writer.XMLStylesImporter",
-            aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
+        nWarn2 = ReadThroughComponent(
+            pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+            "com.sun.star.comp.Writer.XMLSettingsImporter",
+            aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
             IsOrganizerMode() );
+    }
 
-        if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
-            nRet = ReadThroughComponent(
-               pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
-               "com.sun.star.comp.Writer.XMLContentImporter",
-               aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
-               aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-               sal_False );
+    nRet = ReadThroughComponent(
+        pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+        "com.sun.star.comp.Writer.XMLStylesImporter",
+        aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
+        aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
+        IsOrganizerMode() );
 
-        if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
-              aOpt.IsFmtsOnly() ) )
+    if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
+        nRet = ReadThroughComponent(
+           pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+           "com.sun.star.comp.Writer.XMLContentImporter",
+           aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
+           aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
+           sal_False );
+
+    if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
+          aOpt.IsFmtsOnly() ) )
+    {
+        OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
+        SvStorageStreamRef xStrm = pStorage->OpenStream( sStreamName,
+                                      STREAM_READ | STREAM_NOCREATE );
+        if( xStrm.Is() && !xStrm->GetError() )
         {
-            OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
-            SvStorageStreamRef xStrm = pStorage->OpenStream( sStreamName,
-                                          STREAM_READ | STREAM_NOCREATE );
-            if( xStrm.Is() && !xStrm->GetError() )
-            {
-                xStrm->SetBufferSize( 16*1024 );
-                rDoc.ReadLayoutCache( *xStrm );
-            }
-        }
-        if( !nRet )
-        {
-            if( nWarn )
-                nRet = nWarn;
-            else if( nWarn2 )
-                nRet = nWarn2;
+            xStrm->SetBufferSize( 16*1024 );
+            rDoc.ReadLayoutCache( *xStrm );
         }
     }
-    else
+    if( !nRet )
     {
-        // read plain file
-
-        // parse
-        if( xSource.is() )
-        {
-            Reference< io::XActiveDataControl > xSourceControl( xSource,
-                                                                UNO_QUERY );
-            xSourceControl->start();
-        }
-
-        nRet = ReadThroughComponent(
-            xInputStream, xModelComp, aEmptyStr, xServiceFactory,
-            "com.sun.star.comp.Writer.XMLImporter",
-            aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-            IsOrganizerMode(), sal_False );
+        if( nWarn )
+            nRet = nWarn;
+        else if( nWarn2 )
+            nRet = nWarn2;
     }
 
     aOpt.ResetAllFmtsOnly();
