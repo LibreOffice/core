@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-22 15:53:46 $
+ *  last change: $Author: hro $ $Date: 2001-02-27 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,11 @@ int SAL_CALL sal_main();
 
 #if !defined(DECLARE_HANDLE)
 #   ifdef STRICT
+        typedef void *HANDLE;
 #       define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
 #   else
+        typedef void *PVOID;
+        typedef PVOID HANDLE;
 #       define DECLARE_HANDLE(name) typedef HANDLE name
 #   endif
 DECLARE_HANDLE(HINSTANCE);
