@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:39:53 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2580,7 +2580,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚π¤—ΧΪ”ΝΝ‚Ζ‚ΜΦW‚Μ‚έ‚Ε’²ί‚µ‚ά‚·";
         Text[ chinese_traditional ] = "Δζ¦CªΊΕά§σ¶Θ·|ΌvΕT¨μª½±µ³sµ²ªΊ°Ο°μ΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΗαγδΨήΙ ΗαγΜΗζΡΙ έήΨ";
-        Text[ greek ] = "Αλλαγές μιας στήλης ή γραμμής επιρεάζουν μόνο την άμεσα γειτονική περιοχή";
+        Text[ greek ] = "Οι αλλαγές μιας στήλης ή γραμμής επηρεάζουν μόνο την άμεσα γειτονική περιοχή";
         Text[ korean ] = "Ώ­ ¶Η΄Β ΗΰΐΗ Ί―°ζΐΊ ΐΞΑΆΗΡ ΏµΏªΏ΅ΈΈ ΏµΗβΐ» Αέ΄Ο΄Ω.";
         Text[ turkish ] = "Satύr ya da sόtunlar όzerinde yapύlan deπiώiklikler yalnύzca bitiώik birimleri etkiler";
         Text[ language_user1 ] = " ";
@@ -2633,7 +2633,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚Ν¤•\\“ΰ‘S‘Μ‚Ιμ—p‚µ‚ά‚·";
         Text[ chinese_traditional ] = "Δζ¦CªΊΕά§σ·|ΌvΕT¨μΎγ­Σªν®ζ΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΗαΜΟζα ΘΓΛΡε";
-        Text[ greek ] = "Αλλαγές μιας γραμμής ή στήλης επιρεάζουν ολόκληρο τον πίνακα";
+        Text[ greek ] = "Οι αλλαγές μιας γραμμής ή στήλης επηρεάζουν ολόκληρο τον πίνακα";
         Text[ korean ] = "Ώ­ ¶Η΄Β ΗΰΐΗ Ί―°ζΐΊ ΐόΓΌ Η¥Ώ΅  ΏµΗβΐ» Αέ΄Ο΄Ω.";
         Text[ turkish ] = "Satύr ya da sόtunlar όzerinde yapύlan deπiώiklikler tablonun tόmόnό etkiler";
         Text[ language_user1 ] = " ";
@@ -2686,7 +2686,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚Ν¤•\\‚Μ»²½ή‚Ιμ—p‚µ‚ά‚·";
         Text[ chinese_traditional ] = "¤@­ΣΔζ¦CªΊΕά§σ·|ΌvΕTªν®ζªΊ¤j¤p΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΝΜγ ΗαΜΟζα";
-        Text[ greek ] = "Αλλαγές μιας γραμμής ή στήλης επιρεάζουν το μέγεθος του πίνακα";
+        Text[ greek ] = "Οι αλλαγές μιας γραμμής ή στήλης επηρεάζουν το μέγεθος του πίνακα";
         Text[ korean ] = "Ώ­ ¶Η΄Β ΗΰΐΗ Ί―°ζΐΊ Η¥ΐΗ Ε©±βΏ΅ ΏµΗβΐ» Αέ΄Ο΄Ω.";
         Text[ turkish ] = "Satύr ya da sόtunlar όzerinde yapύlan deπiώiklikler tablo boyutunu etkiler";
         Text[ language_user1 ] = " ";
@@ -2713,7 +2713,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ japanese ] = "‚±‚Μέ’θ‚Ν·°Ξή°Δή‘€μ‚ΜΫ‚Ι—Lψ‚Ι‚Θ‚θ‚ά‚·";
         Text[ chinese_traditional ] = "³o­Σ³]©wΣμ¥Ξ©σΑδ½LΎή§@΅C";
         Text[ arabic ] = "ΣΚίζδ εΠε ΗαΕΪΟΗΟΗΚ ΣΗΡνΙ ΗαγέΪζα ΪδΟ ΗΣΚΞΟΗγ αζΝΙ ΗαγέΗΚνΝ.";
-        Text[ greek ] = "Αυτές οι ρυθμίσεις επιρεάζουν τον χειρισμό του πληκτρολογίου.";
+        Text[ greek ] = "Αυτές οι ρυθμίσεις επηρεάζουν τον χειρισμό του πληκτρολογίου.";
         Text[ korean ] = "ΐΜ·―ΗΡ Ό³Α¤ΐΊ Ε°ΊΈµε Α¦ΎξΏ΅ΏµΗβΐ» Αέ΄Ο΄Ω .";
         Text[ turkish ] = "Bu ayarlar klavye kullanύmύnύ etkiler.";
         Text[ language_user1 ] = " ";
