@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 15:51:53 $
+ *  last change: $Author: iha $ $Date: 2003-11-08 22:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,57 @@ uno::Reference< XDataSeries > ChartModelHelper::getSeriesByIdentifier(
         {
             xRet = *aIt;
             break;
+        }
+    }
+    return xRet;
+}
+
+uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
+                                const uno::Reference< frame::XModel >& xModel
+                              , const uno::Reference< XDataSeries >&   xGivenDataSeries )
+{
+    uno::Reference< XChartType > xRet(NULL);
+
+    //iterate through the nmodel to find the given xSeries in the tree
+    //the found parent indicates the charttype
+    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+    if(!xDiagram.is())
+        return xRet;
+    uno::Reference< XDataSeriesTreeParent > xTree = xDiagram->getTree();
+    if(!xTree.is())
+        return xRet;
+    uno::Sequence< uno::Reference< XDataSeriesTreeNode > >  aChartTypes( xTree->getChildren() );
+    for( sal_Int32 i = 0; i < aChartTypes.getLength(); ++i )
+    {
+        uno::Reference< XChartTypeGroup > xChartTypeGroup( aChartTypes[i], uno::UNO_QUERY );
+        DBG_ASSERT(xChartTypeGroup.is(),"First node at the diagram tree needs to be a ChartTypeGroup");
+        if( !xChartTypeGroup.is() )
+            continue;
+        uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aXSlots( xChartTypeGroup->getChildren() );
+        for( sal_Int32 nX = 0; nX < aXSlots.getLength(); ++nX )
+        {
+            uno::Reference< XDataSeriesTreeParent > xXSlot = uno::Reference< XDataSeriesTreeParent >::query( aXSlots[nX] );
+            DBG_ASSERT( xXSlot.is(), "a node for the first dimension of a chart tree should always be a parent" );
+            if(!xXSlot.is())
+                continue;
+            uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aYSlots( xXSlot->getChildren() );
+            for( sal_Int32 nY = 0; nY < aYSlots.getLength(); ++nY )
+            {
+                uno::Reference< XDataSeriesTreeParent > xYSlot = uno::Reference< XDataSeriesTreeParent >::query( aYSlots[nY] );
+                DBG_ASSERT( xYSlot.is(), "a node for the second dimension of a chart tree should always be a parent" );
+                if(!xYSlot.is())
+                    continue;
+                uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aSeriesList( xYSlot->getChildren() );
+                for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+                {
+                    uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
+                    if( xGivenDataSeries==xDataSeries )
+                    {
+                        xRet = xChartTypeGroup->getChartType();
+                        return xRet;
+                    }
+                }
+            }
         }
     }
     return xRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModelHelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: iha $ $Date: 2003-11-08 22:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
 #define _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
+#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <drafts/com/sun/star/chart2/XDataSeries.hpp>
 #endif
@@ -104,6 +107,14 @@ public:
             const rtl::OUString& rIdentifier
             , const ::com::sun::star::uno::Reference<
               ::com::sun::star::frame::XModel > xModel );
+
+    static ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XChartType >
+        getChartTypeOfSeries(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::frame::XModel >& xModel
+            , const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
 };
 
 //.............................................................................
