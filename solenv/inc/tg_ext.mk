@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-07 18:34:33 $
+#   last change: $Author: hjs $ $Date: 2001-06-08 17:05:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,31 +85,32 @@ clean:
     
 
 $(MISC)$/%.tar : $(PRJ)$/download$/%.tar.gz
-    +-$(RM) $@
+    @+-$(RM) $@
     +gunzip -c $< > $@
 
 $(MISC)$/%.tar : $(PRJ)$/download$/%.tar
-    +-$(RM) $@
+    @+-$(RM) $@
     +$(COPY) $< $@
 
 #unntar
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/$(TARFILE_NAME).tar
-    +-$(MKDIR) $(PACKAGE_DIR:d)
-    +-$(MKDIR) $(PACKAGE_DIR)
+    @+-$(MKDIR) $(PACKAGE_DIR:d)
+    @+-$(MKDIR) $(PACKAGE_DIR)
 # see tg_zip.mk
     +cd $(PACKAGE_DIR) && tar -xvf ../../$(ROUT)$/misc$/$(TARFILE_NAME).tar && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @+echo make writeable...
 .IF "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && attrib /s -r && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @+cd $(PACKAGE_DIR) && attrib /s -r && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ELSE			# "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && chmod -R +w * && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @+cd $(PACKAGE_DIR) && chmod -R +w * && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ENDIF			# "$(GUI)"=="WNT"
     
 #patch
 $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
-    +cd $(PACKAGE_DIR) && echo patch not yet implemented! && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && echo no patch needed...
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
-    +cd $(PACKAGE_DIR) && +echo no patch needed...
+    +cd $(PACKAGE_DIR) && ($(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -R -b -p 2) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
@@ -145,4 +146,27 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     $(GNUCOPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(CLASSDIR)
 .ENDIF			# "$(OUT2BIN)"!=""
     +$(TOUCH) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+
+$(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).tar
+    @+-mv $(MISC)$/$(TARFILE_ROOTDIR) $(MISC)$/$(TARFILE_ROOTDIR).old
+    @+-rm -rf $(MISC)$/$(TARFILE_ROOTDIR).old
+    +cd $(MISC) && tar -xvf $(TARFILE_NAME).tar
+.IF "$(GUI)"=="UNX"	
+    +$(TOUCH) $@
+.ENDIF			# "$(GUI)"=="UNX"	
+
+create_patch : $(MISC)$/$(TARFILE_ROOTDIR) 
+    @+-$(RM) $(MISC)$/$(TARFILE_NAME).patch.tmp >& $(NULLDEV)
+    @+-$(RM) $(TARFILE_NAME).patch.bak >& $(NULLDEV)
+#ignore returncode of 1 (indicates differences...)	
+    +-diff -rc $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(MISC)$/$(TARFILE_ROOTDIR) | $(GREP) -v "diff -rc" | $(GREP) -v "Only in" | $(GREP) -v "Common sub" > $(MISC)$/$(TARFILE_NAME).patch.tmp
+    @+-mv $(TARFILE_NAME).patch $(TARFILE_NAME).patch.bak >& $(NULLDEV)
+    @+-mv $(MISC)$/$(TARFILE_NAME).patch.tmp $(TARFILE_NAME).patch >& $(NULLDEV)
+    @+echo still some problems with win32 generated patches...
+
+create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+    +echo done
+    
+patch : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    +echo done
 
