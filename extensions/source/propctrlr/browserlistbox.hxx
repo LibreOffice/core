@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:04:05 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,10 +141,7 @@ namespace pcr
                 virtual void                Clear();
 
                 virtual sal_uInt16          InsertEntry(const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND);
-
                 virtual void                ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos);
-
-                virtual sal_uInt16          AppendEntry( const OLineDescriptor&);
 
                 virtual void                SetPropertyValue( const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
                 virtual ::rtl::OUString     GetPropertyValue( const ::rtl::OUString & rEntryName ) const;
@@ -153,6 +150,7 @@ namespace pcr
                 virtual IBrowserControl*    GetPropertyControl( const ::rtl::OUString& rEntryName );
                 virtual IBrowserControl*    GetCurrentPropertyControl();
                         void                EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
+                        void                EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton );
 
                 virtual void                SetFirstVisibleEntry(sal_uInt16 nPos);
                 virtual sal_uInt16          GetFirstVisibleEntry();
