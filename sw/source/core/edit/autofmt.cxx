@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:39:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,8 +840,10 @@ BOOL SwAutoFormat::DoTable()
 
 String& SwAutoFormat::DelLeadingBlanks( String& rStr ) const
 {
-    for( xub_StrLen nL = rStr.Len(), n = 0;
-            n < nL && IsSpace( rStr.GetChar(n) ); ++n )
+    xub_StrLen nL;
+    xub_StrLen n;
+
+    for( nL = rStr.Len(), n = 0; n < nL && IsSpace( rStr.GetChar(n) ); ++n )
         ;
     if( n )     // keine Spaces
         rStr.Erase( 0, n );
@@ -865,8 +867,10 @@ String& SwAutoFormat::DelTrailingBlanks( String& rStr ) const
 
 xub_StrLen SwAutoFormat::GetLeadingBlanks( const String& rStr ) const
 {
-    for( xub_StrLen nL = rStr.Len(), n = 0;
-        n < nL && IsSpace( rStr.GetChar( n ) ); ++n )
+    xub_StrLen nL;
+    xub_StrLen n;
+
+    for( nL = rStr.Len(), n = 0; n < nL && IsSpace( rStr.GetChar( n ) ); ++n )
         ;
     return n;
 }
@@ -1701,7 +1705,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                 else
                 {
                     USHORT nSpaceSteps = nLvl ? USHORT(nLeftTxtPos / nLvl) : 0;
-                    for( BYTE n = 0; n <= nLvl; ++n )
+                    BYTE n;
+                    for( n = 0; n <= nLvl; ++n )
                     {
                         SwNumFmt aFmt( aRule.Get( n ) );
 
