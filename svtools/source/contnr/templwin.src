@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-23 13:11:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ String STR_SVT_NEWDOC
     Text[ japanese ] = "êVÇµÇ¢ƒﬁ∑≠“›ƒ";
     Text[ korean ] = "New Document";
     Text[ chinese_simplified ] = "–¬Ω®Œƒµµ";
-    Text[ chinese_traditional ] = "∂}±“∑s§Â•Û";
+    Text[ chinese_traditional ] = "∑sºW§Â•Û";
     Text[ turkish ] = "New Document";
     Text[ arabic ] = "New Document";
     Text[ catalan ] = "New Document";
@@ -202,21 +202,21 @@ String STR_SVT_CATEGORY
     Text = "Kategorie";
     Text [ english_us ] = "Category";
     Text[ portuguese ] = "Category";
-    Text[ russian ] = "Category";
+    Text[ russian ] = " ‡ÚÂ„ÓËˇ";
     Text[ greek ] = "Category";
     Text[ dutch ] = "Category";
-    Text[ french ] = "Category";
-    Text[ spanish ] = "Category";
+    Text[ french ] = "CatÈgorie";
+    Text[ spanish ] = "CategorÌa";
     Text[ finnish ] = "Category";
     Text[ italian ] = "Category";
     Text[ danish ] = "Category";
-    Text[ swedish ] = "Category";
-    Text[ polish ] = "Category";
+    Text[ swedish ] = "Kategori";
+    Text[ polish ] = "Kategoria";
     Text[ portuguese_brazilian ] = "Category";
-    Text[ japanese ] = "Category";
+    Text[ japanese ] = "ï™óﬁ";
     Text[ korean ] = "Category";
-    Text[ chinese_simplified ] = "Category";
-    Text[ chinese_traditional ] = "Category";
+    Text[ chinese_simplified ] = "∑÷¿‡";
+    Text[ chinese_traditional ] = "§¿√˛";
     Text[ turkish ] = "Category";
     Text[ arabic ] = "Category";
     Text[ catalan ] = "Category";
@@ -234,23 +234,23 @@ ToolBox TB_SVT_FILEVIEW
             HelpId = HID_TEMPLATEDLG_TB_BACK;
             ItemBitmap = Bitmap { File = "back_small.bmp" ; };
             Text = "Zur¸ck" ;
-            Text [ english_us ] = "Backward" ;
+            Text [ english_us ] = "Back" ;
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Back";
-            Text[ russian ] = "Back";
+            Text[ russian ] = "Õ‡Á‡‰";
             Text[ greek ] = "Back";
             Text[ dutch ] = "Back";
-            Text[ french ] = "Back";
-            Text[ spanish ] = "Back";
+            Text[ french ] = "PrÈcÈdent";
+            Text[ spanish ] = "Regresar";
             Text[ italian ] = "Back";
             Text[ danish ] = "Back";
             Text[ swedish ] = "Tillbaka";
-            Text[ polish ] = "Back";
+            Text[ polish ] = "Wstecz";
             Text[ portuguese_brazilian ] = "Back";
-            Text[ japanese ] = "Back";
+            Text[ japanese ] = "ñﬂÇÈ";
             Text[ korean ] = "Back";
             Text[ chinese_simplified ] = "∑µªÿ";
-            Text[ chinese_traditional ] = "Back";
+            Text[ chinese_traditional ] = "™¶^";
             Text[ turkish ] = "Back";
             Text[ arabic ] = "Back";
             Text[ catalan ] = "Back";
@@ -265,20 +265,20 @@ ToolBox TB_SVT_FILEVIEW
             Text [ english_us ] = "Up One Level" ;
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Higher";
-            Text[ russian ] = "Higher";
+            Text[ russian ] = "Õ‡ Ó‰ËÌ ÛÓ‚ÂÌ¸ ‚‚Âı";
             Text[ greek ] = "Higher";
             Text[ dutch ] = "Higher";
-            Text[ french ] = "Higher";
-            Text[ spanish ] = "Higher";
+            Text[ french ] = "Au rÈpertoire supÈrieur";
+            Text[ spanish ] = "Subir un nivel";
             Text[ italian ] = "Higher";
             Text[ danish ] = "Higher";
-            Text[ swedish ] = "En nivÂ upp";
-            Text[ polish ] = "Poziom wyøej";
+            Text[ swedish ] = "En nivÂ hˆgre";
+            Text[ polish ] = "Katalog wyøej";
             Text[ portuguese_brazilian ] = "Higher";
-            Text[ japanese ] = "Higher";
+            Text[ japanese ] = "ÇPÇ¬è„ÇÃÃ´Ÿ¿ﬁÇ÷";
             Text[ korean ] = "Higher";
-            Text[ chinese_simplified ] = "œÚ…œ“ª≤„";
-            Text[ chinese_traditional ] = "Higher";
+            Text[ chinese_simplified ] = "ƒø¬ºœÚ…œ“ª≤„";
+            Text[ chinese_traditional ] = "•ÿø˝¶V§W§@ºh";
             Text[ turkish ] = "Higher";
             Text[ arabic ] = "Higher";
             Text[ catalan ] = "Higher";
@@ -297,20 +297,20 @@ ToolBox TB_SVT_FILEVIEW
             Text [ english_us ] = "Print" ;
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Print";
-            Text[ russian ] = "Print";
+            Text[ russian ] = "œÂ˜‡Ú¸";
             Text[ greek ] = "Print";
             Text[ dutch ] = "Print";
-            Text[ french ] = "Print";
-            Text[ spanish ] = "Print";
+            Text[ french ] = "Imprimer";
+            Text[ spanish ] = "Imprimir";
             Text[ italian ] = "Print";
             Text[ danish ] = "Print";
             Text[ swedish ] = "Skriv ut";
-            Text[ polish ] = "Print";
+            Text[ polish ] = "Drukuj";
             Text[ portuguese_brazilian ] = "Print";
-            Text[ japanese ] = "Print";
+            Text[ japanese ] = "àÛç¸";
             Text[ korean ] = "Print";
             Text[ chinese_simplified ] = "¥Ú”°";
-            Text[ chinese_traditional ] = "Print";
+            Text[ chinese_traditional ] = "¶C¶L";
             Text[ turkish ] = "Print";
             Text[ arabic ] = "Print";
             Text[ catalan ] = "Print";
@@ -334,6 +334,25 @@ ToolBox TB_SVT_FRAMEWIN
             ItemBitmap = Bitmap { File = "info_small.bmp" ; };
             Text = "Dokumenteigenschaften" ;
             Text [ english_us ] = "Docinfo" ;
+            Text[ portuguese ] = "Docinfo";
+            Text[ russian ] = "Docinfo";
+            Text[ greek ] = "Docinfo";
+            Text[ dutch ] = "Docinfo";
+            Text[ french ] = "Docinfo";
+            Text[ spanish ] = "Docinfo";
+            Text[ finnish ] = "Docinfo";
+            Text[ italian ] = "Docinfo";
+            Text[ danish ] = "Docinfo";
+            Text[ swedish ] = "Dokumentegenskaper";
+            Text[ polish ] = "Docinfo";
+            Text[ portuguese_brazilian ] = "Docinfo";
+            Text[ japanese ] = "Docinfo";
+            Text[ korean ] = "Docinfo";
+            Text[ chinese_simplified ] = "Docinfo";
+            Text[ chinese_traditional ] = "Docinfo";
+            Text[ turkish ] = "Docinfo";
+            Text[ arabic ] = "Docinfo";
+            Text[ catalan ] = "Docinfo";
         };
         ToolBoxItem
         {
@@ -344,6 +363,25 @@ ToolBox TB_SVT_FRAMEWIN
             ItemBitmap = Bitmap { File = "preview_small.bmp" ; };
             Text = "Vorschau" ;
             Text [ english_us ] = "Preview" ;
+            Text[ portuguese ] = "Preview";
+            Text[ russian ] = "Preview";
+            Text[ greek ] = "Preview";
+            Text[ dutch ] = "Preview";
+            Text[ french ] = "Preview";
+            Text[ spanish ] = "Preview";
+            Text[ finnish ] = "Preview";
+            Text[ italian ] = "Preview";
+            Text[ danish ] = "Preview";
+            Text[ swedish ] = "Fˆrhandsvisning";
+            Text[ polish ] = "Preview";
+            Text[ portuguese_brazilian ] = "Preview";
+            Text[ japanese ] = "Preview";
+            Text[ korean ] = "Preview";
+            Text[ chinese_simplified ] = "Preview";
+            Text[ chinese_traditional ] = "Preview";
+            Text[ turkish ] = "Preview";
+            Text[ arabic ] = "Preview";
+            Text[ catalan ] = "Preview";
         };
     };
 };
@@ -506,5 +544,305 @@ StringArray STRARY_SVT_DOCINFO
         < "Theme" ; DI_THEME ; > ;
         < "Size" ; DI_SIZE ; > ;
     };
-};
+ItemList [ language_user1 ] =
+    {
+             < "Titel" ; DI_TITLE ; > ; ;
+        < "Von" ; DI_FROM ; > ; ;
+        < "Datum" ; DI_DATE ; > ; ;
+        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "Beschreibung" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Thema" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ portuguese ] =
+    {
+             < "Capitulo" ; DI_TITLE ; > ; ;
+        < "De" ; DI_FROM ; > ; ;
+        < "Data " ; DI_DATE ; > ; ;
+        < "Palavras-chave" ; DI_KEYWORDS ; > ; ;
+        < "DescriÁ„o" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Assunto" ; DI_THEME ; > ; ;
+        < "Tamanho" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ russian ] =
+    {
+             < "«‡„Î‡‚ËÂ" ; DI_TITLE ; > ; ;
+        < "ËÁ" ; DI_FROM ; > ; ;
+        < "ƒ‡Ú‡" ; DI_DATE ; > ; ;
+        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "ŒÔËÒ‡ÌËÂ" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "“ÂÏ‡" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ greek ] =
+    {
+             < "‘ﬂÙÎÔÚ" ; DI_TITLE ; > ; ;
+        < "·¸" ; DI_FROM ; > ; ;
+        < "«ÏÂÒÔÏÁÌﬂ·" ; DI_DATE ; > ; ;
+        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "–ÂÒÈ„Ò·ˆﬁ" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "»›Ï·" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ dutch ] =
+    {
+             < "Title" ; DI_TITLE ; > ; ;
+        < "Van" ; DI_FROM ; > ; ;
+        < "Datum" ; DI_DATE ; > ; ;
+        < "Sleutelwoorden" ; DI_KEYWORDS ; > ; ;
+        < "Omschrijving" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Onderwerp" ; DI_THEME ; > ; ;
+        < "Grootte" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ french ] =
+    {
+             < "Chapitre" ; DI_TITLE ; > ; ;
+        < "‡ partir de" ; DI_FROM ; > ; ;
+        < "Date" ; DI_DATE ; > ; ;
+        < "Mots-clÈs" ; DI_KEYWORDS ; > ; ;
+        < "Description" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Sujet" ; DI_THEME ; > ; ;
+        < "Taille" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ spanish ] =
+    {
+             < "TÌtulo" ; DI_TITLE ; > ; ;
+        < "De" ; DI_FROM ; > ; ;
+        < "Fecha" ; DI_DATE ; > ; ;
+        < "Palabras clave" ; DI_KEYWORDS ; > ; ;
+        < "DescripciÛn" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Tema" ; DI_THEME ; > ; ;
+        < "TamaÒo" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ finnish ] =
+    {
+             < "Nimiˆ" ; DI_TITLE ; > ; ;
+        < "Teksti -> Tietue" ; DI_FROM ; > ; ;
+        < "P‰iv‰m‰‰r‰" ; DI_DATE ; > ; ;
+        < "Avainsanat" ; DI_KEYWORDS ; > ; ;
+        < "Kommentti" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Aihe" ; DI_THEME ; > ; ;
+        < "Koko" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ italian ] =
+    {
+             < "Titolo3" ; DI_TITLE ; > ; ;
+        < "di" ; DI_FROM ; > ; ;
+        < "Data" ; DI_DATE ; > ; ;
+        < "Parole chiave" ; DI_KEYWORDS ; > ; ;
+        < "Descrizione" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Argomento" ; DI_THEME ; > ; ;
+        < "Dimensioni" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ danish ] =
+    {
+             < "Overskrift" ; DI_TITLE ; > ; ;
+        < "Fra" ; DI_FROM ; > ; ;
+        < "Dato" ; DI_DATE ; > ; ;
+        < "N¯gleord" ; DI_KEYWORDS ; > ; ;
+        < "Beskrivelse" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Emne" ; DI_THEME ; > ; ;
+        < "St¯rrelse" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ swedish ] =
+    {
+             < "Etikett" ; DI_TITLE ; > ; ;
+        < "FrÂn" ; DI_FROM ; > ; ;
+        < "Datum" ; DI_DATE ; > ; ;
+        < "Nyckelord" ; DI_KEYWORDS ; > ; ;
+        < "Beskrivning" ; DI_DESCRIPTION ; > ; ;
+        < "InnehÂllstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒndringsdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "ƒndrat av" ; DI_MODIFIEDBY ; > ; ;
+        < "Utskriftsdatum" ; DI_PRINTDATE ; > ; ;
+        < "Utskrivet av" ; DI_PRINTBY ; > ; ;
+        < "ƒmne" ; DI_THEME ; > ; ;
+        < "Storlek" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ polish ] =
+    {
+             < "Etykieta" ; DI_TITLE ; > ; ;
+        < "od" ; DI_FROM ; > ; ;
+        < "Data" ; DI_DATE ; > ; ;
+        < "S≥owa kluczowe" ; DI_KEYWORDS ; > ; ;
+        < "Opis" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Temat" ; DI_THEME ; > ; ;
+        < "Rozmiar" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+             < "Titel" ; DI_TITLE ; > ; ;
+        < "Von" ; DI_FROM ; > ; ;
+        < "Datum" ; DI_DATE ; > ; ;
+        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "Beschreibung" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Thema" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ japanese ] =
+    {
+             < "å®èëÇ´" ; DI_TITLE ; > ; ;
+        < "åüçıÇénÇﬂÇÈëŒè€" ; DI_FROM ; > ; ;
+        < "??" ; DI_DATE ; > ; ;
+        < "Schl?selw?ter" ; DI_KEYWORDS ; > ; ;
+        < "äTóv" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "√∞œ" ; DI_THEME ; > ; ;
+        < "Gr?e" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ korean ] =
+    {
+             < "¡¶∏Ò" ; DI_TITLE ; > ; ;
+        < "(¿∏)∑Œ ∫Œ≈Õ" ; DI_FROM ; > ; ;
+        < "¿œ¿⁄" ; DI_DATE ; > ; ;
+        < "Schl?selw?ter" ; DI_KEYWORDS ; > ; ;
+        < "º≥∏Ì" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge?dert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "¡÷¡¶" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+             < "¥Û±ÍÃ‚" ; DI_TITLE ; > ; ;
+        < "”…" ; DI_FROM ; > ; ;
+        < "DATE" ; DI_DATE ; > ; ;
+        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "Àµ√˜" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "÷˜Ã‚" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+             < "§jº–√D" ; DI_TITLE ; > ; ;
+        < "±q" ; DI_FROM ; > ; ;
+        < "DATE" ; DI_DATE ; > ; ;
+        < "Schl?selwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "¥y≠z" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "•D√D" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ turkish ] =
+    {
+             < "Bˆl¸m ba˛l˝˝" ; DI_TITLE ; > ; ;
+        < "Yazd˝ran" ; DI_FROM ; > ; ;
+        < "Tarih" ; DI_DATE ; > ; ;
+        < "Anahtar sˆzc¸k" ; DI_KEYWORDS ; > ; ;
+        < "AÁ˝klama" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Konu" ; DI_THEME ; > ; ;
+        < "Boyut" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ arabic ] =
+    {
+             < "«··ﬁ» «·„Â‰Ì" ; DI_TITLE ; > ; ;
+        < "„‰" ; DI_FROM ; > ; ;
+        < "«· «—ÌŒ" ; DI_DATE ; > ; ;
+        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "«·Ê’›" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "«·„Ê÷Ê⁄" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    ItemList [ catalan ] =
+    {
+             < "Titel" ; DI_TITLE ; > ; ;
+        < "Von" ; DI_FROM ; > ; ;
+        < "Datum" ; DI_DATE ; > ; ;
+        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ; ;
+        < "Beschreibung" ; DI_DESCRIPTION ; > ; ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ; ;
+        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ; ;
+        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ; ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ; ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ; ;
+        < "Thema" ; DI_THEME ; > ; ;
+        < "Grˆﬂe" ; DI_SIZE ; > ; ;
+    };
+    };
 
