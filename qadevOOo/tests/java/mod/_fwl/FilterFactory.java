@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterFactory.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-28 19:28:19 $
+ *  last change:$Date: 2004-07-23 10:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,8 @@ public class FilterFactory extends TestCase {
 
         log.println("adding INSTANCE 1 as obj relation to environment");
 
-        //instanceProp.Value = "INSTANCE1";
-        setPropertyValueValue((PropertyValue[])instance, "UserData", "INSTANCE1");
-        //instance[9] = instanceProp;
+        log.println("fill property 'TemplateName' with 'INSTANCE1'");
+        setPropertyValueValue((PropertyValue[])instance, "TemplateName", "INSTANCE1");
         tEnv.addObjRelation("INSTANCE" +1, instance);
 
 
@@ -176,10 +175,8 @@ public class FilterFactory extends TestCase {
             } catch (com.sun.star.container.NoSuchElementException e) {
                 throw new StatusException("Couldn't create relation", e);
             }
-            //System.out.println("Hallo Welt");
             String filterImpl = (String) getPropertyValueValue
                 (filterProps, "FilterService");
-          //      System.out.println("FILTER:" + filterImpl);
             if (filterImpl != null && filterImpl.length() > 0) {
                 String filterType = (String) getPropertyValueValue
                     (filterProps, "Type");
