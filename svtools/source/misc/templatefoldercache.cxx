@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-14 15:15:51 $
+ *  last change: $Author: fs $ $Date: 2001-12-06 12:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include <algorithm>
 
 //.........................................................................
-namespace sfx2
+namespace svt
 {
 //.........................................................................
 
@@ -308,7 +308,7 @@ namespace sfx2
                                         >
     {
         //.................................................................
-                bool operator() (const ::vos::ORef< TemplateContent >& _rLHS, const ::vos::ORef< TemplateContent >& _rRHS )
+        bool operator() (const ::vos::ORef< TemplateContent >& _rLHS, const ::vos::ORef< TemplateContent >& _rRHS )
         {
             if ( !_rLHS.isValid() || !_rRHS.isValid() )
             {
@@ -329,12 +329,12 @@ namespace sfx2
             if ( _rLHS->getSubContents().size() )
             {   // there are children
                 // -> compare them
-                                std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(
+                ::std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(
                     _rLHS->getSubContents().begin(),
                     _rLHS->getSubContents().end(),
                     _rRHS->getSubContents().begin(),
                     *this
-                                );
+                );
                 if ( aFirstDifferent.first != _rLHS->getSubContents().end() )
                     return false;// the sub contents differ
             }
@@ -501,13 +501,14 @@ namespace sfx2
         sal_Bool                        m_bNeedsUpdate : 1;
         sal_Bool                        m_bKnowState : 1;
         sal_Bool                        m_bValidCurrentState : 1;
+        sal_Bool                        m_bAutoStoreState : 1;
 
     public:
-        TemplateFolderCacheImpl( );
+        TemplateFolderCacheImpl( sal_Bool _bAutoStoreState );
         ~TemplateFolderCacheImpl( );
 
-        sal_Bool    needsUpdate();
-        void        storeState();
+        sal_Bool    needsUpdate( sal_Bool _bForceCheck );
+        void        storeState( sal_Bool _bForceRetrieval );
 
     private:
         void        initTemplDirs( ::std::vector< String >& _rRootDirs );
@@ -532,17 +533,22 @@ namespace sfx2
     };
 
     //---------------------------------------------------------------------
-    TemplateFolderCacheImpl::TemplateFolderCacheImpl( )
+    TemplateFolderCacheImpl::TemplateFolderCacheImpl( sal_Bool _bAutoStoreState )
         :m_pCacheStream         ( NULL )
         ,m_bNeedsUpdate         ( sal_True )
         ,m_bKnowState           ( sal_False )
         ,m_bValidCurrentState   ( sal_False )
+        ,m_bAutoStoreState      ( _bAutoStoreState )
     {
     }
 
     //---------------------------------------------------------------------
     TemplateFolderCacheImpl::~TemplateFolderCacheImpl( )
     {
+        // store the current state if possible and required
+        if ( m_bValidCurrentState && m_bAutoStoreState )
+            storeState( sal_False );
+
         closeCacheStream( );
     }
 
@@ -579,7 +585,7 @@ namespace sfx2
         // as both arrays are sorted (by definition - this is a precondition of this method)
         // we can simply go from the front to the back and compare the single elements
 
-                std::pair< ConstFolderIterator, ConstFolderIterator > aFirstDifferent = ::std::mismatch(
+        ::std::pair< ConstFolderIterator, ConstFolderIterator > aFirstDifferent = ::std::mismatch(
             _rLHS.begin(),
             _rLHS.end(),
             _rRHS.begin(),
@@ -590,9 +596,11 @@ namespace sfx2
     }
 
     //---------------------------------------------------------------------
-    void TemplateFolderCacheImpl::storeState()
+    void TemplateFolderCacheImpl::storeState( sal_Bool _bForceRetrieval )
     {
-        DBG_ASSERT( m_bValidCurrentState, "TemplateFolderCacheImpl::storeState: no valid current state!" );
+        if ( !m_bValidCurrentState || _bForceRetrieval )
+            readCurrentState( );
+
         if ( m_bValidCurrentState && openCacheStream( sal_False ) )
         {
             *m_pCacheStream << getMagicNumber();
@@ -817,9 +825,9 @@ namespace sfx2
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TemplateFolderCacheImpl::needsUpdate()
+    sal_Bool TemplateFolderCacheImpl::needsUpdate( sal_Bool _bForceCheck )
     {
-        if ( m_bKnowState )
+        if ( m_bKnowState && !_bForceCheck )
             return m_bNeedsUpdate;
 
         m_bNeedsUpdate = sal_True;
@@ -852,8 +860,8 @@ namespace sfx2
     //= TemplateFolderCache
     //=====================================================================
     //---------------------------------------------------------------------
-    TemplateFolderCache::TemplateFolderCache( )
-        :m_pImpl( new TemplateFolderCacheImpl )
+    TemplateFolderCache::TemplateFolderCache( sal_Bool _bAutoStoreState )
+        :m_pImpl( new TemplateFolderCacheImpl( _bAutoStoreState ) )
     {
     }
 
@@ -864,15 +872,15 @@ namespace sfx2
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TemplateFolderCache::needsUpdate()
+    sal_Bool TemplateFolderCache::needsUpdate( sal_Bool _bForceCheck )
     {
-        return m_pImpl->needsUpdate();
+        return m_pImpl->needsUpdate( _bForceCheck );
     }
 
     //---------------------------------------------------------------------
-    void TemplateFolderCache::storeState()
+    void TemplateFolderCache::storeState( sal_Bool _bForceRetrieval )
     {
-        m_pImpl->storeState();
+        m_pImpl->storeState( _bForceRetrieval );
     }
 
 //.........................................................................
@@ -882,6 +890,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/11/14 15:15:51  vg
+ *  #65293# use temporary variables for gcc
+ *
  *  Revision 1.2  2001/11/08 15:42:14  obo
  *  #65293# compile err solaris
  *
