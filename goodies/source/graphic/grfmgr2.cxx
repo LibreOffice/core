@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,8 +515,12 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
             else
             {
                 // #105229# Don't scale if output size equals bitmap size
-                if( aOutSzPix == rBmpSzPix )
+                // #107226# Copy through only if we're not mirroring
+                if( !bHMirr && !bVMirr && aOutSzPix == rBmpSzPix )
                 {
+                    // #107226# Use original dimensions when just copying through
+                    aOutPt = pOut->PixelToLogic( aOutPtPix );
+                    aOutSz = pOut->PixelToLogic( aOutSzPix );
                     aOutBmpEx = aBmpEx;
                     bRet = TRUE;
                 }
