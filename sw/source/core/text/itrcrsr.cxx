@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:54:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1617,11 +1617,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                                          pPor->GetLen() );
                 aDrawInf.SetOfst( nX );
                 aDrawInf.SetSpace( nSpaceAdd );
-#ifdef VERTICAL_LAYOUT
                 aDrawInf.SetFont( aSizeInf.GetFont() );
                 aDrawInf.SetFrm( pFrm );
                 aDrawInf.SetSnapToGrid( aSizeInf.SnapToGrid() );
-#endif
+                aDrawInf.SetPosMatchesBounds( pCMS && pCMS->bPosMatchesBounds );
 
                 if ( SW_CJK == aSizeInf.GetFont()->GetActual() &&
                      pPara->GetScriptInfo().CountCompChg() &&
