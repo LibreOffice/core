@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDateField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:37 $
+ *  last change:$Date: 2003-02-25 10:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,13 @@ public class _XDateField extends MultiMethodTest {
         requiredMethod("getDate()") ;
 
         boolean result = true ;
-        oObj.setDate(5087) ;
+        oObj.setDate(19000101) ;
 
-        result = oObj.getDate() == 5087 ;
+        result = oObj.getDate() == 19000101 ;
+
+        if (! result ) {
+            System.out.println("getDate: "+oObj.getDate()+" , expected 19000101");
+        }
 
         tRes.tested("setDate()", result) ;
     }
