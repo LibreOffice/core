@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:46:00 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 13:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,11 +394,10 @@ IconChoiceDialog ::~IconChoiceDialog ()
 
     // save configuration at INI-Manager
     // and remove pages
-/*
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
     aTabDlgOpt.SetPosition( GetPosPixel().X(), GetPosPixel().Y() );
     aTabDlgOpt.SetPageID( mnCurrentPageId );
-*/
+
     const USHORT nCount = maPageList.Count();
 
     for ( i = 0; i < nCount; ++i )
@@ -956,7 +955,7 @@ void IconChoiceDialog::ActivatePageImpl ()
                 pData->pPage = (pData->fnCreatePage)( this, *CreateInputItemSet( mnCurrentPageId ) );
 
             SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
-//          pData->pPage->SetUserData( aTabPageOpt.GetUserData() );
+            pData->pPage->SetUserData( aTabPageOpt.GetUserData() );
             SetPosSizePages ( pData->nId );
             PageCreated( mnCurrentPageId, *(pData->pPage) );
 
@@ -1248,7 +1247,7 @@ void IconChoiceDialog::Start_Impl()
     // Konfiguration vorhanden?
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
 
-    if ( 0 )//aTabDlgOpt.Exists() )
+    if ( aTabDlgOpt.Exists() )
     {
         // ggf. Position aus Konfig
         aTabDlgOpt.GetPosition( aPos.X(), aPos.Y() );
