@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "~Reverso" ;
         Text [ portuguese_brazilian ] = "~Rьckseite" ;
         Text[ chinese_simplified ] = "Јі√ж(~C)";
-        Text[ russian ] = "ќбратн. сторона";
+        Text[ russian ] = "ќбратна€ сторона";
         Text[ polish ] = "Tylna strona";
         Text[ japanese ] = "В§Вз(~C)";
         Text[ chinese_traditional ] = "§ѕ≠±(~C)";
@@ -487,7 +487,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ chinese_simplified ] = "“ю»лµƒ“≥√ж(~H)";
         Text[ russian ] = "—крытые страницы";
         Text[ polish ] = "Ukryte strony";
-        Text[ japanese ] = "ЙBВµХґОЪ(~H)";
+        Text[ japanese ] = "ФсХ\\О¶ВћЌя∞Љё(~H)";
         Text[ chinese_traditional ] = "Ѕф§J™Ї≠ґ≠±(~H)";
         Text[ arabic ] = "«б’ЁЌ«  «бгќЁн…";
         Text[ greek ] = " схцЁт уелядет";
