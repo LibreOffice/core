@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 12:13:11 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 13:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,7 +1487,7 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped )               // TRUE = ne
                 bProtected = TRUE;
                 eMode = SC_INPUT_NONE;
                 if (pInputWin)
-                    pInputWin->StopEditEngine();
+                    pInputWin->StopEditEngine( TRUE );
                 UpdateFormulaMode();
                 if (pActiveViewSh)
                 {
@@ -1743,7 +1743,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     {
         eMode = SC_INPUT_NONE;
         if (pInputWin)
-            pInputWin->StopEditEngine();
+            pInputWin->StopEditEngine( TRUE );
         if (pActiveViewSh)
             pActiveViewSh->GetActiveWin()->GrabFocus();
         return;
@@ -1752,7 +1752,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     ScInputMode eOldMode = eMode;
     eMode = eNewMode;
     if (eOldMode == SC_INPUT_TOP && eNewMode != eOldMode && pInputWin)
-        pInputWin->StopEditEngine();
+        pInputWin->StopEditEngine( FALSE );
 
     if (eMode==SC_INPUT_TOP || eMode==SC_INPUT_TABLE)
     {
@@ -2000,7 +2000,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     bSelIsRef = FALSE;
     eMode     = SC_INPUT_NONE;
     if (pInputWin)
-        pInputWin->StopEditEngine();
+        pInputWin->StopEditEngine( TRUE );
 
     if (bOldMod && !bProtected && !bForget)
     {
@@ -2111,7 +2111,7 @@ void ScInputHandler::CancelHandler()
 
     eMode = SC_INPUT_NONE;
     if (pInputWin)
-        pInputWin->StopEditEngine();
+        pInputWin->StopEditEngine( TRUE );
     if (pExecuteSh)
         pExecuteSh->StopEditShell();
 

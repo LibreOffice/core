@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-29 20:59:10 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 13:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,9 +546,9 @@ void ScInputWindow::MakeDialogEditView()
     aTextWindow.MakeDialogEditView();
 }
 
-void ScInputWindow::StopEditEngine()
+void ScInputWindow::StopEditEngine( BOOL bAll )
 {
-    aTextWindow.StopEditEngine();
+    aTextWindow.StopEditEngine( bAll );
 }
 
 void ScInputWindow::TextGrabFocus()
@@ -879,20 +879,21 @@ void ScTextWnd::StartEditEngine()
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 }
 
-void ScTextWnd::StopEditEngine()
+void ScTextWnd::StopEditEngine( BOOL bAll )
 {
     if (pEditView)
     {
         ScModule* pScMod = SC_MOD();
 
-        pScMod->InputSelection( pEditView );
+        if (!bAll)
+            pScMod->InputSelection( pEditView );
         aString = pEditEngine->GetText();
         bIsInsertMode = pEditView->IsInsertMode();
         BOOL bSelection = pEditView->HasSelection();
         DELETEZ(pEditView);
         DELETEZ(pEditEngine);
 
-        if (pScMod->IsEditMode())
+        if ( pScMod->IsEditMode() && !bAll )
             pScMod->SetInputMode(SC_INPUT_TABLE);
 
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
