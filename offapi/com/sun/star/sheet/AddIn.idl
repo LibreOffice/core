@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AddIn.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:13:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@
     a <atom>string</atom>, or an
     <atom>any[][]</atom>
     will be passed. If no argument is specified in the
-    function call, <void></void> will be passed. This allows
+    function call, <void/> will be passed. This allows
     for optional parameters.
     </dd>
     <dt>
@@ -222,6 +222,9 @@ service AddIn
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 13:13:17  mi
+    no dim='[][]' anymore for new document generator
+
     Revision 1.3  2000/11/08 12:43:45  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnSettings.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:46:03 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ service ColumnSettings
         interface.
         </p>
         <p>
-        If the value is <void></void>, a default numberformat should be used according
+        If the value is <void/>, a default numberformat should be used according
         to the datatype of the column.</p>
      */
     [property] long FormatKey;
@@ -100,7 +100,7 @@ service ColumnSettings
         1: center
         2: right
         </pre>
-        <p> If the value is <void></void>, a default alignment should be used according
+        <p> If the value is <void/>, a default alignment should be used according
         to the datatype of the column.</p>
      */
     [property] long Align;
@@ -109,7 +109,7 @@ service ColumnSettings
     // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::Width
     /** specifies the width of the column displayed in a grid, the unit is 10THMM.
 
-        <p> If the value is <void></void>, a default width should be used according to the label
+        <p> If the value is <void/>, a default width should be used according to the label
         of the column.      </p>
      */
     [property] long Width;
@@ -118,7 +118,7 @@ service ColumnSettings
     // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::Position
     /** Position of the column within a grid.
 
-        <p> If the value is <void></void>, the default position should be taken according.      </p>
+        <p> If the value is <void/>, the default position should be taken according.        </p>
      */
     [property] long Position;
 
@@ -142,6 +142,9 @@ service ColumnSettings
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 13:46:03  mi
+    syntax errors in documentation fixed
+
     Revision 1.3  2000/11/08 12:43:30  mi
     moved from api
 
