@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-09-27 13:13:38 $
+ *  last change: $Author: pb $ $Date: 2001-10-26 11:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,8 +470,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
         sal_Bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
 
-        // brauchen wir den Dialog?
-        if ( !rReq.GetArgs() && !bSilent && !rReq.IsAPI() )
+        // need a dialog?
+        if ( ( !rReq.GetArgs() || !rReq.GetArgs()->Count() ) && !bSilent && !rReq.IsAPI() )
         {
             // Printer-Dialog braucht tempor"aren Printer
             SfxPrinter* pDlgPrinter = pPrinter->Clone();
