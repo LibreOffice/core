@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 15:32:24 $
+ *  last change: $Author: mt $ $Date: 2001-10-25 05:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,17 @@
 
 
 using namespace ::com::sun::star;
+
+USHORT lcl_GetItemScriptType( short nI18NType )
+{
+    switch ( nI18NType )
+    {
+        case i18n::ScriptType::LATIN:   return SCRIPTTYPE_LATIN;
+        case i18n::ScriptType::ASIAN:   return SCRIPTTYPE_ASIAN;
+        case i18n::ScriptType::COMPLEX: return SCRIPTTYPE_COMPLEX;
+    }
+    return 0;
+}
 
 USHORT lcl_CalcExtraSpace( ParaPortion* pPortion, const SvxLineSpacingItem& rLSItem )
 {
@@ -1294,7 +1305,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
         }
 
         if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
-            rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : i18n::ScriptType::LATIN;
+            rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : GetScriptTypeOfLanguage( GetDefaultLanguage() );
     }
 }
 
@@ -1352,17 +1363,17 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
         {
             if ( ( rTypes[n].nStartPos <= nE ) && ( rTypes[n].nEndPos >= nS ) )
                {
-                switch ( rTypes[n].nScriptType )
+                if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
                 {
-                    case i18n::ScriptType::LATIN:
-                        nScriptType |= SCRIPTTYPE_LATIN;
-                        break;
-                    case i18n::ScriptType::ASIAN:
-                        nScriptType |= SCRIPTTYPE_ASIAN;
-                        break;
-                    case i18n::ScriptType::COMPLEX:
-                        nScriptType |= SCRIPTTYPE_COMPLEX;
-                        break;
+                    nScriptType |= lcl_GetItemScriptType ( rTypes[n].nScriptType );
+                }
+                else
+                {
+                    if ( !nScriptType && n )
+                    {
+                        // #93548# When starting with WEAK, use prev ScriptType...
+                        nScriptType = rTypes[n-1].nScriptType;
+                    }
                 }
             }
         }
