@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:37 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ using namespace ::vos                           ;
 //  non exported const
 //_________________________________________________________________________________________________________________
 
-const USHORT SLOTID_HELPPOPUPMENU = 5410;
+const USHORT SLOTID_MDIWINDOWLIST = 5610;
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -574,7 +574,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
             {
                 OGuard aSolarGuard( Application::GetSolarMutex() );
                 {
-                    USHORT nPos = pMenuBar->GetItemPos( SLOTID_HELPPOPUPMENU );
+                    USHORT nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
                     if ( nPos != MENU_ITEM_NOTFOUND )
                     {
                         OUString aNoContext;
@@ -586,7 +586,10 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                             xModel = Reference< XModel >( xController->getModel(), UNO_QUERY );
 
                         // retrieve addon popup menus and add them to our menu bar
-                        AddonPopupMenu::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
+                        AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
+
+                        // retrieve addon help menu items and add them to our help menu
+                        AddonMenuManager::MergeAddonHelpMenu( xFrame, pMenuBar );
                     }
 
                     // set new menu on our system window and create new menu manager
