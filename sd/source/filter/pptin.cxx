@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:04:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ SdPPTImport::~SdPPTImport()
 }
 
 ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage_, SfxMedium& rMedium, PowerPointImportParam& rParam ) :
-    SdrPowerPointImport     ( rParam ),
+    SdrPowerPointImport     ( rParam, rMedium.GetBaseURL() ),
     rMed                    ( rMedium ),
     rStorage                ( rStorage_ ),
     nFilterOptions          ( 0 )
