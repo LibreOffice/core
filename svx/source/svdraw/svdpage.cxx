@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:33:26 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1655,39 +1655,54 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
 
 TYPEINIT1(SdrPage,SdrObjList);
 
-SdrPage::SdrPage(SdrModel& rNewModel, FASTBOOL bMasterPage):
-    SdrObjList(&rNewModel,this),
-    pBackgroundObj( NULL ),
-    // #110094#
-    mpViewContact(0L)
+SdrPage::SdrPage(SdrModel& rNewModel, FASTBOOL bMasterPage)
+:   SdrObjList(&rNewModel, this),
+    mpViewContact(0L),
+    nWdt(10L),
+    nHgt(10L),
+    nBordLft(0L),
+    nBordUpp(0L),
+    nBordRgt(0L),
+    nBordLwr(0L),
+    pLayerAdmin(new SdrLayerAdmin(&rNewModel.GetLayerAdmin())),
+    pBackgroundObj(0L),
+    nPageNum(0L),
+    bMaster(bMasterPage),
+    bInserted(sal_False),
+    bObjectsNotPersistent(sal_False),
+    bSwappingLocked(sal_False)
 {
-    pLayerAdmin=new SdrLayerAdmin(&rNewModel.GetLayerAdmin());
-    bMaster=bMasterPage;
-    bInserted=FALSE;
     aPrefVisiLayers.SetAll();
-    nWdt=10;
-    nHgt=10;
-    nBordLft=0;
-    nBordUpp=0;
-    nBordRgt=0;
-    nBordLwr=0;
-    nPageNum=0;
-    eListKind=bMasterPage ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
-    bSwappingLocked=FALSE;
-    bObjectsNotPersistent=FALSE;
+    eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 }
 
-SdrPage::SdrPage(const SdrPage& rSrcPage):
-    SdrObjList(rSrcPage.pModel,this),
-    pBackgroundObj( NULL ),
-    // #110094#
-    mpViewContact(0L)
+SdrPage::SdrPage(const SdrPage& rSrcPage)
+:   SdrObjList(rSrcPage.pModel, this),
+    mpViewContact(0L),
+    nWdt(rSrcPage.nWdt),
+    nHgt(rSrcPage.nHgt),
+    nBordLft(rSrcPage.nBordLft),
+    nBordUpp(rSrcPage.nBordUpp),
+    nBordRgt(rSrcPage.nBordRgt),
+    nBordLwr(rSrcPage.nBordLwr),
+    pLayerAdmin(new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin())),
+    pBackgroundObj(0L),
+    nPageNum(rSrcPage.nPageNum),
+    bMaster(rSrcPage.bMaster),
+    bInserted(sal_False),
+    bObjectsNotPersistent(rSrcPage.bObjectsNotPersistent),
+    bSwappingLocked(rSrcPage.bSwappingLocked)
 {
-    pLayerAdmin=new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin());
-    *this=rSrcPage;
-    eListKind=bMaster ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
-}
+    aPrefVisiLayers.SetAll();
+    eListKind = (bMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
+    // copy things from source
+    *this = rSrcPage;
+
+    // be careful and correct eListKind, a member of SdrObjList which
+    // will be changed by the SdrOIbjList::operator= before...
+    eListKind = (bMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
+}
 SdrPage::~SdrPage()
 {
     // #111111#
@@ -1718,34 +1733,48 @@ SdrPage::~SdrPage()
 
 void SdrPage::operator=(const SdrPage& rSrcPage)
 {
-    // #110094#
     if(mpViewContact)
     {
         delete mpViewContact;
         mpViewContact = 0L;
     }
 
-    SdrObjList::operator=(rSrcPage);
-    pPage=this;
-    bMaster        =rSrcPage.bMaster        ;
-    bSwappingLocked=rSrcPage.bSwappingLocked;
-    aPrefVisiLayers=rSrcPage.aPrefVisiLayers;
-    nWdt           =rSrcPage.nWdt           ;
-    nHgt           =rSrcPage.nHgt           ;
-    nBordLft       =rSrcPage.nBordLft       ;
-    nBordUpp       =rSrcPage.nBordUpp       ;
-    nBordRgt       =rSrcPage.nBordRgt       ;
-    nBordLwr       =rSrcPage.nBordLwr       ;
-    nPageNum       =rSrcPage.nPageNum       ;
-    aMasters       =rSrcPage.aMasters       ;
-    bObjectsNotPersistent=rSrcPage.bObjectsNotPersistent;
+    if(pBackgroundObj)
+    {
+        delete pBackgroundObj;
+        pBackgroundObj = 0L;
+    }
 
-    if( rSrcPage.pBackgroundObj )
+    // Joe also sets some parameters for the class this one
+    // is derived from. SdrObjList does the same bad handling of
+    // copy constructor and operator=, so i better let it stand here.
+    pPage = this;
+
+    // copy all the local parameters to make this instance
+    // a valid copy od source page before copying and inserting
+    // the contained objects
+    bMaster = rSrcPage.bMaster;
+    bSwappingLocked = rSrcPage.bSwappingLocked;
+    aPrefVisiLayers = rSrcPage.aPrefVisiLayers;
+    nWdt = rSrcPage.nWdt;
+    nHgt = rSrcPage.nHgt;
+    nBordLft = rSrcPage.nBordLft;
+    nBordUpp = rSrcPage.nBordUpp;
+    nBordRgt = rSrcPage.nBordRgt;
+    nBordLwr = rSrcPage.nBordLwr;
+    nPageNum = rSrcPage.nPageNum;
+    aMasters = rSrcPage.aMasters;
+    bObjectsNotPersistent = rSrcPage.bObjectsNotPersistent;
+
+    if(rSrcPage.pBackgroundObj)
     {
         pBackgroundObj = rSrcPage.pBackgroundObj->Clone();
           pBackgroundObj->SetPage( this );
         pBackgroundObj->SetModel( pModel );
     }
+
+    // Now copy the contained obejcts (by cloning them)
+    SdrObjList::operator=(rSrcPage);
 }
 
 SdrPage* SdrPage::Clone() const
