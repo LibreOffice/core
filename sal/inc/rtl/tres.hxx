@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-07-13 02:37:27 $
+ *  last change: $Author: mm $ $Date: 2001-08-22 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,52 @@
 #include <osl/diagnose.h>
 #endif
 
-#define TST_BOOM(c, m)  OSL_ENSURE(c, m)
+#include <stdarg.h>
+
+//#define TST_BOOM(c, m)  OSL_ENSURE(c, m)
 
 // <namespace_rtl>
 namespace rtl {
+
+class TestResult;
+/** Function prototype of the logging function.
+*/
+typedef void (SAL_CALL * rtl_logPrintf_Function)(
+    TestResult *,
+    const sal_Bool   bTestCaseState,
+    const char      *pFormatStr, va_list pArgumentList
+    );
+
+/**
+ Structure to extent the TestResult class in a compatible way.
+ Do not relay on the length of this structure. It might be extend
+ in future versions.
+*/
+struct TestResultFunction
+{
+    sal_Int32               nStructLength;
+    /// If set, the logging is active
+    rtl_logPrintf_Function  pLogPrintf;
+/*
+    TestResultFunction()
+        : nStructLength( (sal_Int32)sizeof( TestResultFunction ) )
+    {
+    }
+*/
+};
+
+
 
 // <class_TestResult>
 class TestResult {
 
     // <private_members>
-    sal_Char   *m_name;
-    sal_Char   *m_result;
-    sal_Char   *m_msg;
-    sal_Bool    m_state;
-    sal_Bool    m_boom;
-    sal_Int32   nVerbosityLevel;
+    sal_Char            *m_name;
+    sal_Char            *m_result;
+    sal_Char            *m_msg;
+    sal_Bool            m_state;
+    sal_Bool            m_boom;
+    TestResultFunction  *m_pFunctions;
     // </private_members>
 
     // <private_ctors>
@@ -145,13 +176,13 @@ class TestResult {
 public:
 
     // <public_ctors>
-    TestResult( const sal_Char* meth, sal_Bool boom = sal_False, sal_Int32 nVerbosity = 0 )
+    TestResult( const sal_Char* meth, sal_Bool boom = sal_False, TestResultFunction  *pFunctions = 0 )
             : m_name(0)
             , m_result(0)
             , m_msg(0)
             , m_state( sal_False )
             , m_boom( boom )
-            , nVerbosityLevel(nVerbosity) {
+            , m_pFunctions(pFunctions) {
 
         cpy( &m_name, meth );
     } // </public_ctors>
@@ -176,7 +207,10 @@ public:
             cpy( &m_msg, msg );
         }
         if( ! state && m_boom ) {
-            TST_BOOM( m_state, m_msg );
+            char * pBoom;
+            pBoom = 0;
+            *pBoom = 'b';
+            //TST_BOOM( m_state, m_msg );
         }
     } // </method_state>
 
@@ -217,6 +251,21 @@ public:
         return m_msg;
     } // </method_getMsg>
 
+    // <method_logPrintf>
+    inline void logPrintf ( const sal_Bool   bTestCaseState,
+                                const char      *pFormatStr, ...
+                              )
+    {
+        if( m_pFunctions && m_pFunctions->pLogPrintf )
+        {
+            va_list   vArgumentList;
+            va_start ( vArgumentList, pFormatStr );
+
+            m_pFunctions->pLogPrintf( this, bTestCaseState, pFormatStr, vArgumentList );
+
+            va_end ( vArgumentList );
+        }
+    } // </method_logPrintf>
     // </public_methods>
 
 }; // </class_TestResult>
