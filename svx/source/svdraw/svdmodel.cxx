@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 16:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,7 @@ TYPEINIT1(SdrModel,SfxBroadcaster);
 void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     FASTBOOL bUseExtColorTable, FASTBOOL bLoadRefCounts)
 {
+    mbInDestruction=false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
     eUIUnit=FUNIT_MM;
@@ -518,6 +519,9 @@ SdrModel::~SdrModel()
 #endif
 
     DBG_DTOR(SdrModel,NULL);
+
+    mbInDestruction = true;
+
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
     delete mpOutlinerCache;
@@ -576,6 +580,11 @@ SdrModel::~SdrModel()
 
     if(mpNumberFormatter)
         delete mpNumberFormatter;
+}
+
+bool SdrModel::IsInDestruction() const
+{
+    return mbInDestruction;
 }
 
 const SvNumberFormatter& SdrModel::GetNumberFormatter() const
@@ -834,6 +843,8 @@ void SdrModel::ImpCreateTables()
 
 void SdrModel::Clear()
 {
+    mbInDestruction = true;
+
     sal_Int32 i;
     // delete all drawing pages
     sal_Int32 nAnz=GetPageCount();
