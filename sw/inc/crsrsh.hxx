@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:13:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ struct SwContentAtPos
 
     // befindet sich der Node in einem geschuetzten Bereich?
     FASTBOOL IsInProtectSect() const;
+    bool     IsInRTLText()const;
 };
 
 
