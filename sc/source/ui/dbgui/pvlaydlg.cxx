@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:30:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,15 @@
 #include "scresid.hxx"
 #include "pivot.hxx"
 #include "pvglob.hxx"
-#include "pvfundlg.hxx"
+//CHINA001 #include "pvfundlg.hxx"
 #include "globstr.hrc"
 #include "pivot.hrc"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
 #include "scmod.hxx"
 
+#include "sc.hrc" //CHINA001
+#include "scabstdlg.hxx" //CHINA001
 using namespace com::sun::star;
 
 //----------------------------------------------------------------------------
@@ -931,13 +933,22 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
             String aFieldName = *(pData->pStrColName);
             BOOL bOldShowAll = bShowAll[nArrPos];
 
-            ScDPFunctionDlg* pDlg =
-                new ScDPFunctionDlg( this,
-                                        eType != TYPE_DATA,
-                                        aFieldName,
-                                        (*pArr)[nFieldIndex]->nFuncMask,
-                                        bOldShowAll );
+//CHINA001             ScDPFunctionDlg* pDlg =
+//CHINA001          new ScDPFunctionDlg( this,
+//CHINA001          eType != TYPE_DATA,
+//CHINA001          aFieldName,
+//CHINA001          pArr[nFieldIndex]->nFuncMask,
+//CHINA001          bOldShowAll );
+            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+            AbstractScDPFunctionDlg* pDlg = pFact->CreateScDPFunctionDlg( this,
+                                                                        eType != TYPE_DATA,
+                                                                        aFieldName,
+                                                                        (*pArr)[nFieldIndex]->nFuncMask,
+                                                                        bOldShowAll,
+                                                                        ResId(RID_SCDLG_PIVOTSUBT));
+            DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
             if ( pDlg->Execute() == RET_OK )
             {
                   (*pArr)[nFieldIndex]->nFuncMask
