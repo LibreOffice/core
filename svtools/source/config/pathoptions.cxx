@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-26 15:01:07 $
+ *  last change: $Author: cd $ $Date: 2002-08-21 10:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,34 @@
 
 #include <unotools/ucbhelper.hxx>
 #include <vos/process.hxx>
+#include <comphelper/processfactory.hxx>
+
+#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGSUBSTITUTION_HPP_
+#include <com/sun/star/util/XStringSubstitution.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#include <vector>
+#include <hash_map>
 
 using namespace osl;
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::util;
+using namespace com::sun::star::lang;
 
 // define ----------------------------------------------------------------
 
@@ -117,180 +140,135 @@ using namespace com::sun::star::uno;
 #define SIGN_STARTVARIABLE              ASCII_STR("$(")
 #define SIGN_ENDVARIABLE                ASCII_STR(")")
 
-#define SUBSTITUTE_INST                 ASCII_STR("$(inst)")
-#define SUBSTITUTE_PROG                 ASCII_STR("$(prog)")
-#define SUBSTITUTE_USER                 ASCII_STR("$(user)")
-#define SUBSTITUTE_INSTPATH             ASCII_STR("$(instpath)")
-#define SUBSTITUTE_PROGPATH             ASCII_STR("$(progpath)")
-#define SUBSTITUTE_USERPATH             ASCII_STR("$(userpath)")
-#define SUBSTITUTE_INSTURL              ASCII_STR("$(insturl)")
-#define SUBSTITUTE_PROGURL              ASCII_STR("$(progurl)")
-#define SUBSTITUTE_USERURL              ASCII_STR("$(userurl)")
-#define SUBSTITUTE_PATH                 ASCII_STR("$(path)")
-#define SUBSTITUTE_LANG                 ASCII_STR("$(lang)")
-#define SUBSTITUTE_LANGID               ASCII_STR("$(langid)")
-#define SUBSTITUTE_VLANG                ASCII_STR("$(vlang)")
-#define SUBSTITUTE_WORKDIRURL           ASCII_STR("$(workdirurl)")
-
-// Length of SUBSTITUTE_... to replace it with real values.
-#define REPLACELENGTH_INST              7
-#define REPLACELENGTH_PROG              7
-#define REPLACELENGTH_USER              7
-#define REPLACELENGTH_INSTPATH          11
-#define REPLACELENGTH_PROGPATH          11
-#define REPLACELENGTH_USERPATH          11
-#define REPLACELENGTH_INSTURL           10
-#define REPLACELENGTH_PROGURL           10
-#define REPLACELENGTH_USERURL           10
-#define REPLACELENGTH_PATH              7
-#define REPLACELENGTH_LANG              7
-#define REPLACELENGTH_LANGID            9
-#define REPLACELENGTH_VLANG             8
-#define REPLACELENGTH_WORKDIRURL        13
-
-// Strings to replace $(vlang)
-#define REPLACEMENT_ARABIC              ASCII_STR("arabic")
-#define REPLACEMENT_CZECH               ASCII_STR("czech")
-#define REPLACEMENT_DANISH              ASCII_STR("danish")
-#define REPLACEMENT_DUTCH               ASCII_STR("dutch")
-#define REPLACEMENT_ENGLISH             ASCII_STR("english")
-#define REPLACEMENT_ENGLISH_UK          ASCII_STR("english_uk")
-#define REPLACEMENT_FINNISH             ASCII_STR("finnish")
-#define REPLACEMENT_FRENCH              ASCII_STR("french")
-#define REPLACEMENT_GERMAN              ASCII_STR("german")
-#define REPLACEMENT_GREEK               ASCII_STR("greek")
-#define REPLACEMENT_HEBREW              ASCII_STR("hebrew")
-#define REPLACEMENT_ITALIAN             ASCII_STR("italian")
-#define REPLACEMENT_JAPANESE            ASCII_STR("japanese")
-#define REPLACEMENT_KOREAN              ASCII_STR("korean")
-#define REPLACEMENT_POLISH              ASCII_STR("polish")
-#define REPLACEMENT_RUSSIAN             ASCII_STR("russian")
-#define REPLACEMENT_SLOVAK              ASCII_STR("slovak")
-#define REPLACEMENT_SPANISH             ASCII_STR("spanish")
-#define REPLACEMENT_SWEDISH             ASCII_STR("swedish")
-#define REPLACEMENT_TURKISH             ASCII_STR("turkish")
-#define REPLACEMENT_NORWEGIAN           ASCII_STR("norwegian")
-#define REPLACEMENT_HUNGARIAN           ASCII_STR("hungarian")
-//#define   REPLACEMENT_BULGARIAN           ASCII_STR("bulgarian")
-#define REPLACEMENT_CHINESE_TRADITIONAL ASCII_STR("chinese_traditional")
-#define REPLACEMENT_CHINESE_SIMPLIFIED  ASCII_STR("chinese_simplified")
-#define REPLACEMENT_PORTUGUESE          ASCII_STR("portuguese")
-#define REPLACEMENT_PORTUGUESE_BRAZILIAN    ASCII_STR("portuguese_brazilian")
-#define REPLACEMENT_THAI                ASCII_STR("thai")
-#define REPLACEMENT_CATALAN             ASCII_STR("catalan")
+// Supported variables by the old SvtPathOptions implementation
+#define SUBSTITUTE_INST                 "$(inst)"
+#define SUBSTITUTE_PROG                 "$(prog)"
+#define SUBSTITUTE_USER                 "$(user)"
+#define SUBSTITUTE_INSTPATH             "$(instpath)"
+#define SUBSTITUTE_PROGPATH             "$(progpath)"
+#define SUBSTITUTE_USERPATH             "$(userpath)"
+#define SUBSTITUTE_INSTURL              "$(insturl)"
+#define SUBSTITUTE_PROGURL              "$(progurl)"
+#define SUBSTITUTE_USERURL              "$(userurl)"
+#define SUBSTITUTE_PATH                 "$(path)"
+#define SUBSTITUTE_LANG                 "$(lang)"
+#define SUBSTITUTE_LANGID               "$(langid)"
+#define SUBSTITUTE_VLANG                "$(vlang)"
+#define SUBSTITUTE_WORKDIRURL           "$(workdirurl)"
 
 #define STRPOS_NOTFOUND                 -1
 
-// class SvtPathOptions_Impl ---------------------------------------------
-
-class SvtPathOptions_Impl : public utl::ConfigItem
+struct OUStringHashCode
 {
-private:
-    String          m_aAddinPath;
-    String          m_aAutoCorrectPath;
-    String          m_aAutoTextPath;
-    String          m_aBackupPath;
-    String          m_aBasicPath;
-    String          m_aBitmapPath;
-    String          m_aConfigPath;
-    String          m_aDictionaryPath;
-    String          m_aFavoritesPath;
-    String          m_aFilterPath;
-    String          m_aGalleryPath;
-    String          m_aGraphicPath;
-    String          m_aHelpPath;
-    String          m_aLinguisticPath;
-    String          m_aModulePath;
-    String          m_aPalettePath;
-    String          m_aPluginPath;
-    String          m_aStoragePath;
-    String          m_aTempPath;
-    String          m_aTemplatePath;
-    String          m_aUserConfigPath;
-    String          m_aUserDictionaryPath;
-    String          m_aWorkPath;
-    String          m_aUIConfigPath;
+    size_t operator()( const ::rtl::OUString& sString ) const
+    {
+        return sString.hashCode();
+    }
+};
 
-    String          m_aEmptyString;
-    String          m_aInstPath;
-    String          m_aUserPath;
-    String          m_aProgPath;
-    String          m_aInstURL;
-    String          m_aUserURL;
-    String          m_aProgURL;
+enum VarNameProperty
+{
+    VAR_NEEDS_SYSTEM_PATH,
+    VAR_NEEDS_FILEURL
+};
 
-    LanguageType    m_eLanguageType;
+class NameToHandleMap : public ::std::hash_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
+{
+    public:
+        inline void free() { NameToHandleMap().swap( *this ); }
+};
 
-    ::osl::Mutex    m_aMutex;
+class EnumToHandleMap : public ::std::hash_map< sal_Int32, sal_Int32, std::hash< sal_Int32 >, std::equal_to< sal_Int32 > >
+{
+    public:
+        inline void free() { EnumToHandleMap().swap( *this ); }
+};
 
-    typedef String SvtPathOptions_Impl:: *StrPtr;
+class VarNameToEnumMap : public ::std::hash_map< OUString, VarNameProperty, OUStringHashCode, ::std::equal_to< OUString > >
+{
+    public:
+        inline void free() { VarNameToEnumMap().swap( *this ); }
+};
 
-    // not const because of using a mutex
-    const String&   GetPath( StrPtr pPtr );
-    void            SetPath( StrPtr pPtr, const String& rNewPath );
 
-public:
-                    SvtPathOptions_Impl();
+// class SvtPathOptions_Impl ---------------------------------------------
+class SvtPathOptions_Impl
+{
+    private:
+        // Local variables to return const references
+        std::vector< String >               m_aPathArray;
+        Reference< XFastPropertySet >       m_xPathSettings;
+        Reference< XStringSubstitution >    m_xSubstVariables;
+        EnumToHandleMap                     m_aMapEnumToPropHandle;
+        VarNameToEnumMap                    m_aMapVarNamesToEnum;
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    virtual void    Commit();
+        LanguageType                        m_eLanguageType;
+        String                              m_aEmptyString;
+        ::osl::Mutex                        m_aMutex;
 
-    // get the pathes, not const because of using a mutex
-    const String&   GetAddinPath() { return GetPath( &SvtPathOptions_Impl::m_aAddinPath ); }
-    const String&   GetAutoCorrectPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath); }
-    const String&   GetAutoTextPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoTextPath); }
-    const String&   GetBackupPath() { return GetPath( &SvtPathOptions_Impl::m_aBackupPath); }
-    const String&   GetBasicPath() { return GetPath( &SvtPathOptions_Impl::m_aBasicPath); }
-    const String&   GetBitmapPath() { return GetPath( &SvtPathOptions_Impl::m_aBitmapPath); }
-    const String&   GetConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aConfigPath); }
-    const String&   GetDictionaryPath() { return GetPath( &SvtPathOptions_Impl::m_aDictionaryPath); }
-    const String&   GetFavoritesPath() { return GetPath( &SvtPathOptions_Impl::m_aFavoritesPath); }
-    const String&   GetFilterPath() { return GetPath( &SvtPathOptions_Impl::m_aFilterPath); }
-    const String&   GetGalleryPath() { return GetPath( &SvtPathOptions_Impl::m_aGalleryPath); }
-    const String&   GetGraphicPath() { return GetPath( &SvtPathOptions_Impl::m_aGraphicPath); }
-    const String&   GetHelpPath() { return GetPath( &SvtPathOptions_Impl::m_aHelpPath); }
-    const String&   GetLinguisticPath() { return GetPath( &SvtPathOptions_Impl::m_aLinguisticPath); }
-    const String&   GetModulePath() { return GetPath( &SvtPathOptions_Impl::m_aModulePath); }
-    const String&   GetPalettePath() { return GetPath( &SvtPathOptions_Impl::m_aPalettePath); }
-    const String&   GetPluginPath() { return GetPath( &SvtPathOptions_Impl::m_aPluginPath); }
-    const String&   GetStoragePath() { return GetPath( &SvtPathOptions_Impl::m_aStoragePath); }
-    const String&   GetTempPath() { return GetPath( &SvtPathOptions_Impl::m_aTempPath); }
-    const String&   GetTemplatePath() { return GetPath( &SvtPathOptions_Impl::m_aTemplatePath); }
-    const String&   GetUserConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aUserConfigPath); }
-    const String&   GetUserDictionaryPath() { return GetPath( &SvtPathOptions_Impl::m_aUserDictionaryPath ); }
-    const String&   GetWorkPath() { return GetPath( &SvtPathOptions_Impl::m_aWorkPath ); }
-    const String&   GetUIConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aUIConfigPath ); }
+        // not const because of using a mutex
+        const String&   GetPath( SvtPathOptions::Pathes );
+        void            SetPath( SvtPathOptions::Pathes, const String& rNewPath );
 
-    // set the pathes
-    void            SetAddinPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAddinPath, rPath ); }
-    void            SetAutoCorrectPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath, rPath ); }
-    void            SetAutoTextPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoTextPath, rPath ); }
-    void            SetBackupPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBackupPath, rPath ); }
-    void            SetBasicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBasicPath, rPath ); }
-    void            SetBitmapPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBitmapPath, rPath ); }
-    void            SetConfigPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aConfigPath, rPath ); }
-    void            SetDictionaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aDictionaryPath, rPath ); }
-    void            SetFavoritesPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFavoritesPath, rPath ); }
-    void            SetFilterPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFilterPath, rPath ); }
-    void            SetGalleryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGalleryPath, rPath ); }
-    void            SetGraphicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGraphicPath, rPath ); }
-    void            SetHelpPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aHelpPath, rPath ); }
-    void            SetLinguisticPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aLinguisticPath, rPath ); }
-    void            SetModulePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aModulePath, rPath ); }
-    void            SetPalettePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPalettePath, rPath ); }
-    void            SetPluginPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPluginPath, rPath ); }
-    void            SetStoragePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aStoragePath, rPath ); }
-    void            SetTempPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTempPath, rPath ); }
-    void            SetTemplatePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTemplatePath, rPath ); }
-    void            SetUserConfigPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aUserConfigPath, rPath ); }
-    void            SetUserDictionaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aUserDictionaryPath, rPath ); }
-    void            SetWorkPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aWorkPath, rPath ); }
+    public:
+                        SvtPathOptions_Impl();
 
-    rtl::OUString   SubstVar( const rtl::OUString& rVar );
-    rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
-    rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
+        // get the pathes, not const because of using a mutex
+        const String&   GetAddinPath() { return GetPath( SvtPathOptions::PATH_ADDIN ); }
+        const String&   GetAutoCorrectPath() { return GetPath( SvtPathOptions::PATH_AUTOCORRECT ); }
+        const String&   GetAutoTextPath() { return GetPath( SvtPathOptions::PATH_AUTOTEXT ); }
+        const String&   GetBackupPath() { return GetPath( SvtPathOptions::PATH_BACKUP ); }
+        const String&   GetBasicPath() { return GetPath( SvtPathOptions::PATH_BASIC ); }
+        const String&   GetBitmapPath() { return GetPath( SvtPathOptions::PATH_BITMAP ); }
+        const String&   GetConfigPath() { return GetPath( SvtPathOptions::PATH_CONFIG ); }
+        const String&   GetDictionaryPath() { return GetPath( SvtPathOptions::PATH_DICTIONARY ); }
+        const String&   GetFavoritesPath() { return GetPath( SvtPathOptions::PATH_FAVORITES ); }
+        const String&   GetFilterPath() { return GetPath( SvtPathOptions::PATH_FILTER ); }
+        const String&   GetGalleryPath() { return GetPath( SvtPathOptions::PATH_GALLERY ); }
+        const String&   GetGraphicPath() { return GetPath( SvtPathOptions::PATH_GRAPHIC ); }
+        const String&   GetHelpPath() { return GetPath( SvtPathOptions::PATH_HELP ); }
+        const String&   GetLinguisticPath() { return GetPath( SvtPathOptions::PATH_LINGUISTIC ); }
+        const String&   GetModulePath() { return GetPath( SvtPathOptions::PATH_MODULE ); }
+        const String&   GetPalettePath() { return GetPath( SvtPathOptions::PATH_PALETTE ); }
+        const String&   GetPluginPath() { return GetPath( SvtPathOptions::PATH_PLUGIN ); }
+        const String&   GetStoragePath() { return GetPath( SvtPathOptions::PATH_STORAGE ); }
+        const String&   GetTempPath() { return GetPath( SvtPathOptions::PATH_TEMP ); }
+        const String&   GetTemplatePath() { return GetPath( SvtPathOptions::PATH_TEMPLATE ); }
+        const String&   GetUserConfigPath() { return GetPath( SvtPathOptions::PATH_USERCONFIG ); }
+        const String&   GetUserDictionaryPath() { return GetPath( SvtPathOptions::PATH_USERDICTIONARY ); }
+        const String&   GetWorkPath() { return GetPath( SvtPathOptions::PATH_WORK ); }
+        const String&   GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
 
-    LanguageType    GetLanguageType() const { return m_eLanguageType; }
+        // set the pathes
+        void            SetAddinPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_ADDIN, rPath ); }
+        void            SetAutoCorrectPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOCORRECT, rPath ); }
+        void            SetAutoTextPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOTEXT, rPath ); }
+        void            SetBackupPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BACKUP, rPath ); }
+        void            SetBasicPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BASIC, rPath ); }
+        void            SetBitmapPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_BITMAP, rPath ); }
+        void            SetConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_CONFIG, rPath ); }
+        void            SetDictionaryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_DICTIONARY, rPath ); }
+        void            SetFavoritesPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_FAVORITES, rPath ); }
+        void            SetFilterPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_FILTER, rPath ); }
+        void            SetGalleryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_GALLERY, rPath ); }
+        void            SetGraphicPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_GRAPHIC, rPath ); }
+        void            SetHelpPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_HELP, rPath ); }
+        void            SetLinguisticPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_LINGUISTIC, rPath ); }
+        void            SetModulePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_MODULE, rPath ); }
+        void            SetPalettePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_PALETTE, rPath ); }
+        void            SetPluginPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_PLUGIN, rPath ); }
+        void            SetStoragePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_STORAGE, rPath ); }
+        void            SetTempPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMP, rPath ); }
+        void            SetTemplatePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMPLATE, rPath ); }
+        void            SetUserConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
+        void            SetUserDictionaryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERDICTIONARY, rPath ); }
+        void            SetWorkPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
+
+        rtl::OUString   SubstVar( const rtl::OUString& rVar );
+        rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
+        rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
+
+        LanguageType    GetLanguageType() const { return m_eLanguageType; }
 };
 
 // global ----------------------------------------------------------------
@@ -300,61 +278,143 @@ static sal_Int32            nRefCount = 0;
 static ::osl::Mutex aMutex;
 
 // functions -------------------------------------------------------------
-
-Sequence< OUString > GetPathPropertyNames()
+struct PropertyStruct
 {
-    static const char* aPropNames[] =
-    {
-        "Addin",            // PATH_ADDIN
-        "AutoCorrect",      // PATH_AUTOCORRECT
-        "AutoText",         // PATH_AUTOTEXT
-        "Backup",           // PATH_BACKUP
-        "Basic",            // PATH_BASIC
-        "Bitmap",           // PATH_BITMAP
-        "Config",           // PATH_CONFIG
-        "Dictionary",       // PATH_DICTIONARY
-        "Favorite",         // PATH_FAVORITES
-        "Filter",           // PATH_FILTER
-        "Gallery",          // PATH_GALLERY
-        "Graphic",          // PATH_GRAPHIC
-        "Help",             // PATH_HELP
-        "Linguistic",       // PATH_LINGUISTIC
-        "Module",           // PATH_MODULE
-        "Palette",          // PATH_PALETTE
-        "Plugin",           // PATH_PLUGIN
-        "Storage",          // PATH_STORAGE
-        "Temp",             // PATH_TEMP
-        "Template",         // PATH_TEMPLATE
-        "UserConfig",       // PATH_USERCONFIG
-        "UserDictionary",   // PATH_USERDICTIONARY
-        "Work",             // PATH_WORK
-        "UIConfig"          // PATH_UICONFIG
-    };
+    const char*             pPropName;  // The ascii name of the Office path
+    SvtPathOptions::Pathes  ePath;      // The enum value used by SvtPathOptions
+};
 
-    const int nCount = sizeof( aPropNames ) / sizeof( const char* );
+struct VarNameAttribute
+{
+    const char*             pVarName;       // The name of the path variable
+    VarNameProperty         eVarProperty;   // Which return value is needed by this path variable
+};
+
+static PropertyStruct aPropNames[] =
+{
+    { "Addin",          SvtPathOptions::PATH_ADDIN          },
+    { "AutoCorrect",    SvtPathOptions::PATH_AUTOCORRECT    },
+    { "AutoText",       SvtPathOptions::PATH_AUTOTEXT       },
+    { "Backup",         SvtPathOptions::PATH_BACKUP         },
+    { "Basic",          SvtPathOptions::PATH_BASIC          },
+    { "Bitmap",         SvtPathOptions::PATH_BITMAP         },
+    { "Config",         SvtPathOptions::PATH_CONFIG         },
+    { "Dictionary",     SvtPathOptions::PATH_DICTIONARY     },
+    { "Favorite",       SvtPathOptions::PATH_FAVORITES      },
+    { "Filter",         SvtPathOptions::PATH_FILTER         },
+    { "Gallery",        SvtPathOptions::PATH_GALLERY        },
+    { "Graphic",        SvtPathOptions::PATH_GRAPHIC        },
+    { "Help",           SvtPathOptions::PATH_HELP           },
+    { "Linguistic",     SvtPathOptions::PATH_LINGUISTIC     },
+    { "Module",         SvtPathOptions::PATH_MODULE         },
+    { "Palette",        SvtPathOptions::PATH_PALETTE        },
+    { "Plugin",         SvtPathOptions::PATH_PLUGIN         },
+    { "Storage",        SvtPathOptions::PATH_STORAGE        },
+    { "Temp",           SvtPathOptions::PATH_TEMP           },
+    { "Template",       SvtPathOptions::PATH_TEMPLATE       },
+    { "UserConfig",     SvtPathOptions::PATH_USERCONFIG     },
+    { "UserDictionary", SvtPathOptions::PATH_USERDICTIONARY },
+    { "Work",           SvtPathOptions::PATH_WORK           },
+    { "UIConfig",       SvtPathOptions::PATH_UICONFIG       }
+};
+
+static VarNameAttribute aVarNameAttribute[] =
+{
+    { SUBSTITUTE_INSTPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(instpath)
+    { SUBSTITUTE_PROGPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(progpath)
+    { SUBSTITUTE_USERPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(userpath)
+    { SUBSTITUTE_PATH,      VAR_NEEDS_SYSTEM_PATH },    // $(path)
+};
+
+static Sequence< OUString > GetPathPropertyNames()
+{
+    const int nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     for ( int i = 0; i < nCount; i++ )
-        pNames[i] = OUString::createFromAscii( aPropNames[i] );
+        pNames[i] = OUString::createFromAscii( aPropNames[i].pPropName );
 
     return aNames;
 }
 
 // class SvtPathOptions_Impl ---------------------------------------------
 
-const String& SvtPathOptions_Impl::GetPath( StrPtr pPtr )
+const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return this->*pPtr;
+
+    if ( ePath <= SvtPathOptions::PATH_UICONFIG )
+    {
+        OUString    aPathValue;
+        String      aResult;
+        sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
+
+        // Substitution is done by the service itself using the substition service
+        Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
+        a >>= aPathValue;
+        switch ( ePath )
+        {
+            case SvtPathOptions::PATH_ADDIN:
+            case SvtPathOptions::PATH_FILTER:
+            case SvtPathOptions::PATH_HELP:
+            case SvtPathOptions::PATH_MODULE:
+            case SvtPathOptions::PATH_PLUGIN:
+            case SvtPathOptions::PATH_STORAGE:
+            {
+                // These office paths have to be converted to system pathes
+                utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
+                aPathValue = aResult;
+            }
+        }
+
+        m_aPathArray[ ePath ] = aPathValue;
+        return m_aPathArray[ ePath ];
+    }
+
+    return m_aEmptyString;
 }
 
 // -----------------------------------------------------------------------
 
-void SvtPathOptions_Impl::SetPath( StrPtr pPtr, const String& rNewPath )
+void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    this->*pPtr = rNewPath;
-    SetModified();
+
+    if ( ePath <= SvtPathOptions::PATH_UICONFIG )
+    {
+        String      aResult;
+        OUString    aNewValue;
+        Any         a;
+
+        switch ( ePath )
+        {
+            case SvtPathOptions::PATH_ADDIN:
+            case SvtPathOptions::PATH_FILTER:
+            case SvtPathOptions::PATH_HELP:
+            case SvtPathOptions::PATH_MODULE:
+            case SvtPathOptions::PATH_PLUGIN:
+            case SvtPathOptions::PATH_STORAGE:
+            {
+                // These office paths have to be convert back to UCB-URL's
+                utl::LocalFileHelper::ConvertPhysicalNameToURL( rNewPath, aResult );
+                aNewValue = aResult;
+            }
+            break;
+
+            default:
+                aNewValue = rNewPath;
+        }
+
+        // Resubstitution is done by the service itself using the substition service
+        a <<= aNewValue;
+        try
+        {
+            m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ (sal_Int32)ePath], a );
+        }
+        catch ( IllegalArgumentException& )
+        {
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -368,66 +428,7 @@ OUString SvtPathOptions_Impl::SubstituteAndConvert( const rtl::OUString& rPath )
 
 OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
 {
-    OUString aTmp, aPath = rPath;
-    sal_Int32 nIdx = -1;
-
-    INetURLObject aUrl( aPath );
-    if ( !aUrl.HasError() )
-    {
-        aPath = aUrl.GetMainURL(INetURLObject::NO_DECODE);
-        nIdx = aPath.indexOf( m_aProgURL );
-        while ( nIdx != -1 )
-        {
-            aPath = aPath.replaceAt( nIdx, m_aProgURL.Len(), SUBSTITUTE_PROGURL );
-            nIdx = aPath.indexOf( m_aProgURL );
-        }
-        nIdx = aPath.indexOf( m_aUserURL );
-        while ( nIdx != -1 )
-        {
-            aPath = aPath.replaceAt( nIdx, m_aUserURL.Len(), SUBSTITUTE_USERURL );
-            nIdx = aPath.indexOf( m_aUserURL );
-        }
-        nIdx = aPath.indexOf( m_aInstURL );
-        while ( nIdx != -1 )
-        {
-            aPath = aPath.replaceAt( nIdx, m_aInstURL.Len(), SUBSTITUTE_INSTURL );
-            nIdx = aPath.indexOf( m_aInstURL );
-        }
-    }
-    else
-    {
-        if( FileBase::getSystemPathFromFileURL( m_aProgPath, aTmp ) == FileBase::E_None )
-        {
-            nIdx = aPath.indexOf( aTmp );
-            while ( nIdx != -1 )
-            {
-                aPath = aPath.replaceAt( nIdx, aTmp.getLength(), SUBSTITUTE_PROGPATH );
-                nIdx = aPath.indexOf( aTmp );
-            }
-        }
-
-        if( FileBase::getSystemPathFromFileURL( m_aUserPath, aTmp ) == FileBase::E_None )
-        {
-            nIdx = aPath.indexOf( aTmp );
-            while ( nIdx != -1 )
-            {
-                aPath = aPath.replaceAt( nIdx, aTmp.getLength(), SUBSTITUTE_USERPATH );
-                nIdx = aPath.indexOf( aTmp );
-            }
-        }
-
-        if( FileBase::getSystemPathFromFileURL( m_aInstPath, aTmp ) == FileBase::E_None )
-        {
-            nIdx = aPath.indexOf( aTmp );
-            while ( nIdx != -1 )
-            {
-                aPath = aPath.replaceAt( nIdx, aTmp.getLength(), SUBSTITUTE_INSTPATH );
-                nIdx = aPath.indexOf( aTmp );
-            }
-        }
-    }
-
-    return aPath;
+    return m_xSubstVariables->reSubstituteVariables( rPath );
 }
 
 // -----------------------------------------------------------------------
@@ -437,10 +438,12 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
     // Don't work at parameter-string directly. Copy it.
     OUString aWorkText = rVar;
 
+    // Convert the returned path to system path!
+    BOOL bConvertLocal = FALSE;
+
     // Search for first occure of "$(...".
     sal_Int32 nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE );  // = first position of "$(" in string
-    sal_Int32 nLength = 0; // = count of letters from "$(" to ")" in string
-    BOOL bConvertLocal = FALSE;
+    sal_Int32 nLength   = 0;                                        // = count of letters from "$(" to ")" in string
 
     // Have we found any variable like "$(...)"?
     if ( nPosition != STRPOS_NOTFOUND )
@@ -449,322 +452,23 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         // If no ")" was found - nLength is set to 0 by default! see before.
         sal_Int32 nEndPosition = aWorkText.indexOf( SIGN_ENDVARIABLE, nPosition );
         if ( nEndPosition != STRPOS_NOTFOUND )
-        {
-            nLength = nEndPosition - nPosition;
-            nLength++; // First index in string is 0!
-        }
+            nLength = nEndPosition - nPosition + 1;
     }
 
-    // Is there something for replace ?
+    // Is there another path variable?
     while ( ( nPosition != STRPOS_NOTFOUND ) && ( nLength > 0 ) )
     {
         // YES; Get the next variable for replace.
         OUString aReplacement;
         OUString aSubString = aWorkText.copy( nPosition, nLength );
         aSubString = aSubString.toAsciiLowerCase();
-        sal_Int32 nReplaceLength = 0;
 
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(inst) - directory of the master (server) installation
-        if ( SUBSTITUTE_INST == aSubString )
-        {
+        // Look for special variable that needs a system path.
+        VarNameToEnumMap::const_iterator pIter = m_aMapVarNamesToEnum.find( aSubString );
+        if ( pIter != m_aMapVarNamesToEnum.end() )
             bConvertLocal = TRUE;
-            DBG_ERROR( "Don't use $(inst) any longer" );
-            nReplaceLength = REPLACELENGTH_INST;
-            aReplacement = m_aInstPath;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(user) - directory of the user installation
-        if ( SUBSTITUTE_USER == aSubString )
-        {
-            bConvertLocal = TRUE;
-            DBG_ERROR( "Don't use $(user) any longer" );
-            nReplaceLength = REPLACELENGTH_USERPATH;
-            aReplacement = m_aUserPath;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(prog) - directory of the executable file
-        if ( SUBSTITUTE_PROG == aSubString )
-        {
-            bConvertLocal = TRUE;
-            DBG_ERROR( "Don't use $(prog) any longer" );
-            nReplaceLength = REPLACELENGTH_PROG;
-            aReplacement = m_aProgPath;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(userpath) - directory of the user installation (== dir of soffice.ini)
-        if ( SUBSTITUTE_USERPATH == aSubString )
-        {
-            bConvertLocal = TRUE;
-            nReplaceLength = REPLACELENGTH_USERPATH;
-            aReplacement = m_aUserPath;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(progpath) - directory of the executable file
-        if ( SUBSTITUTE_PROGPATH == aSubString )
-        {
-            bConvertLocal = TRUE;
-            nReplaceLength = REPLACELENGTH_PROGPATH;
-            aReplacement = m_aProgPath;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(instpath) - directory of the master (server) installation as URL
-        if ( SUBSTITUTE_INSTPATH == aSubString )
-        {
-            bConvertLocal = TRUE;
-            nReplaceLength = REPLACELENGTH_INSTPATH;
-            aReplacement = m_aInstPath;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(insturl) - directory of the master (server) installation as URL
-        if ( SUBSTITUTE_INSTURL == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_INSTURL;
-            aReplacement = m_aInstURL;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(userurl) - directory of the user installation (== dir of soffice.ini)
-        if ( SUBSTITUTE_USERURL == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_USERURL;
-            aReplacement = m_aUserURL;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(progurl) - directory of the executable file as URL
-        if ( SUBSTITUTE_PROGURL == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_PROGURL;
-            aReplacement = m_aProgURL;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(workdirurl)
-        if ( SUBSTITUTE_WORKDIRURL == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_WORKDIRURL;
-            aReplacement = m_aWorkPath;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(path)
-        if ( SUBSTITUTE_PATH == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_PATH;
-            aReplacement = OUString::createFromAscii( getenv( "path" ) );
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(lang) - language dependent directory with LanguageId used as directory name
-        if ( SUBSTITUTE_LANG == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_LANG;
-            aReplacement = OUString::createFromAscii( ResMgr::GetLang( m_eLanguageType, 0 ) );
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(langid) - LanguageType of the application as string (for example "1031")
-        if ( SUBSTITUTE_LANGID == aSubString )
-        {
-               nReplaceLength = REPLACELENGTH_LANGID;
-               aReplacement = OUString::valueOf( (sal_Int32)m_eLanguageType );
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(vlang) - language dependent directory with english language name as directory name
-        if ( SUBSTITUTE_VLANG == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_VLANG ;
-            switch ( m_eLanguageType )
-            {
-                case LANGUAGE_ARABIC                :
-                case LANGUAGE_ARABIC_IRAQ           :
-                case LANGUAGE_ARABIC_EGYPT          :
-                case LANGUAGE_ARABIC_LIBYA          :
-                case LANGUAGE_ARABIC_ALGERIA        :
-                case LANGUAGE_ARABIC_MOROCCO        :
-                case LANGUAGE_ARABIC_TUNISIA        :
-                case LANGUAGE_ARABIC_OMAN           :
-                case LANGUAGE_ARABIC_YEMEN          :
-                case LANGUAGE_ARABIC_SYRIA          :
-                case LANGUAGE_ARABIC_JORDAN         :
-                case LANGUAGE_ARABIC_LEBANON        :
-                case LANGUAGE_ARABIC_KUWAIT         :
-                case LANGUAGE_ARABIC_UAE            :
-                case LANGUAGE_ARABIC_BAHRAIN        :
-                case LANGUAGE_ARABIC_QATAR          :   aReplacement = REPLACEMENT_ARABIC;
-                                                        break ;
 
-                case LANGUAGE_CZECH                 :   aReplacement = REPLACEMENT_CZECH;
-                                                        break ;
-
-                case LANGUAGE_DANISH                :   aReplacement = REPLACEMENT_DANISH;
-                                                        break ;
-
-                case LANGUAGE_DUTCH                 :
-                case LANGUAGE_DUTCH_BELGIAN         :   aReplacement = REPLACEMENT_DUTCH;
-                                                        break ;
-
-                case LANGUAGE_ENGLISH               :
-                case LANGUAGE_ENGLISH_AUS           :
-                case LANGUAGE_ENGLISH_CAN           :
-                case LANGUAGE_ENGLISH_NZ            :
-                case LANGUAGE_ENGLISH_EIRE          :
-                case LANGUAGE_ENGLISH_SAFRICA       :
-                case LANGUAGE_ENGLISH_JAMAICA       :
-                case LANGUAGE_ENGLISH_CARRIBEAN     :
-                case LANGUAGE_ENGLISH_BELIZE        :
-                case LANGUAGE_ENGLISH_TRINIDAD      :
-                case LANGUAGE_ENGLISH_ZIMBABWE      :
-                case LANGUAGE_ENGLISH_PHILIPPINES   :
-                case LANGUAGE_ENGLISH_US            :   aReplacement = REPLACEMENT_ENGLISH;
-                                                        break ;
-
-                case LANGUAGE_ENGLISH_UK            :   aReplacement = REPLACEMENT_ENGLISH_UK;
-                                                        break ;
-
-                case LANGUAGE_FINNISH               :   aReplacement = REPLACEMENT_FINNISH;
-                                                        break ;
-
-                case LANGUAGE_FRENCH                :
-                case LANGUAGE_FRENCH_BELGIAN        :
-                case LANGUAGE_FRENCH_CANADIAN       :
-                case LANGUAGE_FRENCH_SWISS          :
-                case LANGUAGE_FRENCH_LUXEMBOURG     :
-                case LANGUAGE_FRENCH_MONACO         :   aReplacement = REPLACEMENT_FRENCH;
-                                                        break ;
-
-                case LANGUAGE_GERMAN                :
-                case LANGUAGE_GERMAN_SWISS          :
-                case LANGUAGE_GERMAN_AUSTRIAN       :
-                case LANGUAGE_GERMAN_LUXEMBOURG     :
-                case LANGUAGE_GERMAN_LIECHTENSTEIN  :   aReplacement = REPLACEMENT_GERMAN;
-                                                        break ;
-
-                case LANGUAGE_GREEK                 :   aReplacement = REPLACEMENT_GREEK;
-                                                        break ;
-
-                case LANGUAGE_HEBREW                :   aReplacement = REPLACEMENT_HEBREW;
-                                                        break ;
-
-                case LANGUAGE_ITALIAN               :
-                case LANGUAGE_ITALIAN_SWISS         :   aReplacement = REPLACEMENT_ITALIAN;
-                                                        break ;
-
-                case LANGUAGE_JAPANESE              :   aReplacement = REPLACEMENT_JAPANESE;
-                                                        break ;
-
-                case LANGUAGE_KOREAN                :
-                case LANGUAGE_KOREAN_JOHAB          :   aReplacement = REPLACEMENT_KOREAN;
-                                                        break ;
-
-                case LANGUAGE_POLISH                :   aReplacement = REPLACEMENT_POLISH;
-                                                        break ;
-
-                case LANGUAGE_RUSSIAN               :   aReplacement = REPLACEMENT_RUSSIAN;
-                                                        break ;
-
-                case LANGUAGE_SLOVAK                :   aReplacement = REPLACEMENT_SLOVAK;
-                                                        break ;
-
-                case LANGUAGE_SPANISH               :
-                case LANGUAGE_SPANISH_MEXICAN       :
-                case LANGUAGE_SPANISH_MODERN        :
-                case LANGUAGE_SPANISH_GUATEMALA     :
-                case LANGUAGE_SPANISH_COSTARICA     :
-                case LANGUAGE_SPANISH_PANAMA        :
-                case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
-                case LANGUAGE_SPANISH_VENEZUELA     :
-                case LANGUAGE_SPANISH_COLOMBIA      :
-                case LANGUAGE_SPANISH_PERU          :
-                case LANGUAGE_SPANISH_ARGENTINA     :
-                case LANGUAGE_SPANISH_ECUADOR       :
-                case LANGUAGE_SPANISH_CHILE         :
-                case LANGUAGE_SPANISH_URUGUAY       :
-                case LANGUAGE_SPANISH_PARAGUAY      :
-                case LANGUAGE_SPANISH_BOLIVIA       :
-                case LANGUAGE_SPANISH_EL_SALVADOR   :
-                case LANGUAGE_SPANISH_HONDURAS      :
-                case LANGUAGE_SPANISH_NICARAGUA     :
-                case LANGUAGE_SPANISH_PUERTO_RICO   :   aReplacement = REPLACEMENT_SPANISH;
-                                                        break ;
-
-                case LANGUAGE_SWEDISH               :
-                case LANGUAGE_SWEDISH_FINLAND       :   aReplacement = REPLACEMENT_SWEDISH;
-                                                        break ;
-
-                case LANGUAGE_TURKISH               :   aReplacement = REPLACEMENT_TURKISH;
-                                                        break ;
-
-                case LANGUAGE_NORWEGIAN             :
-                case LANGUAGE_NORWEGIAN_BOKMAL      :
-                case LANGUAGE_NORWEGIAN_NYNORSK     :   aReplacement = REPLACEMENT_NORWEGIAN;
-                                                        break ;
-
-                case LANGUAGE_HUNGARIAN             :   aReplacement = REPLACEMENT_HUNGARIAN;
-                                                        break ;
-
-/*              case LANGUAGE_BULGARIAN             :   aReplacement = REPLACEMENT_BULGARIAN;
-                                                        break ; */
-
-                case LANGUAGE_CHINESE_TRADITIONAL   :   aReplacement = REPLACEMENT_CHINESE_TRADITIONAL;
-                                                        break ;
-
-                case LANGUAGE_CHINESE_SIMPLIFIED    :   aReplacement = REPLACEMENT_CHINESE_SIMPLIFIED;
-                                                        break ;
-
-                case LANGUAGE_PORTUGUESE            :   aReplacement = REPLACEMENT_PORTUGUESE;
-                                                        break ;
-
-                case LANGUAGE_PORTUGUESE_BRAZILIAN  :   aReplacement = REPLACEMENT_PORTUGUESE_BRAZILIAN;
-                                                        break ;
-
-                case LANGUAGE_THAI                  :   aReplacement = REPLACEMENT_THAI;
-                                                        break ;
-
-                case LANGUAGE_CATALAN               :   aReplacement = REPLACEMENT_CATALAN;
-                                                        break ;
-
-                default                             :   // fallback for L10N-framework => ISO-Code
-                                                        {
-                                                            String rLangStr;
-                                                            String rCountry;
-                                                            ConvertLanguageToIsoNames(m_eLanguageType,rLangStr,rCountry);
-                                                            if ( rCountry.Len()) {
-                                                                rLangStr += String::CreateFromAscii( "-" );
-                                                                rLangStr += rCountry;
-                                                            }
-                                                            aReplacement = rLangStr;
-                                                        }
-                                                        break ;
-            }
-        }
-
-        // Have we found something to replace?
-        if ( nReplaceLength > 0 )
-        {
-            // Yes ... then do it.
-            aWorkText = aWorkText.replaceAt( nPosition, nReplaceLength, aReplacement );
-        }
-        else
-        {
-            // Safe impossible cases
-            // Unknown variable was found! We have detected "$(...)" but don't know his meaning.
-            DBG_ERRORFILE( "Unknown variable was found" );
-            // Skip unknown variable.
-            nPosition += nLength;
-        }
-
-        // Step after replaced text! If no text was replaced (unknown variable!),
-        // length of aReplacement is 0 ... and we don't step then.
-        nPosition += aReplacement.getLength();
+        nPosition += nLength;
 
         // We must control index in string before call something at OUString!
         // The OUString-implementation don't do it for us :-( but the result is not defined otherwise.
@@ -776,7 +480,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         }
         else
         {
-            // Else; Position is valid. Search for next variable to replace.
+            // Else; Position is valid. Search for next variable.
             nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE, nPosition );
             // Have we found any variable like "$(...)"?
             if ( nPosition != STRPOS_NOTFOUND )
@@ -785,18 +489,18 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                 nLength = 0;
                 sal_Int32 nEndPosition = aWorkText.indexOf( SIGN_ENDVARIABLE, nPosition );
                 if ( nEndPosition != STRPOS_NOTFOUND )
-                {
-                    nLength = nEndPosition - nPosition;
-                    nLength++;
-                }
+                    nLength = nEndPosition - nPosition + 1;
             }
         }
     }
 
+    aWorkText = m_xSubstVariables->substituteVariables( rVar, sal_False );
+
     if ( bConvertLocal )
     {
-        ::rtl::OUString aReturn;
-        ::osl::FileBase::getSystemPathFromFileURL( aWorkText, aReturn );
+        // Convert the URL to a system path for special path variables
+        String aReturn;
+        utl::LocalFileHelper::ConvertURLToPhysicalName( aWorkText, aReturn );
         return aReturn;
     }
 
@@ -805,68 +509,58 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 
 // -----------------------------------------------------------------------
 
-SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Common/Path/Current") )
+SvtPathOptions_Impl::SvtPathOptions_Impl() :
+    m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT )
 {
-    ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
-    Any aAny;
-    ::rtl::OUString aOfficePath;
-    ::rtl::OUString aUserPath;
-    ::rtl::OUString aTmp;
+    Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
 
-    // Get inspath and userpath from bootstrap mechanism in every case as file URL
-    ::utl::Bootstrap::PathStatus aState;
-    ::rtl::OUString              sVal  ;
+    // Create necessary services
+    m_xPathSettings = Reference< XFastPropertySet >( xSMgr->createInstance(
+                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                        "com.sun.star.util.PathSettings" ))),
+                                                UNO_QUERY );
+    m_xSubstVariables = Reference< XStringSubstitution >( xSMgr->createInstance(
+                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                        "com.sun.star.util.PathSubstitution" ))),
+                                                UNO_QUERY );
 
-    aState = Bootstrap::locateBaseInstallation(sVal);
-    if(aState==::utl::Bootstrap::PATH_EXISTS)
-        m_aInstPath = sVal;
-    else
-        DBG_ERRORFILE( "bootstrap code has no value for instpath");
+    // Create temporary hash map to have a mapping between property names and property handles
+    Reference< XPropertySet > xPropertySet = Reference< XPropertySet >( m_xPathSettings, UNO_QUERY );
+    Reference< XPropertySetInfo > xPropSetInfo = xPropertySet->getPropertySetInfo();
+    Sequence< Property > aPathPropSeq = xPropSetInfo->getProperties();
 
-    aState = Bootstrap::locateUserData(sVal);
-    if(aState==::utl::Bootstrap::PATH_EXISTS)
-        m_aUserPath = sVal;
-    else
-        DBG_ERRORFILE( "bootstrap code has no value for userpath");
-
-    // get insturl and userurl from configuration (xml files)
-    // But if they doesn't exist (e.g. is true for fat office!) use instpath and userpath instead of this.
-    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALLURL );
-    if ( !aAny.hasValue() || ( aAny >>= aOfficePath ) )
+    NameToHandleMap aTempHashMap;
+    for ( sal_Int32 n = 0; n < aPathPropSeq.getLength(); n++ )
     {
-        // "OFFICEINSTALLURL" is a UCB compatible URL for the office installation directory
-        // in the Webtop this MUST be set, in FATOffice it is the osl URL of the instpath
-        if ( aOfficePath.getLength() )
-            m_aInstURL = aOfficePath;
-        else
-            m_aInstURL = m_aInstPath;
-    }
-    else
-        DBG_ERRORFILE( "wrong any type" );
-
-    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::USERINSTALLURL );
-    if ( !aAny.hasValue() || ( aAny >>= aUserPath ) )
-    {
-        if ( aUserPath.getLength() )
-            m_aUserURL = aUserPath;
-        else
-            m_aUserURL = m_aUserPath;
-    }
-    else
-        DBG_ERRORFILE( "wrong any type" );
-
-    OUString aProgName;
-    ::vos::OStartupInfo aInfo;
-    aInfo.getExecutableFile( aProgName );
-    sal_Int32 lastIndex = aProgName.lastIndexOf('/');
-    if ( lastIndex >= 0 )
-    {
-        ::rtl::OUString aTmpProgPath;
-        aTmp = aProgName.copy( 0, lastIndex );
-        INetURLObject aObj( aTmp );
-        m_aProgPath = m_aProgURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
+        const com::sun::star::beans::Property& aProperty = aPathPropSeq[n];
+        aTempHashMap.insert( NameToHandleMap::value_type( aProperty.Name, aProperty.Handle ));
     }
 
+    // Create mapping between internal enum (SvtPathOptions::Pathes) and property handle
+    sal_Int32 nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
+    for ( sal_Int32 i = 0; i < nCount; i++ )
+    {
+        NameToHandleMap::const_iterator pIter =
+            aTempHashMap.find( rtl::OUString::createFromAscii( aPropNames[i].pPropName ));
+
+        if ( pIter != aTempHashMap.end() )
+        {
+            sal_Int32 nHandle   = pIter->second;
+            sal_Int32 nEnum     = aPropNames[i].ePath;
+            m_aMapEnumToPropHandle.insert( EnumToHandleMap::value_type( nEnum, nHandle ));
+        }
+    }
+
+    // Create hash map for path variables that need a system path as a return value!
+    nCount = sizeof( aVarNameAttribute ) / sizeof( VarNameAttribute );
+    for ( i = 0; i < nCount; i++ )
+    {
+        m_aMapVarNamesToEnum.insert( VarNameToEnumMap::value_type(
+                OUString::createFromAscii( aVarNameAttribute[i].pVarName ),
+                aVarNameAttribute[i].eVarProperty ));
+    }
+
+    // Set language type!
     m_eLanguageType = LANGUAGE_ENGLISH_US;
     Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocaleStr;
@@ -876,175 +570,9 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     {
         DBG_ERRORFILE( "wrong any type" );
     }
-
-    Sequence< OUString > aNames = GetPathPropertyNames();
-    Sequence< Any > aValues = GetProperties( aNames );
-    EnableNotification( aNames );
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
-    {
-        OUString aTempStr, aFullPath;
-
-        for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
-        {
-            if ( pValues[nProp].hasValue() )
-            {
-                switch ( pValues[nProp].getValueTypeClass() )
-                {
-                    case ::com::sun::star::uno::TypeClass_STRING :
-                    {
-                        // multi pathes
-                        if ( pValues[nProp] >>= aTempStr )
-                            aFullPath = SubstituteAndConvert( aTempStr );
-                        else
-                        {
-                            DBG_ERRORFILE( "any operator >>= failed" );
-                        }
-                        break;
-                    }
-
-                    case ::com::sun::star::uno::TypeClass_SEQUENCE :
-                    {
-                        // single pathes
-                        aFullPath = OUString();
-                        Sequence < OUString > aList;
-                        if ( pValues[nProp] >>= aList )
-                        {
-                            sal_Int32 nCount = aList.getLength();
-                            for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
-                            {
-                                aTempStr = SubstituteAndConvert( aList[ nPosition ] );
-                                aFullPath += aTempStr;
-                                if ( nPosition < nCount-1 )
-                                    aFullPath += OUString( RTL_CONSTASCII_USTRINGPARAM(";") );
-                            }
-                        }
-                        else
-                        {
-                            DBG_ERRORFILE( "any operator >>= failed" );
-                        }
-                        break;
-                    }
-
-                    default:
-                    {
-                        DBG_ERRORFILE( "Wrong any type" );
-                    }
-                }
-
-                switch ( nProp )
-                {
-                    case SvtPathOptions::PATH_ADDIN:        m_aAddinPath = String( aFullPath );         break;
-                    case SvtPathOptions::PATH_AUTOCORRECT:  m_aAutoCorrectPath = String( aFullPath );   break;
-                    case SvtPathOptions::PATH_AUTOTEXT:     m_aAutoTextPath = String( aFullPath );      break;
-                    case SvtPathOptions::PATH_BACKUP:       m_aBackupPath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_BASIC:        m_aBasicPath = String( aFullPath );         break;
-                    case SvtPathOptions::PATH_BITMAP:       m_aBitmapPath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_CONFIG:       m_aConfigPath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_DICTIONARY:   m_aDictionaryPath = String( aFullPath );    break;
-                    case SvtPathOptions::PATH_FAVORITES:    m_aFavoritesPath = String( aFullPath );     break;
-                    case SvtPathOptions::PATH_FILTER:       m_aFilterPath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_GALLERY:      m_aGalleryPath = String( aFullPath );       break;
-                    case SvtPathOptions::PATH_GRAPHIC:      m_aGraphicPath = String( aFullPath );       break;
-                    case SvtPathOptions::PATH_HELP:         m_aHelpPath = String( aFullPath );          break;
-                    case SvtPathOptions::PATH_LINGUISTIC:   m_aLinguisticPath = String( aFullPath );    break;
-                    case SvtPathOptions::PATH_MODULE:       m_aModulePath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_PALETTE:      m_aPalettePath = String( aFullPath );       break;
-                    case SvtPathOptions::PATH_PLUGIN:       m_aPluginPath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_STORAGE:      m_aStoragePath = String( aFullPath );       break;
-                    case SvtPathOptions::PATH_TEMP:         m_aTempPath = String( aFullPath );          break;
-                    case SvtPathOptions::PATH_TEMPLATE:     m_aTemplatePath = String( aFullPath );      break;
-                    case SvtPathOptions::PATH_USERCONFIG:   m_aUserConfigPath = String( aFullPath );    break;
-                    case SvtPathOptions::PATH_USERDICTIONARY: m_aUserDictionaryPath = String( aFullPath );break;
-                    case SvtPathOptions::PATH_WORK:         m_aWorkPath = String( aFullPath );          break;
-                    case SvtPathOptions::PATH_UICONFIG:     m_aUIConfigPath = String( aFullPath );      break;
-
-                    default:
-                        DBG_ERRORFILE( "invalid index to load a path" );
-                }
-            }
-        }
-    }
 }
 
 // -----------------------------------------------------------------------
-
-void SvtPathOptions_Impl::Commit()
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    Sequence< OUString > aNames = GetPathPropertyNames();
-    OUString* pNames = aNames.getArray();
-    Sequence< Any > aValues( aNames.getLength() );
-    Any* pValues = aValues.getArray();
-    const Type& rType = ::getBooleanCppuType();
-    OUString aTempStr;
-    for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
-    {
-        sal_Bool bList = sal_False;
-
-        switch ( nProp )
-        {
-            // multi pathes
-            case SvtPathOptions::PATH_AUTOCORRECT:  aTempStr = OUString( m_aAutoCorrectPath );  bList = sal_True; break;
-            case SvtPathOptions::PATH_AUTOTEXT:     aTempStr = OUString( m_aAutoTextPath );     bList = sal_True; break;
-            case SvtPathOptions::PATH_BASIC:        aTempStr = OUString( m_aBasicPath );        bList = sal_True; break;
-            case SvtPathOptions::PATH_GALLERY:      aTempStr = OUString( m_aGalleryPath );      bList = sal_True; break;
-            case SvtPathOptions::PATH_PLUGIN:       aTempStr = OUString( m_aPluginPath );       bList = sal_True; break;
-            case SvtPathOptions::PATH_TEMPLATE:     aTempStr = OUString( m_aTemplatePath );     bList = sal_True; break;
-            case SvtPathOptions::PATH_UICONFIG:     aTempStr = OUString( m_aUIConfigPath );     bList = sal_True; break;
-
-            // single pathes
-            case SvtPathOptions::PATH_ADDIN:            aTempStr = OUString( m_aAddinPath );            break;
-            case SvtPathOptions::PATH_BACKUP:           aTempStr = OUString( m_aBackupPath );           break;
-            case SvtPathOptions::PATH_BITMAP:           aTempStr = OUString( m_aBitmapPath );           break;
-            case SvtPathOptions::PATH_CONFIG:           aTempStr = OUString( m_aConfigPath );           break;
-            case SvtPathOptions::PATH_DICTIONARY:       aTempStr = OUString( m_aDictionaryPath );       break;
-            case SvtPathOptions::PATH_FAVORITES:        aTempStr = OUString( m_aFavoritesPath );        break;
-            case SvtPathOptions::PATH_FILTER:           aTempStr = OUString( m_aFilterPath );           break;
-            case SvtPathOptions::PATH_GRAPHIC:          aTempStr = OUString( m_aGraphicPath );          break;
-            case SvtPathOptions::PATH_HELP:             aTempStr = OUString( m_aHelpPath );             break;
-            case SvtPathOptions::PATH_LINGUISTIC:       aTempStr = OUString( m_aLinguisticPath );       break;
-            case SvtPathOptions::PATH_MODULE:           aTempStr = OUString( m_aModulePath );           break;
-            case SvtPathOptions::PATH_PALETTE:          aTempStr = OUString( m_aPalettePath );          break;
-            case SvtPathOptions::PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
-            case SvtPathOptions::PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
-            case SvtPathOptions::PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
-            case SvtPathOptions::PATH_USERDICTIONARY:   aTempStr = OUString( m_aUserDictionaryPath );   break;
-            case SvtPathOptions::PATH_WORK:             aTempStr = OUString( m_aWorkPath );             break;
-
-            default:
-                DBG_ERRORFILE( "invalid index to save a path" );
-        }
-
-        if ( bList )
-        {
-            String aFullPath( aTempStr );
-            USHORT nCount = aFullPath.GetTokenCount(), nIdx = 0;
-            if ( nCount > 0  )
-            {
-                sal_Int32 nPos = 0;
-                Sequence < OUString > aList( nCount );
-                while ( STRING_NOTFOUND != nIdx )
-                    aList[nPos++] = UsePathVariables( aFullPath.GetToken( 0, ';', nIdx ) );
-                pValues[nProp] <<= aList;
-            }
-        }
-        else
-        {
-            pValues[nProp] <<= UsePathVariables( aTempStr );
-        }
-    }
-    PutProperties( aNames, aValues );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtPathOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
-{
-    DBG_ERRORFILE( "properties have been changed" );
-}
 
 // class SvtPathOptions --------------------------------------------------
 
@@ -1066,8 +594,6 @@ SvtPathOptions::~SvtPathOptions()
     ::osl::MutexGuard aGuard( aMutex );
     if ( !--nRefCount )
     {
-        if ( pOptions->IsModified() )
-            pOptions->Commit();
         DELETEZ( pOptions );
     }
 }
@@ -1554,4 +1080,3 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
     *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
     return aRet;
 }
-
