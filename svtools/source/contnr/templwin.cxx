@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-21 11:15:30 $
+ *  last change: $Author: pb $ $Date: 2001-05-23 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
@@ -155,12 +158,15 @@
 #include <vcl/msgbox.hxx>
 
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 //!using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
+
+extern String CreateExactSizeText_Impl( ULONG nSize ); // fileview.cxx
 
 #define SPLITSET_ID         0
 #define COLSET_ID           1
@@ -189,6 +195,7 @@ static SvtDocInfoMapping_Impl __READONLY_DATA DocInfoMap_Impl[] =
 {
     "Title",        DI_TITLE,           STRING_TYPE,
     "Author",       DI_FROM,            STRING_TYPE,
+    "Size",         DI_SIZE,            SIZE_TYPE,
     "CreationDate", DI_DATE,            DATE_TYPE,
     "Keywords",     DI_KEYWORDS,        STRING_TYPE,
     "Description",  DI_DESCRIPTION,     STRING_TYPE,
@@ -566,6 +573,108 @@ SvtFrameWindow_Impl::~SvtFrameWindow_Impl()
     xFrame->dispose();
 }
 
+
+void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
+{
+    try
+    {
+        xDocInfo->read( rURL );
+        Reference< XPropertySet > aPropSet( xDocInfo, UNO_QUERY );
+
+        Reference< XMultiPropertySet > aMultiSet( xDocInfo, UNO_QUERY );
+        if ( aMultiSet.is() )
+        {
+            String aText;
+            Reference< XPropertySetInfo > aInfoSet = aMultiSet->getPropertySetInfo();
+            if ( aInfoSet.is() )
+            {
+                Sequence< Property > aProps = aInfoSet->getProperties();
+                const Property* pProps  = aProps.getConstArray();
+                sal_uInt32 nCount = aProps.getLength();
+
+                for ( sal_uInt32 i = 0; i < nCount; ++i )
+                {
+                    aText += String( pProps[i].Name );
+                    aText += '\n';
+                }
+            }
+        }
+
+        if ( aPropSet.is() )
+        {
+            USHORT nIndex = 0;
+            rtl::OUString aStringValue;
+            ::com::sun::star::util::DateTime aDateValue;
+            while ( DocInfoMap_Impl[ nIndex ]._pPropName )
+            {
+                SvtDocInfoType eInfoType = DocInfoMap_Impl[ nIndex ]._eType;
+                Any aValue;
+                if ( eInfoType != SIZE_TYPE )
+                    aValue = aPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( DocInfoMap_Impl[ nIndex ]._pPropName ) );
+
+                switch ( eInfoType )
+                {
+                    case STRING_TYPE :
+                    {
+                        if ( ( aValue >>= aStringValue ) && aStringValue.getLength() > 0 )
+                            pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), String( aStringValue ) );
+                        break;
+                    }
+
+                    case DATE_TYPE :
+                    {
+                        if ( aValue >>= aDateValue )
+                        {
+                            DateTime aToolsDT =
+                                DateTime( Date( aDateValue.Day, aDateValue.Month, aDateValue.Year ),
+                                Time( aDateValue.Hours, aDateValue.Minutes, aDateValue.Seconds, aDateValue.HundredthSeconds ) );
+                            if ( aToolsDT.IsValid() )
+                            {
+                                LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+                                String aDateStr = aLocaleWrapper.getDate( aToolsDT );
+                                aDateStr += String::CreateFromAscii( ", " );
+                                aDateStr += aLocaleWrapper.getTime( aToolsDT );
+                                pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aDateStr );
+                            }
+                        }
+                        break;
+                    }
+
+                    case SIZE_TYPE :
+                    {
+                        // size
+                        ULONG nDocSize = ::utl::UCBContentHelper::GetSize( rURL );
+                        pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), CreateExactSizeText_Impl( nDocSize ) );
+                        break;
+                    }
+                }
+
+                ++nIndex;
+            }
+        }
+
+        // info fields
+        Reference< XNameContainer > aNameCnt( xDocInfo, UNO_QUERY );
+        if ( aNameCnt.is() )
+        {
+            Sequence< ::rtl::OUString > aNameList = aNameCnt->getElementNames();
+            const ::rtl::OUString* pNames  = aNameList.getConstArray();
+            sal_uInt32 nCount = aNameList.getLength();
+
+            for ( sal_uInt32 i = 0; i < nCount; ++i )
+            {
+                ::rtl::OUString aName = pNames[i], aStrVal;
+                Any aValue = aNameCnt->getByName( aName );
+                if ( ( aValue >>= aStrVal ) && aStrVal.getLength() > 0 )
+                    pEditWin->InsertEntry( String( aName ), String( aStrVal ) );
+            }
+        }
+    }
+    catch ( ::com::sun::star::io::IOException& ) {}
+    catch ( UnknownPropertyException& ) {}
+    catch ( Exception& ) {}
+}
+
 void SvtFrameWindow_Impl::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
@@ -580,83 +689,8 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
 
     pEditWin->Clear();
 
-    String aText;
-
-    if ( bPreview && xDocInfo.is() )
-    {
-        try
-        {
-            xDocInfo->read( rURL );
-            Reference< XPropertySet > aPropSet( xDocInfo, UNO_QUERY );
-
-            Reference< XMultiPropertySet > aMultiSet( xDocInfo, UNO_QUERY );
-            if ( aMultiSet.is() )
-            {
-                Reference< XPropertySetInfo > aInfoSet = aMultiSet->getPropertySetInfo();
-                if ( aInfoSet.is() )
-                {
-                    Sequence< Property > aProps = aInfoSet->getProperties();
-                    const Property* pProps  = aProps.getConstArray();
-                    sal_uInt32 nCount = aProps.getLength();
-
-                    for ( sal_uInt32 i = 0; i < nCount; ++i )
-                    {
-                        aText += String( pProps[i].Name );
-                        aText += '\n';
-                    }
-                }
-            }
-
-            if ( aPropSet.is() )
-            {
-                USHORT nIndex = 0;
-                rtl::OUString aStringValue;
-                ::com::sun::star::util::DateTime aDateValue;
-                while ( DocInfoMap_Impl[ nIndex ]._pPropName )
-                {
-                    Any aValue = aPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( DocInfoMap_Impl[ nIndex ]._pPropName ) );
-                    switch ( DocInfoMap_Impl[ nIndex ]._eType )
-                    {
-                        case STRING_TYPE :
-                        {
-                            if ( ( aValue >>= aStringValue ) && aStringValue.getLength() > 0 )
-                                pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), String( aStringValue ) );
-                            break;
-                        }
-
-                        case DATE_TYPE :
-                        {
-                            if ( aValue >>= aDateValue )
-                            {
-                                DateTime aToolsDT =
-                                    DateTime( Date( aDateValue.Day, aDateValue.Month, aDateValue.Year ),
-                                    Time( aDateValue.Hours, aDateValue.Minutes, aDateValue.Seconds, aDateValue.HundredthSeconds ) );
-                                if ( aToolsDT.IsValid() )
-                                {
-                                    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-                                    String aDateStr = aLocaleWrapper.getDate( aToolsDT );
-                                    aDateStr += String::CreateFromAscii( ", " );
-                                    aDateStr += aLocaleWrapper.getTime( aToolsDT );
-                                    pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aDateStr );
-                                }
-                            }
-                            break;
-                        }
-
-                        case SIZE_TYPE :
-                        {
-                            break;
-                        }
-                    }
-
-                    ++nIndex;
-                }
-            }
-        }
-        catch ( ::com::sun::star::io::IOException& ) {}
-        catch ( UnknownPropertyException& ) {}
-        catch ( Exception& ) {}
-    }
+    if ( rURL.Len() > 0 && bPreview && xDocInfo.is() )
+        ShowDocInfo( rURL );
 
     if ( rURL.Len() == 0 )
     {

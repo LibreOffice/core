@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-21 11:15:30 $
+ *  last change: $Author: pb $ $Date: 2001-05-23 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ private:
     Window*                         pTextWin;
     SvtDocInfoTable_Impl            aInfoTable;
     String                          aCurrentURL;
+
+    void                    ShowDocInfo( const String& rURL );
 
 public:
     SvtFrameWindow_Impl( Window* pParent );
