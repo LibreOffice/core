@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 15:35:30 $
+ *  last change: $Author: fs $ $Date: 2000-11-13 15:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_CONTROL_PATTERNFIELD, "com.sun.star.form.co
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_CONTROL_IMAGECONTROL, "com.sun.star.form.control.ImageControl");
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_CONTROL_FORMATTEDFIELD, "com.sun.star.form.control.FormattedField");
 
-IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.FormsCollection");
+IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.Forms");
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_INTERNATIONAL_INFO, "com.sun.star.deprecated.International");
 
 IMPLEMENT_CONSTASCII_USTRING(FRM_DATA_ENGINE, "com.sun.star.data.DatabaseEngine");
