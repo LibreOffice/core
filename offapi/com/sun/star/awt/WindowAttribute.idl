@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowAttribute.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:17:22 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::WindowAttribute
 /** These values are used to specify the decorations of a window.
 
     <p><b>IMPORTANT:</b> These constands have to be disjunct with
@@ -78,88 +77,80 @@ constants WindowAttribute
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::SHOW
     /** specifies that the window is initially visible.
      */
     const long SHOW = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::FULLSIZE
     /** specifies that the window fills the complete desktop area.
 
-                <p>This applies only to top windows.
+        <p>This applies only to top windows.</p>
      */
     const long FULLSIZE = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::OPTIMUMSIZE
     /** specifies that the window is optimum size.
 
-                <p>This applies only to top windows.
+        <p>This applies only to top windows.</p>
      */
     const long OPTIMUMSIZE = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::MINSIZE
     /** specifies that the window is minimum size.
 
-                <p>This applies only to top windows.
+        <p>This applies only to top windows.</p>
      */
     const long MINSIZE = 8;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::BORDER
     /** specifies that the window has visible borders.
 
-                <p>This applies only to top windows.
+        <p>This applies only to top windows.</p>
      */
     const long BORDER = 16;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::SIZEABLE
     /** specifies that the size of the window can be changed by the user.
 
-                <p>This applies only to top windows.
+        <p>This applies only to top windows.</p>
      */
     const long SIZEABLE = 32;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::MOVEABLE
     /** specifies that the window can be moved by the user.
 
-                <p>This applies only to top windows.
+        <p>This applies only to top windows.</p>
      */
     const long MOVEABLE = 64;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::CLOSEABLE
     /** specifies that the window can be closed by the user.
 
-                <p>This applies only to top windows.
+        <p>This applies only to top windows.</p>
      */
     const long CLOSEABLE = 128;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::WindowAttribute::SYSTEMDEPENDENT
     /** specifies that the window should support the
-                <type scope="com::sun::star::awt::">XSystemDependentWindowPeer</type> interface.
+        <type scope="com::sun::star::awt::">XSystemDependentWindowPeer</type>
+        interface.
 
-                <p>This flag may be ignored, but in this case no system-dependent
-                extension works.
+        <p>This flag may be ignored, but in this case no system-dependent
+        extension works.</p>
 
-                @see XSystemDependentWindowPeer
-                @see com::sun::star::lang::SystemDependent
+        @see XSystemDependentWindowPeer
+        @see com::sun::star::lang::SystemDependent
 
-                @deprecated
-                    conflicts with <type>VclWindowPeerAttribute::HSCROLL</type>
+        @deprecated
+            conflicts with <type>VclWindowPeerAttribute::HSCROLL</type>
      */
     const long SYSTEMDEPENDENT = 256;
 
