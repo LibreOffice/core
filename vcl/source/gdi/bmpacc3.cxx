@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:23:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-28 11:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
     if( rColor.GetTransparency() == 255 )
         mpLineColor = NULL;
     else
-        mpLineColor = new BitmapColor( HasPalette() ? (BYTE) GetBestPaletteIndex( rColor ) : rColor );
+        mpLineColor = ( HasPalette() ? new BitmapColor(  (BYTE) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
 // ------------------------------------------------------------------
@@ -128,7 +128,7 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
     if( rColor.GetTransparency() == 255 )
         mpFillColor = NULL;
     else
-        mpFillColor = new BitmapColor( HasPalette() ? (BYTE) GetBestPaletteIndex( rColor ) : rColor );
+        mpFillColor = ( HasPalette() ? new BitmapColor(  (BYTE) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
 // ------------------------------------------------------------------

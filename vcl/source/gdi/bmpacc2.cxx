@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:32:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-28 11:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ IMPL_FORMAT_GETPIXEL( _8BIT_PAL )
 
 IMPL_FORMAT_SETPIXEL( _8BIT_PAL )
 {
-    pScanline[ nX ] = rBitmapColor;
+    pScanline[ nX ] = rBitmapColor.GetIndex();
 }
 
 // ------------------------------------------------------------------
