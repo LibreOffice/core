@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:41:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,6 @@
 #include "uitool.hxx"
 #include "usrpref.hxx"
 #include "crstate.hxx"
-#ifndef _OFA_OSPLCFG_HXX
-#include <offmgr/osplcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
