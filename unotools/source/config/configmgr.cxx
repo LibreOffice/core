@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 11:38:50 $
+ *  last change: $Author: pb $ $Date: 2000-11-23 14:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case LOCALE:            sPath += C2U("UserProfile/International"); break;
         case OFFICEINSTALL:
         case OFFICEINSTALLURL:
-            sPath += C2U("Office.Common/Path"); break;
+            sPath += C2U("Office.Common/Path/Current"); break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
