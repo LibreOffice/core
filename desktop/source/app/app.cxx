@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:56:09 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 14:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "testtool.hxx"
 #include "checkinstall.hxx"
 #include "cmdlinehelp.hxx"
+#include "userinstall.hxx"
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -291,6 +292,8 @@
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
 #endif
+
+#include "langselect.hxx"
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -597,7 +600,6 @@ void Desktop::Init()
 #endif
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
-
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
         if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
         {
@@ -639,7 +641,7 @@ void Desktop::DeInit()
             if( pSignalHandler )
                 DELETEZ( pSignalHandler );
         }
-    } catch (RuntimeException& re) {
+    } catch (RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind..
         return;
@@ -1022,10 +1024,20 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
             FatalError( aMessage);
         }
     }
-
+    else if ( aBootstrapError == BE_USERINSTALL_FAILED )
+    {
+            OUString aMessage;
+            OUStringBuffer aDiagnosticMessage( 100 );
+            OUString aErrorMsg;
+            aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "User installation could not be completed" )) );
+            aDiagnosticMessage.append( aErrorMsg );
+            aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
+            FatalError(aMessage);
+    }
     return;
     // leave scope at catch...
-    //_exit( 333 );
+    // _exit( 333 );
 }
 
 /*
@@ -1268,9 +1280,22 @@ void Desktop::Main()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
 
-    // Error handling inside Desktop::Main() because vcl is not
-    // initialized before!!!
-    if ( m_aBootstrapError != BE_OK )
+    if ( m_aBootstrapError == BE_OK )
+    {
+        // Startup screen
+        OpenSplashScreen();
+
+        UserInstall::UserInstallError instErr = UserInstall::finalize();
+        if ( instErr != UserInstall::E_None )
+        {
+            // problems with user installation...
+            HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+        }
+        // refresh path information
+        utl::Bootstrap::reloadData();
+        SetSplashScreenProgress(15);
+    }
+    else
     {
         HandleBootstrapErrors( m_aBootstrapError );
         return;
@@ -1309,7 +1334,7 @@ void Desktop::Main()
     }
 
     // ----  Startup screen ----
-    OpenSplashScreen();
+    // OpenSplashScreen();
 
     // check if accessibility is enabled but not working and allow to quit
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
@@ -1393,16 +1418,23 @@ void Desktop::Main()
         }
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
+        /*
         String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
         LanguageType eUILanguage = (LanguageType) sLanguage.ToInt32();
-        LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
+        */
+
         AllSettings aSettings( Application::GetSettings() );
+
+        LanguageSelection langselect;
+        LanguageType eUILanguage = langselect.Execute();
         aSettings.SetUILanguage( eUILanguage );
+
+        LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
         aSettings.SetLanguage( eLanguage );
         Application::SetSettings( aSettings );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
 
-        // if we need to display the OEM dialog, we need to do it here
+        // if we need to display the dialog, we need to do it here
         if (!pCmdLineArgs->IsQuickstart() && !Desktop::CheckOEM())
         {
                //Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
@@ -1455,6 +1487,7 @@ void Desktop::Main()
         aSeq[1] <<= m_rSplashScreen;
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.office.OfficeWrapper" );
         xWrapper = Reference < XComponent >( xSMgr->createInstanceWithArguments( DEFINE_CONST_UNICODE( "com.sun.star.office.OfficeWrapper" ), aSeq ), UNO_QUERY );
+
         SetSplashScreenProgress(65);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.office.OfficeWrapper" );
 
@@ -1761,6 +1794,7 @@ sal_Bool Desktop::CheckOEM()
 
 void Desktop::OpenClients()
 {
+
     // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
     // should be created
     Reference < XComponent > xFirst;
