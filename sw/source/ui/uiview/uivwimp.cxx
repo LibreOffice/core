@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-11-07 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _UNOTXVW_HXX
 #include <unotxvw.hxx>
 #endif
+#ifndef _UNODISPATCH_HXX
+#include <unodispatch.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -115,6 +118,8 @@ SwView_Impl::SwView_Impl(SwView* pShell) :
         eShellMode(SEL_TEXT)
 {
     *pxXTextView = new SwXTextView(pView);
+    xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
+
 }
 
 /*-----------------13.12.97 09:51-------------------
@@ -259,6 +264,9 @@ SwScannerEventListener& SwView_Impl::GetScannerEventListener()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.14  2000/09/18 16:06:11  willem.vandorp
     OpenOffice header added.
 

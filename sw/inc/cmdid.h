@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-26 10:00:45 $
+ *  last change: $Author: os $ $Date: 2000-11-07 14:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,7 +1011,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
                                                             an die View weiterreichen*/
 // hier ist Schluss!!!
 
-
+#define FN_DB_FORM_LETTER               (FN_QUERY2 + 0)     /* form letter */
+#define FN_DB_INSERT_CONTENT            (FN_QUERY2 + 1)     /* merge data into fields*/
+#define FN_DB_INSERT_COLUMNS            (FN_QUERY2 + 2)     /* insert data into text/table/as fields*/
 /*--------------------------------------------------------------------
     Bereich: Envelope
  --------------------------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: os $ $Date: 2000-11-07 14:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #endif
 
 class SwXTextView;
+namespace com{namespace sun{namespace star{namespace frame { class XDispatchProviderInterceptor;}}}}
 /* -----------------------------29.05.00 08:22--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -100,6 +101,7 @@ class SwView_Impl
     SwView*                     pView;
     ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier > *pxXTextView;        // UNO object
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      xScanEvtLstnr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
     SwScannerEventListener*     pScanEvtLstnr;
     ShellModes                  eShellMode;
 
