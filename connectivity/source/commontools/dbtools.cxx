@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:00:32 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 15:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XDATABASEENVIRONMENT_HPP_
-#include <com/sun/star/sdb/XDatabaseEnvironment.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
 #endif
@@ -136,6 +133,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
+#include <com/sun/star/sdbc/XDriverManager.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
@@ -145,6 +145,16 @@
 
 
 using namespace ::comphelper;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::form;
+
 //.........................................................................
 namespace dbtools
 {
@@ -153,13 +163,13 @@ namespace dbtools
 //==============================================================================
 //==============================================================================
 //------------------------------------------------------------------
-sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
-                                 const ::com::sun::star::lang::Locale& _rLocale)
+sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
+                                 const Reference< XNumberFormatTypes >& _xTypes,
+                                 const Locale& _rLocale)
 {
     OSL_ENSHURE(_xTypes.is() && _xColumn.is(), "dbtools::getDefaultNumberFormat: invalid arg !");
     if (!_xTypes.is() || !_xColumn.is())
-        return ::com::sun::star::util::NumberFormat::UNDEFINED;
+        return NumberFormat::UNDEFINED;
 
     sal_Int32 nDataType;
     try
@@ -169,39 +179,39 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
     }
     catch (...)
     {
-        return ::com::sun::star::util::NumberFormat::UNDEFINED;
+        return NumberFormat::UNDEFINED;
     }
 
     sal_Int32 nFormat;
     switch (nDataType)
     {
-        case ::com::sun::star::sdbc::DataType::BIT:
-            nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::LOGICAL, _rLocale);
+        case DataType::BIT:
+            nFormat = _xTypes->getStandardFormat(NumberFormat::LOGICAL, _rLocale);
             break;
-        case ::com::sun::star::sdbc::DataType::TINYINT:
-        case ::com::sun::star::sdbc::DataType::SMALLINT:
-        case ::com::sun::star::sdbc::DataType::INTEGER:
-        case ::com::sun::star::sdbc::DataType::BIGINT:
-            nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::NUMBER, _rLocale);
+        case DataType::TINYINT:
+        case DataType::SMALLINT:
+        case DataType::INTEGER:
+        case DataType::BIGINT:
+            nFormat = _xTypes->getStandardFormat(NumberFormat::NUMBER, _rLocale);
             break;
-        case ::com::sun::star::sdbc::DataType::FLOAT:
-        case ::com::sun::star::sdbc::DataType::REAL:
-        case ::com::sun::star::sdbc::DataType::DOUBLE:
-        case ::com::sun::star::sdbc::DataType::NUMERIC:
-        case ::com::sun::star::sdbc::DataType::DECIMAL:
+        case DataType::FLOAT:
+        case DataType::REAL:
+        case DataType::DOUBLE:
+        case DataType::NUMERIC:
+        case DataType::DECIMAL:
         {
             try
             {
                 if (getBOOL(_xColumn->getPropertyValue(::rtl::OUString::createFromAscii("IsCurrency"))))
-                    nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::CURRENCY, _rLocale);
+                    nFormat = _xTypes->getStandardFormat(NumberFormat::CURRENCY, _rLocale);
                 else
                 {
                     sal_Int32 nScale = 2;
-                    if (::com::sun::star::sdbc::DataType::NUMERIC == nDataType || ::com::sun::star::sdbc::DataType::DECIMAL == nDataType)
+                    if (DataType::NUMERIC == nDataType || DataType::DECIMAL == nDataType)
                         _xColumn->getPropertyValue(::rtl::OUString::createFromAscii("Scale")) >>= nScale;
 
                     // generate a new format if necessary
-                    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > xFormats(_xTypes, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< XNumberFormats > xFormats(_xTypes, UNO_QUERY);
                     ::rtl::OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, sal_False, sal_False, nScale, sal_True);
 
                     // and add it to the formatter if necessary
@@ -212,49 +222,49 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
             }
             catch (...)
             {
-                nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::NUMBER, _rLocale);
+                nFormat = _xTypes->getStandardFormat(NumberFormat::NUMBER, _rLocale);
             }
         }   break;
-        case ::com::sun::star::sdbc::DataType::CHAR:
-        case ::com::sun::star::sdbc::DataType::VARCHAR:
-        case ::com::sun::star::sdbc::DataType::LONGVARCHAR:
-            nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::TEXT, _rLocale);
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::LONGVARCHAR:
+            nFormat = _xTypes->getStandardFormat(NumberFormat::TEXT, _rLocale);
             break;
-        case ::com::sun::star::sdbc::DataType::DATE:
-            nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, _rLocale);
+        case DataType::DATE:
+            nFormat = _xTypes->getStandardFormat(NumberFormat::DATE, _rLocale);
             break;
-        case ::com::sun::star::sdbc::DataType::TIME:
-            nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::TIME, _rLocale);
+        case DataType::TIME:
+            nFormat = _xTypes->getStandardFormat(NumberFormat::TIME, _rLocale);
             break;
-        case ::com::sun::star::sdbc::DataType::TIMESTAMP:
-            nFormat = _xTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATETIME, _rLocale);
+        case DataType::TIMESTAMP:
+            nFormat = _xTypes->getStandardFormat(NumberFormat::DATETIME, _rLocale);
             break;
-        case ::com::sun::star::sdbc::DataType::BINARY:
-        case ::com::sun::star::sdbc::DataType::VARBINARY:
-        case ::com::sun::star::sdbc::DataType::LONGVARBINARY:
-        case ::com::sun::star::sdbc::DataType::SQLNULL:
-        case ::com::sun::star::sdbc::DataType::OTHER:
-        case ::com::sun::star::sdbc::DataType::OBJECT:
-        case ::com::sun::star::sdbc::DataType::DISTINCT:
-        case ::com::sun::star::sdbc::DataType::STRUCT:
-        case ::com::sun::star::sdbc::DataType::ARRAY:
-        case ::com::sun::star::sdbc::DataType::BLOB:
-        case ::com::sun::star::sdbc::DataType::CLOB:
-        case ::com::sun::star::sdbc::DataType::REF:
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+        case DataType::LONGVARBINARY:
+        case DataType::SQLNULL:
+        case DataType::OTHER:
+        case DataType::OBJECT:
+        case DataType::DISTINCT:
+        case DataType::STRUCT:
+        case DataType::ARRAY:
+        case DataType::BLOB:
+        case DataType::CLOB:
+        case DataType::REF:
         default:
-            nFormat = ::com::sun::star::util::NumberFormat::UNDEFINED;
+            nFormat = NumberFormat::UNDEFINED;
     }
     return nFormat;
 }
 
 //==============================================================================
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> findConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent)
+Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection(xParent, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XConnection> xConnection(xParent, UNO_QUERY);
     if (!xConnection.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xParent, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XChild> xChild(xParent, UNO_QUERY);
         if (xChild.is())
             return findConnection(xChild->getParent());
     }
@@ -262,94 +272,73 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(
+Reference< XDataSource> getDataSource(
             const ::rtl::OUString& _rsTitleOrPath,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+            const Reference< XMultiServiceFactory>& _rxFactory)
 {
     OSL_ENSHURE(_rsTitleOrPath.getLength(), "::getDataSource : invalid arg !");
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>  xReturn;
+    Reference< XDataSource>  xReturn;
 
-    // is it a file url ?
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xNamingContext(
+    // is it a favorite title ?
+    Reference< XNameAccess> xNamingContext(
         _rxFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseAccessContext")),
-        ::com::sun::star::uno::UNO_QUERY);
+            ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseContext")),
+        UNO_QUERY);
 
     if (xNamingContext.is() && xNamingContext->hasByName(_rsTitleOrPath))
     {
-        OSL_ENSHURE(::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService>(xNamingContext, ::com::sun::star::uno::UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
-        xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService>(xNamingContext, ::com::sun::star::uno::UNO_QUERY)->getRegisteredObject(_rsTitleOrPath),
-            ::com::sun::star::uno::UNO_QUERY);
+        OSL_ENSHURE(Reference< XNamingService>(xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
+        xReturn = Reference< XDataSource>(
+            Reference< XNamingService>(xNamingContext, UNO_QUERY)->getRegisteredObject(_rsTitleOrPath),
+            UNO_QUERY);
     }
-    else
-    {   // is it a favorite title ?
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment> xEnvironment(
-            _rxFactory->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseEnvironment")),
-            ::com::sun::star::uno::UNO_QUERY);
-
-        if (xEnvironment.is())
-        {
-            try
-            {
-                xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(xEnvironment->getDatabaseAccess(_rsTitleOrPath), ::com::sun::star::uno::UNO_QUERY);
-            }
-            catch(::com::sun::star::sdbc::SQLException& e)
-            {   // allowed, the env may throw an exception in case of an invalid name
-                e; // make compiler happy
-            }
-        }
-
-    }
-
     return xReturn;
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(
+Reference< XConnection> getConnection(
             const ::rtl::OUString& _rsTitleOrPath,
             const ::rtl::OUString& _rsUser,
             const ::rtl::OUString& _rsPwd,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+            const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xDataSource( getDataSource(_rsTitleOrPath, _rxFactory) );
+    Reference< XDataSource> xDataSource( getDataSource(_rsTitleOrPath, _rxFactory) );
     if (xDataSource.is())
         return xDataSource->getConnection(_rsUser, _rsPwd);
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>();
+    return Reference< XConnection>();
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet) throw (::com::sun::star::uno::RuntimeException)
+Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) throw (RuntimeException)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xReturn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XConnection> xReturn;
+    Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
     {
-        ::com::sun::star::uno::Any aConn(xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")));
+        Any aConn(xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")));
         if  (aConn.getValueType().equals(
-            getCppuType(reinterpret_cast< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>*>(NULL))
+            getCppuType(reinterpret_cast< Reference< XConnection>*>(NULL))
             ))
-            xReturn = *(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>*)aConn.getValue();
+            xReturn = *(Reference< XConnection>*)aConn.getValue();
     }
     return xReturn;
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
-            throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+Reference< XConnection> calcConnection(
+            const Reference< XRowSet>& _rxRowSet,
+            const Reference< XMultiServiceFactory>& _rxFactory)
+            throw (SQLException, RuntimeException)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xReturn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XConnection> xReturn;
+    Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
     {
-        ::com::sun::star::uno::Any aConn( xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) );
-        if (aConn.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE)
-            xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aConn.getValue(), ::com::sun::star::uno::UNO_QUERY);
+        Any aConn( xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) );
+        if (aConn.getValueType().getTypeClass() == TypeClass_INTERFACE)
+            xReturn = Reference< XConnection>(*(Reference< XInterface>*)aConn.getValue(), UNO_QUERY);
 
         if (!xReturn.is())
         {
@@ -379,11 +368,9 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
                 else if (sURL.getLength())
                 {   // the row set has no data source, but a connection url set
                     // -> try to connection with that url
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment> xEnvironment(
-                        _rxFactory->createInstance(
-                            ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseEnvironment")),
-                        ::com::sun::star::uno::UNO_QUERY);
-                    if (xEnvironment.is())
+                    Reference< XDriverManager > xDriverManager(
+                        _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager")), UNO_QUERY);
+                    if (xDriverManager.is())
                     {
                         ::rtl::OUString sUser, sPwd;
                         if (hasProperty(s_sUserProp, xRowSetProps))
@@ -392,16 +379,16 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
                             xRowSetProps->getPropertyValue(s_sPwdProp) >>= sPwd;
                         if (sUser.getLength())
                         {   // use user and pwd together with the url
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aInfo(2);
-                            aInfo.getArray()[0].Name = s_sUserProp;
+                            Sequence< PropertyValue> aInfo(2);
+                            aInfo.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
                             aInfo.getArray()[0].Value <<= sUser;
-                            aInfo.getArray()[1].Name = s_sPwdProp;
+                            aInfo.getArray()[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password"));
                             aInfo.getArray()[1].Value <<= sPwd;
-                            xReturn = xEnvironment->getConnectionWithInfo(sURL, aInfo);
+                            xReturn = xDriverManager->getConnectionWithInfo(sURL, aInfo);
                         }
                         else
                             // just use the url
-                            xReturn = xEnvironment->getConnection(sURL);
+                            xReturn = xDriverManager->getConnection(sURL);
                     }
                 }
             }
@@ -415,7 +402,7 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
             {
                 try
                 {
-                    xRowSetProps->setPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection"), ::com::sun::star::uno::makeAny(xReturn));
+                    xRowSetProps->setPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection"), makeAny(xReturn));
                 }
                 catch(...)
                 {
@@ -428,36 +415,36 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
+Reference< XNameAccess> getTableFields(
+            const Reference< XConnection>& _rxConn,
             const ::rtl::OUString& _rName)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier> xSupplyTables(_rxConn, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XTablesSupplier> xSupplyTables(_rxConn, UNO_QUERY);
     OSL_ENSHURE(xSupplyTables.is(), "::getTableFields : invalid connection !");
         // the conn already said it would support the service sdb::Connection
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xTables( xSupplyTables->getTables());
+    Reference< XNameAccess> xTables( xSupplyTables->getTables());
     if (xTables.is() && xTables->hasByName(_rName))
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xTableCols(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >*)xTables->getByName(_rName).getValue(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XColumnsSupplier> xTableCols(*(Reference< XInterface >*)xTables->getByName(_rName).getValue(), UNO_QUERY);
         OSL_ENSHURE(xTableCols.is(), "::getTableFields : invalid table !");
             // the table is expected to support the service sddb::Table, which requires an XColumnsSupplier interface
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xFieldNames(xTableCols->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XNameAccess> xFieldNames(xTableCols->getColumns(), UNO_QUERY);
         OSL_ENSHURE(xFieldNames.is(), "::getTableFields : TableCols->getColumns doesn't export a NameAccess !");
         return xFieldNames;
     }
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>();
+    return Reference< XNameAccess>();
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::sdb::SQLContext prependContextInfo(::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails)
+SQLContext prependContextInfo(SQLException& _rException, const Reference< XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails)
 {
     // determine the type of the exception
     SQLExceptionInfo aInfo(_rException);
 
     // the new first chain element
-    ::com::sun::star::sdb::SQLContext aContextDescription(_rContextDescription, _rxContext, ::rtl::OUString(), 0, aInfo.get(), _rContextDetails);
+    SQLContext aContextDescription(_rContextDescription, _rxContext, ::rtl::OUString(), 0, aInfo.get(), _rContextDetails);
     return aContextDescription;
 }
 
@@ -468,7 +455,7 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName)
+::rtl::OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName)
 {
     ::rtl::OUString sQuote = _rxMeta->getIdentifierQuoteString();
     ::rtl::OUString sQuotedName;
@@ -514,7 +501,7 @@ sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::
 }
 
 //------------------------------------------------------------------------------
-void qualifiedNameComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData, const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName)
+void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaData, const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName)
 {
     OSL_ENSHURE(_rxConnMetaData.is(), "QualifiedNameComponents : invalid meta data!");
     ::rtl::OUString sSeparator = _rxConnMetaData->getCatalogSeparator();
@@ -557,39 +544,23 @@ void qualifiedNameComponents(const ::com::sun::star::uno::Reference< ::com::sun:
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
+Reference< XNumberFormatsSupplier> getNumberFormats(
+            const Reference< XConnection>& _rxConn,
             sal_Bool _bAlloweDefault,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+            const Reference< XMultiServiceFactory>& _rxFactory)
 {
     // ask the parent of the connection (should be an DatabaseAccess)
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> xReturn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xConnAsChild(_rxConn, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XNumberFormatsSupplier> xReturn;
+    Reference< XChild> xConnAsChild(_rxConn, UNO_QUERY);
     ::rtl::OUString sPropFormatsSupplier = ::rtl::OUString::createFromAscii("NumberFormatsSupplier");
     if (xConnAsChild.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xConnParentProps(xConnAsChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XPropertySet> xConnParentProps(xConnAsChild->getParent(), UNO_QUERY);
         if (xConnParentProps.is() && hasProperty(sPropFormatsSupplier, xConnParentProps))
         {
-            ::com::sun::star::uno::Any aSupplier( xConnParentProps->getPropertyValue(sPropFormatsSupplier) );
-            if (aSupplier.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE)
-                xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >*)aSupplier.getValue(), ::com::sun::star::uno::UNO_QUERY);
-        }
-    }
-
-    // no result 'til now ? -> ask the environment for the default formatter
-    if (!xReturn.is() && _bAlloweDefault)
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment> xEnv(_rxFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseEnvironment")),
-            ::com::sun::star::uno::UNO_QUERY);
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xEnvProps(xEnv, ::com::sun::star::uno::UNO_QUERY);
-        if (xEnv.is() && hasProperty(sPropFormatsSupplier, xEnvProps))
-        {
-            ::com::sun::star::uno::Any aSupplier( xEnvProps->getPropertyValue(sPropFormatsSupplier) );
-            if (aSupplier.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE)
-                xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >*)aSupplier.getValue(), ::com::sun::star::uno::UNO_QUERY);
+            Any aSupplier( xConnParentProps->getPropertyValue(sPropFormatsSupplier) );
+            if (aSupplier.getValueType().getTypeClass() == TypeClass_INTERFACE)
+                xReturn = Reference< XNumberFormatsSupplier>(*(Reference< XInterface >*)aSupplier.getValue(), UNO_QUERY);
         }
     }
 
@@ -599,20 +570,20 @@ void qualifiedNameComponents(const ::com::sun::star::uno::Reference< ::com::sun:
 //==============================================================================
 //------------------------------------------------------------------------------
 void TransferFormComponentProperties(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xOldProps,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xNewProps,
-            const ::com::sun::star::lang::Locale& _rLocale)
+            const Reference< XPropertySet>& xOldProps,
+            const Reference< XPropertySet>& xNewProps,
+            const Locale& _rLocale)
 {
     // kopieren wir erst mal alle Props, die in Quelle und Ziel vorhanden sind und identische Beschreibungen haben
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> xOldInfo( xOldProps->getPropertySetInfo());
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> xNewInfo( xNewProps->getPropertySetInfo());
+    Reference< XPropertySetInfo> xOldInfo( xOldProps->getPropertySetInfo());
+    Reference< XPropertySetInfo> xNewInfo( xNewProps->getPropertySetInfo());
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aOldProperties = xOldInfo->getProperties();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aNewProperties = xNewInfo->getProperties();
+    Sequence< Property> aOldProperties = xOldInfo->getProperties();
+    Sequence< Property> aNewProperties = xNewInfo->getProperties();
     int nNewLen = aNewProperties.getLength();
 
-    ::com::sun::star::beans::Property* pOldProps = aOldProperties.getArray();
-    ::com::sun::star::beans::Property* pNewProps = aNewProperties.getArray();
+    Property* pOldProps = aOldProperties.getArray();
+    Property* pNewProps = aNewProperties.getArray();
 
     ::rtl::OUString sPropDefaultControl(::rtl::OUString::createFromAscii("DefaultControl"));
     ::rtl::OUString sPropLabelControl(::rtl::OUString::createFromAscii("LabelControl"));
@@ -639,17 +610,17 @@ void TransferFormComponentProperties(
             )
         {
             // binaere Suche
-            ::com::sun::star::beans::Property* pResult = (::com::sun::star::beans::Property*) bsearch(pOldProps + i, (void*)pNewProps, nNewLen, sizeof(::com::sun::star::beans::Property),
+            Property* pResult = (Property*) bsearch(pOldProps + i, (void*)pNewProps, nNewLen, sizeof(Property),
                 &PropertyCompare);
             if (pResult && (pResult->Attributes == pOldProps[i].Attributes)
-                && ((pResult->Attributes & ::com::sun::star::beans::PropertyAttribute::READONLY) == 0)
+                && ((pResult->Attributes & PropertyAttribute::READONLY) == 0)
                 && (pResult->Type.equals(pOldProps[i].Type)))
             {   // Attribute stimmen ueberein und Property ist nicht read-only
                 try
                 {
                     xNewProps->setPropertyValue(pResult->Name, xOldProps->getPropertyValue(pResult->Name));
                 }
-                catch(::com::sun::star::lang::IllegalArgumentException& e)
+                catch(IllegalArgumentException& e)
                 {
                     e;
 #ifdef DBG_UTIL
@@ -679,22 +650,22 @@ void TransferFormComponentProperties(
     if (bOldIsFormatted)
     {
         // aus dem eingestellten Format ein paar Properties rausziehen und zum neuen Set durchschleifen
-        ::com::sun::star::uno::Any aFormatKey( xOldProps->getPropertyValue(sPropFormatKey) );
+        Any aFormatKey( xOldProps->getPropertyValue(sPropFormatKey) );
         if (aFormatKey.hasValue())
         {
-            ::com::sun::star::uno::Any aSupplier( xOldProps->getPropertyValue(sPropFormatsSupplier) );
-            OSL_ENSHURE(isAReference(aSupplier.getValueType(), static_cast< ::com::sun::star::util::XNumberFormatsSupplier*>(NULL)),
+            Any aSupplier( xOldProps->getPropertyValue(sPropFormatsSupplier) );
+            OSL_ENSHURE(isAReference(aSupplier.getValueType(), static_cast< XNumberFormatsSupplier*>(NULL)),
                 "TransferFormComponentProperties : invalid property type !");
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> xSupplier;
+            Reference< XNumberFormatsSupplier> xSupplier;
             if (aSupplier.hasValue())
-                xSupplier = *(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>*)aSupplier.getValue();
+                xSupplier = *(Reference< XNumberFormatsSupplier>*)aSupplier.getValue();
             if (xSupplier.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats> xFormats(xSupplier->getNumberFormats());
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xFormat(xFormats->getByKey(getINT32(aFormatKey)));
+                Reference< XNumberFormats> xFormats(xSupplier->getNumberFormats());
+                Reference< XPropertySet> xFormat(xFormats->getByKey(getINT32(aFormatKey)));
                 if (hasProperty(sPropCurrencySymbol, xFormat))
                 {
-                    ::com::sun::star::uno::Any aVal( xFormat->getPropertyValue(sPropCurrencySymbol) );
+                    Any aVal( xFormat->getPropertyValue(sPropCurrencySymbol) );
                     if (aVal.hasValue() && hasProperty(sPropCurrencySymbol, xNewProps))
                         // (wenn die Quelle das nicht gesetzt hat, dann auch nicht kopieren, um den
                         // Default-Wert nicht zu ueberschreiben
@@ -706,47 +677,47 @@ void TransferFormComponentProperties(
         }
 
         // eine eventuelle-Min-Max-Konvertierung
-        ::com::sun::star::uno::Any aEffectiveMin( xOldProps->getPropertyValue(sPropEffectiveMin) );
+        Any aEffectiveMin( xOldProps->getPropertyValue(sPropEffectiveMin) );
         if (aEffectiveMin.hasValue())
         {   // im Gegensatz zu ValueMin kann EffectiveMin void sein
             if (hasProperty(sPropValueMin, xNewProps))
             {
-                OSL_ENSHURE(aEffectiveMin.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE,
+                OSL_ENSHURE(aEffectiveMin.getValueType().getTypeClass() == TypeClass_DOUBLE,
                     "TransferFormComponentProperties : invalid property type !");
                 xNewProps->setPropertyValue(sPropValueMin, aEffectiveMin);
             }
         }
-        ::com::sun::star::uno::Any aEffectiveMax( xOldProps->getPropertyValue(sPropEffectiveMax) );
+        Any aEffectiveMax( xOldProps->getPropertyValue(sPropEffectiveMax) );
         if (aEffectiveMax.hasValue())
         {   // analog
             if (hasProperty(sPropValueMax, xNewProps))
             {
-                OSL_ENSHURE(aEffectiveMax.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE,
+                OSL_ENSHURE(aEffectiveMax.getValueType().getTypeClass() == TypeClass_DOUBLE,
                     "TransferFormComponentProperties : invalid property type !");
                 xNewProps->setPropertyValue(sPropValueMax, aEffectiveMax);
             }
         }
 
         // dann koennen wir noch Default-Werte konvertieren und uebernehmen
-        ::com::sun::star::uno::Any aEffectiveDefault( xOldProps->getPropertyValue(sPropEffectiveDefault) );
+        Any aEffectiveDefault( xOldProps->getPropertyValue(sPropEffectiveDefault) );
         if (aEffectiveDefault.hasValue())
         {
-            sal_Bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING;
-            OSL_ENSHURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE,
+            sal_Bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == TypeClass_STRING;
+            OSL_ENSHURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == TypeClass_DOUBLE,
                 "TransferFormComponentProperties : invalid property type !");
                 // die Effective-Properties sollten immer void oder string oder double sein ....
 
             if (hasProperty(sPropDefaultDate, xNewProps) && !bIsString)
             {   // (einen String in ein Datum zu konvertieren muss nicht immer klappen, denn das ganze kann ja an
                 // eine Textspalte gebunden gewesen sein, aber mit einem double koennen wir was anfangen)
-                ::com::sun::star::util::Date aDate = DBTypeConversion::toDate(getDouble(aEffectiveDefault));
-                xNewProps->setPropertyValue(sPropDefaultDate, ::com::sun::star::uno::makeAny(aDate));
+                Date aDate = DBTypeConversion::toDate(getDouble(aEffectiveDefault));
+                xNewProps->setPropertyValue(sPropDefaultDate, makeAny(aDate));
             }
 
             if (hasProperty(sPropDefaultTime, xNewProps) && !bIsString)
             {   // voellig analog mit Zeit
-                ::com::sun::star::util::Time aTime = DBTypeConversion::toTime(getDouble(aEffectiveDefault));
-                xNewProps->setPropertyValue(sPropDefaultTime, ::com::sun::star::uno::makeAny(aTime));
+                Time aTime = DBTypeConversion::toTime(getDouble(aEffectiveDefault));
+                xNewProps->setPropertyValue(sPropDefaultTime, makeAny(aTime));
             }
 
             if (hasProperty(sPropDefaultValue, xNewProps) && !bIsString)
@@ -768,20 +739,20 @@ void TransferFormComponentProperties(
     {
         // zuerst die Formatierung
         // einen Supplier koennen wir nicht setzen, also muss das neue Set schon einen mitbringen
-        ::com::sun::star::uno::Any aSupplier( xNewProps->getPropertyValue(sPropFormatsSupplier) );
-        OSL_ENSHURE(isAReference(aSupplier, static_cast< ::com::sun::star::util::XNumberFormatsSupplier*>(NULL)),
+        Any aSupplier( xNewProps->getPropertyValue(sPropFormatsSupplier) );
+        OSL_ENSHURE(isAReference(aSupplier, static_cast< XNumberFormatsSupplier*>(NULL)),
             "TransferFormComponentProperties : invalid property type !");
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> xSupplier;
+        Reference< XNumberFormatsSupplier> xSupplier;
         if (aSupplier.hasValue())
-            xSupplier = *(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>*)aSupplier.getValue();
+            xSupplier = *(Reference< XNumberFormatsSupplier>*)aSupplier.getValue();
         if (xSupplier.is())
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats> xFormats(xSupplier->getNumberFormats());
+            Reference< XNumberFormats> xFormats(xSupplier->getNumberFormats());
 
             // Sprache des neuen Formats
 //          ::rtl::OString sLanguage, sCountry;
 //          ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), String(sLanguage.getStr()), String(sCountry.getStr()));
-//          ::com::sun::star::lang::Locale aNewLanguage(
+//          Locale aNewLanguage(
 //              ::rtl::OStringToOUString(sLanguage, RTL_TEXTENCODING_ASCII_US),
 //              ::rtl::OStringToOUString(sCountry, RTL_TEXTENCODING_ASCII_US),
 //              ::rtl::OUString());
@@ -795,23 +766,23 @@ void TransferFormComponentProperties(
             sal_Int32 nBaseKey = 0;
             if (hasProperty(sPropClassId, xOldProps))
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes> xTypeList(xFormats, ::com::sun::star::uno::UNO_QUERY);
+                Reference< XNumberFormatTypes> xTypeList(xFormats, UNO_QUERY);
                 if (xTypeList.is())
                 {
                     sal_Int16 nClassId;
                     xOldProps->getPropertyValue(sPropClassId) >>= nClassId;
                     switch (nClassId)
                     {
-                        case ::com::sun::star::form::FormComponentType::DATEFIELD :
-                            nBaseKey = xTypeList->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, _rLocale);
+                        case FormComponentType::DATEFIELD :
+                            nBaseKey = xTypeList->getStandardFormat(NumberFormat::DATE, _rLocale);
                             break;
 
-                        case ::com::sun::star::form::FormComponentType::TIMEFIELD :
-                            nBaseKey = xTypeList->getStandardFormat(::com::sun::star::util::NumberFormat::TIME, _rLocale);
+                        case FormComponentType::TIMEFIELD :
+                            nBaseKey = xTypeList->getStandardFormat(NumberFormat::TIME, _rLocale);
                             break;
 
-                        case ::com::sun::star::form::FormComponentType::CURRENCYFIELD :
-                            nBaseKey = xTypeList->getStandardFormat(::com::sun::star::util::NumberFormat::CURRENCY, _rLocale);
+                        case FormComponentType::CURRENCYFIELD :
+                            nBaseKey = xTypeList->getStandardFormat(NumberFormat::CURRENCY, _rLocale);
                             break;
                     }
                 }
@@ -828,11 +799,11 @@ void TransferFormComponentProperties(
                 nKey = xFormats->addNew(sNewFormat, _rLocale);
             }
 
-            xNewProps->setPropertyValue(sPropFormatKey, ::com::sun::star::uno::makeAny((sal_Int32)nKey));
+            xNewProps->setPropertyValue(sPropFormatKey, makeAny((sal_Int32)nKey));
         }
 
         // min-/max-Werte
-        ::com::sun::star::uno::Any aNewMin, aNewMax;
+        Any aNewMin, aNewMax;
         if (hasProperty(sPropValueMin, xOldProps))
             aNewMin = xOldProps->getPropertyValue(sPropValueMin);
         if (hasProperty(sPropValueMax, xOldProps))
@@ -841,19 +812,19 @@ void TransferFormComponentProperties(
         xNewProps->setPropertyValue(sPropEffectiveMax, aNewMax);
 
         // Default-Wert
-        ::com::sun::star::uno::Any aNewDefault;
+        Any aNewDefault;
         if (hasProperty(sPropDefaultDate, xOldProps))
         {
-            ::com::sun::star::uno::Any aDate( xOldProps->getPropertyValue(sPropDefaultDate) );
+            Any aDate( xOldProps->getPropertyValue(sPropDefaultDate) );
             if (aDate.hasValue())
-                aNewDefault <<= DBTypeConversion::toDouble(*(::com::sun::star::util::Date*)aDate.getValue());
+                aNewDefault <<= DBTypeConversion::toDouble(*(Date*)aDate.getValue());
         }
 
         if (hasProperty(sPropDefaultTime, xOldProps))
         {
-            ::com::sun::star::uno::Any aTime( xOldProps->getPropertyValue(sPropDefaultTime) );
+            Any aTime( xOldProps->getPropertyValue(sPropDefaultTime) );
             if (aTime.hasValue())
-                aNewDefault <<= DBTypeConversion::toDouble(*(::com::sun::star::util::Time*)aTime.getValue());
+                aNewDefault <<= DBTypeConversion::toDouble(*(Time*)aTime.getValue());
         }
 
         // double oder String werden direkt uebernommen
@@ -868,32 +839,32 @@ void TransferFormComponentProperties(
 }
 
 //------------------------------------------------------------------------------
-sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet)
+sal_Bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & ::com::sun::star::sdbcx::Privilege::INSERT) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & Privilege::INSERT) != 0));
 }
 
 //------------------------------------------------------------------------------
-sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet)
+sal_Bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & Privilege::UPDATE) != 0));
 }
 
 //------------------------------------------------------------------------------
-sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet)
+sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & ::com::sun::star::sdbcx::Privilege::DELETE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & Privilege::DELETE) != 0));
 }
 
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+Reference< XSQLQueryComposer> getCurrentSettingsComposer(
+                const Reference< XPropertySet>& _rxRowSetProps,
+                const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> xReturn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xRowSet(_rxRowSetProps, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConn( calcConnection(xRowSet, _rxFactory));
+    Reference< XSQLQueryComposer> xReturn;
+    Reference< XRowSet> xRowSet(_rxRowSetProps, UNO_QUERY);
+    Reference< XConnection> xConn( calcConnection(xRowSet, _rxFactory));
     try
     {
         if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
@@ -919,7 +890,7 @@ sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::bea
                 sal_Bool bEscapeProcessing = getBOOL(_rxRowSetProps->getPropertyValue(sPropEscapeProcessing));
                 switch (nCommandType)
                 {
-                    case ::com::sun::star::sdb::CommandType::COMMAND:
+                    case CommandType::COMMAND:
                         if (!bEscapeProcessing)
                         {   // native sql -> no parsable statement
                             sStatement = ::rtl::OUString();
@@ -929,7 +900,7 @@ sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::bea
                             sStatement = sCommand;
                         }
                         break;
-                    case ::com::sun::star::sdb::CommandType::TABLE:
+                    case CommandType::TABLE:
                     {
                         if (!sCommand.getLength())
                             break;
@@ -939,18 +910,18 @@ sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::bea
                         sStatement += sTableName;
                     }
                     break;
-                    case ::com::sun::star::sdb::CommandType::QUERY:
+                    case CommandType::QUERY:
                     {
                         // ask the connection for the query
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XQueriesSupplier> xSupplyQueries(xConn, ::com::sun::star::uno::UNO_QUERY);
+                        Reference< XQueriesSupplier> xSupplyQueries(xConn, UNO_QUERY);
                         if (!xSupplyQueries.is())
                             break;
 
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xQueries(xSupplyQueries->getQueries(), ::com::sun::star::uno::UNO_QUERY);
+                        Reference< XNameAccess> xQueries(xSupplyQueries->getQueries(), UNO_QUERY);
                         if (!xQueries.is() || !xQueries->hasByName(sCommand))
                             break;
 
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xQueryProps(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xQueries->getByName(sCommand).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                        Reference< XPropertySet> xQueryProps(*(Reference< XInterface>*)xQueries->getByName(sCommand).getValue(), UNO_QUERY);
                         if (!xQueryProps.is())
                             break;
 
@@ -967,8 +938,8 @@ sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::bea
                         sStatement = getString(xQueryProps->getPropertyValue(sPropCommand));
 
                         // use an additional composer to build a statement from the query filter/order props
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, ::com::sun::star::uno::UNO_QUERY);
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> xLocalComposer;
+                        Reference< XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
+                        Reference< XSQLQueryComposer> xLocalComposer;
                         if (xFactory.is())
                             xLocalComposer = xFactory->createQueryComposer();
                         if (!xLocalComposer.is())
@@ -1000,7 +971,7 @@ sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::bea
             if (sStatement.getLength())
             {
                 // create an composer
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, ::com::sun::star::uno::UNO_QUERY);
+                Reference< XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
                 if (xFactory.is())
                     xReturn = xFactory->createQueryComposer();
                 if (xReturn.is())
@@ -1091,9 +1062,11 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/24 15:00:32  oj
+ *  make strings unique for lib's
+ *
  *  Revision 1.1  2000/10/05 08:50:51  fs
  *  moved the files from unotools to here
- *
  *
  *  Revision 1.0 29.09.00 08:16:59  fs
  ************************************************************************/
