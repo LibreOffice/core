@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-08 16:32:29 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 16:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2024,34 +2024,39 @@ const ::std::list< KernPair >& PrintFontManager::getKernPairs( fontID nFontID, b
 
 bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
 {
+    static const char* pEnable = getenv( "PSPRINT_ENABLE_TTF_COPYRIGHTAWARENESS" );
     bool bRet = true;
-    PrintFont* pFont = getFont( nFont );
-    if( pFont && pFont->m_eType == fonttype::TrueType )
+
+    if( pEnable && *pEnable )
     {
-        TrueTypeFontFile* pTTFontFile = static_cast<TrueTypeFontFile*>(pFont);
-        if( pTTFontFile->m_nTypeFlags & 0x80000000 )
+        PrintFont* pFont = getFont( nFont );
+        if( pFont && pFont->m_eType == fonttype::TrueType )
         {
-            TrueTypeFont* pTTFont = NULL;
-            ByteString aFile = getFontFile( pFont );
-            if( OpenTTFont( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+            TrueTypeFontFile* pTTFontFile = static_cast<TrueTypeFontFile*>(pFont);
+            if( pTTFontFile->m_nTypeFlags & 0x80000000 )
             {
-                // get type flags
-                TTGlobalFontInfo aInfo;
-                GetTTGlobalFontInfo( pTTFont, & aInfo );
-                pTTFontFile->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
+                TrueTypeFont* pTTFont = NULL;
+                ByteString aFile = getFontFile( pFont );
+                if( OpenTTFont( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+                {
+                    // get type flags
+                    TTGlobalFontInfo aInfo;
+                    GetTTGlobalFontInfo( pTTFont, & aInfo );
+                    pTTFontFile->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
 #ifdef DEBUG
-                fprintf( stderr, "font %s has style flags %x\n", aFile.GetBuffer(), pTTFontFile->m_nTypeFlags );
+                    fprintf( stderr, "font %s has style flags %x\n", aFile.GetBuffer(), pTTFontFile->m_nTypeFlags );
 #endif
-                CloseTTFont( pTTFont );
+                    CloseTTFont( pTTFont );
+                }
             }
-       }
 
-        unsigned int nCopyrightFlags = pTTFontFile->m_nTypeFlags & 0x0e;
+            unsigned int nCopyrightFlags = pTTFontFile->m_nTypeFlags & 0x0e;
 
-        // font embedding is allowed if either
-        //   no restriction at all (bit 1 clear)
-        //   printing allowed (bit 1 set, bit 2 set )
-        bRet = ! ( nCopyrightFlags & 0x02 ) || ( nCopyrightFlags & 0x04 );
+            // font embedding is allowed if either
+            //   no restriction at all (bit 1 clear)
+            //   printing allowed (bit 1 set, bit 2 set )
+            bRet = ! ( nCopyrightFlags & 0x02 ) || ( nCopyrightFlags & 0x04 );
+        }
     }
     return bRet;
 }
