@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-25 14:55:21 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 15:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <svtools/whiter.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
+#include <svx/grafctrl.hxx>
 
 #include "graphsh.hxx"
 #include "sc.hrc"
@@ -109,194 +110,21 @@ ScGraphicShell::~ScGraphicShell()
 
 void ScGraphicShell::GetAttrState( SfxItemSet& rSet )
 {
-    SfxItemSet      aAttrSet( GetPool() );
-    SfxWhichIter    aIter( rSet );
-    USHORT          nWhich = aIter.FirstWhich();
-
     ScDrawView* pView = GetViewData()->GetScDrawView();
-    pView->GetAttributes( aAttrSet );
 
-    while( nWhich )
-    {
-        USHORT nSlotId = SfxItemPool::IsWhich( nWhich )
-                            ? GetPool().GetSlotId( nWhich )
-                            : nWhich;
-
-        switch( nSlotId )
-        {
-            case( SID_ATTR_GRAF_MODE ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
-                {
-                    rSet.Put( SfxUInt16Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFMODE, SdrGrafModeItem ) ) );
-                }
-            }
-            break;
-
-            case( SID_ATTR_GRAF_RED ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFRED ) )
-                {
-                    rSet.Put( SfxInt16Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFRED, SdrGrafRedItem ) ) );
-                }
-            }
-            break;
-
-            case( SID_ATTR_GRAF_GREEN ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFGREEN ) )
-                {
-                    rSet.Put( SfxInt16Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFGREEN, SdrGrafGreenItem ) ) );
-                }
-            }
-            break;
-
-            case( SID_ATTR_GRAF_BLUE ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFBLUE ) )
-                {
-                    rSet.Put( SfxInt16Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFBLUE, SdrGrafBlueItem ) ) );
-                }
-            }
-            break;
-
-            case( SID_ATTR_GRAF_LUMINANCE ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFLUMINANCE ) )
-                {
-                    rSet.Put( SfxInt16Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFLUMINANCE, SdrGrafLuminanceItem ) ) );
-                }
-            }
-            break;
-
-            case( SID_ATTR_GRAF_CONTRAST ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFCONTRAST ) )
-                {
-                    rSet.Put( SfxInt16Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFCONTRAST, SdrGrafContrastItem ) ) );
-                }
-            }
-            break;
-
-            case( SID_ATTR_GRAF_GAMMA ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFGAMMA ) )
-                {
-                    rSet.Put( SfxUInt32Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFGAMMA, SdrGrafGamma100Item ) ) );
-                }
-            }
-            break;
-
-            case( SID_ATTR_GRAF_TRANSPARENCE ):
-            {
-                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
-                {
-                    const SdrMarkList&  rMarkList = pView->GetMarkList();
-                    BOOL                bEnable = TRUE;
-
-                    for( USHORT i = 0, nCount = rMarkList.GetMarkCount();
-                            ( i < nCount ) && bEnable; i++ )
-                    {
-                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
-
-                        if( !pObj || !pObj->ISA( SdrGrafObj ) ||
-                            ( (SdrGrafObj*) pObj )->HasGDIMetaFile() ||
-                            ( (SdrGrafObj*) pObj )->IsAnimated() )
-                        {
-                            bEnable = FALSE;
-                        }
-                    }
-
-                    if( bEnable )
-                        rSet.Put( SfxUInt16Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFTRANSPARENCE, SdrGrafTransparenceItem ) ) );
-                    else
-                        rSet.DisableItem( SID_ATTR_GRAF_TRANSPARENCE );
-                }
-            }
-            break;
-
-            default:
-            break;
-        }
-
-        nWhich = aIter.NextWhich();
-    }
+    if( pView )
+        SvxGrafAttrHelper::GetGrafAttrState( rSet, *pView );
 }
 
 void ScGraphicShell::Execute( SfxRequest& rReq )
 {
-    SfxItemSet aSet( GetPool(), SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST-1 );
+    ScDrawView* pView = GetViewData()->GetScDrawView();
 
-    const SfxItemSet*   pArgs = rReq.GetArgs();
-    const SfxPoolItem*  pItem;
-    USHORT              nSlot = rReq.GetSlot();
-    BOOL                bGeometryChanged = FALSE;
-
-    if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, FALSE, &pItem ))
-        pItem = 0;
-
-    switch( nSlot )
+    if( pView )
     {
-        case SID_ATTR_GRAF_RED:
-            if( pItem )
-                aSet.Put( SdrGrafRedItem( ((SfxInt16Item*)pItem)->GetValue() ));
-        break;
-
-        case SID_ATTR_GRAF_GREEN:
-            if( pItem )
-                aSet.Put( SdrGrafGreenItem( ((SfxInt16Item*)pItem)->GetValue() ));
-        break;
-
-        case SID_ATTR_GRAF_BLUE:
-            if( pItem )
-                aSet.Put( SdrGrafBlueItem( ((SfxInt16Item*)pItem)->GetValue() ));
-        break;
-
-        case SID_ATTR_GRAF_LUMINANCE:
-            if( pItem )
-                aSet.Put( SdrGrafLuminanceItem( ((SfxInt16Item*)pItem)->GetValue() ));
-        break;
-
-        case SID_ATTR_GRAF_CONTRAST:
-            if( pItem )
-                aSet.Put( SdrGrafContrastItem( ((SfxInt16Item*)pItem)->GetValue() ));
-        break;
-
-        case SID_ATTR_GRAF_GAMMA:
-            if( pItem )
-                aSet.Put( SdrGrafGamma100Item( ((SfxUInt32Item*)pItem)->GetValue() ));
-        break;
-
-        case SID_ATTR_GRAF_TRANSPARENCE:
-            if( pItem )
-                aSet.Put( SdrGrafTransparenceItem( ((SfxUInt16Item*)pItem)->GetValue() ));
-        break;
-
-        case SID_ATTR_GRAF_MODE:
-            if( pItem )
-                aSet.Put( SdrGrafModeItem( (GraphicDrawMode)
-                                        ((SfxUInt16Item*)pItem)->GetValue() ));
-        break;
-
-        default:
-            break;
+        SvxGrafAttrHelper::ExecuteGrafAttr( rReq, *pView );
+        Invalidate();
     }
-
-    if( aSet.Count() )
-    {
-        ScDrawView* pView = GetViewData()->GetScDrawView();
-        pView->SetAttributes( aSet );
-    }
-
-    Invalidate();
 }
 
 void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
