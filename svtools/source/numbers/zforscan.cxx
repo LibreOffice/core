@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2000-12-07 18:43:59 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,26 +973,9 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 case NF_KEY_AP:
                 case NF_KEY_H:                          // H
                 case NF_KEY_HH:                         // HH
+                case NF_KEY_S:                          // S
                 case NF_KEY_SS:                         // SS
                     eNewType = NUMBERFORMAT_TIME;
-                break;
-                case NF_KEY_S:                          // S(Sonderf. S Schilling)
-                {
-/*
-                    if (eScannedType != NUMBERFORMAT_TIME &&
-                        ( pFormatter->GetInternational()->GetLanguage() == LANGUAGE_GERMAN_AUSTRIAN ||
-                          eNewLnge == LANGUAGE_GERMAN_AUSTRIAN) )
-                    {
-                        sal_Unicode cChar = PreviousChar(i);
-                        if (cChar == '[')           // nur [s],0 am Anfang!
-                            eNewType = NUMBERFORMAT_TIME;
-                        else
-                            eNewType = NUMBERFORMAT_UNDEFINED;
-                    }
-                    else
-*/
-                        eNewType = NUMBERFORMAT_TIME;
-                }
                 break;
                 case NF_KEY_M:                          // M
                 case NF_KEY_MM:                         // MM
@@ -1315,6 +1298,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
     String sOldThousandSep  = pLoc->getNumThousandSep();
     String sOldDateSep      = pLoc->getDateSep();
     String sOldTimeSep      = pLoc->getTimeSep();
+    String sOldCurrSymbol   = pLoc->getCurrSymbol();
     String sOldCurString    = sCurString;
 
     // If the group separator is a Non-Breaking Space (French) continue with a
@@ -2311,16 +2295,16 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
             {
                 if ( bConvertSystemToSystem && eScannedType == NUMBERFORMAT_CURRENCY )
                 {   // don't stringize automatic currency, will be converted
-                    if ( sStrArray[i] == sOldCurString )
+                    if ( sStrArray[i] == sOldCurrSymbol )
                         continue;   // for
                     // DM might be splitted into D and M
-                    if ( sStrArray[i].Len() < sOldCurString.Len() &&
+                    if ( sStrArray[i].Len() < sOldCurrSymbol.Len() &&
                             pChrCls->toUpper( sStrArray[i], 0, 1 ).GetChar(0) ==
                             sOldCurString.GetChar(0) )
                     {
                         String aTmp( sStrArray[i] );
                         USHORT j = i + 1;
-                        while ( aTmp.Len() < sOldCurString.Len() &&
+                        while ( aTmp.Len() < sOldCurrSymbol.Len() &&
                                 j < nAnzStrings &&
                                 nTypeArray[j] == SYMBOLTYPE_STRING )
                         {
@@ -2383,7 +2367,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 const String& rCur =
                                     bConvertMode && bConvertSystemToSystem ?
                                     pLoc->getCurrSymbol() :
-                                    sOldCurString;
+                                    sOldCurrSymbol;
                                 sStrArray[iPos].Replace( nArrPos+nCPos,
                                     sOldCurString.Len(), rCur );
                                 rString.Replace( nStringPos+nCPos,
@@ -2417,7 +2401,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         const String& rCur =
                             bConvertMode && bConvertSystemToSystem ?
                             pLoc->getCurrSymbol() :
-                            sOldCurString;
+                            sOldCurrSymbol;
                         sStrArray[iPos].Replace( nArrPos+nCPos,
                             sOldCurString.Len(), rCur );
                         rString.Replace( nStringPos+nCPos,
