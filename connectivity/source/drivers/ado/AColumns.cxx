@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:42:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
     return new OAdoColumn(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -181,12 +181,12 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     OAdoColumn* pColumn = NULL;
     if(getImplementation(pColumn,_xDescriptor) && pColumn != NULL)
         return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn->getColumnImpl());
-    return Reference< XNamed >();
+    return sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 
