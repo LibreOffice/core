@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,15 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 
 #include "xmlkywd.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-
+using namespace ::comphelper;
 
 void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )
 {
@@ -585,3 +585,46 @@ sal_Bool XMLCompareOnlyPropHdl::exportXML( OUString& rStrExpValue, const Any& rV
     DBG_ASSERT( !this, "exportXML called for compare-only-property" );
     return sal_False;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLBoolValuesPropHdl
+//
+
+XMLBoolValuesPropHdl::XMLBoolValuesPropHdl(
+        const sal_Char* sTrueValue,
+        const sal_Char* sFalseValue ) :
+    sTrueVal( OUString::createFromAscii( sTrueValue ) ),
+    sFalseVal( OUString::createFromAscii( sFalseValue ) )
+{
+}
+
+XMLBoolValuesPropHdl::~XMLBoolValuesPropHdl()
+{
+}
+
+sal_Bool XMLBoolValuesPropHdl::importXML(
+        const OUString& rStrImpValue,
+        Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bTrue  = (rStrImpValue == sTrueVal);
+    sal_Bool bFalse = !bTrue && (rStrImpValue == sFalseVal);
+
+    if( bTrue || bFalse )
+        setBOOL( rValue, bTrue );
+
+    return (bTrue || bFalse);
+}
+
+sal_Bool XMLBoolValuesPropHdl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    rStrExpValue = getBOOL( rValue ) ? sTrueVal : sFalseVal;
+    return sal_True;
+}
+
+

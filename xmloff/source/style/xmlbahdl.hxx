@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
 #include <xmlprhdl.hxx>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 /**
@@ -217,4 +221,24 @@ public:
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
+
+/**
+    A property handler for a boolean property that is represented by two
+    different strings
+*/
+class XMLBoolValuesPropHdl : public XMLPropertyHandler
+{
+protected:
+    ::rtl::OUString sTrueVal;
+    ::rtl::OUString sFalseVal;
+
+public:
+            XMLBoolValuesPropHdl( const sal_Char* sTrueValue, const sal_Char* sFalseValue );
+    virtual ~XMLBoolValuesPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+
 #endif      // _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
