@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:30:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,9 @@
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx>
 #endif
-
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
 
 using namespace ::com::sun::star::i18n;
 
@@ -667,7 +669,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
         FOREACHPAM_END()
     }
     if( !nRet )
-        nRet = GetScriptTypeOfLanguage( LANGUAGE_SYSTEM );
+        nRet = SvtLanguageOptions::GetScriptTypeOfLanguage( LANGUAGE_SYSTEM );
     return nRet;
 }
 
