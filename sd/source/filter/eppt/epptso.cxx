@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-20 14:49:07 $
+ *  last change: $Author: sj $ $Date: 2000-11-22 18:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1928,6 +1928,9 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             if ( ( pPortion->meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Font, pPortion->mnFont ) ) )
                 nPropertyFlags |= 0x00010000;
+            if ( ( pPortion->meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_AsianOrComplexFont, pPortion->mnAsianOrComplexFont ) ) )
+                nPropertyFlags |= 0x00200000;
             if ( ( pPortion->meCharHeight == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_FontHeight, pPortion->mnCharHeight ) ) )
                 nPropertyFlags |= 0x00020000;
@@ -1947,6 +1950,8 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 rOut << (sal_uInt16)( nCharAttr );
             if ( nPropertyFlags & 0x00010000 )
                 rOut << pPortion->mnFont;
+            if ( nPropertyFlags & 0x00200000 )
+                rOut << pPortion->mnAsianOrComplexFont;
             if ( nPropertyFlags & 0x00020000 )
                 rOut << (sal_uInt16)( pPortion->mnCharHeight );
             if ( nPropertyFlags & 0x00040000 )
@@ -2035,13 +2040,14 @@ struct FieldEntry
 
 PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                 Collection& rFontCollection ) :
-    mbLastPortion   ( TRUE ),
-    mnCharAttrHard  ( 0 ),
-    mnCharAttr      ( 0 ),
-    mnTextSize      ( 0 ),
-    mnFont          ( 0 ),
-    mpFieldEntry    ( NULL ),
-    mpText          ( NULL )
+    mbLastPortion       ( TRUE ),
+    mnCharAttrHard      ( 0 ),
+    mnCharAttr          ( 0 ),
+    mnTextSize          ( 0 ),
+    mnFont              ( 0 ),
+    mnAsianOrComplexFont( 0xffff ),
+    mpFieldEntry        ( NULL ),
+    mpText              ( NULL )
 {
     mXPropSet = rXPropSet;
 
@@ -2050,12 +2056,13 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
 
 PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
                             sal_Bool bLast, Collection& rFontCollection ) :
-    mbLastPortion   ( bLast ),
-    mnCharAttrHard  ( 0 ),
-    mnCharAttr      ( 0 ),
-    mnFont          ( 0 ),
-    mpFieldEntry    ( NULL ),
-    mpText          ( NULL )
+    mbLastPortion           ( bLast ),
+    mnCharAttrHard          ( 0 ),
+    mnCharAttr              ( 0 ),
+    mnFont                  ( 0 ),
+    mnAsianOrComplexFont    ( 0xffff ),
+    mpFieldEntry            ( NULL ),
+    mpText                  ( NULL )
 {
     String aString( rXTextRange->getString() );
     String aURL;
@@ -2087,7 +2094,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         }
 
         sal_Bool bSymbol = FALSE;
-        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FontCharset" ) ), FALSE ) )
+        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharset" ) ), FALSE ) )
         {
             sal_Int16 nCharset;
             mAny >>= nCharset;
@@ -2191,6 +2198,12 @@ void PortionObj::ImplGetPortionValues( Collection& rFontCollection, sal_Bool bGe
         mnFont = (sal_uInt16)rFontCollection.GetId( aString );
     }
     meFontName = ePropState;
+    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameAsian" ) ), bGetPropStateValue ) )
+    {
+        String aString( *(::rtl::OUString*)mAny.getValue() );
+        mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aString );
+    }
+    meAsianOrComplexFont = ePropState;
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), bGetPropStateValue ) )
     {
@@ -2286,6 +2299,7 @@ void PortionObj::ImplConstruct( PortionObj& rPortionObj )
     mnCharAttr = rPortionObj.mnCharAttr;
     mnCharHeight = rPortionObj.mnCharHeight;
     mnFont = rPortionObj.mnFont;
+    mnAsianOrComplexFont = rPortionObj.mnAsianOrComplexFont;
 
     if ( rPortionObj.mpText )
     {

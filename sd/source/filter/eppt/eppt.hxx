@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-20 14:48:10 $
+ *  last change: $Author: sj $ $Date: 2000-11-22 18:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,7 @@ enum PPTExTextAttr
     CharAttr_Strikeout,
     CharAttr_Embossed,
     CharAttr_Font,
+    CharAttr_AsianOrComplexFont,
     CharAttr_Symbol,
     CharAttr_FontHeight,
     CharAttr_FontColor,
@@ -405,6 +406,7 @@ struct PPTExCharLevel
 {
     sal_uInt16      mnFlags;
     sal_uInt16      mnFont;
+    sal_uInt16      mnAsianOrComplexFont;
     sal_uInt16      mnFontHeight;
     sal_uInt16      mnEscapement;
     sal_uInt32      mnFontColor;
@@ -703,6 +705,7 @@ class PortionObj : public PropStateValue
         ::com::sun::star::beans::PropertyState  meCharColor;
         ::com::sun::star::beans::PropertyState  meCharHeight;
         ::com::sun::star::beans::PropertyState  meFontName;
+        ::com::sun::star::beans::PropertyState  meAsianOrComplexFont;
         ::com::sun::star::beans::PropertyState  meCharEscapement;
         sal_uInt16      mnCharAttrHard;
 
@@ -710,6 +713,7 @@ class PortionObj : public PropStateValue
         sal_uInt16      mnCharAttr;
         sal_uInt16      mnCharHeight;
         sal_uInt16      mnFont;
+        sal_uInt16      mnAsianOrComplexFont;
         sal_Int16       mnCharEscapement;
 
         sal_uInt32      mnTextSize;

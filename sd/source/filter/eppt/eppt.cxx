@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 17:51:44 $
+ *  last change: $Author: sj $ $Date: 2000-11-22 18:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
     mpVBA                   ( pVBA ),
     mpExEmbed               ( new SvMemoryStream )
 {
-    int i;
+    sal_uInt32 i;
 
     if ( !ImplInitSOIface() )
         return;
@@ -334,7 +334,7 @@ PPTWriter::~PPTWriter()
 
 static inline sal_uInt32 PPTtoEMU( INT32 nPPT )
 {
-    return (double)nPPT * 1587.5;
+    return (sal_uInt32)( (double)nPPT * 1587.5 );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -476,9 +476,9 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                 if ( ImplGetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) ) ) )
                 {
                     sal_uInt16 nWidth = 4233;
-                    sal_uInt16 nHeight = ( (double)4233.0 /
+                    sal_uInt16 nHeight = ( (sal_uInt16)( (double)4233.0 /
                                                 (double)maDestPageSize.Width *
-                                                    (double)maDestPageSize.Height );
+                                                    (double)maDestPageSize.Height ) );
                     aPropItem.Clear();
                     aPropItem << (UINT32)VT_CF
                               << (UINT32)0;
@@ -863,7 +863,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         {
                             nStartSlide++;
                             nFlags |= 4;
-                            nEndSlide = mnPages;
+                            nEndSlide = (sal_uInt16)mnPages;
                             break;
                         }
                     }
@@ -941,7 +941,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     {
                         ::com::sun::star::uno::Sequence< ::rtl::OUString> aNameSeq( aXCont->getElementNames() );
                         const ::rtl::OUString* pUString = aNameSeq.getArray();
-                        sal_Int16 nCount = aNameSeq.getLength();
+                        sal_Int16 nCount = (sal_Int16)aNameSeq.getLength();
                         if ( nCount )
                         {
                             mp_EscherEx->OpenContainer( EPP_NamedShows );
@@ -1218,7 +1218,7 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
             *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Title;
             mp_EscherEx->AddAtom( mnTextSize << 1, EPP_TextCharsAtom );
             const sal_Unicode* pString = aUString;
-            for ( int i = 0; i < mnTextSize; i++ )
+            for ( sal_uInt32 i = 0; i < mnTextSize; i++ )
             {
                 nChar = pString[ i ];       // 0xa -> 0xb weicher Zeilenumbruch
                 if ( nChar == 0xa )
@@ -1791,7 +1791,7 @@ void PPTWriter::ImplWriteCString( SvStream& rSt, const String& rString, sal_uInt
         rSt << (sal_uInt32)( ( nInstance << 4 ) | ( EPP_CString << 16 ) )
             << (sal_uInt32)( nLen << 1 );
         for ( i = 0; i < nLen; i++ )
-            rSt << rString.GetChar( i );
+            rSt << rString.GetChar( (sal_uInt16)i );
     }
 }
 
@@ -2028,6 +2028,7 @@ PPTExCharSheet::PPTExCharSheet( int nInstance )
         }
         rLev.mnFlags = 0;
         rLev.mnFont = 0;
+        rLev.mnAsianOrComplexFont = 0xffff;
         rLev.mnFontHeight = nFontHeight;
         rLev.mnFontColor = 0xfe000000;
         rLev.mnEscapement = 0;
@@ -2049,6 +2050,8 @@ void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         rLev.mnFontHeight = aPortionObj.mnCharHeight;
     if ( aPortionObj.meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         rLev.mnFont = aPortionObj.mnFont;
+    if ( aPortionObj.meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+        rLev.mnAsianOrComplexFont = aPortionObj.mnAsianOrComplexFont;
     rLev.mnFlags = aPortionObj.mnCharAttr;
 }
 
@@ -2071,7 +2074,7 @@ void PPTExCharSheet::Write( SvStream& rSt, _EscherEx* pEx, sal_uInt16 nLev, sal_
     }
     else
     {
-        rSt << (sal_uInt16)0xffff       // unbekannt
+        rSt << rLev.mnAsianOrComplexFont
             << (sal_uInt16)0xffff       // unbekannt
             << (sal_uInt16)0xffff       // unbekannt
             << rLev.mnFontHeight
@@ -2205,9 +2208,9 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
                     aParagraphObj.ImplGetNumberingLevel( rBuProv, i, FALSE );
 //              rLev.mbIsBullet = ( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
                 rLev.mnTextOfs = aParagraphObj.nTextOfs;
-                rLev.mnBulletOfs = aParagraphObj.nBulletOfs;
+                rLev.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
                 rLev.mnBulletChar = aParagraphObj.cBulletId;
-                rLev.mnBulletFont = rFontCollection.GetId( String( aParagraphObj.aFontDesc.Name ) );
+                rLev.mnBulletFont = (sal_uInt16)rFontCollection.GetId( String( aParagraphObj.aFontDesc.Name ) );
                 rLev.mnBulletHeight = aParagraphObj.nBulletRealSize;
                 rLev.mnBulletColor = aParagraphObj.nBulletColor;
 
@@ -2337,6 +2340,7 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
         case CharAttr_Strikeout : nFlag = 256; break;
         case CharAttr_Embossed : nFlag = 512; break;
         case CharAttr_Font : return ( rChar.mnFont != nValue );
+        case CharAttr_AsianOrComplexFont : return ( rChar.mnAsianOrComplexFont != nValue );
         case CharAttr_Symbol : return TRUE;
         case CharAttr_FontHeight : return ( rChar.mnFontHeight != nValue );
         case CharAttr_FontColor : return ( rChar.mnFontColor != nValue );
