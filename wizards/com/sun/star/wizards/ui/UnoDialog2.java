@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDialog2.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:07:05 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
