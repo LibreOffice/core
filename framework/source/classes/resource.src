@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:37:20 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#include "resource.hrc"
+#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
+#include <classes/resource.hrc>
+#endif
 
 String STR_MENU_ADDONS
 {
@@ -126,10 +128,36 @@ String STR_MENU_ADDONHELP
     Text[ slovenian ] = "Pomoč za ~Dodatke";
 };
 
-
-
-
-
-
-
-
+String STR_MENU_HEADFOOTALL
+{
+    TEXT = "Alle" ;
+    TEXT [ English ] = "All" ;
+    Text [ english_us ] = "All" ;
+    Text [ italian ] = "Tutti" ;
+    Text [ spanish ] = "Todos" ;
+    Text [ french ] = "Tous" ;
+    Text [ dutch ] = "alle" ;
+    Text [ swedish ] = "Alla" ;
+    Text [ danish ] = "Alle" ;
+    Text [ portuguese ] = "Todos" ;
+    Text [ portuguese_brazilian ] = "Tudo" ;
+    Text[ chinese_simplified ] = "全部";
+    Text[ russian ] = "���";
+    Text[ polish ] = "Wszystko";
+    Text[ japanese ] = "すべて";
+    Text[ chinese_traditional ] = "全部";
+    Text[ arabic ] = "����";
+    Text[ greek ] = "���";
+    Text[ korean ] = "모두";
+    Text[ turkish ] = "T�m�";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tot";
+    Text[ finnish ] = "Kaikki";
+    Text[ thai ] = "ทั้งหมด";
+    Text[ czech ] = "Vše";
+    Text[ hebrew ] = "‮הכל‬";
+    Text[ hindi ] = "सब";
+    Text[ slovak ] = "Všetko";
+    Text[ hungarian ] = "Minden";
+    Text[ slovenian ] = "Vse";
+};
