@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 12:53:46 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 13:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,13 +372,13 @@ namespace dbaui
                     sal_Int32 nCommandType = CommandType::TABLE;
                     for(;pBegin != pEnd;++pBegin)
                     {
-                        if(pBegin->Name == PROPERTY_DATASOURCENAME)
+                        if (0 == pBegin->Name.compareToAscii(PROPERTY_DATASOURCENAME))
                             pBegin->Value >>= sSrcDataSourceName;
-                        else if(pBegin->Name == PROPERTY_COMMANDTYPE)
+                        else if (0 == pBegin->Name.compareToAscii(PROPERTY_COMMANDTYPE))
                             pBegin->Value >>= nCommandType;
-                        else if(pBegin->Name == PROPERTY_COMMAND)
+                        else if (0 == pBegin->Name.compareToAscii(PROPERTY_COMMAND))
                             pBegin->Value >>= sName;
-                        else if(pBegin->Name == PROPERTY_ACTIVECONNECTION)
+                        else if (0 == pBegin->Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
                             pBegin->Value >>= xSrcConnection;
                     }
 
@@ -855,6 +855,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/06/07 12:53:46  fs
+ *  #87905# don't DnD bookmarks
+ *
  *  Revision 1.13  2001/06/01 11:23:45  oj
  *  #86520# insert of tabledata corrected
  *
