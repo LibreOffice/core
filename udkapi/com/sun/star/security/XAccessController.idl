@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessController.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-11 16:36:36 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 13:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <com/sun/star/security/XAccessControlContext.idl>
 #endif
 
-#ifndef __com_sun_star_security_XPrivilegedAction_idl__
-#include <com/sun/star/security/XPrivilegedAction.idl>
+#ifndef __com_sun_star_security_XAction_idl__
+#include <com/sun/star/security/XAction.idl>
 #endif
 
 #ifndef __com_sun_star_security_Permission_idl__
@@ -88,9 +88,8 @@ module com {  module sun {  module star {  module security {
 
 //=============================================================================
 
-/** Interface for checking permissions and invoking privileged restricted
-    by an additional XAccessControlContext.
-    </p>
+/** Interface for checking permissions and invoking privileged or restricted
+    actions.
 */
 interface XAccessController : com::sun::star::uno::XInterface
 {
@@ -114,13 +113,15 @@ interface XAccessController : com::sun::star::uno::XInterface
         [in] Permission perm )
         raises (AccessControlException);
 
-    /** Perform the specified action with privileges enabled and restricted
-        by the specified AccessControlContext.
+    /** Perform the specified action restricting permissions to the given
+        XAccessControlContext.
+        The action is performed with the intersection of the permissions of all given
+        XAccessControlContexts (including the ones given by earlier doRestricted() calls of the
+        call chain) and the security policy currently in effect.
+        The latter includes static security, e.g. based on user credentials.
         <p>
-        The action is performed with the intersection of the permissions
-        possessed by the caller, and those specified by the XAccessControlContext.
         If the specified XAccessControlContext is null, then the action is performed
-        only with the permissions possessed by the caller.
+        with unmodified permissions, i.e. the call makes no sense.
         </p>
         @param action
                action object to be executed
@@ -131,8 +132,35 @@ interface XAccessController : com::sun::star::uno::XInterface
         @throws com::sun::star::uno::Exception
                 any UNO exception may be thrown
     */
+    any doRestricted(
+        [in] XAction action,
+        [in] XAccessControlContext restriction )
+        raises (com::sun::star::uno::Exception);
+
+    /** Perform the specified action reducing restrictions to only the given XAccessControlContext
+        and the security policy currently in effect.
+        The latter includes static security, e.g. based on user credentials.
+        <p>
+        If the specified XAccessControlContext is null, then the action is performed
+        only with the permissions of the security policy currently in effect.
+        </p>
+
+        @attention
+        Do carefully use this method only for well known use-cases to avoid exploits!
+        Script engines executing sandboxed scripts should generally deny calling this
+        method.
+
+        @param action
+               action object to be executed
+        @param restriction
+               access control context to restrict permission; null for no restriction
+        @return
+                result
+        @throws com::sun::star::uno::Exception
+                any UNO exception may be thrown
+    */
     any doPrivileged(
-        [in] XPrivilegedAction action,
+        [in] XAction action,
         [in] XAccessControlContext restriction )
         raises (com::sun::star::uno::Exception);
 
