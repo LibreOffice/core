@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ObjectOutputStream.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ module com {  module sun {  module star {  module io {
     The written objects are held until this instance is destroyed.
     The references to the objects are written as four-byte integers
     and begin at 1. Data format is written: </p>
-
     <pre>
     short   InfoLength
     long    ObjectReference // 0 indicates no object
@@ -107,7 +106,7 @@ module com {  module sun {  module star {  module io {
         <li>-object reference identifier 0 indicates no object </li>
     </ul>
  */
-service ObjectOutputStream
+published service ObjectOutputStream
 {
     /** allows to write the data to the stream.
      */
