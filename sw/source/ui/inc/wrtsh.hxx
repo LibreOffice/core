@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:03:18 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 
 class Window;
+class OutputDevice;
 class SbxArray;
 class SwDoc;
 class SvInPlaceObjectRef;
