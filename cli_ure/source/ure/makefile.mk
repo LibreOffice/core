@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2003-03-28 10:17:42 $
+#   last change: $Author: dbo $ $Date: 2003-04-25 14:04:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ ALLTAR : \
 CSFILES = \
     uno$/QueryInterface.cs						\
     uno$/Runtime.cs							\
-    uno$/util$/ServiceImplementationAttribute.cs			\
+    uno$/ServiceImplementationAttribute.cs				\
+    uno$/SingletonAttribute.cs					\
     uno$/util$/DisposeGuard.cs					\
     uno$/util$/WeakAdapter.cs					\
     uno$/util$/WeakBase.cs						\
