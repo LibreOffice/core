@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-07 17:35:31 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 09:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,25 +376,37 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             SID_ATTR_POSTIT_DATE));
                 }
 
-                SvxPostItDialog *pDlg = new SvxPostItDialog( pMDI, aSet, bTravel);
-                pDlg->SetReadonlyPostIt(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel());
-
-                if (bTravel)
+                const SfxItemSet* pSet = pArgs;
+                SvxPostItDialog *pDlg = NULL;
+                if ( !pArgs )
                 {
-                    pDlg->EnableTravel(bNext, bPrev);
-                    pDlg->SetPrevHdl(LINK(this, SwTextShell, PostItPrevHdl));
-                    pDlg->SetNextHdl(LINK(this, SwTextShell, PostItNextHdl));
+                    pDlg = new SvxPostItDialog( pMDI, aSet, bTravel);
+                    pDlg->SetReadonlyPostIt(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel());
+
+                    if (bTravel)
+                    {
+                        pDlg->EnableTravel(bNext, bPrev);
+                        pDlg->SetPrevHdl(LINK(this, SwTextShell, PostItPrevHdl));
+                        pDlg->SetNextHdl(LINK(this, SwTextShell, PostItNextHdl));
+                    }
+
+                    if (bNew)
+                        pDlg->SetText(SW_RESSTR(STR_NOTIZ_INSERT));
+
+                    bNoInterrupt = TRUE;
+                    if ( pDlg->Execute() == RET_OK )
+                    {
+                        pSet = pDlg->GetOutputItemSet();
+                        rReq.Done( *pSet );
+                    }
+                    else
+                        rReq.Ignore();
                 }
 
-                if (bNew)
-                    pDlg->SetText(SW_RESSTR(STR_NOTIZ_INSERT));
-
-                bNoInterrupt = TRUE;
-                if ( pDlg->Execute() == RET_OK )
+                if ( pSet )
                 {
-                    const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                    String sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
-                    String sAuthor(((const SvxPostItAuthorItem&)pOutSet->Get(SID_ATTR_POSTIT_AUTHOR)).GetValue());
+                    String sMsg(((const SvxPostItTextItem&)pSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
+                    String sAuthor(((const SvxPostItAuthorItem&)pSet->Get(SID_ATTR_POSTIT_AUTHOR)).GetValue());
 
                     if(bNew)
                     {
@@ -507,9 +519,56 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
             case FN_JAVAEDIT:
             {
-                SwJavaEditDialog *pDlg = new SwJavaEditDialog( pMDI, &rSh);
-                pDlg->Execute();
-                delete pDlg;
+                String aType, aText;
+                BOOL bIsUrl=FALSE;
+                BOOL bNew=FALSE, bUpdate=FALSE;
+                SwFldMgr* pMgr = new SwFldMgr;
+                if ( pItem )
+                {
+                    aText = ((SfxStringItem*)pItem)->GetValue();
+                    SFX_REQUEST_ARG( rReq, pType, SfxStringItem, FN_PARAM_2 , sal_False );
+                    SFX_REQUEST_ARG( rReq, pIsUrl, SfxBoolItem, FN_PARAM_1 , sal_False );
+                    if ( pType )
+                        aType = pType->GetValue();
+                    if ( pIsUrl )
+                        bIsUrl = pIsUrl->GetValue();
+
+                    SwScriptField* pFld = (SwScriptField*)pMgr->GetCurFld();
+                    bNew = !(pFld && pFld->GetTyp()->Which() == RES_SCRIPTFLD);
+                    bUpdate = ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
+                }
+                else
+                {
+                    SwJavaEditDialog *pDlg = new SwJavaEditDialog( pMDI, &rSh);
+                    if ( pDlg->Execute() )
+                    {
+                        aType = pDlg->GetType();
+                        aText = pDlg->GetText();
+                        bIsUrl = pDlg->IsUrl();
+                        bNew = pDlg->IsNew();
+                        bUpdate = pDlg->IsUpdate();
+                        rReq.AppendItem( SfxStringItem( FN_JAVAEDIT, aText ) );
+                        rReq.AppendItem( SfxStringItem( FN_PARAM_2, aType ) );
+                        rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bIsUrl ) );
+                    }
+
+                    delete pDlg;
+                }
+
+                if( bNew )
+                {
+                    SwInsertFld_Data aData(TYP_SCRIPTFLD, 0, aType, aText, bIsUrl);
+                    pMgr->InsertFld(aData);
+                    rReq.Done();
+                }
+                else if( bUpdate )
+                {
+                    pMgr->UpdateCurFld( bIsUrl, aType, aText );
+                    rSh.SetUndoNoResetModified();
+                    rReq.Done();
+                }
+                else
+                    rReq.Ignore();
             }
             break;
 
