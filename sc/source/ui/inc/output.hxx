@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:27:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ struct RowInfo;
 class ScTabViewShell;
 class SvInPlaceObjectRef;
 class ScPageBreakData;
+class FmFormView;
 
 // ---------------------------------------------------------------------------
 
@@ -139,6 +140,9 @@ private:
     SdrObject* pEditObj;        // beim Painten auslassen
 
     ScTabViewShell* pViewShell; // zum Connecten von sichtbaren Plug-Ins
+
+    // #114135#
+    FmFormView* pDrawView;      // SdrView to paint to
 
     BOOL bEditMode;             // InPlace editierte Zelle - nicht ausgeben
     USHORT nEditCol;
@@ -209,6 +213,9 @@ public:
     void    SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
     void    SetEditObject( SdrObject* pObj )    { pEditObj = pObj; }
     void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
+
+    // #114135#
+    void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
 
     void    SetSolidBackground( BOOL bSet )     { bSolidBackground = bSet; }
     void    SetUseStyleColor( BOOL bSet )       { bUseStyleColor = bSet; }
