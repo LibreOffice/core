@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:29:44 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ struct FeatureStateEvent : public ::com::sun::star::lang::EventObject
 
 SlotStatusListener::SlotStatusListener()
 : bDisposed( FALSE )
-, bEnabled( FALSE )
+, bEnabled( TRUE )
 {}
 
 // XStatusListener
