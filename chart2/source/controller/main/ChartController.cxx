@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 17:03:13 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 19:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,9 +157,9 @@ ChartController::~ChartController()
 {
     impl_deleteView();
     //m_pChartWindow is deleted via UNO by Window hierarchy or Framework
-    if(m_pNumberFormatterWrapper)
-        delete m_pNumberFormatterWrapper;
-
+    DELETEZ( m_pNumberFormatterWrapper );
+    DELETEZ( m_pDrawViewWrapper );
+    DELETEZ( m_pDrawModelWrapper );
     //@todo ?
 }
 
@@ -464,7 +464,6 @@ void SAL_CALL ChartController
     throw(uno::RuntimeException)
 {
     m_bViewDirty = false;
-    impl_deleteView();
     impl_tryInitializeView();
     if( m_aSelectedObjectCID.getLength() )
     {
@@ -479,8 +478,11 @@ void SAL_CALL ChartController
 {
     if( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
         this->EndTextEdit();
+    if( m_pDrawViewWrapper )
+        m_pDrawViewWrapper->SetMarkHdlHidden(TRUE);
 
     delete m_pChartView; m_pChartView = NULL;
+    DELETEZ( m_pDrawViewWrapper );
 }
 
         sal_Bool SAL_CALL ChartController
@@ -499,6 +501,7 @@ void SAL_CALL ChartController
     if( xDrawModel.is())
         xDrawModel->lockControllers();
 
+    impl_deleteView();
     m_pChartView = ChartView::createView( m_xCC, m_aModel->getModel()
                                 , uno::Reference<drawing::XDrawPagesSupplier>::query( xDrawModel )
                                 , m_pNumberFormatterWrapper );
@@ -511,7 +514,7 @@ void SAL_CALL ChartController
     if(!m_pDrawViewWrapper)
         m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),m_pChartWindow);
     else
-        m_pDrawViewWrapper->ReInit();
+        m_pDrawViewWrapper->ReInit();//this does not work properly for unknown reasons (after some tiny resizes their seems to went something very wrong: mouse click to view -> crash )
     //test:
     //Rectangle aTest = m_pDrawViewWrapper->GetWorkArea();
     //m_pDrawViewWrapper->SetWorkArea(pOutDev->PixelToLogic(Rectangle(rOfs, rSize)));
@@ -690,6 +693,8 @@ void SAL_CALL ChartController
     //--release all resources and references
 
     impl_deleteView();
+    DELETEZ( m_pDrawViewWrapper );
+    DELETEZ( m_pDrawModelWrapper );
     m_pChartWindow = NULL;//m_pChartWindow is deleted via UNO by Window hierarchy or Framework
 
     m_xFrame = NULL;
