@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-28 16:44:42 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,13 +155,13 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
+        < "Sucesso_popul." ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -176,13 +176,13 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
+        < "Ãåí_ñîâîêóïíîñòü_s" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "ÏÈ" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -197,13 +197,13 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
+        < "Population_s" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -224,7 +224,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -281,13 +281,13 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
+        < "onnistumiset" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
-        < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "Pii" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -323,13 +323,13 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
+        < "Population_s" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -371,7 +371,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -392,7 +392,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -401,7 +401,7 @@ ItemList [ language_user1 ] =
         < "feet" ; FUNIT_FOOT ; > ;
         < "miles" ; FUNIT_MILE ; > ;
         < "mile" ; FUNIT_MILE ; > ;
-        < "%" ; FUNIT_PERCENT ; > ;
+        < "-" ; FUNIT_PERCENT ; > ;
     };
     ItemList [ japanese ] =
     {
@@ -497,7 +497,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -518,7 +518,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -533,13 +533,13 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
+        < "èxits" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -560,7 +560,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "à¹„à¸ž" ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
