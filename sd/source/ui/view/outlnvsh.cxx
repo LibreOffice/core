@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:06:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,6 +1590,7 @@ void SdOutlineViewShell::ReadFrameViewData(FrameView* pView)
 
     USHORT nPage = pFrameView->GetSelectedPage();
     pLastPage = pDoc->GetSdPage( nPage, PK_STANDARD );
+    pOlView->SetActualPage(pLastPage);
 }
 
 
