@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:10:52 $
+ *  last change: $Author: as $ $Date: 2001-05-23 05:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ namespace framework{
 
 #define SUBKEY_PREFERRED                            DECLARE_ASCII("Preferred"                                       )
 #define SUBKEY_INSTALLED                            DECLARE_ASCII("Installed"                                       )
+#define SUBKEY_NAME                                 DECLARE_ASCII("Name"                                            )
 #define SUBKEY_UINAME                               DECLARE_ASCII("UIName"                                          )
 #define SUBKEY_MEDIATYPE                            DECLARE_ASCII("MediaType"                                       )
 #define SUBKEY_CLIPBOARDFORMAT                      DECLARE_ASCII("ClipboardFormat"                                 )
@@ -717,6 +718,9 @@ class FilterCFGAccess   :   public  ::utl::ConfigItem
         virtual ~FilterCFGAccess    (                              );
         void     read               (       DataContainer&   rData );
         void     write              (       DataContainer&   rData );
+
+        static   ::rtl::OUString encodeFilterName( const ::rtl::OUString& sName );
+        static   ::rtl::OUString decodeFilterName( const ::rtl::OUString& sName );
 
     private:
         void     impl_loadTypes     (       DataContainer&   rData );
