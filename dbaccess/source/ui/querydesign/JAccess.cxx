@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:04:24 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ namespace dbaui
                 aRet = aIter->second->GetAccessible();
             }
             else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections()->size() )
-                aRet = (*m_pTableView->getTableConnections())[i - nTableWindowCount]->getAccessible();
+                aRet = (*m_pTableView->getTableConnections())[i - nTableWindowCount]->GetAccessible();
         }
         else
             throw IndexOutOfBoundsException();
