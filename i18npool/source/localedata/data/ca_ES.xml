@@ -12,9 +12,9 @@
 </Country>
 </LC_INFO>
 <LC_CTYPE ref="es_ES"/>
-<LC_FORMAT>
+<LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Pts-403]">
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-<FormatCode>DD/MM/YY</FormatCode>
+<FormatCode>D/MM/YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
@@ -46,31 +46,31 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-<FormatCode>NNNND / MMMM / YYYY</FormatCode>
+<FormatCode>NNNND "de" MMMM "de" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-<FormatCode>D / MMM / YY</FormatCode>
+<FormatCode>D "de" MMM "de" YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-<FormatCode>D / MMM / YYYY</FormatCode>
+<FormatCode>D "de" MMM "de" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>D / MMMM / YYYY</FormatCode>
+<FormatCode>D "de" MMMM "de" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN,D / MMM / YY</FormatCode>
+<FormatCode>NN D "de" MMM "de" YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN,D / MMMM / YYYY</FormatCode>
+<FormatCode>NN D "de" MMMM "de" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNND / MMMM / YYYY</FormatCode>
+<FormatCode>NNNND "de" MMMM "de" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
@@ -158,19 +158,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>#.##0 [$Pts-403];-#.##0 [$Pts-403]</FormatCode>
+<FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>#.##0 [$Pts-403];-#.##0 [$Pts-403]</FormatCode>
+<FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>#.##0 [$Pts-403];[RED]-#.##0 [$Pts-403]</FormatCode>
+<FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>#.##0 [$Pts-403];[RED]-#.##0 [$Pts-403]</FormatCode>
+<FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -178,7 +178,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>#.##0 [$Pts-403];[RED]-#.##0 [$Pts-403]</FormatCode>
+<FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
