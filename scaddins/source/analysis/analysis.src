@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: nf $ $Date: 2001-11-29 13:25:12 $
+ *  last change: $Author: nf $ $Date: 2001-11-29 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,19 +734,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "Returns the serial number of the last day of the month before or after a specified number of months";
             Text[ french ] = "Renvoie le numéro de série du dernier jour du mois situé avant ou après un nombre spécifié de mois par rapport à la date de départ.";
             Text[ spanish ] = "Devuelve el número de serie de la fecha que representa el último día del mes anterior o posterior a un número determinado de meses.";
-            Text[ finnish ] = "Returns the serial number of the last day of the month before or after a specified number of months";
-            Text[ italian ] = "Restituisce la data espressa in numero seriale dell'ultimo giorno del mese precedente o successivo alla data iniziale.";
+            Text[ finnish ] = "Palauttaa kuukauden viimeisen päivämäärän sarjanumeron alkupäivämäärää edeltävältä tai seuraavalta ajalta (määritys kuukausina)";
+            Text[ italian ] = "Restituisce la data dell'ultimo giorno di un mese che anticipa o segue di alcuni mesi la data iniziale.";
             Text[ danish ] = "Returns the serial number of the last day of the month before or after a specified number of months";
             Text[ swedish ] = "Returnerar ett serienummer för det datum som representerar den sista dagen i månaden som ligger ett visst antal månader före eller efter startdatumet.";
             Text[ polish ] = "Podaje wartoœæ liczby seryjnej daty ostatniego dnia miesi¹ca przed lub po podanej liczbie miesiêcy.";
             Text[ portuguese_brazilian ] = "Returns the serial number of the last day of the month before or after a specified number of months";
-            Text[ japanese ] = "ŠJn“ú‚©‚ç‹NZ‚µ‚Äw’è‚³‚ê‚½Œ”‚¾‚¯‘O‚Ü‚½‚ÍŒã‚ÌŒ‚ÌÅI“ú‚É‘Î‰‚·‚é¼Ø±Ù’l‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "ÁöÁ¤µÈ °³¿ù ¼öº¸´Ù ÀÌÀü ¶Ç´Â ÀÌÈÄ¿¡ ÀÖ´Â ´ŞÀÇ ¸¶Áö¸· ÀÏÀ» ¿¬¼Ó ³¯Â¥°ªÀ¸·Î ¹İÈ¯ÇÕ´Ï´Ù.";
-            Text[ chinese_simplified ] = "¼ÆËãÄ³Ò»Ö¸¶¨¿ªÊ¼ÈÕÆÚÖ®Ç°»òÖ®ºóµÄÔÂ·İÖĞ×îºóÒ»ÌìµÄĞòÁĞÊı¡£";
-            Text[ chinese_traditional ] = "¶Ç¦^¦b°_©l¤é´Á¤§«e©Î¤§«á«ü©w¤ë¼Æªº³o¤@­Ó¤ë³Ì«á¤@¤Ñªº§Ç¦C¸¹½X¡C";
+            Text[ japanese ] = "é–‹å§‹æ—¥ã‹ã‚‰èµ·ç®—ã—ã¦æŒ‡å®šã•ã‚ŒãŸæœˆæ•°ã ã‘å‰ã¾ãŸã¯å¾Œã®æœˆã®æœ€çµ‚æ—¥ã«å¯¾å¿œã™ã‚‹ï½¼ï¾˜ï½±ï¾™å€¤ã‚’è¿”ã—ã¾ã™ã€‚";
+            Text[ korean ] = "ì§€ì •ëœ ê°œì›” ìˆ˜ë³´ë‹¤ ì´ì „ ë˜ëŠ” ì´í›„ì— ìˆëŠ” ë‹¬ì˜ ë§ˆì§€ë§‰ ì¼ì„ ì—°ì† ë‚ ì§œê°’ìœ¼ë¡œ ë°˜í™˜í•©ë‹ˆë‹¤.";
+            Text[ chinese_simplified ] = "è®¡ç®—æŸä¸€æŒ‡å®šå¼€å§‹æ—¥æœŸä¹‹å‰æˆ–ä¹‹åçš„æœˆä»½ä¸­æœ€åä¸€å¤©çš„åºåˆ—æ•°ã€‚";
+            Text[ chinese_traditional ] = "å‚³å›åœ¨èµ·å§‹æ—¥æœŸä¹‹å‰æˆ–ä¹‹å¾ŒæŒ‡å®šæœˆæ•¸çš„é€™ä¸€å€‹æœˆæœ€å¾Œä¸€å¤©çš„åºåˆ—è™Ÿç¢¼ã€‚";
             Text[ turkish ] = "Returns the serial number of the last day of the month before or after a specified number of months";
             Text[ arabic ] = "Returns the serial number of the last day of the month before or after a specified number of months";
-            Text[ catalan ] = "Returns the serial number of the last day of the month before or after a specified number of months";
+            Text[ catalan ] = "Torna el nombre de sèrie de la data que representa l'últim dia del mes anterior o posterior a un nombre determinat de mesos.";
         };
 
         String 2 // name of parameter 1         EoMonth
@@ -761,19 +761,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "start date";
             Text[ french ] = "Date initiale";
             Text[ spanish ] = "Fecha inicial";
-            Text[ finnish ] = "start date";
+            Text[ finnish ] = "Alkupäivämäärä";
             Text[ italian ] = "Data iniziale";
             Text[ danish ] = "start date";
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Data pocz¹tkowa";
             Text[ portuguese_brazilian ] = "start date";
-            Text[ japanese ] = "ŠJn“ú";
-            Text[ korean ] = "½ÃÀÛ ³¯Â¥";
+            Text[ japanese ] = "é–‹å§‹æ—¥";
+            Text[ korean ] = "ì‹œì‘ ë‚ ì§œ";
             Text[ chinese_simplified ] = "start_date";
             Text[ chinese_traditional ] = "start_date";
             Text[ turkish ] = "start date";
             Text[ arabic ] = "start date";
-            Text[ catalan ] = "start date";
+            Text[ catalan ] = "data inicial";
         };
 
         String 3 // description of parameter 1  EoMonth
@@ -788,19 +788,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "start date";
             Text[ french ] = "Date initiale";
             Text[ spanish ] = "Fecha inicial";
-            Text[ finnish ] = "start date";
+            Text[ finnish ] = "Aloituspäivämäärä";
             Text[ italian ] = "Data iniziale";
             Text[ danish ] = "start date";
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Liczba okreœlaj¹ca datê pocz¹tkow¹.";
             Text[ portuguese_brazilian ] = "start date";
-            Text[ japanese ] = "‹NZ“ú‚ğ•\\‚·“ú•t";
-            Text[ korean ] = "½ÃÀÛ ³¯Â¥";
-            Text[ chinese_simplified ] = "¿ªÊ¼ÈÕÆÚ";
-            Text[ chinese_traditional ] = "°_©l¤é´Á";
+            Text[ japanese ] = "èµ·ç®—æ—¥ã‚’è¡¨ã™æ—¥ä»˜";
+            Text[ korean ] = "ì‹œì‘ ë‚ ì§œ";
+            Text[ chinese_simplified ] = "å¼€å§‹æ—¥æœŸ";
+            Text[ chinese_traditional ] = "èµ·å§‹æ—¥æœŸ";
             Text[ turkish ] = "start date";
             Text[ arabic ] = "start date";
-            Text[ catalan ] = "start date";
+            Text[ catalan ] = "data inicial";
         };
 
         String 4 // name of parameter 2         EoMonth
@@ -815,19 +815,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "months";
             Text[ french ] = "Mois";
             Text[ spanish ] = "Meses";
-            Text[ finnish ] = "months";
+            Text[ finnish ] = "Kuukausien määrä";
             Text[ italian ] = "Mesi";
             Text[ danish ] = "months";
             Text[ swedish ] = "Månader";
             Text[ polish ] = "Miesi¹ce";
             Text[ portuguese_brazilian ] = "months";
-            Text[ japanese ] = "Œ";
-            Text[ korean ] = "°³¿ù";
+            Text[ japanese ] = "æœˆ";
+            Text[ korean ] = "ê°œì›”";
             Text[ chinese_simplified ] = "months";
             Text[ chinese_traditional ] = "months";
             Text[ turkish ] = "months";
             Text[ arabic ] = "months";
-            Text[ catalan ] = "months";
+            Text[ catalan ] = "mesos";
         };
 
         String 5 // description of parameter 2  EoMonth
@@ -842,19 +842,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "months";
             Text[ french ] = "Nombre de mois avant ou après la date initiale.";
             Text[ spanish ] = "Cantidad de meses anterior o posterior a la fecha inicial";
-            Text[ finnish ] = "months";
-            Text[ italian ] = "Numero di mesi precedenti o successivi alla data finale.";
+            Text[ finnish ] = "Aloituspäivämäärää edeltävien tai seuraavien kuukausien määrä";
+            Text[ italian ] = "Numero di mesi precedenti o successivi alla data iniziale.";
             Text[ danish ] = "months";
             Text[ swedish ] = "Antal månader före eller efter startdatum";
             Text[ polish ] = "Liczba miesiêcy przed lub po dacie pocz¹tkowej.";
             Text[ portuguese_brazilian ] = "months";
-            Text[ japanese ] = "ŠJn“ú‚©‚ç‹NZ‚µ‚½‘O‚Ü‚½‚ÍŒã‚ÌŒ”B";
-            Text[ korean ] = "°³¿ù";
-            Text[ chinese_simplified ] = "Ö¸¶¨¿ªÊ¼ÈÕÆÚµÄÄ³Ò»ÔÂ·İÊı¡£";
-            Text[ chinese_traditional ] = "°_©l¤é´Á¤§«e©Î¤§«áªº¤ë¼Æ¡C";
+            Text[ japanese ] = "é–‹å§‹æ—¥ã‹ã‚‰èµ·ç®—ã—ãŸå‰ã¾ãŸã¯å¾Œã®æœˆæ•°ã€‚";
+            Text[ korean ] = "ê°œì›”";
+            Text[ chinese_simplified ] = "å¼€å§‹æ—¥æœŸä¹‹å‰æˆ–ä¹‹åçš„æœˆä»½æ•°ã€‚";
+            Text[ chinese_traditional ] = "èµ·å§‹æ—¥æœŸä¹‹å‰æˆ–ä¹‹å¾Œçš„æœˆæ•¸ã€‚";
             Text[ turkish ] = "months";
             Text[ arabic ] = "months";
-            Text[ catalan ] = "months";
+            Text[ catalan ] = "mesos";
         };
     };
 
@@ -1832,19 +1832,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "Returns the square root of ( number * pi )";
             Text[ french ] = "Renvoie la racine carrée d'un nombre multiplié par pi.";
             Text[ spanish ] = "Calcula la raíz de un número multiplicado por Pi.";
-            Text[ finnish ] = "Returns the square root of ( number * pi )";
+            Text[ finnish ] = "Palauttaa piillä kerrotun luvun neliönjuuren";
             Text[ italian ] = "Calcola la radice quadrata di un numero per il quale si moltiplica pi greco.";
             Text[ danish ] = "Returns the square root of ( number * pi )";
-            Text[ swedish ] = "Beräknar kvadratroten av ett tal multiplicerat med pi.";
+            Text[ swedish ] = "Beräknar kvadratroten ur ett tal multiplicerat med pi.";
             Text[ polish ] = "Zwraca pierwiastek kwadratowy z liczby pomono¿onej przez pi.";
             Text[ portuguese_brazilian ] = "Returns the square root of ( number * pi )";
-            Text[ japanese ] = "”’l* ƒÎ ‚Ì•½•ûª‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "(°ª + pi)ÀÇ Á¦°ö±ÙÀ» ¹İÈ¯ÇÕ´Ï´Ù.";
-            Text[ chinese_simplified ] = "¼ÆËãÄ³Ò»ºÍ pi Ïà³ËµÄÆ½·½¸ù¡£";
-            Text[ chinese_traditional ] = "¶Ç¦^¬Y¤@­Ó¼Æ­È­¼©ó pi ªº¥­¤è®Ú¡C";
+            Text[ japanese ] = "æ•°å€¤* Ï€ ã®å¹³æ–¹æ ¹ã‚’è¿”ã—ã¾ã™ã€‚";
+            Text[ korean ] = "(ê°’ + pi)ì˜ ì œê³±ê·¼ì„ ë°˜í™˜í•©ë‹ˆë‹¤.";
+            Text[ chinese_simplified ] = "è®¡ç®—æŸä¸€å’Œ pi ç›¸ä¹˜çš„å¹³æ–¹æ ¹ã€‚";
+            Text[ chinese_traditional ] = "å‚³å›æŸä¸€å€‹æ•¸å€¼ä¹˜æ–¼ pi çš„å¹³æ–¹æ ¹ã€‚";
             Text[ turkish ] = "Returns the square root of ( number * pi )";
             Text[ arabic ] = "Returns the square root of ( number * pi )";
-            Text[ catalan ] = "Returns the square root of ( number * pi )";
+            Text[ catalan ] = "Torna l'arrel quadrada del ( nombre * pi )";
         };
 
         String 2 // name of parameter 1         SqrtPI
@@ -1859,19 +1859,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "number";
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
-            Text[ finnish ] = "number";
-            Text[ italian ] = "Num";
+            Text[ finnish ] = "Luku";
+            Text[ italian ] = "Numero";
             Text[ danish ] = "number";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Liczba";
             Text[ portuguese_brazilian ] = "number";
-            Text[ japanese ] = "”’l";
-            Text[ korean ] = "°ª";
+            Text[ japanese ] = "æ•°å€¤";
+            Text[ korean ] = "ê°’";
             Text[ chinese_simplified ] = "number";
             Text[ chinese_traditional ] = "number";
             Text[ turkish ] = "number";
             Text[ arabic ] = "number";
-            Text[ catalan ] = "number";
+            Text[ catalan ] = "nombre";
         };
 
         String 3 // description of parameter 1  SqrtPI
@@ -1886,19 +1886,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "number";
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
-            Text[ finnish ] = "number";
+            Text[ finnish ] = "Luku, joka kerrotaan piillä";
             Text[ italian ] = "Numero";
             Text[ danish ] = "number";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Liczba mno¿ona przez pi.";
             Text[ portuguese_brazilian ] = "number";
-            Text[ japanese ] = "”’l";
-            Text[ korean ] = "°ª";
-            Text[ chinese_simplified ] = "Òª³Ë pi µÄÊıÖµ¡£";
-            Text[ chinese_traditional ] = "­n­¼ pi ªº¼Æ­È¡C";
+            Text[ japanese ] = "æ•°å€¤";
+            Text[ korean ] = "ê°’";
+            Text[ chinese_simplified ] = "è¦ä¹˜ pi çš„æ•°å€¼ã€‚";
+            Text[ chinese_traditional ] = "è¦ä¹˜ pi çš„æ•¸å€¼ã€‚";
             Text[ turkish ] = "number";
             Text[ arabic ] = "number";
-            Text[ catalan ] = "number";
+            Text[ catalan ] = "nombre";
         };
     };
 
@@ -2214,21 +2214,21 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Âîçâğàùàåò ìîäèôèöèğîâàííóş ôóíêöèş Áåññåëÿ In(x).";
             Text[ greek ] = "Returns the modified Bessel function In(x)";
             Text[ dutch ] = "Returns the modified Bessel function In(x)";
-            Text[ french ] = "Renvoie la fonction de Bessel modifiée In(x).";
+            Text[ french ] = "Calcule la fonction de Bessel modifiée In(x).";
             Text[ spanish ] = "Calcula la función Bessel modificada In(x).";
-            Text[ finnish ] = "Returns the modified Bessel function In(x)";
+            Text[ finnish ] = "Palauttaa muokatun In(x) Bessel-funktion";
             Text[ italian ] = "Restituisce la funzione modificata di Bessel In(x).";
             Text[ danish ] = "Returns the modified Bessel function In(x)";
             Text[ swedish ] = "Beräknar den modifierade Bessel-funktionen In(x).";
             Text[ polish ] = "Podaje wartoœæ zmodyfikowanej funkcji Bessela In(x).";
             Text[ portuguese_brazilian ] = "Returns the modified Bessel function In(x)";
-            Text[ japanese ] = "C³ÍŞ¯¾ÙŠÖ” In(x)‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "ä¿®æ­£ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•° In(x)ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ korean ] = "ìˆ˜ì •ëœ Bessel í•¨ìˆ˜ In(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
-            Text[ chinese_simplified ] = "¼ÆËãĞŞÕıµÄ Bessel º¯ÊıÖµ In(x)¡£";
-            Text[ chinese_traditional ] = "¶Ç¦^­×¥¿ªº Bessel ¨ç¼Æ­È In(x) ¡C";
+            Text[ chinese_simplified ] = "è®¡ç®—ä¿®æ­£çš„ Bessel å‡½æ•°å€¼ In(x)ã€‚";
+            Text[ chinese_traditional ] = "å‚³å›ä¿®æ­£çš„ Bessel å‡½æ•¸å€¼ In(x) ã€‚";
             Text[ turkish ] = "Returns the modified Bessel function In(x)";
             Text[ arabic ] = "Returns the modified Bessel function In(x)";
-            Text[ catalan ] = "Returns the modified Bessel function In(x)";
+            Text[ catalan ] = "Torna la funció de Bessel modificada In(x)";
         };
 
         String 2 // name of parameter 1         BesselI
@@ -2237,15 +2237,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "X";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "X";
-            Text[ portuguese ] = "x";
+            Text[ portuguese ] = "Núm_s";
             Text[ russian ] = "X";
-            Text[ greek ] = "x";
+            Text[ greek ] = "×";
             Text[ dutch ] = "x";
             Text[ french ] = "X";
             Text[ spanish ] = "x";
-            Text[ finnish ] = "x";
+            Text[ finnish ] = "X";
             Text[ italian ] = "X";
-            Text[ danish ] = "x";
+            Text[ danish ] = "Tal_s";
             Text[ swedish ] = "X";
             Text[ polish ] = "X";
             Text[ portuguese_brazilian ] = "x";
@@ -2253,8 +2253,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "x";
             Text[ chinese_simplified ] = "x";
             Text[ chinese_traditional ] = "x";
-            Text[ turkish ] = "x";
-            Text[ arabic ] = "x";
+            Text[ turkish ] = "Örn";
+            Text[ arabic ] = "Number_s";
             Text[ catalan ] = "x";
         };
 
@@ -2270,16 +2270,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "x";
             Text[ french ] = "La valeur à laquelle la fonction est à évaluer.";
             Text[ spanish ] = "El valor con el que se evalúa la función.";
-            Text[ finnish ] = "x";
-            Text[ italian ] = "X";
+            Text[ finnish ] = "Arvo, jota käytetään funktion laskennassa";
+            Text[ italian ] = "Il valore secondo il quale si deve calcolare la funzione.";
             Text[ danish ] = "x";
             Text[ swedish ] = "Värdet som funktionen ska beräknas för.";
             Text[ polish ] = "Wartoœæ, przy której nale¿y wyliczyæ funkcjê.";
             Text[ portuguese_brazilian ] = "x";
-            Text[ japanese ] = "ŠÖ”‚É‘ã“ü‚·‚é’l";
-            Text[ korean ] = "x";
-            Text[ chinese_simplified ] = "ÓÃÓÚ¼ÆËã BesselI º¯ÊıµÄ²ÎÊıÖµ¡£";
-            Text[ chinese_traditional ] = "¥Î©ó­pºâ BesselI ¨ç¼Æªº¼Æ­È¡C";
+            Text[ japanese ] = "é–¢æ•°ã«ä»£å…¥ã™ã‚‹å€¤";
+            Text[ korean ] = "í•¨ìˆ˜ ê³„ì‚° ê°’";
+            Text[ chinese_simplified ] = "ç”¨äºè®¡ç®— BesselI å‡½æ•°çš„å‚æ•°å€¼ã€‚";
+            Text[ chinese_traditional ] = "ç”¨æ–¼è¨ˆç®— BesselI å‡½æ•¸çš„æ•¸å€¼ã€‚";
             Text[ turkish ] = "x";
             Text[ arabic ] = "x";
             Text[ catalan ] = "x";
@@ -2291,15 +2291,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "N";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "N";
-            Text[ portuguese ] = "n";
+            Text[ portuguese ] = "Tentativas";
             Text[ russian ] = "N";
-            Text[ greek ] = "n";
+            Text[ greek ] = "Äïêéìİò";
             Text[ dutch ] = "n";
             Text[ french ] = "N";
             Text[ spanish ] = "n";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "N";
             Text[ italian ] = "N";
-            Text[ danish ] = "n";
+            Text[ danish ] = "Forsøg";
             Text[ swedish ] = "N";
             Text[ polish ] = "N";
             Text[ portuguese_brazilian ] = "n";
@@ -2307,8 +2307,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "n";
             Text[ chinese_traditional ] = "n";
-            Text[ turkish ] = "n";
-            Text[ arabic ] = "n";
+            Text[ turkish ] = "Deney";
+            Text[ arabic ] = "Trials";
             Text[ catalan ] = "n";
         };
 
@@ -2324,16 +2324,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "n";
             Text[ french ] = "Ordre de la fonction Bessel.";
             Text[ spanish ] = "Orden de la función Bessel.";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "Bessel-funktion järjestys";
             Text[ italian ] = "Ordine nella funzione di Bessel.";
             Text[ danish ] = "n";
             Text[ swedish ] = "Ordningstalet för Bessel-funktionen";
             Text[ polish ] = "Rz¹d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ÍŞ¯¾ÙŠÖ”‚ÌŸ”";
+            Text[ japanese ] = "ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•°ã®æ¬¡æ•°";
             Text[ korean ] = "n";
-            Text[ chinese_simplified ] = "ÊÇ Bessel º¯ÊıµÄ½×Êı¡£";
-            Text[ chinese_traditional ] = "? Bessel ¨ç¼Æªº¶¶§Ç¡C";
+            Text[ chinese_simplified ] = "æ˜¯ Bessel å‡½æ•°çš„é˜¶æ•°ã€‚";
+            Text[ chinese_traditional ] = "çˆ² Bessel å‡½æ•¸çš„é †åºã€‚";
             Text[ turkish ] = "n";
             Text[ arabic ] = "n";
             Text[ catalan ] = "n";
@@ -2352,21 +2352,21 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Âîçâğàùàåò ôóíêöèş Áåññåëÿ Jn(x).";
             Text[ greek ] = "Returns the Bessel function Jn(x)";
             Text[ dutch ] = "Returns the Bessel function Jn(x)";
-            Text[ french ] = "Renvoie la fonction de Bessel Jn(x).";
+            Text[ french ] = "Calcule la fonction de Bessel Jn(x).";
             Text[ spanish ] = "Calcula la función Bessel Jn(x)";
-            Text[ finnish ] = "Returns the Bessel function Jn(x)";
+            Text[ finnish ] = "Palauttaa Jn(x) Bessel-funktion arvon";
             Text[ italian ] = "Restituisce la funzione di Bessel Jn(x).";
             Text[ danish ] = "Returns the Bessel function Jn(x)";
             Text[ swedish ] = "Beräknar Bessel-funktionen Jn(x).";
             Text[ polish ] = "Podaje wartoœæ funkcji Bessela Jn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Jn(x)";
-            Text[ japanese ] = "ÍŞ¯¾ÙŠÖ” Jn(x)‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•° Jn(x)ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ korean ] = "Bessel í•¨ìˆ˜ Jn(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
-            Text[ chinese_simplified ] = "¼ÆËãĞŞÕıµÄ Bessel º¯ÊıÖµ Jn(x) ¡£";
-            Text[ chinese_traditional ] = "¶Ç¦^ Bessel ¨ç¼Æ Jn(x) ¡C";
+            Text[ chinese_simplified ] = "è®¡ç®—ä¿®æ­£çš„ Bessel å‡½æ•°å€¼ Jn(x) ã€‚";
+            Text[ chinese_traditional ] = "å‚³å› Bessel å‡½æ•¸ Jn(x) ã€‚";
             Text[ turkish ] = "Returns the Bessel function Jn(x)";
             Text[ arabic ] = "Returns the Bessel function Jn(x)";
-            Text[ catalan ] = "Returns the Bessel function Jn(x)";
+            Text[ catalan ] = "Torna la funció de Bessel Jn(x)";
         };
 
         String 2 // name of parameter 1         BesselJ
@@ -2375,15 +2375,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "X";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "X";
-            Text[ portuguese ] = "x";
+            Text[ portuguese ] = "Núm_s";
             Text[ russian ] = "X";
-            Text[ greek ] = "x";
+            Text[ greek ] = "×";
             Text[ dutch ] = "x";
             Text[ french ] = "X";
             Text[ spanish ] = "x";
-            Text[ finnish ] = "x";
+            Text[ finnish ] = "X";
             Text[ italian ] = "X";
-            Text[ danish ] = "x";
+            Text[ danish ] = "Tal_s";
             Text[ swedish ] = "X";
             Text[ polish ] = "X";
             Text[ portuguese_brazilian ] = "x";
@@ -2391,8 +2391,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "x";
             Text[ chinese_simplified ] = "x";
             Text[ chinese_traditional ] = "x";
-            Text[ turkish ] = "x";
-            Text[ arabic ] = "x";
+            Text[ turkish ] = "Örn";
+            Text[ arabic ] = "Number_s";
             Text[ catalan ] = "x";
         };
 
@@ -2408,16 +2408,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "x";
             Text[ french ] = "La valeur à laquelle la fonction est à évaluer.";
             Text[ spanish ] = "El valor con el que se evalúa la función.";
-            Text[ finnish ] = "x";
-            Text[ italian ] = "X";
+            Text[ finnish ] = "Arvo, jota käytetään funktion laskennassa";
+            Text[ italian ] = "Il valore secondo il quale si deve calcolare la funzione.";
             Text[ danish ] = "x";
             Text[ swedish ] = "Värdet som funktionen ska beräknas för.";
             Text[ polish ] = "Wartoœæ, przy której nale¿y wyliczyæ funkcjê.";
             Text[ portuguese_brazilian ] = "x";
-            Text[ japanese ] = "ŠÖ”‚É‘ã“ü‚·‚é’l";
-            Text[ korean ] = "x";
-            Text[ chinese_simplified ] = "ÓÃÓÚ¼ÆËã BesselJ º¯ÊıµÄ²ÎÊıÖµ¡£";
-            Text[ chinese_traditional ] = "¥Î©ó­pºâ BesselJ ¨ç¼Æªº¼Æ­È¡C";
+            Text[ japanese ] = "é–¢æ•°ã«ä»£å…¥ã™ã‚‹å€¤";
+            Text[ korean ] = "í•¨ìˆ˜ ê³„ì‚° ê°’";
+            Text[ chinese_simplified ] = "ç”¨äºè®¡ç®— BesselJ å‡½æ•°çš„å‚æ•°å€¼ã€‚";
+            Text[ chinese_traditional ] = "ç”¨æ–¼è¨ˆç®— BesselJ å‡½æ•¸çš„æ•¸å€¼ã€‚";
             Text[ turkish ] = "x";
             Text[ arabic ] = "x";
             Text[ catalan ] = "x";
@@ -2429,15 +2429,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "N";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "N";
-            Text[ portuguese ] = "n";
+            Text[ portuguese ] = "Tentativas";
             Text[ russian ] = "N";
-            Text[ greek ] = "n";
+            Text[ greek ] = "Äïêéìİò";
             Text[ dutch ] = "n";
             Text[ french ] = "N";
             Text[ spanish ] = "n";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "N";
             Text[ italian ] = "N";
-            Text[ danish ] = "n";
+            Text[ danish ] = "Forsøg";
             Text[ swedish ] = "N";
             Text[ polish ] = "N";
             Text[ portuguese_brazilian ] = "n";
@@ -2445,8 +2445,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "n";
             Text[ chinese_traditional ] = "n";
-            Text[ turkish ] = "n";
-            Text[ arabic ] = "n";
+            Text[ turkish ] = "Deney";
+            Text[ arabic ] = "Trials";
             Text[ catalan ] = "n";
         };
 
@@ -2462,16 +2462,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "n";
             Text[ french ] = "Ordre de la fonction Bessel.";
             Text[ spanish ] = "Orden de la función Bessel";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "Bessel-funktion järjestys";
             Text[ italian ] = "Ordine della funzione di Bessel.";
             Text[ danish ] = "n";
             Text[ swedish ] = "Ordningstalet för Bessel-funktionen";
             Text[ polish ] = "Rz¹d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ÍŞ¯¾ÙŠÖ”‚ÌŸ”";
+            Text[ japanese ] = "ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•°ã®æ¬¡æ•°";
             Text[ korean ] = "n";
-            Text[ chinese_simplified ] = "Ò»¸ö BesselJ º¯ÊıµÄ½×Êı¡£";
-            Text[ chinese_traditional ] = "? BesselJ ¨ç¼Æªº¶¶§Ç¡C";
+            Text[ chinese_simplified ] = "ä¸€ä¸ª BesselJ å‡½æ•°çš„é˜¶æ•°ã€‚";
+            Text[ chinese_traditional ] = "çˆ² BesselJ å‡½æ•¸çš„é †åºã€‚";
             Text[ turkish ] = "n";
             Text[ arabic ] = "n";
             Text[ catalan ] = "n";
@@ -2490,21 +2490,21 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Âîçâğàùàåò ìîäèôèöèğîâàííóş ôóíêöèş Áåññåëÿ Kn(x).";
             Text[ greek ] = "Returns the Bessel function Kn(x)";
             Text[ dutch ] = "Returns the Bessel function Kn(x)";
-            Text[ french ] = "Renvoie la fonction de Bessel modifiée Kn(x).";
+            Text[ french ] = "Calcule la fonction de Bessel modifiée Kn(x).";
             Text[ spanish ] = "Calcula la función de Bessel modificada Kn(x)";
-            Text[ finnish ] = "Returns the Bessel function Kn(x)";
+            Text[ finnish ] = "Palauttaa En(x) Bessel-funktion arvon";
             Text[ italian ] = "Restituisce la funzione modificata di Bessel Kn(x).";
             Text[ danish ] = "Returns the Bessel function Kn(x)";
             Text[ swedish ] = "Beräknar den modifierade Bessel-funktionen Kn(x).";
             Text[ polish ] = "Podaje wartoœæ zmodyfikowanej funkcji Bessela Kn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Kn(x)";
-            Text[ japanese ] = "C³ÍŞ¯¾ÙŠÖ” Kn(x)‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "ä¿®æ­£ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•° Kn(x)ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ korean ] = "Bessel í•¨ìˆ˜ Kn(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
-            Text[ chinese_simplified ] = "¼ÆËãÒ»¸öĞŞ¸ÄµÄ Bessel º¯Êı Kn(x) ¡£";
-            Text[ chinese_traditional ] = "¶Ç¦^­×§ï¹Lªº Bessel ¨ç¼Æ Kn(x) ¡C";
+            Text[ chinese_simplified ] = "è®¡ç®—ä¸€ä¸ªä¿®æ”¹çš„ Bessel å‡½æ•° Kn(x) ã€‚";
+            Text[ chinese_traditional ] = "å‚³å›ä¿®æ”¹éçš„ Bessel å‡½æ•¸ Kn(x) ã€‚";
             Text[ turkish ] = "Returns the Bessel function Kn(x)";
             Text[ arabic ] = "Returns the Bessel function Kn(x)";
-            Text[ catalan ] = "Returns the Bessel function Kn(x)";
+            Text[ catalan ] = "Torna la funció de Bessel Kn(x)";
         };
 
         String 2 // name of parameter 1         BesselK
@@ -2513,15 +2513,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "X";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "X";
-            Text[ portuguese ] = "x";
+            Text[ portuguese ] = "Núm_s";
             Text[ russian ] = "X";
-            Text[ greek ] = "x";
+            Text[ greek ] = "×";
             Text[ dutch ] = "x";
             Text[ french ] = "X";
             Text[ spanish ] = "x";
-            Text[ finnish ] = "x";
+            Text[ finnish ] = "X";
             Text[ italian ] = "X";
-            Text[ danish ] = "x";
+            Text[ danish ] = "Tal_s";
             Text[ swedish ] = "X";
             Text[ polish ] = "X";
             Text[ portuguese_brazilian ] = "x";
@@ -2529,8 +2529,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "x";
             Text[ chinese_simplified ] = "x";
             Text[ chinese_traditional ] = "x";
-            Text[ turkish ] = "x";
-            Text[ arabic ] = "x";
+            Text[ turkish ] = "Örn";
+            Text[ arabic ] = "Number_s";
             Text[ catalan ] = "x";
         };
 
@@ -2546,16 +2546,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "x";
             Text[ french ] = "La valeur à laquelle la fonction est à évaluer.";
             Text[ spanish ] = "El valor con el que se evalúa la función.";
-            Text[ finnish ] = "x";
-            Text[ italian ] = "X";
+            Text[ finnish ] = "Arvo, jota käytetään funktion laskennassa";
+            Text[ italian ] = "Il valore secondo il quale si deve calcolare la funzione.";
             Text[ danish ] = "x";
             Text[ swedish ] = "Värdet som funktionen ska beräknas för.";
             Text[ polish ] = "Wartoœæ, przy której nale¿y wyliczyæ funkcjê.";
             Text[ portuguese_brazilian ] = "x";
-            Text[ japanese ] = "ŠÖ”‚É‘ã“ü‚·‚é’l";
-            Text[ korean ] = "x";
-            Text[ chinese_simplified ] = "ÓÃÓÚ¼ÆËã BesselK º¯ÊıµÄ²ÎÊıÖµ¡£";
-            Text[ chinese_traditional ] = "¥Î©ó­pºâ BesselK ¨ç¼Æªº¼Æ­È¡C";
+            Text[ japanese ] = "é–¢æ•°ã«ä»£å…¥ã™ã‚‹å€¤";
+            Text[ korean ] = "í•¨ìˆ˜ ê³„ì‚° ê°’";
+            Text[ chinese_simplified ] = "ç”¨äºè®¡ç®— BesselK å‡½æ•°çš„å‚æ•°å€¼ã€‚";
+            Text[ chinese_traditional ] = "ç”¨æ–¼è¨ˆç®— BesselK å‡½æ•¸çš„æ•¸å€¼ã€‚";
             Text[ turkish ] = "x";
             Text[ arabic ] = "x";
             Text[ catalan ] = "x";
@@ -2567,15 +2567,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "N";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "N";
-            Text[ portuguese ] = "n";
+            Text[ portuguese ] = "Tentativas";
             Text[ russian ] = "N";
-            Text[ greek ] = "n";
+            Text[ greek ] = "Äïêéìİò";
             Text[ dutch ] = "n";
             Text[ french ] = "N";
             Text[ spanish ] = "n";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "N";
             Text[ italian ] = "N";
-            Text[ danish ] = "n";
+            Text[ danish ] = "Forsøg";
             Text[ swedish ] = "N";
             Text[ polish ] = "N";
             Text[ portuguese_brazilian ] = "n";
@@ -2583,8 +2583,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "n";
             Text[ chinese_traditional ] = "n";
-            Text[ turkish ] = "n";
-            Text[ arabic ] = "n";
+            Text[ turkish ] = "Deney";
+            Text[ arabic ] = "Trials";
             Text[ catalan ] = "n";
         };
 
@@ -2600,16 +2600,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "n";
             Text[ french ] = "Ordre de la fonction Bessel.";
             Text[ spanish ] = "Orden de la función Bessel";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "Bessel-funktion järjestys";
             Text[ italian ] = "Ordine della funzione di Bessel.";
             Text[ danish ] = "n";
             Text[ swedish ] = "Ordningstalet för Bessel-funktionen";
             Text[ polish ] = "Rz¹d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ÍŞ¯¾ÙŠÖ”‚ÌŸ”";
+            Text[ japanese ] = "ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•°ã®æ¬¡æ•°";
             Text[ korean ] = "n";
-            Text[ chinese_simplified ] = "Ò»¸ö BesselK º¯ÊıµÄ½×Êı¡£";
-            Text[ chinese_traditional ] = "? BesselK ¨ç¼Æªº¶¶§Ç¡C";
+            Text[ chinese_simplified ] = "ä¸€ä¸ª BesselK å‡½æ•°çš„é˜¶æ•°ã€‚";
+            Text[ chinese_traditional ] = "çˆ² BesselK å‡½æ•¸çš„é †åºã€‚";
             Text[ turkish ] = "n";
             Text[ arabic ] = "n";
             Text[ catalan ] = "n";
@@ -2628,21 +2628,21 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Âîçâğàùàåò ôóíêöèş Áåññåëÿ Yn(x).";
             Text[ greek ] = "Returns the Bessel function Yn(x)";
             Text[ dutch ] = "Returns the Bessel function Yn(x)";
-            Text[ french ] = "Revoie la fonction de Bessel Yn(x).";
+            Text[ french ] = "Calcule la fonction de Bessel Yn(x).";
             Text[ spanish ] = "Devuelve la función Bessel Yn(x)";
-            Text[ finnish ] = "Returns the Bessel function Yn(x)";
+            Text[ finnish ] = "Palauttaa Yn(x) Bessel-funktion arvon";
             Text[ italian ] = "Restituisce la funzione di Bessel Yn(x).";
             Text[ danish ] = "Returns the Bessel function Yn(x)";
             Text[ swedish ] = "Beräknar Bessel-funktionen Yn(x).";
             Text[ polish ] = "Podaje wartoœæ funkcji Bessela Yn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Yn(x)";
-            Text[ japanese ] = "ÍŞ¯¾ÙŠÖ” Yn(x)‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•° Yn(x)ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ korean ] = "Bessel í•¨ìˆ˜ Yn(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
-            Text[ chinese_simplified ] = "¼ÆËãÒ»¸ö Bessel º¯Êı Yn(x) ¡£";
-            Text[ chinese_traditional ] = "¶Ç¦^ Bessel ¨ç¼Æ Yn(x) ¡C";
+            Text[ chinese_simplified ] = "è®¡ç®—ä¸€ä¸ª Bessel å‡½æ•° Yn(x) ã€‚";
+            Text[ chinese_traditional ] = "å‚³å› Bessel å‡½æ•¸ Yn(x) ã€‚";
             Text[ turkish ] = "Returns the Bessel function Yn(x)";
             Text[ arabic ] = "Returns the Bessel function Yn(x)";
-            Text[ catalan ] = "Returns the Bessel function Yn(x)";
+            Text[ catalan ] = "Torna la funció de Bessel Yn(x)";
         };
 
         String 2 // name of parameter 1         BesselY
@@ -2651,15 +2651,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "X";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "X";
-            Text[ portuguese ] = "x";
+            Text[ portuguese ] = "Núm_s";
             Text[ russian ] = "X";
-            Text[ greek ] = "x";
+            Text[ greek ] = "×";
             Text[ dutch ] = "x";
             Text[ french ] = "X";
             Text[ spanish ] = "x";
-            Text[ finnish ] = "x";
+            Text[ finnish ] = "X";
             Text[ italian ] = "X";
-            Text[ danish ] = "x";
+            Text[ danish ] = "Tal_s";
             Text[ swedish ] = "X";
             Text[ polish ] = "X";
             Text[ portuguese_brazilian ] = "x";
@@ -2667,8 +2667,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "x";
             Text[ chinese_simplified ] = "x";
             Text[ chinese_traditional ] = "x";
-            Text[ turkish ] = "x";
-            Text[ arabic ] = "x";
+            Text[ turkish ] = "Örn";
+            Text[ arabic ] = "Number_s";
             Text[ catalan ] = "x";
         };
 
@@ -2684,16 +2684,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "x";
             Text[ french ] = "La valeur à laquelle la fonction est à évaluer.";
             Text[ spanish ] = "El valor para el que se evalúa la función.";
-            Text[ finnish ] = "x";
-            Text[ italian ] = "X";
+            Text[ finnish ] = "Arvo, jota käytetään funktion laskennassa";
+            Text[ italian ] = "Il valore secondo il quale si deve calcolare la funzione.";
             Text[ danish ] = "x";
             Text[ swedish ] = "Värdet som funktionen ska beräknas för.";
             Text[ polish ] = "Wartoœæ, przy której nale¿y wyliczyæ funkcjê.";
             Text[ portuguese_brazilian ] = "x";
-            Text[ japanese ] = "ŠÖ”‚É‘ã“ü‚·‚é’l";
-            Text[ korean ] = "x";
-            Text[ chinese_simplified ] = "ÓÃÓÚ¼ÆËã BesselY º¯ÊıµÄ²ÎÊıÖµ¡£";
-            Text[ chinese_traditional ] = "¥Î©ó­pºâ BesselY ¨ç¼Æªº¼Æ­È¡C";
+            Text[ japanese ] = "é–¢æ•°ã«ä»£å…¥ã™ã‚‹å€¤";
+            Text[ korean ] = "í•¨ìˆ˜ ê³„ì‚° ê°’";
+            Text[ chinese_simplified ] = "ç”¨äºè®¡ç®— BesselY å‡½æ•°çš„å‚æ•°å€¼ã€‚";
+            Text[ chinese_traditional ] = "ç”¨æ–¼è¨ˆç®— BesselY å‡½æ•¸çš„æ•¸å€¼ã€‚";
             Text[ turkish ] = "x";
             Text[ arabic ] = "x";
             Text[ catalan ] = "x";
@@ -2705,15 +2705,15 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "N";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "N";
-            Text[ portuguese ] = "n";
+            Text[ portuguese ] = "Tentativas";
             Text[ russian ] = "N";
-            Text[ greek ] = "n";
+            Text[ greek ] = "Äïêéìİò";
             Text[ dutch ] = "n";
             Text[ french ] = "N";
             Text[ spanish ] = "n indica el orden de la función.";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "N";
             Text[ italian ] = "N";
-            Text[ danish ] = "n";
+            Text[ danish ] = "Forsøg";
             Text[ swedish ] = "N";
             Text[ polish ] = "N";
             Text[ portuguese_brazilian ] = "n";
@@ -2721,8 +2721,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "n";
             Text[ chinese_traditional ] = "n";
-            Text[ turkish ] = "n";
-            Text[ arabic ] = "n";
+            Text[ turkish ] = "Deney";
+            Text[ arabic ] = "Trials";
             Text[ catalan ] = "n";
         };
 
@@ -2738,16 +2738,16 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "n";
             Text[ french ] = "Ordre de la fonction Bessel.";
             Text[ spanish ] = "Orden de la función Bessel.";
-            Text[ finnish ] = "n";
+            Text[ finnish ] = "Bessel-funktion järjestys";
             Text[ italian ] = "Ordine della funzione di Bessel.";
             Text[ danish ] = "n";
             Text[ swedish ] = "Ordningstalet för Bessel-funktionen";
             Text[ polish ] = "Rz¹d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ÍŞ¯¾ÙŠÖ”‚ÌŸ”";
+            Text[ japanese ] = "ï¾ï¾ï½¯ï½¾ï¾™é–¢æ•°ã®æ¬¡æ•°";
             Text[ korean ] = "n";
-            Text[ chinese_simplified ] = "Ò»¸ö BesselY º¯ÊıµÄ½×Êı¡£";
-            Text[ chinese_traditional ] = "? BesselY ¨ç¼Æªº¶¶§Ç¡C";
+            Text[ chinese_simplified ] = "ä¸€ä¸ª BesselY å‡½æ•°çš„é˜¶æ•°ã€‚";
+            Text[ chinese_traditional ] = "çˆ² BesselY å‡½æ•¸çš„é †åºã€‚";
             Text[ turkish ] = "n";
             Text[ arabic ] = "n";
             Text[ catalan ] = "n";
@@ -4611,25 +4611,25 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Tests wether a number is greater than a threshold value";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Tests whether a number is greater than a threshold value";
-            Text[ portuguese ] = "Tests wether a number is greater than a threshold value";
+            Text[ portuguese ] = "Verifica se um número é superior a um valor limite.";
             Text[ russian ] = "Ïğîâåğÿåò, íå ïğåâûøàåò ëè äàííîå ÷èñëî ïîğîãîâîãî çíà÷åíèÿ.";
             Text[ greek ] = "Tests wether a number is greater than a threshold value";
             Text[ dutch ] = "Tests wether a number is greater than a threshold value";
             Text[ french ] = "Vérifie si un nombre est supérieur à une valeur de seuil.";
             Text[ spanish ] = "Comprueba sin un número es mayor que el valor umbral.";
-            Text[ finnish ] = "Tests wether a number is greater than a threshold value";
+            Text[ finnish ] = "Testaa onko arvo raja-arvoa suurempi";
             Text[ italian ] = "Verifica se un numero è maggiore del valore di soglia.";
             Text[ danish ] = "Tests wether a number is greater than a threshold value";
             Text[ swedish ] = "Kontrollerar om ett tal är större än ett tröskelvärde.";
             Text[ polish ] = "Sprawdza, czy liczba jest wiêksza ni¿ podana wartoœæ progowa.";
             Text[ portuguese_brazilian ] = "Tests wether a number is greater than a threshold value";
-            Text[ japanese ] = "”’l‚ª‚µ‚«‚¢’l‚æ‚è‘å‚«‚¢‚©¬‚³‚¢‚©‚ğ‚Ó‚é‚¢•ª‚¯‚µ‚Ü‚·B";
-            Text[ korean ] = "°ªÀÌ ÀÓ°è°ªº¸´Ù Å«Áö ¿©ºÎ¸¦ °Ë»çÇÕ´Ï´Ù";
-            Text[ chinese_simplified ] = "¼ì²éÒ»¸öÊıÖµÊÇ·ñ´óÓÚÒ»¸öÉáÈë³ÉÏÂÒ»¸ö½ÏĞ¡µÄÊıÖµ¡£";
-            Text[ chinese_traditional ] = "´ú¸Õ¼Æ¦r¬O§_¤j©óÁ{¬É­È¡C";
+            Text[ japanese ] = "æ•°å€¤ãŒã—ãã„å€¤ã‚ˆã‚Šå¤§ãã„ã‹å°ã•ã„ã‹ã‚’ãµã‚‹ã„åˆ†ã‘ã—ã¾ã™ã€‚";
+            Text[ korean ] = "ê°’ì´ ì„ê³„ê°’ë³´ë‹¤ í°ì§€ ì—¬ë¶€ë¥¼ ê²€ì‚¬í•©ë‹ˆë‹¤";
+            Text[ chinese_simplified ] = "æ£€æŸ¥ä¸€ä¸ªæ•°å€¼æ˜¯å¦å¤§äºä¸€ä¸ªèˆå…¥æˆä¸‹ä¸€ä¸ªè¾ƒå°çš„æ•°å€¼ã€‚";
+            Text[ chinese_traditional ] = "æ¸¬è©¦æ•¸å­—æ˜¯å¦å¤§æ–¼è‡¨ç•Œå€¼ã€‚";
             Text[ turkish ] = "Tests wether a number is greater than a threshold value";
             Text[ arabic ] = "Tests wether a number is greater than a threshold value";
-            Text[ catalan ] = "Tests wether a number is greater than a threshold value";
+            Text[ catalan ] = "Comprova si un nombre és més gran que el valor del llindar";
         };
 
         String 2 // name of parameter 1         GeStep
@@ -4638,25 +4638,25 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Zahl";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Number";
-            Text[ portuguese ] = "number";
+            Text[ portuguese ] = "Número";
             Text[ russian ] = "×èñëî";
             Text[ greek ] = "number";
             Text[ dutch ] = "number";
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
-            Text[ finnish ] = "number";
-            Text[ italian ] = "Num";
+            Text[ finnish ] = "Luku";
+            Text[ italian ] = "Numero";
             Text[ danish ] = "number";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Liczba";
             Text[ portuguese_brazilian ] = "number";
-            Text[ japanese ] = "”’l";
-            Text[ korean ] = "¼ö";
+            Text[ japanese ] = "æ•°å€¤";
+            Text[ korean ] = "ìˆ˜";
             Text[ chinese_simplified ] = "number";
             Text[ chinese_traditional ] = "number";
             Text[ turkish ] = "number";
             Text[ arabic ] = "number";
-            Text[ catalan ] = "number";
+            Text[ catalan ] = "nombre";
         };
 
         String 3 // description of parameter 1  GeStep
@@ -4665,25 +4665,25 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "An Schwellenwert zu überprüfender Wert.";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "The value to test against step";
-            Text[ portuguese ] = "number";
+            Text[ portuguese ] = "é o valor a comparar com o valor limite.";
             Text[ russian ] = "Ïğîâåğÿåìîå çíà÷åíèå, ñğàâíèâàåìîå ñ ïîğîãîâûì.";
             Text[ greek ] = "number";
             Text[ dutch ] = "number";
             Text[ french ] = "Valeur à comparer avec la valeur de seuil.";
             Text[ spanish ] = "Valor a comprobar con el valor umbral.";
-            Text[ finnish ] = "number";
+            Text[ finnish ] = "Testattava arvo";
             Text[ italian ] = "Valore da confrontare con il valore di soglia.";
             Text[ danish ] = "number";
-            Text[ swedish ] = "Värde som ska kontrolleras mot tröseklvärde.";
+            Text[ swedish ] = "Värde som ska kontrolleras mot tröskelvärde.";
             Text[ polish ] = "Sprawdzana wartoœæ w stosunku do wartoœci progowej.";
             Text[ portuguese_brazilian ] = "number";
-            Text[ japanese ] = "‚µ‚«‚¢’l‚Æ”äŠr‚·‚é’lB";
-            Text[ korean ] = "¼ö1";
-            Text[ chinese_simplified ] = "Ò»¸öÒª°´²½¼ì²âµÄÊıÖµ¡£";
-            Text[ chinese_traditional ] = "¬°¤@­Ó¥Î¨Ó´ú¸Õªº¼Æ­È¡C";
+            Text[ japanese ] = "ã—ãã„å€¤ã¨æ¯”è¼ƒã™ã‚‹å€¤ã€‚";
+            Text[ korean ] = "ìˆ˜1";
+            Text[ chinese_simplified ] = "ä¸€ä¸ªè¦æŒ‰æ­¥æ£€æµ‹çš„æ•°å€¼ã€‚";
+            Text[ chinese_traditional ] = "ç‚ºä¸€å€‹ç”¨ä¾†æ¸¬è©¦çš„æ•¸å€¼ã€‚";
             Text[ turkish ] = "number";
             Text[ arabic ] = "number";
-            Text[ catalan ] = "number";
+            Text[ catalan ] = "nombre";
         };
 
         String 4 // name of parameter 2         GeStep
@@ -4692,25 +4692,25 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Schwellenwert";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Step";
-            Text[ portuguese ] = "step";
+            Text[ portuguese ] = "Valor limite";
             Text[ russian ] = "Øàã";
             Text[ greek ] = "ÂŞìá";
             Text[ dutch ] = "Stap";
             Text[ french ] = "Seuil";
             Text[ spanish ] = "Valor umbral";
-            Text[ finnish ] = "step";
+            Text[ finnish ] = "Raja";
             Text[ italian ] = "Valore soglia";
             Text[ danish ] = "step";
             Text[ swedish ] = "Tröskelvärde";
             Text[ polish ] = "Próg";
             Text[ portuguese_brazilian ] = "step";
-            Text[ japanese ] = "‚µ‚«‚¢’l";
-            Text[ korean ] = "ÀÓ°è°ª";
+            Text[ japanese ] = "ã—ãã„å€¤";
+            Text[ korean ] = "ì„ê³„ê°’";
             Text[ chinese_simplified ] = "step";
             Text[ chinese_traditional ] = "step";
             Text[ turkish ] = "step";
             Text[ arabic ] = "ÎØæÉ";
-            Text[ catalan ] = "step";
+            Text[ catalan ] = "pas";
         };
 
         String 5 // description of parameter 2  GeStep
@@ -4719,25 +4719,25 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Schwellenwert";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "The threshhold value";
-            Text[ portuguese ] = "step";
+            Text[ portuguese ] = "Valor limite";
             Text[ russian ] = "Ïîğîãîâîå çíà÷åíèå.";
             Text[ greek ] = "ÂŞìá";
             Text[ dutch ] = "Stap";
             Text[ french ] = "Seuil";
             Text[ spanish ] = "Valor umbral";
-            Text[ finnish ] = "step";
+            Text[ finnish ] = "Raja-arvo";
             Text[ italian ] = "Valore soglia";
             Text[ danish ] = "step";
             Text[ swedish ] = "Tröskelvärde";
             Text[ polish ] = "Wartoœæ progowa.";
             Text[ portuguese_brazilian ] = "step";
-            Text[ japanese ] = "‚µ‚«‚¢’l";
-            Text[ korean ] = "ÀÓ°è°ª";
-            Text[ chinese_simplified ] = "ÉáÈëµÄ³õÊ¼Öµ";
-            Text[ chinese_traditional ] = "Á{¬É­È";
+            Text[ japanese ] = "ã—ãã„å€¤";
+            Text[ korean ] = "ì„ê³„ê°’";
+            Text[ chinese_simplified ] = "èˆå…¥çš„åˆå§‹å€¼";
+            Text[ chinese_traditional ] = "è‡¨ç•Œå€¼";
             Text[ turkish ] = "step";
             Text[ arabic ] = "ÎØæÉ";
-            Text[ catalan ] = "step";
+            Text[ catalan ] = "pas";
         };
     };
 
@@ -7689,7 +7689,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "å‚³å›æŸä¸€å€‹å®šæœŸä»˜æ¯çš„æœ‰åƒ¹å‚µåˆ¸æ‰€ç´¯ç©çš„åˆ©æ¯ã€‚";
             Text[ turkish ] = "Return the accrued interest for a security that pays periodic interest";
             Text[ arabic ] = "Return the accrued interest for a security that pays periodic interest";
-            Text[ catalan ] = "Torna l'interès acumulat per a un valor amb pagament periòdics d'interessos";
+            Text[ catalan ] = "Torna l'interès acumulat per a un valor amb pagament periòdics d'interessos" ; } ";
         };
 
         String 2 // name of parameter 1         Accrint
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
