@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 15:38:22 $
+ *  last change: $Author: os $ $Date: 2001-02-26 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,7 +748,6 @@ void  SwAddPrinterTabPage::SetFax( const SvStringsDtor& rFaxLst )
 {
     for ( USHORT i = 0; i < rFaxLst.Count(); ++i )
         aFaxLB.InsertEntry( *rFaxLst.GetObject(i) );
-    aFaxLB.SelectEntryPos( 0 );
 }
 
 //------------------------------------------------------------------------

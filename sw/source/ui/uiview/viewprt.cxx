@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:37 $
+ *  last change: $Author: os $ $Date: 2001-02-26 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,10 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
             else
             {
                 InfoBox aInfoBox(&GetEditWin(), SW_RES(MSG_ERR_NO_FAX));
+                String sMsg = aInfoBox.GetMessText();
+                USHORT nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
+                sMsg.SearchAndReplace(String::CreateFromAscii("%1"), String(SW_RES(nResNo)));
+                aInfoBox.SetMessText(sMsg);
                 aInfoBox.Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);
                 GetViewFrame()->GetDispatcher()->Execute(SID_SW_EDITOPTIONS,

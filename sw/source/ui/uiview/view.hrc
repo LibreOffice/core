@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:34:18 $
+ *  last change: $Author: os $ $Date: 2001-02-26 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
 #define STR_READONLY_SEL            (RC_VIEW_BEGIN + 30)
 
 #define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)
+#define STR_WEBOPTIONS              (RC_VIEW_BEGIN + 32)
+#define STR_TEXTOPTIONS             (RC_VIEW_BEGIN + 33)
 // MSG -------------------------------------------------------------------
 
 #define MSG_ERR_INSERT_GLOS (RC_VIEW_BEGIN)

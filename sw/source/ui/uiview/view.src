@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 20:51:32 $
+ *  last change: $Author: os $ $Date: 2001-02-26 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,27 +383,30 @@ InfoBox MSG_ERR_SRCSTREAM
 };
 InfoBox MSG_ERR_NO_FAX
 {
-    MESSAGE = "Kein Fax-Drucker unter Extras/Optionen/Drucken eingestellt." ;
-    MESSAGE [ English ] = "No fax printer at Settings/Options/Printer configured." ;
-    Message [ dutch ] = "Geen faxprinter geconfigureerd onder: Extra/Opties/Afdrukken." ;
-    Message [ english_us ] = "No fax printer has been set under Tools/Options/Printing." ;
-    Message [ italian ] = "Nessuna stampante-fax installata in Strumenti/Opzioni/Stampa." ;
-    Message [ spanish ] = "En Herramientas/Opciones/Imprimir no se ha configurado ninguna impresora fax." ;
-    Message [ french ] = "Aucune imprimante (fax) n'a été paramétrée sous Outils/Options/Imprimer" ;
-    Message [ swedish ] = "Ingen faxskrivare inställd under Verktyg/Alternativ/Skriva ut." ;
-    Message [ danish ] = "Der er ingen faxprinter indstillet under Funktioner/Indstillinger/Udskriv." ;
-    Message [ portuguese_brazilian ] = "Kein Fax-Drucker unter Extras/Optionen/Drucken eingestellt." ;
-    Message [ portuguese ] = "Não foi configurada nenhuma impressora para fax em Ferramentas/Opções/Imprimir." ;
-    Message[ chinese_simplified ] = "ÔÚ¹¤¾ß/Ñ¡Ïî/´òÓ¡»ú´¦Ã»ÓĞÉè¶¨´«Õæ´òÓ¡»ú¡£";
-    Message[ russian ] = "Â Ñåğâèñ/Ïàğàìåòğû/Ïå÷àòü ôàêñ-ïğèíòåğ íå óñòàíîâëåí.";
-    Message[ polish ] = "Brak ustawienia dla faksu i drukarki pod has³em Narzêdzia/Opcje/Drukuj.";
-    Message[ japanese ] = "mÂ°Ù ¨ µÌß¼®İ ¨ ˆóün‚Å Fax ÌßØİÀ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "¦b¤u¨ã/¿ï¶µ/¾÷¦Lªí¾÷³B¨S¦³³]©w¦C¦L¶Ç¯uªºÅX°Ê³n¥ó¡C";
-    Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ İÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/ØÈÇÚÉ\".";
-    Message[ greek ] = "Äåí İ÷åé ïñéóôåß åêôõğùôŞò ãéá fax óôï êáôÜëïãï Åñãáëåßá/Åğéëïãİò/Åêôığùóç.";
-    Message[ korean ] = "µµ±¸/¿É¼Ç/ÀÎ¼âÇÏ¿¡¼­  ÆÑ½º ÇÁ¸°ÅÍ°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
-    Message[ turkish ] = "Araçlar/Seçenekler/Yazdırma altında faks konfigürasyonu yapılmadı.";
+    MESSAGE = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt." ;
+    MESSAGE [ English ] = "No fax printer at Settings/Options/%1/Printer configured." ;
+    Message [ dutch ] = "Geen faxprinter geconfigureerd onder: Extra/Opties/%1/Afdrukken." ;
+    Message [ english_us ] = "No fax printer has been set under Tools/Options/%1/Printing." ;
+    Message [ italian ] = "Nessuna stampante-fax installata in Strumenti/Opzioni/%1/Stampa." ;
+    Message [ spanish ] = "En Herramientas/Opciones/%1/Imprimir no se ha configurado ninguna impresora fax." ;
+    Message [ french ] = "Aucune imprimante (fax) n'a été paramétrée sous Outils/Options/%1/Imprimer" ;
+    Message [ swedish ] = "Ingen faxskrivare inställd under Verktyg/Alternativ/%1/Skriva ut." ;
+    Message [ danish ] = "Der er ingen faxprinter indstillet under Funktioner/Indstillinger/%1/Udskriv." ;
+    Message [ portuguese_brazilian ] = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt." ;
+    Message [ portuguese ] = "Não foi configurada nenhuma impressora para fax em Ferramentas/Opções/%1/Imprimir." ;
+    Message[ polish ] = "Brak ustawienia dla faksu i drukarki pod has³em Narzêdzia/Opcje/%1/Drukuj.";
+    Message[ turkish ] = "Araçlar/Seçenekler/%1/Yazdırma altında faks konfigürasyonu yapılmadı.";
     Message[ language_user1 ] = " ";
+};
+String STR_WEBOPTIONS
+{
+    TEXT = "HTML-Dokument" ;
+    TEXT [ English ] = "HTML document" ;
+};
+String STR_TEXTOPTIONS
+{
+    TEXT = "Textdokument" ;
+    TEXT [ English ] = "Text document" ;
 };
 InfoBox MSG_NOT_FOUND
 {
@@ -483,8 +486,6 @@ InfoBox MSG_SCAN_NOSOURCE
 };
 String STR_NOGLOS1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum Kürzel '' */
-    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum Kürzel '' */
     TEXT = "AutoText zum Kürzel '" ;
     TEXT [ English ] = "AutoText for Short Name '" ;
     TEXT [ norwegian ] = "AutoText for Short Name '" ;
