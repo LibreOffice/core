@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:56:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3310,6 +3310,18 @@ uno::Reference< uno::XInterface > SdPage::createUnoPage()
 {
     return createUnoPageImpl( this );
 }
+
+
+
+
+void SdPage::SetName (const String& rName)
+{
+    FmFormPage::SetName (rName);
+    ActionChanged();
+}
+
+
+
 
 HeaderFooterSettings& SdPage::getHeaderFooterSettings()
 {
