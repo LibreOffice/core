@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: th $ $Date: 2001-04-09 16:25:57 $
+ *  last change: $Author: th $ $Date: 2001-04-09 17:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,7 @@ static sal_Unicode const aGulimChe[] = { 0xAD74, 0xB9BC, 0xCCB4, 0, 0 };
 static sal_Unicode const aDotum[] = { 0xB3CB, 0xC6C0, 0, 0 };
 static sal_Unicode const aDotumChe[] = { 0xB3CB, 0xC6C0, 0xCCB4, 0, 0 };
 static sal_Unicode const aSimSun[] = { 0x5B8B, 0x4F53, 0, 0 };
+static sal_Unicode const aSimHei[] = { 0x9ED1, 0x4F53, 0, 0 };
 static sal_Unicode const aNSimSun[] = { 0x65B0, 0x5B8B, 0x4F53, 0, 0 };
 static sal_Unicode const aMingLiU[] = { 0x7D30, 0x660E, 0x9AD4, 0, 0 };
 static sal_Unicode const aPMingLiU[] = { 0x65B0, 0x7D30, 0x660E, 0x9AD4, 0, 0 };
@@ -374,6 +375,7 @@ static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 {   "dotumche",             aDotumChe },
 {   "simsun",               aSimSun },
 {   "nsimsun",              aNSimSun },
+{   "simhei",               aSimHei },
 {   "mingliu",              aMingLiU },
 {   "pmingliu",             aPMingLiU },
 {   "msgothic",             aMSGothic },
@@ -837,7 +839,7 @@ static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcon
 static char const aImplSubsSansUnicode[] = "andalewtui;arialunicodems;lucidaunicode";
 static char const aImplSubsJPGothic[] = "msgothic;mspgothic;andalewtui";
 static char const aImplSubsJPMincho[] = "msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;andalewtui";
-static char const aImplSubsZH[] = "simsun;nsimsun;andalewtui";
+static char const aImplSubsZH[] = "simsun;nsimsun;simhei;andalewtui";
 static char const aImplSubsTW[] = "mingliu;pmingliu;andalewtui";
 static char const aImplSubsKR[] = "batang;batangche;gulim;gulimche;dotum;dotumche;gungsuh;gungsuhche;myeomjo;andalewtui";
 
@@ -917,6 +919,7 @@ static ImplFontNameAttr const aImplFontNameList[] =
 {   "segoe",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
 {   "serif",                aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
 {   "sheffield",            aImplSubsSheffield, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL },
+{   "simhei",               aImplSubsZH, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_ZH },
 {   "simsun",               aImplSubsZH, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_ZH },
 {   "sorts",                aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "sorts2",               aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
@@ -1163,7 +1166,7 @@ static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Sans 
 static char const aImplDefSymbol[] = "StarBats;WingDings;Zapf Dingbats;Symbol";
 static char const aImplDef_CJK_JP_Mincho[] = "MS Mincho;HG Mincho J;HG Mincho L;HG Mincho";
 static char const aImplDef_CJK_JP_Gothic[] = "MS Gothic;HG Gothic J;HG Gothic";
-static char const aImplDef_CJK_ZH[] = "SimSun";
+static char const aImplDef_CJK_ZH[] = "SimSun;SimHei";
 static char const aImplDef_CJK_TW[] = "MingLiU";
 static char const aImplDef_CJK_KR_Batang[] = "Batang";
 static char const aImplDef_CJK_KR_Gulim[] = "Gulim";
