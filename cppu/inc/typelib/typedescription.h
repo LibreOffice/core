@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:18:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1137,7 +1137,7 @@ void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
-    sal_Bool * pParameterizedTypes )
+    sal_Bool const * pParameterizedTypes )
     SAL_THROW_EXTERN_C();
 
 /** Inits incomplete static interface type reference. Thread synchronizes on typelib init mutex.
