@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:10:24 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ SdrMarkView::SdrMarkView(SdrModel* pModel1, OutputDevice* pOut):
     StartListening(*pModel1);
 }
 
-SdrMarkView::SdrMarkView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrMarkView::SdrMarkView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrSnapView(pModel1,pXOut),
     aHdl(this),
     mpSdrViewSelection(new sdr::ViewSelection())
@@ -2184,69 +2184,69 @@ void SdrMarkView::MarkListHasChanged()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrMarkView::WriteRecords(SvStream& rOut) const
-{
-    SdrSnapView::WriteRecords(rOut);
-    {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWDRAGMODE);
-        rOut<<BOOL(eEditMode==SDREDITMODE_EDIT); // wg. Kompatibilitaet
-        rOut<<USHORT(eDragMode);
-        rOut<<aRef1;
-        rOut<<aRef2;
-        rOut<<BOOL(bForceFrameHandles);
-        rOut<<BOOL(bPlusHdlAlways);
-        rOut<<BOOL(eEditMode==SDREDITMODE_GLUEPOINTEDIT); // wg. Kompatibilitaet
-        rOut<<USHORT(eEditMode);
-        rOut<<BOOL(bMarkHdlWhenTextEdit);
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCROOKCENTER);
-        rOut<<aLastCrookCenter;
-    }
-}
+//BFS01void SdrMarkView::WriteRecords(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrSnapView::WriteRecords(rOut);
+//BFS01 {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWDRAGMODE);
+//BFS01     rOut<<BOOL(eEditMode==SDREDITMODE_EDIT); // wg. Kompatibilitaet
+//BFS01     rOut<<USHORT(eDragMode);
+//BFS01     rOut<<aRef1;
+//BFS01     rOut<<aRef2;
+//BFS01     rOut<<BOOL(bForceFrameHandles);
+//BFS01     rOut<<BOOL(bPlusHdlAlways);
+//BFS01     rOut<<BOOL(eEditMode==SDREDITMODE_GLUEPOINTEDIT); // wg. Kompatibilitaet
+//BFS01     rOut<<USHORT(eEditMode);
+//BFS01     rOut<<BOOL(bMarkHdlWhenTextEdit);
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCROOKCENTER);
+//BFS01     rOut<<aLastCrookCenter;
+//BFS01 }
+//BFS01}
 
-BOOL SdrMarkView::ReadRecord(const SdrIOHeader& rViewHead,
-    const SdrNamedSubRecord& rSubHead,
-    SvStream& rIn)
-{
-    BOOL bRet=FALSE;
-    if (rSubHead.GetInventor()==SdrInventor) {
-        bRet=TRUE;
-        switch (rSubHead.GetIdentifier()) {
-            case SDRIORECNAME_VIEWDRAGMODE: {
-                eEditMode=SDREDITMODE_EDIT;
-                BOOL bTmpBool;
-                USHORT nTmpUShort;
-                rIn>>bTmpBool; if (!bTmpBool) eEditMode=SDREDITMODE_CREATE; // wg. Kompatibilitaet
-                USHORT nDragMode;
-                rIn>>nDragMode;
-                eDragMode=SdrDragMode(nDragMode);
-                rIn>>aRef1;
-                rIn>>aRef2;
-                rIn>>bTmpBool; bForceFrameHandles=bTmpBool;
-                rIn>>bTmpBool; bPlusHdlAlways=bTmpBool;
-                if (rSubHead.GetBytesLeft()!=0) {
-                    rIn>>bTmpBool;
-                    if (bTmpBool) eEditMode=SDREDITMODE_GLUEPOINTEDIT; // wg. Kompatibilitaet
-                }
-                if (rSubHead.GetBytesLeft()!=0) {
-                    rIn>>nTmpUShort;
-                    eEditMode=(SdrViewEditMode)nTmpUShort;
-                }
-                bGlueVisible2=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
-                if (rSubHead.GetBytesLeft()!=0) {
-                    rIn>>bTmpBool;
-                    bMarkHdlWhenTextEdit=bTmpBool;
-                }
-            } break;
-            case SDRIORECNAME_VIEWCROOKCENTER: {
-                rIn>>aLastCrookCenter;
-            } break;
-            default: bRet=FALSE;
-        }
-    }
-    if (!bRet) bRet=SdrSnapView::ReadRecord(rViewHead,rSubHead,rIn);
-    return bRet;
-}
+//BFS01BOOL SdrMarkView::ReadRecord(const SdrIOHeader& rViewHead,
+//BFS01 const SdrNamedSubRecord& rSubHead,
+//BFS01 SvStream& rIn)
+//BFS01{
+//BFS01 BOOL bRet=FALSE;
+//BFS01 if (rSubHead.GetInventor()==SdrInventor) {
+//BFS01     bRet=TRUE;
+//BFS01     switch (rSubHead.GetIdentifier()) {
+//BFS01         case SDRIORECNAME_VIEWDRAGMODE: {
+//BFS01             eEditMode=SDREDITMODE_EDIT;
+//BFS01             BOOL bTmpBool;
+//BFS01             USHORT nTmpUShort;
+//BFS01             rIn>>bTmpBool; if (!bTmpBool) eEditMode=SDREDITMODE_CREATE; // wg. Kompatibilitaet
+//BFS01             USHORT nDragMode;
+//BFS01             rIn>>nDragMode;
+//BFS01             eDragMode=SdrDragMode(nDragMode);
+//BFS01             rIn>>aRef1;
+//BFS01             rIn>>aRef2;
+//BFS01             rIn>>bTmpBool; bForceFrameHandles=bTmpBool;
+//BFS01             rIn>>bTmpBool; bPlusHdlAlways=bTmpBool;
+//BFS01             if (rSubHead.GetBytesLeft()!=0) {
+//BFS01                 rIn>>bTmpBool;
+//BFS01                 if (bTmpBool) eEditMode=SDREDITMODE_GLUEPOINTEDIT; // wg. Kompatibilitaet
+//BFS01             }
+//BFS01             if (rSubHead.GetBytesLeft()!=0) {
+//BFS01                 rIn>>nTmpUShort;
+//BFS01                 eEditMode=(SdrViewEditMode)nTmpUShort;
+//BFS01             }
+//BFS01             bGlueVisible2=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
+//BFS01             if (rSubHead.GetBytesLeft()!=0) {
+//BFS01                 rIn>>bTmpBool;
+//BFS01                 bMarkHdlWhenTextEdit=bTmpBool;
+//BFS01             }
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWCROOKCENTER: {
+//BFS01             rIn>>aLastCrookCenter;
+//BFS01         } break;
+//BFS01         default: bRet=FALSE;
+//BFS01     }
+//BFS01 }
+//BFS01 if (!bRet) bRet=SdrSnapView::ReadRecord(rViewHead,rSubHead,rIn);
+//BFS01 return bRet;
+//BFS01}
 
 void SdrMarkView::SetMoveOutside(BOOL bOn)
 {
