@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-14 08:52:33 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,17 @@ hidspecial HID_BROWSER_REFRESHCONN                      { HelpId = HID_BROWSER_R
 hidspecial HID_DSADMIN_SPECIAL_MESSAGE                  { HelpId = HID_DSADMIN_SPECIAL_MESSAGE; };
 
 
+hidspecial HID_DSADMIN_USER_ADO                         { HelpId = HID_DSADMIN_USER_ADO; };
+hidspecial HID_DSADMIN_PWDREC_ADO                       { HelpId = HID_DSADMIN_PWDREC_ADO; };
+hidspecial HID_DSADMIN_CONNURL_ADOPAGE                  { HelpId = HID_DSADMIN_CONNURL_ADOPAGE; };
+hidspecial HID_DSADMIN_PAGE_ADO                         { HelpId = HID_DSADMIN_PAGE_ADO; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/12/14 08:52:33  fs
+ *  #81845# +HID_DSADMIN_SPECIAL_MESSAGE
+ *
  *  Revision 1.8  2000/12/12 16:32:06  fs
  *  #81862# type for the adabas user help id (why the heck does the compiler not complain about this?????)
  *
