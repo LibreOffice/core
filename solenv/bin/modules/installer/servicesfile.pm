@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-18 16:55:16 $
+#   last change: $Author: kz $ $Date: 2004-06-21 14:24:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -310,7 +310,7 @@ sub register_unocomponents
                 $counter++;
             }
 
-            if ((( $counter > 0 ) && ( $counter%25 == 0 )) || (( $counter > 0 ) && ( $i == $#{$unocomponents} )))   # limiting to 25 files
+            if ((( $counter > 0 ) && ( $counter%$installer::globals::maxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$unocomponents} ))) # limiting to $installer::globals::maxservices files
             {
                 $filestring =~ s/\;\s*$//;
                 chdir($onesourcepath);
@@ -517,6 +517,48 @@ sub add_jdklib_into_ld_library_path
 }
 
 ##################################################################
+# Adding the libraries included in zip files into path variable
+# (for example mozruntime.zip). This is needed to register all
+# libraries successfully.
+##################################################################
+
+sub add_path_to_pathvariable
+{
+    my ( $filesarrayref, $searchstring ) = @_;
+
+    # determining the path
+
+    my $path = "";
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+        my $sourcepath = $onefile->{'sourcepath'};
+
+        if ( $sourcepath =~ /\Q$searchstring\E/ )
+        {
+            $path = $sourcepath;
+            installer::pathanalyzer::get_path_from_fullqualifiedname(\$path);
+            last;
+        }
+    }
+
+    # adding the path to the PATH variable
+
+    if ( $path ne "" )
+    {
+        my $oldpath = "";
+        if ( $ENV{'PATH'} ) { $oldpath = $ENV{'PATH'}; }
+        else { $oldpath = "\."; }
+        my $newpath = $path . $installer::globals::pathseparator . $oldpath;
+        $ENV{'PATH'} = $newpath;
+
+        my $infoline = "Setting PATH to $ENV{'PATH'}\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+##################################################################
 # Setting the jre path into the PATH (Windows only)
 # This is used by regcomp.exe to register Java components.
 # The jre path is saved in $installer::globals::jrepath
@@ -631,9 +673,12 @@ sub create_services_rdb
         $regcompfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$searchname, $includepatharrayref, 1);
         if ( $$regcompfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $searchname for registering uno components!", "create_services_rdb"); }
 
+        # For Windows the libraries included into the mozruntime.zip have to be added to the path
+        if ($installer::globals::iswin) { add_path_to_pathvariable($filesarrayref, "mozruntime_zip"); }
+
         # setting the LD_LIBRARY_PATH, needed by regcomp
         # Linux: Take care of the lock daemon. He has to be started!
-        # For windows it is necessary that "msvcp70.dll" and "msvcr70.dll" are included into the path !
+        # For windows it is necessary that "msvcp7x.dll" and "msvcr7x.dll" are included into the path !
 
         if ( $installer::globals::isunix ) { include_regcomp_into_ld_library_path($regcompfileref); }
 
