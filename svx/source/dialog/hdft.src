@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:18:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@
     Text[ czech ] = "Levý okraj";  \
     Text[ hebrew ] = "~Linker Rand";    \
     Text[ hindi ] = "~Left margin"; \
-    Text[ slovak ] = "Ľ~avý okraj";
+    Text[ slovak ] = "Ľ~avý okraj"; \
+    Text[ hungarian ] = "~Bal margó"; \
+    Text[ slovenian ] = "~Levi rob";
 
 #define _TEXT_FT_RMARGIN \
         Text = "~Rechter Rand" ;                                            \
@@ -124,7 +126,9 @@
     Text[ czech ] = "Pravý okraj"; \
     Text[ hebrew ] = "~Rechter Rand";   \
     Text[ hindi ] = "R~ight margin";    \
-    Text[ slovak ] = "P~ravý okraj";
+    Text[ slovak ] = "P~ravý okraj"; \
+    Text[ hungarian ] = "J~obb margó"; \
+    Text[ slovenian ] = "De~sni rob";
 
 
  // RID_SVXPAGE_HEADER ----------------------------------------------------
@@ -179,6 +183,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "~Kopfzeile einschalten";
         Text[ hindi ] = "पृष्ठ के ~ऊपर की टीका शुरु";
         Text[ slovak ] = "~Záhlavie zapnuté";
+        Text[ hungarian ] = "É~lőfej bekapcsolása";
+        Text[ slovenian ] = "G~lava vključena";
     };
     CheckBox CB_SHARED
     {
@@ -213,6 +219,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "~Inhalt links/rechts gleich";
         Text[ hindi ] = "समान ~विषय बायाँ/दाहिना";
         Text[ slovak ] = "Rovnaký ~obsah vľavo/vpravo";
+        Text[ hungarian ] = "~Páros és páratlan oldal tartalma azonos";
+        Text[ slovenian ] = "Enaka ~vsebina levo/desno";
     };
     FixedText FT_LMARGIN
     {
@@ -268,7 +276,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ english_us ] = "~Spacing" ;
         Text [ portuguese_brazilian ] = "~Afastamento" ;
         Text [ swedish ] = "A~vst�nd" ;
-        Text [ danish ] = "Afstand" ;
+        Text [ danish ] = "~Afstand" ;
         Text [ italian ] = "Distanza" ;
         Text [ spanish ] = "Espacio" ;
         Text [ french ] = "�cart" ;
@@ -291,6 +299,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
         Text[ slovak ] = "~Rozostupy";
+        Text[ hungarian ] = "~Térköz";
+        Text[ slovenian ] = "~Razmik";
     };
     MetricField ED_DIST
     {
@@ -316,13 +326,13 @@ TabPage RID_SVXPAGE_HEADER
         Text [ english_us ] = "Use d~ynamic spacing" ;
         Text[ portuguese ] = "Use d~ynamic spacing";
         Text[ russian ] = "Use d~ynamic spacing";
-        Text[ greek ] = "Use d~ynamic spacing";
+        Text[ greek ] = "~�������� ��������";
         Text[ dutch ] = "Use d~ynamic spacing";
         Text[ french ] = "Utilisation de l'espacement dynamique";
         Text[ spanish ] = "Utilizar espacio d~in�mico";
         Text[ finnish ] = "Use d~ynamic spacing";
         Text[ italian ] = "Usa spaziatura dinamica";
-        Text[ danish ] = "Use d~ynamic spacing";
+        Text[ danish ] = "Brug ~dynamisk afstand";
         Text[ swedish ] = "Anv�nd d~ynamiskt avst�nd";
         Text[ polish ] = "Use d~ynamic spacing";
         Text[ portuguese_brazilian ] = "Usar afastamento din�mico";
@@ -338,6 +348,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "D~ynamischen Abstand verwenden";
         Text[ hindi ] = "Use d~ynamic spacing";
         Text[ slovak ] = "~Použiť premenlivú šírku";
+        Text[ hungarian ] = "~Dinamikus térközhasználat";
+        Text[ slovenian ] = "Uporabi ~dinamične razmike";
     };
     FixedText FT_HEIGHT
     {
@@ -348,7 +360,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ english_us ] = "~Height" ;
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ swedish ] = "H�j~d" ;
-        Text [ danish ] = "H�jd~e" ;
+        Text [ danish ] = "~H�jde" ;
         Text [ italian ] = "Altezza" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ french ] = "Hauteur" ;
@@ -371,6 +383,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "~Višina";
     };
     MetricField ED_HEIGHT
     {
@@ -398,7 +412,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
         Text [ english_us ] = "~AutoFit height" ;
         Text [ swedish ] = "An~passa h�jd dynamiskt" ;
-        Text [ danish ] = "Juster h�jde dynamisk" ;
+        Text [ danish ] = "~Tilpas automatisk h�jden" ;
         Text [ italian ] = "Adatta altezza d~inamicamente" ;
         Text [ spanish ] = "Ajus~te din�mico de la altura" ;
         Text [ french ] = "Adaptation dynamique de la hauteur" ;
@@ -410,7 +424,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ japanese ] = "高さ自動調整(~A)";
         Text[ chinese_traditional ] = "自動最適調整高度(~A)";
         Text[ arabic ] = "������ �������� ��������";
-        Text[ greek ] = "�������� ���������� �����";
+        Text[ greek ] = "��~������ ���������� �����";
         Text[ korean ] = "높이 자동 맞춤(~A)";
         Text[ turkish ] = "Y�ksekli�i otomatik olarak ayarla";
         Text[ language_user1 ] = " ";
@@ -421,6 +435,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "Höhe ~dynamisch anpassen";
         Text[ hindi ] = "~योग्य ऊँचाई";
         Text[ slovak ] = "~Automatická úprava výšky";
+        Text[ hungarian ] = "A~utomatikus magasság";
+        Text[ slovenian ] = "S~amodejno prilagodi višino";
     };
     FixedLine FL_FRAME
     {
@@ -455,6 +471,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
         Text[ slovak ] = "Záhlavie";
+        Text[ hungarian ] = "Élőfej";
+        Text[ slovenian ] = "Glava";
     };
     Window WN_BSP
     {
@@ -472,7 +490,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ portuguese_brazilian ] = "~Mais..." ;
         Text [ portuguese ] = "~Outros..." ;
         Text [ finnish ] = "~Lis��..." ;
-        Text [ danish ] = "Flere..." ;
+        Text [ danish ] = "~Flere..." ;
         Text [ french ] = "Options..." ;
         Text [ swedish ] = "~Fler..." ;
         Text [ dutch ] = "~Overige..." ;
@@ -494,6 +512,8 @@ TabPage RID_SVXPAGE_HEADER
         Text[ hebrew ] = "Zus~ätze...";
         Text[ hindi ] = "~अधिक...";
         Text[ slovak ] = "~Viac...";
+        Text[ hungarian ] = "~Egyebek...";
+        Text[ slovenian ] = "~Dodatno...";
     };
     Text[ chinese_simplified ] = "页眉";
     Text[ russian ] = "������� ����������";
@@ -511,6 +531,8 @@ TabPage RID_SVXPAGE_HEADER
     Text[ hebrew ] = "‮כותרת עליונה‬";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
     Text[ slovak ] = "Záhlavie";
+    Text[ hungarian ] = "Élőfej";
+    Text[ slovenian ] = "Glava";
 };
  // RID_SVXPAGE_FOOTER ----------------------------------------------------
 TabPage RID_SVXPAGE_FOOTER
@@ -542,7 +564,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ portuguese_brazilian ] = "Ativar ~rodap�" ;
         Text [ portuguese ] = "Activar ~rodap�" ;
         Text [ finnish ] = "Alatunniste k~�yt�ss�" ;
-        Text [ danish ] = "Aktiver sidefod" ;
+        Text [ danish ] = "~Aktiver sidefod" ;
         Text [ french ] = "~Activer le pied de page" ;
         Text [ swedish ] = "Sid~fot p�" ;
         Text [ dutch ] = "Vo~ettekst activeren" ;
@@ -563,7 +585,9 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Zápatí zapnuto";
         Text[ hebrew ] = "~Fußzeile einschalten";
         Text[ hindi ] = "~पृष्ठ के अधोभाग की टीका शुरु";
-        Text[ slovak ] = "Zápä~tie zapnutá";
+        Text[ slovak ] = "Zápä~tie zapnuté";
+        Text[ hungarian ] = "É~lőláb bekapcsolása";
+        Text[ slovenian ] = "~Noga vključena";
     };
     CheckBox CB_SHARED
     {
@@ -598,6 +622,8 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ hebrew ] = "~Inhalt links/rechts gleich";
         Text[ hindi ] = "समान ~विषय बायाँ/दाहिना";
         Text[ slovak ] = "Rovnaký ~obsah vľavo/vpravo";
+        Text[ hungarian ] = "~Páros és páratlan oldal tartalma azonos";
+        Text[ slovenian ] = "Enaka ~vsebina levo/desno";
     };
     FixedText FT_LMARGIN
     {
@@ -652,7 +678,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ english_us ] = "~Spacing" ;
         Text [ portuguese_brazilian ] = "~Afastamento" ;
         Text [ swedish ] = "A~vst�nd" ;
-        Text [ danish ] = "Afstand" ;
+        Text [ danish ] = "~Afstand" ;
         Text [ italian ] = "Distanza" ;
         Text [ spanish ] = "Es~pacio" ;
         Text [ french ] = "�cart" ;
@@ -675,6 +701,8 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
         Text[ slovak ] = "~Rozostupy";
+        Text[ hungarian ] = "~Térköz";
+        Text[ slovenian ] = "~Razmik";
     };
     MetricField ED_DIST
     {
@@ -700,13 +728,13 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ english_us ] = "Use d~ynamic spacing" ;
         Text[ portuguese ] = "Use d~ynamic spacing";
         Text[ russian ] = "Use d~ynamic spacing";
-        Text[ greek ] = "Use d~ynamic spacing";
+        Text[ greek ] = "����~���� ��������";
         Text[ dutch ] = "Use d~ynamic spacing";
         Text[ french ] = "Utilisation de l'espacement dynamique";
         Text[ spanish ] = "Utilizar espacio d~in�mico";
         Text[ finnish ] = "Use d~ynamic spacing";
         Text[ italian ] = "Usa spaziatura dinamica";
-        Text[ danish ] = "Use d~ynamic spacing";
+        Text[ danish ] = "Brug ~dynamisk afstand";
         Text[ swedish ] = "Anv�nd d~ynamiskt avst�nd";
         Text[ polish ] = "Use d~ynamic spacing";
         Text[ portuguese_brazilian ] = "Usar afastamento din�mico";
@@ -722,6 +750,8 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ hebrew ] = "D~ynamischen Abstand verwenden";
         Text[ hindi ] = "Use d~ynamic spacing";
         Text[ slovak ] = "~Použiť premenlivú šírku";
+        Text[ hungarian ] = "~Dinamikus térközhasználat";
+        Text[ slovenian ] = "Uporabi ~dinamične razmike";
     };
     FixedText FT_HEIGHT
     {
@@ -733,7 +763,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ english_us ] = "~Height" ;
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ swedish ] = "H�j~d" ;
-        Text [ danish ] = "H�jd~e" ;
+        Text [ danish ] = "~H�jde" ;
         Text [ italian ] = "Altezza" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ french ] = "Hauteur" ;
@@ -756,6 +786,8 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "~Višina";
     };
     MetricField ED_HEIGHT
     {
@@ -785,7 +817,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ portuguese_brazilian ] = "A~juste autom�tico da altura" ;
         Text [ portuguese ] = "Ajuste din�mico da altura" ;
         Text [ finnish ] = "A~utomaattinen korkeuden sovitus" ;
-        Text [ danish ] = "Juster h�jde dynamisk" ;
+        Text [ danish ] = "~Tilpas automatisk h�jden" ;
         Text [ french ] = "Adaptation dynamique de la hauteur" ;
         Text [ swedish ] = "An~passa h�jd dynamiskt" ;
         Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
@@ -797,7 +829,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ japanese ] = "高さ自動調整(~A)";
         Text[ chinese_traditional ] = "自動最適調整高度(~A)";
         Text[ arabic ] = "������ �������� ��������";
-        Text[ greek ] = "�������� ���������� �����";
+        Text[ greek ] = "��~������ ���������� �����";
         Text[ korean ] = "높이 자동 맞춤(~A)";
         Text[ turkish ] = "Y�ksekli�i otomatik olarak ayarla";
         Text[ language_user1 ] = " ";
@@ -807,6 +839,8 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ hebrew ] = "Höhe ~dynamisch anpassen";
         Text[ hindi ] = "~योग्य ऊँचाई";
         Text[ slovak ] = "~Automatická úprava výšky";
+        Text[ hungarian ] = "A~utomatikus magasság";
+        Text[ slovenian ] = "S~amodejno prilagodi višino";
     };
 
     FixedLine FL_FRAME
@@ -842,6 +876,8 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ hebrew ] = "‮כותרת תחתונה‬";
         Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
         Text[ slovak ] = "Zápätie";
+        Text[ hungarian ] = "Élőláb";
+        Text[ slovenian ] = "Noga";
     };
     Window WN_BSP
     {
@@ -859,7 +895,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ portuguese_brazilian ] = "~Mais..." ;
         Text [ portuguese ] = "~Outros..." ;
         Text [ finnish ] = "~Lis��..." ;
-        Text [ danish ] = "Flere..." ;
+        Text [ danish ] = "~Flere..." ;
         Text [ french ] = "Options..." ;
         Text [ swedish ] = "~Fler..." ;
         Text [ dutch ] = "~Overige..." ;
@@ -881,6 +917,8 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ hebrew ] = "Zus~ätze...";
         Text[ hindi ] = "~अधिक...";
         Text[ slovak ] = "~Viac...";
+        Text[ hungarian ] = "~Egyebek...";
+        Text[ slovenian ] = "~Dodatno...";
     };
     Text[ chinese_simplified ] = "页脚";
     Text[ russian ] = "������ ����������";
@@ -898,6 +936,8 @@ TabPage RID_SVXPAGE_FOOTER
     Text[ hebrew ] = "‮כותרת תחתונה‬";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
     Text[ slovak ] = "Päta";
+    Text[ hungarian ] = "Élőláb";
+    Text[ slovenian ] = "Noga";
 };
 QueryBox RID_SVXQBX_DELETE_HEADFOOT
 {
@@ -910,7 +950,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message [ portuguese_brazilian ] = "Desativar o cabe�alho ou o rodap� excluir�seu conte�do.\nDeseja excluir este texto?" ;
     Message [ portuguese ] = "Ao desactivar o cabe�alho ou o rodap� apaga o respectivo conte�do.\nDeseja realmente eliminar o texto?" ;
     Message [ finnish ] = "Yl�- tai alatunnisteiden poistaminen poistaa sis�ll�n.\nPoistetaanko teksti?" ;
-    Message [ danish ] = "Deaktivering af sidehoveder eller sidef�dder sletter det aktuelle indhold.\nSkal indholdet slettes?" ;
+    Message [ danish ] = "Deaktivering af sidehoveder eller sidef�dder sletter det nuv�rende indhold.\nSkal indholdet slettes?" ;
     Message [ french ] = "La d�sactivation de l'en-t�te ou du pied de page en supprime le contenu.\n�tes-vous s�r de vouloir supprimer ce texte ?" ;
     Message [ swedish ] = "Om du deaktiverar sidhuvuden eller sidf�tter raderas inneh�llet. \nVill du radera inneh�llet?" ;
     Message [ dutch ] = "Als u de kop- of voettekst uitschakelt, wordt de inhoud ervan verwijderd.\nWeet u zeker dat u de inhoud wilt verwijderen?" ;
@@ -932,9 +972,14 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message[ hebrew ] = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Inhalt.\nMöchten Sie den Inhalt löschen?";
     Message[ hindi ] = "पृष्ठ के ऊपर और अधोभाग की टीका हटाने से विषय मिट सकता है ।\nआप इस टेक्स्ट् को मिटाना चाहते है?";
     Message[ slovak ] = "Odstránením záhlavia alebo päty zmažete obsah.\nNaozaj chcete zmazať tento text?";
+    Message[ hungarian ] = "Az élőfej vagy élőláb eltávolítása törli annak tartalmát.\nMégis folytatja?";
+    Message[ slovenian ] = "Če odstranite glave in noge, boste odstranili tudi vsebino.\nAli želite izbrisati to besedilo?";
 };
 
  // ********************************************************************** EOF
+
+
+
 
 
 
