@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-25 13:16:18 $
+#   last change: $Author: hjs $ $Date: 2002-10-31 13:17:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -260,4 +260,5 @@ print( STDERR "Command: $command\n" );
 
 replace_cyg(\@params);
 if ( (defined $debug_light) or (defined $debug) ) { print(STDERR "\n---------------------\nExecute: $command @params\n----------------\n");};
-exec( "$command", @params);
+exec( "$command", @params) or die( "\nError: guw.pl: executing $command failed!\n" );
+
