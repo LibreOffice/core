@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:55:04 $
+ *  last change: $Author: mba $ $Date: 2001-12-14 16:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1647,7 +1647,7 @@ void SfxMedium::GetMedium_Impl()
                 Done_Impl( pImp->xLockBytes->GetError() );
         }
 
-        if ( pImp->xLockBytes.Is() )
+        if ( pImp->xLockBytes.Is() && !GetError() )
         {
             if ( bSynchron )
                 pImp->xLockBytes->SetSynchronMode( sal_True );
