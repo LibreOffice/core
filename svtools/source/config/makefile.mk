@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-21 10:28:37 $
+#   last change: $Author: os $ $Date: 2002-08-30 09:52:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,8 @@ SLOFILES = \
     $(SLO)$/accessibilityoptions.obj	\
     $(SLO)$/cmdoptions.obj				\
     $(SLO)$/languageoptions.obj        \
-    $(SLO)$/extendedsecurityoptions.obj
+    $(SLO)$/extendedsecurityoptions.obj \
+    $(SLO)$/sourceviewconfig.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\

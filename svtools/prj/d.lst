@@ -314,6 +314,7 @@ hedabu: ..\inc\accessibilityoptions.hxx %_DEST%\inc%_EXT%\svtools\accessibilityo
 hedabu: ..\inc\cmdoptions.hxx %_DEST%\inc%_EXT%\svtools\cmdoptions.hxx
 hedabu: ..\inc\ctloptions.hxx %_DEST%\inc%_EXT%\svtools\ctloptions.hxx
 hedabu: ..\inc\languageoptions.hxx %_DEST%\inc%_EXT%\svtools\languageoptions.hxx
+hedabu: ..\inc\sourceviewconfig.hxx %_DEST%\inc%_EXT%\svtools\sourceviewconfig.hxx
 
 hedabu: ..\inc\lngmisc.hxx %_DEST%\inc%_EXT%\svtools\lngmisc.hxx
 hedabu: ..\inc\lingucfg.hxx %_DEST%\inc%_EXT%\svtools\lingucfg.hxx
