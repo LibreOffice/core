@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:04:15 $
+ *  last change: $Author: er $ $Date: 2001-08-22 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,6 +1054,7 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
                         pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
                         switch (DateFmt)
                         {
+                            case MDY:   // yes, "10-Jan-94" is valid
                             case DMY:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
