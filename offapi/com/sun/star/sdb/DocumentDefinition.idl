@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentDefinition.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-22 12:28:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ module com { module sun { module star { module sdb {
     </type>
     could be a form or a report.
 */
-published service DocumentDefinition
+service DocumentDefinition
 {
     interface com::sun::star::beans::XPropertySet;
 
