@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-10 15:06:37 $
+ *  last change: $Author: pl $ $Date: 2002-10-23 18:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,9 @@ private:
     void beginCompression();
     void endCompression();
     void endPage();
+
+    /* draws an emphasis mark */
+    void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
 public:
     PDFWriterImpl( const rtl::OUString& rTargetFile, PDFWriter::PDFVersion eVersion = PDFWriter::PDF_1_4, PDFWriter::Compression eCompression = PDFWriter::Screen );
     ~PDFWriterImpl();
@@ -480,7 +483,7 @@ public:
     void getFontMetric( ImplFontSelectData* pFont, ImplFontMetricData* pMetric ) const;
 
 
-    /* for documentation of public fucntions please see pdfwriter.hxx */
+    /* for documentation of public functions please see pdfwriter.hxx */
 
     OutputDevice* getReferenceDevice();
 

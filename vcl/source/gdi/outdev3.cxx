@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-11 13:28:08 $
+ *  last change: $Author: pl $ $Date: 2002-10-23 18:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2608,7 +2608,7 @@ void ImplMultiTextLineInfo::Clear()
 
 // =======================================================================
 
-static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont )
+FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const Font& rFont )
 {
     FontEmphasisMark nEmphasisMark = rFont.GetEmphasisMark();
 
@@ -2638,7 +2638,7 @@ static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-BOOL ImplIsUnderlineAbove( const Font& rFont )
+BOOL OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
 {
     if ( !rFont.IsVertical() )
         return FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: od $ $Date: 2002-10-17 13:53:45 $
+ *  last change: $Author: pl $ $Date: 2002-10-23 18:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@ using namespace rtl;
 #else
 #define MARK( x )
 #endif
-
-// defined in outdev3.cxx
-BOOL ImplIsUnderlineAbove( const Font& );
 
 static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
@@ -2258,20 +2255,28 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     if( m_aCurrentPDFState.m_aFont.IsShadow() )
     {
         Font aSaveFont = m_aCurrentPDFState.m_aFont;
+        Color aSaveTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
+
         Font& rFont = m_aCurrentPDFState.m_aFont;
         if( rFont.GetColor() == Color( COL_BLACK ) || rFont.GetColor().GetLuminance() < 8 )
             rFont.SetColor( Color( COL_LIGHTGRAY ) );
         else
             rFont.SetColor( Color( COL_BLACK ) );
         rFont.SetShadow( FALSE );
+        setFont( rFont );
+        setTextLineColor( rFont.GetColor() );
+        updateGraphicsState();
 
         long nOff = 1 + ((m_pReferenceDevice->mpFontEntry->mnLineHeight-24)/24);
         if( rFont.IsOutline() )
             nOff++;
         rLayout.DrawBase() += Point( nOff, nOff );
-        drawLayout( rLayout, rText, false );
+        drawLayout( rLayout, rText, bTextLines );
         rLayout.DrawBase() -= Point( nOff, nOff );
-        m_aCurrentPDFState.m_aFont = aSaveFont;
+
+        setFont( aSaveFont );
+        setTextLineColor( aSaveTextLineColor );
+        updateGraphicsState();
     }
 
     OStringBuffer aLine( 512 );
@@ -2325,6 +2330,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     double fXScale = 1.0;
     sal_Int32 nFontHeight = m_pReferenceDevice->mpFontEntry->maFontSelData.mnHeight;
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
+
     // transform font height back to current units
     nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicWidth( nFontHeight );
     if( m_aCurrentPDFState.m_aFont.GetWidth() )
@@ -2341,14 +2347,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         // force state before GetFontMetric
         m_pReferenceDevice->ImplNewFont();
     }
+
+    double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
+    double fSin = sin( fAngle );
+    double fCos = cos( fAngle );
+
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pAdvanceWidths, pCharPosAry )) )
     {
         // back transformation to current coordinate system
         aPos = m_pReferenceDevice->PixelToLogic( aPos );
-
-        double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
-        double fSin = sin( fAngle );
-        double fCos = cos( fAngle );
 
         Point aDiff;
         if ( eAlign == ALIGN_BOTTOM )
@@ -2392,16 +2399,16 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 if( nGlyphFlags[n] & GF_ROTL )
                 {
                     fDeltaAngle = M_PI/2.0;
-                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent();
-                    aDeltaPos.Y() = m_pReferenceDevice->GetFontMetric().GetDescent();
+                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent() - m_pReferenceDevice->GetFontMetric().GetDescent();
+                    aDeltaPos.Y() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent() * fXScale);
                     fYScale = fXScale;
                     fTempXScale = 1.0;
                 }
                 else if( nGlyphFlags[n] & GF_ROTR )
                 {
                     fDeltaAngle = -M_PI/2.0;
-                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetDescent();
-                    aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent();
+                    aDeltaPos.X() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent()*fXScale);
+                    aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent() + m_pReferenceDevice->GetFontMetric().GetDescent();
                     fYScale = fXScale;
                     fTempXScale = 1.0;
                 }
@@ -2496,7 +2503,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
          )
         )
     {
-        BOOL bUnderlineAbove = ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
+        BOOL bUnderlineAbove = OutputDevice::ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
             Point aPos, aStartPt;
@@ -2538,6 +2545,133 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                           m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, bUnderlineAbove );
         }
+    }
+
+    // write eventual emphasis marks
+    if( m_aCurrentPDFState.m_aFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
+    {
+        PolyPolygon             aEmphPoly;
+        Rectangle               aEmphRect1;
+        Rectangle               aEmphRect2;
+        long                    nEmphYOff;
+        long                    nEmphWidth;
+        long                    nEmphHeight;
+        BOOL                    bEmphPolyLine;
+        FontEmphasisMark        nEmphMark;
+
+        push( PUSH_ALL );
+
+        aLine.setLength( 0 );
+        aLine.append( "q\r\n" );
+
+        nEmphMark = m_pReferenceDevice->ImplGetEmphasisMarkStyle( m_aCurrentPDFState.m_aFont );
+        if ( nEmphMark & EMPHASISMARK_POS_BELOW )
+            nEmphHeight = m_pReferenceDevice->mnEmphasisDescent;
+        else
+            nEmphHeight = m_pReferenceDevice->mnEmphasisAscent;
+        m_pReferenceDevice->ImplGetEmphasisMark( aEmphPoly,
+                                                 bEmphPolyLine,
+                                                 aEmphRect1,
+                                                 aEmphRect2,
+                                                 nEmphYOff,
+                                                 nEmphWidth,
+                                                 nEmphMark,
+                                                 nEmphHeight,
+                                                 m_pReferenceDevice->mpFontEntry->mnOrientation );
+        if ( bEmphPolyLine )
+        {
+            setLineColor( m_aCurrentPDFState.m_aFont.GetColor() );
+            setFillColor( Color( COL_TRANSPARENT ) );
+        }
+        else
+        {
+            setFillColor( m_aCurrentPDFState.m_aFont.GetColor() );
+            setLineColor( Color( COL_TRANSPARENT ) );
+        }
+        writeBuffer( aLine.getStr(), aLine.getLength() );
+
+        Point aOffset = Point(0,0);
+
+        if ( nEmphMark & EMPHASISMARK_POS_BELOW )
+            aOffset.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnDescent + nEmphYOff;
+        else
+            aOffset.Y() -= m_pReferenceDevice->mpFontEntry->maMetric.mnAscent + nEmphYOff;
+
+        long nEmphWidth2     = nEmphWidth / 2;
+        long nEmphHeight2    = nEmphHeight / 2;
+        aOffset += Point( nEmphWidth2, nEmphHeight2 );
+
+        if ( eAlign == ALIGN_BOTTOM )
+            aOffset.Y() -= m_pReferenceDevice->mpFontEntry->maMetric.mnDescent;
+        else if ( eAlign == ALIGN_TOP )
+            aOffset.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnAscent;
+
+        for( int nStart = 0;;)
+        {
+            Point aPos;
+            long nGlyphIndex, nAdvance;
+            if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+                break;
+
+            if( !rLayout.IsSpacingGlyph( nGlyphIndex ) )
+            {
+                Point aAdjOffset = aOffset;
+                aAdjOffset.X() += (nAdvance - nEmphWidth) / 2;
+                aAdjOffset = Point( (int)(fXScale * fCos * (double)aAdjOffset.X() + fSin * (double)aAdjOffset.Y()),
+                                 -(int)(fXScale * fSin * (double)aAdjOffset.X() - fCos * (double)aAdjOffset.Y()) );
+
+                aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );
+
+                aPos += aAdjOffset;
+                aPos = m_pReferenceDevice->PixelToLogic( aPos );
+                drawEmphasisMark( aPos.X(), aPos.Y(),
+                                  aEmphPoly, bEmphPolyLine,
+                                  aEmphRect1, aEmphRect2 );
+            }
+        }
+
+        writeBuffer( "Q\r\n", 3 );
+        pop();
+    }
+
+}
+
+void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
+                                      const PolyPolygon& rPolyPoly, BOOL bPolyLine,
+                                      const Rectangle& rRect1, const Rectangle& rRect2 )
+{
+    // TODO: pass nWidth as width of this mark
+    long nWidth = 0;
+
+    if ( rPolyPoly.Count() )
+    {
+        if ( bPolyLine )
+        {
+            Polygon aPoly = rPolyPoly.GetObject( 0 );
+            aPoly.Move( nX, nY );
+            drawPolyLine( aPoly );
+        }
+        else
+        {
+            PolyPolygon aPolyPoly = rPolyPoly;
+            aPolyPoly.Move( nX, nY );
+            drawPolyPolygon( aPolyPoly );
+        }
+    }
+
+    if ( !rRect1.IsEmpty() )
+    {
+        Rectangle aRect( Point( nX+rRect1.Left(),
+                                nY+rRect1.Top() ), rRect1.GetSize() );
+        drawRectangle( aRect );
+    }
+
+    if ( !rRect2.IsEmpty() )
+    {
+        Rectangle aRect( Point( nX+rRect2.Left(),
+                                nY+rRect2.Top() ), rRect2.GetSize() );
+
+        drawRectangle( aRect );
     }
 }
 
@@ -2865,14 +2999,31 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     if ( bNormalLines &&
          ((eStrikeout == STRIKEOUT_SLASH) || (eStrikeout == STRIKEOUT_X)) )
     {
-        String aStrikeout = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
+        String aStrikeoutChar = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
+        String aStrikeout = aStrikeoutChar;
         while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
             aStrikeout.Append( aStrikeout );
 
-        // do not get broader than nWidth
-        while( m_pReferenceDevice->GetTextWidth( aStrikeout ) > nWidth )
+        // do not get broader than nWidth modulo 1 character
+        while( m_pReferenceDevice->GetTextWidth( aStrikeout ) >= nWidth )
             aStrikeout.Erase( 0, 1 );
+        aStrikeout.Append( aStrikeoutChar );
+        BOOL bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
+        if( bShadow )
+        {
+            Font aFont = m_aCurrentPDFState.m_aFont;
+            aFont.SetShadow( FALSE );
+            setFont( aFont );
+            updateGraphicsState();
+        }
         drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
+        if( bShadow )
+        {
+            Font aFont = m_aCurrentPDFState.m_aFont;
+            aFont.SetShadow( TRUE );
+            setFont( aFont );
+            updateGraphicsState();
+        }
 
         switch( eUnderline )
         {
