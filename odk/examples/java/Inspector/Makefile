@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.18 $
+#  $Revision: 1.19 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:11:51 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:16:39 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -200,13 +200,13 @@ JavaInspectorExample : $(COMP_REGISTERFLAG) $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make $(APP1_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
 	@echo ------
 	@echo The InstanceInspector component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo document.
 	@echo -
-	@echo make InstanceInspectorTest.odt.load
+	@echo $(MAKE) InstanceInspectorTest.odt.load
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(SAMPLE_CLASS_OUT)/%.jar
