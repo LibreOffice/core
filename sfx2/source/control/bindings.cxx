@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.28 $
- *  last change: $Author: obo $ $Date: 2004-07-06 13:33:08 $
+ *  $Revision: 1.29 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  ************************************************************************/
 
-//#include <stdio.h>
+#include <hash_map>
 
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -155,6 +155,8 @@ static USHORT nTimeOut = 300;
 static sal_uInt32 nCache1 = 0;
 static sal_uInt32 nCache2 = 0;
 
+typedef std::hash_map< USHORT, bool > InvalidateSlotMap;
+
 //====================================================================
 
 DECL_PTRARRAY(SfxStateCacheArr_Impl, SfxStateCache*, 32, 16);
@@ -230,6 +232,7 @@ public:
     sal_Bool                    bFirstRound;    // Erste Runde im Update
     sal_uInt16                  nFirstShell;    // Shell, die in erster Runde bevorzugt wird
     sal_uInt16                  nOwnRegLevel;   // z"ahlt die echten Locks, ohne die der SuperBindings
+    InvalidateSlotMap           m_aInvalidateSlots; // store slots which are invalidated while in update
 };
 
 //--------------------------------------------------------------------
@@ -578,6 +581,26 @@ void SfxBindings::Update_Impl
 
 //--------------------------------------------------------------------
 
+void SfxBindings::InvalidateSlotsInMap_Impl()
+{
+    InvalidateSlotMap::const_iterator pIter = pImp->m_aInvalidateSlots.begin();
+    while ( pIter != pImp->m_aInvalidateSlots.end() )
+    {
+        Invalidate( pIter->first );
+        ++pIter;
+    }
+    pImp->m_aInvalidateSlots.clear();
+}
+
+//--------------------------------------------------------------------
+
+void SfxBindings::AddSlotToInvalidateSlotsMap_Impl( USHORT nId )
+{
+    pImp->m_aInvalidateSlots[nId] = sal_True;
+}
+
+//--------------------------------------------------------------------
+
 void SfxBindings::Update
 (
     sal_uInt16      nId     // die gebundene und upzudatende Slot-Id
@@ -650,12 +673,14 @@ void SfxBindings::Update
                     !pMsgServer->GetSlot()->IsMode(SFX_SLOT_VOLATILE) ) )
                 {
                     pImp->bInUpdate = sal_False;
+                    InvalidateSlotsInMap_Impl();
                     return;
                 }
                 if (!pMsgServer)
                 {
                     pCache->SetState(SFX_ITEM_DISABLED, 0);
                     pImp->bInUpdate = sal_False;
+                    InvalidateSlotsInMap_Impl();
                     return;
                 }
 
@@ -666,6 +691,7 @@ void SfxBindings::Update
         }
 
         pImp->bInUpdate = sal_False;
+        InvalidateSlotsInMap_Impl();
     }
 }
 
@@ -710,6 +736,7 @@ void SfxBindings::Update()
         while ( !NextJob_Impl(0) )
             ; // loop
         pImp->bInUpdate = sal_False;
+        InvalidateSlotsInMap_Impl();
     }
 }
 
@@ -981,9 +1008,20 @@ void SfxBindings::Invalidate
 
 {
     DBG_PROFSTART(SfxBindingsInvalidateAll);
-    DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
+//  DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
 
     DBG_MEMTEST();
+
+    if ( pImp->bInUpdate )
+    {
+        sal_Int32 i = 0;
+        while ( pIds[i] != 0 )
+            AddSlotToInvalidateSlotsMap_Impl( pIds[i++] );
+
+        if ( pImp->pSubBindings )
+            pImp->pSubBindings->Invalidate( pIds );
+        return;
+    }
 
     if ( pImp->pSubBindings )
         pImp->pSubBindings->Invalidate( pIds );
@@ -1134,7 +1172,15 @@ void SfxBindings::Invalidate
 
 {
     DBG_MEMTEST();
-    DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
+//  DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
+
+    if ( pImp->bInUpdate )
+    {
+        AddSlotToInvalidateSlotsMap_Impl( nId );
+        if ( pImp->pSubBindings )
+            pImp->pSubBindings->Invalidate( nId );
+        return;
+    }
 
     if ( pImp->pSubBindings )
         pImp->pSubBindings->Invalidate( nId );
