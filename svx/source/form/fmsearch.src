@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-02 14:19:07 $
+ *  last change: $Author: obo $ $Date: 2001-10-11 20:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese ] = "~Texto";
         Text[ russian ] = "Òåêñò";
         Text[ greek ] = "Êåßìåíï :";
-        Text[ dutch ] = "~Tekst :";
+        Text[ dutch ] = "~Tekst";
         Text[ french ] = "Texte";
         Text[ spanish ] = "~Texto";
         Text[ finnish ] = "~Teksti:";
@@ -231,7 +231,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese ] = "~Formulário";
         Text[ russian ] = "Ôîğìóëÿğ";
         Text[ greek ] = "Öüñìá:";
-        Text[ dutch ] = "~Formulier :";
+        Text[ dutch ] = "~Formulier";
         Text[ french ] = "Formulaire";
         Text[ spanish ] = "~Formulario";
         Text[ finnish ] = "muoto";
@@ -295,7 +295,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese ] = "Campo ú~nico";
         Text[ russian ] = "Â îòäåëüíîì ïîëå";
         Text[ greek ] = "Ìåìïíùìİíï ğåäßï:";
-        Text[ dutch ] = "~Een enkel veld :";
+        Text[ dutch ] = "~Een enkel veld";
         Text[ french ] = "Champ unique";
         Text[ spanish ] = "~Campo individual";
         Text[ finnish ] = "Yksitt?inen kentt?";
@@ -358,7 +358,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese ] = "~Posição:";
         Text[ russian ] = "Ïîçèöèÿ";
         Text[ greek ] = "Èİóç :";
-        Text[ dutch ] = "~Positie :";
+        Text[ dutch ] = "~Positie";
         Text[ french ] = "Position";
         Text[ spanish ] = "~Posición";
         Text[ finnish ] = "Sijainti";
@@ -632,6 +632,25 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text = "Zeichenbreite berücksichtigen" ;
         Text [ english ] = "Match character width" ;
         Text [ english_us ] = "Match character width" ;
+        Text[ portuguese ] = "Formas de largura média e normal";
+        Text[ russian ] = "Íîğìàëüíûå/ïîëóøèğîêèå ôîğìû";
+        Text[ greek ] = "Öüñìåò ìå êáíïíéêü/ìéóü ğëÜôïò";
+        Text[ dutch ] = "Halve/normale breedte";
+        Text[ french ] = "Respecter la chasse";
+        Text[ spanish ] = "Formas con ancho medio o normal";
+        Text[ finnish ] = "Halb-/normalbreite Formen";
+        Text[ italian ] = "Considera la larghezza dei caratteri";
+        Text[ danish ] = "Match half/full width forms";
+        Text[ swedish ] = "Anpassa till teckenbredd";
+        Text[ polish ] = "Formy po³owy/zwyk³ej szerokoœci";
+        Text[ portuguese_brazilian ] = "Match half/full width forms";
+        Text[ japanese ] = "å…¨è§’ã¨åŠè§’";
+        Text[ korean ] = "ë°˜/ì „ì²´ ë„ˆë¹„ í¼";
+        Text[ chinese_simplified ] = "é¡¾å…¨å­—ç¬¦å®½åº¦";
+        Text[ chinese_traditional ] = "é¡§åŠå­—å…ƒå¯¬åº¦";
+        Text[ turkish ] = "Match half/full width forms";
+        Text[ arabic ] = "äãÇĞÌ äÕİ ÇáÚÑÖ/ÚÑÖ ÚÇÏí";
+        Text[ catalan ] = "Match half/full-width forms";
     };
     CheckBox CB_SOUNDSLIKECJK
     {
@@ -1033,6 +1052,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
 
