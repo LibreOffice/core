@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleComponent.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2003-09-08 10:04:48 $
+ *  last change:$Date: 2004-03-19 15:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
                 log.println("finding the point which lies on the component");
 
-                int curX = chBnd.Width;
+                int curX = chBnd.Width / 2;
                 int curY = chBnd.Height / 2;
 
                 while (!children[i].containsPoint(new Point(curX, curY)) &&
