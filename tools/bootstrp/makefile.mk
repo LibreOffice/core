@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: nf $ $Date: 2001-05-07 14:16:04 $
+#   last change: $Author: nf $ $Date: 2001-05-08 11:09:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,6 +157,11 @@ APP6LIBS=	$(LB)$/bootstrp.lib
 APP6STDLIBS=$(STATIC_LIBS) 
 APP6DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/sspretty.obj
 
+APP7TARGET= rscdep
+APP7OBJS=	$(OBJ)$/rscdep.obj
+APP7LIBS=	$(LB)$/bootstrp.lib
+APP7STDLIBS=$(STATIC_LIBS) 
+APP7DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/rscdep.obj
 
 DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
 
