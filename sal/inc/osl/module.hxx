@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-18 09:18:32 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 08:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _OSL_MODULE_HXX_
 #define _OSL_MODULE_HXX_
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _OSL_MODULE_H_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-11 19:17:56 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 08:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #   include <rtl/memory.h>
 #endif
 
-#ifndef _RTL_USTRING_
-#   include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#   include <rtl/ustring.hxx>
 #endif
 
 #include <osl/file.h>
