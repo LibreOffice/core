@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astenum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:45:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,10 @@ sal_Bool AstEnum::dump(RegistryKey& rKey)
     if ( nConst > 0 )
     {
         typereg::Writer aBlob(
-            TYPEREG_VERSION_0, getDocumentation(),
+            m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
+            getDocumentation(),
             OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
-            RT_TYPE_ENUM,
+            RT_TYPE_ENUM, m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
             nConst, 0, 0);
 
@@ -131,7 +132,7 @@ sal_Bool AstEnum::dump(RegistryKey& rKey)
         {
             pDecl = *iter;
             if ( pDecl->getNodeType() == NT_enum_val )
-                ((AstConstant*)pDecl)->dumpBlob(aBlob, index++);
+                ((AstConstant*)pDecl)->dumpBlob(aBlob, index++, false);
 
             ++iter;
         }
