@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:12:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #endif
 
 #include <sot/clsids.hxx>
-#include <sfx2/fcontnr.hxx>
+#include <sfx2/objface.hxx>
 
 #include "itemdef.hxx"
 #include "cfgid.h"
@@ -97,16 +97,7 @@ SFX_IMPL_INTERFACE( SwWebDocShell, SfxObjectShell, SW_RES(0) )
 
 TYPEINIT1(SwWebDocShell, SwDocShell);
 
-SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, swriter/web, SvGlobalName(SO3_SWWEB_CLASSID) )
-{
-    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
-    rFactory.SetDocumentServiceName(C2S("com.sun.star.text.WebDocument"));
-    //rFactory.GetFilterContainer()->SetDetectFilter( &SwDLL::DetectFilter );
-    SwWebDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SWWEB_MENU));
-    SwWebDocShell::Factory().RegisterAccel(SW_RES(CFG_SWWEB_ACCEL));
-    SwWebDocShell::Factory().RegisterHelpFile(C2S("swriter.svh"));
-    //SwWebDocShell::Factory().RegisterHelpPIFile(C2S("swriter.svh"));
-}
+SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SvGlobalName(SO3_SWWEB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/web" )
 
 /*-----------------22.01.97 09.29-------------------
 
@@ -133,25 +124,9 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion ) const
+                                   sal_Int32 nVersion ) const
 {
-    SfxInPlaceObject::FillClass(pClassName, pClipFormat, pAppName, pLongUserName,
-                                pUserName, nVersion);
-
-    if (nVersion == SOFFICE_FILEFORMAT_40)
-    {
-        *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_40 );
-        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_40;
-        *pAppName = C2S("StarWriter/Web 4.0");
-        *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE_40);
-    }
-    else if ( nVersion == SOFFICE_FILEFORMAT_50)
-    {
-        *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_50 );
-        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_50;
-        *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE_50);
-    }
-    else if (nVersion == SOFFICE_FILEFORMAT_60)
+    if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_60 );
         *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_60;
