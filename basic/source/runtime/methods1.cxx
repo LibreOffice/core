@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:48:17 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SBX_HXX
 #include <svtools/sbx.hxx>
+#endif
+#ifndef _ZFORLIST_HXX //autogen
+#include <svtools/zforlist.hxx>
 #endif
 #ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
@@ -2185,6 +2188,106 @@ RTLFUNC(DatePart)
     rPar.Get(0)->PutLong( nRet );
 }
 
+// FormatDateTime(Date[,NamedFormat])
+RTLFUNC(FormatDateTime)
+{
+    USHORT nParCount = rPar.Count();
+    if( nParCount < 2 || nParCount > 3 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    double dDate = rPar.Get(1)->GetDate();
+    INT16 nNamedFormat = 0;
+    if( nParCount > 2 )
+    {
+        nNamedFormat = rPar.Get(2)->GetInteger();
+        if( nNamedFormat < 0 || nNamedFormat > 4 )
+        {
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+            return;
+        }
+    }
+
+    Reference< XCalendar > xCalendar = getLocaleCalendar();
+    if( !xCalendar.is() )
+    {
+        StarBASIC::Error( SbERR_INTERNAL_ERROR );
+        return;
+    }
+
+    String aRetStr;
+    SbxVariableRef pSbxVar = new SbxVariable( SbxSTRING );
+    switch( nNamedFormat )
+    {
+        // GeneralDate:
+        // Display a date and/or time. If there is a date part,
+        // display it as a short date. If there is a time part,
+        // display it as a long time. If present, both parts are displayed.
+
+        // 12/21/2004 11:24:50 AM
+        // 21.12.2004 12:13:51
+        case 0:
+            pSbxVar->PutDate( dDate );
+            aRetStr = pSbxVar->GetString();
+            break;
+
+        // LongDate: Display a date using the long date format specified
+        // in your computer's regional settings.
+        // Tuesday, December 21, 2004
+        // Dienstag, 21. December 2004
+        case 1:
+        {
+            SvNumberFormatter* pFormatter = NULL;
+            if( pINST )
+                pFormatter = pINST->GetNumberFormatter();
+            else
+            {
+                ULONG n;    // Dummy
+                SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
+            }
+
+            LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+            ULONG nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eLangType );
+            Color* pCol;
+            pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );
+
+            if( !pINST )
+                delete pFormatter;
+
+            break;
+        }
+
+        // ShortDate: Display a date using the short date format specified
+        // in your computer's regional settings.
+        // 12/21/2004
+        // 21.12.2004
+        case 2:
+            pSbxVar->PutDate( floor(dDate) );
+            aRetStr = pSbxVar->GetString();
+            break;
+
+        // LongTime: Display a time using the time format specified
+        // in your computer's regional settings.
+        // 11:24:50 AM
+        // 12:13:51
+        case 3:
+        // ShortTime: Display a time using the 24-hour format (hh:mm).
+        // 11:24
+        case 4:
+            double n;
+            double dTime = modf( dDate, &n );
+            pSbxVar->PutDate( dTime );
+            if( nNamedFormat == 3 )
+                aRetStr = pSbxVar->GetString();
+            else
+                aRetStr = pSbxVar->GetString().Copy( 0, 5 );
+            break;
+    }
+
+    rPar.Get(0)->PutString( aRetStr );
+}
 
 RTLFUNC(Round)
 {
