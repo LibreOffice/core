@@ -2,9 +2,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: is $ $Date: 2004-09-02 15:10:48 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:36:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -481,7 +481,20 @@ sub adapt_name
     $$nameref =~ s/\-\-/\-/g;   # making "--" to "-", if %SHORT_PRODUCTEXTENSION is empty
     $$nameref =~ s/\-\./\./g;   # making "-." to ".", if %SHORT_PRODUCTEXTENSION is empty
     $$nameref =~ s/\-\s*$//;    # making "-" to "" at end, if %SHORT_PRODUCTEXTENSION is empty
-    $$nameref =~ s/\.org//g;    # openoffice.org -> openoffice
+}
+
+#####################################################################
+# Adapting the package name, after variables are resolved
+#####################################################################
+
+sub adapt_packagename
+{
+    my ($nameref) = @_;
+
+    $$nameref =~ s/\-\-/\-/g;   # making "--" to "-", if %SHORT_PRODUCTEXTENSION is empty
+    $$nameref =~ s/\-\./\./g;   # making "-." to ".", if %SHORT_PRODUCTEXTENSION is empty
+    $$nameref =~ s/\-\s*$//;    # making "-" to "" at end, if %SHORT_PRODUCTEXTENSION is empty
+    $$nameref =~ s/\.org/org/g; # openoffice.org -> openofficeorg
 }
 
 1;
