@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+ *  last change: $Author: mba $ $Date: 2001-11-05 08:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,6 +590,9 @@ SfxApplication::~SfxApplication()
         Deinitialize();
 
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+
+    // better call SvFactory::DeInit, because this will remove ALL factories,
+    // but it will fail because the ConfigManager has a storage that is a SvObject
     SfxObjectFactory::RemoveAll_Impl();
 
 //    UCB_Helper::Deinitialize();
