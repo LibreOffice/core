@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-27 20:15:22 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 09:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2809,6 +2809,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
