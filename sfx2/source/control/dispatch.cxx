@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                             ? (SfxExecuteItem*)pOrigItem->Clone()
                             : 0;
 
-        // ggf. TabPage-ID setzen und SID merken
+        // ggf. TabPage-ID setzen
         SfxAppData_Impl *pAppData = pSfxApp->Get_Impl();
         SFX_REQUEST_ARG(rReq, pTabPageItem, SfxUInt16Item, SID_TABPAGE, sal_False);
         if ( pTabPageItem )
@@ -328,7 +328,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             pAppData->nAutoTabPageId = pTabPageItem->GetValue();
             rReq.RemoveItem( SID_TABPAGE ); // sonst ArgCount > 0 => Seiteneff.
         }
-        pAppData->nExecutingSID = rReq.GetSlot();
 
         // API-Call-Klammerung und Document-Lock w"ahrend des Calls
         {
@@ -357,7 +356,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         // TabPage-ID und Executing-SID zurueck setzen
         if ( pTabPageItem )
             pAppData->nAutoTabPageId = 0;
-        pAppData->nExecutingSID = 0;
 
 #if modal_mode_sinnlos
         // ggf. Lock wieder freigeben
@@ -392,6 +390,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                     pBindings->Update(rSlot.GetSlotId());
                 }
             }
+
             return sal_True;
         }
     }
