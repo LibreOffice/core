@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-13 16:35:48 $
+#   last change: $Author: vg $ $Date: 2004-04-13 16:55:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.54 $ ';
+$id_str = ' $Revision: 1.55 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -139,6 +139,7 @@ if ($^O eq 'linux') {
 $strip      = '/usr/ccs/bin/strip' if ( $^O eq 'solaris' );
 $strip      = 'strip' if ( $^O eq "darwin" );
 $upd           = $ENV{'UPD'};
+($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
 
 # zip is default for RE
 $opt_zip = 1 if ( defined($ENV{UPDATER}) && $ENV{UPDATER} eq 'YES' && defined($ENV{DELIVER_TO_ZIP}) );
@@ -437,7 +438,6 @@ sub init_globals
 
     my $build_sosl    = $ENV{'BUILD_SOSL'};
     my $common_outdir = $ENV{'COMMON_OUTDIR'};
-    my $gui           = lc($ENV{'GUI'});
     my $inpath        = $ENV{'INPATH'};
     my $outpath       = $ENV{'OUTPATH'};
     my $solarversion  = $ENV{'SOLARVERSION'};
@@ -761,7 +761,7 @@ sub copy_if_newer
     # to minimize the possibility for race conditions
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
     my $rc = '';
-    if ((defined $ENV{PROEXT}) && (unstripped($from))) {
+    if (($gui eq 'unx') && (defined $ENV{PROEXT}) && (unstripped($from))) {
         $rc = do_strip($from, $temp_file);
     } else {
         $rc = copy($from, $temp_file);
