@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-02 09:01:04 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 12:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,20 @@ public class java_remote_bridge_Test {
         }
 
         public Object getInstance(String name) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
-//          System.err.println("\t\tTest_XInstanceProvider.getInstance:" + name);
+//              System.err.println("\t\tTest_XInstanceProvider.getInstance:" + name);
 
-            return _object;
+            Object object = _object;
+
+            if(name.equals("return_null"))
+                object = null;
+
+            else if(name.equals("throw_com.sun.star.uno.RuntimeException"))
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " - throwing:" + name);
+
+            else if(name.equals("throw_com.sun.star.container.NoSuchElementException"))
+                throw new com.sun.star.container.NoSuchElementException(getClass().getName() + " - throwing:" + name);
+
+            return object;
         }
     }
 
@@ -191,6 +202,60 @@ public class java_remote_bridge_Test {
         return true;
     }
 
+    static boolean test_getInstance() throws Exception {
+        boolean passed = true;
+
+        System.err.println("\tjava_remote_bridge - testing getInstance...");
+
+
+        boolean tmp_passed = (__java_remote_bridge_B.getInstance("return_null") == null);
+        System.err.println("\t\treturn null: passed? " + tmp_passed);
+
+        passed = passed && tmp_passed;
+
+        try {
+            __java_remote_bridge_B.getInstance("throw_com.sun.star.uno.RuntimeException");
+
+            tmp_passed = false;
+        }
+        catch(com.sun.star.uno.RuntimeException runtimeException) {
+            tmp_passed = runtimeException.getMessage().indexOf("throw_com.sun.star.uno.RuntimeException") != -1;
+        }
+
+        System.err.println("\t\tthrow RuntimeException: passed? " + tmp_passed);
+        passed = passed && tmp_passed;
+
+          try {
+             __java_remote_bridge_B.getInstance("throw_com.sun.star.container.NoSuchElementException");
+
+            tmp_passed = false;
+          }
+          catch(com.sun.star.uno.RuntimeException runtimeException) {
+            tmp_passed =  (runtimeException.getMessage().indexOf("throw_com.sun.star.container.NoSuchElementException") != -1);
+          }
+
+        System.err.println("\t\tthrow NoSuchElementException: passed? " + tmp_passed);
+        passed = passed && tmp_passed;
+
+
+          try {
+             __java_remote_bridge_A.getInstance("blabla");
+
+            tmp_passed = false;
+          }
+          catch(com.sun.star.uno.RuntimeException runtimeException) {
+            tmp_passed =  (runtimeException.getMessage().indexOf("no instance provider set") != -1);
+          }
+
+        System.err.println("\t\tno instance provider: passed? " + tmp_passed);
+
+        passed = passed && tmp_passed;
+
+        System.err.println("\tjava_remote_bridge - testing getInstance: passed?" +  passed);
+
+        return passed;
+    }
+
     static public boolean test(Vector notpassed, String protocol) throws Exception {
         System.err.println("java_remote_bridge - testing with protocol: " + protocol + "...");
         __xConnection_A = new PipedConnection(new Object[0]);
@@ -206,11 +271,21 @@ public class java_remote_bridge_Test {
 
         __java_remote_bridge_A = new java_remote_bridge(__java_environment_A, null, new Object[]{protocol, __xConnection_A, __xInstanceProvider});
         __java_remote_bridge_B = new java_remote_bridge(__java_environment_B, null, new Object[]{protocol, __xConnection_B, null});
-//          __java_remote_bridge_A = new java_remote_bridge(__java_environment_A, null, new Object[]{"iiop", __xConnection_A, __xInstanceProvider});
-//          __java_remote_bridge_B = new java_remote_bridge(__java_environment_B, null, new Object[]{"iiop", __xConnection_B, null});
 
-          boolean passed =  test_lifecycle(100, yXInstanceProvider);
-        passed = passed && test_releasing_of_outmapped_objects();
+
+
+
+          boolean passed = true;
+        boolean tmp_passed = false;
+
+        tmp_passed = test_getInstance();
+        passed = passed && tmp_passed;
+
+        tmp_passed = test_lifecycle(100, yXInstanceProvider);
+        passed = passed && tmp_passed;
+
+        tmp_passed = test_releasing_of_outmapped_objects();
+        passed = passed && tmp_passed;
 
         System.err.println("java_remote_bridge_Test - " + protocol + " test passed?" + passed);
         if(!passed && notpassed != null)
