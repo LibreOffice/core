@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-21 14:57:26 $
+ *  last change: $Author: dl $ $Date: 2001-09-28 12:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ BOOL SdView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 |*
 \************************************************************************/
 
-BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage) const
+BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresObjListOnly) const
 {
     /**************************************************************************
     * Ist ein Presentationsobjekt selektiert?
@@ -332,17 +332,17 @@ BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage) const
         pMark = pMarkList->GetMark(nMark);
         pObj = pMark->GetObj();
 
-        if ( pObj && ( pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
+        if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
         {
             pPage = (SdPage*) pObj->GetPage();
             bMasterPage = pPage->IsMasterPage();
 
             if (bMasterPage && bOnMasterPage || !bMasterPage && bOnPage)
             {
-                if ( pPage && pPage->GetPresObjList()->GetPos(pObj)
-                              != LIST_ENTRY_NOTFOUND )
+                if ( pPage && pPage->GetPresObjList()->GetPos(pObj) != LIST_ENTRY_NOTFOUND )
                 {
                     bSelected = TRUE;
+                    break;
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-10 11:37:49 $
+ *  last change: $Author: dl $ $Date: 2001-09-28 12:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
     {
         case SID_GROUP:  // BASIC
         {
-            if ( pDrView->IsPresObjSelected() )
+            if ( pDrView->IsPresObjSelected( TRUE, TRUE, TRUE ) )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
