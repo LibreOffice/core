@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
+ *  last change: $Author: hr $ $Date: 2001-08-16 14:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ namespace dbaui
     //========================================================================
     //= DBTreeListModel
     //========================================================================
-    DBG_NAME(DBTreeListUserData);
+    DBG_NAME(DBTreeListUserData)
     //------------------------------------------------------------------------
     DBTreeListModel::DBTreeListUserData::DBTreeListUserData()
         :eType(SbaTableQueryBrowser::etQuery)
@@ -110,6 +110,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/08/15 13:14:59  oj
+ *  #88644# correct getImplementationId and insert some DBG's
+ *
  *  Revision 1.8  2001/05/14 11:58:35  oj
  *  #86744# some changes for entries and views
  *

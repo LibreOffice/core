@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:39:35 $
+ *  last change: $Author: hr $ $Date: 2001-08-16 14:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ namespace dbaui
         }
     };
 
-    DBG_NAME(ODataView);
+    DBG_NAME(ODataView)
     // -------------------------------------------------------------------------
     ODataView::ODataView(Window* pParent, const Reference< XMultiServiceFactory >& _rFactory, WinBits nStyle)
         :Window(pParent,nStyle)
