@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,31 +61,26 @@
 #ifndef _NEONTYPES_HXX_
 #define _NEONTYPES_HXX_
 
-#if STLPORT_VERSION < 321
-#include <tools/presys.h>
-#include    <vector.h>
-#include <tools/postsys.h>
-#else
-#include    <vector>
-#endif  // STLPORT_VERSION < 321
-
-#ifdef _USE_NO_NAMERSPACES_
-#define std
+#if SUPD<=614
+#define OLD_NEON_PROPFIND_INTERFACE
 #endif
 
 #include <http_basic.h>
 #include <http_request.h>
 #include <dav_props.h>
-#include <uri.h>
 
 typedef http_session                HttpSession;
 typedef http_req                    HttpRequest;
 typedef http_status                 HttpStatus;
 typedef http_server_capabilities    HttpServerCapabilities;
 
-typedef dav_propfind_handler    NeonPropFindHandler;
-typedef dav_propname            NeonPropName;
-typedef struct hip_xml_elm      NeonPropFindXmlElem;
-typedef hip_xml_elmid           NeonPropFindXmlId;
+typedef dav_propfind_handler        NeonPropFindHandler;
+typedef dav_propname                NeonPropName;
+typedef struct hip_xml_elm          NeonPropFindXmlElem;
+typedef hip_xml_elmid               NeonPropFindXmlId;
+
+#ifndef OLD_NEON_PROPFIND_INTERFACE
+typedef dav_prop_result_set         NeonPropFindResultSet;
+#endif
 
 #endif _NEONTYPES_HXX_

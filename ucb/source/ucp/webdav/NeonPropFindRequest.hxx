@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,13 +86,20 @@ class NeonPropFindRequest
         ~NeonPropFindRequest( );
 
     private:
+#ifdef OLD_NEON_PROPFIND_INTERFACE
         static void *   StartResource( void * inUserData, const char * inHref );
         static void     EndResource( void *             inUserData,
                                      void *             inResource,
                                      const char *       inStatusLine,
                                      const HttpStatus * inHttpStatus,
                                      const char *       inDescription );
-
+#else
+        static void *  CreatePrivate( void *        userdata,
+                                      const char *  uri );
+        static void    DiscoverResults( void * userdata,
+                                        const char * href,
+                                         const NeonPropFindResultSet * set);
+#endif
         static int      EndElement( void *                      inUserData,
                                     const NeonPropFindXmlElem * inXmlElem,
                                     const char *                inCdata );

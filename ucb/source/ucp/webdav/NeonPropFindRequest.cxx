@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include "NeonTypes.hxx"
 #include "NeonPropFindRequest.hxx"
 #include "DAVException.hxx"
 
@@ -115,6 +116,9 @@ const NeonPropFindXmlElem NeonPropFindRequest::sXmlElems[] =
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
+
+#ifdef OLD_NEON_PROPFIND_INTERFACE
+
 NeonPropFindRequest::NeonPropFindRequest( HttpSession *             inSession,
                                           const char *              inPath,
                                           const Depth               inDepth,
@@ -177,12 +181,82 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession *             inSession,
     }
 }
 
+#else
+
+NeonPropFindRequest::NeonPropFindRequest( HttpSession *             inSession,
+                                          const char *              inPath,
+                                          const Depth               inDepth,
+                                          const vector<OUString>    inPropNames,
+                                          vector< DAVResource > &   ioResources)
+{
+    // Create a propfind handler
+    if ( ( mPropFindHandler = dav_propfind_create( inSession,
+                                                   inPath,
+                                                   inDepth ) ) == NULL )
+        throw DAVException( DAVException::DAV_REQUEST_CREATE );
+
+    // Generate the list of properties we're looking for
+    int thePropCount = inPropNames.size();
+    int theRetVal;
+    if ( thePropCount > 0 )
+    {
+        NeonPropName * thePropNames = new NeonPropName[ thePropCount + 1 ];
+        for ( int theIndex = 0; theIndex < thePropCount; theIndex ++ )
+        {
+            thePropNames[ theIndex ].nspace = "DAV:";
+            // Warning: Why am I doing a strdup here?
+            thePropNames[ theIndex ].name =
+                        strdup( GetPropName( inPropNames[ theIndex ] ) );
+        }
+        thePropNames[ theIndex ].nspace = NULL;
+        thePropNames[ theIndex ].name = NULL;
+
+        dav_propfind_set_complex( mPropFindHandler,
+                                    thePropNames,
+                                    CreatePrivate,
+                                    &ioResources );
+
+        // Setup the CheckContext and End element handlers
+        hip_xml_push_handler( dav_propfind_get_parser( mPropFindHandler ),
+                                sXmlElems,
+                                CheckContext,
+                                NULL,
+                                EndElement,
+                                mPropFindHandler );
+
+        // Send the request
+        theRetVal = dav_propfind_named( mPropFindHandler,
+                                        DiscoverResults,
+                                        &ioResources );
+
+        for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
+            free( (void *)thePropNames[ theIndex ].name );
+        delete thePropNames;
+    }
+    else
+        throw DAVException( DAVException::DAV_INVALID_ARG );
+
+    if ( theRetVal != HTTP_OK )
+    {
+        if ( theRetVal == HTTP_AUTH )
+            throw DAVException( DAVException::DAV_HTTP_AUTH );
+        else
+            throw DAVException( DAVException::DAV_HTTP_ERROR );
+    }
+}
+
+#endif
+
 // -------------------------------------------------------------------
 // Destructor
 // -------------------------------------------------------------------
 NeonPropFindRequest::~NeonPropFindRequest( )
 {
+// Crash in neon -> hip_xml_destroy(...) is buggy!
+//  dav_propfind_destroy( mPropFindHandler );
 }
+
+#ifdef OLD_NEON_PROPFIND_INTERFACE
 
 // -------------------------------------------------------------------
 // StartResource
@@ -213,6 +287,34 @@ void NeonPropFindRequest::EndResource( void *               inUserData,
 {
 }
 
+#else
+
+// -------------------------------------------------------------------
+// CreatePrivate
+
+// static
+void * NeonPropFindRequest::CreatePrivate( void *       userdata,
+                                           const char * uri )
+{
+    DAVResource theResource(
+                    OStringToOUString( uri, RTL_TEXTENCODING_UTF8 ),
+                    false );
+    vector< DAVResource > * theResources = (vector< DAVResource > * )userdata;
+    theResources->push_back( theResource );
+    return theResources;
+}
+
+// -------------------------------------------------------------------
+// DiscoverResults
+
+// static
+void NeonPropFindRequest::DiscoverResults( void * userdata,
+                                           const char * href,
+                                            const NeonPropFindResultSet * set )
+{
+}
+
+#endif
 
 // -------------------------------------------------------------------
 // EndElement
@@ -248,17 +350,21 @@ int NeonPropFindRequest::EndElement( void *                         inUserData,
         }
 
 
-        // Get hold of the current DAVResource ( as created in StartResource )
+        // Get hold of the current DAVResource
+#ifdef OLD_NEON_PROPFIND_INTERFACE
         vector< DAVResource > * theResources =
          (vector< DAVResource > * )dav_propfind_get_current_resource(
                                         ( NeonPropFindHandler *)inUserData );
-
+#else
+        vector< DAVResource > * theResources =
+         (vector< DAVResource > * )dav_propfind_current_private(
+                                        ( NeonPropFindHandler *)inUserData );
+#endif
         // Add the newly created PropertyValue
         vector< DAVResource >::iterator theIterator = theResources->end();
         theIterator--;
         theIterator->properties.push_back( thePropertyValue );
     }
-
     return 0;
 }
 
