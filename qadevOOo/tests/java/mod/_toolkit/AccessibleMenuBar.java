@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuBar.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-09-08 13:00:37 $
+ *  last change: $Date: 2003-11-18 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,12 @@ public class AccessibleMenuBar extends TestCase {
                     acomp.grabFocus();
                 }
             });
+
+        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
+                                                            new Boolean(false));
+
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+                                                            new Boolean(false));
 
         return tEnv;
 
