@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:22:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ void SAL_CALL OfficeIPCThread::run()
             // handle request for acceptor
             sal_Bool bAcceptorRequest = sal_False;
             OUString aAcceptString;
-            if ( aCmdLineArgs.GetAcceptString(aAcceptString) ) {
+            if ( aCmdLineArgs.GetAcceptString(aAcceptString) && Desktop::CheckOEM()) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty,
                                           "ACCEPT", aAcceptString );
@@ -605,7 +605,7 @@ void SAL_CALL OfficeIPCThread::run()
                 bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
 
                 // Special command line args to create an empty document for a given module
-                if ( aCmdLineArgs.HasModuleParam() )
+                if ( aCmdLineArgs.HasModuleParam() && Desktop::CheckOEM())
                 {
                     SvtModuleOptions aOpt;
                     SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
@@ -628,7 +628,7 @@ void SAL_CALL OfficeIPCThread::run()
                 }
             }
 
-            if ( bDocRequestSent )
+            if ( bDocRequestSent && Desktop::CheckOEM)
              {
                 // Send requests to dispatch watcher if we have at least one. The receiver
                 // is responsible to delete the request after processing it.
