@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,7 +1142,7 @@ void SwHTMLParser::InsertBodyOptions()
         sal_uInt16 nWhich = 0;
         if( LANGUAGE_DONTKNOW != eLang )
         {
-            switch( GetScriptTypeOfLanguage( eLang ) )
+            switch( SvtLanguageOptions::GetScriptTypeOfLanguage( eLang ) )
             {
             case SCRIPTTYPE_LATIN:
                 nWhich = RES_CHRATR_LANGUAGE;
