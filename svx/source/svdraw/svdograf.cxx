@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:04:21 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 11:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1829,16 +1829,17 @@ void SdrGrafObj::ForceDefaultAttr()
 
 //-/    if(pPool)
 //-/    {
-    SetItem( SdrGrafLuminanceItem( 0 ) );
-    SetItem( SdrGrafContrastItem( 0 ) );
-    SetItem( SdrGrafRedItem( 0 ) );
-    SetItem( SdrGrafGreenItem( 0 ) );
-    SetItem( SdrGrafBlueItem( 0 ) );
-    SetItem( SdrGrafGamma100Item( 100 ) );
-    SetItem( SdrGrafTransparenceItem( 0 ) );
-    SetItem( SdrGrafInvertItem( FALSE ) );
-    SetItem( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
-    SetItem( SdrGrafCropItem( 0, 0, 0, 0 ) );
+    ImpForceItemSet();
+    mpObjectItemSet->Put( SdrGrafLuminanceItem( 0 ) );
+    mpObjectItemSet->Put( SdrGrafContrastItem( 0 ) );
+    mpObjectItemSet->Put( SdrGrafRedItem( 0 ) );
+    mpObjectItemSet->Put( SdrGrafGreenItem( 0 ) );
+    mpObjectItemSet->Put( SdrGrafBlueItem( 0 ) );
+    mpObjectItemSet->Put( SdrGrafGamma100Item( 100 ) );
+    mpObjectItemSet->Put( SdrGrafTransparenceItem( 0 ) );
+    mpObjectItemSet->Put( SdrGrafInvertItem( FALSE ) );
+    mpObjectItemSet->Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
+    mpObjectItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
 //-/    }
 //-/    if( pPool )
 //-/    {

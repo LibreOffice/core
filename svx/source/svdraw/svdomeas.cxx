@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 11:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,8 @@ void SdrMeasureObj::ForceDefaultAttr()
     //#71958# by default, the show units Bool-Item is set as hard
     // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
     // from one application to another
-    SetItem(SdrMeasureShowUnitItem(TRUE));
+    ImpForceItemSet();
+    mpObjectItemSet->Put(SdrMeasureShowUnitItem(TRUE));
 
     XPolygon aXP(4);        //      []
     aXP[0] = Point(100,0);    // 0,4__[]__2,4
@@ -321,11 +322,11 @@ void SdrMeasureObj::ForceDefaultAttr()
     aXP[2] = Point(0,400);    //     \  /
     aXP[3] = Point(100,0);    //      \/1,0
 
-    SetItem(XLineStartItem(String(), aXP));
-    SetItem(XLineStartWidthItem(200));
-    SetItem(XLineEndItem(String(), aXP));
-    SetItem(XLineEndWidthItem(200));
-    SetItem(XLineStyleItem(XLINE_SOLID));
+    mpObjectItemSet->Put(XLineStartItem(String(), aXP));
+    mpObjectItemSet->Put(XLineStartWidthItem(200));
+    mpObjectItemSet->Put(XLineEndItem(String(), aXP));
+    mpObjectItemSet->Put(XLineEndWidthItem(200));
+    mpObjectItemSet->Put(XLineStyleItem(XLINE_SOLID));
 //-/        if(!pMeasureAttr)
 //-/        {
 //-/            SdrMeasureSetItem aSetItem(pPool);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:58:27 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 11:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,22 +900,23 @@ void SdrAttrObj::ForceDefaultAttr()
 
 //-/        mpObjectItemSet = CreateNewItemSet(*pPool);
 
+    ImpForceItemSet();
     if(bTextFrame)
     {
         SdrCaptionObj* pCapt = PTR_CAST(SdrCaptionObj, this);
         BOOL bCaption(pCapt != 0L);
 
         if(!bCaption)
-             SetItem(XLineStyleItem(XLINE_NONE));
+             mpObjectItemSet->Put(XLineStyleItem(XLINE_NONE));
 
-        SetItem(XFillColorItem(String(), Color(COL_WHITE)));
-        SetItem(XFillStyleItem(XFILL_NONE));
+        mpObjectItemSet->Put(XFillColorItem(String(), Color(COL_WHITE)));
+        mpObjectItemSet->Put(XFillStyleItem(XFILL_NONE));
     }
     else
     {
-        SetItem(SvxAdjustItem(SVX_ADJUST_CENTER));
-        SetItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-        SetItem(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+        mpObjectItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+        mpObjectItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+        mpObjectItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
     }
 //-/    }
 //-/    if (pPool!=NULL && pLineAttr==NULL) {

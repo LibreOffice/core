@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-08 17:31:30 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 11:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,13 +1328,14 @@ void SdrCircObj::ForceDefaultAttr()
 
     if(eKindA != SDRCIRC_FULL)
     {
-        SetItem(SdrCircKindItem(eKindA));
+        ImpForceItemSet();
+        mpObjectItemSet->Put(SdrCircKindItem(eKindA));
 
         if(nStartWink)
-            SetItem(SdrCircStartAngleItem(nStartWink));
+            mpObjectItemSet->Put(SdrCircStartAngleItem(nStartWink));
 
         if(nEndWink != 36000)
-            SetItem(SdrCircEndAngleItem(nEndWink));
+            mpObjectItemSet->Put(SdrCircEndAngleItem(nEndWink));
     }
 
     // call parent, after SetItem(SdrCircKindItem())
