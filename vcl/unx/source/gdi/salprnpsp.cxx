@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-25 16:05:36 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 16:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,14 @@ static int(*pFaxNrFunction)(String&)        = NULL;
 static String getPdfDir( const PrinterInfo& rInfo )
 {
     String aDir;
-    int nTokens = rInfo.m_aFeatures.getTokenCount( ',' );
-    for( int i = 0; i < nTokens; i++ )
+    sal_Int32 nIndex = 0;
+    while( nIndex != -1 )
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( i, ',' ) );
+        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
         if( ! aToken.compareToAscii( "pdf=", 4 ) )
         {
-            aDir = aToken.getToken( 1, '=' );
+            sal_Int32 nPos = 0;
+            aDir = aToken.getToken( 1, '=', nPos );
             if( ! aDir.Len() )
                 aDir = String( ByteString( getenv( "HOME" ) ), gsl_getSystemTextEncoding() );
             break;
@@ -445,10 +446,10 @@ void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         pInfo->maComment        = rInfo.m_aComment;
         pInfo->mpSysData        = NULL;
 
-        int nTokens = rInfo.m_aFeatures.getTokenCount( ',' );
-        for( int i = 0; i < nTokens; i++ )
+        sal_Int32 nIndex = 0;
+        while( nIndex != -1 )
         {
-            String aToken( rInfo.m_aFeatures.getToken( i, ',' ) );
+            String aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
             if( aToken.CompareToAscii( "pdf=", 4 ) == COMPARE_EQUAL )
             {
                 pInfo->maLocation = getPdfDir( rInfo );
@@ -820,10 +821,10 @@ BOOL SalPrinter::StartJob(
 
     // check wether this printer is configured as fax
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( maPrinterData.m_aJobData.m_aPrinterName ) );
-    int nTokens = rInfo.m_aFeatures.getTokenCount( ',' );
-    for( int i = 0; i < nTokens; i++ )
+    sal_Int32 nIndex = 0;
+    while( nIndex != -1 )
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( i, ',' ) );
+        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
         if( ! aToken.compareToAscii( "fax", 3 ) )
         {
             maPrinterData.m_bFax = true;
@@ -834,7 +835,8 @@ BOOL SalPrinter::StartJob(
             if( it != pJobSetup->maValueMap.end() )
                 maPrinterData.m_aFaxNr = it->second;
 
-            maPrinterData.m_bSwallowFaxNo = ! aToken.getToken( 1, '=' ).compareToAscii( "swallow", 7 ) ? true : false;
+            sal_Int32 nPos = 0;
+            maPrinterData.m_bSwallowFaxNo = ! aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? true : false;
 
             break;
         }

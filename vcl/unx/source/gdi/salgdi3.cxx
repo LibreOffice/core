@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-02 14:19:09 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 16:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,8 +325,9 @@ FontLookup::FontLookup ( ::std::list< psp::fontID >::iterator& it,
         mnWeight = ToFontWeight (aInfo.m_eWeight);
         mbDisplay=    aInfo.m_eType == psp::fonttype::Builtin
                    || aInfo.m_eType == psp::fonttype::Unknown ? False : True;
-        maName   = rtl::OUStringToOString (aInfo.m_aFamilyName,
-                                        RTL_TEXTENCODING_ISO_8859_1).toLowerCase();
+        maName   = rtl::OUStringToOString
+            ( aInfo.m_aFamilyName,
+              RTL_TEXTENCODING_ISO_8859_1).toAsciiLowerCase();
 
         sal_Int32       n_length = maName.getLength();
         const sal_Char* p_from   = maName.getStr();
@@ -459,7 +460,7 @@ FontFallback::FontFallback () :
                 continue;
             if ( ! equalWeight (aInfo.m_eWeight, psp::weight::Normal) )
                 continue;
-            if ( aName.equalsIgnoreCase (aInfo.m_aFamilyName) )
+            if ( aName.equalsIgnoreAsciiCase (aInfo.m_aFamilyName) )
                 mnId = *it;
         }
     }

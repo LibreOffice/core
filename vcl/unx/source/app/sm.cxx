@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 16:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ String SessionManagerClient::getExecName()
     ::rtl::OUString aExec;
     aStartupInfo.getExecutableFile( aExec );
 
-    int nPos = aExec.search( ::rtl::OUString::createFromAscii( ".bin" ) );
+    int nPos = aExec.indexOf( ::rtl::OUString::createFromAscii( ".bin" ) );
     if( nPos != -1 )
         aExec = aExec.copy( 0, nPos );
     return aExec;

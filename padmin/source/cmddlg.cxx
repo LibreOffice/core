@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 16:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,23 +299,25 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
 
     m_bWasFax = false;
     m_bWasPdf = false;
-    int nTokens = m_pParent->m_aJobData.m_aFeatures.getTokenCount( ',' );
     m_aConfigureBox.SelectEntryPos( m_nPrinterEntry );
-    for( int i = 0; i < nTokens; i++ )
+    sal_Int32 nIndex = 0;
+    while( nIndex != -1 )
     {
-        OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( i, ',' ) );
+        OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( 0, ',', nIndex ) );
         if( ! aToken.compareToAscii( "fax", 3 ) )
         {
             m_bWasFax = true;
             m_aFaxSwallowBox.Show( TRUE );
-            m_aFaxSwallowBox.Check( ! aToken.getToken( 1, '=' ).compareToAscii( "swallow", 7 ) ? TRUE : FALSE );
+            sal_Int32 nPos = 0;
+            m_aFaxSwallowBox.Check( ! aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? TRUE : FALSE );
             m_aConfigureBox.SelectEntryPos( m_nFaxEntry );
             break;
         }
-        if( ! m_pParent->m_aJobData.m_aFeatures.getToken( i, ',' ).compareToAscii( "pdf=", 4 ) )
+        if( ! aToken.compareToAscii( "pdf=", 4 ) )
         {
             m_bWasPdf = true;
-            m_aPdfDirectoryEdit.SetText( m_pParent->m_aJobData.m_aFeatures.getToken( i, ',' ).getToken( 1, '=' ) );
+            sal_Int32 nPos = 0;
+            m_aPdfDirectoryEdit.SetText( aToken.getToken( 1, '=', nPos ) );
             m_aPdfDirectoryEdit.Show( TRUE );
             m_aPdfDirectoryButton.Show( TRUE );
             m_aPdfDirectoryText.Show( TRUE );
@@ -343,13 +345,13 @@ void RTSCommandPage::save()
     ::std::list< String >::iterator it;
 
     String aFeatures;
-    int nTokens = m_pParent->m_aJobData.m_aFeatures.getTokenCount( ',' );
+    sal_Int32 nIndex = 0;
     String aOldPdfPath;
     bool bOldFaxSwallow = false;
     bool bFaxSwallow = m_aFaxSwallowBox.IsChecked() ? true : false;
-    for( int i = 0; i < nTokens; i++ )
+    while( nIndex != -1 )
     {
-        OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( i, ',' ) );
+        OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( 0, ',', nIndex ) );
         if( aToken.compareToAscii( "fax", 3 ) &&
             aToken.compareToAscii( "pdf", 3 ) )
         {
@@ -361,9 +363,15 @@ void RTSCommandPage::save()
             }
         }
         else if( ! aToken.compareToAscii( "pdf=", 4 ) )
-            aOldPdfPath = aToken.getToken( 1, '=' );
+        {
+            sal_Int32 nPos = 0;
+            aOldPdfPath = aToken.getToken( 1, '=', nPos );
+        }
         else if( ! aToken.compareToAscii( "fax=", 4 ) )
-            bOldFaxSwallow = aToken.getToken( 1, '=' ).compareToAscii( "swallow", 7 ) ? false : true;
+        {
+            sal_Int32 nPos = 0;
+            bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? false : true;
+        }
     }
     ::std::list< String >* pList = &m_aPrinterCommands;
     if( bHaveFax )
