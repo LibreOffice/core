@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-28 14:45:33 $
+ *  last change: $Author: as $ $Date: 2001-02-07 12:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,13 +162,19 @@
 #ifndef _COM_SUN_STAR_BRIDGE_XINSTANCEPROVIDER_HPP_
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 #endif
+
 #ifdef TF_FILTER//MUSTFILTER
-#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
-#include <com/sun/star/document/XTypeDetection.hpp>
+    #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+    #include <com/sun/star/document/XTypeDetection.hpp>
+    #endif
 #endif
-#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XELEMENTACCESS_HPP_
@@ -256,27 +262,46 @@ using namespace ::com::sun::star::container ;
 /*-***************************************************************************************************************/
 class TestApplication : public Application
 {
+    //*************************************************************************************************************
     public:
+
         void Main();
 
+    //*************************************************************************************************************
     private:
 
-        //*********************************************************************************************************
-        // test methods
-        //*********************************************************************************************************
-        void impl_testDesktop       ( const Reference< XDesktop >& xDesktop                                                     );
-        void impl_testPlugIn        ( const Reference< XDesktop >& xDesktop, const Reference< XMultiServiceFactory >& xFactory  );
-        void impl_testLoginDialog   (                                                                                           );
-        void impl_testFilterCache   (                                                                                           );
+        #ifdef TEST_DESKTOP
+        void impl_testDesktop   ( const Reference< XDesktop >& xDesktop );
+        void impl_buildTree     ( const Reference< XDesktop >& xDesktop );
+        void impl_logTree       ( const Reference< XDesktop >& xDesktop );
+        #endif
+
+        #ifdef TEST_PLUGIN
+        void impl_testPlugIn    ( const Reference< XDesktop >& xDesktop, const Reference< XMultiServiceFactory >& xFactory  );
+        #endif
+
+        #ifdef TEST_LOGINDIALOG
+        void impl_testLoginDialog();
+        #endif
+
 #ifdef TF_FILTER
-        void impl_testTypeDetection (                                                                                           );
+        #ifdef TEST_FILTERCACHE
+        void impl_testFilterCache();
+        #endif
+
+        #ifdef TEST_TYPEDETECTION
+        void impl_testTypeDetection();
+        #endif
+
+        #ifdef TEST_FILTERREGISTRATION
+        void impl_testFilterRegistration();
+        #endif
 #endif
 
-        //*********************************************************************************************************
-        // helper methods
-        //*********************************************************************************************************
-        void impl_buildTree ( const Reference< XDesktop >& xDesktop );// Build a new tree with desktop on top.
-        void impl_logTree   ( const Reference< XDesktop >& xDesktop );// Write names of all frames in tree to logfile.
+    //*************************************************************************************************************
+    private:
+
+        Reference< XMultiServiceFactory >   m_xFactory;
 
 };  //  class TestApplication
 
@@ -292,7 +317,7 @@ TestApplication aTestApplication ;
 
 void TestApplication::Main()
 {
-    RegistryCache aCache;
+//  RegistryCache aCache;
 
     /**-***********************************************************************************************************
         initialize program
@@ -300,12 +325,12 @@ void TestApplication::Main()
 
     // Init global servicemanager and set it.
     ServiceManager aManager;
-    Reference< XMultiServiceFactory > xGlobalServiceManager = aManager.getManager();
-    setProcessServiceFactory( xGlobalServiceManager );
+    m_xFactory = aManager.getManager( DECLARE_ASCII("test.rdb") );
+    setProcessServiceFactory( m_xFactory );
 
     // Control sucess of operation.
-    LOG_ASSERT( !(xGlobalServiceManager.is()==sal_False             ), "TestApplication::Main()\nCan't create global service manager.\n\n"          )
-    LOG_ASSERT( !(getProcessServiceFactory()!=xGlobalServiceManager ), "TestApplication::Main()\nGlobal servicemanager not set in UNOTOOLS.\n\n"    )
+    LOG_ASSERT( !(m_xFactory.is()           ==sal_False ), "TestApplication::Main()\nCan't create global service manager.\n\n"          )
+    LOG_ASSERT( !(getProcessServiceFactory()!=m_xFactory), "TestApplication::Main()\nGlobal servicemanager not set in UNOTOOLS.\n\n"    )
 
     // For some follow operations, we need the vcl-toolkit!
     InitExtVclToolkit();
@@ -313,11 +338,6 @@ void TestApplication::Main()
     /**-***********************************************************************************************************
         test area
     **************************************************************************************************************/
-
-    Reference< XInterface > xI( xGlobalServiceManager->createInstance( DECLARE_ASCII("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
-    Reference< XConfigManager > xC( xI, UNO_QUERY );
-    LOG_ASSERT( xI.is(), "config not created\n" )
-    LOG_ASSERT( xC.is(), "config interface not found\n" )
 
     //-------------------------------------------------------------------------------------------------------------
     #ifdef TEST_FILTERCACHE
@@ -347,6 +367,11 @@ void TestApplication::Main()
     //-------------------------------------------------------------------------------------------------------------
     #ifdef TEST_PLUGIN
     impl_testPlugIn( xDesktop, xGlobalServiceManager );
+    #endif
+
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef TEST_FILTERREGISTRATION
+    impl_testFilterRegistration();
     #endif
 
 /*
@@ -440,6 +465,7 @@ void TestApplication::Main()
 //  test method
 //_________________________________________________________________________________________________________________
 #ifdef TF_FILTER
+#ifdef TEST_TYPEDETECTION
 void TestApplication::impl_testTypeDetection()
 {
     // We use a string buffer to log important informations and search results.
@@ -537,9 +563,13 @@ void TestApplication::impl_testTypeDetection()
     WRITE_LOGFILE( "testTypeDetection.log", U2B(sBuffer.makeStringAndClear()).getStr() )
 }
 #endif
+#endif
+
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
+#ifdef TF_FILTER
+#ifdef TEST_FILTERCACHE
 void TestApplication::impl_testFilterCache()
 {
     FilterCache aCache;
@@ -613,10 +643,13 @@ void TestApplication::impl_testFilterCache()
 
     WRITE_LOGFILE( "test_FilterCache.log", U2B(sBuffer.makeStringAndClear()).getStr() )
 }
+#endif
+#endif
 
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
+#ifdef TEST_LOGINDIALOG
 void TestApplication::impl_testLoginDialog()
 {
     // Get global servicemanager to create service "LoginDialog".
@@ -718,10 +751,12 @@ void TestApplication::impl_testLoginDialog()
     LOG_ASSERT( sal_False, OUStringToOString( sConnectionType  , RTL_TEXTENCODING_UTF8 ).getStr() )
     LOG_ASSERT( sal_False, OString::valueOf( (sal_Int32)nPort ).getStr() )
 }
+#endif
 
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
+#ifdef TEST_PLUGIN
 void TestApplication::impl_testPlugIn( const Reference< XDesktop >& xDesktop, const Reference< XMultiServiceFactory >& xFactory )
 {
     // create instance provider for creation of factories.
@@ -745,10 +780,12 @@ void TestApplication::impl_testPlugIn( const Reference< XDesktop >& xDesktop, co
     Reference< XFramesSupplier > xSupplier( xDesktop, UNO_QUERY );
     xPlugIn->setCreator( xSupplier );
 }
+#endif
 
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
+#ifdef TEST_DESKTOP
 #define LOGFILE_TARGETING "targeting.log"
 void TestApplication::impl_testDesktop( const Reference< XDesktop >& xDesktop )
 {
@@ -1179,3 +1216,79 @@ void TestApplication::impl_logTree( const Reference< XDesktop >& xDesktop )
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "\n"                       );
 #endif
 }
+#endif // TEST_DESKTOP
+
+//_________________________________________________________________________________________________________________
+//  test method for registration of new filters in configuration
+//_________________________________________________________________________________________________________________
+#ifdef TEST_FILTERREGISTRATION
+void TestApplication::impl_testFilterRegistration()
+{
+    Reference< XNameContainer > xContainer( m_xFactory->createInstance( SERVICENAME_FILTERFACTORY ), UNO_QUERY );
+    LOG_ASSERT( !(xContainer.is()==sal_False), "TestApplication::impl_testFilterRegistration()\nCould not create FilterFactory-service or cast it to XNameContainer.\n" )
+    if( xContainer.is() == sal_True )
+    {
+        Sequence< PropertyValue > lProperties( 8 );
+
+        lProperties[0].Name     =   DECLARE_ASCII("Type"                    );
+        lProperties[0].Value    <<= DECLARE_ASCII("component_DB"            );
+
+        lProperties[1].Name     =   DECLARE_ASCII("UIName"                  );
+        lProperties[1].Value    <<= DECLARE_ASCII("Ein neuer Filter-Eintrag");
+
+        lProperties[2].Name     =   DECLARE_ASCII("DocumentService"         );
+        lProperties[2].Value    <<= DECLARE_ASCII("test.document.service"   );
+
+        lProperties[3].Name     =   DECLARE_ASCII("FilterService"           );
+        lProperties[3].Value    <<= DECLARE_ASCII("test.filter.service"     );
+
+        lProperties[4].Name     =   DECLARE_ASCII("Flags"                   );
+        lProperties[4].Value    <<= (sal_Int32)100;
+
+        Sequence< OUString > lTempData(1);
+        lTempData[0] = DECLARE_ASCII("meine UserData");
+        lProperties[5].Name     =   DECLARE_ASCII("UserData"                );
+        lProperties[5].Value    <<= lTempData;
+
+        lProperties[6].Name     =   DECLARE_ASCII("FileFormatVersion"       );
+        lProperties[6].Value    <<= (sal_Int32)1;
+
+        lProperties[7].Name     =   DECLARE_ASCII("TemplateName"            );
+        lProperties[7].Value    <<= DECLARE_ASCII("Mein Template Name"      );
+
+        Any aProperties;
+        aProperties <<= lProperties;
+        xContainer->insertByName( DECLARE_ASCII("mein_eigener_neuer_Filter"), aProperties );
+
+        lProperties[0].Name     =   DECLARE_ASCII("Type"                    );
+        lProperties[0].Value    <<= DECLARE_ASCII("component_DB"            );
+
+        lProperties[1].Name     =   DECLARE_ASCII("UIName"                  );
+        lProperties[1].Value    <<= DECLARE_ASCII("Ein neuer Filter-Eintrag 2");
+
+        lProperties[2].Name     =   DECLARE_ASCII("DocumentService"         );
+        lProperties[2].Value    <<= DECLARE_ASCII("test.document.service 2" );
+
+        lProperties[3].Name     =   DECLARE_ASCII("FilterService"           );
+        lProperties[3].Value    <<= DECLARE_ASCII("test.filter.service 2"       );
+
+        lProperties[4].Name     =   DECLARE_ASCII("Flags"                   );
+        lProperties[4].Value    <<= (sal_Int32)200;
+
+        lTempData[0] = DECLARE_ASCII("meine UserData 2");
+        lProperties[5].Name     =   DECLARE_ASCII("UserData"                );
+        lProperties[5].Value    <<= lTempData;
+
+        lProperties[6].Name     =   DECLARE_ASCII("FileFormatVersion"       );
+        lProperties[6].Value    <<= (sal_Int32)2;
+
+        lProperties[7].Name     =   DECLARE_ASCII("TemplateName"            );
+        lProperties[7].Value    <<= DECLARE_ASCII("Mein Template Name 2"        );
+
+        aProperties <<= lProperties;
+        xContainer->insertByName( DECLARE_ASCII("mein_eigener_neuer_Filter_2"), aProperties );
+
+        xContainer->removeByName( DECLARE_ASCII("mein_eigener_neuer_Filter") );
+    }
+}
+#endif
