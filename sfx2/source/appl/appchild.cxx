@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appchild.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
