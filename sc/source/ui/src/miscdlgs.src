@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:31:43 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,7 +1014,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ chinese_simplified ] = "±ΈΧΆ(~O)";
         Text[ russian ] = "Οπθμεχΰνθÿ";
         Text[ polish ] = "Notatki";
-        Text[ japanese ] = "ÒΣ(~O)";
+        Text[ japanese ] = "ΊÒέΔ(~O)";
         Text[ chinese_traditional ] = "³Ζµω(~O)";
         Text[ arabic ] = "γαΗΝΩΗΚ";
         Text[ greek ] = "Σημειώσεις";
@@ -2597,7 +2597,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ΟςΙΟ(~U)";
         Text[ russian ] = "Ρβεπυσ";
-        Text[ polish ] = "W g~σrze";
+        Text[ polish ] = "Na g~σrze";
         Text[ japanese ] = "γ‚Φ(~U)";
         Text[ chinese_traditional ] = "¤W(~U)";
         Text[ arabic ] = "ΓΪαμ";
