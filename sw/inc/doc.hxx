@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:45:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1934,6 +1934,8 @@ public:
     // loesche den nicht sichtbaren ::com::sun::star::ucb::Content aus dem Document, wie z.B.:
     // versteckte Bereiche, versteckte Absaetze
     sal_Bool RemoveInvisibleContent();
+    //restore the invisible content if it's available on the undo stack
+    sal_Bool RestoreInvisibleContent();
     // replace fields by text - mailmerge support
     BOOL ConvertFieldsToText();
     // embedded alle lokalen Links (Bereiche/Grafiken)
