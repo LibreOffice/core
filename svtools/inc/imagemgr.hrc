@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-05 18:12:16 $
+ *  last change: $Author: pb $ $Date: 2002-11-05 07:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,14 @@
 #define STR_DESCRIPTION_POWERPOINT                  (RID_DESCRIPTION_START + 43)
 #define STR_DESCRIPTION_POWERPOINT_TEMPLATE         (RID_DESCRIPTION_START + 44)
 #define STR_DESCRIPTION_POWERPOINT_SHOW             (RID_DESCRIPTION_START + 45)
+#define STR_DESCRIPTION_SXMATH_DOC                  (RID_DESCRIPTION_START + 46)
+#define STR_DESCRIPTION_SXCHART_DOC                 (RID_DESCRIPTION_START + 47)
+#define STR_DESCRIPTION_SXDRAW_DOC                  (RID_DESCRIPTION_START + 48)
+#define STR_DESCRIPTION_SXCALC_DOC                  (RID_DESCRIPTION_START + 49)
+#define STR_DESCRIPTION_SXIMPRESS_DOC               (RID_DESCRIPTION_START + 50)
+#define STR_DESCRIPTION_SXWRITER_DOC                (RID_DESCRIPTION_START + 51)
+#define STR_DESCRIPTION_SXGLOBAL_DOC                (RID_DESCRIPTION_START + 52)
+#define STR_DESCRIPTION_MATHML_DOC                  (RID_DESCRIPTION_START + 53)
 
 #endif
 
