@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobExecutor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,37 +78,16 @@ module com { module sun { module star { module task {
     own configuration and there lifetime. Such events are simple strings
     wich meaning doesn't matter for any real service implementation of this
     specification. But triggered events must be available inside the
-    configuration and some <type>XJob</type>s must be registered for that.
-    It's possible to start it synchronously (<type>XJob</type>) or asynchronously
-    (<type>XAsyncJob</type>). But in general it's forbidden to use any UI inside
-    synchronous one. That can be the source of many trouble and will be forbidden.
-    </p>
-
-    <p>
-    A neccessary configuration of such job executor must support follow functionality:
-    <ul>
-        <li>Same Job should be able to register for more then one event</li>
-        <li>It must be possible to provide a place for job specific configuration data,
-            so the jobs doesn't be forced to use her own config implementation.
-            That's neccessary to perform whole operation because most possible events
-            can be occure during startup of an application. And configuration access
-            shouldn't make it slow. And one part of job interfaces is initialization
-            of it with her own config data.</li>
-        <li>It must be possible to configure if a job wish to be started synchronous
-            or not.</li>
-    </ul>
-    </p>
-
-    <p>
-    Further it must be possible to deregister a successfully runned job.
+    configuration and some <type>Job</type>s or <type>AsyncJob</type>s must be registered for that.
     </p>
 
     @see Job
+    @see AsyncJob
  */
 service JobExecutor
 {
     //------------------------------------------------------------------------
-    /** start and regulate execution
+    /** start and regulate execution.
      */
     interface com::sun::star::task::XJobExecutor;
 };
