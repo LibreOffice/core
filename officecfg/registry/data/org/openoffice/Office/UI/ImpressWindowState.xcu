@@ -105,7 +105,7 @@
     </prop>
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Presentation</value>
-     <value xml:lang="de">Pr�sentation</value>
+     <value xml:lang="de">Präsentation</value>
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/connectorsbar" oor:op="replace">
@@ -249,7 +249,7 @@
    <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Insert</value>
-     <value xml:lang="de">Einf�gen</value>
+     <value xml:lang="de">Einfügen</value>
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/linesbar" oor:op="replace">
