@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:38:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,10 @@ String STR_FILECTRL_BUTTONTEXT
     Text[ czech ] = "Prohlížet...";
     Text[ hebrew ] = "‮דיפדוף...‬";
     Text[ hindi ] = "ब्रउज़...";
+    Text[ slovak ] = "Prehľadávať...";
 };
+
+
 
 
 
