@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-12-10 16:54:18 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ using namespace com::sun::star::uno;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
+TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
 // --------------------------------------------------------------------------
 String MakeSender()
@@ -373,3 +374,60 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
     return aNames;
 }
 
+BOOL SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
+{
+    sal_Bool bRet = sal_True;
+    switch(nMemberId & ~CONVERT_TWIPS)
+    {
+        case MID_ENV_ADDR_TEXT : rVal <<= aAddrText; break;
+        case MID_ENV_SEND : rVal <<= bSend; break;
+        case MID_SEND_TEXT : rVal <<= aSendText; break;
+        case MID_ENV_ADDR_FROM_LEFT : rVal <<= lAddrFromLeft; break;
+        case MID_ENV_ADDR_FROM_TOP : rVal <<= lAddrFromTop; break;
+        case MID_ENV_SEND_FROM_LEFT : rVal <<= lSendFromLeft; break;
+        case MID_ENV_SEND_FROM_TOP : rVal <<= lSendFromTop; break;
+        case MID_ENV_WIDTH : rVal <<= lWidth; break;
+        case MID_ENV_HEIGHT : rVal <<= lHeight; break;
+        case MID_ENV_ALIGN            : rVal <<= (sal_Int16) eAlign; break;
+        case MID_ENV_PRINT_FROM_ABOVE  : rVal <<= bPrintFromAbove; break;
+        case MID_ENV_SHIFT_RIGHT      : rVal <<= lShiftRight; break;
+        case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
+        default:
+            DBG_ERROR("Wrong memberId");
+            bRet = sal_False;
+    }
+    return bRet;
+}
+/* -----------------------------26.04.01 12:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
+{
+    BOOL bRet = FALSE;
+    switch(nMemberId  & ~CONVERT_TWIPS)
+    {
+        case MID_ENV_ADDR_TEXT : bRet = (rVal >>= aAddrText); break;
+        case MID_ENV_SEND : bRet = (rVal >>= bSend); break;
+        case MID_SEND_TEXT : bRet = (rVal >>= aSendText); break;
+        case MID_ENV_ADDR_FROM_LEFT : bRet = (rVal >>= lAddrFromLeft); break;
+        case MID_ENV_ADDR_FROM_TOP : bRet = (rVal >>= lAddrFromTop); break;
+        case MID_ENV_SEND_FROM_LEFT : bRet = (rVal >>= lSendFromLeft); break;
+        case MID_ENV_SEND_FROM_TOP : bRet = (rVal >>= lSendFromTop); break;
+        case MID_ENV_WIDTH : bRet = (rVal >>= lWidth); break;
+        case MID_ENV_HEIGHT : bRet = (rVal >>= lHeight); break;
+        case MID_ENV_ALIGN :
+        {
+            sal_Int16 nTemp;
+            bRet = (rVal >>= nTemp);
+            if (bRet)
+                eAlign = SwEnvAlign(nTemp);
+            break;
+        }
+        case MID_ENV_PRINT_FROM_ABOVE  : bRet = (rVal >>= bPrintFromAbove); break;
+        case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= lShiftRight); break;
+        case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= lShiftDown); break;
+        default:
+            DBG_ERROR("Wrong memberId");
+    }
+    return bRet;
+}

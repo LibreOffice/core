@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:48:08 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <hintids.hxx>
+
+#include <sfx2/request.hxx>
 
 #include <svtools/svmedit.hxx>
 #ifndef _APP_HXX //autogen
@@ -342,19 +344,28 @@ static USHORT nTitleNo = 0;
     }
 
     Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
-    SwEnvDlg* pDlg = new SwEnvDlg( pParent, aSet,
-                                   pOldSh, pTempPrinter,
-                                   !bEnvChange);
+    SwEnvDlg* pDlg = NULL;
+    short nMode = ENV_INSERT;
 
-    short nMode = pDlg->Execute();
+    SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, sal_False );
+    if ( !pItem )
+    {
+        pDlg = new SwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange);
+        nMode = pDlg->Execute();
+    }
+    else
+    {
+        SFX_REQUEST_ARG( rReq, pBoolItem, SfxBoolItem, FN_PARAM_1, sal_False );
+        if ( pBoolItem && pBoolItem->GetValue() )
+            nMode = ENV_NEWDOC;
+    }
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
         SwWait aWait( (SwDocShell&)*xDocSh, TRUE );
 
         // Dialog auslesen, Item in Config speichern
-        const SwEnvItem& rItem = (const SwEnvItem&) pDlg->
-                                            GetOutputItemSet()->Get(FN_ENVELOP);
+        const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);
         aEnvCfg.GetItem() = rItem;
         aEnvCfg.Commit();
 
@@ -612,9 +623,20 @@ static USHORT nTitleNo = 0;
                 ShowDBObj(*pView, pSh->GetDBData());
             }
         }
+
+        if ( !pItem )
+        {
+            rReq.AppendItem( rItem );
+            if ( nMode == ENV_NEWDOC )
+                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, TRUE ) );
+        }
+
+        rReq.Done();
     }
     else    //Abbruch
     {
+        rReq.Ignore();
+
         xDocSh->DoClose();
         --nTitleNo;
 

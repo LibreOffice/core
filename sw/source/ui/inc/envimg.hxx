@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 13:06:36 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,15 @@ public:
     SwEnvItem();
     SwEnvItem(const SwEnvItem& rItem);
 
+    TYPEINFO();
+
     SwEnvItem& operator =(const SwEnvItem& rItem);
 
     virtual int operator ==(const SfxPoolItem& rItem) const;
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const;
+    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 // class SwEnvCfgItem -------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 09:04:55 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@
 #ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
 #endif
+#include "envimg.hxx"
 #include "frmatr.hxx"
 #include "cfgitems.hxx"
 #include "grfatr.hxx"
@@ -326,6 +327,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.13  2002/07/01 09:04:55  mba
+    #100784#: recording paramaters
+
     Revision 1.12  2002/06/27 08:47:16  mba
     #100714#: macro recording
 
