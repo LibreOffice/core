@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.17 $
+#*  $Revision: 1.18 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-03-26 10:54:43 $
+#*  last change: $Author: vg $ $Date: 2003-04-15 14:27:38 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -179,11 +179,12 @@ MY_MISC_CXXFILES = \
 
 # English Locales
 SHL1TARGET=localedata_en
-SHL1IMPLIB= 	i$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=	$(SHL1TARGET)
+SHL1IMPLIB=i$(SHL1TARGET)
+
+SHL1VERSIONMAP=$(SHL1TARGET).map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
 SHL1OBJS= \
     $(SLO)$/localedata_en_AU.obj \
     $(SLO)$/localedata_en_BZ.obj \
@@ -204,11 +205,12 @@ LIB1OBJFILES=$(SHL1OBJS)
 
 # Spanish Locales
 SHL2TARGET=localedata_es
-SHL2IMPLIB= 	i$(SHL2TARGET)
-DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-DEF2NAME=	$(SHL2TARGET)
-DEFLIB2NAME=	$(SHL2TARGET)
+SHL2IMPLIB=i$(SHL2TARGET)
+
+SHL2VERSIONMAP=$(SHL2TARGET).map
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=$(SHL2TARGET)
+
 SHL2STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
 SHL2OBJS= \
     $(SLO)$/localedata_es_AR.obj \
@@ -236,11 +238,12 @@ LIB2OBJFILES=$(SHL2OBJS)
 
 # European Locales
 SHL3TARGET=localedata_euro
-SHL3IMPLIB= 	i$(SHL3TARGET)
-DEF3DEPN=	$(MISC)$/$(SHL3TARGET).flt
-SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
-DEF3NAME=	$(SHL3TARGET)
-DEFLIB3NAME=	$(SHL3TARGET)
+SHL3IMPLIB=i$(SHL3TARGET)
+
+SHL3VERSIONMAP=$(SHL3TARGET).map
+SHL3DEF=$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=$(SHL3TARGET)
+
 SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB) $(LINK_LOCALEDATA_ES_LIB)
 SHL3OBJS=	\
     $(SLO)$/localedata_ca_ES.obj	\
@@ -282,11 +285,12 @@ LIB3OBJFILES=$(SHL3OBJS)
 
 # Other Locales
 SHL4TARGET=localedata_others
-SHL4IMPLIB= 	i$(SHL4TARGET)
-DEF4DEPN=	$(MISC)$/$(SHL4TARGET).flt
-SHL4DEF=	$(MISC)$/$(SHL4TARGET).def
-DEF4NAME=	$(SHL4TARGET)
-DEFLIB4NAME=	$(SHL4TARGET)
+SHL4IMPLIB=i$(SHL4TARGET)
+
+SHL4VERSIONMAP=$(SHL4TARGET).map
+SHL4DEF=$(MISC)$/$(SHL4TARGET).def
+DEF4NAME=$(SHL4TARGET)
+
 SHL4STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
 SHL4OBJS= \
     $(SLO)$/localedata_af_ZA.obj \
@@ -324,23 +328,3 @@ $(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST)
 
 $(MISC)$/localedata_%.cxx : %.xml
     +$(BIN)$/saxparser $* $< $@ $(BIN)$/$(TARGET).rdb $(SOLARBINDIR)$/types.rdb
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
-$(MISC)$/$(SHL2TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
-$(MISC)$/$(SHL3TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
-$(MISC)$/$(SHL4TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
