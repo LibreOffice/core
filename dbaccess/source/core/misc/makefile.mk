@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 17:52:07 $
+#   last change: $Author: hr $ $Date: 2004-08-02 15:16:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,10 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=	\
         $(SLO)$/sdbcoretools.obj				\
         $(SLO)$/commandbase.obj				\
-        $(SLO)$/configurationflushable.obj	\
         $(SLO)$/propertyhelper.obj			\
         $(SLO)$/services.obj				\
+        $(SLO)$/PropertyForward.obj				\
+        $(SLO)$/ContainerMediator.obj			\
         $(SLO)$/userinformation.obj
 
 # --- Targets ----------------------------------
