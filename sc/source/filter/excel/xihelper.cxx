@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:32:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,10 @@ const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS;
 
 // ----------------------------------------------------------------------------
 
+XclImpString::XclImpString()
+{
+}
+
 XclImpString::XclImpString( const String& rString ) :
     maString( rString )
 {
@@ -242,49 +246,7 @@ XclImpString::XclImpString( const String& rString ) :
 
 XclImpString::XclImpString( XclImpStream& rStrm, XclStrFlags nFlags )
 {
-    DBG_ASSERT( (nFlags & ~nAllowedFlags) == 0, "XclImpString::XclImpString - unknown flag" );
-    bool b16BitLen = !::get_flag( nFlags, EXC_STR_8BITLENGTH );
-
-    switch( rStrm.GetRoot().GetBiff() )
-    {
-        case EXC_BIFF2:
-        case EXC_BIFF3:
-        case EXC_BIFF4:
-        case EXC_BIFF5:
-            // no integrated formatting in BIFF2-BIFF7
-            maString = rStrm.ReadByteString( b16BitLen );
-        break;
-
-        case EXC_BIFF8:
-        {
-            // --- string header ---
-            sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
-            sal_uInt8 nFlagField = 0;
-            if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
-                rStrm >> nFlagField;
-
-            bool b16Bit, bRich, bFarEast;
-            sal_uInt16 nRunCount;
-            sal_uInt32 nExtInf;
-            rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
-
-            // --- character array ---
-            maString = rStrm.ReadRawUniString( nChars, b16Bit );
-
-            // --- formatting ---
-            DBG_ASSERT( bRich == (nRunCount != 0), "XclImpString::XclImpString - corrupt formatting info" );
-            if( bRich )
-                ReadFormats( rStrm, nRunCount );
-
-            // --- extended (FarEast) information ---
-            DBG_ASSERT( bFarEast == (nExtInf != 0), "XclImpString::XclImpString - corrupt far-east info" );
-            if( bFarEast )
-                rStrm.SkipUniStringExtData( nExtInf );
-        }
-        break;
-
-        default:    DBG_ERROR_BIFF();
-    }
+    Read( rStrm, nFlags );
 }
 
 XclImpString::~XclImpString()
@@ -335,6 +297,56 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
                 AppendFormat( nChar, nXclFont );
             }
         break;
+        default:    DBG_ERROR_BIFF();
+    }
+}
+
+void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
+{
+    maString.Erase();
+    maFormats.clear();
+
+    DBG_ASSERT( (nFlags & ~nAllowedFlags) == 0, "XclImpString::Read - unknown flag" );
+    bool b16BitLen = !::get_flag( nFlags, EXC_STR_8BITLENGTH );
+
+    switch( rStrm.GetRoot().GetBiff() )
+    {
+        case EXC_BIFF2:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
+        case EXC_BIFF5:
+            // no integrated formatting in BIFF2-BIFF7
+            maString = rStrm.ReadByteString( b16BitLen );
+        break;
+
+        case EXC_BIFF8:
+        {
+            // --- string header ---
+            sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+            sal_uInt8 nFlagField = 0;
+            if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
+                rStrm >> nFlagField;
+
+            bool b16Bit, bRich, bFarEast;
+            sal_uInt16 nRunCount;
+            sal_uInt32 nExtInf;
+            rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
+
+            // --- character array ---
+            maString = rStrm.ReadRawUniString( nChars, b16Bit );
+
+            // --- formatting ---
+            DBG_ASSERT( bRich == (nRunCount != 0), "XclImpString::Read - corrupt formatting info" );
+            if( bRich )
+                ReadFormats( rStrm, nRunCount );
+
+            // --- extended (FarEast) information ---
+            DBG_ASSERT( bFarEast == (nExtInf != 0), "XclImpString::Read - corrupt far-east info" );
+            if( bFarEast )
+                rStrm.SkipUniStringExtData( nExtInf );
+        }
+        break;
+
         default:    DBG_ERROR_BIFF();
     }
 }
