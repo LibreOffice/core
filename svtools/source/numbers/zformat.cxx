@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2000-12-12 15:31:43 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3280,7 +3280,7 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
 void SvNumberformat::GetFormatSpecialInfo(BOOL& bThousand,
                                           BOOL& IsRed,
                                           USHORT& nPrecision,
-                                          USHORT& nAnzLeading)
+                                          USHORT& nAnzLeading) const
 {
     const ImpSvNumberformatInfo& rInfo = NumFor[0].Info();
     bThousand = rInfo.bThousand;
