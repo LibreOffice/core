@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-20 09:57:34 $
+ *  last change: $Author: sj $ $Date: 2000-10-20 14:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2944,12 +2944,11 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                     //DffRecordHeader aEscherPropertiesHd;
                     if ( SeekToRec( rStCtrl, DFF_msofbtOPT,nEscherF002End ) )
                     {
-                        DffPropertyReader aProps( *this );
-                        rStCtrl >> (DffPropertyReader&)aProps;
-                        aProps.mnFix16Angle = Fix16ToAngle( aProps.GetPropertyValue( DFF_Prop_Rotation, 0 ) );
-                        UINT32 nColor = aProps.GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
+                        rStCtrl >> (DffPropertyReader&)*this;
+                        mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
+                        UINT32 nColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
                         pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-                        aProps.ApplyAttributes( rStCtrl, *pSet );
+                        ApplyAttributes( rStCtrl, *pSet );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
                         pSet->Put( XFillColorItem( String(), aColor ) );
                     }
