@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TIndexes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:52:00 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void OIndexesHelper::appendObject( const Reference< XPropertySet >& descriptor )
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     ::rtl::OUString aName = comphelper::getString(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)));
     if ( m_pElements->exists(aName) )
-        throw ElementExistException(aName,*this);
+        throw ElementExistException(aName,static_cast<XTypeProvider*>(this));
 
     if(!m_pTable->isNew())
     {
