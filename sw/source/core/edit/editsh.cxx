@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,13 +237,6 @@ void SwEditShell::Insert(const String &rStr)
             if ( nPrevPos )
                 --nPrevPos;
 
-            // If some day the font fallback works, we should do this here:
-            // 1. get script info
-            // 2. call InitScriptInfo( rNode, bRTL )
-            // This would avoid calling UpdateBidiInfo here, instead it would
-            // be called within InitScriptInfo and only if there are complex
-            // characters in the string.
-
             SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( ((SwTxtNode&)rNode),
                                                               sal_True );
 
@@ -257,13 +250,12 @@ void SwEditShell::Insert(const String &rStr)
                                                     sal_False );
 
                 SwScriptInfo aScriptInfo;
-                aScriptInfo.SetDefaultDir( pFrm->IsRightToLeft() );
-                aScriptInfo.UpdateBidiInfo( ((SwTxtNode&)rNode).GetTxt() );
+                aScriptInfo.InitScriptInfo( (SwTxtNode&)rNode, pFrm->IsRightToLeft() );
                 nLevel = aScriptInfo.DirType( nPrevPos );
             }
             else
             {
-                pSI->UpdateBidiInfo( ((SwTxtNode&)rNode).GetTxt() );
+                pSI->InitScriptInfo( (SwTxtNode&)rNode );
                 nLevel = pSI->DirType( nPrevPos );
             }
 
