@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-04 12:26:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,38 +573,24 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
 /*************************************************************************
  *                          SwHookOut
  *
- * Change current output device to printer, this has to be done before
+ * Change current output device to formatting device, this has to be done before
  * formatting.
  *************************************************************************/
 
-SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) : pInf( 0 ), pOut( 0 )
+SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) :
+     pInf( &rInfo ),
+     pOut( rInfo.GetOut() ),
+     bOnWin( rInfo.OnWin() )
 {
-    if ( rInfo.GetPrt() )
-    {
-        // first case: outdev = window
-        if ( rInfo.OnWin() )
-        {
-            pInf = &rInfo;
-            pInf->SetPrtOut();
-        }
-        // second case: outdev = pdf export
-        else if ( rInfo.GetOut() && OUTDEV_PRINTER != rInfo.GetOut()->GetOutDevType() )
-        {
-            pInf = &rInfo;
-            pOut = pInf->GetOut();
-            pInf->SetOut( pInf->GetPrt() );
-        }
-    }
+    ASSERT( rInfo.GetRefDev(), "No reference device for text formatting" )
+
+    // set new values
+    rInfo.SetOut( rInfo.GetRefDev() );
+    rInfo.SetOnWin( sal_False );
 }
 
 SwHookOut::~SwHookOut()
 {
-    if( pInf )
-    {
-        if ( pOut )
-            pInf->SetOut( pOut );
-        else
-            pInf->SetWinOut();
-    }
+    pInf->SetOut( pOut );
+    pInf->SetOnWin( bOnWin );
 }
-
