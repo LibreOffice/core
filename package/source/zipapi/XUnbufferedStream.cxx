@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:16:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                 if ( nDiff > 0 )
                 {
                     mxZipSeek->seek ( mnZipCurrent );
-                    sal_Int32 nToRead = std::min ( nDiff, std::max ( nRequestedBytes, 8192L ) );
+                    sal_Int32 nToRead = std::min ( nDiff, std::max ( nRequestedBytes, static_cast< sal_Int32 >( 8192 ) ) );
                     sal_Int32 nZipRead = mxZipStream->readBytes ( maCompBuffer, nToRead );
                     mnZipCurrent += nZipRead;
                     // maCompBuffer now has the data, check if we need to decrypt
