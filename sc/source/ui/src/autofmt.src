@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:58:34 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ swedish ] = "Cell~format" ;
         Text [ dutch ] = "~Formaat" ;
         Text [ spanish ] = "~Formato" ;
-        Text [ english_us ] = "F~ormat" ;
+        Text [ english_us ] = "~Format" ;
         Text[ chinese_simplified ] = "¸ñÊ½(~O)";
         Text[ russian ] = "Ôîð~ìàò";
         Text[ polish ] = "Format";
@@ -472,7 +472,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ ENGLISH ] = "Ren~ame" ;
         TabStop = TRUE ;
         Text [ portuguese ] = "Mudar ~nome" ;
-        Text [ english_us ] = "Ren~ame" ;
+        Text [ english_us ] = "~Rename" ;
         Text [ portuguese_brazilian ] = "Um~benennen" ;
         Text [ swedish ] = "B~yt namn" ;
         Text [ danish ] = "Omdøb" ;
