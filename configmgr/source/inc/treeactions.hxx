@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-21 19:05:19 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 12:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONFIGMGR_TREEACTIONS_HXX_
 #define _CONFIGMGR_TREEACTIONS_HXX_
 
-#ifndef CONFIGMGR_CMTREEMODEL_HXX
-#include "cmtreemodel.hxx"
+#ifndef CONFIGMGR_CHANGE_HXX
+#include "change.hxx"
 #endif
 
 //..........................................................................
@@ -78,27 +78,65 @@ namespace configmgr
 */
 struct OChangeActionCounter : public ChangeTreeAction
 {
-    sal_Int32       nValues, nAdds, nAddUsers, nRemoves;
-    sal_Bool        bDifferentSetActionLevels;
+    sal_Int32       nValues, nAdds, nRemoves;
 
-    OChangeActionCounter() :nValues(0), nAdds(0), nAddUsers(0), nRemoves(0), bDifferentSetActionLevels(sal_False) { }
+    OChangeActionCounter() :nValues(0), nAdds(0), nRemoves(0) {}
 
-    virtual void handle(ValueChange const& aValueNode)  { ++nValues; }
-    virtual void handle(AddNode const& aAddNode);   // moved to
-    virtual void handle(RemoveNode const& aRemoveNode)  { ++nRemoves; }
-    virtual void handle(SubtreeChange const& aSubtree)
-    {
-        sal_Int32 nOldAdds(nAdds), nOldRemoves(nRemoves);
-        applyToChildren(aSubtree);
-        if  (   (   nOldAdds
-                &&  (nAdds > nOldAdds)
-                )
-            ||  (   nOldRemoves
-                &&  (nRemoves > nOldRemoves)
-                )
-            )
-            bDifferentSetActionLevels = sal_True;
-    }
+    virtual void handle(ValueChange const& aValueNode);
+    virtual void handle(AddNode const& aAddNode);
+    virtual void handle(RemoveNode const& aRemoveNode);
+    virtual void handle(SubtreeChange const& aSubtree);
+
+    sal_Bool hasChanges() const {return nValues || nAdds || nRemoves;}
+};
+
+//==========================================================================
+//= OMergeTreeAction
+//==========================================================================
+//= This class tests changes on an existing tree and drops them if they
+//= are not need anymore or alters add nodes in node changes and vice versa
+//==========================================================================
+struct OMergeTreeAction : public ChangeTreeModification
+{
+    SubtreeChange&  m_rChangeList;  // list which containes changes merged with the existing nodes
+    const ISubtree* m_pRefTree;     // reference node needed for merging
+
+public:
+    OMergeTreeAction(SubtreeChange& rList, const ISubtree* pTree)
+        :m_rChangeList(rList)
+        ,m_pRefTree(pTree){}
+
+    void handle(ValueChange& aValueNode);
+    void handle(AddNode& aAddNode);
+    void handle(RemoveNode& aRemoveNode);
+    void handle(SubtreeChange& aSubtree);
+
+private:
+    // ensuring the correct state
+    void ensure();
+};
+
+//==========================================================================
+//= OCreateSubtreeAction
+//==========================================================================
+//= creates a subtree out of a changes list
+//==========================================================================
+struct OCreateSubtreeAction : public ChangeTreeModification
+{
+    ISubtree*   m_pTree;
+
+public:
+    OCreateSubtreeAction(ISubtree* _pTree)
+        :m_pTree(_pTree){}
+
+    void handle(ValueChange& aValueNode);
+    void handle(AddNode& aAddNode);
+    void handle(RemoveNode& aRemoveNode);
+    void handle(SubtreeChange& aSubtree);
+
+private:
+    // ensuring the correct state
+    void ensure();
 };
 
 // ===================================================================
