@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:02:01 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,34 @@ OColumnSettings::~OColumnSettings()
     DBG_DTOR( OColumnSettings, NULL );
 }
 
+// com::sun::star::lang::XUnoTunnel
+//------------------------------------------------------------------
+sal_Int64 OColumnSettings::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
+{
+    if  (  ( rId.getLength() == 16 )
+        && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        )
+        return reinterpret_cast< sal_Int64 >( this );
+
+    return 0;
+}
+
+//--------------------------------------------------------------------------
+Sequence< sal_Int8 > OColumnSettings::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
 //------------------------------------------------------------------------------
 void OColumnSettings::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
@@ -638,7 +666,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
         xRet = m_pColFactoryImpl->createColumn(_rName);
         Reference<XChild> xChild(xRet,UNO_QUERY);
         if ( xChild.is() )
-            xChild->setParent(*this);
+            xChild->setParent(static_cast<XChild*>(static_cast<TXChild*>(this)));
     }
 
     Reference<XPropertySet> xDest(xRet,UNO_QUERY);
@@ -655,7 +683,7 @@ Reference< XPropertySet > OColumns::createEmptyObject()
         Reference<XPropertySet> xRet = m_pColFactoryImpl->createEmptyObject();
         Reference<XChild> xChild(xRet,UNO_QUERY);
         if ( xChild.is() )
-            xChild->setParent(*this);
+            xChild->setParent(static_cast<XChild*>(static_cast<TXChild*>(this)));
         return xRet;
     }
     else
@@ -682,7 +710,10 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
             return Any();
     }
 
-    return OColumns_BASE::queryInterface( rType);
+    aRet = OColumns_BASE::queryInterface( rType);
+    if ( !aRet.hasValue() )
+        aRet = TXChild::queryInterface( rType);
+    return aRet;
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
@@ -749,7 +780,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
         OColumns_BASE::appendObject(descriptor);
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_ADD),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_ADD),static_cast<XChild*>(static_cast<TXChild*>(this)),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
 // -------------------------------------------------------------------------
@@ -766,7 +797,7 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         OColumns_BASE::dropObject(_nPos,_sElementName);
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_DROP),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_DROP),static_cast<XChild*>(static_cast<TXChild*>(this)),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnDropped(_sElementName);
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
@@ -777,8 +808,9 @@ Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDes
     Reference<XPropertySet> xProp = createEmptyObject();
     Reference< XNamed > xName(xProp,UNO_QUERY);
     OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    if(xProp.is())
+    if ( xProp.is() )
         ::comphelper::copyProperties(_xDescriptor,xProp);
+
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnCloned(xProp);
     return xName;
