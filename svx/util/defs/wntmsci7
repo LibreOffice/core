@@ -19268,3 +19268,8 @@ _real@8@400d8ca0000000000000
 ?disposing@SvXMLGraphicHelper@@MAAXXZ
 ??0SvXMLEmbeddedObjectHelper@@QAE@AAVSvPersist@@W4SvXMLEmbeddedObjectHelperMode@@@Z
 ?disposing@SvXMLEmbeddedObjectHelper@@MAAXXZ
+?_resize@ScriptTypePosInfos@@IAEXI@Z
+?_resize@WritingDirectionInfos@@IAEXI@Z
+?Execute@SvxOpenGraphicDialog@@QAEKXZ
+?GetGraphic@SvxOpenGraphicDialog@@QBEKAAVGraphic@@@Z
+?_resize@SrchAttrItemList@@IAEXI@Z
