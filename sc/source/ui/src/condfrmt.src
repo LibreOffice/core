@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-18 07:49:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "±ø¥ó ~1";
         Text[ arabic ] = "ÇáÔÑØ 1";
         Text[ greek ] = "ÓõíèŞêç ~1";
-        Text[ korean ] = "Á¶°Ç 1";
+        Text[ korean ] = "ÀüÁ¦ Á¶°Ç 1";
         Text[ turkish ] = "Koşul 1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condición 1";
@@ -422,13 +422,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     StringList [ korean ] =
     {
             < "°°À½" ; Default ; > ;
-        < "´ÙÀ½º¸´Ù¡¡ÀÛ´Ù" ; Default ; > ;
-        < "´ÙÀ½º¸´Ù¡¡Å©´Ù" ; Default ; > ;
-        < "ÀÛ°Å³ª¡¡°°´Ù" ; Default ; > ;
-        < "´ÙÀ½º¸´Ù¡¡Å©°Å³ª¡¡°°´Ù" ; Default ; > ;
+        < "º¸´Ù ÀÛ´Ù" ; Default ; > ;
+        < "º¸´Ù Å©´Ù" ; Default ; > ;
+        < "ÀÛ°Å³ª °°´Ù" ; Default ; > ;
+        < "Å©°Å³ª °°´Ù" ; Default ; > ;
         < "°°Áö ¾ÊÀ½" ; Default ; > ;
         < "´ÙÀ½ »çÀÌÀÓ" ; Default ; > ;
-        < "»çÀÌ¡¡¾Æ´Ô" ; Default ; > ;
+        < "´ÙÀ½ »çÀÌ°¡ ¾Æ´Ô" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -499,18 +499,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedText FT_COND1_AND
     {
@@ -565,18 +565,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedText FT_COND1_TEMPLATE
     {
@@ -594,14 +594,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
         Text [ portuguese ] = "~Estilo da célula" ;
-        Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
+        Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~C)";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù";
-        Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡";
+        Text[ japanese ] = "¾Ù‚Ì½À²Ù(~C)";
+        Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡(~C)";
         Text[ arabic ] = "äãØ ÎáíÉ";
         Text[ greek ] = "Óô~õë êåëéïı";
-        Text[ korean ] = "¼¿ À¯Çü";
+        Text[ korean ] = "¼¿ ÅÛÇÃ¸´(~C)";
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estilo de celda";
@@ -643,7 +643,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "±ø¥ó ~2";
         Text[ arabic ] = "ÇáÔÑØ 2";
         Text[ greek ] = "ÓõíèŞêç ~2";
-        Text[ korean ] = "Á¶°Ç 2";
+        Text[ korean ] = "ÀüÁ¦ Á¶°Ç 2";
         Text[ turkish ] = "Koşul 2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condición 2";
@@ -749,7 +749,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     StringList [ korean ] =
     {
             < "¼¿ °ªÀº" ; Default ; > ;
-        < "¼ö½Ä" ; Default ; > ;
+        < "¼ö½ÄÀº" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -971,13 +971,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     StringList [ korean ] =
     {
             < "°°À½" ; Default ; > ;
-        < "´ÙÀ½º¸´Ù¡¡ÀÛ´Ù" ; Default ; > ;
-        < "´ÙÀ½º¸´Ù¡¡Å©´Ù" ; Default ; > ;
-        < "ÀÛ°Å³ª¡¡°°´Ù" ; Default ; > ;
-        < "Å©°Å³ª¡¡°°´Ù" ; Default ; > ;
+        < "º¸´Ù ÀÛ´Ù" ; Default ; > ;
+        < "º¸´Ù Å©´Ù" ; Default ; > ;
+        < "ÀÛ°Å³ª °°´Ù" ; Default ; > ;
+        < "Å©°Å³ª °°À½" ; Default ; > ;
         < "°°Áö ¾ÊÀ½" ; Default ; > ;
         < "´ÙÀ½ÀÇ »çÀÌÀÓ" ; Default ; > ;
-        < "£®£®»çÀÌ¡¡¾Æ´Ô" ; Default ; > ;
+        < "´ÙÀ½ÀÇ »çÀÌ ¾Æ´Ô" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1048,18 +1048,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedText FT_COND2_AND
     {
@@ -1114,18 +1114,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedText FT_COND2_TEMPLATE
     {
@@ -1143,14 +1143,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
         Text [ portuguese ] = "~Estilo da célula" ;
-        Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
+        Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~E)";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù";
-        Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡";
+        Text[ japanese ] = "¾Ù‚Ì½À²Ù(~E)";
+        Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡(~E)";
         Text[ arabic ] = "äãØ ÎáíÉ";
         Text[ greek ] = "Óôõë ê~åëéïı";
-        Text[ korean ] = "¼¿ À¯Çü";
+        Text[ korean ] = "¼¿ ÅÛÇÃ¸´(~E)";
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estilo de celda";
@@ -1192,7 +1192,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "±ø¥ó ~3";
         Text[ arabic ] = "ÇáÔÑØ 3";
         Text[ greek ] = "ÓõíèŞêç ~3";
-        Text[ korean ] = "Á¶°Ç 3";
+        Text[ korean ] = "ÀüÁ¦ Á¶°Ç 3";
         Text[ turkish ] = "Koşul 3";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condición 3";
@@ -1520,10 +1520,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     StringList [ korean ] =
     {
             < "°°À½" ; Default ; > ;
-        < "´ÙÀ½º¸´Ù¡¡ÀÛ´Ù" ; Default ; > ;
-        < "´ÙÀ½º¸´Ù¡¡Å©´Ù" ; Default ; > ;
-        < "ÀÛ°Å³ª¡¡°°´Ù" ; Default ; > ;
-        < "Å©°Å³ª¡¡°°´Ù" ; Default ; > ;
+        < "º¸´Ù ÀÛ´Ù" ; Default ; > ;
+        < "º¸´Ù Å©´Ù" ; Default ; > ;
+        < "ÀÛ°Å³ª °°´Ù" ; Default ; > ;
+        < "Å©°Å³ª °°À½" ; Default ; > ;
         < "°°Áö ¾ÊÀ½" ; Default ; > ;
         < "´ÙÀ½ÀÇ »çÀÌÀÓ" ; Default ; > ;
         < "¹Û¿¡" ; Default ; > ;
@@ -1597,18 +1597,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedText FT_COND3_AND
     {
@@ -1663,18 +1663,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedText FT_COND3_TEMPLATE
     {
@@ -1692,14 +1692,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
         Text [ portuguese ] = "E~stilo da célula" ;
-        Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
+        Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~L)";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù";
-        Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡";
+        Text[ japanese ] = "¾Ù‚Ì½À²Ù(~L)";
+        Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡(~L)";
         Text[ arabic ] = "äãØ ÎáíÉ";
         Text[ greek ] = "Óôõë êå~ëéïı";
-        Text[ korean ] = "¼¿ À¯Çü";
+        Text[ korean ] = "¼¿ ÅÛÇÃ¸´(~L)";
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estilo de celda";
@@ -1754,6 +1754,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ catalan ] = "Formato condicionado";
     Text[ finnish ] = "Ehdollinen muotoilu";
 };
+
 
 
 
