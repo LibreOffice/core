@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 12:37:55 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,7 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
     bDisposing( sal_False ),
     pModel(NULL),
     aSize(100,100),
+    mnLockCount(0),
     aDisposeListeners( maMutex )
 {
     Init();
@@ -295,6 +296,7 @@ SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMap* pPropertyMap )
     pObj    (pObject),
     pModel(NULL),
     aSize(100,100),
+    mnLockCount(0),
     aDisposeListeners( maMutex )
 
 {
@@ -308,6 +310,7 @@ SvxShape::SvxShape() throw()
     pObj    (NULL),
     pModel(NULL),
     aSize(100,100),
+    mnLockCount(0),
     aDisposeListeners( maMutex )
 
 {
@@ -318,6 +321,8 @@ SvxShape::SvxShape() throw()
 SvxShape::~SvxShape() throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    DBG_ASSERT( mnLockCount == 0, "Locked shape was disposed!" );
 
     if( pModel )
         EndListening( *pModel );
@@ -372,6 +377,9 @@ SvxShape* SvxShape::GetShapeForSdrObj( SdrObject* pObj ) throw()
 //----------------------------------------------------------------------
 void SvxShape::Init() throw()
 {
+    mpItemSet = NULL;
+    mbIsMultiPropertyCall = sal_False;
+
     // only init if we already have an object
     // if we get an object later Init() will
     // be called again
@@ -1570,71 +1578,96 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             DBG_ASSERT( pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
-            SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-            aSet.Put(pObj->GetItem(pMap->nWID));
+            sal_Bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST;
 
-            if( SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rVal, aSet ))
-                return;
-
-            if(!aSet.Count())
+            SfxItemSet* pSet;
+            if( mbIsMultiPropertyCall && !bIsNotPersist )
             {
-                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+                if( mpItemSet == NULL )
                 {
-                    // Not-Persistant Attribute, hole diese extra
-                    pObj->TakeNotPersistAttr(aSet, sal_False);
+                    pSet = mpItemSet = pObj->GetItemSet().Clone();
+                }
+                else
+                {
+                    pSet = mpItemSet;
                 }
             }
-
-            if(!aSet.Count())
+            else
             {
-                // Default aus ItemPool holen
-                if(pModel->GetItemPool().IsWhich(pMap->nWID))
-                    aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+                pSet = new SfxItemSet( pModel->GetItemPool(),   pMap->nWID, pMap->nWID);
             }
 
-            if(aSet.Count())
-            {
-                SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(pMap->nWID);
-                if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
-                {
-                    // Umrechnen auf Metrik des ItemPools in 100stel mm
-                    // vorkommende Typen: sal_Int32, sal_uInt32, sal_uInt16
-                    uno::Any aVal( rVal );
+            pSet->Put(pObj->GetItem(pMap->nWID));
 
-                    switch(eMapUnit)
+            if( !SvxUnoTextRangeBase::SetPropertyValueHelper( *pSet, pMap, rVal, *pSet ))
+            {
+                if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+                {
+                    if(bIsNotPersist)
                     {
-                        case SFX_MAPUNIT_TWIP :
+                        // Not-Persistant Attribute, hole diese extra
+                        pObj->TakeNotPersistAttr(*pSet, sal_False);
+                    }
+                }
+
+                if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+                {
+                    // Default aus ItemPool holen
+                    if(pModel->GetItemPool().IsWhich(pMap->nWID))
+                        pSet->Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+                }
+
+                if( pSet->GetItemState( pMap->nWID ) == SFX_ITEM_SET )
+                {
+                    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(pMap->nWID);
+                    if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+                    {
+                        // Umrechnen auf Metrik des ItemPools in 100stel mm
+                        // vorkommende Typen: sal_Int32, sal_uInt32, sal_uInt16
+                        uno::Any aVal( rVal );
+
+                        switch(eMapUnit)
                         {
-                            if( rVal.getValueType() == ::getCppuType(( const sal_Int32 *)0))
-                                aVal <<= (sal_Int32)(MM_TO_TWIPS(*(sal_Int32*)rVal.getValue()));
-                            else if( rVal.getValueType() == ::getCppuType(( const sal_uInt32*)0))
-                                aVal <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rVal.getValue()));
-                            else if( rVal.getValueType() == ::getCppuType(( const sal_uInt16*)0))
-                                aVal <<= (sal_uInt16)(MM_TO_TWIPS(*(sal_uInt16*)rVal.getValue()));
-                            else
+                            case SFX_MAPUNIT_TWIP :
+                            {
+                                if( rVal.getValueType() == ::getCppuType(( const sal_Int32 *)0))
+                                    aVal <<= (sal_Int32)(MM_TO_TWIPS(*(sal_Int32*)rVal.getValue()));
+                                else if( rVal.getValueType() == ::getCppuType(( const sal_uInt32*)0))
+                                    aVal <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rVal.getValue()));
+                                else if( rVal.getValueType() == ::getCppuType(( const sal_uInt16*)0))
+                                    aVal <<= (sal_uInt16)(MM_TO_TWIPS(*(sal_uInt16*)rVal.getValue()));
+                                else
+                                    DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
+                                break;
+                            }
+                            default:
+                            {
                                 DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
-                            break;
+                            }
                         }
-                        default:
+                        aPropSet.setPropertyValue( pMap, aVal, *pSet );
+                    }
+                    else
+                    {
+                        aPropSet.setPropertyValue( pMap, rVal, *pSet );
+                    }
+
+                    if(bIsNotPersist)
+                    {
+                        // Not-Persist Attribute extra setzen
+                        pObj->ApplyNotPersistAttr( *pSet );
+                        delete pSet;
+                    }
+                    else
+                    {
+                        // if we have a XMultiProperty call then the item set
+                        // will be set in setPropertyValues later
+                        if( !mbIsMultiPropertyCall )
                         {
-                            DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
+                            pObj->SetItemSetAndBroadcast( *pSet );
+                            delete pSet;
                         }
                     }
-                    aPropSet.setPropertyValue( pMap, aVal, aSet );
-                }
-                else
-                {
-                    aPropSet.setPropertyValue( pMap, rVal, aSet );
-                }
-
-                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-                {
-                    // Not-Persist Attribute extra setzen
-                    pObj->ApplyNotPersistAttr( aSet );
-                }
-                else
-                {
-                    pObj->SetItemSetAndBroadcast(aSet);
                 }
             }
             return;
@@ -2113,11 +2146,30 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
 
     try
     {
+        mbIsMultiPropertyCall = sal_True;
+
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
             xSet->setPropertyValue( *pNames++, *pValues++ );
+
+        mbIsMultiPropertyCall = sal_False;
+
+        if( mpItemSet )
+        {
+            pObj->SetItemSetAndBroadcast( *mpItemSet );
+            delete mpItemSet;
+            mpItemSet = NULL;
+        }
     }
     catch( beans::UnknownPropertyException& e )
     {
+        mbIsMultiPropertyCall = sal_False;
+
+        if( mpItemSet )
+        {
+            delete mpItemSet;
+            mpItemSet = NULL;
+        }
+
         const OUString aMsg( RTL_CONSTASCII_USTRINGPARAM("UnknownPropertyException"));
         const uno::Reference< uno::XInterface > xContext;
 
@@ -2142,7 +2194,7 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
         {
             *pValue = xSet->getPropertyValue( *pNames++ );
         }
-        catch( uno::Exception& e )
+        catch( uno::Exception& )
         {
             DBG_ERROR( "SvxShape::getPropertyValues, unknown property asked" );
         }
@@ -2768,6 +2820,86 @@ void SAL_CALL SvxShape::setParent( const ::com::sun::star::uno::Reference< ::com
     throw lang::NoSupportException();
 }
 
+//----------------------------------------------------------------------
+
+/** called from the XActionLockable interface methods on initial locking */
+void SvxShape::lock()
+{
+}
+
+//----------------------------------------------------------------------
+
+/** called from the XActionLockable interface methods on final unlock */
+void SvxShape::unlock()
+{
+}
+
+//----------------------------------------------------------------------
+
+// XActionLockable
+sal_Bool SAL_CALL SvxShape::isActionLocked(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    return mnLockCount != 0;
+}
+
+//----------------------------------------------------------------------
+
+void SAL_CALL SvxShape::addActionLock(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    DBG_ASSERT( mnLockCount < 0xffff, "lock overflow in SvxShape!" );
+    mnLockCount++;
+
+    if( mnLockCount == 1 )
+        lock();
+}
+
+//----------------------------------------------------------------------
+
+void SAL_CALL SvxShape::removeActionLock(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    DBG_ASSERT( mnLockCount > 0, "lock underflow in SvxShape!" );
+    mnLockCount--;
+
+    if( mnLockCount == 0 )
+        unlock();
+}
+
+//----------------------------------------------------------------------
+
+void SAL_CALL SvxShape::setActionLocks( sal_Int16 nLock ) throw (::com::sun::star::uno::RuntimeException )
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( (mnLockCount == 0) && (nLock != 0) )
+        unlock();
+
+    if( (mnLockCount != 0) && (nLock == 0) )
+        lock();
+
+    mnLockCount = (sal_uInt16)nLock;
+}
+
+//----------------------------------------------------------------------
+
+sal_Int16 SAL_CALL SvxShape::resetActionLocks(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( mnLockCount != 0 )
+        unlock();
+
+    sal_Int16 nOldLocks = (sal_Int16)mnLockCount;
+    mnLockCount = 0;
+
+    return nOldLocks;
+}
+
 /***********************************************************************
 * class SvxShapeText                                                   *
 ***********************************************************************/
@@ -2924,11 +3056,33 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeText::getImplementationId()
     return pID->getImplementationId() ;
 }
 
+//----------------------------------------------------------------------
+
+/** called from the XActionLockable interface methods on initial locking */
+void SvxShapeText::lock()
+{
+    SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
+    if( pEditSource )
+        pEditSource->lock();
+}
+
+//----------------------------------------------------------------------
+
+/** called from the XActionLockable interface methods on final unlock */
+void SvxShapeText::unlock()
+{
+    SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
+    if( pEditSource )
+        pEditSource->unlock();
+}
+
+
 /***********************************************************************
 * class SvxShapeRect                                                   *
 ***********************************************************************/
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
 : SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE) )
+
 {
 
 }
