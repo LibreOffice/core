@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-24 09:36:15 $
+#   last change: $Author: obo $ $Date: 2002-10-24 15:44:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -240,6 +240,7 @@ SLOFILES =	\
     $(SLO)$/appsys.obj		\
     $(SLO)$/desktopresid.obj	\
     $(SLO)$/dispatchwatcher.obj	\
+    $(SLO)$/ssodlg.obj				\
     $(SLO)$/ssoinit.obj			\
     $(SLO)$/configinit.obj			\
     $(SLO)$/officeipcmanager.obj	\
