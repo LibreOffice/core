@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:12:54 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,11 +277,15 @@ enum SwMoveFlags
 #define DUMMY_PARASPACEMAX_AT_PAGES 0x20
 #define DUMMY_TAB_COMPAT            0x40
 #define DUMMY_USE_VIRTUAL_DEVICE    0x80
+
 #define DUMMY_ADD_FLY_OFFSETS       0x01
 #define DUMMY_ADD_EXTERNAL_LEADING  0x02
 #define DUMMY_USE_HIRES_VIR_DEV     0x04
 // OD 06.01.2004 #i11859#
 #define DUMMY_USE_FORMER_LINESPACING 0x08
+// OD 2004-02-16 #106629# - flag for adding paragraph and table spacing at
+// bottom of table cells
+#define DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS 0x10
 
 //
 // COMPATIBILITY FLAGS END
@@ -1964,6 +1968,24 @@ public:
 
     short IsUseVirtualDevice() const;
     void _SetUseVirtualDevice( short nNew );
+
+    // OD 2004-02-16 #106629# - accessors to compatibility flag for adding
+    // paragraph and table spacing at bottom of table cells.
+    sal_Bool IsAddParaSpacingToTableCells() const
+    {
+        return n8Dummy2 & DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS;
+    }
+    void SetAddParaSpacingToTableCells( const sal_Bool _bAddParaSpacingToTableCells )
+    {
+        if ( _bAddParaSpacingToTableCells )
+        {
+            n8Dummy2 |= DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS;
+        }
+        else
+        {
+            n8Dummy2 &= ~DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS;
+        }
+    }
 
     // OD 06.01.2004 #i11859#
     sal_Bool IsFormerLineSpacing() const
