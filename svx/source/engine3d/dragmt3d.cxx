@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dragmt3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:35:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ void E3dDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
         for (UINT16 a=0;a<nPVCnt;a++)
         {
             SdrPageView* pPV = rView.GetPageViewPvNum(a);
-            if(pPV->HasMarkedObj())
+            if(pPV->HasMarkedObjPageView())
             {
                 rXOut.SetOffset(pPV->GetOffset());
                 UINT16 nPntCnt = aGrp[nOb]->aWireframePoly.GetPointCount();
