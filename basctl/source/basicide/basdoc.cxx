@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 10:16:10 $
+ *  last change: $Author: tbe $ $Date: 2001-05-28 11:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #include <baside.hxx>
 
 
-SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_SPECIAL | SFXOBJECTSHELL_DONTREPLACE, side3 )
+SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_SPECIAL | SFXOBJECTSHELL_DONTREPLACE, sbasic )
 {
     Factory().SetExplorerImageId( IMG_MACROLIB );
     Factory().RegisterHelpFile( String( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) ) );
