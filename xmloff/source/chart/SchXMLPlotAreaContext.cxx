@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-15 08:57:29 $
+ *  last change: $Author: bm $ $Date: 2001-03-15 20:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,7 +868,7 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
     rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetSeriesAttrTokenMap();
 
-    for( sal_Int32 i = 0; i < nAttrCount; i++ )
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
@@ -915,19 +915,18 @@ void SchXMLSeriesContext::EndElement()
 
         try
         {
+            if( mrImportHelper.GetNumberOfSeries() < mnSeriesIndex + mrDomainOffset + 1 )
+                mrImportHelper.ResizeChartData( mnSeriesIndex + mrDomainOffset + 1 );
+
             xProp = mxDiagram->getDataRowProperties( mnSeriesIndex + mrDomainOffset );
         }
-        catch( lang::IndexOutOfBoundsException )
+        catch( lang::IndexOutOfBoundsException aEx )
         {
-            try
-            {
-                mrImportHelper.ResizeChartData( mnSeriesIndex + mrDomainOffset + 1 );
-                xProp = mxDiagram->getDataRowProperties( mnSeriesIndex + mrDomainOffset );
-            }
-            catch( lang::IndexOutOfBoundsException )
-            {
-                DBG_ERROR( "resizing of chart data didn't work!" );
-            }
+#ifdef DBG_UTIL
+            String aStr( aEx.Message );
+            ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR1( "SeriesContext: Exception caught: %s", aBStr.GetBuffer());
+#endif
         }
 
         if( xProp.is())
@@ -991,6 +990,8 @@ SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
             mnDataPointIndex++;
             pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName, mxDiagram,
                                                    mnSeriesIndex + mrDomainOffset, mnDataPointIndex );
+            break;
+
         default:
             pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
@@ -1046,13 +1047,19 @@ void SchXMLDataPointContext::EndElement()
 
         try
         {
+            if( mrImportHelper.GetNumberOfSeries() < mnSeries + 1 ||
+                mrImportHelper.GetLengthOfSeries() < mrIndex + 1  )
+                mrImportHelper.ResizeChartData( mnSeries + 1, mrIndex + 1 );
+
             xProp = mxDiagram->getDataPointProperties( mnSeries, mrIndex );
         }
-        catch( lang::IndexOutOfBoundsException )
+        catch( lang::IndexOutOfBoundsException aEx )
         {
-            // resize chart
-            mrImportHelper.ResizeChartData( mnSeries + 1, mrIndex + 1 );
-            xProp = mxDiagram->getDataPointProperties( mnSeries, mrIndex );
+#ifdef DBG_UTIL
+            String aStr( aEx.Message );
+            ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR1( "SeriesContext: Exception caught: %s", aBStr.GetBuffer());
+#endif
         }
 
         // set properties
