@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 12:34:15 $
+#   last change: $Author: hr $ $Date: 2004-10-11 13:49:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,7 +171,7 @@ SHL1STDLIBS=\
     oleaut32.lib
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-    SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
+    SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
 
 #SHL1LIBS = $(SLB)$/$(TARGET).lib
