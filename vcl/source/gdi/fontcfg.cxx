@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 12:18:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,6 +893,9 @@ void FontSubstConfigItem::getMapName( const String& rOrgName, String& rShortName
 {
     rShortName = rOrgName;
 
+    // TODO: get rid of the crazy O(N*strlen) searches below
+    // they should be possible in O(strlen)
+
     // Kill leading vendor names and other unimportant data
     ImplKillLeading( rShortName, aImplKillLeadingList );
 
@@ -940,6 +943,7 @@ void FontSubstConfigItem::getMapName( const String& rOrgName, String& rShortName
     }
 
     // Remove numbers
+    // TODO: also remove localized and fullwidth digits
     xub_StrLen i = 0;
     while ( i < rFamilyName.Len() )
     {
