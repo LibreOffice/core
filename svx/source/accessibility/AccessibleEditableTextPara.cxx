@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:50:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,7 +961,7 @@ namespace accessibility
         ::rtl::OUString aLine;
 
         if( getCharacterCount() )
-            aLine = getTextAtIndex(0, AccessibleTextType::LINE);
+            aLine = getTextAtIndex(0, AccessibleTextType::LINE).SegmentText;
 
         // Get the string from the resource for the specified id.
         String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION ) );
@@ -975,17 +975,17 @@ namespace accessibility
             sal_Int32 i;
 
             // search backward from MaxDescriptionLen for previous word start
-            for( aCurrWord=getTextAtIndex(MaxDescriptionLen, AccessibleTextType::WORD),
+            for( aCurrWord=getTextAtIndex(MaxDescriptionLen, AccessibleTextType::WORD).SegmentText,
                      i=MaxDescriptionLen,
                      aLine=::rtl::OUString();
                  i>=0;
                  --i )
             {
-                if( getTextAtIndex(i, AccessibleTextType::WORD) != aCurrWord )
+                if( getTextAtIndex(i, AccessibleTextType::WORD).SegmentText != aCurrWord )
                 {
                     if( i == 0 )
                         // prevent completely empty string
-                        aLine = getTextAtIndex(0, AccessibleTextType::WORD);
+                        aLine = getTextAtIndex(0, AccessibleTextType::WORD).SegmentText;
                     else
                         aLine = getTextRange(0, i);
                 }
@@ -1496,7 +1496,7 @@ namespace accessibility
         return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
     }
 
-    ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
@@ -1505,6 +1505,10 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
 
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
+
         switch( aTextType )
         {
             case AccessibleTextType::ATTRIBUTE_RUN:
@@ -1512,9 +1516,11 @@ namespace accessibility
                 USHORT nStartIndex, nEndIndex;
 
                 if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
-                    return GetTextRange(nStartIndex, nEndIndex);
-                else
-                    return ::rtl::OUString();
+                {
+                    aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                    aResult.SegmentStart = nStartIndex;
+                    aResult.SegmentEnd = nEndIndex;
+                }
             }
 
             case AccessibleTextType::LINE:
@@ -1532,17 +1538,23 @@ namespace accessibility
                     nCurIndex += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ), nLine);
 
                     if( nCurIndex > nIndex )
-                        return GetTextRange( nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine), nCurIndex );
+                    {
+                        aResult.SegmentStart = nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
+                        aResult.SegmentEnd = nCurIndex;
+                        aResult.SegmentText = GetTextRange( aResult.SegmentStart, aResult.SegmentEnd );
+                        break;
+                    }
                 }
-                return ::rtl::OUString();
             }
 
             default:
-                return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
+                aResult = OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
+
+        return aResult;
     }
 
-    ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
@@ -1550,6 +1562,10 @@ namespace accessibility
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
+
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
 
         switch( aTextType )
         {
@@ -1563,10 +1579,13 @@ namespace accessibility
                     if( nStartIndex != 0 )
                     {
                         if( GetAttributeRun(nStartIndex, nEndIndex, nStartIndex-1) )
-                            return GetTextRange(nStartIndex, nEndIndex);
+                        {
+                            aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                            aResult.SegmentStart = nStartIndex;
+                            aResult.SegmentEnd = nEndIndex;
+                        }
                     }
                 }
-                return ::rtl::OUString();
             }
 
             case AccessibleTextType::LINE:
@@ -1589,18 +1608,22 @@ namespace accessibility
                     if( nCurIndex > nIndex &&
                         nLastIndex > nCurLineLen )
                     {
-                        return GetTextRange( nLastIndex - nCurLineLen, static_cast< USHORT >( nLastIndex ) );
+                        aResult.SegmentStart = nLastIndex - nCurLineLen;
+                        aResult.SegmentEnd = static_cast< USHORT >( nLastIndex );
+                        aResult.SegmentText = GetTextRange( aResult.SegmentStart, aResult.SegmentEnd );
+                        break;
                     }
                 }
-                return ::rtl::OUString();
             }
 
             default:
-                return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
+                aResult = OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
+
+        return aResult;
     }
 
-    ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
@@ -1608,6 +1631,10 @@ namespace accessibility
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
+
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
 
         switch( aTextType )
         {
@@ -1621,10 +1648,13 @@ namespace accessibility
                     if( nEndIndex < GetTextLen() )
                     {
                         if( GetAttributeRun(nStartIndex, nEndIndex, nEndIndex) )
-                            return GetTextRange(nStartIndex, nEndIndex);
+                        {
+                            aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                            aResult.SegmentStart = nStartIndex;
+                            aResult.SegmentEnd = nEndIndex;
+                        }
                     }
                 }
-                return ::rtl::OUString();
             }
 
             case AccessibleTextType::LINE:
@@ -1645,15 +1675,19 @@ namespace accessibility
                     if( nCurIndex > nIndex &&
                         nLine < nLineCount-1 )
                     {
-                        return GetTextRange( nCurIndex, nCurIndex + rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine+1) );
+                        aResult.SegmentStart = nCurIndex;
+                        aResult.SegmentEnd = nCurIndex + rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine+1);
+                        aResult.SegmentText = GetTextRange( aResult.SegmentStart, aResult.SegmentEnd );
+                        break;
                     }
                 }
-                return ::rtl::OUString();
             }
 
             default:
-                return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
+                aResult = OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
+
+        return aResult;
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
