@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 01:08:07 $
+ *  last change: $Author: os $ $Date: 2002-05-08 09:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 133 , 69 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Basistextgröße" ;
+        Text = "Max. Basistextgröße" ;
         Text [ english_us ] = "Max. base text size" ;
         Text[ portuguese ] = "Base text size";
         Text[ russian ] = "Base text size";
@@ -341,7 +341,7 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 133 , 85 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Ruby-Textgröße" ;
+        Text = "Max. Ruby-Textgröße" ;
         Text [ english_us ] = "Ruby text size" ;
         Text[ portuguese ] = "Ruby text size";
         Text[ russian ] = "Ruby text size";
