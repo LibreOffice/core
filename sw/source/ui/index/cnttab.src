@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:53:05 $
+ *  last change: $Author: nf $ $Date: 2000-12-04 12:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1793,18 +1793,18 @@ TabPage TP_TOX_SELECT
 
             ItemList =
             {
-                < "StarOffice Math" ;               1;> ;
-                < "StarOffice Chart" ;          2;> ;
-                < "StarOffice Calc" ;               8;> ;
-                < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+                < "%PRODUCTNAME Math" ;                 1;> ;
+                < "%PRODUCTNAME Chart" ;            2;> ;
+                < "%PRODUCTNAME Calc" ;                 8;> ;
+                < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
                 < "Andere OLE-Objekte";     128;> ;
             };
             ItemList[ ENGLISH ] =
             {
-                < "StarOffice Math" ;               1; > ;
-                < "StarOffice Chart" ;          2;> ;
-                < "StarOffice Calc" ;               8;> ;
-                < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+                < "%PRODUCTNAME Math" ;                 1; > ;
+                < "%PRODUCTNAME Chart" ;            2;> ;
+                < "%PRODUCTNAME Calc" ;                 8;> ;
+                < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
                 < "Other OLE objects" ;     128;> ;
             };
             ItemList [ language_user1 ] =
@@ -1817,147 +1817,147 @@ TabPage TP_TOX_SELECT
         };
         ItemList [ english_us ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Other OLE Objects";  128;> ;
         };
         ItemList [ portuguese ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Outros objectos OLE";    128;> ;
         };
         ItemList [ russian ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Äðóãèå îáúåêòû OLE";     128;> ;
         };
         ItemList [ greek ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "¢ëëá áíôéêåßìåíá OLE";   128;> ;
         };
         ItemList [ dutch ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Andere OLE-objecten";    128;> ;
         };
         ItemList [ french ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Autres objets OLE";  128;> ;
         };
         ItemList [ spanish ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Otros objetos OLE";  128;> ;
         };
         ItemList [ italian ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Altri oggetti OLE";  128;> ;
         };
         ItemList [ danish ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
             < "StarCalc" ;              8;> ;
             < "StarDraw/StarImpress" ;  16;> ;
             < "Andre OLE-objekter";     128;> ;
         };
         ItemList [ swedish ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Andra OLE-objekt";   128;> ;
         };
         ItemList [ polish ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Inne obiekty OLE";   128;> ;
         };
         ItemList [ portuguese_brazilian ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Image" ;              8;> ;
-            < "StarOffice Calc" ;   16;> ;
-            < "StarOffice Draw/StarOffice Impress";     128;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Image" ;                8;> ;
+            < "%PRODUCTNAME Calc" ;     16;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
         };
         ItemList [ japanese ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "‚»‚Ì‚Ù‚©‚Ì OLE µÌÞ¼Þª¸Ä";    128;> ;
         };
         ItemList [ korean ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Image" ;              8;> ;
-            < "StarOffice Calc" ;   16;> ;
-            < "StarOffice Draw/StarOffice Impress";     128;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Image" ;                8;> ;
+            < "%PRODUCTNAME Calc" ;     16;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
         };
         ItemList [ chinese_simplified ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "ÆäËû OLE ¶ÔÏó";  128;> ;
         };
         ItemList [ chinese_traditional ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "¨ä¥¦ªº OLE ª«¥ó";    128;> ;
         };
         ItemList [ arabic ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "ßÇÆäÇÊ OLE ÃÎÑì";    128;> ;
         };
         ItemList [ turkish ] =
         {
-            < "StarOffice Math" ;               1;> ;
-            < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Image" ;              8;> ;
-            < "StarOffice Calc" ;   16;> ;
-            < "StarOffice Draw/StarOffice Impress";     128;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Image" ;                8;> ;
+            < "%PRODUCTNAME Calc" ;     16;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
         };
     };
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-04 11:54:26 $
+ *  last change: $Author: nf $ $Date: 2000-12-04 12:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,12 +256,12 @@ QueryBox MSG_SEARCH_END
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
     Message = "%PRODUCTNAME Writer hat bis zum Ende des Dokumentes gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
-    Message [ ENGLISH ] = "StarOffice Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
-    Message [ norwegian ] = "StarOffice Writer har søkt til slutten av  dokumentet. Vil du fortsette fra begynnelsen?" ;
+    Message [ ENGLISH ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
+    Message [ norwegian ] = "%PRODUCTNAME Writer har søkt til slutten av  dokumentet. Vil du fortsette fra begynnelsen?" ;
     Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino alla fine del documento. Volete continuare dall'inizio del documento?" ;
     Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o final do documento. Deseja continuar do início?" ;
     Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao fim do documento. Deseja continuar a procura no início do documento?" ;
-    Message [ finnish ] = "StarOffice Writer on etsinyt asiakirjan loppuun asti.Jatketaanko alusta?" ;
+    Message [ finnish ] = "%PRODUCTNAME Writer on etsinyt asiakirjan loppuun asti.Jatketaanko alusta?" ;
     Message [ danish ] = "%PRODUCTNAME Writer har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
     Message [ french ] = "%PRODUCTNAME Writer a atteint la fin du document. Souhaitez-vous reprendre la recherche au début du document ?" ;
     Message [ swedish ] = "%PRODUCTNAME Writer har sökt till slutet av dokument. Vill Du fortsätta sökningen i början av dokumentet?" ;
@@ -284,12 +284,12 @@ QueryBox MSG_SEARCH_START
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
     Message = "%PRODUCTNAME Writer hat bis zum Anfang des Dokumentes gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
-    Message [ ENGLISH ] = "StarOffice Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
-    Message [ norwegian ] = "StarOffice Writer har søkt til begynnelsen av dokumentet. Vil du fortsette fra slutten?" ;
+    Message [ ENGLISH ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
+    Message [ norwegian ] = "%PRODUCTNAME Writer har søkt til begynnelsen av dokumentet. Vil du fortsette fra slutten?" ;
     Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino all'inizio del documento. Volete continuare dalla fine del documento?" ;
     Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o início do documento. Deseja continuar no final?" ;
     Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao início do documento. Deseja continuar a procura no fim do documento?" ;
-    Message [ finnish ] = "StarOffice Writer on etsinyt asiakirjan alkuun asti.Jatketaanko lopusta?" ;
+    Message [ finnish ] = "%PRODUCTNAME Writer on etsinyt asiakirjan alkuun asti.Jatketaanko lopusta?" ;
     Message [ danish ] = "%PRODUCTNAME Writer har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
     Message [ french ] = "%PRODUCTNAME Writer a atteint le début du document. Souhaitez-vous reprendre la recherche à la fin du document ?" ;
     Message [ swedish ] = "%PRODUCTNAME Writer har sökt till början av dokumentet. Vill Du fortsätta sökningen i slutet av dokumentet?" ;
