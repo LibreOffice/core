@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-13 13:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ using namespace ::com::sun::star::ucb;
 #include <unotools/ucblockbytes.hxx>
 #include <svtools/pathoptions.hxx>
 #include <ucbhelper/contentbroker.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #include "ucbhelp.hxx"
 #include "helper.hxx"
