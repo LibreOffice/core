@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:38:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #define SC_PREVIEW_RANGE_REPROW 2
 #define SC_PREVIEW_RANGE_TAB    3
 
-class Window;
+class OutputDevice;
 class String;
 class Point;
 class Rectangle;
@@ -136,7 +136,7 @@ public:
 
 class ScPreviewLocationData
 {
-    Window*     pWindow;
+    OutputDevice* pWindow;
     ScDocument* pDoc;
     MapMode     aCellMapMode;
     MapMode     aDrawMapMode[SC_PREVIEW_MAXRANGES];
@@ -150,7 +150,7 @@ class ScPreviewLocationData
     Rectangle   GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const;
 
 public:
-            ScPreviewLocationData( ScDocument* pDocument, Window* pWin );
+            ScPreviewLocationData( ScDocument* pDocument, OutputDevice* pWin );
             ~ScPreviewLocationData();
 
     void    SetCellMapMode( const MapMode& rMapMode );
@@ -194,6 +194,10 @@ public:
     // otherwise of the header of the row in rCellPos
     Rectangle GetHeaderCellOutputRect(const Rectangle& rVisRect, const ScAddress& rCellPos, sal_Bool bColHeader) const;
     Rectangle GetCellOutputRect(const ScAddress& rCellPos) const;
+
+    // Query the range and rectangle of the main (non-repeat) cell range.
+    // Returns FALSE if not contained.
+    BOOL    GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const;
 };
 
 #endif
