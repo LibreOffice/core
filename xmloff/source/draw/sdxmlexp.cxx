@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 19:57:36 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 17:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,12 +205,47 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#ifndef _B3D_HMATRIX_HXX
+#include <goodies/hmatrix.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONSHAPE3D_HPP_
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_DOUBLESEQUENCE_HPP_
+#include <com/sun/star/drawing/DoubleSequence.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
+#include <com/sun/star/drawing/ShadeMode.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
+#include <com/sun/star/drawing/Direction3D.hpp>
+#endif
+
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
 #include "PropertySetMerger.hxx"
 #endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+inline sal_Int32 FRound( double fVal )
+{
+    return( fVal > 0.0 ? (sal_Int32) ( fVal + 0.5 ) : -(sal_Int32) ( -fVal + 0.5 ) );
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // wrapper to have control for virtual function calls to handle all kinds
@@ -1657,7 +1692,7 @@ void SdXMLExport::_ExportContent()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportTextBoxShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportTextBoxShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
 {
@@ -1666,7 +1701,7 @@ void SdXMLExport::ImpExportTextBoxShape(SvXMLExport& rExp,
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        SdXMLImExTransform aTransform;
+        SdXMLImExTransform2D aTransform;
         OUString aStr;
         OUStringBuffer sStringBuffer;
 
@@ -1802,14 +1837,14 @@ void SdXMLExport::ImpExportTextBoxShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportRectangleShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportRectangleShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /*= SEF_DEFAULT */,    com::sun::star::awt::Point* pRefPoint /* = NULL */ )
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        SdXMLImExTransform aTransform;
+        SdXMLImExTransform2D aTransform;
         OUString aStr;
         OUStringBuffer sStringBuffer;
 
@@ -1891,14 +1926,14 @@ void SdXMLExport::ImpExportRectangleShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportLineShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportLineShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        SdXMLImExTransform aTransform;
+        SdXMLImExTransform2D aTransform;
         OUString aStr;
         OUStringBuffer sStringBuffer;
         awt::Point aStart(0,0);
@@ -1986,14 +2021,14 @@ void SdXMLExport::ImpExportLineShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportEllipseShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportEllipseShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        SdXMLImExTransform aTransform;
+        SdXMLImExTransform2D aTransform;
         // get size to decide between Circle and Ellipse
         awt::Point aPoint = xShape->getPosition();
         if( pRefPoint )
@@ -2077,7 +2112,7 @@ void SdXMLExport::ImpExportEllipseShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportPolygonShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2088,7 +2123,7 @@ void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
             || eShapeType == XmlShapeTypeDrawClosedBezierShape);
         BOOL bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
             || eShapeType == XmlShapeTypeDrawOpenBezierShape);
-        SdXMLImExTransform aTransform;
+        SdXMLImExTransform2D aTransform;
         OUString aStr;
         OUStringBuffer sStringBuffer;
 
@@ -2260,14 +2295,14 @@ void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportGraphicObjectShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        SdXMLImExTransform aTransform;
+        SdXMLImExTransform2D aTransform;
         OUString aStr;
         OUStringBuffer sStringBuffer;
 
@@ -2362,7 +2397,7 @@ void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportChartShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportChartShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2450,7 +2485,7 @@ void SdXMLExport::ImpExportChartShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportSpreadsheetShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportSpreadsheetShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2486,7 +2521,7 @@ void SdXMLExport::ImpExportSpreadsheetShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportControlShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportControlShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2497,7 +2532,7 @@ void SdXMLExport::ImpExportControlShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportConnectorShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportConnectorShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2507,7 +2542,7 @@ void SdXMLExport::ImpExportConnectorShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportMeasureShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportMeasureShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2517,7 +2552,7 @@ void SdXMLExport::ImpExportMeasureShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportOLE2Shape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportOLE2Shape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2553,7 +2588,7 @@ void SdXMLExport::ImpExportOLE2Shape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportPageShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportPageShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2574,7 +2609,7 @@ void SdXMLExport::ImpExportPageShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportCaptionShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExportCaptionShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2584,41 +2619,358 @@ void SdXMLExport::ImpExportCaptionShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
+void SdXMLExport::ImpExport3DShape(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
-    switch(eShapeType)
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
     {
-        case XmlShapeTypeDraw3DCubeObject:
+        // transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
+        uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
+        drawing::HomogenMatrix xHomMat;
+        aAny >>= xHomMat;
+        SdXMLImExTransform3D aTransform;
+        aTransform.AddHomogenMatrix(xHomMat);
+        if(aTransform.NeedsAction())
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_transform, aTransform.GetExportString(rExp.GetMM100UnitConverter()));
+
+        switch(eShapeType)
         {
-            // write 3DCube shape
-//          SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_3DCube, sal_True, sal_True);
-            break;
+            case XmlShapeTypeDraw3DCubeObject:
+            {
+                // write 3DCube shape
+                SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DCube, sal_True, sal_True);
+                break;
+            }
+            case XmlShapeTypeDraw3DSphereObject:
+            {
+                // write 3DSphere shape
+                SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DSphere, sal_True, sal_True);
+                break;
+            }
+            case XmlShapeTypeDraw3DLatheObject:
+            case XmlShapeTypeDraw3DExtrudeObject:
+            {
+                // write special 3DLathe/3DExtrude attributes
+                uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPolyPolygon3D")));
+                drawing::PolyPolygonShape3D xPolyPolygon3D;
+                aAny >>= xPolyPolygon3D;
+
+                // look for maximal values
+                double fXMin, fXMax, fYMin, fYMax;
+                BOOL bInit(FALSE);
+                sal_Int32 nOuterSequenceCount(xPolyPolygon3D.SequenceX.getLength());
+                drawing::DoubleSequence* pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
+                drawing::DoubleSequence* pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
+
+                for(sal_Int32 a(0L); a < nOuterSequenceCount; a++)
+                {
+                    sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
+                    double* pArrayX = pInnerSequenceX->getArray();
+                    double* pArrayY = pInnerSequenceY->getArray();
+
+                    for(sal_Int32 b(0L); b < nInnerSequenceCount; b++)
+                    {
+                        double fX = *pArrayX++;
+                        double fY = *pArrayY++;
+
+                        if(bInit)
+                        {
+                            if(fX > fXMax)
+                                fXMax = fX;
+
+                            if(fX < fXMin)
+                                fXMin = fX;
+
+                            if(fY > fYMax)
+                                fYMax = fY;
+
+                            if(fY < fYMin)
+                                fYMin = fY;
+                        }
+                        else
+                        {
+                            fXMin = fXMax = fX;
+                            fYMin = fYMax = fY;
+                            bInit = TRUE;
+                        }
+                    }
+
+                    pInnerSequenceX++;
+                    pInnerSequenceY++;
+                }
+
+                // export ViewBox
+                awt::Point aMinPoint(FRound(fXMin), FRound(fYMin));
+                awt::Size aMaxSize(FRound(fXMax) - aMinPoint.X, FRound(fYMax) - aMinPoint.Y);
+                SdXMLImExViewBox aViewBox(
+                    aMinPoint.X, aMinPoint.Y, aMaxSize.Width, aMaxSize.Height);
+                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_viewBox,
+                    aViewBox.GetExportString(rExp.GetMM100UnitConverter()));
+
+                // prepare svx:d element export
+                SdXMLImExSvgDElement aSvgDElement(aViewBox);
+                pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
+                pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
+
+                for(a = 0L; a < nOuterSequenceCount; a++)
+                {
+                    sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
+                    double* pArrayX = pInnerSequenceX->getArray();
+                    double* pArrayY = pInnerSequenceY->getArray();
+                    drawing::PointSequence aPoly(nInnerSequenceCount);
+                    awt::Point* pInnerSequence = aPoly.getArray();
+
+                    for(sal_Int32 b(0L); b < nInnerSequenceCount; b++)
+                    {
+                        double fX = *pArrayX++;
+                        double fY = *pArrayY++;
+
+                        *pInnerSequence = awt::Point(FRound(fX), FRound(fY));
+                        pInnerSequence++;
+                    }
+
+                    // calculate closed flag
+                    awt::Point* pFirst = aPoly.getArray();
+                    awt::Point* pLast = pFirst + (nInnerSequenceCount - 1);
+                    BOOL bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
+
+                    aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint,
+                        aMaxSize, rExp.GetMM100UnitConverter(), bClosed);
+                }
+
+                // write point array
+                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_d, aSvgDElement.GetExportString());
+
+                if(eShapeType == XmlShapeTypeDraw3DLatheObject)
+                {
+                    // write 3DLathe shape
+                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DLathe, sal_True, sal_True);
+                }
+                else
+                {
+                    // write 3DExtrude shape
+                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DExtrude, sal_True, sal_True);
+                }
+                break;
+            }
         }
-        case XmlShapeTypeDraw3DSphereObject:
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::ImpExport3DScene(SdXMLExport& rExp,
+    const uno::Reference< drawing::XShape >& xShape,
+    XmlShapeType eShapeType)
+{
+    uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
+    if(xShapes.is() && xShapes->getCount())
+    {
+        // write 3DScene attributes
+        const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+        if(xPropSet.is())
         {
-            // write 3DSphere shape
-//          SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_3DSphere, sal_True, sal_True);
-            break;
-        }
-        case XmlShapeTypeDraw3DLatheObject:
-        {
-            // write 3DLathe shape
-//          SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_3DLathe, sal_True, sal_True);
-            break;
-        }
-        case XmlShapeTypeDraw3DExtrudeObject:
-        {
-            // write 3DExtrude shape
-//          SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_3DExtrude, sal_True, sal_True);
-            break;
-        }
-        case XmlShapeTypeDraw3DPolygonObject:
-        {
-            // write 3DPolygon shape
-//          SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_3DPolygon, sal_True, sal_True);
-            break;
+            OUString aStr;
+            OUStringBuffer sStringBuffer;
+
+            // rectangle, prepare parameters
+            awt::Point aPoint = xShape->getPosition();
+            awt::Size aSize = xShape->getSize();
+
+            // svg: x
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
+
+            // svg: y
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
+
+            // svg: width
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Width);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
+
+            // svg: height
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Height);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
+
+            // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
+            uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
+            drawing::HomogenMatrix xHomMat;
+            aAny >>= xHomMat;
+            SdXMLImExTransform3D aTransform;
+            aTransform.AddHomogenMatrix(xHomMat);
+            if(aTransform.NeedsAction())
+                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_transform, aTransform.GetExportString(rExp.GetMM100UnitConverter()));
+
+            // VRP
+
+            // VPN
+
+            // VUP
+
+            // projection "D3DScenePerspective" drawing::ProjectionMode
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")));
+            drawing::ProjectionMode xPrjMode;
+            aAny >>= xPrjMode;
+            if(xPrjMode == drawing::ProjectionMode_PARALLEL)
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_parallel));
+            else
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_perspective));
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_projection, aStr);
+
+            // distance
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
+            sal_Int32 nDistance;
+            aAny >>= nDistance;
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_distance, aStr);
+
+            // focalLength
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
+            sal_Int32 nFocalLength;
+            aAny >>= nFocalLength;
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_focal_length, aStr);
+
+            // shadowSlant
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
+            sal_Int16 nShadowSlant;
+            aAny >>= nShadowSlant;
+            rExp.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_shadow_slant, aStr);
+
+            // shadeMode
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
+            drawing::ShadeMode xShadeMode;
+            aAny >>= xShadeMode;
+            if(xShadeMode == drawing::ShadeMode_FLAT)
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat));
+            else if(xShadeMode == drawing::ShadeMode_PHONG)
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong));
+            else if(xShadeMode == drawing::ShadeMode_SMOOTH)
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
+            else
+                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_draft));
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_shade_mode, aStr);
+
+            // ambientColor
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
+            sal_Int32 aColTemp;
+            Color aAmbientColor;
+            aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
+            rExp.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_ambient_color, aStr);
+
+            // lightingMode
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
+            sal_Bool bTwoSidedLighting;
+            aAny >>= bTwoSidedLighting;
+            rExp.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_lighting_mode, aStr);
+
+            // write 3DScene shape
+            SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DScene, sal_True, sal_True);
+
+            // write lamps 1..8 as content
+            {
+                // lightcolor
+                Color aLightColor[8];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor1")));
+                aAny >>= aColTemp; aLightColor[0].SetColor(aColTemp);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor2")));
+                aAny >>= aColTemp; aLightColor[1].SetColor(aColTemp);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor3")));
+                aAny >>= aColTemp; aLightColor[2].SetColor(aColTemp);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor4")));
+                aAny >>= aColTemp; aLightColor[3].SetColor(aColTemp);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor5")));
+                aAny >>= aColTemp; aLightColor[4].SetColor(aColTemp);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor6")));
+                aAny >>= aColTemp; aLightColor[5].SetColor(aColTemp);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor7")));
+                aAny >>= aColTemp; aLightColor[6].SetColor(aColTemp);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor8")));
+                aAny >>= aColTemp; aLightColor[7].SetColor(aColTemp);
+
+                // lightdirection
+                Vector3D aLightDirection[8];
+                drawing::Direction3D xLightDir;
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection1")));
+                aAny >>= xLightDir; aLightDirection[0] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection2")));
+                aAny >>= xLightDir; aLightDirection[1] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection3")));
+                aAny >>= xLightDir; aLightDirection[2] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection4")));
+                aAny >>= xLightDir; aLightDirection[3] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection5")));
+                aAny >>= xLightDir; aLightDirection[4] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection6")));
+                aAny >>= xLightDir; aLightDirection[5] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection7")));
+                aAny >>= xLightDir; aLightDirection[6] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection8")));
+                aAny >>= xLightDir; aLightDirection[7] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+
+                // lighton
+                sal_Bool bLightOnOff[8];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn1")));
+                aAny >>= bLightOnOff[0];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn2")));
+                aAny >>= bLightOnOff[1];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn3")));
+                aAny >>= bLightOnOff[2];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn4")));
+                aAny >>= bLightOnOff[3];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn5")));
+                aAny >>= bLightOnOff[4];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn6")));
+                aAny >>= bLightOnOff[5];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn7")));
+                aAny >>= bLightOnOff[6];
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn8")));
+                aAny >>= bLightOnOff[7];
+
+                for(sal_uInt32 a(0L); a < 8; a++)
+                {
+                    // lightcolor
+                    rExp.GetMM100UnitConverter().convertColor(sStringBuffer, aLightColor[a]);
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_diffuse_color, aStr);
+
+                    // lightdirection
+                    rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aLightDirection[a]);
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_direction, aStr);
+
+                    // lighton
+                    rExp.GetMM100UnitConverter().convertBool(sStringBuffer, bLightOnOff[a]);
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_enabled, aStr);
+
+                    // specular
+                    rExp.GetMM100UnitConverter().convertBool(sStringBuffer, (BOOL)(a == 0L));
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_specular, aStr);
+
+                    // write light entry
+                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_light, sal_True, sal_True);
+                }
+            }
+
+            // write members
+            rExp.ImpWriteSingleShapeStyleInfos(xShapes);
         }
     }
 }
@@ -2716,7 +3068,6 @@ void SdXMLExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& xSha
                 else if(aType.EqualsAscii("Sphere", 21 + 7, 6)) { eShapeType = XmlShapeTypeDraw3DSphereObject; }
                 else if(aType.EqualsAscii("Lathe", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DLatheObject; }
                 else if(aType.EqualsAscii("Extrude", 21 + 7, 7)) { eShapeType = XmlShapeTypeDraw3DExtrudeObject; }
-                else if(aType.EqualsAscii("Polygon", 21 + 7, 7)) { eShapeType = XmlShapeTypeDraw3DPolygonObject; }
             }
             else if(aType.EqualsAscii("presentation.", 13, 13))
             {
@@ -2862,16 +3213,27 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfo(
         case XmlShapeTypeDraw3DSphereObject:
         case XmlShapeTypeDraw3DLatheObject:
         case XmlShapeTypeDraw3DExtrudeObject:
-        case XmlShapeTypeDraw3DPolygonObject:
         {
-            ImpExport3DShape(rExp, xShape, eShapeType, nFeatures, pRefPoint );
+            ImpExport3DShape((SdXMLExport&)rExp, xShape, eShapeType);
+            break;
+        }
+
+        case XmlShapeTypeDraw3DSceneObject:
+        {
+            // empty 3dscene
+            DBG_ASSERT(FALSE, "XMLEXP: WriteShape: empty 3DScene in export, not exported.");
+            break;
+        }
+
+        case XmlShapeTypeDrawGroupShape:
+        {
+            // empty group
+            DBG_ASSERT(FALSE, "XMLEXP: WriteShape: empty GroupShape in export, not exported.");
             break;
         }
 
         case XmlShapeTypePresOrgChartShape:
-        case XmlShapeTypeDraw3DSceneObject:
         case XmlShapeTypeDrawFrameShape:
-        case XmlShapeTypeDrawGroupShape:
         case XmlShapeTypeUnknown:
         case XmlShapeTypeNotYetSet:
         default:
@@ -2899,11 +3261,31 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfos(uno::Reference< container::XInde
             uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
             if(xShapes.is() && xShapes->getCount())
             {
-                // write group shape
-                SvXMLElementExport aPGR(*this, XML_NAMESPACE_DRAW, sXML_g, sal_True, sal_True);
+                // group shape or 3Dscene?
+                sal_Bool bIsScene(FALSE);
+                uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
+                if(xShapeDescriptor.is())
+                {
+                    String aType((OUString)xShapeDescriptor->getShapeType());
+                    if(aType.EqualsAscii((const sal_Char*)"com.sun.star.drawing.Shape3DSceneObject"))
+                    {
+                        bIsScene = TRUE;
+                    }
+                }
 
-                // write members
-                ImpWriteSingleShapeStyleInfos(xShapes, nFeatures, pRefPoint );
+                if(bIsScene)
+                {
+                    // write 3DScene
+                    ImpExport3DScene(*this, xShape, XmlShapeTypeDraw3DSceneObject);
+                }
+                else
+                {
+                    // write group shape
+                    SvXMLElementExport aPGR(*this, XML_NAMESPACE_DRAW, sXML_g, sal_True, sal_True);
+
+                    // write members
+                    ImpWriteSingleShapeStyleInfos(xShapes, nFeatures, pRefPoint);
+                }
             }
             else
             {
