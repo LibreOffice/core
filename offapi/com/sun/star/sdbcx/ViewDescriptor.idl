@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** is used to define a new view for a database.
     @see com::sun::star::sdbcx::View
  */
-service ViewDescriptor
+published service ViewDescriptor
 {
     // DocMerge: empty anyway
     service Descriptor;
