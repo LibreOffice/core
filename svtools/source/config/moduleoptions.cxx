@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:49:23 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@
 #define ROOTNODE_FACTORIES                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office/Factories"        ))
 #define PATHSEPERATOR                       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"                             ))
 
+// Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is
+//            special code that uses hard coded strings to return them.
 #define PROPERTYNAME_SHORTNAME              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"       ))
 #define PROPERTYNAME_TEMPLATEFILE           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryTemplateFile"    ))
 #define PROPERTYNAME_WINDOWATTRIBUTES       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryWindowAttributes"))
@@ -667,7 +669,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                   break;
         case SvtModuleOptions::E_DRAW          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw"));
                                                   break;
-        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress"));
+        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress?slot=10425"));
                                                   break;
         case SvtModuleOptions::E_MATH          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/smath"));
                                                   break;
