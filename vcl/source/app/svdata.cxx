@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 15:02:06 $
+ *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ void ImplDeInitSVData()
     ImplSVData* pSVData = ImplGetSVData();
 
     // delete global instance data
+    if( pSVData->mpSettingsConfigItem )
+        delete pSVData->mpSettingsConfigItem;
 
     if( pSVData->maGDIData.mpDefFontConfig )
         delete pSVData->maGDIData.mpDefFontConfig;

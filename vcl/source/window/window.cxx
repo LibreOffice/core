@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-06 13:15:07 $
+ *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,9 +768,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
 #ifndef REMOTE_APPSERVER
 #if defined WNT
-
-        // FIXME: determine if accessibility should be enabled
-        if( NULL != getenv("SAL_ACCESSIBILITY_ENABLED" ) )
+        static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
+        if( ( pEnv && *pEnv ) || Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
             // instanciate access bridge service
             if(!pSVData->mxAccessBridge.is())
@@ -788,7 +787,11 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
                 catch(::com::sun::star::uno::Exception exception)
                 {
-                    // FIXME: error handling
+                    AllSettings aSettings = Application::GetSettings();
+                    MiscSettings aMisc = aSettings.GetMiscSettings();
+                    aMisc.SetEnableATToolSupport( FALSE );
+                    aSettings.SetMiscSettings( aMisc );
+                    Application::SetSettings( aSettings );
                 }
             }
         }

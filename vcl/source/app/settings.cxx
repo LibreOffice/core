@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-01 08:40:44 $
+ *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 
 #ifndef _VCL_I18NHELP_HXX
 #include <i18nhelp.hxx>
+#endif
+
+#ifndef _VCL_FONTCFG_HXX
+#include <fontcfg.hxx>
 #endif
 
 #include <unohelp.hxx>
@@ -1071,6 +1075,7 @@ ImplMiscData::ImplMiscData()
 {
     mnRefCount                  = 1;
     mnTwoDigitYearStart         = 1930;
+    mnEnableATT                 = ~0;
 }
 
 // -----------------------------------------------------------------------
@@ -1079,6 +1084,7 @@ ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
     mnRefCount                  = 1;
     mnTwoDigitYearStart         = rData.mnTwoDigitYearStart;
+    mnEnableATT                 = rData.mnEnableATT;
 }
 
 // -----------------------------------------------------------------------
@@ -1149,10 +1155,37 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return TRUE;
 
-    if ( (mpData->mnTwoDigitYearStart   == rSet.mpData->mnTwoDigitYearStart ) )
+    if ( (mpData->mnTwoDigitYearStart   == rSet.mpData->mnTwoDigitYearStart ) &&
+         (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) )
         return TRUE;
     else
         return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL MiscSettings::GetEnableATToolSupport() const
+{
+    if( mpData->mnEnableATT == (USHORT)~0 )
+    {
+        rtl::OUString aEnable =
+            vcl::SettingsConfigItem::get()->
+            getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
+                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
+        mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? TRUE : FALSE;
+    }
+    return (BOOL)mpData->mnEnableATT;
+}
+
+// -----------------------------------------------------------------------
+
+void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
+{
+    vcl::SettingsConfigItem::get()->
+        setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
+                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
+                  rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
+    mpData->mnEnableATT = bEnable;
 }
 
 // =======================================================================

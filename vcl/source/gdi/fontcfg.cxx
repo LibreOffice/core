@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-25 17:00:23 $
+ *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 
 #define DEFAULTFONT_CONFIGNODE "VCL/DefaultFonts"
 #define SUBSTFONT_CONFIGNODE "VCL/FontSubstitutions"
+#define SETTINGS_CONFIGNODE "VCL/Settings"
 
 using namespace vcl;
 using namespace rtl;
@@ -1127,3 +1128,157 @@ const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( cons
     }
     return NULL;
 }
+
+/*
+ *  SettingsConfigItem::get
+ */
+
+SettingsConfigItem* SettingsConfigItem::get()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->mpSettingsConfigItem )
+        pSVData->mpSettingsConfigItem = new SettingsConfigItem();
+    return pSVData->mpSettingsConfigItem;
+}
+
+/*
+ *  SettignsConfigItem constructor
+ */
+
+SettingsConfigItem::SettingsConfigItem()
+        :
+        ConfigItem( OUString( RTL_CONSTASCII_USTRINGPARAM( SETTINGS_CONFIGNODE ) ),
+                    CONFIG_MODE_DELAYED_UPDATE )
+{
+    getValues();
+}
+
+/*
+ *  SettingsConfigItem destructor
+ */
+
+SettingsConfigItem::~SettingsConfigItem()
+{
+    if( IsModified() )
+        Commit();
+}
+
+/*
+ *  SettingsConfigItem::Commit
+ */
+
+void SettingsConfigItem::Commit()
+{
+    int i;
+
+    ::std::hash_map< OUString, ::std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group;
+
+    for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
+    {
+        String aKeyName( group->first );
+        sal_Bool bAdded = AddNode( OUString(), aKeyName );
+        Sequence< PropertyValue > aValues( group->second.size() );
+        PropertyValue* pValues = aValues.getArray();
+        int nIndex = 0;
+        ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+        for( it = group->second.begin(); it != group->second.end(); ++it )
+        {
+            String aName( aKeyName );
+            aName.Append( '/' );
+            aName.Append( String( it->first ) );
+            pValues[nIndex].Name    = aName;
+            pValues[nIndex].Handle  = 0;
+            pValues[nIndex].Value <<= it->second;
+            pValues[nIndex].State   = PropertyState_DIRECT_VALUE;
+            nIndex++;
+        }
+        ReplaceSetProperties( aKeyName, aValues );
+    }
+}
+
+/*
+ *  SettingsConfigItem::Notify
+ */
+
+void SettingsConfigItem::Notify( const Sequence< OUString >& rPropertyNames )
+{
+    getValues();
+}
+
+/*
+ *  SettingsConfigItem::getValues
+ */
+void SettingsConfigItem::getValues()
+{
+    m_aSettings.clear();
+
+    int i, j;
+    Sequence< OUString > aNames( GetNodeNames( OUString() ) );
+    for( j = 0; j < aNames.getLength(); j++ )
+    {
+#ifdef DEBUG
+        fprintf( stderr, "found settings data for \"%s\"\n",
+                 OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
+                 );
+#endif
+        String aKeyName( aNames.getConstArray()[j] );
+        Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
+        Sequence< OUString > aSettingsKeys( aKeys.getLength() );
+        const OUString* pFrom = aKeys.getConstArray();
+        OUString* pTo = aSettingsKeys.getArray();
+        for( int m = 0; m < aKeys.getLength(); m++ )
+        {
+            String aName( aKeyName );
+            aName.Append( '/' );
+            aName.Append( String( pFrom[m] ) );
+            pTo[m] = aName;
+        }
+        Sequence< Any > aValues( GetProperties( aSettingsKeys ) );
+        const Any* pValue = aValues.getConstArray();
+        for( i = 0; i < aValues.getLength(); i++, pValue++ )
+        {
+            if( pValue->getValueTypeClass() == TypeClass_STRING )
+            {
+                const OUString* pLine = (const OUString*)pValue->getValue();
+                if( pLine->getLength() )
+                    m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
+#ifdef DEBUG
+                fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
+                         OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
+                         OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
+                         );
+#endif
+            }
+        }
+    }
+}
+
+/*
+ *  SettingsConfigItem::getDefaultFont
+ */
+
+const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
+{
+    ::std::hash_map< OUString, ::std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
+    if( group == m_aSettings.end() || group->second.find( rKey ) == group->second.end() )
+    {
+        static OUString aEmpty;
+        return aEmpty;
+    }
+    return group->second.find(rKey)->second;
+}
+
+/*
+ *  SettingsConfigItem::setDefaultFont
+ */
+
+void SettingsConfigItem::setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue )
+{
+    bool bModified = m_aSettings[ rGroup ][ rKey ] != rValue;
+    if( bModified )
+    {
+        m_aSettings[ rGroup ][ rKey ] = rValue;
+        SetModified();
+    }
+}
+
