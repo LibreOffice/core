@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
+ *  last change: $Author: oj $ $Date: 2001-12-10 11:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,9 @@ namespace dbaui
     void ODataView::Resize()
     {
         Window::Resize();
-        resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
+        Size aSize = GetSizePixel();
+        if(aSize.Width() > 0 && aSize.Height() > 0)
+            resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
 
 //.........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-10 11:04:07 $
+ *  last change: $Author: oj $ $Date: 2001-12-10 11:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
     sal_Int32 nSplitPos = static_cast<OQueryController*>(getController())->getSplitPos();
     if( nSplitPos == -1 || nSplitPos >= aPlaygroundSize.Height())
     {
-        nSplitPos = sal_Int32(aPlaygroundSize.Height()*0.5);
+        nSplitPos = sal_Int32(aPlaygroundSize.Height()*0.6);
         static_cast<OQueryController*>(getController())->setSplitPos(nSplitPos);
     }
 
