@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:48:57 $
+ *  last change: $Author: hr $ $Date: 2004-08-04 13:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5190,8 +5190,8 @@ BOOL StatementControl::Execute()
                                 if ( aUId.IsNumeric() )
                                 {
                                     nParams = PARAM_ULONG_1;
-                                    DBG_ASSERT( nUId <= 0xFFFF, "ID on ToolBox > 0xFFFF" );
                                     nLNr1 = USHORT( aUId.GetNum() );
+                                    DBG_ASSERT( nLNr1 <= 0xFFFF, "ID on ToolBox > 0xFFFF" );
                                 }
                                 else
                                 {
