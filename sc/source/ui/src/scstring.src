@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:57:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 21:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ String STR_ROWHEIGHT
     Text[ russian ] = "Âûñîòà";
     Text[ polish ] = "Wysokoœæ";
     Text[ japanese ] = "‚‚³";
-    Text[ chinese_traditional ] = "°ª";
+    Text[ chinese_traditional ] = "°ª«×";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ";
     Text[ greek ] = "¾øïò";
     Text[ korean ] = "³ôÀÌ";
@@ -882,11 +882,11 @@ String STR_COLWIDTH
     Text [ dutch ] = "Breedte" ;
     Text [ spanish ] = "Ancho" ;
     Text [ english_us ] = "Width" ;
-    Text[ chinese_simplified ] = "¿í";
+    Text[ chinese_simplified ] = "¿í¶È";
     Text[ russian ] = "Øèğèíà";
     Text[ polish ] = "Szerokoœæ";
     Text[ japanese ] = "•";
-    Text[ chinese_traditional ] = "¼e";
+    Text[ chinese_traditional ] = "¼e«×";
     Text[ arabic ] = "ÇáÚÑÖ";
     Text[ greek ] = "ĞëÜôïò";
     Text[ korean ] = "³Êºñ";
@@ -1044,11 +1044,11 @@ String SCSTR_EMPTY
     Text [ dutch ] = "- leeg -" ;
     Text [ spanish ] = "- vacío -" ;
     Text [ english_us ] = "- empty -" ;
-    Text[ chinese_simplified ] = "- ¿Õ°× -";
+    Text[ chinese_simplified ] = "- ¿ÕÈ± -";
     Text[ russian ] = "-ïóñòî -";
     Text[ polish ] = "- pusty -";
     Text[ japanese ] = "- ‹ó”’ -";
-    Text[ chinese_traditional ] = "- ªÅ¥Õ -";
+    Text[ chinese_traditional ] = "- ªÅ¯Ê -";
     Text[ arabic ] = "- İÇÑÛ -";
     Text[ greek ] = "- êåíü -";
     Text[ korean ] = "- ºñ¾úÀ½ -";
@@ -1071,11 +1071,11 @@ String SCSTR_NOTEMPTY
     Text [ dutch ] = "- niet leeg -" ;
     Text [ spanish ] = "- no vacío -" ;
     Text [ english_us ] = "- not empty -" ;
-    Text[ chinese_simplified ] = "- ²»¿Õ°× -";
+    Text[ chinese_simplified ] = "- ²»¿ÕÈ± -";
     Text[ russian ] = "- íå ïóñòî -";
     Text[ polish ] = "-nie pusty -";
     Text[ japanese ] = "- ‹ó”’‚È‚µ -";
-    Text[ chinese_traditional ] = "- ¤£ªÅ¥Õ -";
+    Text[ chinese_traditional ] = "- ¤£ªÅ¯Ê -";
     Text[ arabic ] = "- ÛíÑ İÇÑÛ -";
     Text[ greek ] = "- ü÷é êåíü -";
     Text[ korean ] = "- ºñ¾îÀÖÁö ¾ÊÀ½ -";
@@ -1836,11 +1836,11 @@ String SCSTR_HOR_JUSTIFY_STANDARD
     Text [ dutch ] = "Standaard horizontaal uitlijnen" ;
     Text [ spanish ] = "Alineación horizontal preterminada" ;
     Text [ english_us ] = "Horizontal alignment default" ;
-    Text[ chinese_simplified ] = "Ë®Æ½¶ÔÆë±ê×¼";
+    Text[ chinese_simplified ] = "Ë®Æ½¶ÔÆë ±ê×¼";
     Text[ russian ] = "Ãîğèçîíòàëüíîå âûğàâíèâàíèå (ñòàíäàğò)";
     Text[ polish ] = "Domyœlne wyrównanie w poziomie";
     Text[ japanese ] = "•W€‰¡ˆÊ’u";
-    Text[ chinese_traditional ] = "¤ô¥­¹ï»ô¼Ğ·Ç";
+    Text[ chinese_traditional ] = "¤ô¥­¹ï»ô ¼Ğ·Ç";
     Text[ arabic ] = "ãÍÇĞÇÉ ÃİŞíÉ ÇİÊÑÇÖíÉ";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "ĞñïåğéëïãŞ: Ïñéæüíôéá óôïß÷éóç";
@@ -1934,7 +1934,7 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text = "Vertikale Ausrichtung Standard" ;
     Text [ ENGLISH ] = "Adjust Standard" ;
     Text [ norwegian ] = "Tilpass Standard" ;
-    Text [ italian ] = "Allineamento standard verticale" ;
+    Text [ italian ] = "Allineamento verticale standard" ;
     Text [ portuguese_brazilian ] = "Ajustar Padr?o" ;
     Text [ portuguese ] = "Ajustar padrão na vertical" ;
     Text [ finnish ] = "Pystytasaus oletusarvona" ;
@@ -2164,7 +2164,7 @@ String SCSTR_PROTECTDOC
     Text [ english_us ] = "Protect Document" ;
     Text[ chinese_simplified ] = "±£»¤ÎÄµµ";
     Text[ russian ] = "Çàùèòà äîêóìåíòà";
-    Text[ polish ] = "Chroñ arkusz";
+    Text[ polish ] = "Chroñ dokument";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•ÛŒì";
     Text[ chinese_traditional ] = "«OÅ@¤å¥ó";
     Text[ arabic ] = "ÍãÇíÉ ÇáãÓÊäÏ";
@@ -2871,11 +2871,11 @@ String SCSTR_FIELDSEP
     Text [ swedish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{tom}\t32" ;
     Text [ finnish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32" ;
     Text [ english_us ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 " ;
-    Text[ chinese_simplified ] = ",\t44\t;\t59\t:\t58\t{ÖÆ±í·û}\t9\t{¿Õ°×}\t32";
+    Text[ chinese_simplified ] = ",\t44\t;\t59\t:\t58\t{ÖÆ±í·û}\t9\t{¿ÕÈ±}\t32";
     Text[ russian ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Ïğîáåë}\t32";
     Text[ polish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Pusty}\t32";
     Text[ japanese ] = ",\t44\t;\t59\t:\t58\t{ÀÌŞ}\t9\t{‹ó”’}\t32";
-    Text[ chinese_traditional ] = ",\t44\t;\t59\t:\t58\t{»sªí²Å}\t9\t{ªÅ¥Õ}\t32";
+    Text[ chinese_traditional ] = ",\t44\t;\t59\t:\t58\t{»sªí²Å}\t9\t{ªÅ¯Ê}\t32";
     Text[ arabic ] = ",\t44\t;\t59\t:\t58\t{ÚáÇãÉ ÌÏæáÉ}\t9\t{ãÓÇİÉ}\t32";
     Text[ greek ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{êåíü}\t32";
     Text[ korean ] = ",\t44\t;\t59\t:\t58\t{ÅÇ}\t9\t{°ø¹é}\t32";
@@ -3117,6 +3117,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
