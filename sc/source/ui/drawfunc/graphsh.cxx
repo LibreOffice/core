@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 15:17:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ void ScGraphicShell::Execute( SfxRequest& rReq )
 void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     BOOL bEnable = FALSE;
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -148,7 +148,7 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -166,7 +166,7 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
                 if( pPageView )
                 {
                     SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetMarkDescription() );
+                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );
