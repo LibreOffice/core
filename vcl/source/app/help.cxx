@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-29 13:13:10 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 14:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,10 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     SetTextColor( rStyleSettings.GetHelpTextColor() );
     SetTextAlign( ALIGN_TOP );
     SetBackground( Wallpaper( rStyleSettings.GetHelpColor() ) );
-    SetLineColor( COL_BLACK );
+    if( rStyleSettings.GetHelpColor().IsDark() )
+        SetLineColor( COL_WHITE );
+    else
+        SetLineColor( COL_BLACK );
     SetFillColor();
 
     SetHelpText( rText );
