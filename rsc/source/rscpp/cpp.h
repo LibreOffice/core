@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:39:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ int outputEval( int c );
 /* cpp2.c */
 int control( int counter );
 doinclude();
-dodefine();
+void dodefine();
 doif( int hash );
 openinclude( char *, int );
 hasdirectory(char *, char * );
