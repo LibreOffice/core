@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:07:19 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public abstract void finishWizard();
 
     public void finishWizard_1() {
-//        wizardClosed = true;
         finishWizard();
         Desktop.getDesktop(xMSF).removeTerminateListener(this);
     }
@@ -590,13 +589,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * perform a cancel.
      */
     public void cancelWizard_1() {
-        if (wizardClosed)
-           return;
-        else {
-            wizardClosed = true;
-            cancelWizard();
-            Desktop.getDesktop(xMSF).removeTerminateListener(this);
-        }
+        cancelWizard();
+        Desktop.getDesktop(xMSF).removeTerminateListener(this);
     }
 
     public void windowHidden() {
