@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:46:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ class PeStatus
                             F_Tok *             i_pFuncArray,
                             INT16 *             i_pTokTypeArray,
                             F_Tok               i_pDefault );
-                        ~PeStatus();
+    virtual             ~PeStatus();
 
     virtual void        Call_Handler(
                             INT16               i_nTokTypeId,
@@ -238,7 +238,7 @@ PeStatus<PE>::Call_Handler( INT16               i_nTokTypeId,
     }
     else
     {
-        for ( nPos; nPos < nSize; ++nPos )
+        for ( ; nPos < nSize; ++nPos )
         {
             if (CheckForCall(nPos, i_nTokTypeId, i_sTokenText))
                 return;
