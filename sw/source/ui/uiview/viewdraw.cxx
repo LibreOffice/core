@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:54:43 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
     uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
-        pOutliner->SetRefDevice(pSh->GetPrt());
+        pOutliner->SetRefDevice(pSh->GetDoc()->_GetRefDev());
         pOutliner->SetSpeller(xSpell);
         uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
         pOutliner->SetHyphenator( xHyphenator );
