@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:57:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,11 @@ GtkSalObject::~GtkSalObject()
         gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pSocket)),
                               m_pSocket );
         // get rid of the socket
-        gtk_widget_destroy( m_pSocket );
+        // actually the gtk_container_remove should let the ref count
+        // of the socket sink to 0 and destroy it (see signalDestroy)
+        // this is just a sanity check
+        if( m_pSocket )
+            gtk_widget_destroy( m_pSocket );
     }
 }
 
