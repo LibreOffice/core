@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2002-07-05 07:22:12 $
+#   last change: $Author: tra $ $Date: 2002-07-19 13:29:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=SHELL
 TARGET=sysshell
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -71,7 +72,9 @@ TARGET=sysshell
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=   $(SLO)$/systemshell.obj
+LIB1OBJFILES=$(SLO)$/systemshell.obj
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+LIB1ARCHIV= $(SLB)$/lib$(TARGET).a
 
 # --- Targets ------------------------------------------------------
 
