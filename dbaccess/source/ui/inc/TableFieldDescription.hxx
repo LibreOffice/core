@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:28:26 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace dbaui
         Window*                     m_pTabWindow;
 
         sal_Int32                   m_eDataType;
-        EFunctionType               m_eFunctionType;
+        sal_Int32                   m_eFunctionType;
         ETableFieldType             m_eFieldType;
         EOrderDir                   m_eOrderDir;
         sal_Int32                   m_nIndex;
@@ -120,6 +120,8 @@ namespace dbaui
 
         sal_Bool                operator==( const OTableFieldDesc& rDesc );
 
+        void                    clear();
+
         sal_Bool                IsVisible() const    { return m_bVisible;}
         sal_Bool                IsNumericDataType() const;
         sal_Bool                IsGroupBy() const    { return m_bGroupBy;}
@@ -139,7 +141,7 @@ namespace dbaui
         void                    SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit);
         void                    SetColWidth( sal_Int32 nWidth ) { m_nColWidth = nWidth; }
         void                    SetFieldIndex( sal_Int32 nFieldIndex ) { m_nIndex = nFieldIndex; }
-        void                    SetFunctionType( EFunctionType eTyp )   { m_eFunctionType = eTyp; }
+        void                    SetFunctionType( sal_Int32 eTyp )   { m_eFunctionType = eTyp; }
         void                    SetColumnId(sal_uInt16 _nColumnId) { m_nColumnId = _nColumnId; }
 
 
@@ -156,8 +158,15 @@ namespace dbaui
         sal_Int32               GetColWidth()       const { return m_nColWidth; }
         sal_Int32               GetFieldIndex()     const { return m_nIndex; }
         Window*                 GetTabWindow()      const { return m_pTabWindow;}
-        EFunctionType           GetFunctionType()   const { return m_eFunctionType; }
+        sal_Int32               GetFunctionType()   const { return m_eFunctionType; }
         sal_uInt16              GetColumnId()       const { return m_nColumnId;}
+
+        inline sal_Bool         isAggreateFunction()    const { return (m_eFunctionType & FKT_AGGREGATE) == FKT_AGGREGATE;  }
+        inline sal_Bool         isOtherFunction()       const { return (m_eFunctionType & FKT_OTHER)     == FKT_OTHER;      }
+        inline sal_Bool         isNumeric()             const { return (m_eFunctionType & FKT_NUMERIC)   == FKT_NUMERIC;    }
+        inline sal_Bool         isNoneFunction()        const { return  m_eFunctionType                  == FKT_NONE;       }
+        inline sal_Bool         isCondition()           const { return (m_eFunctionType & FKT_CONDITION) == FKT_CONDITION;  }
+        inline sal_Bool         isNumericOrAggreateFunction()   const { return isNumeric() || isAggreateFunction(); }
 
         sal_Bool                HasCriteria()       const
         {
