@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:17:59 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,15 @@ void FontCache::flush()
     while( nIndex >= 0 )
     {
         aPath = aPrinterPath.getToken( 0, ':', nIndex );
-        aPath.AppendAscii( "/pspfontcache" );
-        aStream.Open( aPath, STREAM_WRITE | STREAM_TRUNC );
-        if( aStream.IsOpen() && aStream.IsWritable() )
+        if( aPath.Len() ) // #i15112# never even attempt to write into root
         {
-            bHavePath = true;
-            break;
+            aPath.AppendAscii( "/pspfontcache" );
+            aStream.Open( aPath, STREAM_WRITE | STREAM_TRUNC );
+            if( aStream.IsOpen() && aStream.IsWritable() )
+            {
+                bHavePath = true;
+                break;
+            }
         }
     }
 
