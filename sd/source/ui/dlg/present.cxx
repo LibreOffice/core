@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-24 11:40:01 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,8 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     else
         aRbtStandard.Check( TRUE );
 
-    /// NEU
+/* #109180# change in behaviour, even when always start with current page is enabled, range settings are
+            still used
     BOOL bStartWithActualPage = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_START_ACTUAL_PAGE ) ).GetValue();
     if( bStartWithActualPage )
     {
@@ -196,7 +197,8 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
         aGrpRange.Enable( FALSE );
     }
     else
-        ChangeRangeHdl( this );
+*/
+    ChangeRangeHdl( this );
 
     ChangeMousepointerHdl( this );
     ClickWindowPresentationHdl( NULL );
