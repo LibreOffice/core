@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmteiro.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:32:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,11 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual USHORT           GetVersion( USHORT nFFVer ) const;
 };
 
 inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(BOOL bInP) const
