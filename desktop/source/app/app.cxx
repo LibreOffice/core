@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:15:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include "javainteractionhandler.hxx"
+#include "../migration/wizard.hxx"
 
 #ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATION_HPP_
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
@@ -372,7 +373,15 @@ ResMgr* Desktop::GetDesktopResManager()
             as.SetUILanguage(aLanguageType);
             SetSettings(as);
 */
-            ::com::sun::star::lang::Locale aLocale;
+            LanguageSelection langselect;
+            OUString aUILocaleString = LanguageSelection::getLanguageString();
+            sal_Int32 nIndex = 0;
+            OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
+            OUString aCountry = aUILocaleString.getToken( 0, '-', nIndex);
+            OUString aVariant = aUILocaleString.getToken( 0, '-', nIndex);
+
+            ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, aVariant );
+
             Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
             AllSettings as = GetSettings();
             as.SetUILocale(aLocale);
@@ -1381,6 +1390,12 @@ void Desktop::Main()
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
 
+        com::sun::star::uno::ContextLayer layer(
+            com::sun::star::uno::getCurrentContext() );
+
+        com::sun::star::uno::setCurrentContext(
+            new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
+
         ConfigurationErrorHandler aConfigErrHandler;
         if (!ShouldSuppressUI(pCmdLineArgs))
             aConfigErrHandler.activate();
@@ -1496,21 +1511,15 @@ void Desktop::Main()
         // initialize test-tool library (if available)
         tools::InitTestToolLib();
 
-        // License Dialog
-        Reference< XJob > xLicense(xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.License" ))), UNO_QUERY );
-        if (xLicense.is())
-        {
-            sal_Bool bAccepted = sal_False;
-            Any aResult = xLicense->execute(Sequence< NamedValue >());
-            if ( !((aResult >>= bAccepted) && bAccepted))
-            {
-                Reference< XDesktop > xDesktop( xSMgr->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"))),UNO_QUERY);
-                xDesktop.is() && xDesktop->terminate();
-                return; // License was declined, exit bootstrap routine
-            }
+        // First Start Wizard
+        FirstStartWizard fsw(NULL);
+        if (!fsw.Execute()) {
+            Reference< XDesktop > xDesktop( xSMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"))),UNO_QUERY);
+            xDesktop.is() && xDesktop->terminate();
+            return;
         }
+
         SetSplashScreenProgress(50);
 
         // Backing Component
