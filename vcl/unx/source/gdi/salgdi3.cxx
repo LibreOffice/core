@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-04 16:15:22 $
+ *  last change: $Author: pl $ $Date: 2001-04-04 17:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1526,9 +1526,9 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
             pMetric->mnLastChar     = 255;
 
             pMetric->mnWidth        = nTextWidth;
-            pMetric->mnAscent       = aInfo.m_nAscend * nTextHeight / 1000;
-            pMetric->mnDescent      = aInfo.m_nDescend * nTextHeight / 1000;
-            pMetric->mnLeading      = aInfo.m_nLeading * nTextHeight / 1000;
+            pMetric->mnAscent       = ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000;
+            pMetric->mnDescent      = ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000;
+            pMetric->mnLeading      = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
         }
     }
     else
