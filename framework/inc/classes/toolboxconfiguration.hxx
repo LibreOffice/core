@@ -5,7 +5,7 @@
 #include <svtools/svarray.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -30,21 +30,21 @@ namespace framework
 
 struct ToolBoxItemDescriptor
 {
-    Bitmap* pBmp;                       // Bitmap ptr not used by xml configuration
-    String  aBitmapName;                // bitmap name => use to find correct bmp file
-    String  aItemText;                  // label for this toolbox item
-    String  aURL;                       // URL command to dispatch
-    USHORT  nId;                        // internal id not used by xml configuration
-    USHORT  nItemBits;                  // properties for this toolbox item (WinBits)
-    USHORT  nItemType;                  // toolbox item type (BUTTON, SPACE, BREAK, SEPARATOR)
-    USHORT  nVisible;                   // toolbox item visible?
-    USHORT  nWidth;                     // width of a toolbox window (edit field, etc.)
-    USHORT  nUserDef;                   // user defined toolbox item (1=yes/0=no)
-    String  aHelpId;                    // A help id associated with this toolbox item
+    BitmapEx*   pBmpEx;                     // Bitmap ptr not used by xml configuration
+    String      aBitmapName;                // bitmap name => use to find correct bmp file
+    String      aItemText;                  // label for this toolbox item
+    String      aURL;                       // URL command to dispatch
+    USHORT      nId;                        // internal id not used by xml configuration
+    USHORT      nItemBits;                  // properties for this toolbox item (WinBits)
+    USHORT      nItemType;                  // toolbox item type (BUTTON, SPACE, BREAK, SEPARATOR)
+    USHORT      nVisible;                   // toolbox item visible?
+    USHORT      nWidth;                     // width of a toolbox window (edit field, etc.)
+    USHORT      nUserDef;                   // user defined toolbox item (1=yes/0=no)
+    String      aHelpId;                    // A help id associated with this toolbox item
 
     public:
 
-        ToolBoxItemDescriptor() : pBmp( 0 )
+        ToolBoxItemDescriptor() : pBmpEx( 0 )
                                  ,nId( 0 )
                                  ,nItemBits( 0 )
                                  ,nItemType( (USHORT)TOOLBOXITEM_SPACE )
