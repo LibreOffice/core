@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:19:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ slovak ] = "Vybrať jazyk";
 };
  // ********************************************************************** EOF
+
 
 
 
