@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:38:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,111 +77,27 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 172 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "A~ufsteigend" ;
-        Text [ ENGLISH ] = "~Ascending" ;
-        Text [ norwegian ] = "St~igende" ;
-        Text [ italian ] = "Crescente" ;
-        Text [ portuguese_brazilian ] = "~Ascendente" ;
-        Text [ portuguese ] = "~Ascendente" ;
-        Text [ finnish ] = "Nouseva" ;
-        Text [ danish ] = "St~igende" ;
-        Text [ french ] = "Croissant" ;
-        Text [ swedish ] = "Stig~ande" ;
-        Text [ dutch ] = "Op~lopend" ;
-        Text [ spanish ] = "~Ascendente" ;
-        Text [ english_us ] = "~Ascending" ;
+        Text [ de ] = "A~ufsteigend" ;
+        Text [ en-US ] = "~Ascending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä¸Š(~A)";
-        Text[ russian ] = "Ïî âî~çğàñòàíèş";
-        Text[ polish ] = "~Rosn¹co";
-        Text[ japanese ] = "æ˜‡é †(~A)";
-        Text[ chinese_traditional ] = "å‘ä¸Š(~A)";
-        Text[ arabic ] = "ÊÕÇÚÏí";
-        Text[ greek ] = "Áıîïõóá";
-        Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ(~A)";
-        Text[ turkish ] = "A~rtan düzende";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ascendent";
-        Text[ thai ] = "à¸ˆà¸²à¸~à¸™à¹‰à¸­à¸¢à¹„à¸›à¸«à¸²à¸¡à¸²à¸";
-        Text[ czech ] = "VzestupnÄ›";
-        Text[ hebrew ] = "A~ufsteigend";
-        Text[ hindi ] = "~à¤…à¤°à¥‹à¤¹à¤£ à¤•à¥à¤°à¤®";
-        Text[ slovak ] = "Vzostupn~e";
-        Text[ hungarian ] = "~NÃ¶vekvÅ‘";
-        Text[ slovenian ] = "N~araÅ¡ÄajoÄe";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DOWN1
     {
         Pos = MAP_APPFONT ( 172 , 28 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "A~bsteigend" ;
-        Text [ ENGLISH ] = "~Descending" ;
-        Text [ norwegian ] = "~Synkende" ;
-        Text [ italian ] = "Decrescente" ;
-        Text [ portuguese_brazilian ] = "~Descendente" ;
-        Text [ portuguese ] = "~Descendente" ;
-        Text [ finnish ] = "Laskeva" ;
-        Text [ danish ] = "Fal~dende" ;
-        Text [ french ] = "Décroissant" ;
-        Text [ swedish ] = "~Fallande" ;
-        Text [ dutch ] = "A~flopend" ;
-        Text [ spanish ] = "~Descendente" ;
-        Text [ english_us ] = "~Descending" ;
+        Text [ de ] = "A~bsteigend" ;
+        Text [ en-US ] = "~Descending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä¸‹(~D)";
-        Text[ russian ] = "Ïî óáûâàíèş";
-        Text[ polish ] = "M~alej¹co";
-        Text[ japanese ] = "é™é †(~D)";
-        Text[ chinese_traditional ] = "å‘ä¸‹(~D)";
-        Text[ arabic ] = "ÊäÇÒáí";
-        Text[ greek ] = "Öèßíïõóá";
-        Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ(~D)";
-        Text[ turkish ] = "A~zalan düzende";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Descendent";
-        Text[ thai ] = "à¸ˆà¸²à¸~à¸¡à¸²à¸à¹„à¸›à¸«à¸²à¸™à¹‰à¸­à¸¢";
-        Text[ czech ] = "SestupnÄ›";
-        Text[ hebrew ] = "A~bsteigend";
-        Text[ hindi ] = "~à¤…à¤µà¤°à¥‹à¤¹à¤£ à¤•à¥à¤°à¤®";
-        Text[ slovak ] = "Z~ostupne";
-        Text[ hungarian ] = "~CsÃ¶kkenÅ‘";
-        Text[ slovenian ] = "Pa~dajoÄe";
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT1
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "~Sortieren nach" ;
-        Text [ ENGLISH ] = "S~ort by" ;
-        Text [ norwegian ] = "Sortere etter" ;
-        Text [ italian ] = "Ordina per" ;
-        Text [ portuguese_brazilian ] = "Ordenar ~por" ;
-        Text [ portuguese ] = "~Ordenar por" ;
-        Text [ finnish ] = "Lajittelu~peruste" ;
-        Text [ danish ] = "~Sorter efter" ;
-        Text [ french ] = "~Trier selon" ;
-        Text [ swedish ] = "~Sortera efter" ;
-        Text [ dutch ] = "~Sorteren op" ;
-        Text [ spanish ] = "Ordenar según" ;
-        Text [ english_us ] = "Sort ~by" ;
-        Text[ chinese_simplified ] = "æ’åºæŒ‰ç…§(~B)";
-        Text[ russian ] = "Ñîğòèğîâàòü ïî";
-        Text[ polish ] = "Sortuj ~wed³ug";
-        Text[ japanese ] = "æœ€å„ªå…ˆã‚­ãƒ¼(~B)";
-        Text[ chinese_traditional ] = "æ’åºæŒ‰ç…§(~B)";
-        Text[ arabic ] = "İÑÒ ÍÓÈ";
-        Text[ greek ] = "Ôáîéíüìç~óç êáôÜ";
-        Text[ korean ] = "ì²«ì§¸ ê¸°ì¤€(~B)";
-        Text[ turkish ] = "Sıralama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ordena ~per";
-        Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¸¥à¸³à¸”à¸±à¸šà¹‚à¸”à¸¢";
-        Text[ czech ] = "SeÅ™adit podle";
-        Text[ hebrew ] = "~Sortieren nach";
-        Text[ hindi ] = "~à¤¸à¥‡ à¤¸à¥‹à¤°à¥à¤Ÿ à¤•à¤°à¥‹";
-        Text[ slovak ] = "Zor~adiÅ¥ podÄ¾a";
-        Text[ hungarian ] = "~RendezÃ©si szempont";
-        Text[ slovenian ] = "Razvrs~ti po";
+        Text [ de ] = "~Sortieren nach" ;
+        Text [ en-US ] = "Sort ~by" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_SORT2
     {
@@ -195,111 +111,27 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 172 , 55 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "Au~fsteigend" ;
-        Text [ ENGLISH ] = "A~scending" ;
-        Text [ norwegian ] = "Stige~nde" ;
-        Text [ italian ] = "Cre~scente" ;
-        Text [ portuguese_brazilian ] = "Ascend~ente" ;
-        Text [ portuguese ] = "Ascenden~te" ;
-        Text [ finnish ] = "Nouseva" ;
-        Text [ danish ] = "Sti~gende" ;
-        Text [ french ] = "Croissant" ;
-        Text [ swedish ] = "St~igande" ;
-        Text [ dutch ] = "Oplope~nd" ;
-        Text [ spanish ] = "A~scendente" ;
-        Text [ english_us ] = "A~scending" ;
+        Text [ de ] = "Au~fsteigend" ;
+        Text [ en-US ] = "A~scending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä¸Š(~S)";
-        Text[ russian ] = "Ïî âîçğàñ~òàíèş";
-        Text[ polish ] = "R~osn¹co";
-        Text[ japanese ] = "æ˜‡é †(~S)";
-        Text[ chinese_traditional ] = "å‘ä¸Š(~S)";
-        Text[ arabic ] = "ÊÕÇÚÏí";
-        Text[ greek ] = "Áıîïõóá";
-        Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ(~S)";
-        Text[ turkish ] = "Ar~tan düzende";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~scendent";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸™à¹‰~à¸­à¸¢à¹„à¸›à¸«à¸²à¸¡à¸²à¸";
-        Text[ czech ] = "VzestupnÄ›";
-        Text[ hebrew ] = "Au~fsteigend";
-        Text[ hindi ] = "à¤…~à¤°à¥‹à¤¹à¤£ à¤•à¥à¤°à¤®";
-        Text[ slovak ] = "Vzo~stupne";
-        Text[ hungarian ] = "NÃ¶~vekvÅ‘";
-        Text[ slovenian ] = "Nara~Å¡ÄajoÄe";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DOWN2
     {
         Pos = MAP_APPFONT ( 172 , 69 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "Abstei~gend" ;
-        Text [ ENGLISH ] = "D~escending" ;
-        Text [ norwegian ] = "S~ynkende" ;
-        Text [ italian ] = "Decresce~nte" ;
-        Text [ portuguese_brazilian ] = "D~escendente" ;
-        Text [ portuguese ] = "D~escendente" ;
-        Text [ finnish ] = "Laskeva" ;
-        Text [ danish ] = "~Faldende" ;
-        Text [ french ] = "Décroissant" ;
-        Text [ swedish ] = "Fa~llande" ;
-        Text [ dutch ] = "Aflo~pend" ;
-        Text [ spanish ] = "D~escendente" ;
-        Text [ english_us ] = "D~escending" ;
+        Text [ de ] = "Abstei~gend" ;
+        Text [ en-US ] = "D~escending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä¸‹(~E)";
-        Text[ russian ] = "Ïî óáûâàíèş";
-        Text[ polish ] = "Ma~lej¹co";
-        Text[ japanese ] = "é™é †(~E)";
-        Text[ chinese_traditional ] = "å‘ä¸‹(~E)";
-        Text[ arabic ] = "ÊäÇÒáí";
-        Text[ greek ] = "Öèßíïõóá";
-        Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ(~E)";
-        Text[ turkish ] = "Aza~lan düzende";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "D~escendent";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸¡à¸²~à¸à¹„à¸›à¸«à¸²à¸™à¹‰à¸­à¸¢";
-        Text[ czech ] = "SestupnÄ›";
-        Text[ hebrew ] = "Abstei~gend";
-        Text[ hindi ] = "à¤…~à¤µà¤°à¥‹à¤¹à¤£ à¤•à¥à¤°à¤®";
-        Text[ slovak ] = "Zostupn~e";
-        Text[ hungarian ] = "CsÃ¶~kkenÅ‘";
-        Text[ slovenian ] = "PadajoÄ~e";
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT2
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "~Anschließend nach" ;
-        Text [ ENGLISH ] = "~Then by" ;
-        Text [ norwegian ] = "Og så etter" ;
-        Text [ italian ] = "poi per" ;
-        Text [ portuguese_brazilian ] = "Em se~guida por" ;
-        Text [ portuguese ] = "~Depois por" ;
-        Text [ finnish ] = "Toinen lajitteluehto" ;
-        Text [ danish ] = "~Dernæst efter" ;
-        Text [ french ] = "~Puis selon" ;
-        Text [ swedish ] = "S~edan efter" ;
-        Text [ dutch ] = "~Daarna op" ;
-        Text [ spanish ] = "Después según" ;
-        Text [ english_us ] = "Then b~y" ;
-        Text[ chinese_simplified ] = "ç„¶åæŒ‰ç…§(~Y)";
-        Text[ russian ] = "Çàòåì ïî";
-        Text[ polish ] = "~Nastêpnie wed³ug";
-        Text[ japanese ] = "ï¼’ç•ªç›®ã«å„ªå…ˆã•ã‚Œã‚‹ã‚­ãƒ¼(~Y)";
-        Text[ chinese_traditional ] = "ç„¶å¾ŒæŒ‰ç…§(~Y)";
-        Text[ arabic ] = "Ëã ÍÓÈ";
-        Text[ greek ] = "Ê~áôüğéí êáôÜ";
-        Text[ korean ] = "ë‘˜ì§¸ ê¸°ì¤€(~Y)";
-        Text[ turkish ] = "~Hazırlayan";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Després p~er";
-        Text[ thai ] = "à¸•à¹ˆà¸­à¸ˆà¸²à¸à¸™à¸±à¹‰à¸™à¹‚à¸”à¸¢";
-        Text[ czech ] = "Potom podle";
-        Text[ hebrew ] = "~AnschlieÃŸend nach";
-        Text[ hindi ] = "à¤”à¤° ~à¤¸à¥‡";
-        Text[ slovak ] = "Potom po~dÄ¾a";
-        Text[ hungarian ] = "A~zutÃ¡n";
-        Text[ slovenian ] = "In na~to po";
+        Text [ de ] = "~Anschließend nach" ;
+        Text [ en-US ] = "Then b~y" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_SORT3
     {
@@ -313,111 +145,27 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 172 , 96 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "Aufs~teigend" ;
-        Text [ ENGLISH ] = "As~cending" ;
-        Text [ norwegian ] = "Stigend~e" ;
-        Text [ italian ] = "Crescen~te" ;
-        Text [ portuguese_brazilian ] = "Ascenden~te" ;
-        Text [ portuguese ] = "Ascenden~te" ;
-        Text [ finnish ] = "Nouseva" ;
-        Text [ danish ] = "Stige~nde" ;
-        Text [ french ] = "Croissant" ;
-        Text [ swedish ] = "Sti~gande" ;
-        Text [ dutch ] = "~Oplopend" ;
-        Text [ spanish ] = "As~cendente" ;
-        Text [ english_us ] = "As~cending" ;
+        Text [ de ] = "Aufs~teigend" ;
+        Text [ en-US ] = "As~cending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä¸Š(~C)";
-        Text[ russian ] = "Ïî âîçğàñòàíèş";
-        Text[ polish ] = "Ro~sn¹co";
-        Text[ japanese ] = "æ˜‡é †(~C)";
-        Text[ chinese_traditional ] = "å‘ä¸Š(~C)";
-        Text[ arabic ] = "ÊÕÇÚÏí";
-        Text[ greek ] = "Áıîïõóá";
-        Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ(~C)";
-        Text[ turkish ] = "Art~an düzende";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "As~cendent";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸™à¹‰à¸­~à¸¢à¹„à¸›à¸«à¸²à¸¡à¸²à¸";
-        Text[ czech ] = "VzestupnÄ›";
-        Text[ hebrew ] = "Aufs~teigend";
-        Text[ hindi ] = "à¤…à¤°à¥‹~à¤¹à¤£ à¤•à¥à¤°à¤®";
-        Text[ slovak ] = "Vzostupn~e";
-        Text[ hungarian ] = "NÃ¶v~ekvÅ‘";
-        Text[ slovenian ] = "NaraÅ¡~ÄajoÄe";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DOWN3
     {
         Pos = MAP_APPFONT ( 172 , 110 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "Absteigen~d" ;
-        Text [ ENGLISH ] = "De~scending" ;
-        Text [ norwegian ] = "Sy~nkende" ;
-        Text [ italian ] = "D~ecrescente" ;
-        Text [ portuguese_brazilian ] = "De~scendente" ;
-        Text [ portuguese ] = "De~scendente" ;
-        Text [ finnish ] = "Laskeva" ;
-        Text [ danish ] = "Fald~ende" ;
-        Text [ french ] = "Décroissant" ;
-        Text [ swedish ] = "Falla~nde" ;
-        Text [ dutch ] = "Aflopen~d" ;
-        Text [ spanish ] = "Desce~ndente" ;
-        Text [ english_us ] = "Desce~nding" ;
+        Text [ de ] = "Absteigen~d" ;
+        Text [ en-US ] = "Desce~nding" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä¸‹(~N)";
-        Text[ russian ] = "Ïî óáûâàíèş";
-        Text[ polish ] = "Malej¹~co";
-        Text[ japanese ] = "é™é †(~N)";
-        Text[ chinese_traditional ] = "å‘ä¸‹(~N)";
-        Text[ arabic ] = "ÊäÇÒáí";
-        Text[ greek ] = "Öèßíïõóá";
-        Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ(~N)";
-        Text[ turkish ] = "Azala~n düzende";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desce~ndent";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸¡à¸²à¸à¹„~à¸›à¸«à¸²à¸™à¹‰à¸­à¸¢";
-        Text[ czech ] = "SestupnÄ›";
-        Text[ hebrew ] = "Absteigen~d";
-        Text[ hindi ] = "à¤…à¤µà¤°à¥‹à¤¹~à¤£ à¤•à¥à¤°à¤®";
-        Text[ slovak ] = "Zostup~ne";
-        Text[ hungarian ] = "CsÃ¶kke~nÅ‘";
-        Text[ slovenian ] = "Pada~joÄe";
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT3
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "A~nschließend nach" ;
-        Text [ ENGLISH ] = "T~hen by" ;
-        Text [ norwegian ] = "Og så etter" ;
-        Text [ italian ] = "poi per" ;
-        Text [ portuguese_brazilian ] = "E~m seguida por" ;
-        Text [ portuguese ] = "~Depois por" ;
-        Text [ finnish ] = "Lisälajittelu~ehto" ;
-        Text [ danish ] = "~Dernæst efter" ;
-        Text [ french ] = "P~uis selon" ;
-        Text [ swedish ] = "Se~dan efter" ;
-        Text [ dutch ] = "D~aarna op" ;
-        Text [ spanish ] = "Después según" ;
-        Text [ english_us ] = "T~hen by" ;
-        Text[ chinese_simplified ] = "ç„¶åæŒ‰ç…§(~H)";
-        Text[ russian ] = "Â ïîñëåäíşş î÷åğåäü ïî";
-        Text[ polish ] = "Nas~têpnie wed³ug";
-        Text[ japanese ] = "ï¼“ç•ªç›®ã«å„ªå…ˆã•ã‚Œã‚‹ã‚­ãƒ¼(~H)";
-        Text[ chinese_traditional ] = "ç„¶å¾ŒæŒ‰ç…§(~H)";
-        Text[ arabic ] = "Ëã ÍÓÈ";
-        Text[ greek ] = "Êáôüğé~í êáôÜ";
-        Text[ korean ] = "ì…‹ì§¸ ê¸°ì¤€(~H)";
-        Text[ turkish ] = "Sonraki kural:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desp~rés per";
-        Text[ thai ] = "à¸•à¹ˆà¸­à¸ˆà¸²à¸à¸™à¸±à¹‰à¸™à¹‚à¸”à¸¢";
-        Text[ czech ] = "Potom podle";
-        Text[ hebrew ] = "A~nschlieÃŸend nach";
-        Text[ hindi ] = "à¤”~à¤° à¤¸à¥‡";
-        Text[ slovak ] = "~Potom podÄ¾a";
-        Text[ hungarian ] = "Az~utÃ¡n";
-        Text[ slovenian ] = "I~n nato po";
+        Text [ de ] = "A~nschließend nach" ;
+        Text [ en-US ] = "T~hen by" ;
+        Text [ x-comment ] = " ";
     };
 };
 TabPage RID_SCPAGE_SORT_OPTIONS
@@ -431,38 +179,10 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 6 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text = "~Groß-/Kleinschreibung beachten" ;
-        Text [ ENGLISH ] = "~Case sensitive" ;
-        Text [ norwegian ] = "~Case sensitive" ;
-        Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~Diferenciar maiúsculas/minúsculas" ;
-        Text [ portuguese ] = "~Maiúsculas/Minúsculas" ;
-        Text [ finnish ] = "Kirjainkoon ~erottelu" ;
-        Text [ danish ] = "~STORE og små bogstaver" ;
-        Text [ french ] = "Respecter la casse" ;
-        Text [ swedish ] = "Versalkänsli~g" ;
-        Text [ dutch ] = "~Hoofdletters/kleine letters belangrijk" ;
-        Text [ spanish ] = "~Mayúsculas/minúsculas" ;
-        Text [ english_us ] = "Case ~sensitive" ;
+        Text [ de ] = "~Groß-/Kleinschreibung beachten" ;
+        Text [ en-US ] = "Case ~sensitive" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åŒºåˆ†å­—æ¯å¤§å°å†™(~S)";
-        Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "~Uwzglêdnij wielkoœæ liter";
-        Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~S)";
-        Text[ chinese_traditional ] = "å€åˆ†å­—æ¯å¤§å°å¯«(~S)";
-        Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
-        Text[ greek ] = "Óõìöùíßá ğåæşí-êåöáëáßùí";
-        Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ì êµ¬ë¶„(~S)";
-        Text[ turkish ] = "~Büyük/küçük harf duyarlı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Di~stingeix entre majúscules i minúscules";
-        Text[ thai ] = "à¸•à¸£à¸‡à¸•à¸²~à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
-        Text[ czech ] = "RozliÅ¡ovat malÃ¡/velkÃ¡ pÃ­smena";
-        Text[ hebrew ] = "~GroÃŸ-/Kleinschreibung beachten";
-        Text[ hindi ] = "à¤•à¥‡à¤¸ ~à¤¸à¤šà¥‡à¤¤à¤¨";
-        Text[ slovak ] = "RozliÅ¡ovaÅ¥ malÃ©/veÄ¾kÃ© pÃ­~smenÃ¡";
-        Text[ hungarian ] = "~Kis- Ã©s nagybetÅ±k megkÃ¼lÃ¶nbÃ¶ztetÃ©se";
-        Text[ slovenian ] = "Ra~zlikuj velike in male Ärke";
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_LABEL
     {
@@ -472,145 +192,31 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     String STR_COL_LABEL
     {
-        Text = "Bereich ~enthält Spaltenbeschriftungen" ;
-        Text [ ENGLISH ] = "Source with ~column headers" ;
-        Text [ norwegian ] = "Kilde med  ~kolonne topptekst" ;
-        Text [ italian ] = "L'area ~contiene intestazioni di colonna" ;
-        Text [ portuguese_brazilian ] = "Intervalo contém ~cabeçalhos de colunas" ;
-        Text [ portuguese ] = "Área contém ~cabeçalhos de colunas" ;
-        Text [ finnish ] = "Alue sisältää sarake~otsikkoja" ;
-        Text [ danish ] = "Området indeholder ~kolonneetiketter" ;
-        Text [ french ] = "La plage contient des étiquettes de colonne." ;
-        Text [ swedish ] = "Område innehåller ~kolumnetiketter" ;
-        Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
-        Text [ spanish ] = "El área contiene los títulos de las ~columnas" ;
-        Text [ english_us ] = "Range contains column la~bels" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡ç­¾";
-        Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
-        Text[ polish ] = "~Zakres zawiera nag³ówki kolumn";
-        Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~B)";
-        Text[ chinese_traditional ] = "ç¯„åœå«æœ‰æ¬„æ¨™ç±¤(~B)";
-        Text[ arabic ] = "ÊÊÖãä ÇáãäØŞÉ ÑÄæÓ ÃÚãÏÉ";
-        Text[ greek ] = "Ç ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì—´ ë ˆì´ë¸” í¬í•¨(~B)";
-        Text[ turkish ] = "Kenarlar sütun etiketlerinden oluşuyor";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "L'àrea conté ca~pçaleres de columnes";
-        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µ~à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-        Text[ czech ] = "Oblast obsahuje zÃ¡hlavÃ­ sloupcÅ¯";
-        Text[ hebrew ] = "Bereich ~enthÃ¤lt Spaltenbeschriftungen";
-        Text[ hindi ] = "à¤«à¥ˆà¤²à¤¾à¤µ à¤®à¥‡à¤‚ à¤¸à¥à¤¤à¤‚à¤­ ~à¤¶à¥€à¤°à¥à¤·à¤•à¥‡à¤‚ à¤¹à¥ˆ";
-        Text[ slovak ] = "OblasÅ¥ obsahuje zÃ¡~hlavia stÄºpcov";
-        Text[ hungarian ] = "A ~tartomÃ¡ny oszlopcÃ­mkÃ©ket tartalmaz";
-        Text[ slovenian ] = "Obseg vsebuje o~znake stolpcev";
+        Text [ de ] = "Bereich ~enthält Spaltenbeschriftungen" ;
+        Text [ en-US ] = "Range contains column la~bels" ;
     };
     String STR_ROW_LABEL
     {
-        Text = "Bereich ~enthält Zeilenbeschriftungen" ;
-        Text [ ENGLISH ] = "Source with ~row headers" ;
-        Text [ norwegian ] = "Kilde med rad topptekst" ;
-        Text [ italian ] = "L'intervallo contiene diciture di riga" ;
-        Text [ portuguese_brazilian ] = "Intervalo contém ~cabeçalhos de linhas" ;
-        Text [ portuguese ] = "Área contém ~cabeçalhos de linhas" ;
-        Text [ finnish ] = "Alue sisältää ~riviotsikoita" ;
-        Text [ danish ] = "Området indeholder ~rækkeetiketter" ;
-        Text [ french ] = "La plage contient des étiquettes de ligne." ;
-        Text [ swedish ] = "Område innehåller ~radetiketter" ;
-        Text [ dutch ] = "Bereik bevat ~rijkoppen" ;
-        Text [ spanish ] = "El área contiene los títulos de las ~filas" ;
-        Text [ english_us ] = "Range contains ~row labels" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰è¡Œæ ‡ç­¾";
-        Text[ russian ] = "Çàãîëîâêè ñòğîê â îáëàñòè";
-        Text[ polish ] = "Z~akres zawiera nag³ówki wierszy";
-        Text[ japanese ] = "ç¯„å›²ã«è¡Œã®é …ç›®æ¬„ã‚’å«ã‚€(~R)";
-        Text[ chinese_traditional ] = "ç¯„åœå«æœ‰åˆ—æ¨™ç±¤(~R)";
-        Text[ arabic ] = "ÊÊÖãä ÇáãäØŞÉ ÑÄæÓ Õİæİ";
-        Text[ greek ] = "Ç ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò ãñáììşí";
-        Text[ korean ] = "ë²”ìœ„ì— í–‰ ë ˆì´ë¸”ì´ í¬í•¨(~R)";
-        Text[ turkish ] = "Sınır ~satır etiketlerini içerir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "L'àrea conté capçaleres de fil~es";
-        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¹~à¸–à¸§";
-        Text[ czech ] = "Oblast obsahuje zÃ¡hlavÃ­ Å™Ã¡dkÅ¯";
-        Text[ hebrew ] = "Bereich ~enthÃ¤lt Zeilenbeschriftungen";
-        Text[ hindi ] = "à¤«à¥ˆà¤²à¤¾à¤µ à¤®à¥‡à¤‚ ~à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤¶à¥€à¤°à¥à¤·à¤•à¥‡à¤‚ à¤¹à¥ˆ";
-        Text[ slovak ] = "OblasÅ¥ obsahuje zÃ¡hlavia ~riadkov";
-        Text[ hungarian ] = "A tartomÃ¡ny ~sorcÃ­mkÃ©ket tartalmaz";
-        Text[ slovenian ] = "Obseg vsebuje oznake v~rstic";
+        Text [ de ] = "Bereich ~enthält Zeilenbeschriftungen" ;
+        Text [ en-US ] = "Range contains ~row labels" ;
     };
     CheckBox BTN_FORMATS
     {
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text = "~Formate einschließen" ;
-        Text [ ENGLISH ] = "Include ~formats" ;
-        Text [ norwegian ] = "Inkluder formater " ;
-        Text [ italian ] = "Includi ~formati" ;
-        Text [ portuguese_brazilian ] = "Incluir ~formatos" ;
-        Text [ portuguese ] = "Incluir ~formatos" ;
-        Text [ finnish ] = "Sisällytä ~muodot" ;
-        Text [ danish ] = "Inkluder formater" ;
-        Text [ french ] = "Inclure les ~formats" ;
-        Text [ swedish ] = "Inkludera ~format" ;
-        Text [ dutch ] = "~Opmaak opnemen" ;
-        Text [ spanish ] = "Incluir ~formatos" ;
-        Text [ english_us ] = "Include ~formats" ;
+        Text [ de ] = "~Formate einschließen" ;
+        Text [ en-US ] = "Include ~formats" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åŒ…å«æ ¼å¼(~F)";
-        Text[ russian ] = "Âêëş÷àÿ ~ôîğìàòû";
-        Text[ polish ] = "Do³¹cz ~formaty";
-        Text[ japanese ] = "æ›¸å¼ã‚’å«ã‚€(~F)";
-        Text[ chinese_traditional ] = "åŒ…å«æ ¼å¼(~F)";
-        Text[ arabic ] = "ÊÖãíä ÇáÊäÓíŞÇÊ";
-        Text[ greek ] = "Íá óõìğåñéëç~öèïıí êáé ïé ìïñöİò";
-        Text[ korean ] = "ì„œì‹ í¬í•¨(~F)";
-        Text[ turkish ] = "~Formatlamayı da dikkate al";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Inclou els ~formats";
-        Text[ thai ] = "à¸£à¸§à¸¡~à¸£à¸¹à¸›à¹à¸šà¸š";
-        Text[ czech ] = "Zahrnout formÃ¡t";
-        Text[ hebrew ] = "~Formate einschlieÃŸen";
-        Text[ hindi ] = "~à¤°à¤šà¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "ZahrnÃºÅ¥ ~formÃ¡ty";
-        Text[ hungarian ] = "~FormÃ¡tummal egyÃ¼tt";
-        Text[ slovenian ] = "VkljuÄi ~oblike zapisa";
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_COPYRESULT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text = "Sortierergebnis ~ausgeben nach" ;
-        Text [ ENGLISH ] = "Result destinat~ion area" ;
-        Text [ norwegian ] = "Resultat målområde" ;
-        Text [ italian ] = "Area destina~zione risultato" ;
-        Text [ portuguese_brazilian ] = "~Copiar resultados da ordenação para" ;
-        Text [ portuguese ] = "~Copiar resultados da classificação para:" ;
-        Text [ finnish ] = "Kopioi ~lajittelutulokset:" ;
-        Text [ danish ] = "~Kopier sorteringsresultatet til:" ;
-        Text [ french ] = "Copier le résultat du tri vers" ;
-        Text [ swedish ] = "Sorteringsresult~at till" ;
-        Text [ dutch ] = "~Sorteerresultaat kopiëren naar" ;
-        Text [ spanish ] = "C~opiar resultado de clasificación en" ;
-        Text [ english_us ] = "~Copy sort results to:" ;
+        Text [ de ] = "Sortierergebnis ~ausgeben nach" ;
+        Text [ en-US ] = "~Copy sort results to:" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å¤åˆ¶æ’åºç»“æœåˆ°(~C)";
-        Text[ russian ] = "Âûäàâàòü ğå~çóëüòàòû ñîğòèğîâêè â";
-        Text[ polish ] = "~Kopiuj wyniki sortowania do:";
-        Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆçµæœã®è²¼ã‚Šä»˜ã‘å…ˆ(~C)";
-        Text[ chinese_traditional ] = "è¤‡è£½æ’åºçµæœåˆ°(~C)";
-        Text[ arabic ] = "äÓÎ äÊíÌÉ ÇáİÑÒ Åáì";
-        Text[ greek ] = "ÁíôéãñáöŞ áğïôåëåóìÜôùí ôáîéíüìçóçò óôï";
-        Text[ korean ] = "ì •ë ¬ ê²°ê³¼ë¥¼ ë‹¤ìŒ ìœ„ì¹˜ë¡œ ë³µì‚¬(~C)";
-        Text[ turkish ] = "Sıralama sonuçlarının kopyalanacağı ~yer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Copia els resultats de l'ordenació a:";
-        Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸à¹€à¸£à¸µà¸¢à¸‡à¸¥à¸³à¸”à¸±à¸šà¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œà¹„à¸›à¸¢à¸±à¸‡:";
-        Text[ czech ] = "KopÃ­rovat vÃ½sledky Å™azenÃ­ do:";
-        Text[ hebrew ] = "Sortierergebnis ~ausgeben nach";
-        Text[ hindi ] = "à¤®à¥‡à¤‚ à¤¸à¥‹à¤°à¥à¤Ÿ à¤¨à¤¤à¥€à¤œà¥‹à¤‚ à¤•à¤¾ ~à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤¬à¤¨à¤¾à¤“ :";
-        Text[ slovak ] = "~KopÃ­rovaÅ¥ triedenÃ© vÃ½sledky do:";
-        Text[ hungarian ] = "A ~rendezÃ©s eredmÃ©nyÃ©t ide mÃ¡solja:";
-        Text[ slovenian ] = "~Kopiraj rezultate razvrÅ¡Äanja v:";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_OUTAREA
     {
@@ -632,38 +238,10 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text = "~Benutzerdefinierte Sortierreihenfolge" ;
-        Text [ ENGLISH ] = "~Userdefined sort precedence" ;
-        Text [ norwegian ] = "~Brukerdefinert sorteringsrekkefølge " ;
-        Text [ italian ] = "Sequenza d'ordine definita dall'~utente" ;
-        Text [ portuguese_brazilian ] = "Ordem de classificação ~personalizada" ;
-        Text [ portuguese ] = "Ordem de classificação definida pelo ~utilizador" ;
-        Text [ finnish ] = "Mukautettu lajittelu~järjestys" ;
-        Text [ danish ] = "~Brugerdefineret sorteringsrækkefølge" ;
-        Text [ french ] = "Ordre de tri ~utilisateur" ;
-        Text [ swedish ] = "An~vändardefinierad sorteringsordning" ;
-        Text [ dutch ] = "~Door gebruiker gedefinieerde sorteervolgorde" ;
-        Text [ spanish ] = "Orden de clasificación definida por el usuario" ;
-        Text [ english_us ] = "Custom sort ~order" ;
+        Text [ de ] = "~Benutzerdefinierte Sortierreihenfolge" ;
+        Text [ en-US ] = "Custom sort ~order" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªå®šçš„æ’åºè§„åˆ™(~O)";
-        Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè, îïğåäåëåííûé ïîëüçîâàòåëåì";
-        Text[ polish ] = "~Niestandardowa kolejnoœæ sortowania";
-        Text[ japanese ] = "é †åºã®æŒ‡å®š(~O)";
-        Text[ chinese_traditional ] = "ä½¿ç”¨è€…è‡ªè¨‚æ’åºè¦å‰‡(~O)";
-        Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
-        Text[ greek ] = "ÓåéñÜ ôáîéíüìçóçò ïñéæüìåíç áğü ôïí ÷ñŞóôç";
-        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ì •ë ¬ ìˆœì„œ(~O)";
-        Text[ turkish ] = "~Kullanıcı tanımlı sıralama düzeni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus d'~ordenació personalitzat";
-        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸à¸²à¸£à¹€à¸£à¸µà¸¢à¸‡~à¸¥à¸³à¸”à¸±à¸šà¹€à¸­à¸‡";
-        Text[ czech ] = "VlastnÃ­ poÅ™adÃ­ Å™azenÃ­";
-        Text[ hebrew ] = "~Benutzerdefinierte Sortierreihenfolge";
-        Text[ hindi ] = "à¤¸à¥‹à¤°à¥à¤Ÿ ~à¤•à¥à¤°à¤® à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
-        Text[ slovak ] = "VlastnÃ© p~oradie triedenia";
-        Text[ hungarian ] = "EgyÃ©ni rendezÃ©si s~orrend";
-        Text[ slovenian ] = "Vrstni red p~o meri";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_SORT_USER
     {
@@ -678,35 +256,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 101 , 8 ) ;
-        Text = "S~prache" ;
-        Text [ ENGLISH ] = "L~anguage" ;
-        Text[ english_us ] = "~Language";
-        Text[ portuguese ] = "~Língua";
-        Text[ russian ] = "ßçûê";
-        Text[ greek ] = "Ãëşóóá";
-        Text[ dutch ] = "~Taal";
-        Text[ french ] = "~Langue";
-        Text[ spanish ] = "I~dioma";
-        Text[ italian ] = "~Lingua";
-        Text[ danish ] = "S~prog";
-        Text[ swedish ] = "S~pråk";
-        Text[ polish ] = "~Jêzyk";
-        Text[ portuguese_brazilian ] = "~Idioma";
-        Text[ japanese ] = "è¨€èª(~L)";
-        Text[ korean ] = "ì–¸ì–´ ì„¤ì •(~L)";
-        Text[ chinese_simplified ] = "è¯­è¨€(~L)";
-        Text[ chinese_traditional ] = "èªè¨€(~L)";
-        Text[ turkish ] = "Dil";
-        Text[ arabic ] = "ÇááÛÉ";
-        Text[ catalan ] = "Idioma";
-        Text[ finnish ] = "~Kieli";
-        Text[ thai ] = "~à¸ à¸²à¸©à¸²";
-        Text[ czech ] = "Jazyk";
-        Text[ hebrew ] = "â€®×©×¤×”â€¬";
-        Text[ hindi ] = "~à¤­à¤¾à¤·à¤¾";
-        Text[ slovak ] = "~Jazyk";
-        Text[ hungarian ] = "~Nyelv";
-        Text[ slovenian ] = "~Jezik";
+        Text [ de ] = "S~prache" ;
+        Text [ en-US ] = "~Language";
     };
     ListBox LB_LANGUAGE
     {
@@ -721,35 +272,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 119 , 104 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text = "Op~tionen" ;
-        Text [ ENGLISH ] = "O~ptions" ;
-        Text[ english_us ] = "O~ptions";
-        Text[ portuguese ] = "O~pções";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ greek ] = "Åğéëïãİò";
-        Text[ dutch ] = "O~pties";
-        Text[ french ] = "Op~tions";
-        Text[ spanish ] = "Opciones";
-        Text[ finnish ] = "A~setukset";
-        Text[ italian ] = "O~pzioni";
-        Text[ danish ] = "In~dstillinger";
-        Text[ swedish ] = "Al~ternativ";
-        Text[ polish ] = "O~pcje";
-        Text[ portuguese_brazilian ] = "O~pções";
-        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³(~P)";
-        Text[ korean ] = "ì˜µì…˜(~P)";
-        Text[ chinese_simplified ] = "é€‰é¡¹(~P)";
-        Text[ chinese_traditional ] = "é¸é …(~P)";
-        Text[ turkish ] = "Seçe~nekler";
-        Text[ arabic ] = "O~ptions";
-        Text[ catalan ] = "O~pcions";
-        Text[ thai ] = "à¸•à¸±~à¸§à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "MoÅ¾nosti";
-        Text[ hebrew ] = "Op~tionen";
-        Text[ hindi ] = "à¤µà¤¿~à¤•à¤²à¥à¤ª";
-        Text[ slovak ] = "MoÅ¾no~sti";
-        Text[ hungarian ] = "B~eÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "MoÅ¾no~sti";
+        Text [ de ] = "Op~tionen" ;
+        Text [ en-US ] = "O~ptions";
     };
     ListBox LB_ALGORITHM
     {
@@ -763,147 +287,35 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 133 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Richtung" ;
-        Text [ ENGLISH ] = "Direction" ;
-        Text [ norwegian ] = "Retning" ;
-        Text [ italian ] = "Direzione" ;
-        Text [ portuguese_brazilian ] = "Direção" ;
-        Text [ portuguese ] = "Direcção" ;
-        Text [ finnish ] = "Suunta" ;
-        Text [ danish ] = "Retning" ;
-        Text [ french ] = "Direction" ;
-        Text [ swedish ] = "Riktning" ;
-        Text [ dutch ] = "Richting" ;
-        Text [ spanish ] = "Dirección" ;
-        Text [ english_us ] = "Direction" ;
-        Text[ chinese_simplified ] = "æ–¹å‘";
-        Text[ russian ] = "Íàïğàâëåíèå";
-        Text[ polish ] = "Kierunek";
-        Text[ japanese ] = "æ–¹å‘";
-        Text[ chinese_traditional ] = "æ–¹å‘";
-        Text[ arabic ] = "ÇáÇÊÌÇå";
-        Text[ greek ] = "Êáôåıèõíóç";
-        Text[ korean ] = "ë°©í–¥";
-        Text[ turkish ] = "Yön";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Direcció";
-        Text[ thai ] = "à¸—à¸´à¸¨à¸—à¸²à¸‡";
-        Text[ czech ] = "SmÄ›r";
-        Text[ hebrew ] = "Richtung";
-        Text[ hindi ] = "à¤¦à¤¿à¤¶à¤¾";
-        Text[ slovak ] = "Smer";
-        Text[ hungarian ] = "IrÃ¡ny";
-        Text[ slovenian ] = "Smer";
+        Text [ de ] = "Richtung" ;
+        Text [ en-US ] = "Direction" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_TOP_DOWN
     {
         Pos = MAP_APPFONT ( 12 , 144 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text = "Von ~oben nach unten (Zeilen sortieren)" ;
-        Text [ ENGLISH ] = "~Top to bottom (sort rows)" ;
-        Text [ norwegian ] = "~Topp til bunn (sorter rader)" ;
-        Text [ italian ] = "Dall'~alto verso il basso (ordina righe)" ;
-        Text [ portuguese_brazilian ] = "De ~cima para baixo (ordenar linhas)" ;
-        Text [ portuguese ] = "De ~cima para baixo (ordenar linhas)" ;
-        Text [ finnish ] = "Yl~häältä alas (rivien lajittelu)" ;
-        Text [ danish ] = "F~ra øverst til nederst (sorter rækker)" ;
-        Text [ french ] = "De ~haut en bas (tri de lignes)" ;
-        Text [ swedish ] = "Uppifrån ~och ned (sortera rader)" ;
-        Text [ dutch ] = "Van ~boven naar beneden (rijen sorteren)" ;
-        Text [ spanish ] = "De ~arriba hacia abajo (ordenar filas)" ;
-        Text [ english_us ] = "~Top to bottom (sort rows)" ;
+        Text [ de ] = "Von ~oben nach unten (Zeilen sortieren)" ;
+        Text [ en-US ] = "~Top to bottom (sort rows)" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä»ä¸Šå‘ä¸‹(è¡Œæ’åº) (~T)";
-        Text[ russian ] = "Ñâåğõó âíèç (ñîğòèğîâêà ñòğîê)";
-        Text[ polish ] = "Sortuj wiersze od ~góry do do³u";
-        Text[ japanese ] = "ä¸Šã‹ã‚‰ä¸‹ã¸(è¡Œã‚’ä¸¦ã¹æ›¿ãˆã‚‹)(~T)";
-        Text[ chinese_traditional ] = "å¾ä¸Šå‘ä¸‹(æ’åºåˆ—) (~T)";
-        Text[ arabic ] = "ãä ÃÚáì Åáì ÃÓİá (İÑÒ ÇáÕİæİ)";
-        Text[ greek ] = "Áğü ğÜíù ğñ~ïò ôá êÜôù (ôáîéíüìçóç ãñáììşí)";
-        Text[ korean ] = "ìœ„ì—ì„œ ì•„ë˜ë¡œ(í–‰ ì •ë ¬)(~T)";
-        Text[ turkish ] = "~Yukarıdan aşağı (satırları sırala)";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "De dal~t a baix (ordena les files)";
-        Text[ thai ] = "~à¸šà¸™à¸¥à¸‡à¸¥à¹ˆà¸²à¸‡ (à¹€à¸£à¸µà¸¢à¸‡à¹à¸–à¸§)";
-        Text[ czech ] = "Shora dolÅ¯ (seÅ™adit Å™Ã¡dky)";
-        Text[ hebrew ] = "Von ~oben nach unten (Zeilen sortieren)";
-        Text[ hindi ] = "~à¤Šà¤ªà¤° à¤¸à¥‡ à¤¨à¥€à¤šà¥‡ à¤¤à¤• (à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤¸à¥‹à¤°à¥à¤Ÿ à¤•à¤°à¥‹)";
-        Text[ slovak ] = "Zvrchu nadol (~triediÅ¥ riadky)";
-        Text[ hungarian ] = "F~elÃ¼lrÅ‘l lefelÃ© (sorok rendezÃ©se)";
-        Text[ slovenian ] = "Od ~zgoraj navzdol (razvrsti vrstice)";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_LEFT_RIGHT
     {
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text = "Von ~links nach rechts (Spalten sortieren)" ;
-        Text [ ENGLISH ] = "~Left to right (sort columns)" ;
-        Text [ norwegian ] = "~Venstre til høyre (sorter kolonner)" ;
-        Text [ italian ] = "~Da sinistra a destra (ordina colonne)" ;
-        Text [ portuguese_brazilian ] = "Da ~esquerda para a direita (ordenar colunas)" ;
-        Text [ portuguese ] = "Da ~esquerda para a direita (ordenar colunas)" ;
-        Text [ finnish ] = "~Vasemmalta oikealle (sarakkeiden lajittelu)" ;
-        Text [ danish ] = "Fra venstre til højre (sorter kolonner)" ;
-        Text [ french ] = "De gauche à droite (trier les colonnes)" ;
-        Text [ swedish ] = "Från vänster till höger (sortera kolumner)" ;
-        Text [ dutch ] = "Van ~links naar rechts (kolommen sorteren)" ;
-        Text [ spanish ] = "De ~izquierda a derecha (ordenar columnas)" ;
-        Text [ english_us ] = "L~eft to right (sort columns)" ;
+        Text [ de ] = "Von ~links nach rechts (Spalten sortieren)" ;
+        Text [ en-US ] = "L~eft to right (sort columns)" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä»å·¦å‘å³(åˆ—æ’åº)(~E)";
-        Text[ russian ] = "Ñëåâà íàïğàâî (ñîğòèğîâêà ñòîëáöîâ)";
-        Text[ polish ] = "Sortuj kolumny od ~lewej do prawej";
-        Text[ japanese ] = "å·¦ã‹ã‚‰å³ã¸(åˆ—ã®ä¸¦ã¹æ›¿ãˆ)(~E)";
-        Text[ chinese_traditional ] = "å¾å·¦å‘å³(æ’åºæ¬„)(~E)";
-        Text[ arabic ] = "ãä ÇáíÓÇÑ Åáì Çáíãíä (İÑÒ ÇáÃÚãÏÉ)";
-        Text[ greek ] = "Áğü áñéóôåñÜ ğñïò äåîéÜ (Ôáîéíüìçóç óôçëşí)";
-        Text[ korean ] = "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ(ì—´ ì •ë ¬)(~E)";
-        Text[ turkish ] = "Soldan ~sağa ( sütünları sırala)";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "D'es~querra a dreta (ordena les columnes)";
-        Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢à¹„à¸›à¸‚à¸§à¸² (à¹€à¸£à¸µà¸¢à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ)";
-        Text[ czech ] = "Zleva doprava (seÅ™adit sloupce)";
-        Text[ hebrew ] = "Von ~links nach rechts (Spalten sortieren)";
-        Text[ hindi ] = "à¤¬à¤¾~à¤¯à¤¾à¤ à¤“à¤° à¤¸à¥‡ à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤° (à¤¸à¥à¤¤à¤‚à¤­à¥‹à¤‚ à¤•à¥‹ à¤¸à¥‹à¤°à¥à¤Ÿ à¤•à¤°à¥‹)";
-        Text[ slovak ] = "ZÄ¾ava do prava (tri~ediÅ¥ stÄºpce)";
-        Text[ hungarian ] = "~BalrÃ³l jobbra (oszlopok rendezÃ©se)";
-        Text[ slovenian ] = "Od l~eve proti desni (razvrsti stolpce)";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_AREA_LABEL
     {
         Pos = MAP_APPFONT ( 6 , 171 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Datenbereich:" ;
-        Text [ ENGLISH ] = "Source data:" ;
-        Text [ norwegian ] = "Kildedata:" ;
-        Text [ italian ] = "Area dati:" ;
-        Text [ portuguese_brazilian ] = "Área de dados:" ;
-        Text [ portuguese ] = "Área de dados:" ;
-        Text [ finnish ] = "Tietoalue:" ;
-        Text [ danish ] = "Dataområde:" ;
-        Text [ french ] = "Plage de données :" ;
-        Text [ swedish ] = "Dataområde:" ;
-        Text [ dutch ] = "Gegevensbereik:" ;
-        Text [ spanish ] = "Área de datos:" ;
-        Text [ english_us ] = "Data area:" ;
-        Text[ chinese_simplified ] = "æ•°æ®åŒºåŸŸï¼š";
-        Text[ russian ] = "Îáëàñòü äàííûõ:";
-        Text[ polish ] = "Obszar danych:";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç¯„å›²:";
-        Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸï¼š";
-        Text[ arabic ] = "äØÇŞ ÇáÈíÇäÇÊ:";
-        Text[ greek ] = "Ğåñéï÷Ş åğéöÜíåéáò:";
-        Text[ korean ] = "ë°ì´í„° ì˜ì—­:";
-        Text[ turkish ] = "Veri alanı:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Àrea de dades:";
-        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
-        Text[ czech ] = "Oblast dat:";
-        Text[ hebrew ] = "Datenbereich:";
-        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£:";
-        Text[ slovak ] = "OblasÅ¥ dÃ¡t:";
-        Text[ hungarian ] = "AdatterÃ¼let:";
-        Text[ slovenian ] = "Podatkovno podroÄje:";
+        Text [ de ] = "Datenbereich:" ;
+        Text [ en-US ] = "Data area:" ;
+        Text [ x-comment ] = " ";
     };
 };
 TabDialog RID_SCDLG_SORT
@@ -911,19 +323,8 @@ TabDialog RID_SCDLG_SORT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 175 ) ;
-    Text = "Sortieren" ;
-    Text [ ENGLISH ] = "Sort" ;
-    Text [ norwegian ] = "Sorter" ;
-    Text [ italian ] = "Ordina" ;
-    Text [ portuguese_brazilian ] = "Ordenar" ;
-    Text [ portuguese ] = "Ordenar" ;
-    Text [ finnish ] = "Lajittele" ;
-    Text [ danish ] = "Sorter" ;
-    Text [ french ] = "Tri" ;
-    Text [ swedish ] = "Sortera" ;
-    Text [ dutch ] = "Sorteren" ;
-    Text [ spanish ] = "Ordenar" ;
-    Text [ english_us ] = "Sort" ;
+    Text [ de ] = "Sortieren" ;
+    Text [ en-US ] = "Sort" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     TabControl 1
@@ -937,73 +338,17 @@ TabDialog RID_SCDLG_SORT
             {
                 Identifier = TP_FIELDS ;
                 PageResID = TP_FIELDS ;
-                Text = "Sortierkriterien" ;
-                Text [ ENGLISH ] = "Criteria" ;
-                Text [ norwegian ] = "Criteria" ;
-                Text [ italian ] = "Criteri" ;
-                Text [ portuguese_brazilian ] = "Critérios de Ordenação" ;
-                Text [ portuguese ] = "Critérios de classificação" ;
-                Text [ finnish ] = "Lajitteluperuste" ;
-                Text [ danish ] = "Sorteringskriterier" ;
-                Text [ french ] = "Critères de tri" ;
-                Text [ swedish ] = "Sorteringskriterier" ;
-                Text [ dutch ] = "Sorteercriteria" ;
-                Text [ spanish ] = "Criterios" ;
-                Text [ english_us ] = "Sort Criteria" ;
-                Text[ chinese_simplified ] = "æ’åºæ ‡å‡†";
-                Text[ russian ] = "Óñëîâèÿ ñîğòèğîâêè";
-                Text[ polish ] = "Kryteria sortowania";
-                Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆæ¡ä»¶";
-                Text[ chinese_traditional ] = "æ’åºæ¨™æº–";
-                Text[ arabic ] = "ãÚÇííÑ ÇáİÑÒ";
-                Text[ greek ] = "ÊñéôŞñéá ôáîéíüìçóçò";
-                Text[ korean ] = "ì •ë ¬ ê¸°ì¤€";
-                Text[ turkish ] = "Sıralama ölçütleri";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Criteris d'ordenació";
-                Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¹€à¸à¸“à¸‘à¹Œ";
-                Text[ czech ] = "SeÅ™adit podle";
-                Text[ hebrew ] = "Sortierkriterien";
-                Text[ hindi ] = "à¤¸à¥‹à¤°à¥à¤Ÿ à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤¨à¥à¤¤";
-                Text[ slovak ] = "ZoradiÅ¥ podÄ¾a";
-                Text[ hungarian ] = "RendezÃ©si feltÃ©tel";
-                Text[ slovenian ] = "Kriteriji razvrÅ¡Äanja";
+                Text [ de ] = "Sortierkriterien" ;
+                Text [ en-US ] = "Sort Criteria" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_OPTIONS ;
                 PageResID = TP_OPTIONS ;
-                Text = "Optionen" ;
-                Text [ ENGLISH ] = "Options" ;
-                Text [ norwegian ] = "Options" ;
-                Text [ italian ] = "Opzioni" ;
-                Text [ portuguese_brazilian ] = "Opções" ;
-                Text [ portuguese ] = "Opções" ;
-                Text [ finnish ] = "Asetukset" ;
-                Text [ danish ] = "Indstillinger" ;
-                Text [ french ] = "Options" ;
-                Text [ swedish ] = "Alternativ" ;
-                Text [ dutch ] = "Opties" ;
-                Text [ spanish ] = "Opciones" ;
-                Text [ english_us ] = "Options" ;
-                Text[ chinese_simplified ] = "é€‰é¡¹";
-                Text[ russian ] = "Ïàğàìåòğû";
-                Text[ polish ] = "Opcje";
-                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-                Text[ chinese_traditional ] = "é¸é …";
-                Text[ arabic ] = "ÇáÎíÇÑÇÊ";
-                Text[ greek ] = "Åğéëïãİò";
-                Text[ korean ] = "ì˜µì…˜";
-                Text[ turkish ] = "Seçenekler";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Opcions";
-                Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-                Text[ czech ] = "Volby";
-                Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-                Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
-                Text[ slovak ] = "Nastavenia";
-                Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-                Text[ slovenian ] = "MoÅ¾nosti";
+                Text [ de ] = "Optionen" ;
+                Text [ en-US ] = "Options" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
@@ -1032,44 +377,7 @@ TabDialog RID_SCDLG_SORT
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "æ’åº";
-    Text[ russian ] = "Ñîğòèğîâêà";
-    Text[ polish ] = "Sortuj";
-    Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆ";
-    Text[ chinese_traditional ] = "æ’åº";
-    Text[ arabic ] = "ÇáİÑÒ";
-    Text[ greek ] = "Ôáîéíüìçóç";
-    Text[ korean ] = "ì •ë ¬";
-    Text[ turkish ] = "Sırala";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ordena";
-    Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡";
-    Text[ czech ] = "Å˜adit";
-    Text[ hebrew ] = "â€®××™×•×Ÿâ€¬";
-    Text[ hindi ] = "à¤¸à¥‹à¤°à¥à¤Ÿ";
-    Text[ slovak ] = "ZoradiÅ¥";
-    Text[ hungarian ] = "RendezÃ©s";
-    Text[ slovenian ] = "Razvrsti";
+    Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
