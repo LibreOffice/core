@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-27 12:37:24 $
+ *  last change: $Author: fs $ $Date: 2002-05-29 13:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,25 +204,19 @@ namespace svxform
     {
         SetHelpId( HID_FORM_NAVIGATOR );
 
-        {
-            ImageList aNodeBmps( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-            SetNodeBitmaps(
-                m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-                m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-                BMP_COLOR_NORMAL
-            );
-        }
-        {
-            ImageList aNodeBmps( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-            SetNodeBitmaps(
-                m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-                m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-                BMP_COLOR_HIGHCONTRAST
-            );
-        }
-
         m_aNavigatorImages = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
         m_aNavigatorImagesHC = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
+
+        SetNodeBitmaps(
+            m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+            BMP_COLOR_NORMAL
+        );
+        SetNodeBitmaps(
+            m_aNavigatorImagesHC.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+            m_aNavigatorImagesHC.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+            BMP_COLOR_HIGHCONTRAST
+        );
 
         SetDragDropMode(0xFFFF);
         EnableInplaceEditing( sal_True );
@@ -2209,6 +2203,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/05/27 12:37:24  fs
+ *  #99541# #99543#
+ *
  *  Revision 1.4  2002/05/17 11:57:02  fs
  *  #98725# draw icons if to-be-cut images semi-transparent
  *
