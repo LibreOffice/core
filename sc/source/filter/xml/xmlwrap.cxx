@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 11:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
 
 #include "document.hxx"
 #include "xmlwrap.hxx"
@@ -206,6 +209,22 @@ sal_Bool ScXMLImportWrapper::Import()
         }
 
         uno::Reference<task::XStatusIndicator> xStatusIndicator;
+        if (xModel.is())
+        {
+            uno::Reference<frame::XController> xController( xModel->getCurrentController());
+            if( xController.is())
+            {
+                uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+                if( xFrame.is())
+                {
+                    uno::Reference<task::XStatusIndicatorFactory> xFactory( xFrame, uno::UNO_QUERY );
+                    if( xFactory.is())
+                    {
+                        xStatusIndicator = xFactory->createStatusIndicator();
+                    }
+                }
+            }
+        }
 
         uno::Sequence<uno::Any> aArgs(2);
         uno::Any* pArgs = aArgs.getArray();
@@ -314,6 +333,22 @@ sal_Bool ScXMLImportWrapper::Export()
         }
 
         uno::Reference<task::XStatusIndicator> xStatusIndicator;
+        if (xModel.is())
+        {
+            uno::Reference<frame::XController> xController( xModel->getCurrentController());
+            if( xController.is())
+            {
+                uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+                if( xFrame.is())
+                {
+                    uno::Reference<task::XStatusIndicatorFactory> xFactory( xFrame, uno::UNO_QUERY );
+                    if( xFactory.is())
+                    {
+                        xStatusIndicator = xFactory->createStatusIndicator();
+                    }
+                }
+            }
+        }
 
         uno::Sequence<uno::Any> aArgs(3);
         uno::Any* pArgs = aArgs.getArray();
