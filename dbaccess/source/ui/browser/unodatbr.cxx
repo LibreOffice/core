@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 11:36:27 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 13:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,9 +1385,16 @@ void SbaTableQueryBrowser::RemoveColumnListener(const Reference< XPropertySet > 
 }
 
 //------------------------------------------------------------------------------
-void SbaTableQueryBrowser::FormLoaded(sal_Bool _bWasSynch)
+void SbaTableQueryBrowser::criticalFail()
 {
-    SbaXDataBrowserController::FormLoaded(_bWasSynch);
+    SbaXDataBrowserController::criticalFail();
+    unloadAndCleanup(sal_False, sal_False);
+}
+
+//------------------------------------------------------------------------------
+void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
+{
+    SbaXDataBrowserController::LoadFinished(_bWasSynch);
 
     // if the form has been loaded, this means that our "selection" has changed
     ::com::sun::star::lang::EventObject aEvt(*this);
@@ -1434,6 +1441,9 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
         aReturn.aState = ::cppu::bool2any(haveExplorer());
         return aReturn;
     }
+
+    if (!isLoaded())
+        return aReturn;
 
     try
     {
@@ -2160,20 +2170,13 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
 
             {
                 FormErrorHelper aHelper(this);
-                // load the row set
-                m_bLoadCanceled = sal_False;
-                if (xLoadable->isLoaded())
-                    // reload does not work if not already loaded
-                    xLoadable->reload();
-                else
-                    xLoadable->load();
+                // load the form
+                bSuccess = reloadForm(xLoadable);
 
                 // initialize the model
                 InitializeGridModel(getFormComponent());
 
-                FormLoaded(sal_True);
-
-                bSuccess = xLoadable->isLoaded() && !errorOccured();
+                LoadFinished(sal_True);
             }
 
             return bSuccess;
@@ -2396,9 +2399,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 // set the title of the beamer
                 setTitle(sDataSourceName,aName);
             else
-            {
-                // clean up
-                unloadAndCleanup(sal_False, sal_False);
+            {   // clean up
+                criticalFail();
             }
         }
         catch(SQLException& e)

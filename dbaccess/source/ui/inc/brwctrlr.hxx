@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-16 14:36:59 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 13:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
+#endif
+#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
+#include <com/sun/star/form/XLoadable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -212,6 +215,7 @@ namespace dbaui
 
         sal_Bool    isValid() const         { return m_xRowSet.is() && m_xGridModel.is(); }
         sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
+        sal_Bool    isLoaded() const;
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    getParser() const { return m_xParser; }
@@ -356,11 +360,17 @@ namespace dbaui
             // load the form
             // the default implementation does an direct load or starts a load thread, depending on the multithread capabilities
             // of the data source.
-            // the default implementation also calls FormLoaded after a syncronous load, so be sure to do the same if you override
+            // the default implementation also calls LoadFinished after a syncronous load, so be sure to do the same if you override
             // this metod and don't call the base class' method
 
-        virtual void FormLoaded(sal_Bool bWasSynch);
-            // called if the loading is done (no matter if synchron or asynchron).
+        virtual void LoadFinished(sal_Bool bWasSynch);
+            // called if the loading (the _complete_ loading process) is done (no matter if synchron or asynchron).
+
+        virtual void criticalFail();
+            // called whenever a reload operation on the rowset failed
+            // (a "operation" is not only a simple reload: If the user sets a filter, an reloading the form
+            // after setting this filter fails, the filter is reset and the form is reloaded, again. Only the
+            // whole process (_both_ XLoadable::reload calls _together_) form the "reload operation"
 
         // --------------------
 
@@ -387,12 +397,19 @@ namespace dbaui
             // So for error recognition the above methods may be used.
         // init the formatter if form changes
         void initFormatter();
+
+        /// loads or reloads the form
+        sal_Bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
+
     private:
         // execute the filter or sort slot
         void ExecuteFilterSortCrit(sal_Bool bFilter);
 
         // execute the search slot
         void ExecuteSearch();
+
+        void applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied);
+        void applyParserOrder(const ::rtl::OUString& _rOldOrder);
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK(OnInvalidateClipboard, void*);

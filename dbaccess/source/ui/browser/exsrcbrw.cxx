@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 14:28:02 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                 {
                     OSL_ENSURE(sal_False,
                         (   ByteString("SbaExternalSourceBrowser::dispatch : could not set a column property (")
-                        +=  ByteString(pControlProps->Name.getStr(), pControlProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        +=  ByteString(pControlProps->Name.getStr(), (sal_uInt16)pControlProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
                         +=  ByteString(")!")).GetBuffer());
                 }
             }
@@ -446,7 +446,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         initFormatter();
         // assume that the master form is already loaded, we have no chance to check this
         m_bLoadCanceled = sal_False;
-        FormLoaded(sal_True);
+        LoadFinished(sal_True);
 
         Reference< XResultSetUpdate >  xUpdate(xMaster, UNO_QUERY);
         try

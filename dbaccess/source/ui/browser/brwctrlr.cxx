@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-16 14:38:54 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 13:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,6 +602,22 @@ void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun
 }
 
 // -----------------------------------------------------------------------------
+sal_Bool SbaXDataBrowserController::reloadForm(const Reference< XLoadable >& _rxLoadable)
+{
+    WaitObject aWO(getBrowserView());
+
+    m_bLoadCanceled = sal_False;
+
+    FormErrorHelper aReportError(this);
+    if (_rxLoadable->isLoaded())
+        _rxLoadable->reload();
+    else
+        _rxLoadable->load();
+
+    return _rxLoadable->isLoaded() && !errorOccured();
+}
+
+// -----------------------------------------------------------------------------
 void SbaXDataBrowserController::initFormatter()
 {
     // ---------------------------------------------------------------
@@ -738,33 +754,20 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::LoadForm()
 {
-    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-    sal_Bool bThreadSafe(sal_False);
-    try
-    {
-        if(xFormSet->getPropertySetInfo()->hasPropertyByName(PROPERTY_THREADSAFE))
-            bThreadSafe = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_THREADSAFE));
-    }
-    catch(Exception&)
-    {
-    }
+//  sal_Bool bThreadSafe(sal_False);
+//  if (bThreadSafe)
+//  {   // load in an own thread so the office doesn't block meanwhile
+//      m_pLoadThread = new LoadFormThread(getRowSet(), m_sLoadStopperCaption);
+//      ((LoadFormThread*)m_pLoadThread)->SetTerminationHdl(LINK(this, SbaXDataBrowserController, OnOpenFinished));
+//      m_pLoadThread->create();
+//
+//      InvalidateAll();
+//      return sal_True;
+//  }
 
-
-    m_bLoadCanceled = sal_False;
-    if (bThreadSafe)
-    {   // load in an own thread so the office doesn't block meanwhile
-        m_pLoadThread = new LoadFormThread(getRowSet(), m_sLoadStopperCaption);
-        ((LoadFormThread*)m_pLoadThread)->SetTerminationHdl(LINK(this, SbaXDataBrowserController, OnOpenFinished));
-        m_pLoadThread->create();
-
-        InvalidateAll();
-    }
-    else
-    {
-        Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(),UNO_QUERY);
-        xLoadable->load();
-        FormLoaded(sal_True);
-    }
+    Reference< XLoadable > xLoadable(getRowSet(),UNO_QUERY);
+    xLoadable->load();
+    LoadFinished(sal_True);
     return sal_True;
 }
 //------------------------------------------------------------------------------
@@ -1541,7 +1544,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
                     break;  // no insert/update/delete -> no edit mode
 
-                if (!isValidCursor())
+                if (!isValidCursor() || !isLoaded())
                     break;  // no cursor -> no edit mode
 
                 aReturn.bEnabled = sal_True;
@@ -1583,6 +1586,92 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
     }
 
     return aReturn;
+}
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrder)
+{
+    Reference< XPropertySet > xFormSet(getRowSet(), UNO_QUERY);
+    Reference< XLoadable > xLoadable(getRowSet(), UNO_QUERY);
+
+    if (!xLoadable.is())
+    {
+        OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserOrder: invalid row set!");
+        return;
+    }
+
+    sal_Bool bSuccess = sal_False;
+    try
+    {
+        xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(m_xParser->getOrder()));
+        bSuccess = reloadForm(xLoadable);
+    }
+    catch(Exception&)
+    {
+    }
+
+    if (!bSuccess)
+    {
+        xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(_rOldOrder));
+        DO_SAFE( m_xParser->setOrder(_rOldOrder), "SbaXDataBrowserController::applyParserOrder: could not restore the old order of my parser !" );
+
+        try
+        {
+            if (m_bLoadCanceled || !reloadForm(xLoadable))
+                criticalFail();
+        }
+        catch(Exception&)
+        {
+            criticalFail();
+        }
+        InvalidateAll();
+    }
+    InvalidateFeature(ID_BROWSER_REMOVEFILTER);
+}
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied)
+{
+    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
+    Reference< XLoadable >  xLoadable(getRowSet(), UNO_QUERY);
+
+    if (!xLoadable.is())
+    {
+        OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserFilter: invalid row set!");
+        return;
+    }
+
+    sal_Bool bSuccess = sal_False;
+    try
+    {
+        FormErrorHelper aError(this);
+        xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(m_xParser->getFilter()));
+        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+
+        bSuccess = reloadForm(xLoadable);
+    }
+    catch(Exception&)
+    {
+    }
+
+    if (!bSuccess)
+    {
+        xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(_rOldFilter));
+        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(_bOldFilterApplied));
+        DO_SAFE( m_xParser->setFilter(_rOldFilter), "SbaXDataBrowserController::applyParserFilter: could not restore the old filter of my parser !" );
+
+        try
+        {
+            if (m_bLoadCanceled || !reloadForm(xLoadable))
+                criticalFail();
+        }
+        catch(Exception&)
+        {
+            criticalFail();
+        }
+        InvalidateAll();
+    }
+    InvalidateFeature(ID_BROWSER_REMOVEFILTER);
 }
 
 //------------------------------------------------------------------------------
@@ -1642,7 +1731,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     {
         return;
     }
-    ;
 
     ::rtl::OUString sNewVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
     sal_Bool bOldFilterApplied(sal_False);
@@ -1655,60 +1743,10 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         // nothing to be done
         return;
 
-    {
-        WaitObject aWO(getBrowserView());
-        try
-        {
-            if (bFilter)
-            {
-                xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(m_xParser->getFilter()));
-                xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-            }
-            else
-                xFormSet->setPropertyValue(PROPERTY_ORDER,makeAny( m_xParser->getOrder()));
-
-            Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
-            FormErrorHelper aReportError(this);
-            if (xReload->isLoaded())
-                xReload->reload();
-            else
-                xReload->load();
-        }
-        catch(Exception&)
-        {
-        }
-    }
-
-    if (errorOccured())
-    {
-        // synchronize the parser with the form
-        Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-        if (bFilter)
-        {
-            xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(sOldVal));
-            xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(bOldFilterApplied));
-            DO_SAFE( m_xParser->setFilter(sOldVal), "SbaXDataBrowserController::ExecuteFilterSortCrit : could not restore the old filter of my parser !" );
-        }
-        else
-        {
-            xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(sOldVal));
-            DO_SAFE( m_xParser->setOrder(sOldVal), "SbaXDataBrowserController::ExecuteFilterSortCrit : could not restore the old order of my parser !" );
-        }
-
-        try
-        {
-            Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
-            if (xReload->isLoaded())
-                xReload->reload();
-            else
-                xReload->load();
-        }
-        catch(Exception&)
-        {
-        }
-        InvalidateAll();
-    }
-    InvalidateFeature(ID_BROWSER_REMOVEFILTER);
+    if (bFilter)
+        applyParserFilter(sOldVal, bOldFilterApplied);
+    else
+        applyParserOrder(sOldVal);
 }
 
 //------------------------------------------------------------------------------
@@ -1772,11 +1810,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
                 sal_Bool bApplied = ::comphelper::getBOOL(xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER));
                 xActiveSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(!bApplied)));
-                Reference< ::com::sun::star::form::XLoadable >  xReload(xActiveSet, UNO_QUERY);
-                {
-                    WaitObject aWO(getBrowserView());
-                    xReload->reload();
-                }
+                reloadForm(Reference< XLoadable >(xActiveSet, UNO_QUERY));
             }
             InvalidateFeature(ID_BROWSER_FILTERED);
             break;
@@ -1860,41 +1894,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             )
 
             if (bParserSuccess)
-            {
-                WaitObject aWO(getBrowserView());
-                try
-                {
-                    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-                    xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(m_xParser->getOrder()));
-
-                    Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
-                    FormErrorHelper aReportError(this);
-                    xReload->reload();
-                }
-                catch(Exception&)
-                {
-                }
-            }
-            if (errorOccured())
-            {
-                // synchronize the parser with the form
-                Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-                xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(sOldSort));
-                m_xParser->setOrder(sOldSort);
-
-                try
-                {
-                    Reference< ::com::sun::star::form::XLoadable > xReload(xFormSet, UNO_QUERY);
-                    if (xReload->isLoaded())
-                        xReload->reload();
-                    else
-                        xReload->load();
-                }
-                catch(Exception&)
-                {
-                }
-            }
-            InvalidateFeature(ID_BROWSER_REMOVEFILTER);
+                applyParserOrder(sOldSort);
         }
         break;
 
@@ -1930,41 +1930,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             )
 
             if (bParserSuccess)
-            {
-                WaitObject aWO(getBrowserView());
-                try
-                {
-                    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-                    xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(m_xParser->getFilter()));
-                    xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+                applyParserFilter(sOldFilter, bApplied);
 
-                    Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
-                    FormErrorHelper aReportError(this);
-                    xReload->reload();
-                }
-                catch(Exception&)
-                {
-                }
-                ;
-            }
-            if (errorOccured())
-            {
-                // synchronize the parser with the form
-                Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-                xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(sOldFilter));
-                xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, makeAny(bApplied));
-                m_xParser->setFilter(sOldFilter);
-
-                try
-                {
-                    Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
-                    xReload->reload();
-                }
-                catch(Exception&)
-                {
-                }
-                ;
-            }
             InvalidateFeature(ID_BROWSER_REMOVEFILTER);
             InvalidateFeature(ID_BROWSER_FILTERED);
         }
@@ -1993,13 +1960,11 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 WaitObject aWO(getBrowserView());
                 try
                 {
-                    Reference< ::com::sun::star::form::XLoadable >  xReload(getRowSet(), UNO_QUERY);
-                    xReload->reload();
+                    reloadForm(Reference< XLoadable >(getRowSet(), UNO_QUERY));
                 }
                 catch(Exception&)
                 {
                 }
-                ;
             }
             InvalidateFeature(ID_BROWSER_REMOVEFILTER);
             InvalidateFeature(ID_BROWSER_FILTERED);
@@ -2008,11 +1973,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 
         case ID_BROWSER_REFRESH:
             if (SaveData(sal_True, sal_False))
-            {
-                Reference< ::com::sun::star::form::XLoadable >  xReload(getRowSet(), UNO_QUERY);
-                WaitObject aWO(getBrowserView());
-                xReload->reload();
-            }
+                if (!reloadForm(Reference< XLoadable >(getRowSet(), UNO_QUERY)))
+                    criticalFail();
             break;
 
         case ID_BROWSER_SAVEDOC:
@@ -2326,7 +2288,7 @@ IMPL_LINK(SbaXDataBrowserController, OnOpenFinishedMainThread, void*, EMPTYARG)
     delete m_pLoadThread;
     m_pLoadThread = NULL;
 
-    FormLoaded(sal_False);
+    LoadFinished(sal_False);
 
     return 0L;
 }
@@ -2374,7 +2336,13 @@ IMPL_LINK(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, EMPTYARG)
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::FormLoaded(sal_Bool /*bWasSynch*/)
+void SbaXDataBrowserController::criticalFail()
+{
+    InvalidateAll();
+}
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
 {
     if (isValid() && !m_bLoadCanceled)
     {
@@ -2475,6 +2443,13 @@ void SbaXDataBrowserController::leaveFormAction()
 {
     DBG_ASSERT(m_nFormActionNestingLevel > 0, "SbaXDataBrowserController::leaveFormAction : invalid call !");
     --m_nFormActionNestingLevel;
+}
+
+// -------------------------------------------------------------------------
+sal_Bool SbaXDataBrowserController::isLoaded() const
+{
+    Reference< XLoadable > xLoad(m_xRowSet, UNO_QUERY);
+    return xLoad.is() && xLoad->isLoaded();
 }
 
 // -------------------------------------------------------------------------
