@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:28:29 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 12:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,10 +431,10 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     SwFmtAnchor aAnchor;
     {
         uno::Any* pAnchorPgNo;
-        if(GetProperty(C2S(UNO_NAME_ANCHOR_PAGE_NO), pAnchorPgNo))
+        if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_ANCHOR_PAGE_NO)), pAnchorPgNo))
             bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorPgNo, MID_ANCHOR_PAGENUM);
         uno::Any* pAnchorType;
-        if(GetProperty(C2S(UNO_NAME_ANCHOR_TYPE), pAnchorType))
+        if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_ANCHOR_TYPE)), pAnchorType))
             bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
     }
 //  if(aAnchor.GetAnchorId() == FLY_PAGE && !aAnchor.GetPageNum())
@@ -442,15 +442,15 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     rSet.Put(aAnchor);
     {
         uno::Any* pCol = 0;
-        GetProperty(C2S(UNO_NAME_BACK_COLOR), pCol );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_COLOR)), pCol );
         uno::Any* pTrans = 0;
-        GetProperty(C2S(UNO_NAME_BACK_TRANSPARENT), pTrans );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_TRANSPARENT)), pTrans );
         uno::Any* pGrLoc = 0;
-        GetProperty(C2S(UNO_NAME_BACK_GRAPHIC_LOCATION), pGrLoc );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_GRAPHIC_LOCATION)), pGrLoc   );
         uno::Any* pGrURL = 0;
-        GetProperty(C2S(UNO_NAME_BACK_GRAPHIC_URL), pGrURL     );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_GRAPHIC_URL)), pGrURL     );
         uno::Any* pGrFilter = 0;
-        GetProperty(C2S(UNO_NAME_BACK_GRAPHIC_FILTER), pGrFilter     );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BACK_GRAPHIC_FILTER)), pGrFilter     );
 
         if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc)
         {
@@ -470,11 +470,11 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pCont = 0;
-        GetProperty(C2S(UNO_NAME_CONTENT_PROTECTED), pCont );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_CONTENT_PROTECTED)), pCont );
         uno::Any* pPos = 0;
-        GetProperty(C2S(UNO_NAME_POSITION_PROTECTED), pPos );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_POSITION_PROTECTED)), pPos );
         uno::Any* pName = 0;
-        GetProperty(C2S(UNO_NAME_SIZE_PROTECTED), pName );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SIZE_PROTECTED)), pName );
         if(pCont||pPos||pName)
         {
             SvxProtectItem aProt(RES_PROTECT);
@@ -489,13 +489,13 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pHori  = 0;
-        GetProperty(C2S(UNO_NAME_HORI_ORIENT), pHori );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_ORIENT)), pHori );
         uno::Any* pHoriP = 0;
-        GetProperty(C2S(UNO_NAME_HORI_ORIENT_POSITION), pHoriP );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_ORIENT_POSITION)), pHoriP );
         uno::Any* pHoriR = 0;
-        GetProperty(C2S(UNO_NAME_HORI_ORIENT_RELATION), pHoriR );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_ORIENT_RELATION)), pHoriR );
         uno::Any* pPageT = 0;
-        GetProperty(C2S(UNO_NAME_PAGE_TOGGLE), pPageT);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_PAGE_TOGGLE)), pPageT);
         if(pHori||pHoriP||pHoriR||pPageT)
         {
             SwFmtHoriOrient aOrient;
@@ -513,11 +513,11 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
 
     {
         uno::Any* pVert  = 0;
-        GetProperty(C2S(UNO_NAME_VERT_ORIENT), pVert);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT)), pVert);
         uno::Any* pVertP = 0;
-        GetProperty(C2S(UNO_NAME_VERT_ORIENT_POSITION), pVertP );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT_POSITION)), pVertP );
         uno::Any* pVertR = 0;
-        GetProperty(C2S(UNO_NAME_VERT_ORIENT_RELATION), pVertR );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT_RELATION)), pVertR );
         if(pVert||pVertP||pVertR)
         {
             SwFmtVertOrient aOrient;
@@ -532,13 +532,13 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pURL = 0;
-        GetProperty(C2S(UNO_NAME_HYPER_LINK_U_R_L), pURL );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HYPER_LINK_U_R_L)), pURL );
         uno::Any* pTarget = 0;
-        GetProperty(C2S(UNO_NAME_HYPER_LINK_TARGET), pTarget );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HYPER_LINK_TARGET)), pTarget );
         uno::Any* pHyLNm = 0;
-        GetProperty(C2S(UNO_NAME_HYPER_LINK_NAME), pHyLNm );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HYPER_LINK_NAME)), pHyLNm );
         uno::Any* pHySMp = 0;
-        GetProperty(C2S(UNO_NAME_SERVER_MAP), pHySMp );
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SERVER_MAP)), pHySMp );
         if(pURL||pTarget||pHyLNm||pHySMp)
         {
             SwFmtURL aURL;
@@ -554,9 +554,9 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         }
     }
     uno::Any* pL = 0;
-    GetProperty(C2S(UNO_NAME_LEFT_MARGIN), pL );
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN)), pL );
     uno::Any* pR = 0;
-    GetProperty(C2S(UNO_NAME_RIGHT_MARGIN), pR );
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RIGHT_MARGIN)), pR );
     if(pL||pR)
     {
         SvxLRSpaceItem aLR(RES_LR_SPACE);
@@ -567,9 +567,9 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         rSet.Put(aLR);
     }
     uno::Any* pT = 0;
-    GetProperty(C2S(UNO_NAME_TOP_MARGIN), pT );
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TOP_MARGIN)), pT );
     uno::Any* pB = 0;
-    GetProperty(C2S(UNO_NAME_BOTTOM_MARGIN), pB );
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BOTTOM_MARGIN)), pB );
     if(pT||pB)
     {
         SvxULSpaceItem aTB(RES_UL_SPACE);
@@ -580,32 +580,32 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         rSet.Put(aTB);
     }
     uno::Any* pOp;
-    if(GetProperty(C2S(UNO_NAME_OPAQUE), pOp))
+    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_OPAQUE)), pOp))
     {
         SvxOpaqueItem aOp(RES_OPAQUE);
         bRet &= ((SfxPoolItem&)aOp).PutValue(*pOp, 0);
         rSet.Put(aOp);
     }
     uno::Any* pPrt;
-    if(GetProperty(C2S(UNO_NAME_PRINT), pPrt))
+    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_PRINT)), pPrt))
     {
         SvxPrintItem aPrt(RES_PRINT);
         bRet &= ((SfxPoolItem&)aPrt).PutValue(*pPrt, 0);
         rSet.Put(aPrt);
     }
     uno::Any* pSh;
-    if(GetProperty(C2S(UNO_NAME_SHADOW_FORMAT), pSh))
+    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SHADOW_FORMAT)), pSh))
     {
         SvxShadowItem aSh(RES_SHADOW);
         bRet &= ((SfxPoolItem&)aSh).PutValue(*pSh, CONVERT_TWIPS);
         rSet.Put(aSh);
     }
     uno::Any* pSur   = 0;
-    GetProperty(C2S(UNO_NAME_SURROUND), pSur);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SURROUND)), pSur);
     if( !pSur )
-        GetProperty(C2S(UNO_NAME_TEXT_WRAP), pSur);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TEXT_WRAP)), pSur);
     uno::Any* pSurAnch = 0;
-    GetProperty(C2S(UNO_NAME_SURROUND_ANCHORONLY), pSurAnch);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SURROUND_ANCHORONLY)), pSurAnch);
     if(pSur || pSurAnch)
     {
         SwFmtSurround aSrnd;
@@ -616,23 +616,23 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         rSet.Put(aSrnd);
     }
     uno::Any* pLeft         = 0;
-    GetProperty(C2S(UNO_NAME_LEFT_BORDER)  ,    pLeft  );
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_LEFT_BORDER))  ,  pLeft  );
     uno::Any* pRight        = 0;
-    GetProperty(C2S(UNO_NAME_RIGHT_BORDER) ,    pRight );
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RIGHT_BORDER)) ,  pRight );
     uno::Any* pTop      = 0;
-    GetProperty(C2S(UNO_NAME_TOP_BORDER)      , pTop   );
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TOP_BORDER))    , pTop   );
     uno::Any* pBottom   = 0;
-    GetProperty(C2S(UNO_NAME_BOTTOM_BORDER),    pBottom);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BOTTOM_BORDER)),  pBottom);
     uno::Any* pDistance     = 0;
-    GetProperty(C2S(UNO_NAME_BORDER_DISTANCE),  pDistance);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BORDER_DISTANCE)),    pDistance);
     uno::Any* pLeftDistance     = 0;
-    GetProperty(C2S(UNO_NAME_LEFT_BORDER_DISTANCE), pLeftDistance);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_LEFT_BORDER_DISTANCE)),   pLeftDistance);
     uno::Any* pRightDistance    = 0;
-    GetProperty(C2S(UNO_NAME_RIGHT_BORDER_DISTANCE),    pRightDistance);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RIGHT_BORDER_DISTANCE)),  pRightDistance);
     uno::Any* pTopDistance  = 0;
-    GetProperty(C2S(UNO_NAME_TOP_BORDER_DISTANCE),  pTopDistance);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TOP_BORDER_DISTANCE)),    pTopDistance);
     uno::Any* pBottomDistance   = 0;
-    GetProperty(C2S(UNO_NAME_BOTTOM_BORDER_DISTANCE),   pBottomDistance);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_BOTTOM_BORDER_DISTANCE)), pBottomDistance);
     if( pLeft || pRight || pTop ||  pBottom || pDistance ||
         pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance )
     {
@@ -659,21 +659,21 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     }
     {
         uno::Any* pRelH = 0;
-        GetProperty(C2S(UNO_NAME_RELATIVE_HEIGHT), pRelH);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RELATIVE_HEIGHT)), pRelH);
         uno::Any* pRelW = 0;
-        GetProperty(C2S(UNO_NAME_RELATIVE_WIDTH), pRelW);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_RELATIVE_WIDTH)), pRelW);
         uno::Any* pSyncWidth = 0;
-        GetProperty(C2S(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT), pSyncWidth);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT)), pSyncWidth);
         uno::Any* pSyncHeight = 0;
-        GetProperty(C2S(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH), pSyncHeight);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH)), pSyncHeight);
         uno::Any* pWidth = 0;
-        GetProperty(C2S(UNO_NAME_WIDTH), pWidth);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_WIDTH)), pWidth);
         uno::Any* pHeight = 0;
-        GetProperty(C2S(UNO_NAME_HEIGHT), pHeight);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HEIGHT)), pHeight);
         uno::Any* pSize = 0;
-        GetProperty(C2S(UNO_NAME_SIZE), pSize);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SIZE)), pSize);
         uno::Any* pSizeType = 0;
-        GetProperty(C2S(UNO_NAME_SIZE_TYPE), pSizeType);
+        GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SIZE_TYPE)), pSizeType);
         if( pWidth || pHeight ||pRelH || pRelW || pSize ||pSizeType ||
             pSyncWidth || pSyncHeight )
         {
@@ -800,14 +800,14 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&, 
     sal_Bool bRet = FillBaseProperties(rSet, rSizeFound);
 
     uno::Any* pEdit;
-    if(GetProperty(C2S(UNO_NAME_EDIT_IN_READONLY), pEdit))
+    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_EDIT_IN_READONLY)), pEdit))
     {
         SfxBoolItem aBool(RES_EDIT_IN_READONLY);
         ((SfxPoolItem&)aBool).PutValue(*pEdit, 0);
         rSet.Put(aBool);
     }
     uno::Any* pColumns;
-    if(GetProperty(C2S(UNO_NAME_TEXT_COLUMNS), pColumns))
+    if(GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_TEXT_COLUMNS)), pColumns))
     {
         SwFmtCol aCol;
         ((SfxPoolItem&)aCol).PutValue(*pColumns, MID_COLUMNS);
@@ -923,9 +923,9 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     uno::Any* pHEvenMirror = 0;
     uno::Any* pHOddMirror = 0;
     uno::Any* pVMirror = 0;
-    GetProperty(C2S(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES), pHEvenMirror);
-    GetProperty(C2S(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES), pHOddMirror);
-    GetProperty(C2S(UNO_NAME_VERT_MIRRORED), pVMirror);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES)), pHEvenMirror);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES)), pHOddMirror);
+    GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_VERT_MIRRORED)), pVMirror);
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {
         SwMirrorGrf aMirror;
@@ -1357,8 +1357,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             delete pGrfObj;
         }
-        else if(0 != (bNextFrame = (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAIN_NEXT_NAME)))
-            || COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAIN_PREV_NAME))
+        else if(0 != (bNextFrame = (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME))))
+            || rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME)))
         {
             OUString uTemp;
             aValue >>= uTemp;
@@ -1497,7 +1497,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aAny;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPES))
+    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES)))
     {
         uno::Sequence<TextContentAnchorType> aTypes(5);
          TextContentAnchorType* pArray = aTypes.getArray();
@@ -1601,7 +1601,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             aAny <<= OUString(SwXStyleFamilies::GetProgrammaticName(pFmt->DerivedFrom()->GetName(), SFX_STYLE_FAMILY_FRAME));
         }
         else if(eType == FLYCNTTYPE_GRF &&
-                (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ACTUAL_SIZE) ||
+                (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE)) ||
                     FN_UNO_ALTERNATIVE_TEXT == pCur->nWID))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
@@ -1787,7 +1787,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             pCur->nWID != FN_PARAM_LINK_DISPLAY_NAME)
         {
             if( eType == FLYCNTTYPE_GRF &&
-                        (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT)||
+                        (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT))||
                         (pCur &&
                         (pCur->nWID >= RES_GRFATR_BEGIN &&
                             pCur->nWID < RES_GRFATR_END))))
@@ -1797,7 +1797,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                    if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT))
+                    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT)))
                     {
                         pNoTxt->SetAlternateText(aEmptyStr);
                     }
@@ -1816,12 +1816,12 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
                 aSet.SetParent(&pFmt->GetAttrSet());
                 aSet.ClearItem(pCur->nWID);
-                if(COMPARE_EQUAL != rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE))
+                if(!rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE)))
                     pFmt->SetAttr(aSet);
             }
         }
-        else if(0 != (bNextFrame = (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAIN_NEXT_NAME)))
-                || COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAIN_PREV_NAME))
+        else if(0 != (bNextFrame = (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME))))
+                || rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME)))
         {
             SwDoc* pDoc = pFmt->GetDoc();
             if(bNextFrame)
@@ -2022,7 +2022,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
         uno::Any* pStyle;
         SwFrmFmt *pParentFrmFmt = 0;
-        if(pProps->GetProperty(C2S(UNO_NAME_FRAME_STYLE_NAME), pStyle))
+        if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_FRAME_STYLE_NAME)), pStyle))
             pParentFrmFmt = lcl_GetFrmFmt( *pStyle, pDoc );
 
         SwFlyFrmFmt* pFmt = 0;
@@ -2046,7 +2046,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             uno::Any* pGraphicURL;
             String sGraphicURL;
             GraphicObject *pGrfObj = 0;
-            if(pProps->GetProperty(C2S(UNO_NAME_GRAPHIC_URL), pGraphicURL))
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL)), pGraphicURL))
             {
                 OUString uTemp;
                 (*pGraphicURL) >>= uTemp;
@@ -2071,7 +2071,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
             String sFltName;
             uno::Any* pFilter;
-            if(pProps->GetProperty(C2S(UNO_NAME_GRAPHIC_FILTER), pFilter))
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_FILTER)), pFilter))
             {
                 OUString uTemp;
                 (*pFilter) >>= uTemp;
@@ -2095,23 +2095,23 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
             }
             uno::Any* pSurroundContour;
-            if(pProps->GetProperty(C2S(UNO_NAME_SURROUND_CONTOUR), pSurroundContour))
-                setPropertyValue(C2U(UNO_NAME_SURROUND_CONTOUR), *pSurroundContour);
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), pSurroundContour))
+                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), *pSurroundContour);
             uno::Any* pContourOutside;
-            if(pProps->GetProperty(C2S(UNO_NAME_CONTOUR_OUTSIDE), pContourOutside))
-                setPropertyValue(C2U(UNO_NAME_CONTOUR_OUTSIDE), *pContourOutside);
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), pContourOutside))
+                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), *pContourOutside);
             uno::Any* pContourPoly;
-            if(pProps->GetProperty(C2S(UNO_NAME_CONTOUR_POLY_POLYGON), pContourPoly))
-                setPropertyValue(C2U(UNO_NAME_CONTOUR_POLY_POLYGON), *pContourPoly);
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), pContourPoly))
+                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), *pContourPoly);
             uno::Any* pPixelContour;
-            if(pProps->GetProperty(C2S(UNO_NAME_IS_PIXEL_CONTOUR), pPixelContour))
-                setPropertyValue(C2U(UNO_NAME_IS_PIXEL_CONTOUR), *pPixelContour);
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), pPixelContour))
+                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), *pPixelContour);
             uno::Any* pAutoContour;
-            if(pProps->GetProperty(C2S(UNO_NAME_IS_AUTOMATIC_CONTOUR), pAutoContour))
-                setPropertyValue(C2U(UNO_NAME_IS_AUTOMATIC_CONTOUR), *pAutoContour);
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), pAutoContour))
+                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
             uno::Any* pAltText;
-            if(pProps->GetProperty(C2S(UNO_NAME_ALTERNATIVE_TEXT), pAltText))
-                setPropertyValue(C2U(UNO_NAME_ALTERNATIVE_TEXT), *pAltText);
+            if(pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_ALTERNATIVE_TEXT)), pAltText))
+                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ALTERNATIVE_TEXT)), *pAltText);
         }
         else
         {
@@ -2122,9 +2122,9 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         if( pFmt && pDoc->GetDrawModel() )
             lcl_GetOrCreateSdrObject( pFmt );
         uno::Any* pOrder;
-        if( pProps->GetProperty(C2S(UNO_NAME_Z_ORDER), pOrder) )
+        if( pProps->GetProperty(C2S(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), pOrder) )
         {
-            setPropertyValue(C2U(UNO_NAME_Z_ORDER), *pOrder);
+            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
         }
 
     }

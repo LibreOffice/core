@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:25:32 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 12:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
     Any aRet;
     if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
     {
-        if(0 != rPropertyName.compareToAscii(UNO_NAME_REFERENCE_ID))
+        if(!rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_REFERENCE_ID)))
             throw UnknownPropertyException();
 
         const SwFmtFtn*  pFmt = FindFmt();
@@ -623,6 +623,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/06/12 07:25:32  mib
+    #86004#: performance: check cursor position using start node
+
     Revision 1.8  2001/04/05 13:33:54  os
     #85785# property map corrected
 
