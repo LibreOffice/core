@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-26 12:58:47 $
+ *  last change: $Author: mba $ $Date: 2000-11-29 17:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,8 @@ static Sequence< OUString > GetPropertyNames()
     {
         "ExtendedTip",
         "Tip",
-        "Agent/AutoStart",
-        "HowTo/Show"
+//        "Agent/AutoStart",
+//        "HowTo/Show"
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
