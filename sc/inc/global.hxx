@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 20:01:05 $
+ *  last change: $Author: dr $ $Date: 2002-04-22 14:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,7 @@ public:
 
     static void             InitTextHeight(SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
-    static SvxBrushItem*    GetButtonBrushItem()    { return pButtonBrushItem; }
+    static SvxBrushItem*    GetButtonBrushItem();
     static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
        static const String& GetEmptyString();

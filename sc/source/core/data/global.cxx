@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:01:15 $
+ *  last change: $Author: dr $ $Date: 2002-04-22 14:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,6 +598,12 @@ String ScGlobal::GetLongErrorString(USHORT nErrNumber)
     return aRes;
 }
 
+SvxBrushItem* ScGlobal::GetButtonBrushItem()
+{
+    pButtonBrushItem->SetColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+    return pButtonBrushItem;
+}
+
 const String& ScGlobal::GetEmptyString()
 {
     return *pEmptyString;
@@ -646,7 +652,7 @@ void ScGlobal::Init()
     for( USHORT nC = 0 ; nC <= STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ) );
-    pButtonBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ) );
+    pButtonBrushItem = new SvxBrushItem( Color() );
     pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ) );
     pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ) );
 
