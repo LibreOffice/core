@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-10 15:31:07 $
+ *  last change: $Author: as $ $Date: 2000-12-05 11:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include <svtools/svtools.hrc>
 #include <svtools/saveopt.hxx>
+#include <svtools/localisationoptions.hxx>
 
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>
@@ -301,6 +302,9 @@ FASTBOOL SfxApplication::Initialize_Impl()
     if ( !pAppIniMgr )
         pAppIniMgr = CreateIniManager();
 #endif
+    SvtLocalisationOptions aLocalisation;
+    Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
+    Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
 
     // StarObjects initialisieren
     if ( !SvFactory::Init() )
