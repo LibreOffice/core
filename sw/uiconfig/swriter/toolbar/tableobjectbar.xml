@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="helpid:20330" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="helpid:10200" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="helpid:10201" toolbar:text="" toolbar:visible="true" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle" toolbar:helpid="helpid:10187" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MergeCells" toolbar:helpid="helpid:20506" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SplitCell" toolbar:helpid="helpid:20505" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:OptimizeTable" toolbar:helpid="helpid:20510" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRows" toolbar:helpid="helpid:20501" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:helpid="helpid:20502" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DeleteRows" toolbar:helpid="helpid:20503" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DeleteColumns" toolbar:helpid="helpid:20504" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectTable" toolbar:helpid="helpid:20515" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:helpid="helpid:20514" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:helpid="helpid:20513" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:helpid="helpid:20585" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:helpid="helpid:20586" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:helpid="helpid:20587" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoFormat" toolbar:helpid="helpid:20595" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:helpid="helpid:20595" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoSum" toolbar:helpid="helpid:20595" toolbar:text="" />
+</toolbar:toolbar>
