@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 17:03:29 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 23:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ Text[ swedish ] = "%PRODUCTNAME kalender";
     Text[ polish ] = "Kalendarz %PRODUCTNAME";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Calendar";
     Text[ japanese ] = "%PRODUCTNAME ¶ÚİÀŞ°";
-    Text[ korean ] = "%PRODUCTNAME ÀÏÁ¤";
+    Text[ korean ] = "%PRODUCTNAME Ä®·»´õ£¡";
     Text[ chinese_simplified ] = "%PRODUCTNAME ÈÕÀú";
     Text[ chinese_traditional ] = "%PRODUCTNAME ¦æ¨Æ¾ä";
     Text[ arabic ] = "ÊŞæíã%PRODUCTNAME ";
@@ -200,7 +200,7 @@ Text[ swedish ] = "Beräkna helgdagar";
     Text[ polish ] = "Oblicz dni œwi¹teczne";
     Text[ portuguese_brazilian ] = "Add Holidays to Calendar";
     Text[ japanese ] = "j“ú‚ğ”‚¦‚é";
-    Text[ korean ] = "ÀÏÁ¤¿¡ ÈŞÀÏÃß°¡";
+    Text[ korean ] = "°øÈŞÀÏ¡¡°è»ê£¡";
     Text[ chinese_simplified ] = "½Ú¼ÙÈÕ¼ÆËã";
     Text[ chinese_traditional ] = "­pºâ¸`°²¤é";
     Text[ arabic ] = "ÍÓÇÈ ÇáÚØáÇÊ";
@@ -273,7 +273,7 @@ Text[ swedish ] = "Kalender";
     Text[ polish ] = "Kalendarz";
     Text[ portuguese_brazilian ] = "Calendar";
     Text[ japanese ] = "¶ÚİÀŞ°";
-    Text[ korean ] = "Ä«·»´õ";
+    Text[ korean ] = "Ä®·»´õ";
     Text[ chinese_simplified ] = "ÈÕÀú";
     Text[ chinese_traditional ] = "¦æ¨Æ¾ä";
     Text[ arabic ] = "ÊŞæíã";
@@ -345,7 +345,7 @@ Text[ swedish ] = "Beräkna helgdagar för";
     Text[ polish ] = "Obliczenie dni œwi¹tecznych dla";
     Text[ portuguese_brazilian ] = "Add holidays for";
     Text[ japanese ] = "j“ú‚ğ”‚¦‚é‘ÎÛ";
-    Text[ korean ] = "ÈŞÀÏ¸¸ Ãß°¡";
+    Text[ korean ] = "°øÈŞÀÏ¡¡°è»ê";
     Text[ chinese_simplified ] = "¼ÆËã½Ú¼ÙÈÕÎª";
     Text[ chinese_traditional ] = "­pºâ¸`°²¤éªº©Ò¦b¦a";
     Text[ arabic ] = "ÍÓÇÈ ÇáÚØáÇÊ ÇáÑÓãíÉ áÜ";
@@ -370,7 +370,7 @@ Text[ swedish ] = "Sverige";
     Text[ polish ] = "Polska";
     Text[ portuguese_brazilian ] = "USA";
     Text[ japanese ] = "“ú–{";
-    Text[ korean ] = "¹Ì±¹";
+    Text[ korean ] = "µ¶ÀÏ";
     Text[ chinese_simplified ] = "ÖĞ¹ú";
     Text[ chinese_traditional ] = "¥xÆW";
     Text[ arabic ] = "ãÕÑ";
@@ -395,7 +395,7 @@ Text[ swedish ] = "Tidsrymd";
     Text[ polish ] = "Okres czasu";
     Text[ portuguese_brazilian ] = "Time Frame";
     Text[ japanese ] = "ŠúŠÔ";
-    Text[ korean ] = "½Ã°£ ÇÁ·¹ÀÓ";
+    Text[ korean ] = "±â°£";
     Text[ chinese_simplified ] = "Ê±¼ä";
     Text[ chinese_traditional ] = "®É¶¡­S³ò";
     Text[ arabic ] = "ÇáİÊÑÉ ÇáÒãäíÉ";
@@ -467,6 +467,7 @@ Text[ swedish ] = "-";
     Text[ arabic ] = "ÇáÚØáÇÊ ÇáÑÓãíÉ ÇáãÍáíÉ";
     Text[ greek ] = "Ôïğéêİò áñãßåò";
     Text[ turkish ] = "-";
+    Text[ korean ] = "µ¶ÀÏ¡¡°øÈŞÀÏ";
 };
 
 String  dlgCalOwnData
@@ -734,7 +735,7 @@ Text[ swedish ] = "Allmänna helgdagar";
     Text[ chinese_traditional ] = "¤@¯ë¸`°²¤é";
     Text[ arabic ] = "ÚØáÇÊ ÚÇãÉ";
     Text[ greek ] = "Ãåíéêİò áñãßåò";
-    Text[ korean ] = "°øÈŞÀÏ";
+    Text[ korean ] = "ÀÏ¹İ¡¡°øÈŞÀÏ";
     Text[ turkish ] = "Genel tatil günleri";
 };
 
@@ -1048,7 +1049,7 @@ Text[ swedish ] = "Års- / månadskalender";
     Text[ polish ] = "Kalendarz roczny / miesiêczny";
     Text[ portuguese_brazilian ] = "Yearly- / Monthly Calendar";
     Text[ japanese ] = "”NŠÔ/ŒŠÔ ¶ÚİÀŞ°";
-    Text[ korean ] = "¿¬Áß Ä«·»´õ / ¿ùº° Ä«·»´õ";
+    Text[ korean ] = "¿¬ Ä®·»´õ / ¿ùº° Ä®·»´õ";
     Text[ chinese_simplified ] = "ÄêÀúºÍÔÂÀú";
     Text[ chinese_traditional ] = "¦~¤ë¦æ¨Æ¾ä";
     Text[ arabic ] = "ÊŞæíã Óäæí / ÊŞæíã ÔåÑí";
@@ -1072,7 +1073,7 @@ Text[ swedish ] = "Ett fel uppstod när kalendern skapades.";
     Text[ polish ] = "Podczas tworzenia kalendarza zaszed³ b³¹d.";
     Text[ portuguese_brazilian ] = "An error occurred during the creation of the calendar.";
     Text[ japanese ] = "¶ÚİÀŞ°‚Ìì¬‚ÌÛ‚É´×°”­¶B";
-    Text[ korean ] = "Ä«·»´õ ÀÛ¼º½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ korean ] = "Ä®·»´õ ÀÛ¼º½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚÖÆ×÷ÈÕÀúÊ±³öÏÖÁËÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b«Ø¥ß¤@­Ó¦æ¨Æ¾ä®Éµo¥Í¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅäÔÇÁ ÇáÊŞæíã.";
@@ -1153,7 +1154,7 @@ Text[ swedish ] = "";
     Text[ polish ] = "Tydzieñ roboczy";
     Text[ portuguese_brazilian ] = "Workday";
     Text[ japanese ] = "˜J“­T“ú";
-    Text[ korean ] = "±Ù¹« ½Ã°£, ÁÖ";
+    Text[ korean ] = "±Ù¹« ÁÖ£¯³â";
     Text[ chinese_simplified ] = "¹¤×÷ÖÜ";
     Text[ chinese_traditional ] = "¤u§@¶g";
     Text[ arabic ] = "ÃÓÈæÚ Úãá";
@@ -1211,7 +1212,7 @@ Text[ swedish ] = "Kalender";
     Text[ polish ] = "Kalendarz";
     Text[ portuguese_brazilian ] = "Calendar";
     Text[ japanese ] = "¶ÚİÀŞ°";
-    Text[ korean ] = "ÀÏÁ¤";
+    Text[ korean ] = "Ä®·»´õ";
     Text[ chinese_simplified ] = "ÈÕÀú";
     Text[ chinese_traditional ] = "¦æ¨Æ¾ä";
     Text[ arabic ] = "ÇáÊŞæíã";
