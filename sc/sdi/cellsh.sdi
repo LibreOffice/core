@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.sdi,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:56:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,8 @@ interface CellSelection : Selection
     SID_DEC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_INC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
-    SID_THESAURUS               [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
-    SID_SPELLING                [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_THESAURUS   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
+    SID_SPELL_DIALOG [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_HANGUL_HANJA_CONVERSION [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
