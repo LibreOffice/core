@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: hr $ $Date: 2003-03-27 16:49:17 $
-#*    $Revision: 1.6 $
+#*    last change   $Author: vg $ $Date: 2003-04-15 16:42:21 $
+#*    $Revision: 1.7 $
 #*
 #*    $Logfile: $
 #*
@@ -468,7 +468,7 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
     catch( RuntimeException & e )
     {
         bReturn = (
-#if ! defined _DEBUG
+#if OSL_DEBUG_LEVEL == 0
             // java stack traces trash Message
             e.Message == sCompare &&
 #endif
@@ -495,7 +495,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             catch (IllegalArgumentException aExc)
             {
                 if (aExc.ArgumentPosition == 5 &&
-#if ! defined _DEBUG
+#if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
                     aExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0 &&
 #endif
@@ -515,7 +515,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         catch (const RuntimeException & rExc)
         {
             if (rExc.Context == xLBT->getInterface()
-#if ! defined _DEBUG
+#if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
                 && rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0
 #endif
@@ -535,7 +535,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
     catch (Exception & rExc)
     {
         if (rExc.Context == xLBT->getInterface()
-#if ! defined _DEBUG
+#if OSL_DEBUG_LEVEL == 0
             // java stack traces trash Message
             && rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0
 #endif
