@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:12:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     ViewShell* pViewShell = NULL;
     if (pBase != NULL)
-        pViewShell = pBase->GetSubShellManager().GetMainSubShell();
+        pViewShell = pBase->GetMainViewShell();
 
     if (pViewShell != NULL)
     {
