@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-06 11:06:23 $
+ *  last change: $Author: dbo $ $Date: 2001-07-06 11:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,8 +550,14 @@ static inline void __reallocSequence(
     uno_Sequence * pSource = *ppSequence;
     sal_Int32 nSourceElements = pSource->nElements;
 
-    if (pSource->nRefCount > 1) // split
+    if (pSource->nRefCount > 1 ||
+        // not mem-copyable elements?
+        typelib_TypeClass_ANY == pElementType->eTypeClass ||
+        typelib_TypeClass_STRUCT == pElementType->eTypeClass ||
+        typelib_TypeClass_EXCEPTION == pElementType->eTypeClass)
     {
+        // split sequence and construct new one from scratch
+
         uno_Sequence * pNew = 0;
 
         sal_Int32 nRest = nSize - nSourceElements;
@@ -587,15 +593,12 @@ static inline void __reallocSequence(
     }
     else
     {
-        sal_Int32 nCorrect;
         if (nSize > nSourceElements) // default construct the rest
         {
             __defaultConstructElements(
                 ppSequence, pElementType,
                 nSourceElements, nSize,
                 nSize ); // realloc to nSize
-            // correct nSourceElements any data pointer due to reallocation
-            nCorrect = nSourceElements;
         }
         else // or destruct the rest and realloc mem
         {
@@ -605,53 +608,6 @@ static inline void __reallocSequence(
             *ppSequence = (uno_Sequence *)::rtl_reallocateMemory(
                 *ppSequence, SAL_SEQUENCE_HEADER_SIZE + (nSize * nElementSize) );
             (*ppSequence)->nElements = nSize;
-            // correct nSize any data pointer due to reallocation
-            nCorrect = nSize;
-        }
-        if (typelib_TypeClass_ANY == pElementType->eTypeClass)
-        {
-            // correct reallocated any array
-            uno_Any * pAnys = (uno_Any *)(*ppSequence)->elements;
-            while (nCorrect--)
-            {
-                uno_Any * pAny = pAnys + nCorrect;
-                switch (pAny->pType->eTypeClass)
-                {
-                case typelib_TypeClass_CHAR:
-                case typelib_TypeClass_BOOLEAN:
-                case typelib_TypeClass_BYTE:
-                case typelib_TypeClass_SHORT:
-                case typelib_TypeClass_UNSIGNED_SHORT:
-                case typelib_TypeClass_LONG:
-                case typelib_TypeClass_UNSIGNED_LONG:
-                case typelib_TypeClass_STRING:
-                case typelib_TypeClass_TYPE:
-                case typelib_TypeClass_ENUM:
-                case typelib_TypeClass_SEQUENCE:
-                case typelib_TypeClass_INTERFACE:
-                    pAny->pData = &pAny->pReserved;
-                    break;
-                case typelib_TypeClass_HYPER:
-                case typelib_TypeClass_UNSIGNED_HYPER:
-                    if (sizeof(void *) >= sizeof(sal_Int64))
-                    {
-                        pAny->pData = &pAny->pReserved;
-                    }
-                    break;
-                case typelib_TypeClass_FLOAT:
-                    if (sizeof(void *) >= sizeof(float))
-                    {
-                        pAny->pData = &pAny->pReserved;
-                    }
-                    break;
-                case typelib_TypeClass_DOUBLE:
-                    if (sizeof(void *) >= sizeof(double))
-                    {
-                        pAny->pData = &pAny->pReserved;
-                    }
-                    break;
-                }
-            }
         }
     }
 }
