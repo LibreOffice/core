@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:35:27 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:42:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ TransliterationImpl::getType() throw(RuntimeException)
 {
     if (numCascade > 1)
         return (TransliterationType::CASCADE|TransliterationType::IGNORE);
-    if (bodyCascade[0].is())
+    if (numCascade > 0 && bodyCascade[0].is())
         return(bodyCascade[0]->getType());
     throw ERROR;
 }
@@ -325,6 +325,9 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
                     Sequence< sal_Int32 >& offset ) throw(RuntimeException)
 {
 
+    if (numCascade == 0)
+        return inStr;
+
     if (offset.getLength() != nCount)
         offset.realloc(nCount);
     if (numCascade == 1)
@@ -377,6 +380,9 @@ OUString SAL_CALL
 TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset ) throw(RuntimeException)
 {
+    if (numCascade == 0)
+        return inStr;
+
     if (offset.getLength() != nCount)
         offset.realloc(nCount);
     if (numCascade == 1)
@@ -425,7 +431,9 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
 OUString SAL_CALL
 TransliterationImpl::transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount ) throw(RuntimeException)
 {
-    if (numCascade == 1)
+    if (numCascade == 0)
+        return inStr;
+    else if (numCascade == 1)
         return bodyCascade[0]->transliterateString2String( inStr, startPos, nCount);
     else {
         OUString tmpStr = bodyCascade[0]->transliterateString2String(inStr, startPos, nCount);
@@ -439,7 +447,9 @@ TransliterationImpl::transliterateString2String( const OUString& inStr, sal_Int3
 OUString SAL_CALL
 TransliterationImpl::transliterateChar2String( sal_Unicode inChar ) throw(RuntimeException)
 {
-    if (numCascade == 1)
+    if (numCascade == 0)
+        return OUString(&inChar, 1);
+    else if (numCascade == 1)
         return bodyCascade[0]->transliterateChar2String( inChar);
     else {
         OUString tmpStr = bodyCascade[0]->transliterateChar2String(inChar);
