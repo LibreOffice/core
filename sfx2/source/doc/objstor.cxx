@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: svesik $ $Date: 2001-10-25 02:49:44 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 09:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,8 @@
 #include "dlgcont.hxx"
 #include "filedlghelper.hxx"
 #include "scriptcont.hxx"
-
-#ifndef _SFX_HELP_HXX
 #include "sfxhelp.hxx"
+
 #endif
 #ifndef _SFX_HELPID_HRC
 #include "helpid.hrc"
@@ -1055,14 +1054,17 @@ sal_Bool SfxObjectShell::DoSaveAs( SvStorage * pNewStor )
 sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
 {
     // hier kommen nur Root-Storages rein, die via Temp-File gespeichert werden
+    rMedium.CreateTempFileNoCopy();
+    SetError(rMedium.GetErrorCode());
+    if ( GetError() )
+        return FALSE;
+
     const String aOldURL( INetURLObject::GetBaseURL() );
     if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         if ( ShallSetBaseURL_Impl( rMedium ) )
             INetURLObject::SetBaseURL( rMedium.GetName() );
         else
             INetURLObject::SetBaseURL( String() );
-
-    rMedium.CreateTempFileNoCopy();
 
     sal_Bool bRet = SaveTo_Impl( rMedium, NULL, FALSE );
     INetURLObject::SetBaseURL( aOldURL );
@@ -1424,6 +1426,12 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     SfxMedium* pMediumTmp = new SfxMedium( pMedium->GetName(), pMedium->GetOpenMode(), pMedium->IsDirect(), pFilter, pSet );
     pMediumTmp->SetLongName( pMedium->GetLongName() );
     pMediumTmp->CreateTempFileNoCopy();
+    if ( pMediumTmp->GetErrorCode() != ERRCODE_NONE )
+    {
+        SetError( pMediumTmp->GetError() );
+        delete pMediumTmp;
+        return FALSE;
+    }
 
     // some awful base URL stuff
     const String aOldURL( INetURLObject::GetBaseURL() );
@@ -1479,17 +1487,16 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         // transfer error code from medium to objectshell
         SetError( pMediumTmp->GetError() );
 
-        // kill temporary file and medium
-        String aTmp;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pMediumTmp->GetPhysicalName(), aTmp );
-        delete pMediumTmp;
-        SfxContentHelper::Kill( aTmp );
-
         // reconnect to object storage
         if ( IsHandsOff() )
-            DoSaveCompleted( pMedium );
+        {
+            if ( !DoSaveCompleted( pMedium ) )
+                DBG_ERROR("Case not handled - no way to get a storage!");
+        }
         else
             DoSaveCompleted( (SvStorage*)0 );
+
+        delete pMediumTmp;
     }
 
     SetModified( !bSaved );
@@ -1572,8 +1579,10 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     if ( pRequest->GetArgs() )
         pParams->Put( *pRequest->GetArgs() );
 
+    BOOL bDialogUsed = FALSE;
     if ( !pFileNameItem )
     {
+        bDialogUsed = TRUE;
         if(! bUrl )
         {
             // check if we have a filter which allows for filter options
@@ -1708,6 +1717,8 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
     if ( !pFileNameItem && bSaveTo )
     {
+        bDialogUsed = TRUE;
+
         // get the filename by dialog ...
         // create the file dialog
         sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
@@ -1787,6 +1798,19 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,pParams))
     {
+        const SfxFilter* pFilter = GetMedium()->GetFilter();
+        if  (   bDialogUsed && pFilter
+            &&  pFilter->IsOwnFormat()
+            &&  pFilter->UsesStorage()
+            &&  pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60
+            )
+        {
+            SfxViewFrame* pDocViewFrame = SfxViewFrame::GetFirst( this );
+            SfxFrame* pDocFrame = pDocViewFrame ? pDocViewFrame->GetFrame() : NULL;
+            if ( pDocFrame )
+                SfxHelp::OpenHelpAgent( pDocFrame, HID_DID_SAVE_PACKED_XML );
+        }
+
         pImp->bWaitingForPicklist = sal_True;
         if (!pImp->bSetStandardName)
             pImp->bDidWarnFormat=sal_False;
@@ -1825,7 +1849,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     // all values present in both itemsets will be overwritten by the new parameters
     if( pParams )
         pMergedParams->Put( *pParams );
-    delete pParams;
+    DELETEZ( pParams );
 
 #ifdef DBG_UTIL
     if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_SET )
@@ -1841,6 +1865,22 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     // create a medium for the target URL
     SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, 0, pParams );
 
+    // set filter; if no filter is given, take the default filter of the factory
+    if ( aFilterName.Len() )
+        pNewFile->SetFilter( GetFactory(), aFilterName );
+    else
+        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter(0) );
+
+    // saving is alway done using a temporary file
+    pNewFile->CreateTempFileNoCopy();
+    if ( pNewFile->GetErrorCode() != ERRCODE_NONE )
+    {
+        // creating temporary file failed ( f.e. floppy disk not inserted! )
+        SetError( pNewFile->GetError() );
+        delete pNewFile;
+        return FALSE;
+    }
+
     // check if a "SaveTo" is wanted, no "SaveAs"
     SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
     sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || pSaveToItem && pSaveToItem->GetValue();
@@ -1850,15 +1890,6 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     SfxDocumentInfo aSavedInfo;
     if ( bCopyTo )
         aSavedInfo = GetDocInfo();
-
-    // set filter; if no filter is given, take the default filter of the factory
-    if ( aFilterName.Len() )
-        pNewFile->SetFilter( GetFactory(), aFilterName );
-    else
-        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter(0) );
-
-    // saving is alway done using a temporary file
-    pNewFile->CreateTempFileNoCopy();
 
     // some base URL stuff ( awful, but not avoidable ... )
     const String aOldURL( INetURLObject::GetBaseURL() );
@@ -1959,6 +1990,8 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
             DoSaveCompleted( pMedium );
         else
             DoSaveCompleted( (SvStorage*)0 );
+
+        DELETEZ( pNewFile );
     }
 
     if( !bOk )
@@ -2030,6 +2063,8 @@ void SfxObjectShell::SetLoadLayout_Impl( sal_Bool bLoadLayout )
 sal_Bool SfxObjectShell::IsInformationLost()
 {
     const SfxFilter *pFilt = GetMedium()->GetFilter();
+    if ( pFilt == GetFactory().GetFilterContainer()->GetFilter(0) )
+        return FALSE;
     return pFilt && pFilt->IsAlienFormat() && pImp->bDidDangerousSave && !(pFilt->GetFilterFlags() & SFX_FILTER_SILENTEXPORT);
 }
 
