@@ -42,17 +42,17 @@ public class IdeUpdater extends Thread {
 
     String opSys =System.getProperty("os.name");
     if (opSys.indexOf("Windows") != -1) {
-        netbeansLauncher = new File( installPath + "bin" + File.separator + "runide.exe" );
+        netbeansLauncher = new File( installPath + "bin" );
     }
     else {
-        netbeansLauncher = new File( installPath + "bin" + File.separator + "runide.sh" );
+        netbeansLauncher = new File( installPath + "bin" );
     }
 
-    if( netbeansLauncher.isFile() ) {
+    if( netbeansLauncher.isDirectory() ) {
         isNetbeansPath = true;
         installPath = installPath +"modules" + File.separator;
     }
-    else if( jeditLauncher.isFile() ){
+    else if( jeditLauncher.isDirectory() ){
         isNetbeansPath =  false;
         installPath = installPath + "jars" + File.separator;
     }
