@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 15:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,11 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
             case CTF_SC_ROWBREAKBEFORE              : pPageBreak = property; break;
         }
     }
+    if (pPageBreak)
+    {
+        if(!(::cppu::any2bool(pPageBreak->maValue)))
+            pPageBreak->mnIndex = -1;
+    }
     if (pOptimalHeight)
     {
         sal_Bool bOptimalHeight = ::cppu::any2bool(pOptimalHeight->maValue);
@@ -269,11 +274,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
         rProperties.push_back(*pOptimalHeight);
         delete pOptimalHeight;
     }
-    if (pPageBreak)
-    {
-        if(!(::cppu::any2bool(pPageBreak->maValue)))
-            pPageBreak->mnIndex = -1;
-    }
+    // don't access pointers to rProperties elements after push_back!
 }
 
 class ScXMLMapContext : public SvXMLImportContext
