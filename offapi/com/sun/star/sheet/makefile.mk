@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 16:22:37 $
+#   last change: $Author: hr $ $Date: 2004-04-13 12:36:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,38 @@ IDLFILES=\
     AccessibleCsvTable.idl\
     AccessibleCsvCell.idl\
     ActivationEvent.idl\
+    CellAnnotationsEnumeration.idl\
+    CellAreaLinksEnumeration.idl\
+    DatabaseRangesEnumeration.idl\
+    DataPilotFieldsEnumeration.idl\
+    DataPilotItem.idl\
+    DataPilotItems.idl\
+    DataPilotItemsEnumeration.idl\
+    DataPilotTablesEnumeration.idl\
+    DDELinksEnumeration.idl\
+    FunctionCategory.idl\
+    FunctionDescriptionEnumeration.idl\
+    LabelRangesEnumeration.idl\
+    MoveDirection.idl\
+    NamedRangesEnumeration.idl\
+    ScenariosEnumeration.idl\
+    SheetCellRangesEnumeration.idl\
+    SheetLinksEnumeration.idl\
+    SpreadsheetsEnumeration.idl\
+    SpreadsheetViewPanesEnumeration.idl\
+    StatusBarFunction.idl\
+    SubTotalFieldsEnumeration.idl\
+    TableAutoFormatEnumeration.idl\
+    TableAutoFormatsEnumeration.idl\
+    TableCellStyle.idl\
+    TableConditionalEntryEnumeration.idl\
+    UniqueCellFormatRanges.idl\
+    UniqueCellFormatRangesEnumeration.idl\
+    RangeSelectionArguments.idl\
+    RangeSelectionEvent.idl\
+    XRangeSelection.idl\
+    XRangeSelectionChangeListener.idl\
+    XRangeSelectionListener.idl\
     AddIn.idl\
     Border.idl\
     CellAnnotation.idl\
@@ -233,6 +265,7 @@ IDLFILES=\
     XDatabaseRange.idl\
     XDatabaseRanges.idl\
     XDataPilotDescriptor.idl\
+    XDataPilotField.idl\
     XDataPilotMemberResults.idl\
     XDataPilotResults.idl\
     XDataPilotTable.idl\
