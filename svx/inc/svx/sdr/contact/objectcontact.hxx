@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:20:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,10 @@ namespace sdr
             // Non-painted object was changed. Test for potentially
             // getting visible
             virtual void ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const;
+
+            // #i42815#
+            // Get info if given Rectangle is visible in this view
+            virtual sal_Bool IsAreaVisible(const Rectangle& rRectangle) const;
 
             // Take some action when new objects are inserted. This is triggered from
             // the VOCs, originating from VCs.
