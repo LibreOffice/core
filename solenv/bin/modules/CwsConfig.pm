@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CwsConfig.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-26 00:20:18 $
+#   last change: $Author: hr $ $Date: 2004-07-05 09:24:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ sub new
     my $class = ref($invocant) || $invocant;
     my $self = {};
     $self->{_CONFIG_FILE}        = undef;    # config file
+    $self->{_GLOBAL}             = undef;    # is it a global config file?
     $self->{VCSID}               = undef;    # VCSID
     $self->{CWS_DB_URL_LIST_REF} = undef;    # list of CWS DB servers
     $self->{NET_PROXY}           = undef;    # network proxy
@@ -180,8 +181,8 @@ sub cvs_binary
             # defaults
             $cvs_binary = ($^O eq 'MSWin32') ? 'cvs.exe' : 'cvs';
         }
-        # special case ... don't ask ...
-        if ($cvs_binary =~ /cvs.clt2/ && $^O eq 'MSWin32') {
+        # special case, don't ask
+        if ( $self->{_GLOBAL} && $cvs_binary =~ /cvs.clt2/ && $^O eq 'MSWin32' ) {
             $cvs_binary = 'cvsclt2.exe';
         }
         $self->{CVS_BINARY} = $cvs_binary;
@@ -199,6 +200,12 @@ sub cvs_server_root
         if ( !defined($cvs_server_root) ) {
             # give up, this is a mandatory entry
             croak("ERROR: can't parse CVS_SERVER_ROOT entry in '\$HOME/.cwsrc'.\n");
+        }
+        if ( $self->{_GLOBAL} ) {
+            # a global config file will almost always have the wrong vcsid in
+            # the cvsroot -> substitute vcsid
+            my $id = $self->vcsid();
+            $cvs_server_root =~ s/:pserver:\w+@/:pserver:$id@/;
         }
         $self->{CVS_SERVER_ROOT} = $cvs_server_root;
     }
@@ -380,9 +387,11 @@ sub parse_config_file
     # check for config files
     if ( -e "$ENV{HOME}/.cwsrc" ) {
         $config_file = Config::Tiny->read("$ENV{HOME}/.cwsrc");
+        $self->{_GLOBAL} = 0;
     }
     elsif ( -e "$ENV{COMMON_ENV_TOOLS}/cwsrc" ) {
         $config_file = Config::Tiny->read("$ENV{COMMON_ENV_TOOLS}/cwsrc");
+        $self->{_GLOBAL} = 1;
     }
     else {
         croak("ERROR: can't find CWS config file '\$HOME/.cwsrc'.\n");
