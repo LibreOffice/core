@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 18:50:27 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 11:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@
 #include <svtools/ptitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/algitem.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
