@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:37:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,7 +734,7 @@ BasicManager* SfxApplication::GetBasicManager()
 
 Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 {
-    if( !pImp->pDialogLibContainer )
+    if ( !pImp->pDialogLibContainer )
         GetBasicManager();
     Reference< XLibraryContainer > xRet
         = static_cast< XLibraryContainer* >( pImp->pDialogLibContainer );
@@ -745,7 +745,7 @@ Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 
 Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
 {
-    if( !pImp->pBasicLibContainer )
+    if ( !pImp->pBasicLibContainer )
         GetBasicManager();
     Reference< XLibraryContainer > xRet
         = static_cast< XLibraryContainer* >( pImp->pBasicLibContainer );
