@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:28 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,8 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) con
     for(sal_uInt32 a(0); a < nMarkAnz; a++)
     {
         // #80277# merging was done wrong in the prev version
-        const SfxItemSet& rSet = aMark.GetMark(a)->GetObj()->GetItemSet();
+        //const SfxItemSet& rSet = aMark.GetMark(a)->GetObj()->GetItemSet();
+        const SfxItemSet& rSet = aMark.GetMark(a)->GetObj()->GetMergedItemSet();
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich(aIter.FirstWhich());
 
@@ -830,14 +831,25 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             // add attribute undo
             AddUndo(new SdrUndoAttrObj(*pObj,FALSE,bHasEEItems || bPossibleGeomChange || bRescueText));
 
-            SdrBroadcastItemChange aItemChange(*pObj);
-            if(bReplaceAll)
-                pObj->ClearItem();
-            if( (0 != aCharWhichIds.size() ) && pObj->ISA(SdrTextObj) )
-                ((SdrTextObj*)pObj)->RemoveOutlinerCharacterAttribs( aCharWhichIds );
+            //pObj->SetItemSetAndBroadcast(aAttr, bReplaceAll);
+            pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
 
-            pObj->SetItemSet(aAttr);
-            pObj->BroadcastItemChange(aItemChange);
+            if( (0 != aCharWhichIds.size() ) && pObj->ISA(SdrTextObj) )
+            {
+                SdrTextObj* pTextObj = ((SdrTextObj*)pObj);
+                Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
+
+                // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
+                pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
+
+                // object has changed, should be called form
+                // RemoveOutlinerCharacterAttribs. This will change when the text
+                // object implementation changes.
+                pTextObj->SetChanged();
+
+                pTextObj->BroadcastObjectChange();
+                pTextObj->SendUserCall(SDRUSERCALL_CHGATTR, aOldBoundRect);
+            }
         }
         // besser vorher checken, was gemacht werden soll:
         // pObj->SetAttr() oder SetNotPersistAttr()
@@ -1338,7 +1350,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, BOOL 
         pObj->TakeObjInfo(aInfo);
         if (!aInfo.bMoveAllowed || pObj->IsMoveProtect()) {
             Point aOfs(pM->GetPageView()->GetOffset());
-            Rectangle aObjRect(bBoundRects?pObj->GetBoundRect():pObj->GetSnapRect());
+            Rectangle aObjRect(bBoundRects?pObj->GetCurrentBoundRect():pObj->GetSnapRect());
             aObjRect.Move(aOfs.X(),aOfs.Y());
             aBound.Union(aObjRect);
             bHasFixed=TRUE;
@@ -1376,7 +1388,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, BOOL 
             Point aOfs(pPV->GetOffset());
             long nXMov=0;
             long nYMov=0;
-            Rectangle aObjRect(bBoundRects?pObj->GetBoundRect():pObj->GetSnapRect());
+            Rectangle aObjRect(bBoundRects?pObj->GetCurrentBoundRect():pObj->GetSnapRect());
             switch (eVert) {
                 case SDRVALIGN_TOP   : nYMov=aBound.Top()   -aObjRect.Top()       -aOfs.Y(); break;
                 case SDRVALIGN_BOTTOM: nYMov=aBound.Bottom()-aObjRect.Bottom()    -aOfs.Y(); break;
