@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:06:38 $
+#   last change: $Author: rt $ $Date: 2004-09-20 14:38:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,11 +86,14 @@ $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
     +$(WRAPCMD) $(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
                 --keyfile $(BIN)$/cliuno.snk \
-        --assembly-version "1.0.0.0" \
+        --assembly-version "1.1.0.0" \
         --assembly-description "This assembly contains metadata for the StarOffice/OpenOffice.org API." \
         --assembly-company "OpenOffice.org" \
         $(SOLARBINDIR)$/types_doc.rdb
 
 #		--assembly-copyright "2003" \
+
+#Version changes
+#incompatible change from 1.0.0.0 -> 1.1.0.0
 
 .ENDIF
