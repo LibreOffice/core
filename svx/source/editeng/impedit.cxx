@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:41:10 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,13 +1379,20 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                 SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
                 if ( xDataObj->isDataFlavorSupported( aFlavor ) )
                 {
-                    uno::Any aData = xDataObj->getTransferData( aFlavor );
-                    ::rtl::OUString aTmpText;
-                    aData >>= aTmpText;
-                    String aText( aTmpText );
-                    aText.ConvertLineEnd( LINEEND_LF );
-                    aText.SearchAndReplaceAll( LINE_SEP, ' ' );
-                    aSel = pEditEngine->pImpEditEngine->ImpInsertText( aSel, aText );
+                    try
+                    {
+                        uno::Any aData = xDataObj->getTransferData( aFlavor );
+                        ::rtl::OUString aTmpText;
+                        aData >>= aTmpText;
+                        String aText( aTmpText );
+                        aText.ConvertLineEnd( LINEEND_LF );
+                        aText.SearchAndReplaceAll( LINE_SEP, ' ' );
+                        aSel = pEditEngine->pImpEditEngine->ImpInsertText( aSel, aText );
+                    }
+                    catch( ... )
+                    {
+                        ; // #i9286# can happen, even if isDataFlavorSupported returns true...
+                    }
                 }
             }
             else
