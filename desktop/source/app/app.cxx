@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 15:53:14 $
+ *  last change: $Author: cd $ $Date: 2001-07-10 05:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include <vos/process.hxx>
 #endif
 
+#include <rtl/logfile.hxx>
 #include <setup2/installer.hxx>
 #include <svtools/pathoptions.hxx>
 #include "svtools/cjkoptions.hxx"
@@ -105,6 +106,8 @@ using namespace ::com::sun::star::lang;
 
 void PreloadConfigTrees()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "PreloadConfigTrees()" );
+
     // these tree are preloaded to get a faster startup for the office
     Sequence <rtl::OUString> aPreloadPathList(6);
     aPreloadPathList[0] =  rtl::OUString::createFromAscii("org.openoffice.Office.Common");
@@ -162,10 +165,13 @@ Desktop aDesktop;
 
 Desktop::Desktop() : m_pLabelResMgr( 0 ), m_pIntro( 0 )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "Desktop::Desktop()" );
 }
 
 void Desktop::Main()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "Desktop::Main()" );
+
     // ----  Startup screen ----
     OpenStartupScreen( "iso" );
 
@@ -217,21 +223,29 @@ void Desktop::Main()
 
 //  The only step that should be done if terminate flag was specified
 //  Typically called by the plugin only
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start Installer::InitializeInstallation()" );
     Installer* pInstaller = new Installer;
     pInstaller->InitializeInstallation( Application::GetAppFileName() );
     delete pInstaller;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end Installer::InitializeInstallation()" );
 
     if( !bTerminate )
     {
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create SvtPathOptions/SvtCJKOptions" );
         SvtPathOptions* pPathOptions = new SvtPathOptions;
         SvtCJKOptions* pCJKOPptions = new SvtCJKOptions(sal_True);
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create SvtPathOptions/SvtCJKOptions" );
         RegisterServices();
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create OfficeWrapper::OfficeWrapper()" );
         OfficeWrapper* pWrapper = new OfficeWrapper( ::comphelper::getProcessServiceFactory() );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create OfficeWrapper::OfficeWrapper()" );
 //      Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
 
         // Post user event to startup first application component window
         Application::PostUserEvent( LINK( this, Desktop, OpenClients ) );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "start call SfxApplicationClass::Main()" );
         SfxApplicationClass::Main();
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "end call SfxApplicationClass::Main()" );
 //      xWrapper->dispose();
 
         if( pWrapper!=NULL)
@@ -265,6 +279,8 @@ IMPL_LINK( Desktop, OpenClients, void*, pvoid )
 
 void Desktop::OpenStartupScreen( const char* pLabelPrefix )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "Desktop::OpenStartupScreen()" );
+
     if ( pLabelPrefix && !Application::IsRemoteServer() )
     {
         // versuchen, die Label-DLL zu erzeugen
@@ -293,6 +309,7 @@ void Desktop::OpenStartupScreen( const char* pLabelPrefix )
 
 void Desktop::CloseStartupScreen()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "Desktop::CloseStartupScreen()" );
     delete m_pIntro;
     m_pIntro = 0;
 }
