@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:05:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2222,6 +2222,8 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                         pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
                         pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
                         pMedium->GetItemSet()->Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
+
+                        m_pData->m_pObjectShell->ResetError();
                         if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
                             nError=ERRCODE_IO_GENERAL;
                         nError = m_pData->m_pObjectShell->GetErrorCode();
