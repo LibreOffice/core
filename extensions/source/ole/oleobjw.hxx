@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-04-11 11:22:50 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,19 +77,27 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
+
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
+
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
 #endif
 
+
 #include <typelib/typedescription.hxx>
 #include "unoconversionutilities.hxx"
-
+#include "windata.hxx"
 using namespace cppu;
 using namespace rtl;
 using namespace std;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
+using namespace com::sun::star::bridge::oleautomation;
 
 namespace ole_adapter
 {
@@ -98,90 +106,155 @@ namespace ole_adapter
 
 typedef hash_map<OUString, pair<DISPID, unsigned short>, hashOUString_Impl, equalOUString_Impl> DispIdMap;
 
-typedef hash_map<OUString, unsigned int, hashOUString_Impl, equalOUString_Impl> TLBFuncIndexMap;
+typedef hash_multimap<OUString, unsigned int, hashOUString_Impl, equalOUString_Impl> TLBFuncIndexMap;
 
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
-class IUnknownWrapper_Impl : public WeakImplHelper3<XInvocation, XBridgeSupplier2, XInitialization>,
+class IUnknownWrapper_Impl : public WeakImplHelper4<XInvocation, XBridgeSupplier2, XInitialization, XAutomationObject>,
                              public UnoConversionUtilities<IUnknownWrapper_Impl>
 
 {
 public:
-    IUnknownWrapper_Impl(Reference<XMultiServiceFactory> &xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    IUnknownWrapper_Impl(Reference<XMultiServiceFactory> &xFactory,
+                         sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
 
     ~IUnknownWrapper_Impl();
 
+    //XInterface
+    Any SAL_CALL IUnknownWrapper_Impl::queryInterface(const Type& t)
+        throw (RuntimeException);
 
     // XInvokation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw(RuntimeException);
-    virtual Any SAL_CALL invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
-    virtual void SAL_CALL setValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
-    virtual Any SAL_CALL getValue( const OUString& aPropertyName ) throw(UnknownPropertyException, RuntimeException);
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) throw(RuntimeException);
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) throw(RuntimeException);
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  )
+        throw(RuntimeException);
+    virtual Any SAL_CALL invoke( const OUString& aFunctionName,
+                                 const Sequence< Any >& aParams,
+                                 Sequence< sal_Int16 >& aOutParamIndex,
+                                 Sequence< Any >& aOutParam )
+        throw(IllegalArgumentException, CannotConvertException,
+              InvocationTargetException, RuntimeException);
+    virtual void SAL_CALL setValue( const OUString& aPropertyName,
+                                    const Any& aValue )
+        throw(UnknownPropertyException, CannotConvertException,
+              InvocationTargetException, RuntimeException);
+    virtual Any SAL_CALL getValue( const OUString& aPropertyName )
+        throw(UnknownPropertyException, RuntimeException);
+    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName )
+        throw(RuntimeException);
+    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName )
+        throw(RuntimeException);
 
     // XBridgeSupplier2
     // This interface is implemented to provide a safe way to obtain the original
     // IUnknown or IDispatch within the function anyToVariant. The function asks
     // every UNO object for its XBridgeSupplier2 and if it is available uses it to convert
     // the object with its own supplier.
-    virtual Any SAL_CALL createBridge( const Any& modelDepObject, const Sequence< sal_Int8 >& aProcessId, sal_Int16 sourceModelType, sal_Int16 destModelType ) throw(IllegalArgumentException, RuntimeException);
+    virtual Any SAL_CALL createBridge( const Any& modelDepObject,
+                                       const Sequence< sal_Int8 >& aProcessId,
+                                       sal_Int16 sourceModelType,
+                                       sal_Int16 destModelType )
+        throw(IllegalArgumentException, RuntimeException);
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
+        throw(Exception, RuntimeException);
+protected:
 
-    // ------------------------------------------------------------------------------------------------------------------
-    virtual Any invokeWithDispIdUnoTlb(DISPID dispID, const Sequence< Any >& Params, Sequence<sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
+    // ----------------------------------------------------------------------------
+    virtual Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
+                                       const Sequence< Any >& Params,
+                                       Sequence<sal_Int16 >& OutParamIndex,
+                                       Sequence< Any >& OutParam);
     // Is used for OleObjectFactory service
-    virtual Any invokeWithDispIdComTlb(DISPID dispID,
-                          const Sequence< Any >& Params,
-                          Sequence< sal_Int16 >& OutParamIndex,
-                          Sequence< Any >& OutParam)
-              throw ( IllegalArgumentException, CannotConvertException,
-                      InvocationTargetException, RuntimeException);
+    virtual Any invokeWithDispIdComTlb(const OUString& sFuncName,
+                                       const Sequence< Any >& Params,
+                                       Sequence< sal_Int16 >& OutParamIndex,
+                                       Sequence< Any >& OutParam);
 
-    virtual void setValueWithDispId(DISPID dispID, const Any& Value) throw ( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
-    virtual Any getValueWithDispId(DISPID dispID) throw (UnknownPropertyException, RuntimeException );
+//    virtual void setValueWithDispId(DISPID dispID, const Any& Value);
+
+//    virtual Any getValueWithDispId(const OUString& sName, DISPID dispID);
 
 
     // UnoConversionUtilities -------------------------------------------------------------------------------
     virtual Reference<XInterface> createUnoWrapperInstance();
     virtual Reference<XInterface> createComWrapperInstance();
-protected:
 
+    /**Obtains a FUNCDESC structure for a function.
+       Fills the FUNCDESC structure if ITypeInfo provides information for
+       the function of name sFuncName or pFuncDesc will not be filled in.
+       May throw a BridgeRuntimeError.
+     */
+    void getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncDesc);
+    /**Obtains a FUNCDESC structures or a VARDESC structure
+       for a property. pFuncDescPut may also contain
+       a structure for a "propertyputref" operation. If pFuncDesc contains a
+       "put ref" or "put" FUNCDESC depends on what was found first in the type
+       description.
+       Fills the FUNCDESC structure if ITypeInfo provides information for
+       the respective property functions or the structures will not be filled in.
+       May throw a BridgeRuntimeError.
+     */
+    void getPropDesc(const OUString & sFuncName, FUNCDESC ** pFuncDescGet,
+                     FUNCDESC** pFuncDescPut, VARDESC ** pVarDesc);
     // These functions are for the case if an object of this class wraps an IDispatch
     // object that implements UNO interfaces. In that case the member m_seqTypes
     // is set through XInitialization::initialize.
-    void getMethodInfo( TypeDescription& methodDescription);
+    void getMethodInfo(const OUString& sName, TypeDescription& methodDescription);
     // After return attributInfo contains typelib_InterfaceAttributeTypeDescription::pAttributeTypeRef
-    void getAttributeInfo( TypeDescription& attributeInfo);
+    void getAttributeInfo(const OUString& sName, TypeDescription& attributeInfo);
     // used by get MethodInfo
-    TypeDescription  getInterfaceMemberDescOfCurrentCall( );
+    TypeDescription  getInterfaceMemberDescOfCurrentCall(const OUString& sName);
+    /** Returns alway a valid ITypeInfo interface or throws a BridgeRuntimeError.
+        The returned interface does not need to be AddRef'ed as long as it is locally
+        used. The interface is kept in the instance of this class.
+     */
     ITypeInfo*  getTypeInfo();
 
+    /** Returns the DISPID for a function or property name. If true is returned then
+        id contains a valid DISPID.
+    */
+    bool getDispid(const OUString& sFuncName, DISPID * id);
 
-    // Gets information about the parameter types ( VARTYPE) and mode ( in, out, in/out)
-    sal_Bool getParameterInfo();
-    // Builds up the complete vartype from a TYPEDESC, e.g VT_BSTR, VT_BYREF | VT_I4, VT_BYREF|VT_ARRAY|VT_I1
-    sal_Bool getElementTypeDesc( TYPEDESC *desc, VARTYPE& varType );
-    // Iterates over all functions and put the names and indices into a map (TLBFuncIndexMap)
-    sal_Bool buildComTlbIndex();
-    // Determines whether the map m_mapComFunc has already been set up
-    sal_Bool isComTlbIndex();
+    /** Gets the element type in a VARIANT like style. E.g. if desc->lptdesc contains
+        a VT_PTR than it is replaced by VT_BYREF and VT_SAFEARRAY is replaced by VT_ARRAY
+        If the TYPEDESC describes an SAFEARRAY then varType is a combination of VT_ARRAY
+        and the element type.
+        The argument desc must be obtained from FUNCDESC::lprgelemdescParam[i].tdesc where
+        FUNCDESC was obtained from the ITypeInfo belonging to wrapped IDispatch.
+    */
+    VARTYPE getElementTypeDesc( const TYPEDESC *desc);
+    /** Iterates over all functions and put the names and indices into the map
+        m_mapComFunc of type TLBFuncIndexMap.
+        Call the function every time before accessing the map.
+        Throws a BridgeRuntimeError on failure.
+    */
+    void  buildComTlbIndex();
 
-    // The information is necessary for getReturnType and getOutParameterType because they obtain
-    // the information for the current call on Invocation.
-    void setCurrentInvokeCall( const OUString& name){ m_usCurrentGet=L""; m_usCurrentInvoke= name;}
-    void setCurrentGetCall( const OUString& name){ m_usCurrentInvoke= L""; m_usCurrentGet= name;}
+    /** Returns a FUNCDESC structure which contains type information about the
+        current XInvocation::invoke call. The FUNCDESC either describes a method,
+        a property put or a property get operation.
+        It uses the types  com.sun.star.bridge.oleautomation.PropertyPutArgument
+        which can be
+        contained in the sequence of in-arguments of invoke to determine if the call is
+        a property put or property get operation.
+        If no adequate FUNCDESC was found, an IllegalArgumentException is thrown.
+        Therefore it is safe to assume that the returned FUNCDESC* is not NULL.
 
-    // Finds out wheter the wrapped IDispatch is an JScript Object. This is is done by
-    // asking for the property "_environment". If it has the value "JScript" ( case insensitive)
-    // then the IDispatch is considered a JScript object.
+        @exception IllegalArgumentException
+        Thrown if no adequate FUNCDESC could be found.
+    */
+    void getFuncDescForInvoke(const OUString & sFuncName,
+                              const Sequence<Any> & seqArgs, FUNCDESC** pFuncDesc);
+
+    // Finds out wheter the wrapped IDispatch is an JScript Object. This is is
+    // done by
+    // asking for the property "_environment". If it has the value "JScript"
+    // (case insensitive) then the IDispatch is considered a JScript object.
     sal_Bool isJScriptObject();
     // -------------------------------------------------------------------------------
 
-    DispIdMap::iterator getDispIdEntry(const OUString& name);
     // If UNO interfaces are implemented in JScript objects, VB or C++ COM objects
     // and those are passed as parameter to a UNO interface function, then
     // the IDispatch* are wrapped by objects of this class. Assuming that the functions
@@ -192,32 +265,26 @@ protected:
     // m_TypeDescription is only useful when an object wraps an IDispatch object that implements
     // an UNO interface. The value is set during a call to XInitialization::initialize.
     Sequence<Type> m_seqTypes;
-    IUnknown*           m_pUnknown;
-    IDispatch*          m_pDispatch;
+    CComPtr<IUnknown> m_spUnknown;
+    CComPtr<IDispatch> m_spDispatch;
+    /** This value is set dureing XInitialization::initialize. It indicates that the COM interface
+    was transported as VT_DISPATCH in a VARIANT rather then a VT_UNKNOWN
+    */
+    sal_Bool  m_bOriginalDispatch;
     DispIdMap           m_dispIdMap;
     Reference<XIdlClass>*       m_pxIdlClass;
-    Mutex               m_mutex;
 
 
-    // The name of the function being executed ( invoke)
-    OUString    m_usCurrentInvoke;
-    // The name of the property being retrieved ( getValue)
-    OUString    m_usCurrentGet;
     // used by isJScriptObject
     enum JScriptDetermination{ JScriptUndefined=0, NoJScript, IsJScript};
     JScriptDetermination m_eJScript;
-    // The map is filled by buildComTlbIndex and
+    // The map is filled by buildComTlbIndex
+    // It maps Uno Function names to an index which is used in ITypeInfo::GetFuncDesc
     TLBFuncIndexMap m_mapComFunc;
+    // used for synchroizing the computation of the content for m_mapComFunc
+    bool m_bComTlbIndexInit;
     // Keeps the ITypeInfo obtained from IDispatch::GetTypeInfo
     CComPtr< ITypeInfo > m_spTypeInfo;
-    // keeps the modes of parameters of the current function call
-    // These values correspond to Windows PARAMFLAGS constants ( PARAMFLAG_FIN, PARAMFLAG_FOUT)
-    // The Sequence contains only the in and out flag
-    // The length of the sequence reprensentsf the number of parameters.
-    Sequence< sal_Int32> m_seqCurrentParamTypes;
-    // contains the VARTYPES of the parameters of the current call
-    Sequence<sal_uInt16> m_seqCurrentVartypes;
-
 };
 
 } // end namespace
