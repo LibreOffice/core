@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddlgfact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:13:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl); //add for SdActionDlg
 IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl); //add for SdVectorizeDlg
 IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl); //add for SdPublishingDlg
 IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl); // add for HeaderFooterDialog
+IMPL_ABSTDLG_BASE(AbstractBulletDialog_Impl);
 
 //AbstractCopyDlg_Impl begin
 void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
@@ -190,6 +191,38 @@ String AbstractTabDialog_Impl::GetText() const
     return pDlg->GetText();
 }
 //add for AbstractTabDialog_Impl end
+
+// --------------------------------------------------------------------
+
+// AbstractBulletDialog_Impl begin
+void AbstractBulletDialog_Impl::SetCurPageId( USHORT nId )
+{
+    static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetCurPageId( nId );
+}
+const SfxItemSet* AbstractBulletDialog_Impl::GetOutputItemSet() const
+{
+    return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetOutputItemSet();
+}
+//add by CHINA001
+const USHORT* AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetInputRanges( pItem );
+}
+//add by CHINA001
+void AbstractBulletDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetInputSet( pInSet );
+}
+//From class Window.
+void AbstractBulletDialog_Impl::SetText( const XubString& rStr )
+{
+    static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetText( rStr );
+}
+String AbstractBulletDialog_Impl::GetText() const
+{
+    return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetText();
+}
+//add for AbstractBulletDialog_Impl end
 
 // --------------------------------------------------------------------
 
@@ -686,24 +719,14 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdItemSetTabDlg ( co
                                                 const SfxItemSet* pAttr,
                                                 ::sd::View* pView ) //add for OutlineBulletDlg, SdParagraphDlg
 {
-
-    SfxTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
     {
-        case TAB_OUTLINEBULLET :
-            pDlg = new ::sd::OutlineBulletDlg( pParent, pAttr, pView );
-            break;
-        case TAB_PARAGRAPH :
-            pDlg = new SdParagraphDlg( pParent, pAttr );
-            break;
-        default:
-            break;
+    case TAB_OUTLINEBULLET :
+        return new AbstractBulletDialog_Impl( new ::sd::OutlineBulletDlg( pParent, pAttr, pView ) );
+    case TAB_PARAGRAPH :
+        return new AbstractTabDialog_Impl( new SdParagraphDlg( pParent, pAttr ) );
     }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
     return 0;
-
 }
 // add for OutlineBulletDlg end
 
