@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:56:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,8 +581,7 @@ class SwDoc
     // fuer Felder:
     void _InitFieldTypes();     // wird vom CTOR gerufen!!
     void _MakeFldList( int eMode );
-    void RenameUserFld( const String& rOldName, const String& rNewName,
-                        String& rFormel );
+
     // Datenbankfelder:
     void UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc );
     void AddUsedDBToList( SvStringsDtor& rDBNameList,
@@ -762,11 +761,7 @@ public:
     void GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts, const SwPaM* = 0,
                         sal_Bool bDrawAlso = sal_False ) const;
 
-        // dokumentglobale Macros
-    sal_Bool HasGlobalMacro(sal_uInt16 nEvent) const;
-    const SvxMacro& GetGlobalMacro(sal_uInt16 nEvent) const;
     void SetGlobalMacro(sal_uInt16 nEvent, const SvxMacro&);
-    sal_Bool DelGlobalMacro(sal_uInt16 nEvent);
     const SvxMacroTableDtor& GetMacroTable() const { return *pMacroTable; }
 
     // Fussnoten Informationen
@@ -996,7 +991,6 @@ public:
     void RemoveFldType(sal_uInt16 nFld);
     void UpdateFlds( SfxPoolItem* pNewHt = 0, sal_Bool bCloseDB = sal_False );
     void InsDeletedFldType( SwFieldType & );
-    sal_Bool RenameUserFields(const String& rOldName, const String& rNewName);
 
     // #111840#
     /**
@@ -1286,8 +1280,6 @@ public:
     const SwGrfFmtColls *GetGrfFmtColls() const     { return pGrfFmtCollTbl; }
     SwGrfFmtColl *MakeGrfFmtColl(const String &rFmtName,
                                     SwGrfFmtColl *pDerivedFrom);
-    void DelGrfFmtColl(sal_uInt16 nFmt);
-    void DelGrfFmtColl( SwGrfFmtColl* pColl );
     SwGrfFmtColl* FindGrfFmtCollByName( const String& rName ) const
         {   return (SwGrfFmtColl*)FindFmtByName( (SvPtrarr&)*pGrfFmtCollTbl, rName ); }
 
@@ -1366,7 +1358,6 @@ public:
     sal_Bool IsPoolTxtCollUsed( sal_uInt16 nId ) const;
     sal_Bool IsPoolFmtUsed( sal_uInt16 nId ) const;
     sal_Bool IsPoolPageDescUsed( sal_uInt16 nId ) const;
-    sal_Bool IsPoolNumRuleUsed( sal_uInt16 nId ) const;
 
     // erfrage ob die Absatz-/Zeichen-/Rahmen-/Seiten - Vorlage benutzt wird
     sal_Bool IsUsed( const SwModify& ) const;
@@ -1379,12 +1370,6 @@ public:
     sal_uInt16 GetDocPatternCnt() const { return aPatternNms.Count(); }
         // gebe den Dok-VorlagenNamen zurueck. !!! Kann auch 0 sein !!!
     String* GetDocPattern( sal_uInt16 nPos ) const { return aPatternNms[nPos]; }
-    // loeche die nicht mehr benutzten Pattern-Namen aus dem Array.
-
-    // alle nicht mehr referenzierten Namen werden durch 0-Pointer
-    // ersetzt. Diese Positionen koennen wieder vergeben werden.
-    void ReOrgPatternHelpIds();
-
 
         // Loesche alle nicht referenzierten FeldTypen
     void GCFieldTypes();                // impl. in docfld.cxx
@@ -1725,8 +1710,6 @@ public:
     sal_Bool SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew );
         // Erfrage wie attributiert ist
     sal_Bool GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet );
-        // setze das TabelleAttribut Undo auf:
-    void AppendUndoForAttrTable( const SwTable& rTbl );
         // setze das InsertDB als Tabelle Undo auf:
     void AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable );
         // setze die Spalten/Zeilen/ZTellen Breite/Hoehe
@@ -1740,8 +1723,6 @@ public:
     void SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
     void ClearBoxNumAttrs( const SwNodeIndex& rNode );
 
-    sal_Bool CopyTblInTbl( const SwTable& rSrcTable, SwTable& rDestTbl,
-                        const SwNodeIndex& rBoxIdx );
     sal_Bool InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                         const SwTable* pCpyTbl = 0, sal_Bool bCpyName = sal_False,
                         sal_Bool bCorrPos = sal_False );
@@ -1763,9 +1744,6 @@ public:
     sal_Bool MergeTable( const SwPosition& rPos, sal_Bool bWithPrev = sal_True,
                         sal_uInt16 nMode = 0 );
 
-    // Raeume die Umrandung innerhalb der Tabelle ein wenig auf (doppelte
-    // an einer Kante erkennen und beseitigen)
-    sal_Bool GCTableBorder( const SwPosition& rPos );
     // Charts der angegebenen Tabelle zum Update bewegen
     void UpdateCharts( const String &rName ) const;
     // update all charts, for that exists any table
@@ -1814,10 +1792,6 @@ public:
     void ChgSection( sal_uInt16 nSect, const SwSection&, const SfxItemSet* = 0, sal_Bool bPreventLinkUpdate = FALSE);
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
-    void ChgSectionPasswd(
-            const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
-            const SwSection& rSection );
-
     // Pointer auf die SfxDocShell vom Doc, kann 0 sein !!!
           SwDocShell* GetDocShell()         { return pDocShell; }
     const SwDocShell* GetDocShell() const   { return pDocShell; }
@@ -1849,8 +1823,6 @@ public:
     // erzeuge um das zu Servende Object eine Selektion
     sal_Bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const;
-    // erfage alle zu servendenen Objecte
-    sal_uInt16 GetServerObjects( SvStrings& rStrArr ) const;
 
     // fuer Drag&Move: ( z.B. RefMarks "verschieben" erlauben )
     sal_Bool IsCopyIsMove() const               { return bCopyIsMove; }
@@ -1927,7 +1899,6 @@ public:
                         sal_uInt16 nDelType = USHRT_MAX );
     sal_Bool DeleteRedline( const SwStartNode& rSection, sal_Bool bSaveInUndo = sal_True,
                         sal_uInt16 nDelType = USHRT_MAX );
-    void DeleteRedline( sal_uInt16 nPos );
     sal_uInt16 GetRedlinePos( const SwNode& rNd, sal_uInt16 nType = USHRT_MAX ) const;
     void CompressRedlines();
     const SwRedline* GetRedline( const SwPosition& rPos,
@@ -2053,7 +2024,6 @@ public:
                                                     BOOL bLocaleData ) const;
     void SetForbiddenCharacters( USHORT nLang,
             const com::sun::star::i18n::ForbiddenCharacters& );
-    void ClearForbiddenCharacters( USHORT nLang );
     const vos::ORef<SvxForbiddenCharactersTable>& GetForbiddenCharacterTbl() const
             { return xForbiddenCharsTable; }
     vos::ORef<SvxForbiddenCharactersTable>& GetForbiddenCharacterTbl();
@@ -2231,7 +2201,6 @@ public:
 
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
-    void ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem);
 
     // Change a TOX undoable.
     void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
@@ -2259,25 +2228,6 @@ public:
     // -> #111840#
 
     /**
-        Checks if there is a character at a certain position.
-
-        @param rPos       position to search at
-
-        @retval TRUE      there is a character at \a rPos
-        @retval FALSE     else
-    */
-    static BOOL IsChar(const SwPosition & rPos);
-
-    /**
-       Returns the character at a certain position.
-
-       @param rPos        position to search at
-
-       @return the character at the given position
-    */
-    static xub_Unicode GetChar(const SwPosition & rPos);
-
-    /**
        Returns the field at a certain position.
 
        @param rPos        position to search at
@@ -2299,7 +2249,6 @@ public:
 
     // -> #i23726#
     BOOL IsFirstOfNumRule(SwPosition & rPos);
-    void IndentNumRule(SwPosition & rPos, short nAmount);
     // <- #i23726#
 };
 
