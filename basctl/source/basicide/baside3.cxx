@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 10:51:53 $
+ *  last change: $Author: tbe $ $Date: 2001-12-07 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
         pEditor->SetMode( DLGED_SELECT );
         rBindings.Invalidate( SID_CHOOSE_CONTROLS );
     }
+    rBindings.Invalidate( SID_SHOW_PROPERTYBROWSER );
     rBindings.Invalidate( SID_DOC_MODIFIED );
     rBindings.Invalidate( SID_SAVEDOC );
 }
