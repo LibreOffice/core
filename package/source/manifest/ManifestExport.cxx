@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,21 +88,30 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
 {
     const OUString sFileEntryElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
     const OUString sManifestElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
-    const OUString sInitialisationVectorElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_INITIALISATION_VECTOR ) );
-    const OUString sEncryptionDataElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
+    const OUString sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
+    const OUString sAlgorithmElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) );
+    const OUString sKeyDerivationElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) );
+
     const OUString sCdataAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
     const OUString sMediaTypeAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
     const OUString sFullPathAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
-    const OUString sAlgorithmAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM ) );
+    const OUString sSizeAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
     const OUString sSaltAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
+    const OUString sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) );
     const OUString sIterationCountAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
+    const OUString sAlgorithmNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
+    const OUString sKeyDerivationNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
 
-    const OUString sFullPath            ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
-    const OUString sMediaType           ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-    const OUString sBlowfish            ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish" ) );
-    const OUString sIterationCount      ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
-    const OUString sSalt                ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
-    const OUString sInitialisationVector( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
+    const OUString sFullPathProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+    const OUString sMediaTypeProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+    const OUString sIterationCountProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+    const OUString sSaltProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+    const OUString sInitialisationVectorProperty( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
+    const OUString sSizeProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
+
+    const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+    const OUString sBlowfish            ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) );
+    const OUString sPBKDF2              ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
 
     AttributeList * pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
@@ -110,8 +119,17 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
                                   OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
 
     Reference < XAttributeList > xRootAttrList (pRootAttrList);
+
     xHandler->startDocument();
+    Reference < XExtendedDocumentHandler > xExtHandler ( xHandler, UNO_QUERY );
+    if (xExtHandler.is())
+    {
+        OUString aDocType ( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_DOCTYPE ) );
+        xExtHandler->unknown ( aDocType );
+    }
+    xHandler->ignorableWhitespace ( sWhiteSpace );
     xHandler->startElement( sManifestElement, xRootAttrList );
+
     const Sequence < PropertyValue > *pSequence = rManList.getConstArray();
 
     for (sal_uInt32 i = 0, nEnd = rManList.getLength() ; i < nEnd ; i++)
@@ -122,64 +140,83 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         const PropertyValue *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL;
         for (sal_uInt32 j = 0, nNum = pSequence->getLength(); j < nNum; j++, pValue++)
         {
-            if (pValue->Name.equals (sMediaType) )
+            if (pValue->Name.equals (sMediaTypeProperty) )
             {
                 pValue->Value >>= aString;
                 pAttrList->AddAttribute ( sMediaTypeAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name.equals (sFullPath) )
+            else if (pValue->Name.equals (sFullPathProperty) )
             {
                 pValue->Value >>= aString;
                 pAttrList->AddAttribute ( sFullPathAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name.equals (sInitialisationVector) )
+            else if (pValue->Name.equals (sSizeProperty) )
+            {
+                sal_Int32 nSize;
+                pValue->Value >>= nSize;
+                OUStringBuffer aBuffer;
+                aBuffer.append ( nSize );
+                pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            }
+            else if (pValue->Name.equals (sInitialisationVectorProperty) )
                 pVector = pValue;
-            else if (pValue->Name.equals (sSalt) )
+            else if (pValue->Name.equals (sSaltProperty) )
                 pSalt = pValue;
-            else if (pValue->Name.equals (sIterationCount) )
+            else if (pValue->Name.equals (sIterationCountProperty) )
                 pIterationCount = pValue;
         }
         Reference < XAttributeList > xAttrList = pAttrList;
+        xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sFileEntryElement , xAttrList);
-        if ( pVector )
+        if ( pVector && pSalt && pIterationCount )
         {
             AttributeList * pAttrList = new AttributeList;
-            pAttrList->AddAttribute ( sAlgorithmAttribute, sCdataAttribute, sBlowfish );
-            if ( pIterationCount )
-            {
-                sal_Int64 nValue;
-                pIterationCount->Value >>= nValue;
-                OUStringBuffer aBuffer;
-                aBuffer.append (nValue);
-                pAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
-            }
-            if ( pSalt )
-            {
-                OUStringBuffer aBuffer;
-                Sequence < sal_Int8 > aSequence;
-                pSalt->Value >>= aSequence;
-                Base64Codec::encodeBase64 ( aBuffer, aSequence );
-                pAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
-            }
             Reference < XAttributeList > xAttrList (pAttrList);
+            xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sEncryptionDataElement , xAttrList);
-            if ( pVector )
-            {
-                AttributeList * pAttrList = new AttributeList;
-                Reference < XAttributeList > xAttrList (pAttrList);
-                OUStringBuffer aBuffer;
-                Sequence < sal_Int8 > aSequence;
-                pVector->Value >>= aSequence;
-                Base64Codec::encodeBase64 ( aBuffer, aSequence );
-                xHandler->startElement ( sInitialisationVectorElement, xAttrList);
-                xHandler->characters ( aBuffer.makeStringAndClear() );
-                xHandler->endElement ( sInitialisationVectorElement );
-            }
+
+            pAttrList = new AttributeList;
+            xAttrList = pAttrList;
+
+            pAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sBlowfish );
+
+            OUStringBuffer aBuffer;
+            Sequence < sal_uInt8 > aSequence;
+            pVector->Value >>= aSequence;
+            Base64Codec::encodeBase64 ( aBuffer, aSequence );
+            pAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+
+            xHandler->ignorableWhitespace ( sWhiteSpace );
+            xHandler->startElement( sAlgorithmElement , xAttrList);
+            xHandler->ignorableWhitespace ( sWhiteSpace );
+            xHandler->endElement( sAlgorithmElement );
+
+            pAttrList = new AttributeList;
+            xAttrList = pAttrList;
+
+            pAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2 );
+
+            sal_Int32 nCount;
+            pIterationCount->Value >>= nCount;
+            aBuffer.append (nCount);
+            pAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+
+            pSalt->Value >>= aSequence;
+            Base64Codec::encodeBase64 ( aBuffer, aSequence );
+            pAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+
+            xHandler->ignorableWhitespace ( sWhiteSpace );
+            xHandler->startElement( sKeyDerivationElement , xAttrList);
+            xHandler->ignorableWhitespace ( sWhiteSpace );
+            xHandler->endElement( sKeyDerivationElement );
+            xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sEncryptionDataElement );
         }
+        xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->endElement( sFileEntryElement );
         pSequence++;
     }
+    xHandler->ignorableWhitespace ( sWhiteSpace );
     xHandler->endElement( sManifestElement );
     xHandler->endDocument();
 }
