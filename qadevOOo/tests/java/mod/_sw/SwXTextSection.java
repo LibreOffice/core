@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextSection.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 20:23:28 $
+ *  last change:$Date: 2005-01-25 16:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ public class SwXTextSection extends TestCase {
     } catch ( com.sun.star.uno.Exception e ) {
         // Some exception occures.FAILED
         e.printStackTrace( log );
-        throw new StatusException( "Couldn³t create document", e );
+        throw new StatusException( "Couldn't create document", e );
     }
     }
 
