@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
                                    : new SwFtnInfo( pSh->GetFtnInfo() );
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
+    USHORT i;
+
     if(PTR_CAST(SwWebDocShell, pDocSh))
     {
         aParaTemplLbl   .Hide();
@@ -324,7 +326,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
         // Seite
-    for( USHORT i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_ENDNOTE; ++i )
+    for( i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_ENDNOTE; ++i )
         aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
 
     USHORT nCount = pSh->GetPageDescCnt();
