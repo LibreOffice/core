@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-12 16:33:42 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 16:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,12 +515,12 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
             css::uno::Reference< css::frame::XTask > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
             // Ask task for terminating. If anyone say "NO" ...
             // ... we must reset oer default return value to "NO" too!
-            // But we don't break this loop ... we will close all task, which accept it.
             try
             {
                 if( xTask->close() == sal_False )
                 {
                     bTaskVeto = sal_True;
+                    break;
                 }
             }
             catch( css::lang::DisposedException& )
