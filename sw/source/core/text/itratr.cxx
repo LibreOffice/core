@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-08 10:53:32 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,20 +183,12 @@ using namespace ::com::sun::star;
 
 void SwAttrIter::Chg( SwTxtAttr *pHt )
 {
-#ifndef OLD_ATTR_HANDLING
     ASSERT( pHt && pFnt, "No attribute of font available for change");
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, sal_True );
     else
         aAttrHandler.PushAndChg( *pHt, *pFnt );
     nChgCnt++;
-#else
-    if( pRedln && pRedln->IsOn() )
-        pRedln->ChangeTxtAttr( pFnt, *pHt, sal_True );
-    else
-        pHt->ChgFnt( pFnt );
-    nChgCnt++;
-#endif
 }
 
 /*************************************************************************
@@ -205,7 +197,6 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 
 void SwAttrIter::Rst( SwTxtAttr *pHt )
 {
-#ifndef OLD_ATTR_HANDLING
     ASSERT( pHt && pFnt, "No attribute of font available for reset");
     // get top from stack after removing pHt
     if( pRedln && pRedln->IsOn() )
@@ -213,13 +204,6 @@ void SwAttrIter::Rst( SwTxtAttr *pHt )
     else
         aAttrHandler.PopAndChg( *pHt, *pFnt );
     nChgCnt--;
-#else
-    if( pRedln && pRedln->IsOn() )
-        pRedln->ChangeTxtAttr( pFnt, *pHt, sal_False );
-    else
-        pHt->RstFnt( pFnt );
-    nChgCnt--;
-#endif
 }
 
 /*************************************************************************
@@ -437,6 +421,10 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
     if( pRedln )
         nChgCnt += pRedln->Seek( *pFnt, nNewPos, nPos );
     nPos = nNewPos;
+
+    if( nPropFont )
+        pFnt->SetProportion( nPropFont );
+
     return pFnt->IsFntChg();
 }
 
@@ -956,16 +944,14 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
 
-#ifndef OLD_ATTR_HANDLING
     // We do not want scaling attributes to be considered during this
     // calculation. For this, we push a temporary scaling attribute with
     // scaling value 100 and priority flag on top of the scaling stack
     SwAttrHandler& rAH = aIter.GetAttrHandler();
     SvxCharScaleWidthItem aItem;
-    SwTxtCharScaleWidth aAttr( aItem, nStt, nEnd );
+    SwTxtAttrEnd aAttr( aItem, nStt, nEnd );
     aAttr.SetPriorityAttr( sal_True );
     rAH.PushAndChg( aAttr, *(aIter.GetFnt()) );
-#endif
 
     xub_StrLen nIdx = nStt;
 

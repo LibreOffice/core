@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrtox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,18 +107,6 @@ xub_StrLen* SwTxtTOXMark::GetEnd()
     return pEnd;
 }
 
-void SwTxtTOXMark::ChgFnt(SwFont *pFont)
-{
-    ASSERT( pFont->GetTox()<255, "ChgFnt: Tox-Schachtelungstiefe zu gross" );
-    pFont->GetTox()++;
-}
-
-void SwTxtTOXMark::RstFnt(SwFont *pFont)
-{
-    ASSERT( pFont->GetTox(), "RstFnt: Tox-Rst ohne Tox-Chg?" );
-    pFont->GetTox()--;
-}
-
 void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
 {
     SwTOXMark& rTOX = (SwTOXMark&)GetTOXMark();
@@ -149,6 +137,3 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
     //
     ((SwTOXType*)pType)->Add( &rTOX );
 }
-
-
-

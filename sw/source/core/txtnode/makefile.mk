@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-12-21 09:32:45 $
+#   last change: $Author: ama $ $Date: 2001-03-15 15:50:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,8 +107,6 @@ CXXFILES = \
         thints.cxx \
         txatbase.cxx \
         txatritr.cxx \
-        txtatr0.cxx \
-        txtatr1.cxx \
         txtatr2.cxx \
         txtedt.cxx
 
@@ -132,8 +130,6 @@ SLOFILES =  \
         $(SLO)$/thints.obj \
         $(SLO)$/txatbase.obj \
         $(SLO)$/txatritr.obj \
-        $(SLO)$/txtatr0.obj \
-        $(SLO)$/txtatr1.obj \
         $(SLO)$/txtatr2.obj \
         $(SLO)$/txtedt.obj
 

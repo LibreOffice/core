@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtinet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-25 12:02:29 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,17 +72,12 @@ class SvxFont;
 class SwTxtNode;
 class SwCharFmt;
 class Color;
-class SwImplPrev;
 
 // ATT_INETFMT *********************************************
 
 class SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
 {
-    SwImplPrev *pImpl;
     SwTxtNode* pMyTxtNd;
-    BOOL bPrevNoHyph    : 1;
-    BOOL bPrevBlink     : 1;
-    BOOL bPrevURL       : 1;
     BOOL bVisited       : 1; // Besuchter Link?
     BOOL bValidVis      : 1; // Ist das bVisited-Flag gueltig?
     BOOL bColor         : 1;
@@ -91,9 +86,6 @@ public:
     SwTxtINetFmt( const SwFmtINetFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtINetFmt();
     TYPEINFO();
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 10:20:48 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,8 @@ void SwScriptInfo::InitScriptInfo( const String& rTxt )
         nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
         if( nChg < rTxt.Len() )
             nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+        else
+            nScript = i18n::ScriptType::LATIN;
     }
     do
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 09:38:46 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,7 @@ class SwDoCapitals;     // DoCapitals
 class SwWrongList;
 class SwDrawTextInfo;   // _DrawText
 class ViewShell;
-#ifndef OLD_ATTR_HANDLING
 class SwAttrHandler;
-#endif
 
 const xub_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
 const xub_Unicode CH_BREAK = 0x0A;  //
@@ -225,9 +223,7 @@ protected:
 
 public:
     SwFont( const SwAttrSet* pSet );
-#ifndef OLD_ATTR_HANDLING
     SwFont( const SwAttrHandler& rAttrHandler );
-#endif
     SwFont( const SwFont& rFont );
 
     inline void ChgFnt( ViewShell *pSh, OutputDevice *pOut )

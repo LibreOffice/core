@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:08:39 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
-
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
 #ifndef _TXATBASE_HXX
 #include <txatbase.hxx>
 #endif
@@ -105,25 +101,9 @@ int SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
     return GetAttr() == rAttr.GetAttr();
 }
 
-void SwTxtAttr::ChgFnt(SwFont *)
-{
-}
-
-void SwTxtAttr::RstFnt(SwFont *)
-{
-}
-
 SwTxtAttrEnd::SwTxtAttrEnd( const SfxPoolItem& rAttr, xub_StrLen nS,
                             xub_StrLen nE )
     : SwTxtAttr( rAttr, nS ), nEnd( nE )
-{
-}
-
-void SwTxtAttr::ChgTxtAttr( SwTxtAttr & )
-{
-}
-
-void SwTxtAttr::RstTxtAttr( SwTxtAttr & )
 {
 }
 
@@ -131,6 +111,3 @@ xub_StrLen* SwTxtAttrEnd::GetEnd()
 {
     return &nEnd;
 }
-
-
-

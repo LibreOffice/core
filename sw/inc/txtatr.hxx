@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:10:39 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,6 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
-#ifndef _SV_FONTTYPE_HXX //autogen
-#include <vcl/fonttype.hxx>
-#endif
-#ifndef _SVX_SVXENUM_HXX //autogen
-#include <svx/svxenum.hxx>
-#endif
-
 #ifndef _TXATBASE_HXX
 #include <txatbase.hxx>     // SwTxtAttr/SwTxtAttrEnd
 #endif
@@ -87,199 +77,13 @@
 class SwTxtNode;    // fuer SwTxtFld
 class SvxFont;
 class SwCharSetCol;
-class SwImplPrev;
-class SwFmtRuby;
 class SwCharFmt;
 class SvxTwoLinesItem;
-
-// ATT_FONT ***********************************************************
-
-class SwTxtFont: public SwTxtAttrEnd
-{
-    // Hier werden die alten Werte aus dem Font bei ChgFnt() gemerkt.
-    String aPrevName;
-    String aPrevStyleName;
-    FontFamily ePrevFamily;
-    FontPitch ePrevPitch;
-    CharSet ePrevCharSet;
-    BYTE nScript;
-public:
-    SwTxtFont( const SvxFontItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd,
-               const BYTE nScrpt );
-    ~SwTxtFont( );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_POSTURE ***********************************************************
-
-class SwTxtPosture : public SwTxtAttrEnd
-{
-    FontItalic ePrevPosture;
-    BYTE nScript;
-public:
-    SwTxtPosture( const SvxPostureItem& rAttr, xub_StrLen nStart,
-        xub_StrLen nEnd, const BYTE nScrpt );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_WEIGHT ************************************************************
-
-class SwTxtWeight : public SwTxtAttrEnd
-{
-    // Hier merkt es sich das SV-Attribut Weight aus dem Font.
-    FontWeight ePrevWeight;
-    BYTE nScript;
-public:
-    SwTxtWeight( const SvxWeightItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd,
-        const BYTE nScrpt );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_SHADOWED **********************************************************
-
-class SwTxtShadowed : public SwTxtAttrEnd
-{
-    BOOL bPrevShadow;
-public:
-    SwTxtShadowed( const SvxShadowedItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_AUTOKERN **********************************************************
-
-class SwTxtAutoKern : public SwTxtAttrEnd
-{
-    BOOL bPrevAutoKern;
-public:
-    SwTxtAutoKern( const SvxAutoKernItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-};
-
-// ATT_WORDLINEMODE **********************************************************
-
-class SwTxtWordLineMode : public SwTxtAttrEnd
-{
-    BOOL bPrevWordLineMode;
-public:
-    SwTxtWordLineMode( const SvxWordLineModeItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_CONTOUR ***********************************************************
-
-class SwTxtContour : public SwTxtAttrEnd
-{
-    BOOL bPrevContour;
-public:
-    SwTxtContour( const SvxContourItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_CROSSEDOUT ********************************************************
-
-class SwTxtCrossedOut : public SwTxtAttrEnd
-{
-    FontStrikeout ePrevCrossedOut;
-public:
-    SwTxtCrossedOut( const SvxCrossedOutItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_UNDERLINE *********************************************************
-
-class SwTxtUnderline : public SwTxtAttrEnd
-{
-    FontUnderline ePrevUnderline;
-    Color ePrevColor;
-public:
-    SwTxtUnderline( const SvxUnderlineItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_SIZE **************************************************************
-
-class SwTxtSize : public SwTxtAttrEnd
-{
-    Size aPrevSize;
-    BYTE nScript;
-public:
-    SwTxtSize( const SvxFontHeightItem& rAttr, xub_StrLen nStart,
-        xub_StrLen nEnd, const BYTE nScrpt );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_COLOR *************************************************************
-
-class SwTxtColor : public SwTxtAttrEnd
-{
-    friend class SwTxtCharSetColor;
-    Color aPrevColor;
-public:
-    SwTxtColor( const SvxColorItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_CHARSETCOLOR ******************************************************
-
-class SwTxtCharSetColor : public SwTxtAttrEnd
-{
-    SwCharSetCol *pPrevCharSetCol;
-public:
-    SwTxtCharSetColor( const SvxCharSetColorItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-    ~SwTxtCharSetColor();
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
 
 // ATT_CHARFMT *********************************************
 
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
-    SwImplPrev *pImpl;
     SwTxtNode* pMyTxtNd;
     BOOL bPrevNoHyph    : 1;
     BOOL bPrevBlink     : 1;
@@ -289,9 +93,6 @@ class SwTxtCharFmt : public SwTxtAttrEnd
 public:
     SwTxtCharFmt( const SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     ~SwTxtCharFmt( );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
 
     // werden vom SwFmtCharFmt hierher weitergeleitet
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );    // SwClient
@@ -303,109 +104,6 @@ public:
 
 };
 
-
-// ATT_KERNING ***********************************************************
-
-class SwTxtKerning : public SwTxtAttrEnd
-{
-    short nPrevKern;
-public:
-    SwTxtKerning( const SvxKerningItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_CASEMAP ***********************************************************
-
-class SwTxtCaseMap : public SwTxtAttrEnd
-{
-    SvxCaseMap ePrevCaseMap;
-public:
-    SwTxtCaseMap( const SvxCaseMapItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_LANGUAGE **********************************************************
-
-class SwTxtLanguage : public SwTxtAttrEnd
-{
-    LanguageType ePrevLang;
-    BYTE nScript;
-public:
-    SwTxtLanguage( const SvxLanguageItem& rAttr, xub_StrLen nStart,
-        xub_StrLen nEnd, const BYTE nScrpt );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-};
-
-
-// ATT_ESCAPEMENT ********************************************************
-
-class SwTxtEscapement : public SwTxtAttrEnd
-{
-    short   nPrevEsc;
-    BYTE    nPrevPropr;
-
-public:
-    SwTxtEscapement( const SvxEscapementItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_BLINK ***********************
-
-class SwTxtBlink : public SwTxtAttrEnd
-{
-    BOOL bPrev;
-public:
-    SwTxtBlink( const SvxBlinkItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_BACKGROUND ***********************
-
-class SwTxtBackground : public SwTxtAttrEnd
-{
-    Color *pPrevColor;
-public:
-    SwTxtBackground( const SvxBrushItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-    ~SwTxtBackground();
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// ATT_NOHYPHENHERE **************************
-
-class SwTxtNoHyphenHere : public SwTxtAttrEnd
-{
-    BOOL bPrev;
-public:
-    SwTxtNoHyphenHere( const SvxNoHyphenItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-};
-
 // ATT_HARDBLANK ******************************
 
 class SwTxtHardBlank : public SwTxtAttr
@@ -415,7 +113,6 @@ public:
     SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStart );
     inline sal_Unicode GetChar() const  { return cChar; }
 };
-
 
 // ATT_XNLCONTAINERITEM ******************************
 
@@ -437,9 +134,6 @@ public:
     virtual ~SwTxtRuby();
     TYPEINFO();
 
-//??    virtual void ChgFnt(SwFont *);
-//??    virtual void RstFnt(SwFont *);
-
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
@@ -453,7 +147,6 @@ public:
             { return ((SwTxtRuby*)this)->GetCharFmt(); }
 };
 
-
 // ******************************
 
 class SwTxt2Lines : public SwTxtAttrEnd
@@ -463,57 +156,7 @@ public:
                     xub_StrLen nStart, xub_StrLen nEnd );
 };
 
-// EMPHASIS_MARK ************************************************************
-
-class SwTxtEmphasisMark : public SwTxtAttrEnd
-{
-    // Hier merkt es sich das SV-Attribut Weight aus dem Font.
-    FontEmphasisMark ePrevEmphasis;
-public:
-    SwTxtEmphasisMark( const SvxEmphasisMarkItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// CHARROTATE ************************************************************
-
-class SwTxtCharRotate : public SwTxtAttrEnd
-{
-    // Hier merkt es sich das SV-Attribut den Wert aus dem Font.
-    USHORT nPrevRotate;
-public:
-    SwTxtCharRotate( const SvxCharRotateItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-// CHARSCALEWIDTH **********************************************************
-
-class SwTxtCharScaleWidth : public SwTxtAttrEnd
-{
-    // Hier merkt es sich das SV-Attribut den Wert aus dem Font.
-    USHORT nPrevScale;
-public:
-    SwTxtCharScaleWidth( const SvxCharScaleWidthItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-
-    virtual void ChgFnt(SwFont *);
-    virtual void RstFnt(SwFont *);
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
-};
-
-
 // --------------- Inline Implementierungen ------------------------
-
 
 inline const SwTxtNode& SwTxtCharFmt::GetTxtNode() const
 {
@@ -526,6 +169,5 @@ inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
     ASSERT( pMyTxtNd, "SwTxtRuby:: wo ist mein TextNode?" );
     return *pMyTxtNd;
 }
-
 
 #endif

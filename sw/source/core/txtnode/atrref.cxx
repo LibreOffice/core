@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrref.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,17 +141,4 @@ xub_StrLen* SwTxtRefMark::GetEnd()
 {
     return pEnd;
 }
-
-void SwTxtRefMark::ChgFnt( SwFont * pFont )
-{
-    ASSERT( pFont->GetRef()<255, "ChgFnt: Ref-Schachtelungstiefe zu gross" );
-    pFont->GetRef()++;
-}
-
-void SwTxtRefMark::RstFnt( SwFont * pFont )
-{
-    ASSERT( pFont->GetRef(), "RstFnt: Ref-Rst ohne Ref-Chg?" );
-    pFont->GetRef()--;
-}
-
 

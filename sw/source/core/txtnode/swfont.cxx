@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 09:39:30 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,8 @@
 #ifndef _SWATRSET_HXX //autogen
 #include <swatrset.hxx>
 #endif
-#ifndef OLD_ATTR_HANDLING
 #ifndef _ATRHNDL_HXX
 #include <atrhndl.hxx>
-#endif
 #endif
 
 #include "viewsh.hxx"       // Bildschirmabgleich
@@ -656,7 +654,6 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
         pBackColor = NULL;
 }
 
-#ifndef OLD_ATTR_HANDLING
 SwFont::SwFont( const SwAttrHandler& rAttrHandler )
 {
     nActual = SW_LATIN;
@@ -775,7 +772,6 @@ SwFont::SwFont( const SwAttrHandler& rAttrHandler )
     else
         pBackColor = NULL;
 }
-#endif
 
 SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
 {

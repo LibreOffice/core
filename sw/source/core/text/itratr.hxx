@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:22:53 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,7 @@ class SwAttrIter
     friend class SwFontSave;
 protected:
 
-#ifndef OLD_ATTR_HANDLING
     SwAttrHandler aAttrHandler;
-#endif
-
     ViewShell *pShell;
     SwFont *pFnt;
     SwpHints  *pHints;
