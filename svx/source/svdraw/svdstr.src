@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-25 20:29:54 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4986,7 +4986,7 @@ String STR_EditSetStylesheet
     Text[ dutch ] = "Opmaakprofiel op %O toepassen";
     Text[ chinese_simplified ] = "ε†ι…ζ ·εΌε° %O";
     Text[ greek ] = "Εφαρμογή στυλ σε %O";
-    Text[ korean ] = "%Oμ— μ„μ‹ μ μ©";
+    Text[ korean ] = "%Oμ— ν…ν”λ¦Ώ μ μ©";
     Text[ turkish ] = "Biηimleri %O iηin kullan";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM - -";
     Text[ catalan ] = "Aplicar estilo a %O";
@@ -5015,7 +5015,7 @@ String STR_EditDelStylesheet
     Text[ dutch ] = "Opmaakprofiel van %O verwijderen";
     Text[ chinese_simplified ] = "δ» %O δΉ‹δΈ­ε ι™¤ζ ·εΌ";
     Text[ greek ] = "Διαγραφή προτύπου από %O";
-    Text[ korean ] = "%Oμ—μ„  μ„μ‹ μ κ±°";
+    Text[ korean ] = "%Oμ—μ„ ν…ν”λ¦Ώ μ κ±°";
     Text[ turkish ] = "Biηimini kaldύr: %O";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM - -";
     Text[ catalan ] = "Eliminar estilo de %O";
@@ -5525,7 +5525,7 @@ String STR_EditMergeSubstractPoly
     Text[ polish ] = "Odejmij %O";
     Text[ portuguese_brazilian ] = "Substract %O";
     Text[ japanese ] = "%O γ‚’1γ¤γ«γ—γ¦εΌ•γ";
-    Text[ korean ] = "%O κ°μ‚°";
+    Text[ korean ] = "%O λΉΌκΈ°";
     Text[ chinese_simplified ] = "ε†η¦» %O";
     Text[ chinese_traditional ] = "ζΈ›ε» %O";
     Text[ arabic ] = "ΨΡΝ %O";
@@ -5823,7 +5823,7 @@ String STR_ExchangeDD
     Text[ dutch ] = "Slepen&neerzetten %O";
     Text[ chinese_simplified ] = "ζ‹–ζ”Ύ %O";
     Text[ greek ] = "Μετακίνηση και Aπόθεση %O";
-    Text[ korean ] = "%O λ“λκ·Έ μ•¤ λ“λ΅­";
+    Text[ korean ] = "%O λμ–΄μ„ λ†“κΈ°";
     Text[ turkish ] = "Sόrόkle ve bύrak: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arrastrar y colocar %O";
@@ -5854,7 +5854,7 @@ String STR_ExchangeDDPaste
     Text[ dutch ] = "Plakken via slepen&neerzetten";
     Text[ chinese_simplified ] = "ζ’ε…¥ζ‹–ζ”Ύε†…ε®Ή";
     Text[ greek ] = "Εισαγωγή 'Μετακίνηση και Aπόθεση'";
-    Text[ korean ] = "λ“λκ·Έ μ•¤ λ“λ΅­ μ‚½μ…";
+    Text[ korean ] = "λμ–΄μ„ λ†“κΈ° μ‚½μ…";
     Text[ turkish ] = "Sόrόkle ve bύrak iώleviyle ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar arrastrar y colocar";
@@ -5885,7 +5885,7 @@ String STR_DragInsertPoint
     Text[ dutch ] = "Punt in %O invoegen";
     Text[ chinese_simplified ] = "ε¨%O ζ’ε…¥ζ¥η‚Ή";
     Text[ greek ] = "Εισαγωγή σημείου στο %O";
-    Text[ korean ] = "μ μ„ %Oλ΅ μ‚½μ…";
+    Text[ korean ] = "μ μ„ %Oλ΅(μΌλ΅) μ‚½μ…";
     Text[ turkish ] = "Nokta ekle: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar punto en %O";
@@ -5914,7 +5914,7 @@ String STR_DragInsertGluePoint
     Text[ dutch ] = "Plakpunt in %0 invoegen";
     Text[ chinese_simplified ] = "ε¨ %O ε¤„ζ’ε…¥η²η»“η‚Ή";
     Text[ greek ] = "Εισαγωγή σημείου κόλλησης σε %O";
-    Text[ korean ] = "μ ‘μ°©μ μ„ %Oλ΅ μ‚½μ…";
+    Text[ korean ] = "μ ‘μ°©μ μ„ %Oλ΅(μΌλ΅) μ‚½μ…";
     Text[ turkish ] = "Yapύώtύrma noktasύ ekle: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aρadir punto de adhesiσn en %O";
@@ -6180,7 +6180,7 @@ String STR_DragMethMirrorFree
     Text[ dutch ] = "%O vrij spiegelen";
     Text[ chinese_simplified ] = "%O θ‡ªη”±ηΏ»θ½¬";
     Text[ greek ] = "Κατόπτριση %O ελεύθερα";
-    Text[ korean ] = "%Oμ„(λ¥Ό) μ„μλ€λ΅ λ€μΉ­";
+    Text[ korean ] = "%Oμ„(λ¥Ό) μ„μλ΅ λ€μΉ­";
     Text[ turkish ] = "Serbest yansύt: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Reflejar libremente %O";
@@ -6560,7 +6560,7 @@ String STR_DragEdgeTail
     Text[ dutch ] = "%O wijzigen";
     Text[ chinese_simplified ] = "ζ›΄ζ”Ή %O";
     Text[ greek ] = "Αλλαγή %O";
-    Text[ korean ] = "%O μ΅°μ •";
+    Text[ korean ] = "%O μλ™ λ§μ¶¤";
     Text[ turkish ] = "Deπiώtir: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar %O";
@@ -7197,7 +7197,7 @@ String STR_UndoNewPageMasterDscr
     Text[ dutch ] = "Achtergrondpagina toewijzen";
     Text[ chinese_simplified ] = "ι…η½®θƒζ™―ι΅µιΆ";
     Text[ greek ] = "Αντιστοίχιση σελίδας φόντου";
-    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ λ°°μ •";
+    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ μ§€μ •";
     Text[ turkish ] = "Artalan sayfasύ ata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Asignar pαgina de fondo";
@@ -7225,7 +7225,7 @@ String STR_UndoDelPageMasterDscr
     Text[ dutch ] = "Toewijzing achtergrondpagina΄s verwijderen";
     Text[ chinese_simplified ] = "ε ι™¤θƒζ™―ι΅µιΆι…η½®";
     Text[ greek ] = "Κατάργηση αντιστοίχισης σελιδών φόντου";
-    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ λ°°μ • μ κ±°";
+    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ μ§€μ • μ κ±°";
     Text[ turkish ] = "Artalan sayfa atamasύnύ kaldύr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar atributos de la pαgina de fondo";
@@ -7253,7 +7253,7 @@ String STR_UndoMovPageMasterDscr
     Text[ dutch ] = "Toewijzing achtergrondpagina΄s verplaatsen";
     Text[ chinese_simplified ] = "η§»ε¨θƒζ™―ι΅µιΆε†ι…";
     Text[ greek ] = "Μετακίνηση αντιστοίχισης σελιδών φόντου";
-    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ λ°°μ • μ΄λ™";
+    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ μ§€μ • μ΄λ™";
     Text[ turkish ] = "Artalan sayfa atamasύnύ taώύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar atributos de la pαgina de fondo";
@@ -7283,7 +7283,7 @@ String STR_UndoChgPageMasterDscr
     Text[ dutch ] = "Toewijzing achtergrondpagina΄s wijzigen";
     Text[ chinese_simplified ] = "ζ›΄ζ”Ήθƒζ™―ι΅µιΆι…η½®";
     Text[ greek ] = "Αλλαγή αντιστοίχισης σελιδών φόντου";
-    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ λ°°μ • λ³€κ²½";
+    Text[ korean ] = "λ°°κ²½ νμ΄μ§€ μ§€μ • λ³€κ²½";
     Text[ turkish ] = "Artalan sayfa atamasύnύ deπiώtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar atributos de la pαgina de fondo";
@@ -8985,7 +8985,7 @@ String STR_ItemNam_SHADOWCOLOR
     Text[ russian ] = "Φβες ςενθ";
     Text[ polish ] = "Kolor cienia";
     Text[ japanese ] = "ε½±γ®θ‰²";
-    Text[ chinese_traditional ] = "ι™°ε½±ι΅”θ‰²";
+    Text[ chinese_traditional ] = "ι™°ε½±ι΅θ‰²";
     Text[ arabic ] = "αζδ ΗαΩα";
     Text[ dutch ] = "Schaduwkleur";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆθ‰²";
@@ -9766,7 +9766,7 @@ String STR_ItemNam_TEXT_AUTOGROWWIDTH
     Text[ dutch ] = "Automatische aanpassing van kaderbreedte";
     Text[ chinese_simplified ] = "θ‡ªε¨θ°ƒζ•΄ζ΅†ε®½";
     Text[ greek ] = "Αυτόματη προσαρμογή του πλάτους του πλαισίου";
-    Text[ korean ] = "ν”„λ μ„ λ„λΉ„ μλ™ μ΅°μ ";
+    Text[ korean ] = "ν”„λ μ„ λ„λΉ„ μλ™ λ§μ¶¤";
     Text[ turkish ] = "Otomatik ηerηeve geniώliπi ayarύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajuste automαtico del ancho del marco";
@@ -10601,7 +10601,7 @@ String SIP_UNKNOWN_ATTR
     Text[ dutch ] = "Onbekend attribuut";
     Text[ chinese_simplified ] = "ε±ζ€§δΈζ";
     Text[ greek ] = "Άγνωστη ιδιότητα";
-    Text[ korean ] = "μ•λ ¤μ Έγ€€μμ§€ μ•μ€ μ†μ„±";
+    Text[ korean ] = "μ•λ ¤μ Έ μμ§€ μ•μ€ μ†μ„±";
     Text[ turkish ] = "Bilinmeyen φznitelik";
     Text[ catalan ] = "Atributo desconocido";
     Text[ finnish ] = "Tuntematon m??rite";
@@ -10710,7 +10710,7 @@ String SIP_XA_LINECOLOR
     Text[ portuguese_brazilian ] = "Linecolor";
     Text[ japanese ] = "η·γ®θ‰²";
     Text[ chinese_simplified ] = "ηΊΏζ΅ιΆθ‰²";
-    Text[ chinese_traditional ] = "η·ζΆι΅”θ‰²";
+    Text[ chinese_traditional ] = "η·ζΆι΅θ‰²";
     Text[ arabic ] = "αζδ ΗαΞΨ";
     Text[ dutch ] = "Lijnkleur";
     Text[ chinese_simplified ] = "ηΊΏζ΅ιΆθ‰²";
@@ -11078,7 +11078,7 @@ String SIP_XA_LINERESERVED_LAST
     Text[ dutch ] = "Lijnreserve 6";
     Text[ chinese_simplified ] = "ηΊΏζ΅ιΆ„η•™ 6";
     Text[ greek ] = "Γραμμή εναλλακτ. 6";
-    Text[ korean ] = "μ„  μλΉ„6";
+    Text[ korean ] = "μ„  μλΉ„ 6";
     Text[ turkish ] = "Ηizgi - Yedek 6";
     Text[ catalan ] = "Lνnea reserva 6";
     Text[ finnish ] = "Rivi varattu 6:lle";
@@ -11158,7 +11158,7 @@ String SIP_XA_FILLCOLOR
     Text[ portuguese_brazilian ] = "Fillcolor";
     Text[ japanese ] = "ε΅—γ‚γ¤γ¶γ—γ®θ‰²";
     Text[ chinese_simplified ] = "ε……ε΅«ιΆθ‰²";
-    Text[ chinese_traditional ] = "ε……ε΅«ι΅”θ‰²";
+    Text[ chinese_traditional ] = "ε……ε΅«ι΅θ‰²";
     Text[ arabic ] = "αζδ ΗαΚΪΘΖΙ";
     Text[ dutch ] = "Opvulkleur";
     Text[ chinese_simplified ] = "ε……ε΅«ιΆθ‰²";
@@ -11530,7 +11530,7 @@ String SIP_XA_FILLBMP_TILEOFFSETX
     Text[ dutch ] = "Tegelopvulling X in %";
     Text[ chinese_simplified ] = "εΉ³ι“Ίεη§» X %";
     Text[ greek ] = "Μετατόπιση επικάλυψης X σε %";
-    Text[ korean ] = "λ°”λ‘‘ν μ¤ν”„μ…‹Xλ¥Ό %λ΅";
+    Text[ korean ] = "λ°”λ‘‘ν μ¤ν”„μ…‹ Xλ¥Ό %λ΅";
     Text[ turkish ] = "Dφώeme taώύ konumu X (%)";
     Text[ catalan ] = "Desplazamiento de azulejo en %";
     Text[ finnish ] = "Lohkosiirtym? X kohteessa %";
@@ -11558,7 +11558,7 @@ String SIP_XA_FILLBMP_TILEOFFSETY
     Text[ dutch ] = "Trapsgewijze plaatsing tegels in %";
     Text[ chinese_simplified ] = "εΉ³ι“Ίεη§» Y %";
     Text[ greek ] = "Μετατόπιση επικάλυψης Y σε %";
-    Text[ korean ] = "λ°”λ‘‘ν μ¤ν”„μ…‹Yλ¥Ό %λ΅";
+    Text[ korean ] = "λ°”λ‘‘ν μ¤ν”„μ…‹ Yλ¥Ό %λ΅";
     Text[ turkish ] = "Dφώeme taώύ konumu Y (%)";
     Text[ catalan ] = "Desplazamiento de azulejo Y en %";
     Text[ finnish ] = "Lohkosiirtym? Y kohteessa %";
@@ -11614,7 +11614,7 @@ String SIP_XA_FILLRESERVED3
     Text[ dutch ] = "Bitmapreserve 3";
     Text[ chinese_simplified ] = "δ½ε›ΎιΆ„η•™ 3";
     Text[ greek ] = "Bitmap εναλλακτ. 3";
-    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„3";
+    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„ 3";
     Text[ turkish ] = "Bit eώlem - Yedek 3";
     Text[ catalan ] = "Bitmap reserva 3";
     Text[ finnish ] = "Bittikartta varattu 3:lle";
@@ -11642,7 +11642,7 @@ String SIP_XA_FILLRESERVED4
     Text[ dutch ] = "Bitmapreserve 4";
     Text[ chinese_simplified ] = "δ½ε›ΎιΆ„η•™ 4";
     Text[ greek ] = "Bitmap εναλλακτ. 4";
-    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„4";
+    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„ 4";
     Text[ turkish ] = "Bit eώlem - Yedek 4";
     Text[ catalan ] = "Bitmap reserva 4";
     Text[ finnish ] = "Bittikartta varattu 4:lle";
@@ -11670,7 +11670,7 @@ String SIP_XA_FILLRESERVED5
     Text[ dutch ] = "Bitmapreserve 5";
     Text[ chinese_simplified ] = "δ½ε›ΎιΆ„η•™ 5";
     Text[ greek ] = "Bitmap εναλλακτ. 5";
-    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„5";
+    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„ 5";
     Text[ turkish ] = "Bit eώlem - Yedek 5";
     Text[ catalan ] = "Bitmap reserva 5";
     Text[ finnish ] = "Bittikartta varattu 5:lle";
@@ -11698,7 +11698,7 @@ String SIP_XA_FILLRESERVED6
     Text[ dutch ] = "Bitmapreserve 6";
     Text[ chinese_simplified ] = "δ½ε›ΎιΆ„η•™ 6";
     Text[ greek ] = "Bitmap εναλλακτ. 6";
-    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„6";
+    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„ 6";
     Text[ turkish ] = "Bit eώlem - Yedek 6";
     Text[ catalan ] = "Bitmap reserva 6";
     Text[ finnish ] = "Bittikartta varattu 6:lle";
@@ -11726,7 +11726,7 @@ String SIP_XA_FILLRESERVED7
     Text[ dutch ] = "Bitmapreserve 7";
     Text[ chinese_simplified ] = "δ½ε›ΎιΆ„η•™ 7";
     Text[ greek ] = "Bitmap εναλλακτ. 7";
-    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„7";
+    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„ 7";
     Text[ turkish ] = "Bit eώlem - Yedek 7";
     Text[ catalan ] = "Bitmap reserva 7";
     Text[ finnish ] = "Bittikartta varattu 7:lle";
@@ -11754,7 +11754,7 @@ String SIP_XA_FILLRESERVED8
     Text[ dutch ] = "Bitmapreserve 8";
     Text[ chinese_simplified ] = "δ½ε›ΎιΆ„η•™ 8";
     Text[ greek ] = "Bitmap εναλλακτ. 8";
-    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„8";
+    Text[ korean ] = "λΉ„νΈλ§µ μλΉ„ 8";
     Text[ turkish ] = "Bit eώlem - Yedek 8";
     Text[ catalan ] = "Bitmap reserva 8";
     Text[ finnish ] = "Bittikartta varattu 8:lle";
@@ -11782,7 +11782,7 @@ String SIP_XA_FILLBMP_POSOFFSETX
     Text[ dutch ] = "Tegelpositie X in %";
     Text[ chinese_simplified ] = "εΉ³ι“Ίδ½η½® X %";
     Text[ greek ] = "Θέση X παράθεσης σε %";
-    Text[ korean ] = "λ°”λ‘‘ν μ„μΉX λ¥Ό %λ΅";
+    Text[ korean ] = "λ°”λ‘‘ν μ„μΉ Xλ¥Ό %λ΅";
     Text[ turkish ] = "Dφώeme taώύ konumu X (%)";
     Text[ catalan ] = "Posiciσn azulejo X en %";
     Text[ finnish ] = "Lohkosijainti X kohteessa %";
@@ -11810,7 +11810,7 @@ String SIP_XA_FILLBMP_POSOFFSETY
     Text[ dutch ] = "Tegelpositie Y in %";
     Text[ chinese_simplified ] = "εΉ³ι“Ίδ½η½® Y %";
     Text[ greek ] = "Θέση Y παράθεσης σε %";
-    Text[ korean ] = "λ°”λ‘‘ν μ„μΉYλ¥Ό %λ΅";
+    Text[ korean ] = "λ°”λ‘‘ν μ„μΉ Yλ¥Ό %λ΅";
     Text[ turkish ] = "Dφώeme taώύ konumu Y (%)";
     Text[ catalan ] = "Posiciσn azulejo Y en %";
     Text[ finnish ] = "Lohkosijainti Y kohteessa %";
@@ -11865,7 +11865,7 @@ String SIP_XA_FILLRESERVED10
     Text[ dutch ] = "Vullingsreserve 10";
     Text[ chinese_simplified ] = "ε……ε΅«ιΆ„η•™ 10";
     Text[ greek ] = "Γέμισμα εναλλακτ. 10";
-    Text[ korean ] = "μ±„μ°κΈ°γ€€μλΉ„10";
+    Text[ korean ] = "μ±„μ°κΈ°γ€€μλΉ„ 10";
     Text[ turkish ] = "Dolgu - Yedek 10";
     Text[ catalan ] = "Relleno reserva 10";
     Text[ finnish ] = "T?ytt?varattu 10:lle";
@@ -11921,7 +11921,7 @@ String SIP_XA_FILLRESERVED_LAST
     Text[ dutch ] = "Vullingsreserve 12";
     Text[ chinese_simplified ] = "ε……ε΅«ιΆ„η•™ 12";
     Text[ greek ] = "Γέμισμα εναλλακτ. 12";
-    Text[ korean ] = "μ±„μ°κΈ° μλΉ„12";
+    Text[ korean ] = "μ±„μ°κΈ° μλΉ„ 12";
     Text[ turkish ] = "Dolgu - Yedek 12";
     Text[ catalan ] = "Relleno reserva 12";
     Text[ finnish ] = "T?ytt?varattu 12:lle";
@@ -12172,7 +12172,7 @@ String SIP_XA_FORMTXTSHDWCOLOR
     Text[ portuguese_brazilian ] = "Color of fontwork color";
     Text[ japanese ] = "οΎο½«οΎοΎ„οΎο½°ο½Έ ε½±γ®θ‰²";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ι΄ε½±ιΆθ‰²";
-    Text[ chinese_traditional ] = "ηΎθ΅“ε­—ε‹ι™°ε½±ι΅”θ‰²";
+    Text[ chinese_traditional ] = "ηΎθ΅“ε­—ε‹ι™°ε½±ι΅θ‰²";
     Text[ arabic ] = "αζδ Ωα Fontwork";
     Text[ dutch ] = "Fontwork schaduwkleur";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ι΄ε½±ιΆθ‰²";
@@ -12318,7 +12318,7 @@ String SIP_XA_FORMTXTSHDWTRANSP
     Text[ dutch ] = "Fontwork schaduwtransparantie";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ι΄ε½±ι€ζ";
     Text[ greek ] = "Διαφάνεια σκιάς Fontwork";
-    Text[ korean ] = "Fontwork μμγ€€ν¬λª…";
+    Text[ korean ] = "Fontwork μμ ν¬λª…";
     Text[ turkish ] = "Fontwork gφlge saydamlύπύ";
     Text[ catalan ] = "Transparencia de sombra Fontwork";
     Text[ finnish ] = "Fonttity? varjostuksen l?pin?kyvyys";
@@ -12538,7 +12538,7 @@ String SIP_SA_SHADOWCOLOR
     Text[ portuguese_brazilian ] = "Shadow color";
     Text[ japanese ] = "ε½±γ®θ‰²";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆθ‰²";
-    Text[ chinese_traditional ] = "ι™°ε½±ι΅”θ‰²";
+    Text[ chinese_traditional ] = "ι™°ε½±ι΅θ‰²";
     Text[ arabic ] = "αζδ ΗαΩα";
     Text[ dutch ] = "Schaduwkleur";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆθ‰²";
@@ -12713,7 +12713,7 @@ String SIP_SA_SHADOWRESERVE1
     Text[ dutch ] = "Schaduwreserve 1";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆ„η•™ 1";
     Text[ greek ] = "Σκιά εναλλακτ. 1";
-    Text[ korean ] = "μμ μλΉ„1";
+    Text[ korean ] = "μμ μλΉ„ 1";
     Text[ turkish ] = "Gφlge - Yedek 1";
     Text[ catalan ] = "Sombra reserva 1";
     Text[ finnish ] = "Varjo varattu 1:lle";
@@ -12741,7 +12741,7 @@ String SIP_SA_SHADOWRESERVE2
     Text[ dutch ] = "Schaduwreserve 2";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆ„η•™ 2";
     Text[ greek ] = "Σκιά εναλλακτ. 2";
-    Text[ korean ] = "μμ μλΉ„2";
+    Text[ korean ] = "μμ μλΉ„ 2";
     Text[ turkish ] = "Gφlge - Yedek 2";
     Text[ catalan ] = "Sombra reserva 2";
     Text[ finnish ] = "Varjo varattu 2:lle";
@@ -12769,7 +12769,7 @@ String SIP_SA_SHADOWRESERVE3
     Text[ dutch ] = "Schaduwreserve 3";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆ„η•™ 3";
     Text[ greek ] = "Σκιά εναλλακτ. 3";
-    Text[ korean ] = "μμ μλΉ„3";
+    Text[ korean ] = "μμ μλΉ„ 3";
     Text[ turkish ] = "Gφlge - Yedek 3";
     Text[ catalan ] = "Sombra reserva 3";
     Text[ finnish ] = "Varjo varattu 3:lle";
@@ -12797,7 +12797,7 @@ String SIP_SA_SHADOWRESERVE4
     Text[ dutch ] = "Schaduwreserve 4";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆ„η•™ 4";
     Text[ greek ] = "Σκιά εναλλακτ. 4";
-    Text[ korean ] = "μμ μλΉ„4";
+    Text[ korean ] = "μμ μλΉ„ 4";
     Text[ turkish ] = "Gφlge - Yedek 4";
     Text[ catalan ] = "Sombra reserva 4";
     Text[ finnish ] = "Varjo varattu 4:lle";
@@ -12825,7 +12825,7 @@ String SIP_SA_SHADOWRESERVE5
     Text[ dutch ] = "Schaduwreserve 5";
     Text[ chinese_simplified ] = "ι΄ε½±ιΆ„η•™ 5";
     Text[ greek ] = "Σκιά εναλλακτ. 5";
-    Text[ korean ] = "μμ μλΉ„5";
+    Text[ korean ] = "μμ μλΉ„ 5";
     Text[ turkish ] = "Gφlge - Yedek 5";
     Text[ catalan ] = "Sombra reserva 5";
     Text[ finnish ] = "Varjo varattu 5:lle";
@@ -13416,7 +13416,7 @@ String SIP_SA_TEXT_AUTOGROWHEIGHT
     Text[ dutch ] = "Automatische hoogte-instelling";
     Text[ chinese_simplified ] = "θ‡ªε¨θ°ƒζ•΄ι«εΊ¦";
     Text[ greek ] = "Αυτόματη προσαρμογή του ύψους";
-    Text[ korean ] = "μλ™ λ†’μ΄ μ΅°μ •";
+    Text[ korean ] = "λ†’μ΄ μλ™ λ§μ¶¤";
     Text[ turkish ] = "Otomatik yόkseklik ayarύ";
     Text[ catalan ] = "Ajute de altura automαtico";
     Text[ finnish ] = "Automaattinen korkeuden sovitus";
@@ -13587,7 +13587,7 @@ String SIP_SA_TEXT_VERTADJUST
     Text[ dutch ] = "Verticaal tekstanker";
     Text[ chinese_simplified ] = "ε‚η›΄ζ–Ήε‘ζ–‡ε­—ι”ε®";
     Text[ greek ] = "Κατακόρυφη αγκύρωση κειμένου";
-    Text[ korean ] = "μμ§λ°©ν–¥ ν…μ¤νΈ κ³ μ •";
+    Text[ korean ] = "μμ§ λ°©ν–¥ ν…μ¤νΈ κ³ μ •";
     Text[ turkish ] = "Dikey metin sabitleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Anclaje de texto, vertical";
@@ -13700,7 +13700,7 @@ String SIP_SA_TEXT_AUTOGROWWIDTH
     Text[ dutch ] = "Automatische breedte-instelling";
     Text[ chinese_simplified ] = "θ‡ªε¨θ°ƒζ•΄ε®½εΊ¦";
     Text[ greek ] = "Αυτόματη προσαρμογή πλάτους";
-    Text[ korean ] = "μλ™ λ„λΉ„ μ΅°μ •";
+    Text[ korean ] = "λ„λΉ„ μλ™ λ§μ¶¤";
     Text[ turkish ] = "Otomatik geniώlik ayarύ";
     Text[ catalan ] = "Ajuste automαtico de ancho";
     Text[ finnish ] = "Automaattinen leveyden sovitus";
@@ -13728,7 +13728,7 @@ String SIP_SA_TEXT_HORZADJUST
     Text[ dutch ] = "Horizontaal tekstanker";
     Text[ chinese_simplified ] = "ζ°΄εΉ³ζ–Ήε‘ζ–‡ε­—ι”ε®";
     Text[ greek ] = "Οριζόντια αγκύρωση κειμένου";
-    Text[ korean ] = "μν‰λ°©ν–¥ ν…μ¤νΈ κ³ μ •";
+    Text[ korean ] = "μν‰ λ°©ν–¥ ν…μ¤νΈ κ³ μ •";
     Text[ turkish ] = "Yatay metin sabitleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Anclaje horizontal de texto";
@@ -13977,7 +13977,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ polish ] = "Justowanie form automatycznych";
     Text[ portuguese_brazilian ] = "SvDraw Autoshape Adjustment";
     Text[ japanese ] = "ο½µο½°οΎ„ο½Όο½ªο½²οΎοΎθªΏζ•΄";
-    Text[ korean ] = "μ΅°μ •";
+    Text[ korean ] = "μλ™ λ§μ¶¤";
     Text[ chinese_simplified ] = "ε½Άη¶θ‡ªε¨θ°ƒι€‚";
     Text[ chinese_traditional ] = "ε½Άη‹€θ‡ªε‹•θªΏι©";
     Text[ turkish ] = "SvDraw Autoshape Adjustment";
@@ -14003,7 +14003,7 @@ String SIP_SA_XMLATTRIBUTES
     Text[ swedish ] = "Anvδndardefinierade attribut";
     Text[ polish ] = "Atrybuty indywidualne";
     Text[ portuguese_brazilian ] = "User definied Attributes";
-    Text[ japanese ] = "User definied Attributes";
+    Text[ japanese ] = "οΎ•ο½°ο½»οΎο½°ε®ηΎ©γ®ε±ζ€§";
     Text[ korean ] = "User definied Attributes";
     Text[ chinese_simplified ] = "δ½Ώη”¨θ€…θ‡ªε®η„ε±ζ€§";
     Text[ chinese_traditional ] = "θ‡ªθ¨‚η„ε±¬ζ€§";
@@ -14399,7 +14399,7 @@ String SIP_SA_EDGELINEDELTAANZ
     Text[ dutch ] = "Aantal verplaatsbare lijnen";
     Text[ chinese_simplified ] = "ε„η§ηΊΏζ΅ζ•°η›®";
     Text[ greek ] = "Αριθμός γραμμών που μετακινούνται";
-    Text[ korean ] = "μ΄λ™κ°€λ¥ν• μ„ μ κ°μ";
+    Text[ korean ] = "μ΄λ™ κ°€λ¥ν• μ„ μ κ°μ";
     Text[ turkish ] = "Taώύnabilir ηizgi sayύsύ";
     Text[ catalan ] = "Nϊm. lνneas desplazables";
     Text[ finnish ] = "Siirrett?vien rivien m??r?";
@@ -14511,7 +14511,7 @@ String SIP_SA_EDGERESERVE02
     Text[ dutch ] = "Verbindingsreserve 2";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 2";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 2";
-    Text[ korean ] = "μ»¤λ„¥ν„°γ€€μλΉ„2";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 2";
     Text[ turkish ] = "Baπlayύcύ - Yedek 2";
     Text[ catalan ] = "Conector reserva 2";
     Text[ finnish ] = "Varattu liitin 2";
@@ -14539,7 +14539,7 @@ String SIP_SA_EDGERESERVE03
     Text[ dutch ] = "Verbindingsreserve 3";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 3";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 3";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„3";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 3";
     Text[ turkish ] = "Baπlayύcύ - Yedek 3";
     Text[ catalan ] = "Conector reserva 3";
     Text[ finnish ] = "Varattu liitin 3";
@@ -14567,7 +14567,7 @@ String SIP_SA_EDGERESERVE04
     Text[ dutch ] = "Verbindingsreserve 4";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 4";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 4";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„4";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 4";
     Text[ turkish ] = "Baπlayύcύ - Yedek 4";
     Text[ catalan ] = "Conector reserva 4";
     Text[ finnish ] = "Varattu liitin 4";
@@ -14595,7 +14595,7 @@ String SIP_SA_EDGERESERVE05
     Text[ dutch ] = "Verbindingsreserve 5";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 5";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 5";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„5";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 5";
     Text[ turkish ] = "Baπlayύcύ - Yedek 5";
     Text[ catalan ] = "Conector reserva 5";
     Text[ finnish ] = "Varattu liitin 5";
@@ -14623,7 +14623,7 @@ String SIP_SA_EDGERESERVE06
     Text[ dutch ] = "Verbindingsreserve 6";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 6";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 6";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„6";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 6";
     Text[ turkish ] = "Baπlayύcύ - Yedek 6";
     Text[ catalan ] = "Conector reserva 6";
     Text[ finnish ] = "Varattu liitin 6";
@@ -14651,7 +14651,7 @@ String SIP_SA_EDGERESERVE07
     Text[ dutch ] = "Verbindingsreserve 7";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 7";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 7";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„7";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 7";
     Text[ turkish ] = "Baπlayύcύ - Yedek 7";
     Text[ catalan ] = "Conector reserva 7";
     Text[ finnish ] = "Varattu liitin 7";
@@ -14679,7 +14679,7 @@ String SIP_SA_EDGERESERVE08
     Text[ dutch ] = "Verbindingsreserve 8";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 8";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 8";
-    Text[ korean ] = "μ»¤λ„¥ν„°γ€€μλΉ„8";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 8";
     Text[ turkish ] = "Baπlayύcύ - Yedek 8";
     Text[ catalan ] = "Conector reserva 8";
     Text[ finnish ] = "Varattu liitin 8";
@@ -14707,7 +14707,7 @@ String SIP_SA_EDGERESERVE09
     Text[ dutch ] = "Verbindingsreserve 9";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 9";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 9";
-    Text[ korean ] = "μ»¤λ„¥ν„°γ€€μλΉ„9";
+    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 9";
     Text[ turkish ] = "Baπlayύcύ - Yedek 9";
     Text[ catalan ] = "Conector reserva 9";
     Text[ finnish ] = "Varattu liitin 9";
@@ -15187,7 +15187,7 @@ String SIP_SA_MEASUREFORMATSTRING
     Text[ dutch ] = "Formaat tekstafmetingen";
     Text[ chinese_simplified ] = "ε®ι‡ζ–‡ε­—ζ ΌεΌ";
     Text[ greek ] = "Μορφή κειμένου διαστασιολόγησης";
-    Text[ korean ] = "μΉμκ°’ ν¬λ§·";
+    Text[ korean ] = "μΉμκ°’ μ„μ‹";
     Text[ turkish ] = "Φlηόm metni formatύ";
     Text[ catalan ] = "Formato texto dimensionado";
     Text[ finnish ] = "Mitoitusarvon muoto";
@@ -15327,7 +15327,7 @@ String SIP_SA_MEASURERESERVE04
     Text[ dutch ] = "Afmetingsreserve 4";
     Text[ chinese_simplified ] = "ε®ε°Ίε―ΈιΆ„η•™ 4";
     Text[ greek ] = "Διαστασιολόγηση εναλλακτ. 4";
-    Text[ korean ] = "μΉμ μλΉ„4";
+    Text[ korean ] = "μΉμ μλΉ„ 4";
     Text[ turkish ] = "Boyutlar - Yedek 4";
     Text[ catalan ] = "Dimensiones reserva 4";
     Text[ finnish ] = "Mitoitus varattu 4:lle";
@@ -15355,7 +15355,7 @@ String SIP_SA_MEASURERESERVE05
     Text[ dutch ] = "Afmetingsreserve 5";
     Text[ chinese_simplified ] = "ε®ε°Ίε―ΈιΆ„η•™ 5";
     Text[ greek ] = "Διαστασιολόγηση εναλλακτ. 5";
-    Text[ korean ] = "μΉμ μλΉ„5";
+    Text[ korean ] = "μΉμ μλΉ„ 5";
     Text[ turkish ] = "Boyutlar - Yedek 5";
     Text[ catalan ] = "Dimensionamiento reserva 5";
     Text[ finnish ] = "Mitoitus varattu 5:lle";
@@ -15383,7 +15383,7 @@ String SIP_SA_MEASURERESERVE06
     Text[ dutch ] = "Afmetingsreserve 6";
     Text[ chinese_simplified ] = "ε®ε°Ίε―ΈιΆ„η•™ 6";
     Text[ greek ] = "Διαστασιολόγηση εναλλακτ. 6";
-    Text[ korean ] = "μΉμ μλΉ„6";
+    Text[ korean ] = "μΉμ μλΉ„ 6";
     Text[ turkish ] = "Boyutlar - Yedek 6";
     Text[ catalan ] = "Dimensionamiento reserva 6";
     Text[ finnish ] = "Mitoitus varattu 6:lle";
@@ -15411,7 +15411,7 @@ String SIP_SA_MEASURERESERVE07
     Text[ dutch ] = "Afmetingsreserve 7";
     Text[ chinese_simplified ] = "ε®ε°Ίε―ΈιΆ„η•™ 7";
     Text[ greek ] = "Διαστασιολόγηση εναλλακτ. 7";
-    Text[ korean ] = "μΉμ μλΉ„7";
+    Text[ korean ] = "μΉμ μλΉ„ 7";
     Text[ turkish ] = "Boyutlar - Yedek 7";
     Text[ catalan ] = "Dimensionamiento reserva 7";
     Text[ finnish ] = "Mitoitus varattu 7:lle";
@@ -15553,7 +15553,7 @@ String SIP_SA_CIRCRESERVE0
     Text[ dutch ] = "Cirkelreserve 0";
     Text[ chinese_simplified ] = "ε†ε½ΆιΆ„η•™ 0";
     Text[ greek ] = "Κύκλος εναλλακτ. 0";
-    Text[ korean ] = "μ› μλΉ„0";
+    Text[ korean ] = "μ› μλΉ„ 0";
     Text[ turkish ] = "Daire - Yedek 0";
     Text[ catalan ] = "Cνrculo reserva 0";
     Text[ finnish ] = "Ympyr? varattu 0:lle";
@@ -15581,7 +15581,7 @@ String SIP_SA_CIRCRESERVE1
     Text[ dutch ] = "Cirkelreserve 1";
     Text[ chinese_simplified ] = "ε†ε½ΆιΆ„η•™ 1";
     Text[ greek ] = "Κύκλος εναλλακτ. 1";
-    Text[ korean ] = "μ› μλΉ„1";
+    Text[ korean ] = "μ› μλΉ„ 1";
     Text[ turkish ] = "Daire - Yedek 1";
     Text[ catalan ] = "Cνrculo reserva 1";
     Text[ finnish ] = "Ympyr? varattu 1:lle";
@@ -15609,7 +15609,7 @@ String SIP_SA_CIRCRESERVE2
     Text[ dutch ] = "Cirkelreserve 2";
     Text[ chinese_simplified ] = "ε†ε½ΆιΆ„η•™ 2";
     Text[ greek ] = "Κύκλος εναλλακτ. 2";
-    Text[ korean ] = "μ› μλΉ„2";
+    Text[ korean ] = "μ› μλΉ„ 2";
     Text[ turkish ] = "Daire - Yedek 2";
     Text[ catalan ] = "Cνrculo reserva 2";
     Text[ finnish ] = "Ympyr? varattu 2:lle";
@@ -15637,7 +15637,7 @@ String SIP_SA_CIRCRESERVE3
     Text[ dutch ] = "Cirkelreserve 3";
     Text[ chinese_simplified ] = "ε†ε½ΆιΆ„η•™ 3";
     Text[ greek ] = "Κύκλος εναλλακτ. 3";
-    Text[ korean ] = "μ› μλΉ„3";
+    Text[ korean ] = "μ› μλΉ„ 3";
     Text[ turkish ] = "Daire - Yedek 3";
     Text[ catalan ] = "Cνrculo reserva 3";
     Text[ finnish ] = "Ympyr? varattu 3:lle";
@@ -16688,7 +16688,7 @@ String SIP_EE_PARA_BULLETSTATE
     Text[ dutch ] = "Opsommingsteken weergeven";
     Text[ chinese_simplified ] = "ζΎη¤ΊηΌ–ε·ε­—η¬¦";
     Text[ greek ] = "Εμφάνιση συμβόλων αρίθμησης";
-    Text[ korean ] = "κΈ€λ¨Έλ¦¬κΈ°νΈ  λ‚νƒ€λ‚΄κΈ°";
+    Text[ korean ] = "κΈ€λ¨Έλ¦¬ κΈ°νΈ  λ‚νƒ€λ‚΄κΈ°";
     Text[ turkish ] = "Madde iώaretlerini gφster";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar viρeta";
@@ -16717,7 +16717,7 @@ String SIP_EE_PARA_OUTLLRSPACE
     Text[ dutch ] = "Inspringing bij opsomming";
     Text[ chinese_simplified ] = "ηΌ–ε·ηΌ©θΏ›";
     Text[ greek ] = "Εσοχές κατά την αρίθμηση";
-    Text[ korean ] = "κΈ€λ¨Έλ¦¬κΈ°νΈμ—μ„ λ“¤μ—¬μ“°κΈ°";
+    Text[ korean ] = "κΈ€λ¨Έλ¦¬ κΈ°νΈμ—μ„ λ“¤μ—¬μ“°κΈ°";
     Text[ turkish ] = "Numaralama iηin girintiler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sangrνa en enumeraciσn";
@@ -16746,7 +16746,7 @@ String SIP_EE_PARA_OUTLLEVEL
     Text[ dutch ] = "Nummeringsniveau";
     Text[ chinese_simplified ] = "ηΌ–ε·ε±‚ζ¬΅";
     Text[ greek ] = "Επίπεδο αρίθμησης";
-    Text[ korean ] = "κΈ€λ¨Έλ¦¬κΈ°νΈγ€€μμ¤€";
+    Text[ korean ] = "κΈ€λ¨Έλ¦¬ κΈ°νΈ μμ¤€";
     Text[ turkish ] = "Numaralama dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nivel de enumeraciσn";
@@ -16775,7 +16775,7 @@ String SIP_EE_PARA_BULLET
     Text[ dutch ] = "Nummeringsteken";
     Text[ chinese_simplified ] = "ηΌ–ε·ε­—η¬¦";
     Text[ greek ] = "Σύμβολα αρίθμησης";
-    Text[ korean ] = "κΈ€λ¨Έλ¦¬κΈ°νΈ";
+    Text[ korean ] = "κΈ€λ¨Έλ¦¬ κΈ°νΈ";
     Text[ turkish ] = "Numaralama ve madde iώaretleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Viρeta";
@@ -16941,7 +16941,7 @@ String SIP_EE_CHAR_COLOR
     Text[ portuguese_brazilian ] = "Text color";
     Text[ japanese ] = "οΎο½«οΎοΎ„γ®θ‰²";
     Text[ chinese_simplified ] = "ζ–‡ε­—ιΆθ‰²";
-    Text[ chinese_traditional ] = "ε­—ε‹ι΅”θ‰²";
+    Text[ chinese_traditional ] = "ε­—ε‹ι΅θ‰²";
     Text[ arabic ] = "αζδ ΗαΞΨ";
     Text[ dutch ] = "Tekstkleur";
     Text[ chinese_simplified ] = "ζ–‡ε­—ιΆθ‰²";
@@ -17176,7 +17176,7 @@ String SIP_EE_CHAR_OUTLINE
     Text[ dutch ] = "Contour";
     Text[ chinese_simplified ] = "ε­—δ½“θ½®ε»“";
     Text[ greek ] = "Γραμματοσειρά περιγράμματος";
-    Text[ korean ] = "μ¤κ³½λ¬Έμ";
+    Text[ korean ] = "μ¤κ³½ λ¬Έμ";
     Text[ turkish ] = "Konturlu yazύ";
     Text[ catalan ] = "Contorno";
     Text[ finnish ] = "J?sennys";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
