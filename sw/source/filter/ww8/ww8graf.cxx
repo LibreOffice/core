@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: mh $ $Date: 2002-10-24 09:02:23 $
+ *  last change: $Author: cmc $ $Date: 2002-10-31 13:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2193,207 +2193,214 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
 RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool bOrgObjectWasReplace)
 {
-    ASSERT(pRecord, "No pRecord!");
-    RndStdIds eAnchor = FLY_PAGE;
-    if (pRecord)
+    ASSERT(pRecord || pFSPA, "give me something! to work with for anchoring");
+    if (!pRecord && !pFSPA)
+        return FLY_PAGE;
+
+    SvxMSDffImportRec aRecordFromFSPA;
+    if (!pRecord)
     {
-        // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
-        // nYAlign - abs. Position, Top,   Centered,  Bottom, Inside, Outside
+        pRecord = &aRecordFromFSPA;
+        pRecord->nXRelTo = pFSPA->nbx;
+        pRecord->nYRelTo = pFSPA->nby;
+    }
 
-        // nXRelTo - Page printable area, Page,  Column,    Character
-        // nYRelTo - Page printable area, Page,  Paragraph, Line
+    // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
+    // nYAlign - abs. Position, Top,   Centered,  Bottom, Inside, Outside
 
-        const int nCntXAlign = 6;
-        const int nCntYAlign = 6;
+    // nXRelTo - Page printable area, Page,  Column,    Character
+    // nYRelTo - Page printable area, Page,  Paragraph, Line
 
-        const int nCntRelTo  = 4;
+    const int nCntXAlign = 6;
+    const int nCntYAlign = 6;
+
+    const int nCntRelTo  = 4;
 
 /*
-        // our anchor settings
-        static const RndStdIds aAnchorTab[] = {
-            FLY_AT_CNTNT,   // Frame bound to paragraph
-            FLY_IN_CNTNT,   //             to character
-            FLY_PAGE,       //             to page
-            FLY_AT_FLY,     //             to another fly ( LAYER_IMPL )
-            FLY_AUTO_CNTNT, // automat. positioned frame bound to paragraph
-        };
+    // our anchor settings
+    static const RndStdIds aAnchorTab[] = {
+        FLY_AT_CNTNT,   // Frame bound to paragraph
+        FLY_IN_CNTNT,   //             to character
+        FLY_PAGE,       //             to page
+        FLY_AT_FLY,     //             to another fly ( LAYER_IMPL )
+        FLY_AUTO_CNTNT, // automat. positioned frame bound to paragraph
+    };
 */
 
-        // horizontal Adjustment
-        static const SwHoriOrient aHoriOriTab[ nCntXAlign ] = {
-            HORI_NONE,      // Value of nXPos defined RelPos directly.
+    // horizontal Adjustment
+    static const SwHoriOrient aHoriOriTab[ nCntXAlign ] = {
+        HORI_NONE,      // Value of nXPos defined RelPos directly.
 
-            HORI_LEFT,      // automatical adjustment
-            HORI_CENTER,    // automatical adjustment
-            HORI_RIGHT,     // automatical adjustment
+        HORI_LEFT,      // automatical adjustment
+        HORI_CENTER,    // automatical adjustment
+        HORI_RIGHT,     // automatical adjustment
 
-            HORI_LEFT,      // will be converted to HORI_INSIDE when SetPosToggle() called
-            HORI_RIGHT      // will be converted to HORI_OUTSIDE...
-        };
+        HORI_LEFT,      // will be converted to HORI_INSIDE when SetPosToggle() called
+        HORI_RIGHT      // will be converted to HORI_OUTSIDE...
+    };
 
 
-        // vertical Adjustment
-        static const SwVertOrient aVertOriTab[ nCntYAlign ] = {
-            VERT_NONE,          // Value of nXPos defined RelPos directly.
-            VERT_TOP,           // automatical adjustment
-            VERT_CENTER,        // automatical adjustment
-            VERT_BOTTOM,        // automatical adjustment
-            VERT_LINE_TOP,      // automatical adjustment
-            VERT_LINE_BOTTOM    // automatical adjustment
-        };
+    // vertical Adjustment
+    static const SwVertOrient aVertOriTab[ nCntYAlign ] = {
+        VERT_NONE,          // Value of nXPos defined RelPos directly.
+        VERT_TOP,           // automatical adjustment
+        VERT_CENTER,        // automatical adjustment
+        VERT_BOTTOM,        // automatical adjustment
+        VERT_LINE_TOP,      // automatical adjustment
+        VERT_LINE_BOTTOM    // automatical adjustment
+    };
 
-        // Adjustment is relative to...
-        static const SwRelationOrient aRelOriTab[ nCntRelTo ] = {
-            REL_PG_PRTAREA, // Page printable area, when bound to page. identical with PRTAREA
-            REL_PG_FRAME,   // Page,                when bound to page. identical with FRAME
-            FRAME,          // Paragraph Text area
+    // Adjustment is relative to...
+    static const SwRelationOrient aRelOriTab[ nCntRelTo ] = {
+        REL_PG_PRTAREA, // Page printable area, when bound to page. identical with PRTAREA
+        REL_PG_FRAME,   // Page,                when bound to page. identical with FRAME
+        FRAME,          // Paragraph Text area
 //          PRTAREA,        // Paragraph area
-            REL_CHAR        // to a Character
+        REL_CHAR        // to a Character
 
 //          REL_PG_LEFT,    // in left page-border
 //          REL_PG_RIGHT,   // in right page-border
 //          REL_FRM_LEFT,   // in left paragraph-border
 //          REL_FRM_RIGHT,  // in right paragraph-border
-        };
+    };
 
 
-        UINT32 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
-        UINT32 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
+    UINT32 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
+    UINT32 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
 
-        if (pFSPA)
+    if (pFSPA)
+    {
+        /*
+        #74188#
+        Strangely in this case the FSPA value seems to be considered before
+        the newer escher nXRelTo record.
+        */
+        if ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
+            pRecord->nXRelTo = pFSPA->nbx;
+        if ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
+            pRecord->nYRelTo = pFSPA->nby;
+    }
+
+    UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
+    UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
+
+    RndStdIds eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
+        :  2 <= nYRelTo  ?  FLY_AT_CNTNT :  FLY_PAGE;
+
+    // Make adjustments for absolute positoning
+    // When anchored vertically to line and horizontally to either
+    // page, margin or column with absolute positioning in Word, we
+    // should anchor to Character in Writer
+    if ((nXAlign == 0) && (nYAlign == 0))
+    {
+        if ((nXRelTo <= 2) && (nYRelTo == 3))
         {
-            /*
-            #74188#
-            Strangely in this case the FSPA value seems to be considered before
-            the newer escher nXRelTo record.
-            */
-            if ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
-                pRecord->nXRelTo = pFSPA->nbx;
-            if ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
-                pRecord->nYRelTo = pFSPA->nby;
+            eAnchor = FLY_AUTO_CNTNT;
+        }
+        else if ((nXRelTo == 3) && (nYRelTo == 3))
+        {
+            eAnchor = FLY_AUTO_CNTNT;
+            //nYAlign = 3;
+        }
+    }
+
+
+    //No drawing layer stuff in the header, so if
+    //this is going to be in the headerfooter and
+    //cannot be replaced by a fly then anchor it
+    //to the current page.
+    if ((bIsHeader || bIsFooter) && !bOrgObjectWasReplace &&
+        !pRecord->bReplaceByFly)
+    {
+        eAnchor=FLY_PAGE;
+    }
+
+    SwFmtAnchor aAnchor( eAnchor );
+    aAnchor.SetAnchor( pPaM->GetPoint() );
+    rFlySet.Put( aAnchor );
+
+    if (pFSPA)
+    {
+        SwHoriOrient eHoriOri;
+        eHoriOri = aHoriOriTab[ nXAlign ];
+        SwRelationOrient eHoriRel;
+        eHoriRel = aRelOriTab[  nXRelTo ];
+        if ((eHoriRel == FRAME) && (eAnchor == FLY_PAGE))
+            eHoriRel = PRTAREA;
+
+        /*
+         Absolute positions in winword for graphics are broken when the
+         graphic is in a table, all absolute positions now become relative
+         to the top left corner of that cell.  We really cannot import
+         that feature correctly as we have not the same functionality
+         (yet). This normalizes the absolute position by the left of the
+         table, which at least puts it close, theres nothing we can do
+         about the vertical either.
+        */
+        if (nTable && eAnchor == FLY_PAGE)
+        {
+            pFSPA->nXaLeft -= GetTableLeft();
+            pFSPA->nXaRight -= GetTableLeft();
         }
 
-        UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
-        UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
-
-        eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
-            :  2 <= nYRelTo  ?  FLY_AT_CNTNT :  FLY_PAGE;
-
-        // Make adjustments for absolute positoning
-        // When anchored vertically to line and horizontally to either
-        // page, margin or column with absolute positioning in Word, we
-        // should anchor to Character in Writer
-        if ((nXAlign == 0) && (nYAlign == 0))
+        /*
+        ##640##
+        If we are inside another frame we have to adjust our x and y
+        offsets correspondingly by the offsets of the parent
+        */
+        if (pSFlyPara && pSFlyPara->pFlyFmt && !pRecord->bReplaceByFly)
         {
-            if ((nXRelTo <= 2) && (nYRelTo == 3))
+            SwFlyFrmFmt *pFmt = pSFlyPara->pFlyFmt;
+            const SvxBoxItem &rParentBox = pFmt->GetBox();
+            pFSPA->nYaTop -= rParentBox.GetDistance();
+            pFSPA->nYaBottom -= rParentBox.GetDistance();
+
+            if (eHoriRel == FRAME)
             {
-                eAnchor = FLY_AUTO_CNTNT;
-            }
-            else if ((nXRelTo == 3) && (nYRelTo == 3))
-            {
-                eAnchor = FLY_AUTO_CNTNT;
-                //nYAlign = 3;
-            }
-        }
+                const SwFmtHoriOrient &rParentHori = pFmt->GetHoriOrient();
+                pFSPA->nXaLeft += rParentHori.GetPos();
+                pFSPA->nXaLeft += rParentBox.GetDistance();
 
+                pFSPA->nXaRight += rParentHori.GetPos();
+                pFSPA->nXaRight += rParentBox.GetDistance();
 
-        //No drawing layer stuff in the header, so if
-        //this is going to be in the headerfooter and
-        //cannot be replaced by a fly then anchor it
-        //to the current page.
-        if ((bIsHeader || bIsFooter) && !bOrgObjectWasReplace &&
-            !pRecord->bReplaceByFly)
-        {
-            eAnchor=FLY_PAGE;
-        }
-
-        SwFmtAnchor aAnchor( eAnchor );
-        aAnchor.SetAnchor( pPaM->GetPoint() );
-        rFlySet.Put( aAnchor );
-
-        if (pFSPA)
-        {
-            SwHoriOrient eHoriOri;
-            eHoriOri = aHoriOriTab[ nXAlign ];
-            SwRelationOrient eHoriRel;
-            eHoriRel = aRelOriTab[  nXRelTo ];
-            if ((eHoriRel == FRAME) && (eAnchor == FLY_PAGE))
-                eHoriRel = PRTAREA;
-
-            /*
-             Absolute positions in winword for graphics are broken when the
-             graphic is in a table, all absolute positions now become relative
-             to the top left corner of that cell.  We really cannot import
-             that feature correctly as we have not the same functionality
-             (yet). This normalizes the absolute position by the left of the
-             table, which at least puts it close, theres nothing we can do
-             about the vertical either.
-            */
-            if (nTable && eAnchor == FLY_PAGE)
-            {
-                pFSPA->nXaLeft -= GetTableLeft();
-                pFSPA->nXaRight -= GetTableLeft();
-            }
-
-            /*
-            ##640##
-            If we are inside another frame we have to adjust our x and y
-            offsets correspondingly by the offsets of the parent
-            */
-            if (pSFlyPara && pSFlyPara->pFlyFmt && !pRecord->bReplaceByFly)
-            {
-                SwFlyFrmFmt *pFmt = pSFlyPara->pFlyFmt;
-                const SvxBoxItem &rParentBox = pFmt->GetBox();
-                pFSPA->nYaTop -= rParentBox.GetDistance();
-                pFSPA->nYaBottom -= rParentBox.GetDistance();
-
-                if (eHoriRel == FRAME)
+                if (rParentHori.GetRelationOrient() == REL_PG_FRAME)
                 {
-                    const SwFmtHoriOrient &rParentHori = pFmt->GetHoriOrient();
-                    pFSPA->nXaLeft += rParentHori.GetPos();
-                    pFSPA->nXaLeft += rParentBox.GetDistance();
-
-                    pFSPA->nXaRight += rParentHori.GetPos();
-                    pFSPA->nXaRight += rParentBox.GetDistance();
-
-                    if (rParentHori.GetRelationOrient() == REL_PG_FRAME)
-                    {
-                        pFSPA->nXaLeft -= nPgLeft;
-                        pFSPA->nXaRight -= nPgLeft;
-                    }
+                    pFSPA->nXaLeft -= nPgLeft;
+                    pFSPA->nXaRight -= nPgLeft;
                 }
             }
-
-            SwFmtHoriOrient aHoriOri( pFSPA->nXaLeft, eHoriOri, eHoriRel );
-            if( 4 <= nXAlign )
-                aHoriOri.SetPosToggle(true);
-            rFlySet.Put( aHoriOri );
-
-            //Writer honours this wrap distance when aligned as "left" or "right",
-            //Word doesn't. Writer doesn't honour it when its "from left".
-            if (eHoriOri == HORI_LEFT)
-                pRecord->nDxWrapDistLeft=0;
-            else if (eHoriOri == HORI_RIGHT)
-                pRecord->nDxWrapDistRight=0;
-
-            SwVertOrient eVertOri;
-            eVertOri = aVertOriTab[ nYAlign ];
-            SwRelationOrient eVertRel;
-            eVertRel = FLY_AUTO_CNTNT == eAnchor ? REL_CHAR :
-                aRelOriTab[  nYRelTo ];
-            // Make an adjustment for the special case where we want to align
-            // vertically to page when horizontally aligned centre to character
-            if (((pRecord->nXAlign == 1) ||
-                (pRecord->nXAlign == 2)) && (pRecord->nXRelTo == 3)
-                && (pRecord->nYAlign == 2) && (pRecord->nYRelTo ==1))
-            {
-                eVertRel = REL_PG_PRTAREA;
-            }
-            if ((eAnchor == FLY_AT_CNTNT) && (eVertRel == REL_CHAR))
-                eVertRel = PRTAREA;
-
-            rFlySet.Put(SwFmtVertOrient( pFSPA->nYaTop,  eVertOri, eVertRel ));
         }
+
+        SwFmtHoriOrient aHoriOri( pFSPA->nXaLeft, eHoriOri, eHoriRel );
+        if( 4 <= nXAlign )
+            aHoriOri.SetPosToggle(true);
+        rFlySet.Put( aHoriOri );
+
+        //Writer honours this wrap distance when aligned as "left" or "right",
+        //Word doesn't. Writer doesn't honour it when its "from left".
+        if (eHoriOri == HORI_LEFT)
+            pRecord->nDxWrapDistLeft=0;
+        else if (eHoriOri == HORI_RIGHT)
+            pRecord->nDxWrapDistRight=0;
+
+        SwVertOrient eVertOri;
+        eVertOri = aVertOriTab[ nYAlign ];
+        SwRelationOrient eVertRel;
+        eVertRel = FLY_AUTO_CNTNT == eAnchor ? REL_CHAR :
+            aRelOriTab[  nYRelTo ];
+        // Make an adjustment for the special case where we want to align
+        // vertically to page when horizontally aligned centre to character
+        if (((pRecord->nXAlign == 1) ||
+            (pRecord->nXAlign == 2)) && (pRecord->nXRelTo == 3)
+            && (pRecord->nYAlign == 2) && (pRecord->nYRelTo ==1))
+        {
+            eVertRel = REL_PG_PRTAREA;
+        }
+        if ((eAnchor == FLY_AT_CNTNT) && (eVertRel == REL_CHAR))
+            eVertRel = PRTAREA;
+
+        rFlySet.Put(SwFmtVertOrient( pFSPA->nYaTop,  eVertOri, eVertRel ));
     }
 
     return eAnchor;
@@ -2567,17 +2574,14 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             pF->nby = WW8_FSPA::RelPageBorder;
         }
 
-        RndStdIds eAnchor = FLY_AT_CNTNT;
         if (pF->nby != WW8_FSPA::RelText)
         {
-            if( bIsHeader || bIsFooter)
+            if (bIsHeader || bIsFooter)
                 pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
-            else
-                eAnchor = FLY_PAGE;
         }
 
-        if (pRecord)
-            eAnchor = ProcessEscherAlign(pRecord, pF, aFlySet, bReplaceable);
+        RndStdIds eAnchor = ProcessEscherAlign(pRecord, pF, aFlySet,
+            bReplaceable);
 
         // Should we, and is it possible to make this into a writer textbox
         if( (!(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX)) &&
