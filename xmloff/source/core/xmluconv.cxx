@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 09:57:12 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 05:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1785,4 +1785,45 @@ void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
         rBuffer.appendAscii( pSync );
 }
 
+void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>& rProps,
+                    const uno::Reference<beans::XPropertySet>& aProperties)
+{
+    uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = aProperties->getPropertySetInfo();
+    if (xPropertySetInfo.is())
+    {
+        uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
+        sal_Int32 nCount(aProps.getLength());
+        if (nCount)
+        {
+            rProps.realloc(nCount);
+            beans::PropertyValue* pProps = rProps.getArray();
+            if (pProps)
+            {
+                for (sal_Int32 i = 0; i < nCount; i++, pProps++)
+                {
+                    pProps->Name = aProps[i].Name;
+                    pProps->Value = aProperties->getPropertyValue(aProps[i].Name);
+                }
+            }
+        }
+    }
+}
+
+void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet>& rProperties,
+                    const uno::Sequence<beans::PropertyValue>& aProps)
+{
+    sal_Int32 nCount(aProps.getLength());
+    if (nCount)
+    {
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = rProperties->getPropertySetInfo();
+        if (xPropertySetInfo.is())
+        {
+            for (sal_Int32 i = 0; i < nCount; i++)
+            {
+                if (xPropertySetInfo->hasPropertyByName(aProps[i].Name))
+                    rProperties->setPropertyValue(aProps[i].Name, aProps[i].Value);
+            }
+        }
+    }
+}
 
