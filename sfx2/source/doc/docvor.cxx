@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-26 13:32:40 $
+ *  last change: $Author: cd $ $Date: 2002-07-31 07:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include <vcl/waitobj.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <tools/color.hxx>
 #include <svtools/pathoptions.hxx>
 #pragma hdrstop
 
@@ -1183,9 +1184,19 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 {
     // wenn keine Childs vorhanden sind, gfs. Childs
     // einfuegen
+    BmpColorMode eColorMode = BMP_COLOR_NORMAL;
+
+    if ( GetDisplayBackground().GetColor().IsDark() )
+        eColorMode = BMP_COLOR_HIGHCONTRAST;
+
+
     if ( !GetModel()->HasChilds( pEntry ) )
     {
         WaitObject aWaitCursor( this );
+
+        // Choose the correct mask color dependent from eColorMode. This must be adopted if
+        // we change the mask color for normal images, too!
+        Color aMaskColor(( eColorMode == BMP_COLOR_NORMAL ) ? COL_LIGHTGRAY : COL_LIGHTMAGENTA );
 
         // hier sind alle initial eingefuegt
         SfxErrorContext aEc(ERRCTX_SFX_CREATEOBJSH, pDlg->pDialog);
@@ -1213,15 +1224,16 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
                 for(USHORT i = 0; i < nCount; ++i)
                 {
                     BOOL bDeletable;
-                    // #101060#
-                    // !! NOT SOLVED YET:
-                    //  GetContent() only returns normal bitmaps and no HC ones. This hast to be extended to show
-                    //  HC-images for the doc contents!
                     aRef->GetContent(
-                        aText, aClosedBmp, aOpenedBmp, bDeletable,
+                        aText, aClosedBmp, aOpenedBmp, eColorMode, bDeletable,
                         i, aPath[nDocLevel+1], aPath[nDocLevel+2]);
+
+                    // Create image with the correct mask color
+                    Image aClosedImage( aClosedBmp, aMaskColor );
+                    Image aOpenedImage( aOpenedBmp, aMaskColor );
+
                     SvLBoxEntry *pNew = SvTreeListBox::InsertEntry(
-                        aText, aOpenedBmp, aClosedBmp,
+                        aText, aOpenedImage, aClosedImage,
                         pEntry, bCanHaveChilds);
                     pNew->SetUserData(bDeletable ? &bDeletable : 0);
                 }

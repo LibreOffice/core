@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 14:39:50 $
+ *  last change: $Author: cd $ $Date: 2002-07-31 07:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,13 +1048,28 @@ BOOL   SfxObjectShell::CanHaveChilds(USHORT nIdx1,
 
 //--------------------------------------------------------------------
 
+void SfxObjectShell::GetContent(String &rText,
+                                Bitmap &rClosedBitmap,
+                                Bitmap &rOpenedBitmap,
+                                BOOL &bCanDel,
+                                USHORT i,
+                                USHORT nIdx1,
+                                USHORT nIdx2 )
+{
+    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
+    SfxObjectShell::GetContent( rText, rClosedBitmap, rOpenedBitmap, BMP_COLOR_NORMAL, bCanDel, i, nIdx1, nIdx2 );
+}
+
+//--------------------------------------------------------------------
+
 void   SfxObjectShell::GetContent(String &rText,
-                                        Bitmap &rClosedBitmap,
-                                        Bitmap &rOpenedBitmap,
-                                        BOOL &bCanDel,
-                                        USHORT i,
-                                        USHORT nIdx1,
-                                        USHORT nIdx2)
+                                  Bitmap &rClosedBitmap,
+                                  Bitmap &rOpenedBitmap,
+                                  BmpColorMode eColorMode,
+                                  BOOL &bCanDel,
+                                  USHORT i,
+                                  USHORT nIdx1,
+                                  USHORT nIdx2 )
 {
     bCanDel=TRUE;
 
@@ -1069,13 +1084,29 @@ void   SfxObjectShell::GetContent(String &rText,
             {
                 case CONTENT_STYLE:
                     nTextResId = STR_STYLES;
-                    nClosedBitmapResId= BMP_STYLES_CLOSED;
-                    nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    if ( eColorMode == BMP_COLOR_NORMAL )
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    }
+                    else
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
+                    }
                     break;
                 case CONTENT_MACRO:
                     nTextResId = STR_MACROS;
-                    nClosedBitmapResId= BMP_STYLES_CLOSED;
-                    nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    if ( eColorMode == BMP_COLOR_NORMAL )
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    }
+                    else
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
+                    }
                     break;
 /*
                 case CONTENT_CONFIG:
@@ -1104,7 +1135,7 @@ void   SfxObjectShell::GetContent(String &rText,
             bCanDel=((pStyle->GetMask() & SFXSTYLEBIT_USERDEF)
                      == SFXSTYLEBIT_USERDEF);
             rClosedBitmap = rOpenedBitmap =
-                GetStyleFamilyBitmap(pStyle->GetFamily());
+                GetStyleFamilyBitmap(pStyle->GetFamily(), eColorMode );
         }
             break;
         case CONTENT_MACRO:
@@ -1126,23 +1157,30 @@ void   SfxObjectShell::GetContent(String &rText,
 }
 
 //--------------------------------------------------------------------
+Bitmap SfxObjectShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
+{
+    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
+    return SfxObjectShell::GetStyleFamilyBitmap( eFamily, BMP_COLOR_NORMAL );
+}
 
-Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily)
+//--------------------------------------------------------------------
+
+Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode )
 {
     USHORT nResId = 0;
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            nResId = BMP_STYLES_FAMILY1;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY1 : BMP_STYLES_FAMILY1_HC;
             break;
         case SFX_STYLE_FAMILY_PARA:
-            nResId = BMP_STYLES_FAMILY2;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY2 : BMP_STYLES_FAMILY2_HC;
             break;
         case SFX_STYLE_FAMILY_FRAME:
-            nResId = BMP_STYLES_FAMILY3;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY3 : BMP_STYLES_FAMILY3_HC;
             break;
         case SFX_STYLE_FAMILY_PAGE :
-            nResId = BMP_STYLES_FAMILY4;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY4 : BMP_STYLES_FAMILY4_HC;
             break;
     }
 
