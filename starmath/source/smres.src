@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:43:17 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2303,7 +2303,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ greek ] = " ‹Ù˘:";
             Text[ dutch ] = "~Beneden";
             Text[ french ] = "En bas";
-            Text[ spanish ] = "~Abajo";
+            Text[ spanish ] = "Abajo";
             Text[ finnish ] = "~Alaosa";
             Text[ italian ] = "~In basso";
             Text[ danish ] = "Forneden:";
@@ -2403,7 +2403,7 @@ ModalDialog RID_ALIGNDIALOG
         Text [ french ] = "CentrÈ" ;
         Text [ swedish ] = "~Centrerad" ;
         Text [ dutch ] = "~Centreren" ;
-        Text [ spanish ] = "~Centrado" ;
+        Text [ spanish ] = "Centrado" ;
         Text [ english_us ] = "~Centered" ;
         Text[ chinese_simplified ] = "Â±Ö‰∏≠(~C)";
         Text[ russian ] = "œÓ ˆÂÌÚÛ";
@@ -2624,7 +2624,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ danish ] = "~Formeltekst" ;
         Text [ italian ] = "Testo formula" ;
         Text [ spanish ] = "~Texto de la fÛrmula" ;
-        Text [ french ] = "~Texte de la formule" ;
+        Text [ french ] = "Texte de la formule" ;
         Text [ portuguese ] = "Te~xto da fÛrmula" ;
         Text [ portuguese_brazilian ] = "~Formeltext" ;
         Text[ chinese_simplified ] = "ÂÖ¨ÂºèËØ¥ÊòéÊñá(~F)";
@@ -2652,7 +2652,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ swedish ] = "~Ram" ;
         Text [ danish ] = "Ramme" ;
         Text [ italian ] = "~Cornice" ;
-        Text [ spanish ] = "~Marco" ;
+        Text [ spanish ] = "Marco" ;
         Text [ french ] = "~Cadre" ;
         Text [ portuguese ] = "~Moldura" ;
         Text [ portuguese_brazilian ] = "~Rahmen" ;
@@ -2711,7 +2711,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ portuguese ] = "~Tamanho original" ;
         Text [ finnish ] = "Alkuper‰inen koko" ;
         Text [ danish ] = "Oprindelig st¯rrelse" ;
-        Text [ french ] = "~Taille d'origine" ;
+        Text [ french ] = "Taille d'origine" ;
         Text [ swedish ] = "~Originalstorlek" ;
         Text [ dutch ] = "~Originele grootte" ;
         Text [ spanish ] = "T~amaÒo original" ;
@@ -3011,7 +3011,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ portuguese ] = "~Fechar";
         Text[ russian ] = "«‡Í˚Ú¸";
         Text[ dutch ] = "Sluiten~n";
-        Text[ french ] = "~Fermer";
+        Text[ french ] = "Fermer";
         Text[ spanish ] = "~Cerrar";
         Text[ italian ] = "C~hiudi";
         Text[ danish ] = "Luk";
@@ -3461,7 +3461,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ portuguese ] = "Modificar" ;
         Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Modificer" ;
-        Text [ french ] = "~Modifier" ;
+        Text [ french ] = "Modifier" ;
         Text [ swedish ] = "ƒ~ndra" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "~Modificar" ;
@@ -3491,7 +3491,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "~Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ spanish ] = "~Eliminar" ;
