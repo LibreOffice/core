@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 11:02:25 $
+ *  last change: $Author: pb $ $Date: 2002-12-02 07:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,11 @@ class SvtCTLOptions_Impl : public utl::ConfigItem
 private:
     static Sequence< rtl::OUString > m_aPropertyNames;
 
-    sal_Bool    m_bIsLoaded;
-    sal_Bool    m_bCTLFontEnabled;
-    sal_Bool    m_bCTLSequenceChecking;
+    sal_Bool                        m_bIsLoaded;
+    sal_Bool                        m_bCTLFontEnabled;
+    sal_Bool                        m_bCTLSequenceChecking;
+    SvtCTLOptions::CursorMovement   m_eCTLCursorMovement;
+    SvtCTLOptions::TextNumerals     m_eCTLTextNumerals;
 
 public:
     SvtCTLOptions_Impl();
@@ -109,6 +111,14 @@ public:
 
     void            SetCTLSequenceChecking( sal_Bool _bEnabled );
     sal_Bool        IsCTLSequenceChecking() const { return m_bCTLSequenceChecking;}
+
+    void            SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement );
+    SvtCTLOptions::CursorMovement
+                    GetCTLCursorMovement() const { return m_eCTLCursorMovement; }
+
+    void            SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals );
+    SvtCTLOptions::TextNumerals
+                    GetCTLTextNumerals() const { return m_eCTLTextNumerals; }
 };
 //------------------------------------------------------------------------------
 Sequence< rtl::OUString > SvtCTLOptions_Impl::m_aPropertyNames;
@@ -117,15 +127,19 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
     utl::ConfigItem( ASCII_STR("Office.Common/I18N/CTL") ),
 
-    m_bIsLoaded         ( sal_False ),
-    m_bCTLFontEnabled   ( sal_False ),
-    m_bCTLSequenceChecking( sal_False )
+    m_bIsLoaded             ( sal_False ),
+    m_bCTLFontEnabled       ( sal_False ),
+    m_bCTLSequenceChecking  ( sal_False ),
+    m_eCTLCursorMovement    ( SvtCTLOptions::MOVEMENT_LOGICAL ),
+    m_eCTLTextNumerals      ( SvtCTLOptions::NUMERALS_ARABIC )
 
 {
 }
 //------------------------------------------------------------------------------
 SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
 {
+    if ( IsModified() == sal_True )
+        Commit();
 }
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& aPropertyNames )
@@ -138,17 +152,16 @@ void SvtCTLOptions_Impl::Commit()
     rtl::OUString* pNames = m_aPropertyNames.getArray();
     Sequence< Any > aValues( m_aPropertyNames.getLength() );
     Any* pValues = aValues.getArray();
-
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
     for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
     {
-        switch( nProp )
+        switch ( nProp )
         {
-            case 0: bVal = m_bCTLFontEnabled; break;
-            case 1: bVal = m_bCTLSequenceChecking; break;
+            case  0: pValues[nProp].setValue( &m_bCTLFontEnabled, rType ); break;
+            case  1: pValues[nProp].setValue( &m_bCTLSequenceChecking, rType ); break;
+            case  2: pValues[nProp] <<= (sal_Int32)m_eCTLCursorMovement; break;
+            case  3: pValues[nProp] <<= (sal_Int32)m_eCTLTextNumerals; break;
         }
-        pValues[nProp].setValue( &bVal, getBooleanCppuType() );
     }
     PutProperties( m_aPropertyNames, aValues );
 }
@@ -157,10 +170,12 @@ void SvtCTLOptions_Impl::Load()
 {
     if ( !m_aPropertyNames.getLength() )
     {
-        m_aPropertyNames.realloc(2);
+        m_aPropertyNames.realloc(4);
         rtl::OUString* pNames = m_aPropertyNames.getArray();
         pNames[0] = ASCII_STR("CTLFont");
         pNames[1] = ASCII_STR("CTLSequenceChecking");
+        pNames[2] = ASCII_STR("CTLCursorMovement");
+        pNames[3] = ASCII_STR("CTLTextNumerals");
         EnableNotification( m_aPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( m_aPropertyNames );
@@ -169,6 +184,7 @@ void SvtCTLOptions_Impl::Load()
     if ( aValues.getLength() == m_aPropertyNames.getLength() )
     {
         sal_Bool bValue = sal_False;
+        sal_Int32 nValue = 0;
 
         for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
         {
@@ -180,6 +196,14 @@ void SvtCTLOptions_Impl::Load()
                     {
                         case 0: m_bCTLFontEnabled = bValue; break;
                         case 1: m_bCTLSequenceChecking = bValue;break;
+                    }
+                }
+                else if ( pValues[nProp] >>= nValue )
+                {
+                    switch ( nProp )
+                    {
+                        case 2: m_eCTLCursorMovement = (SvtCTLOptions::CursorMovement)nValue; break;
+                        case 3: m_eCTLTextNumerals = (SvtCTLOptions::TextNumerals)nValue;break;
                     }
                 }
             }
@@ -203,6 +227,24 @@ void SvtCTLOptions_Impl::SetCTLSequenceChecking( sal_Bool _bEnabled )
     {
         SetModified();
         m_bCTLSequenceChecking = _bEnabled;
+    }
+}
+//------------------------------------------------------------------------------
+void SvtCTLOptions_Impl::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
+{
+    if ( m_eCTLCursorMovement != _eMovement )
+    {
+        SetModified();
+        m_eCTLCursorMovement = _eMovement;
+    }
+}
+//------------------------------------------------------------------------------
+void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
+{
+    if ( m_eCTLTextNumerals != _eNumerals )
+    {
+        SetModified();
+        m_eCTLTextNumerals = _eNumerals;
     }
 }
 // global ----------------------------------------------------------------
@@ -260,4 +302,27 @@ sal_Bool SvtCTLOptions::IsCTLSequenceChecking() const
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceChecking();
 }
-
+// -----------------------------------------------------------------------------
+void SvtCTLOptions::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    pCTLOptions->SetCTLCursorMovement( _eMovement );
+}
+// -----------------------------------------------------------------------------
+SvtCTLOptions::CursorMovement SvtCTLOptions::GetCTLCursorMovement() const
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    return pCTLOptions->GetCTLCursorMovement();
+}
+// -----------------------------------------------------------------------------
+void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    pCTLOptions->SetCTLTextNumerals( _eNumerals );
+}
+// -----------------------------------------------------------------------------
+SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals() const
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    return pCTLOptions->GetCTLTextNumerals();
+}
