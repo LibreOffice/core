@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:56:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-25 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,6 @@ void NewXForms( SfxRequest& rReq )
     // create new document
     SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
     xDocSh->DoInitNew( 0 );
-    xDocSh->Stamp_SetActivateEvent(SFX_EVENT_CREATEDOC);
 
     // initialize XForms
     static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );
