@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcanvas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:59:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ namespace cppcanvas
 
             virtual ColorSharedPtr              createColor() const;
 
-            virtual CanvasSharedPtr             cloneCanvas() const;
+            virtual CanvasSharedPtr             clone() const;
 
             virtual ::com::sun::star::uno::Reference<
                 ::drafts::com::sun::star::rendering::XCanvas >      getUNOCanvas() const;
