@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-26 13:14:16 $
+ *  last change: $Author: gt $ $Date: 2002-07-26 13:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1194,7 +1194,7 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
             USHORT i = (USHORT)GetModel()->GetRelPos(pEntry);
             const USHORT nEntryCount = pMgr->GetTemplates()->GetCount(i);
             for(USHORT j = 0; j < nEntryCount; ++j)
-                InsertEntry( pMgr->GetTemplates()->GetName( i, j ), BMPTYPE_DOC, pEntry, TRUE );
+                InsertEntryByBmpType( pMgr->GetTemplates()->GetName( i, j ), BMPTYPE_DOC, pEntry, TRUE );
         }
         else
         {
@@ -1315,7 +1315,7 @@ USHORT SfxOrganizeListBox_Impl::GetLevelCount_Impl(SvLBoxEntry* pParent) const
 
 //-------------------------------------------------------------------------
 
-SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntry( const XubString& rText, BMPTYPE eBmpType,
+SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
     SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
 {
     SvLBoxEntry*    pEntry = NULL;
@@ -1333,7 +1333,7 @@ SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntry( const XubString& rText, BMPTY
             pColHC = &aClosedFolderBmpHC;
             break;
         default:
-            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntry(): something forgotten?!" );
+            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
 
         case BMPTYPE_DOC:
             pExp = &aOpenedDocBmp;
@@ -1421,14 +1421,14 @@ void SfxOrganizeListBox_Impl::Reset()
     {
         const USHORT nCount = pMgr->GetTemplates()->GetRegionCount();
         for ( USHORT i = 0; i < nCount; ++i )
-            InsertEntry( pMgr->GetTemplates()->GetFullRegionName(i), BMPTYPE_FOLDER, 0, TRUE );
+            InsertEntryByBmpType( pMgr->GetTemplates()->GetFullRegionName(i), BMPTYPE_FOLDER, 0, TRUE );
     }
     else
     {
         const SfxObjectList& rList = pMgr->GetObjectList();
         const USHORT nCount = rList.Count();
         for ( USHORT i = 0; i < nCount; ++i )
-            InsertEntry( rList.GetBaseName(i), BMPTYPE_DOC, 0, TRUE );
+            InsertEntryByBmpType( rList.GetBaseName(i), BMPTYPE_DOC, 0, TRUE );
 
     }
     SetUpdateMode(TRUE);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-26 12:58:27 $
+ *  last change: $Author: gt $ $Date: 2002-07-26 13:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ private:
                                          SvLBoxEntry* pParent, SvLBoxEntry* pEntry = 0 ) const;
     USHORT              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
 
-    SvLBoxEntry*        InsertEntry( const XubString& rText, BMPTYPE eBmpType,
+    SvLBoxEntry*        InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
                             SvLBoxEntry* pParent = NULL, BOOL bChildsOnDemand = FALSE,
                             ULONG nPos = LIST_APPEND, void* pUserData = NULL );
 };
