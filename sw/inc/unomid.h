@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:48:22 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,5 +179,8 @@
 #define MID_ENV_PRINT_FROM_ABOVE 11
 #define MID_ENV_SHIFT_RIGHT     12
 #define MID_ENV_SHIFT_DOWN      13
+
+// OD 2004-05-04 #i28701# - SwFmtWrapInfluenceOnObjPos
+#define MID_WRAP_INFLUENCE      0
 
 #endif
