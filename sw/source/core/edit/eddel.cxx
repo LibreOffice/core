@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:18:36 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,96 +200,6 @@ long SwEditShell::Delete()
     }
     return nRet;
 }
-
-
-
-long SwEditShell::Move()
-{
-    SET_CURR_SHELL( this );
-
-    long nRet = 0;
-    if( !HasReadonlySel() )
-    {
-        StartAllAction();
-        SwPosition * pPos = 0;
-        BOOL bFirstMove = TRUE;
-
-        String sBookmark( String::CreateFromAscii("Move") );
-        GetDoc()->MakeUniqueBookmarkName( sBookmark );
-
-        BOOL bUndo = GetDoc()->DoesUndo();
-
-        GetDoc()->StartUndo( UNDO_START );
-
-        FOREACHPAM_START(this)
-
-            if( !pPos )
-            {
-                // der 1.Cursor ist die Position, wohin verschoben wird !!
-                PCURCRSR->DeleteMark();
-                pPos = (SwPosition*)PCURCRSR->GetPoint();
-            }
-            // nur bei Selektion (nicht Textnodes haben Selection,
-            // aber Point/GetMark sind gleich
-            else if( PCURCRSR->HasMark() &&
-                    *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() &&
-                    GetDoc()->MoveAndJoin( *PCURCRSR, *pPos ))
-            {
-                nRet = 1;
-                if( bFirstMove )
-                {
-                    // Anfangs-Position vom neuen Bereich merken
-                    bFirstMove = FALSE;
-                    GetDoc()->DoUndo( FALSE );
-                    GetDoc()->MakeBookmark( *PCURCRSR, KeyCode(), sBookmark,
-                                            aEmptyStr, MARK );
-                    GetDoc()->DoUndo( bUndo );
-                }
-            }
-
-        FOREACHPAM_END()
-
-        KillPams();
-
-        // wurde ueberhaupt etwas verschoben ?
-        if( !bFirstMove )
-        {
-            USHORT nFndPos = GetDoc()->FindBookmark( sBookmark );
-            const SwBookmark& rBkmk = *GetDoc()->GetBookmarks()[ nFndPos ];
-
-            SwPaM* pCrsr = GetCrsr();
-            pCrsr->SetMark();
-            *pCrsr->GetMark() = rBkmk.GetPos();
-
-            GetDoc()->DoUndo( FALSE );
-            GetDoc()->DelBookmark( nFndPos );
-            GetDoc()->DoUndo( bUndo );
-        }
-
-#if OSL_DEBUG_LEVEL > 1
-// pruefe ob die Indizies auch in den richtigen Nodes angemeldet sind
-{
-    SwPaM* pCmp = GetCrsr();        // sicher den Pointer auf Cursor
-    do {
-        ASSERT( pCmp->GetPoint()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(), "Point im falschen Node" );
-        ASSERT( pCmp->GetMark()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(FALSE), "Mark im falschen Node" );
-        BOOL bTst = *pCmp->GetPoint() == *pCmp->GetMark();
-    } while( GetCrsr() != ( pCmp = (SwPaM*)pCmp->GetNext() ) );
-}
-#endif
-
-        // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo( UNDO_END );
-        EndAllAction();
-    }
-    return nRet;
-    // falls eine Bitmap nicht verschoben werden konnte so melde das an
-    // die SwWriterShell weiter
-}
-
-
 
 long SwEditShell::Copy( SwEditShell* pDestShell )
 {
