@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: ama $ $Date: 2001-09-11 07:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,25 @@
  *************************************************************************/
 
 SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
-                          const sal_Bool bRightMargin )
+                          const sal_Bool bRightMargin, const sal_Bool bNoScroll = TRUE )
 {
     // 8810: vgl. 1170, RightMargin in der letzten Masterzeile...
     const xub_StrLen nOffset = rPos.nContent.GetIndex();
-    SwTxtFrm *pFrmAtPos = pFrm->GetFrmAtPos( rPos );
+    SwTxtFrm *pFrmAtPos = pFrm;
+    if( !bNoScroll || pFrm->GetFollow() )
+    {
+        pFrmAtPos = pFrm->GetFrmAtPos( rPos );
+        if( rPos.nContent.GetIndex() < pFrmAtPos->GetOfst() &&
+            !pFrmAtPos->IsFollow() )
+        {
+            xub_StrLen nNew = rPos.nContent.GetIndex();
+            if( nNew < MIN_OFFSET_STEP )
+                nNew = 0;
+            else
+                nNew -= MIN_OFFSET_STEP;
+            lcl_ChangeOffset( pFrmAtPos, nNew );
+        }
+    }
     while( pFrm != pFrmAtPos )
     {
         pFrm = pFrmAtPos;
@@ -206,17 +220,6 @@ SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
                 break;
         }
     }
-    if( rPos.nContent.GetIndex() < pFoll->GetOfst() && !pFoll->IsFollow() )
-    {
-        // Der Offset wird verschoben, bis die gewuenschte Position sichtbar
-        // wird und MIN_OFFSET_STEP weitere Zeichen.
-        xub_StrLen nNew = rPos.nContent.GetIndex();
-        if( nNew < MIN_OFFSET_STEP )
-            nNew = 0;
-        else
-            nNew -= MIN_OFFSET_STEP;
-        lcl_ChangeOffset( pFoll, nNew );
-    }
     return pFoll;
 }
 
@@ -250,8 +253,9 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
     // opt: reading ahead erspart uns ein GetAdjFrmAtPos
     const sal_Bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->eState );
-    SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, rPos, bRightMargin );
-
+    const sal_Bool bNoScroll = pCMS && pCMS->bNoScroll;
+    SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, rPos, bRightMargin,
+                                     bNoScroll );
     pFrm->GetFormatted();
     const SwFrm* pTmpFrm = (SwFrm*)pFrm->GetUpper();
     SwTwips nUpperMaxY = pTmpFrm->Frm().Top() + pTmpFrm->Prt().Bottom();
@@ -315,7 +319,6 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         if( !pFrm->HasPara() )
             return sal_False;
         sal_Bool bGoOn = sal_True;
-        sal_Bool bPrvLine;
         xub_StrLen nOffset = rPos.nContent.GetIndex();
         xub_StrLen nNextOfst;
 
@@ -334,11 +337,10 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 // 1170: das letzte Zeichen der Zeile mitnehmen?
                 bRet = bRightMargin ? aLine.GetEndCharRect( &rOrig, nOffset, pCMS, nMaxY )
                                 : aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
-                bPrvLine = pCMS && aLine.GetPrev() && !pFrm->GetNext();
-
             }
-            if( pFrm->IsUndersized() && bPrvLine && rOrig.Bottom() == nUpperMaxY &&
-                pFrm->GetOfst() < nOffset && !pFrm->IsFollow() )
+            if( pFrm->IsUndersized() && pCMS && !pFrm->GetNext() &&
+                rOrig.Bottom() == nUpperMaxY && pFrm->GetOfst() < nOffset &&
+                !pFrm->IsFollow() && !bNoScroll )
                 bGoOn = lcl_ChangeOffset( pFrm, nNextOfst );
             else
                 bGoOn = sal_False;
