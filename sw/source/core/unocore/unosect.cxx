@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-11 16:20:02 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 12:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef _FMTFTNTX_HXX
 #include <fmtftntx.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -1142,6 +1145,8 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
                                                 aPropSet.getPropertyMap(), rPropertyName);
         if(!pMap)
             throw UnknownPropertyException();
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         SfxItemSet* pNewAttrSet = 0;
         switch(pMap->nWID)
         {
@@ -1232,6 +1237,9 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
     SwSectionFmt*   pFmt = GetFmt();
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                             aPropSet.getPropertyMap(), rPropertyName);
+    if ( pMap->nFlags & PropertyAttribute::READONLY)
+        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     switch(pMap->nWID)
     {
         case WID_SECT_CONDITION:
