@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-26 10:59:46 $
+ *  last change: $Author: cl $ $Date: 2002-10-24 16:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
             {
                 // Dialog...
-                SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField() );
+                SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOutlinerView->GetAttribs() );
                 if( aDlg.Execute() == RET_OK )
                 {
                     SvxFieldData* pField = aDlg.GetField();
@@ -573,6 +573,16 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
                         pOutlinerView->SetSelection( aSel );
 
                         delete pField;
+                    }
+
+                    SfxItemSet aSet( aDlg.GetItemSet() );
+                    if( aSet.Count() )
+                    {
+                        pOutlinerView->SetAttribs( aSet );
+
+                        Outliner* pOutliner = pOutlinerView->GetOutliner();
+                        if( pOutliner )
+                            pOutliner->UpdateFields();
                     }
                 }
             }

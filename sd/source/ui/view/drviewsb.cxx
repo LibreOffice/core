@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-20 15:10:40 $
+ *  last change: $Author: cl $ $Date: 2002-10-24 16:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                                  pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
                 {
                     // Dialog...
-                    SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField() );
+                    SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOLV->GetAttribs() );
                     if( aDlg.Execute() == RET_OK )
                     {
                         SvxFieldData* pField = aDlg.GetField();
@@ -639,9 +639,20 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                             // Selektion wird wieder in den Ursprungszustand gebracht
                             if( !bSel )
                                 aSel.nEndPos--;
+
                             pOLV->SetSelection( aSel );
 
                             delete pField;
+                        }
+
+                        SfxItemSet aSet( aDlg.GetItemSet() );
+                        if( aSet.Count() )
+                        {
+                            pOLV->SetAttribs( aSet );
+
+                            Outliner* pOutliner = pOLV->GetOutliner();
+                            if( pOutliner )
+                                pOutliner->UpdateFields();
                         }
                     }
                 }
