@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-06-27 07:33:11 $ $Revision: 1.10 $
+    $Author: hjs $ $Date: 2003-08-19 12:32:00 $ $Revision: 1.11 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -105,6 +105,13 @@ TypeLibFile( "sfxslots.tlb" )
         INT16       Command         MID_SEARCH_COMMAND;
     };
     item SvxSearch SvxSearchItem;
+
+    struct SvxSize
+    {
+        INT32               Width           MID_SIZE_WIDTH;
+        INT32               Height          MID_SIZE_HEIGHT;
+    };
+    item SvxSize SvxSizeItem;
 
     include "sfx.sdi"
     include "object.sdi"
