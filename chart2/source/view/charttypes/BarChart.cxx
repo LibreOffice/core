@@ -414,7 +414,7 @@ void BarChart::createShapes()
                             xPointGroupShape_Shapes
                             , aTransformedGeom
                             ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex )
-                            ,(*aSeriesIter)->getAppearanceOfPoint( nCatIndex ).m_eGeometry3D );
+                            ,GEOMETRY_CUBOID );
                     }
                     else //m_nDimension!=3
                     {
