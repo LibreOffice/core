@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,14 @@ namespace configmgr
         node::Attributes getAttributes() const { return m_aAttributes; }
 
         bool isDefault()   const { return m_aAttributes.isDefault(); }
-        bool isLocalized() const { return m_aAttributes.bLocalized; }
+        bool isLocalized() const { return m_aAttributes.isLocalized(); }
 
         void modifyState(node::State _eNewState);
-        void modifyAccess(bool _bWritable,bool _bFinalized);
-          void forceWritableToFinalized();
+        void modifyAccess(node::Access _aAccessLevel);
+        void markMandatory();
+        void markRemovable();
+        void promoteAccessToDefault();
+          void forceReadonlyToFinalized();
 
             // to be used with caution. If the node is referenced from somewhere else under it's old name,
             // you may have problems with this inconsistence
@@ -298,7 +301,7 @@ namespace configmgr
         bool isValid()      const {return !m_aValuePair.isEmpty();}
 
         bool isNull()       const {return m_aValuePair.isNull();}
-        bool hasUsableDefault()   const {return getAttributes().bNullable || m_aValuePair.hasSecond();}
+        bool hasUsableDefault()   const {return getAttributes().isNullable() || m_aValuePair.hasSecond();}
 
         uno::Type   getValueType()  const {return m_aValuePair.getValueType();}
         uno::Any    getValue()      const {return m_aValuePair.getValue( selectMember(this->isDefault()) );}
