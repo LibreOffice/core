@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:55:51 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,6 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         const SfxPoolItem* pItem = NULL;
         if ( pDispatcher->GetBindings() )
         {
-            // execute using bindings, enables support for toggle/enum etc.
             if ( !pDispatcher->IsLocked( GetId() ) )
             {
                 SfxShell *pShell = 0;
@@ -578,14 +577,13 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                     TransformParameters( GetId(), lNewArgs, aSet );
                     if ( aSet.Count() )
                     {
-                        SfxRequest aReq( GetId(), nCall, aSet );
-                        pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
-                        pItem = aReq.GetReturnValue();
-                        bSuccess = aReq.IsDone() || pItem != NULL;
-                        bFailure = aReq.IsCancelled();
+                        // execute with arguments - call directly
+                        pItem = pDispatcher->Execute( GetId(), nCall, aSet );
+                        bSuccess = (pItem != NULL);
                     }
                     else
                     {
+                        // execute using bindings, enables support for toggle/enum etc.
                         SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
                         pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
                         pItem = aReq.GetReturnValue();
@@ -593,10 +591,15 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         bFailure = aReq.IsCancelled();
                     }
                 }
+#ifdef DBG_UTIL
+                else
+                    DBG_WARNING("MacroPlayer: Unknown slot dispatched!");
+#endif
             }
         }
         else
         {
+            // AppDispatcher
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             TransformParameters( GetId(), lNewArgs, aSet );
             if ( aSet.Count() )
