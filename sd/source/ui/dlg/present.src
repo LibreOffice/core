@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:33:33 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "ΊΨΓώ";
         Text[ arabic ] = "ΗαδζΪ";
         Text[ greek ] = "Τύπος";
-        Text[ korean ] = "ΗόΕΒ";
+        Text[ korean ] = "ΑΎ·ω";
         Text[ turkish ] = "Tόr";
         Text[ language_user1 ] = " ";
     };
@@ -290,7 +290,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "ΌΠ·Η(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "±βΊ»(~D)";
+        Text[ korean ] = "±βΊ»";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
     };
@@ -317,7 +317,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "µψµ΅(~W)";
         Text[ arabic ] = "ΗαδΗέΠΙ";
         Text[ greek ] = "~Παράθυρο";
-        Text[ korean ] = "ΓΆ(~W)";
+        Text[ korean ] = "ΓΆ";
         Text[ turkish ] = "Pencere";
         Text[ language_user1 ] = " ";
     };
@@ -344,7 +344,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "¦Ϋ°Κ(~U)";
         Text[ arabic ] = "ΚαήΗΖν";
         Text[ greek ] = "Αυτόματα";
-        Text[ korean ] = "ΐΪµΏΒχ(~U)";
+        Text[ korean ] = "ΐΪµΏ";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
     };
@@ -398,7 +398,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ chinese_traditional ] = "¶΅Ήj®Ι¶΅";
         QuickHelpText[ arabic ] = "γΟΙ ΗαΕνήΗέ ΗαγΔήΚ";
         QuickHelpText[ greek ] = "Διάρκεια προσωρινής διακοπής";
-        QuickHelpText[ korean ] = "Duration of pause";
+        QuickHelpText[ korean ] = "ΐΟ½ΓΑίΑφ΅΅±β°£!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -427,7 +427,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "Εγ¥άΉΟΌΠ(~L)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΤΪΗΡ";
         Text[ greek ] = "Εμφάνιση λογότυπου";
-        Text[ korean ] = "·Ξ°ν ³ªΕΈ³»±β(~L)";
+        Text[ korean ] = "·Ξ°ν ³ªΕΈ³»±β";
         Text[ turkish ] = "Logo gφrόntόle";
         Text[ language_user1 ] = " ";
     };
