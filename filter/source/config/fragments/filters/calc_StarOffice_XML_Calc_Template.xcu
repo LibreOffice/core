@@ -11,5 +11,5 @@
             <value xml:lang="en-US">%productname% %formatversion% Spreadsheet Template</value>
             <value xml:lang="x-translate">%productname% %formatversion% Spreadsheet Template</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
     </node>
