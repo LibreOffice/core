@@ -32,6 +32,7 @@ oa	offapi\com\sun\star\i18n				nmake	-	all	oa_i18n NULL
 oa	offapi\com\sun\star\installation		nmake	-	all	oa_inst NULL
 oa	offapi\com\sun\star\ldap			    nmake	-	all	oa_ldap NULL
 oa	offapi\com\sun\star\linguistic2			nmake	-	all	oa_ling2 NULL
+oa	offapi\com\sun\star\media				nmake	-	all	oa_media NULL
 oa	offapi\com\sun\star\mozilla				nmake	-	all	oa_mozilla NULL
 oa	offapi\com\sun\star\packages			nmake	-	all	oa_packages NULL
 oa	offapi\com\sun\star\packages\manifest	nmake	-	all	oa_manifest NULL
@@ -78,4 +79,4 @@ oa	offapi\drafts\com\sun\star\form         nmake	-	all	oa_drafts_form NULL
 oa  offapi\drafts\com\sun\star\ui           nmake   -   all oa_drafts_ui NULL
 oa  offapi\drafts\com\sun\star\frame        nmake   -   all oa_drafts_frame NULL
 oa  offapi\drafts\com\sun\star\frame\status nmake   -   all oa_drafts_status NULL
-oa  offapi\util                             nmake   -   all oa_util oa_auth oa_awt oa_chart oa_chart2 oa_config oa_configbootstrap oa_configbackend oa_configbackend_xml oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_embed oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ldap oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_xml_input oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_xml_dom oa_xml_xpath oa_xml_views oa_xml_events oa_image oa_ui oa_ui_dialogs oa_accessibility oa_form_binding oa_form_validation oa_geometry oa_rendering oa_draftdraw oa_sfprovider_drafts oa_sfbrowse_drafts oa_drafts_ui oa_drafts_frame oa_drafts_status oa_deployment oa_deployment_ui oa_frame_status oa_graphic NULL
+oa  offapi\util                             nmake   -   all oa_util oa_auth oa_awt oa_chart oa_chart2 oa_config oa_configbootstrap oa_configbackend oa_configbackend_xml oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_embed oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ldap oa_ling2 oa_media oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_xml_input oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_xml_dom oa_xml_xpath oa_xml_views oa_xml_events oa_image oa_ui oa_ui_dialogs oa_accessibility oa_form_binding oa_form_validation oa_geometry oa_rendering oa_draftdraw oa_sfprovider_drafts oa_sfbrowse_drafts oa_drafts_ui oa_drafts_frame oa_drafts_status oa_deployment oa_deployment_ui oa_frame_status oa_graphic NULL
