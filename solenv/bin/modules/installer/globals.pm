@@ -125,6 +125,7 @@ BEGIN
     $packageversion = 1;
     $packagerevision = 1;
     $rpmcommand = "";
+    $rpmquerycommand = "";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -138,6 +139,10 @@ BEGIN
     $addpackagelist = "";
     $is_unix_multi = 0;
     $unixmultipath = "";
+    $makelinuxlinkrpm = 0;
+    $linuxlibrarypatchlevel = "1";
+    @linuxlinks = ();
+    @linkrpms = ();
 
     $strip = 0;
     $solarjava = 0;
@@ -163,16 +168,29 @@ BEGIN
     $longmanufacturer = "";
     $sundirname = "Sun";
     $codefilename = "codes.txt";
+    $componentfilename = "components.txt";
     $productcode = "";
     $upgradecode = "";
+    $msiproductversion = "";
+    $created_new_component_guid = 0;
+    @allddffiles = ();
+    $infodirectory = "";
 
     $addjavainstaller = 0;
     $javalanguagepath = "";
+    $javasettozero = 0;
+    $addlicensefile = 1;
+    $addsystemintegration = 0;
+    $makedownload = 1;
+    $islanguagepackinunixmulti = 0;
+    @installsetfiles = ();
 
     $is_copy_only_project = 0;
     $addchildprojects = 0;
     $languagepack = 0;
     $tab = 0;
+    $patch = 0;
+    $patchincludepath = "";
 
     $unomaxservices = 25;
     $javamaxservices = 15;
@@ -196,9 +214,14 @@ BEGIN
     $javafile = "";
     $adafile = "";
 
+    $subdir = "";
+    $postprocess_specialepm = 0;
+    $postprocess_standardepm = 0;
 
     $starttime = "";
 
+    @solarispatchscripts = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall", "postinstall", "preinstall", "i.none");
+    @solarispatchfiles = (".diPatch", "patchinfo");
     @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
