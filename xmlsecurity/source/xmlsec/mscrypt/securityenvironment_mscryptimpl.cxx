@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:10:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1126,48 +1126,48 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
         CertFreeCertificateChain( pChainContext ) ;
 
         if( chainStatus == CERT_TRUST_NO_ERROR ) {
-            validity = !( ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ) ;
+            validity = !( ::com::sun::star::security::CertificateValidity::INVALID ) ;
         } else {
-            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+            validity = ::com::sun::star::security::CertificateValidity::INVALID ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_VALID ) == CERT_TRUST_IS_NOT_TIME_VALID ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_TIMEOUT ;
+            validity |= ::com::sun::star::security::CertificateValidity::TIMEOUT ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_NESTED ) == CERT_TRUST_IS_NOT_TIME_NESTED ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_TIMEOUT ;
+            validity |= ::com::sun::star::security::CertificateValidity::TIMEOUT ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_REVOKED ) == CERT_TRUST_IS_REVOKED ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_REVOKED ;
+            validity |= ::com::sun::star::security::CertificateValidity::REVOKED ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_OFFLINE_REVOCATION ) == CERT_TRUST_IS_OFFLINE_REVOCATION ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_REVOKED ;
+            validity |= ::com::sun::star::security::CertificateValidity::REVOKED ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_NOT_SIGNATURE_VALID ) == CERT_TRUST_IS_NOT_SIGNATURE_VALID ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_SIGNATURE_INVALID ;
+            validity |= ::com::sun::star::security::CertificateValidity::SIGNATURE_INVALID ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_UNTRUSTED_ROOT ) == CERT_TRUST_IS_UNTRUSTED_ROOT ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ROOT_UNTRUSTED ;
+            validity |= ::com::sun::star::security::CertificateValidity::ROOT_UNTRUSTED ;
         }
 
         if( ( chainStatus & CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) == CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_UNKNOWN_REVOKATION ;
+            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
         }
 
         if( ( chainStatus & CERT_TRUST_INVALID_EXTENSION ) == CERT_TRUST_INVALID_EXTENSION ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_EXTENSION_INVALID ;
+            validity |= ::com::sun::star::security::CertificateValidity::EXTENSION_INVALID ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_PARTIAL_CHAIN ) == CERT_TRUST_IS_PARTIAL_CHAIN ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_CHAIN_INCOMPLETE ;
+            validity |= ::com::sun::star::security::CertificateValidity::CHAIN_INCOMPLETE ;
         }
     } else {
-        validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+        validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
     return validity ;
@@ -1194,9 +1194,9 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::c
 
     //Firstly, make sentence whether or not the cert is self-signed.
     if( CertCompareCertificateName( X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, &(pCertContext->pCertInfo->Subject), &(pCertContext->pCertInfo->Issuer) ) ) {
-        characters |= ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+        characters |= ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     } else {
-        characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+        characters &= ~ ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     }
 
     //Secondly, make sentence whether or not the cert has a private key.
@@ -1211,12 +1211,12 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::c
                    &( dwKeySpec ) ,
                    &( fCallerFreeProv ) )
         ) {
-            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+            characters |=  ::com::sun::star::security::CertificateCharacters::HAS_PRIVATE_KEY ;
 
             if( hProv != NULL && fCallerFreeProv )
                 CryptReleaseContext( hProv, 0 ) ;
         } else {
-            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::HAS_PRIVATE_KEY ;
         }
     }
 
@@ -1283,9 +1283,9 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::c
             ) ;
 
             if( pTempCert != NULL && CertCompareCertificate( X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pCertContext->pCertInfo, pTempCert->pCertInfo ) ) {
-                characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+                characters |=  ::com::sun::star::security::CertificateCharacters::TRUSTED ;
             } else {
-                characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+                characters &= ~ ::com::sun::star::security::CertificateCharacters::TRUSTED ;
             }
         }
     }
@@ -1317,7 +1317,7 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
     return xcert ;
 }
 
-::rtl::OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInfo() throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
     return rtl::OUString::createFromAscii("Microsoft Crypto API");
 }
