@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-10-09 14:21:27 $
+ *  last change: $Author: dg $ $Date: 2000-12-20 17:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,9 +446,9 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             // implementationsabh. cast von unsigned nach signed!
             nRet = (fVal > 0x7fffffffffffffff ? (sal_uInt64)fVal : (sal_Int64)fVal);
 #ifdef SAL_W32 // conversion from unsigned __int64 to double not impl
-            if (fVal >= min && fVal <= (__int64)(max & 0x7fffffffffffffff))
+            if (fVal >= min && (fVal < 0 || fVal <= (__int64)(max & 0x7fffffffffffffff)))
 #else
-            if (fVal >= min && fVal <= max)
+            if (fVal >= min && (fVal < 0 || ((sal_uInt64)fVal) <= max))
 #endif
                 return nRet;
             throw CannotConvertException(
