@@ -2,9 +2,9 @@
  *
  *  $RCSfile: katakanaToHiragana.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:53:29 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
 static sal_Unicode toHiragana (const sal_Unicode c)
 {
-    if (0x30a0 <= c && c <= 0x30f4 || 0x30fd <= c && c <= 0x30ff) { // 30A0 - 30FF KATAKANA LETTER
+    if (0x30a1 <= c && c <= 0x30f6 || 0x30fd <= c && c <= 0x30ff) { // 30A0 - 30FF KATAKANA LETTER
         // shift code point by 0x0060
         return c - (0x30a0 - 0x3040);
     }
