@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-18 08:04:31 $
+ *  last change: $Author: cp $ $Date: 2002-08-16 17:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,11 +1619,19 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
                 // TrackingMode is ended in ImplHandleLoseFocus
 // To avoid problems with the Unix IME
 //                pFocusWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
-                NotifyEvent aNEvt( EVENT_LOSEFOCUS, pFocusWin );
-                if ( !ImplCallPreNotify( aNEvt ) )
-                    pFocusWin->LoseFocus();
-                pFocusWin->ImplCallDeactivateListeners( NULL );
-                GetpApp()->FocusChanged();
+
+                // XXX #102010# hack for accessibility: do not close the menu,
+                // even after focus lost
+                static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE");
+                if( !(pEnv && *pEnv) )
+                {
+                    NotifyEvent aNEvt( EVENT_LOSEFOCUS, pFocusWin );
+                    if ( !ImplCallPreNotify( aNEvt ) )
+                        pFocusWin->LoseFocus();
+                    pFocusWin->ImplCallDeactivateListeners( NULL );
+                    GetpApp()->FocusChanged();
+                }
+                // XXX
             }
         }
 
