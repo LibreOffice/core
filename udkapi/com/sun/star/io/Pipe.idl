@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pipe.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ module com {  module sun {  module star {  module io {
 
 // DocMerge from xml: service com::sun::star::io::Pipe
 /** the implementation of an output stream and an input stream.
-
     <p>
     All data written through the outputstream is buffered until it is
     read again from the input stream. Often two different threads access
@@ -87,7 +86,7 @@ module com {  module sun {  module star {  module io {
     <p> With the pipe-service, an outputstream can be converted into an
     input stream at the cost of an additional buffer.
  */
-service Pipe
+published service Pipe
 {
     // DocMerge: empty anyway
     interface com::sun::star::io::XOutputStream;

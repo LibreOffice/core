@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pump.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,12 @@
 
 // DocMerge from xml: service com::sun::star::io::Pump
 /** the implementation of a data source and a data sink.
-
     <p>A thread will be created that reads from the input stream and writes
     the data to the connected output stream. Data will not be buffered by
     this service. </p>
 
  */
-service Pump
+published service Pump
 {
     /** allows to set the outputstream
      */
