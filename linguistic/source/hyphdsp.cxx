@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-17 11:04:12 $
+ *  last change: $Author: tl $ $Date: 2002-09-19 11:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,8 @@ Reference< XHyphenatedWord > SAL_CALL
     }
     else
     {
+        DBG_ASSERT( nMaxLeading < rWord.getLength(), "illegal argument combination" );
+
         OUString aChkWord( rWord );
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
@@ -434,6 +436,8 @@ Reference< XHyphenatedWord > SAL_CALL
     }
     else
     {
+        DBG_ASSERT( nIndex < rWord.getLength(), "illegal argument combination" );
+
         OUString aChkWord( rWord );
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
