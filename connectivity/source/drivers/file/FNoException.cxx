@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:39:26 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,10 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
 
     ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
     for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
+    {
+        OSL_ENSURE(*aIter < _rRow->size(),"Invalid index for orderkey values!");
         pKeyValue->pushKey(new ORowSetValueDecorator((*_rRow)[*aIter]));
+    }
 
     return pKeyValue;
 }

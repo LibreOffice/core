@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 10:51:15 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
 #endif
+#ifndef _CONNECTIVITY_PCOLUMN_HXX_
+#include "connectivity/PColumn.hxx"
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -145,6 +148,8 @@ void OPreparedStatement::disposing()
     }
     clearMyResultSet();
 
+    m_xParamColumns = NULL;
+
     OStatement_BASE2::disposing();
 
     m_xMetaData = NULL;
@@ -154,7 +159,7 @@ void OPreparedStatement::disposing()
         m_aParameterRow = NULL;
     }
 
-    m_xParamColumns = NULL;
+
 }
 // -------------------------------------------------------------------------
 void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLException, RuntimeException)
@@ -163,12 +168,17 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
 
     m_aParameterRow = new OValueVector();
     m_aParameterRow->push_back(sal_Int32(0));
-    m_xParamColumns = new OSQLColumns();
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
-    // describe all parameters need for the resultset
-    describeParameter();
+    if ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
+        m_xParamColumns = m_aSQLIterator.getParameters();
+    else
+    {
+        m_xParamColumns = new OSQLColumns();
+        // describe all parameters need for the resultset
+        describeParameter();
+    }
 
     OResultSet::setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False,m_xDBMetaData,m_aColMapping);
 
@@ -453,9 +463,9 @@ void SAL_CALL OPreparedStatement::release() throw()
 void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {
     ::connectivity::checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    if(m_aAssignValues.isValid() && (parameterIndex < 1 || parameterIndex >= m_aParameterIndexes.size()))
+    if ( m_aAssignValues.isValid() && (parameterIndex < 1 || parameterIndex >= static_cast<sal_Int32>(m_aParameterIndexes.size())) )
         throwInvalidIndexException(*this);
-    else if ((sal_Int32)(*m_aParameterRow).size() <= parameterIndex)
+    else if ( static_cast<sal_Int32>((*m_aParameterRow).size()) <= parameterIndex )
         (*m_aParameterRow).resize(parameterIndex+1);
 }
 // -----------------------------------------------------------------------------
@@ -472,26 +482,11 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
 // -----------------------------------------------------------------------------
 UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
-
-    // Nr. des neu hinzuzufuegenden Parameters:
-    UINT32 nParameter = m_xParamColumns->size()+1;
-
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
     OSL_ENSURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
     OSQLParseNode * pMark = pParameter->getChild(0);
 
     ::rtl::OUString sParameterName;
-//  if (SQL_ISPUNCTUATION(pMark,"?"))
-//      aParameterName = '?';
-//  else if (SQL_ISPUNCTUATION(pMark,":"))
-//      aParameterName = pParameter->getChild(1)->getTokenValue();
-//  else if (SQL_ISPUNCTUATION(pMark,"["))
-//      aParameterName = pParameter->getChild(1)->getTokenValue();
-//  else
-//  {
-//      OSL_ASSERT("OResultSet: Fehler im Parse Tree");
-//  }
-
     // Parameter-Column aufsetzen:
     sal_Int32 eType = DataType::VARCHAR;
     UINT32 nPrecision = 255;
@@ -503,14 +498,14 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
         // Typ, Precision, Scale ... der angegebenen Column verwenden,
         // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
         // Column wird der Wert verglichen.
-        eType = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
-        nPrecision = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
-        nScale = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
-        nNullable = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
-        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sParameterName;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))         >>= eType;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))    >>= nPrecision;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))        >>= nScale;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))   >>= nNullable;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))         >>= sParameterName;
     }
 
-    Reference<XPropertySet> xParaColumn = new connectivity::sdbcx::OColumn(sParameterName
+    Reference<XPropertySet> xParaColumn = new connectivity::parse::OParseColumn(sParameterName
                                                     ,::rtl::OUString()
                                                     ,::rtl::OUString()
                                                     ,nNullable
@@ -519,10 +514,9 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
                                                     ,eType
                                                     ,sal_False
                                                     ,sal_False
-                                                    ,sal_False
                                                     ,m_aSQLIterator.isCaseSensitive());
     m_xParamColumns->push_back(xParaColumn);
-    return nParameter;
+    return m_xParamColumns->size();
 }
 // -----------------------------------------------------------------------------
 void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
@@ -532,7 +526,7 @@ void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode
     {
         ::rtl::OUString sColumnName,sTableRange;
         m_aSQLIterator.getColumnRange(_pNode,sColumnName,sTableRange);
-        if(sColumnName.getLength())
+        if ( sColumnName.getLength() )
         {
             Reference<XNameAccess> xNameAccess = _xTable->getColumns();
             if(xNameAccess->hasByName(sColumnName))
@@ -548,11 +542,11 @@ void OPreparedStatement::describeParameter()
 {
     ::std::vector< OSQLParseNode*> aParseNodes;
     scanParameter(m_pParseTree,aParseNodes);
-    if(aParseNodes.size())
+    if ( !aParseNodes.empty() )
     {
-        m_xParamColumns = new OSQLColumns();
+        //  m_xParamColumns = new OSQLColumns();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        if(xTabs.size())
+        if( !xTabs.empty() )
         {
             OSQLTable xTable = xTabs.begin()->second;
             ::std::vector< OSQLParseNode*>::const_iterator aIter = aParseNodes.begin();
@@ -591,8 +585,11 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
             //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
         }
 
-        if (m_aParameterRow.isValid() &&  nParaCount < m_aParameterRow->size())
+        if (m_aParameterRow.isValid() &&  (m_xParamColumns->size()+1) != m_aParameterRow->size() )
+            m_aParameterRow->resize(m_xParamColumns->size()+1);
+        if (m_aParameterRow.isValid() && nParaCount < m_aParameterRow->size() )
         {
+
             m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
         }
     }
