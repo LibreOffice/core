@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:54:04 $
+ *  last change: $Author: rt $ $Date: 2000-12-18 13:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,13 +148,13 @@
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
+using namespace ::svxform;
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
 
-using namespace ::svxform;
 
 TYPEINIT1(FmFormPage, SdrPage);
 
