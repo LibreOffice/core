@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:46:53 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
         *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_40 );
         *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_40;
         *pAppName = String::CreateFromAscii("StarWriter 4.0/GlobalDocument");
-
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE_40);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_50)
@@ -134,6 +133,8 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
     }
     else if (nVersion == SOFFICE_FILEFORMAT_60)
     {
+        *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
+        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_60;
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
     }
 
