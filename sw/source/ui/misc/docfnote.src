@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:19:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog DLG_DOC_FOOTNOTE
     Text [ ENGLISH ] = "Footnote Options" ;
     Text [ norwegian ] = "Fotnotevalg" ;
     Text [ italian ] = "Impostazioni note a piè pagina" ;
-    Text [ portuguese_brazilian ] = "Opções de nota de rodapé" ;
+    Text [ portuguese_brazilian ] = "Op??s de nota de rodap?" ;
     Text [ portuguese ] = "Opções de notas de rodapé" ;
     Text [ finnish ] = "Alaviitteen asetukset" ;
     Text [ danish ] = "Fodnoteindstillinger" ;
@@ -94,7 +94,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text = "Fußnoten" ;
                 Text [ ENGLISH ] = "Footnotes" ;
                 Text [ english_us ] = "Footnotes" ;
-                Text [ portuguese_brazilian ] = "Fußnoten" ;
+                Text [ portuguese_brazilian ] = "Fu?noten" ;
                 Text [ swedish ] = "Fotnoter" ;
                 Text [ danish ] = "Fodnoter" ;
                 Text [ italian ] = "Note a piè pagina" ;
@@ -172,7 +172,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Automatic numbering" ;
         Text [ norwegian ] = "Auto. nummerering" ;
         Text [ italian ] = "Numerazione automatica" ;
-        Text [ portuguese_brazilian ] = "Numeração automática" ;
+        Text [ portuguese_brazilian ] = "Numera??o autom?tica" ;
         Text [ portuguese ] = "Numeração automática" ;
         Text [ finnish ] = "Automaattinen numerointi" ;
         Text [ danish ] = "Automatisk nummerering" ;
@@ -333,8 +333,8 @@ TabPage TP_FOOTNOTEOPTION
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Por página" ; > ;
-            < "Por capítulo" ; > ;
+            < "Por p?gina" ; > ;
+            < "Por cap?tulo" ; > ;
             < "Por documento" ; > ;
         };
         StringList [ portuguese ] =
@@ -499,7 +499,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "Die~tro" ;
-        Text [ portuguese_brazilian ] = "Atrás" ;
+        Text [ portuguese_brazilian ] = "Atr?s" ;
         Text [ portuguese ] = "At~rás" ;
         Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
@@ -566,7 +566,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "End of ~page" ;
         Text [ norwegian ] = "End of ~page" ;
         Text [ italian ] = "Fine ~pagina" ;
-        Text [ portuguese_brazilian ] = "Final de ~página" ;
+        Text [ portuguese_brazilian ] = "Final de ~p?gina" ;
         Text [ portuguese ] = "Fim de ~página" ;
         Text [ finnish ] = "~Sivun loppu" ;
         Text [ danish ] = "Sidens slutning" ;
@@ -655,7 +655,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Paragraph" ;
         Text [ norwegian ] = "~Paragraf" ;
         Text [ italian ] = "~Paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Parágrafo" ;
+        Text [ portuguese_brazilian ] = "~Par?grafo" ;
         Text [ portuguese ] = "~Parágrafo" ;
         Text [ finnish ] = "~Kappale" ;
         Text [ danish ] = "Afsnit" ;
@@ -695,7 +695,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
         Text [ italian ] = "~Pagina" ;
-        Text [ portuguese_brazilian ] = "~Página" ;
+        Text [ portuguese_brazilian ] = "~P?gina" ;
         Text [ portuguese ] = "~Página" ;
         Text [ finnish ] = "~Sivu" ;
         Text [ danish ] = "Side" ;
@@ -762,7 +762,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Text" ;
         Left = TRUE ;
         Text [ english_us ] = "Te~xt area" ;
-        Text [ portuguese_brazilian ] = "~Fußnotensymbol" ;
+        Text [ portuguese_brazilian ] = "~Fu?notensymbol" ;
         Text [ swedish ] = "Textområde" ;
         Text [ danish ] = "Tekstområde" ;
         Text [ italian ] = "Area del testo" ;
@@ -800,7 +800,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "~Footnote text" ;
         Left = TRUE ;
         Text [ english_us ] = "~Footnote area" ;
-        Text [ portuguese_brazilian ] = "~Fußnotensymbol" ;
+        Text [ portuguese_brazilian ] = "~Fu?notensymbol" ;
         Text [ swedish ] = "Fotnotsområde" ;
         Text [ danish ] = "Fodnoteområde" ;
         Text [ italian ] = "Area note a piè pagina" ;
@@ -838,7 +838,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ ENGLISH ] = "Continuation notice" ;
         Text [ norwegian ] = "+++Continuation notice" ;
         Text [ italian ] = "Avvertenza che la nota continua" ;
-        Text [ portuguese_brazilian ] = "Aviso de continuação" ;
+        Text [ portuguese_brazilian ] = "Aviso de continua??o" ;
         Text [ portuguese ] = "Continuação das notas de rodapé" ;
         Text [ finnish ] = "Jatkoilmoitus" ;
         Text [ danish ] = "Henvisningstekst for flersidede fodnoter" ;
@@ -953,7 +953,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Automatic numbering" ;
         Text [ norwegian ] = "Auto. nummerering" ;
         Text [ italian ] = "Numerazione automatica" ;
-        Text [ portuguese_brazilian ] = "Numeração automática" ;
+        Text [ portuguese_brazilian ] = "Numera??o autom?tica" ;
         Text [ portuguese ] = "Numeração automática" ;
         Text [ finnish ] = "Automaattinen numerointi" ;
         Text [ danish ] = "Automatisk nummerering" ;
@@ -1124,7 +1124,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "Die~tro" ;
-        Text [ portuguese_brazilian ] = "Atrás" ;
+        Text [ portuguese_brazilian ] = "Atr?s" ;
         Text [ portuguese ] = "A~trás" ;
         Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
@@ -1169,7 +1169,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "End of ~page" ;
         Text [ norwegian ] = "End of ~page" ;
         Text [ italian ] = "Fine ~pagina" ;
-        Text [ portuguese_brazilian ] = "Final de ~página" ;
+        Text [ portuguese_brazilian ] = "Final de ~p?gina" ;
         Text [ portuguese ] = "Fim de ~página" ;
         Text [ finnish ] = "~Sivun loppu" ;
         Text [ danish ] = "Sidens slutning" ;
@@ -1258,7 +1258,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "~Paragraph" ;
         Text [ norwegian ] = "~Paragraf" ;
         Text [ italian ] = "~Paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Parágrafo" ;
+        Text [ portuguese_brazilian ] = "~Par?grafo" ;
         Text [ portuguese ] = "~Parágrafo" ;
         Text [ finnish ] = "~Kappale" ;
         Text [ danish ] = "Afsnit" ;
@@ -1298,7 +1298,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
         Text [ italian ] = "~Pagina" ;
-        Text [ portuguese_brazilian ] = "~Página" ;
+        Text [ portuguese_brazilian ] = "~P?gina" ;
         Text [ portuguese ] = "~Página" ;
         Text [ finnish ] = "~Sivu" ;
         Text [ danish ] = "Side" ;
@@ -1439,7 +1439,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ ENGLISH ] = "Continuation notice" ;
         Text [ norwegian ] = "+++Continuation notice" ;
         Text [ italian ] = "Avvertenza che la nota continua" ;
-        Text [ portuguese_brazilian ] = "Aviso de continuação" ;
+        Text [ portuguese_brazilian ] = "Aviso de continua??o" ;
         Text [ portuguese ] = "Continuação das notas de rodapé" ;
         Text [ finnish ] = "Jatkoilmoitus" ;
         Text [ danish ] = "Henvisningstekst for flersidede fodnoter" ;
