@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:23:47 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ FloatingWindow RID_INSERT_CTRL
     Text[ korean ] = "»ğÀÔ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar";
 };
 FloatingWindow RID_INSERT_OBJ_CTRL
 {
@@ -240,6 +241,7 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     Text[ korean ] = "°³Ã¼ »ğÀÔ";
     Text[ turkish ] = "Nesne ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar objeto";
 };
 Menu RID_INSERT_FIELD_CTRL
 {
@@ -270,6 +272,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "³¯Â¥";
             Text[ turkish ] = "Tarih";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Fecha";
         };
         MenuItem
         {
@@ -296,6 +299,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "½Ã°£";
             Text[ turkish ] = "Saat";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Hora";
         };
          //#ifndef MN_SW_WEB
         MenuItem
@@ -323,6 +327,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "ÂÊ ¹øÈ£";
             Text[ turkish ] = "Sayfa numarası";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Número de página";
         };
         MenuItem
         {
@@ -349,6 +354,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "ÂÊ ¼ö";
             Text[ turkish ] = "Sayfa sayısı";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Contar páginas";
         };
         MenuItem
         {
@@ -375,6 +381,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "ÁÖÁ¦";
             Text[ turkish ] = "Konu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Tema";
         };
         MenuItem
         {
@@ -401,6 +408,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "Á¦¸ñ";
             Text[ turkish ] = "Başlık";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Título";
         };
          //#endif
         MenuItem
@@ -428,6 +436,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "ÀÛ¼ºÀÚ";
             Text[ turkish ] = "Yazan";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Autor";
         };
         MenuItem
         {
@@ -458,6 +467,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "±âÅ¸...";
             Text[ turkish ] = "Diğer...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Otros...";
         };
     };
 };
@@ -522,6 +532,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "Ç¥";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tabla";
     };
     String ST_FRM
     {
@@ -546,6 +557,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ";
         Text[ turkish ] = "Metin çerçevesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marco de texto";
     };
     String ST_PGE
     {
@@ -570,6 +582,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "ÂÊ";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Página";
     };
     String ST_DRW
     {
@@ -607,6 +620,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "±×¸®±â °³Ã¼";
         Text[ turkish ] = "Çizim nesnesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objeto de dibujo";
     };
     String ST_CTRL
     {
@@ -631,6 +645,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "ÄÁÆ®·Ñ";
         Text[ turkish ] = "Komut alanı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de control";
     };
     String ST_REG
     {
@@ -655,6 +670,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "±¸¿ª";
         Text[ turkish ] = "Bölüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Area";
     };
     String ST_BKM
     {
@@ -679,6 +695,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "Ã¥°¥ÇÇ";
         Text[ turkish ] = "Metin işareti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marca de texto";
     };
     String ST_GRF
     {
@@ -703,6 +720,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "±×·¡ÇÈ";
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imagen";
     };
     String ST_OLE
     {
@@ -727,6 +745,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "OLE °³Ã¼";
         Text[ turkish ] = "OLE nesnesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objeto OLE";
     };
     String ST_OUTL
     {
@@ -752,6 +771,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "Ç¥Á¦";
         Text[ turkish ] = "Başlık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encabezado";
     };
     String ST_SEL
     {
@@ -776,6 +796,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "¸¶Å·";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     String ST_FTN
     {
@@ -801,6 +822,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "°¢ÁÖ";
         Text[ turkish ] = "Dipnot";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nota al pie";
     };
     String ST_MARK
     {
@@ -825,6 +847,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "¸¶Ä¿";
         Text[ turkish ] = "Anımsatıcı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marca";
     };
     String ST_POSTIT
     {
@@ -849,6 +872,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "¸Ş¸ğ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nota";
     };
     String ST_SRCH_REP
     {
@@ -873,6 +897,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "Ã£±â¡¡¹İº¹";
         Text[ turkish ] = "Aramayı yinele";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Repetir búsqueda";
     };
     String ST_INDEX_ENTRY
     {
@@ -897,6 +922,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "»öÀÎ Ç×¸ñ";
         Text[ turkish ] = "Dizin girişi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Entrada del índice";
     };
     String ST_TABLE_FORMULA
     {
@@ -921,6 +947,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "Ç¥ ¾ç½Ä";
         Text[ turkish ] = "Tablo formülü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fórmula de tabla";
     };
     String ST_TABLE_FORMULA_ERROR
     {
@@ -945,6 +972,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "Àß¸øµÈ Ç¥ ¾ç½Ä";
         Text[ turkish ] = "Hatalı tablo formülü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fórmula errónea de tabla";
     };
     Text [ portuguese ] = "Navegação" ;
     Text [ english_us ] = "Navigation" ;
@@ -965,6 +993,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ korean ] = "³×ºñ°ÔÀÌ¼Ç";
     Text[ turkish ] = "Dolaşma";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegación";
 };
 /*
 Noch ein paar Reserven
@@ -1028,6 +1057,7 @@ String STR_IMGBTN_TBL_DOWN
     Text[ korean ] = "´ÙÀ½ Ç¥";
     Text[ turkish ] = "Sonraki tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla siguiente";
 };
 String STR_IMGBTN_FRM_DOWN
 {
@@ -1053,6 +1083,7 @@ String STR_IMGBTN_FRM_DOWN
     Text[ korean ] = "´ÙÀ½ ÅØ½ºÆ® ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Sonraki metin çerçevesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco de texto siguiente";
 };
 String STR_IMGBTN_PGE_DOWN
 {
@@ -1078,6 +1109,7 @@ String STR_IMGBTN_PGE_DOWN
     Text[ korean ] = "´ÙÀ½ ÂÊ";
     Text[ turkish ] = "Sonraki sayfa";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Página siguiente";
 };
 String STR_IMGBTN_DRW_DOWN
 {
@@ -1103,6 +1135,7 @@ String STR_IMGBTN_DRW_DOWN
     Text[ korean ] = "´ÙÀ½ ±×¸®±â °³Ã¼";
     Text[ turkish ] = "Sonraki çizim nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de dibujo siguiente";
 };
 String STR_IMGBTN_CTRL_DOWN
 {
@@ -1128,6 +1161,7 @@ String STR_IMGBTN_CTRL_DOWN
     Text[ korean ] = "´ÙÀ½ ÄÁÆ®·Ñ";
     Text[ turkish ] = "Sonraki komut alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de control siguiente";
 };
 String STR_IMGBTN_REG_DOWN
 {
@@ -1153,6 +1187,7 @@ String STR_IMGBTN_REG_DOWN
     Text[ korean ] = "´ÙÀ½ ±¸¿ª";
     Text[ turkish ] = "Sonraki bölüm";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Area siguiente";
 };
 String STR_IMGBTN_BKM_DOWN
 {
@@ -1178,6 +1213,7 @@ String STR_IMGBTN_BKM_DOWN
     Text[ korean ] = "´ÙÀ½ Ã¥°¥ÇÇ";
     Text[ turkish ] = "Sonraki metin işareti";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marca de texto siguiente";
 };
 String STR_IMGBTN_GRF_DOWN
 {
@@ -1203,6 +1239,7 @@ String STR_IMGBTN_GRF_DOWN
     Text[ korean ] = "´ÙÀ½ ±×·¡ÇÈ";
     Text[ turkish ] = "Sonraki grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen siguiente";
 };
 String STR_IMGBTN_OLE_DOWN
 {
@@ -1229,6 +1266,7 @@ String STR_IMGBTN_OLE_DOWN
     Text[ korean ] = "´ÙÀ½ OLE°³Ã¼";
     Text[ turkish ] = "Sonraki OLE nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto OLE siguiente";
 };
 String STR_IMGBTN_OUTL_DOWN
 {
@@ -1254,6 +1292,7 @@ String STR_IMGBTN_OUTL_DOWN
     Text[ korean ] = "´ÙÀ½ Ç¥Á¦";
     Text[ turkish ] = "Sonraki başlık";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Encabezado siguiente";
 };
 String STR_IMGBTN_SEL_DOWN
 {
@@ -1279,6 +1318,7 @@ String STR_IMGBTN_SEL_DOWN
     Text[ korean ] = "´ÙÀ½ ¸¶Å·";
     Text[ turkish ] = "Önceki seçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección siguiente";
 };
 String STR_IMGBTN_FTN_DOWN
 {
@@ -1304,6 +1344,7 @@ String STR_IMGBTN_FTN_DOWN
     Text[ korean ] = "´ÙÀ½ °¢ÁÖ";
     Text[ turkish ] = "Sonraki dipnot";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nota al pie siguiente";
 };
 String STR_IMGBTN_MARK_DOWN
 {
@@ -1329,6 +1370,7 @@ String STR_IMGBTN_MARK_DOWN
     Text[ korean ] = "´ÙÀ½ ¸¶Ä¿";
     Text[ turkish ] = "Sonraki anımsatıcı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marca siguiente";
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
@@ -1354,6 +1396,7 @@ String STR_IMGBTN_POSTIT_DOWN
     Text[ korean ] = "´ÙÀ½ ¸Ş¸ğ";
     Text[ turkish ] = "Sonraki not";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nota siguiente";
 };
 String STR_IMGBTN_SRCH_REP_DOWN
 {
@@ -1378,6 +1421,7 @@ String STR_IMGBTN_SRCH_REP_DOWN
     Text[ korean ] = "°è¼Ó ¾ÕÀ¸·Î °Ë»ö";
     Text[ turkish ] = "İleri dogru ara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Continuar búsqueda hacia delante";
 };
 String STR_IMGBTN_INDEX_ENTRY_DOWN
 {
@@ -1402,6 +1446,7 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ korean ] = "´ÙÀ½ »öÀÎ Ç×¸ñ";
     Text[ turkish ] = "Sonraki dizin girişi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Entrada de índice siguiente";
 };
 String STR_IMGBTN_NEXT_UP
 {
@@ -1434,6 +1479,7 @@ String STR_IMGBTN_TBL_UP
     Text[ korean ] = "ÀÌÀü Ç¥";
     Text[ turkish ] = "Önceki tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla anterior";
 };
 String STR_IMGBTN_FRM_UP
 {
@@ -1458,6 +1504,7 @@ String STR_IMGBTN_FRM_UP
     Text[ korean ] = "ÀÌÀü ÅØ½ºÆ® ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Önceki metin çerçevesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco de texto anterior";
 };
 String STR_IMGBTN_PGE_UP
 {
@@ -1482,6 +1529,7 @@ String STR_IMGBTN_PGE_UP
     Text[ korean ] = "ÀÌÀü ÂÊ";
     Text[ turkish ] = "Önceki sayfa";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Página anterior";
 };
 String STR_IMGBTN_DRW_UP
 {
@@ -1506,6 +1554,7 @@ String STR_IMGBTN_DRW_UP
     Text[ korean ] = "ÀÌÀü ±×¸®±â °³Ã¼";
     Text[ turkish ] = "Önceki çizim nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de dibujo anterior";
 };
 String STR_IMGBTN_CTRL_UP
 {
@@ -1530,6 +1579,7 @@ String STR_IMGBTN_CTRL_UP
     Text[ korean ] = "ÀÌÀü ÄÁÆ®·Ñ";
     Text[ turkish ] = "Önceki komut alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de control anterior";
 };
 String STR_IMGBTN_REG_UP
 {
@@ -1554,6 +1604,7 @@ String STR_IMGBTN_REG_UP
     Text[ korean ] = "ÀÌÀü ±¸¿ª";
     Text[ turkish ] = "Önceki Bölüm";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Area anterior";
 };
 String STR_IMGBTN_BKM_UP
 {
@@ -1578,6 +1629,7 @@ String STR_IMGBTN_BKM_UP
     Text[ korean ] = "ÀÌÀü  Ã¥°¥ÇÇ";
     Text[ turkish ] = "Önceki metin işareti";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marca de texto anterior";
 };
 String STR_IMGBTN_GRF_UP
 {
@@ -1602,6 +1654,7 @@ String STR_IMGBTN_GRF_UP
     Text[ korean ] = "ÀÌÀü ±×¸²";
     Text[ turkish ] = "Önceki grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen anterior";
 };
 String STR_IMGBTN_OLE_UP
 {
@@ -1627,6 +1680,7 @@ String STR_IMGBTN_OLE_UP
     Text[ korean ] = "ÀÌÀü OLE°³Ã¼";
     Text[ turkish ] = "Önceki OLE nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto OLE anterior";
 };
 String STR_IMGBTN_OUTL_UP
 {
@@ -1652,6 +1706,7 @@ String STR_IMGBTN_OUTL_UP
     Text[ korean ] = "ÀÌÀü Ç¥Á¦";
     Text[ turkish ] = "Önceki başlık";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Encabezado anterior";
 };
 String STR_IMGBTN_SEL_UP
 {
@@ -1676,6 +1731,7 @@ String STR_IMGBTN_SEL_UP
     Text[ korean ] = "ÀÌÀü ¸¶Å·";
     Text[ turkish ] = "Sonraki seçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección anterior";
 };
 String STR_IMGBTN_FTN_UP
 {
@@ -1701,6 +1757,7 @@ String STR_IMGBTN_FTN_UP
     Text[ korean ] = "ÀÌÀü °¢ÁÖ";
     Text[ turkish ] = "Önceki dipnot";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nota al pie anterior";
 };
 String STR_IMGBTN_MARK_UP
 {
@@ -1725,6 +1782,7 @@ String STR_IMGBTN_MARK_UP
     Text[ korean ] = "ÀÌÀü ¸¶Ä¿";
     Text[ turkish ] = "Önceki anımsatıcı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marca anterior";
 };
 String STR_IMGBTN_POSTIT_UP
 {
@@ -1749,6 +1807,7 @@ String STR_IMGBTN_POSTIT_UP
     Text[ korean ] = "ÀÌÀü ¸Ş¸ğ";
     Text[ turkish ] = "Önceki not";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nota anterior";
 };
 String STR_IMGBTN_SRCH_REP_UP
 {
@@ -1773,6 +1832,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text[ korean ] = "°è¼Ó µÚ·Î °Ë»ö";
     Text[ turkish ] = "Geriye doğru ara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Continuar búsqueda en sentido inverso";
 };
 String STR_IMGBTN_INDEX_ENTRY_UP
 {
@@ -1790,13 +1850,14 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ chinese_simplified ] = "ÉÏÒ»¸öÄ¿Â¼ÌõÄ¿";
     Text[ russian ] = "Ïğåäûäóùèé ıëåìåíò óêàçàòåëÿ";
     Text[ polish ] = "Poprzedni wpis do indeksu";
-    Text[ japanese ] = "‘O‚Ì–ÚŸ¥õˆø€–Ú";
+    Text[ japanese ] = "‘O‚Ì–ÚŸ‚Æõˆø‚Ì€–Ú";
     Text[ chinese_traditional ] = "¤W¤@­Ó¥Ø¿ı±ø¥Ø";
     Text[ arabic ] = "ÇáÅÏÎÇá ÇáİåÑÓí ÇáÓÇÈŞ";
     Text[ greek ] = "Ğñïçãïıìåíç êáôá÷şñéóç åõñåôçñßïõ";
     Text[ korean ] = "ÀÌÀü »öÀÎ Ç×¸ñ";
     Text[ turkish ] = "Önceki dizin girişi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Entrada de índice anterior";
 };
 String STR_IMGBTN_TBLFML_UP
 {
@@ -1821,6 +1882,7 @@ String STR_IMGBTN_TBLFML_UP
     Text[ korean ] = "ÀÌÀü Ç¥ ¾ç½Ä";
     Text[ turkish ] = "Önceki tablo formülü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fórmula de tabla anterior";
 };
 String STR_IMGBTN_TBLFML_DOWN
 {
@@ -1845,6 +1907,7 @@ String STR_IMGBTN_TBLFML_DOWN
     Text[ korean ] = "´ÙÀ½ Ç¥ ¾ç½Ä";
     Text[ turkish ] = "Sonraki tablo formülü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Siguiente fórmula de tabla";
 };
 String STR_IMGBTN_TBLFML_ERR_UP
 {
@@ -1869,6 +1932,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ korean ] = "Àß¸øµÈ ÀÌÀü Ç¥ ¾ç½Ä";
     Text[ turkish ] = "Önceki hatalı tablo formülü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fórmula de tabla anterior errónea";
 };
 String STR_IMGBTN_TBLFML_ERR_DOWN
 {
@@ -1893,6 +1957,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ korean ] = "Àß¸øµÈ ´ÙÀ½ Ç¥ ¾ç½Ä";
     Text[ turkish ] = "Sonraki hatalı tablo formülü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Siguiente fórmula errónea de tabla";
 };
 ImageButton BTN_NAVI
 {
@@ -1927,5 +1992,6 @@ ImageButton BTN_NAVI
         Text[ korean ] = "³×ºñ°ÔÀÌ¼Ç";
         Text[ turkish ] = "Dolaşma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Navegación";
     };
 };
