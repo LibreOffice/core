@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clsids.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:13:23 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,11 @@
 #define SO3_SCH_CLASSID_60 \
     0x12DCAE26, 0x281F, 0x416F, 0xA2, 0x34, 0xC3, \
     0x08, 0x61, 0x27, 0x38, 0x2E
+
+/* ole embed 6.0 */
+#define SO3_SCH_OLE_EMBED_CLASSID_60 \
+    0xd415cd93, 0x35c4, 0x4c6f, 0x81, 0x9d, 0xa6, \
+    0x64, 0xa1, 0xc8, 0x13, 0xae
 
 /* aktuell */
 
