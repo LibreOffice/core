@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-03 21:44:52 $
+ *  last change: $Author: vg $ $Date: 2001-07-13 20:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ ModalDialog DLG_EXPORT_EPCT
     Text[ catalan ] = "Opciones PICT";
     Text[ finnish ] = "PICT-asetukset";
 };
+
 
 
 
