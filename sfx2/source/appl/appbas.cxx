@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-25 11:05:54 $
+ *  last change: $Author: ab $ $Date: 2001-07-10 11:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,97 +658,21 @@ BasicManager* SfxApplication::GetBasicManager()
 
         // #58293# soffice.new nur im ::com::sun::star::sdbcx::User-Dir suchen => erstes Verzeichnis
         String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
-        sal_Bool bBasicUpdated = sal_False;
 
         // Basic erzeugen und laden
         // MT: #47347# AppBasicDir ist jetzt ein PATH!
         INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
         aAppBasic.insertName( Application::GetAppName() );
-        aAppBasic.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
-        String aAppBasicFile, aNewBasicFile;
 
-        // Direkt nach der Installation gibt es ggf. _nur_ eine SOFFICE.NEW
-        aAppBasicFile = aAppBasic.getName();
-        if ( !aPathCFG.SearchFile( aAppBasicFile, SvtPathOptions::PATH_BASIC ) )
-        {
-            INetURLObject aNewBasic = aAppBasic;
-            aNewBasic.setExtension( DEFINE_CONST_UNICODE( "new" ) );
+        BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
+        pImp->pBasicMgr = pBasicManager;
 
-            aNewBasicFile = aNewBasic.getName();
-            if( aPathCFG.SearchFile( aNewBasicFile, SvtPathOptions::PATH_BASIC ) )
-            {
-                aAppBasic = INetURLObject( aNewBasicFile );
-                aAppBasic.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
-                SfxContentHelper::MoveTo( aNewBasicFile, aAppBasic.GetMainURL() );
-                bBasicUpdated = sal_True;
-            }
-        }
-        else
-        {
-            aAppBasic = INetURLObject( aAppBasicFile );
-        }
-
-        SvStorageRef aStor = new SvStorage( aAppBasic.GetMainURL(), STREAM_READ | STREAM_SHARE_DENYWRITE );
-        BasicManager* pBasicManager;
-        if ( aStor.Is() && 0 == aStor->GetError() )
-        {
-            SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, Application::GetAppName() );
-            String aOldBaseURL = INetURLObject::GetBaseURL();
-            INetURLObject::SetBaseURL( aAppBasic.GetMainURL() );
-            pBasicManager = new BasicManager( *aStor, NULL, &aAppBasicDir );
-            pImp->pBasicMgr = pBasicManager;
-            pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
-
-            // ggf. nach einem Channel-Update den BasicManager aktualisieren
-            INetURLObject aNewBasic = aAppBasic;
-            aNewBasic.setExtension( DEFINE_CONST_UNICODE( "new" ) );
-
-            aNewBasicFile = aNewBasic.getName();
-            if( aPathCFG.SearchFile( aNewBasicFile, SvtPathOptions::PATH_BASIC ) )
-            {
-                aNewBasic = INetURLObject( aNewBasicFile );
-                SvStorageRef xTmpStor = new SvStorage( aNewBasic.PathToFileName(), STREAM_READ | STREAM_SHARE_DENYWRITE );
-                pImp->pBasicMgr->Merge( *xTmpStor );
-                bBasicUpdated = sal_True;
-                xTmpStor.Clear();   // Sonst kein Kill() moeglich
-                SfxContentHelper::Kill( aNewBasicFile ); // SOFFICE.NEW loeschen
-            }
-            INetURLObject::SetBaseURL( aOldBaseURL );
-            if ( pImp->pBasicMgr->HasErrors() )
-            {
-                // handle errors
-                BasicError *pErr = pImp->pBasicMgr->GetFirstError();
-                while ( pErr )
-                {
-                    // show message to user
-                    if ( ERRCODE_BUTTON_CANCEL ==
-                         ErrorHandler::HandleError( pErr->GetErrorId() ) )
-                    {
-                        // user wants to break loading of BASIC-manager
-                        delete pImp->pBasicMgr;
-                        aStor.Clear();
-                        break;
-                    }
-                    pErr = pImp->pBasicMgr->GetNextError();
-                }
-            }
-        }
-        if ( !aStor.Is() || 0 != aStor->GetError() )
-        {
-            pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
-            pImp->pBasicMgr = pBasicManager;
-
-            // Als Destination das erste Dir im Pfad:
-            String aFileName( aAppBasic.getName() );
-            aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
-            DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-            aAppBasic.insertName( aFileName );
-            pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
-        }
-
-        aStor.Clear();
-        if ( bBasicUpdated )
-            SaveBasicManager();
+        // Als Destination das erste Dir im Pfad:
+        String aFileName( aAppBasic.getName() );
+        aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
+        DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+        aAppBasic.insertName( aFileName );
+        pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
 
         // globale Variablen
         StarBASIC *pBas = pImp->pBasicMgr->GetLib(0);
