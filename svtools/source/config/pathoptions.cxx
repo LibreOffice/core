@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-04 12:25:08 $
+ *  last change: $Author: sb $ $Date: 2000-12-07 19:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ using namespace com::sun::star::uno;
 #define SUBSTITUTE_INST                 ASCII_STR("$(inst)")
 #define SUBSTITUTE_PROG                 ASCII_STR("$(prog)")
 #define SUBSTITUTE_USER                 ASCII_STR("$(user)")
-#define SUBSTITUTE_INSTPATH             ASCII_STR("$(inst)")
-#define SUBSTITUTE_PROGPATH             ASCII_STR("$(prog)")
+#define SUBSTITUTE_INSTPATH             ASCII_STR("$(instpath)")
+#define SUBSTITUTE_PROGPATH             ASCII_STR("$(progpath)")
 #define SUBSTITUTE_USERPATH             ASCII_STR("$(userpath)")
 #define SUBSTITUTE_INSTURL              ASCII_STR("$(insturl)")
 #define SUBSTITUTE_PROGURL              ASCII_STR("$(progurl)")
@@ -129,6 +129,8 @@ using namespace com::sun::star::uno;
 #define REPLACELENGTH_INST              7
 #define REPLACELENGTH_PROG              7
 #define REPLACELENGTH_USER              7
+#define REPLACELENGTH_INSTPATH          11
+#define REPLACELENGTH_PROGPATH          11
 #define REPLACELENGTH_USERPATH          11
 #define REPLACELENGTH_INSTURL           10
 #define REPLACELENGTH_PROGURL           10
@@ -476,18 +478,34 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         else
         // -------------------------------------------------------------------------------------------------------------------
         // $(prog) - directory of the executable file
-        if ( SUBSTITUTE_PROG == aSubString || SUBSTITUTE_PROGPATH == aSubString )
+        if ( SUBSTITUTE_PROG == aSubString )
         {
             nReplaceLength = REPLACELENGTH_PROG;
             aReplacement = m_aProgPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
+        // $(progpath) - directory of the executable file
+        if ( SUBSTITUTE_PROGPATH == aSubString )
+        {
+            nReplaceLength = REPLACELENGTH_PROGPATH;
+            aReplacement = m_aProgPath;
+        }
+        else
+        // -------------------------------------------------------------------------------------------------------------------
         // $(insturl) - directory of the master (server) installation as URL
-        if ( SUBSTITUTE_INSTURL == aSubString || SUBSTITUTE_INSTPATH == aSubString )
+        if ( SUBSTITUTE_INSTURL == aSubString )
         {
             nReplaceLength = REPLACELENGTH_INSTURL;
             aReplacement = m_aInstURL;
+        }
+        else
+        // -------------------------------------------------------------------------------------------------------------------
+        // $(instpath) - directory of the master (server) installation as URL
+        if ( SUBSTITUTE_INSTPATH == aSubString )
+        {
+            nReplaceLength = REPLACELENGTH_INSTPATH;
+            aReplacement = m_aInstPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
