@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnreachableStateException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:24:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,22 +66,28 @@
 #endif
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
+//============================================================================
 
-// DocMerge from xml: exception com::sun::star::embed::UnreachableStateException
 /** This exception can be thrown in case specified state can not be reached.
  */
 exception UnreachableStateException: com::sun::star::uno::Exception
 {
-    long nCurState;
-    long nNextState;
+    // -----------------------------------------------------------------------
+    /** The current state of the object.
+     */
+    long CurrentState;
+
+    // -----------------------------------------------------------------------
+    /** The state that could not be reached.
+     */
+    long NextState;
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
