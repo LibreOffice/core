@@ -22,6 +22,8 @@ hedabu: ..\inc\xmlitmap.hxx %_DEST%\inc%_EXT%\xmloff\xmlitmap.hxx
 hedabu: ..\inc\xmlkywd.hxx %_DEST%\inc%_EXT%\xmloff\xmlkywd.hxx
 hedabu: ..\inc\xmlmetae.hxx %_DEST%\inc%_EXT%\xmloff\xmlmetae.hxx
 hedabu: ..\inc\xmlmetai.hxx %_DEST%\inc%_EXT%\xmloff\xmlmetai.hxx
+hedabu: ..\inc\xmlscripte.hxx %_DEST%\inc%_EXT%\xmloff\xmlscripte.hxx
+hedabu: ..\inc\xmlscripti.hxx %_DEST%\inc%_EXT%\xmloff\xmlscripti.hxx
 hedabu: ..\inc\hxx %_DEST%\inc%_EXT%\xmloff\hxx.hxx
 hedabu: ..\inc\xmlstyle.hxx %_DEST%\inc%_EXT%\xmloff\xmlstyle.hxx
 hedabu: ..\inc\xmltkmap.hxx %_DEST%\inc%_EXT%\xmloff\xmltkmap.hxx
