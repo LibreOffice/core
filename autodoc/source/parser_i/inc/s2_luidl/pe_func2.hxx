@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_func2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,19 @@ class PE_Function : public UnoIDL_PE,
                     public ParseEnvState
 {
   public:
-    typedef ary::idl::Ce_id     RInterface;
+    typedef ary::idl::Ce_id     RParent;
     typedef ary::idl::Ce_id     RFunction;
 
+    enum E_Constructor { constructor };
+
+    /// Constructor for interfaces.
                         PE_Function(
-                            RFunction &         o_rResult,
-                            const RInterface &  i_rCurInterface );
+                            const RParent &     i_rCurInterface );
+
+    /// Constructor for single interface based services.
+                        PE_Function(
+                            const RParent &     i_rCurService,
+                            E_Constructor       i_eCtorMarker );
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
@@ -120,6 +127,9 @@ class PE_Function : public UnoIDL_PE,
                                                 i_rToken );
     virtual void        Process_Punctuation(
                             const TokPunctuation &
+                                                i_rToken );
+    virtual void        Process_BuiltInType(
+                            const TokBuiltInType &
                                                 i_rToken );
     virtual void        Process_ParameterHandling(
                             const TokParameterHandling &
@@ -162,13 +172,11 @@ class PE_Function : public UnoIDL_PE,
 
     String              sData_Name;
     ary::idl::Type_id   nData_ReturnType;
-    bool                bData_Const;
     bool                bData_Oneway;
     ary::idl::Function *
                         pCurFunction;
 
-    RFunction *         pResult;
-    const RInterface *  pCurInterface;
+    const RParent *     pCurParent;
 
     Dyn<PE_Type>        pPE_Type;
     ary::idl::Type_id   nCurParsedType;     // ReturnType or Exception
@@ -180,6 +188,7 @@ class PE_Function : public UnoIDL_PE,
                         eCurParsedParam_Direction;
     ary::idl::Type_id   nCurParsedParam_Type;
     String              sCurParsedParam_Name;
+    bool                bIsForConstructors;
 };
 
 

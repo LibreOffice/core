@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_iface.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,13 @@
     // COMPONENTS
     // PARAMETERS
 
-
+namespace ary
+{
+namespace idl
+{
+    class Interface;
+}
+}
 
 namespace csi
 {
@@ -79,9 +85,6 @@ namespace uidl
 {
 
 
-//class Interface;
-//class Function;
-//class Attribute;
 
 class PE_Function;
 class PE_Attribute;
@@ -123,7 +126,7 @@ class PE_Interface : public UnoIDL_PE,
     virtual void        Process_Default();
 
   private:
-    enum E_State
+    enum E_State        /// @ATTENTION  Do not change existing values (except of e_STATES_MAX) !!! Else array-indices will break.
     {
         e_none = 0,
         need_uik,
@@ -133,12 +136,13 @@ class PE_Interface : public UnoIDL_PE,
         need_interface,
         need_name,
         wait_for_base,
-        in_base,
+        in_base,            // in header, after ":"
         need_curlbr_open,
         e_std,
         in_function,
         in_attribute,
         need_finish,
+        in_base_interface,  // in body, after "interface"
         e_STATES_MAX
     };
     enum E_TokenType    /// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
@@ -168,6 +172,7 @@ class PE_Interface : public UnoIDL_PE,
     void                On_std_Stereotype(const char * i_sText);
     void                On_std_GotoFunction(const char * i_sText);
     void                On_std_GotoAttribute(const char * i_sText);
+    void                On_std_GotoBaseInterface(const char * i_sText);
     void                On_need_finish_Punctuation(const char * i_sText);
     void                On_Default(const char * i_sText);
 
@@ -188,12 +193,16 @@ class PE_Interface : public UnoIDL_PE,
     E_State             eState;
     String              sData_Name;
     bool                bIsPreDeclaration;
+    ary::idl::Interface *
+                        pCurInterface;
     ary::idl::Ce_id     nCurInterface;
 
     Dyn<PE_Function>    pPE_Function;
+    Dyn<PE_Attribute>   pPE_Attribute;
+
     Dyn<PE_Type>        pPE_Type;
     ary::idl::Type_id   nCurParsed_Base;
-    Dyn<PE_Attribute>   pPE_Attribute;
+    bool                bOptional;
 };
 
 

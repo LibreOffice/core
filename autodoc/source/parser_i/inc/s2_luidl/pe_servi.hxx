@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_servi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace ary
      namespace idl
     {
          class Service;
+         class SglIfcService;
     }
 }
 
@@ -84,8 +85,10 @@ namespace csi
 namespace uidl
 {
 
-class PE_Attribute;
+class PE_Property;
 class PE_Type;
+class PE_Function;
+
 
 class PE_Service : public UnoIDL_PE,
                    public ParseEnvState
@@ -133,6 +136,9 @@ class PE_Service : public UnoIDL_PE,
         expect_service_separator,
         at_ignore,
         need_finish,
+        need_base_interface,    /// After ":".
+        need_curlbr_open_sib,   /// After base interface in single interface based service.
+        e_std_sib,              /// Standard in single interface based service.
         e_STATES_MAX
     };
 
@@ -149,13 +155,18 @@ class PE_Service : public UnoIDL_PE,
     String              sData_Name;
     bool                bIsPreDeclaration;
     ary::idl::Service * pCurService;
+    ary::idl::SglIfcService *
+                        pCurSiService;
     ary::idl::Ce_id     nCurService;  // Needed for PE_Attribute.
 
-    Dyn<PE_Attribute>   pPE_Property;
+    Dyn<PE_Property>    pPE_Property;
     ary::idl::Ce_id     nCurParsed_Property;
 
     Dyn<PE_Type>        pPE_Type;
     ary::idl::Type_id   nCurParsed_Type;
+
+    Dyn<PE_Function>    pPE_Constructor;
+
     bool                bOptionalMember;
 };
 
