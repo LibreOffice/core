@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:44:01 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void WorkWindow::ImplLoadRes( const ResId& rResId )
 {
     SystemWindow::ImplLoadRes( rResId );
 
-    ReadShortRes();
+    ReadLongRes();
     if ( !(rResId.aWinBits & WB_HIDE) && (RSC_WORKWIN == rResId.GetRT()) )
         Show();
 }
