@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:37:48 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ using namespace rtl;
 
 using namespace x11;
 
-static const int nXdndProtocolRevision = 4;
+static const int nXdndProtocolRevision = 5;
 
 // mapping between mime types (or what the office thinks of mime types)
 // and X convention types
@@ -277,7 +277,9 @@ SelectionManager::SelectionManager() :
         m_aLinkCursor( None ),
         m_aNoneCursor( None ),
         m_aCurrentCursor( None ),
-        m_bLastDropAccepted( false )
+        m_bLastDropAccepted( false ),
+        m_aDragSourceWindow( None ),
+        m_bDropWaitingForCompletion( false )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_bDropEnterSent            = true;
@@ -2004,6 +2006,34 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 
     ::std::hash_map< Window, DropTargetEntry >::iterator it =
           m_aDropTargets.find( aTarget );
+
+#if OSL_DEBUG_LEVEL > 1
+    if( rMessage.message_type == m_nXdndEnter     ||
+        rMessage.message_type == m_nXdndLeave     ||
+        rMessage.message_type == m_nXdndDrop      ||
+        rMessage.message_type == m_nXdndPosition  )
+    {
+        fprintf( stderr, "got drop event %s, ", OUStringToOString( getString( rMessage.message_type ), RTL_TEXTENCODING_ASCII_US).getStr() );
+        if( it == m_aDropTargets.end() )
+            fprintf( stderr, "but no target found\n" );
+        else if( ! it->second.m_pTarget->m_bActive )
+            fprintf( stderr, "but target is inactive\n" );
+        else if( m_aDropEnterEvent.data.l[0] != None && m_aDropEnterEvent.data.l[0] != aSource )
+            fprintf( stderr, "but source 0x%x is unknown (expected 0x%x or 0)\n", aSource, m_aDropEnterEvent.data.l[0] );
+        else
+            fprintf( stderr, "processing.\n" );
+    }
+#endif
+
+    if( it != m_aDropTargets.end() && it->second.m_pTarget->m_bActive &&
+        m_bDropWaitingForCompletion && m_aDropEnterEvent.data.l[0] )
+    {
+        OSL_ENSURE( 0, "someone forgot to call dropComplete ?" );
+        // some listener forgot to call dropComplete in the last operation
+        // let us end it now and accept the new enter event
+        dropComplete( sal_False, m_aCurrentDropWindow, m_nDropTime );
+    }
+
     if( it != m_aDropTargets.end() &&
         it->second.m_pTarget->m_bActive &&
         ( m_aDropEnterEvent.data.l[0] == None || m_aDropEnterEvent.data.l[0] == aSource )
@@ -2114,6 +2144,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
                 aEvent.SourceActions= m_nLastDropAction;
                 aEvent.Transferable = m_xDropTransferable;
 
+                m_bDropWaitingForCompletion = true;
                 aGuard.clear();
                 it->second->drop( aEvent );
             }
@@ -2126,6 +2157,8 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
                 aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
                 aGuard.clear();
                 it->second->dragExit( aEvent );
+                // reset the drop status, notify source
+                dropComplete( sal_False, m_aCurrentDropWindow, m_nDropTime );
             }
         }
     }
@@ -2164,7 +2197,19 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, Window aDropWindow, Time
             aEvent.xclient.message_type = m_nXdndFinished;
             aEvent.xclient.format       = 32;
             aEvent.xclient.data.l[0]    = m_aCurrentDropWindow;
-            aEvent.xclient.data.l[1]    = 0;
+            aEvent.xclient.data.l[1]    = bSuccess ? 1 : 0;
+            aEvent.xclient.data.l[2]    = 0;
+            aEvent.xclient.data.l[3]    = 0;
+            aEvent.xclient.data.l[4]    = 0;
+            if( bSuccess )
+            {
+                if( m_nLastDropAction & DNDConstants::ACTION_MOVE )
+                    aEvent.xclient.data.l[2] = m_nXdndActionMove;
+                else if( m_nLastDropAction & DNDConstants::ACTION_COPY )
+                    aEvent.xclient.data.l[2] = m_nXdndActionCopy;
+                else if( m_nLastDropAction & DNDConstants::ACTION_LINK )
+                    aEvent.xclient.data.l[2] = m_nXdndActionLink;
+            }
 
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Sending XdndFinished to 0x%x\n",
@@ -2179,6 +2224,7 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, Window aDropWindow, Time
             m_aCurrentDropWindow        = None;
             m_nCurrentProtocolVersion   = nXdndProtocolRevision;
         }
+        m_bDropWaitingForCompletion = false;
     }
     else
         OSL_ASSERT( "dropComplete from invalid DropTargetDropContext" );
@@ -2253,6 +2299,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
 
         XSendEvent( m_pDisplay, m_aDropEnterEvent.data.l[0],
                     False, NoEventMask, & aEvent );
+        XFlush( m_pDisplay );
     }
 }
 
@@ -2596,6 +2643,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                     dtde.Transferable   = m_xDragSourceTransferable;
                     m_bDropSent                 = true;
                     m_nDropTimeout              = time( NULL );
+                    m_bDropWaitingForCompletion = true;
                     aGuard.clear();
                     it->second->drop( dtde );
                     bCancel = false;
@@ -3016,41 +3064,63 @@ void SelectionManager::startDrag(
         return;
     }
 
-    // first get the current pointer position and the window that
-    // the pointer is located in. since said window should be one
-    // of our DropTargets at the time of executeDrag we can use
-    // them for a start
-    Window aRoot, aSource;
-    int root_x, root_y, win_x, win_y;
-    unsigned int mask;
-
     {
         MutexGuard aGuard(m_aMutex);
+
+        // first get the current pointer position and the window that
+        // the pointer is located in. since said window should be one
+        // of our DropTargets at the time of executeDrag we can use
+        // them for a start
+        Window aRoot, aParent, aChild;
+        int root_x, root_y, win_x, win_y;
+        unsigned int mask;
 
         ::std::hash_map< Window, DropTargetEntry >::const_iterator it;
         it = m_aDropTargets.begin();
         while( it != m_aDropTargets.end() )
         {
             if( XQueryPointer( m_pDisplay, it->second.m_aRootWindow,
-                               &aRoot, &aSource,
+                               &aRoot, &aParent,
                                &root_x, &root_y,
                                &win_x, &win_y,
                                &mask ) )
             {
-                aSource = it->second.m_aRootWindow;
+                aParent = it->second.m_aRootWindow;
                 break;
             }
             ++it;
         }
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found drop target window 0x%x\n", aSource );
-#endif
-        if( it == m_aDropTargets.end() )
+
+        // don't start DnD if there is none of our windows on the same screen as
+        // the pointer or if no mouse button is pressed
+        if( it == m_aDropTargets.end() || (mask & (Button1Mask|Button2Mask|Button3Mask)) == 0 )
         {
             if( listener.is() )
                 listener->dragDropEnd( aDragFailedEvent );
             return;
         }
+
+        // try to find which of our drop targets is the drag source
+        // if that drop target is deregistered we should stop executing
+        // the drag (actually this is a poor substitute for an "endDrag"
+        // method ).
+        m_aDragSourceWindow = None;
+        aParent = aRoot = it->second.m_aRootWindow;
+        do
+        {
+            XTranslateCoordinates( m_pDisplay, aRoot, aParent, root_x, root_y, &win_x, &win_y, &aChild );
+            if( aChild != None && m_aDropTargets.find( aChild ) != m_aDropTargets.end() )
+            {
+                m_aDragSourceWindow = aChild;
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "found drag source window 0x%x\n", m_aDragSourceWindow );
+#endif
+                break;
+            }
+            aParent = aChild;
+        } while( aChild != None );
+
+
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "try to grab pointer ... " );
 #endif
@@ -3581,9 +3651,47 @@ void SelectionManager::registerDropTarget( Window aWindow, DropTarget* pTarget )
 
 void SelectionManager::deregisterDropTarget( Window aWindow )
 {
-    MutexGuard aGuard(m_aMutex);
+    ClearableMutexGuard aGuard(m_aMutex);
 
     m_aDropTargets.erase( aWindow );
+    if( aWindow == m_aDragSourceWindow && m_aDragRunning.check() )
+    {
+        // abort drag
+        std::hash_map< Window, DropTargetEntry >::const_iterator it =
+            m_aDropTargets.find( m_aDropWindow );
+        if( it != m_aDropTargets.end() )
+        {
+            DropTargetEvent dte;
+            dte.Source = static_cast< OWeakObject* >( it->second.m_pTarget );
+            aGuard.clear();
+            it->second.m_pTarget->dragExit( dte );
+        }
+        else if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
+        {
+            // send XdndLeave
+            XEvent aEvent;
+            aEvent.type = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.message_type = m_nXdndLeave;
+            aEvent.xclient.window       = m_aDropWindow;
+            aEvent.xclient.data.l[0]    = m_aWindow;
+            memset( aEvent.xclient.data.l+1, 0, sizeof(long)*4);
+            m_aDropWindow = m_aDropProxy = None;
+            XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+        }
+        // notify the listener
+        DragSourceDropEvent dsde;
+        dsde.Source             = static_cast< OWeakObject* >(this);
+        dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
+        dsde.DragSource         = static_cast< XDragSource* >(this);
+        dsde.DropAction         = DNDConstants::ACTION_NONE;
+        dsde.DropSuccess        = sal_False;
+        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        m_xDragSourceListener.clear();
+        aGuard.clear();
+        xListener->dragDropEnd( dsde );
+    }
 }
 
 /*
