@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleChartElement.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:07:44 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,9 @@ service AccessibleChartElement
         position in one or the other coordinate system).</p>
 
         <p>Focus handling depends on support of the
-        <type>XAccessibleText</type> and
-        <type>XAccessibleEditableText</type> interfaces.</p>
+        <type scope="::com::sun::star::accessibility">XAccessibleText</type> and
+        <type scope="::com::sun::star::accessibility">XAccessibleEditableText</type>
+        interfaces.</p>
 
         <p>Key bindings are not supported at the moment</p>
     */
@@ -202,8 +203,9 @@ service AccessibleChartElement
 
         <p>This interface is used primarily to provide the predominant
         foreground and background colors and&mdash;if applicable, i.e. the
-        <type>XAccessibleText</type> interface is supported&mdash;information
-        about the font used to display text.</p>
+        <type scope="::com::sun::star::accessibility">XAccessibleText</type>
+        interface is supported&mdash;information about the font used to display
+        text.</p>
 
         <p>The foreground and background colors may in some cases be directly
         taken from the object.  In other cases, for example when a gradient or a
