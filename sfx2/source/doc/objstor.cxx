@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-01 09:02:38 $
+ *  last change: $Author: mba $ $Date: 2001-02-01 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,8 +1144,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium&  rMedium )
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilters (
                 xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
 
-    ::rtl::OUString aFilterName = SfxFilterContainer::ConvertToNewFilterName( aName );
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xLoader( xFilters->createInstance( aFilterName ), ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xLoader( xFilters->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
     if ( xLoader.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp( GetModel(), ::com::sun::star::uno::UNO_QUERY );
@@ -1176,8 +1175,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilters (
                 xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
 
-        ::rtl::OUString aFilterName = SfxFilterContainer::ConvertToNewFilterName( aName );
-        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > ( xFilters->createInstance( aFilterName ), ::com::sun::star::uno::UNO_QUERY );
+        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > ( xFilters->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
     }
 
     if ( xExporter.is() )
