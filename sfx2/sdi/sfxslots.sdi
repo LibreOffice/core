@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-06-14 07:33:33 $ $Revision: 1.8 $
+    $Author: mba $ $Date: 2002-06-17 11:24:44 $ $Revision: 1.9 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -63,7 +63,7 @@ TypeLibFile( "sfxslots.tlb" )
         //INT32       ModificationTime   MID_DOCINFO_MODIFICATIONTIME;
         //String        Template           MID_DOCINFO_TEMPLATE;
         BOOL        UseUserData        MID_DOCINFO_USEUSERDATA;
-        BOOL        bDeleteUserData    MID_DOCINFO_DELETEUSERDATA;
+        BOOL        DeleteUserData    MID_DOCINFO_DELETEUSERDATA;
         String      Title              MID_DOCINFO_TITLE;
         String      Subject            MID_DOCINFO_SUBJECT;
         String      KeyWords           MID_DOCINFO_KEYWORDS;
