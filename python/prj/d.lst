@@ -3,7 +3,7 @@ mkdir: %_DEST%\lib%_EXT%\python
 mkdir: %_DEST%\lib%_EXT%\python\lib-old
 mkdir: %_DEST%\lib%_EXT%\python\lib-tk
 mkdir: %_DEST%\lib%_EXT%\python\site-packages
-mkdir: %_DEST%\lib%_EXT%\python\test    
+mkdir: %_DEST%\lib%_EXT%\python\test
 mkdir: %_DEST%\lib%_EXT%\python\test\output
 mkdir: %_DEST%\lib%_EXT%\python\test\data
 mkdir: %_DEST%\lib%_EXT%\python\encodings
@@ -85,17 +85,3 @@ symlink: %_DEST%\lib%_EXT%\libpython2.3.so.1.0 %_DEST%\lib%_EXT%\libpython2.3.so
 
 #linklib: libpython.so.*.*.*
 
-
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/mmap.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/parser.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/pyexpat.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/select.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/unicodedata.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/winsound.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/_csv.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/_socket.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/_sre.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/_symtable.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/_testcapi.pyd
-./wntmsci8.pro/misc/build/Python-2.3.4/PCbuild/_winreg.pyd
