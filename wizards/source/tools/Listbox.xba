@@ -297,7 +297,7 @@ End Sub
 
 
 Function GetSelectedListboxItems(oListbox as Object)
-Dim SelList() as String
+Dim SelList(Ubound(oListBox.SelectedItems())) as String
 Dim i as Integer
 Dim CurIndex as Integer
 	For i = 0 To Ubound(oListbox.SelectedItems())
@@ -349,4 +349,5 @@ Dim i as Integer
 		End If
 	Next i
 	GetItemPos() = -1
-End Function</script:module>
+End Function
+</script:module>
