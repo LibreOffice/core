@@ -6854,7 +6854,7 @@ SfxVoidItem Repaginate FN_REPAGINATE
 
 //--------------------------------------------------------------------------
 SfxBoolItem RepeatSearch FN_REPEAT_SEARCH
-()
+( SfxBoolItem Quiet SID_SEARCH_QUIET )
 [
     /* flags: */
     AutoUpdate = FALSE,
