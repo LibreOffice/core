@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:27:32 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,16 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                                           sal_True, sal_False );
 
         //  text as element content
-        rExport.Characters( pObj->aText );
+        rtl::OUString aContent( pObj->aText );
+        while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1]->nFormatPos == pObj->nFormatPos )
+        {
+            // The array can contain several elements for the same position in the number
+            // (for example, literal text and space from underscores). They must be merged
+            // into a single embedded-text element.
+            aContent += rEmbeddedEntries[nEntry+1]->aText;
+            ++nEntry;
+        }
+        rExport.Characters( aContent );
     }
 }
 
@@ -1316,13 +1325,20 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             nDigitsPassed += pElemStr->Len();
                         break;
                     case XMLNUM_SYMBOLTYPE_STRING:
+                    case XMLNUM_SYMBOLTYPE_BLANK:
                         if ( nDigitsPassed > 0 && nDigitsPassed < nIntegerSymbols && pElemStr )
                         {
-                            //  text within the integer part of a number:number element
+                            //  text (literal or underscore) within the integer part of a number:number element
+
+                            String aEmbeddedStr;
+                            if ( nElemType == XMLNUM_SYMBOLTYPE_STRING )
+                                aEmbeddedStr = *pElemStr;
+                            else
+                                SvNumberformat::InsertBlanks( aEmbeddedStr, 0, pElemStr->GetChar(1) );
 
                             sal_Int32 nEmbedPos = nIntegerSymbols - nDigitsPassed;
 
-                            SvXMLEmbeddedTextEntry* pObj = new SvXMLEmbeddedTextEntry( nPos, nEmbedPos, *pElemStr );
+                            SvXMLEmbeddedTextEntry* pObj = new SvXMLEmbeddedTextEntry( nPos, nEmbedPos, aEmbeddedStr );
                             aEmbeddedEntries.Insert( pObj, aEmbeddedEntries.Count() );
                         }
                         break;
@@ -1378,9 +1394,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case XMLNUM_SYMBOLTYPE_BLANK:
-                    if (pElemStr)
+                    if ( pElemStr && !lcl_IsInEmbedded( aEmbeddedEntries, nPos ) )
                     {
                         //  turn "_x" into the number of spaces used for x in InsertBlanks in the NumberFormat
+                        //  (#i20396# the spaces may also be in embedded-text elements)
 
                         String aBlanks;
                         SvNumberformat::InsertBlanks( aBlanks, 0, pElemStr->GetChar(1) );
@@ -1465,8 +1482,18 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                 bAnyContent = sal_True;
                                 break;
                             case NUMBERFORMAT_FRACTION:
-                                WriteFractionElement_Impl( nLeading, bThousand, nPrecision, nPrecision );
-                                bAnyContent = sal_True;
+                                {
+                                    sal_Int32 nInteger = nLeading;
+                                    if ( pElemStr && pElemStr->GetChar(0) == '?' )
+                                    {
+                                        //  If the first digit character is a question mark,
+                                        //  the fraction doesn't have an integer part, and no
+                                        //  min-integer-digits attribute must be written.
+                                        nInteger = -1;
+                                    }
+                                    WriteFractionElement_Impl( nInteger, bThousand, nPrecision, nPrecision );
+                                    bAnyContent = sal_True;
+                                }
                                 break;
                         }
 
