@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:09:37 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 12:31:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ CFLAGS+= -GR # enable RTTI
 # --- Files --------------------------------------------------------
 
 SLOFILES=	\
+    $(SLO)$/condition.obj \
     $(SLO)$/dynload.obj \
     $(SLO)$/simplereferenceobject.obj
 
