@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSourceModel.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 14:03:38 $
+*  last change: $Author: rt $ $Date: 2004-10-22 13:59:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -69,7 +69,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import java.lang.reflect.InvocationTargetException;
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 
 public class ScriptSourceModel {
 
