@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportLayouter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:21:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-24 09:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ public class ReportLayouter {
             LayoutFiles = FileAccess.getFolderTitles(CurReportDocument.xMSF, "stl", ReportWizard.ReportPath);
             XInterface xUcbInterface = (XInterface) CurReportDocument.xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
-            boolean bcntexists = xSimpleFileAccess.exists(ReportWizard.ReportPath + "/cnt-default.stw");
-            boolean bstlexists = xSimpleFileAccess.exists(ReportWizard.ReportPath + "/stl-default.stw");
+            boolean bcntexists = xSimpleFileAccess.exists(ReportWizard.ReportPath + "/cnt-default.ott");
+            boolean bstlexists = xSimpleFileAccess.exists(ReportWizard.ReportPath + "/stl-default.ott");
             //TODO Die exception wieder rein; ggfs mit rp absprechen
             //      if ((bcntexists == false) || (bstlexists == false))
             //          throw  new NoValidPathException(CurReportDocument.xMSF);
@@ -124,7 +124,7 @@ public class ReportLayouter {
                                             new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                                             new Object[] { new Integer(8), slblDataStructure, new Integer(95), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)});
 
-            short iSelPos = (short) JavaTools.FieldInList(ContentFiles[1], ReportWizard.ReportPath + "/cnt-default.stw");
+            short iSelPos = (short) JavaTools.FieldInList(ContentFiles[1], ReportWizard.ReportPath + "/cnt-default.ott");
             iOldContentPos = (int) iSelPos;
             xContentListBox = CurUnoDialog.insertListBox("lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                                             new String[] { "Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width" },
@@ -135,7 +135,7 @@ public class ReportLayouter {
                                             new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                                             new Object[] { new Integer(8), slblPageLayout, new Integer(205), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)});
 
-            short iSelLayoutPos = (short) JavaTools.FieldInList(LayoutFiles[1], ReportWizard.ReportPath + "/stl-default.stw");
+            short iSelLayoutPos = (short) JavaTools.FieldInList(LayoutFiles[1], ReportWizard.ReportPath + "/stl-default.ott");
             xLayoutListBox = CurUnoDialog.insertListBox("lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                                                     new String[] { "Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width" },
                                                     new Object[] { new Integer(108), "HID:34364", new Integer(205), new Integer(37), new short[] { iSelLayoutPos }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), new Integer(99)
