@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-11 16:20:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,11 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #endif
 
+// #107844#
+#ifndef _SVDUNDO_HXX
+#include <svx/svdundo.hxx>
+#endif
+
 class Timer;
 class SfxObjectShell;
 class SdPage;
@@ -135,6 +140,27 @@ enum DocCreationMode
     NEW_DOC,
     DOC_LOADED
 };
+
+//////////////////////////////////////////////////////////////////////////////
+// #107844#
+// An undo class which is able to set/unset user calls is needed to handle
+// the undo/redo of PresObjs correctly. It can also add/remove the object
+// from the PresObjList of that page.
+
+class SdrUndoUserCallObj : public SdrUndoObj
+{
+protected:
+    SdPage*                         mpOld;
+    SdPage*                         mpNew;
+
+public:
+    SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pNew);
+
+    virtual void Undo();
+    virtual void Redo();
+};
+
+//////////////////////////////////////////////////////////////////////////////
 
 // ------------------
 // - SdDrawDocument -
@@ -379,6 +405,28 @@ public:
        void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { bSummationOfParagraphs = bOn; }
     const BOOL          IsSummationOfParagraphs() const { return bSummationOfParagraphs; }
 
+    /** Set the mode that controls whether (and later how) the formatting of the document
+        depends on the current printer metrics.
+        @param nMode
+            Use <const
+            scope="com::sun::star::document::PrinterIndependentLayout">ENABLED</const>
+            to make formatting printer-independent and <const
+            scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
+            to make formatting depend on the current printer metrics.
+    */
+    void SetPrinterIndependentLayout (sal_Int32 nMode);
+
+    /** Get the flag that controls whether the formatting of the document
+        depends on the current printer metrics.
+        @return
+            Use <const
+            scope="com::sun::star::document::PrinterIndependentLayout">ENABLED</const>
+            when formatting is printer-independent and <const
+            scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
+            when formatting depends on the current printer metrics.
+    */
+    sal_Int32 GetPrinterIndependentLayout (void);
+
     void                SetOnlineSpell( BOOL bIn );
     BOOL                GetOnlineSpell() const { return bOnlineSpell; }
     void                StopOnlineSpelling();
@@ -563,6 +611,12 @@ public:
         BOOL bIsPageObj);
 
 private:
+    /** This member stores the printer independent layout mode.  Please
+        refer to <member>SetPrinterIndependentLayout()</member> for its
+        values.
+    */
+    sal_Int32 mnPrinterIndependentLayout;
+
     /** Insert a given set of standard and notes page after the given <argument>pCurrentPage</argument>.
         @param pCurrentPage
             This page and its associated notes/standard page is copied.
