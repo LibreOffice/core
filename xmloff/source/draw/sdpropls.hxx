@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:25:40 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 18:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,21 +131,32 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 16 )
 #define XML_SD_TYPE_NUMBULLET                       (XML_SD_TYPES_START + 17 )
 #define XML_SD_TYPE_WRITINGMODE                     (XML_SD_TYPES_START + 18 )
+#define XML_SD_TYPE_BITMAP_TILE                     (XML_SD_TYPES_START + 19 )
+#define XML_SD_TYPE_BITMAP_STRETCH                  (XML_SD_TYPES_START + 20 )
+#define XML_SD_TYPE_BITMAPREPOFFSETX                (XML_SD_TYPES_START + 21 )
+#define XML_SD_TYPE_BITMAPREPOFFSETY                (XML_SD_TYPES_START + 22 )
+#define XML_SD_TYPE_FILLBITMAPSIZE                  (XML_SD_TYPES_START + 23 )
+#define XML_SD_TYPE_LOGICAL_SIZE                    (XML_SD_TYPES_START + 24 )
+#define XML_SD_TYPE_BITMAP_REFPOINT                 (XML_SD_TYPES_START + 25 )
 
 // 3D property types
-#define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 19 )
-#define XML_SD_TYPE_NORMALS_KIND                    (XML_SD_TYPES_START + 20 )
-#define XML_SD_TYPE_NORMALS_DIRECTION               (XML_SD_TYPES_START + 21 )
-#define XML_SD_TYPE_TEX_GENERATION_MODE_X           (XML_SD_TYPES_START + 22 )
-#define XML_SD_TYPE_TEX_GENERATION_MODE_Y           (XML_SD_TYPES_START + 23 )
-#define XML_SD_TYPE_TEX_KIND                        (XML_SD_TYPES_START + 24 )
-#define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 25 )
+#define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )
+#define XML_SD_TYPE_NORMALS_KIND                    (XML_SD_TYPES_START + 41 )
+#define XML_SD_TYPE_NORMALS_DIRECTION               (XML_SD_TYPES_START + 42 )
+#define XML_SD_TYPE_TEX_GENERATION_MODE_X           (XML_SD_TYPES_START + 43 )
+#define XML_SD_TYPE_TEX_GENERATION_MODE_Y           (XML_SD_TYPES_START + 44 )
+#define XML_SD_TYPE_TEX_KIND                        (XML_SD_TYPES_START + 45 )
+#define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 46 )
 
 //////////////////////////////////////////////////////////////////////////////
 
 #define CTF_NUMBERINGRULES          1000
 #define CTF_NUMBERINGRULES_NAME     1001
 #define CTF_WRITINGMODE             1002
+#define CTF_BITMAP_TILE             1003
+#define CTF_BITMAP_STRETCH          1004
+#define CTF_REPEAT_OFFSET_X         1005
+#define CTF_REPEAT_OFFSET_Y         1006
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes

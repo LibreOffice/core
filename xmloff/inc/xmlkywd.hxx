@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-13 17:28:26 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 18:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,8 @@ XML_CONSTASCII_ACTION( sXML_fill_gradient_name, "fill-gradient-name" );
 XML_CONSTASCII_ACTION( sXML_fill_hatch_name, "fill-hatch-name" );
 XML_CONSTASCII_ACTION( sXML_fill_image, "fill-image" );
 XML_CONSTASCII_ACTION( sXML_fill_image_name, "fill-image-name" );
+XML_CONSTASCII_ACTION( sXML_fill_image_height, "fill-image-height" );
+XML_CONSTASCII_ACTION( sXML_fill_image_width, "fill-image-width" );
 XML_CONSTASCII_ACTION( sXML_filter, "filter");
 XML_CONSTASCII_ACTION( sXML_filter_and, "filter-and");
 XML_CONSTASCII_ACTION( sXML_filter_condition, "filter-condition");
@@ -1412,6 +1414,7 @@ XML_CONSTASCII_ACTION( sXML_tick_marks_major_inner, "tick-marks-major-inner" );
 XML_CONSTASCII_ACTION( sXML_tick_marks_major_outer, "tick-marks-major-outer" );
 XML_CONSTASCII_ACTION( sXML_tick_marks_minor_inner, "tick-marks-minor-inner" );
 XML_CONSTASCII_ACTION( sXML_tick_marks_minor_outer, "tick-marks-minor-outer" );
+XML_CONSTASCII_ACTION( sXML_tile_repeat_offset, "tile-repeat-offset" );
 XML_CONSTASCII_ACTION( sXML_time, "time");
 XML_CONSTASCII_ACTION( sXML_time_adjust, "time-adjust" );
 XML_CONSTASCII_ACTION( sXML_time_style, "time-style" );
@@ -1584,4 +1587,12 @@ XML_CONSTASCII_ACTION( sXML_dots2, "dots2" );
 XML_CONSTASCII_ACTION( sXML_dots2_length, "dots2-length" );
 XML_CONSTASCII_ACTION( sXML_enable_numbering, "enable-numbering" );
 
+XML_CONSTASCII_ACTION( sXML_top_left, "top-left" );
+XML_CONSTASCII_ACTION( sXML_top_right, "top-right" );
+XML_CONSTASCII_ACTION( sXML_bottom_left, "bottom-left" );
+XML_CONSTASCII_ACTION( sXML_bottom_right, "bottom-right" );
+
+XML_CONSTASCII_ACTION( sXML_fill_image_ref_point,   "fill-image-ref-point" );
+XML_CONSTASCII_ACTION( sXML_fill_image_ref_point_x, "fill-image-ref-point-x" );
+XML_CONSTASCII_ACTION( sXML_fill_image_ref_point_y, "fill-image-ref-point-y" );
 #endif

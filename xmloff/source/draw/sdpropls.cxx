@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:25:40 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 18:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_RECTANGLEPOINT_HPP_
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#endif
+
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include <EnumPropertyHdl.hxx>
 #endif
@@ -107,6 +111,22 @@
 
 #ifndef _XMLOFF_PROPERTYHANDLER_NUMRULE_HXX
 #include "numithdl.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLBACKGROUNDREPEATPROPERTYHANDLER_HXX
+#include "XMLBackgroundRepeatPropertyHandler.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
+#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLFILLBITMAPSIZEPROPERTYHANDLER_HXX
+#include "XMLFillBitmapSizePropertyHandler.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
+#include "XMLBitmapLogicalSizePropertyHandler.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -181,6 +201,18 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FillTransparence",   XML_NAMESPACE_DRAW, sXML_transparency,      XML_TYPE_PERCENT16, 0 },
     { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
 
+    { "FillBitmapSizeX",            XML_NAMESPACE_DRAW, sXML_fill_image_width,  XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_width,  XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapSizeY",            XML_NAMESPACE_DRAW, sXML_fill_image_height, XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_height, XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapTile",             XML_NAMESPACE_STYLE, sXML_repeat,           XML_SD_TYPE_BITMAP_TILE|MID_FLAG_MULTI_PROPERTY, CTF_BITMAP_TILE },
+    { "FillBitmapStretch",          XML_NAMESPACE_STYLE, sXML_repeat,           XML_SD_TYPE_BITMAP_STRETCH|MID_FLAG_MULTI_PROPERTY, CTF_BITMAP_STRETCH },
+    { "FillBitmapPositionOffsetX",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,                XML_TYPE_PERCENT, 0 },
+    { "FillBitmapPositionOffsetY",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,                XML_TYPE_PERCENT, 0 },
+    { "FillBitmapRectanglePoint",   XML_NAMESPACE_DRAW, sXML_fill_image_ref_point, XML_SD_TYPE_BITMAP_REFPOINT, 0 },
+    { "FillBitmapOffsetX",          XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X },
+    { "FillBitmapOffsetY",          XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
+
     // text frame attributes
     { "TextWritingMode",    XML_NAMESPACE_FO,   sXML_writing_mode,      XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
 
@@ -195,7 +227,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_SD_TYPE_COLORMODE, 0 },
     { "AdjustLuminance",  XML_NAMESPACE_DRAW, sXML_luminance,           XML_TYPE_PERCENT16, 0 },        // signed?
     { "AdjustContrast", XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 },        // signed?
-    { "Gamma",          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },       // signed?
+    { "Gamma",          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },           // signed?
     { "AdjustRed",      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 },        // signed?
     { "AdjustGreen",    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 },        // signed?
     { "AdjustBlue",     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
@@ -499,6 +531,20 @@ SvXMLEnumMapEntry  aXML_TexMode_EnumMap[] =
     { NULL, 0 }
 };
 
+SvXMLEnumMapEntry aXML_RefPoint_EnumMap[] =
+{
+    { sXML_top_left,    drawing::RectanglePoint_LEFT_TOP },
+    { sXML_top,         drawing::RectanglePoint_MIDDLE_TOP },
+    { sXML_top_right,   drawing::RectanglePoint_RIGHT_TOP },
+    { sXML_left,        drawing::RectanglePoint_LEFT_MIDDLE },
+    { sXML_center,      drawing::RectanglePoint_MIDDLE_MIDDLE },
+    { sXML_right,       drawing::RectanglePoint_RIGHT_MIDDLE },
+    { sXML_bottom_left, drawing::RectanglePoint_LEFT_BOTTOM },
+    { sXML_bottom,      drawing::RectanglePoint_MIDDLE_BOTTOM },
+    { sXML_bottom_right,drawing::RectanglePoint_RIGHT_BOTTOM },
+    { NULL, 0 }
+};
+
 //////////////////////////////////////////////////////////////////////////////
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel )
@@ -651,6 +697,33 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLNumRulePropHdl( xCompare );
                 break;
             }
+            case XML_SD_TYPE_BITMAP_TILE:
+            case XML_SD_TYPE_BITMAP_STRETCH:
+            {
+                pHdl = new XMLBackgroundRepeatPropertyHandler( nType == XML_SD_TYPE_BITMAP_TILE );
+                break;
+            }
+            case XML_SD_TYPE_BITMAPREPOFFSETX:
+            case XML_SD_TYPE_BITMAPREPOFFSETY:
+            {
+                pHdl = new XMLBitmapRepeatOffsetPropertyHandler( nType == XML_SD_TYPE_BITMAPREPOFFSETX );
+                break;
+            }
+            case XML_SD_TYPE_FILLBITMAPSIZE:
+            {
+                pHdl = new XMLFillBitmapSizePropertyHandler();
+                break;
+            }
+            case XML_SD_TYPE_LOGICAL_SIZE:
+            {
+                pHdl = new XMLBitmapLogicalSizePropertyHandler();
+                break;
+            }
+            case XML_SD_TYPE_BITMAP_REFPOINT:
+            {
+                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, getCppuType((const ::com::sun::star::drawing::RectanglePoint*)0) );
+                break;
+            }
         }
 
         if(pHdl)
@@ -693,6 +766,11 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
+    XMLPropertyState* pBitmapTile = NULL;
+    XMLPropertyState* pBitmapStretch = NULL;
+    XMLPropertyState* pRepeatOffsetX = NULL;
+    XMLPropertyState* pRepeatOffsetY = NULL;
+
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
          property != rProperties.end();
@@ -735,7 +813,40 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                     }
                 }
                 break;
+            case CTF_BITMAP_TILE:
+                pBitmapTile = property;
+                break;
+
+            case CTF_BITMAP_STRETCH:
+                pBitmapStretch = property;
+                break;
+
+            case CTF_REPEAT_OFFSET_X:
+                pRepeatOffsetX = property;
+                break;
+
+            case CTF_REPEAT_OFFSET_Y:
+                pRepeatOffsetY = property;
+                break;
         }
+    }
+
+    if( pBitmapTile && pBitmapStretch )
+    {
+        sal_Bool bTile;
+        if( ( pBitmapTile->maValue >>= bTile ) && bTile )
+            pBitmapStretch->mnIndex = -1;
+        else
+            pBitmapTile->mnIndex = -1;
+    }
+
+    if( pRepeatOffsetX && pRepeatOffsetY )
+    {
+        sal_Int32 nOffset;
+        if( ( pRepeatOffsetX->maValue >>= nOffset ) && ( nOffset == 0 ) )
+            pRepeatOffsetX->mnIndex = -1;
+        else
+            pRepeatOffsetY->mnIndex = -1;
     }
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
