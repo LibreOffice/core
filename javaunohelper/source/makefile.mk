@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dbo $ $Date: 2002-12-06 16:40:54 $
+#   last change: $Author: rt $ $Date: 2002-12-11 16:34:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,8 @@ UNOTYPES= \
         com.sun.star.uno.XWeak						\
         com.sun.star.uno.XAggregation				\
             com.sun.star.uno.XComponentContext          \
-        com.sun.star.lang.XInitialization
+        com.sun.star.lang.XInitialization           \
+        com.sun.star.lang.XComponent
 
 SLOFILES= \
         $(SLO)$/javaunohelper.obj		\
