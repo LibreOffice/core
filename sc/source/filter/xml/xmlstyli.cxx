@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:32:37 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,11 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             }
         }
     }
+
+    // #i27594#; copy Value, but don't insert
+    if (pAllBorderWidthProperty)
+        pAllBorderWidthProperty->mnIndex = -1;
+
     for ( i = 0; i < 4; i++)
     {
         if (pAllPaddingProperty && !pPadding[i])
@@ -390,16 +395,13 @@ void XMLTableStyleContext::SetBaseCellAddress(com::sun::star::uno::Sequence<bean
 {
     aProps.realloc(aProps.getLength() + 1);
     beans::PropertyValue aProp;
-    table::CellAddress aBaseAddress;
-    sal_Int32 nOffset(0);
-    if ( ScXMLConverter::GetAddressFromString( aBaseAddress, sBaseCell, GetScImport().GetDocument(), nOffset ))
-    {
-        uno::Any aAnyBase;
-        aAnyBase <<= aBaseAddress;
-        aProp.Value = aAnyBase;
-        aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
-        aProps[aProps.getLength() - 1] = aProp;
-    }
+
+    // #b4974740# source position must be set as string, because it may
+    // refer to a sheet that hasn't been loaded yet.
+
+    aProp.Value <<= sBaseCell;
+    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR));
+    aProps[aProps.getLength() - 1] = aProp;
 }
 
 void XMLTableStyleContext::SetStyle(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
