@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:25:43 $
+ *  last change: $Author: mib $ $Date: 2001-01-29 07:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
 {
     if (bAutoStyles)
     {
-        exportText(rText, bAutoStyles, bProgress );
+        exportText(rText, bAutoStyles, bProgress, sal_True );
     }
     else
     {
@@ -247,7 +247,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
                                      (bIsEndnote ? sXML_endnote_body :
                                                    sXML_footnote_body),
                                      sal_False, sal_False);
-            exportText(rText, bAutoStyles, bProgress );
+            exportText(rText, bAutoStyles, bProgress, sal_True );
         }
     }
 }
