@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:56:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,14 @@
 #ifndef _DBFLD_HXX
 #define _DBFLD_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _FLDBAS_HXX
 #include "fldbas.hxx"
+#endif
 #ifndef _SWDBDATA_HXX
-#include <swdbdata.hxx>
+#include "swdbdata.hxx"
 #endif
 
 class SwDoc;
@@ -74,7 +79,7 @@ class SwFrm;
     Beschreibung: Datenbankfeld
  --------------------------------------------------------------------*/
 
-class SwDBFieldType : public SwValueFieldType
+class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 {
     SwDBData    aDBData;        //
     String      sName;          // only used in ::GetName() !
@@ -105,7 +110,7 @@ public:
     Der Inhalt wird entsprechend dem Format, soweit vorhanden, formatiert.
  --------------------------------------------------------------------*/
 
-class SwDBField : public SwValueField
+class SW_DLLPUBLIC SwDBField : public SwValueField
 {
     String  aContent;
     USHORT  nSubType;
@@ -175,7 +180,7 @@ inline void SwDBField::ChgBodyTxtFlag( BOOL bIsInBody )
     Beschreibung: Basisklasse fuer alle weiteren Datenbankfelder
  --------------------------------------------------------------------*/
 
-class SwDBNameInfField : public SwField
+class SW_DLLPUBLIC SwDBNameInfField : public SwField
 {
     SwDBData    aDBData;
     USHORT      nSubType;
@@ -219,7 +224,7 @@ public:
     Beschreibung: Naechsten Datensatz mit Bedingung
  --------------------------------------------------------------------*/
 
-class SwDBNextSetField : public SwDBNameInfField
+class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 {
     String  aCond;
     BOOL    bCondValid;
