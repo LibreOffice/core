@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-19 13:44:11 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 07:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,11 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>       // SwRedlineTbl
+#endif
+#ifdef BIDI
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx> // SwDrawTextInfo
+#endif
 #endif
 
 using namespace ::com::sun::star;
@@ -466,6 +471,8 @@ void SwTxtNode::SetWrong( SwWrongList *pNew )
     pWrong = pNew;
 }
 
+#ifndef BIDI
+
 /*************************************************************************
  *                class SwScanner
  * Hilfsklasse, die beim Spellen die Worte im gewuenschten Bereich
@@ -492,6 +499,7 @@ public:
     xub_StrLen GetEnd() const           { return nBegin + nLen; }
     xub_StrLen GetLen() const           { return nLen; }
 };
+#endif
 
 
 
