@@ -1582,33 +1582,6 @@ SfxVoidItem ConfigureDialog SID_CONFIG
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ConfigureToolboxVisible SID_CUSTOMIZETOOLBOX
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem Context SID_CONTEXT
 
 [
@@ -1762,33 +1735,6 @@ SfxStringItem CurrentTime SID_CURRENTTIME
     StatusBarConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem CommonTaskBarVisible SID_TOGGLECOMMONTASKBAR
-
-[
-      /* flags: */
-      AutoUpdate = FALSE,
-      Cachable = Cachable,
-      FastCall = FALSE,
-      HasCoreId = FALSE,
-      HasDialog = FALSE,
-      ReadOnlyDoc = TRUE,
-      Toggle = FALSE,
-      Container = TRUE,
-      RecordAbsolute = FALSE,
-      RecordPerSet;
-      Synchron;
-
-      Readonly = FALSE,
-
-      /* config: */
-      AccelConfig = TRUE,
-      MenuConfig = TRUE,
-      StatusBarConfig = FALSE,
-      ToolBoxConfig = TRUE,
-      GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
@@ -2592,33 +2538,6 @@ SfxBoolItem FullScreen SID_WIN_FULLSCREEN
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem FunctionBarVisible SID_TOGGLEFUNCTIONBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4361,33 +4280,6 @@ SfxVoidItem Logout SID_LOGOUT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem MacroBarVisible SID_TOGGLEMACROBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem ScriptOrganizer SID_SCRIPTORGANIZER
 (SfxScriptOrganizerItem ScriptOrganizer SID_SCRIPTORGANIZER)
 [
@@ -4807,33 +4699,6 @@ SfxVoidItem NameChangedOnTab SID_BASICIDE_NAMECHANGEDONTAB
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem NavigationBarVisible SID_TOGGLENAVBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem Navigator SID_NAVIGATOR
 
 [
@@ -5004,33 +4869,6 @@ SfxVoidItem NewWindow SID_NEWWINDOW
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem ObjectBarVisible SID_TOGGLEOBJECTBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5276,33 +5114,6 @@ SfxStringItem OpenUrl SID_OPENURL
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem OptionBarVisible SID_TOGGLEOPTIONBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
@@ -7498,33 +7309,6 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ToolBarVisible SID_TOGGLETOOLBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem ToolsMacroEdit SID_EDITMACRO
 ()
 [
@@ -8834,6 +8618,32 @@ SfxVoidItem RecentFileList SID_RECENTFILELIST
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_APPLICATION;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem AvailableToolbars SID_AVAILABLE_TOOLBARS
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
