@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 16:45:08 $
+ *  last change: $Author: er $ $Date: 2000-11-03 15:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,18 +338,18 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
     sal_Int32 nCnt, nElem;
 
     // boolean keyords
-    Sequence< ::rtl::OUString > aWordSeq = pLocaleData->getReservedWord();
-    nCnt = aWordSeq.getLength();
-    DBG_ASSERT( reservedWords::TRUE_WORD < nCnt, "SetDependentKeywords: TRUE_WORD?" )
-    if ( reservedWords::TRUE_WORD < nCnt )
-        sKeyword[NF_KEY_TRUE] = pCharClass->upper( aWordSeq[ reservedWords::TRUE_WORD ] );
-    else
+    sKeyword[NF_KEY_TRUE] = pCharClass->upper( pLocaleData->getTrueWord() );
+    if ( !sKeyword[NF_KEY_TRUE].Len() )
+    {
+        DBG_ERRORFILE( "SetDependentKeywords: TRUE_WORD?" );
         sKeyword[NF_KEY_TRUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "TRUE" ) );
-    DBG_ASSERT( reservedWords::FALSE_WORD < nCnt, "SetDependentKeywords: FALSE_WORD?" )
-    if ( reservedWords::FALSE_WORD < nCnt )
-        sKeyword[NF_KEY_FALSE] = pCharClass->upper( aWordSeq[ reservedWords::FALSE_WORD ] );
-    else
+    }
+    sKeyword[NF_KEY_FALSE] = pCharClass->upper( pLocaleData->getFalseWord() );
+    if ( !sKeyword[NF_KEY_FALSE].Len() )
+    {
+        DBG_ERRORFILE( "SetDependentKeywords: FALSE_WORD?" );
         sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
+    }
 
     // currency symbol
     Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
