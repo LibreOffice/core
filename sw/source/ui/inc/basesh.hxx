@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 11:24:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,21 +111,20 @@ class SwBaseShell: public SfxShell
     DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
 protected:
+    SwFlyFrmAttrMgr*    pFrmMgr;
 
-    SwWrtShell& GetShell   ();
-    SwWrtShell* GetShellPtr();
+    SwWrtShell&         GetShell();
+    SwWrtShell*         GetShellPtr();
 
-    SwView&     GetView() { return rView; }
+    inline SwView&      GetView()                       { return rView; }
+    inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
+    inline BOOL         AddGrfUpdateSlot( USHORT nSlot ){ return aGrfUpdateSlots.Insert( nSlot ); }
 
-    SwFlyFrmAttrMgr *pFrmMgr;
+    DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 
-    DECL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
+    void                InsertURLButton( const String& rURL, const String& rTarget, const String& rTxt );
+    void                InsertTable( SfxRequest& _rRequest );
 
-    void SetGetStateSet( SfxItemSet* p )            { pGetStateSet = p; }
-    BOOL AddGrfUpdateSlot( USHORT nSlot )
-                                { return aGrfUpdateSlots.Insert( nSlot ); }
-
-    void InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt);
 public:
     SwBaseShell(SwView &rShell);
     virtual     ~SwBaseShell();
