@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-04 11:10:45 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,10 @@ CFileOpenDialog::CFileOpenDialog(
     m_GetFileNameWrapper( CGetFileNameWrapper::create( ) )
 {
     // initialize the OPENFILENAME struct
-    if ( IsWin2000( ) )
+    if (IsWindows2000Platform())
     {
-        ZeroMemory( &m_ofn, sizeof( m_ofn ) );
-        m_ofn.lStructSize = sizeof( m_ofn );
+        ZeroMemory(&m_ofn, sizeof(m_ofn));
+        m_ofn.lStructSize = sizeof(m_ofn);
     }
     else // OSVER < Win2000
     {
@@ -145,7 +145,8 @@ CFileOpenDialog::CFileOpenDialog(
                    OFN_HIDEREADONLY |
                    OFN_PATHMUSTEXIST |
                    OFN_FILEMUSTEXIST |
-                   OFN_OVERWRITEPROMPT;
+                   OFN_OVERWRITEPROMPT |
+                   OFN_ENABLESIZING;
 
     // it is a little hack but how else could
     // we get a parent window (using a vcl window?)

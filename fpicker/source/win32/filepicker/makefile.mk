@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: tra $ $Date: 2001-11-15 16:02:34 $
+#   last change: $Author: tra $ $Date: 2002-03-21 07:37:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,8 +98,14 @@ SLOFILES=$(SLO)$/FileOpenDlg.obj\
          $(SLO)$/controlcommand.obj\
          $(SLO)$/filepickerstate.obj\
          $(SLO)$/getfilenamewrapper.obj\
-         $(SLO)$/asynceventnotifier.obj
-                 
+         $(SLO)$/asynceventnotifier.obj\
+         $(SLO)$/previewadapter.obj\
+         $(SLO)$/previewbase.obj\
+         $(SLO)$/filepickereventnotification.obj\
+         $(SLO)$/customcontrol.obj\
+         $(SLO)$/customcontrolcontainer.obj\
+         $(SLO)$/customcontrolfactory.obj\
+         $(SLO)$/dialogcustomcontrols.obj
 
 # --- Targets ------------------------------------------------------
 
