@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-02 21:15:20 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 21:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9205,7 +9205,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     SlotName[ spanish ] = "Fondo de car�cter";
     SlotName[ italian ] = "Colore sfondo caratteri";
     SlotName[ danish ] = "Tegnbaggrund-fyld";
-    SlotName[ swedish ] = "Teckenbakgrundsvattenkanna";
+    SlotName[ swedish ] = "F�rg�verstrykning teckenbakgrund";
     SlotName[ polish ] = "T�o znak�w-Polewaczka";
     SlotName[ portuguese_brazilian ] = "CharBackgroundExt";
     SlotName[ japanese ] = "文字背景の水やりﾓｰﾄﾞ";
@@ -9233,7 +9233,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
     SlotName[ spanish ] = "Color de relleno del car�cter";
     SlotName[ italian ] = "Colore riempimento carattere";
     SlotName[ danish ] = "Tegnefarve-fyld";
-    SlotName[ swedish ] = "Teckenf�rgvattenkanna";
+    SlotName[ swedish ] = "F�rg�verstrykning teckenf�rg";
     SlotName[ polish ] = "Kolor znak�w-Polewaczka";
     SlotName[ portuguese_brazilian ] = "CharColorExt";
     SlotName[ japanese ] = "文字色の水やりﾓｰﾄﾞ";
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
