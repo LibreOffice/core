@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: os $ $Date: 2002-01-18 09:04:33 $
+ *  last change: $Author: dvo $ $Date: 2002-02-04 18:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,10 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX //autogen
+#include <svx/frmdiritem.hxx>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -629,6 +633,14 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
             ((SfxPoolItem&)aFrmSz).PutValue(aSizeVal, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
             rToSet.Put(aFrmSz);
         }
+    }
+    uno::Any* pFrameDirection = 0;
+    GetProperty(RES_FRAMEDIR, 0, pFrameDirection);
+    if(pFrameDirection)
+    {
+        SvxFrameDirectionItem aAttr(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
+        aAttr.PutValue(*pFrameDirection, 0);
+        rToSet.Put(aAttr);
     }
     uno::Any* pUnknown = 0;
     GetProperty(RES_UNKNOWNATR_CONTAINER, 0, pUnknown);
