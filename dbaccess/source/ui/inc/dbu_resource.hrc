@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@
 #define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START + 17
 #define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 18
 #define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 19
+#define ERROR_INVALID_TABLE_NAME_LENGTH RID_ERRORBOX_START + 20
 
 
 //========================================================================
@@ -477,6 +478,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.66  2002/02/06 07:23:39  oj
+ *  #96957# new handling inserted for context menu and accessibility
+ *
  *  Revision 1.65  2002/01/24 17:38:31  fs
  *  incorporate the improvements suggested during code review of genericcontroller.*
  *

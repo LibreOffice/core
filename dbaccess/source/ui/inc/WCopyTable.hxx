@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,8 @@ namespace dbaui
         const ODatabaseExport::TColumnVector*   getDestVector() const   { return &m_aDestVec; }
         ::rtl::OUString getName() const { return m_sName; }
 
+        /** clears the dest vectors
+        */
         void clearDestColumns();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createTable();
