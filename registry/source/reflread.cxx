@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:37:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1687,6 +1687,33 @@ static RTFieldAccess TYPEREG_CALLTYPE getReferenceAccess(TypeReaderImpl hEntry, 
     return pEntry->m_pReferences->getReferenceAccess(index);
 }
 
+static sal_uInt32 TYPEREG_CALLTYPE getMISuperTypeCount(TypeReaderImpl hEntry)
+{
+    TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
+
+    if (pEntry == NULL) return 0;
+
+    if (pEntry->m_pCP == NULL) pEntry->init();
+
+    return pEntry->m_nSuperTypes;
+}
+
+static void TYPEREG_CALLTYPE getMISuperTypeName(TypeReaderImpl hEntry, rtl_uString** pSuperTypeName, sal_uInt16 index)
+{
+    TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
+
+    if (pEntry == NULL)
+    {
+        rtl_uString_new(pSuperTypeName);
+        return;
+    }
+
+    if (pEntry->m_pCP == NULL) pEntry->init();
+
+    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES + (index * sizeof(sal_uInt16))));
+    if ( pTmp )
+        rtl_string2UString( pSuperTypeName, pTmp, rtl_str_getLength(pTmp), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+}
 
 extern "C" RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
 {
@@ -1727,6 +1754,8 @@ extern "C" RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(v
         aApi.getReferenceType       = &getReferenceType;
         aApi.getReferenceDoku       = &getReferenceDoku;
         aApi.getReferenceAccess     = &getReferenceAccess;
+        aApi.getMISuperTypeCount    = &getMISuperTypeCount;
+        aApi.getMISuperTypeName     = &getMISuperTypeName;
 
         return (&aApi);
     }
