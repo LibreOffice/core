@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-26 21:46:08 $
+ *  last change: $Author: mtg $ $Date: 2001-10-30 13:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,9 @@
 #endif
 #include <hash_map>
 
-struct ContentInfo
+class ContentInfo : public cppu::OWeakObject
 {
+public:
     com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > xTunnel;
     bool bFolder;
     union
@@ -96,9 +97,9 @@ struct ContentInfo
     , xTunnel ( pNewFolder )
     {
     }
-    ~ContentInfo ()
+    virtual ~ContentInfo ()
     {
-        if (bFolder)
+        if ( bFolder )
             pFolder->releaseUpwardRef();
     }
 };
