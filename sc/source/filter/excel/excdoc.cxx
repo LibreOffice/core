@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
+ *  last change: $Author: vg $ $Date: 2001-04-19 09:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ inline void* DefRowXFs::Set( UINT16 nR, UINT16 nXF )
 
 inline void DefRowXFs::Get( const void* p, UINT16& rR, UINT16& rXF )
 {
-    rR = ( UINT16 ) p;
+    rR = ( UINT16 ) ( UINT32 ) p;
     rXF = ( UINT16 ) ( ((UINT32)p) >> 16 );
 }
 
