@@ -2487,8 +2487,8 @@
             </node>
             <node oor:name=".uno:TableBoundaries" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Gitternetzlinien ausblenden</value>
-                    <value xml:lang="en-US">~Hide Gridlines</value>
+                    <value xml:lang="de">Tabellenbegrenzungen</value>
+                    <value xml:lang="en-US">Table Boundaries</value>
                 </prop>
             </node>
             <node oor:name=".uno:ShowBookview" oor:op="replace">
