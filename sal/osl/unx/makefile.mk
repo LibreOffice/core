@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:01:22 $
+#   last change: $Author: hr $ $Date: 2004-02-04 15:30:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/file_stat.obj
 #.ENDIF
 
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF
