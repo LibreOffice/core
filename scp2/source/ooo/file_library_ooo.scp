@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: rt $ $Date: 2004-03-30 14:51:08 $
+*  last change: $Author: hr $ $Date: 2004-04-14 11:54:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1187,7 +1187,14 @@ STD_UNO_LIB_FILE( gid_File_Lib_Pdffilter, pdffilter)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pk , pk)
 
-STD_LIB_FILE( gid_File_Lib_Pkgchk , pkgchk)
+File gid_File_Lib_Deployment
+#if defined UNX
+    Name = STRING(CONCAT5(deployment,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
+#else
+    Name = STRING(CONCAT4(deployment,OFFICEUPD,DLLSUFFIX,.uno.dll));
+#endif
+    PACKED_UNO_LIB_FILE_BODY;
+End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pl , pl)
 
@@ -1636,6 +1643,10 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpftp1,ucpftp1)
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucphier1,ucphier1)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
+
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
+
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
 File gid_File_Lib_Myspell
     TXT_FILE_BODY;
