@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-12 10:16:23 $
+ *  last change: $Author: sj $ $Date: 2001-04-09 17:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,22 +696,48 @@ BOOL SdPPTImport::Import()
                 pMPage->NbcInsertObject( pObj );
 
             ProcessData aProcessData( *(*pList)[ nAktPageNum ], (SdPage*)pMPage );
-
-            // und nun die Page nach Objekten abklappern
-            ULONG nObjAnz = GetObjCount();
-            for ( ULONG nObjNum = 0; nObjNum < nObjAnz; nObjNum++ )
+            sal_uInt32 nFPosMerk = rStCtrl.Tell();
+            DffRecordHeader aPageHd;
+            if ( SeekToAktPage( &aPageHd ) )
             {
-                SdrObject* pObj = NULL;
-                ULONG nFPosMerk = rStCtrl.Tell();
-                if ( SeekToObj( nObjNum ) )
-                    pObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
-                rStCtrl.Seek( nFPosMerk );
-                if ( pObj )
+                sal_uInt32 nPageRecEnd = aPageHd.GetRecEndFilePos();
+                DffRecordHeader aPPDrawHd;
+                if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, nPageRecEnd, &aPPDrawHd ) )
                 {
-                    pObj->SetLayer( nBackgroundObjectsLayerID );
-                    pMPage->NbcInsertObject( pObj );
+                    sal_uInt32 nPPDrawEnd = aPPDrawHd.GetRecEndFilePos();
+                    DffRecordHeader aEscherF002Hd;
+                    if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, nPPDrawEnd, &aEscherF002Hd ) )
+                    {
+                        sal_uInt32 nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
+                        DffRecordHeader aEscherObjListHd;
+                        if ( SeekToRec( rStCtrl, DFF_msofbtSpgrContainer, nEscherF002End, &aEscherObjListHd ) )
+                        {
+                            sal_uInt32 nObjCount = 0;
+                            while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
+                            {
+                                DffRecordHeader aHd;
+                                rStCtrl >> aHd;
+                                if ( ( aHd.nRecType == DFF_msofbtSpContainer ) || ( aHd.nRecType == DFF_msofbtSpgrContainer ) )
+                                {
+                                    if ( nObjCount++ )      // skipping the first object
+                                    {
+                                        aHd.SeekToBegOfRecord( rStCtrl );
+                                        SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                        if ( pObj )
+                                        {
+                                            pObj->SetLayer( nBackgroundObjectsLayerID );
+                                            pMPage->NbcInsertObject( pObj );
+                                        }
+                                    }
+                                }
+                                aHd.SeekToEndOfRecord( rStCtrl );
+                            }
+                        }
+                    }
                 }
             }
+            rStCtrl.Seek( nFPosMerk );
+
             ImportPageEffect( (SdPage*)pMPage );
             if( pStbMgr )
                 pStbMgr->SetState( nImportedPages++ );
