@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,8 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
     XMLPropertyState*       pPMScaleTo          = NULL;
     XMLPropertyState*       pPMScaleToPages     = NULL;
+    XMLPropertyState*       pPMScaleToX         = NULL;
+    XMLPropertyState*       pPMScaleToY         = NULL;
 
     XMLPropertyState*       pPrint              = NULL;
 
@@ -415,6 +417,8 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTF_PM_FOOTERDYNAMIC:      pPMFooterDynamic    = pProp;    break;
             case CTF_PM_SCALETO:            pPMScaleTo          = pProp;    break;
             case CTF_PM_SCALETOPAGES:       pPMScaleToPages     = pProp;    break;
+            case CTF_PM_SCALETOX:           pPMScaleToX         = pProp;    break;
+            case CTF_PM_SCALETOY:           pPMScaleToY         = pProp;    break;
         }
         if (nPrintId == CTF_PM_PRINTMASK)
         {
@@ -445,6 +449,10 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         lcl_RemoveStateIfZero16( pPMScaleTo );
     if( pPMScaleToPages )
         lcl_RemoveStateIfZero16( pPMScaleToPages );
+    if( pPMScaleToX )
+        lcl_RemoveStateIfZero16( pPMScaleToX );
+    if( pPMScaleToY )
+        lcl_RemoveStateIfZero16( pPMScaleToY );
 
     if (pPrint)
     {
