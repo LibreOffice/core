@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-30 09:17:48 $
+ *  last change: $Author: vg $ $Date: 2002-05-16 14:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,7 @@ String STR_DELETE_STYLE_USED
     Text[ chinese_traditional ] = "ζ‚¨θ¦εªι™¤η„ζ―δΈ€ε€‹δ½Ώη”¨η„ζ¨£εΌοΉ—\n";
     Text[ arabic ] = "ΓδΚ ΗαΒδ ΘΥΟΟ ΝΠέ δγΨ ήνΟ ΗαΗΣΚΞΟΗγ!\n";
     Text[ greek ] = "Διαγράφετε ένα πρότυπο που εφαρμόστηκε!\n";
-    Text[ korean ] = "μ‚¬μ©λ ν…ν”λ¦Ώμ„ μ‚­μ ν•κ³  μμµλ‹λ‹¤!\n";
+    Text[ korean ] = "μ‚¬μ©λ μ¤νƒ€μΌμ„ μ‚­μ ν•κ³  μμµλ‹λ‹¤!\n";
     Text[ turkish ] = "Kullanύlan bir ώablonu siliyorsunuz!\n";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "΅Usted estα borrando un estilo que ha sido aplicado!\n";
