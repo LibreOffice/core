@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 11:03:59 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,7 +1336,7 @@ String SCSTR_REMOVE
     Text [ portuguese ] = "~Eliminar" ;
     Text [ finnish ] = "~Poista" ;
     Text [ danish ] = "Slet" ;
-    Text [ french ] = "~Supprimer" ;
+    Text [ french ] = "Supprimer" ;
     Text [ swedish ] = "~Radera" ;
     Text [ dutch ] = "~Wissen" ;
     Text [ spanish ] = "~Eliminar" ;
@@ -1363,7 +1363,7 @@ String SCSTR_CANCEL
     Text [ portuguese ] = "Cancela~r" ;
     Text [ finnish ] = "Peruu~ta" ;
     Text [ danish ] = "Annuller" ;
-    Text [ french ] = "~Annuler" ;
+    Text [ french ] = "Annuler" ;
     Text [ swedish ] = "Av~bryt" ;
     Text [ dutch ] = "~Annuleren" ;
     Text [ spanish ] = "Can~celar" ;
@@ -1391,7 +1391,7 @@ String SCSTR_MODIFY
     Text [ portuguese ] = "Modif~icar" ;
     Text [ finnish ] = "~Muokkaa" ;
     Text [ danish ] = "Modificer" ;
-    Text [ french ] = "~Modifier" ;
+    Text [ french ] = "Modifier" ;
     Text [ swedish ] = "~Ändra" ;
     Text [ dutch ] = "Wij~zigen" ;
     Text [ spanish ] = "~Modificar" ;
