@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,7 +1011,16 @@ void Application::SystemSettingsChanging( AllSettings& rSettings,
 void Application::MergeSystemSettings( AllSettings& rSettings )
 {
 #ifndef REMOTE_APPSERVER
-    Window* pWindow = ImplGetDefaultWindow();
+    Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    if( ! pWindow )
+        pWindow = ImplGetDefaultWindow();
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( !pSVData->maAppData.mbSettingsInit )
+    {
+        pWindow->ImplGetFrame()->UpdateSettings( *pSVData->maAppData.mpSettings );
+        pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
+        pSVData->maAppData.mbSettingsInit = TRUE;
+    }
     pWindow->ImplGetFrame()->UpdateSettings( rSettings );
     pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
 #endif
@@ -1640,9 +1649,14 @@ Window* Application::GetDefDialogParent()
             else
                 return NULL;
         }
+        // last active application frame
+        else if( pWin = pSVData->maWinData.mpActiveApplicationFrame )
+        {
+            return pWin->mpFrameWindow->ImplGetWindow();
+        }
         else
         {
-            // first visible top window
+            // first visible top window (may be totally wrong....)
             pWin = pSVData->maWinData.mpFirstFrame;
             while( pWin )
             {
@@ -2331,4 +2345,21 @@ bool Application::GetShowImeStatusWindowDefault()
 BOOL Application::IsAccessibilityEnabled()
 {
     return FALSE;
+}
+
+BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
+{
+    BOOL bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
+
+    if( !bRet && bShowCancel && !rCancelled )
+    {
+        // disable accessibility if the user chooses to continue
+        AllSettings aSettings = Application::GetSettings();
+        MiscSettings aMisc = aSettings.GetMiscSettings();
+        aMisc.SetEnableATToolSupport( FALSE );
+        aSettings.SetMiscSettings( aMisc );
+        Application::SetSettings( aSettings );
+    }
+
+    return bRet;
 }
