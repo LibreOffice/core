@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_calc.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:08:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,4 +469,214 @@ RegistryItem gid_Regitem__Sxc
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".sxc";
     Value = "soffice.StarCalcDocument.6";
+End
+
+// new oos file extension 
+
+RegistryItem gid_Regitem__Oos
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".oos";
+    Value = "openoffice.CalcDocument.1";
+End
+
+RegistryItem gid_Regitem_Oos_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".oos";
+    Name = "Content Type";
+    Value = "application/x-vnd.oasis.openoffice.spreadsheet";
+End
+
+RegistryItem gid_Regitem_Oos_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "MIME\Database\Content Type\application/x-vnd.oasis.openoffice.spreadsheet";
+    Name = "Extension";
+    Value = ".oos";
+End
+
+RegistryItem gid_Regitem_Oos_Openoffice_Calcdocument_1_Shellnew
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".oos\openoffice.CalcDocument.1\ShellNew";
+    Name = "FileName";
+    Value = "soffice.oos";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument\CurVer";
+    Value = "openoffice.CalcDocument.1";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1";
+    REG_VALUE_LNG(OO_CALC)
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\CLSID";
+    Value = "{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,3";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\Insertable";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\shell\open\command";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "openoffice.CalcDocument.1\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+// new ots file extension 
+
+RegistryItem gid_Regitem_Ots
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".ots";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "openoffice.CalcTemplate.1";
+End
+
+RegistryItem gid_Regitem_Ots_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ots";
+    Name = "Content Type";
+    Value = "application/x-vnd.oasis.openoffice.spreadsheet";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    REG_VALUE_LNG(OO_CALC_TEMPLATE)
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1\DefaultIcon";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "<progpath>\program\soffice.exe,4";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1\shell";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "new";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1\shell\new";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1\shell\new\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1\shell\open\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1\shell\print\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "openoffice.CalcTemplate.1\shell\printto\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
