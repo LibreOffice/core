@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-28 23:28:06 $
+ *  last change: $Author: pluby $ $Date: 2000-10-29 06:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,14 @@ void NSApp_init();
 
 // Release applications's global GUI objects
 void NSApp_release();
+
+// Get next event from the application event queue. If there are no events in
+// the queue and bWait is true, wait for next event to be posted to the queue.
+// Otherwise, return immediately.
+MSG NSApp_nextEvent( BOOL bWait );
+
+// Dispatch events
+void NSApp_sendEvent( MSG hMsg );
 
 #ifdef __cplusplus
 }

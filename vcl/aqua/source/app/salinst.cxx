@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-28 01:31:50 $
+ *  last change: $Author: pluby $ $Date: 2000-10-29 06:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
 #endif
 
 // =======================================================================
@@ -602,7 +606,7 @@ void SalInstance::AcquireYieldMutex( ULONG nCount )
 // -----------------------------------------------------------------------
 
 #ifdef WIN
-static void ImplSalDispatchMessage( MSG* pMsg )
+static void ImplSalDispatchMessage( MSG *pMsg )
 {
     SalData* pSalData = GetSalData();
     if ( pSalData->mpFirstObject )
@@ -610,7 +614,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         if ( ImplSalPreDispatchMsg( pMsg ) )
             return;
     }
-    LRESULT lResult = ImplDispatchMessage( pMsg );
+    LONG lResult = ImplDispatchMessage( pMsg );
     if ( pSalData->mpFirstObject )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
@@ -618,9 +622,9 @@ static void ImplSalDispatchMessage( MSG* pMsg )
 
 // -----------------------------------------------------------------------
 
+#ifdef WIN
 void ImplSalYield( BOOL bWait )
 {
-#ifdef WIN
     MSG aMsg;
 
     if ( bWait )
@@ -639,16 +643,16 @@ void ImplSalYield( BOOL bWait )
             ImplSalDispatchMessage( &aMsg );
         }
     }
-#endif
 }
+#endif
 
 // -----------------------------------------------------------------------
 
 void SalInstance::Yield( BOOL bWait )
 {
-#ifdef WIN
     SalYieldMutex*  pYieldMutex = maInstData.mpSalYieldMutex;
     SalData*        pSalData = GetSalData();
+#ifdef WIN
     DWORD           nCurThreadId = GetCurrentThreadId();
     ULONG           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
     ULONG           n = nCount;
@@ -677,6 +681,15 @@ void SalInstance::Yield( BOOL bWait )
             ImplSalYieldMutexAcquireWithWait();
             n--;
         }
+    }
+#else
+    // Try to get an event from the event queue. If an event is available,
+    // dispatch it. Note that if bWait is true, we will wait indefinitely
+    // for the next event if no event is pending in the queue.
+    MSG aMsg = NSApp_nextEvent( bWait );
+    if ( aMsg )
+    {
+        NSApp_sendEvent( aMsg );
     }
 #endif
 }
@@ -884,11 +897,18 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
     return (SalFrame*)ImplSendMessage( maInstData.mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
 #else
     SalFrame *pFrame = new SalFrame;
+
      // Stub code: Mac OS X does not support child windows so return NULL until
     // we figure how to implement a good substitute for a child window
     if( pParent )
         return NULL;
+
     pFrame->maFrameData.mhWnd = NSWindow_new( nSalFrameStyle );
+
+    // Stub code: Run event loop here since we have not ported past this
+    // method. This code should eventually be removed as porting continues.
+    Application::Execute();
+
     return pFrame;
 #endif
 }

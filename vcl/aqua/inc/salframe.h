@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-28 01:31:50 $
+ *  last change: $Author: pluby $ $Date: 2000-10-29 06:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ extern "C" {
 HWND NSWindow_new( ULONG nSalFrameStyle );
 
 // Release a native NSWindow
-void NSWindow_release( HWND window );
+void NSWindow_release( HWND hWindow );
 
 #ifdef __cplusplus
 }
