@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:03:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,16 +182,24 @@ void SbaTableQueryBrowser::AddSupportedFeatures()
 {
     SbaXDataBrowserController::AddSupportedFeatures();
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Title")]                           = ID_BROWSER_TITLE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBrowserExplorer")]               = ID_BROWSER_EXPLORER;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Title"))]                               = ID_BROWSER_TITLE;
+    if ( !m_bShowMenu )
+    {
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBrowserExplorer"))]                   = ID_BROWSER_EXPLORER;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBFormLetter")]                   = ID_BROWSER_FORMLETTER;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBInsertColumns")]                = ID_BROWSER_INSERTCOLUMNS;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBInsertContent")]                = ID_BROWSER_INSERTCONTENT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBDocumentDataSource")]           = ID_BROWSER_DOCUMENT_DATASOURCE;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBFormLetter"))]                       = ID_BROWSER_FORMLETTER;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBInsertColumns"))]                    = ID_BROWSER_INSERTCOLUMNS;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBInsertContent"))]                    = ID_BROWSER_INSERTCONTENT;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBDocumentDataSource"))]               = ID_BROWSER_DOCUMENT_DATASOURCE;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:CloseWin")]                        = ID_BROWSER_CLOSE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBRebuildData")]                   = ID_BROWSER_REFRESH_REBUILD;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/FormLetter"))]        = ID_BROWSER_FORMLETTER;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/InsertColumns"))]     = ID_BROWSER_INSERTCOLUMNS;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/InsertContent"))]     = ID_BROWSER_INSERTCONTENT;
+        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/DocumentDataSource"))]= ID_BROWSER_DOCUMENT_DATASOURCE;
+    }
+
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"))]                            = ID_BROWSER_CLOSE;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRebuildData"))]                       = ID_BROWSER_REFRESH_REBUILD;
 }
 // -------------------------------------------------------------------------
 String SbaTableQueryBrowser::getURL() const
