@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-12 14:39:50 $
+ *  last change: $Author: pl $ $Date: 2002-05-21 16:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 #include <psprint/strhelper.hxx>
 #ifdef SOLARIS
 #include <ieeefp.h> // finite
+#include <alloca.h>
 #endif
+#include <stdlib.h>
 #include <math.h> // for isnan
 #include <string.h> // strcpy
 
@@ -162,7 +164,7 @@ String GetCommandLineToken( int nToken, const String& rLine )
         return String();
 
     int nActualToken = 0;
-    sal_Unicode* pBuffer = new sal_Unicode[ nLen + 1 ];
+    sal_Unicode* pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*( nLen + 1 ) );
     const sal_Unicode* pRun = rLine.GetBuffer();
     sal_Unicode* pLeap;
 
@@ -203,7 +205,6 @@ String GetCommandLineToken( int nToken, const String& rLine )
     *pLeap = 0;
 
     String aRet( pBuffer );
-    delete pBuffer;
     return aRet;
 }
 
@@ -214,7 +215,7 @@ ByteString GetCommandLineToken( int nToken, const ByteString& rLine )
         return ByteString();
 
     int nActualToken = 0;
-    char* pBuffer = new char[ nLen + 1 ];
+    char* pBuffer = (char*)alloca( nLen + 1 );
     const char* pRun = rLine.GetBuffer();
     char* pLeap;
 
@@ -255,7 +256,6 @@ ByteString GetCommandLineToken( int nToken, const ByteString& rLine )
     *pLeap = 0;
 
     ByteString aRet( pBuffer );
-    delete pBuffer;
     return aRet;
 }
 
@@ -367,7 +367,7 @@ String WhitespaceToSpace( const String& rLine, BOOL bProtect )
     if( ! nLen )
         return String();
 
-    sal_Unicode *pBuffer = new sal_Unicode[ nLen + 1 ];
+    sal_Unicode *pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*(nLen + 1) );
     const sal_Unicode *pRun = rLine.GetBuffer();
     sal_Unicode *pLeap = pBuffer;
 
@@ -415,7 +415,6 @@ String WhitespaceToSpace( const String& rLine, BOOL bProtect )
         *pLeap = 0;
 
     String aRet( *pBuffer == ' ' ? pBuffer+1 : pBuffer );
-    delete pBuffer;
     return aRet;
 }
 
@@ -425,7 +424,7 @@ ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
     if( ! nLen )
         return ByteString();
 
-    char *pBuffer = new char[ nLen + 1 ];
+    char *pBuffer = (char*)alloca( nLen + 1 );
     const char *pRun = rLine.GetBuffer();
     char *pLeap = pBuffer;
 
@@ -473,7 +472,6 @@ ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
         *pLeap = 0;
 
     ByteString aRet( *pBuffer == ' ' ? pBuffer+1 : pBuffer );
-    delete pBuffer;
     return aRet;
 }
 
