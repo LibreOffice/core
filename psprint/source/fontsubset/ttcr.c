@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttcr.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:52:11 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.5 2004-02-04 11:52:11 hr Exp $ */
+/* $Id: ttcr.c,v 1.6 2004-03-17 10:50:16 obo Exp $ */
 
 /*
  * TrueTypeCreator method implementation
@@ -301,7 +301,7 @@ void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
     TrueTypeCreator *ptr = smalloc(sizeof(TrueTypeCreator));
 
     ptr->tables = listNewEmpty();
-    listSetElementDtor(ptr->tables, TrueTypeTableDispose);
+    listSetElementDtor(ptr->tables, (void(*)(void*))TrueTypeTableDispose);
 
     ptr->tag = tag;
 
@@ -350,7 +350,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     sal_uInt8 *ttf;
     int i=0, n;
     TableEntry *te;
-    sal_uInt8 *head = NULL;  /* saved pointer to the head table data for checkSumAdjustment calculation */
+    sal_uInt8 *head = NULL;     /* saved pointer to the head table data for checkSumAdjustment calculation */
 
     if ((n = listCount(_this->tables)) == 0) return SF_TTFORMAT;
 
@@ -630,7 +630,7 @@ static void TrueTypeTableDispose_post(TrueTypeTable *_this)
             if (p->format == 0x00030000) {
                 /* do nothing */
             } else {
-                fprintf(stderr, "Unsupported format of a 'post' table: %08X.\n", p->format);
+                fprintf(stderr, "Unsupported format of a 'post' table: %08X.\n", (int)p->format);
             }
             free(p);
         }
@@ -957,7 +957,7 @@ static int GetRawData_post(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
         PutUInt16((sal_uInt16)p->isFixedPitch, post, 12, 1);
         ret = TTCR_OK;
     } else {
-        fprintf(stderr, "Unrecognized format of a post table: %08X.\n", p->format);
+        fprintf(stderr, "Unrecognized format of a post table: %08X.\n", (int)p->format);
         ret = TTCR_POSTFORMAT;
     }
 
