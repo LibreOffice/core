@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesPanel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:54:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include "MasterPagesPanel.hxx"
-#include "../ScrollPanel.hxx"
 #include "CurrentMasterPagesSelector.hxx"
 #include "RecentMasterPagesSelector.hxx"
 #include "AllMasterPagesSelector.hxx"
@@ -77,24 +76,22 @@ namespace sd { namespace toolpanel { namespace controls {
 
 
 MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
-    : SubToolPanel (pParent)
+    : ScrollPanel (pParent)
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
-
-    ScrollPanel* pScrollPanel = new ScrollPanel (this);
+    controls::MasterPagesSelector* pSelector;
 
     // Create a panel with the master pages that are in use by the currently
     // edited document.
     DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(
         rBase.GetMainViewShell());
-    controls::MasterPagesSelector* pSelector
-        = new controls::CurrentMasterPagesSelector (
-            this,
-            *pDocument,
-            rBase,
-            *pDrawViewShell);
+    pSelector = new controls::CurrentMasterPagesSelector (
+        this,
+        *pDocument,
+        rBase,
+        *pDrawViewShell);
     pSelector->LateInit();
-    pScrollPanel->AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector),
         SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
         HID_SD_CURRENT_MASTERS);
@@ -106,7 +103,7 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         *pDocument,
         rBase);
     pSelector->LateInit();
-    pScrollPanel->AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector),
         SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE),
         HID_SD_RECENT_MASTERS);
@@ -119,12 +116,10 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         rBase,
         *pDrawViewShell);
     pSelector->LateInit();
-    pScrollPanel->AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector),
         SdResId(STR_TASKPANEL_ALL_MASTER_PAGES_TITLE),
         HID_SD_ALL_MASTERS);
-
-    AddControl (::std::auto_ptr<TreeNode>(pScrollPanel));
     pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_ALL) );
 }
 
