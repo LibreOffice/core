@@ -43,7 +43,7 @@ public class ObjectViewContainer
 
         // Add new views.
         Add (ContextView.Create(xContext));
-        //        Add (StateSetView.Create(xContext));
+        Add (StateSetView.Create(xContext));
         Add (FocusView.Create(xContext));
         Add (SelectionView.Create(xContext));
         Add (TextView.Create(xContext));
