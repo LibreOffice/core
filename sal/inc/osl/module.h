@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-09 18:07:42 $
+ *  last change: $Author: hr $ $Date: 2002-08-14 16:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ extern "C" {
 
 #elif defined(SAL_UNX)
 #if defined(MACOSX)
-#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name ".dylib." version ".framework"
+#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name ".dylib." version
 #else
 #define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name SAL_DLLEXTENSION "." version
 #endif
