@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:50 $
+ *  last change: $Author: pluby $ $Date: 2000-12-01 22:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,23 @@
 #ifndef _SV_SV_H
 #include <sv.h>
 #endif
+
+#ifdef __cplusplus
+
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
+
+#endif // __cplusplus
+
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
 #endif
 #ifndef _SV_VCLWINDOW_H
 #include <VCLWindow.h>
 #endif
+
+#ifdef __cplusplus
 
 class AutoTimer;
 class SalInstance;
@@ -82,6 +90,15 @@ class SalFrame;
 class SalVirtualDevice;
 class SalPrinter;
 class Font;
+
+#else // __cplusplus
+
+#define AutoTimer void
+#define SalInstance void
+#define SalVirtualDevice void
+#define SalPrinter void
+
+#endif // __cplusplus
 
 // -----------
 // - SalData -
@@ -97,9 +114,8 @@ struct SalData
     long*                   mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
-    ULONG                   mnTimerMS;              // Current Time (in MS) of the Timer
-    ULONG                   mnTimerOrgMS;           // Current Original Time (in MS)
-    UINT32                  mnTimerId;              // windows timer id
+    double                  mnTimerExpiration;      // Current expiration time (in seconds) of the Timer
+    double                  mnTimerInterval;        // Current interval (in seconds) of the Timer
     SALTIMERPROC            mpTimerProc;            // timer callback proc
     VCLWINDOW               mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
@@ -118,8 +134,19 @@ struct SalData
     int                     mnSageStatus;           // Status der Sage-DLL (DISABLE_AGENT == nicht vorhanden)
 };
 
+#ifdef __cplusplus
+
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
 inline SalData* GetSalData() { return (SalData*)ImplGetSVData()->mpSalData; }
 inline SalData* GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData; }
+
+#else // __cplusplus
+
+// C wrapper functions around SetSalData, GetSalData, and GetAppSalData
+void SalSetSalData( struct SalData* pData );
+struct SalData* SalGetSalData();
+struct SalData* SalGetAppSalData();
+
+#endif // __cplusplus
 
 #endif  // _SV_SALDATA_HXX

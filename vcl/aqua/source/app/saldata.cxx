@@ -1,16 +1,16 @@
 /*************************************************************************
  *
- *  $RCSfile: saltimer.cxx,v $
+ *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: pluby $ $Date: 2000-12-01 22:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
+ *   - GNU Lesser General Public License Version 2.1
+ *   - Sun Industry Standards Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
  *
@@ -59,19 +59,10 @@
  *
  ************************************************************************/
 
-#define _SV_SALTIMER_CXX
+#define _SV_SALDATA_CXX
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
-#endif
-#ifndef _SV_SALTIMER_HXX
-#include <saltimer.hxx>
-#endif
-#ifndef _SV_SALTIMER_HXX
-#include <saltimer.h>
-#endif
-#ifndef _SV_VCLDATE_H
-#include <VCLDate.h>
 #endif
 
 // =======================================================================
@@ -80,41 +71,26 @@
 extern "C" {
 #endif // __cplusplus
 
-void CallSalTimerCallbackProc()
+void SalSetSalData( struct SalData* pData )
 {
-    SalData* pSalData = GetSalData();
-    pSalData->mpTimerProc();
+    SetSalData( pData );
+}
+
+// -----------------------------------------------------------------------
+
+struct SalData* SalGetSalData()
+{
+    return GetSalData();
+}
+
+// -----------------------------------------------------------------------
+
+struct SalData* SalGetAppSalData()
+{
+    return GetAppSalData();
 }
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-// =======================================================================
-
-void SalTimer::Start( ULONG nMS )
-{
-    SalData* pSalData = GetSalData();
-
-    pSalData->mnTimerInterval = (double)nMS / 1000;
-    pSalData->mnTimerExpiration =
-        VCLDate_TimeIntervalSince1970() + pSalData->mnTimerInterval;
-}
-
-// -----------------------------------------------------------------------
-
-void SalTimer::Stop()
-{
-    SalData* pSalData = GetSalData();
-
-    pSalData->mnTimerInterval = 0;
-    pSalData->mnTimerExpiration = 0;
-}
-
-// -----------------------------------------------------------------------
-
-void SalTimer::SetCallback( SALTIMERPROC pProc )
-{
-    SalData* pSalData = GetSalData();
-    pSalData->mpTimerProc = pProc;
-}

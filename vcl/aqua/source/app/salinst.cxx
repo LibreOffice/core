@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:52 $
+ *  last change: $Author: pluby $ $Date: 2000-12-01 22:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,9 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
-
 #define _SV_SALINST_CXX
+
+#include <stdio.h>
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2000-11-01 22:12:30 $
+#   last change: $Author: pluby $ $Date: 2000-12-01 22:29:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,12 +86,14 @@ OBJFILES=	$(OBJ)$/salmain.obj			\
             $(OBJ)$/VCLAutoreleasePool.obj
 
 SLOFILES=   $(SLO)$/salinst.obj			\
+            $(SLO)$/saldata.obj			\
             $(SLO)$/saltimer.obj		\
             $(SLO)$/salsound.obj		\
             $(SLO)$/salsys.obj			\
             $(SLO)$/salmain.obj			\
             $(SLO)$/VCLApplication.obj	\
-            $(SLO)$/VCLAutoreleasePool.obj
+            $(SLO)$/VCLAutoreleasePool.obj	\
+            $(SLO)$/VCLDate.obj
 
 EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
             $(OBJ)$/salmain.obj
