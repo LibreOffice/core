@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,4 +174,10 @@ void SAL_CALL ODbaseTables::dropByIndex( sal_Int32 index ) throw(SQLException, I
     dropByName((*m_aElements[index]).first);
 }
 // -------------------------------------------------------------------------
+//------------------------------------------------------------------
+Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException)
+{
+    typedef sdbcx::OCollection OTables_BASE;
+    return OTables_BASE::queryInterface(rType);
+}
 
