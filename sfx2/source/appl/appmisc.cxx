@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:50:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,10 +139,7 @@
 #include "app.hxx"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "cfgmgr.hxx"
-#include "cfgitem.hxx"
 #include "tbxctrl.hxx"
-#include "tbxconf.hxx"
 #include "stbitem.hxx"
 #include "accitem.hxx"
 #include "mnuitem.hxx"
@@ -153,7 +150,6 @@
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "workwin.hxx"
-//#include "iodlg.hxx"
 #include "intro.hxx"
 #include "about.hxx"
 #include "fcontnr.hxx"
@@ -167,7 +163,6 @@
 #include "openflag.hxx"
 #include "viewsh.hxx"
 #include "appimp.hxx"
-//#include "bmkmenu.hxx"
 #include "objface.hxx"
 #include "helper.hxx"   // SfxContentHelper::Kill()
 
@@ -221,6 +216,7 @@ IMPL_LINK( SfxSpecialConfigError_Impl, TimerHdl, Timer*, pTimer )
 
 //====================================================================
 
+#define SFX_ITEMTYPE_STATBAR             4
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 {
@@ -381,35 +377,6 @@ ModalDialog* SfxApplication::CreateAboutDialog()
 }
 
 //--------------------------------------------------------------------
-
-void SfxApplication::HandleConfigError_Impl( sal_uInt16 nErrorCode ) const
-{
-    sal_uInt16 nResId = 0;
-    switch(nErrorCode)
-    {
-        case SfxConfigManager::ERR_READ:
-            nResId = MSG_ERR_READ_CFG;
-            break;
-        case SfxConfigManager::ERR_WRITE:
-            nResId = MSG_ERR_WRITE_CFG;
-            break;
-        case SfxConfigManager::ERR_OPEN:
-            nResId = MSG_ERR_OPEN_CFG;
-            break;
-        case SfxConfigManager::ERR_FILETYPE:
-            nResId = MSG_ERR_FILETYPE_CFG;
-            break;
-        case SfxConfigManager::ERR_VERSION:
-            nResId = MSG_ERR_VERSION_CFG;
-            break;
-    }
-    DBG_ASSERT(nResId != 0, "unbekannte Fehlerkonstante aus Konfiguration");
-    if(nResId)
-    {
-        ErrorBox aErrorBox(NULL, SfxResId(nResId));
-        aErrorBox.Execute();
-    }
-}
 
 //--------------------------------------------------------------------
 #ifdef WNT
@@ -588,34 +555,6 @@ SfxSlotPool& SfxApplication::GetSlotPool( SfxViewFrame *pFrame ) const
         return *pSlotPool;
 }
 
-
-SfxAcceleratorManager* SfxApplication::GetAcceleratorManager() const
-{
-    // Accelerator immer mit ContainerBindings
-    SfxViewFrame *pFrame = pViewFrame;
-    if ( !pFrame )
-        return pAcceleratorMgr;
-
-    while ( pFrame->GetParentViewFrame_Impl() )
-        pFrame = pFrame->GetParentViewFrame_Impl();
-
-    SfxViewShell* pSh = 0;
-    if( pFrame )
-        pSh = pFrame->GetViewShell();
-    if ( pSh )
-    {
-        SfxAcceleratorManager *pMgr = pSh->GetAccMgr_Impl();
-        if ( pMgr )
-            return pMgr;
-    }
-
-    return pAcceleratorMgr;
-}
-
-SfxAcceleratorManager* SfxApplication::GetGlobalAcceleratorManager() const
-{
-    return pAcceleratorMgr;
-}
 
 ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon()
 {
