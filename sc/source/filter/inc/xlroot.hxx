@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:40:31 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
+class EditEngine;
 
 struct RootData;//!
 
@@ -85,6 +86,7 @@ struct XclRootData
 {
     typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEngineDefaulterPtr;
     typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEditEnginePtr;
+    typedef ::std::auto_ptr< EditEngine >               EditEnginePtr;
 
     XclBiff                     meBiff;         /// Current BIFF version.
     ScDocument&                 mrDoc;          /// The source or destination document.
@@ -100,6 +102,7 @@ struct XclRootData
 
     ScEditEngineDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
     ScHeaderEditEnginePtr       mpHFEditEngine; /// Edit engine for header/footer.
+    EditEnginePtr               mpDrawEditEng;  /// Edit engine for text boxes.
 
     ::std::auto_ptr< RootData > mpRDP;//!
 
@@ -122,12 +125,13 @@ class SfxObjectShell;
 class ScModelObj;
 class SfxPrinter;
 class SvNumberFormatter;
+class ScDocumentPool;
+class ScStyleSheetPool;
 class ScRangeName;
 class SvStorage;
 struct XclFontData;
 
-/** Access to global data for a filter object (imported or exported document)
-    from other classes. */
+/** Access to global data for a filter object (imported or exported document) from other classes. */
 class XclRoot
 {
 private:
@@ -186,6 +190,8 @@ public:
     ScEditEngineDefaulter&      GetEditEngine() const;
     /** Returns the edit engine for import/export of headers/footers. */
     ScHeaderEditEngine&         GetHFEditEngine() const;
+    /** Returns the edit engine for import/export of drawing text boxes. */
+    EditEngine&                 GetDrawEditEngine() const;
 
     /** Returns the highest possible cell address in a Calc document. */
     inline const ScAddress&     GetScMaxPos() const { return mrData.maScMaxPos; }
