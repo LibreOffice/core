@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 11:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace connectivity
 
             sal_Bool isPrepared() const { return m_bPrepared;}
             void prepareStatement();
+            void checkParameterIndex(sal_Int32 _parameterIndex);
 
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
