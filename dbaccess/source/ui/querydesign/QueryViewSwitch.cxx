@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 13:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,7 @@ void OQueryViewSwitch::Construct()
 void OQueryViewSwitch::initialize()
 {
     m_pDesignView->initialize();
-    if (static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode())
-        switchView();
+    switchView();
 }
 // -------------------------------------------------------------------------
 void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
