@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:08:01 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,14 +387,14 @@ TabPage TP_CHAR_URL
         Text [ English ] = "Text" ;
         Text[ english_us ] = "Te~xt";
         Text[ portuguese ] = "Te~xto";
-        Text[ russian ] = "Óêàçàíèå";
+        Text[ russian ] = "Òåêñò";
         Text[ greek ] = "Êåßìåíï";
         Text[ dutch ] = "~Tekst";
         Text[ french ] = "~Texte";
         Text[ spanish ] = "Texto";
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
-        Text[ swedish ] = "Hänv~isning";
+        Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "H~inweis";
         Text[ japanese ] = "•¶Žš—ñ(~K)";
@@ -455,7 +455,7 @@ TabPage TP_CHAR_URL
         Text [ English ] = "Frame" ;
         Text [ english_us ] = "Target Frame" ;
         Text [ portuguese_brazilian ] = "~Targetframe" ;
-        Text [ swedish ] = "~Ram" ;
+        Text [ swedish ] = "Ra~m" ;
         Text [ danish ] = "Frame" ;
         Text [ italian ] = "~Frame" ;
         Text [ spanish ] = "~Frame" ;
@@ -549,7 +549,7 @@ TabPage TP_CHAR_URL
         Text [ italian ] = "Per il ~sito visitato" ;
         Text [ spanish ] = "Vínculos ~visitados" ;
         Text [ french ] = "Lien ~visité" ;
-        Text [ swedish ] = "~Besökt länk" ;
+        Text [ swedish ] = "~Använd länk" ;
         Text [ danish ] = "Besøgt hyperlink" ;
         Text [ portuguese_brazilian ] = "~Besuchte Links" ;
         Text [ portuguese ] = "Links ~visitados" ;
@@ -586,7 +586,7 @@ TabPage TP_CHAR_URL
         Text [ spanish ] = "Vínculos no v~isitados" ;
         Text [ french ] = "Lien ~non visité" ;
         Text [ dutch ] = "N~iet-bezochte Link" ;
-        Text [ swedish ] = "~Obesökt länk" ;
+        Text [ swedish ] = "~Oanvänd länk" ;
         Text [ danish ] = "Ubesøgt hyperlink" ;
         Text [ portuguese_brazilian ] = "~Unbesuchte Links" ;
         Text [ portuguese ] = "~Link não visitado" ;
