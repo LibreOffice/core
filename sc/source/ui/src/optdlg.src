@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:38:28 $
+ *  last change: $Author: rt $ $Date: 2001-05-11 07:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,12 +202,12 @@ StringList [ language_user1 ] =\
             < " " ; Default ; > ;\
         < " " ; Default ; > ;\
         < " " ; Default ; > ;\
-    };
-StringList [ catalan ] =
-    {
-            < "Mostrar" ; Default ; > ;
-        < "Ocultar" ; Default ; > ;
-        < "Comodín" ; Default ; > ;
+    };\
+StringList [ catalan ] =\
+    {\
+            < "Mostrar" ; Default ; > ;\
+        < "Ocultar" ; Default ; > ;\
+        < "Comodín" ; Default ; > ;\
     };
 
 /**************************************************************************/
