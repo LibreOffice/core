@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-03 13:25:36 $
+ *  last change: $Author: sj $ $Date: 2002-08-08 08:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5350,7 +5350,11 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
     if ( !IsEmpty() )
     {
         if ( eSpType == mso_sptRectangle )
+        {
             pRet = new SdrRectObj( aSnapRect );
+            pRet->SetModel( pSdrModel );
+            pRet->SetItemSet(rSet);
+        }
         else if ( eSpType == mso_sptRoundRectangle )
         {
             sal_Int32 nW = aSnapRect.Right() - aSnapRect.Left();
@@ -5361,9 +5365,15 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
             nW = (sal_Int32)( (double)nW * fAdjust );
             rSet.Put( SdrEckenradiusItem( nW ) );
             pRet = new SdrRectObj( aSnapRect );
+            pRet->SetModel( pSdrModel );
+            pRet->SetItemSet(rSet);
         }
         else if ( eSpType == mso_sptEllipse )
+        {
             pRet = new SdrCircObj( OBJ_CIRC, aSnapRect );
+            pRet->SetModel( pSdrModel );
+            pRet->SetItemSet(rSet);
+        }
         else if ( eSpType == mso_sptArc )
         {   // the arc is something special, because sometimes the snaprect does not match
             Rectangle aPolyBoundRect;
@@ -5386,7 +5396,12 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 return NULL;
 
             if ( bFilled )      // ( filled ) ? we have to import an pie : we have to construct an arc
+            {
                 pRet = new SdrCircObj( OBJ_SECT, aPolyBoundRect, nStartAngle, nEndAngle );
+                pRet->NbcSetSnapRect( aSnapRect );
+                pRet->SetModel( pSdrModel );
+                pRet->SetItemSet(rSet);
+            }
             else
             {
                 Point aStart, aEnd, aCenter( aPolyBoundRect.Center() );
@@ -5410,7 +5425,6 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 aPolygon[ 0 ] = aPolygon[ 1 ];                              // try to get the arc boundrect
                 aPolygon[ nPt - 1 ] = aPolygon[ nPt - 2 ];
                 Rectangle aPolyArcRect( aPolygon.GetBoundRect() );
-
                 if ( aPolyArcRect != aPolyPieRect )
                 {
                     double  fYScale, fXScale;
@@ -5441,20 +5455,29 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                     fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
                     fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
 
-                    aSnapRect = Rectangle( Point( aSnapRect.Left() + (sal_Int32)fXOfs, aSnapRect.Top() + (sal_Int32)fYOfs ),
+                    aPolyArcRect = Rectangle( Point( aSnapRect.Left() + (sal_Int32)fXOfs, aSnapRect.Top() + (sal_Int32)fYOfs ),
                         Size( (sal_Int32)( aSnapRect.GetWidth() * fXScale ), (sal_Int32)( aSnapRect.GetHeight() * fYScale ) ) );
 
                 }
-                pRet = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
+                SdrCircObj* pObjCirc = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
+                pObjCirc->SetSnapRect( aPolyArcRect );
+                pObjCirc->SetModel( pSdrModel );
+                pObjCirc->SetItemSet( rSet );
+
+                SdrRectObj* pRect = new SdrRectObj( aPolyArcRect );
+                pRect->SetSnapRect( aPolyArcRect );
+                pRect->SetModel( pSdrModel );
+                pRect->SetItemSet( rSet );
+                pRect->SetItem( XLineStyleItem( XLINE_NONE ) );
+                pRect->SetItem( XFillStyleItem( XFILL_NONE ) );
+
+                pRet = new SdrObjGroup();
+                pRet->SetModel( pSdrModel );
+                ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pRect );
+                ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pObjCirc );
             }
-            pRet->NbcSetSnapRect( aSnapRect );
         }
-        if ( pRet )
-        {
-            pRet->SetModel( pSdrModel );
-            pRet->SetItemSet(rSet);
-        }
-        else if ( nNumElemVert )
+        if ( !pRet && nNumElemVert )
         {
             // Header auswerten
             XPolygon aXP( (sal_uInt16)nNumElemVert );
