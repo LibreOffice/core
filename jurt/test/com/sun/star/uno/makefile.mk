@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-09 10:16:25 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:25:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ TARGET := test_com_sun_star_uno
 PACKAGE := com$/sun$/star$/uno
 JAVATESTFILES := \
     AnyConverter_Test.java \
-    UnoRuntime_Test.java \
+    UnoRuntime_EnvironmentTest.java \
     WeakReference_Test.java
 JARFILES := ridl.jar
 
