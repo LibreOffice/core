@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 09:21:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef DBA_CORE_SHARED_CONNECTION_HXX
 #include "SharedConnection.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 
 namespace dbaccess
 {
@@ -71,6 +75,25 @@ using namespace ::com::sun::star::container;
 //  using namespace ::com::sun::star::reflection;
 using namespace connectivity;
 
+DBG_NAME(OSharedConnection)
+OSharedConnection::OSharedConnection(Reference< XAggregation >& _rxProxyConnection)
+            : OSharedConnection_BASE(m_aMutex)
+{
+    DBG_CTOR(OSharedConnection,NULL);
+    setDelegation(_rxProxyConnection,m_refCount);
+}
+// -----------------------------------------------------------------------------
+OSharedConnection::~OSharedConnection()
+{
+    DBG_DTOR(OSharedConnection,NULL);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OSharedConnection::disposing(void)
+{
+    OSharedConnection_BASE::disposing();
+    OConnectionWrapper::disposing();
+}
+// -----------------------------------------------------------------------------
 Reference< XStatement > SAL_CALL OSharedConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
