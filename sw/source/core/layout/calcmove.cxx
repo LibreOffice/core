@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:30:07 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,37 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             const SwFrm *pPrevFrm = pNewUpper->Lower();
             while ( pPrevFrm )
             {
-                (aRect.*fnRectX->fnSetTop)(
-                    (pPrevFrm->Frm().*fnRectX->fnGetBottom)() );
+                SwTwips nNewTop = (pPrevFrm->Frm().*fnRectX->fnGetBottom)();
+                // OD 2004-03-01 #106629#:
+                // consider lower spacing of last frame in a table cell
+                {
+                    // check, if last frame is inside table and if it includes
+                    // its lower spacing.
+                    if ( !pPrevFrm->GetNext() && pPrevFrm->IsInTab() &&
+                         pNewPage->GetFmt()->GetDoc()->IsAddParaSpacingToTableCells() )
+                    {
+                        const SwFrm* pLastFrm = pPrevFrm;
+                        // if last frame is a section, take its last content
+                        if ( pPrevFrm->IsSctFrm() )
+                        {
+                            pLastFrm = static_cast<const SwSectionFrm*>(pPrevFrm)->FindLastCntnt();
+                            if ( pLastFrm &&
+                                 pLastFrm->FindTabFrm() != pPrevFrm->FindTabFrm() )
+                            {
+                                pLastFrm = pLastFrm->FindTabFrm();
+                            }
+                        }
+
+                        if ( pLastFrm )
+                        {
+                            SwBorderAttrAccess aAccess( SwFrm::GetCache(), pLastFrm );
+                            const SwBorderAttrs& rAttrs = *aAccess.Get();
+                            nNewTop -= rAttrs.GetULSpace().GetLower();
+                        }
+                    }
+                }
+                (aRect.*fnRectX->fnSetTop)( nNewTop );
+
                 pPrevFrm = pPrevFrm->GetNext();
             }
 
@@ -916,12 +945,8 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //An der FixSize gibt der umgebende Frame die Groesse vor, die
             //Raender werden einfach abgezogen.
             const long nLeft = rAttrs.CalcLeft( this );
-#ifdef BIDI
             const long nRight = ((SwBorderAttrs&)rAttrs).CalcRight( this );
             (this->*fnRect->fnSetXMargins)( nLeft, nRight );
-#else
-            (this->*fnRect->fnSetXMargins)( nLeft, rAttrs.CalcRight() );
-#endif
 
             ViewShell *pSh = GetShell();
             SwTwips nWidthArea;
@@ -984,17 +1009,20 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //4. Der Abstand fuer TextFrms entspricht mindestens dem Durchschuss
 
             nUpper = CalcUpperSpace( &rAttrs, NULL );
-            // in balanced columned section frames we do not want the
-            // common border
-            sal_Bool bCommonBorder = sal_True;
-            if ( IsInSct() && GetUpper()->IsColBodyFrm() )
-            {
-                const SwSectionFrm* pSct = FindSctFrm();
-                bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
-            }
-            SwTwips nLower = bCommonBorder ?
-                             rAttrs.GetBottomLine( *(this) ) :
-                             rAttrs.CalcBottomLine();
+
+            // OD 2004-03-02 #106629# - use new method <CalcLowerSpace(..)>
+            SwTwips nLower = CalcLowerSpace( &rAttrs );
+//            // in balanced columned section frames we do not want the
+//            // common border
+//            sal_Bool bCommonBorder = sal_True;
+//            if ( IsInSct() && GetUpper()->IsColBodyFrm() )
+//            {
+//                const SwSectionFrm* pSct = FindSctFrm();
+//                bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
+//            }
+//            SwTwips nLower = bCommonBorder ?
+//                             rAttrs.GetBottomLine( this ) :
+//                             rAttrs.CalcBottomLine();
 
             (Prt().*fnRect->fnSetPosY)( (!bVert || bReverse) ? nUpper : nLower);
             nUpper += nLower;
@@ -1137,9 +1165,16 @@ void SwCntntFrm::MakeAll()
 
     //Wenn ein Follow neben seinem Master steht und nicht passt, kann er
     //gleich verschoben werden.
-    if( lcl_Prev( this ) && ((SwTxtFrm*)this)->IsFollow() && IsMoveable() )
+    if ( lcl_Prev( this ) && ((SwTxtFrm*)this)->IsFollow() && IsMoveable() )
     {
         bMovedFwd = TRUE;
+        // OD 2004-03-02 #106629# - If follow frame is in table, it's master
+        // will be the last in the current table cell. Thus, invalidate the
+        // printing area of the master,
+        if ( IsInTab() )
+        {
+            lcl_Prev( this )->InvalidatePrt();
+        }
         MoveFwd( bMakePage, FALSE );
     }
 
@@ -1754,6 +1789,17 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
             nSpace -= nUpper;
             if ( nSpace < 0 )
                 bRet = FALSE;
+        }
+
+        // OD 2004-03-01 #106629# - also consider lower spacing in table cells
+        if ( bRet && IsInTab() &&
+             pNewUpper->GetFmt()->GetDoc()->IsAddParaSpacingToTableCells() )
+        {
+            nSpace -= rAttrs.GetULSpace().GetLower();
+            if ( nSpace < 0 )
+            {
+                bRet = FALSE;
+            }
         }
 
         if ( bRet && !bSplit && pFrm->IsKeep( rAttrs ) )
