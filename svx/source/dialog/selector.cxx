@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 15:58:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,13 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHINFORMATION_HPP_
+#include <com/sun/star/frame/DispatchInformation.hpp>
+#endif
+
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -155,7 +162,47 @@ using namespace ::com::sun::star::script;
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 
+#define PRTSTR(x) rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
+
 SV_IMPL_PTRARR(SvxGroupInfoArr_Impl, SvxGroupInfoPtr);
+
+class TestOUString : public OUString
+{
+public:
+
+    TestOUString() : OUString()
+    { OSL_TRACE("Creating empty TestOUString"); }
+
+    TestOUString( OUString value ) : OUString( value )
+    { OSL_TRACE("Creating nontempty OUString: %s", PRTSTR(value)); }
+
+    ~TestOUString()
+    { OSL_TRACE("Destroying TestOUString: %s", PRTSTR(*this)); }
+};
+
+class ScriptInfo
+{
+private:
+
+    OUString m_sURI;
+    OUString m_sDescription;
+
+public:
+
+    ScriptInfo( const OUString& uri )
+        : m_sURI( uri ) {}
+    ~ScriptInfo() {}
+
+    void SetHelpText( const OUString& description )
+    {
+        if ( description.getLength() != 0 )
+        {
+            m_sDescription = description.copy(0);
+        }
+    };
+    const OUString& GetHelpText() const { return m_sDescription; }
+    const OUString& GetURI() const { return m_sURI; }
+};
 
 /*
  * The implementations of SvxConfigFunctionListBox_Impl and
@@ -224,12 +271,25 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
     {
         SvxGroupInfo_Impl *pData = aArr[i];
 
-        if ( pData->nKind == SFX_CFGFUNCTION_MACRO ||
-                 pData->nKind == SFX_CFGFUNCTION_SCRIPT )
+        if ( pData->nKind == SFX_CFGFUNCTION_SLOT && pData->pObject != NULL )
+        {
+            delete (OUString*)pData->pObject;
+        }
+
+        if ( pData->nKind == SFX_CFGFUNCTION_MACRO )
         {
             SfxMacroInfo *pInfo = (SfxMacroInfo*) pData->pObject;
             SFX_APP()->GetMacroConfig()->ReleaseSlotId( pInfo->GetSlotId() );
             delete pInfo;
+        }
+
+        if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
+        {
+            ScriptInfo *pInfo = (ScriptInfo*) pData->pObject;
+            if ( pInfo != NULL )
+            {
+                delete pInfo;
+            }
         }
 
         if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
@@ -301,20 +361,26 @@ USHORT SvxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
 String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
 {
     // Information zum selektierten Entry aus den Userdaten holen
-    SvxGroupInfo_Impl *pInfo = pEntry ? (SvxGroupInfo_Impl*) pEntry->GetUserData(): 0;
+    SvxGroupInfo_Impl *pInfo =
+        pEntry ? (SvxGroupInfo_Impl*) pEntry->GetUserData(): 0;
+
     if ( pInfo )
     {
         if ( pInfo->nKind == SFX_CFGFUNCTION_SLOT )
         {
-            // Eintrag ist eine Funktion, Hilfe aus der Office-Hilfe
-            USHORT nId = pInfo->nOrd;
-            String aText = Application::GetHelp()->GetHelpText( nId, this );
+            OUString* aCmdURL = (OUString*) pInfo->pObject;
 
-            if ( !aText.Len() )
-                SFX_SLOTPOOL().GetSlotName( nId, &aText );
-            return aText;
+            OUString aHelpText =
+                Application::GetHelp()->GetHelpText( *aCmdURL, this );
+
+            return aHelpText;
         }
-        else
+        else if ( pInfo->nKind == SFX_CFGFUNCTION_SCRIPT )
+        {
+            ScriptInfo* pScriptInfo = (ScriptInfo*) pInfo->pObject;
+            return pScriptInfo->GetHelpText();
+        }
+        else if ( pInfo->nKind == SFX_CFGFUNCTION_MACRO )
         {
             // Eintrag ist ein Macro, Hilfe aus der MacroInfo
             SfxMacroInfo *pMacInfo = (SfxMacroInfo*) pInfo->pObject;
@@ -350,7 +416,8 @@ SvxConfigFunctionListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 }
 
 SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
-    Window* pParent, const ResId& rResId, ULONG nConfigMode )
+    Window* pParent, const ResId& rResId,
+    ULONG nConfigMode, const Reference< frame::XFrame >& xFrame )
         : SvTreeListBox( pParent, rResId )
         , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ),
     m_sMyMacros(ResId(STR_MYMACROS)),
@@ -365,6 +432,12 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     m_docImage_hc(ResId(IMG_DOC_HC))
 {
     FreeResource();
+
+    if ( xFrame != NULL )
+    {
+        m_xFrame.set( xFrame );
+    }
+
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
 
     ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
@@ -470,47 +543,118 @@ String SvxConfigGroupListBox_Impl::GetGroup()
     return String();
 }
 
-void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
+void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
 {
     SetUpdateMode(FALSE);
+    ClearAll();
 
-    ClearAll(); // Remove all old entries from treelist box
-    SfxApplication *pSfxApp = SFX_APP();
+    Reference< XComponentContext > xContext;
+    Reference < beans::XPropertySet > xProps(
+        ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
-    // Verwendet wird der aktuelle Slotpool
-    if ( nMode )
+    xContext.set( xProps->getPropertyValue(
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
+        UNO_QUERY );
+
+    // are we showing builtin commands?
+    if ( nMode && xContext.is() && m_xFrame.is() )
     {
-        pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
-        for ( USHORT i=1; i<pSlotPool->GetGroupCount(); i++ )
+        Reference< lang::XMultiComponentFactory > xMCF =
+            xContext->getServiceManager();
+
+        Reference< frame::XDispatchInformationProvider > xDIP(
+            m_xFrame, UNO_QUERY );
+
+        Reference< drafts::com::sun::star::frame::XModuleManager >
+            xModuleManager( xMCF->createInstanceWithContext(
+                OUString::createFromAscii(
+                    "drafts.com.sun.star.frame.ModuleManager" ),
+                xContext ),
+            UNO_QUERY );
+
+        OUString aModuleId = xModuleManager->identify( m_xFrame );
+
+        Reference< container::XNameAccess > xNameAccess(
+            xMCF->createInstanceWithContext(
+                OUString::createFromAscii(
+                    "drafts.com.sun.star.frame.UICommandDescription" ),
+                xContext ),
+            UNO_QUERY );
+
+        if ( xNameAccess.is() )
         {
-            // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-            String aName = pSlotPool->SeekGroup( i );
-            const SfxSlot *pSfxSlot = pSlotPool->FirstSlot();
-            if ( pSfxSlot )
+            xNameAccess->getByName( aModuleId ) >>= m_xModuleCommands;
+        }
+
+        Reference< container::XNameAccess > xAllCategories(
+            xMCF->createInstanceWithContext(
+                OUString::createFromAscii(
+                    "com.sun.star.ui.UICategoryDescription" ),
+                xContext ),
+            UNO_QUERY );
+
+        Reference< container::XNameAccess > xModuleCategories;
+        if ( xAllCategories.is() )
+        {
+            if ( aModuleId.getLength() != 0 )
             {
-                // Check if all entries are not useable. Don't
-                // insert a group without any useable function.
-                sal_Bool bActiveEntries = sal_False;
-                while ( pSfxSlot )
+                try
                 {
-                    USHORT nId = pSfxSlot->GetSlotId();
-                    if ( pSfxSlot->GetMode() & nMode )
-                    {
-                        bActiveEntries = sal_True;
-                        break;
-                    }
+                    xModuleCategories = Reference< container::XNameAccess >(
+                           xAllCategories->getByName( aModuleId ), UNO_QUERY );
+                }
+                catch ( container::NoSuchElementException& )
+                {
+                }
+            }
 
-                    pSfxSlot = pSlotPool->NextSlot();
+            if ( !xModuleCategories.is() )
+            {
+                xModuleCategories = xAllCategories;
+            }
+        }
+
+        if ( xModuleCategories.is() )
+        {
+            Sequence< sal_Int16 > gids =
+                xDIP->getSupportedCommandGroups();
+
+            for ( sal_Int32 i = 0; i < gids.getLength(); i++ )
+            {
+                Sequence< frame::DispatchInformation > commands;
+                try
+                {
+                    commands =
+                        xDIP->getConfigurableDispatchInformation( gids[i] );
+                }
+                catch ( container::NoSuchElementException& )
+                {
+                    continue;
                 }
 
-                if ( bActiveEntries )
+                if ( commands.getLength() == 0 )
                 {
-                    // Wenn Gruppe nicht leer
-                    SvLBoxEntry *pEntry = InsertEntry( aName, NULL );
-                    SvxGroupInfo_Impl *pInfo = new SvxGroupInfo_Impl( SFX_CFGGROUP_FUNCTION, i );
-                    aArr.Insert( pInfo, aArr.Count() );
-                    pEntry->SetUserData( pInfo );
+                    continue;
                 }
+
+                sal_Int32 gid = gids[i];
+                OUString idx = OUString::valueOf( gid );
+                OUString group = idx;
+                try
+                {
+                    xModuleCategories->getByName( idx ) >>= group;
+                }
+                catch ( container::NoSuchElementException& )
+                {
+                }
+
+                SvLBoxEntry *pEntry = InsertEntry( group, NULL );
+
+                SvxGroupInfo_Impl *pInfo =
+                    new SvxGroupInfo_Impl( SFX_CFGGROUP_FUNCTION, gids[i] );
+                aArr.Insert( pInfo, aArr.Count() );
+
+                pEntry->SetUserData( pInfo );
             }
         }
     }
@@ -518,6 +662,8 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
     if ( bShowBasic )
     {
         // Basics einsammeln
+        SfxApplication* pSfxApp = SFX_APP();
+
         pSfxApp->EnterBasicCall();
         String aMacroName(' ');
         aMacroName += String( ResId( STR_BASICMACROS, DIALOG_MGR() ) );
@@ -602,13 +748,12 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
         pSfxApp->LeaveBasicCall();
     }
 
-    SfxObjectShell *tmp = SfxObjectShell::GetWorkingDocument();
-    if ( bShowSF )
+    if ( bShowSF && xContext.is() )
     {
         // Add Scripting Framework entries
         Reference< browse::XBrowseNode > rootNode;
+        Reference< XComponentContext> xCtx;
 
-        Reference< XComponentContext > xCtx;
         try
         {
             Reference < beans::XPropertySet > xProps(
@@ -617,7 +762,6 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
                 OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
-            //rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
         }
         catch( Exception& e )
         {
@@ -723,12 +867,12 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                                         0, static_cast<void *>( theChild.get()));
 
                                 OSL_TRACE("adding child node %s",::rtl::OUStringToOString( uiName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                                Image aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_NORMAL );
+                                Image aImage = GetImage( theChild, xContext, bIsRootNode,BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
                                     InsertEntry( uiName, NULL);
                                 SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
                                 SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_HIGHCONTRAST );
+                                aImage = GetImage( theChild, xContext, bIsRootNode,BMP_COLOR_HIGHCONTRAST );
                                 SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
                                 SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 
@@ -768,8 +912,8 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
     Image aImage;
     if ( bIsRootNode )
     {
-        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
-        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
+        OUString user = OUString::createFromAscii("user");
+        OUString share = OUString::createFromAscii("share");
         if (node->getName().equals( user ) || node->getName().equals(share ) )
         {
             if( bHighContrast == BMP_COLOR_NORMAL )
@@ -779,8 +923,8 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
         }
         else
         {
-            ::rtl::OUString factoryURL;
-            ::rtl::OUString nodeName = node->getName();
+            OUString factoryURL;
+            OUString nodeName = node->getName();
             Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
             if ( xDocumentModel.is() )
             {
@@ -788,20 +932,20 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
                     xModuleManager(
                         xCtx->getServiceManager()
                             ->createInstanceWithContext(
-                                ::rtl::OUString::createFromAscii("drafts." // xxx todo
+                                OUString::createFromAscii("drafts." // xxx todo
                                       "com.sun.star.frame.ModuleManager"),
                                 xCtx ),
                             UNO_QUERY_THROW );
                 Reference<container::XNameAccess> xModuleConfig(
                     xModuleManager, UNO_QUERY_THROW );
                 // get the long name of the document:
-                ::rtl::OUString appModule( xModuleManager->identify(
+                OUString appModule( xModuleManager->identify(
                                     xDocumentModel ) );
                 Sequence<beans::PropertyValue> moduleDescr;
                 Any aAny = xModuleConfig->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(::rtl::OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
+                    throw RuntimeException(OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -859,14 +1003,15 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
 }
 
 Reference< XInterface  >
-SvxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
+SvxConfigGroupListBox_Impl::getDocumentModel(
+    Reference< XComponentContext >& xCtx, OUString& docName )
 {
     Reference< XInterface > xModel;
     Reference< lang::XMultiComponentFactory > mcf =
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
+            OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -880,7 +1025,9 @@ SvxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
             components->nextElement(), UNO_QUERY );
         if ( model.is() )
         {
-            ::rtl::OUString sTdocUrl = xModelToDocTitle( model );
+            OUString sTdocUrl;
+            SvxScriptSelectorDialog::GetDocTitle( model, sTdocUrl );
+
             if( sTdocUrl.equals( docName ) )
             {
                 xModel = model;
@@ -889,81 +1036,6 @@ SvxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
         }
     }
     return xModel;
-}
-
-::rtl::OUString SvxConfigGroupListBox_Impl::xModelToDocTitle( const Reference< frame::XModel >& xModel )
-{
-    // Set a default name, this should never be seen.
-    ::rtl::OUString docNameOrURL =
-        ::rtl::OUString::createFromAscii("Unknown");
-    if ( xModel.is() )
-    {
-        ::rtl::OUString tempName;
-        try
-        {
-            Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
-            if ( propSet.is() )
-            {
-                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
-                {
-                    docNameOrURL = tempName;
-                    if ( xModel->getURL().getLength() == 0 )
-                    {
-                        // process "UntitledX - YYYYYYYY"
-                        // to get UntitledX
-                        sal_Int32 pos = 0;
-                        docNameOrURL = tempName.getToken(0,' ',pos);
-                        OSL_TRACE("xModelToDocTitle() Title for document is %s.",
-                            ::rtl::OUStringToOString( docNameOrURL,
-                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    }
-                    else
-                    {
-                        Reference< document::XDocumentInfoSupplier >  xDIS( xModel, UNO_QUERY_THROW );
-                        Reference< beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  UNO_QUERY_THROW );
-                        Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
-
-                        aTitle >>= docNameOrURL;
-                        if ( docNameOrURL.getLength() == 0 )
-                        {
-                            docNameOrURL =  parseLocationName( xModel->getURL() );
-                        }
-                    }
-                }
-            }
-        }
-        catch ( Exception& e )
-        {
-            OSL_TRACE("MiscUtils::xModelToDocTitle() exception thrown: !!! %s",
-                ::rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-
-    }
-    else
-    {
-        OSL_TRACE("MiscUtils::xModelToDocTitle() doc model is null" );
-    }
-    return docNameOrURL;
-}
-
-::rtl::OUString SvxConfigGroupListBox_Impl::parseLocationName( const ::rtl::OUString& location )
-{
-    // strip out the last leaf of location name
-    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-    ::rtl::OUString temp = location;
-    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
-
-    if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
-    {
-        temp = temp.copy( lastSlashIndex + 1 );
-    }
-    // maybe we should throw here!!!
-    else
-    {
-        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
-    }
-    return temp;
 }
 
 void SvxConfigGroupListBox_Impl::GroupSelected()
@@ -984,68 +1056,90 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
     {
         case SFX_CFGGROUP_FUNCTION :
         {
-            USHORT nGroup = pInfo->nOrd;
-            String aSelectedGroup = pSlotPool->SeekGroup( nGroup );
-            if ( aSelectedGroup != String() )
+            SvLBoxEntry *pEntry = FirstSelected();
+            if ( pEntry != NULL )
             {
-                const SfxSlot *pSfxSlot = pSlotPool->FirstSlot();
-                while ( pSfxSlot )
+                SvxGroupInfo_Impl *pInfo =
+                    (SvxGroupInfo_Impl*) pEntry->GetUserData();
+
+                Reference< frame::XDispatchInformationProvider > xDIP(
+                    m_xFrame, UNO_QUERY );
+
+                Sequence< frame::DispatchInformation > commands;
+                try
                 {
-                    USHORT nId = pSfxSlot->GetSlotId();
-                    if ( pSfxSlot->GetMode() & nMode )
+                    commands = xDIP->getConfigurableDispatchInformation(
+                        pInfo->nOrd );
+                }
+                catch ( container::NoSuchElementException& )
+                {
+                }
+
+                for ( sal_Int32 i = 0; i < commands.getLength(); i++ )
+                {
+                    if ( commands[i].Command.getLength() == 0 )
                     {
-                        String aName = pSlotPool->GetSlotName_Impl( *pSfxSlot );
-                        if ( aName.Len() && !pFunctionListBox->GetEntry_Impl( nId ) )
-                        {
-#ifdef DBG_UTIL
-                            if ( pFunctionListBox->GetEntry_Impl( aName ) )
-                                DBG_WARNINGFILE( "function name already exits" );
-#endif
-
-                            // create the dispatch name from the slot ID
-                            OUString aSuffix, aCmd;
-                            Image aImage;
-
-                            if ( pSfxSlot->pUnoName && m_pImageProvider )
-                            {
-                                aSuffix = OUString::createFromAscii(
-                                    pSfxSlot->GetUnoName());
-
-                                if ( aSuffix.getLength() != 0 )
-                                {
-                                    aCmd = DEFINE_CONST_UNICODE(".uno:");
-                                    aCmd += aSuffix;
-
-                                    aImage = m_pImageProvider->GetImage( aCmd );
-                                }
-                            }
-
-                            // Wenn die Namen unterschiedlich sind, dann auch die Funktion, denn zu
-                            // einer Id liefert der Slotpool immer den gleichen Namen!
-                            SvLBoxEntry* pFuncEntry = NULL;
-                            if ( !!aImage )
-                            {
-                                OSL_TRACE("Got an image");
-                                pFuncEntry = pFunctionListBox->InsertEntry(
-                                    aName, aImage, aImage );
-                            }
-                            else
-                            {
-                                OSL_TRACE("Got no image");
-                                pFuncEntry = pFunctionListBox->InsertEntry(
-                                    aName, NULL );
-                            }
-
-                            SvxGroupInfo_Impl *pInfo = new SvxGroupInfo_Impl( SFX_CFGFUNCTION_SLOT, nId );
-                            pFunctionListBox->aArr.Insert( pInfo, pFunctionListBox->aArr.Count() );
-                            pFuncEntry->SetUserData( pInfo );
-                        }
+                        continue;
                     }
 
-                    pSfxSlot = pSlotPool->NextSlot();
+                    Image aImage;
+
+                    OUString* aCmdURL = new OUString( commands[i].Command );
+                        // RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) );
+
+                    if ( m_pImageProvider )
+                    {
+                        aImage = m_pImageProvider->GetImage( *aCmdURL );
+                    }
+
+                    OUString aLabel;
+                    try
+                    {
+                        Any a = m_xModuleCommands->getByName( *aCmdURL );
+                        Sequence< beans::PropertyValue > aPropSeq;
+
+                        if ( a >>= aPropSeq )
+                        {
+                            for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                            {
+                                if ( aPropSeq[i].Name.equalsAscii( "Name" ) )
+                                {
+                                    aPropSeq[i].Value >>= aLabel;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    catch ( container::NoSuchElementException& )
+                    {
+                    }
+
+                    if ( aLabel.getLength() == 0 )
+                    {
+                        aLabel = commands[i].Command;
+                    }
+
+                    SvLBoxEntry* pFuncEntry = NULL;
+                    if ( !!aImage )
+                    {
+                        pFuncEntry = pFunctionListBox->InsertEntry(
+                            aLabel, aImage, aImage );
+                    }
+                    else
+                    {
+                        pFuncEntry = pFunctionListBox->InsertEntry(
+                            aLabel, NULL );
+                    }
+
+                    SvxGroupInfo_Impl *pInfo = new SvxGroupInfo_Impl(
+                        SFX_CFGFUNCTION_SLOT, 123, aCmdURL );
+
+                    pFunctionListBox->aArr.Insert(
+                        pInfo, pFunctionListBox->aArr.Count() );
+
+                    pFuncEntry->SetUserData( pInfo );
                 }
             }
-
             break;
         }
 
@@ -1128,13 +1222,12 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                     // do nothing, the description will be empty
                                 }
 
-                                SfxMacroInfo* aInfo = new SfxMacroInfo( uri );
+                                ScriptInfo* aInfo = new ScriptInfo( uri );
                                 aInfo->SetHelpText( description );
-                                SFX_APP()->GetMacroConfig()->GetSlotId( aInfo );
 
                                 SvxGroupInfo_Impl* pInfo =
-                                    new SvxGroupInfo_Impl(SFX_CFGFUNCTION_SCRIPT,
-                                        aInfo->GetSlotId(), aInfo);
+                                    new SvxGroupInfo_Impl(
+                                        SFX_CFGFUNCTION_SCRIPT, 123, aInfo );
 
                                 Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
@@ -1362,7 +1455,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     new SvxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
-                                ::rtl::OUString uiName = theChild->getName();
+                                OUString uiName = theChild->getName();
                                 sal_Bool isRootNode = sal_False;
                                 //if we show slots (as in the customize dialog)
                                 //then the user & share are added at depth=1
@@ -1481,6 +1574,69 @@ void SvxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
     }
 }
 
+void
+SvxScriptSelectorDialog::GetDocTitle(
+    const Reference< frame::XModel >& xModel,
+    OUString& rTitle )
+{
+    OUString aResult = OUString::createFromAscii("Unknown");
+
+    if ( !xModel.is() )
+    {
+        rTitle = aResult;
+        return;
+    }
+
+    try
+    {
+        Reference< beans::XPropertySet > xProps(
+            xModel->getCurrentController()->getFrame(), UNO_QUERY_THROW );
+
+        OUString prop = OUString::createFromAscii( "Title" );
+        OUString tmp;
+
+        if ( sal_True == ( xProps->getPropertyValue( prop ) >>= tmp ) )
+        {
+            if ( xModel->getURL().getLength() == 0 )
+            {
+                // process "UntitledX - YYYYYYYY" // to get UntitledX
+                sal_Int32 pos = 0;
+                aResult = tmp.getToken(0, ' ', pos);
+            }
+            else
+            {
+                Reference< document::XDocumentInfoSupplier > xDIS(
+                    xModel, UNO_QUERY );
+
+                if ( xDIS.is() )
+                {
+                    Reference< beans::XPropertySet > xProp (
+                        xDIS->getDocumentInfo(), UNO_QUERY );
+                    xProp->getPropertyValue( prop ) >>= tmp;
+                }
+
+                if ( tmp.getLength() == 0 )
+                {
+                    // strip out the last leaf of location name
+                    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
+                    tmp = xModel->getURL();
+                    sal_Int32 idx = tmp.lastIndexOf( '/' );
+                    if ( ( idx + 1 ) <  tmp.getLength()  )
+                    {
+                        tmp = tmp.copy( idx + 1 );
+                    }
+                }
+                aResult = tmp;
+            }
+        }
+    }
+    catch ( Exception& e )
+    {
+        OSL_TRACE("GetDocTitle() exception: %s", PRTSTR(e.Message));
+    }
+    rTitle = aResult;
+}
+
 /*
  * Implementation of SvxScriptSelectorDialog
  *
@@ -1489,13 +1645,13 @@ void SvxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-  Window* pParent, BOOL bShowSlots )
+  Window* pParent, BOOL bShowSlots, const Reference< frame::XFrame >& xFrame )
     :
     ModelessDialog( pParent, SVX_RES( RID_DLG_SCRIPTSELECTOR ) ),
     aDialogDescription( this, ResId( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
     aGroupText( this, ResId( TXT_SELECTOR_CATEGORIES ) ),
     aCategories( this, ResId( BOX_SELECTOR_CATEGORIES ),
-        bShowSlots ? SFX_SLOT_MENUCONFIG : 0 ),
+        bShowSlots ? SFX_SLOT_MENUCONFIG : 0, xFrame ),
     aFunctionText( this, ResId( TXT_SELECTOR_COMMANDS ) ),
     aCommands( this, ResId( BOX_SELECTOR_COMMANDS ) ),
     aOKButton( this, ResId( BTN_SELECTOR_OK ) ),
@@ -1526,7 +1682,6 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     ResizeControls();
 
     aCategories.SetFunctionListBox( &aCommands );
-
     aCategories.Init();
     // aCategories.Select( aCategories.GetEntry( 0, 0 ) );
 
@@ -1625,8 +1780,8 @@ IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )
 void
 SvxScriptSelectorDialog::UpdateUI()
 {
-    USHORT nId = aCommands.GetCurId();
-    if ( nId != 0 )
+    OUString url = GetScriptURL();
+    if ( url != NULL && url.getLength() != 0 )
     {
         String rMessage =
             aCommands.GetHelpText( aCommands.FirstSelected() );
@@ -1694,18 +1849,40 @@ SvxScriptSelectorDialog::GetSelectedId()
     return aCommands.GetId( aCommands.GetLastSelectedEntry() );
 }
 
-// Currently we only return a URL if a Scripting Framework script is
-// selected, and an empty string if a Slot API is selected
 String
 SvxScriptSelectorDialog::GetScriptURL()
 {
     OUString result;
 
-    SfxMacroInfo* info = aCommands.GetMacroInfo();
-
-    if ( info != NULL )
+    SvLBoxEntry *pEntry = aCommands.GetLastSelectedEntry();
+    if ( pEntry )
     {
-        result = info->GetURL();
+        SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
+        if ( pData->nKind == SFX_CFGFUNCTION_SLOT )
+        {
+            if ( pData->pObject != NULL )
+            {
+                OUString* tmp = (OUString*) pData->pObject;
+                result = OUString( *tmp );
+            }
+        }
+        else if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
+        {
+            ScriptInfo* pInfo = (ScriptInfo*) pData->pObject;
+            if ( pInfo != NULL )
+            {
+                result = pInfo->GetURI();
+            }
+        }
+        else
+        {
+            SfxMacroInfo* info = aCommands.GetMacroInfo();
+
+            if ( info != NULL )
+            {
+                result = info->GetURL();
+            }
+        }
     }
 
     return result;
