@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: pluby $ $Date: 2000-10-19 18:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@
 #include <stdio.h>
 #ifdef SOLARIS
 #include <alloca.h>
+#elif defined MACOSX
+#include <sys/malloc.h>
 #else
 #include <malloc.h>
 #endif
