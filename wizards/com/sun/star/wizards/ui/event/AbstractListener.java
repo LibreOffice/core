@@ -2,9 +2,9 @@
 *
  *  $RCSfile: AbstractListener.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $  $Date: 2004-11-27 09:07:55 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  */
 package com.sun.star.wizards.ui.event;
-
 import com.sun.star.awt.XControl;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
@@ -119,8 +118,6 @@ public class AbstractListener {
             System.out.println("=======================================================");
 
             ite.printStackTrace();
-            ite.getCause().printStackTrace();
-
 
         } catch (IllegalAccessException iae) {
             iae.printStackTrace();
