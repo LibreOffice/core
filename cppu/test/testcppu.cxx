@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:33:37 $
+ *  last change: $Author: jsc $ $Date: 2001-04-02 10:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,6 +837,10 @@ static void testEnvironment(void)
     (*pEnv->release)( pEnv );
 }
 
+inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( const Sequence< OUString[2][4] >* ) SAL_THROW( () )
+{
+    return getCppuSequenceType< OUString[2][4] >( getCppuArrayType2( (const OUString (*)[2][4])0 ) );
+}
 
 void testArray(void)
 {
@@ -944,6 +948,29 @@ void testArray(void)
         for ( j=0; j<4; j++ )
             OSL_ASSERT( sA[i][j] == (*sB)[i][j] );
 
+    // requires a specialized getCppuType function 'getCppuType( const Sequence< OUString[2][4] >* )'
+    Sequence< OUString[2][4] > aSeq(2);
+    OUString (*pSeq)[2][4] = aSeq.getArray();
+    uno_copyData(pSeq[0], sA, pType, cpp_acquire);
+    uno_copyData(pSeq[1], sA, pType, cpp_acquire);
+
+    OSL_ASSERT( aSeq[0][0][0] == sA[0][0] );
+    OSL_ASSERT( aSeq[0][0][1] == sA[0][1] );
+    OSL_ASSERT( aSeq[0][0][2] == sA[0][2] );
+    OSL_ASSERT( aSeq[0][0][3] == sA[0][3] );
+    OSL_ASSERT( aSeq[0][1][0] == sA[1][0] );
+    OSL_ASSERT( aSeq[0][1][1] == sA[1][1] );
+    OSL_ASSERT( aSeq[0][1][2] == sA[1][2] );
+    OSL_ASSERT( aSeq[0][1][3] == sA[1][3] );
+
+    OSL_ASSERT( aSeq[1][0][0] == sA[0][0] );
+    OSL_ASSERT( aSeq[1][0][1] == sA[0][1] );
+    OSL_ASSERT( aSeq[1][0][2] == sA[0][2] );
+    OSL_ASSERT( aSeq[1][0][3] == sA[0][3] );
+    OSL_ASSERT( aSeq[1][1][0] == sA[1][0] );
+    OSL_ASSERT( aSeq[1][1][1] == sA[1][1] );
+    OSL_ASSERT( aSeq[1][1][2] == sA[1][2] );
+    OSL_ASSERT( aSeq[1][1][3] == sA[1][3] );
 
     uno_constructData( p2, pType );
     ppS = (rtl_uString**)p2;
