@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ Resource RID_ERRCTX
         Text[ greek ] = "$(ERR) êáôÜ ôçí áíáæŞôçóç äéåıèõíóçò";
         Text[ dutch ] = "$(ERR) bij zoeken naar een adres";
         Text[ french ] = "$(ERR) lors de la recherche d'adresse";
-        Text[ spanish ] = "$(ERR) searching for an address";
+        Text[ spanish ] = "$(ERR) al buscar una dirección";
         Text[ italian ] = "$(ERR) searching for an address";
         Text[ danish ] = "$(ERR) under adressesøgningen";
         Text[ swedish ] = "$(ERR) vid adressökning";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ String STR_KEY_CONFIG_DIR
     Text [ portuguese_brazilian ] = "Configurações" ;
     Text [ portuguese ] = "Configuração" ;
     Text [ finnish ] = "Määritykset" ;
-    Text [ danish ] = "Konfigurationer" ;
+    Text [ danish ] = "Konfiguration" ;
     Text [ french ] = "Configuration" ;
     Text [ swedish ] = "Konfiguration" ;
     Text [ dutch ] = "Configuraties" ;
@@ -182,9 +182,9 @@ String STR_KEY_GRAPHICS_PATH
     Text [ portuguese_brazilian ] = "Gráficos" ;
     Text [ portuguese ] = "Imagens" ;
     Text [ finnish ] = "Grafiikka" ;
-    Text [ danish ] = "Billeder" ;
+    Text [ danish ] = "Grafik" ;
     Text [ french ] = "Images" ;
-    Text [ swedish ] = "Grafiker" ;
+    Text [ swedish ] = "Grafik" ;
     Text [ dutch ] = "Afbeeldingen" ;
     Text [ spanish ] = "Imágenes" ;
     Text [ english_us ] = "Graphics" ;
@@ -249,7 +249,7 @@ String STR_KEY_DATABASE_PATH
     Text[ chinese_simplified ] = "²éÑ¯Êı¾İ¿â";
     Text[ russian ] = "Çàïğîñû áàçû äàííûõ";
     Text[ polish ] = "Kwerendy bazy danych";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½ ¸´Ø°";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½¸´Ø°";
     Text[ chinese_traditional ] = "¬d¸ß¸ê®Æ®w";
     Text[ arabic ] = "ÇÓÊÚáÇãÇÊ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ dutch ] = "Database query's";
@@ -381,7 +381,7 @@ String STR_KEY_GLOSSARY_PATH
     Text[ greek ] = "ÁõôïÊåßìåíï";
     Text[ dutch ] = "AutoTekst";
     Text[ french ] = "AutoTexte";
-    Text[ spanish ] = "AutoText";
+    Text[ spanish ] = "AutoTexto";
     Text[ italian ] = "Testo automatico";
     Text[ danish ] = "AutoTekst";
     Text[ swedish ] = "AutoText";
@@ -469,7 +469,7 @@ String STR_KEY_EXPLORER_DIR
     Text[ arabic ] = "ÇáãÓÊßÔİ";
     Text[ dutch ] = "Explorer";
     Text[ chinese_simplified ] = "×ÊÔ´¹ÜÀíÆ÷";
-    Text[ greek ] = "Explorer";
+    Text[ greek ] = "ÅîåñåõíçôŞò";
     Text[ korean ] = "ÀÍ½ºÇÃ·¯·Î";
     Text[ turkish ] = "Explorer";
     Text[ language_user1 ] = " ";
@@ -558,7 +558,7 @@ String STR_KEY_NEW_DIR
     Text [ English ] = "standard templates" ;
     Text [ dutch ] = "Standaardsjablonen" ;
     Text [ english_us ] = "Default Templates" ;
-    Text [ swedish ] = "Standardformatmallar" ;
+    Text [ swedish ] = "Standardmallar" ;
     Text [ danish ] = "Standardskabeloner" ;
     Text [ italian ] = "Modelli standard" ;
     Text [ spanish ] = "Plantillas predeterminadas" ;
@@ -689,7 +689,7 @@ String STR_KEY_DOWNLOAD_DIR
     Text [ portuguese ] = "Atalho de descarga" ;
     Text [ portuguese_brazilian ] = "Download-Verzeichnis" ;
     Text [ swedish ] = "Nerladdningskatalog" ;
-    Text [ danish ] = "Overførsels-bibliotek" ;
+    Text [ danish ] = "Overførselsbibliotek" ;
     Text [ italian ] = "Cartella download" ;
     Text [ spanish ] = "Ruta de descarga" ;
     Text [ french ] = "Répertoire de Téléchargement (Download)" ;
@@ -832,7 +832,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ arabic ] = "Ïáíá Plugins";
     Text[ dutch ] = "Plugins directory";
     Text[ chinese_simplified ] = "Plug-In Ä¿Â¼";
-    Text[ greek ] = "ÊáôÜëïãïò Plugins";
+    Text[ greek ] = "ÊáôÜëïãïò óõíäåüìåíùí õğïìïíÜäùí";
     Text[ korean ] = "ÇÃ·¯±× ÀÎ µğ·ºÅä¸®";
     Text[ turkish ] = "Plug-In dizini";
 };
@@ -897,7 +897,7 @@ String STR_KEY_ADDINS_PATH
     Text[ swedish ] = "AddIns";
     Text[ russian ] = "AddIns";
     Text[ italian ] = "AddIns";
-    Text[ danish ] = "AddIns";
+    Text[ danish ] = "Add-Ins";
     Text[ polish ] = "AddIns";
     Text[ portuguese_brazilian ] = "AddIns";
     Text[ japanese ] = "±ÄŞ²İ";
