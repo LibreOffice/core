@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:40:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ namespace package_ucp {
 //=========================================================================
 
 #define PACKAGE_URL_SCHEME          "vnd.sun.star.pkg"
+#define PACKAGE_ZIP_URL_SCHEME      "vnd.sun.star.zip"
 #define PACKAGE_URL_SCHEME_LENGTH   16
 
 //=========================================================================
@@ -83,6 +84,7 @@ class PackageUri
     mutable ::rtl::OUString m_aPath;
     mutable ::rtl::OUString m_aName;
     mutable ::rtl::OUString m_aParam;
+    mutable ::rtl::OUString m_aScheme;
     mutable bool            m_bValid;
 
 private:
@@ -120,6 +122,9 @@ public:
 
     const ::rtl::OUString & getParam() const
     { init(); return m_aParam; }
+
+    const ::rtl::OUString & getScheme() const
+    { init(); return m_aScheme; }
 
     inline sal_Bool isRootFolder() const;
 };
