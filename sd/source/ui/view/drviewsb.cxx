@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-24 16:08:08 $
+ *  last change: $Author: bm $ $Date: 2002-11-04 17:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,9 @@
 #ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
 #endif
-
+#ifndef _SVX_DLG_NAME_HXX
+#include <svx/dlgname.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -130,6 +132,7 @@
 #include "drviewsh.hxx"
 #include "dlgfield.hxx"
 #include "drawview.hxx"
+#include "unmodpg.hxx"
 
 
 /*************************************************************************
@@ -674,4 +677,80 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
     };
 };
 
+bool SdDrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
+{
+    BOOL   bOutDummy;
+    if( pDoc->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
+        return false;
 
+    SdPage* pPageToRename = NULL;
+    PageKind ePageKind = GetPageKind();
+
+    if( GetEditMode() == EM_PAGE )
+    {
+        pPageToRename = pDoc->GetSdPage( nPageId - 1, ePageKind );
+
+        // Undo
+        SdPage* pUndoPage = pPageToRename;
+        SdrLayerAdmin &  rLayerAdmin = pDoc->GetLayerAdmin();
+        BYTE nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
+        BYTE nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
+        SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers( 0 );
+
+        // (#67720#)
+        SfxUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
+        ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
+            pManager, pDoc, pUndoPage, rName, pUndoPage->GetAutoLayout(),
+            aVisibleLayers.IsSet( nBackground ),
+            aVisibleLayers.IsSet( nBgObj ));
+        pManager->AddUndoAction( pAction );
+
+        // rename
+        pPageToRename->SetName( rName );
+
+        if( ePageKind == PK_STANDARD )
+        {
+            // also rename notes-page
+            SdPage* pNotesPage = pDoc->GetSdPage( nPageId - 1, PK_NOTES );
+            pNotesPage->SetName( rName );
+        }
+    }
+    else
+    {
+        // rename MasterPage -> rename LayoutTemplate
+        pPageToRename = pDoc->GetMasterSdPage( nPageId - 1, ePageKind );
+        pDoc->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
+    }
+
+    bool bSuccess = ( FALSE != rName.Equals( pPageToRename->GetName()));
+
+    if( bSuccess )
+    {
+        // user edited page names may be changed by the page so update control
+        aTabControl.SetPageText( nPageId, rName );
+
+        // set document to modified state
+        pDoc->SetChanged( TRUE );
+
+        // inform navigator about change
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
+        GetViewFrame()->GetDispatcher()->Execute(
+            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+    }
+
+    return bSuccess;
+}
+
+IMPL_LINK( SdDrawViewShell, RenameSlideHdl, SvxNameDialog*, pDialog )
+{
+    if( ! pDialog )
+        return 0;
+
+    String aNewName;
+    pDialog->GetName( aNewName );
+
+    SdPage* pCurrentPage = pDoc->GetSdPage( aTabControl.GetCurPageId() - 1, GetPageKind() );
+
+    return ( aNewName.Equals( pCurrentPage->GetName() )
+             || GetDocSh()->IsNewPageNameValid( aNewName ) );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-17 15:25:28 $
+ *  last change: $Author: bm $ $Date: 2002-11-04 17:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
         rSet.DisableItem(SID_INSERTPAGE);
         rSet.DisableItem(SID_RENAMEPAGE);
+        rSet.DisableItem(SID_RENAMEPAGE_QUICK);
         rSet.DisableItem(SID_DUPLICATE_PAGE);
         rSet.ClearItem(SID_ANIMATION_OBJECTS);
         rSet.DisableItem(SID_ANIMATION_OBJECTS);
@@ -701,6 +702,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_ANIMATION_OBJECTS);
         rSet.DisableItem(SID_ANIMATION_EFFECTS);
         rSet.DisableItem(SID_RENAMEPAGE);
+        rSet.DisableItem(SID_RENAMEPAGE_QUICK);
         rSet.DisableItem(SID_INSERTLAYER);
         rSet.DisableItem(SID_MODIFYLAYER);
         rSet.DisableItem(SID_RENAMELAYER);
@@ -1330,6 +1332,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DUPLICATE_PAGE );
         rSet.DisableItem( SID_MODIFYPAGE );
         rSet.DisableItem( SID_RENAMEPAGE );
+        rSet.DisableItem( SID_RENAMEPAGE_QUICK );
         rSet.DisableItem( SID_DELETE_PAGE );
         rSet.DisableItem( SID_PAGESETUP );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-11-04 14:47:19 $
+ *  last change: $Author: bm $ $Date: 2002-11-04 17:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,60 +435,7 @@ long SdTabControl::AllowRenaming()
 void SdTabControl::EndRenaming()
 {
     if( !IsEditModeCanceled() )
-    {
-        SdView* pView = pDrViewSh->GetView();
-        SdDrawDocument* pDoc = pView->GetDoc();
-        String aNewName( GetEditText() );
-
-        if (pDrViewSh->GetEditMode() == EM_PAGE)
-        {
-            // Seite umbenennen
-            SdView* pView = pDrViewSh->GetView();
-            SdDrawDocument* pDoc = pView->GetDoc();
-            PageKind ePageKind = pDrViewSh->GetPageKind();
-            SdPage* pActualPage = pDoc->GetSdPage(GetEditPageId() - 1, ePageKind);
-
-            SdPage* pUndoPage = pActualPage;
-            SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-            BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-            BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-            SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
-
-            // #67720#
-            SfxUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
-            ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                pManager, pDoc, pUndoPage, aNewName, pActualPage->GetAutoLayout(),
-                aVisibleLayers.IsSet(aBckgrnd),
-                aVisibleLayers.IsSet(aBckgrndObj));
-            pManager->AddUndoAction(pAction);
-
-            pActualPage->SetName(aNewName);
-            aNewName = pActualPage->GetName();
-
-            if (ePageKind == PK_STANDARD)
-            {
-                SdPage* pNotesPage = pDoc->GetSdPage(GetEditPageId() - 1, PK_NOTES);
-                pNotesPage->SetName(aNewName);
-            }
-        }
-        else
-        {
-            // MasterPage umbenennen -> LayoutTemplate umbenennen
-            SdPage* pActualPage = pDoc->GetMasterSdPage(GetEditPageId() - 1, pDrViewSh->GetPageKind());
-            pDoc->RenameLayoutTemplate(pActualPage->GetLayoutName(), aNewName);
-            aNewName = pActualPage->GetName();
-        }
-
-        // user edited page names may be changed by the page so update control
-        SetPageText( GetEditPageId(), aNewName );
-
-        pDoc->SetChanged(TRUE);
-
-        // Damit der Navigator das mitbekommt
-        SfxBoolItem aItem(SID_NAVIGATOR_INIT, TRUE);
-        pDrViewSh->GetViewFrame()->GetDispatcher()->Execute(
-            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-    }
+        pDrViewSh->RenameSlide( GetEditPageId(), GetEditText() );
 }
 
 

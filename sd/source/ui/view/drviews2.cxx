@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2002-11-04 14:49:15 $
+ *  last change: $Author: bm $ $Date: 2002-11-04 17:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef _SVX_XLNEDWIT_HXX
 #include <svx/xlnedwit.hxx>
+#endif
+#ifndef _SVX_DLG_NAME_HXX
+#include <svx/dlgname.hxx>
 #endif
 
 #pragma hdrstop
@@ -681,6 +684,46 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_RENAMEPAGE:
+        {
+            if (ePageKind==PK_STANDARD || ePageKind==PK_NOTES )
+            {
+                if ( pDrView->IsTextEdit() )
+                {
+                    pDrView->EndTextEdit();
+                }
+
+                USHORT nPageId = aTabControl.GetCurPageId();
+                SdPage* pCurrentPage = ( GetEditMode() == EM_PAGE )
+                    ? pDoc->GetSdPage( nPageId - 1, GetPageKind() )
+                    : pDoc->GetMasterSdPage( nPageId - 1, GetPageKind() );
+
+                String aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
+                String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
+                String aPageName = pCurrentPage->GetName();
+
+                SvxNameDialog aNameDlg( pWindow, aPageName, aDescr );
+                aNameDlg.SetText( aTitle );
+                aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ) );
+                aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+
+                if( aNameDlg.Execute() == RET_OK )
+                {
+                    String aNewName;
+                    aNameDlg.GetName( aNewName );
+                    if( ! aNewName.Equals( aPageName ) )
+                    {
+                        bool bResult = RenameSlide( nPageId, aNewName );
+                        DBG_ASSERT( bResult, "Couldn't rename slide" );
+                    }
+                }
+            }
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_RENAMEPAGE_QUICK:
         {
             if (ePageKind==PK_STANDARD || ePageKind==PK_NOTES )
             {
