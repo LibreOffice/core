@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:45:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/lang/XComponent.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -106,6 +102,19 @@
 #include "xstorage.hxx"
 
 using namespace ::com::sun::star;
+
+void ClearEncryptionKey( const uno::Reference< beans::XPropertySet >& xPropertySet )
+{
+    ::rtl::OUString aString_EncryptionKey = ::rtl::OUString::createFromAscii( "EncryptionKey" );
+
+    try {
+        xPropertySet->setPropertyValue( aString_EncryptionKey, uno::makeAny( uno::Sequence< sal_Int8 >() ) );
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Can't restore encryption related properties!\n" );
+    }
+}
 
 void completeStorageStreamCopy_Impl( const uno::Reference< io::XStream >& xSource,
                               const uno::Reference< io::XStream >& xDest );
@@ -208,8 +217,8 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       uno::Reference< lang::XMultiServiceFactory > xFactory,
                                       sal_Bool bForceEncrypted )
 : m_pAntiImpl( NULL )
-, m_bIsModified( sal_False )
-, m_bCommited( sal_False )
+, m_bHasDataToFlush( sal_False )
+, m_bFlushed( sal_False )
 , m_xPackageStream( xPackageStream )
 , m_xFactory( xFactory )
 , m_pParent( pParent )
@@ -241,7 +250,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    if ( m_bCommited )
+    if ( m_bFlushed )
     {
         OSL_ENSURE( m_xPackageStream.is(), "An inserted stream is incomplete!\n" );
         uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY );
@@ -250,7 +259,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
 
         xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
-        m_bCommited = sal_False;
+        m_bFlushed = sal_False;
     }
 }
 //-----------------------------------------------
@@ -480,11 +489,8 @@ void OWriteStream_Impl::Commit()
 
     OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
 
-    if ( !m_bIsModified )
+    if ( !m_bHasDataToFlush )
         return;
-
-    // The stream must be free
-    OSL_ENSURE( !m_pAntiImpl || !m_pAntiImpl->m_xOutStream.is(), "Commiting storage while a write stream is open!\n" );
 
     OSL_ENSURE( m_aTempURL.getLength(), "The temporary must exist!\n" );
     uno::Reference < io::XOutputStream > xTempOut(
@@ -530,8 +536,8 @@ void OWriteStream_Impl::Commit()
 
     // the stream should be free soon, after package is stored
     m_xPackageStream = xNewPackageStream;
-    m_bIsModified = sal_False;
-    m_bCommited = sal_True; // will allow to use transaction on stream level if will need it
+    m_bHasDataToFlush = sal_False;
+    m_bFlushed = sal_True; // will allow to use transaction on stream level if will need it
 }
 
 //-----------------------------------------------
@@ -542,7 +548,7 @@ void OWriteStream_Impl::Revert()
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    if ( !m_bIsModified )
+    if ( !m_bHasDataToFlush )
         return; // nothing to do
 
     // The stream must be free
@@ -561,7 +567,7 @@ void OWriteStream_Impl::Revert()
 
     m_aProps.realloc( 0 );
 
-    m_bIsModified = sal_False;
+    m_bHasDataToFlush = sal_False;
 
     m_bHasCachedPassword = sal_False;
     m_aKey.realloc( 0 );
@@ -876,10 +882,149 @@ uno::Sequence< sal_Int8 > OWriteStream_Impl::GetCommonRootPass()
     return aGlobalKey;
 }
 
+//-----------------------------------------------
 void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     m_aInputStreamsList.remove( pStream );
+}
+
+//-----------------------------------------------
+uno::Reference< io::XStream > OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy )
+{
+    uno::Reference < io::XStream > xTempFile(
+        m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+        uno::UNO_QUERY );
+
+    uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY );
+    if ( !xTempSeek.is() )
+        throw uno::RuntimeException(); // TODO
+
+    uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
+    if ( !xTempOut.is() )
+        throw uno::RuntimeException();
+
+    if ( xDataToCopy.is() )
+        copyInputToOutput_Impl( xDataToCopy, xTempOut );
+
+    xTempOut->closeOutput();
+    xTempSeek->seek( 0 );
+
+    uno::Reference< io::XInputStream > xInStream = xTempFile->getInputStream();
+    if ( !xInStream.is() )
+        throw io::IOException();
+
+    uno::Reference< io::XStream > xResult(
+                        static_cast< ::cppu::OWeakObject* >( new OInputSeekStream( xInStream, m_aProps ) ),
+                        uno::UNO_QUERY );
+
+    if ( !xResult.is() )
+        throw uno::RuntimeException();
+
+    return xResult;
+}
+
+//-----------------------------------------------
+uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit()
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    OSL_ENSURE( m_xPackageStream.is(), "The source stream for copying is incomplete!\n" );
+    if ( !m_xPackageStream.is() )
+        throw uno::RuntimeException();
+
+    uno::Reference< io::XInputStream > xDataToCopy;
+    if ( IsEncrypted() )
+    {
+        // an encrypted stream must contain input stream
+        uno::Sequence< sal_Int8 > aGlobalKey = GetCommonRootPass();
+
+        if ( m_bHasCachedPassword && !SequencesEqual( m_aKey, aGlobalKey ) )
+            throw packages::WrongPasswordException();
+
+        xDataToCopy = m_xPackageStream->getDataStream();
+        OSL_ENSURE( xDataToCopy.is(), "Encrypted ZipStream must already have input stream inside!\n" );
+
+        if ( xDataToCopy.is() && !m_bHasCachedPassword )
+        {
+            m_bHasCachedPassword = sal_True;
+            m_aKey = aGlobalKey;
+        }
+    }
+    else
+        xDataToCopy = m_xPackageStream->getDataStream();
+
+    // in case of new inserted package stream it is possible that input stream still was not set
+    return CreateReadonlyCopyBasedOnData( xDataToCopy );
+}
+
+//-----------------------------------------------
+uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( const uno::Sequence< sal_Int8 >& aKey )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    OSL_ENSURE( m_xPackageStream.is(), "The source stream for copying is incomplete!\n" );
+    if ( !m_xPackageStream.is() )
+        throw uno::RuntimeException();
+
+    if ( !IsEncrypted() )
+        throw packages::NoEncryptionException();
+
+    uno::Reference< io::XInputStream > xDataToCopy;
+
+    if ( m_bHasCachedPassword )
+    {
+        if ( !SequencesEqual( m_aKey, aKey ) )
+            throw packages::WrongPasswordException();
+
+        // the correct key must be set already
+        xDataToCopy = m_xPackageStream->getDataStream();
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
+        if ( !xPropertySet.is() )
+            throw uno::RuntimeException();
+
+        ::rtl::OUString aString_EncryptionKey = ::rtl::OUString::createFromAscii( "EncryptionKey" );
+        try {
+            xPropertySet->setPropertyValue( aString_EncryptionKey, uno::makeAny( aKey ) );
+        }
+        catch ( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "Can't write encryption related properties!\n" );
+            throw io::IOException(); // TODO
+        }
+
+        try {
+            xDataToCopy = m_xPackageStream->getDataStream();
+
+            if ( xDataToCopy.is() )
+            {
+                m_bHasCachedPassword = sal_True;
+                m_aKey = aKey;
+            }
+            else
+            {
+                OSL_ENSURE( sal_False, "Encrypted ZipStream must already have input stream inside!\n" );
+                ClearEncryptionKey( xPropertySet );
+            }
+        }
+        catch( packages::WrongPasswordException& )
+        {
+            ClearEncryptionKey( xPropertySet );
+            throw;
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "Can't open encrypted stream!\n" );
+            ClearEncryptionKey( xPropertySet );
+            throw;
+        }
+    }
+
+    // in case of new inserted package stream it is possible that input stream still was not set
+    return CreateReadonlyCopyBasedOnData( xDataToCopy );
 }
 
 //===============================================
@@ -1126,7 +1271,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
         throw io::NotConnectedException();
 
     m_xOutStream->writeBytes( aData );
-    m_pImpl->m_bIsModified = sal_True;
+    m_pImpl->m_bHasDataToFlush = sal_True;
     m_pImpl->m_pParent->SetModifiedInternally( sal_True );
 }
 
@@ -1137,6 +1282,11 @@ void SAL_CALL OWriteStream::flush()
                 io::IOException,
                 uno::RuntimeException )
 {
+    // In case stream is flushed it's current version becomes visible
+    // to the parent storage. Usually parent storage flushes the stream
+    // during own commit but a user can explicitly flush the stream
+    // so the changes will be available through cloning functionality.
+
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -1146,6 +1296,7 @@ void SAL_CALL OWriteStream::flush()
         throw io::NotConnectedException();
 
     m_xOutStream->flush();
+    m_pImpl->Commit();
 }
 
 //-----------------------------------------------
@@ -1261,7 +1412,7 @@ void SAL_CALL OWriteStream::truncate()
 
     xTruncate->truncate();
 
-    m_pImpl->m_bIsModified = sal_True;
+    m_pImpl->m_bHasDataToFlush = sal_True;
     m_pImpl->m_pParent->SetModifiedInternally( sal_True );
 }
 
@@ -1289,6 +1440,7 @@ void SAL_CALL OWriteStream::dispose()
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
 
     m_pImpl->m_pAntiImpl = NULL;
+    m_pImpl->Commit();
     m_pImpl = NULL;
 }
 
@@ -1345,7 +1497,7 @@ void SAL_CALL OWriteStream::setEncryptionKey( const uno::Sequence< sal_Int8 >& a
 
     m_pImpl->m_bHasCachedPassword = sal_True;
     m_pImpl->m_aKey = aKey;
-    m_pImpl->m_bIsModified = sal_True;
+    m_pImpl->m_bHasDataToFlush = sal_True;
     m_pImpl->m_pParent->SetModifiedInternally( sal_True );
 }
 
@@ -1426,7 +1578,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
     else
         throw beans::UnknownPropertyException(); // TODO
 
-    m_pImpl->m_bIsModified = sal_True;
+    m_pImpl->m_bHasDataToFlush = sal_True;
     m_pImpl->m_pParent->SetModifiedInternally( sal_True );
 }
 
