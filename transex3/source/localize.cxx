@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include <bootstrp/appdef.hxx>
 #include <bootstrp/command.hxx>
 #include <stdio.h>
+
+// #define EHAM02_TEST
 
 //
 // SourceTreeLocalizer
@@ -287,8 +289,24 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sLine;
             while ( !aSDFIn.IsEof()) {
                 aSDFIn.ReadLine( sLine );
-                if ( sLine.Len())
+                if ( sLine.Len()) {
+
+#ifdef EHAM02_TEST
+                    if ( sLine.GetToken( 9, '\t' ) == "99" ) {
+                        ByteString sTmp;
+                        for ( USHORT i = 0; i < sLine.GetTokenCount( '\t' ); i++ ) {
+                            if ( i == 10 )
+                                sTmp += "X_";
+                            sTmp += sLine.GetToken( i, '\t' );
+                            sTmp += "\t";
+                        }
+                        sTmp.EraseTrailingChars( '\t' );
+                        sLine = sTmp;
+                    }
+#endif
+
                     aSDF.WriteLine( sLine );
+                }
             }
             aSDFIn.Close();
 

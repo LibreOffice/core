@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,8 @@ BOOL LngParser::Merge(
         // read languages
         bGroup = FALSE;
 
+        ByteString sLanguagesDone;
+
         while ( nPos < pLines->Count() && !bGroup ) {
             ByteString sLine( *pLines->GetObject( nPos ));
             sLine.EraseLeadingChars( ' ' );
@@ -306,18 +308,23 @@ BOOL LngParser::Merge(
                 sGroup.EraseTrailingChars( ' ' );
                 bGroup = TRUE;
                 nPos ++;
+                sLanguagesDone = "";
             }
             else if ( sLine.GetTokenCount( '=' ) > 1 ) {
                 ByteString sLang = sLine.GetToken( 0, '=' );
                 sLang.EraseLeadingChars( ' ' );
                 sLang.EraseTrailingChars( ' ' );
 
-                if ( !sLang.IsNumericAscii()) {
+                ByteString sSearch( ";" );
+                sSearch += sLang;
+                sSearch += ";";
+
+                if (( !sLang.IsNumericAscii() ||  sLanguagesDone.Search( sSearch ) != STRING_NOTFOUND )) {
                     pLines->Remove( nPos );
                 }
                 else if (( MergeDataFile::GetLangIndex( sLang.ToInt32()) < LANGUAGES ) &&
                     ( pEntrys ) &&
-                    ( LANGUAGE_ALLOWED( sLang.ToInt32())))
+                    ( LANGUAGE_ALLOWED( Export::GetLangIndex( sLang.ToInt32()))))
                 {
                     // this is a valid text line
                     USHORT nIndex = MergeDataFile::GetLangIndex( sLang.ToInt32());
@@ -338,10 +345,13 @@ BOOL LngParser::Merge(
                     }
                     nLastLangPos = nPos;
                     nPos ++;
+                    sLanguagesDone += sSearch;
                 }
-                else
+                else {
                     nLastLangPos = nPos;
                     nPos ++;
+                    sLanguagesDone += sSearch;
+                }
             }
             else
                 nPos++;

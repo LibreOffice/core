@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,22 +104,22 @@ BOOL ParseCommandLine( int argc, char* argv[])
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
-        if (( ByteString( argv[ i ]) == "-i" ) || ( argv[ i ] == "-I" )) {
+        if ( ByteString( argv[ i ]).ToUpperAscii() == "-I" ) {
             nState = STATE_INPUT; // next tokens specifies source files
         }
-        else if (( ByteString( argv[ i ]) == "-o" ) || ( argv[ i ] == "-O" )) {
+        else if ( ByteString( argv[ i ]).ToUpperAscii()  == "-O" ) {
             nState = STATE_OUTPUT; // next token specifies the dest file
         }
-        else if (( ByteString( argv[ i ]) == "-p" ) || ( argv[ i ] == "-P" )) {
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-P" ) {
             nState = STATE_PRJ; // next token specifies the cur. project
         }
-        else if (( ByteString( argv[ i ]) == "-r" ) || ( argv[ i ] == "-R" )) {
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-R" ) {
             nState = STATE_ROOT; // next token specifies path to project root
         }
-        else if (( ByteString( argv[ i ]) == "-m" ) || ( argv[ i ] == "-M" )) {
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-M" ) {
             nState = STATE_MERGESRC; // next token specifies the merge database
         }
-        else if (( ByteString( argv[ i ]) == "-e" ) || ( argv[ i ] == "-E" )) {
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = FALSE;
         }
@@ -131,7 +131,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
             nState = STATE_UTF8;
             bUTF8 = FALSE;
         }
-        else if (( ByteString( argv[ i ]) == "-l" ) || ( argv[ i ] == "-L" )) {
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
         }
         else {

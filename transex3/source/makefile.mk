@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-26 13:18:03 $
+#   last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,21 +76,19 @@ CDEFS+= -DYY_NEVER_INTERACTIVE=1
 
 # --- Files --------------------------------------------------------
 
-OBJFILES=   				\
-    $(OBJ)$/utf8conv.obj	\
-    $(OBJ)$/export2.obj	   
+OBJFILES=   			\
+    $(OBJ)$/export.obj	\
+    $(OBJ)$/export2.obj	\
+    $(OBJ)$/merge.obj   \
+    $(OBJ)$/wrdtrans.obj	\
+    $(OBJ)$/wtratree.obj	\
+    $(OBJ)$/wtranode.obj    \
+    $(OBJ)$/srciter.obj	
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=	$(TARGET)
 APP1STACK=	16000
-APP1OBJS=   				\
-    $(OBJ)$/src_yy.obj 		\
-    $(OBJ)$/export.obj 		\
-    $(OBJ)$/wrdtrans.obj	\
-    $(OBJ)$/merge.obj		\
-    $(OBJ)$/wtratree.obj	\
-    $(OBJ)$/wtranode.obj    \
-    $(OBJ)$/srciter.obj	
+APP1OBJS=   $(OBJ)$/src_yy.obj $(OBJ)$/utf8conv.obj
 APP1STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS) 
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
