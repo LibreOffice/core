@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 14:48:31 $
+ *  last change: $Author: os $ $Date: 2002-04-25 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 SfxImageItem aImageItem(nWhich);
                 if(pWrtShell->IsInVerticalText())
-                    aImageItem.SetRotation( 900 );
+                    aImageItem.SetRotation( 2700 );
 #ifdef BIDI
                 if(pWrtShell->IsInRightToLeftText())
                     aImageItem.SetMirrored( TRUE );
