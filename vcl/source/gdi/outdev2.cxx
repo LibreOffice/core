@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 10:31:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,9 +856,21 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     if( OUTDEV_PRINTER == meOutDevType )
     {
-        Bitmap aBmp( aBmpEx.GetBitmap() ), aMask( aBmpEx.GetMask() );
-           aBmp.Replace( aMask, Color( COL_WHITE ) );
-        ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        if( rBitmapEx.IsAlpha() )
+        {
+            // #107169# For true alpha bitmaps, no longer masking the
+            // bitmap, but perform a full alpha blend against a white
+            // background here.
+            Bitmap aBmp( aBmpEx.GetBitmap() );
+            aBmp.Blend( aBmpEx.GetAlpha(), Color( COL_WHITE) );
+            DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
+        }
+        else
+        {
+            Bitmap aBmp( aBmpEx.GetBitmap() ), aMask( aBmpEx.GetMask() );
+            aBmp.Replace( aMask, Color( COL_WHITE ) );
+            ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        }
         return;
     }
 #ifndef REMOTE_APPSERVER
