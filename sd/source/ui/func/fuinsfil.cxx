@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-02 14:48:19 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 14:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
 #endif
 
 
@@ -550,6 +553,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         SdrOutliner* pOutliner = new SdrOutliner( pPool, OUTLINERMODE_TEXTOBJECT );
         pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
         pOutliner->SetEditTextObjectPool(pPool);
+        pOutliner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
         SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);

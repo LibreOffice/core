@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-21 16:20:10 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 14:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
+
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
+#endif
 
 #include <svx/svxids.hrc>
 #include <svx/srchitem.hxx>
@@ -371,6 +375,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
             if( xHyphenator.is() )
                 rOutliner.SetHyphenator( xHyphenator );
         }
+
+        SetForbiddenCharsTable( new SvxForbiddenCharactersTable( xMgr ) );
     }
     catch(...)
     {
