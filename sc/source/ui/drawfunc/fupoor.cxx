@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:46:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,7 @@
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
 #include "detfunc.hxx"
+#include "document.hxx"
 
 
 /*************************************************************************
@@ -353,6 +354,9 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
 
     ScViewData* pViewData = pViewShell->GetViewData();
+    if ( pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() ) )
+        dx = -dx;
+
     ScSplitPos eWhich = pViewData->GetActivePart();
     if ( dx > 0 && pViewData->GetHSplitMode() == SC_SPLIT_FIX && WhichH(eWhich) == SC_SPLIT_LEFT )
     {
