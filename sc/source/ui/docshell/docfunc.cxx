@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 10:30:42 $
+ *  last change: $Author: sab $ $Date: 2000-12-04 11:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1989,6 +1989,10 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
     if (!nRangeCnt)
         return TRUE;
 
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if ( bRecord && pDoc->IsImportingXML() )
+        bRecord = FALSE;
+
     if ( !rDocShell.IsEditable() )
     {
         if (!bApi)
@@ -1997,7 +2001,6 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
     }
 
     BOOL bSuccess = FALSE;
-    ScDocument* pDoc = rDocShell.GetDocument();
     USHORT nStart = pRanges[0];
     USHORT nEnd = pRanges[2*nRangeCnt-1];
 
