@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 09:59:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
+#endif
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
 #endif
 
 //------------------------------------------------------------------------
@@ -222,7 +226,7 @@ enum SvxChartRegress
 
 #ifdef ITEMID_CHARTSTYLE
 
-class SvxChartStyleItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -244,7 +248,7 @@ public:
 
 #ifdef ITEMID_CHARTREGRESS
 
-class SvxChartRegressItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -267,7 +271,7 @@ public:
 
 #ifdef ITEMID_CHARTDATADESCR
 
-class SvxChartDataDescrItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -290,7 +294,7 @@ public:
 
 #ifdef ITEMID_CHARTLEGENDPOS
 
-class SvxChartLegendPosItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartLegendPosItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -313,7 +317,7 @@ public:
 
 #ifdef ITEMID_CHARTTEXTORDER
 
-class SvxChartTextOrderItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -339,7 +343,7 @@ public:
 
 #ifdef ITEMID_CHARTTEXTORIENT
 
-class SvxChartTextOrientItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -362,7 +366,7 @@ public:
 
 #ifdef ITEMID_CHARTKINDERROR
 
-class SvxChartKindErrorItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -387,7 +391,7 @@ public:
 
 #ifdef ITEMID_CHARTINDICATE
 
-class SvxChartIndicateItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
@@ -412,7 +416,7 @@ public:
 
 #ifdef ITEMID_DOUBLE
 
-class SvxDoubleItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
 {
     double fVal;
 
