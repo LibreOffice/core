@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:10:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4727,7 +4727,12 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_FRAMEDIR*/                   OutWW8_SvxFrameDirection,
 /* RES_FRMATR_DUMMY8 */             0, // Dummy:
 /* RES_FRMATR_DUMMY9 */             0, // Dummy:
-
+/* RES_FOLLOW_TEXT_FLOW */          0,
+/* RES_FRMATR_DUMMY1 */             0, // Dummy:
+/* RES_FRMATR_DUMMY2 */             0, // Dummy:
+/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_FRMATR_DUMMY4 */             0, // Dummy:
+/* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
 /* RES_GRFATR_MIRRORGRF */          0, // OutW4W_SwMirrorGrf,
 /* RES_GRFATR_CROPGRF   */          0, // OutW4W_SwCropGrf
