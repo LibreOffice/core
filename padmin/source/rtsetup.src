@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:06:15 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ TabDialog RID_RTS_RTSDIALOG
     Moveable = TRUE;
     Closeable = TRUE;
     SVLook = TRUE;
-    Text = "Eigenschaften von %s" ;
+    Text = "Eigenschaften von %s" ; 
     Text [ English ] = "Properties of %s" ;
 
     TabControl RID_RTS_RTSDIALOG_TABCONTROL
@@ -103,6 +103,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ czech ] = "Příkaz";
                 Text[ hebrew ] = "‮פעולה‬";
                 Text[ hindi ] = "आज्ञा";
+                Text[ slovak ] = "Príkaz";
             };
             PageItem
             {
@@ -133,6 +134,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ czech ] = "Papír";
                 Text[ hebrew ] = "‮נייר‬";
                 Text[ hindi ] = "कागज";
+                Text[ slovak ] = "Papier";
             };
             PageItem
             {
@@ -163,6 +165,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ czech ] = "Zařízení";
                 Text[ hebrew ] = "‮כונן‬";
                 Text[ hindi ] = "साधन";
+                Text[ slovak ] = "Zariadenie";
             };
             PageItem
             {
@@ -193,6 +196,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ czech ] = "Náhrada písem";
                 Text[ hebrew ] = "‮החלפת גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट प्रतिस्थापन";
+                Text[ slovak ] = "Náhrada za písmo";
             };
             PageItem
             {
@@ -223,6 +227,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ czech ] = "Ostatní nastavení";
                 Text[ hebrew ] = "‮אפשרויות אחרות‬";
                 Text[ hindi ] = "अन्य निर्धारण";
+                Text[ slovak ] = "Iné nastavenia";
             };
         };
     };
@@ -254,6 +259,7 @@ TabDialog RID_RTS_RTSDIALOG
         Text[ czech ] = "z ovladače";
         Text[ hebrew ] = "‮מהתקן‬";
         Text[ hindi ] = "ड्रइवर से";
+        Text[ slovak ] = "z ovládača";
     };
     String RID_RTS_RTSDIALOG_INVALID_TXT
     {
@@ -283,6 +289,7 @@ TabDialog RID_RTS_RTSDIALOG
         Text[ czech ] = "<ignorovat>";
         Text[ hebrew ] = "‮<התעלמות>‬";
         Text[ hindi ] = "<उपेक्षा करो>";
+        Text[ slovak ] = "<ignorovať>";
     };
     Text[ english_us ] = "Properties of %s";
     Text[ portuguese ] = "Propriedades de %s";
@@ -308,6 +315,7 @@ TabDialog RID_RTS_RTSDIALOG
     Text[ czech ] = "Vlastnosti %s";
     Text[ hebrew ] = "‮תכונות של %s‬";
     Text[ hindi ] = "%s का स्वभाव";
+    Text[ slovak ] = "Vlastnosti %s";
 };
 
 TabPage RID_RTS_PAPERPAGE
@@ -344,6 +352,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ czech ] = "Velikost papíru";
         Text[ hebrew ] = "‮גודל נייר‬";
         Text[ hindi ] = "~कागज का परिमाण";
+        Text[ slovak ] = "Veľkosť ~papiera";
     };
     ListBox RID_RTS_PAPER_PAPER_BOX
     {
@@ -382,6 +391,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ czech ] = "Orientace";
         Text[ hebrew ] = "‮כיוון‬";
         Text[ hindi ] = "~अनुस्थापन";
+        Text[ slovak ] = "~Orientácia";
     };
     ListBox RID_RTS_PAPER_ORIENTATION_BOX
     {
@@ -420,6 +430,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ czech ] = "Duplex";
         Text[ hebrew ] = "‮דו צדדי‬";
         Text[ hindi ] = "~द्विगुणित";
+        Text[ slovak ] = "~Duplex";
     };
     ListBox RID_RTS_PAPER_DUPLEX_BOX
     {
@@ -458,6 +469,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ czech ] = "Zásobník papíru";
         Text[ hebrew ] = "‮מגש‬";
         Text[ hindi ] = "कागज का ट्रे";
+        Text[ slovak ] = "Zásobník papiera";
     };
     ListBox RID_RTS_PAPER_SLOT_BOX
     {
@@ -468,10 +480,10 @@ TabPage RID_RTS_PAPERPAGE
     };
     FixedText RID_RTS_PAPER_SCALE_TXT
     {
-        Pos = MAP_APPFONT ( 5 , 65 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Skalierung" ;
-        Text [ English ] = "~Scale" ;
+        Pos = MAP_APPFONT ( 5 , 65 ) ; 
+        Size = MAP_APPFONT ( 80 , 8 ) ; 
+        Text = "~Skalierung" ; 
+        Text [ English ] = "~Scale" ; 
         Text[ english_us ] = "~Scale";
         Text[ portuguese ] = "~Escala";
         Text[ russian ] = "~���������������";
@@ -496,13 +508,14 @@ TabPage RID_RTS_PAPERPAGE
         Text[ czech ] = "Měřítko";
         Text[ hebrew ] = "‮קנה מידה‬";
         Text[ hindi ] = "~स्केल";
+        Text[ slovak ] = "Mie~rka";
     };
     MetricField RID_RTS_PAPER_SCALE_BOX
     {
-        Border = TRUE ;
+        Border = TRUE ; 
         Spin = TRUE;
-        Pos = MAP_APPFONT ( 115 , 65 ) ;
-        Size = MAP_APPFONT ( 110 , 12 ) ;
+        Pos = MAP_APPFONT ( 115 , 65 ) ; 
+        Size = MAP_APPFONT ( 110 , 12 ) ; 
     };
 };
 
@@ -539,6 +552,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
+        Text[ slovak ] = "Farba";
     };
     String RID_RTS_DEVICE_GRAY_TXT
     {
@@ -568,6 +582,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ czech ] = "Stupně šedi";
         Text[ hebrew ] = "‮סולם האפור‬";
         Text[ hindi ] = "ग्रेस्केल";
+        Text[ slovak ] = "Stupne šedej";
     };
 
     FixedText RID_RTS_DEVICE_PPDKEY_TXT
@@ -600,6 +615,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ czech ] = "Volba";
         Text[ hebrew ] = "‮אפשרות‬";
         Text[ hindi ] = "~विकल्प";
+        Text[ slovak ] = "V~oľba";
     };
     ListBox RID_RTS_DEVICE_PPDKEY_BOX
     {
@@ -637,6 +653,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ czech ] = "Současná hodnota";
         Text[ hebrew ] = "‮ערך נוכחי‬";
         Text[ hindi ] = "वर्तमान ~मूल्य";
+        Text[ slovak ] = "Aktuálna hodno~ta";
     };
     ListBox RID_RTS_DEVICE_PPDVALUE_BOX
     {
@@ -675,6 +692,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ czech ] = "PostScript Level";
         Text[ hebrew ] = " ‮רמת‬PostScript";
         Text[ hindi ] = "पोस्टस्क्रिप्ट् ~स्तर";
+        Text[ slovak ] = "Úrov~eň Postscriptu";
     };
     ListBox RID_RTS_DEVICE_LEVEL_BOX
     {
@@ -712,6 +730,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~रंग";
+        Text[ slovak ] = "~Farba";
     };
     ListBox RID_RTS_DEVICE_SPACE_BOX
     {
@@ -749,6 +768,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ czech ] = "Barevná hloubka";
         Text[ hebrew ] = "‮עומק הצבע (בסיביות)‬";
         Text[ hindi ] = "रंग का ~गहराई";
+        Text[ slovak ] = "Farebná hĺ~bka";
     };
     ListBox RID_RTS_DEVICE_DEPTH_BOX
     {
@@ -781,7 +801,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ dutch ] = "~Vervanging van lettertype activeren";
         Text[ french ] = "Activer la ~substitution de police";
         Text[ spanish ] = "~Activar sustituci�n de fuente";
-        Text[ italian ] = "~Attiva la sostituzione dei font";
+        Text[ italian ] = "~Attiva la sostituzione del tipo di carattere";
         Text[ danish ] = "Aktiver ~skrifttypeerstatning";
         Text[ swedish ] = "Aktivera tecken~snittsers�ttning";
         Text[ polish ] = "~W��cz zamian� czcionek";
@@ -798,6 +818,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ czech ] = "Povolit nahrazování písem";
         Text[ hebrew ] = "‮לאפשר החלפת גופנים‬";
         Text[ hindi ] = "फ़ॉन्ट प्रतिस्थापन ~सक्षम करो";
+        Text[ slovak ] = "Povoliť zám~enu písma";
     };
 
     FixedText RID_RTS_FS_SUBST_TXT
@@ -813,7 +834,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ dutch ] = "Vervangen ~lettertypen";
         Text[ french ] = "Polices su~bstitu�es";
         Text[ spanish ] = "~Fuentes sustituidas";
-        Text[ italian ] = "Font sostituiti";
+        Text[ italian ] = "Tipi di carattere sostituiti";
         Text[ danish ] = "Erstattede s~krifttyper";
         Text[ swedish ] = "Ersatta te~ckensnitt";
         Text[ polish ] = "Czcion~ki zamienione";
@@ -830,6 +851,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ czech ] = "Nahrazená písma";
         Text[ hebrew ] = "‮גופנים מוחלפים‬";
         Text[ hindi ] = "प्रतिस्थापित ~फ़ॉन्ट्स";
+        Text[ slovak ] = "Nahradené ~písma";
     };
     MultiListBox RID_RTS_FS_SUBST_BOX
     {
@@ -870,6 +892,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton RID_RTS_FS_REMOVE_BTN
     {
@@ -901,6 +924,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ czech ] = "Odebrat";
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
+        Text[ slovak ] = "Odob~rať";
     };
     FixedText RID_RTS_FS_FROM_TXT
     {
@@ -932,6 +956,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ czech ] = "Nahradit písmo";
         Text[ hebrew ] = "‮החלפת גופן‬";
         Text[ hindi ] = "फ़ॉन्ट् प्रति~स्थापित करो";
+        Text[ slovak ] = "Nahradiť pí~smo";
     };
     ComboBox RID_RTS_FS_FROM_BOX
     {
@@ -971,6 +996,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ czech ] = "písmem tiskárny";
         Text[ hebrew ] = "‮גופן המדפסת‬";
         Text[ hindi ] = "~मुद्रक फ़ॉन्ट् से";
+        Text[ slovak ] = "podľa ~písma tlačiarne";
     };
     ListBox RID_RTS_FS_TO_BOX
     {
@@ -1024,6 +1050,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Vybrat příkaz";
         Text[ hebrew ] = "‮בחירת פעולה‬";
         Text[ hindi ] = "आज्ञा चुनो";
+        Text[ slovak ] = "Vybrať príkaz";
     };
     String RID_RTS_CMD_STR_CONFIGURE_PRINTER
     {
@@ -1037,7 +1064,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Imprimante";
         Text[ spanish ] = "Impresora";
         Text[ italian ] = "Stampante";
-        Text[ danish ] = "Printer";
+        Text[ danish ] = "Printer ";
         Text[ swedish ] = "Skrivare";
         Text[ polish ] = "Drukarka";
         Text[ portuguese_brazilian ] = "Impressora";
@@ -1053,6 +1080,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Tiskárna";
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "मुद्रक";
+        Text[ slovak ] = "Tlačiareň";
     };
     String RID_RTS_CMD_STR_CONFIGURE_FAX
     {
@@ -1061,7 +1089,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "Fax";
         Text[ portuguese ] = "Fax";
         Text[ russian ] = "����";
-        Text[ greek ] = "Fax";
+        Text[ greek ] = "~Fax";
         Text[ dutch ] = "fax";
         Text[ french ] = "Fax";
         Text[ spanish ] = "Fax";
@@ -1082,6 +1110,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Fax";
         Text[ hebrew ] = "‮פקס‬";
         Text[ hindi ] = "फ़ॉक्स";
+        Text[ slovak ] = "Fax";
     };
     String RID_RTS_CMD_STR_CONFIGURE_PDF
     {
@@ -1111,8 +1140,9 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "PDF konvertor";
         Text[ hebrew ] = "‮ממיר ל PDF‬";
         Text[ hindi ] = "PDF कनवर्टर";
+        Text[ slovak ] = "PDF konvertor";
     };
-
+    
     ListBox RID_RTS_CMD_LB_CONFIGURE
     {
         DropDown = true;
@@ -1150,6 +1180,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Konfigurovat jako";
         Text[ hebrew ] = "‮תצורה בתור‬";
         Text[ hindi ] = "~रूपरेखा दो जैसे";
+        Text[ slovak ] = "~Konfigurovať";
     };
 
     CheckBox RID_RTS_CMD_BOX_SWALLOWFAXNO
@@ -1182,6 +1213,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Číslo faxu bude z výstupu odstraněno";
         Text[ hebrew ] = "‮מספר הפקס יוסר מהפלט‬";
         Text[ hindi ] = "औटपुट् से ~फ़ॉक्स संख्या को हटाया जाएगा";
+        Text[ slovak ] = "~Faxové číslo bude odstránené z výstupu";
     };
     FixedText RID_RTS_CMD_TXT_PDFDIR
     {
@@ -1213,6 +1245,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Cílový adresář PDF:";
         Text[ hebrew ] = "‮ספרית יעד לפלט PDF‬";
         Text[ hindi ] = "PDF लक्ष्य डैरक्टरी :";
+        Text[ slovak ] = "Cieľový adresár PDF:";
     };
     Edit RID_RTS_CMD_EDT_PDFDIR
     {
@@ -1261,6 +1294,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Příkaz: ";
         Text[ hebrew ] = "‮פעולה:‬";
         Text[ hindi ] = "आज्ञा: ";
+        Text[ slovak ] = "Príkaz ";
     };
     FixedLine RID_RTS_CMD_FL_DEFAULT
     {
@@ -1276,7 +1310,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ french ] = "Imprimante";
         Text[ spanish ] = "Impresora";
         Text[ italian ] = "Stampante";
-        Text[ danish ] = "Printer";
+        Text[ danish ] = "Printer ";
         Text[ swedish ] = "Skrivare";
         Text[ polish ] = "Drukarka";
         Text[ portuguese_brazilian ] = "Impressora";
@@ -1292,6 +1326,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Tiskárna";
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "मुद्रक";
+        Text[ slovak ] = "Tlačiareň";
     };
     PushButton RID_RTS_CMD_BTN_HELP
     {
@@ -1323,6 +1358,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Nápověda";
         Text[ hebrew ] = "‮עזרה‬";
         Text[ hindi ] = "~सहायता";
+        Text[ slovak ] = "~Pomocník";
     };
     PushButton RID_RTS_CMD_BTN_REMOVE
     {
@@ -1354,6 +1390,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     String RID_RTS_CMD_STR_PDFHELP
     {
@@ -1383,6 +1420,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Příkazová řádka pro konvertory do PDF je spouštěna takto: Pro každý tisknutý dokument je \"(TMP)\" v příkazové řádce nahrazeno dočasným souborem a \"(OUTFILE)\" je nahrazeno názvem cílového PDF souboru. Pokud se v příkazové řádce vyskytuje \"(TMP)\", je PostScriptový kód předán dočasným souborem, v opačném případě do standardního vstupu pomocí roury.";
         Text[ hebrew ] = "‮התוכנה מבצעת את הפקודה להמרה ל-PDF באופן הבא: עבור כל מסמך שמודפס, המחרוזת \"(TMP)\"  בשורת הפקודה תוחלף בידי קובץ זמני והמחרוזת \"(OUTFILE)\" בשורת הפקודה תוחלף בשם קובץ פלט ה PDF. יש לציין שמקור הקלט בקובץ PostScript על ידי המחרוזת \"(TMP)\" בשורת הפקודה, אחרת התוכנית תקראה מקלט ברירת המחדל.‬";
         Text[ hindi ] = "PDF कनवर्टरों केलिए आज्ञा रेखा निम्नलिखित प्रकार से पूरा होगा: छपाई की हुयी हरेक लेखपत्र केलिए, आज्ञा रेखा में \"(TMP)\" को अल्पकालिक फाइल से प्रतिस्थापित किया जायेगा और आज्ञा रेखा में \"(OUTFILE)\" को लक्ष्य का PDF फाइल नाम से प्रतिस्थापित किया जायेगा । अगर \"(TMP)\" आज्ञा रेखा में है, तो पोस्टस्क्रिप्ट कोड को एक फाइल के द्वारा भेजा जायेगा, नहीं तो स्टान्डर्ड इनपुट जैसे (एक पइप जैसे) भेजा जायेगा ।";
+        Text[ slovak ] = "Príkazový riadok pre PDF konvertory je spracovaný takto: pre každý vytlačený dokument, \"(TMP)\" v príkazovom riadku je zamenený dočasným súborom a \"(OUTFILE)\" v príkazovom riadku je zamenený za cieľový názov PDF súboru. Ak\"(TMP)\" je v príkazovom riadku, PostScript kód bude dodaný cez súbor, inak cez cez štandardný vstup (tzn. ako rúra).";
     };
     String RID_RTS_CMD_STR_PRINTERHELP
     {
@@ -1412,6 +1450,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Příkazová řádka pro tisková zařízení je spouštěna takto: Vygenerovaný PostScriptový kód je předán do standardního vstupu (pomocí roury) spuštěného příkazu.";
         Text[ hebrew ] = "‮יש לספק קובץ PostScript בקלט ברירת המחדל עבור פקודות הדפסה.‬";
         Text[ hindi ] = "मुद्रक साधनों केलिए आज्ञा रेखा को निम्नलिखित प्रकार से चलाना है: आज्ञा रेखा को उत्पादित पोस्टस्क्रिप्ट कोड को स्टान्डर्ड इनपुट् जैसे दिया जायेगा (पइप जैसे) ।";
+        Text[ slovak ] = "Príkazový riadok pre tlačiarne je spracovaný takto: generovaný PostScript kód je dodaný ako štandardný vstup (tzn. ako rúra) v príkazovom riadku.";
     };
     String RID_RTS_CMD_STR_FAXHELP
     {
@@ -1441,6 +1480,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ czech ] = "Příkazová řádka pro faxová zařízení je spouštěna takto: Pro každý odesílaný fax je \"(TMP)\" v příkazové řádce nahrazeno dočasným souborem a \"(PHONE)\" je nahrazeno telefonním číslem faxu. Pokud se v příkazové řádce vyskytuje \"(TMP)\", je PostScriptový kód předán dočasným souborem, v opačném případě do standardního vstupu pomocí roury.";
         Text[ hebrew ] = "‮התוכנה מבצעת את הפקודה לשילוח פקס באופן הבא: עבור כל פקס, המחרוזת ‬\"(TMP)\"‮ תוחלף בידי קובץ זמני והמחרוזת-‬\"(PHONE)\"‮ תוחלף במספר הפקס. יש לציין אספקת קלט בקובץ ‬PostScript‮ על ידי המחריזת‬\"(TMP)\"‮ בשורת הפקודה, אחרת התוכנית תנסה לקראו את הקלט מקלט ברירת המחדל. ‬";
         Text[ hindi ] = "फ़ॉक्स साधनों केलिए आज्ञा रेखा निम्नलिखित प्रकार से पूरा होगा: भेजा हुआ हरेक फ़ॉक्स केलिए, आज्ञा रेखा में \"(TMP)\" को अल्पकालिक फाइल से प्रतिस्थापित किया जायेगा और आज्ञा रेखा में \"(PHONE)\" को फ़ॉक्स संख्या से प्रतिस्थापित किया जायेगा । अगर \"(TMP)\" आज्ञा रेखा में दिख रहा है, तो पोस्टस्क्रिप्ट कोड को एक फाइल के द्वारा भेजा जायेगा, नहीं तो स्टान्डर्ड इनपुट जैसे (एक पइप जैसे) भेजा जायेगा ।";
+        Text[ slovak ] = "Príkazový riadok pre faxové zariadenia je spracovaný takto: pre každý fax poslaný, \"(TMP)\" v príkazovom riadku je zamenený dočasným súborom a \"(PHONE)\" v príkazovom riadku je zamenený faxovým číslom. Ak sa \"(TMP)\" nachádza v príkazovom riadku, PostScript kód bude dodaný cez súbor, inak cez štandardný vstup (tzn. rúrou)";
     };
 };
 
@@ -1479,6 +1519,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ czech ] = "Levý okraj";
         Text[ hebrew ] = "‮שוליים שמאליים‬";
         Text[ hindi ] = "~बायाँ ओर की पृष्ठ-प्रान्त को व्यवस्था करो";
+        Text[ slovak ] = "Ľavý o~kraj";
     };
     MetricField RID_RTS_OTHER_LEFTMARGIN_BOX
     {
@@ -1520,6 +1561,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ czech ] = "Horní okraj";
         Text[ hebrew ] = "‮שוליים עליונים‬";
         Text[ hindi ] = "~ऊपर की पृष्ठ-प्रान्त को व्यवस्था करो";
+        Text[ slovak ] = "~Horný okraj";
     };
     MetricField RID_RTS_OTHER_TOPMARGIN_BOX
     {
@@ -1561,6 +1603,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ czech ] = "Pravý okraj";
         Text[ hebrew ] = "‮שוליים ימניים‬";
         Text[ hindi ] = "~दाहिनी ओर की पृष्ठ-प्रान्त को व्यवस्था करो";
+        Text[ slovak ] = "P~ravý okraj";
     };
     MetricField RID_RTS_OTHER_RIGHTMARGIN_BOX
     {
@@ -1602,6 +1645,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ czech ] = "Spodní okraj";
         Text[ hebrew ] = "‮שוליים תחתונים‬";
         Text[ hindi ] = "~नीचे की पृष्ठ-प्रान्त को व्यवस्था करो";
+        Text[ slovak ] = "~Spodný okraj";
     };
     MetricField RID_RTS_OTHER_BOTTOMMARGIN_BOX
     {
@@ -1618,7 +1662,7 @@ TabPage RID_RTS_OTHERPAGE
         Pos = MAP_APPFONT( 5, 65 );
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Kommentar" ;
-        Text [ English ] = "~Comment" ;
+        Text [ English ] = "~Comment" ;     
         Text[ english_us ] = "~Comment";
         Text[ portuguese ] = "~Coment�rio";
         Text[ russian ] = "~�����������";
@@ -1643,6 +1687,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ czech ] = "Komentář";
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "~अपवाद";
+        Text[ slovak ] = "~Komentár";
     };
     Edit RID_RTS_OTHER_COMMENT_EDT
     {
@@ -1680,6 +1725,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
 };
 
@@ -1711,7 +1757,10 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ czech ] = "Prosím zadejte faxové číslo.";
     Text[ hebrew ] = "‮מספר הפקס‬";
     Text[ hindi ] = "कृपया फ़ॉक्स संख्या को प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Prosím zadajte faxové číslo.";
 };
+
+
 
 
 
