@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-01-31 12:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1;
     for(; aIter != _rInsertRow->end();++aIter)
     {
-        ((aSql += aQuote) += m_xSetMetaData->getColumnName(i++)) += aQuote;
+        aSql += ::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++));
         aSql += aComma;
         aValues += aPara;
     }
@@ -279,7 +279,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
         aColumnName = m_xSetMetaData->getColumnName(i);
         if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
         {
-            ((aCondition += aQuote) += aColumnName) += aQuote;
+            aCondition += ::dbtools::quoteName( aQuote,aColumnName);
             if(aIter->isNull())
                 aCondition += ::rtl::OUString::createFromAscii(" IS NULL");
             else
@@ -293,7 +293,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
         {
             if((*aIndexIter)->hasByName(aColumnName))
             {
-                ((aCondition += aQuote) += aColumnName) += aQuote;
+                aCondition += ::dbtools::quoteName( aQuote,aColumnName);
                 if(aIter->isNull())
                     aCondition += ::rtl::OUString::createFromAscii(" IS NULL");
                 else
@@ -305,7 +305,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
         }
         if(aIter->isModified())
         {
-            ((aSql += aQuote) += aColumnName) += aQuote;
+            aSql += ::dbtools::quoteName( aQuote,aColumnName);
             aSql += aPara;
         }
     }
@@ -413,7 +413,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
             aColumnName = m_xSetMetaData->getColumnName(i++);
             if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
             {
-                ((aSql += aQuote) += aColumnName) += aQuote;
+                aSql += ::dbtools::quoteName( aQuote,aColumnName);
                 if(aIter->isNull())
                     aSql += ::rtl::OUString::createFromAscii(" IS NULL");
                 else
@@ -427,7 +427,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
             {
                 if((*aIndexIter)->hasByName(aColumnName))
                 {
-                    ((aSql += aQuote) += aColumnName) += aQuote;
+                    aSql += ::dbtools::quoteName( aQuote,aColumnName);
                     if(aIter->isNull())
                         aSql += ::rtl::OUString::createFromAscii(" IS NULL");
                     else
@@ -566,6 +566,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.15  2001/01/24 09:50:49  oj
+    #82628# rowset modifications
+
     Revision 1.14  2001/01/22 07:38:23  oj
     #82632# change member
 

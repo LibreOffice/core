@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-04 14:22:37 $
+ *  last change: $Author: oj $ $Date: 2001-01-31 12:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,7 +825,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" ADD ");
-        aSql += aQuote + connectivity::getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote;
+        aSql += ::dbtools::quoteName( aQuote,::comphelper::getString(descriptor->getPropertyValue(PROPERTY_NAME)));
         aSql += ::rtl::OUString::createFromAscii(" ");
 
         sal_Int32 nType = connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_TYPE));
@@ -909,7 +909,7 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" DROP ");
-        aSql += aQuote + elementName + aQuote;
+        aSql += ::dbtools::quoteName( aQuote,elementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
