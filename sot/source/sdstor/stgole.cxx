@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgole.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 12:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #include "rtl/string.h"
 #include "stgole.hxx"
 #include "storinfo.hxx"     // Read/WriteClipboardFormat()
+
+#include <tools/debug.hxx>
 #pragma hdrstop
 
 ///////////////////////// class StgInternalStream ////////////////////////
@@ -74,7 +76,9 @@ StgInternalStream::StgInternalStream
     USHORT nMode = bWr
                  ? STREAM_WRITE | STREAM_SHARE_DENYALL
                  : STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE;
-    pStrm = rStg.OpenStream( rName, nMode );
+    pStrm = PTR_CAST( StorageStream, rStg.OpenStream( rName, nMode ) );
+    DBG_ASSERT( pStrm, "No StorageStream!" );
+
     // set the error code right here in the stream
     SetError( rStg.GetError() );
     SetBufferSize( 1024 );
