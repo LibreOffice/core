@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:22:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,24 +162,33 @@ public:
     */
     ScrollBarManager& GetScrollBarManager (void);
 
-    /** Return the page that currently has the focus or is the first page of
-        the selection.
-        @return
-            When there is no focus and the selection is empty then NULL is
-            returned.
+    /** This method forwards the call to the SlideSorterView and executes
+        pending operations like moving selected pages into the visible area.
     */
-    virtual SdPage* GetActualPage (void);
+    void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 
-    virtual void FuTemporary (SfxRequest& rRequest);
-    virtual void FuPermanent (SfxRequest& rRequest);
-    virtual void FuSupport (SfxRequest& rRequest);
-    virtual bool Command (
+    /** The name of this method is taken from the ViewShell class.  It
+        returns the page that (hopefully) has currently the attention of the
+        user.
+        @return
+            When the slide sorter is not displayed in the center pane then
+            the current page of the center pane view shell is returned.
+            Other wise the focused page is returned or, if the focus
+            indicator is not currently visible, the first selected page is
+            returned.  If all that fails then NULL is returned.
+    */
+    SdPage* GetActualPage (void);
+
+    void FuTemporary (SfxRequest& rRequest);
+    void FuPermanent (SfxRequest& rRequest);
+    void FuSupport (SfxRequest& rRequest);
+    bool Command (
         const CommandEvent& rEvent,
         ::sd::Window* pWindow);
 
-    virtual void GetCtrlState (SfxItemSet &rSet);
-    virtual void GetMenuState (SfxItemSet &rSet);
-    virtual void GetStatusBarState (SfxItemSet& rSet);
+    void GetCtrlState (SfxItemSet &rSet);
+    void GetMenuState (SfxItemSet &rSet);
+    void GetStatusBarState (SfxItemSet& rSet);
 
     void ExecCtrl (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
@@ -254,16 +263,22 @@ public:
     enum SelectionHint { SH_FIRST, SH_LAST, SH_RECENT };
 
     /** Try to make all currently selected page objects visible, i.e. set
-        the zoom factor and origin so that the page objects lie inside the
-        visible area.
+        the origin so that the page objects lie inside the visible area.
+        When the selection is empty then the visible area is not modified.
         @param eSelectionHint
-            This is an advice on which selected page object is handled with
+            This is an advice on which selected page object to handle with
             the highest priority when the whole selection does not fit in to
             the visible area.
     */
     void MakeSelectionVisible (
         SelectionHint eSelectionHint = SH_RECENT);
 
+    /** Modify the origin of the visible area so that the given rectangle
+        comes into view.  This is done with the smallest change: no
+        scrolling takes place when the given rectangle already lies in the
+        visible area.  Otherwise either the top or the bottom of the given
+        rectangle is aligned with the top or the bottom of the visible area.
+    */
     void MakeRectangleVisible (const Rectangle& rBox);
 
     /** Set the zoom factor.  The given value is clipped against an upper
@@ -357,6 +372,11 @@ private:
         FinishEditModeChange().
     */
     SdPage* mpEditModeChangeMasterPage;
+
+    /** When this flag is set then on the next call to Paint() the selection
+        is moved into the visible area.
+    */
+    bool mbIsMakeSelectionVisiblePending;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
