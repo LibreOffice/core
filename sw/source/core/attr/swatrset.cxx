@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 14:34:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,30 +205,7 @@ int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
     return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
 }
 
-
-int SwAttrSet::Differentiate_BC( const SfxItemSet& rSet,
-                            SwAttrSet* pOld, SwAttrSet* pNew )
-{
-    pNewSet = pNew;
-    pOldSet = pOld;
-    SfxItemSet::Differentiate( rSet );
-    pOldSet = pNewSet = 0;
-    return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
-}
-
-
-int SwAttrSet::MergeValues_BC( const SfxItemSet& rSet,
-                            SwAttrSet* pOld, SwAttrSet* pNew )
-{
-    pNewSet = pNew;
-    pOldSet = pOld;
-    SfxItemSet::MergeValues( rSet );
-    pOldSet = pNewSet = 0;
-    return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
-}
-
-
-    // Notification-Callback
+// Notification-Callback
 void  SwAttrSet::Changed( const SfxPoolItem& rOld,
                                 const SfxPoolItem& rNew )
 {
