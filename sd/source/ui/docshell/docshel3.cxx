@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:25:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "fuhhconv.hxx"
 
@@ -166,15 +166,10 @@ namespace sd {
 
 void DrawDocShell::Execute( SfxRequest& rReq )
 {
-    if (pViewShell)
+    if(pViewShell && pViewShell->GetSlideShow())
     {
-        FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
-
-        if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
-        {
-            // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
-            return;
-        }
+        // during a running presentation no slot will be executed
+        return;
     }
 
     switch ( rReq.GetSlot() )
