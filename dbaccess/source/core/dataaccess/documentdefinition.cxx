@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-16 15:49:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,8 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
               ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
               ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
+        if ( xConnection.is() )
+            m_xLastKnownConnection = xConnection;
 
         if ( bOpenFolder )
         {
@@ -1345,11 +1347,15 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
     if ( !m_bForm && _bFill && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
     {
         setModelReadOnly(sal_False);
-        Sequence<Any> aArgs(1);
+        Sequence<Any> aArgs(2);
         PropertyValue aValue;
         aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocument"));
         aValue.Value <<= getComponent();
         aArgs[0] <<= aValue;
+           aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"));
+           aValue.Value <<= m_xLastKnownConnection;
+           aArgs[1] <<= aValue;
+
         Reference< XJobExecutor > xExecuteable(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aArgs),UNO_QUERY);
         if ( xExecuteable.is() )
             xExecuteable->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fill")));
