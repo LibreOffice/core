@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:34:33 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 07:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,88 +364,4 @@ String STR_DDEFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vínculo DDE";
 };
-String STR_RTFFORMAT
-{
-    Text = "Formatierter Text [RTF]" ;
-    Text [ ENGLISH ] = "Formatted text [RTF]" ;
-    Text [ norwegian ] = "Formatert tekst [RTF]" ;
-    Text [ italian ] = "Testo formattato [RTF]" ;
-    Text [ portuguese_brazilian ] = "Texto formatado [RTF]" ;
-    Text [ portuguese ] = "Texto formatado [RTF]" ;
-    Text [ finnish ] = "Muotoiltu teksti (RTF)" ;
-    Text [ danish ] = "Formateret tekst [RTF]" ;
-    Text [ french ] = "Texte formaté [RTF]" ;
-    Text [ swedish ] = "Formaterad text [RTF]" ;
-    Text [ dutch ] = "Opgemaakte tekst [RTF]" ;
-    Text [ spanish ] = "Texto formateado [RTF]" ;
-    Text [ english_us ] = "Formatted text [RTF]" ;
-    Text[ chinese_simplified ] = "ÒÑ¸ñÊ½»¯µÄÎÄ±¾[RTF]";
-    Text[ russian ] = "Îòôîğìàòèğîâàííûé òåêñò [RTF]";
-    Text[ polish ] = "sformatowany tekst [RTF]";
-    Text[ japanese ] = "‘®İ’èÏ‚İ‚ÌÃ·½Ä [RTF]";
-    Text[ greek ] = "Ìïñöïğïéçìİíï êåßìåíï [RTF]";
-    Text[ korean ] = "Æ÷¸ËµÈ ÅØ½ºÆ® [RTF]";
-    Text[ chinese_traditional ] = "¤w¸g®æ¦¡¤Æªº¤å¦r [RTF]";
-    Text[ arabic ] = "[RTF]äÕ ãõäÓŞ ";
-    Text[ turkish ] = "Formatlı metin [RTF]";
-    Text[ catalan ] = "Texto formateado [RTF]";
-};
-String STR_TEXTFORMAT
-{
-    Text = "Unformatierter Text" ;
-    Text [ ENGLISH ] = "Unformatted Text" ;
-    Text [ norwegian ] = "Uformatert Tekst" ;
-    Text [ italian ] = "Testo non formattato" ;
-    Text [ portuguese_brazilian ] = "Texto N?o Formatado" ;
-    Text [ portuguese ] = "Texto não formatado" ;
-    Text [ finnish ] = "Muotoilematon teksti" ;
-    Text [ danish ] = "Uformateret tekst" ;
-    Text [ french ] = "Texte non formaté" ;
-    Text [ swedish ] = "Oformaterad text" ;
-    Text [ dutch ] = "Tekst zonder opmaak" ;
-    Text [ spanish ] = "Texto no formateado" ;
-    Text [ english_us ] = "Unformatted text" ;
-    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ×Ö";
-    Text[ russian ] = "Íåîòôîğìàòèğîâàííûé òåêñò";
-    Text[ polish ] = "niesformatowany tekst";
-    Text[ japanese ] = "‘®İ’è‚³‚ê‚Ä‚¢‚È‚¢Ã·½Ä";
-    Text[ chinese_traditional ] = "¥¼®æ¦¡¤Æªº¤å¦r";
-    Text[ arabic ] = "äÕ ÛíÑ ãäÓŞ";
-    Text[ dutch ] = "Tekst zonder opmaak";
-    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ×Ö";
-    Text[ greek ] = "Êåßìåíï ÷ùñßò ìïñöïğïßçóç";
-    Text[ korean ] = "Æ÷¸ËµÇÁö¾ÊÀº ÅØ½ºÆ®";
-    Text[ turkish ] = "Formatlanmamış metin";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto no formateado";
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
