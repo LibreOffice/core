@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:35:27 $
+ *  last change: $Author: os $ $Date: 2001-12-04 11:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ TabPage TP_LAB_PRT
     CheckBox CB_SYNCHRON
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Inhalte ~synchronisieren" ;
         Text [ ENGLISH ] = "~Synchronize content" ;
         TabStop = TRUE ;
