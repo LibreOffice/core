@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:55:02 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,12 @@ throw(  SAXException, RuntimeException )
 
 // -----------------------------------------------------------------------------
 
-OReadMenuDocumentHandler::OReadMenuDocumentHandler( const Reference< XIndexContainer >& rMenuBarContainer ) :
+// #110897#
+OReadMenuDocumentHandler::OReadMenuDocumentHandler(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const Reference< XIndexContainer >& rMenuBarContainer )
+:   // #110897#
+    mxServiceFactory(xServiceFactory),
     m_xMenuBarContainer( rMenuBarContainer ),
     m_xContainerFactory( rMenuBarContainer, UNO_QUERY ),
     m_nElementDepth( 0 ),
@@ -276,6 +281,12 @@ OReadMenuDocumentHandler::OReadMenuDocumentHandler( const Reference< XIndexConta
 {
 }
 
+// #110897#
+const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuDocumentHandler::getServiceFactory()
+{
+    // #110897#
+    return mxServiceFactory;
+}
 
 OReadMenuDocumentHandler::~OReadMenuDocumentHandler()
 {
@@ -313,7 +324,10 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = sal_True;
-        m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
+
+        // #110897# m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
+        m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( getServiceFactory(), m_xMenuBarContainer, m_xContainerFactory ));
+
         m_xReader->startDocument();
     }
 }
@@ -351,9 +365,13 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
 // -----------------------------------------------------------------------------
 
 
+// #110897#
 OReadMenuBarHandler::OReadMenuBarHandler(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer,
-    const Reference< XSingleComponentFactory >& rFactory          ) :
+    const Reference< XSingleComponentFactory >& rFactory          )
+:   // #110897#
+    mxServiceFactory( xServiceFactory ),
     m_xMenuBarContainer( rMenuBarContainer ),
     m_xContainerFactory( rFactory ),
     m_nElementDepth( 0 ),
@@ -361,6 +379,12 @@ OReadMenuBarHandler::OReadMenuBarHandler(
 {
 }
 
+// #110897#
+const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuBarHandler::getServiceFactory()
+{
+    // #110897#
+    return mxServiceFactory;
+}
 
 OReadMenuBarHandler::~OReadMenuBarHandler()
 {

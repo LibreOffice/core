@@ -63,25 +63,32 @@ namespace framework
 
 SV_IMPL_PTRARR( StatusBarDescriptor, StatusBarItemDescriptorPtr);
 
-static Reference< XParser > GetSaxParser()
+static Reference< XParser > GetSaxParser(
+    // #110897#
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    )
 {
-    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    return Reference< XParser >( xServiceManager->createInstance(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
-                                UNO_QUERY);
+    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    //return Reference< XParser >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
+    return Reference< XParser >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
 }
 
-static Reference< XDocumentHandler > GetSaxWriter()
+static Reference< XDocumentHandler > GetSaxWriter(
+    // #110897#
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    )
 {
-    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    return Reference< XDocumentHandler >( xServiceManager->createInstance(
-                                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )),
-                                          UNO_QUERY) ;
+    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    //return Reference< XDocumentHandler >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+    return Reference< XDocumentHandler >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
 }
 
-sal_Bool StatusBarConfiguration::LoadStatusBar( SvStream& rInStream, StatusBarDescriptor& aItems )
+// #110897#
+sal_Bool StatusBarConfiguration::LoadStatusBar(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rInStream, StatusBarDescriptor& aItems )
 {
-    Reference< XParser > xParser( GetSaxParser() );
+    Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
     Reference< XInputStream > xInputStream(
                                 (::cppu::OWeakObject *)new utl::OInputStreamWrapper( rInStream ),
                                 UNO_QUERY );
@@ -120,9 +127,12 @@ sal_Bool StatusBarConfiguration::LoadStatusBar( SvStream& rInStream, StatusBarDe
 }
 
 
-sal_Bool StatusBarConfiguration::StoreStatusBar( SvStream& rOutStream, const StatusBarDescriptor& aItems )
+// #110897#
+sal_Bool StatusBarConfiguration::StoreStatusBar(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rOutStream, const StatusBarDescriptor& aItems )
 {
-    Reference< XDocumentHandler > xWriter( GetSaxWriter() );
+    Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
 
     Reference< XOutputStream > xOutputStream(
                                 (::cppu::OWeakObject *)new utl::OOutputStreamWrapper( rOutStream ),

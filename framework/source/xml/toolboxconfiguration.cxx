@@ -68,25 +68,33 @@ namespace framework
 SV_IMPL_PTRARR( ToolBoxDescriptor, ToolBoxItemDescriptorPtr);
 SV_IMPL_PTRARR( ToolBoxLayoutDescriptor, ToolBoxLayoutItemDescriptorPtr);
 
-static Reference< XParser > GetSaxParser()
+static Reference< XParser > GetSaxParser(
+    // #110897#
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    )
 {
-    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    return Reference< XParser >( xServiceManager->createInstance(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
-                                UNO_QUERY);
+    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    //return Reference< XParser >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
+    return Reference< XParser >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
 }
 
-static Reference< XDocumentHandler > GetSaxWriter()
+static Reference< XDocumentHandler > GetSaxWriter(
+    // #110897#
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    )
 {
-    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    return Reference< XDocumentHandler >( xServiceManager->createInstance(
-                                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )),
-                                          UNO_QUERY) ;
+    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    //return Reference< XDocumentHandler >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+    return Reference< XDocumentHandler >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
 }
 
-sal_Bool ToolBoxConfiguration::LoadToolBox( SvStream& rInStream, ToolBoxDescriptor& aItems )
+// #110897#
+sal_Bool ToolBoxConfiguration::LoadToolBox(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rInStream,
+    ToolBoxDescriptor& aItems )
 {
-    Reference< XParser > xParser( GetSaxParser() );
+    Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
     Reference< XInputStream > xInputStream(
                                 (::cppu::OWeakObject *)new utl::OInputStreamWrapper( rInStream ),
                                 UNO_QUERY );
@@ -125,9 +133,13 @@ sal_Bool ToolBoxConfiguration::LoadToolBox( SvStream& rInStream, ToolBoxDescript
 }
 
 
-sal_Bool ToolBoxConfiguration::StoreToolBox( SvStream& rOutStream, const ToolBoxDescriptor& aItems )
+// #110897#
+sal_Bool ToolBoxConfiguration::StoreToolBox(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rOutStream,
+    const ToolBoxDescriptor& aItems )
 {
-    Reference< XDocumentHandler > xWriter( GetSaxWriter() );
+    Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
 
     Reference< XOutputStream > xOutputStream(
                                 (::cppu::OWeakObject *)new utl::OOutputStreamWrapper( rOutStream ),
@@ -158,9 +170,13 @@ sal_Bool ToolBoxConfiguration::StoreToolBox( SvStream& rOutStream, const ToolBox
     return sal_False;
 }
 
-sal_Bool    ToolBoxConfiguration::LoadToolBoxLayout( SvStream& rInStream, ToolBoxLayoutDescriptor& aItems )
+// #110897#
+sal_Bool ToolBoxConfiguration::LoadToolBoxLayout(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rInStream,
+    ToolBoxLayoutDescriptor& aItems )
 {
-    Reference< XParser > xParser( GetSaxParser() );
+    Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
     Reference< XInputStream > xInputStream(
                                 (::cppu::OWeakObject *)new utl::OInputStreamWrapper( rInStream ),
                                 UNO_QUERY );
@@ -198,9 +214,13 @@ sal_Bool    ToolBoxConfiguration::LoadToolBoxLayout( SvStream& rInStream, ToolBo
     return sal_False;
 }
 
-sal_Bool ToolBoxConfiguration::StoreToolBoxLayout( SvStream& rOutStream, ToolBoxLayoutDescriptor& aItems )
+// #110897#
+sal_Bool ToolBoxConfiguration::StoreToolBoxLayout(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rOutStream,
+    ToolBoxLayoutDescriptor& aItems )
 {
-    Reference< XDocumentHandler > xWriter( GetSaxWriter() );
+    Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
 
     Reference< XOutputStream > xOutputStream(
                                 (::cppu::OWeakObject *)new utl::OOutputStreamWrapper( rOutStream ),
