@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:13:16 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,11 @@ namespace framework
                               m_bCreateNewRowCol0( sal_False ),
                               m_bDeactiveHide( sal_False ),
                               m_bMasterHide( sal_False ),
-                              m_nStyle( BUTTON_SYMBOL ) {}
+                              m_bContextActive( sal_True ),
+                              m_nStyle( BUTTON_SYMBOL ),
+                              m_bNoClose( sal_False ),
+                              m_bSoftClose( sal_False )
+                              {}
 
                 UIElement( const rtl::OUString& rName,
                            const rtl::OUString& rType,
@@ -421,6 +425,10 @@ namespace framework
                                m_bCreateNewRowCol0( sal_False ),
                                m_bDeactiveHide( sal_False ),
                                m_bMasterHide( sal_False ),
+                               m_bContextSensitive( sal_False ),
+                               m_bContextActive( sal_True ),
+                               m_bNoClose( sal_False ),
+                               m_bSoftClose( sal_False ),
                                m_nStyle( BUTTON_SYMBOL ) {}
 
                 bool operator< ( const UIElement& aUIElement ) const;
@@ -428,13 +436,17 @@ namespace framework
                 rtl::OUString                                                            m_aType;
                 rtl::OUString                                                            m_aName;
                 rtl::OUString                                                            m_aUIName;
-                com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > m_xUIElement;
+                com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >       m_xUIElement;
                 sal_Bool                                                                 m_bFloating : 1,
                                                                                          m_bVisible : 1,
                                                                                          m_bUserActive : 1,
                                                                                          m_bCreateNewRowCol0 : 1,
                                                                                          m_bDeactiveHide : 1,
-                                                                                         m_bMasterHide : 1;
+                                                                                         m_bMasterHide : 1,
+                                                                                         m_bContextSensitive : 1,
+                                                                                         m_bContextActive : 1;
+                sal_Bool                                                                 m_bNoClose : 1,
+                                                                                         m_bSoftClose : 1;
                 sal_Int16                                                                m_nStyle;
                 DockedData                                                               m_aDockedData;
                 FloatingData                                                             m_aFloatingData;
@@ -466,6 +478,7 @@ namespace framework
             void implts_destroyElements();
             void implts_createAddonsToolBars();
             void implts_createCustomToolBars();
+            void implts_createNonContextSensitiveToolBars();
             void implts_createCustomToolBars( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& aCustomTbxSeq );
             void implts_createCustomToolBar( const rtl::OUString& aTbxResName, const rtl::OUString& aTitle );
             void implts_toggleFloatingUIElementsVisibility( sal_Bool bActive );
