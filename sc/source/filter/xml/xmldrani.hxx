@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:02:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ public:
 class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
     rtl::OUString   sDatabaseRangeName;
+    rtl::OUString   sConnectionRessource;
     rtl::OUString   sRangeAddress;
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
@@ -173,6 +174,7 @@ public:
     virtual void EndElement();
 
     void SetDatabaseName(const rtl::OUString sTempDatabaseName) { sDatabaseName = sTempDatabaseName; }
+    void SetConnectionRessource(const rtl::OUString sTempConRes) { sConnectionRessource = sTempConRes; }
     void SetSourceObject(const rtl::OUString sTempSourceObject) { sSourceObject = sTempSourceObject; }
     void SetSourceType(const com::sun::star::sheet::DataImportMode nTempSourceType) { nSourceType = nTempSourceType; }
     void SetNative(const sal_Bool bTempNative) { bNative = bTempNative; }
@@ -199,7 +201,8 @@ public:
 
 class ScXMLSourceSQLContext : public SvXMLImportContext
 {
-    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
+    ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
+    rtl::OUString               sDBName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -224,7 +227,8 @@ public:
 
 class ScXMLSourceTableContext : public SvXMLImportContext
 {
-    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
+    ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
+    rtl::OUString               sDBName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -249,7 +253,8 @@ public:
 
 class ScXMLSourceQueryContext : public SvXMLImportContext
 {
-    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
+    ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
+    rtl::OUString               sDBName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -263,6 +268,31 @@ public:
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
     virtual ~ScXMLSourceQueryContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLConResContext : public SvXMLImportContext
+{
+    ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLConResContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
+
+    virtual ~ScXMLConResContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
