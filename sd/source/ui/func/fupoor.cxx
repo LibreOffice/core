@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-03 16:16:14 $
+ *  last change: $Author: cl $ $Date: 2002-05-06 09:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,9 +549,10 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEUP:
         {
-            pView->EndTextEdit();
-            if (!rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if(rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
+                pView->EndTextEdit();
+
                 // Vorherige Seite
                 bReturn = TRUE;
                 SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
@@ -560,21 +561,14 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 if (nSdPage > 0)
                     ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage - 1);
             }
-            else if (!bSlideShow)
-            {
-                // Scroll nach unten
-                ScrollStart();
-                pViewShell->ScrollLines(0, -1);
-                ScrollEnd();
-            }
         }
         break;
 
         case KEY_PAGEDOWN:
         {
-            pView->EndTextEdit();
-            if (!rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if(rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
+                pView->EndTextEdit();
                 // Naechste Seite
                 bReturn = TRUE;
                 SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
@@ -584,13 +578,6 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage + 1);
                 }
-            }
-            else if (!bSlideShow)
-            {
-                // Scroll nach oben
-                ScrollStart();
-                pViewShell->ScrollLines(0, 1);
-                ScrollEnd();
             }
         }
         break;
