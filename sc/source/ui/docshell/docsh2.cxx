@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:23:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,6 @@
 
 #include "scitems.hxx"
 #include <tools/gen.hxx>
-#include <sfx2/interno.hxx>
-#include <so3/svstor.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/drawitem.hxx>
@@ -108,11 +106,11 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-BOOL __EXPORT ScDocShell::InitNew( SvStorage * pStor )
+BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::InitNew" );
 
-    BOOL bRet = SfxInPlaceObject::InitNew( pStor );
+    BOOL bRet = SfxObjectShell::InitNew( xStor );
 
     aDocument.MakeTable(0);
     //  zusaetzliche Tabellen werden von der ersten View angelegt,
@@ -283,14 +281,11 @@ void ScDocShell::RemoveUnknownObjects()
     //  Loeschen wie in SvPersist::CleanUp
 
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
-    const SvInfoObjectMemberList* pChildList = GetObjectList();
+    uno::Sequence < rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
 
-    if( pChildList && pChildList->Count() )
-    {
-        for( ULONG i=0; i<pChildList->Count(); )
+        for( sal_Int32 i=0; i<aNames.getLength(); i++ )
         {
-            SvInfoObjectRef pEle = pChildList->GetObject(i);
-            String aObjName = pEle->GetObjName();
+            String aObjName = aNames[i];
             BOOL bFound = FALSE;
             if ( pDrawLayer )
             {
@@ -317,15 +312,13 @@ void ScDocShell::RemoveUnknownObjects()
 
             if (!bFound)
             {
-                DBG_ASSERT(pEle->GetRefCount()==2, "Loeschen von referenziertem Storage");
-                String aStorName(pEle->GetStorageName());
-                SvPersist::Remove(pEle);
-                GetStorage()->Remove(aStorName);
+                //TODO/LATER: hacks not supported anymore
+                //DBG_ASSERT(pEle->GetRefCount()==2, "Loeschen von referenziertem Storage");
+                GetEmbeddedObjectContainer().RemoveEmbeddedObject( aObjName );
             }
             else
                 i++;
         }
-    }
 }
 
 
