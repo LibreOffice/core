@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopti.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:22:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 #ifndef SC_OPTUTIL_HXX
@@ -137,7 +141,7 @@ public:
 // Einstellungen - Ansicht
 //==================================================================
 
-class ScViewOptions
+class SC_DLLPUBLIC ScViewOptions
 {
 public:
                 ScViewOptions();
@@ -189,7 +193,7 @@ inline SvStream& operator<<( SvStream& rStream, const ScViewOptions& rOpt )
 // Item fuer Einstellungsdialog - Ansicht
 //==================================================================
 
-class ScTpViewItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
@@ -235,5 +239,3 @@ public:
 
 
 #endif
-
-
