@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:11:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,7 +895,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::previous(  ) throw(SQLException, RuntimeEx
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
-    return m_aStatement.get();
+    return m_xStatement;
 }
 // -------------------------------------------------------------------------
 
