@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:29:38 $
+ *  last change: $Author: os $ $Date: 2001-04-17 09:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,80 +209,23 @@ TabPage TP_OPTLOAD_PAGE
     FixedText FT_FIELD
     {
         Pos = MAP_APPFONT ( 130 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Felder und Diagramme" ;
-        Text [ English ] = "Update" ;
-        Text[ english_us ] = "Fields and charts";
-        Text[ portuguese ] = "Campos e gráficos";
-        Text[ russian ] = "Ïîëÿ è äèàãğàììû";
-        Text[ dutch ] = "Velden en diagrammen";
-        Text[ french ] = "Champs et diagrammes";
-        Text[ spanish ] = "Campos y diagramas";
-        Text[ italian ] = "Campi e diagrammi";
-        Text[ danish ] = "Felter og diagrammer";
-        Text[ swedish ] = "Fält och diagram";
-        Text[ polish ] = "Pola i wykresy";
-        Text[ portuguese_brazilian ] = "Refresh links";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚Æ¸Ş×Ì";
-        Text[ chinese_simplified ] = "×Ö¶ÎºÍÍ¼±í";
-        Text[ chinese_traditional ] = "Äæ¦ì©M¹Ïªí";
-        Text[ arabic ] = "ÍŞæá æÑÓæã ÈíÇäíÉ";
-        Text[ greek ] = "Ğåäßá êáé äéáãñÜììáôá";
-        Text[ korean ] = "ÇÊµå¿Í Â÷Æ®";
-        Text[ turkish ] = "Alan ve şemalar";
-        Text[ language_user1 ] = " ";
+        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Text = "Felder und Diagramme aktualisieren" ;
+        Text [ English ] = "Update fields and charts" ;
     };
     CheckBox CB_AUTO_UPDATE_FIELDS
     {
         Pos = MAP_APPFONT ( 136 , 26) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text = "F~eldbefehle automatisch aktualisieren" ;
-        Text [ English ] = "Update fields automatically" ;
-        Text[ english_us ] = "Update ~fields automatically";
-        Text[ portuguese ] = "Actualizar ~campos automaticamente";
-        Text[ russian ] = "Îáíîâëÿòü ïîëÿ àâòîìàòè÷åñêè";
-        Text[ dutch ] = "V~eldopdrachten automatisch actualiseren";
-        Text[ french ] = "Actualiser automatiquement les ~champs";
-        Text[ spanish ] = "Actualizar ~campos automáticamente";
-        Text[ italian ] = "Aggiorna i comandi di campo automaticamente";
-        Text[ danish ] = "Opdater felter automatisk";
-        Text[ swedish ] = "Uppdat~era fältkommandon automatiskt";
-        Text[ polish ] = "Aktualizuj pola automatycznie";
-        Text[ portuguese_brazilian ] = "Update fields automatically";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚ğ©“®XV‚·‚é(~F)";
-        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂ×Ö¶ÎÃüÁî(~F)";
-        Text[ chinese_traditional ] = "¦Û°Ê§ó·sÄæ¦ì«ü¥O(~F)";
-    Text[ arabic ] = "ÊÍÏíË ÇáÍŞæá ÊáŞÇÆíÇğ";
-    Text[ greek ] = "Áõôüìáôç åíçìİñùóç ~åíôïëşí ğåäßùí";
-    Text[ korean ] = "ÇÊµå ÀÚµ¿ ¾÷ µ¥ÀÌÆ®(~F)";
-    Text[ turkish ] = "Alan öğelerini otomatik olarak güncelle";
-    Text[ language_user1 ] = " ";
+        Text = "F~eldbefehle automatisch" ;
+        Text [ English ] = "Fields automatically" ;
 };
     CheckBox CB_AUTO_UPDATE_CHARTS
     {
-        Pos = MAP_APPFONT ( 136 , 39) ;
+        Pos = MAP_APPFONT ( 142 , 39) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text = "Dia~gramme automatisch aktualisieren" ;
-        Text [ English ] = "Update charts automatically" ;
-        Text[ english_us ] = "Update ~charts automatically";
-        Text[ portuguese ] = "Actualizar ~gráficos automaticamente";
-        Text[ russian ] = "Îáíîâëÿòü äèàãğàììû àâòîìàòè÷åñêè";
-        Text[ dutch ] = "~Diagrammen automatisch actualiseren";
-        Text[ french ] = "Actualiser automatiquement les dia~grammes";
-        Text[ spanish ] = "Actualizar ~diagramas automáticamente";
-        Text[ italian ] = "Aggiorna i diagrammi automaticamente";
-        Text[ danish ] = "Opdater diagrammer automatisk";
-        Text[ swedish ] = "Uppdatera dia~gram automatiskt";
-        Text[ polish ] = "Aktualizuj wykresy automatycznie";
-        Text[ portuguese_brazilian ] = "Update charts automatically";
-        Text[ japanese ] = "¸Ş×Ì‚ğ©“®XV‚·‚é(~C)";
-        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂÍ¼±í(~C)";
-        Text[ chinese_traditional ] = "¦Û°Ê§ó·s¹Ïªí(~C)";
-    Text[ arabic ] = "ÊÍÏíË ÇáÑÓæã ÇáÈíÇäíÉ ÊáŞÇÆíÇğ";
-    Text[ greek ] = "Áõôüìáôç åíçìİñùóç äéá~ãñáììÜôùí";
-    Text[ korean ] = "Â÷Æ® ÀÚµ¿ ¾÷ µ¥ÀÌÆ®(~C)";
-    Text[ turkish ] = "Şemaları otomatik olarak güncelle";
-    Text[ language_user1 ] = " ";
+        Text = "Dia~gramme automatisch" ;
+        Text [ English ] = "Charts automatically" ;
 };
     FixedLine GB_CAPTION
     {
