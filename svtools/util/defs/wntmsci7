@@ -11713,3 +11713,9 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?GetOwnStaticMutex@SvtCommandOptions@@SAAAVMutex@osl@@XZ
 ?Lookup@SvtCommandOptions@@QBEEW4CmdOption@1@ABVOUString@rtl@@@Z
 ?m_nRefCount@SvtCommandOptions@@0JA
+?GetExportFormatNumberForTypeName@GraphicFilter@@QAEGABVString@@@Z
+?GetImportFormatNumberForTypeName@GraphicFilter@@QAEGABVString@@@Z
+?ImplSearchEntry@@YAPAEPAE0KK@Z
+?GetExportFormatNumberForTypeName@FilterConfigCache@@QAEGABVString@@@Z
+?GetImportFormatNumberForTypeName@FilterConfigCache@@QAEGABVString@@@Z
+?Push@WinMtfOutput@@QAEXXZ
