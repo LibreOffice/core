@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 12:29:44 $
+ *  last change: $Author: aw $ $Date: 2001-06-12 13:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,8 +873,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
             case XML_SD_TYPE_BACKFACE_CULLING:
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_enabled) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_disabled) );
+                // #87922# DoubleSided -> BackfaceCulling
+                // This BOOL needs to be flipped, DoubleSided TRUE -> NO Backface culling
+                // and vice versa.
+                const OUString aTrueStr( OUString::createFromAscii(sXML_disabled) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_enabled) );
                 pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
                 break;
             }
