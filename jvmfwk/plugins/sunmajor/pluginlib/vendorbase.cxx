@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:53:01 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #include "vendorbase.hxx"
 #include "util.hxx"
 #include "sunjre.hxx"
-#include "sunversion.hxx"
 
 using namespace std;
 using namespace rtl;
@@ -297,20 +296,12 @@ bool VendorBase::needsRestart() const
 
 int VendorBase::compareVersions(const rtl::OUString& sSecond) const
 {
-    OUString sFirst = getVersion();
-
-    SunVersion version1(sFirst);
-    SunVersion version2(sSecond);
-    if ( ! (version1 &&  version2))
-        throw MalformedVersionException();
-
-    if(version1 == version2)
-        return 0;
-    if(version1 > version2)
-        return 1;
-    else
-        return -1;
+    OSL_ENSURE(0, "[Java framework] VendorBase::compareVersions must be "
+               "overridden in derived class.");
+    return 0;
 }
+
+
 
 
 }
