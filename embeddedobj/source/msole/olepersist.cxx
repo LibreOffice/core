@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-24 16:12:41 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 10:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,39 @@
 
 using namespace ::com::sun::star;
 
+//------------------------------------------------------
+void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
+                                              const uno::Reference< io::XStream >& xNewObjectStream,
+                                              const ::rtl::OUString& aNewName )
+{
+    try {
+        uno::Reference< lang::XComponent > xComponent( m_xObjectStream, uno::UNO_QUERY );
+        OSL_ENSURE( xComponent.is(), "Wrong stream implementation!" );
+        if ( xComponent.is() )
+            xComponent->dispose();
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    m_xObjectStream = xNewObjectStream;
+    m_xParentStorage = xNewParentStorage;
+    m_aEntryName = aNewName;
+}
+
+//------------------------------------------------------
+void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
+                                              const ::rtl::OUString& aNewName )
+{
+    sal_Int32 nStreamMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
+
+    uno::Reference< io::XStream > xNewOwnStream = xNewParentStorage->openStreamElement( aNewName, nStreamMode );
+    OSL_ENSURE( xNewOwnStream.is(), "The method can not return empty reference!" );
+
+    SwitchOwnPersistence( xNewParentStorage, xNewOwnStream, aNewName );
+}
+
+
 //----------------------------------------------
 sal_Bool OleEmbeddedObject::SaveObject_Impl()
 {
@@ -156,15 +189,18 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::CreateOleComponent_Impl()
+void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
 {
     if ( !m_pOleComponent )
     {
-        m_pOleComponent = new OleComponent( m_xFactory, this );
+        m_pOleComponent = pOleComponent ? pOleComponent : new OleComponent( m_xFactory, this );
         m_pOleComponent->acquire(); // TODO: needs holder?
-        m_xClosePreventer = uno::Reference< util::XCloseListener >(
-                                static_cast< ::cppu::OWeakObject* >( new OClosePreventer ),
-                                uno::UNO_QUERY );
+
+        if ( !m_xClosePreventer.is() )
+            m_xClosePreventer = uno::Reference< util::XCloseListener >(
+                                    static_cast< ::cppu::OWeakObject* >( new OClosePreventer ),
+                                    uno::UNO_QUERY );
+
         m_pOleComponent->addCloseListener( m_xClosePreventer );
     }
     else
@@ -255,9 +291,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
 
-    m_xObjectStream = xStorage->openStreamElement( sEntName, nStorageMode );
-    m_xParentStorage = xStorage;
-    m_aEntryName = sEntName;
+    SwitchOwnPersistence( xStorage, sEntName );
 
     if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_DEFAULT_INIT )
     {
@@ -492,8 +526,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    OSL_ENSURE( m_bIsLink || m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
-    // ???
+    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
 
     uno::Reference< io::XStream > xTargetStream =
                 xStorage->openStreamElement( sEntName, embed::ElementModes::ELEMENT_READWRITE );
@@ -544,30 +577,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     if ( bUseNew )
     {
-        // the link object is not linked any more for OOo objects
-        // but since OLE objects have persistence storing them as an entry
-        // does not automatically break the link
-
-        // TODO: it is possible to leave the object in linked state,
-        // but since OOo object will become an embedded persistence after storing,
-        // may be this object must be also stored as embedded one ?
-
-        m_bIsLink = sal_False;
-        m_aLinkURL = ::rtl::OUString();
-
-        try {
-            uno::Reference< lang::XComponent > xComponent( m_xObjectStream, uno::UNO_QUERY );
-            OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
-        catch ( uno::Exception& )
-        {
-        }
-
-        m_xObjectStream = m_xNewObjectStream;
-        m_xParentStorage = m_xNewParentStorage;
-        m_aEntryName = m_aNewEntryName;
+        SwitchOwnPersistence( m_xNewParentStorage, m_xNewObjectStream, m_aNewEntryName );
     }
     else
     {
@@ -721,7 +731,8 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
-    if ( !m_bIsLink || m_nObjectState == -1 )
+    // TODO: The object must be at least in Running state;
+    if ( !m_bIsLink || m_nObjectState == -1 || !m_pOleComponent )
     {
         // it must be a linked initialized object
         throw embed::WrongStateException(
@@ -729,42 +740,55 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
+    if ( m_bReadOnly )
+        throw io::IOException(); // TODO: Access denied
+
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
+
     // TODO: if the parent storage and entry are the same as object uses the breaking of link must be done
     // just by through OLE functionality
 
-    // TODO: if the storage or the name is different the object must be switched to the new storage in addition
+    // TODO: create an object based on the link
+    OleComponent* pNewOleComponent = new OleComponent( m_xFactory, this );
+    try {
+        pNewOleComponent->InitEmbeddedCopyOfLink( m_pOleComponent );
+    }
+    catch ( uno::Exception& )
+    {
+        delete pNewOleComponent;
+        throw;
+    }
 
-#if 0
-    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-    if ( !xNameAccess.is() )
-        throw uno::RuntimeException(); //TODO
+    GetRidOfComponent();
+    CreateOleComponent_Impl( pNewOleComponent );
 
-    // detect entry existence
-    sal_Bool bElExists = xNameAccess->hasByName( sEntName );
+    if ( m_xParentStorage != xStorage || !m_aNewEntryName.equals( sEntName ) )
+        SwitchOwnPersistence( xStorage, sEntName );
 
-    m_bReadOnly = sal_False;
-    sal_Int32 nStreamMode = embed::ElementModes::ELEMENT_READWRITE;
+    if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
+    {
+        // TODO: should we activate the new object if the link was activated?
 
-    // only in case object must be switched
-    m_xObjectStream = xStorage->openStreamElement( sEntName, nStreamMode );
-    m_xParentStorage = xStorage;
-    m_aEntryName = sEntName;
+        sal_Int32 nTargetState = m_nObjectState;
+        m_nObjectState = embed::EmbedStates::EMBED_LOADED;
 
-    // TODO: ???
-    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
-        m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
-    else if ( m_nObjectState == embed::EmbedStates::EMBED_ACTIVE )
-        m_pDocHolder->Show();
+        if ( m_nObjectState == embed::EmbedStates::EMBED_RUNNING )
+            m_pOleComponent->RunObject();
+        else // m_nObjectState == embed::EmbedStates::EMBED_ACTIVE
+        {
+            m_pOleComponent->RunObject();
+            m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
+        }
+
+        m_nObjectState = nTargetState;
+    }
 
     m_bIsLink = sal_False;
-    m_aLinkFilterName = ::rtl::OUString();
     m_aLinkURL = ::rtl::OUString();
-#endif
 }
 
 //------------------------------------------------------

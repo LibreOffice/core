@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-24 16:12:34 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 10:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,17 @@ protected:
     void CloseComponent();
     void Dispose();
 
+    void SwitchOwnPersistence(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xNewObjectStream,
+                const ::rtl::OUString& aNewName );
+
+    void SwitchOwnPersistence(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
+                const ::rtl::OUString& aNewName );
+
+    void GetRidOfComponent();
+
 public:
     // in case a new object must be created the class ID must be specified
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
@@ -192,7 +203,7 @@ public:
     sal_Bool SaveObject_Impl();
     sal_Bool OnShowWindow_Impl( sal_Bool bShow );
 
-    void CreateOleComponent_Impl();
+    void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
 
     void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
 

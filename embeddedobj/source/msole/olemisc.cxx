@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-24 16:12:40 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 10:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,16 +134,8 @@ OleEmbeddedObject::~OleEmbeddedObject()
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::Dispose()
+void OleEmbeddedObject::GetRidOfComponent()
 {
-    if ( m_pInterfaceContainer )
-    {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        m_pInterfaceContainer->disposeAndClear( aSource );
-        delete m_pInterfaceContainer;
-        m_pInterfaceContainer = NULL;
-    }
-
     if ( m_pOleComponent )
     {
         if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
@@ -157,6 +149,21 @@ void OleEmbeddedObject::Dispose()
         m_pOleComponent->release();
         m_pOleComponent = NULL;
     }
+}
+
+//------------------------------------------------------
+void OleEmbeddedObject::Dispose()
+{
+    if ( m_pInterfaceContainer )
+    {
+        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        m_pInterfaceContainer->disposeAndClear( aSource );
+        delete m_pInterfaceContainer;
+        m_pInterfaceContainer = NULL;
+    }
+
+    if ( m_pOleComponent )
+        GetRidOfComponent();
 
     if ( m_xObjectStream.is() )
     {

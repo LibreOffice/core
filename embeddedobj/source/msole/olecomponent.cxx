@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-24 16:12:38 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 10:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_DOUBLEINITIALIZATIONEXCEPTION_HPP_
-#include <com/sun/star/frame/DoubleInitializationException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_WRONGSTATEEXCEPTION_HPP_
@@ -586,7 +582,7 @@ void OleComponent::LoadEmbeddedObject( const uno::Reference< io::XInputStream >&
         throw lang::IllegalArgumentException(); // TODO
 
     if ( m_pIStorage || m_aTempURL.getLength() )
-        throw frame::DoubleInitializationException(); // TODO the object is already initialized
+        throw io::IOException(); // TODO the object is already initialized
 
     m_nMSAspect = (DWORD)nAspect; // first 32 bits are for MS aspects
 
@@ -617,7 +613,7 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
         throw lang::IllegalArgumentException(); // TODO
 
     if ( m_pIStorage || m_aTempURL.getLength() )
-        throw frame::DoubleInitializationException(); // the object is already initialized
+        throw io::IOException(); // TODO:the object is already initialized
 
     m_pIStorage = CreateNewIStorage_Impl();
     if ( !m_pIStorage )
@@ -659,7 +655,7 @@ void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTr
 void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL, sal_Int64 nAspect, sal_uInt32 nIconHandle )
 {
     if ( m_pIStorage || m_aTempURL.getLength() )
-        throw frame::DoubleInitializationException(); // the object is already initialized
+        throw io::IOException(); // TODO:the object is already initialized
 
     m_nMSAspect = (DWORD)nAspect; // first 32 bits are for MS aspects
 
@@ -691,7 +687,7 @@ void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL, sal_In
 void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL, sal_Int64 nAspect, sal_uInt32 nIconHandle )
 {
     if ( m_pIStorage || m_aTempURL.getLength() )
-        throw frame::DoubleInitializationException(); // the object is already initialized
+        throw io::IOException(); // TODO:the object is already initialized
 
     m_nMSAspect = (DWORD)nAspect; // first 32 bits are for MS aspects
 
@@ -715,6 +711,42 @@ void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL, sal_Int6
         throw uno::RuntimeException(); // TODO
 
     if ( !InitializeObject_Impl( nIconHandle ) )
+        throw uno::RuntimeException(); // TODO
+}
+
+//----------------------------------------------
+void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
+{
+    if ( !pOleLinkComponent || !pOleLinkComponent->m_pObj )
+        throw lang::IllegalArgumentException(); // TODO
+
+    if ( m_pIStorage || m_aTempURL.getLength() )
+        throw io::IOException(); // TODO:the object is already initialized
+
+    m_nMSAspect = pOleLinkComponent->m_nMSAspect;
+
+    CComPtr< IDataObject > pDataObject;
+    HRESULT hr = pOleLinkComponent->m_pObj->QueryInterface( IID_IDataObject, (void**)&pDataObject );
+    if ( FAILED( hr ) || !pDataObject || OleQueryCreateFromData( pDataObject ) )
+        throw io::IOException(); // TODO: the object doesn't allow initialization based on data
+
+    m_pIStorage = CreateNewIStorage_Impl();
+    if ( !m_pIStorage )
+        throw uno::RuntimeException(); // TODO:
+
+    hr = OleCreateFromData( pDataObject,
+                            IID_IUnknown,
+                            OLERENDER_DRAW,
+                            NULL,
+                            NULL,
+                            m_pIStorage,
+                            (void**)&m_pObj );
+
+    if ( FAILED( hr ) || !m_pObj)
+        throw uno::RuntimeException(); // TODO
+
+    // TODO: May be the Icon should be also copied?
+    if ( !InitializeObject_Impl( NULL ) )
         throw uno::RuntimeException(); // TODO
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-24 16:12:39 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 10:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ public:
 
     virtual ~OleComponent();
 
+    OleComponent* createEmbeddedCopyOfLink();
+
     void disconnectEmbeddedObject();
 
     // ==== Initialization ==================================================
@@ -181,6 +183,9 @@ public:
     void CreateObjectFromFile( const ::rtl::OUString& aFileName, sal_Int64 nAspect, sal_uInt32 nIconHandle );
 
     void CreateLinkFromFile( const ::rtl::OUString& aFileName, sal_Int64 nAspect, sal_uInt32 nIconHandle );
+
+    void InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent );
+
     // ======================================================================
 
     void RunObject(); // switch OLE object to running state
