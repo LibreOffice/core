@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2ivector.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:38:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-12 08:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@ namespace basegfx
 
     double B2IVector::angle( const B2IVector& rVec ) const
     {
-        return atan2(mnX * rVec.getY() - mnY * rVec.getX(),
-            mnX * rVec.getX() + mnY * rVec.getY());
+        return atan2(double( mnX * rVec.getY() - mnY * rVec.getX()),
+            double( mnX * rVec.getX() + mnY * rVec.getY()));
     }
 
     const B2IVector& B2IVector::getEmptyVector()
