@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:56:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         else if (pView->IsAction() )
         {
             pView->EndAction();
-            if ( pView->HasMarkedObj() )
+            if ( pView->AreObjectsMarked() )
                 bReturn = TRUE;
         }
     }
@@ -388,9 +388,9 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     USHORT nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
-        if ( pView->HasMarkedObj() )
+        if ( pView->AreObjectsMarked() )
         {
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
