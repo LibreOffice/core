@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
+ *  last change: $Author: os $ $Date: 2001-07-06 10:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,8 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         aNewStartNF.GetText() != aNewStartNF.GetSavedValue())
     {
         bModified = TRUE;
-        rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, aNewStartCB.GetState() == STATE_CHECK));
+        BOOL bChecked = STATE_CHECK == aNewStartCB.GetState();
+        rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, bChecked));
         rSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT, (USHORT)aNewStartNF.GetValue()));
     }
 
@@ -217,12 +218,14 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     SfxItemState eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
 
     String aStyle;
+    BOOL bHasNumberStyle = FALSE;
     if( eItemState >= SFX_ITEM_AVAILABLE )
     {
         aStyle = ((const SfxStringItem &)rSet.Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
         if(!aStyle.Len())
             aStyle = aNumberStyleLB.GetEntry(0);
         aNumberStyleLB.SelectEntry( aStyle );
+        bHasNumberStyle = TRUE;
     }
     else
     {
@@ -242,7 +245,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         aNewStartCB.EnableTriState(FALSE);
     }
     else
-        aNewStartCB.SetState(STATE_DONTKNOW);
+        aNewStartCB.SetState(bHasNumberStyle ? STATE_NOCHECK : STATE_DONTKNOW);
     aNewStartCB.SaveValue();
 
     eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART_AT);
@@ -328,45 +331,4 @@ IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2001/02/23 12:45:28  os
-      Complete use of DefaultNumbering component
-
-      Revision 1.1.1.1  2000/09/18 17:14:32  hr
-      initial import
-
-      Revision 1.9  2000/09/18 16:05:14  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.8  2000/07/03 08:04:44  os
-      #72742# resource warnings corrected
-
-      Revision 1.7  1998/04/15 12:31:48  OS
-      TriState-Boxen #49486#
-
-
-      Rev 1.6   15 Apr 1998 14:31:48   OS
-   TriState-Boxen #49486#
-
-      Rev 1.5   17 Mar 1998 17:55:24   OS
-   Vorlagenlistbox bei unbekannter Vorlage unselektiert #47570#
-
-      Rev 1.4   03 Mar 1998 10:14:48   OS
-   Zeilennumerierung nicht in HTML
-
-      Rev 1.3   20 Feb 1998 11:23:42   MA
-   Restarbeiten Zeilennummerierung
-
-      Rev 1.2   05 Feb 1998 14:56:26   OS
-   Paste-Fehler
-
-      Rev 1.1   05 Feb 1998 14:43:30   OS
-   Zeilennumerierung
-
-      Rev 1.0   02 Feb 1998 09:15:52   OS
-   Initial revision.
-
-*************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:12:17 $
+ *  last change: $Author: os $ $Date: 2001-07-06 10:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
                     if(SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART))
                     {
-                        BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                        BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
                         // das zweite Item muss immer drin sein!
                         USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                         if(!bStart)
