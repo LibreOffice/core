@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:10:45 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 12:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "ControlBackground",              XML_NAMESPACE_FO,   sXML_background_color,      XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 },
     { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
     { "ControlDataStyle",               XML_NAMESPACE_STYLE,sXML_data_style_name,       XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE },
+    { "ControlTextEmphasis",            XML_NAMESPACE_STYLE,sXML_text_emphasize,        XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 },
 
     // special entries for floating frames
     { "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, sXML_frame_display_scrollbar,   XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR },
@@ -1002,7 +1003,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
 
             case XML_SD_TYPE_CONTROL_BORDER:
-                pHdl = new xmloff::OControlBorderHandler();
+                pHdl = new xmloff::OControlBorderHandler;
+                break;
+            case XML_TYPE_CONTROL_TEXT_EMPHASIZE:
+                pHdl = new ::xmloff::OControlTextEmphasisHandler;
                 break;
 
             case XML_SD_TYPE_CAPTION_ANGLE_TYPE:
