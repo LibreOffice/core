@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:49:55 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #include <svtools/poolcach.hxx>
 #include <svtools/saveopt.hxx>
 #include <svtools/zforlist.hxx>
-#include <vcl/system.hxx>
 #include <unotools/charclass.hxx>
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
