@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>NAVY DIF (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">NAVY DIF</value>
+            <value>NAVY DIF</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

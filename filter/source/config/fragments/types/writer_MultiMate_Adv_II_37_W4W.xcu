@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>MultiMate Adv. II 3.7 (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">MultiMate Adv. II 3.7</value>
+            <value>MultiMate Adv. II 3.7</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
