@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: rt $ $Date: 2003-06-20 13:11:55 $
+#   last change: $Author: vg $ $Date: 2003-06-27 09:07:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,11 +167,17 @@ ALLTAR: $(REGISTRYCHECKFLAG)
 # JSC -> temporary special handling for sheet/SheetSortDescriptor and text/BaseIndex
 # only for build reasons, otherwise the build will break, the changes are not really incompatible
 # JB: configuration: services were documented, but not tagged, as optional
+# TBE, JSC: awt: lost changes from first IDL review are currently not checked until reference rdb is updated
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
     +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UCR)$/types.db -x /UCR/com/sun/star/i18n/reservedWords
     +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords \
         -x /UCR/com/sun/star/sheet/SheetSortDescriptor -x /UCR/com/sun/star/text/BaseIndex \
         -x /UCR/com/sun/star/configuration/ConfigurationAccess -x /UCR/com/sun/star/configuration/ConfigurationUpdateAccess \
+        -x /UCR/com/sun/star/awt/UnoControl -x /UCR/com/sun/star/awt/UnoControlCheckBox \
+        -x /UCR/com/sun/star/awt/UnoControlCurrencyFieldModel -x /UCR/com/sun/star/awt/UnoControlDialog \
+        -x /UCR/com/sun/star/awt/UnoControlDialogModel -x /UCR/com/sun/star/awt/UnoControlEdit \
+        -x /UCR/com/sun/star/awt/UnoControlFormattedFieldModel -x /UCR/com/sun/star/awt/UnoControlListBox \
+        -x /UCR/com/sun/star/awt/UnoControlNumericFieldModel -x /UCR/com/sun/star/awt/UnoControlPatternFieldModel \
         && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
