@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-05 10:31:41 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,6 +979,12 @@ void FmXFormShell::disposing()
     m_xAttachedFrame = NULL;
 
     CloseExternalFormViewer();
+
+    while ( m_aLoadingPages.size() )
+    {
+        Application::RemoveUserEvent( m_aLoadingPages.front().nEventId );
+        m_aLoadingPages.pop();
+    }
 
     // dispose all our navigation dispatchers
     for (   FormsDispatchersIterator aFormIter = m_aNavigationDispatcher.begin();
@@ -4542,6 +4548,178 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
     Sequence< Any > aValues(1);
     aValues[0] = ::cppu::bool2any(m_bUseWizards);
     PutProperties(aNames, aValues);
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
+{
+    // deactivate our view if we are deactivated ourself
+    // FS - 30.06.99 - 67308
+    if ( _pCurrentView && _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
+        _pCurrentView->GetImpl()->Deactivate( _bDeactivateController );
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
+{
+    // activate our view if we are activated ourself
+    // FS - 30.06.99 - 67308
+    if ( _pCurrentView && _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
+    {
+        // load forms for the page the current view belongs to
+        SdrPageView* pCurPageView = _pCurrentView->GetPageViewPvNum( 0 );
+        FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
+        if ( pPage )
+        {
+            if ( !pPage->GetImpl()->hasEverBeenActivated() )
+                loadForms( pPage, FORMS_LOAD | ( _bSyncAction ? FORMS_SYNC : FORMS_ASYNC ) );
+            pPage->GetImpl()->setHasBeenActivated( );
+        }
+
+        // first-time initializations for the views
+        if ( !_pCurrentView->GetImpl()->hasEverBeenActivated( ) )
+        {
+            _pCurrentView->GetImpl()->onFirstViewActivation( PTR_CAST( FmFormModel, _pCurrentView->GetModel() ) );
+            _pCurrentView->GetImpl()->setHasBeenActivated( );
+        }
+
+        // activate the current view
+        _pCurrentView->GetImpl()->Activate( _bSyncAction );
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels )
+{
+    if (!_rxModels.is())
+    {
+        DBG_ERROR("FmXFormShell::smartControlReset: invalid container!");
+        return;
+    }
+
+    static const ::rtl::OUString sClassIdPropertyName = FM_PROP_CLASSID;
+    static const ::rtl::OUString sBoundFieldPropertyName = FM_PROP_BOUNDFIELD;
+    sal_Int32 nCount = _rxModels->getCount();
+    Reference< XPropertySet > xCurrent;
+    Reference< XPropertySetInfo > xCurrentInfo;
+    Reference< XPropertySet > xBoundField;
+
+    for (sal_Int32 i=0; i<nCount; ++i)
+    {
+        _rxModels->getByIndex(i) >>= xCurrent;
+        if (xCurrent.is())
+            xCurrentInfo = xCurrent->getPropertySetInfo();
+        else
+            xCurrentInfo.clear();
+        if (!xCurrentInfo.is())
+            continue;
+
+        if (xCurrentInfo->hasPropertyByName(sClassIdPropertyName))
+        {   // it's a control model
+
+            // check if this control is bound to a living database field
+            if (xCurrentInfo->hasPropertyByName(sBoundFieldPropertyName))
+                xCurrent->getPropertyValue(sBoundFieldPropertyName) >>= xBoundField;
+            else
+                xBoundField.clear();
+
+            if (!xBoundField.is())
+            {   // no, not valid bound -> reset it
+                Reference< XReset > xControlReset(xCurrent, UNO_QUERY);
+                if (xControlReset.is())
+                    xControlReset->reset();
+            }
+        }
+        else
+        {
+            Reference< XIndexAccess > xContainer(xCurrent, UNO_QUERY);
+            if (xContainer.is())
+                smartControlReset(xContainer);
+        }
+    }
+}
+
+//------------------------------------------------------------------------
+IMPL_LINK( FmXFormShell, OnLoadForms, FmFormPage*, _pPage )
+{
+    FmLoadAction aAction = m_aLoadingPages.front();
+    m_aLoadingPages.pop();
+
+    loadForms( aAction.pPage, aAction.nFlags & ~FORMS_ASYNC );
+    return 0L;
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /* FORMS_LOAD | FORMS_SYNC */ )
+{
+    DBG_ASSERT( ( _nBehaviour & ( FORMS_ASYNC | FORMS_UNLOAD ) )  != ( FORMS_ASYNC | FORMS_UNLOAD ),
+        "FmXFormShell::loadForms: async loading not supported - this will heavily fail!" );
+
+    if ( _nBehaviour & FORMS_ASYNC )
+    {
+        m_aLoadingPages.push( FmLoadAction(
+            _pPage,
+            _nBehaviour,
+            Application::PostUserEvent( LINK( this, FmXFormShell, OnLoadForms ), _pPage )
+        ) );
+        return;
+    }
+
+    DBG_ASSERT( _pPage, "FmXFormShell::loadForms: invalid page!" );
+    if ( _pPage )
+    {
+        // lock the undo env so the forms can change non-transient properties while loading
+        // (without this my doc's modified flag would be set)
+        FmFormModel* pModel = PTR_CAST( FmFormModel, _pPage->GetModel() );
+        DBG_ASSERT( pModel, "FmXFormShell::loadForms: invalid model!" );
+        if ( pModel )
+            pModel->GetUndoEnv().Lock();
+
+        // load all forms
+        Reference< XIndexAccess >  xForms;
+        xForms = xForms.query( _pPage->GetForms() );
+        DBG_ASSERT( xForms.is(), "FmXFormShell::loadForms: invalid forms collection!" );
+
+        if ( xForms.is() )
+        {
+            Reference< XLoadable >  xForm;
+            for ( sal_Int32 j = 0, nCount = xForms->getCount(); j < nCount; ++j )
+            {
+                xForms->getByIndex( j ) >>= xForm;
+                // a database form must be loaded for
+                if ( 0 == ( _nBehaviour & FORMS_UNLOAD ) )
+                {
+                    if ( ::isLoadable( xForm ) && !xForm->isLoaded() )
+                        xForm->load();
+
+                    if ( _nBehaviour & FORMS_RESET )
+                    {
+                        Reference< XIndexAccess > xContainer( xForm, UNO_QUERY );
+                        DBG_ASSERT( xContainer.is(), "FmXFormShell::loadForms: the form is no container!" );
+                        if ( xContainer.is() )
+                            smartControlReset( xContainer );
+                    }
+                }
+                else
+                {
+                    if ( xForm->isLoaded() )
+                        xForm->unload();
+
+                    if ( _nBehaviour & FORMS_RESET )
+                    {
+                        Reference< XReset > xReset( xForm, UNO_QUERY );
+                        DBG_ASSERT( xReset.is(), "FmXFormShell::loadForms: the form cannot be resets!" );
+                        if ( xReset.is() )
+                            xReset->reset();
+                    }
+                }
+            }
+        }
+
+        if ( pModel )
+            // unlock the environment
+            pModel->GetUndoEnv().UnLock();
+    }
 }
 
 //==============================================================================

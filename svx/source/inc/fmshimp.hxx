@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-02 16:31:42 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,8 @@
 #include "dbtoolsclient.hxx"
 #endif
 
+#include <queue>
+
 SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16);
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
@@ -212,6 +214,15 @@ DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XF
 #define GA_SYNC_MASK        3
 #define GA_DISABLE_ROCTRLR  4
 #define GA_ENABLE_ROCTRLR   8
+
+
+// flags for controlling the behaviour when calling loadForms
+#define FORMS_LOAD          0x0000      // default: simply load
+#define FORMS_SYNC          0x0000      // default: do in synchronous
+
+#define FORMS_UNLOAD        0x0001      // unload
+#define FORMS_RESET         0x0002      // reset after the load/unload
+#define FORMS_ASYNC         0x0004      // do this async
 
 //==============================================================================
 // FmFormNavigationDispatcher - a dispatcher responsible for a form navigation slot
@@ -273,6 +284,21 @@ struct CursorActionDescription
         // this thread is being canceled
 
     CursorActionDescription() : pThread(NULL), nFinishedEvent(0), bCanceling(sal_False) { }
+};
+
+class FmFormPage;
+//========================================================================
+struct FmLoadAction
+{
+    FmFormPage* pPage;
+    sal_uInt32  nEventId;
+    sal_uInt16  nFlags;
+
+    FmLoadAction( ) : pPage( NULL ), nFlags( 0 ), nEventId( 0 ) { }
+    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, sal_uInt32 _nEventId )
+        :pPage( _pPage ), nFlags( _nFlags ), nEventId( _nEventId )
+    {
+    }
 };
 
 //========================================================================
@@ -350,6 +376,8 @@ class FmXFormShell  :public FmXFormShell_BASE
 
     ::osl::Mutex    m_aMutex;
     sal_uInt32      m_nInvalidationEvent;
+    ::std::queue< FmLoadAction >
+                    m_aLoadingPages;
 
     FmFormShell*    m_pShell;
 
@@ -450,7 +478,19 @@ public:
     void EnableTrackProperties( sal_Bool bEnable) { m_bTrackProperties = bEnable; }
     sal_Bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
 
+public:
+    // activation handling
+            void        viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction = sal_False );
+            void        viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeactivateController = sal_True );
+
 protected:
+    // form handling
+    /// load or unload the forms on a page
+            void        loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour = FORMS_LOAD | FORMS_SYNC );
+            void        smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
+
+
+    // stuff
     void ResetForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xForms = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(), sal_Bool bInvalidate = sal_False);
     void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
     void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
@@ -621,6 +661,8 @@ private:
 
     DECL_LINK(OnCursorActionDone, FmCursorActionThread*);
     DECL_LINK(OnCursorActionDoneMainThread, FmCursorActionThread*);
+
+    DECL_LINK( OnLoadForms, FmFormPage* );
 };
 
 //------------------------------------------------------------------------------

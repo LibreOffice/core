@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 14:52:11 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,19 @@ void FmXPageViewWinRec::updateTabOrder( const ::com::sun::star::uno::Reference< 
 }
 
 //------------------------------------------------------------------------
+FmXFormView::FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
+            FmFormView* _pView)
+    :m_pView(_pView)
+    ,m_nEvent(0)
+    ,m_nErrorMessageEvent(0)
+    ,m_xORB(_xORB)
+    ,m_nAutoFocusEvent(0)
+    ,m_pWatchStoredList( NULL )
+    ,m_bFirstActivation( sal_True )
+{
+}
+
+//------------------------------------------------------------------------
 void FmXFormView::cancelEvents()
 {
     if ( m_nEvent )
@@ -668,8 +681,14 @@ IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, EMPTYTAG)
     m_nErrorMessageEvent = 0;
     Window* pParentWindow = Application::GetDefDialogParent();
     ErrorBox(pParentWindow, WB_OK, m_sErrorMessage).Execute();
-//  ErrorBox(Application::GetDefDialogParent(), WB_OK, m_sErrorMessage).Execute();
     return 0L;
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
+{
+    if ( _pDocModel && _pDocModel->GetAutoControlFocus() )
+        Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
 }
 
 //------------------------------------------------------------------------------
@@ -681,39 +700,6 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
     {
         DBG_ERROR( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
         return 0;
-    }
-
-    if (m_pPageViewForActivation)
-    {
-        FmFormModel* pModel = PTR_CAST(FmFormModel, m_pView->GetModel());
-        if (pModel)
-            // lock the undo env so the forms can change non-transient properties while loading
-                // (without this my doc's modified flag would be set)
-            pModel->GetUndoEnv().Lock();
-
-        // Load all forms
-        FmFormPage* pPage = static_cast<FmFormPage*>(m_pPageViewForActivation->GetPage());
-        Reference< XIndexAccess >  xForms(pPage->GetForms(), UNO_QUERY);
-
-        if ( xForms.is() )
-        {
-            Any aElement;
-            Reference< XLoadable >  xForm;
-            for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
-            {
-                xForms->getByIndex(i) >>= xForm;
-                // a database form must be loaded for
-                if (::isLoadable(xForm) && !xForm->isLoaded())
-                    xForm->load();
-            }
-        }
-
-        if (pModel && pModel->GetAutoControlFocus())
-            LINK(this, FmXFormView, OnAutoFocus).Call(NULL);
-
-        if (pModel)
-            // unlock the environment
-            pModel->GetUndoEnv().UnLock();
     }
 
     // setting the controller to activate
@@ -763,7 +749,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::Activate(SdrPageView* pPageView, sal_Bool bSync)
+void FmXFormView::Activate(sal_Bool bSync)
 {
     if (m_nEvent)
     {
@@ -771,7 +757,6 @@ void FmXFormView::Activate(SdrPageView* pPageView, sal_Bool bSync)
         m_nEvent = 0;
     }
 
-    m_pPageViewForActivation = pPageView;
     if (bSync)
     {
         LINK(this,FmXFormView,OnActivate).Call(NULL);
@@ -781,13 +766,12 @@ void FmXFormView::Activate(SdrPageView* pPageView, sal_Bool bSync)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::Deactivate(SdrPageView* pPageView, BOOL bDeactivateController)
+void FmXFormView::Deactivate(BOOL bDeactivateController)
 {
     if (m_nEvent)
     {
         Application::RemoveUserEvent(m_nEvent);
         m_nEvent = 0;
-        m_pPageViewForActivation = NULL;
     }
 
     FmXFormShell* pShImpl =  m_pView->GetFormShell() ? m_pView->GetFormShell()->GetImpl() : NULL;
@@ -805,57 +789,6 @@ void FmXFormView::AttachControl( const ::com::sun::star::uno::Reference< ::com::
 void FmXFormView::AttachControls( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCtrlContainer,
                                   sal_Bool bDetach )
 {
-}
-
-//------------------------------------------------------------------------------
-void FmXFormView::smartControlReset( const Reference< XIndexAccess >& _rxModels )
-{
-    if (!_rxModels.is())
-    {
-        DBG_ERROR("FmXFormView::smartControlReset: invalid container!");
-        return;
-    }
-
-    static const ::rtl::OUString sClassIdPropertyName = FM_PROP_CLASSID;
-    static const ::rtl::OUString sBoundFieldPropertyName = FM_PROP_BOUNDFIELD;
-    sal_Int32 nCount = _rxModels->getCount();
-    Reference< XPropertySet > xCurrent;
-    Reference< XPropertySetInfo > xCurrentInfo;
-    Reference< XPropertySet > xBoundField;
-
-    for (sal_Int32 i=0; i<nCount; ++i)
-    {
-        _rxModels->getByIndex(i) >>= xCurrent;
-        if (xCurrent.is())
-            xCurrentInfo = xCurrent->getPropertySetInfo();
-        else
-            xCurrentInfo.clear();
-        if (!xCurrentInfo.is())
-            continue;
-
-        if (xCurrentInfo->hasPropertyByName(sClassIdPropertyName))
-        {   // it's a control model
-
-            // check if this control is bound to a living database field
-            if (xCurrentInfo->hasPropertyByName(sBoundFieldPropertyName))
-                xCurrent->getPropertyValue(sBoundFieldPropertyName) >>= xBoundField;
-            else
-                xBoundField.clear();
-
-            if (!xBoundField.is())
-            {   // no, not valid bound -> reset it
-                Reference< XReset > xControlReset(xCurrent, UNO_QUERY);
-                if (xControlReset.is())
-                    xControlReset->reset();
-            }
-        }
-        else
-        {
-            Reference< XIndexAccess > xContainer(xCurrent, UNO_QUERY);
-            if (xContainer.is())
-                smartControlReset(xContainer);
-        }
-    }
 }
 
 //------------------------------------------------------------------------------

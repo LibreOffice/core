@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-28 15:51:48 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ class FmFormPageImpl
     FmFormPage*             pPage;
     UniString               m_sPageId;
 
+    sal_Bool        m_bFirstActivation  : 1;
+
 protected:
     FmFormPageImpl(FmFormPage* _pPage);
     FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl);
@@ -146,6 +148,10 @@ public:
                          sal_Int32 nCommandType = 0);
 
     UniString GetPageId() const { return m_sPageId; }
+
+    // activation handling
+    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
 
 protected:
     // lesen und schreiben der Objecte

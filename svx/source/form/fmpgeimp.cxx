@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-28 15:52:37 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ DBG_NAME(FmFormPageImpl);
 //------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
                :pPage(_pPage)
+               ,m_bFirstActivation( sal_True )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
     Init();
@@ -186,6 +187,7 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
 //------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
                :pPage(_pPage)
+               ,m_bFirstActivation( sal_True )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
     Init();

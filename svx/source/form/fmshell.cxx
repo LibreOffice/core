@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 07:30:45 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1992,14 +1992,14 @@ void FmFormShell::SetView(FmFormView* pView)
         m_pFormView->SetFormShell( this );
         m_pFormModel = (FmFormModel*)m_pFormView->GetModel();
 
+        SetDesignMode(pView->IsDesignMode());
+
         // We activate our view if we are activated ourself, but sometimes the Activate precedes the SetView.
         // But here we know both the view and our activation state so we at least are able to pass the latter
         // to the former.
         // FS - 30.06.99 - 67308
-        if (IsActive() && m_pFormView->GetImpl() && !m_pFormView->IsDesignMode())
-            m_pFormView->GetImpl()->Activate(m_pFormView->GetPageViewPvNum(0));
-
-        SetDesignMode(pView->IsDesignMode());
+        if ( IsActive() )
+            GetImpl()->viewActivated( m_pFormView );
     }
     else
     {
@@ -2036,23 +2036,16 @@ void FmFormShell::SetY2KState(sal_uInt16 n)
 void FmFormShell::Activate(sal_Bool bMDI)
 {
     SfxShell::Activate(bMDI);
-    // activate our view if we are activated ourself
-    // FS - 30.06.99 - 67308
-    if (m_pFormView && m_pFormView->GetImpl() && !m_pFormView->IsDesignMode())
-    {
-        SdrPageView* pCurPageView = m_pFormView->GetPageViewPvNum(0);
-        m_pFormView->GetImpl()->Activate(pCurPageView, sal_True);
-    }
+
+    GetImpl()->viewActivated( m_pFormView, sal_True );
 }
 
 //------------------------------------------------------------------------
 void FmFormShell::Deactivate(sal_Bool bMDI)
 {
     SfxShell::Deactivate(bMDI);
-    // deactivate our view if we are deactivated ourself
-    // FS - 30.06.99 - 67308
-    if (m_pFormView && m_pFormView->GetImpl() && !m_pFormView->IsDesignMode())
-        m_pFormView->GetImpl()->Deactivate(NULL, FALSE);
+
+    GetImpl()->viewDeactivated( m_pFormView, sal_False );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 14:50:12 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class SdrPageViewWinRec;
 class SdrPageView;
 class SdrObject;
 class FmFormObj;
+class FmFormModel;
 class Window;
 class OutputDevice;
 FORWARD_DECLARE_INTERFACE(awt,XControl)
@@ -183,13 +184,14 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
-    FmWinRecList m_aWinList;    // dieses Liste wird nur im nicht designmodus gefuellt
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
 
     FmFormView*     m_pView;
-    SdrPageView*    m_pPageViewForActivation;
     sal_uInt32      m_nEvent;
     sal_uInt32      m_nErrorMessageEvent;
     sal_uInt32      m_nAutoFocusEvent;
+
+    FmWinRecList m_aWinList;    // dieses Liste wird nur im nicht designmodus gefuellt
 
     String          m_sErrorMessage;
 
@@ -197,7 +199,8 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     SdrMarkList             m_aMark;
     ObjectRemoveListener*   m_pWatchStoredList;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+    sal_Bool        m_bFirstActivation  : 1;
+
 
     void AttachControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl, sal_Bool bDetach );
     void AttachControls( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&, sal_Bool bDetach );
@@ -206,15 +209,7 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
 
 protected:
     FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
-                FmFormView* _pView)
-        :m_pView(_pView)
-        ,m_pPageViewForActivation(NULL)
-        ,m_nEvent(0)
-        ,m_nErrorMessageEvent(0)
-        ,m_xORB(_xORB)
-        ,m_nAutoFocusEvent(0)
-        ,m_pWatchStoredList( NULL )
-    { }
+                FmFormView* _pView);
     ~FmXFormView();
 
     void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
@@ -247,14 +242,18 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xORB; }
 
+    // activation handling
+    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+
+            void        onFirstViewActivation( const FmFormModel* _pDocModel );
+
 private:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
     void addWindow(const SdrPageViewWinRec*);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
-    void Activate(SdrPageView* pPageView, sal_Bool bSync = sal_False);
-    void Deactivate(SdrPageView* pPageView, BOOL bDeactivateController = TRUE);
-
-    void smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
+    void Activate(sal_Bool bSync = sal_False);
+    void Deactivate(BOOL bDeactivateController = TRUE);
 
     SdrObject* implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
 

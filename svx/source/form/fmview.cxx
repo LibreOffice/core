@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 14:52:40 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 14:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,15 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
     if (pCurPage && bDesign)
     {
         DeactivateControls(pCurPageView);
-        pImpl->Deactivate(pCurPageView);
+        DBG_ASSERT( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: no valid shell!" );
+            // Since fixing 101864, 96009, et.al., we route the deactivation through the FormShell. I _suppose_
+            // the shell is always existent here, but I am not sure if there is a valid scenario where it isn't.
+            // Thus this assertion.
+
+        if ( pFormShell && pFormShell->GetImpl() )
+            pFormShell->GetImpl()->viewDeactivated( this );
+        else
+            pImpl->Deactivate( sal_True );
     }
 
     // über all angemeldeten Pages iterieren
@@ -335,36 +343,13 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         FmFormPage* pPage = PTR_CAST(FmFormPage,GetPageViewPvNum(i)->GetPage());
         if (pPage)
         {
-            // Un/Load all forms
-            Reference< ::com::sun::star::container::XIndexAccess >  xForms(((FmFormPage*)pPage)->GetForms(), UNO_QUERY);
-
             // during load the environment covers the error handling
             if (!bDesign)
                 ActivateControls(pCurPageView);
 
-            Reference< ::com::sun::star::form::XReset >  xReset;
-            for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
-            {
-                xForms->getByIndex(i) >>= xReset;
-                Reference< XLoadable >  xLoad(xReset, UNO_QUERY);
-                if (!xLoad.is())
-                    continue;
-
-                if (bDesign)
-                {
-                    if (xLoad->isLoaded())
-                        xLoad->unload();
-
-                    xReset->reset();
-                }
-                else
-                {
-                    if (::isLoadable(xLoad) && !xLoad->isLoaded())
-                        xLoad->load();
-
-                    pImpl->smartControlReset(Reference< XIndexAccess >(xReset, UNO_QUERY));
-                }
-            }
+            DBG_ASSERT( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: no valid shell!" );
+            if ( pFormShell && pFormShell->GetImpl() )
+                pFormShell->GetImpl()->loadForms( pPage, FORMS_RESET | ( bDesign ? FORMS_UNLOAD : FORMS_LOAD ) );
         }
     }
 
@@ -388,8 +373,11 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         }
         else
         {
-            // Erste ::com::sun::star::form aktivieren
-            pImpl->Activate(NULL);
+            // notify our shell that we have been activated
+            if ( pFormShell && pFormShell->GetImpl() )
+                pFormShell->GetImpl()->viewActivated( this );
+            else
+                pImpl->Activate();
 
             // set the auto focus to the first control (if indicated by the model to do so)
             sal_Bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
@@ -425,8 +413,11 @@ SdrPageView* FmFormView::ShowPage(SdrPage* pPage, const Point& rOffs)
             // Alles deselektieren
             UnmarkAll();
 
-            // Erste ::com::sun::star::form aktivieren
-            pImpl->Activate(pPV);
+            // notify our shell that we have been activated
+            if ( pFormShell && pFormShell->GetImpl() )
+                pFormShell->GetImpl()->viewActivated( this );
+            else
+                pImpl->Activate( );
         }   // nur wenn die Shell bereits im DesignMode ist
         else if (pFormShell && pFormShell->IsDesignMode())
         {
@@ -450,7 +441,10 @@ void FmFormView::HidePage(SdrPageView* pPV)
     {
         // Controls wieder deaktivieren
         DeactivateControls(pPV);
-        pImpl->Deactivate(pPV);
+        if ( pFormShell && pFormShell->GetImpl() )
+            pFormShell->GetImpl()->viewDeactivated( this );
+        else
+            pImpl->Deactivate( sal_True );
     }
     E3dView::HidePage(pPV);
 }
