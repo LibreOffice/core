@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2001-10-04 13:38:40 $
+#   last change: $Author: fs $ $Date: 2002-11-08 13:11:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,8 @@ PRJ=..$/..$/..
 PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=browser
+
+BMP_IN=$(PRJ)$/res
 
 # --- Settings -----------------------------------------------------
 
