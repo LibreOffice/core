@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:15:07 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,9 @@ private:
         throw ( ::com::sun::star::ucb::CommandFailedException,
                 ::com::sun::star::task::DocumentPasswordRequest );
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
+    queryChildContent( const rtl::OUString & rRelativeChildUri );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
     getStream( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv ) const
@@ -365,7 +368,9 @@ public:
                        ContentProvider* pProvider,
                        const ::rtl::OUString& rContentId );
 
-    void notifyDocumentClosure();
+    void notifyDocumentClosed();
+    void notifyChildRemoved( const rtl::OUString & rRelativeChildUri );
+    void notifyChildInserted( const rtl::OUString & rRelativeChildUri );
 
     rtl::Reference< ContentProvider > getContentProvider() const
     { return rtl::Reference< ContentProvider >( m_pProvider ); }
