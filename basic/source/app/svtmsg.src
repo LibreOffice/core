@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-08 09:35:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,4 +346,8 @@ String S_CANNOT_CREATE_DIRECTORY
 String S_DIRECTORY_NOT_EMPTY
 {
     Text = "Directory has to be Empty to unpack to. Directory: \"($Arg1)\"";
+};
+String S_DEPRECATED
+{
+    Text = "Deprecated! Please change the script.";
 };
