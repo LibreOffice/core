@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 17:13:19 $
+#   last change: $Author: rt $ $Date: 2004-09-17 12:58:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -204,6 +204,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/hangulhanjadlg.obj \
     $(SLO)$/optasian.obj		\
     $(SLO)$/optaccessibility.obj	\
+    $(SLO)$/optinet2.obj	\
     $(SLO)$/optsave.obj		\
     $(SLO)$/impgrf.obj      \
     $(SLO)$/optpath.obj	\
@@ -330,7 +331,6 @@ SLOFILES=\
     $(SLO)$/optcolor.obj    \
     $(SLO)$/optjsearch.obj  \
     $(SLO)$/optgenrl.obj	\
-    $(SLO)$/optinet2.obj	\
     $(SLO)$/optctl.obj	\
     $(SLO)$/svxgrahicitem.obj \
     $(SLO)$/swframeposstrings.obj\
