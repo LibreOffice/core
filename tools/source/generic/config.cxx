@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:34:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     unsigned int    nKeyLen;
     unsigned int    i;
     const BYTE*     pLine;
-    ImplKeyData*    pPrevKey;
+    ImplKeyData*    pPrevKey = NULL;
     ImplKeyData*    pKey;
     ImplGroupData*  pPrevGroup = NULL;
     ImplGroupData*  pGroup = NULL;
