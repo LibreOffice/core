@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifdef MAC
 #include <svx/brshitem.hxx>
 #endif
+
+#include <svx/svdview.hxx>
+#include "tabvwsh.hxx"
 
 #include "gridwin.hxx"
 #include "viewdata.hxx"
@@ -678,6 +681,22 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
     DrawRedraw( aOutputData, aDrawingRect, eMode, SC_LAYER_INTERN );
     DrawRedraw( aOutputData, aDrawingRect, eMode, SC_LAYER_CONTROLS );  // als letztes
     DrawSdrGrid( aDrawingRect );
+
+    {
+        // call RefreshAllIAOManagers only once in paint, so do it here
+        // and not in DrawOneLayer(). But after DrawGrid...
+        ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+
+        if(pTabViewShell)
+        {
+            SdrView* pDrawView = pTabViewShell->GetSdrView();
+
+            if(pDrawView)
+            {
+                pDrawView->RefreshAllIAOManagers();
+            }
+        }
+    }
 
     if (!bIsInScroll)                               // Drawing Markierungen
     {
