@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:32:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
@@ -184,6 +181,7 @@
 #define Selection
 #include "sfxslots.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::script;
@@ -687,8 +685,7 @@ BasicManager* SfxApplication::GetBasicManager()
         pBasicCont->setBasicManager( pBasicManager );
 
         // Dialog container
-        SotStorage* pStor = NULL;
-        SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( pStor );
+        SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( uno::Reference< embed::XStorage >() );
         pDialogCont->acquire(); // Hold via UNO
         Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
         pImp->pDialogLibContainer = pDialogCont;
