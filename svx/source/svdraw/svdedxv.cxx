@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:27:10 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void SdrObjEditView::BrkAction()
 void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
 {
     if (IsMacroObj()) {
-        rRect=pMacroObj->GetBoundRect()+pMacroPV->GetOffset();
+        rRect=pMacroObj->GetCurrentBoundRect()+pMacroPV->GetOffset();
     } else {
         SdrGlueEditView::TakeActionRect(rRect);
     }
@@ -454,7 +454,7 @@ Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
         SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextEditObj);
         if (pText!=NULL && pText->IsClosedObj())
         {
-            bFound=GetDraftFillColor(pText->GetItemSet(),aBackground);
+            bFound=GetDraftFillColor(pText->GetMergedItemSet(), aBackground);
         }
         if (!bFound && pTextEditPV!=NULL && pTextEditObj!=NULL)
         {
@@ -507,7 +507,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, BOOL bNoPaint, O
     if (pText!=NULL)
     {
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
-        pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+        pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
     pOutlView->SetOutputArea(aTextEditArea);
     pTextEditOutliner->SetUpdateMode(TRUE);
@@ -641,7 +641,15 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
         aOldCalcFieldValueLink=pTextEditOutliner->GetCalcFieldValueHdl();
         // Der FieldHdl muss von BegTextEdit gesetzt sein, da dor ein UpdateFields gerufen wird.
         pTextEditOutliner->SetCalcFieldValueHdl(LINK(this,SdrObjEditView,ImpOutlinerCalcFieldValueHdl));
-        if (pTextEditObj->BegTextEdit(*pTextEditOutliner)) {
+        if (pTextEditObj->BegTextEdit(*pTextEditOutliner))
+        {
+            // #111096#
+            // Switch off evtl. running TextAnimation
+            if(pTextEditObj->ISA(SdrTextObj))
+            {
+                ((SdrTextObj*)pTextEditObj)->SetTextAnimationAllowed(sal_False);
+            }
+
             // alten Cursor merken
             if (pTextEditOutliner->GetViewCount()!=0) {
                 OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(ULONG(0));
@@ -808,12 +816,18 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
             pTEObj->EndTextEdit(*pTEOutliner);
 
             if ( pTEObj->GetRotateAngle() != 0 )
-                pTEObj->SendRepaintBroadcast();  // Sonst wird nicht alles restauriert
+            {
+                // obviously a repaint
+                pTEObj->ActionChanged();
+                // pTEObj->BroadcastObjectChange();  // Sonst wird nicht alles restauriert
+            }
 
             // #90468# invalidate here for FontWork object to force complete redraw
             if(pTEObj && pTEObj->ISA(SdrTextObj) && ((SdrTextObj*)pTEObj)->IsFontwork())
             {
-                pTEObj->SendRepaintBroadcast();
+                // obviously a repaint
+                pTEObj->ActionChanged();
+                // pTEObj->BroadcastObjectChange();
             }
 
             if (pTxtUndo!=NULL) {
@@ -853,6 +867,13 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
                 eRet=SDRENDTEXTEDIT_SHOULDBEDELETED;
             }
             EndUndo(); // EndUndo hinter Remove, falls der UndoStack gleich weggehaun' wird
+
+            // #111096#
+            // Switch on evtl. TextAnimation again after TextEdit
+            if(pTEObj->ISA(SdrTextObj))
+            {
+                ((SdrTextObj*)pTEObj)->SetTextAnimationAllowed(sal_True);
+            }
         }
         // alle OutlinerViews loeschen
         for (ULONG i=pTEOutliner->GetViewCount(); i>0;) {
@@ -1034,7 +1055,7 @@ BOOL SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
             if( pMod && !pMod->IsChanged() )
             {
                 if( pTextEditOutliner && pTextEditOutliner->IsModified() )
-                    pMod->SetChanged( TRUE );
+                    pMod->SetChanged( sal_True );
             }
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
@@ -1344,7 +1365,7 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
             rTargetSet.Put(pTextEditObj->GetStyleSheet()->GetItemSet());
 
         // add object attributes
-        rTargetSet.Put( pTextEditObj->GetItemSet() );
+        rTargetSet.Put( pTextEditObj->GetMergedItemSet() );
 
         if( pTextEditObj->GetOutlinerParaObject() )
             rTargetSet.Put( SvxScriptTypeItem( pTextEditObj->GetOutlinerParaObject()->GetTextObject().GetScriptType() ) );
@@ -1423,11 +1444,8 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,!bNoEEItems));
             EndUndo();
 
-            SdrBroadcastItemChange aItemChange(*pTextEditObj);
-            if(bReplaceAll)
-                pTextEditObj->ClearItem();
-            pTextEditObj->SetItemSet(*pSet);
-            pTextEditObj->BroadcastItemChange(aItemChange);
+            //pTextEditObj->SetItemSetAndBroadcast(*pSet, bReplaceAll);
+            pTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
 
             FlushComeBackTimer(); // Damit ModeHasChanged sofort kommt
             bRet=TRUE;
@@ -1452,11 +1470,8 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,FALSE));
             EndUndo();
 
-            SdrBroadcastItemChange aItemChange(*pTextEditObj);
-            if(bReplaceAll)
-                pTextEditObj->ClearItem();
-            pTextEditObj->SetItemSet(aSet);
-            pTextEditObj->BroadcastItemChange(aItemChange);
+            //pTextEditObj->SetItemSetAndBroadcast(aSet, bReplaceAll);
+            pTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
 
             if (aMark.GetMarkCount()==1 && aMark.GetMark(0)->GetObj()==pTextEditObj) {
                 SetNotPersistAttrToMarked(aSet,bReplaceAll);
