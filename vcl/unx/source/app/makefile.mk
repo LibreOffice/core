@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 14:29:42 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:56:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,10 @@ SLOFILES=\
 .IF "$(WITH_LIBSN)"=="YES"
 CDEFS+=-DHAVE_LIBSN
 CFLAGS+=$(LIBSN_CFLAGS)
+.ENDIF
+
+.IF "$(WITH_WIDGETSET)"!=""
+CFLAGS+= $(WIDGETSET_CFLAGS)
 .ENDIF
 
 .IF "$(OS)$(CPU)" == "SOLARISS"
