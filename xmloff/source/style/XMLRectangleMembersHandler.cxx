@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRectangleMembersHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:01:06 $
+ *  last change: $Author: cl $ $Date: 2001-05-03 09:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ sal_Bool XMLRectangleMembersHdl::importXML(
                 break;
         }
 
+        rValue <<= aRect;
         return sal_True;
     }
 
