@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,17 +77,20 @@ String STR_TABLE_PRIV_NAME
     Text[ italian ] = "Nome tabella";
     Text[ danish ] = "Tabelnavn";
     Text[ swedish ] = "Tabellnamn";
-    Text[ polish ] = "Nazwa tabeli";
-    Text[ portuguese_brazilian ] = "Tablename";
+    Text[ polish ] = "Nazywanie tabeli";
+    Text[ portuguese_brazilian ] = "Nome da tabela";
     Text[ japanese ] = "テーブル名";
     Text[ korean ] = "테이블 이름";
     Text[ chinese_simplified ] = "表格名称";
     Text[ chinese_traditional ] = "表格名稱";
     Text[ arabic ] = "��� ������";
-    Text[ turkish ] = "Tablo ad�";
+    Text[ turkish ] = "Tablo ismi";
     Text[ finnish ] = "Taulun nimi";
     Text[ catalan ] = "Nom de la taula";
     Text[ thai ] = "ชื่อตาราง";
+    Text[ czech ] = "Název tabulky";
+    Text[ hebrew ] = "Tabellename";
+    Text[ hindi ] = "सारणी नाम";
 };
 
 String STR_TABLE_PRIV_INSERT
@@ -105,16 +108,19 @@ String STR_TABLE_PRIV_INSERT
     Text[ italian ] = "Inserisci dati";
     Text[ danish ] = "Inds�t data";
     Text[ swedish ] = "Infoga data";
-    Text[ polish ] = "Wstaw dane";
-    Text[ portuguese_brazilian ] = "Insert";
+    Text[ polish ] = "Wstawianie danych";
+    Text[ portuguese_brazilian ] = "Inserir dados";
     Text[ japanese ] = "データの挿入";
     Text[ korean ] = "데이터 삽입";
     Text[ chinese_simplified ] = "插入数据";
     Text[ chinese_traditional ] = "插入資料";
-    Text[ turkish ] = "Ekle";
+    Text[ turkish ] = "Veri Ekle";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Inserta";
     Text[ thai ] = "แทรกข้อมูล";
+    Text[ czech ] = "Vložit data";
+    Text[ hebrew ] = "Daten einfügen";
+    Text[ hindi ] = "ड़ॉटा जोड़ो";
 };
 
 String STR_TABLE_PRIV_DELETE
@@ -132,16 +138,19 @@ String STR_TABLE_PRIV_DELETE
     Text[ italian ] = "Elimina dati";
     Text[ danish ] = "Slet data";
     Text[ swedish ] = "Radera data";
-    Text[ polish ] = "Usu� dane";
-    Text[ portuguese_brazilian ] = "Delete";
+    Text[ polish ] = "Usuwanie danych";
+    Text[ portuguese_brazilian ] = "Excluir dados";
     Text[ japanese ] = "データの削除";
     Text[ korean ] = "데이터 삭제";
     Text[ chinese_simplified ] = "删除数据";
     Text[ chinese_traditional ] = "刪除資料";
-    Text[ turkish ] = "Sil";
+    Text[ turkish ] = "Veri Sil";
     Text[ arabic ] = "���";
     Text[ catalan ] = "Elimina";
     Text[ thai ] = "ลบข้อมูล";
+    Text[ czech ] = "Odstranit data";
+    Text[ hebrew ] = "Daten löschen";
+    Text[ hindi ] = "ड़ॉटा मिटाओ";
 };
 
 String STR_TABLE_PRIV_UPDATE
@@ -159,16 +168,19 @@ String STR_TABLE_PRIV_UPDATE
     Text[ italian ] = "Cambia dati";
     Text[ danish ] = "Modificer data";
     Text[ swedish ] = "�ndra data";
-    Text[ polish ] = "Modyfikuj dane";
-    Text[ portuguese_brazilian ] = "Update";
+    Text[ polish ] = "Modyfikowanie dane";
+    Text[ portuguese_brazilian ] = "Modificar dados";
     Text[ japanese ] = "データの変更";
-    Text[ korean ] = "데이터 변경";
+    Text[ korean ] = "데이터 수정";
     Text[ chinese_simplified ] = "更改数据";
     Text[ chinese_traditional ] = "變更資料";
-    Text[ turkish ] = "De�i�tir";
+    Text[ turkish ] = "Veri De�i�tir";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Modifica";
     Text[ thai ] = "ดัดแปลงแก้ไขข้อมูล";
+    Text[ czech ] = "Upravit data";
+    Text[ hebrew ] = "Daten ändern";
+    Text[ hindi ] = "ड़ॉटा सुधारो";
 };
 
 String STR_TABLE_PRIV_ALTER
@@ -185,17 +197,20 @@ String STR_TABLE_PRIV_ALTER
     Text[ italian ] = "Cambia struttura";
     Text[ danish ] = "Modificer struktur";
     Text[ swedish ] = "�ndra struktur";
-    Text[ polish ] = "Modyfikuj struktur�";
-    Text[ portuguese_brazilian ] = "Alter";
+    Text[ polish ] = "Zmiana struktury";
+    Text[ portuguese_brazilian ] = "Alterar estrutura";
     Text[ japanese ] = "構成の変更";
     Text[ korean ] = "구조 수정";
     Text[ chinese_simplified ] = "更改构造";
     Text[ chinese_traditional ] = "變更結构";
     Text[ arabic ] = "����� ������";
-    Text[ turkish ] = "Yap�y� de�i�tir";
+    Text[ turkish ] = "Di�er Yap�";
     Text[ finnish ] = "Muuta rakennetta";
     Text[ catalan ] = "Modifica l'estructura";
     Text[ thai ] = "เปลี่ยนโครงสร้าง";
+    Text[ czech ] = "Změnit strukturu";
+    Text[ hebrew ] = "Struktur ändern";
+    Text[ hindi ] = "बनावट बदलना";
 };
 String STR_TABLE_PRIV_SELECT
 {
@@ -212,16 +227,19 @@ String STR_TABLE_PRIV_SELECT
     Text[ italian ] = "Leggi dati";
     Text[ danish ] = "L�s data";
     Text[ swedish ] = "L�s data";
-    Text[ polish ] = "Czytaj dane";
-    Text[ portuguese_brazilian ] = "Select";
+    Text[ polish ] = "Odczyt danych";
+    Text[ portuguese_brazilian ] = "Ler dados";
     Text[ japanese ] = "データの読み取り";
     Text[ korean ] = "데이터 읽기";
     Text[ chinese_simplified ] = "读取数据";
     Text[ chinese_traditional ] = "讀取資料";
-    Text[ turkish ] = "Oku";
+    Text[ turkish ] = "Veri oku";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Llegeix";
     Text[ thai ] = "อ่านข้อมูล";
+    Text[ czech ] = "Číst data";
+    Text[ hebrew ] = "Daten lesen";
+    Text[ hindi ] = "ड़ॉटा पढो";
 };
 
 String STR_TABLE_PRIV_REFERENCE
@@ -238,17 +256,20 @@ String STR_TABLE_PRIV_REFERENCE
     Text[ italian ] = "Cambia riferimenti";
     Text[ danish ] = "Modificer referencer";
     Text[ swedish ] = "�ndra referenser";
-    Text[ polish ] = "Modyfikuj odwo�ania";
-    Text[ portuguese_brazilian ] = "References";
+    Text[ polish ] = "Modyfikowanie odwo�a�";
+    Text[ portuguese_brazilian ] = "Modificar refer�ncias";
     Text[ japanese ] = "参照の変更";
-    Text[ korean ] = "참조 변경";
+    Text[ korean ] = "참조 수정";
     Text[ chinese_simplified ] = "更改引用";
     Text[ chinese_traditional ] = "變更引用";
     Text[ arabic ] = "����� �������";
-    Text[ turkish ] = "Referanslar� de�i�tir";
+    Text[ turkish ] = "Ayarlar� de�i�tir";
     Text[ finnish ] = "Muuta viitteit�";
     Text[ catalan ] = "Modifica les refer�ncies";
     Text[ thai ] = "ดัดแปลงแก้ไขการอ้างอิง";
+    Text[ czech ] = "Upravit odkazy";
+    Text[ hebrew ] = "References ändern";
+    Text[ hindi ] = "रेफरेन्स सुधारो";
 };
 
 String STR_TABLE_PRIV_DROP
@@ -266,17 +287,30 @@ String STR_TABLE_PRIV_DROP
     Text[ italian ] = "Elimina struttura";
     Text[ danish ] = "Slet struktur";
     Text[ swedish ] = "Radera struktur";
-    Text[ polish ] = "Usu� struktur�";
-    Text[ portuguese_brazilian ] = "Droping";
+    Text[ polish ] = "Usuwanie struktury";
+    Text[ portuguese_brazilian ] = "Excluir estrutura";
     Text[ japanese ] = "構造体の削除";
     Text[ korean ] = "구조 삭제";
     Text[ chinese_simplified ] = "删除结构";
     Text[ chinese_traditional ] = "刪除結構";
-    Text[ turkish ] = "Droping";
+    Text[ turkish ] = "Yap�y� durdur";
     Text[ arabic ] = "Droping";
     Text[ catalan ] = "Elimina l'estructura";
     Text[ thai ] = "ปล่อยโครงสร้าง";
+    Text[ czech ] = "Zahodit strukturu";
+    Text[ hebrew ] = "Struktur löschen";
+    Text[ hindi ] = "बनावट गिराओ";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
