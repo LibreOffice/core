@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivotsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:07:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
             if( pDPObj )
             {
                 ScQueryParam aQueryParam;
-                USHORT nSrcTab = 0;
+                SCTAB nSrcTab = 0;
                 const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
                 DBG_ASSERT( pDesc, "no sheet source for DP filter dialog" );
                 if( pDesc )
