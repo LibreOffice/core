@@ -3,14 +3,18 @@
 T4_XSLT = \
     writer_DocBook_File \
     writer_MS_Word_2003 \
-    writer_XHTML_File
+    XHTML_File
 
 # -----------------------------------------------
-# count = 3
+# count = 6
 F4_XSLT = \
     DocBook_File \
     Microsoft_Word_2003_XML \
-    XHTML_File
+    XHTML_Calc_File \
+    XHTML_Draw_File \
+    XHTML_Impress_File \
+    XHTML_Writer_File
+
 
 # -----------------------------------------------
 # count = 0
