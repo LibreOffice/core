@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:09:37 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include    <stdio.h>
 #include <string.h>
-
 #include "javaoptions.hxx"
 #include "osl/process.h"
 #include "osl/thread.h"
@@ -92,7 +91,7 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     }
 
     char    *s=NULL;
-    for (i; i < ac; i++)
+    for( ; i < ac; i++)
     {
         if (av[i][0] == '-')
         {
