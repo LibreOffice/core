@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:30:33 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 00:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ TabPage RID_TP_MODULS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "–¬Ω®∂‘ª∞øÚ(~N)...";
         Text[ russian ] = "ÕÓ‚˚È ‰Ë‡ÎÓ„...";
-        Text[ polish ] = "Nowy dialog...";
+        Text[ polish ] = "Nowe okno dialogowe...";
         Text[ japanese ] = "êVÇµÇ¢¿ﬁ≤±€∏ﬁ(~N)...";
         Text[ chinese_traditional ] = "∂}±“πÔ∏‹§Ë∂Ù(~N)...";
         Text[ arabic ] = "„—»⁄ ÕÊ«— ÃœÌœ...";
@@ -379,7 +379,7 @@ TabPage RID_TP_MODULS
         Text[ chinese_traditional ] = "ßR∞£(~D)...";
         Text[ arabic ] = "Õ–›...";
         Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ korean ] = "ªË¡¶(~D)...";
+        Text[ korean ] = "¡¶∞≈(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "E~liminar...";
     };
@@ -517,7 +517,7 @@ TabPage RID_TP_LIBS
         Text [ portuguese ] = "~Senha..." ;
         Text [ finnish ] = "~Salasana" ;
         Text [ danish ] = "Adgangskode..." ;
-        Text [ french ] = "Mot de ~passe..." ;
+        Text [ french ] = "Mot de passe..." ;
         Text [ swedish ] = "Lˆs~enord..." ;
         Text [ dutch ] = "W~achtwoord..." ;
         Text [ spanish ] = "~ContraseÒa..." ;
@@ -544,7 +544,7 @@ TabPage RID_TP_LIBS
         Text [ italian ] = "~Nuovo..." ;
         Text [ portuguese_brazilian ] = "~Novo" ;
         Text [ portuguese ] = "~Novo..." ;
-        Text [ french ] = "Nou~veau..." ;
+        Text [ french ] = "Nouveau..." ;
         Text [ dutch ] = "~Nieuw..." ;
         Text [ spanish ] = "~Nuevo..." ;
         Text [ danish ] = "Ny..." ;
@@ -583,7 +583,7 @@ TabPage RID_TP_LIBS
         Text[ russian ] = "ƒÓ·‡‚ËÚ¸...";
         Text[ polish ] = "Dodaj...";
         Text[ japanese ] = "í«â¡(~A)...";
-        Text[ chinese_traditional ] = "ºW•[(~A)...";
+        Text[ chinese_traditional ] = "∑sºW(~A)...";
         Text[ arabic ] = "≈÷«›…...";
         Text[ greek ] = "–ÒÔÛËﬁÍÁ...";
         Text[ korean ] = "√ﬂ∞°(~A)...";
@@ -617,7 +617,7 @@ TabPage RID_TP_LIBS
         Text[ chinese_traditional ] = "ßR∞£(~D)...";
         Text[ arabic ] = "Õ–›...";
         Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ korean ] = "ªË¡¶(~D)...";
+        Text[ korean ] = "¡¶∞≈(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "Elim~inar...";
     };
@@ -868,6 +868,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
