@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-30 13:08:27 $
+#   last change: $Author: hjs $ $Date: 2001-11-02 12:00:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 
 .INCLUDE : minor.mk
 
-
+.IF "$(UPDATER)"!=""
 %minor.mk :
 .IF "$(SOURCEVERSION)"=="$(WORK_STAMP)"
     @+-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc >& $(NULLDEV)
@@ -104,6 +104,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 .ELSE			# "$(GUI)"=="UNX"
     @+$(COPY) $(SOLARVERSION)$/$(UPD)minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
+.ENDIF          # "$(UPDATER)"!=""
 
 .INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 
@@ -1433,8 +1434,12 @@ SVXLIGHT=TRUE
 
 #defaults for UCR HEADER
 UNOUCRBASE*=UCR
-UNOUCRRDB*=$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT*=$(OUT)$/inc
+.IF "$(UDKSTAMP))"==""
+UNOUCRRDB*=$(SOLARBINDIR)$/udkapi.rdb
+.ELSE           # "$(UDKSTAMP))"==""
+UNOUCRRDB*=$(SOLARBINDIR)$/applicat.rdb
+.ENDIF          # "$(UDKSTAMP))"==""
 
 # --- Compiler -----------------------------------------------------
 .INCLUDE : rules.mk

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-25 18:03:02 $
+#   last change: $Author: hjs $ $Date: 2001-11-02 12:00:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1165,7 +1165,11 @@ NO_SHL9DESCRIPTION=TRUE
 .IF "$(UNOUCRRDB)"!=""
 COMPRDB*:=$(UNOUCRRDB)
 .ELSE			# "$(UNOUCRRDB)"!=""
+.IF "$(UDKSTAMP))"==""
+COMPRDB*:=$(SOLARBINDIR)$/udkapi.rdb
+.ELSE           # "$(UDKSTAMP))"==""
 COMPRDB*:=$(SOLARBINDIR)$/applicat.rdb
+.ENDIF          # "$(UDKSTAMP))"==""
 .ENDIF			# "$(UNOUCRRDB)"!=""
 .ENDIF          # "$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
 .IF "$(COMP1TYPELIST)"!=""
