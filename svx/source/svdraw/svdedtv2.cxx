@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:48:35 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,7 +1124,13 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
     // ConvertMarkedToPolyObj was too strong here, it will loose quality and
     // information when curve objects are combined. This can be replaced by
     // using ConvertMarkedToPathObj without changing the previous fix.
-    ConvertMarkedToPathObj(sal_True);
+
+    // #i21250#
+    // Instead of simply passing sal_True as LineToArea, use bNoPolyPoly as info
+    // if this command is a 'Combine' or a 'Connect' command. On Connect it's sal_True.
+    // To not concert line segments with a set line width to polygons in that case,
+    // use this info. Do not convert LineToArea on Connect commands.
+    ConvertMarkedToPathObj(!bNoPolyPoly);
 
     // continue as before
     bCombineError = FALSE;
@@ -1215,9 +1221,15 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
         // Attribute des untersten Objekts
         ImpCopyAttributes(pAttrObj,pPath);
 
-        // #100408# If LineStyle is XLINE_NONE force to XLINE_SOLID to make visible.
-        const XLineStyle eLineStyle = ((const XLineStyleItem&)pPath->GetItem(XATTR_LINESTYLE)).GetValue();
-        if(XLINE_NONE == eLineStyle)
+        // #100408# If LineStyle of pAttrObj is XLINE_NONE force to XLINE_SOLID to make visible.
+        const XLineStyle eLineStyle = ((const XLineStyleItem&)pAttrObj->GetItem(XATTR_LINESTYLE)).GetValue();
+        const XFillStyle eFillStyle = ((const XFillStyleItem&)pAttrObj->GetItem(XATTR_FILLSTYLE)).GetValue();
+
+        // #110635#
+        // Take fill style/closed state of pAttrObj in account when deciding to change the line style
+        sal_Bool bIsClosedPathObj(pAttrObj->ISA(SdrPathObj) && ((SdrPathObj*)pAttrObj)->IsClosed());
+
+        if(XLINE_NONE == eLineStyle && (XFILL_NONE == eFillStyle || !bIsClosedPathObj))
         {
             pPath->SetItem(XLineStyleItem(XLINE_SOLID));
         }
