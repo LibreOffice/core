@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-11 16:33:42 $
+#   last change: $Author: hjs $ $Date: 2001-10-17 13:12:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,15 +105,11 @@ OUTDIR2INC= \
 CONFIGURE_ACTION=$(PERL) Configure VC-WIN32 ^ ms\do_ms.btm
 
 BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=*nmake -f ms/ntdll.mak
+BUILD_ACTION=*nmake -f ms/nt.mak
 
 OUT2LIB= \
-    out32dll$$/libeay32.lib \
-    out32dll$$/ssleay32.lib
-    
-OUT2BIN= \
-    out32dll$$/libeay32.dll \
-    out32dll$$/ssleay32.dll
+    out32$$/libeay32.lib \
+    out32$$/ssleay32.lib
     
 OUTDIR2INC= \
     inc32$/openssl
