@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 16:53:48 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,9 @@ import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.environments.remote.IUnmarshal;
 import com.sun.star.lib.uno.environments.remote.ThreadID;
 
-import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
-import com.sun.star.lib.uno.typeinfo.TypeInfo;
+import com.sun.star.lib.uno.typedesc.MethodDescription;
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+//import com.sun.star.lib.uno.typeinfo.TypeInfo;
 
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
@@ -94,7 +95,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-09-28 16:53:48 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:01:32 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -105,18 +106,19 @@ public class urp extends Protocol {
      */
     static public final boolean DEBUG = false;
 
-    static private final short __cache_size = 256;
+    static private final TypeDescription __emptyTypeDescArray[] = new TypeDescription[0];
+    static private final short           __cache_size = 256;
 
 
     protected IBridge           _iBridge;
     protected boolean           _bIgnoreNextCloseConnection = false;
 
     private String   _in_oid;
-    private Type     _in_interface;
+    private TypeDescription     _in_interface;
     private ThreadID _in_threadId;
 
     private String   _out_oid;
-    private Type     _out_interface;
+    private TypeDescription     _out_interface;
     private ThreadID _out_threadId;
 
     private int       _message_count;
@@ -198,19 +200,19 @@ public class urp extends Protocol {
         // get the out signature and parameter array of the reply
         Object objects[] = (Object[])removePendingRequest(_in_threadId);
         Object param[] = (Object[])objects[0];
-        Class signature[] = (Class[])objects[1];
-        Class resultClass = (Class)objects[2];
+        TypeDescription signature[] = (TypeDescription[])objects[1];
+        TypeDescription resultType = (TypeDescription)objects[2];
 
         exception[0] = (header & EXCEPTION) != 0;
         if(exception[0]) {// Exception? So the reply has an any as the result
-            signature = new Class[0];
-            resultClass = com.sun.star.uno.Any.class;
+            signature = __emptyTypeDescArray;
+            resultType = TypeDescription.__any_TypeDescription;
         }
 
         // read the result object
         Object result = null;
-        if(resultClass != null)
-            result = _unmarshal.readObject(resultClass);
+        if(resultType != null)
+            result = _unmarshal.readObject(resultType);
 
         // read the out parameters
         for(int i = 0; i < signature.length; ++ i) {
@@ -218,24 +220,29 @@ public class urp extends Protocol {
                 Array.set(param[i], 0, _unmarshal.readObject(signature[i].getComponentType()));
         }
 
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readReply:" + result);
+
         return result;
     }
 
 
-    private Object []readParams(MMDesc mMDesc) throws Exception {
-        Object params[] = new Object[mMDesc._in_sig.length];
+    private Object []readParams(MethodDescription methodDescription) throws Exception {
+        TypeDescription in_sig[] = methodDescription.getInSignature();
+        TypeDescription out_sig[] = methodDescription.getOutSignature();
+
+        Object params[] = new Object[in_sig.length];
 
         for(int i = 0; i < params.length; ++ i) {
-            if(mMDesc._in_sig[i] != null) // is it an in parameter?
-                if(mMDesc._out_sig[i] != null) {// is it also an out -> inout?
-                    Object inout = Array.newInstance(mMDesc._out_sig[i].getComponentType(), 1);
-                    Array.set(inout, 0, _unmarshal.readObject(mMDesc._out_sig[i].getComponentType()));
+            if(in_sig[i] != null) // is it an in parameter?
+                if(out_sig[i] != null) {// is it also an out -> inout?
+                    Object inout = Array.newInstance(out_sig[i].getComponentType().getZClass(), 1);
+                    Array.set(inout, 0, _unmarshal.readObject(out_sig[i].getComponentType()));
                     params[i] = inout;
                 }
                 else  // it is only an in parameter
-                    params[i] = _unmarshal.readObject(mMDesc._in_sig[i]);
+                    params[i] = _unmarshal.readObject(in_sig[i]);
             else // it is only an out parameter, so provide the holder
-                params[i] = Array.newInstance(mMDesc._out_sig[i].getComponentType(), 1);
+                params[i] = Array.newInstance(out_sig[i].getComponentType().getZClass(), 1);
         }
 
         return params;
@@ -252,19 +259,18 @@ public class urp extends Protocol {
         else
             methodId = (header & 0x3f);
 
-        MMDesc mMDesc = getMMDesc(_in_interface.getDescription(), methodId);
-        operation[0] = mMDesc._name;
+        MethodDescription methodDescription = _in_interface.getMethodDescription(methodId);
+        operation[0] = methodDescription.getName();
 
-        if(mMDesc._methodTypeInfo == null) // is there a method type info
-            synchron[0] = true;  // if not, the default is synchron
-        else
-            synchron[0] = !mMDesc._methodTypeInfo.isOneway();
+        synchron[0] = !methodDescription.isOneway();
 
-        param[0] = readParams(mMDesc);
+        param[0] = readParams(methodDescription);
 
         if(synchron[0]) { // if the request is synchron, it is pending
-            putPendingReply(_in_threadId, new Object[]{param[0], mMDesc._out_sig, mMDesc._res/*, mMDesc*/});
+            putPendingReply(_in_threadId, new Object[]{param[0], methodDescription.getOutSignature(), methodDescription.getReturnSig()/*, mMDesc*/});
         }
+
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readShortRequest:" + _in_oid + " " + operation[0] + " " + synchron[0]);
     }
 
     private void readLongRequest(byte header, String operation[], Object param[][], boolean synchron[]) throws Exception  {
@@ -278,7 +284,7 @@ public class urp extends Protocol {
             methodId = _unmarshal.readbyte();
 
         if((header & NEWTYPE) != 0)
-            _in_interface = _unmarshal.readType();
+            _in_interface = _unmarshal.readTypeDescription();
 
         if((header & NEWOID) != 0) // new oid?
             _in_oid = _unmarshal.readOid();
@@ -288,7 +294,7 @@ public class urp extends Protocol {
 
         _ignore_cache = ((header & IGNORECACHE) != 0); // do not use cache for this request?
 
-        MMDesc mMDesc = getMMDesc(_in_interface.getDescription(), methodId);
+        MethodDescription methodDescription = _in_interface.getMethodDescription(methodId);
         boolean mustReply;
 
         if((header & MOREFLAGS) != 0) {// is there an extended flags byte?
@@ -299,16 +305,18 @@ public class urp extends Protocol {
         }
         else {
             // the typeinfo does not differentiate between MUSTREPLY and SYNCHRONOUSE
-            synchron[0] = mMDesc._methodTypeInfo != null ? !mMDesc._methodTypeInfo.isOneway() : true;
+            synchron[0] = !methodDescription.isOneway();
             mustReply = synchron[0];
         }
 
-        operation[0] = mMDesc._name;
+        operation[0] = methodDescription.getName();
 
-        param[0] = readParams(mMDesc);
+        param[0] = readParams(methodDescription);
 
         if(synchron[0]) // if the request is synchron, the reply is pending
-            putPendingReply(_in_threadId, new Object[]{param[0], mMDesc._out_sig, mMDesc._res/*, mMDesc*/});
+            putPendingReply(_in_threadId, new Object[]{param[0], methodDescription.getOutSignature(), methodDescription.getReturnSig()/*, mMDesc*/});
+
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readLongRequest:" + _in_oid + " " + operation[0] + " " + synchron[0]);
     }
 
     private Object readMessage(String operation[], Object param[], boolean synchron[], boolean exception[]) throws Exception {
@@ -334,7 +342,7 @@ public class urp extends Protocol {
 
 
     public void writeRequest(String oid,
-                             Type zInterface,
+                             TypeDescription zInterface,
                              String operation,
                              ThreadID threadId,
                              Object params[],
@@ -346,7 +354,7 @@ public class urp extends Protocol {
         ++ _requestsSend;
         ++ _message_count;
         synchronized(_marshal) {
-            MMDesc mMDesc = getMMDesc(zInterface.getDescription(), operation);
+            MethodDescription methodDescription = zInterface.getMethodDescription(operation);
 
             byte header = 0;
             boolean bigHeader = false;
@@ -384,28 +392,24 @@ public class urp extends Protocol {
 
             // if the type of request is provided, test if it differs from declaration
             if(synchron[0] != null) {
-                if(mMDesc._methodTypeInfo != null && mMDesc._methodTypeInfo.isOneway() == synchron[0].booleanValue()) {
+                if(methodDescription.isOneway() == synchron[0].booleanValue()) {
                     bigHeader = true;
                     hasExFlags = true;
                 }
             }
-            else if(mMDesc._methodTypeInfo != null) // if the request type is not provided, use the typeInfo if available
-                synchron[0] = new Boolean(!mMDesc._methodTypeInfo.isOneway());
-            else // if no request type provided and no typeInfo available fall back to synchron
-                synchron[0] = new Boolean(true);
+            else
+                synchron[0] = new Boolean(!methodDescription.isOneway());
 
 
             // if the type of request is provided, test if it differs from declaration
             if(mustReply[0] != null) {
-                if(mMDesc._methodTypeInfo != null && mMDesc._methodTypeInfo.isOneway() == mustReply[0].booleanValue()) {
+                if(methodDescription.isOneway() == mustReply[0].booleanValue()) {
                     bigHeader = true;
                     hasExFlags = true;
                 }
             }
-            else if(mMDesc._methodTypeInfo != null) // if the request type is not provided, use the typeInfo if available
-                mustReply[0] = new Boolean(!mMDesc._methodTypeInfo.isOneway());
-            else // if no request type provided and no typeInfo available fall back to synchron
-                mustReply[0] = new Boolean(true);
+            else
+                mustReply[0] = new Boolean(!methodDescription.isOneway());
 
 
             if(bigHeader) { // something has changed, send big header
@@ -413,7 +417,7 @@ public class urp extends Protocol {
                 header |= REQUEST;
                 header |= hasExFlags ? MOREFLAGS : 0;
 
-                if(mMDesc._index > 255)
+                if(methodDescription.getIndex() > 255)
                     header |= LONGMETHODID;
 
                 _marshal.writebyte(header);
@@ -428,13 +432,13 @@ public class urp extends Protocol {
                 }
 
                 // write the method id
-                if(mMDesc._index > 255)
-                    _marshal.writeshort((short)mMDesc._index);
+                if(methodDescription.getIndex() > 255)
+                    _marshal.writeshort((short)methodDescription.getIndex());
                 else
-                    _marshal.writebyte((byte)mMDesc._index);
+                    _marshal.writebyte((byte)methodDescription.getIndex());
 
                 if(zInterface != null) // has the interface changed? -> write it
-                    _marshal.writeType(zInterface);
+                    _marshal.writeTypeDescrption(zInterface);
 
                 if(oid != null) // has the oid changed? -> write it
                     _marshal.writeOid(_out_oid);
@@ -443,29 +447,31 @@ public class urp extends Protocol {
                     _marshal.writeThreadID(threadId);
             }
             else { // simple request
-                if(mMDesc._index <= 0x2f) // does the method id fit in the header?
-                    _marshal.writebyte((byte)mMDesc._index);
+                if(methodDescription.getIndex() <= 0x2f) // does the method id fit in the header?
+                    _marshal.writebyte((byte)methodDescription.getIndex());
                 else { // no
                     header |= DIR_MID;
-                    header |= mMDesc._index >> 8;
+                    header |= methodDescription.getIndex() >> 8;
 
                     _marshal.writebyte(header);
-                    _marshal.writebyte((byte)(mMDesc._index & 0xff));
+                    _marshal.writebyte((byte)(methodDescription.getIndex() & 0xff));
                 }
             }
 
             // write the in parameters
-            for(int i = 0; i < mMDesc._in_sig.length; ++ i) {
-                if(mMDesc._in_sig[i] != null) { // is it an in parameter?
-                    if(mMDesc._out_sig[i] != null)  // is it also an out parameter?
-                        _marshal.writeObject(mMDesc._out_sig[i].getComponentType(), ((Object [])params[i])[0]);
+            TypeDescription in_sig[] = methodDescription.getInSignature();
+            TypeDescription out_sig[] = methodDescription.getOutSignature();
+            for(int i = 0; i < in_sig.length; ++ i) {
+                if(in_sig[i] != null) { // is it an in parameter?
+                    if(out_sig[i] != null)  // is it also an out parameter?
+                        _marshal.writeObject(out_sig[i].getComponentType(), ((Object [])params[i])[0]);
                     else // in only
-                        _marshal.writeObject(mMDesc._in_sig[i], params[i]);
+                        _marshal.writeObject(in_sig[i], params[i]);
                 }
             }
 
             if(synchron[0].booleanValue()) // if we are waiting for a reply, the reply is pending
-                putPendingRequest(_out_threadId, new Object[]{params, mMDesc._out_sig, mMDesc._res});
+                putPendingRequest(_out_threadId, new Object[]{params, out_sig, methodDescription.getReturnSig()});
         }
     }
 
@@ -475,16 +481,16 @@ public class urp extends Protocol {
         synchronized(_marshal) {
             Object objects[] = (Object[])removePendingReply(threadId);
             Object params[] = (Object[])objects[0];
-            Class signature[] = (Class[])objects[1];
-            Class resClass = (Class)objects[2];
+            TypeDescription signature[] = (TypeDescription[])objects[1];
+            TypeDescription resType     = (TypeDescription)objects[2];
 
             byte header = BIG_HEADER; // big header
 
             if(exception) { // has an exception occurred?
                 header |= EXCEPTION;
 
-                signature = new Class[0];
-                resClass = Any.class;
+                signature = __emptyTypeDescArray;
+                resType = TypeDescription.__any_TypeDescription;
             }
 
             if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id ?
@@ -501,7 +507,7 @@ public class urp extends Protocol {
                 _marshal.writeThreadID(threadId);
 
             // write the result
-            _marshal.writeObject(resClass, result);
+            _marshal.writeObject(resType, result);
 
             // write the out parameters
             for(int i = 0; i < signature.length; ++ i)
@@ -536,7 +542,7 @@ public class urp extends Protocol {
     static class Message implements IMessage {
         String    _oid;
         Object    _result;
-        Class     _interface;
+        TypeDescription      _typeDescription;
         String    _operation;
         ThreadID  _threadId;
         boolean   _synchron;
@@ -545,7 +551,7 @@ public class urp extends Protocol {
 
         Message(String    oid,
                 Object    result,
-                Class     zInterface,
+                TypeDescription      typeDescription,
                 String    operation,
                 ThreadID  threadId,
                 boolean   synchron,
@@ -554,7 +560,7 @@ public class urp extends Protocol {
         {
             _oid       = oid;
             _result    = result;
-            _interface = zInterface;
+            _typeDescription      = typeDescription;
             _operation = operation;
             _threadId  = threadId;
             _synchron  = synchron;
@@ -570,8 +576,8 @@ public class urp extends Protocol {
             return _threadId;
         }
 
-        public Class getInterface() {
-            return _interface;
+        public TypeDescription getInterface() {
+            return _typeDescription;
         }
 
         public boolean isSynchron() {
@@ -637,7 +643,7 @@ public class urp extends Protocol {
                 else { // a request
                     iMessage = new Message(_in_oid,
                                            null,
-                                           _in_interface.getDescription(),
+                                           _in_interface,
                                            operation[0],
                                            _in_threadId,
                                            synchron[0],

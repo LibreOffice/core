@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 16:53:16 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,10 @@ import com.sun.star.lib.uno.environments.remote.IUnmarshal;
 import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.environments.remote.ThreadID;
 
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
+
 
 class Unmarshal implements IUnmarshal {
     /**
@@ -100,22 +103,22 @@ class Unmarshal implements IUnmarshal {
     private DataInput   _dataInput;
     private IBridge     _iBridge;
     private Object      _objectCache[];
-    private Type        _typeCache[];
+    private TypeDescription        _typeDescriptionCache[];
     private ThreadID    _threadIdCache[];
 
     Unmarshal(IBridge iBridge, short cacheSize) {
         _iBridge         = iBridge;
 
-        _objectCache   = new Object[cacheSize];
-        _typeCache     = new Type[cacheSize];
-        _threadIdCache = new ThreadID[cacheSize];
-        _inputStream   = new ByteArrayInputStream(new byte[0]);
-        _dataInput     = new DataInputStream(_inputStream);
+        _objectCache          = new Object[cacheSize];
+        _typeDescriptionCache = new TypeDescription[cacheSize];
+        _threadIdCache        = new ThreadID[cacheSize];
+        _inputStream          = new ByteArrayInputStream(new byte[0]);
+        _dataInput            = new DataInputStream(_inputStream);
     }
 
     Object readAny() throws Exception {
-        Type type = readType();
-        Object object = readObject(type.getDescription());
+        TypeDescription typeDescription = readTypeDescription();
+        Object object = readObject(typeDescription);
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readAny:" + object);
 
@@ -173,10 +176,10 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    Enum readEnum(Class zClass) throws Exception {
+    Enum readEnum(TypeDescription typeDescription) throws Exception {
         Integer index = readInteger();
 
-        Method fromInt = zClass.getMethod("fromInt", new Class[] {int.class});
+        Method fromInt = typeDescription.getZClass().getMethod("fromInt", new Class[] {int.class});
         Enum result = (Enum)fromInt.invoke(null, new Object[]{index});
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readEnum:" + result);
@@ -184,20 +187,13 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    Throwable readThrowable(Class zClass) throws Exception {
+    Throwable readThrowable(TypeDescription typeDescription) throws Exception {
         String message = readString();
 
-        Constructor constructor = zClass.getConstructor(new Class[]{String.class});
+        Constructor constructor = typeDescription.getZClass().getConstructor(new Class[]{String.class});
         Throwable throwable = (Throwable)constructor.newInstance(new Object[]{message});
 
-        if(java.lang.Exception.class.isAssignableFrom(zClass))
-            readStruct(zClass, throwable);
-
-        else if(java.lang.RuntimeException.class.isAssignableFrom(zClass))
-            readStruct(zClass, throwable);
-
-        else
-            throw new Exception("urp.Unmarshal.readThrowable - unsupported throwable:" + zClass);
+        readStruct(typeDescription, throwable);
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThrowable:" + throwable);
 
@@ -228,76 +224,50 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    public Object readObject(Class zClass) throws Exception {
+    public Object readObject(TypeDescription typeDescription) throws Exception {
         Object result = null;
 
-        if(zClass == Any.class || zClass == Object.class) // read an any?
-            result = readAny();
+        switch(typeDescription.getTypeClass().getValue()) {
+        case TypeClass.ANY_value:       result = readAny();           break; // read an any?
+        case TypeClass.SEQUENCE_value:
+        case TypeClass.ARRAY_value:     result = readSequence(typeDescription);  break;  // read a sequence ?
+        case TypeClass.VOID_value:                                    break; // nop  // read nothing ?
+        case TypeClass.ENUM_value:      result = readEnum(typeDescription);      break;  // read an enum ?
+        case TypeClass.UNION_value:     result = readUnion(typeDescription);     break;  // read a union ?
+        case TypeClass.TYPE_value:      result = new Type(readTypeDescription());          break;  // read a type ?
+        case TypeClass.INTERFACE_value: result = readReference(typeDescription); break;  // read an interface ?
+        case TypeClass.BOOLEAN_value:   result = readBoolean();       break;  // is it a boolean
+        case TypeClass.CHAR_value:      result = readCharacter();     break;  // is it a character ?)
+        case TypeClass.BYTE_value:      result = readByte();          break; // is it a byte ?
+        case TypeClass.SHORT_value:
+        case TypeClass.UNSIGNED_SHORT_value: result = readShort();         break;  // is it a short ?
+        case TypeClass.LONG_value:
+        case TypeClass.UNSIGNED_LONG_value: result = readInteger();       break;  // is it an integer ?
+        case TypeClass.HYPER_value:
+        case TypeClass.UNSIGNED_HYPER_value: result = readLong();          break;  // is it a long ?
+        case TypeClass.FLOAT_value:     result = readFloat();         break;  // is it a float ?
+        case TypeClass.DOUBLE_value:    result = readDouble();        break;  // is it a double ?
+        case TypeClass.STRING_value:    result = readString();        break;  // is it a String ?
+        case TypeClass.EXCEPTION_value: result = readThrowable(typeDescription); break;  // is it an exception?
+        case TypeClass.STRUCT_value:
+            if(typeDescription.getZClass() == ThreadID.class) // read a thread id ?
+                result = readThreadID();
+            else   // otherwise read a struct
+                result = readStruct(typeDescription);
 
-        else if(zClass.isArray() && zClass.getComponentType() == byte.class) // read a sequence ?
-            result = readbyteSequence();
+            break;
 
-        else if(zClass.isArray()) // read a sequence ?
-            result = readSequence(zClass);
+        default:
+            throw new com.sun.star.uno.RuntimeException("unknown typeClass:" + typeDescription.getTypeClass());
+        }
 
-        else if(zClass == Void.class || zClass == void.class) // read nothing ?
-            ; // nop
-
-        else if(Enum.class.isAssignableFrom(zClass)) // read an enum ?
-            result = readEnum(zClass);
-
-        else if(Union.class.isAssignableFrom(zClass)) // read a union ?
-            result = readUnion(zClass);
-
-        else if(zClass == Type.class) // read a type ?
-            result = readType();
-
-        else if(XInterface.class.isAssignableFrom(zClass)) // read an interface ?
-            result = readReference(zClass);
-
-        else if(zClass == ThreadID.class) // read a thread id ?
-            result = readThreadID();
-
-        else if(zClass == boolean.class || zClass == Boolean.class)  // is it a boolean
-            result = readBoolean();
-
-        else if(zClass == char.class || zClass == Character.class) // is it a character ?)
-            result = readCharacter();
-
-        else if(zClass == byte.class || zClass == Byte.class) // is it a byte ?
-            result = readByte();
-
-        else if(zClass == short.class || zClass == Short.class) // is it a short ?
-            result = readShort();
-
-        else if(zClass == int.class || zClass == Integer.class) // is it an integer ?
-            result = readInteger();
-
-        else if(zClass == long.class || zClass == Long.class) // is it a long ?
-            result = readLong();
-
-        else if(zClass == float.class || zClass == Float.class) // is it a float ?
-            result = readFloat();
-
-        else if(zClass == double.class || zClass == Double.class) // is it a double ?
-            result = readDouble();
-
-        else if(zClass == String.class) // is it a String ?
-            result = readString();
-
-        else if(Throwable.class.isAssignableFrom(zClass)) // is it an exception?
-            result = readThrowable(zClass);
-
-        else // otherwise read a struct
-            result = readStruct(zClass);
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readObject:" + zClass + " " + result);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readObject:" + typeDescription + " " + result);
 
         return result;
     }
 
     String readOid() throws Exception {
-        Marshal.M_InterfaceReference m_InterfaceReference = (Marshal.M_InterfaceReference)readObject(Marshal.M_InterfaceReference.class);
+        Marshal.M_InterfaceReference m_InterfaceReference = (Marshal.M_InterfaceReference)readObject(Marshal.__M_InterfaceReferenceTypeDescription);
 
         String oid = null;
 
@@ -315,7 +285,7 @@ class Unmarshal implements IUnmarshal {
         return oid;
     }
 
-    Object readReference(Class zInterface) throws Exception {
+    Object readReference(TypeDescription typeDescription) throws Exception {
         Object oid = readOid();;
 
         // the result is a null ref, in case cache and oid are invalid
@@ -323,26 +293,31 @@ class Unmarshal implements IUnmarshal {
 
         // map the object from universe
         if(oid != null)
-            result = _iBridge.mapInterfaceFrom(oid, zInterface);
+            result = _iBridge.mapInterfaceFrom(oid, new Type(typeDescription));
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readReference:" + zInterface + " " + result);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readReference:" + typeDescription + " " + result);
 
         return result;
     }
 
-    Object readSequence(Class zClass) throws Exception {
-        int size = readCompressedInt();
+    Object readSequence(TypeDescription typeDescription) throws Exception {
         Object result = null;
+        if(typeDescription.getTypeClass() == TypeClass.BYTE) // read a byte sequence ?
+              result = readbyteSequence();
 
-        zClass = zClass.getComponentType();
+        else {
+            int size = readCompressedInt();
 
-        if(zClass == Any.class) // take special care of any array (cause anys are mapped to objects)
-            result = Array.newInstance(Object.class, size);
-        else
-            result = Array.newInstance(zClass, size);
+            typeDescription = typeDescription.getComponentType();
 
-        for(int i = 0; i < size; ++ i)
-            Array.set(result, i, readObject(zClass));
+            if(typeDescription.getTypeClass() == TypeClass.ANY) // take special care of any array (cause anys are mapped to objects)
+                result = Array.newInstance(Object.class, size);
+            else
+                result = Array.newInstance(typeDescription.getZClass(), size);
+
+            for(int i = 0; i < size; ++ i)
+                Array.set(result, i, readObject(typeDescription));
+        }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readSequence:" + result);
 
@@ -385,12 +360,12 @@ class Unmarshal implements IUnmarshal {
         return new String(bytes, "UTF8");
     }
 
-    void readStruct(Class zClass, Object object) throws Exception {
-        Field fields[] = zClass.getFields();
+    void readStruct(TypeDescription typeDescription, Object object) throws Exception {
+        Field fields[] = typeDescription.getFields();
 
         for(int i = 0; i < fields.length; ++ i) {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
-                MemberTypeInfo memberTypeInfo = Protocol.__findMemberTypeInfo(zClass, fields[i].getName());
+                MemberTypeInfo memberTypeInfo = typeDescription.getMemberTypeInfo(fields[i].getName());
 
                 // default the member type to the declared type
                 Class zInterface = fields[i].getType();
@@ -415,23 +390,23 @@ class Unmarshal implements IUnmarshal {
                     }
                 }
 
-                fields[i].set(object, readObject(zInterface));
+                fields[i].set(object, readObject(TypeDescription.getTypeDescription(zInterface)));
             }
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readStruct:" + object);
     }
 
-    Object readStruct(Class zClass) throws Exception {
-        Object object = zClass.newInstance();
+    Object readStruct(TypeDescription typeDescription) throws Exception {
+        Object object = typeDescription.getZClass().newInstance();
 
-        readStruct(zClass, object);
+        readStruct(typeDescription, object);
 
         return object;
     }
 
     ThreadID readThreadID() throws Exception {
-        Marshal.M_ThreadId m_threadId = (Marshal.M_ThreadId)readObject(Marshal.M_ThreadId.class);
+        Marshal.M_ThreadId m_threadId = (Marshal.M_ThreadId)readObject(Marshal.__M_ThreadIdTypeDescription);
 
         ThreadID threadId = null;
 
@@ -449,34 +424,36 @@ class Unmarshal implements IUnmarshal {
         return threadId;
     }
 
-    Type readType() throws Exception {
+    TypeDescription readTypeDescription() throws Exception {
         int typeClassValue = _dataInput.readUnsignedByte() & 0xff;
 
         TypeClass typeClass = TypeClass.fromInt(typeClassValue & 0x7f);
-        Type type = null;
+        TypeDescription typeDescription = null;
 
-        if(Type.isTypeClassSimple(typeClass)) // is it a simple type?
-            type = new Type(typeClass);
+        if(TypeDescription.isTypeClassSimple(typeClass)) // is it a simple type?
+            typeDescription = TypeDescription.getTypeDescription(typeClass);
 
         else {
             short index = _dataInput.readShort(); // the cache index
 
             if(index != (short)0xffff) { // shall we update the cache?
                 if((typeClassValue & 0x80) != 0) // update the cache?
-                    _typeCache[index] = new Type(typeClass, readString());
+                    _typeDescriptionCache[index] = TypeDescription.getTypeDescription(readString());
+//                      _typeDescriptionCache[index] = TypeDescription.getType(typeClass, readString());
 
-                type = _typeCache[index];
+                typeDescription = _typeDescriptionCache[index];
             }
             else
-                type = new Type(typeClass, readString());
+                typeDescription = TypeDescription.getTypeDescription(readString());
+//                  type = TypeDescription.getType(typeClass, readString());
         }
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readType:" + type);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readType:" + typeDescription);
 
-        return type;
+        return typeDescription;
     }
 
-    Union readUnion(Class zClass) throws Exception {
+    Union readUnion(TypeDescription typeDescription) throws Exception {
         throw new Exception("Unmarshal.readUnion - not implemented!!!");
     }
 

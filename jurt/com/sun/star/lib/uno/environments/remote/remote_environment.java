@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_environment.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,10 @@ import java.util.Enumeration;
 
 import com.sun.star.lib.util.WeakTable;
 
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 import com.sun.star.uno.IEnvironment;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -124,17 +127,17 @@ public class remote_environment implements IEnvironment {
      * @param oId[]       inout parameter for the corresponding object id
      * @param xtypeDescr  type description of interface
      */
-    public Object registerInterface(Object object, String oId[], Class zInterface) {
+    public Object registerInterface(Object object, String oId[], Type type) {
         if(oId[0] == null)
             oId[0] = UnoRuntime.generateOid(object);
 
-        Object p_object = (Object)_objects.get(oId[0] + zInterface, zInterface);
+        Object p_object = (Object)_objects.get(oId[0] + type.getTypeDescription(), ((TypeDescription)type.getTypeDescription()).getZClass());
 
         if(DEBUG)
             System.err.println("#### AbstractEnvironment.registerInterface:" + object + " " + UnoRuntime.generateOid(object) + " " + p_object);
 
         if(p_object == null)
-            object = _objects.put(oId[0] + zInterface, object, zInterface);
+            object = _objects.put(oId[0] + type.getTypeDescription(), object, ((TypeDescription)type.getTypeDescription()).getZClass());
         else
             object = p_object;
 
@@ -147,7 +150,7 @@ public class remote_environment implements IEnvironment {
      * @param oId         object id of interface to be revoked
      * @param xtypeDescr  type description of interface to be revoked
      */
-    public void revokeInterface(String oId, Class zInterface) {
+    public void revokeInterface(String oId, Type type) {
         _objects.remove(oId);
     }
 
@@ -157,10 +160,10 @@ public class remote_environment implements IEnvironment {
      * @param oId        object id of interface to be retrieved
      * @param xtypeDescr description of interface to be retrieved
      */
-    public Object getRegisteredInterface(String oId, Class zInterface)  {
-        Object object = _objects.get(oId + zInterface, zInterface);
+    public Object getRegisteredInterface(String oId, Type type)     {
+        Object object = _objects.get(oId + type.getTypeDescription(), ((TypeDescription)type.getTypeDescription()).getZClass());
 
-        if(DEBUG) System.err.println("#### AbstractEnvironment(" + getName() + ").getRegisteredInterface:>" + oId + "< " + zInterface +" " + object);
+        if(DEBUG) System.err.println("#### AbstractEnvironment(" + getName() + ").getRegisteredInterface:>" + oId + "< " + type +" " + object);
 
         return object;
     }

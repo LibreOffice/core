@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2000-12-22 10:01:27 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2000-12-22 10:01:27 $
+ * @version     $Revision: 1.7 $ $ $Date: 2001-01-16 18:01:27 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -93,7 +93,6 @@ public class JobQueue {
      * When set to true, enables various debugging output.
      */
     public static final boolean DEBUG = false;
-
 
     /**
      * E.g. to get privleges for security managers, it is
@@ -318,10 +317,12 @@ public class JobQueue {
         // if there is an async queue, wait for jobs to be done
         if(_async_jobQueue != null) {
             synchronized(_async_jobQueue) {
+
                 // wait for async queue to be empty and last job to be done
-                while(_async_jobQueue._worker_thread != null && (_async_jobQueue._active || _async_jobQueue._head != null)) {
+                while(_async_jobQueue._active || _async_jobQueue._head != null) {
                     if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
                     _async_jobQueue.wait(10);
+                    if(DEBUG) System.err.println("waited for async");
                 }
             }
         }
@@ -467,7 +468,7 @@ public class JobQueue {
                         removeDisposeId(disposeId, disposeId_count);
 
                         if(_sync_jobQueue != null)
-                            notifyAll(); // notify waiters (e.g. this is an asyncQueue and there is a sync waiting)
+                            notify(); // notify waiters (e.g. this is an asyncQueue and there is a sync waiting)
                     }
                     else
                         quit = false;

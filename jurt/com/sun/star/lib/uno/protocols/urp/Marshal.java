@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2000-12-13 16:32:20 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ import com.sun.star.lib.uno.environments.remote.IMarshal;
 import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.environments.remote.ThreadID;
 
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
 
 class Marshal implements IMarshal {
@@ -98,6 +100,14 @@ class Marshal implements IMarshal {
      * When set to true, enables various debugging output.
      */
     static public final boolean DEBUG = false;
+
+    static public final TypeDescription __xInterfaceTypeDescription           = TypeDescription.getTypeDescription(XInterface.class);
+    static public final TypeDescription __M_InterfaceReferenceTypeDescription = TypeDescription.getTypeDescription(M_InterfaceReference.class);
+    static public final TypeDescription __M_ThreadIdTypeDescription           = TypeDescription.getTypeDescription(M_ThreadId.class);
+
+    static private final M_InterfaceReference __null_M_InterfaceReference = new M_InterfaceReference("", (short)0xffff);
+
+
 
     static class M_ThreadId {
         public byte  full[];
@@ -146,25 +156,25 @@ class Marshal implements IMarshal {
     void writeAny(Object object) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeAny:" + object);
 
-        Type type = null;
+        TypeDescription typeDescription = null;
 
         if(object == null)
-            type = new Type(Void.class);
+            typeDescription = TypeDescription.__void_TypeDescription;
 
         else if(object instanceof Any) {
             Any any = (Any)object;
 
-            type = new Type(any.getInterface());
+            typeDescription = (TypeDescription)any.getType().getTypeDescription();
             object = any.getObject();
         }
         else if(object instanceof XInterface)
-            type = new Type(XInterface.class);
+            typeDescription = __xInterfaceTypeDescription;
 
         else
-            type = new Type(object.getClass());
+            typeDescription = TypeDescription.getTypeDescription(object.getClass());
 
-        writeType(type);
-        writeObject(type.getDescription(), object);
+        writeTypeDescrption(typeDescription);
+        writeObject(typeDescription, object);
     }
 
     void writeBoolean(Boolean zBoolean) throws Exception {
@@ -184,9 +194,17 @@ class Marshal implements IMarshal {
     void writebyteSequence(byte bytes[]) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writebyteSequence:" + bytes);
 
-        writeCompressedInt(bytes.length);
+        int size = 0;
+        if(bytes == null)
+            System.err.println("WARNING! writing null sequence as empty sequence");
 
-        _dataOutput.write(bytes);
+        else
+            size = bytes.length;
+
+        writeCompressedInt(size);
+
+        if(size != 0)
+            _dataOutput.write(bytes);
     }
 
     void writeByte(Byte zByte) throws Exception {
@@ -213,20 +231,13 @@ class Marshal implements IMarshal {
         writeint(enum.getValue());
     }
 
-    void writeThrowable(Class zClass, Throwable throwable) throws Exception {
+    void writeThrowable(TypeDescription typeDescription, Throwable throwable) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeThrowable:" + throwable);
 
         String message = throwable.getMessage();
         writeString((message == null) ? "" : message);
 
-        if(java.lang.Exception.class.isAssignableFrom(zClass))
-            writeStruct(zClass, throwable);
-
-        else if(java.lang.RuntimeException.class.isAssignableFrom(zClass))
-            writeStruct(zClass, throwable);
-
-        else
-            throw new Exception("urp.Marshal.writeThrowable - unsupported throwable:" + zClass);
+        writeStruct(typeDescription, throwable);
     }
 
     void writeFloat(Float zFloat) throws Exception {
@@ -253,73 +264,40 @@ class Marshal implements IMarshal {
         _dataOutput.writeLong(zLong.longValue());
     }
 
-    // we may optimize this method with a hashtable in the future
-    public void writeObject(Class zClass, Object object) throws Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeObject: <" + zClass + "> <" + object + ">");
+    public void writeObject(TypeDescription typeDescription, Object object) throws Exception {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeObject: <" + typeDescription + "> <" + object + ">");
 
-        if(zClass == Any.class || zClass == Object.class) // write an any ?
-            writeAny(object);
+        switch(typeDescription.getTypeClass().getValue()) {
+        case TypeClass.ANY_value:       writeAny(object);                                     break; // write an any ?
+        case TypeClass.SEQUENCE_value:
+        case TypeClass.ARRAY_value:     writeSequence(typeDescription, object);               break; // write a sequence ?
+        case TypeClass.VOID_value:                                                            break; // write nothing ?
+        case TypeClass.ENUM_value:      writeEnum((Enum)object);                              break; // write an enum ?
+        case TypeClass.UNION_value:     writeUnion((Union)object);                            break; // write a union ?
+        case TypeClass.TYPE_value:      writeTypeDescrption((TypeDescription)((Type)object).getTypeDescription()); break; // write a type ?
+        case TypeClass.INTERFACE_value: writeReference(typeDescription, object);              break; // is it an interface ?
+        case TypeClass.BOOLEAN_value:   writeBoolean((Boolean)object);                        break; // is it a boolean
+        case TypeClass.CHAR_value:      writeCharacter((Character)object);                    break; // is it a character ?
+        case TypeClass.BYTE_value:      writeByte((Byte)object);                              break; // is it a byte ?
+        case TypeClass.SHORT_value:     writeShort((Short)object);                            break; // is it a short ?
+        case TypeClass.LONG_value:      writeInteger((Integer)object);                        break; // is it an integer ?
+        case TypeClass.HYPER_value:     writeLong((Long)object);                              break; // is it a long ?
+        case TypeClass.FLOAT_value:     writeFloat((Float)object);                            break; // is it a float ?
+        case TypeClass.DOUBLE_value:    writeDouble((Double)object);                          break; // is it a double ?
+        case TypeClass.STRING_value:    writeString((String)object);                          break; // is it a String ?
+        case TypeClass.STRUCT_value:
+            if(object instanceof ThreadID) // is it a thread id ?
+                writeThreadID((ThreadID)object);
+            else // is it a struct ?
+                writeStruct(typeDescription, object);
 
-        else if(zClass.isArray() & zClass.getComponentType() == byte.class) // write a sequence ?
-            writebyteSequence((byte [])object);
+            break;
+        case TypeClass.EXCEPTION_value: writeThrowable(typeDescription, (Throwable)object);   break; // is it an exception?
 
-        else if(zClass.isArray()) // write a sequence ?
-            writeSequence(zClass, object);
-
-        else if(zClass == Void.class || zClass == void.class) // write nothing ?
-            ; // nop
-
-        else if(Enum.class.isAssignableFrom(zClass)) // write an enum ?
-            writeEnum((Enum)object);
-
-        else if(Union.class.isAssignableFrom(zClass)) // write a union ?
-            writeUnion((Union)object);
-
-        else if(Type.class.isAssignableFrom(zClass)) // write a type ?
-            writeType((Type)object);
-
-        else if(XInterface.class.isAssignableFrom(zClass)) // is it an interface ?
-            writeReference(zClass, object);
-
-        else if(object instanceof ThreadID) // is it a thread id ?
-            writeThreadID((ThreadID)object);
-
-        else if(zClass == boolean.class || zClass == Boolean.class)  // is it a boolean
-            writeBoolean((Boolean)object);
-
-        else if(zClass == char.class || zClass == Character.class) // is it a character ?)
-            writeCharacter((Character)object);
-
-        else if(zClass == byte.class || zClass == Byte.class) // is it a byte ?
-            writeByte((Byte)object);
-
-        else if(zClass == short.class || zClass == Short.class) // is it a short ?
-            writeShort((Short)object);
-
-        else if(zClass == int.class || zClass == Integer.class) // is it an integer ?
-            writeInteger((Integer)object);
-
-        else if(zClass == long.class || zClass == Long.class) // is it a long ?
-            writeLong((Long)object);
-
-        else if(zClass == float.class || zClass == Float.class) // is it a float ?
-            writeFloat((Float)object);
-
-        else if(zClass == double.class || zClass == Double.class) // is it a double ?
-            writeDouble((Double)object);
-
-        else if(zClass == String.class) // is it a String ?
-            writeString((String)object);
-
-        else if(Throwable.class.isAssignableFrom(zClass)) // is it an exception?
-            writeThrowable(zClass, (Throwable)object);
-
-        else // otherwise it must be a struct
-            writeStruct(zClass, object);
-
+        default:
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeObject - unknown typeClass:" + typeDescription.getTypeClass().getValue());
+        }
     }
-
-    static private final M_InterfaceReference null_M_InterfaceReference = new M_InterfaceReference("", (short)0xffff);
 
     void writeOid(String oid) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeOid:" + oid);
@@ -327,7 +305,7 @@ class Marshal implements IMarshal {
         M_InterfaceReference m_InterfaceReference = null;
 
         if(oid == null)
-            m_InterfaceReference = null_M_InterfaceReference;
+            m_InterfaceReference = __null_M_InterfaceReference;
         else {
             boolean found[] = new boolean[1];
             short index;
@@ -339,30 +317,35 @@ class Marshal implements IMarshal {
             m_InterfaceReference = new M_InterfaceReference(found[0] ? "" : oid, index);
         }
 
-        writeObject(M_InterfaceReference.class, m_InterfaceReference);
+        writeObject(__M_InterfaceReferenceTypeDescription, m_InterfaceReference);
     }
 
-    void writeReference(Class zInterface, Object object) throws Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReference:" + zInterface + " " + object);
+    void writeReference(TypeDescription typeDescription, Object object) throws Exception {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReference:" + typeDescription + " " + object);
 
         // map the object to universe
-        writeOid(object != null ? (String)_iBridge.mapInterfaceTo(object, zInterface) : null);
+        writeOid(object != null ? (String)_iBridge.mapInterfaceTo(object, new Type(typeDescription)) : null);
     }
 
-    void writeSequence(Class zClass, Object object) throws Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeSequence:" + zClass + " " + object);
+    void writeSequence(TypeDescription typeDescription, Object object) throws Exception {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeSequence:" + typeDescription + " " + object);
 
-        int size = 0;
-        if(object == null)
-            System.err.println("WARNING! writing null sequence as empty sequence");
-        else
-            size = Array.getLength(object);
+        if(typeDescription.getTypeClass() == TypeClass.BYTE) // write a byte sequence ?
+            writebyteSequence((byte [])object);
 
-        writeCompressedInt(size);
+        else {
+            int size = 0;
+            if(object == null)
+                System.err.println("WARNING! writing null sequence as empty sequence");
+            else
+                size = Array.getLength(object);
 
-        zClass = zClass.getComponentType();
-        for(int i = 0; i < size; ++ i)
-            writeObject(zClass, Array.get(object, i));
+            writeCompressedInt(size);
+
+            typeDescription = typeDescription.getComponentType();
+            for(int i = 0; i < size; ++ i)
+                writeObject(typeDescription, Array.get(object, i));
+        }
     }
 
     void writeShort(Short zShort) throws Exception {
@@ -397,13 +380,13 @@ class Marshal implements IMarshal {
         _dataOutput.write(bytes);
     }
 
-    void writeStruct(Class zClass, Object object) throws Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeStruct:" + zClass + " " + object);
+    void writeStruct(TypeDescription typeDescription, Object object) throws Exception {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeStruct:" + typeDescription + " " + object);
 
-        Field fields[] = zClass.getFields();
+        Field fields[] = typeDescription.getFields();
         for(int i = 0; i < fields.length; ++ i) {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
-                MemberTypeInfo memberTypeInfo = Protocol.__findMemberTypeInfo(zClass, fields[i].getName());
+                MemberTypeInfo memberTypeInfo = typeDescription.getMemberTypeInfo(fields[i].getName());
 
                 // default the member type to the declared type
                 Class zInterface = fields[i].getType();
@@ -430,7 +413,7 @@ class Marshal implements IMarshal {
                     }
                 }
 
-                writeObject(zInterface, fields[i].get(object));
+                writeObject(TypeDescription.getTypeDescription(zInterface), fields[i].get(object));
             }
         }
     }
@@ -447,20 +430,20 @@ class Marshal implements IMarshal {
 
         M_ThreadId m_ThreadId = new M_ThreadId(found[0] ? null : threadID.getBytes(), index);
 
-        writeObject(M_ThreadId.class, m_ThreadId);
+        writeObject(__M_ThreadIdTypeDescription, m_ThreadId);
     }
 
-    void writeType(Type type) throws Exception {
-        TypeClass typeClass = type.getTypeClass();
+    void writeTypeDescrption(TypeDescription typeDescription) throws Exception {
+        TypeClass typeClass = typeDescription.getTypeClass();
 
-        if(Type.isTypeClassSimple(typeClass))
+        if(TypeDescription.isTypeClassSimple(typeClass))
             _dataOutput.writeByte((byte)typeClass.getValue()); // write the typeclass value
         else {
             boolean found[] = new boolean[1];
             short index;
 
             if(_useCaches)
-                index = _typeCache.add(found, type.getTypeName());
+                index = _typeCache.add(found, typeDescription.getTypeName());
             else
                 index = (short)0xffff;
 
@@ -469,7 +452,7 @@ class Marshal implements IMarshal {
             _dataOutput.writeShort(index); // write the cache index
 
             if(!found[0]) // if not found in cache and the type is complex, write the type name
-                writeString(type.getTypeName());
+                writeString(typeDescription.getTypeName());
         }
     }
 

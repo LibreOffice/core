@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-17 10:45:40 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,12 @@ package com.sun.star.lib.uno.environments.remote;
 import java.io.IOException;
 
 
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.sun.star.corba.giop.ReplyStatusType_1_2;
-
-import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
+import com.sun.star.lib.uno.typedesc.TypeDescription;
 
 import com.sun.star.uno.Any;
-import com.sun.star.uno.MappingException;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
@@ -83,7 +79,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-11-17 10:45:40 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:01:27 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -119,7 +115,7 @@ public class Job {
      * @param o_out_sig     the out signature as an out parameter
      */
     protected Object dispatch_MethodCall(Object params[]) throws Exception {
-          Method method = Protocol.__findMethod(_iMessage.getInterface(), _iMessage.getOperation());
+          Method method = _iMessage.getInterface().getMethodDescription(_iMessage.getOperation()).getMethod();
 
           if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispatch_MethodCall:" + _object + " " + method.getName() + " " + params);
 
@@ -137,14 +133,14 @@ public class Job {
      * @param o_out_sig     the out signature as an out parameter
      */
     protected Object dispatch_queryInterface(Type type) throws Exception {
-        Class zInterface = type.getDescription();
+        Class zInterface = ((TypeDescription)type.getTypeDescription()).getZClass();
 
         Object result = null;
 
         Object face = UnoRuntime.queryInterface(zInterface, _object);
         // the hell knows why, but empty interfaces a given back as void anys
         if(face != null)
-            result = new com.sun.star.uno.Any(type.getDescription(), face);
+            result = new Any(type, face);
 
          if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispatch_queryInterface:" + _object + " " + zInterface + " result:" + result);
 
@@ -190,17 +186,15 @@ public class Job {
             }
             while(theException instanceof InvocationTargetException);
 
-            // is this an exception we now?
             if(theException instanceof com.sun.star.uno.Exception
             || theException instanceof com.sun.star.uno.RuntimeException) {
+                if(_iMessage.isSynchron())
+                    _iReceiver.sendReply(true, _iMessage.getThreadID(), theException);
 
                 if(DEBUG) System.err.println("#### RemoteStub.request - exception:" + theException);
             }
-            else // wrap it as uno exception
-                theException = new com.sun.star.uno.RuntimeException("java exception: " + theException.toString(), null);
-
-            if(_iMessage.isSynchron())
-                _iReceiver.sendReply(true, _iMessage.getThreadID(), theException);
+            else
+                throw (Exception)invocationTargetException.getTargetException();
         }
 
         return result;
@@ -256,7 +250,7 @@ public class Job {
      * <p>
      * @return  returns the interface
      */
-    public Class getInterface() {
+    public TypeDescription getInterface() {
         return _iMessage.getInterface();
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-09 13:43:15 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ import com.sun.star.lib.sandbox.generic.Dispatcher;
 import com.sun.star.lib.sandbox.generic.DispatcherAdapterBase;
 import com.sun.star.lib.sandbox.generic.DispatcherAdapterFactory;
 
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.MappingException;
@@ -90,7 +92,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2001-01-09 13:43:15 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:01:25 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -138,7 +140,7 @@ public class java_environment implements IEnvironment, Disposable {
         }
 
         Holder _holder;
-        Class _zInterface;
+        Type _type;
 
         Hashtable _methods;
 
@@ -171,18 +173,18 @@ public class java_environment implements IEnvironment, Disposable {
             super();
         }
 
-        public void setInterface(Class zInterface) {
-            _zInterface = zInterface;
+        public void setInterface(Type type) {
+            _type = type;
             _methods = __getMethodsAsTable(object.getClass());
         }
 
-        public Class getInterface() {
-            return _zInterface;
+        public Type getInterface() {
+            return _type;
         }
 
         // IQueryInterface - delegate calls through this proxy
-        public Object queryInterface(Class zInterface) throws MappingException {
-            return UnoRuntime.queryInterface(zInterface, object);
+        public Object queryInterface(Type type) throws MappingException {
+            return UnoRuntime.queryInterface(type, object);
         }
 
         public boolean isSame(Object object) throws MappingException {
@@ -227,18 +229,19 @@ public class java_environment implements IEnvironment, Disposable {
                 _objects.remove(_oId);
         }
 
-        Object xxgetObject(Class zInterface) {
+        Object xxgetObject(Type type) {
             Object result = _object;
 
             if(_object instanceof Proxy) {
-                if(DEBUG) System.err.println("###################### creating new Proxy Proxy");
-                Class holderProxyClass = DispatcherAdapterFactory.createDispatcherAdapter(zInterface, HolderProxy.class.getName().replace('.', '/'));
+                if(DEBUG) System.err.println("##### " + getClass().getName() + " -  creating new Proxy Proxy");
+                Class holderProxyClass = DispatcherAdapterFactory.createDispatcherAdapter(((TypeDescription)type.getTypeDescription()).getZClass(),
+                                                                                          HolderProxy.class.getName().replace('.', '/'));
 
                 try {
                     HolderProxy holderProxy = (HolderProxy)holderProxyClass.newInstance();
                     holderProxy.setObject(holderProxy, _object);
                     holderProxy.setHolder(this);
-                    holderProxy.setInterface(zInterface);
+                    holderProxy.setInterface(type);
 
                     result = holderProxy;
                 }
@@ -305,20 +308,20 @@ public class java_environment implements IEnvironment, Disposable {
      * @return  a proxy to registered interface if necessare, otherwise the registered object itself
      * @param object      the interface to register
      * @param oId[]       inout parameter for the corresponding object id
-     * @param zInterface  the type description of the given interface
+     * @param type  the type description of the given interface
      * @see               com.sun.star.uno.IEnvironment#registerInterface
      */
-    public Object registerInterface(Object object, String oId[], Class zInterface) {
+    public Object registerInterface(Object object, String oId[], Type type) {
         if(oId[0] == null)
             oId[0] = UnoRuntime.generateOid(object);
 
-        String keyName = oId[0] + zInterface;
+        String keyName = oId[0] + type;
 
         // get the holder
         Holder holder = (Holder)_objects.get(keyName);
 
         if(DEBUG)
-            System.err.println("##### " + getClass().getName() + ".registerInterface:" + object + " " + oId[0] + " " + zInterface);
+            System.err.println("##### " + getClass().getName() + ".registerInterface:" + object + " " + oId[0] + " " + type);
 
         if(holder == null) {
             holder = new Holder(keyName, object);
@@ -330,42 +333,42 @@ public class java_environment implements IEnvironment, Disposable {
         holder = (Holder)_objects.get(keyName);
         holder.incRefCount();
 
-        return holder.xxgetObject(zInterface);
+        return holder.xxgetObject(type);
     }
 
     /**
      * You have to revoke ANY interface that has been registered via this method.
      * <p>
      * @param oId         object id of interface to be revoked
-     * @param zInterface  the type description of the interface
+     * @param type  the type description of the interface
      * @see               com.sun.star.uno.IEnvironment#revokeInterface
      */
-    public void revokeInterface(String oId, Class zInterface) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".revokeInterface:" + oId + " " + zInterface);
-        Holder holder = (Holder)_objects.get(oId + zInterface);
+    public void revokeInterface(String oId, Type type) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".revokeInterface:" + oId + " " + type);
+        Holder holder = (Holder)_objects.get(oId + type);
         if(holder != null)
             holder.decRefCount();
         else
-            System.err.println("java_environment.revokeInterface - unknown oid:" + oId + " " + zInterface);
+            System.err.println("java_environment.revokeInterface - unknown oid:" + oId + " " + type);
     }
 
     /**
      * Retrieves an interface identified by its object id and type from this environment.
      * <p>
      * @param oId        object id of interface to be retrieved
-     * @param zInterface the type description of the interface to be retrieved
+     * @param type the type description of the interface to be retrieved
      * @see               com.sun.star.uno.IEnvironment#getRegisteredInterface
      */
-    public Object getRegisteredInterface(String oId, Class zInterface)  {
+    public Object getRegisteredInterface(String oId, Type type)     {
         Object result = null;
 
-        Holder holder = (Holder)_objects.get(oId + zInterface);
+        Holder holder = (Holder)_objects.get(oId + type);
 
         if(holder != null) {
-            result = holder.xxgetObject(zInterface);
+            result = holder.xxgetObject(type);
         }
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".getRegisteredInterface:>" + oId + "< " + zInterface +" " + result);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".getRegisteredInterface:>" + oId + "< " + type +" " + result);
 
         return result;
     }
