@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-22 13:39:29 $
+ *  last change: $Author: dl $ $Date: 2001-11-02 12:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1818,7 +1818,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             pUndoMgr->AddUndoAction(pPLUndoAction);
         #endif
             pPage->SetPresentationLayout(aLayoutName);
-            pPage->SetAutoLayout(eAutoLayout, TRUE);
+            pPage->SetAutoLayout(eAutoLayout);
 
             pPage = (SdPage*)pPageList->Next();
         }
@@ -1990,7 +1990,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 #endif
 
             pPage->SetPresentationLayout(aName);
-            pPage->SetAutoLayout(eNewAutoLayout, TRUE);
+            pPage->SetAutoLayout(eNewAutoLayout);
 
             pPage = (SdPage*)pPageList->Next();
         }
