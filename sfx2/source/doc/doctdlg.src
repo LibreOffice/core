@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:00:48 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ japanese ] = "V‚µ‚ΆΓέΜίΪ°Δ";
         Text[ chinese_traditional ] = "¶}±Ò·s¤ε¥σΌΛ¦΅";
         Text[ arabic ] = "ήΗαΘ γΣΚδΟ ΜΟνΟ";
-        Text[ greek ] = "Δημιουργία προτύπου εγγράφου";
+        Text[ greek ] = "Δημιουργία πρότυπου εγγράφου";
         Text[ korean ] = "»υ Ό­½ΔΖΔΐΟ";
         Text[ turkish ] = "Yeni belge ώablonu";
         Text[ language_user1 ] = " ";
@@ -163,7 +163,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ portuguese ] = "Modelos" ;
         Text [ finnish ] = "~Mallit" ;
         Text [ danish ] = "Skabeloner" ;
-        Text [ french ] = "~Noms de modθles" ;
+        Text [ french ] = "~Modθles" ;
         Text [ swedish ] = "~Mallar" ;
         Text [ dutch ] = "S~jablonen" ;
         Text [ spanish ] = "P~lantillas" ;
@@ -197,7 +197,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ portuguese ] = "Modelos" ;
         Text [ finnish ] = "Mallit" ;
         Text [ danish ] = "Skabeloner" ;
-        Text [ french ] = "Modθles existants" ;
+        Text [ french ] = "Modθles" ;
         Text [ swedish ] = "Mallar" ;
         Text [ dutch ] = "Sjablonen" ;
         Text [ spanish ] = "Plantillas" ;
@@ -240,7 +240,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ dutch ] = "Be~werken" ;
         Text [ italian ] = "Modifica" ;
         Text [ spanish ] = "~Editar" ;
-        Text [ french ] = "~Personnaliser" ;
+        Text [ french ] = "Ι~diter" ;
         Text [ swedish ] = "~Redigera" ;
         Text [ danish ] = "Rediger" ;
         Text [ portuguese ] = "~Editar" ;
@@ -290,7 +290,7 @@ ModalDialog DLG_DOC_TEMPLATE
     Text[ japanese ] = "Δή·­ÒέΔ‚ΜΓέΜίΪ°Δ";
     Text[ chinese_traditional ] = "¤ε¥σΌΛ¦΅";
     Text[ arabic ] = "ήζΗαΘ γΣΚδΟ";
-    Text[ greek ] = "Πρότυπα εγγράφων";
+    Text[ greek ] = "Πρότυπα εγγράφου";
     Text[ korean ] = "Ή®Ό­ Ό­½ΔΖΔΐΟ";
     Text[ turkish ] = "Belge ώablonu";
     Text[ language_user1 ] = " ";
