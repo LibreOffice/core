@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:59:51 $
+ *  last change: $Author: aw $ $Date: 2001-01-17 12:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1902,9 +1902,18 @@ BOOL SvxSlantTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( bModified )
     {
         // Referenzpunkt setzen
-        Point aPt = aRect.Center();
-        rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR_X, aPt.X() ) );
-    rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y() ) );
+        // #75897#
+        Rectangle aObjectRect(pView->GetAllMarkedRect());
+        pView->GetPageViewPvNum(0)->LogicToPagePos(aObjectRect);
+        Point aPt = aObjectRect.Center();
+
+        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
+        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y()));
+
+        // Referenzpunkt setzen
+//      Point aPt = aRect.Center();
+//      rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR_X, aPt.X() ) );
+//  rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y() ) );
 
         rAttrs.Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, FALSE ) );
     }
