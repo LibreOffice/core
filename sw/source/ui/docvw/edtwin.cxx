@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-11 09:02:36 $
+ *  last change: $Author: jp $ $Date: 2001-10-11 15:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,10 +665,12 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
         //fix(24138): Es kann sein, dass der "Sprung" ueber eine Tabelle so
         //nicht geschafft wird. Deshalb wir hier eben per Up/Down ueber die
         //Tabelle gesprungen.
-        if ( aOldVis == rSh.VisArea() &&
-            !rSh.IsStartOfDoc() && !rSh.IsEndOfDoc() && !rSh.IsTableMode())
+        const SwRect& rVisArea = rSh.VisArea();
+        if( aOldVis == rVisArea && !rSh.IsStartOfDoc() && !rSh.IsEndOfDoc() )
         {
-            if ( aModPt.Y() < rSh.VisArea().Top() )
+            //JP 11.10.2001 Bug 72294 - take the center point of VisArea to
+            //              decide in which direction the user want.
+            if( aModPt.Y() < ( rVisArea.Top() + rVisArea.Height() / 2 ) )
                 rSh.Up( TRUE );
             else
                 rSh.Down( TRUE );
