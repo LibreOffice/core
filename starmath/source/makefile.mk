@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2002-05-23 14:18:44 $
+#   last change: $Author: hjs $ $Date: 2002-08-16 13:56:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,11 +140,15 @@ CDEFS+=-DUSE_POLYGON
 $(SLO)$/smlib.obj : $(INCCOM)$/dllname.hxx
 
 $(INCCOM)$/dllname.hxx: makefile.mk
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+.IF "$(GUI)"=="UNX"
     $(RM) $@
     echo #define DLL_NAME \"libsm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
+.IF "$(USE_SHELL)"!="4nt"
+    echo \#define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ELSE          # "$(USE_SHELL)"!="4nt"
     echo #define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF          # "$(USE_SHELL)"!="4nt"
 .ENDIF
 
 $(SRS)$/smres.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
