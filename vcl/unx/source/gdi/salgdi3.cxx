@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 17:05:14 $
+ *  last change: $Author: hdu $ $Date: 2002-02-18 18:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,7 +977,7 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
     ServerFont *pFont, const sal_uInt32* pGlyph, int nLength, const long* pDXAry )
 {
     // translate unicode to glyph ids and make sure they are already on the server
-    unsigned int* pGlyphString = (unsigned short*)alloca( 4*nLength );
+    unsigned* pGlyphString = (unsigned*)alloca( sizeof(unsigned)*nLength );
     for( int i = 0; i < nLength; ++i )
     {
         const int nGlyphIndex = pGlyph[i];
