@@ -225,6 +225,10 @@ JAVA_OFFICEBEAN_OFFICEWRITERBEAN= \
 JAVA_OFFICEBEAN_HELPERBEANS= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeCommand.java \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/BeanInfoAdapter.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconColor32.jpg \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconColor16.jpg \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconMono32.jpg \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconMono16.jpg \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/BasicOfficeBean.java
 
 BASIC_EXAMPLES= \
