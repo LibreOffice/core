@@ -3,7 +3,6 @@ od	odk					usr1	-	all	od_mkout NULL
 od	odk\source\bean\com\sun\star\beans	nmake	-	all	od_beanjava NULL
 od	odk\source\bean\native\win32	nmake	-	n	od_beanwin32 NULL
 od	odk\source\bean\native\unix		nmake	-	u	od_beanunix NULL
-od	odk\source\OOSupport	nmake	-	all	od_oosupportjava NULL
 od	odk\pack\unzip_udk			nmake	-	all	od_unzip_udk NULL
 od	odk\examples\cpp			nmake	-	all	od_cpp od_unzip_udk NULL
 od	odk\examples\java			nmake	-	all	od_java od_unzip_udk NULL
@@ -24,7 +23,7 @@ od	odk\examples\DevelopersGuide\ProfUNO		nmake	-	all	od_profuno od_unzip_udk NUL
 od	odk\examples\DevelopersGuide\Spreadsheet		nmake	-	all	od_spread od_unzip_udk NULL
 od	odk\examples\DevelopersGuide\Text		nmake	-	all	od_text od_unzip_udk NULL
 od	odk\examples\DevelopersGuide\UCB		nmake	-	all	od_ucb od_unzip_udk NULL
-od	odk\pack\copying			nmake	-	all	od_copying od_unzip_udk od_beanjava od_beanwin32.n od_beanunix.u od_oosupportjava od_cpp od_java od_basic od_ole od_access od_basics od_charts od_comp od_config od_data od_drawing od_first od_forms od_offbean od_offdev od_profuno od_spread od_text od_ucb NULL
+od	odk\pack\copying			nmake	-	all	od_copying od_unzip_udk od_beanjava od_beanwin32.n od_beanunix.u od_cpp od_java od_basic od_ole od_access od_basics od_charts od_comp od_config od_data od_drawing od_first od_forms od_offbean od_offdev od_profuno od_spread od_text od_ucb NULL
 od	odk\pack\checkinc			nmake	-	all	od_checkinc od_copying NULL
 od	odk\pack\checkinc2			nmake	-	all	od_checkinc2 od_copying NULL
 od	odk\pack\checkidl			nmake	-	all	od_checkidl od_copying NULL
