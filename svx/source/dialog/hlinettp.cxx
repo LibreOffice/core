@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-19 16:18:05 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 15:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,6 +883,9 @@ IMPL_LINK ( SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, void *, EMPTYARG )
         String aStrTarget ( aStrScheme );
         aStrTarget += aStrURL;
         maCbbTarget.SetText ( aStrTarget );
+
+        // #95306# setting cursor to end of string
+        maCbbTarget.SetSelection ( Selection( aStrTarget.Len() ) );
     }
 
     if ( maRbtLinktypInternet.IsChecked() && aStrURL.Len()!=0 && IsMarkWndVisible() )
