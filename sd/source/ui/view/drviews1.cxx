@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:46:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             if (eEditMode == EM_PAGE)
                 aTabControl.SetCurPageId (nActualPageNum + 1);
         }
+        /*AF: The LayerDialogChildWindow is not used anymore (I hope).
         if (GetViewFrame()->KnowsChildWindow(
             LayerDialogChildWindow::GetChildWindowId()))
         {
@@ -576,7 +577,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 LayerDialogChildWindow::GetChildWindowId(),
                 IsLayerModeActive());
         }
-
+        */
         ResetActualLayer();
 
         Invalidate( SID_PAGEMODE );
