@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:19:14 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,10 @@ private:
     EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
     EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
     EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
+
+    void                InitScriptTypes( USHORT nPara );
+    short               GetScriptType( const EditPaM& rPaM ) const;
+    BOOL                IsScriptChange( const EditPaM& rPaM ) const;
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );

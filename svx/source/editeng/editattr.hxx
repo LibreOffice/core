@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-13 10:08:02 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ public:
     inline void     Expand( USHORT nDiff );
     inline void     Collaps( USHORT nDiff );
 
-    virtual void    SetFont( SvxFont& rFont ) = 0;
+    virtual void    SetFont( SvxFont& rFont );
 
     BOOL    IsIn( USHORT nIndex )
                 { return ( ( nStart <= nIndex ) && ( nEnd >= nIndex ) ); }

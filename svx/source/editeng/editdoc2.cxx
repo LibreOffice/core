@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
         }
     }
     bInvalid = TRUE;
+    aScriptInfos.Remove( 0, aScriptInfos.Count() );
 }
 
 void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
@@ -236,6 +237,7 @@ void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
     nInvalidDiff = 0;
     bInvalid = TRUE;
     bSimple = FALSE;
+    aScriptInfos.Remove( 0, aScriptInfos.Count() );
 }
 
 void ParaPortion::AdjustBlocks( EditLine* pLine, long nRemainingSpace )
@@ -653,6 +655,8 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         }
         break;
         case EE_CHAR_FONTHEIGHT:
+        case EE_CHAR_FONTHEIGHT_CJK:
+        case EE_CHAR_FONTHEIGHT_CTL:
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontHeightItem ) ), "ConvertItem: Ungueltiges Item!" );
             SvxFontHeightItem& rItem = (SvxFontHeightItem&)rPoolItem;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:21:12 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
+#include <com/sun/star/text/ScriptType.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -1958,7 +1962,15 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
     // Problem: Es mussten zwei Listen beruecksichtigt/gefuehrt werden:
     // OrderedByStart,OrderedByEnd.
 
+    if ( nPos > pNode->Len() )
+        nPos = pNode->Len();
+
     rFont = pNode->GetCharAttribs().GetDefFont();
+
+    short nScriptType = GetScriptType( EditPaM( pNode, nPos ) );
+    if ( ( nScriptType == text::ScriptType::ASIAN ) || ( nScriptType == text::ScriptType::COMPLEX ) )
+        CreateFont( rFont, pNode->GetContentAttribs().GetItems(), FALSE, nScriptType );
+
     const SvxFontWidthItem& rWidthItem =
         (const SvxFontWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH);
     sal_uInt16 nRelWidth = rWidthItem.GetProp();
@@ -1981,7 +1993,8 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
                      || ( !pNode->Len() ) ) )
             {
                 DBG_ASSERT( ( pAttrib->Which() >= EE_CHAR_START ) && ( pAttrib->Which() <= EE_FEATURE_END ), "Unglueltiges Attribut in Seek() " );
-                pAttrib->SetFont( rFont );
+                if ( IsScriptItemValid( pAttrib->Which(), nScriptType ) )
+                    pAttrib->SetFont( rFont );
                 if ( pAttrib->Which() == EE_CHAR_FONTWIDTH )
                     nRelWidth = ((const SvxFontWidthItem*)pAttrib->GetItem())->GetProp();
             }

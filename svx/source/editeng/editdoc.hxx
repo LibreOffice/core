@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@ DBG_NAMEEX( EE_TextPortion );
 #define CHARPOSGROW     16
 #define DEFTAB          720
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent = TRUE );
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent = TRUE, short nScriptType = 0 );
+USHORT GetScriptItemId( USHORT nItemId, short nScriptType );
+BOOL IsScriptItemValid( USHORT nItemId, short nScriptType );
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, USHORT nS, USHORT nE );
 
@@ -120,6 +122,22 @@ inline BOOL EPaM::operator == ( const EPaM& r ) const
 {
     return ( ( nPara == r.nPara ) && ( nIndex == r.nIndex ) ) ? TRUE : FALSE;
 }
+
+struct ScriptTypePosInfo
+{
+    short   nScriptType;
+    USHORT  nStartPos;
+    USHORT  nEndPos;
+
+    ScriptTypePosInfo( short _Type, USHORT _Start, USHORT _End )
+    {
+        nScriptType = _Type;
+        nStartPos = _Start;
+        nEndPos = _End;
+    }
+};
+
+SV_DECL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo, 0, 4 );
 
 typedef EditCharAttrib* EditCharAttribPtr;
 SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0, 4 );
@@ -530,22 +548,24 @@ class ParaPortion
 {
     friend class ImpEditEngine; // zum Einstellen der Hoehe
 private:
-    EditLineList    aLineList;
-    TextPortionList aTextPortionList;
-    ContentNode*    pNode;
-    long            nHeight;
+    EditLineList        aLineList;
+    TextPortionList     aTextPortionList;
+    ContentNode*        pNode;
+    long                nHeight;
 
-    USHORT          nInvalidPosStart;
-    USHORT          nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
-    USHORT          nBulletX;
-    short           nInvalidDiff;
+    ScriptTypePosInfos  aScriptInfos;
 
-    BOOL            bInvalid        : 1;
-    BOOL            bSimple         : 1;    // nur lineares Tippen
-    BOOL            bVisible        : 1;    // MT 05/00: Gehoert an den Node!!!
-    BOOL            bForceRepaint   : 1;
+    USHORT              nInvalidPosStart;
+    USHORT              nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
+    USHORT              nBulletX;
+    short               nInvalidDiff;
 
-                    ParaPortion( const ParaPortion& ) {;}
+    BOOL                bInvalid            : 1;
+    BOOL                bSimple             : 1;    // nur lineares Tippen
+    BOOL                bVisible            : 1;    // MT 05/00: Gehoert an den Node!!!
+    BOOL                bForceRepaint       : 1;
+
+                        ParaPortion( const ParaPortion& );
 
 public:
                         ParaPortion( ContentNode* pNode );

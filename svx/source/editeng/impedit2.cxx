@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-20 13:05:40 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@
 
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
 #include <com/sun/star/text/WordType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
+#include <com/sun/star/text/ScriptType.hpp>
 #endif
 
 #define LINE_SEP    0x0A
@@ -1338,6 +1342,84 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
 
     return aNewSel;
 }
+
+void ImpEditEngine::InitScriptTypes( USHORT nPara )
+{
+    uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+    ContentNode* pNode = pParaPortion->GetNode();
+    ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+    ::rtl::OUString aText( *pNode );
+    USHORT nTextLen = aText.getLength();
+
+    rTypes.Remove( 0, rTypes.Count() );
+
+    long nPos = 0;
+    short nScriptType = xBI->getScriptType( aText, nPos );
+    rTypes.Insert( ScriptTypePosInfo( nScriptType, nPos, nTextLen ), rTypes.Count() );
+    nPos = xBI->endOfScript( aText, nPos, nScriptType );
+    while ( nPos != (-1) )
+    {
+        rTypes[rTypes.Count()-1].nEndPos = nPos;
+
+        nScriptType = xBI->getScriptType( aText, nPos );
+        if ( nScriptType == text::ScriptType::WEAK )
+            nScriptType = rTypes[rTypes.Count()-1].nScriptType;
+
+        rTypes.Insert( ScriptTypePosInfo( nScriptType, nPos, nTextLen ), rTypes.Count() );
+        nPos = xBI->endOfScript( aText, nPos, nScriptType );
+    }
+
+    if ( rTypes[0].nScriptType == text::ScriptType::WEAK )
+        rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : text::ScriptType::LATIN;
+}
+
+short ImpEditEngine::GetScriptType( const EditPaM& rPaM ) const
+{
+     USHORT nPara = GetEditDoc().GetPos( rPaM.GetNode() );
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+    if ( !pParaPortion->aScriptInfos.Count() )
+        ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+
+    ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+    USHORT nPos = rPaM.GetIndex();
+    short nScriptType = 0;
+    for ( USHORT n = 0; n < rTypes.Count(); n++ )
+    {
+        if ( ( rTypes[n].nStartPos <= nPos ) && ( rTypes[n].nEndPos >= nPos ) )
+           {
+            nScriptType = rTypes[n].nScriptType;
+            break;
+        }
+    }
+
+    DBG_ASSERT( nScriptType, "Script not found!" );
+    return nScriptType;
+}
+
+BOOL ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
+{
+     USHORT nPara = GetEditDoc().GetPos( rPaM.GetNode() );
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+    if ( !pParaPortion->aScriptInfos.Count() )
+        ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+
+    ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+    USHORT nPos = rPaM.GetIndex();
+    BOOL bScriptChange = FALSE;
+    for ( USHORT n = 0; n < rTypes.Count(); n++ )
+    {
+        if ( rTypes[n].nStartPos == nPos )
+           {
+            bScriptChange = TRUE;
+            break;
+        }
+    }
+
+    return bScriptChange;
+}
+
+
 
 //  ----------------------------------------------------------------------
 //  Textaenderung

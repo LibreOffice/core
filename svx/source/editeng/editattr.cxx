@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,13 +111,18 @@ EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, USHORT nS, USHORT nE )
     bEdge       = FALSE;
 }
 
+void EditCharAttrib::SetFont( SvxFont& rFont )
+{
+}
+
+
 // -------------------------------------------------------------------------
 // class EditCharAttribFont
 // -------------------------------------------------------------------------
 EditCharAttribFont::EditCharAttribFont( const SvxFontItem& rAttr, USHORT nStart, USHORT nEnd )
     : EditCharAttrib( rAttr, nStart, nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTINFO, "Kein Fontattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTINFO || rAttr.Which() == EE_CHAR_FONTINFO_CJK || rAttr.Which() == EE_CHAR_FONTINFO_CTL, "Kein Fontattribut!" );
 }
 
 void EditCharAttribFont::SetFont( SvxFont& rFont )
@@ -136,7 +141,7 @@ void EditCharAttribFont::SetFont( SvxFont& rFont )
 EditCharAttribItalic::EditCharAttribItalic( const SvxPostureItem& rAttr, USHORT nStart, USHORT nEnd )
     : EditCharAttrib( rAttr, nStart, nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_ITALIC, "Kein Italicattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_ITALIC || rAttr.Which() == EE_CHAR_ITALIC_CJK || rAttr.Which() == EE_CHAR_ITALIC_CTL, "Kein Italicattribut!" );
 }
 
 void EditCharAttribItalic::SetFont( SvxFont& rFont )
@@ -150,7 +155,7 @@ void EditCharAttribItalic::SetFont( SvxFont& rFont )
 EditCharAttribWeight::EditCharAttribWeight( const SvxWeightItem& rAttr, USHORT nStart, USHORT nEnd )
     : EditCharAttrib( rAttr, nStart, nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_WEIGHT, "Kein Weightttribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_WEIGHT || rAttr.Which() == EE_CHAR_WEIGHT_CJK || rAttr.Which() == EE_CHAR_WEIGHT_CTL, "Kein Weightttribut!" );
 }
 
 void EditCharAttribWeight::SetFont( SvxFont& rFont )
@@ -178,7 +183,7 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont )
 EditCharAttribFontHeight::EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, USHORT nStart, USHORT nEnd )
     : EditCharAttrib( rAttr, nStart, nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTHEIGHT, "Kein Heightattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTHEIGHT || rAttr.Which() == EE_CHAR_FONTHEIGHT_CJK || rAttr.Which() == EE_CHAR_FONTHEIGHT_CTL, "Kein Heightattribut!" );
 }
 
 void EditCharAttribFontHeight::SetFont( SvxFont& rFont )

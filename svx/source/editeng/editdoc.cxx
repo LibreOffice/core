@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,23 +64,22 @@
 #pragma hdrstop
 
 #include <tstpitem.hxx>
-#include "colritem.hxx"
-
-#include "fontitem.hxx"
-#include "crsditem.hxx"
-#include "fhgtitem.hxx"
-#include "fwdtitem.hxx"
-#include "postitem.hxx"
-#include "kernitem.hxx"
-#include "wrlmitem.hxx"
-#include "wghtitem.hxx"
-#include "udlnitem.hxx"
-#include "cntritem.hxx"
-#include "escpitem.hxx"
-#include "shdditem.hxx"
-#include "akrnitem.hxx"
-#include "cscoitem.hxx"
-
+#include <colritem.hxx>
+#include <fontitem.hxx>
+#include <crsditem.hxx>
+#include <fhgtitem.hxx>
+#include <fwdtitem.hxx>
+#include <postitem.hxx>
+#include <kernitem.hxx>
+#include <wrlmitem.hxx>
+#include <wghtitem.hxx>
+#include <udlnitem.hxx>
+#include <cntritem.hxx>
+#include <escpitem.hxx>
+#include <shdditem.hxx>
+#include <akrnitem.hxx>
+#include <cscoitem.hxx>
+#include <langitem.hxx>
 
 #include <editdoc.hxx>
 #include <editdbg.hxx>
@@ -95,7 +94,105 @@
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
+#include <com/sun/star/text/ScriptType.hpp>
+#endif
+
 #include <stdlib.h> // qsort
+
+using namespace ::com::sun::star;
+
+
+// ------------------------------------------------------------
+
+USHORT GetScriptItemId( USHORT nItemId, short nScriptType )
+{
+    USHORT nId = nItemId;
+
+    if ( ( nScriptType == text::ScriptType::ASIAN ) ||
+         ( nScriptType == text::ScriptType::COMPLEX ) )
+    {
+        switch ( nItemId )
+        {
+            case EE_CHAR_LANGUAGE:
+                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_LANGUAGE_CJK : EE_CHAR_LANGUAGE_CTL;
+            break;
+            case EE_CHAR_FONTINFO:
+                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_FONTINFO_CJK : EE_CHAR_FONTINFO_CTL;
+            break;
+            case EE_CHAR_FONTHEIGHT:
+                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_FONTHEIGHT_CJK : EE_CHAR_FONTHEIGHT_CTL;
+            break;
+            case EE_CHAR_WEIGHT:
+                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_WEIGHT_CJK : EE_CHAR_WEIGHT_CTL;
+            break;
+            case EE_CHAR_ITALIC:
+                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_ITALIC_CJK : EE_CHAR_ITALIC_CTL;
+            break;
+        }
+    }
+
+    return nId;
+}
+
+BOOL IsScriptItemValid( USHORT nItemId, short nScriptType )
+{
+    BOOL bValid = TRUE;
+
+    switch ( nItemId )
+    {
+        case EE_CHAR_LANGUAGE:
+            bValid = nScriptType == text::ScriptType::LATIN;
+        break;
+        case EE_CHAR_LANGUAGE_CJK:
+            bValid = nScriptType == text::ScriptType::ASIAN;
+        break;
+        case EE_CHAR_LANGUAGE_CTL:
+            bValid = nScriptType == text::ScriptType::COMPLEX;
+        break;
+        case EE_CHAR_FONTINFO:
+            bValid = nScriptType == text::ScriptType::LATIN;
+        break;
+        case EE_CHAR_FONTINFO_CJK:
+            bValid = nScriptType == text::ScriptType::ASIAN;
+        break;
+        case EE_CHAR_FONTINFO_CTL:
+            bValid = nScriptType == text::ScriptType::COMPLEX;
+        break;
+        case EE_CHAR_FONTHEIGHT:
+            bValid = nScriptType == text::ScriptType::LATIN;
+        break;
+        case EE_CHAR_FONTHEIGHT_CJK:
+            bValid = nScriptType == text::ScriptType::ASIAN;
+        break;
+        case EE_CHAR_FONTHEIGHT_CTL:
+            bValid = nScriptType == text::ScriptType::COMPLEX;
+        break;
+        case EE_CHAR_WEIGHT:
+            bValid = nScriptType == text::ScriptType::LATIN;
+        break;
+        case EE_CHAR_WEIGHT_CJK:
+            bValid = nScriptType == text::ScriptType::ASIAN;
+        break;
+        case EE_CHAR_WEIGHT_CTL:
+            bValid = nScriptType == text::ScriptType::COMPLEX;
+        break;
+        case EE_CHAR_ITALIC:
+            bValid = nScriptType == text::ScriptType::LATIN;
+        break;
+        case EE_CHAR_ITALIC_CJK:
+            bValid = nScriptType == text::ScriptType::ASIAN;
+        break;
+        case EE_CHAR_ITALIC_CTL:
+            bValid = nScriptType == text::ScriptType::COMPLEX;
+        break;
+    }
+
+    return bValid;
+}
+
+
+// ------------------------------------------------------------
 
 // Sollte spaeter zentral nach TOOLS/STRING (Aktuell: 303)
 // fuer Grep: WS_TARGET
@@ -131,8 +228,23 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_AUTOKERN, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_KERNING, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },   // EE_FEATURE_TAB
-        { 0, SFX_ITEM_POOLABLE },   // EE_FEATURE_LINEBR
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_LANGUAGE
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_LANGUAGE_CJK
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_LANGUAGE_CTL
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTINFO_CJK
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTINFO_CTL
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTHEIGHT_CJK
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTHEIGHT_CTL
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_WEIGHT_CJK
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_WEIGHT_CTL
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ITALIC_CJK
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ITALIC_CTL
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_EMPHASISMARK_DUMMY
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_2LINES_DUMMY
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ROTATION_DUMMY
+        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
+        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
         { SID_FIELD, SFX_ITEM_POOLABLE }
 };
@@ -153,7 +265,17 @@ USHORT aV3Map[] = {
     4020, 4021
 };
 
+USHORT aV4Map[] = {
+    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
+    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
+    4014, 4015, 4016, 4017, 4018,
+    /* CJK Items inserted here: EE_CHAR_LANGUAGE - EE_CHAR_ROTATION_DUMMY */
+    4034, 4035, 4036, 4037
+};
+
 SV_IMPL_PTRARR( ContentList, ContentNode* );
+SV_IMPL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo );
+
 
 int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
 {
@@ -172,17 +294,28 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
     EditCharAttrib* pNew = 0;
     switch( rNew.Which() )
     {
+        case EE_CHAR_LANGUAGE:
+        case EE_CHAR_LANGUAGE_CJK:
+        case EE_CHAR_LANGUAGE_CTL:
+        {
+            pNew = new EditCharAttrib( rNew, nS, nE );
+        }
+        break;
         case EE_CHAR_COLOR:
         {
             pNew = new EditCharAttribColor( (const SvxColorItem&)rNew, nS, nE );
         }
         break;
         case EE_CHAR_FONTINFO:
+        case EE_CHAR_FONTINFO_CJK:
+        case EE_CHAR_FONTINFO_CTL:
         {
             pNew = new EditCharAttribFont( (const SvxFontItem&)rNew, nS, nE );
         }
         break;
         case EE_CHAR_FONTHEIGHT:
+        case EE_CHAR_FONTHEIGHT_CJK:
+        case EE_CHAR_FONTHEIGHT_CTL:
         {
             pNew = new EditCharAttribFontHeight( (const SvxFontHeightItem&)rNew, nS, nE );
         }
@@ -193,6 +326,8 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         }
         break;
         case EE_CHAR_WEIGHT:
+        case EE_CHAR_WEIGHT_CJK:
+        case EE_CHAR_WEIGHT_CTL:
         {
             pNew = new EditCharAttribWeight( (const SvxWeightItem&)rNew, nS, nE );
         }
@@ -208,6 +343,8 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         }
         break;
         case EE_CHAR_ITALIC:
+        case EE_CHAR_ITALIC_CJK:
+        case EE_CHAR_ITALIC_CTL:
         {
             pNew = new EditCharAttribItalic( (const SvxPostureItem&)rNew, nS, nE );
         }
@@ -1042,7 +1179,7 @@ void EditDoc::RemoveItemsFromPool( ContentNode* pNode )
     }
 }
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent, short nScriptType )
 {
     Font aPrevFont( rFont );
     rFont.SetAlign( ALIGN_BASELINE );
@@ -1051,15 +1188,16 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
     if ( bSearchInParent )
     {
         rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
-        rFont.SetName( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetFamilyName() );
-        rFont.SetFamily( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetFamily() );
-        rFont.SetPitch( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetPitch() );
-        rFont.SetCharSet( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetCharSet() );
-        rFont.SetSize( Size( ((const SvxFontWidthItem&)rSet.Get( EE_CHAR_FONTWIDTH )).GetWidth(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT )).GetHeight() ) );
-        rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
+        const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) );
+        rFont.SetName( rFontItem.GetFamilyName() );
+        rFont.SetFamily( rFontItem.GetFamily() );
+        rFont.SetPitch( rFontItem.GetPitch() );
+        rFont.SetCharSet( rFontItem.GetCharSet() );
+        rFont.SetSize( Size( ((const SvxFontWidthItem&)rSet.Get( EE_CHAR_FONTWIDTH )).GetWidth(), ((const SvxFontHeightItem&)rSet.Get( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ) ).GetHeight() ) );
+        rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ))).GetWeight() );
         rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
-        rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( EE_CHAR_ITALIC )).GetPosture() );
+        rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ))).GetPosture() );
         rFont.SetOutline( ((const SvxContourItem&)rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
         rFont.SetShadow( ((const SvxShadowedItem&)rSet.Get( EE_CHAR_SHADOW )).GetValue() );
         rFont.SetEscapement( ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetEsc() );
@@ -1072,25 +1210,26 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
     {
         if ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON )
             rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
-        if ( rSet.GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        if ( rSet.GetItemState( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) ) == SFX_ITEM_ON )
         {
-            rFont.SetName( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetFamilyName() );
-            rFont.SetFamily( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetFamily() );
-            rFont.SetPitch( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetPitch() );
-            rFont.SetCharSet( ((const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO )).GetCharSet() );
+            const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) );
+            rFont.SetName( rFontItem.GetFamilyName() );
+            rFont.SetFamily( rFontItem.GetFamily() );
+            rFont.SetPitch( rFontItem.GetPitch() );
+            rFont.SetCharSet( rFontItem.GetCharSet() );
         }
-        if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) == SFX_ITEM_ON )
-            rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT )).GetHeight() ) );
+        if ( rSet.GetItemState( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ) == SFX_ITEM_ON )
+            rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) )).GetHeight() ) );
         if ( rSet.GetItemState( EE_CHAR_FONTWIDTH ) == SFX_ITEM_ON )
             rFont.SetSize( Size( ((const SvxFontWidthItem&)rSet.Get( EE_CHAR_FONTWIDTH )).GetWidth(), rFont.GetSize().Height() ) );
-        if ( rSet.GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_ON )
-            rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
+        if ( rSet.GetItemState( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ) ) == SFX_ITEM_ON )
+            rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ) )).GetWeight() );
         if ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON )
             rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
         if ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON )
             rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
-        if ( rSet.GetItemState( EE_CHAR_ITALIC ) == SFX_ITEM_ON )
-            rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( EE_CHAR_ITALIC )).GetPosture() );
+        if ( rSet.GetItemState( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ) ) == SFX_ITEM_ON )
+            rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ) )).GetPosture() );
         if ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SFX_ITEM_ON )
             rFont.SetOutline( ((const SvxContourItem&)rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
         if ( rSet.GetItemState( EE_CHAR_SHADOW ) == SFX_ITEM_ON )
@@ -1997,16 +2136,10 @@ EditEngineItemPool::EditEngineItemPool( BOOL bPersistenRefCounts )
     : SfxItemPool( String( "EditEngineItemPool", RTL_TEXTENCODING_ASCII_US ), EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, 0, bPersistenRefCounts )
 {
-    // ====================== Version 1 =============================
     SetVersionMap( 1, 3999, 4015, aV1Map );
-
-    // ====================== Version 2 =============================
     SetVersionMap( 2, 3999, 4019, aV2Map );
-
-    // ====================== Version 2 =============================
     SetVersionMap( 3, 3997, 4020, aV3Map );
-
-    // ==============================================================
+    SetVersionMap( 4, 3994, 4022, aV4Map );
 
     DBG_ASSERT( EE_DLL(), "EditDLL?!" );
     SfxPoolItem** ppDefItems = EE_DLL()->GetGlobalData()->GetDefItems();

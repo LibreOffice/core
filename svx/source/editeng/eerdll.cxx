@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,13 @@
 #include <wghtitem.hxx>
 #include <wrlmitem.hxx>
 #include <numitem.hxx>
+#include <svx/langitem.hxx>
+
 
 GlobalEditData::GlobalEditData()
 {
-    ppDefItems = 0;
-    pStdRefDevice = 0;
+    ppDefItems = NULL;
+    pStdRefDevice = NULL;
 }
 
 GlobalEditData::~GlobalEditData()
@@ -154,14 +156,29 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[22] = new SvxAutoKernItem( FALSE, EE_CHAR_PAIRKERNING );
         ppDefItems[23] = new SvxKerningItem( 0, EE_CHAR_KERNING );
         ppDefItems[24] = new SvxWordLineModeItem( FALSE, EE_CHAR_WLM );
+        ppDefItems[25] = new SvxLanguageItem( LANGUAGE_GERMAN, EE_CHAR_LANGUAGE );
+        ppDefItems[26] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
+        ppDefItems[27] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
+        ppDefItems[28] = new SvxFontItem( EE_CHAR_FONTINFO_CJK );
+        ppDefItems[29] = new SvxFontItem( EE_CHAR_FONTINFO_CTL );
+        ppDefItems[30] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK );
+        ppDefItems[31] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL );
+        ppDefItems[32] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK );
+         ppDefItems[33] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
+        ppDefItems[34] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
+        ppDefItems[35] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
+        ppDefItems[36] = new SfxVoidItem( EE_CHAR_EMPHASISMARK_DUMMY );
+        ppDefItems[37] = new SfxVoidItem( EE_CHAR_2LINES_DUMMY );
+        ppDefItems[38] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
+        ppDefItems[39] = new SfxVoidItem( EE_CHAR_ROTATION_DUMMY );
 
         // Features
-        ppDefItems[25] = new SfxVoidItem( EE_FEATURE_TAB );
-        ppDefItems[26] = new SfxVoidItem( EE_FEATURE_LINEBR );
-        ppDefItems[27] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
-        ppDefItems[28] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
+        ppDefItems[40] = new SfxVoidItem( EE_FEATURE_TAB );
+        ppDefItems[41] = new SfxVoidItem( EE_FEATURE_LINEBR );
+        ppDefItems[42] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
+        ppDefItems[43] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
-        DBG_ASSERT( EDITITEMCOUNT == 29, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+        DBG_ASSERT( EDITITEMCOUNT == 44, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
     }
 
     return ppDefItems;

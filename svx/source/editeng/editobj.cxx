@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-11 15:12:26 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,13 +1252,16 @@ void BinTextObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
 {
     // Some Items must be generated for the 5.0 file format,
     // because we don't have a special format for 5.x or 6.x
-    for ( USHORT nPara = GetContents().Count(); nPara; )
+    USHORT nParas = GetContents().Count();
+    const SvxNumBulletItem** ppNumBulletItems = new const SvxNumBulletItem*[nParas];
+    for ( USHORT nPara = nParas; nPara; )
     {
         ContentInfo* pC = GetContents().GetObject( --nPara );
         const SvxNumBulletItem* pSvxNumBulletItem = NULL;
-        if ( pC->GetParaAttribs().GetItemState(EE_PARA_NUMBULLET) == SFX_ITEM_ON )
+        const SfxPoolItem* pTmpItem = NULL;
+        if ( pC->GetParaAttribs().GetItemState(EE_PARA_NUMBULLET, FALSE, &pTmpItem ) == SFX_ITEM_ON )
         {
-            pSvxNumBulletItem = &(const SvxNumBulletItem&)pC->GetParaAttribs().Get(EE_PARA_NUMBULLET);
+            pSvxNumBulletItem = (const SvxNumBulletItem*)pTmpItem;
         }
         else if ( pStyleSheetPool && pC->GetStyle().Len() )
         {
@@ -1267,14 +1270,32 @@ void BinTextObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
                 pSvxNumBulletItem = &(const SvxNumBulletItem&)pStyle->GetItemSet().Get(EE_PARA_NUMBULLET);
         }
 
+        ppNumBulletItems[nPara] = pSvxNumBulletItem;
+
         if ( pSvxNumBulletItem )
         {
-            SvxBulletItem aNewBullet( EE_PARA_BULLET );
-            const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pC->GetParaAttribs().Get( EE_PARA_OUTLLEVEL );
-            lcl_CreateBulletItem( *pSvxNumBulletItem, rLevel.GetValue(), aNewBullet );
-            pC->GetParaAttribs().Put( aNewBullet );
+            // Check if Item allready used, don't create a new one in this case.
+            BOOL bInserted = FALSE;
+            for ( USHORT nP = nPara+1; nP < nParas; nP++ )
+            {
+                if ( ppNumBulletItems[nP] == pSvxNumBulletItem )
+                {
+                    ContentInfo* pTmpC = GetContents().GetObject( nP );
+                    pC->GetParaAttribs().Put( pTmpC->GetParaAttribs().Get( EE_PARA_BULLET ) );
+                    bInserted = TRUE;
+                    break;
+                }
+            }
+            if ( !bInserted )
+            {
+                SvxBulletItem aNewBullet( EE_PARA_BULLET );
+                const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pC->GetParaAttribs().Get( EE_PARA_OUTLLEVEL );
+                lcl_CreateBulletItem( *pSvxNumBulletItem, rLevel.GetValue(), aNewBullet );
+                pC->GetParaAttribs().Put( aNewBullet );
+            }
         }
      }
+    delete ppNumBulletItems;
 }
 
 void BinTextObject::FinishStore()

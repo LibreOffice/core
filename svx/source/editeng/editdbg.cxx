@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,11 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_PARA_TABS:
             aDebStr += "Tabs = ?";
         break;
+        case EE_CHAR_LANGUAGE:
+        case EE_CHAR_LANGUAGE_CJK:
+        case EE_CHAR_LANGUAGE_CTL:
+            aDebStr += "Language = ?";
+        break;
         case EE_CHAR_COLOR:
         {
             aDebStr += "Color= ";
@@ -163,6 +168,8 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         }
         break;
         case EE_CHAR_FONTINFO:
+        case EE_CHAR_FONTINFO_CJK:
+        case EE_CHAR_FONTINFO_CTL:
         {
             aDebStr += "Font=";
             aDebStr += ByteString( ((SvxFontItem&)rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US );
@@ -172,6 +179,8 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         }
         break;
         case EE_CHAR_FONTHEIGHT:
+        case EE_CHAR_FONTHEIGHT_CJK:
+        case EE_CHAR_FONTHEIGHT_CTL:
         {
             aDebStr += "Groesse=";
             aDebStr += ByteString::CreateFromInt32( ((SvxFontHeightItem&)rItem).GetHeight() );
@@ -198,6 +207,8 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         }
         break;
         case EE_CHAR_WEIGHT:
+        case EE_CHAR_WEIGHT_CJK:
+        case EE_CHAR_WEIGHT_CTL:
             aDebStr += "FontWeight=";
             aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxWeightItem&)rItem).GetWeight() );
         break;
@@ -210,6 +221,8 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
             aDebStr +=ByteString::CreateFromInt32(  (USHORT)((SvxCrossedOutItem&)rItem).GetStrikeout() );
         break;
         case EE_CHAR_ITALIC:
+        case EE_CHAR_ITALIC_CJK:
+        case EE_CHAR_ITALIC_CTL:
             aDebStr += "FontPosture=";
             aDebStr +=ByteString::CreateFromInt32(  (USHORT)((SvxPostureItem&)rItem).GetPosture() );
         break;
