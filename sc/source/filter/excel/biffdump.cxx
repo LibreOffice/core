@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:32:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5465,7 +5465,7 @@ void Biff8RecDumper::ContDump( const ULONG nL )
             nCharCnt++;
 
             if( IsPrintable( *p ) )
-                aT += *p;
+                aT += static_cast< sal_Char >( *p );
             else
                 aT += '.';
 
@@ -5545,7 +5545,7 @@ void Biff8RecDumper::ContDumpStream( SvStream& rStrm, const ULONG nL )
             nCharCnt++;
 
             if( IsPrintable( *p ) )
-                aT += *p;
+                aT += static_cast< sal_Char >( *p );
             else
                 aT += '.';
 
@@ -6759,7 +6759,14 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
     if( nInSize == ~0UL ) return;
 
     SvStream& rOutStrm = *pDumpStream;
-    rOutStrm << "\n\n\n-- Ctls stream dump --\n";
+
+    ByteString aStrmLen;
+    rOutStrm << "\n\n\n-- Ctls stream dump --   stream-len=0x";
+    __AddHex( aStrmLen, nInSize );
+    rOutStrm << aStrmLen.GetBuffer() << "=";
+    aStrmLen.Erase();
+    __AddDec( aStrmLen, nInSize );
+    rOutStrm << aStrmLen.GetBuffer() << "\n";
 
     enum {
         xlCtrlPushButton,
@@ -6838,11 +6845,12 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0010, "picpos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0020, "size" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0080, "pic" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0100, "accel" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0400, "icon" );
-                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFA00 ); // 0x20 always(?)
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFA00 );
                 sal_uInt32 nCtrlFlags = __nFlags;
 
                 if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
@@ -6864,7 +6872,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "accel" );
                 if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEX2( "icon-len" );
                 EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
-                EXC_CTRLDUMP_SIZE();
+                if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_SIZE();
             }
             break;
             case xlCtrlToggleButton:
@@ -6887,6 +6895,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 EXC_CTRLDUMP_ADDFLAG( 0x00000020, "scrollbars" );
                 EXC_CTRLDUMP_ADDFLAG( 0x00000040, "style" );
                 EXC_CTRLDUMP_ADDFLAG( 0x00000080, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000100, "size" );
                 EXC_CTRLDUMP_ADDFLAG( 0x00000200, "password" );
                 EXC_CTRLDUMP_ADDFLAG( 0x00000400, "listwidth" );
                 EXC_CTRLDUMP_ADDFLAG( 0x00000800, "boundcol" );
@@ -6907,7 +6916,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 EXC_CTRLDUMP_ADDFLAG( 0x08000000, "icon" );
                 EXC_CTRLDUMP_ADDFLAG( 0x10000000, "pic" );
                 EXC_CTRLDUMP_ADDFLAG( 0x20000000, "accel" );
-                EXC_CTRLDUMP_ENDFLAG( 0x40080000 ); // 0x80000100 always set?
+                EXC_CTRLDUMP_ENDFLAG( 0x40080000 ); // 0x80000000 always set?
                 sal_uInt32 nCtrlFlags = __nFlags;
 
                 EXC_CTRLDUMP_STARTFLAG( "2nd-content-flags" );
@@ -6966,7 +6975,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 if( nCtrlFlags & 0x10000000 ) EXC_CTRLDUMP_DEC2( "pic-len" );
                 if( nCtrlFlags & 0x20000000 ) EXC_CTRLDUMP_HEX1( "accel" );
                 if( nCtrlFlags2 & 0x00000001 ) EXC_CTRLDUMP_DECVARMASK( nGroupNameLen, 0x7FFFFFFF, "groupname-len" );
-                EXC_CTRLDUMP_SIZE();
+                if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_SIZE();
                 EXC_CTRLDUMP_STRING( nValueLen, "value" );
                 EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
                 EXC_CTRLDUMP_STRING( nGroupNameLen, "groupname" );
@@ -6982,6 +6991,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0010, "pos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0020, "size" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0080, "bordercolor" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0100, "borderstyle" );
@@ -6989,7 +6999,7 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 EXC_CTRLDUMP_ADDFLAG( 0x0400, "pic" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0800, "accel" );
                 EXC_CTRLDUMP_ADDFLAG( 0x1000, "icon" );
-                EXC_CTRLDUMP_ENDFLAG( 0xFFFFE020 );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFE000 );
                 sal_uInt32 nCtrlFlags = __nFlags;
 
                 if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
@@ -7014,7 +7024,68 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
                 if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_HEX2( "accel" );
                 if( nCtrlFlags & 0x1000 ) EXC_CTRLDUMP_HEX2( "icon-len" );
                 EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
-                EXC_CTRLDUMP_SIZE();
+                if( nCtrlFlags & 0x0020 ) EXC_CTRLDUMP_SIZE();
+            }
+            break;
+            case xlCtrlSpin:
+            case xlCtrlScrollBar:
+            {
+                sal_uInt32 nIcon = 0;
+
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "size" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000010, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000100, "unknown1" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000200, "unknown2" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "unknown3" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000020, "min" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000040, "max" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000080, "value" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "step" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "page-step" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00002000, "orient" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00004000, "prop-thumb" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00008000, "delay" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00010000, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFE0000 );
+                sal_uInt32 nCtrlFlags = __nFlags;
+
+                if( nCtrlFlags & 0x00000001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x00000004 )
+                {
+                    EXC_CTRLDUMP_STARTFLAG( "option-flags" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                    EXC_CTRLDUMP_ENDFLAG( 0xEFFFFFF1 );
+                }
+                if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC4( "mouseptr" );
+                if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_DEC4( "min" );
+                if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC4( "max" );
+                if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_DEC4( "value" );
+                if( nCtrlFlags & 0x00000100 ) EXC_CTRLDUMP_HEX4( "unknown1" );
+                if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_HEX4( "unknown2" );
+                if( nCtrlFlags & 0x00000400 ) EXC_CTRLDUMP_HEX4( "unknown3" );
+                if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_DEC4( "step" );
+                if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_DEC4( "page-step" );
+                if( nCtrlFlags & 0x00002000 ) EXC_CTRLDUMP_DEC4( "orient" );
+                if( nCtrlFlags & 0x00004000 ) EXC_CTRLDUMP_DEC4( "prop-thumb" );
+                if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_DEC4( "delay" );
+                if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_HEXVAR( nIcon, "icon" );
+                if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_SIZE();
+                if( nIcon )
+                {
+                    sal_uInt32 nIconLen;
+                    rInStrm.SeekRel( 20 );
+                    rInStrm >> nIconLen;
+                    rInStrm.SeekRel( nIconLen );
+                    nNextPos += 24 + nIconLen;
+                }
             }
             break;
         }
@@ -7030,67 +7101,70 @@ void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
         rInStrm.Seek( nNextPos );
 
         // font data
-        rInStrm >> nId >> nSize;
-        if( nId == 0x0200 )
+        if( (eCtrlType != xlCtrlSpin) && (eCtrlType != xlCtrlScrollBar) )
         {
-            nNextPos = rInStrm.Tell() + nSize;
-
-            t = "id="; __AddHex( t, nId ); t += "  size="; __AddHex( t, nSize );
-            rOutStrm << t.GetBuffer() << "   (font data)\n";
-            t.Erase();
-
-            EXC_CTRLDUMP_STARTFLAG( "content-flags" );
-            EXC_CTRLDUMP_ADDFLAG( 0x01, "fontname" );
-            EXC_CTRLDUMP_ADDFLAG( 0x02, "fontstyle" );
-            EXC_CTRLDUMP_ADDFLAG( 0x04, "fontsize" );
-            EXC_CTRLDUMP_ADDFLAG( 0x10, "language-id" );
-            EXC_CTRLDUMP_ADDFLAG( 0x40, "align" );
-            EXC_CTRLDUMP_ADDFLAG( 0x80, "fontweight" );
-            EXC_CTRLDUMP_ENDFLAG( 0xFFFFFF08 ); // 0x20 always set?
-            sal_uInt32 nCtrlFlags = __nFlags;
-            sal_uInt32 nFontLen = 0;
-
-            if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_DECVARMASK( nFontLen, 0x7FFFFFFF, "fontname-len" );
-            if( nCtrlFlags & 0x0002 )
+            rInStrm >> nId >> nSize;
+            if( nId == 0x0200 )
             {
-                EXC_CTRLDUMP_STARTFLAG( "fontstyle-flags" );
-                EXC_CTRLDUMP_ADDFLAG( 0x01, "bold" );
-                EXC_CTRLDUMP_ADDFLAG( 0x02, "italic" );
-                EXC_CTRLDUMP_ADDFLAG( 0x04, "underline" );
-                EXC_CTRLDUMP_ADDFLAG( 0x08, "strikeout" );
-                EXC_CTRLDUMP_ENDFLAG( 0xBFFFFFF0 ); // 0x40000000 always set?
-            }
-            if( nCtrlFlags & 0x0004 ) EXC_CTRLDUMP_DEC4( "fontsize" );
-            if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX2( "language-id" );
-            if( nCtrlFlags & 0x0040 )
-            {
-                EXC_CTRLDUMP_ALIGN_INSTRM( 2 );
-                sal_uInt16 nAlign; rInStrm >> nAlign;
-                t += "  align="; __AddDec( t, nAlign );
-                switch( nAlign )
+                nNextPos = rInStrm.Tell() + nSize;
+
+                t = "id="; __AddHex( t, nId ); t += "  size="; __AddHex( t, nSize );
+                rOutStrm << t.GetBuffer() << "   (font data)\n";
+                t.Erase();
+
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x01, "fontname" );
+                EXC_CTRLDUMP_ADDFLAG( 0x02, "fontstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x04, "fontsize" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10, "language-id" );
+                EXC_CTRLDUMP_ADDFLAG( 0x40, "align" );
+                EXC_CTRLDUMP_ADDFLAG( 0x80, "fontweight" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFF08 ); // 0x20 always set?
+                sal_uInt32 nCtrlFlags = __nFlags;
+                sal_uInt32 nFontLen = 0;
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_DECVARMASK( nFontLen, 0x7FFFFFFF, "fontname-len" );
+                if( nCtrlFlags & 0x0002 )
                 {
-                    case 1: t += "=left";   break;
-                    case 2: t += "=right";  break;
-                    case 3: t += "=center"; break;
-                    default: t += "=!unknown!";
+                    EXC_CTRLDUMP_STARTFLAG( "fontstyle-flags" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x01, "bold" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x02, "italic" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x04, "underline" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x08, "strikeout" );
+                    EXC_CTRLDUMP_ENDFLAG( 0xBFFFFFF0 ); // 0x40000000 always set?
                 }
-                EXC_CTRLDUMP_PRINTC();
-            }
-            if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC2( "fontweight" );
-            EXC_CTRLDUMP_STRING( nFontLen, "font" );
-            EXC_CTRLDUMP_PRINT();
+                if( nCtrlFlags & 0x0004 ) EXC_CTRLDUMP_DEC4( "fontsize" );
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX2( "language-id" );
+                if( nCtrlFlags & 0x0040 )
+                {
+                    EXC_CTRLDUMP_ALIGN_INSTRM( 2 );
+                    sal_uInt16 nAlign; rInStrm >> nAlign;
+                    t += "  align="; __AddDec( t, nAlign );
+                    switch( nAlign )
+                    {
+                        case 1: t += "=left";   break;
+                        case 2: t += "=right";  break;
+                        case 3: t += "=center"; break;
+                        default: t += "=!unknown!";
+                    }
+                    EXC_CTRLDUMP_PRINTC();
+                }
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC2( "fontweight" );
+                EXC_CTRLDUMP_STRING( nFontLen, "font" );
+                EXC_CTRLDUMP_PRINT();
 
-            EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
-            if( rInStrm.Tell() < nNextPos )
-            {
-                rOutStrm << "  unknown data:";
-                ContDumpStream( rInStrm, nNextPos - rInStrm.Tell() );
-                rOutStrm << '\n';
+                EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
+                if( rInStrm.Tell() < nNextPos )
+                {
+                    rOutStrm << "  unknown data:";
+                    ContDumpStream( rInStrm, nNextPos - rInStrm.Tell() );
+                    rOutStrm << '\n';
+                }
+                rInStrm.Seek( nNextPos );
             }
-            rInStrm.Seek( nNextPos );
+            else
+                rInStrm.SeekRel( -4 );
         }
-        else
-            rInStrm.SeekRel( -4 );
     }
 
     rOutStrm << "\n-- end of stream --\n";
@@ -7188,7 +7262,7 @@ void Biff8RecDumper::Init( void )
 
     const sal_Char*     pDefName = "biffrecdumper.ini";
     const sal_Char*     pIniKey = "BIFFRECDUMPERINI";
-    const sal_Char*     pPathSep = "\\";        // only DOS-style implemented
+    const sal_Char      pPathSep[] = { SAL_PATHDELIMITER, '\0' };
     ByteString          aIniName;
 
     SvFileStream*       pIn = NULL;
@@ -7390,7 +7464,7 @@ void Biff8RecDumper::Init( void )
                                 eAct = InComment;
                             else
                             {
-                                AddError( nLine, "Unknwon command", aCommand );
+                                AddError( nLine, "Unknown command", aCommand );
                                 n = 0;
                             }
                         }
@@ -7403,7 +7477,7 @@ void Biff8RecDumper::Init( void )
                             }
                             else
                             {
-                                AddError( nLine, "Unknwon command", aCommand );
+                                AddError( nLine, "Unknown command", aCommand );
                                 n = 0;
                             }
                         }
@@ -7442,7 +7516,7 @@ void Biff8RecDumper::Init( void )
                             eAct = InComment;
                         else
                         {
-                            AddError( nLine, "Unknwon command", aCommand );
+                            AddError( nLine, "Unknown command", aCommand );
                             n = 0;
                         }
                     }
@@ -7455,7 +7529,7 @@ void Biff8RecDumper::Init( void )
                         }
                         else
                         {
-                            AddError( nLine, "Unknwon command", aCommand );
+                            AddError( nLine, "Unknown command", aCommand );
                             n = 0;
                         }
                     }
