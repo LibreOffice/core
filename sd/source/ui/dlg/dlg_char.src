@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:42:44 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ TabDialog TAB_CHAR
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betű";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -132,7 +134,7 @@ TabDialog TAB_CHAR
                 Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
-                Text [ danish ] = "Skrifteffekt" ;
+                Text [ danish ] = "Skrifteffekter" ;
                 Text [ french ] = "Effets de caract�res" ;
                 Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffecten" ;
@@ -155,6 +157,8 @@ TabDialog TAB_CHAR
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट प्रभाव";
                 Text[ slovak ] = "Efekty pre písmo";
+                Text[ hungarian ] = "Betűhatások";
+                Text[ slovenian ] = "Učinki pisave";
             };
             PageItem
             {
@@ -187,6 +191,8 @@ TabDialog TAB_CHAR
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
                 Text[ slovak ] = "Umiestnenie";
+                Text[ hungarian ] = "Pozíció";
+                Text[ slovenian ] = "Položaj";
             };
         };
     };
@@ -243,6 +249,8 @@ TabDialog TAB_CHAR
         Text[ hebrew ] = "Zurück";
         Text[ hindi ] = "लौटना";
         Text[ slovak ] = "Návrat";
+        Text[ hungarian ] = "Vissza";
+        Text[ slovenian ] = "Vrnitev";
     };
     Text[ chinese_simplified ] = "字符";
     Text[ russian ] = "�����";
@@ -260,7 +268,11 @@ TabDialog TAB_CHAR
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
     Text[ slovak ] = "Znak";
+    Text[ hungarian ] = "Karakter";
+    Text[ slovenian ] = "Znak";
 };
+
+
 
 
 
