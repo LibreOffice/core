@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:14:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Tabelle" ;       RID_SW_TP_OPTTABLE_PAGE  ; > ;
             < "Änderungen" ;    RID_SW_TP_REDLINE_OPT    ; > ;
             < "Kompatibilität" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
+            < "AutoBeschriftung" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
         };
         ItemList [ en-US ] =
         {
@@ -354,6 +355,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Table" ;         RID_SW_TP_OPTTABLE_PAGE  ; > ;
             < "Changes" ;    RID_SW_TP_REDLINE_OPT    ; > ;
             < "Compatibility" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
+            < "AutoCaption" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
         };
     };
     StringArray SID_SW_ONLINEOPTIONS
@@ -511,13 +513,13 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList [ de ] =
         {
-            < "%PRODUCTNAME Database" ; 0; > ;
+            < "%PRODUCTNAME Base" ; 0; > ;
             < "Verbindungen" ; SID_SB_CONNECTIONPOOLING; > ;
             < "Datenbanken" ; SID_SB_DBREGISTEROPTIONS; > ;
         };
         ItemList [ en-US ] =
         {
-            < "%PRODUCTNAME Database" ; 0; > ;
+            < "%PRODUCTNAME Base" ; 0; > ;
             < "Connections" ; SID_SB_CONNECTIONPOOLING; > ;
             < "Databases" ; SID_SB_DBREGISTEROPTIONS; > ;
         };
