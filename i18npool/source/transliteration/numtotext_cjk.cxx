@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-06 07:48:34 $
+ *  last change: $Author: khong $ $Date: 2002-09-07 01:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define TRANSLITERATION_ALL
 #include <numtotext_cjk.hxx>
 #include <data/numberchar.h>
-#include <data/bullet.h>
+#include <bullet.h>
 
 using namespace com::sun::star::uno;
 using namespace rtl;
