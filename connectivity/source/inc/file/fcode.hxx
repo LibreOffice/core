@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:48:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ namespace connectivity
             sal_uInt16 getRowPos() const {return m_nRowPos;}
             virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
-            void bindValue(const OValueRefRow& _pRow);                      // Bindung an den Wert, den der Operand repräsentiert
+            void bindValue(const OValueRefRow& _pRow);                      // Bindung an den Wert, den der Operand repraesentiert
 
             TYPEINFO();
         };
@@ -173,7 +173,7 @@ namespace connectivity
             TYPEINFO();
         };
 
-        // Parameter für ein Prädikat
+        // Parameter fuer ein Praedikat
         class OOperandParam : public OOperandRow
         {
         public:
@@ -265,7 +265,7 @@ namespace connectivity
         {
         public:
             virtual void Exec(OCodeStack&) = 0;
-            virtual sal_uInt16 getRequestedOperands() const;            // Anzahl benötigter Operanden
+            virtual sal_uInt16 getRequestedOperands() const;    // Anzahl benoetigter Operanden
                                                                 // Standard ist 2
             TYPEINFO();
         };
