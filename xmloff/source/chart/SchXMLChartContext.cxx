@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-26 15:37:47 $
+ *  last change: $Author: bm $ $Date: 2001-03-27 13:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 #endif
 
 using namespace com::sun::star;
+
+#define SCH_BUILDCHART(xDoc) if( xDoc->hasControllersLocked() ) {\
+    xDoc->unlockControllers();\
+    xDoc->lockControllers(); }
 
 enum SchXMLChartType
 {
@@ -372,6 +376,18 @@ void SchXMLChartContext::EndElement()
                 {
                     DBG_ERROR( "Property String for Title not available" );
                 }
+                uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                if( xShape.is())
+                {
+                    // perform build chart with new title string
+                    // so that setting the position works correctly
+                    if( xDoc.is())
+                    {
+                        xDoc->unlockControllers();
+                        xDoc->lockControllers();
+                    }
+                    xShape->setPosition( maMainTitlePos );
+                }
             }
         }
         if( maSubTitle.getLength())
@@ -388,6 +404,18 @@ void SchXMLChartContext::EndElement()
                 catch( beans::UnknownPropertyException )
                 {
                     DBG_ERROR( "Property String for Title not available" );
+                }
+                uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                if( xShape.is())
+                {
+                    // perform build chart with new title string
+                    // so that setting the position works correctly
+                    if( xDoc.is())
+                    {
+                        xDoc->unlockControllers();
+                        xDoc->lockControllers();
+                    }
+                    xShape->setPosition( maSubTitlePos );
                 }
             }
         }
@@ -477,6 +505,14 @@ void SchXMLChartContext::EndElement()
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if( xModel.is())
         xModel->unlockControllers();
+
+    // set absolute legend position after (BuildChart!)
+    if( maLegendPos.X != -1 )
+    {
+        uno::Reference< drawing::XShape > xLegendShape( xDoc->getLegend(), uno::UNO_QUERY );
+        if( xLegendShape.is())
+            xLegendShape->setPosition( maLegendPos );
+    }
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(
@@ -501,20 +537,15 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                 uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
                 if( xProp.is())
                 {
-                    sal_Bool bHasControllersLocked = xDoc->hasControllersLocked();
-                    if( bHasControllersLocked )
-                        xDoc->unlockControllers();
-
                     uno::Any aTrueBool;
                     aTrueBool <<= (sal_Bool)(sal_True);
                     xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasMainTitle" ), aTrueBool );
 
-                    if( bHasControllersLocked )
-                        xDoc->lockControllers();
+                    SCH_BUILDCHART( xDoc );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
-                                                   rLocalName, maMainTitle, xTitleShape );
+                                                   rLocalName, maMainTitle, xTitleShape, maMainTitlePos );
             }
             break;
 
@@ -524,25 +555,19 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                 uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
                 if( xProp.is())
                 {
-                    sal_Bool bHasControllersLocked = xDoc->hasControllersLocked();
-                    if( bHasControllersLocked )
-                        xDoc->unlockControllers();
-
                     uno::Any aTrueBool;
                     aTrueBool <<= (sal_Bool)(sal_True);
                     xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasSubTitle" ), aTrueBool );
-
-                    if( bHasControllersLocked )
-                        xDoc->lockControllers();
+                    SCH_BUILDCHART( xDoc );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getSubTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
-                                                   rLocalName, maSubTitle, xTitleShape );
+                                                   rLocalName, maSubTitle, xTitleShape, maSubTitlePos );
             }
             break;
 
         case XML_TOK_CHART_LEGEND:
-            pContext = new SchXMLLegendContext( mrImportHelper, GetImport(), rLocalName );
+            pContext = new SchXMLLegendContext( mrImportHelper, GetImport(), rLocalName, maLegendPos );
             break;
 
         case XML_TOK_CHART_TABLE:
@@ -562,12 +587,14 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
 
 SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
                                         const rtl::OUString& rLocalName,
-                                        rtl::OUString& aTitle,
-                                        uno::Reference< drawing::XShape >& xTitleShape ) :
+                                        rtl::OUString& rTitle,
+                                        uno::Reference< drawing::XShape >& xTitleShape,
+                                        awt::Point& rPosition ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
-        maTitle( aTitle ),
-        mxTitleShape( xTitleShape )
+        mrTitle( rTitle ),
+        mxTitleShape( xTitleShape ),
+        mrPosition( rPosition )
 {
 }
 
@@ -578,12 +605,9 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     rtl::OUString aValue;
-    rtl::OUString aServiceName;
-    rtl::OUString sAutoStyleName;
 
-    awt::Point aPosition;
     if( mxTitleShape.is())
-        aPosition = mxTitleShape->getPosition();
+        mrPosition = mxTitleShape->getPosition();
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -595,14 +619,14 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
         if( nPrefix == XML_NAMESPACE_SVG )
         {
             if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_x )))
-                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.X, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( mrPosition.X, aValue );
             else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_y )))
-                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.Y, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( mrPosition.Y, aValue );
         }
         else if( nPrefix == XML_NAMESPACE_CHART )
         {
             if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
-                sAutoStyleName = aValue;
+                msAutoStyleName = aValue;
         }
     }
 
@@ -615,13 +639,12 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
         }
-        mxTitleShape->setPosition( aPosition );
     }
 }
 
@@ -635,7 +658,7 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_TEXT &&
         rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_p )))
     {
-        pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maTitle );
+        pContext = new SchXMLParagraphContext( GetImport(), rLocalName, mrTitle );
     }
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -646,9 +669,11 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
 // ----------------------------------------
 
 SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
-                                          SvXMLImport& rImport, const rtl::OUString& rLocalName ) :
+                                          SvXMLImport& rImport, const rtl::OUString& rLocalName,
+                                          com::sun::star::awt::Point& rPosition ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrImportHelper( rImpHelper )
+        mrImportHelper( rImpHelper ),
+        mrPosition( rPosition )
 {
 }
 
@@ -666,14 +691,8 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         aTrueBool <<= (sal_Bool)(sal_True);
         try
         {
-            sal_Bool bHasControllersLocked = xDoc->hasControllersLocked();
-            if( bHasControllersLocked )
-                xDoc->unlockControllers();
-
             xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), aTrueBool );
-
-            if( bHasControllersLocked )
-                 xDoc->lockControllers();
+            SCH_BUILDCHART( xDoc );
         }
         catch( beans::UnknownPropertyException )
         {
@@ -727,10 +746,10 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 break;
 
             case XML_TOK_LEGEND_X:
-                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.X, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( mrPosition.X, aValue );
                 break;
             case XML_TOK_LEGEND_Y:
-                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.Y, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( mrPosition.Y, aValue );
                 break;
             case XML_TOK_LEGEND_STYLE_NAME:
                 sAutoStyleName = aValue;
@@ -751,10 +770,6 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
         }
     }
-
-    // set absolute position
-    if( xLegendShape.is())
-        xLegendShape->setPosition( aPosition );
 }
 
 SchXMLLegendContext::~SchXMLLegendContext()

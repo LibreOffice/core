@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 18:00:35 $
+ *  last change: $Author: bm $ $Date: 2001-03-27 13:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ struct SchXMLAxis
     sal_Int8 nIndexInCategory;
     rtl::OUString aName;
     rtl::OUString aTitle;
+    com::sun::star::awt::Point aPosition;
 
     SchXMLAxis() : eClass( SCH_XML_AXIS_UNDEF ), nIndexInCategory( 0 ) {}
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-22 12:31:46 $
+ *  last change: $Author: bm $ $Date: 2001-03-27 13:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,6 +720,7 @@ void SchXMLAxisContext::EndElement()
     uno::Any aTrueBool;
     aTrueBool <<= (sal_Bool)(sal_True);
     sal_Bool bHasTitle = ( maCurrentAxis.aTitle.getLength() > 0 );
+    uno::Reference< frame::XModel > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
 
     switch( maCurrentAxis.eClass )
     {
@@ -754,6 +755,18 @@ void SchXMLAxisContext::EndElement()
                             catch( beans::UnknownPropertyException )
                             {
                                 DBG_ERROR( "Property String for Title not available" );
+                            }
+                            uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                            if( xShape.is())
+                            {
+                                // perform build chart with new title string
+                                // so that setting the position works correctly
+                                if( xDoc.is())
+                                {
+                                    xDoc->unlockControllers();
+                                    xDoc->lockControllers();
+                                }
+                                xShape->setPosition( maCurrentAxis.aPosition );
                             }
                         }
                     }
@@ -807,6 +820,18 @@ void SchXMLAxisContext::EndElement()
                             {
                                 DBG_ERROR( "Property String for Title not available" );
                             }
+                            uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                            if( xShape.is())
+                            {
+                                // perform build chart with new title string
+                                // so that setting the position works correctly
+                                if( xDoc.is())
+                                {
+                                    xDoc->unlockControllers();
+                                    xDoc->lockControllers();
+                                }
+                                xShape->setPosition( maCurrentAxis.aPosition );
+                            }
                         }
                     }
                 }
@@ -858,6 +883,18 @@ void SchXMLAxisContext::EndElement()
                             {
                                 DBG_ERROR( "Property String for Title not available" );
                             }
+                            uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                            if( xShape.is())
+                            {
+                                // perform build chart with new title string
+                                // so that setting the position works correctly
+                                if( xDoc.is())
+                                {
+                                    xDoc->unlockControllers();
+                                    xDoc->lockControllers();
+                                }
+                                xShape->setPosition( maCurrentAxis.aPosition );
+                            }
                         }
                     }
                 }
@@ -896,7 +933,8 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             uno::Reference< drawing::XShape > xTitleShape = getTitleShape();
             pContext = new SchXMLTitleContext( mrImportHelper, rImport, rLocalName,
                                                maCurrentAxis.aTitle,
-                                               xTitleShape );
+                                               xTitleShape,
+                                               maCurrentAxis.aPosition );
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_grid )))
         {

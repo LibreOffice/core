@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-29 12:32:22 $
+ *  last change: $Author: bm $ $Date: 2001-03-27 13:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ private:
     SchXMLImportHelper& mrImportHelper;
 
     rtl::OUString maMainTitle, maSubTitle;
+    com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
     sal_Bool mbHasOwnTable;
 
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress > maSeriesAddresses;
@@ -124,14 +125,17 @@ class SchXMLTitleContext : public SvXMLImportContext
 {
 private:
     SchXMLImportHelper& mrImportHelper;
-    rtl::OUString& maTitle;
+    rtl::OUString& mrTitle;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTitleShape;
+    rtl::OUString msAutoStyleName;
+    com::sun::star::awt::Point& mrPosition;
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                        rtl::OUString& aTitle,
-                        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape );
+                        rtl::OUString& rTitle,
+                        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape,
+                        com::sun::star::awt::Point& rPosition );
     virtual ~SchXMLTitleContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference<
@@ -148,10 +152,12 @@ class SchXMLLegendContext : public SvXMLImportContext
 {
 private:
     SchXMLImportHelper& mrImportHelper;
+    com::sun::star::awt::Point& mrPosition;
 
 public:
     SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
-                         SvXMLImport& rImport, const rtl::OUString& rLocalName );
+                         SvXMLImport& rImport, const rtl::OUString& rLocalName,
+                         com::sun::star::awt::Point& rPosition );
     virtual ~SchXMLLegendContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
