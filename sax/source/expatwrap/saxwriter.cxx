@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-04 15:57:55 $
+ *  last change: $Author: jbu $ $Date: 2001-03-01 12:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,19 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
             OUString::createFromAscii( "unexpected end of document" ),
             Reference< XInterface >() , Any() );
     }
-    m_out->closeOutput();
+    try
+    {
+        m_out->closeOutput();
+    }
+    catch( IOException & e )
+    {
+        Any a;
+        a <<= e;
+        throw SAXException(
+            OUString::createFromAscii( "IO exception during closing the IO Stream" ),
+            Reference< XInterface > (),
+            a );
+    }
 }
 
 
