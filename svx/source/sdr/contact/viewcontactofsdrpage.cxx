@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:32:49 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,29 @@ namespace sdr
                                 if(rView.IsPageBorderVisible())
                                 {
                                     DrawPaperBorder(rDisplayInfo);
+                                }
+                            }
+                            else
+                            {
+                                // #i29291#
+                                // This is a rare and special case when we draw a SdrPage
+                                // that is not visible on any view and has no masterpage.
+                                // In this case, the page should paint its paper rect white
+                                // instead of leaving it black.
+                                // This case is used f.e. from the gallery to paint a thumb preview
+                                if( !GetSdrPage().IsMasterPage() && !GetSdrPage().TRG_HasMasterPage() )
+                                {
+                                    // get page color
+                                    Color aColor( pPageView->GetApplicationDocumentColor() );
+                                    if(aColor == COL_AUTO)
+                                    {
+                                        aColor = Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
+                                    }
+
+                                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+                                    pOut->SetBackground(Wallpaper(aColor));
+                                    pOut->SetLineColor();
+                                    pOut->Erase();
                                 }
                             }
 
