@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-15 14:31:26 $
+ *  last change: $Author: ama $ $Date: 2002-03-15 11:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1498,6 +1498,25 @@ Point SwRootFrm::GetPagePos( USHORT nPageNum ) const
     }
     return pPage->Frm().Pos();
 }
+
+/*************************************************************************
+|*
+|*  SwRootFrm::IsDummyPage(USHORT)
+|*
+|*  Description: Returns TRUE, when the given physical pagenumber does't exist
+|*               or this page is an empty page.
+|*************************************************************************/
+BOOL SwRootFrm::IsDummyPage( USHORT nPageNum ) const
+{
+    if( !Lower() || !nPageNum || nPageNum > GetPageNum() )
+        return TRUE;
+
+    const SwPageFrm *pPage = (const SwPageFrm*)Lower();
+    while( pPage && nPageNum < pPage->GetPhyPageNum() )
+        pPage = (const SwPageFrm*)pPage->GetNext();
+    return pPage ? pPage->IsEmptyPage() : TRUE;
+}
+
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:25:36 $
+ *  last change: $Author: ama $ $Date: 2002-03-15 11:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,6 +663,11 @@ USHORT ViewShell::GetNumPages()
     //Es kann sein, das noch kein Layout existiert weil die Methode vom
     //Root-Ctor gerufen wird.
     return GetLayout() ? GetLayout()->GetPageNum() : 0;
+}
+
+sal_Bool ViewShell::IsDummyPage( USHORT nPageNum ) const
+{
+    return GetLayout() ? GetLayout()->IsDummyPage( nPageNum ) : 0;
 }
 
 /*************************************************************************

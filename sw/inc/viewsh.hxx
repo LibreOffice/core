@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-03-15 07:32:04 $
+ *  last change: $Author: ama $ $Date: 2002-03-15 11:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,7 @@ public:
     Point GetPagePos( sal_uInt16 nPageNum ) const;
 
     sal_uInt16 GetNumPages();   //Anzahl der aktuellen Seiten Layout erfragen.
+    sal_Bool   IsDummyPage( USHORT nPageNum ) const;  // An empty page?
 
     //Invalidierung der ersten Sichtbaren Seite fuer alle Shells im Ring.
     void SetFirstVisPageInvalid();
