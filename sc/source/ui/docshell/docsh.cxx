@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 17:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -962,8 +963,7 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3 oder 4 Datei
             aDocStm->SetKey(pStor->GetKey());               // Passwort setzen
             aDocStm->SetSize(0);
             bRet = aDocument.Save( *aDocStm, pProgress );
-            if ( !bRet )
-                DBG_ERROR( "Fehler beim Speichern" );
+            DBG_ASSERT( bRet, "Error while saving" );
 
             if ( aDocument.HasLostData() )
             {
@@ -1088,8 +1088,7 @@ BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
 
         aDocument.LoadPool( *aPoolStm, TRUE );      // TRUE: RefCounts aus Datei laden
         bRet = (aPoolStm->GetError() == 0);
-        if ( !bRet )
-            DBG_ERROR( "Fehler im Pool-Stream" );
+        DBG_ASSERT( bRet, "Error in pool stream" );
 
         //  UpdateStdNames is called from ScDocument::Load, but is also needed
         //  if only the styles are loaded!
