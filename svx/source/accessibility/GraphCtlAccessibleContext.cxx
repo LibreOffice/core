@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:24:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -155,7 +155,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -251,7 +251,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
             mxShapes[pObj] = pAcc;
 
             // Create event and inform listeners of the object creation.
-            CommitChange( AccessibleEventId::ACCESSIBLE_CHILD_EVENT, makeAny( xAccessibleShape ), makeAny( Reference<XAccessible>() ) );
+            CommitChange( AccessibleEventId::CHILD, makeAny( xAccessibleShape ), makeAny( Reference<XAccessible>() ) );
         }
     }
 
@@ -267,7 +267,7 @@ Reference< XAccessibleContext > SAL_CALL SvxGraphCtrlAccessibleContext::getAcces
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::contains( const awt::Point& rPoint ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     // no guard -> done in getSize()
     awt::Size aSize (getSize());
@@ -279,7 +279,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::contains( const awt::Point& rPo
 
 //-----------------------------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt( const awt::Point& rPoint ) throw( RuntimeException )
+Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -662,8 +662,8 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
 {
     Sequence< OUString > aSNs( 3 );
 
-    aSNs[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.Accessible" ) );
-    aSNs[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.AccessibleContext" ) );
+    aSNs[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.Accessible" ) );
+    aSNs[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
     aSNs[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AccessibleGraphControl" ) );
 
     return aSNs;
@@ -681,7 +681,7 @@ Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( 
 
 OUString SvxGraphCtrlAccessibleContext::getServiceName( void ) throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.AccessibleContext" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
 }
 
 //=====  XAccessibleSelection =============================================
@@ -769,7 +769,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::deselectSelectedAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
+void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -953,16 +953,16 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& rBC, const SfxHint& 
                         AccessibleShape* pShape = (*iter).second;
 
                         if( NULL != pShape )
-                            pShape->CommitChange( AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT, uno::Any(), uno::Any() );
+                            pShape->CommitChange( AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any() );
                     }
                 }
                 break;
 
             case HINT_OBJINSERTED:
-                CommitChange( AccessibleEventId::ACCESSIBLE_CHILD_EVENT, makeAny( getAccessible( pSdrHint->GetObject() ) ) , uno::Any());
+                CommitChange( AccessibleEventId::CHILD, makeAny( getAccessible( pSdrHint->GetObject() ) ) , uno::Any());
                 break;
             case HINT_OBJREMOVED:
-                CommitChange( AccessibleEventId::ACCESSIBLE_CHILD_EVENT, uno::Any(), makeAny( getAccessible( pSdrHint->GetObject() ) )  );
+                CommitChange( AccessibleEventId::CHILD, uno::Any(), makeAny( getAccessible( pSdrHint->GetObject() ) )  );
                 break;
             case HINT_MODELCLEARED:
                 dispose();
