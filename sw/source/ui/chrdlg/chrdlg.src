@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:49:30 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ String STR_TEXTCOLL_HEADER
     TEXT[ hebrew ] = " (Absatzvorlage:";
     TEXT[ hindi ] = "(परिच्छेद शैली: ";
     TEXT[ slovak ] = "Štýl odstavca:";
+    TEXT[ hungarian ] = "(Bekezdésstílus:";
+    TEXT[ slovenian ] = "(Slog odstavka:";
 };
 String STR_PAGEFMT_HEADER
 {
@@ -123,6 +125,8 @@ String STR_PAGEFMT_HEADER
     TEXT[ hebrew ] = " ‮(סגנון:‬";
     TEXT[ hindi ] = "(पृष्ठ शैली: ";
     TEXT[ slovak ] = "Štýl stránky:";
+    TEXT[ hungarian ] = "(Oldalstílus:";
+    TEXT[ slovenian ] = "(Slog strani:";
 };
 String SW_STR_NONE
 {
@@ -155,6 +159,8 @@ String SW_STR_NONE
     Text[ hebrew ] = "‮[ללא]‬";
     Text[ hindi ] = "[कोई नहीं]";
     Text[ slovak ] = "[Nič]";
+    Text[ hungarian ] = "[Nincs]";
+    Text[ slovenian ] = "[brez]";
 };
 InfoBox MSG_ILLEGAL_PAGENUM
 {
@@ -190,7 +196,10 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ hebrew ] = "Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden.";
     MESSAGE[ hindi ] = "वर्तमान पृष्ठ केलिए पृष्ठ संख्या को लागू नहीं कर सकते है ।  सम संख्या को बायाँ ओर के पृष्ठ में , विषम संख्या को दाहिनी ओर के पृष्ठ में उपयोग करता है ।";
     MESSAGE[ slovak ] = "Na aktuálnej strane nemožno použiť číslovanie strán. Párne čísla možno použiť len na ľavých stránkach, nepárne čísla na pravých stránkach.";
+    MESSAGE[ hungarian ] = "Az aktuális oldalra nem kerülhet oldalszám. Bal oldalon páros, jobb oldalon páratlan számok állhatnak.";
+    MESSAGE[ slovenian ] = "Na trenutni strani ni mogoče uporabiti številk strani. Sode številke lahko uporabljate na levih straneh, lihe pa na desnih.";
 };
+
 
 
 
