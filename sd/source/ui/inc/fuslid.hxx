@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuslid.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,20 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUSLID_HXX
-#define _SD_FUSLID_HXX
+#ifndef SD_FU_SLIDE_HXX
+#define SD_FU_SLIDE_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class SdSlideViewShell;
-class SdSlideView;
-class SdWindow;
 class SdDrawDocument;
+
+namespace sd {
+
+class SlideView;
+class SlideViewShell;
+class Window;
 
 
 /*************************************************************************
@@ -78,19 +81,19 @@ class SdDrawDocument;
 |*
 \************************************************************************/
 
-class FuSlide : public FuPoor
+class FuSlide
+    : public FuPoor
 {
- protected:
-    SdSlideViewShell* pSlViewShell;
-    SdSlideView*      pSlView;
-
- public:
+public:
     TYPEINFO();
 
-    FuSlide(SdSlideViewShell* pViewSh, SdWindow* pWin,
-            SdSlideView* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
-
-    virtual ~FuSlide();
+    FuSlide (
+        SlideViewShell* pViewSh,
+        ::sd::Window* pWin,
+        SlideView* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuSlide (void);
 
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
@@ -102,7 +105,12 @@ class FuSlide : public FuPoor
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
+
+protected:
+    SlideViewShell* pSlViewShell;
+    SlideView*    pSlView;
 };
 
+} // end of namespace sd
 
-#endif      // _SD_FUSLID_HXX
+#endif
