@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-10 16:22:15 $
+ *  last change: $Author: tbe $ $Date: 2002-12-12 18:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4114,22 +4114,6 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
         aHideBtn.Show( pMen->HasHideButton() );
     }
     Invalidate();
-
-    // TODO: send CREATE/DESTROY instead of VCLEVENT_WINDOW_HIDE/VCLEVENT_WINDOW_SHOW when available again
-    if ( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
-    {
-        // access bridge must be notified about the removal of the old accessible menu context by an ACCESSIBLE_CHILD_EVENT
-        ImplCallEventListeners( VCLEVENT_WINDOW_HIDE, this );
-
-        // notify listeners, that a new menubar was set
-        ImplCallEventListeners( VCLEVENT_WINDOW_MENUBAR, (void*) pMen );
-
-        // free the reference to the accessible component
-        SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
-
-        // access bridge must be notified about the addition of the new accessible menu context by an ACCESSIBLE_CHILD_EVENT
-        ImplCallEventListeners( VCLEVENT_WINDOW_SHOW, this );
-    }
 }
 
 void MenuBarWindow::ShowButtons( BOOL bClose, BOOL bFloat, BOOL bHide )
