@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: abi $ $Date: 2001-06-08 08:53:55 $
+#   last change: $Author: abi $ $Date: 2001-06-13 16:26:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ CFLAGS +=  -DHAVE_EXPAT_H
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=/GR
+.ENDIF
 
 # --- General -----------------------------------------------------
 
@@ -93,7 +94,6 @@ SLOFILES=\
     $(SLO)$/databases.obj
 
 # --- Targets ----------------------------------------------------------
-.ENDIF
 
 .INCLUDE: target.mk
 
