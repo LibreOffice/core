@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 16:22:14 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     KSHORT nRealWidth;      // "echte" Zeilenbreite
     KSHORT nWidth;          // "virtuelle" Zeilenbreite
     KSHORT nLineHeight;     // endgueltige Hoehe nach CalcLine
+    KSHORT nLineNettoHeight;   // line height without spacing
     KSHORT nForcedLeftMargin;   // Verschiebung des linken Rands wg. Rahmen
 
     INT16  nMinLeading;     // minimum number of chars before hyphenation point
@@ -640,8 +641,12 @@ public:
 
     inline xub_StrLen GetLineStart() const { return nLineStart; }
     inline void SetLineStart( const xub_StrLen nNew ) { nLineStart = nNew; }
+
+    // these are used during fly calculation
     inline KSHORT GetLineHeight() const { return nLineHeight; }
     inline void SetLineHeight( const KSHORT nNew ) { nLineHeight = nNew; }
+    inline KSHORT GetLineNettoHeight() const { return nLineNettoHeight; }
+    inline void SetLineNettoHeight( const KSHORT nNew ) { nLineNettoHeight = nNew; }
 
     inline const SwLinePortion *GetUnderFlow() const { return pUnderFlow; }
     inline SwLinePortion *GetUnderFlow() { return pUnderFlow; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-23 08:02:42 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,6 +1035,7 @@ void SwTxtFormatInfo::CtorInit( SwTxtFrm *pNewFrm, const sal_Bool bNewInterHyph,
     nForcedLeftMargin = 0;
     pRest = 0;
     nLineHeight = 0;
+    nLineNettoHeight = 0;
     SetLineStart(0);
     Init();
 }
@@ -1138,6 +1139,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nRealWidth = KSHORT(nActWidth);
     nWidth = nRealWidth;
     nLineHeight = 0;
+    nLineNettoHeight = 0;
     nForcedLeftMargin = 0;
 
     nMinLeading = 0;
@@ -1409,9 +1411,9 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
 #endif
         ;
 
-    sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
+    const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
             pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
-    sal_Bool bRotation = pFnt->GetOrientation();
+    const sal_Bool bRotation = pFnt->GetOrientation();
 
     if( bFamily || bRotation )
     {

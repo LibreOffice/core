@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,21 @@ SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFnt )
     : aExpand(rExpand), pFnt(pFnt), nViewWidth(0), nNextOffset(0),
       bFollow( sal_False ), bHasFollow( sal_False )
 {
+    SetWhichPor( POR_FLD );
+}
+
+SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
+    : aExpand( rFld.GetExp() ),
+      bCenter( rFld.IsCenter() ),
+      bFollow( rFld.IsFollow() ),
+      bHasFollow( rFld.HasFollow() ),
+      bHide( rFld.IsHide() ),
+      bLeft( rFld.IsLeft() ),
+      nNextOffset( rFld.GetNextOffset() )
+{
+    if ( rFld.HasFont() )
+        pFnt = new SwFont( *rFld.GetFont() );
+
     SetWhichPor( POR_FLD );
 }
 

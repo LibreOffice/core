@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-19 09:21:16 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
                 // The distance between two different scripts is set
                 // to 20% of the fontheight.
-                if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) )
+                if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
+                    nTmp != rInf.GetTxt().Len() )
                 {
                     USHORT nDist = rInf.GetFont()->GetHeight()/5;
                     if( nDist )
@@ -982,10 +983,6 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     // maximal bis zum naechsten Attributwchsel.
     xub_StrLen nNextAttr = GetNextAttr();
     xub_StrLen nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
-
-    // At the end of a multi-line part we've to break. Obsolete?
-//    if( GetMulti() && nNextChg > rInf.GetIdx() + GetMulti()->GetLen() )
-//        nNextChg = rInf.GetIdx() + GetMulti()->GetLen();
 
     nNextAttr = pScriptInfo->NextScriptChg( rInf.GetIdx() );
     if( nNextChg > nNextAttr )
@@ -1230,6 +1227,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 delete rInf.GetFly();
                 rInf.SetFly( 0 );
             }
+
             return rInf.GetFly();
         }
         // Ein fieser Sonderfall: ein Rahmen ohne Umlauf kreuzt den
@@ -1283,7 +1281,10 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd );
                 else
                     pTmp = new SwDoubleLinePortion( *pCreate, nEnd );
+
                 delete pCreate;
+                CalcFlyWidth( rInf );
+
                 return pTmp;
             }
         }
@@ -1415,6 +1416,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     sal_Bool bBuild = sal_True;
     SetFlyInCntBase( sal_False );
     GetInfo().SetLineHeight( 0 );
+    GetInfo().SetLineNettoHeight( 0 );
     GetInfo().SetPaintOfst( 0 );
 
     // Recycling muss bei geaenderter Zeilenhoehe unterdrueckt werden
@@ -1425,6 +1427,14 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     pCurr->SetEndHyph( sal_False );
     pCurr->SetMidHyph( sal_False );
 
+    // fly positioning can make it necessary format a line several times
+    // for this, we have to keep a copy of our rest portion
+    SwLinePortion* pFld = GetInfo().GetRest();
+    SwFldPortion* pSaveFld = 0;
+
+    if ( pFld && pFld->InFldGrp() )
+        pSaveFld = new SwFldPortion( *((SwFldPortion*)pFld) );
+
     // Hier folgt bald die Unterlaufpruefung.
     while( bBuild )
     {
@@ -1432,12 +1442,14 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         sal_Bool bOldArrowDone = GetInfo().IsArrowDone();
         GetInfo().SetFtnInside( sal_False );
         FeedInf( GetInfo() );
+
         Recycle( GetInfo() );   // initialisiert sich oder rettet Portions
 
         if( bOldNumDone )
             GetInfo().SetNumDone( sal_True );
         if( bOldArrowDone )
             GetInfo().SetArrowDone( sal_True );
+
         BuildPortions( GetInfo() );
         if( GetInfo().IsStop() )
         {
@@ -1467,18 +1479,31 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         }
 
         // bBuild entscheidet, ob noch eine Ehrenrunde gedreht wird
-        bBuild = !GetInfo().GetLineHeight() &&
+        bBuild = pCurr->GetRealHeight() > GetInfo().GetLineHeight() &&
                 ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow( GetInfo() )
                 || GetInfo().CheckFtnPortion( pCurr ) );
         if( bBuild )
         {
             GetInfo().SetNumDone( bOldNumDone );
             GetInfo().ResetMaxWidthDiff();
+
+            // delete old rest
+            if ( GetInfo().GetRest() )
+                delete GetInfo().GetRest();
+
+            // set original rest portion
+            if ( pSaveFld )
+                GetInfo().SetRest( new SwFldPortion( *pSaveFld ) );
+
             pCurr->SetLen( 0 );
             pCurr->Width(0);
             pCurr->Truncate();
         }
     }
+
+    // delete master copy of rest portion
+    if ( pSaveFld )
+        delete pSaveFld;
 
     xub_StrLen nNewStart = nStart + pCurr->GetLen();
 

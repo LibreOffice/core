@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-19 09:26:03 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,10 +404,12 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
 }
 
 /*************************************************************************
- * SwTxtFly::ChkFlyUnderflow()
- * ueberprueft, ob Textportions der aktuellen Zeile mit Objekten
- * (absatz/seitengeb.) ueberlappen.
- * Dazu wird SwTxtFly.GetFrm(..) benutzt.
+ *                      SwTxtFly::ChkFlyUnderflow()
+ * This is called after the real height of the line has been calculated
+ * Therefore it is possible, that more flys from below intersect with the
+ * line, or that flys from above do not intersect with the line anymore
+ * We check this and return true if so, meaning that the line has to be
+ * formatted again
  *************************************************************************/
 
 sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
@@ -416,6 +418,7 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
     if( GetCurr() )
     {
         // Erst pruefen wir, ob ueberhaupt ein Fly mit der Zeile ueberlappt.
+        // = pCurr->GetRealHeight()
         const long nHeight = GetLineHeight();
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
         SwRect aInter( rInf.GetTxtFly()->GetFrm( aLine ) );
@@ -425,22 +428,55 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
         // Nun ueberpruefen wir jede Portion, die sich haette senken koennen,
         // ob sie mit dem Fly ueberlappt.
         const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
+        aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() - GetCurr()->Height();
+        aLine.Height( GetCurr()->Height() );
+
         while( pPos )
         {
+            aLine.Width( pPos->Width() );
+            aInter = rInf.GetTxtFly()->GetFrm( aLine );
+
+            // new flys from below?
             if( !pPos->IsFlyPortion() )
             {
-                aLine.Width( pPos->Width() );
-                aInter = rInf.GetTxtFly()->GetFrm( aLine );
                 if( aInter.IsOver( aLine ) )
                 {
                     aInter._Intersection( aLine );
                     if( aInter.HasArea() )
                     {
                         rInf.SetLineHeight( KSHORT(nHeight) );
+                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
                         return sal_True;
                     }
                 }
             }
+            else
+            {
+                // the fly portion is not anylonger intersected by a fly
+                if ( ! aInter.IsOver( aLine ) )
+                {
+                    rInf.SetLineHeight( KSHORT(nHeight) );
+                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                    return sal_True;
+                }
+                else
+                {
+                    aInter._Intersection( aLine );
+
+                    // no area means a fly has become invalid because of
+                    // lowering the line => reformat the line
+                    // we also have to reformat the line, if the fly size
+                    // differs from the intersection intervals size
+                    if( ! aInter.HasArea() ||
+                        ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
+                    {
+                        rInf.SetLineHeight( KSHORT(nHeight) );
+                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                        return sal_True;
+                    }
+                }
+            }
+
             aLine.Left( aLine.Left() + pPos->Width() );
             pPos = pPos->GetPortion();
         }
@@ -457,43 +493,50 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
 
 // Durch Flys kann sich der rechte Rand verkuerzen.
 
-void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf ) const
+void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 {
-    if( GetMulti() )
+    if( GetMulti() || rInf.GetFly() )
         return;
+
     SwTxtFly *pTxtFly = rInf.GetTxtFly();
     if( !pTxtFly->IsOn() || rInf.IsIgnoreFly() )
         return;
 
     register const SwLinePortion *pLast = rInf.GetLast();
 
-    long nHeight;
     long nAscent;
-    sal_Bool bOldFly = 0 != rInf.GetFly();
-    // aLine wird dokumentglobal
-    if( bOldFly )
+    long nTop = Y();
+    long nHeight;
+
+    if( rInf.GetLineHeight() )
     {
-        // Wenn CalcFlyWidth aus Underflow() gerufen wird, kann eine FlyPortion
-        // gesetzt sein, die Breite muss neu berechnet werden, die Hoehe ist
-        // richtig und muss als Zeilenhoehe genutzt werden
-        nHeight = rInf.GetFly()->Height();
-        nAscent = rInf.GetFly()->GetAscent();
-        delete rInf.GetFly(); // Die alte FlyPortion hat ihre Schuldigkeit getan
-        rInf.SetFly( 0 );
-    }
-    else if( rInf.GetLineHeight() )
-    {
-        nHeight = rInf.GetLineHeight();
+        // real line height has already been calculated, we only have to
+        // search for intersections in the lower part of the strip
         nAscent = pCurr->GetAscent();
+        nHeight = rInf.GetLineNettoHeight();
+        nTop += rInf.GetLineHeight() - nHeight;
     }
     else
     {
-        nHeight = pLast->Height();
         nAscent = pLast->GetAscent();
+        nHeight = pLast->Height();
+
+        // if not already done, me make a first guess for the lines real height
+        // for savety reasons we do not want pCurr to be changed
+        if ( ! pCurr->GetRealHeight() )
+            CalcRealHeight();
+
+        if ( pCurr->GetRealHeight() > nHeight )
+            nTop += pCurr->GetRealHeight() - nHeight;
+        else
+            // important for fixed space between lines
+            nHeight = pCurr->GetRealHeight();
     }
+
     const long nLeftMar = GetLeftMargin();
     const long nLeftMin = (rInf.X() || GetDropLeft()) ? nLeftMar : GetLeftMin();
-    SwRect aLine( rInf.X() + nLeftMin, Y(),  rInf.RealWidth() - rInf.X()
+
+    SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
                   + nLeftMar - nLeftMin , nHeight );
 
     SwRect aInter( pTxtFly->GetFrm( aLine ) );
@@ -593,7 +636,8 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf ) const
         }
 
         rInf.SetFly( pFly );
-        if( !bOldFly || pFly->Fix() < rInf.Width() )
+
+        if( pFly->Fix() < rInf.Width() )
             rInf.Width( pFly->Fix() );
     }
 }

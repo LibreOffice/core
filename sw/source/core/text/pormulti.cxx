@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 12:57:30 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,12 +1494,14 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwMultiPortion& rMulti )
 {
     SwTwips nMaxWidth = rInf.Width();
+    KSHORT nOldX;
 
     if( rMulti.HasBrackets() )
     {
         xub_StrLen nOldIdx = rInf.GetIdx();
         rInf.SetIdx( ((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart );
         SeekAndChg( rInf );
+        nOldX = KSHORT(GetInfo().X());
         ((SwDoubleLinePortion&)rMulti).FormatBrackets( rInf, nMaxWidth );
         rInf.SetIdx( nOldIdx );
     }
@@ -1695,8 +1697,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             rInf.SetIdx( nStartIdx );
         }
         if( ((SwDoubleLinePortion&)rMulti).GetBrackets() )
+        {
             rMulti.Width( rMulti.Width() +
-                ((SwDoubleLinePortion&)rMulti).BracketWidth() );
+                    ((SwDoubleLinePortion&)rMulti).BracketWidth() );
+            GetInfo().X( nOldX );
+        }
     }
     else
     {

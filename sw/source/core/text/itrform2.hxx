@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:27:23 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ class SwTxtFormatter : public SwTxtPainter
 
 
     // Berechnung des emulierten rechten Rands
-    void CalcFlyWidth( SwTxtFormatInfo &rInf ) const;
+    void CalcFlyWidth( SwTxtFormatInfo &rInf );
 
     // wird von SwTxtFormatter wegen UpdatePos ueberladen
     void CalcAdjustLine( SwLineLayout *pCurr );
