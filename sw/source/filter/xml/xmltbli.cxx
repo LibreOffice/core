@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
+ *  last change: $Author: mib $ $Date: 2001-05-15 08:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ SV_IMPL_PTRARR(SwXMLTableCells_Impl,SwXMLTableCellPtr)
 class SwXMLTableRow_Impl
 {
     OUString aStyleName;
+    OUString aDfltCellStyleName;
 
     SwXMLTableCells_Impl aCells;
 
@@ -368,29 +369,34 @@ class SwXMLTableRow_Impl
 
 public:
 
-    SwXMLTableRow_Impl( const OUString& rStyleName, sal_uInt32 nCells );
+    SwXMLTableRow_Impl( const OUString& rStyleName, sal_uInt32 nCells,
+                         const OUString *pDfltCellStyleName = 0 );
     ~SwXMLTableRow_Impl() {}
 
     inline SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol ) const;
 
-    inline void Set( const OUString& rStyleName );
+    inline void Set( const OUString& rStyleName,
+                     const OUString& rDfltCellStyleName );
 
     void Expand( sal_uInt32 nCells, sal_Bool bOneCell );
 
     void SetSplitable( sal_Bool bSet ) { bSplitable = bSet; }
     sal_Bool IsSplitable() const { return bSplitable; }
 
-
     const OUString& GetStyleName() const { return aStyleName; }
+    const OUString& GetDefaultCellStyleName() const { return aDfltCellStyleName; }
 
     void Dispose();
 };
 
 SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
-                                        sal_uInt32 nCells ) :
+                                        sal_uInt32 nCells,
+                                        const OUString *pDfltCellStyleName ) :
     aStyleName( rStyleName ),
     bSplitable( sal_False )
 {
+    if( pDfltCellStyleName  )
+        aDfltCellStyleName = *pDfltCellStyleName;
     ASSERT( nCells <= USHRT_MAX,
             "SwXMLTableRow_Impl::SwXMLTableRow_Impl: too many cells" );
     if( nCells > USHRT_MAX )
@@ -429,9 +435,11 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
             "SwXMLTableRow_Impl::Expand: wrong number of cells" );
 }
 
-inline void SwXMLTableRow_Impl::Set( const OUString& rStyleName )
+inline void SwXMLTableRow_Impl::Set( const OUString& rStyleName,
+                                       const OUString& rDfltCellStyleName )
 {
     aStyleName = rStyleName;
+    aDfltCellStyleName = rDfltCellStyleName;
 }
 
 void SwXMLTableRow_Impl::Dispose()
@@ -746,7 +754,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
     xMyTable( pTable )
 {
     sal_uInt32 nColRep = 1UL;
-    OUString aStyleName;
+    OUString aStyleName, aDfltCellStyleName;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -760,11 +768,13 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         const OUString& rValue = xAttrList->getValueByIndex( i );
         if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            if( aLocalName.compareToAscii( sXML_style_name ) == 0 )
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_style_name) ) )
                 aStyleName = rValue;
-            else if( aLocalName.compareToAscii(
-                            sXML_number_columns_repeated ) == 0 )
+            else if( aLocalName.equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(sXML_number_columns_repeated ) ) )
                 nColRep = (sal_uInt32)rValue.toInt32();
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_default_cell_style_name) ) )
+                aDfltCellStyleName = rValue;
         }
     }
 
@@ -790,7 +800,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
     if( nWidth )
     {
         while( nColRep-- && GetTable()->IsInsertColPossible() )
-            GetTable()->InsertColumn( nWidth, bRelWidth );
+            GetTable()->InsertColumn( nWidth, bRelWidth, &aDfltCellStyleName );
     }
 }
 
@@ -897,7 +907,7 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
     xMyTable( pTable ),
     nRowRepeat( 1 )
 {
-    OUString aStyleName;
+    OUString aStyleName, aDfltCellStyleName;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -911,22 +921,24 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         const OUString& rValue = xAttrList->getValueByIndex( i );
         if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( sXML_style_name,
-                                         sizeof(sXML_style_name)-1 ) )
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_style_name) ) )
             {
                 aStyleName = rValue;
             }
-            else if( aLocalName.equalsAsciiL( sXML_number_rows_repeated,
-                                      sizeof(sXML_number_rows_repeated)-1 ) )
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_number_rows_repeated) ) )
             {
                 nRowRepeat = (sal_uInt32)rValue.toInt32();
                 if( nRowRepeat < 1UL )
                     nRowRepeat = 1UL;
             }
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_default_cell_style_name) ) )
+            {
+                aDfltCellStyleName = rValue;
+            }
         }
     }
     if( GetTable()->IsValid() )
-        GetTable()->InsertRow( aStyleName, bInHead );
+        GetTable()->InsertRow( aStyleName, aDfltCellStyleName, bInHead );
 }
 
 void SwXMLTableRowContext_Impl::EndElement()
@@ -1250,6 +1262,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         const Reference< xml::sax::XAttributeList > & xAttrList ) :
     XMLTextTableContext( rImport, nPrfx, rLName ),
     pRows( new SwXMLTableRows_Impl ),
+    pColumnDefaultCellStyleNames( 0 ),
     pTableNode( 0 ),
     pBox1( 0 ),
     pSttNd1( 0 ),
@@ -1277,10 +1290,12 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         const OUString& rValue = xAttrList->getValueByIndex( i );
         if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            if( aLocalName.compareToAscii( sXML_style_name ) == 0 )
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_style_name ) ) )
                 aStyleName = rValue;
-            else if( aLocalName.compareToAscii( sXML_name ) == 0 )
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_name) ) )
                 aName = rValue;
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_default_cell_style_name ) ) )
+                aDfltCellStyleName = rValue;
         }
     }
 
@@ -1396,6 +1411,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
 SwXMLTableContext::~SwXMLTableContext()
 {
+    delete pColumnDefaultCellStyleNames;
 }
 
 SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -1457,7 +1473,8 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
-void SwXMLTableContext::InsertColumn( sal_Int32 nWidth, sal_Bool bRelWidth )
+void SwXMLTableContext::InsertColumn( sal_Int32 nWidth, sal_Bool bRelWidth,
+                                         const OUString *pDfltCellStyleName )
 {
     ASSERT( nCurCol < USHRT_MAX,
             "SwXMLTableContext::InsertColumn: no space left" );
@@ -1470,6 +1487,22 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth, sal_Bool bRelWidth )
         nWidth = USHRT_MAX;
     aColumnWidths.Insert( (sal_uInt16)nWidth, aColumnWidths.Count() );
     aColumnRelWidths.Insert( bRelWidth, aColumnRelWidths.Count() );
+    if( (pDfltCellStyleName && pDfltCellStyleName->getLength() > 0) ||
+        pColumnDefaultCellStyleNames )
+    {
+        if( !pColumnDefaultCellStyleNames )
+        {
+            pColumnDefaultCellStyleNames = new SvStringsDtor;
+            sal_uInt16 nCount = aColumnRelWidths.Count() - 1;
+            while( nCount-- )
+                pColumnDefaultCellStyleNames->Insert( new String,
+                    pColumnDefaultCellStyleNames->Count() );
+        }
+
+        pColumnDefaultCellStyleNames->Insert(
+            pDfltCellStyleName ? new String( *pDfltCellStyleName ) : new String,
+            pColumnDefaultCellStyleNames->Count() );
+    }
 }
 
 sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
@@ -1484,6 +1517,15 @@ sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
         nWidth += aColumnWidths[i];
 
     return nWidth;
+}
+
+OUString SwXMLTableContext::GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const
+{
+    OUString sRet;
+    if( pColumnDefaultCellStyleNames )
+        sRet =  *(*pColumnDefaultCellStyleNames)[(sal_uInt16)nCol];
+
+    return sRet;
 }
 
 void SwXMLTableContext::InsertCell( const OUString& rStyleName,
@@ -1564,11 +1606,23 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                            pRows->Count() );
     }
 
+    OUString sStyleName( rStyleName );
+    if( !sStyleName.getLength() )
+    {
+        sStyleName = ((*pRows)[(sal_uInt16)nCurRow])->GetDefaultCellStyleName();
+        if( !sStyleName.getLength() && HasColumnDefaultCellStyleNames() )
+        {
+            sStyleName = GetColumnDefaultCellStyleName( nCurCol );
+            if( !sStyleName.getLength() )
+                sStyleName = aDfltCellStyleName;
+        }
+    }
+
     // Fill the cells
     for( i=nColSpan; i>0UL; i-- )
         for( j=nRowSpan; j>0UL; j-- )
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( rStyleName, j, i, pStartNode, pTable, bProtect,
+                ->Set( sStyleName, j, i, pStartNode, pTable, bProtect,
                        pFormula, bHasValue, fValue);
 
     // Set current col to the next (free) column
@@ -1578,6 +1632,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
 }
 
 void SwXMLTableContext::InsertRow( const OUString& rStyleName,
+                                   const OUString& rDfltCellStyleName,
                                    sal_Bool bInHead )
 {
     ASSERT( nCurRow < USHRT_MAX,
@@ -1593,12 +1648,13 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
     {
         // The current row has already been inserted because of a row span
         // of a previous row.
-        (*pRows)[(sal_uInt16)nCurRow]->Set( rStyleName );
+        (*pRows)[(sal_uInt16)nCurRow]->Set( rStyleName, rDfltCellStyleName );
     }
     else
     {
         // add a new row
-        pRows->Insert( new SwXMLTableRow_Impl( rStyleName, GetColumnCount()),
+        pRows->Insert( new SwXMLTableRow_Impl( rStyleName, GetColumnCount(),
+                                               &rDfltCellStyleName ),
                        pRows->Count() );
     }
 
@@ -1618,7 +1674,8 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
     const SwXMLTableRow_Impl *pSrcRow = (*pRows)[(sal_uInt16)nCurRow-1];
     while( nCount > 1 && IsInsertRowPossible() )
     {
-        InsertRow( pSrcRow->GetStyleName(), sal_False );
+        InsertRow( pSrcRow->GetStyleName(), pSrcRow->GetDefaultCellStyleName(),
+                   sal_False );
         while( nCurCol < GetColumnCount() )
         {
             if( !GetCell(nCurRow,nCurCol)->IsUsed() )

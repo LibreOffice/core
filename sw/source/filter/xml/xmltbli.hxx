@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
+ *  last change: $Author: mib $ $Date: 2001-05-15 08:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,10 @@
 #include <xmloff/XMLTextTableContext.hxx>
 #endif
 
-#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL)
+#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_BOOLS
+#define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
 
@@ -92,9 +93,11 @@ namespace com { namespace sun { namespace star {
 class SwXMLTableContext : public XMLTextTableContext
 {
     ::rtl::OUString     aStyleName;
+    ::rtl::OUString     aDfltCellStyleName;
 
     SvUShorts           aColumnWidths;
     SvBools             aColumnRelWidths;
+    SvStringsDtor       *pColumnDefaultCellStyleNames;
 
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldCursor;
@@ -170,9 +173,12 @@ public:
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 
-    void InsertColumn( sal_Int32 nWidth, sal_Bool bRelWidth );
+    void InsertColumn( sal_Int32 nWidth, sal_Bool bRelWidth,
+                       const ::rtl::OUString *pDfltCellStyleName = 0 );
     sal_Int32 GetColumnWidth( sal_uInt32 nCol, sal_uInt32 nColSpan=1UL ) const;
+    ::rtl::OUString GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const;
     inline sal_uInt32 GetColumnCount() const;
+    inline sal_Bool HasColumnDefaultCellStyleNames() const;
 
     sal_Bool IsInsertCellPossible() const { return nCurCol < GetColumnCount(); }
     sal_Bool IsInsertColPossible() const { return nCurCol < USHRT_MAX; }
@@ -188,6 +194,7 @@ public:
                      sal_Bool bHasValue = sal_False,
                      double fValue = 0.0 );
     void InsertRow( const ::rtl::OUString& rStyleName,
+                    const ::rtl::OUString& rDfltCellStyleName,
                     sal_Bool bInHead );
     void FinishRow();
     void InsertRepRows( sal_uInt32 nCount );
@@ -215,5 +222,9 @@ inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
     return GetPrevStartNode( 0UL, GetColumnCount() );
 }
 
+inline sal_Bool SwXMLTableContext::HasColumnDefaultCellStyleNames() const
+{
+    return pColumnDefaultCellStyleNames != 0;
+}
 
 #endif
