@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,22 @@
 
 // include ---------------------------------------------------------------
 
+
+#ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
+#endif
 
 // Help-Ids --------------------------------------------------------------
 
 #define RID_PDF_EXPORT_DLG          (RID_FILTER_START +   0)
+
+#define RID_XSLT_DIALOG_START       (RID_FILTER_START +   1)
+#define RID_XSLT_DIALOG_END         (RID_FILTER_START +  49)
+
+// warning, next range is RID_FILTER_START + 100 !
+
+
+#define HID_FILTER_XSLT_START       (HID_FILTER_START +   0) // see source/xsltdialog/xmlfilterhelpids.hrc for range
 
 #endif
 
