@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-15 07:38:03 $
+ *  last change: $Author: fs $ $Date: 2002-10-18 15:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
     DBG_CHKTHIS(FormattedField, NULL);
     m_pLastOutputColor = NULL;
 
-    if ( 0 != ( _nWhat & FCT_FORMATTER ) )
+    if ( ( 0 != ( _nWhat & FCT_FORMATTER ) ) && m_pFormatter )
         m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
         // 95845 - 03.04.2002 - fs@openoffice.org
 
