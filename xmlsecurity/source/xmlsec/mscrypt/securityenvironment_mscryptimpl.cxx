@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mmi $ $Date: 2004-09-09 08:25:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,19 @@
 
 #include <xmlsecurity/biginteger.hxx>
 
+#include "xmlsec/keysmngr.h"
+#include "xmlsec/mscrypto/akmngr.h"
+
+//CP : added by CP
+#include <rtl/locale.h>
+#include <osl/nlsupport.h>
+
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
+//CP : end
+
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
@@ -97,9 +110,11 @@ using ::com::sun::star::security::XCertificate ;
 extern X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
 
 SecurityEnvironment_MSCryptImpl :: SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( NULL ) , m_hKeyStore( NULL ), m_hCertStore( NULL ), m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList(), m_xServiceManager( aFactory ), m_bEnableDefault( sal_False ) {
+
 }
 
 SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
+
     if( m_hProv != NULL ) {
         CryptReleaseContext( m_hProv, 0 ) ;
         m_hProv = NULL ;
@@ -140,6 +155,7 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
         for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; priKeyIt ++ )
             CryptDestroyKey( *priKeyIt ) ;
     }
+
 }
 
 /* XInitialization */
@@ -453,7 +469,8 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) 
 }
 
 //Methods from XSecurityEnvironment
-Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException ) {
+Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException )
+{
     sal_Int32 length ;
     X509Certificate_MSCryptImpl* xcert ;
     std::list< X509Certificate_MSCryptImpl* > certsList ;
@@ -477,6 +494,8 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
     //Thirdly, we try to find certificate from system default key store.
     if( m_bEnableDefault ) {
         HCERTSTORE hSystemKeyStore ;
+        DWORD      dwKeySpec;
+        HCRYPTPROV hCryptProv;
 
         /*
         hSystemKeyStore = CertOpenStore(
@@ -491,6 +510,20 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
         if( hSystemKeyStore != NULL ) {
             pCertContext = NULL ;
             while( pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext ) ) {
+                // Add By CP for checking whether the certificate is a personal certificate or not.
+                if(!(CryptAcquireCertificatePrivateKey(pCertContext,
+                        CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
+                        NULL,
+                        &hCryptProv,
+                        &dwKeySpec,
+                        NULL)))
+                {
+                    // Not Privatekey found. SKIP this one; By CP
+                    continue;
+                }
+                // then TODO : Check the personal cert is valid or not.
+
+                // end CP
                 xcert = MswcryCertContextToXCert( pCertContext ) ;
                 if( xcert != NULL )
                     certsList.push_back( xcert ) ;
@@ -516,25 +549,37 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
     return Sequence< Reference< XCertificate > >() ;
 }
 
+
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) {
-    X509Certificate_MSCryptImpl* xcert ;
-    PCCERT_CONTEXT pCertContext ;
+    unsigned int i ;
+    sal_Int8 found = 0 ;
     LPSTR   pszName ;
+    X509Certificate_MSCryptImpl *xcert = NULL ;
+    PCCERT_CONTEXT pCertContext = NULL ;
+    HCERTSTORE hCertStore = NULL ;
+    CRYPT_INTEGER_BLOB cryptSerialNumber ;
     CERT_INFO certInfo ;
 
+    // By CP , for correct encoding
+    sal_uInt16 encoding ;
+    rtl_Locale *pLocale = NULL ;
+    osl_getProcessLocale( &pLocale ) ;
+    encoding = osl_getTextEncodingFromLocale( pLocale ) ;
+    // CP end
+
     //Create cert info from issue and serial
-    rtl::OString oissuer = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_ASCII_US ) ;
+    rtl::OString oissuer = rtl::OUStringToOString( issuerName , encoding ) ;
     pszName = ( char* )oissuer.getStr() ;
 
     if( ! ( CertStrToName(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
         pszName ,
-        CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
+        CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_ENABLE_UTF8_UNICODE_FLAG,
         NULL ,
         NULL ,
         &certInfo.Issuer.cbData, NULL ) )
     ) {
-        throw SecurityException() ;
+        return NULL ;
     }
 
     if( !( certInfo.Issuer.pbData = ( BYTE* )malloc( certInfo.Issuer.cbData ) ) ) {
@@ -544,134 +589,158 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
     if( ! ( CertStrToName(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
         pszName ,
-        CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
+        CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_ENABLE_UTF8_UNICODE_FLAG,
         NULL ,
         ( BYTE* )certInfo.Issuer.pbData ,
         &certInfo.Issuer.cbData, NULL ) )
     ) {
         free( certInfo.Issuer.pbData ) ;
-        throw SecurityException() ;
+        return NULL ;
     }
 
-    certInfo.SerialNumber.cbData = serialNumber.getLength() ;
-    if( !( certInfo.SerialNumber.pbData = ( BYTE* )malloc( certInfo.SerialNumber.cbData ) ) ) {
+    //Get the SerialNumber
+    cryptSerialNumber.cbData = serialNumber.getLength() ;
+    if( !( cryptSerialNumber.pbData = ( BYTE* )malloc( cryptSerialNumber.cbData ) ) )
+    {
         free( certInfo.Issuer.pbData ) ;
-        throw SecurityException() ;
+        throw RuntimeException() ;
     }
+    for( i = 0; i < cryptSerialNumber.cbData; i ++ )
+        cryptSerialNumber.pbData[i] = serialNumber[ cryptSerialNumber.cbData - i - 1 ] ;
 
-    for( unsigned int i = 0; i < certInfo.SerialNumber.cbData; i ++ )
-        certInfo.SerialNumber.pbData[i] = serialNumber[ certInfo.SerialNumber.cbData - i - 1 ] ;
+    certInfo.SerialNumber.cbData = cryptSerialNumber.cbData ;
+    certInfo.SerialNumber.pbData = cryptSerialNumber.pbData ;
 
-    pCertContext = NULL ;
+    // Get the Cert from all store.
+    for( i = 0 ; i < 6 ; i ++ )
+    {
+        switch(i)
+        {
+        case 0:
+            if(m_hKeyStore == NULL) continue ;
+            hCertStore = m_hKeyStore ;
+            break;
+        case 1:
+            if(m_hCertStore == NULL) continue ;
+            hCertStore = m_hCertStore ;
+            break;
+        case 2:
+            hCertStore = CertOpenSystemStore( 0, "MY" ) ;
+            if(hCertStore == NULL || !m_bEnableDefault) continue ;
+            break;
+        case 3:
+            hCertStore = CertOpenSystemStore( 0, "Root" ) ;
+            if(hCertStore == NULL || !m_bEnableDefault) continue ;
+            break;
+        case 4:
+            hCertStore = CertOpenSystemStore( 0, "Trust" ) ;
+            if(hCertStore == NULL || !m_bEnableDefault) continue ;
+            break;
+        case 5:
+            hCertStore = CertOpenSystemStore( 0, "CA" ) ;
+            if(hCertStore == NULL || !m_bEnableDefault) continue ;
+            break;
+        default:
+            i=6;
+            continue;
+        }
 
-    //Above all, we try to find the certificate in the given key store.
-    if( m_hKeyStore != NULL ) {
-        //Find the certificate from the store.
+/*******************************************************************************
+ * This code reserved for remind us there are another way to find one cert by
+ * IssuerName&serialnumber. You can use the code to replaced the function
+ * CertFindCertificateInStore IF and ONLY IF you must find one special cert in
+ * certStore but can not be found by CertFindCertificateInStore , then , you
+ * should also change the same part in libxmlsec/.../src/mscrypto/x509vfy.c#875.
+ * By Chandler Peng(chandler.peng@sun.com)
+ *****/
+/*******************************************************************************
+        pCertContext = NULL ;
+        found = 0;
+        do{
+            //  1. enum the certs has same string in the issuer string.
+            pCertContext = CertEnumCertificatesInStore( hCertStore , pCertContext ) ;
+            if( pCertContext != NULL )
+            {
+                // 2. check the cert's issuer name .
+                char* issuer = NULL ;
+                DWORD cbIssuer = 0 ;
+
+                cbIssuer = CertNameToStr(
+                    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
+                    &( pCertContext->pCertInfo->Issuer ),
+                    CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
+                    NULL, 0
+                ) ;
+
+                if( cbIssuer == 0 ) continue ; // discard this cert;
+
+                issuer = (char *)malloc( cbIssuer ) ;
+                if( issuer == NULL )  // discard this cert;
+                {
+                    free( cryptSerialNumber.pbData) ;
+                    free( certInfo.Issuer.pbData ) ;
+                    CertFreeCertificateContext( pCertContext ) ;
+                    if(i != 0 && i != 1) CertCloseStore( hCertStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                    throw RuntimeException() ;
+                }
+
+                cbIssuer = CertNameToStr(
+                    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
+                    &( pCertContext->pCertInfo->Issuer ),
+                    CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
+                    issuer, cbIssuer
+                ) ;
+
+                if( cbIssuer <= 0 )
+                {
+                    free( issuer ) ;
+                    continue ;// discard this cert;
+                }
+
+                if(strncmp(pszName , issuer , cbIssuer) != 0)
+                {
+                    free( issuer ) ;
+                    continue ;// discard this cert;
+                }
+                free( issuer ) ;
+
+                // 3. check the serial number.
+                if( memcmp( cryptSerialNumber.pbData , pCertContext->pCertInfo->SerialNumber.pbData  , cryptSerialNumber.cbData ) != 0 )
+                {
+                    continue ;// discard this cert;
+                }
+
+                // 4. confirm and break;
+                found = 1;
+                break ;
+            }
+
+        }while(pCertContext);
+
+        if(i != 0 && i != 1) CertCloseStore( hCertStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        if( found != 0 ) break; // Found the certificate.
+********************************************************************************/
+
         pCertContext = CertFindCertificateInStore(
-            m_hKeyStore,
+            hCertStore,
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             0,
             CERT_FIND_SUBJECT_CERT,
             &certInfo,
             NULL
         ) ;
+
+        if(i != 0 && i != 1) CertCloseStore( hCertStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        if( pCertContext != NULL ) break ; // Found the certificate.
+
     }
 
-    //firstly, we try to find the certificate in the given cert store.
-    if( m_hCertStore != NULL ) {
-        //Find the certificate from the store.
-        pCertContext = CertFindCertificateInStore(
-            m_hCertStore,
-            X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-            0,
-            CERT_FIND_SUBJECT_CERT,
-            &certInfo,
-            NULL
-        ) ;
-    }
-
-    //Secondly, we try to find certificate from system default key store.
-    if( pCertContext == NULL && m_bEnableDefault ) {
-        HCERTSTORE hSystemKeyStore ;
-
-        hSystemKeyStore = CertOpenSystemStore( 0, "MY" ) ;
-        if( hSystemKeyStore != NULL ) {
-            pCertContext = CertFindCertificateInStore(
-                hSystemKeyStore,
-                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                0,
-                CERT_FIND_SUBJECT_CERT,
-                &certInfo,
-                NULL
-            ) ;
-        }
-
-        CertCloseStore( hSystemKeyStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-    }
-
-    //Thirdly, we try to find certificate from system default root cert store.
-    if( pCertContext == NULL && m_bEnableDefault ) {
-        HCERTSTORE hSystemRootStore ;
-
-        hSystemRootStore = CertOpenSystemStore( 0, "Root" ) ;
-        if( hSystemRootStore != NULL ) {
-            pCertContext = CertFindCertificateInStore(
-                hSystemRootStore,
-                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                0,
-                CERT_FIND_SUBJECT_CERT,
-                &certInfo,
-                NULL
-            ) ;
-        }
-
-        CertCloseStore( hSystemRootStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-    }
-
-    //Fourthly, we try to find certificate from system default trust cert store.
-    if( pCertContext == NULL && m_bEnableDefault ) {
-        HCERTSTORE hSystemTrustStore ;
-
-        hSystemTrustStore = CertOpenSystemStore( 0, "Trust" ) ;
-        if( hSystemTrustStore != NULL ) {
-            pCertContext = CertFindCertificateInStore(
-                hSystemTrustStore,
-                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                0,
-                CERT_FIND_SUBJECT_CERT,
-                &certInfo,
-                NULL
-            ) ;
-        }
-
-        CertCloseStore( hSystemTrustStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-    }
-
-    //Fifthly, we try to find certificate from system default CA cert store.
-    if( pCertContext == NULL && m_bEnableDefault ) {
-        HCERTSTORE hSystemCAStore ;
-
-        hSystemCAStore = CertOpenSystemStore( 0, "CA" ) ;
-        if( hSystemCAStore != NULL ) {
-            pCertContext = CertFindCertificateInStore(
-                hSystemCAStore,
-                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                0,
-                CERT_FIND_SUBJECT_CERT,
-                &certInfo,
-                NULL
-            ) ;
-        }
-
-        CertCloseStore( hSystemCAStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-    }
-
-
-    free( certInfo.Issuer.pbData ) ;
-    free( certInfo.SerialNumber.pbData ) ;
+    if( cryptSerialNumber.pbData ) free( cryptSerialNumber.pbData ) ;
+    if( certInfo.Issuer.pbData ) free( certInfo.Issuer.pbData ) ;
 
     if( pCertContext != NULL ) {
         xcert = MswcryCertContextToXCert( pCertContext ) ;
+        if( pCertContext ) CertFreeCertificateContext( pCertContext ) ;
     } else {
         xcert = NULL ;
     }
@@ -1248,3 +1317,101 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
     return xcert ;
 }
 
+::rtl::OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInfo() throw( ::com::sun::star::uno::RuntimeException )
+{
+    return rtl::OUString::createFromAscii("Microsoft Crypto API");
+}
+
+/* Native methods */
+xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( Exception, RuntimeException ) {
+
+    unsigned int i ;
+    HCRYPTKEY symKey ;
+    HCRYPTKEY pubKey ;
+    HCRYPTKEY priKey ;
+    xmlSecKeysMngrPtr pKeysMngr = NULL ;
+
+    /*-
+     * The following lines is based on the of xmlsec-mscrypto crypto engine
+     */
+    pKeysMngr = xmlSecMSCryptoAppliedKeysMngrCreate( m_hKeyStore , m_hCertStore ) ;
+    if( pKeysMngr == NULL )
+        throw RuntimeException() ;
+
+    /*-
+     * Adopt symmetric key into keys manager
+     */
+    for( i = 0 ; ( symKey = getSymKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecMSCryptoAppliedKeysMngrSymKeyLoad( pKeysMngr, symKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+
+    /*-
+     * Adopt asymmetric public key into keys manager
+     */
+    for( i = 0 ; ( pubKey = getPubKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecMSCryptoAppliedKeysMngrPubKeyLoad( pKeysMngr, pubKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+
+    /*-
+     * Adopt asymmetric private key into keys manager
+     */
+    for( i = 0 ; ( priKey = getPriKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecMSCryptoAppliedKeysMngrPriKeyLoad( pKeysMngr, priKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+
+    /*-
+     * Adopt system default certificate store.
+     */
+    if( defaultEnabled() ) {
+        HCERTSTORE hSystemStore ;
+
+        //Add system key store into the keys manager.
+        hSystemStore = CertOpenSystemStore( 0, "MY" ) ;
+        if( hSystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, hSystemStore ) < 0 ) {
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                throw RuntimeException() ;
+            }
+        }
+
+        //Add system root store into the keys manager.
+        hSystemStore = CertOpenSystemStore( 0, "Root" ) ;
+        if( hSystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, hSystemStore ) < 0 ) {
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                throw RuntimeException() ;
+            }
+        }
+
+        //Add system trusted store into the keys manager.
+        hSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
+        if( hSystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, hSystemStore ) < 0 ) {
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                throw RuntimeException() ;
+            }
+        }
+
+        //Add system CA store into the keys manager.
+        hSystemStore = CertOpenSystemStore( 0, "CA" ) ;
+        if( hSystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, hSystemStore ) < 0 ) {
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                throw RuntimeException() ;
+            }
+        }
+    }
+
+    return pKeysMngr ;
+}
+void SecurityEnvironment_MSCryptImpl :: destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( Exception, RuntimeException ) {
+    if( pKeysMngr != NULL ) {
+        xmlSecKeysMngrDestroy( pKeysMngr ) ;
+    }
+}
