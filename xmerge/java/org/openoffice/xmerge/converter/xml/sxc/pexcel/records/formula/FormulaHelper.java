@@ -115,6 +115,6 @@ public class FormulaHelper {
         for (Enumeration e = infixTokens.elements();e.hasMoreElements();) {
             buff.append(((Token)e.nextElement()).toString());
         }
-        return buff.toString();
+        return "=" + buff.toString();
     }
 }
