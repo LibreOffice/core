@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:49:04 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 11:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,74 +254,74 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
 String STR_PRIVATETEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? StarWriter : Formatierter Text [StarWriter] */
-    Text = "StarOffice Writer" ;
-    Text [ dutch ] = "StarOffice Writer" ;
-    Text [ english_us ] = "StarOffice Writer" ;
-    Text [ italian ] = "StarOffice Writer" ;
-    Text [ spanish ] = "StarOffice Writer" ;
-    Text [ french ] = "StarOffice Writer" ;
-    Text [ swedish ] = "StarOffice Writer" ;
-    Text [ danish ] = "StarOffice Writer" ;
-    Text [ portuguese ] = "StarOffice Writer" ;
-    Text [ portuguese_brazilian ] = "StarOffice Writer" ;
-    Text[ chinese_simplified ] = "StarOffice Writer";
-    Text[ russian ] = "StarOffice Writer";
-    Text[ polish ] = "StarOffice Writer";
-    Text[ japanese ] = "StarOffice Writer";
-    Text[ chinese_traditional ] = "StarOffice Writer";
-    Text[ arabic ] = "StarOffice Writer";
-    Text[ greek ] = "StarOffice Writer";
-    Text[ korean ] = "StarOffice Writer";
-    Text[ turkish ] = "StarOffice Writer";
+    Text = "%PRODUCTNAME Writer" ;
+    Text [ dutch ] = "%PRODUCTNAME Writer" ;
+    Text [ english_us ] = "%PRODUCTNAME Writer" ;
+    Text [ italian ] = "%PRODUCTNAME Writer" ;
+    Text [ spanish ] = "%PRODUCTNAME Writer" ;
+    Text [ french ] = "%PRODUCTNAME Writer" ;
+    Text [ swedish ] = "%PRODUCTNAME Writer" ;
+    Text [ danish ] = "%PRODUCTNAME Writer" ;
+    Text [ portuguese ] = "%PRODUCTNAME Writer" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Writer" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME Writer";
+    Text[ russian ] = "%PRODUCTNAME Writer";
+    Text[ polish ] = "%PRODUCTNAME Writer";
+    Text[ japanese ] = "%PRODUCTNAME Writer";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Writer";
+    Text[ arabic ] = "%PRODUCTNAME Writer";
+    Text[ greek ] = "%PRODUCTNAME Writer";
+    Text[ korean ] = "%PRODUCTNAME Writer";
+    Text[ turkish ] = "%PRODUCTNAME Writer";
     Text[ language_user1 ] = " ";
 };
 String STR_PRIVATEGRAPHIC
 {
-    Text = "Grafik [StarOffice Writer]" ;
+    Text = "Grafik [%PRODUCTNAME Writer]" ;
     Text [ ENGLISH ] = "Graphic [StarOffice Writer]" ;
     Text [ norwegian ] = "Graphic [StarOffice Writer]" ;
-    Text [ italian ] = "Immagine [StarOffice Writer]" ;
-    Text [ portuguese_brazilian ] = "Gráfico [StarOffice Writer]" ;
-    Text [ portuguese ] = "Imagem [StarOffice Writer]" ;
+    Text [ italian ] = "Immagine [%PRODUCTNAME Writer]" ;
+    Text [ portuguese_brazilian ] = "Gráfico [%PRODUCTNAME Writer]" ;
+    Text [ portuguese ] = "Imagem [%PRODUCTNAME Writer]" ;
     Text [ finnish ] = "Kuva [StarOffice Writer]" ;
-    Text [ danish ] = "Grafik [StarOffice Writer]" ;
-    Text [ french ] = "Image [StarOffice Writer]" ;
-    Text [ swedish ] = "Grafik [StarOffice Writer]" ;
-    Text [ dutch ] = "Afbeelding [StarOffice Writer]" ;
-    Text [ spanish ] = "Imagen [StarOffice Writer]" ;
-    Text [ english_us ] = "Graphics [StarOffice Writer]" ;
-    Text[ chinese_simplified ] = "Í¼ÐÎ [StarOffice Writer]";
-    Text[ russian ] = "Ðèñóíîê [StarOffice Writer]";
-    Text[ polish ] = "Grafika [StarOffice Writer]";
-    Text[ japanese ] = "¸Þ×Ì¨¯¸ [StarOffice Writer]";
-    Text[ greek ] = "Ãñáöéêü [StarOffice Writer]";
-    Text[ korean ] = "±×·¡ÇÈ [StarOffice Writer]";
-    Text[ chinese_traditional ] = "¹Ï§Î [StarOffice Writer]";
-    Text[ arabic ] = "[StarOffice Writer] ÑÓæãÇÊ";
-    Text[ turkish ] = "Grafik [StarOffice Writer]";
+    Text [ danish ] = "Grafik [%PRODUCTNAME Writer]" ;
+    Text [ french ] = "Image [%PRODUCTNAME Writer]" ;
+    Text [ swedish ] = "Grafik [%PRODUCTNAME Writer]" ;
+    Text [ dutch ] = "Afbeelding [%PRODUCTNAME Writer]" ;
+    Text [ spanish ] = "Imagen [%PRODUCTNAME Writer]" ;
+    Text [ english_us ] = "Graphics [%PRODUCTNAME Writer]" ;
+    Text[ chinese_simplified ] = "Í¼ÐÎ [%PRODUCTNAME Writer]";
+    Text[ russian ] = "Ðèñóíîê [%PRODUCTNAME Writer]";
+    Text[ polish ] = "Grafika [%PRODUCTNAME Writer]";
+    Text[ japanese ] = "¸Þ×Ì¨¯¸ [%PRODUCTNAME Writer]";
+    Text[ greek ] = "Ãñáöéêü [%PRODUCTNAME Writer]";
+    Text[ korean ] = "±×·¡ÇÈ [%PRODUCTNAME Writer]";
+    Text[ chinese_traditional ] = "¹Ï§Î [%PRODUCTNAME Writer]";
+    Text[ arabic ] = "[%PRODUCTNAME Writer] ÑÓæãÇÊ";
+    Text[ turkish ] = "Grafik [%PRODUCTNAME Writer]";
 };
 String STR_PRIVATEOLE
 {
-    Text = "Objekt [StarOffice Writer]" ;
+    Text = "Objekt [%PRODUCTNAME Writer]" ;
     Text [ ENGLISH ] = "Object [StarOffice Writer]" ;
-    Text [ english_us ] = "Object [StarOffice Writer]" ;
-    Text [ italian ] = "Oggetto [StarOffice Writer]" ;
-    Text [ spanish ] = "Objeto [StarOffice Writer]" ;
-    Text [ french ] = "Objet [StarOffice Writer]" ;
-    Text [ dutch ] = "Object [StarOffice Writer]" ;
-    Text [ swedish ] = "Objekt [StarOffice Writer]" ;
-    Text [ danish ] = "Objekt [StarOffice Writer]" ;
-    Text [ portuguese ] = "Objecto [StarOffice Writer]" ;
-    Text [ portuguese_brazilian ] = "Objekt [StarOffice Writer]" ;
-    Text[ chinese_simplified ] = "¶ÔÏó [StarOffice Writer]";
-    Text[ russian ] = "Îáúåêò [StarOffice Writer]";
-    Text[ polish ] = "Obiekt [StarOffice Writer]";
-    Text[ japanese ] = "µÌÞ¼Þª¸Ä [StarOffice Writer]";
-    Text[ greek ] = "Áíôéêåßìåíï [StarOffice Writer]";
-    Text[ korean ] = "°³Ã¼ [StarOffice Writer]";
-    Text[ chinese_traditional ] = "ª«¥ó [StarOffice Writer]";
-    Text[ arabic ] = "[StarOffice Writer]ßÇÆä ";
-    Text[ turkish ] = "Nesne [StarOffice Writer]";
+    Text [ english_us ] = "Object [%PRODUCTNAME Writer]" ;
+    Text [ italian ] = "Oggetto [%PRODUCTNAME Writer]" ;
+    Text [ spanish ] = "Objeto [%PRODUCTNAME Writer]" ;
+    Text [ french ] = "Objet [%PRODUCTNAME Writer]" ;
+    Text [ dutch ] = "Object [%PRODUCTNAME Writer]" ;
+    Text [ swedish ] = "Objekt [%PRODUCTNAME Writer]" ;
+    Text [ danish ] = "Objekt [%PRODUCTNAME Writer]" ;
+    Text [ portuguese ] = "Objecto [%PRODUCTNAME Writer]" ;
+    Text [ portuguese_brazilian ] = "Objekt [%PRODUCTNAME Writer]" ;
+    Text[ chinese_simplified ] = "¶ÔÏó [%PRODUCTNAME Writer]";
+    Text[ russian ] = "Îáúåêò [%PRODUCTNAME Writer]";
+    Text[ polish ] = "Obiekt [%PRODUCTNAME Writer]";
+    Text[ japanese ] = "µÌÞ¼Þª¸Ä [%PRODUCTNAME Writer]";
+    Text[ greek ] = "Áíôéêåßìåíï [%PRODUCTNAME Writer]";
+    Text[ korean ] = "°³Ã¼ [%PRODUCTNAME Writer]";
+    Text[ chinese_traditional ] = "ª«¥ó [%PRODUCTNAME Writer]";
+    Text[ arabic ] = "[%PRODUCTNAME Writer]ßÇÆä ";
+    Text[ turkish ] = "Nesne [%PRODUCTNAME Writer]";
 };
 String STR_DDEFORMAT
 {
