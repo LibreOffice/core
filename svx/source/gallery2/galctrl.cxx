@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:51:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #include <vcl/svapp.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
+#include <avmedia/mediaplayer.hxx>
 #include "helpid.hrc"
 #include "galbrws2.hxx"
 #include "galtheme.hxx"
@@ -282,13 +285,21 @@ void GalleryPreview::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 // ------------------------------------------------------------------------
 
-void GalleryPreview::PreviewSound( const INetURLObject& rURL )
+void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 {
-    aSound.Stop();
-    aSound.SetSoundName( rURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
-        aSound.Play();
+    {
+        ::avmedia::MediaFloater* pFloater = AVMEDIA_MEDIAWINDOW();
+
+        if( !pFloater )
+        {
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_AVMEDIA_PLAYER, SFX_CALLMODE_SYNCHRON );
+            pFloater = AVMEDIA_MEDIAWINDOW();
+        }
+
+        if( pFloater )
+            pFloater->setURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), true );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -596,7 +607,7 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, US
                 GraphicObject   aGrfObj;
 
                 if( pObj->GetObjKind() == SGA_OBJ_SOUND )
-                    aGrfObj = Graphic( Bitmap( GAL_RESID( RID_SVXBMP_GALLERY_SOUND ) ) );
+                    aGrfObj = Graphic( BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) ) );
                 else if( pObj->IsThumbBitmap() )
                     aGrfObj = Graphic( pObj->GetThumbBmp() );
                 else
