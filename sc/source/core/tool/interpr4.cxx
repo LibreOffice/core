@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:35:59 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 19:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2886,8 +2886,6 @@ void ScInterpreter::ScSpewFunc()
 #include "sctictac.hxx"
 #include "scmod.hxx"
 
-extern "C" void SAL_CALL StartInvader( Window* pParent, ResMgr* pRes);  // StarWars
-extern void Game();                     // Froggie
 void ScInterpreter::ScGame()
 {
     enum GameType {
@@ -3041,14 +3039,14 @@ int main()
                     }
                     break;
                     case SC_GAME_STARWARS :
-#if 0
-// libtfu currently not built and delivered
-#ifdef SC_INVADER_GPF
-                        if ( getenv( "SC_INVADER_GPF" ) )
-#endif
-                            StartInvader( Application::GetDefDialogParent(),
-                                    SC_MOD()->GetResMgr());
-#endif
+                    {
+                        oslModule m_tfu = osl_loadModule(rtl::OUString::createFromAscii( SVLIBRARY( "tfu" ) ).pData, SAL_LOADMODULE_NOW);
+                        typedef void StartInvader_Type (Window*, ResMgr*);
+
+                        StartInvader_Type *StartInvader = (StartInvader_Type *) osl_getSymbol( m_tfu, rtl::OUString::createFromAscii("StartInvader").pData );
+                        if ( StartInvader )
+                            StartInvader( Application::GetDefDialogParent(), ResMgr::CreateResMgr( "tfu" MAKE_NUMSTR(SUPD) ));
+                    }
                     break;
                     case SC_GAME_FROGGER :
                         //Game();
