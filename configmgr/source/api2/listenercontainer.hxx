@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: jb $ $Date: 2000-12-03 11:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(Index nIndex) throw(uno::RuntimeException)
         {
-            OSL_ENSURE(!isDisposed(),"Object is already disposed in toto");
+    //      OSL_ENSURE(!isDisposed(),"Object is already disposed in toto");
 
             osl::ClearableMutexGuard aGuard(mutex());
 
