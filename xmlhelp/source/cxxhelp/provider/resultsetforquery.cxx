@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-16 15:20:25 $
+ *  last change: $Author: abi $ $Date: 2001-08-23 11:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,13 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         m_pDatabases->getStaticInformationForModule( m_aURLParameter.get_module(),
                                                      m_aURLParameter.get_language() );
 
-    if( scope.compareToAscii( "Heading" ) == 0 )
-        scope = inf->get_heading();
-    else
-        scope = inf->get_fulltext();
+    if( inf )
+    {
+        if( scope.compareToAscii( "Heading" ) == 0 )
+            scope = inf->get_heading();
+        else
+            scope = inf->get_fulltext();
+    }
 
     sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 

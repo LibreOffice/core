@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-21 13:26:25 $
+ *  last change: $Author: abi $ $Date: 2001-08-23 11:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,25 +337,28 @@ rtl::OUString URLParameter::get_the_jar()
 
 void URLParameter::readBerkeley()
 {
-    if( get_id().compareToAscii("") != 0 )
-    {
-        Db* db = m_pDatabases->getBerkeley( get_module(),
-                                            get_language() );
+    if( get_id().compareToAscii("") == 0 )
+        return;
 
-        rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
-        Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
-                 keyStr.getLength() );
-        Dbt data;
+    Db* db = m_pDatabases->getBerkeley( get_module(),
+                                        get_language() );
 
-        int err = db->get( 0,&key,&data,0 );
+    if( ! db )
+        return;
 
-        DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
-                                        data.get_size() );
-        m_aTitle = converter.getTitle();
-        m_aPath  = converter.getFile();
-        m_aJar   = converter.getDatabase();
-        m_aTag   = converter.getHash();
-    }
+    rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
+    Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
+             keyStr.getLength() );
+    Dbt data;
+
+    int err = db->get( 0,&key,&data,0 );
+
+    DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
+                                    data.get_size() );
+    m_aTitle = converter.getTitle();
+    m_aPath  = converter.getFile();
+    m_aJar   = converter.getDatabase();
+    m_aTag   = converter.getHash();
 }
 
 

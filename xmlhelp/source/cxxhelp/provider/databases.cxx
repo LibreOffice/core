@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-21 13:26:25 $
+ *  last change: $Author: abi $ $Date: 2001-08-23 11:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,72 +231,76 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
 
     rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + Module;
 
-    ModInfoTable::iterator it =
-        m_aModInfo.insert( ModInfoTable::value_type( key,0 ) ).first;
+    std::pair< ModInfoTable::iterator,bool > aPair =
+        m_aModInfo.insert( ModInfoTable::value_type( key,0 ) );
 
-    if( ! it->second )
+    ModInfoTable::iterator it = aPair.first;
+
+    if( aPair.second && ! it->second )
     {
         osl::File cfgFile( getInstallPathAsURL() +
                            key +
                            rtl::OUString::createFromAscii( ".cfg" ) );
 
         if( osl::FileBase::E_None != cfgFile.open( OpenFlag_Read ) )
-            return 0;
-
-        sal_uInt32 pos = 0;
-        sal_uInt64 nRead;
-        sal_Char buffer[2048];
-        sal_Unicode lineBuffer[1028];
-        rtl::OUString fileContent;
-
-        while( osl::FileBase::E_None == cfgFile.read( &buffer,2048,nRead ) && nRead )
-            fileContent += rtl::OUString( buffer,sal_Int32( nRead ),RTL_TEXTENCODING_UTF8 );
-
-        cfgFile.close();
-
-        const sal_Unicode* str = fileContent.getStr();
-        rtl::OUString current,lang,program,startid,title,heading,fulltext;
-
-        for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
+            it->second = 0;
+        else
         {
-            sal_Unicode ch = str[ i ];
-            if( ch == sal_Unicode( '\n' ) || ch == sal_Unicode( '\r' ) )
-            {
-                if( pos )
-                {
-                    current = rtl::OUString( lineBuffer,pos );
+            sal_uInt32 pos = 0;
+            sal_uInt64 nRead;
+            sal_Char buffer[2048];
+            sal_Unicode lineBuffer[1028];
+            rtl::OUString fileContent;
 
-                    if( current.compareToAscii( "Title",5 ) == 0 )
+            while( osl::FileBase::E_None == cfgFile.read( &buffer,2048,nRead ) && nRead )
+                fileContent += rtl::OUString( buffer,sal_Int32( nRead ),RTL_TEXTENCODING_UTF8 );
+
+            cfgFile.close();
+
+            const sal_Unicode* str = fileContent.getStr();
+            rtl::OUString current,lang,program,startid,title,heading,fulltext;
+
+            for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
+            {
+                sal_Unicode ch = str[ i ];
+                if( ch == sal_Unicode( '\n' ) || ch == sal_Unicode( '\r' ) )
+                {
+                    if( pos )
                     {
-                        title = current.copy( current.indexOf(sal_Unicode( '=' ) ) + 1 );
+                        current = rtl::OUString( lineBuffer,pos );
+
+                        if( current.compareToAscii( "Title",5 ) == 0 )
+                        {
+                            title = current.copy( current.indexOf(sal_Unicode( '=' ) ) + 1 );
+                        }
+                        else if( current.compareToAscii( "Start",5 ) == 0 )
+                        {
+                            startid = current.copy( current.indexOf('=') + 1 );
+                        }
+                        else if( current.compareToAscii( "Language",8 ) == 0 )
+                        {
+                            lang = current.copy( current.indexOf('=') + 1 );
+                        }
+                        else if( current.compareToAscii( "Program",7 ) == 0 )
+                        {
+                            program = current.copy( current.indexOf('=') + 1 );
+                        }
+                        else if( current.compareToAscii( "Heading",7 ) == 0 )
+                        {
+                            heading = current.copy( current.indexOf('=') + 1 );
+                        }
+                        else if( current.compareToAscii( "FullText",8 ) == 0 )
+                        {
+                            fulltext = current.copy( current.indexOf('=') + 1 );
+                        }
                     }
-                    else if( current.compareToAscii( "Start",5 ) == 0 )
-                    {
-                        startid = current.copy( current.indexOf('=') + 1 );
-                    }
-                    else if( current.compareToAscii( "Language",8 ) == 0 )
-                    {
-                        lang = current.copy( current.indexOf('=') + 1 );
-                    }
-                    else if( current.compareToAscii( "Program",7 ) == 0 )
-                    {
-                        program = current.copy( current.indexOf('=') + 1 );
-                    }
-                    else if( current.compareToAscii( "Heading",7 ) == 0 )
-                    {
-                        heading = current.copy( current.indexOf('=') + 1 );
-                    }
-                    else if( current.compareToAscii( "FullText",8 ) == 0 )
-                    {
-                        fulltext = current.copy( current.indexOf('=') + 1 );
-                    }
+                    pos = 0;
                 }
-                pos = 0;
+                else
+                    lineBuffer[ pos++ ] = ch;
             }
-            else
-                lineBuffer[ pos++ ] = ch;
+            it->second = new StaticModuleInformation( title,startid,program,heading,fulltext );
         }
-        it->second = new StaticModuleInformation( title,startid,program,heading,fulltext );
     }
 
     return it->second;
@@ -376,12 +380,15 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         Database +
         ( helpText ? rtl::OUString::createFromAscii( ".ht" ) : rtl::OUString::createFromAscii( ".db" ) );
 
-    DatabasesTable::iterator it =
-        m_aDatabases.insert( DatabasesTable::value_type( key,0 ) ).first;
+    std::pair< DatabasesTable::iterator,bool > aPair =
+        m_aDatabases.insert( DatabasesTable::value_type( key,0 ) );
 
-    if( ! it->second )
+    DatabasesTable::iterator it = aPair.first;
+
+    if( aPair.second && ! it->second )
     {
-        Db* table = it->second = new Db( 0,0 );
+
+        Db* table = new Db( 0,DB_CXX_NO_EXCEPTIONS );
 
         rtl::OUString fileNameOU =
             getInstallPathAsSystemPath() +
@@ -389,8 +396,13 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 
         rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
 
-        table->open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 );
-        m_aDatabases[ key ] = table;
+        if( table->open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
+        {
+            delete table;
+            table = 0;
+        }
+
+        it->second = table;
     }
 
     return it->second;
