@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyLinkContent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-20 13:25:00 $
+ *  last change: $Author: kso $ $Date: 2001-01-08 10:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,19 +109,21 @@ service HierarchyLinkContent
 {
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
      */
     interface com::sun::star::lang::XComponent;
 
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
      */
     interface com::sun::star::ucb::XContent;
 
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
+
+        <p>
 
         <b>Supported Commands</b>
         <ul>
@@ -162,36 +164,38 @@ service HierarchyLinkContent
         string TargetURL ( the URL of the link target )
         </li>
         </ul>
+
+        </p>
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
-        service <type>com::sun::star::ucb::Content.idl</type>.
+        service <type>Content</type>.
      */
     interface com::sun::star::container::XChild;
 };

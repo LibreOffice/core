@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyContentProvider.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-20 13:25:00 $
+ *  last change: $Author: kso $ $Date: 2001-01-08 10:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,18 +83,22 @@ service HierarchyContentProvider
     //-------------------------------------------------------------------------
     /** provides three types of contents: Link, Folder and Root Folder.
 
+        <p>
+
         <b>HCP Contents</b>
         <ol>
         <li>
         A HCP Link is a content which points to another (UCB) content.
         It is always contained in HCP Folder. A HCP Link has no children.
 
-            @see com::sun::star::ucb::HierarchyLinkContent
+        See <type>HierarchyLinkContent</type>
+
         </li>
         <li>
         A HCP Folder is a container for other HCP Folders and HCP Links.
 
-            @see com::sun::star::ucb::HierarchyFolderContent
+        See <type>HierarchyFolderContent</type>
+
         </li>
         <li>
         There is at most one instance of a HCP Root Folder at a time.
@@ -102,7 +106,8 @@ service HierarchyContentProvider
         Folder can contain HCP Folders and HCP Links. It has the URL
         "vnd.sun.star.hier:/".
 
-            @see com::sun::star::ucb::HierarchyRootFolderContent
+        See <type>HierarchyRootFolderContent</type>
+
         </li>
         </ol>
 
@@ -118,9 +123,19 @@ service HierarchyContentProvider
 
         Examples:
 
+        <ul>
+        <li>
         vnd.sun.star.hier:/ ( The URL of the HCP Root Folder )
+        </li>
+        <li>
         vnd.sun.star.hier:/Bookmarks/Sun%20Microssystems%20Home%20Page
+        </li>
+        <li>
         vnd.sun.star.hier:/Workplace/Printers
+        </li>
+        </ul>
+
+        </p>
      */
     interface com::sun::star::ucb::XContentProvider;
 };
