@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: cyrillem $ $Date: 2002-05-17 10:29:37 $
+#   last change: $Author: ghiggins $ $Date: 2002-05-20 13:50:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,6 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssframe.db \
     $(UCR)$/dcssaccessibility.db\
     $(UCR)$/dcssabridge.db\
-    $(UCR)$/dcsscbackend.db\
     $(UCR)$/dcssi18n.db\
     $(UCR)$/dcssauth.db
 
@@ -153,7 +152,7 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 ALLTAR: $(REGISTRYCHECKFLAG)
 
 $(REGISTRYCHECKFLAG) : $(UNOIDLDBTARGET)
-    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
-    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
+    +regcompare -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
+    +regcompare -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
