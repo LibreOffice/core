@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BarDiagram.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,16 +137,7 @@ service BarDiagram
         as a deep chart with a z-axis (real 3D chart) or as a
         2-dimensional xy chart with 3 dimensional graphics.
 
-
-
-
-
-
-
-
-
         @optional
-            a
      */
     [optional, property] boolean Deep;
 
@@ -156,14 +147,6 @@ service BarDiagram
     /** determines if there are connecting lines between
         stacked bar charts. Currently, vertical bar charts do not support
         this property.
-
-
-
-
-
-
-
-
 
         @optional
      */
@@ -175,21 +158,9 @@ service BarDiagram
     /** determines how many data rows are displayed as lines rather than
         bars.
 
-        If this property differs from zero the last
+        <p>If this property differs from zero the last
         <member>BarDiagram::NumberOfLines</member> data rows are shown as lines. It is
-        currently supported by two dimensional vertical bar charts only.
-
-
-
-
-
-
-
-
-
-
-
-
+        currently supported by two dimensional vertical bar charts only. </p>
 
         @deprecated
      */
@@ -203,6 +174,9 @@ service BarDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:00  hjs
     initial import
 

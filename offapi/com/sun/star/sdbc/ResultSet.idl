@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ service ResultSet
     /** optional for implementation, controls the releasing of resources
              and the notification of registered listeners.
      */
-    interface com::sun::star::lang::XComponent;
+    [optional] interface com::sun::star::lang::XComponent;
 
 
     // DocMerge from xml: service com::sun::star::sdbc::ResultSet: interface com::sun::star::sdbc::XCloseable
@@ -142,7 +142,7 @@ service ResultSet
                 <p>This interface is mandatory only for JDBC conformance,
                 otherwise it is optional.
      */
-    interface XCloseable;
+    [optional] interface XCloseable;
 
     // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
@@ -158,7 +158,7 @@ service ResultSet
                 <p>This interface is mandatory only for JDBC conformance,
                 otherwise it is optional.
      */
-    interface XWarningsSupplier;
+    [optional] interface XWarningsSupplier;
 
 
     // DocMerge from xml: service com::sun::star::sdbc::ResultSet: interface com::sun::star::sdbc::XResultSetMetaDataSupplier
@@ -178,7 +178,7 @@ service ResultSet
 
                 <p>The implementation is optional.
      */
-    interface XResultSetUpdate;
+    [optional] interface XResultSetUpdate;
 
 
     // DocMerge from xml: service com::sun::star::sdbc::ResultSet: interface com::sun::star::sdbc::XRow
@@ -198,7 +198,7 @@ service ResultSet
 
                 <p>The implementation is optional.
      */
-    interface XRowUpdate;
+    [optional] interface XRowUpdate;
 
 
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::CursorName
@@ -219,12 +219,6 @@ service ResultSet
         execution must be done by a different Statement than the one
         which generated the ResultSet being used for positioning. Also,
         cursor names must be unique within a connection.</p>
-
-
-
-
-
-
 
         @optional
      */
@@ -268,6 +262,9 @@ service ResultSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:40  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataAwareControlModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ service DataAwareControlModel
                 it has to forward the changes of it's value to the field
                 it is connected to immediately.
      */
-    interface com::sun::star::form::XBoundComponent;
+    [optional] interface com::sun::star::form::XBoundComponent;
 
 
     // DocMerge from xml: service com::sun::star::form::DataAwareControlModel: interface com::sun::star::form::XLoadListener
@@ -166,6 +166,9 @@ service DataAwareControlModel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:16  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ service DatabaseAccess
     /** establishing a connection with user interaction, the implementation
              is optional.
      */
-    interface XCompletedConnection;
+    [optional] interface XCompletedConnection;
 
 
     // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::URL
@@ -148,14 +148,6 @@ service DatabaseAccess
     // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::IsPasswordRequired
     /** indicates that a password is always necessary.
 
-
-
-
-
-
-
-
-
         @optional
      */
     [optional, property] boolean IsPasswordRequired;
@@ -181,6 +173,9 @@ service DatabaseAccess
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:24 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ service ConfigurationAccess
  <p><i>Renaming a node is not supported.</i>
  <p>This interface is optional on a root node directly obtained from a <type>ConfigurationProvider</type>..
 */
-    interface com::sun::star::container::XNamed;
+    [optional] interface com::sun::star::container::XNamed;
 
 /** provides the complete hierarchical name of this node within the configuration tree.
 */
@@ -200,7 +200,7 @@ service ConfigurationAccess
  be supported on a read-only Configuration access.
  <p><i>This interface is optional in this service</i>
 */
-    interface com::sun::star::beans::XPropertySet;
+    [optional] interface com::sun::star::beans::XPropertySet;
 
 /** provides access to the descendants of this node as properties.
  This interface allows accessing multiple values at once.
@@ -209,14 +209,14 @@ service ConfigurationAccess
  be supported on a read-only Configuration access.
  <p><i>This interface is optional in this service</i>
 */
-    interface com::sun::star::beans::XMultiPropertySet;
+    [optional] interface com::sun::star::beans::XMultiPropertySet;
 
 /** provides access to state of descendants of this node.
  This interface allows accessing default values and determining whether a default is active for a value.
  Setting property values is not supported by a read-only Configuration access.
  <p><i>This interface is optional in this service</i>
 */
-    interface com::sun::star::beans::XPropertyState;
+    [optional] interface com::sun::star::beans::XPropertyState;
 
 
 /** provides access to the descendants of this node as properties.
@@ -224,7 +224,7 @@ service ConfigurationAccess
  Setting property values is not supported by a read-only Configuration access.
  <p><i>This interface is optional in this service</i>
 */
-    interface com::sun::star::beans::XPropertyAccess;
+    [optional] interface com::sun::star::beans::XPropertyAccess;
 
 };
 

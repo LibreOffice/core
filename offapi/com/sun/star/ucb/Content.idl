@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2001-01-18 14:27:23 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,7 @@ service Content
 
         This interface is optional.
      */
-    interface com::sun::star::ucb::XCommandInfoChangeNotifier;
+    [optional] interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** creates new contents (i.e. creates a new folder in another folder
@@ -630,7 +630,7 @@ service Content
         This interface is optional. It should be implemented by contents
         which shall be able to create new objects.
      */
-    interface com::sun::star::ucb::XContentCreator;
+    [optional] interface com::sun::star::ucb::XContentCreator;
 
     //-------------------------------------------------------------------------
     /** provides access to the parent content of this content.

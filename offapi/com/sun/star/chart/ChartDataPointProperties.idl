@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataPointProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-20 14:48:39 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,8 @@ service ChartDataPointProperties
     // DocMerge from xml: property com::sun::star::chart::ChartDataPointProperties::SymbolType
     /** specifies the type of symbol.
 
-        @optional@see ChartSymbolType
+        @optional
+        @see ChartSymbolType
      */
     [optional, property] long SymbolType;
 
@@ -145,7 +146,8 @@ service ChartDataPointProperties
 
     /** specifies the type of symbol.
 
-        @optional@see ChartSymbolType
+        @optional
+        @see ChartSymbolType
      */
     [optional, property] string SymbolBitmapURL;
 };
@@ -157,6 +159,9 @@ service ChartDataPointProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/11/20 14:48:39  bm
+    SymbolBitmapURL is a string not an XBitmap
+
     Revision 1.4  2000/11/20 14:47:20  bm
     +property SymbolBitmapURL for SunSigma
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentInfo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:05 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,6 @@
 
 //=============================================================================
 
-// DocMerge: from xml
-
 // DocMerge from xml: service com::sun::star::document::DocumentInfo
 /** This service provides document-specific information like the
     author, creation date and user fields.@see StandaloneDocumentInfo
@@ -97,28 +95,18 @@
 service DocumentInfo
 {
     // DocMerge: empty anyway
-
-    // DocMerge: empty anyway
     interface com::sun::star::document::XDocumentInfo;
-
-    // DocMerge: empty anyway
 
     // DocMerge: empty anyway
     interface com::sun::star::lang::XComponent;
 
     // DocMerge: empty anyway
-
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
-
-    // DocMerge: empty anyway
 
     // DocMerge: empty anyway
     interface com::sun::star::beans::XFastPropertySet;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Author
     /** contains the intial author of the document.
@@ -126,8 +114,6 @@ service DocumentInfo
     [property] string Author;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::BlindCopiesTo
     /** contains the recipients who have received or will
@@ -145,8 +131,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::CopyTo
     /** contains the recipients who have received or will
         receive a copy by email.
@@ -162,8 +146,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::CreationDate
     /** contains the date and time of the first time the
         document was stored.
@@ -172,12 +154,8 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Description
     /** contains a multi-line comment of the document.
-
-
 
         <p>Line delimiters can be UNIX, Macintosh or DOS style.</p>
      */
@@ -185,16 +163,12 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::InReplyTo
     /** contains the message ID to which this is an answer.
      */
     [property] string InReplyTo;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Keywords
     /** contains a comma separated by a list of keywords for
@@ -204,12 +178,8 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::MIMEType
     /** contains the MIME-type of the document's resource.
-
-
 
         <p>The MIME-type is neither stored in the document information nor in
         the document; it is sent within a protocol header or is
@@ -219,8 +189,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::ModifyDate
     /** contains the date and time of the last time the
         document was stored.
@@ -228,8 +196,6 @@ service DocumentInfo
     [property] com::sun::star::util::DateTime ModifyDate;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::ModifiedBy
     /** contains the name of the editor who was the last
@@ -239,13 +205,9 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Newsgroups
     /** contains the list of newsgroups where this document
         was or will be posted.
-
-
 
         <p>If there is more than one entry, the list is separated by a comma.</p>
      */
@@ -253,12 +215,8 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Original
     /** contains the source of the document.
-
-
 
         <p>E.g. the message ID for a locally stored message.</p>
      */
@@ -266,20 +224,14 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Priority
     /** contains the priority of the document.
-
-
 
         <p>The value can be between 0 (very high) and 4 (very low).</p>
      */
     [property] short Priority;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Recipient
     /** contains the recipient of the document.
@@ -288,16 +240,12 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::References
     /** contains a list of referred message IDs.
      */
     [property] string References;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::ReplyTo
     /** contains the mailto:-URL for where to send an answer.
@@ -306,8 +254,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Theme
     /** contains a theme describing the topic of the document.
      */
@@ -315,16 +261,12 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Title
     /** contains the title of the document.
      */
     [property] string Title;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::Template
     /** contains the path and name of the template from
@@ -339,8 +281,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::TemplateDate
     /** contains the date and time of when the document
         was created or updated from the template.
@@ -348,8 +288,6 @@ service DocumentInfo
     [property] com::sun::star::util::DateTime TemplateDate;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::IsEncrypted
     /** determines if the document is encrypted with a
@@ -368,8 +306,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::PrintDate
     /** contains the date and time of when the document was
         last printed.
@@ -378,8 +314,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::PrintedBy
     /** contains the name of the editor who was the last
         person to print the document.
@@ -387,8 +321,6 @@ service DocumentInfo
     [property] string PrintedBy;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::AutoloadEnabled
     /** determines if another (or the same) URL is to be
@@ -399,8 +331,6 @@ service DocumentInfo
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: from xml
-
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::AutoloadURL
     /** contains the URL to load automatically after a
         specified time after the document is loaded into a desktop frame.
@@ -408,8 +338,6 @@ service DocumentInfo
     [property] string AutoloadURL;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::AutoloadSecs
     /** contains the number of seconds after which a specified
@@ -419,8 +347,6 @@ service DocumentInfo
     [property] long AutoloadSecs;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
 
     // DocMerge from xml: property com::sun::star::document::DocumentInfo::DefaultTarget
     /** contains the name of the default frame into which
@@ -441,6 +367,9 @@ service DocumentInfo
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:05  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:40  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationUpdateAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:38 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ service ConfigurationUpdateAccess
  Otherwise <member>XChild::getParent()</member> can be used to navigate to the root
  of the update to commit any changes.
 */
-    interface com::sun::star::util::XChangesBatch;
+    [optional] interface com::sun::star::util::XChangesBatch;
 };
 
 //=============================================================================

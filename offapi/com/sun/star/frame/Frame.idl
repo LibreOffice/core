@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,14 +106,14 @@ service Frame
     /** This optional interface is used to access sub-frames within this
                 Frame.
      */
-    interface com::sun::star::frame::XFramesSupplier;
+    [optional] interface com::sun::star::frame::XFramesSupplier;
 
 
     // DocMerge from xml: service com::sun::star::frame::Frame: interface com::sun::star::task::XStatusIndicatorFactory
     /** This optional interface supplies access to <type>XStatusIndicator</type>s
                 for the component within the frame.
      */
-    interface com::sun::star::task::XStatusIndicatorFactory;
+    [optional] interface com::sun::star::task::XStatusIndicatorFactory;
 
 };
 
@@ -124,6 +124,9 @@ service Frame
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:14  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:20  hjs
     initial import
 

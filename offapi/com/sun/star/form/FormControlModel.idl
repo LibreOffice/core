@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormControlModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ service FormControlModel
     /** This optional interface gives an efficient access to all
                 properties at once or an ability to set more than one property at once.
      */
-    interface com::sun::star::beans::XFastPropertySet;
+    [optional] interface com::sun::star::beans::XFastPropertySet;
 
 
     // DocMerge from xml: service com::sun::star::form::FormControlModel: interface com::sun::star::beans::XPropertyState
@@ -114,7 +114,7 @@ service FormControlModel
                 properties, e.g. whether a default value
                 is to be used or not for a certain property.
      */
-    interface com::sun::star::beans::XPropertyState;
+    [optional] interface com::sun::star::beans::XPropertyState;
 
     //-------------------------------------------------------------------------
 
@@ -151,6 +151,9 @@ service FormControlModel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.2  2000/10/10 08:40:23  dg
     optional was missing for TabIndex
 

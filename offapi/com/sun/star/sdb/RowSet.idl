@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:38 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,30 +213,12 @@ service RowSet
     /** is the name of the table which should be updated, this is usually used
         for queries which relate to more than one table.
 
-
-
-
-
-
-
-
-
         @optional
-            .
      */
     [optional, property] string UpdateTableName;
 
-
     // DocMerge from xml: property com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::RowSet::UpdateCatalogName
     /** is the name of the table catalog
-
-
-
-
-
-
-
-
 
         @optional
      */
@@ -245,14 +227,6 @@ service RowSet
 
     // DocMerge from xml: property com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::RowSet::UpdateSchemaName
     /** is the name of the table schema.
-
-
-
-
-
-
-
-
 
         @optional
      */
@@ -265,6 +239,9 @@ service RowSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:38  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseDefinition.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:39 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,17 +92,17 @@ service DatabaseDefinition
     // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition: interface com::sun::star::sdbcx::XViewsSupplier
     /** The implementation is optional.
      */
-    interface XViewsSupplier;
+    [optional] interface XViewsSupplier;
 
     // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition: interface com::sun::star::sdbcx::XUsersSupplier
     /** The implementation is optional.
      */
-    interface XUsersSupplier;
+    [optional] interface XUsersSupplier;
 
     // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition: interface com::sun::star::sdbcx::XGroupsSupplier
     /** The implementation is optional.
      */
-    interface XGroupsSupplier;
+    [optional] interface XGroupsSupplier;
 };
 
 //=============================================================================
@@ -111,6 +111,9 @@ service DatabaseDefinition
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:39  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:43  hjs
     initial import
 

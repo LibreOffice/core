@@ -2,9 +2,9 @@
  *
  *  $RCSfile: User.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:39 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ service User
     /** optional for implementation if the database does not know the concept
              of user groups. provides the access to the groups a user belongs.
      */
-    interface XGroupsSupplier;
+    [optional] interface XGroupsSupplier;
 
     // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
@@ -102,6 +102,9 @@ service User
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:39  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:44  hjs
     initial import
 

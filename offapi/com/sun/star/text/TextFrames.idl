@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFrames.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 09:30:48 $
+ *  last change: $Author: mi $ $Date: 2001-01-23 10:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ service TextFrames
                 which occur upon insertion and removal of <type>TextFrame</type>
                 instances.
      */
-    interface com::sun::star::container::XContainer;
+    [optional] interface com::sun::star::container::XContainer;
 
 };
 
