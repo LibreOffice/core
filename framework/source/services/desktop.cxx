@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:31:36 $
+ *  last change: $Author: as $ $Date: 2001-07-27 11:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,43 +418,42 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     // Set default return value to TRUE!
     // Because; if we detect a vetor of a listener or a task say "no" to our close() call ...
     // we should reset to FALSE.
-    sal_Bool bTerminated = sal_True;
+    sal_Bool bTerminated = sal_True ;
+    sal_Bool bVeto       = sal_False;
 
     // Disable our async quit timer ... we terminate ourself!
     // But if termination fail ... don't forget to enable it again!
     // Member is threadsafe himself!
     m_aChildTaskContainer.disableQuitTimer();
 
-    // Step over all child tasks and ask they "WOULD YOU DIE?"
-    css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
-    sal_Int32                                                       nCount = lTasks.getLength()                    ;
-    for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
+    try
     {
-        // Get an element from container and cast it to task.
-        // IT MUST BE A TASK! Childs of desktop everytime tasks. No pure frames accepted!
-        // It can be a plugin too, but a plugin is derived from a task ...!
-        css::uno::Reference< css::frame::XTask > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
-        // Ask task for terminating. If anyone say "NO" ...
-        // ... we must reset ouer default return value to "NO" too!
-        // But we don't break this loop ... we will close all task, which accept it.
-        if( xTask->close() == sal_False )
-        {
-            bTerminated = sal_False;
-        }
+        impl_sendQueryTerminationEvent();
+    }
+    catch( css::frame::TerminationVetoException& )
+    {
+        bTerminated = sal_False;
+        bVeto       = sal_True ;
     }
 
-    // If termination of tasks was successfully ... ask listener for her agreement.
-    // A vetoable listener can throw an TerminateVetoException.
-    // Then we return false!
-    if( bTerminated == sal_True )
+    if( bVeto == sal_False )
     {
-        try
+        // Step over all child tasks and ask they "WOULD YOU DIE?"
+        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
+        sal_Int32                                                       nCount = lTasks.getLength()                    ;
+        for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
         {
-            impl_sendQueryTerminationEvent();
-        }
-        catch( css::frame::TerminationVetoException& )
-        {
-            bTerminated = sal_False;
+            // Get an element from container and cast it to task.
+            // IT MUST BE A TASK! Childs of desktop everytime tasks. No pure frames accepted!
+            // It can be a plugin too, but a plugin is derived from a task ...!
+            css::uno::Reference< css::frame::XTask > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
+            // Ask task for terminating. If anyone say "NO" ...
+            // ... we must reset ouer default return value to "NO" too!
+            // But we don't break this loop ... we will close all task, which accept it.
+            if( xTask->close() == sal_False )
+            {
+                bTerminated = sal_False;
+            }
         }
     }
 
