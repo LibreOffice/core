@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 16:47:30 $
+ *  last change: $Author: os $ $Date: 2002-03-27 11:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,6 @@
  *
  ************************************************************************/
 #include "bib.hrc"
-
-ImageList RID_BIB_BMPEXPANDER
-{
-    ImageBitmap = Bitmap { File = "expander.bmp" ; };
-    IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; };
-    IdCount = { 9 ; };
-};
 
 String RID_BIB_STR_FIELDSELECTION
 {
