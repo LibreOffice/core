@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-18 14:06:31 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:58:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ SLOFILES =	\
         $(SLO)$/SwRewriter.obj \
         $(SLO)$/SwUndoField.obj \
         $(SLO)$/SwUndoPageDesc.obj \
+        $(SLO)$/SwUndoFmt.obj \
         $(SLO)$/SwUndoTempAutoCorr.obj \
         $(SLO)$/SwUndoTOXChange.obj \
         $(SLO)$/docundo.obj \
