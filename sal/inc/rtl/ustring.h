@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:26:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 08:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,21 +1353,21 @@ void SAL_CALL rtl_uString_newTrim( rtl_uString ** newStr, rtl_uString * str ) SA
 
     @param newStr
     pointer to the new string.  The pointed-to data must be null or a valid
-    string.
+    string.  If either token or index is negative, an empty token is stored in
+    newStr (and -1 is returned).
 
     @param str
     a valid string.
 
     @param token
-    the number of the token to return, starting at index.  Must be
-    non-negative.
+    the number of the token to return, starting at index.
 
     @param cTok
     the character that seperates the tokens.
 
     @param index
-    the position at which searching for the token starts.  Must be between 0
-    and the length of str, inclusive.
+    the position at which searching for the token starts.  Must not be greater
+    than the length of str.
 
     @return
     the index of the next token, or -1 if no more tokens follow.
