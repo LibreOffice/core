@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #endif
 
-#ifdef DEBUG
+//#if OSL_DEBUG_LEVEL > 1
 //#include "Debug.c"
-#endif
+//#endif
 
 #define SWAPPOINT(p) {  \
     p.x=SWAPSHORT(p.x); \
@@ -1093,7 +1093,7 @@ BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 *************************************************************************/
 BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
-#ifdef DEBUG  // Recordgrößen checken. Neuer Compiler hat vielleichte anderes Allignment!
+#if OSL_DEBUG_LEVEL > 1 // Recordgrößen checken. Neuer Compiler hat vielleichte anderes Alignment!
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return FALSE;
 #endif
 
