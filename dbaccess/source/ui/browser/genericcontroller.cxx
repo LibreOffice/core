@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:40:32 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 19:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
 // -----------------------------------------------------------------------
 void OGenericUnoController::InvalidateFeature(const ::rtl::OUString& _rURLPath, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
 {
-    InvalidateFeature( m_aSupportedFeatures[_rURLPath], _xListener, _bForceBroadcast );
+    ImplInvalidateFeature( m_aSupportedFeatures[_rURLPath], _xListener, _bForceBroadcast );
 }
 
 // -----------------------------------------------------------------------------
@@ -518,7 +518,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
+void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
 {
     FeaturePair aPair;
     aPair.nId               = _nId;
@@ -537,9 +537,15 @@ void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< 
 }
 
 // -----------------------------------------------------------------------
+void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
+{
+    ImplInvalidateFeature( _nId, _xListener, _bForceBroadcast );
+}
+
+// -----------------------------------------------------------------------
 void OGenericUnoController::InvalidateAll()
 {
-    InvalidateFeature( ALL_FEATURES, NULL, sal_True );
+    ImplInvalidateFeature( ALL_FEATURES, NULL, sal_True );
 }
 
 // -----------------------------------------------------------------------------
