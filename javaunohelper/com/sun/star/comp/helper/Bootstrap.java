@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:36:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package com.sun.star.comp.helper;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.JavaLoader;
 import com.sun.star.container.XSet;
@@ -278,13 +279,8 @@ public class Bootstrap {
                 xLocalContext.getServiceManager();
 
             // create a URL resolver
-            Object urlResolver = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-
-            // query for the XUnoUrlResolver interface
             XUnoUrlResolver xUrlResolver =
-                (XUnoUrlResolver)UnoRuntime.queryInterface(
-                XUnoUrlResolver.class, urlResolver );
+                UnoUrlResolver.create( xLocalContext );
 
             // try to connect to office
             Object remoteServiceManager = null;
