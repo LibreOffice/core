@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:25:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,7 @@ static sal_Unicode const aYetR[]                    = { 0xD734, 0xBA3C, 0xC61B, 
 static sal_Unicode const aHYGothicExtra[]           = { 'h', 'y', 0xACAC, 0xACE0, 0xB515, 0, 0 };
 static sal_Unicode const aSunMokPan[]               = { 0xC36C, 0xBAA9, 0xD310, 0, 0 };
 static sal_Unicode const aSunYeopseo[]              = { 0xC36C, 0xC5FD, 0xC11C, 0, 0 };
+static sal_Unicode const aSunBaekSong[]              = { 0xC36C, 0xBC31, 0xC1A1, 0, 0 };
 static sal_Unicode const aHYPostLight[]             = { 'h', 'y', 0xC5FD, 0xC11C, 'l', 0, 0 };
 static sal_Unicode const aHYPost[]                  = { 'h', 'y', 0xC5FD, 0xC11C, 0, 0 };
 static sal_Unicode const aMagicR[]                  = { 0xD734, 0xBA3C, 0xB9E4, 0xC9C1, 0xCCB4, 0, 0 };
@@ -550,6 +551,7 @@ static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 {   "hygothicextra",        aHYGothicExtra },
 {   "sunmokpan",            aSunMokPan },
 {   "sunyeopseo",           aSunYeopseo },
+{   "sunbaeksong",          aSunBaekSong },
 {   "hypostlight",          aHYPostLight },
 {   "hypost",               aHYPost },
 {   "magicr",               aMagicR },
@@ -5930,8 +5932,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             else if( nPixelWidth )
                 nRTLOffset = nPixelWidth;
             else
-                nRTLOffset = pSalLayout->GetTextWidth();
-            nRTLOffset /= pSalLayout->GetUnitsPerPixel();
+                nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
             pSalLayout->DrawOffset().X() = -nRTLOffset;
         }
     }
