@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 14:58:08 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2524,13 +2524,6 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
         ScTabViewShell* pShell = aViewData.GetViewShell();
         pShell->WindowChanged();
-
-        if (pShell->HasAccessibilityObjects())
-        {
-            ScAccGridViewChangeHint aAccHint(eOld, eWhich,
-                pGridWin[eOld]->GetAccessible(), pGridWin[eWhich]->GetAccessible());
-            pShell->BroadcastAccessibility(aAccHint);
-        }
 
         pSelEngine->SetWindow(pGridWin[eWhich]);
         pSelEngine->SetWhich(eWhich);
