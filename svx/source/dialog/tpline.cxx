@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 12:56:44 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 12:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ void SvxLineTabPage::Construct()
 
 void SvxLineTabPage::FillListboxes()
 {
-    aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+//  aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     ResMgr* pMgr = DIALOG_MGR();
 
@@ -372,7 +372,6 @@ void SvxLineTabPage::FillListboxes()
     USHORT nOldSelect = aLbLineStyle.GetSelectEntryPos();
     aLbLineStyle.Clear();
     aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_INVISIBLE, pMgr ) ) );
-    aLbLineStyle.SelectEntryPos( nOldSelect );
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
@@ -389,6 +388,8 @@ void SvxLineTabPage::FillListboxes()
     Image aSolidLine ( aBitmap );
     aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_SOLID, pMgr ) ), aSolidLine );
     aLbLineStyle.Fill( pDashList );
+    aLbLineStyle.SelectEntryPos( nOldSelect );
+
     // LinienEndenStile
     String sNone( ResId( RID_SVXSTR_NONE, pMgr ) );
     nOldSelect = aLbStartStyle.GetSelectEntryPos();
