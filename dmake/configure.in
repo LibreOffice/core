@@ -58,7 +58,7 @@ case $OS_UNAME in
 		OS_VERSION=sysvr4
 		echo "Irix found"
 	;;
-	FreeBsd)
+	FreeBSD)
 		OS_VERSION=386ix
 		echo "FreeBSD found"
 	;;
