@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-04 17:26:28 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 09:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,12 +103,10 @@
 
 #include "fileobj.hxx"
 #include "linkmgr.hxx"
-#include "fobjcach.hxx"
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
 #include "xoutbmp.hxx"          // XOutBitmap
 #include "impgrf.hxx"
-#include "dialdll.hxx"
 
 // es gibt wohl ein paar Compiler-Fehler beim optimieren
 #pragma optimize( "", off )
@@ -279,8 +277,6 @@ JP 28.02.96: noch eine Baustelle:
                     // wieder versuchen
                     bLoadAgain = !xMed->IsRemote();
                     bLoadError = !GetGraphic_Impl( aGrf, xMed->GetInStream() );
-                    if( bLoadError )
-                        GetCache()->Remove( *this );
                 }
                 else if( !LoadFile_Impl() ||
                         !GetGraphic_Impl( aGrf, xMed.Is() ? xMed->GetInStream() : 0 ))
@@ -362,45 +358,32 @@ BOOL SvFileObject::Connect( SvBaseLink& rLink )
             if( pShell->GetMedium() )
                 sReferer = pShell->GetMedium()->GetName();
         }
-
-        FileObjCacheEntry_Impl* pEntry = GetCache()->Insert( *this, sFileNm );
-        pObj = pEntry->GetObject();
     }
 
-    if( pObj == this )
+    switch( rLink.GetObjectType() )
     {
-        switch( rLink.GetObjectType() )
-        {
-        case OBJECT_CLIENT_GRF:
-            nType = FILETYPE_GRF;
-            bSynchron = rLink.IsSynchron();
-            break;
+    case OBJECT_CLIENT_GRF:
+        nType = FILETYPE_GRF;
+        bSynchron = rLink.IsSynchron();
+        break;
 
-        case OBJECT_CLIENT_FILE:
-            nType = FILETYPE_TEXT;
-            break;
+    case OBJECT_CLIENT_FILE:
+        nType = FILETYPE_TEXT;
+        break;
 
-        default:
-            return FALSE;
-        }
-
-        SetUpdateTimeout( 0 );
+    default:
+        return FALSE;
     }
-    else
-        bProgress = FALSE;
+
+    SetUpdateTimeout( 0 );
 
     // und jetzt bei diesem oder gefundenem Pseudo-Object anmelden
-    pObj->AddDataAdvise( &rLink, rLink.GetContentType(),
+    AddDataAdvise( &rLink, rLink.GetContentType(),
                         (bProgress ? ADVISEMODE_ONLYONCE : 0 ));
     // um ueber Status-Aenderungen informiert zu werden
-    pObj->AddDataAdvise( &rLink, SvxLinkManager::RegisterStatusInfoId(),
+    AddDataAdvise( &rLink, SvxLinkManager::RegisterStatusInfoId(),
                             ADVISEMODE_ONLYONCE );
-    pObj->AddConnectAdvise( &rLink, ADVISE_CLOSED );
-
-    if( pObj != this )
-        // am Link das richtige Object setzen
-        ((ImplGrfCastBaseLink&)rLink).SetObject( pObj );
-
+    AddConnectAdvise( &rLink, ADVISE_CLOSED );
     return TRUE;
 }
 
@@ -697,7 +680,6 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
         else if( pThis->bWaitForData && pThis->pDownLoadData )
         {
             pThis->bLoadError = TRUE;
-            GetCache()->Remove( *pThis );
         }
     }
 
@@ -785,10 +767,6 @@ void SvFileObject::CancelTransfers()
     // und aus dem Cache austragen, wenn man mitten im Laden ist
     if( !bDataReady )
     {
-        SvxGrfLinkData_Impl* pData = *(SvxGrfLinkData_Impl**)GetAppData( SHL_LNKCCH );
-        if( pData->pCache )
-            pData->pCache->Remove( *this );
-
         // nicht noch mal aufsetzen
         bLoadAgain = bMedUseCache = FALSE;
         bDataReady = bLoadError = bWaitForData = TRUE;
@@ -816,195 +794,4 @@ void SvFileObject::SendStateChg_Impl( USHORT nState )
     }
 }
 
-/**/
-
-
-FileObjCacheEntry_Impl::FileObjCacheEntry_Impl(
-    SvFileObject& rObj, const String& rName )
-    : pPrev( 0 ), pNext( 0 ),
-    xObj( &rObj ),
-    sFileName( rName )
-{
-}
-
-
-FileObjCacheEntry_Impl::~FileObjCacheEntry_Impl()
-{
-// xObj->pImpCachePointer = 0;
-}
-
-
-/**/
-
-
-FileObjCache_Impl::FileObjCache_Impl( USHORT nMaxCnt )
-    : pFirst( 0 ), pLast( 0 ), nSize( 0 ), nMaxSize( nMaxCnt )
-{
-    StartListening( *SFX_APP() );
-}
-
-
-FileObjCache_Impl::~FileObjCache_Impl()
-{
-    while( pFirst )
-    {
-        FileObjCacheEntry_Impl* p = pFirst->pNext;
-        delete pFirst;
-        pFirst = p;
-    }
-}
-
-
-    // FileObject einfuegen. Wenn doppelt, dann returne das schon
-    // vorhandene, ansonsten lege ein neues an.
-
-FileObjCacheEntry_Impl* FileObjCache_Impl::Insert(
-        SvFileObject& rObj, const String& rName )
-{
-    FileObjCacheEntry_Impl* p = pFirst;
-    while( p && p->sFileName != rName )
-        p = p->pNext;
-
-    if( !p )        // nicht gefunden, also neu anlegen
-    {
-        p = new FileObjCacheEntry_Impl( rObj, rName );
-        if( !nSize++ )
-        {
-            pFirst = pLast = p;
-            return pFirst;
-        }
-        else if( nSize > nMaxSize )     // letzten entfernen
-        {
-            // evtuell nach vorne suchen, ob es einen gibt, der nicht
-            // mehr verbunden ist ?
-            pLast = pLast->pPrev;
-            delete pLast->pNext;
-            pLast->pNext = 0;
-            --nSize;
-        }
-    }
-    else if( p != pFirst )      // gefunden, also nach vorne verschieben
-    {
-        if( p->pNext )
-            p->pNext->pPrev = p->pPrev;
-        else if( p == pLast )           // das muss der Letzte sein!
-            pLast = p->pPrev ? p->pPrev : p;
-
-        if( p->pPrev )
-        {
-            p->pPrev->pNext = p->pNext;
-            p->pPrev = 0;
-        }
-    }
-    else
-        return pFirst;          // der gefundene
-
-    p->pNext = pFirst;
-    pFirst->pPrev = p;
-    pFirst = p;
-
-    return pFirst;
-}
-
-    // enferne dieses Object
-
-void FileObjCache_Impl::Remove( SvFileObject& rObj )
-{
-    FileObjCacheEntry_Impl* p = pFirst;
-    while( p && &p->xObj != &rObj )
-        p = p->pNext;
-
-    if( p )
-    {
-        // ausketten
-        if( p == pFirst )
-            pFirst = p->pNext;
-        if( p == pLast )
-            pLast = p->pPrev;
-
-        if( p->pNext )
-            p->pNext->pPrev = p->pPrev;
-
-        if( p->pPrev )
-            p->pPrev->pNext = p->pNext;
-
-        delete p;
-        --nSize;
-    }
-}
-
-    // enferne dieses Object
-
-void FileObjCache_Impl::Remove( const String& rName )
-{
-    FileObjCacheEntry_Impl* p = pFirst;
-    while( p && p->sFileName != rName )
-        p = p->pNext;
-
-    if( p )
-    {
-        // ausketten
-        if( p == pFirst )
-            pFirst = p->pNext;
-        if( p == pLast )
-            pLast = p->pPrev;
-
-        if( p->pNext )
-            p->pNext->pPrev = p->pPrev;
-
-        if( p->pPrev )
-            p->pPrev->pNext = p->pNext;
-
-        delete p;
-        --nSize;
-    }
-}
-
-
-void FileObjCache_Impl::SFX_NOTIFY( SfxBroadcaster& , const TypeId& ,
-                                    const SfxHint& rHint, const TypeId& )
-{
-    if( rHint.ISA( SfxSimpleHint ) && SFX_HINT_DEINITIALIZING ==
-        ((SfxSimpleHint&)rHint).GetId() )
-    {
-        // die Applikation wird herunter gefahren, lasse alle Mediums los
-        while( pFirst )
-        {
-            FileObjCacheEntry_Impl* p = pFirst->pNext;
-            delete pFirst;
-            pFirst = p;
-        }
-
-        EndListening( *SFX_APP() );
-    }
-}
-
-    // suche nach einem Object mit dem Namen
-
-FileObjCacheEntry_Impl* FileObjCache_Impl::Found( const String& rName )
-{
-    FileObjCacheEntry_Impl* p = pFirst;
-    while( p && p->sFileName != rName )
-        p = p->pNext;
-    return p;
-}
-
-
-/**/
-
-SvxGrfLinkCacheDll::SvxGrfLinkCacheDll()
-{
-    DBG_ASSERT( !(*GetAppData(SHL_LNKCCH)), "Ctor, but pointer not null" );
-
-    (*(SvxGrfLinkData_Impl**)GetAppData(SHL_LNKCCH)) = new SvxGrfLinkData_Impl;
-}
-
-
-SvxGrfLinkCacheDll::~SvxGrfLinkCacheDll()
-{
-    DBG_ASSERT( (*GetAppData(SHL_LNKCCH)), "Dtor, pointer == null" );
-
-    delete (*(SvxGrfLinkData_Impl**)GetAppData(SHL_LNKCCH));
-    (*(SvxGrfLinkData_Impl**)GetAppData(SHL_LNKCCH)) = 0;
-}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialdll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:55 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,19 +71,6 @@ public:
 
     static void     ResetResMgr();
 };
-
-// class SvxGrfLinkCacheDll ----------------------------------------------
-
-class SvxGrfLinkData_Impl;
-
-class SvxGrfLinkCacheDll
-{
-    SvxGrfLinkData_Impl* pData;
-public:
-    SvxGrfLinkCacheDll();
-    ~SvxGrfLinkCacheDll();
-};
-
 
 #endif
 

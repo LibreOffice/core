@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 17:51:37 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 09:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 
 #include "linkmgr.hxx"
 #include "fileobj.hxx"
-#include "fobjcach.hxx"
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
 #include "unolingu.hxx"
@@ -247,33 +246,6 @@ void SvxLinkManager::SetTransferPriority( SvBaseLink& rLink, USHORT nPrio )
         pFileObj->SetTransferPriority( nPrio );
 }
 
-
-void SvxLinkManager::PrepareReload( SvBaseLink* pLnk )
-{
-    FileObjCache_Impl* pCache = ::GetCache();
-    SvFileObject* pFileObj;
-
-    if( pLnk )      // einen speziellen?
-    {
-        if( OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
-            0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
-        {
-            pCache->Remove( *pFileObj );
-            pLnk->SetUseCache( FALSE );
-        }
-        return ;
-    }
-
-    // dann eben alle
-    const SvBaseLinks& rLnks = GetLinks();
-    for( USHORT n = rLnks.Count(); n; )
-        if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
-            OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
-            0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
-        {
-            pCache->Remove( *pFileObj );
-        }
-}
 
     // um Status Informationen aus dem FileObject an den BaseLink zu
     // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
