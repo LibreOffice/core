@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:18:10 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,14 @@
 
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX
@@ -979,6 +987,28 @@ sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
 
     switch ( nMemberId )
     {
+        case 0:
+        {
+            uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
+
+            ::com::sun::star::drawing::LineDash aLineDash;
+
+            const XDash& rXD = GetValue();
+            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
+            aLineDash.Dots = rXD.GetDots();
+            aLineDash.DotLen = rXD.GetDotLen();
+            aLineDash.Dashes = rXD.GetDashes();
+            aLineDash.DashLen = rXD.GetDashLen();
+            aLineDash.Distance = rXD.GetDistance();
+
+            aPropSeq[0].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
+            aPropSeq[0].Value   = uno::makeAny( OUString( GetName() ));
+            aPropSeq[1].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ));
+            aPropSeq[1].Value   = uno::makeAny( aLineDash );
+            rVal = uno::makeAny( aPropSeq );
+            break;
+        }
+
         case MID_NAME:
         {
             rtl::OUString aApiName;
@@ -1059,6 +1089,50 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
 
     switch ( nMemberId )
     {
+        case 0:
+        {
+            uno::Sequence< beans::PropertyValue >   aPropSeq;
+            ::com::sun::star::drawing::LineDash     aLineDash;
+            rtl::OUString                           aName;
+            sal_Bool                                bLineDash( sal_False );
+
+            if ( rVal >>= aPropSeq )
+            {
+                for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+                {
+                    if ( aPropSeq[n].Name.equalsAsciiL( "Name", 4  ))
+                        aPropSeq[n].Value >>= aName;
+                    else if ( aPropSeq[n].Name.equalsAsciiL( "LineDash", 8 ))
+                    {
+                        if ( aPropSeq[n].Value >>= aLineDash )
+                            bLineDash = sal_True;
+                    }
+                }
+
+                SetName( aName );
+                if ( bLineDash )
+                {
+                    XDash aXDash;
+
+                    aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
+                    aXDash.SetDots(aLineDash.Dots);
+                    aXDash.SetDotLen(aLineDash.DotLen);
+                    aXDash.SetDashes(aLineDash.Dashes);
+                    aXDash.SetDashLen(aLineDash.DashLen);
+                    aXDash.SetDistance(aLineDash.Distance);
+
+                    if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
+                        aXDash.SetDots(1);
+
+                    SetValue( aXDash );
+                }
+
+                return sal_True;
+            }
+
+            return sal_False;
+        }
+
         case MID_NAME:
         {
             rtl::OUString aName;
