@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Mutex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $  $Date: 2003-12-11 12:31:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,17 +80,17 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    printf( "#printUString_u# " );
+    t_print("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 /** print Boolean value.
 */
 inline void printBool( sal_Bool bOk )
 {
-    printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "YES!\n" ): printf( "NO!\n" );
+    t_print("#printBool# " );
+    ( sal_True == bOk ) ? t_print("YES!\n" ): t_print("NO!\n" );
 }
 
 /** pause nSec seconds helper function.
@@ -100,7 +100,7 @@ namespace ThreadHelper
     void thread_sleep( sal_Int32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
-        printf( "# wait %d seconds. ", _nSec );
+        t_print("# wait %d seconds. ", _nSec );
         fflush(stdout);
 
 #ifdef WNT                               //Windows
@@ -109,7 +109,19 @@ namespace ThreadHelper
 #if ( defined UNX ) || ( defined OS2 )   //Unix
         sleep( _nSec );
 #endif
-        printf( "# done\n" );
+        t_print("# done\n" );
+    }
+    void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
+     {
+#ifdef WNT      //Windows
+            Sleep(_nTenthSec * 100 );
+#endif
+#if ( defined UNX ) || ( defined OS2 )  //Unix
+            TimeValue nTV;
+            nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
+            nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
+            osl_waitThread(&nTV);
+#endif
     }
 }
 
@@ -248,7 +260,7 @@ protected:
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
-        printf( "# Mutex acquired. \n" );
+        t_print("# Mutex acquired. \n" );
         pMyMutex->release( );
     }
 };
@@ -270,7 +282,7 @@ protected:
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
-        ThreadHelper::thread_sleep( 2 );
+        ThreadHelper::thread_sleep_tenth_sec( 2 );
         pMyMutex->release( );
     }
 };
@@ -294,7 +306,7 @@ protected:
         Mutex* pGlobalMutex;
         pGlobalMutex = pGlobalMutex->getGlobalMutex( );
         pGlobalMutex->acquire( );
-        printf( "# Global Mutex acquired. \n" );
+        t_print("# Global Mutex acquired. \n" );
         pGlobalMutex->release( );
     }
 };
@@ -359,7 +371,7 @@ namespace osl_Mutex
                 bRes = sal_True;
 
             /*for (sal_Int8 i=0; i<BUFFER_SIZE; i++)
-                printf("#data in buffer is %d\n", m_Data.buffer[i]);
+                t_print("#data in buffer is %d\n", m_Data.buffer[i]);
             */
 
             CPPUNIT_ASSERT_MESSAGE("Mutex ctor", bRes == sal_True);
@@ -417,13 +429,13 @@ namespace osl_Mutex
             HoldThread myThread( &aMutex );
             myThread.create( );
 
-            ThreadHelper::thread_sleep( 2 );
+            ThreadHelper::thread_sleep_tenth_sec( 2 );
             // if acquire in myThread does not work, 2 secs is long enough,
             // myThread should terminate now, and bRes1 should be sal_False
             sal_Bool bRes1 = myThread.isRunning( );
 
             aMutex.release( );
-            ThreadHelper::thread_sleep( 1 );
+            ThreadHelper::thread_sleep_tenth_sec( 1 );
             // after release mutex, myThread stops blocking and will terminate immediately
             sal_Bool bRes2 = myThread.isRunning( );
             myThread.join( );
@@ -471,7 +483,7 @@ namespace osl_Mutex
             myThread.create();
 
             // ensure the child thread acquire the mutex
-            ThreadHelper::thread_sleep(1);
+            ThreadHelper::thread_sleep_tenth_sec(1);
 
             sal_Bool bRes1 = aMutex.tryToAcquire();
 
@@ -509,7 +521,7 @@ namespace osl_Mutex
             myThread.create( );
 
             // ensure the child thread acquire the mutex
-            ThreadHelper::thread_sleep( 1 );
+            ThreadHelper::thread_sleep_tenth_sec( 1 );
 
             sal_Bool bRunning = myThread.isRunning( );
             sal_Bool bRes1 = aMutex.tryToAcquire( );
@@ -563,11 +575,11 @@ namespace osl_Mutex
             GlobalMutexThread myThread;
             myThread.create();
 
-            ThreadHelper::thread_sleep(1);
+            ThreadHelper::thread_sleep_tenth_sec(1);
             sal_Bool bRes1 = myThread.isRunning();
 
             pGlobalMutex->release();
-            ThreadHelper::thread_sleep(1);
+            ThreadHelper::thread_sleep_tenth_sec(1);
             // after release mutex, myThread stops blocking and will terminate immediately
             sal_Bool bRes2 = myThread.isRunning();
 
@@ -628,7 +640,7 @@ protected:
     {
         // block here if the mutex has been acquired
         MutexGuard aGuard( pMyMutex );
-        ThreadHelper::thread_sleep( 2 );
+        ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
 };
 
@@ -645,7 +657,7 @@ namespace osl_Guard
             GuardThread myThread(&aMutex);
             myThread.create();
 
-            ThreadHelper::thread_sleep(1);
+            ThreadHelper::thread_sleep_tenth_sec(1);
             sal_Bool bRes = aMutex.tryToAcquire();
             // after 1 second, the mutex has been guarded, and the child thread should be running
             sal_Bool bRes1 = myThread.isRunning();
@@ -669,7 +681,7 @@ namespace osl_Guard
             myThread.create( );
 
             /// is it still blocking?
-            ThreadHelper::thread_sleep( 2 );
+            ThreadHelper::thread_sleep_tenth_sec( 2 );
             sal_Bool bRes = myThread.isRunning( );
 
             /// oh, release him.
@@ -713,7 +725,7 @@ protected:
     void SAL_CALL run( )
     {
         // acquire the mutex
-        printf( "# ClearGuardThread" );
+        t_print("# ClearGuardThread" );
         ClearableMutexGuard aGuard( pMyMutex );
         ThreadHelper::thread_sleep( 2 );
 
@@ -786,7 +798,7 @@ namespace osl_ClearableGuard
             TimeValue aTimeVal_after;
             osl_getSystemTime( &aTimeVal_after );
             sal_Int32 nSec = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
-            // printf("# nSec is %d\n", nSec);
+            // t_print("nSec is %d\n", nSec);
 
             myThread.join();
 
@@ -806,7 +818,7 @@ namespace osl_ClearableGuard
             myThread.create( );
 
             /// is it blocking?
-            ThreadHelper::thread_sleep( 2 );
+            ThreadHelper::thread_sleep_tenth_sec( 4 );
             sal_Bool bRes = myThread.isRunning( );
 
             /// use clear to release.
@@ -852,11 +864,11 @@ protected:
     void SAL_CALL run( )
     {
         // acquire the mutex
-        printf( "# ResettableGuard" );
+        t_print("# ResettableGuard" );
         ResettableMutexGuard aGuard( pMyMutex );
         // release the mutex
         aGuard.clear( );
-        ThreadHelper::thread_sleep( 2 );
+        ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
 };
 
@@ -913,7 +925,7 @@ namespace osl_ResettableGuard
 
             /// is it running? and clear done?
             myMutexGuard.clear( );
-            ThreadHelper::thread_sleep( 1 );
+            ThreadHelper::thread_sleep_tenth_sec( 1 );
             sal_Bool bRes = myThread.isRunning( );
 
             /// if reset is not success, the release will return sal_False
