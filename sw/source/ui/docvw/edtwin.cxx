@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 09:55:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 10:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,7 +1187,17 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey )
         {
-            if( rSh.IsInVerticalText() )
+            // In general, we want to map the direction keys if we are inside
+            // some vertical formatted text.
+            // 1. Exception: For a table cursor in a horizontal table, the
+            //               directions should never be mapped.
+            // 2. Exception: For a table cursor in a vertical table, the
+            //               directions should always be mapped.
+            const bool bVertText = rSh.IsInVerticalText();
+            const bool bTblCrsr = rSh.GetTableCrsr();
+            const bool bVertTable = rSh.IsTableVertical();
+            if( ( bVertText && ( !bTblCrsr || bVertTable ) ) ||
+                ( bTblCrsr && bVertTable ) )
             {
                 if( KEY_UP == nKey ) nKey = KEY_LEFT;
                 else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
