@@ -8,6 +8,7 @@
 
 mkdir: %_DEST%\inc%_EXT%\comphelper
 ..\inc\comphelper\*.hxx %_DEST%\inc%_EXT%\comphelper\*.hxx
+mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\comphelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 ..\version.mk  %_DEST%\inc%_EXT%\comphelper\version.mk
 
