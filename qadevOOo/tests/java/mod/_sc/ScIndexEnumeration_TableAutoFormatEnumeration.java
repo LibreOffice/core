@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_TableAutoFormatEnumeration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:09:42 $
+ *  last change:$Date: 2003-09-08 12:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,20 @@
 
 package mod._sc;
 
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
     XSpreadsheetDocument xSheetDoc = null;
@@ -108,16 +108,11 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XInterface oInterface = null;
         XInterface oObj = null;
-        XComponentLoader oCLoader = null;
-        XDesktop oDesktop = null;
 
         try {
             // creation of testobject here
             // get AutoFormats
-            XComponent xComp = (XComponent)UnoRuntime.queryInterface
-                (XComponent.class, xSheetDoc);
             oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sheet.TableAutoFormats");
 
