@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:30:08 $
+ *  last change: $Author: jsc $ $Date: 2002-12-03 17:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ service TypeDescriptionManager
     /** Interface for creating enumerations for type descriptions supported
         by this <type>TypeDescriptionManager</type>
     */
-    interface XTypeDescriptionEnumerationAccess;
+    [optional] interface XTypeDescriptionEnumerationAccess;
 };
 
 //=============================================================================
@@ -136,6 +136,10 @@ service TypeDescriptionManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/11/11 08:30:08  kso
+    #104677# - Introduced/modified for Type Description Manager/Provider Enumeration
+               Interface.
+
     Revision 1.9  2002/11/06 10:26:47  dbo
     #104560# docu
 
