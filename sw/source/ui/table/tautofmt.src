@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:45:59 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,37 +119,8 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     Window WND_PREVIEW
     {
-        Pos = MAP_APPFONT ( 83 , 23 ) ;
+        Pos = MAP_APPFONT ( 83 , 12 ) ;
         Size = MAP_APPFONT ( 161 , 86 ) ;
-    };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 77 , 12 ) ;
-        Size = MAP_APPFONT ( 172 , 102 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ norwegian ] = "Preview" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Examinar" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Esikatselu" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
     };
     CheckBox BTN_NUMFORMAT
     {
@@ -306,11 +277,11 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Orienta~ción";
     };
-    GroupBox GB_FORMAT
+    FixedLine FL_FORMAT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 120 ) ;
-        Size = MAP_APPFONT ( 243 , 43 ) ;
+        Size = MAP_APPFONT ( 243 , 8 ) ;
         Text = "Formatierung" ;
         Text [ ENGLISH ] = "For~mats" ;
         Text [ norwegian ] = "For~mats" ;

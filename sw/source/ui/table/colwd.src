@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:28:06 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,10 +151,10 @@ ModalDialog DLG_COL_WIDTH
         First = 100 ;
         Last = 9999 ;
     };
-    GroupBox GB_WIDTH
+    FixedLine FL_WIDTH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 81 , 50 ) ;
+        Size = MAP_APPFONT ( 81 , 8 ) ;
         Text = "Breite" ;
         Text [ ENGLISH ] = "Width" ;
         Text [ norwegian ] = "Bredde " ;

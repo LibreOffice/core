@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,10 @@ SwInsRowColDlg::SwInsRowColDlg(SwView& rVw, BOOL bCol )
     : SvxStandardDialog( rVw.GetWindow(), SW_RES(DLG_INS_ROW_COL) ),
     aCount( this, SW_RES( FT_COUNT ) ),
     aCountEdit( this, SW_RES( ED_COUNT ) ),
-    aInsGrp( this, SW_RES( GB_INS ) ),
+    aInsFL( this, SW_RES( FL_INS ) ),
     aBeforeBtn( this, SW_RES( CB_POS_BEFORE ) ),
     aAfterBtn( this, SW_RES( CB_POS_AFTER ) ),
-    aPosGrp( this, SW_RES( GB_POS ) ),
+    aPosFL( this, SW_RES( FL_POS ) ),
     aRow(SW_RES(STR_ROW)),
     aCol(SW_RES(STR_COL)),
     aOKBtn( this, SW_RES( BT_OK ) ),
@@ -135,6 +135,9 @@ SwInsRowColDlg::SwInsRowColDlg(SwView& rVw, BOOL bCol )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.30  2000/09/18 16:06:08  willem.vandorp
     OpenOffice header added.
 

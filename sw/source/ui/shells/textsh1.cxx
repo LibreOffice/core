@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-18 09:08:49 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,9 +192,6 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>       // fuer Undo-IDs
-#endif
-#ifndef _AUTOFDLG_HXX
-#include <autofdlg.hxx>
 #endif
 #ifndef _REFFLD_HXX
 #include <reffld.hxx>

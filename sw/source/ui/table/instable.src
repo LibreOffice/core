@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:33:30 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ ModalDialog DLG_INSERT_TABLE
     HelpID = FN_INSERT_TABLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 280 , 110 ) ;
+    Size = MAP_APPFONT ( 280 , 132 ) ;
     Text = "Tabelle einfügen" ;
     Text [ ENGLISH ] = "Insert table" ;
     Text [ norwegian ] = "Insert table" ;
@@ -87,14 +87,14 @@ ModalDialog DLG_INSERT_TABLE
     Edit ED_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 199, 12 ) ;
+        Pos = MAP_APPFONT ( 53 , 6 ) ;
+        Size = MAP_APPFONT ( 158, 12 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_NAME
+    FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 211, 30 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 45, 8 ) ;
         Text = "Name" ;
         Text[ENGLISH] = "Name" ;
             Text[ italian ] = "Nome";
@@ -121,8 +121,8 @@ ModalDialog DLG_INSERT_TABLE
     };
     FixedText FT_COL
     {
-        Pos = MAP_APPFONT ( 11 , 49 ) ;
-        Size = MAP_APPFONT ( 39 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 39 , 8 ) ;
         Text = "~Spalten" ;
         Text [ ENGLISH ] = "~Columns" ;
         Text [ norwegian ] = "~Columns" ;
@@ -152,7 +152,7 @@ ModalDialog DLG_INSERT_TABLE
     NumericField ED_COL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 53 , 47 ) ;
+        Pos = MAP_APPFONT ( 53 , 32 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -166,8 +166,8 @@ ModalDialog DLG_INSERT_TABLE
     };
     FixedText FT_ROW
     {
-        Pos = MAP_APPFONT ( 11 , 69 ) ;
-        Size = MAP_APPFONT ( 39 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 39 , 8 ) ;
         Text = "~Zeilen" ;
         Text [ ENGLISH ] = "~Rows" ;
         Text [ norwegian ] = "~Rows" ;
@@ -197,7 +197,7 @@ ModalDialog DLG_INSERT_TABLE
     NumericField ED_ROW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 53 , 67 ) ;
+        Pos = MAP_APPFONT ( 53 , 48 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -209,38 +209,16 @@ ModalDialog DLG_INSERT_TABLE
         First = 1 ;
         Last = 99 ;
     };
-    GroupBox GB_TABLE
+    FixedLine FL_TABLE
     {
-        Pos = MAP_APPFONT ( 6 , 36 ) ;
-        Size = MAP_APPFONT ( 81 , 68 ) ;
-        Text = "Größe" ;
+        Pos = MAP_APPFONT ( 6 , 21 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
+        Text = "Tabellengröße" ;
         Text [ ENGLISH ] = "Size" ;
-        Text [ norwegian ] = "Størrelse" ;
-        Text [ italian ] = "Dimensione" ;
-        Text [ portuguese_brazilian ] = "Tamanho" ;
-        Text [ portuguese ] = "Tamanho" ;
-        Text [ finnish ] = "Koko" ;
-        Text [ danish ] = "Størrelse" ;
-        Text [ french ] = "Taille" ;
-        Text [ swedish ] = "Storlek" ;
-        Text [ dutch ] = "Grootte" ;
-        Text [ spanish ] = "Tamaño" ;
-        Text [ english_us ] = "Size" ;
-        Text[ chinese_simplified ] = "´óÐ¡";
-        Text[ russian ] = "Ðàçìåð";
-        Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Þ";
-        Text[ chinese_traditional ] = "¤j¤p";
-        Text[ arabic ] = "ÇáÍÌã";
-        Text[ greek ] = "ÌÝãåèïò";
-        Text[ korean ] = "Å©±â";
-        Text[ turkish ] = "Boyut";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tamaño";
     };
     CheckBox CB_HEADER
     {
-        Pos = MAP_APPFONT ( 99 , 49 ) ;
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT (113 , 10 ) ;
         Text = "Übe~rschrift" ;
         Text [ ENGLISH ] = "Header" ;
@@ -269,7 +247,7 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_REPEAT_HEADER
     {
-        Pos = MAP_APPFONT ( 105 , 62 ) ;
+        Pos = MAP_APPFONT ( 18 , 88 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
         Text = "Auf jeder Seite ~wiederholen" ;
         Text [ ENGLISH ] = "Repeat on every page" ;
@@ -298,7 +276,7 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_DONT_SPLIT
     {
-        Pos = MAP_APPFONT ( 99 , 75 ) ;
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text = "Tabelle ~nicht trennen" ;
         Text [ ENGLISH ] = "Don't split table" ;
@@ -327,7 +305,7 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_BORDER
     {
-        Pos = MAP_APPFONT ( 99 , 88 ) ;
+        Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text = "~Umrandung" ;
         Text [ ENGLISH ] = "Border" ;
@@ -354,10 +332,10 @@ ModalDialog DLG_INSERT_TABLE
         Text[ catalan ] = "~Borde";
         Text[ finnish ] = "Reuna";
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
-        Pos = MAP_APPFONT ( 93 , 36 ) ;
-        Size = MAP_APPFONT ( 125 , 68 ) ;
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Options" ;
         Text[ italian ] = "Opzioni";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:26:03 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,10 +202,10 @@ ModelessDialog DLG_INSERT_CHART
         Text[ catalan ] = "Primera c~olumna como etiqueta";
         Text[ finnish ] = "~Ensimmäinen sarake kuvaotsikkona";
     };
-    GroupBox GB_1
+    FixedLine FL_1
     {
         Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 285 , 65 ) ;
+        Size = MAP_APPFONT ( 285 , 8 ) ;
         Text = "Auswahl" ;
         Text [ English ] = "Selection" ;
         Text [ english_us ] = "Selection" ;

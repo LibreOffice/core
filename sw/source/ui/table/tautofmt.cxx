@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-01-26 15:15:40 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,14 +260,13 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     //
     aFtFormat       ( this, SW_RES( FT_FORMAT ) ),
     aLbFormat       ( this, SW_RES( LB_FORMAT ) ),
-    aGbPreview      ( this, SW_RES( GB_PREVIEW ) ),
     pWndPreview     ( new AutoFmtPreview( this, SW_RES( WND_PREVIEW ) ) ),
     aBtnNumFormat   ( this, SW_RES( BTN_NUMFORMAT ) ),
     aBtnBorder      ( this, SW_RES( BTN_BORDER ) ),
     aBtnFont        ( this, SW_RES( BTN_FONT ) ),
     aBtnPattern     ( this, SW_RES( BTN_PATTERN ) ),
     aBtnAlignment   ( this, SW_RES( BTN_ALIGNMENT ) ),
-    aGbFormat       ( this, SW_RES( GB_FORMAT ) ),
+    aFLFormat       ( this, SW_RES( FL_FORMAT ) ),
     aBtnOk          ( this, SW_RES( BTN_OK ) ),
     aBtnCancel      ( this, SW_RES( BTN_CANCEL ) ),
     aBtnHelp        ( this, SW_RES( BTN_HELP ) ),
@@ -332,7 +331,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     aBtnMore.AddWindow( &aBtnFont );
     aBtnMore.AddWindow( &aBtnPattern );
     aBtnMore.AddWindow( &aBtnAlignment );
-    aBtnMore.AddWindow( &aGbFormat );
+    aBtnMore.AddWindow( &aFLFormat );
     aBtnMore.AddWindow( &aBtnRename );
 
     aBtnAdd.Enable( bSetAutoFmt );
@@ -1724,6 +1723,9 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/01/26 15:15:40  os
+    #83247# CreateFromInt32
+
     Revision 1.3  2000/10/20 14:18:06  os
     use comphelper methods
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:44:11 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,10 +373,10 @@ TabPage TP_FORMAT_TABLE
         Text[ catalan ] = "Relati~vo";
         Text[ finnish ] = "~Suhteellinen";
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 184 , 42 ) ;
+        Size = MAP_APPFONT ( 184 , 8 ) ;
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -404,7 +404,7 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FULL
     {
-        Pos = MAP_APPFONT ( 199 , 14 ) ;
+        Pos = MAP_APPFONT ( 202 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Automatisch" ;
@@ -433,7 +433,7 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_LEFT
     {
-        Pos = MAP_APPFONT ( 199 , 28 ) ;
+        Pos = MAP_APPFONT ( 202 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
@@ -463,7 +463,7 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FROM_LEFT
     {
-        Pos = MAP_APPFONT ( 199 , 42 ) ;
+        Pos = MAP_APPFONT ( 202 , 42 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Von l~inks" ;
         Text [ ENGLISH ] = "~From left" ;
@@ -491,7 +491,7 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_RIGHT
     {
-        Pos = MAP_APPFONT ( 199 , 56 ) ;
+        Pos = MAP_APPFONT ( 202 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "~Right" ;
@@ -521,7 +521,7 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_CENTER
     {
-        Pos = MAP_APPFONT ( 199 , 70 ) ;
+        Pos = MAP_APPFONT ( 202 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Zen~triert" ;
         Text [ ENGLISH ] = "~Centered" ;
@@ -551,7 +551,7 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FREE
     {
-        Pos = MAP_APPFONT ( 199 , 84 ) ;
+        Pos = MAP_APPFONT ( 202 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Manuell" ;
         Text [ ENGLISH ] = "~Manual" ;
@@ -578,10 +578,10 @@ TabPage TP_FORMAT_TABLE
         Text[ catalan ] = "~Manual";
         Text[ finnish ] = "~Manuaalinen";
     };
-    GroupBox GB_POS
+    FixedLine FL_POS
     {
-        Pos = MAP_APPFONT ( 193 , 3 ) ;
-        Size = MAP_APPFONT ( 61 , 119 ) ;
+        Pos = MAP_APPFONT ( 196 , 3 ) ;
+        Size = MAP_APPFONT ( 58 , 8 ) ;
         Text = "Ausrichtung" ;
         Text [ ENGLISH ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
@@ -607,10 +607,10 @@ TabPage TP_FORMAT_TABLE
         Text[ turkish ] = "Hizalama";
         Text[ catalan ] = "Alineación";
     };
-    GroupBox GB_DIST
+    FixedLine FL_DIST
     {
         Pos = MAP_APPFONT ( 6 , 48 ) ;
-        Size = MAP_APPFONT ( 184 , 74 ) ;
+        Size = MAP_APPFONT ( 184 , 8 ) ;
         Text = "Abstände" ;
         Text [ ENGLISH ] = "Distance" ;
         Text [ norwegian ] = "Avstand" ;
@@ -1113,10 +1113,10 @@ TabPage TP_TABLE_COLUMN
         Last = 5600 ;
         SpinSize = 10 ;
     };
-    GroupBox COL_GB_LAYOUT
+    FixedLine COL_FL_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 50 ) ;
-        Size = MAP_APPFONT ( 240 , 49 ) ;
+        Size = MAP_APPFONT ( 240 , 8 ) ;
         Text = "Spaltenbreite" ;
         Text [ ENGLISH ] = "Column width" ;
         Text [ norwegian ] = "Bredde på kolonne " ;
@@ -1154,10 +1154,10 @@ TabPage TP_TABLE_TEXTFLOW
     Size = MAP_APPFONT ( 260 , 185 ) ;
     TEXT_TEXTFLOW
     Hide = TRUE;
-    GroupBox GB_FLOW
+    FixedLine FL_FLOW
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 251 , 96 ) ;
+        Size = MAP_APPFONT ( 251 , 8 ) ;
         TEXT_TEXTFLOW
     };
     CheckBox CB_PAGEBREAK
@@ -1486,10 +1486,10 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Repet~ir encabezado";
     };
-    GroupBox GB_VERT_ORIENT
+    FixedLine FL_VERT_ORIENT
     {
         Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 251 , 52 ) ;
+        Size = MAP_APPFONT ( 251 , 8 ) ;
         Text = "Vertikale Ausrichtung" ;
         Text [ ENGLISH ] = "Vertical Alignment" ;
         Text [ english_us ] = "Vertical alignment" ;

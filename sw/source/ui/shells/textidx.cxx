@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textidx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 11:31:19 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,8 @@
 #include "wrtsh.hxx"
 #include "swundo.hxx"                   // fuer Undo-Ids
 #include "textsh.hxx"
-#include "idx.hxx"
 #include "idxmrk.hxx"
 #include "multmrk.hxx"
-#include "usridx.hxx"
 #include "cnttab.hxx"
 #include "toxmgr.hxx"
 

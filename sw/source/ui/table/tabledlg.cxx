@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-21 10:08:51 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,15 +237,15 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     aTopMF(this,        SW_RES( ED_TOP_DIST )),
     aBottomFT(this,     SW_RES( FT_BOTTOM_DIST )),
     aBottomMF(this,     SW_RES( ED_BOTTOM_DIST )),
-    aDistGB(this,       SW_RES( GB_DIST )),
-    aOptionsGB(this,    SW_RES( GB_OPTIONS )),
+    aDistFL(this,       SW_RES( FL_DIST )),
+    aOptionsFL(this,    SW_RES( FL_OPTIONS )),
     aFullBtn(this,      SW_RES( RB_FULL )),
     aFreeBtn(this,      SW_RES( RB_FREE )),
     aLeftBtn(this,      SW_RES( RB_LEFT )),
     aFromLeftBtn(this,  SW_RES( RB_FROM_LEFT )),
     aRightBtn(this,     SW_RES( RB_RIGHT )),
     aCenterBtn(this,    SW_RES( RB_CENTER )),
-    aPosFrm(this,       SW_RES( GB_POS )),
+    aPosFL(this,       SW_RES( FL_POS )),
     pTblData(0),
     nSaveWidth(0),
     nMinTableWidth(MINLAY),
@@ -919,7 +919,7 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
     aMF5(this,              SW_RES(COL_MF_5)),
     aFT6(this,              SW_RES(COL_FT_6)),
     aMF6(this,              SW_RES(COL_MF_6)),
-    aColGB(this,            SW_RES(COL_GB_LAYOUT)),
+    aColFL(this,            SW_RES(COL_FL_LAYOUT)),
     aUpBtn(this,            SW_RES(COL_BTN_UP)),
     aDownBtn(this,          SW_RES(COL_BTN_DOWN)),
     nNoOfCols( 0 ),
@@ -1635,7 +1635,7 @@ DEBUG_TBLDLG_TCOLUMN(pOldTColumns, nAllCols);
 SwTextFlowPage::SwTextFlowPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES( TP_TABLE_TEXTFLOW ), rSet ),
-    aFlowGB         (this, SW_RES(GB_FLOW            )),
+    aFlowFL         (this, SW_RES(FL_FLOW            )),
     aPgBrkCB        (this, SW_RES(CB_PAGEBREAK      )),
     aPgBrkRB        (this, SW_RES(RB_BREAKPAGE      )),
     aColBrkRB       (this, SW_RES(RB_BREAKCOLUMN    )),
@@ -1648,7 +1648,7 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     aKeepCB         (this, SW_RES(CB_KEEP           )),
     aSplitCB        (this, SW_RES(CB_SPLIT          )),
     aHeadLineCB     (this, SW_RES(CB_HEADLINE       )),
-    aVertOrientGB   (this, SW_RES(GB_VERT_ORIENT    )),
+    aVertOrientFL   (this, SW_RES(FL_VERT_ORIENT    )),
     aTopRB          (this, SW_RES(RB_VERT_TOP       )),
     aCenterRB       (this, SW_RES(RB_VERT_CENTER    )),
     aBottomRB       (this, SW_RES(RB_VERT_BOTTOM    )),

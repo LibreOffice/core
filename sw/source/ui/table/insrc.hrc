@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,11 @@
  ************************************************************************/
 #define FT_COUNT    1
 #define ED_COUNT    2
-#define GB_INS      3
+#define FL_INS          3
 
 #define CB_POS_BEFORE   10
 #define CB_POS_AFTER    11
-#define GB_POS          12
+#define FL_POS                  12
 
 #define STR_ROW         20
 #define STR_COL         21

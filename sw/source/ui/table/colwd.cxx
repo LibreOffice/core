@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-09 16:54:59 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
     aColEdit(this,      SW_RES(ED_COL)),
     aWidthFT(this,      SW_RES(FT_WIDTH)),
     aWidthEdit(this,    SW_RES(ED_WIDTH)),
-    aWidthFrm(this,     SW_RES(GB_WIDTH)),
+    aWidthFL(this,     SW_RES(FL_WIDTH)),
     aOKBtn(this,        SW_RES(BT_OK)),
     aCancelBtn(this,    SW_RES(BT_CANCEL)),
     aHelpBtn(this,      SW_RES(BT_HELP)),
@@ -167,6 +167,9 @@ void SwTableWidthDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/09 16:54:59  jp
+    compiler error
+
     Revision 1.2  2000/10/06 13:37:52  jp
     should changes: don't use IniManager
 

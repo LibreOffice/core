@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:59:25 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -95,14 +92,14 @@ struct TColumn
 
 class SwFormatTablePage : public SfxTabPage
 {
-    GroupBox        aOptionsGB;
+    FixedLine        aOptionsFL;
     FixedText       aNameFT;
     TableNameEdit   aNameED;
     FixedText       aWidthFT;
     PercentField    aWidthMF;
     CheckBox        aRelWidthCB;
 
-    GroupBox        aPosFrm;
+    FixedLine        aPosFL;
     RadioButton     aFullBtn;
     RadioButton     aLeftBtn;
     RadioButton     aFromLeftBtn;
@@ -110,7 +107,7 @@ class SwFormatTablePage : public SfxTabPage
     RadioButton     aCenterBtn;
     RadioButton     aFreeBtn;
 
-    GroupBox        aDistGB;
+    FixedLine       aDistFL;
     FixedText       aLeftFT;
     PercentField    aLeftMF;
     FixedText       aRightFT;
@@ -173,7 +170,7 @@ class SwTableColumnPage : public SfxTabPage
     FixedText       aFT6;
     PercentField    aMF6;
     ImageButton     aDownBtn;
-    GroupBox        aColGB;
+    FixedLine        aColFL;
 
     SwTableRep*     pTblData;
     PercentField*   pFieldArr[MET_FIELDS];
@@ -215,7 +212,7 @@ public:
 --------------------------------------------------*/
 class SwTextFlowPage : public SfxTabPage
 {
-    GroupBox        aFlowGB;
+    FixedLine        aFlowFL;
     CheckBox        aPgBrkCB;
     RadioButton     aPgBrkRB;
     RadioButton     aColBrkRB;
@@ -229,7 +226,7 @@ class SwTextFlowPage : public SfxTabPage
     CheckBox        aKeepCB;
     CheckBox        aHeadLineCB;
 
-    GroupBox        aVertOrientGB;
+    FixedLine        aVertOrientFL;
     RadioButton     aTopRB;
     RadioButton     aCenterRB;
     RadioButton     aBottomRB;

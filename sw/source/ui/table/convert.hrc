@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #define CB_TAB          1
 #define CB_SEMI         3
 #define CB_PARA         4
-#define GB_DELIM        5
+#define FL_DELIM                5
 #define RB_OTHER        6
 #define ED_OTHER        7
 #define CB_KEEPCOLUMN   8
@@ -70,7 +70,7 @@
 #define CB_REPEAT_HEADER    14
 #define CB_DONT_SPLIT       15
 #define CB_BORDER           16
-#define GB_OPTIONS          17
+#define FL_OPTIONS                      17
 
 #define BT_OK           100
 #define BT_CANCEL       101

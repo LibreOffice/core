@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:32:02 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,10 +178,10 @@ ModalDialog DLG_INS_ROW_COL
         First = 1 ;
         Last = 5 ;
     };
-    GroupBox GB_INS
+    FixedLine FL_INS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 63 , 32 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
         Text = "Einfügen" ;
         Text [ ENGLISH ] = "Insert" ;
@@ -208,10 +208,10 @@ ModalDialog DLG_INS_ROW_COL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar";
     };
-    GroupBox GB_POS
+    FixedLine FL_POS
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 63 , 40 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "Position" ;
     };
     FixedText FT_COUNT

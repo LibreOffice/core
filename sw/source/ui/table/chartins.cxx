@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 09:33:27 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ SwInsertChartDlg::SwInsertChartDlg( SfxBindings* pBindings,
     aNext       (this, SW_RES(BT_NEXT    )),
     aFirstRow   (this, SW_RES(CB_FIRST_ROW)),
     aFirstCol   (this, SW_RES(CB_FIRST_COL)),
-    aGroup1     (this, SW_RES(GB_1       )),
+    aFL1     (this, SW_RES(FL_1       )),
     pChartDlg(0),
     pWrtShell(pSh),
     pInItemSet(0),

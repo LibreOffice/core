@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-28 09:09:32 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,17 +116,17 @@ void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog( rView.GetWindow(), SW_RES(DLG_INSERT_TABLE) ),
     aNameEdit       (this, SW_RES(ED_NAME)),
-    aNameFrm        (this, SW_RES(GB_NAME)),
+    aNameFT         (this, SW_RES(FT_NAME)),
     aColLbl         (this, SW_RES(FT_COL)),
     aColEdit        (this, SW_RES(ED_COL)),
     aRowLbl         (this, SW_RES(FT_ROW)),
     aRowEdit        (this, SW_RES(ED_ROW)),
-    aFrm            (this, SW_RES(GB_TABLE)),
+    aFL             (this, SW_RES(FL_TABLE)),
     aHeaderCB       (this, SW_RES(CB_HEADER)),
     aRepeatHeaderCB (this, SW_RES(CB_REPEAT_HEADER)),
     aDontSplitCB    (this, SW_RES(CB_DONT_SPLIT)),
     aBorderCB       (this, SW_RES(CB_BORDER)),
-    aOptionsGB      (this, SW_RES(GB_OPTIONS)),
+    aOptionsFL      (this, SW_RES(FL_OPTIONS)),
     aOkBtn          (this, SW_RES(BT_OK)),
     aCancelBtn      (this, SW_RES(BT_CANCEL)),
     aHelpBtn        (this, SW_RES(BT_HELP)),
@@ -225,6 +225,9 @@ IMPL_LINK(SwInsTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/28 09:09:32  os
+    #83804# no split in HTML
+
     Revision 1.1.1.1  2000/09/18 17:14:47  hr
     initial import
 

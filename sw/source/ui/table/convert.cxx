@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
     aTabBtn         (this, SW_RES(CB_TAB)),
     aSemiBtn        (this, SW_RES(CB_SEMI)),
     aParaBtn        (this, SW_RES(CB_PARA)),
-    aDelimFrm       (this, SW_RES(GB_DELIM)),
+    aDelimFL       (this, SW_RES(FL_DELIM)),
     aOtherBtn       (this, SW_RES(RB_OTHER)),
     aOtherEd        (this, SW_RES(ED_OTHER)),
     aKeepColumn     (this, SW_RES(CB_KEEPCOLUMN)),
@@ -140,7 +140,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
     aRepeatHeaderCB (this, SW_RES(CB_REPEAT_HEADER)),
     aDontSplitCB    (this, SW_RES(CB_DONT_SPLIT)),
     aBorderCB       (this, SW_RES(CB_BORDER)),
-    aOptionsGB      (this, SW_RES(GB_OPTIONS)),
+    aOptionsFL      (this, SW_RES(FL_OPTIONS)),
 
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
@@ -169,11 +169,11 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
         aRepeatHeaderCB    .Show(FALSE);
         aDontSplitCB       .Show(FALSE);
         aBorderCB          .Show(FALSE);
-        aOptionsGB         .Show(FALSE);
+        aOptionsFL         .Show(FALSE);
 
         //Groesse anpassen
         Size aSize(GetSizePixel());
-        aSize.Height() = aDelimFrm.GetSizePixel().Height() + 2 * aDelimFrm.GetPosPixel().Y();
+        aSize.Height() = 8 + aHelpBtn.GetSizePixel().Height() + aHelpBtn.GetPosPixel().Y();
         SetOutputSizePixel(aSize);
     }
     aKeepColumn.SaveValue();
@@ -241,6 +241,9 @@ IMPL_LINK(SwConvertTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.39  2000/09/18 16:06:07  willem.vandorp
     OpenOffice header added.
 

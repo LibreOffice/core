@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:30:05 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,10 +241,10 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ catalan ] = "Mismo an~cho para todas las columnas";
         Text[ finnish ] = "Yhtäsuuret sarakkeiden leveydet";
     };
-    GroupBox GB_DELIM
+    FixedLine FL_DELIM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 125 , 62 ) ;
+        Size = MAP_APPFONT ( 125 , 8 ) ;
         TEXT = "Trennzeichen im Text" ;
         TEXT [ ENGLISH ] = "Delimiter" ;
         TEXT [ norwegian ] = "Skilletegn" ;
@@ -387,10 +387,10 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ catalan ] = "~Borde";
         Text[ finnish ] = "Reuna";
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 71 ) ;
-        Size = MAP_APPFONT ( 125 , 69 ) ;
+        Size = MAP_APPFONT ( 125 , 8 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Options" ;
         Text[ italian ] = "Opzioni";

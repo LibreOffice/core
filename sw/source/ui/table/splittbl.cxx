@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     aOKPB(                  this, ResId(PB_OK       )),
     aCancelPB(              this, ResId(PB_CANCEL   )),
     aHelpPB(                this, ResId(PB_HELP     )),
-    aSplitGB(               this, ResId(GB_SPLIT    )),
+    aSplitFL(               this, ResId(FL_SPLIT    )),
     aCntntCopyRB(           this, ResId(RB_CNTNT    )),
     aBoxAttrCopyWithParaRB( this, ResId(RB_BOX_PARA )),
     aBoxAttrCopyNoParaRB(   this, ResId(RB_BOX_NOPARA)),
@@ -116,6 +116,9 @@ void SwSplitTblDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:48  hr
+    initial import
+
     Revision 1.4  2000/09/18 16:06:09  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:12:27 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@ ModalDialog DLG_ROW_HEIGHT
     };
     CheckBox CB_AUTOHEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 80 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~dynamisch anpassen : auto. H~öhe */
         Text = "~dynamisch anpassen" ;
         Text [ ENGLISH ] = "~dynamic adjustment" ;
@@ -149,10 +149,10 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ catalan ] = "~ajuste dinámico";
         Text[ finnish ] = "~Sovita kokoon";
     };
-    GroupBox GB_HEIGHT
+    FixedLine FL_HEIGHT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 89 , 51 ) ;
+        Size = MAP_APPFONT ( 89 , 8 ) ;
         Text = "Höhe" ;
         Text [ ENGLISH ] = "Height" ;
         Text [ norwegian ] = "Høyde " ;
