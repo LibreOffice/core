@@ -1,17 +1,13 @@
 # -----------------------------------------------
-# count = 4
+# count = 2
 T4_XSLT = \
     writer_DocBook_File \
-    writer_MS_Word_2003_XML \
-    calc_MS_Excel_2003_XML \
     XHTML_File
 
 # -----------------------------------------------
-# count = 7
+# count = 5
 F4_XSLT = \
     DocBook_File \
-    MS_Excel_2003_XML \
-    MS_Word_2003_XML \
     XHTML_Calc_File \
     XHTML_Draw_File \
     XHTML_Impress_File \
