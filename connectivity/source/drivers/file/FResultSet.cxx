@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-14 12:57:56 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 16:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,14 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
 
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
+    // it could happen that values are updated as string and then called for as getBytes
+    sal_Int32 nType = (*m_aRow)[columnIndex].getTypeKind();
+    if(nType == DataType::VARCHAR)
+    {
+        ::rtl::OUString aStr = (*m_aRow)[columnIndex];
+        return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
+    }
+
     return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
@@ -785,7 +793,10 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
     {
         OValueVector::iterator aIter = m_aInsertRow->begin()+1;
         for(;aIter != m_aInsertRow->end();++aIter)
+        {
             aIter->setBound(sal_False);
+            aIter->setNull();
+        }
     }
 }
 // -------------------------------------------------------------------------
@@ -802,7 +813,10 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
 
     OValueVector::iterator aIter = m_aInsertRow->begin()+1;
     for(;aIter != m_aInsertRow->end();++aIter)
+    {
         aIter->setBound(sal_False);
+        aIter->setNull();
+    }
 }
 // -------------------------------------------------------------------------
 
@@ -846,7 +860,7 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = (sal_Int32)x;
+    (*m_aInsertRow)[columnIndex] = x;
 }
 // -------------------------------------------------------------------------
 
@@ -926,7 +940,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    //  (*m_aInsertRow)[columnIndex] = x;
+    (*m_aInsertRow)[columnIndex] = x;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
@@ -975,9 +989,10 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-
+    Sequence<sal_Int8> aSeq;
+    x->readSomeBytes(aSeq,length);
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    //  (*m_aInsertRow)[columnIndex] = x;
+    (*m_aInsertRow)[columnIndex] = aSeq;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -987,16 +1002,17 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-
+    Sequence<sal_Int8> aSeq;
+    x->readSomeBytes(aSeq,length);
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    //  (*m_aInsertRow)[columnIndex] = x;
+    (*m_aInsertRow)[columnIndex] = aSeq;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
@@ -1014,6 +1030,9 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
 
 void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (OResultSet_BASE::rBHelper.bDisposed)
+        throw DisposedException();
     columnIndex = mapColumn(columnIndex);
     OSL_ENSHURE(0,"OResultSet::updateNumericObject: NYI");
 }
