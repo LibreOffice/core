@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:23:28 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
         Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
-        svt::EmbeddedObjectRef::TryRunningState( xObj );
         awt::Size aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
         Size aOleSize( aSz.Width, aSz.Height );
 
@@ -169,7 +168,6 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
         if ( !(nErr & ERRCODE_ERROR_MASK) && xObj.is() )
         {
-            svt::EmbeddedObjectRef::TryRunningState( xObj );
             Rectangle aRect = pObj->GetLogicRect();
             Size aDrawSize = aRect.GetSize();
 
