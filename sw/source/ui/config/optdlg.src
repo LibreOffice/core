@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 20:47:08 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 20:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1442,7 +1442,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ swedish ] = "Pappersmagasin fr�n ~skrivarinst�llning";
         Text[ polish ] = "Zasobnik papieru z ustaw~ie� drukarki";
         Text[ portuguese_brazilian ] = "da impressora ~setup";
-        Text[ japanese ] = "ﾌﾟﾘﾝﾀの設定の用紙ﾄﾚｲを通常使用(~P)";
+        Text[ japanese ] = "ﾌﾟﾘﾝﾀ設定の用紙ﾄﾚｲを使用する(~P)";
         Text[ korean ] = "프린터 설정에 따른 용지 공급(~P)";
         Text[ chinese_simplified ] = "采用打印机设定的纸张来源(~P)";
         Text[ chinese_traditional ] = "採用印表機設定的紙張來源(~P)";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
