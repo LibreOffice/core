@@ -162,19 +162,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[$C$-240A]#,##0;([$C$-240A]#,##0)</FormatCode>
+<FormatCode>[$$-240A]#,##0;([$$-240A]#,##0)</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[$C$-240A]#,##0.00;([$C$-240A]#,##0.00)</FormatCode>
+<FormatCode>[$$-240A]#,##0.00;([$$-240A]#,##0.00)</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[$C$-240A]#,##0;[RED]([$C$-240A]#,##0)</FormatCode>
+<FormatCode>[$$-240A]#,##0;[RED]([$$-240A]#,##0)</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[$C$-240A]#,##0.00;[RED]([$C$-240A]#,##0.00)</FormatCode>
+<FormatCode>[$$-240A]#,##0.00;[RED]([$$-240A]#,##0.00)</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -182,7 +182,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[$C$-240A]#,##0.--;[RED]([$C$-240A]#,##0.--)</FormatCode>
+<FormatCode>[$$-240A]#,##0.--;[RED]([$$-240A]#,##0.--)</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -207,8 +207,8 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>C$</CurrencyID>
-<CurrencySymbol>C$</CurrencySymbol>
+<CurrencyID>$</CurrencyID>
+<CurrencySymbol>$</CurrencySymbol>
 <BankSymbol>COP</BankSymbol>
 <CurrencyName>Peso</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
