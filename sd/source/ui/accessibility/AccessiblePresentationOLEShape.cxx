@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationOLEShape.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:44:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
