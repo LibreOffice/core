@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorlist.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:33:31 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include "rtl/ref.hxx"
 #include "vendorbase.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
 
 namespace jfw_plugin
 {
@@ -72,12 +73,12 @@ namespace jfw_plugin
 typedef char  const * const * (* getJavaExePaths_func)(int*);
 typedef rtl::Reference<VendorBase> (* createInstance_func) ();
 
-struct Blas
-{
-        char const * sVendorName;
-    getJavaExePaths_func getJavaFunc;
-    createInstance_func  createFunc;
-};
+// struct Blas
+// {
+//         char const * sVendorName;
+//     getJavaExePaths_func getJavaFunc;
+//     createInstance_func  createFunc;
+// };
 
 struct VendorSupportMapEntry
 {
@@ -95,6 +96,14 @@ VendorSupportMapEntry gVendorMap[] ={
 #define END_VENDOR_MAP() \
     {NULL, NULL, NULL} };
 
+
+com::sun::star::uno::Sequence<rtl::OUString> getVendorNames();
+
+/* Examines if the vendor supplied in parameter sVendor is part of the
+   list of supported vendors. That is the arry of VendorSupportMapEntry
+   is search for an respective entry.
+*/
+bool isVendorSupported(const rtl::OUString & sVendor);
 }
 
 #endif
