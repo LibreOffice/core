@@ -18,18 +18,6 @@
     </component-description>
 
     <component-description>
-        <author> Stefan Schaefer </author>
-        <name> com.sun.star.comp.desktop.QuickstartWrapper </name>
-        <description>
-            The Quickstarter.
-        </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.office.Quickstart </supported-service>
-    </component-description>
-
-    <component-description>
         <author> Mathias Bauer </author>
         <name> com.sun.star.comp.office.FrameLoader </name>
         <description>
