@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewSettingsSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module view {
 
 /** provides access to the view settings of the object.
  */
-interface XViewSettingsSupplier: com::sun::star::uno::XInterface
+published interface XViewSettingsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
