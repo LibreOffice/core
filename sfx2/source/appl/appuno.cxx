@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 11:13:28 $
+ *  last change: $Author: ab $ $Date: 2001-11-07 18:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ using namespace ::rtl;
 #include "dispatch.hxx"
 #include "doctemplates.hxx"
 #include "shutdownicon.hxx"
+#include "scriptcont.hxx"
+#include "dlgcont.hxx"
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
@@ -969,6 +971,24 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.office.Quickstart") );
 
+    // script library container service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxScriptLibraryContainer::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ScriptLibraryContainer") );
+
+    // dialog library container service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxDialogLibraryContainer::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.DialogLibraryContainer") );
+
 #if 0
     if (pRegistryKey)
     {
@@ -1020,6 +1040,8 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( SfxAppDispatchProvider )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
+        IF_NAME_CREATECOMPONENTFACTORY( SfxScriptLibraryContainer )
+        IF_NAME_CREATECOMPONENTFACTORY( SfxDialogLibraryContainer )
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
