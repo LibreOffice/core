@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:16:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@ JP 20.07.95:
 #include <svtools/svarray.hxx>
 #endif
 
+#ifndef _HINTIDS_HXX
 #include "hintids.hxx"          //_immmer_ vor den solar-items!
+#endif
 
 #define ITEMID_HORJUSTIFY   0
 #define ITEMID_VERJUSTIFY   0
@@ -140,6 +142,10 @@ JP 20.07.95:
 #endif
 #ifndef _SVX_BOLNITEM_HXX
 #include <svx/bolnitem.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 struct SwAfVersions;
@@ -266,7 +272,7 @@ public:
 #endif
 };
 
-class SwTableAutoFmt
+class SW_DLLPUBLIC SwTableAutoFmt
 {
     friend void _FinitCore();       // zum Zerstoeren des dflt. Pointers
     static SwBoxAutoFmt* pDfltBoxAutoFmt;
@@ -327,14 +333,15 @@ public:
     BOOL LoadOld( SvStream& rStream, USHORT aLoadVer[] );
 #endif
 };
-typedef SwTableAutoFmt* SwTableAutoFmtPtr ;
 
+typedef SwTableAutoFmt* SwTableAutoFmtPtr ;
 SV_DECL_PTRARR_DEL( _SwTableAutoFmtTbl, SwTableAutoFmtPtr, 1, 5 )
 
-class SwTableAutoFmtTbl : public _SwTableAutoFmtTbl
+class SW_DLLPUBLIC SwTableAutoFmtTbl : public _SwTableAutoFmtTbl
 {
-    BOOL Load( SvStream& rStream );
-    BOOL Save( SvStream& rStream ) const;
+    SW_DLLPRIVATE BOOL Load( SvStream& rStream );
+    SW_DLLPRIVATE BOOL Save( SvStream& rStream ) const;
+
 public:
     SwTableAutoFmtTbl();
 
