@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-18 11:50:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
-#ifndef NOOLDSV //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
