@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: th $ $Date: 2001-06-21 12:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@
 
 #define WIZARDDIALOG_BUTTON_OFFSET_Y        6
 #define WIZARDDIALOG_BUTTON_DLGOFFSET_X     6
-#define WIZARDDIALOG_LINE_DLGOFFSET_X       6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_X       6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_Y       6
 
@@ -196,8 +195,7 @@ void WizardDialog::ImplPosCtrls()
     if ( mpFixedLine && mpFixedLine->IsVisible() )
     {
         nOffY -= mpFixedLine->GetSizePixel().Height();
-        mpFixedLine->SetPosSizePixel( WIZARDDIALOG_LINE_DLGOFFSET_X, nOffY,
-                                      aDlgSize.Width()-(WIZARDDIALOG_LINE_DLGOFFSET_X*2), 0,
+        mpFixedLine->SetPosSizePixel( 0, nOffY, aDlgSize.Width(), 0,
                                       WINDOW_POSSIZE_POS | WINDOW_POSSIZE_WIDTH );
     }
 
