@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: dbo $ $Date: 2002-11-27 10:06:09 $
-#*    $Revision: 1.5 $
+#*    last change   $Author: hr $ $Date: 2003-03-27 16:49:17 $
+#*    $Revision: 1.6 $
 #*
 #*    $Logfile: $
 #*
@@ -467,7 +467,12 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
     }
     catch( RuntimeException & e )
     {
-        bReturn = ( e.Message == sCompare && xLBT->getInterface() == e.Context );
+        bReturn = (
+#if ! defined _DEBUG
+            // java stack traces trash Message
+            e.Message == sCompare &&
+#endif
+            xLBT->getInterface() == e.Context );
     }
     return bReturn;
 }
@@ -490,8 +495,11 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             catch (IllegalArgumentException aExc)
             {
                 if (aExc.ArgumentPosition == 5 &&
-                    aExc.Context == xLBT->getInterface() &&
-                    aExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0)
+#if ! defined _DEBUG
+                    // java stack traces trash Message
+                    aExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0 &&
+#endif
+                    aExc.Context == xLBT->getInterface())
                 {
                     ++nCount;
                 }
@@ -506,8 +514,12 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         }
         catch (const RuntimeException & rExc)
         {
-            if (rExc.Context == xLBT->getInterface() &&
-                rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0)
+            if (rExc.Context == xLBT->getInterface()
+#if ! defined _DEBUG
+                    // java stack traces trash Message
+                && rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0
+#endif
+                )
             {
                 ++nCount;
             }
@@ -522,8 +534,12 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
     }
     catch (Exception & rExc)
     {
-        if (rExc.Context == xLBT->getInterface() &&
-            rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0)
+        if (rExc.Context == xLBT->getInterface()
+#if ! defined _DEBUG
+            // java stack traces trash Message
+            && rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0
+#endif
+            )
         {
             ++nCount;
         }
@@ -738,29 +754,3 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
-
-/**************************************************************************
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2002/10/29 10:48:02  dbo
-    #104312# minor fixes
-
-    Revision 1.3  2002/09/17 15:08:40  jbu
-    #98508# added bridgetest_javaserver batch, tests work now also in .pro builds
-
-    Revision 1.2  2001/07/04 08:41:23  jbu
-    #88717# queryInterface for an unknown type is now tested (feature was introduced in UDK302b/UDK300o
-
-    Revision 1.1  2001/05/04 07:05:17  kr
-    moved from grande to openoffice
-
-    Revision 1.3  2001/03/12 16:22:44  jl
-    OSL_ENSHURE replaced by OSL_ENSURE
-
-    Revision 1.2  2000/08/14 07:12:50  jbu
-    added remote tests
-
-    Revision 1.1  2000/05/26 14:20:26  dbo
-    new
-
-
-**************************************************************************/

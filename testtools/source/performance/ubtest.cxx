@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: dbo $ $Date: 2001-06-29 14:01:57 $
-#*    $Revision: 1.2 $
+#*    last change   $Author: hr $ $Date: 2003-03-27 16:49:18 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile: $
 #*
@@ -134,7 +134,7 @@ static inline void out( double fVal, FILE * stream = stderr,
                         sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
 {
     sal_Char ar[128];
-    ::sprintf( ar, (fVal < 0.000001 ? "%g" : "%f"), fVal );
+    ::snprintf( ar, sizeof(ar), (fVal < 0.000001 ? "%g" : "%f"), fVal );
     out( ar, stream, nStart, cFillchar );
 }
 //--------------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ static inline void out( sal_Int64 nVal, FILE * stream = stderr,
                         sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
 {
     sal_Char ar[128];
-    ::sprintf( ar, "%ld", nVal );
+    ::snprintf( ar, sizeof(ar), "%ld", nVal );
     out( ar, stream, nStart, cFillchar );
 }
 
@@ -1322,6 +1322,16 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.2.20.1  2003/02/18 12:28:35  vg
+    INTEGRATION: CWS kso6 (1.2.30); FILE MERGED
+    2003/02/10 16:01:14 kso 1.2.30.1: #105906# - Checked/removed sprintf, strcpy, strcat
+
+    Revision 1.2.30.1  2003/02/10 16:01:14  kso
+    #105906# - Checked/removed sprintf, strcpy, strcat
+
+    Revision 1.2  2001/06/29 14:01:57  dbo
+    osl_executeProcess has changed
+
     Revision 1.1  2001/05/04 07:05:18  kr
     moved from grande to openoffice
 

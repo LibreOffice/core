@@ -172,9 +172,10 @@ $(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : $(WINTARGETS)
         -c $(MY_DLLPREFIX)jen$(MY_DLLPOSTFIX)
 
 # currently no chance to construct absolute file url for testComponent.jar
-# 	regcomp -register -r uno_services.rdb -br $(SOLARBINDIR)$/udkapi.rdb \
+# 	regmerge regcomp.rdb / $(SOLARBINDIR)$/udkapi.rdb uno_services.rdb
+# 	regcomp -register -r uno_services.rdb -br regcomp.rdb \
 # 		-classpath $(MY_CLASSPATH)	\
-# 		-c file:///d:/udk304/testtools/wntmsci7/class/testComponent.jar
+# 		-c file:///c:/source/testtools/wntmsci9/class/testComponent.jar
 .ENDIF
 
 
