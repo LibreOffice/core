@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-04-26 09:12:31 $
+#   last change: $Author: tra $ $Date: 2001-06-26 18:37:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,10 +69,13 @@ LIBTARGET=NO
 
 .INCLUDE : settings.mk
 
+.INCLUDE : ..$/..$/cppumaker.mk
+
 # --- Files -------------------------------------
 
 SLOFILES=$(SLO)$/WinImplHelper.obj\
-         $(SLO)$/AutoBuffer.obj
+         $(SLO)$/AutoBuffer.obj\
+         $(SLO)$/resourceprovider.obj
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
