@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-30 16:07:37 $
+ *  last change: $Author: pl $ $Date: 2001-11-01 20:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ class SalFrameData
     Rectangle       maResizeBuffer;
     Rectangle       maPaintRegion;
 
+    Timer           maAlwaysOnTopRaiseTimer;
+
     // data for WMAdaptor
     int             meWindowType;
     int             mnDecorationFlags;
@@ -226,7 +228,8 @@ class SalFrameData
     inline                  SalFrameData( SalFrame *pFrame );
     inline                  ~SalFrameData();
 
-            DECL_LINK( HandleResizeTimer, void* );
+    DECL_LINK( HandleResizeTimer, void* );
+    DECL_LINK( HandleAlwaysOnTopRaise, void* );
 public:
     long            Dispatch( XEvent *pEvent );
     void            Init( ULONG nSalFrameStyle, SystemParentData* pParentData = NULL );

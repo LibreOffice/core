@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-01 12:19:30 $
+ *  last change: $Author: pl $ $Date: 2001-11-01 20:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,9 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
 
     maResizeTimer.SetTimeoutHdl( LINK( this, SalFrameData, HandleResizeTimer ) );
     maResizeTimer.SetTimeout( 50 );
+
+    maAlwaysOnTopRaiseTimer.SetTimeoutHdl( LINK( this, SalFrameData, HandleAlwaysOnTopRaise ) );
+    maAlwaysOnTopRaiseTimer.SetTimeout( 100 );
 
     mpDeleteData                = NULL;
 
@@ -2615,6 +2618,13 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
     return 1;
 }
 
+IMPL_LINK( SalFrameData, HandleAlwaysOnTopRaise, void*, pDummy )
+{
+    if( bMapped_ )
+        pFrame_->ToTop( 0 );
+    return 0;
+}
+
 IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
 {
     bool bMoved = false;
@@ -3109,7 +3119,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     && bMapped_
                     && ! GetDisplay()->getWMAdaptor()->isAlwaysOnTopOK()
                     && nVisibility_ != VisibilityUnobscured )
-                    pFrame_->ToTop( 0 );
+                    maAlwaysOnTopRaiseTimer.Start();
             break;
 
             case ReparentNotify:

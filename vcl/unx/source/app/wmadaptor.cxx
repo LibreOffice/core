@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-30 16:01:50 $
+ *  last change: $Author: pl $ $Date: 2001-11-01 20:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include <prex.h>
 #include <X11/X.h>
 #include <X11/Xatom.h>
+#include <X11/Xresource.h>
 #include <postx.h>
 
 #ifdef DEBUG
@@ -307,9 +308,28 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                  *  in case of Dtwm. The transient behaviour can be restored
                  *  by settting the following X-resource in $HOME/.Xdefaults:
                  *  Dtwm*VCLSalFrame*secondariesOnTop: True
-                 *  it is expected that the installation inserts this,
-                 *  so m_bTransientBehaviour can be set to true here
                  */
+                m_bTransientBehaviour = false;
+                char* pDisplayResource = XResourceManagerString( m_pDisplay );
+                if( pDisplayResource )
+                {
+                    XrmDatabase aDB = XrmGetStringDatabase( pDisplayResource );
+                    XrmValue aValue;
+                    char* pType = NULL;
+                    if( XrmGetResource( aDB,
+                                        "Dtwm*VCLSalFrame*secondariesOnTop",
+                                        "Dtwm*VCLSalFrame",
+                                        &pType,
+                                        &aValue ) )
+                    {
+                        if( aValue.addr && ! strncasecmp( aValue.addr, "true", 4 ) )
+                            m_bTransientBehaviour = true;
+                    }
+#ifdef DEBUG
+                    fprintf( stderr, "set m_bTransientBehaviour to %s from database\n", m_bTransientBehaviour ? "true" : "false" );
+#endif
+                    XrmDestroyDatabase( aDB );
+                }
             }
             XFree (pProperty);
         }
