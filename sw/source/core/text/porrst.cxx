@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:32:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *                      class SwBreakPortion
  *************************************************************************/
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
-    : SwLinePortion( rPortion ), nRestWidth( 0 )
+    : SwLinePortion( rPortion )
 {
     nLineLength = 1;
     SetWhichPor( POR_BRK );
@@ -199,41 +199,7 @@ SwLinePortion *SwBreakPortion::Compress()
 void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
-    {
-        USHORT nViewWidth = ((SwBreakPortion*)this)->CalcViewWidth( rInf );
-
-        if( nViewWidth && nViewWidth <= nRestWidth )
-            rInf.DrawLineBreak( *this );
-    }
-}
-
-/*************************************************************************
- *                  SwBreakPortion::CalcViewWidth()
- *************************************************************************/
-
-USHORT SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
-{
-    ASSERT( rInf.GetOpt().IsLineBreak(), "SwBreakPortion::CalcViewWidth: zombie" );
-    // Im Mormalfall folgt auf ein Break keine weitere Portion, nur wenn im Blocksatz
-    // auch die letzte Zeile im Blocksatz ist, folgt eine Marginportion der Breite 0,
-    // ist die Zeile zentriert, so folgt eine Marginportion mit Breite > 0.
-    if( GetPortion() )
-    {
-        if( GetPortion()->IsFlyPortion() )
-        {
-            short nTmp = ((SwFlyPortion*)GetPortion())->GetPrtGlue();
-            nRestWidth = nTmp > 0 ? nTmp : 0;
-        }
-        else
-            nRestWidth = GetPortion()->Width();
-    }
-    USHORT nViewWidth = 0;
-
-    // The view width is not depending on the zoom factor anymore.
-    if( rInf.OnWin() && nRestWidth )
-        nViewWidth = LINE_BREAK_WIDTH;
-
-    return nViewWidth;
+        rInf.DrawLineBreak( *this );
 }
 
 /*************************************************************************
@@ -242,7 +208,6 @@ USHORT SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
 
 sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
 {
-    nRestWidth = (USHORT)(rInf.Width() - rInf.X());
     register const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
