@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:28:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,8 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nYMin( 0 ),
         m_nXMax( 0 ),
         m_nYMax( 0 ),
-        m_bHaveVerticalSubstitutedGlyphs( false )
+        m_bHaveVerticalSubstitutedGlyphs( false ),
+        m_bUserOverride( false )
 {
 }
 
@@ -2275,7 +2276,8 @@ void PrintFontManager::initialize( void* pInitDisplay )
                          getFontFileSysPath( aFont ).getStr() );
 #endif
             }
-            continue;
+            if( ! m_pFontCache->scanAdditionalFiles( aPath ) )
+                continue;
         }
 
         DIR* pDIR = opendir( aPath.getStr() );
@@ -2285,20 +2287,30 @@ void PrintFontManager::initialize( void* pInitDisplay )
             // read fonts.dir if possible
             ::std::hash_map< OString, ::std::list<OString>, OStringHash > aFontsDir;
             int nDirID = getDirectoryAtom( aPath, true );
-            ByteString aGccDummy( aPath );
-            String aFontsDirPath( aGccDummy, aEncoding );
-            aFontsDirPath.AppendAscii( "/fonts.dir" );
-            SvFileStream aStream( aFontsDirPath, STREAM_READ );
-            if( aStream.IsOpen() )
+            // #i38367# no fonts.dir in our own directories anymore
+            std::list< int >::const_iterator priv_dir;
+            for( priv_dir = m_aPrivateFontDirectories.begin();
+                 priv_dir != m_aPrivateFontDirectories.end() && *priv_dir != nDirID;
+                 ++priv_dir )
+                 ;
+
+            if( priv_dir == m_aPrivateFontDirectories.end() )
             {
-                ByteString aLine;
-                while( ! aStream.IsEof() )
+                ByteString aGccDummy( aPath );
+                String aFontsDirPath( aGccDummy, aEncoding );
+                aFontsDirPath.AppendAscii( "/fonts.dir" );
+                SvFileStream aStream( aFontsDirPath, STREAM_READ );
+                if( aStream.IsOpen() )
                 {
-                    aStream.ReadLine( aLine );
-                    ByteString aFileName( GetCommandLineToken( 0, aLine ) );
-                    ByteString aXLFD( aLine.Copy( aFileName.Len() ) );
-                    if( aFileName.Len() && aXLFD.Len() )
-                        aFontsDir[ aFileName ].push_back(aXLFD);
+                    ByteString aLine;
+                    while( ! aStream.IsEof() )
+                    {
+                        aStream.ReadLine( aLine );
+                        ByteString aFileName( GetCommandLineToken( 0, aLine ) );
+                        ByteString aXLFD( aLine.Copy( aFileName.Len() ) );
+                        if( aFileName.Len() && aXLFD.Len() )
+                            aFontsDir[ aFileName ].push_back(aXLFD);
+                    }
                 }
             }
 
@@ -2331,7 +2343,6 @@ void PrintFontManager::initialize( void* pInitDisplay )
                         ::std::list< PrintFont* > aNewFonts;
                         if( analyzeFontFile( nDirID, aFileName, aXLFDs.size() ? false : true, aXLFDs, aNewFonts ) )
                         {
-                            bool bUpdateFont = aXLFDs.size() < aNewFonts.size();
                             for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
                             {
                                 fontID aFont = m_nNextFontID++;
@@ -2339,8 +2350,6 @@ void PrintFontManager::initialize( void* pInitDisplay )
                                 m_aFontFileToFontID[ aFileName ].insert( aFont );
                                 m_pFontCache->updateFontCacheEntry( *it, false );
                                 nDirFonts++;
-                                if( bUpdateFont && isPrivateFontFile( aFont ) )
-                                    changeFontProperties( aFont, OStringToOUString( getXLFD( *it ), RTL_TEXTENCODING_UTF8 ) );
 #if OSL_DEBUG_LEVEL > 1
                                 fprintf( stderr, "adding font %d: \"%s\" from %s\n", aFont,
                                          OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
@@ -2352,6 +2361,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                 }
             }
             closedir( pDIR );
+            m_pFontCache->updateDirTimestamp( nDirID );
             if( ! nDirFonts )
                 m_pFontCache->markEmptyDir( nDirID );
         }
@@ -3140,42 +3150,23 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
 
     // find a directory with write access
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    SvFileStream aFontsDir;
+    bool bCanWrite = false;
     int nDirID = 0;
     INetURLObject aDir;
     for( ::std::list< int >::const_iterator dir_it = m_aPrivateFontDirectories.begin();
-         ! ( aFontsDir.IsOpen() && aFontsDir.IsWritable() ) && dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
+         ! bCanWrite && dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
     {
-        // there must be a writable fonts.dir in that directory
-        aDir = INetURLObject( OStringToOUString( getDirectory( *dir_it ), aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-        nDirID = *dir_it;
-        INetURLObject aFDir( aDir );
-        ByteString aDirPath( String(aFDir.PathToFileName()), aEncoding );
-        if( createPath( aDirPath ) )
+        // check if we can create files in that directory
+        ByteString aDirPath = getDirectory( *dir_it );
+        if( ! access( aDirPath.GetBuffer(), W_OK ) || createPath( aDirPath ) )
         {
-            aFDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "fonts.dir" ) ) );
-            aFontsDir.Open( aFDir.PathToFileName(), STREAM_READ | STREAM_WRITE );
+            aDir = INetURLObject( OStringToOUString( aDirPath, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+            nDirID = *dir_it;
+            bCanWrite = true;
         }
     }
-    if( aFontsDir.IsOpen() )
+    if( bCanWrite )
     {
-        aFontsDir.SetLineDelimiter( LINEEND_LF );
-        // we have a suitable path
-        // read the fonts.dir
-        ::std::list< ByteString > aLines;
-        ::std::list< ByteString >::iterator line_it;
-        ByteString aLine;
-        while( ! aFontsDir.IsEof() )
-        {
-            aFontsDir.ReadLine( aLine );
-            if( aLine.Len() )
-                aLines.push_back( aLine );
-        }
-        if( aLines.begin() != aLines.end() )
-            aLines.pop_front(); // not interested in the number of lines
-
-        // copy the font files and add them to fonts.dir
-        // do not overwrite existing files unless user wants it that way
         for( ::std::list< OString >::const_iterator font_it = rFiles.begin();
              font_it != rFiles.end(); ++font_it )
         {
@@ -3310,51 +3301,10 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                     m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
                     m_aFonts[ m_nNextFontID++ ] = *it;
                     m_pFontCache->updateFontCacheEntry( *it, false );
-
-                    aLine = ByteString( String(aTo.GetName()), aEncoding );
-                    aLine += ' ';
-                    aLine += ByteString( getXLFD( *it ) );
-
-                    int nTTCnumber = -1;
-                    if( (*it)->m_eType == fonttype::TrueType )
-                        nTTCnumber = static_cast<TrueTypeFontFile*>(*it)->m_nCollectionEntry;
-
-                    ByteString aFile( String(aTo.GetName()), aEncoding );
-                    for( line_it = aLines.begin(); line_it != aLines.end(); ++line_it )
-                    {
-                        if( line_it->GetToken( 0, ' ' ).Equals( aFile ) )
-                        {
-                            if( nTTCnumber <= 0 )
-                            {
-                                *line_it = aLine;
-                                break;
-                            }
-                            else
-                                nTTCnumber--;
-                        }
-                    }
-                    if( line_it == aLines.end() )
-                        aLines.push_back( aLine );
                 }
             }
         }
-        aFontsDir.Seek( STREAM_SEEK_TO_BEGIN );
-        aFontsDir.SetStreamSize( 0 );
-        aFontsDir.WriteLine( ByteString::CreateFromInt32( aLines.size() ) );
-        for( line_it = aLines.begin(); line_it != aLines.end(); ++line_it )
-            aFontsDir.WriteLine( *line_it );
 
-        // rehash X font path
-        Display* pDisplay = XOpenDisplay( NULL );
-        if( pDisplay )
-        {
-            int nPaths = 0;
-            char** pFontPaths = XGetFontPath( pDisplay, &nPaths );
-            XSetFontPath( pDisplay, pFontPaths, nPaths );
-            if( pFontPaths && nPaths )
-                XFreeFontPath( pFontPaths );
-            XCloseDisplay( pDisplay );
-        }
         m_pFontCache->updateDirTimestamp( nDirID );
         m_pFontCache->flush();
     }
@@ -3371,29 +3321,22 @@ bool PrintFontManager::checkImportPossible() const
     bool bSuccess = false;
 
     // find a directory with write access
-    SvFileStream aFontsDir;
-    INetURLObject aDir;
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    for( ::std::list< OString >::const_iterator dir_it = m_aFontDirectories.begin();
-         ! ( aFontsDir.IsOpen() && aFontsDir.IsWritable() ) && dir_it != m_aFontDirectories.end(); ++dir_it )
+    ByteString aDir;
+    for( std::list< int >::const_iterator dir_it = m_aPrivateFontDirectories.begin();
+         dir_it != m_aFontDirectories.end(); ++dir_it )
     {
-        // there must be a writable fonts.dir in that directory
-        aDir = INetURLObject( OStringToOUString( *dir_it, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-        INetURLObject aFDir( aDir );
-        ByteString aDirPath( String(aFDir.PathToFileName()), aEncoding );
-        if( createPath( aDirPath ) )
+        aDir = getDirectory( *dir_it );
+        if( ! access( aDir.GetBuffer(), W_OK ) || createPath( aDir ) )
         {
-            aFDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "fonts.dir" ) ) );
-            aFontsDir.Open( aFDir.PathToFileName(), STREAM_READ | STREAM_WRITE );
+            bSuccess = true;
+            break;
         }
     }
-    if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
-    {
+
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found writable %s\n", ByteString( aFontsDir.GetFileName(), osl_getThreadTextEncoding() ).GetBuffer() );
+    if( bSuccess )
+        fprintf( stderr, "found writable %s\n", aDir.GetBuffer() );
 #endif
-        bSuccess = true;
-    }
 
     return bSuccess;
 }
@@ -3402,122 +3345,30 @@ bool PrintFontManager::checkImportPossible() const
 
 bool PrintFontManager::checkChangeFontPropertiesPossible( fontID nFontID ) const
 {
-    bool bSuccess = false;
-    PrintFont* pFont = getFont( nFontID );
-    if( pFont )
-    {
-        OString aFontsDirPath;
-        switch( pFont->m_eType )
-        {
-            case fonttype::Type1:
-                aFontsDirPath = getDirectory( static_cast< Type1FontFile* >(pFont)->m_nDirectory );
-                break;
-            case fonttype::TrueType:
-                aFontsDirPath = getDirectory( static_cast< TrueTypeFontFile* >(pFont)->m_nDirectory );
-                break;
-            default: break;
-        }
-        if( aFontsDirPath.getLength() )
-        {
-            OUString aUniPath, aFDPath;
-            FileBase::getFileURLFromSystemPath( OStringToOUString( aFontsDirPath, osl_getThreadTextEncoding() ), aUniPath );
-            aUniPath += OUString::createFromAscii( "/fonts.dir" );
-            FileBase::getSystemPathFromFileURL( aUniPath, aFDPath );
-            SvFileStream aFontsDir( aFDPath, STREAM_READ | STREAM_WRITE );
-            if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
-                bSuccess = true;
-        }
-    }
-    return bSuccess;
+    // since font properties are changed in the font cache file only nowadays
+    // they can always be changed
+    return true;
 }
 
 // -------------------------------------------------------------------------
 
 bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUString& rXLFD )
 {
-    bool bSuccess = false;
-    if( ! checkChangeFontPropertiesPossible( nFontID ) )
-        return bSuccess;
-
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    ByteString aXLFD( OUStringToOString( rXLFD, RTL_TEXTENCODING_UTF8 ) );
+    ByteString aAddStyle = aXLFD.GetToken( '-', 6 );
+    if( aAddStyle.Search( "utf8" ) == STRING_NOTFOUND )
+    {
+        aAddStyle.Append( aAddStyle.Len() ? ";utf8" : "utf8" );
+        aXLFD.SetToken( 6, ';', aAddStyle );
+    }
     PrintFont* pFont = getFont( nFontID );
-    OString aFontsDirPath;
-    ByteString aFontFile;
+    std::list< OString > aDummyList;
+    aDummyList.push_back( aXLFD );
+    getFontAttributesFromXLFD( pFont, aDummyList );
+    pFont->m_bUserOverride = true;
+    m_pFontCache->updateFontCacheEntry( pFont, true );
 
-    int nTTCnumber = -1;
-    switch( pFont->m_eType )
-    {
-        case fonttype::Type1:
-            aFontsDirPath = getDirectory( static_cast< Type1FontFile* >(pFont)->m_nDirectory );
-            aFontFile = static_cast< Type1FontFile* >(pFont)->m_aFontFile;
-            break;
-        case fonttype::TrueType:
-            aFontsDirPath = getDirectory( static_cast< TrueTypeFontFile* >(pFont)->m_nDirectory );
-            aFontFile = static_cast< TrueTypeFontFile* >(pFont)->m_aFontFile;
-            nTTCnumber = static_cast< TrueTypeFontFile* >(pFont)->m_nCollectionEntry;
-            break;
-        default: break;
-    }
-    OUString aUniPath, aFDPath;
-    FileBase::getFileURLFromSystemPath( OStringToOUString( aFontsDirPath, aEncoding ), aUniPath );
-    aUniPath += OUString::createFromAscii( "/fonts.dir" );
-    FileBase::getSystemPathFromFileURL( aUniPath, aFDPath );
-    SvFileStream aFontsDir( aFDPath, STREAM_READ | STREAM_WRITE );
-    aFontsDir.SetLineDelimiter( LINEEND_LF );
-    if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
-    {
-        ByteString aXLFD( OUStringToOString( rXLFD, RTL_TEXTENCODING_UTF8 ) );
-        ByteString aAddStyle = aXLFD.GetToken( '-', 6 );
-        if( aAddStyle.Search( "utf8" ) == STRING_NOTFOUND )
-        {
-            aAddStyle.Append( aAddStyle.Len() ? ";utf8" : "utf8" );
-            aXLFD.SetToken( 6, ';', aAddStyle );
-        }
-        ::std::list< ByteString > aLines;
-        ByteString aLine;
-        aFontsDir.ReadLine( aLine ); // pop line count
-        while( ! aFontsDir.IsEof() )
-        {
-            aFontsDir.ReadLine( aLine );
-            if( GetCommandLineToken( 0, aLine ) == aFontFile )
-            {
-                if( nTTCnumber <= 0 )
-                {
-                    bSuccess = true;
-                    aLine = aFontFile;
-                    aLine += ' ';
-                    aLine += aXLFD;
-                }
-                else
-                    nTTCnumber--;
-            }
-            if( aLine.Len() )
-                aLines.push_back( aLine );
-        }
-        if( ! bSuccess )
-        {
-            bSuccess = true;
-            aLine = aFontFile;
-            aLine += ' ';
-            aLine += aXLFD;
-            aLines.push_back( aLine );
-        }
-        // write the file
-        aFontsDir.Seek( STREAM_SEEK_TO_BEGIN );
-        aFontsDir.SetStreamSize( 0 );
-        // write number of fonts
-        aFontsDir.WriteLine( ByteString::CreateFromInt32( aLines.size() ) );
-        while( aLines.begin() != aLines.end() )
-        {
-            aFontsDir.WriteLine( aLines.front() );
-            aLines.pop_front();
-        }
-        std::list< OString > aDummyList;
-        aDummyList.push_back( aXLFD );
-        getFontAttributesFromXLFD( pFont, aDummyList );
-        m_pFontCache->updateFontCacheEntry( pFont, true );
-    }
-    return bSuccess;
+    return true;
 }
 
 // -------------------------------------------------------------------------
@@ -3621,50 +3472,17 @@ bool PrintFontManager::removeFonts( const ::std::list< fontID >& rFonts )
 #endif
                 unlink( aAfm.getStr() );
             }
-            INetURLObject aFontsDirPath( String( aFile, osl_getThreadTextEncoding() ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            aFontsDirPath.CutName();
-            aFontsDirPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( "fonts.dir" ) ) );
-            ByteString aFontsDirSysPath( String(aFontsDirPath.PathToFileName()), osl_getThreadTextEncoding() );
-            if( ! access( aFontsDirSysPath.GetBuffer(), R_OK | W_OK ) )
+            m_aFonts.erase( *it );
+            delete pFont;
+            if( bRemoveDuplicates )
             {
-                SvFileStream aFontsDir( aFontsDirPath.PathToFileName(), STREAM_READ | STREAM_WRITE );
-                aFontsDir.SetLineDelimiter( LINEEND_LF );
-                if( aFontsDir.IsOpen() )
+                for( ::std::list< fontID >::iterator dup = aDuplicates.begin(); dup != aDuplicates.end(); ++dup )
                 {
-                    ByteString aLine;
-                    // skip entry count
-                    aFontsDir.ReadLine( aLine );
-                    ::std::list< ByteString > aLines;
-                    int nPos = aFile.SearchBackward( '/' );
-                    ByteString aFileName( aFile.Copy( nPos != STRING_NOTFOUND ? nPos+1 : 0 ) );
-                    while( ! aFontsDir.IsEof() )
-                    {
-                        aFontsDir.ReadLine( aLine );
-                        if( aLine.Len() && aLine.CompareTo( aFileName, aFileName.Len() ) != COMPARE_EQUAL )
-                            aLines.push_back( aLine );
-                    }
-                    aFontsDir.SetStreamSize( 0 );
-                    aFontsDir.Seek( 0 );
-                    // write entry count
-                    aFontsDir.WriteLine( ByteString::CreateFromInt32( aLines.size() ) );
-                    while( aLines.begin() != aLines.end() )
-                    {
-                        aFontsDir.WriteLine( aLines.front() );
-                        aLines.pop_front();
-                    }
+                    m_aFontFileToFontID[ aFile ].erase( *dup );
+                    PrintFont* pDup = m_aFonts[ *dup ];
+                    m_aFonts.erase( *dup );
+                    delete pDup;
                 }
-            }
-        }
-        m_aFonts.erase( *it );
-        delete pFont;
-        if( bRemoveDuplicates )
-        {
-            for( ::std::list< fontID >::iterator dup = aDuplicates.begin(); dup != aDuplicates.end(); ++dup )
-            {
-                m_aFontFileToFontID[ aFile ].erase( *dup );
-                PrintFont* pDup = m_aFonts[ *dup ];
-                m_aFonts.erase( *dup );
-                delete pDup;
             }
         }
     }
