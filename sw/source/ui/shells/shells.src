@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:54:18 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ InfoBox MSG_NO_RULER
     Message[ chinese_simplified ] = "‘Џї≠ј»÷чћв'≥§ћх–ќ'ƒЏќё»ќЇќЌЉ–ќ°£";
     Message[ russian ] = "¬ теме галереи 'Ћинейки' рисунков не имеетс€.";
     Message[ polish ] = "Nie ma њadnych grafik w temacie galerii \"Obramowania\"";
-    Message[ japanese ] = "Јёђ„Ў∞√∞ѕ'ў∞„∞'В…Єё„ћ®ѓЄљВЌВ†ВиВ№ВєВсБB";
+    Message[ japanese ] = "Јёђ„Ў•√∞ѕВћБuў∞„∞БvВ…ВЌЄё„ћ®ѓЄВЌВ†ВиВ№ВєВсБB";
     Message[ chinese_traditional ] = "µeіY•D√D'™ш±шІќ'§ЇµL•ф¶уєѕ§щ°C";
     Message[ arabic ] = "б«  жћѕ √н… ’ж— Ён гж÷жЏ «бћ«бн—н 'Rulers'.";
     Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
@@ -563,7 +563,7 @@ String STR_REDLINE_MSG
     Text[ spanish ] = "El AutoFormato ha concluido.\nAhora puede aceptar o rechazar todos los cambios\na la vez o uno por uno.";
     Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
     Text[ chinese_simplified ] = "“—Њ≠Ќк≥…„‘ґѓЄс љ°£\nƒъѕ÷‘Џƒ№єїљ” №їтЊ№ЊшЋщ”–µƒЄьЄƒ£ђїт’я\nљ” №їтЊ№Њшµ•ЄцЄьЄƒ°£";
-    Text[ russian ] = "јвтоформатирование закончено.\n—ейчас вы можете прин€ть или отклонить сразу все изменени€,\nили каждое по отдельности.";
+    Text[ russian ] = "јвтоформатирование закончено.\n—ейчас ¬ы можете прин€ть или отклонить сразу все изменени€,\nили каждое по отдельности.";
     Text[ polish ] = "Autoformatowanie jest zakoсczone.\nMoњesz zaaakceptowaж lub odrzuciж teraz wszystkie zmiany,\nlub akceptowaж je oraz odrzucaж pojedynczo.";
     Text[ japanese ] = "µ∞ƒћЂ∞ѕѓƒВ™ПIЧєВµВ№ВµВљБB\nВЈВ„ВƒВћХѕНXВрОуВѓУьВкВйВ©БAМ≥В…ЦяВЈВ±В∆В™В≈ВЂВ№ВЈБB\nВ№ВљВЌВ–В∆В¬В–В∆В¬ВћХѕНXВ…В¬ВҐВƒМЯУҐВЈВйВ±В∆ВаВ≈ВЂВ№ВЈБB";
     Text[ chinese_traditional ] = "§wЄgІє¶®¶џ∞ Ѓж¶°°C\n±z≤{¶bѓа∞ч±µ®ь©ќ©Џµі©“¶≥™Ї≈№Іу°A±z§]ѓа∞ч\n±µ®ь©ќ©Џµі≥ж≠”™Ї≈№Іу°C";
@@ -970,7 +970,7 @@ String RID_FRAME_TOOLBOX
     Text[ polish ] = "Pasek obiektуw ramki";
     Text[ japanese ] = "ШgµћёЉё™Єƒ ё∞";
     Text[ chinese_traditional ] = "ЃЎ™Ђ•у¶C";
-    Text[ arabic ] = "‘—нЎ я«∆д«  «б≈Ў«—";
+    Text[ arabic ] = "‘—нЎ я«∆д«  «бя«ѕ—";
     Text[ dutch ] = "Kaderobjectbalk";
     Text[ chinese_simplified ] = "њтґ‘ѕујЄ";
     Text[ greek ] = "√сбммё бнфйкеймЁнщн рлбйуяпх";
@@ -1903,7 +1903,7 @@ String STR_SHELLNAME_FRAME
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "Шg";
     Text[ chinese_traditional ] = "§е¶r§иґф";
-    Text[ arabic ] = "≈Ў«—";
+    Text[ arabic ] = "я«ѕ—";
     Text[ dutch ] = "Kader";
     Text[ chinese_simplified ] = "њт";
     Text[ greek ] = "–есягсбммб";
@@ -2190,7 +2190,7 @@ String STR_SWBG_FRAME
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "Шg";
     Text[ chinese_traditional ] = "§е¶r§иґф";
-    Text[ arabic ] = "≈Ў«—";
+    Text[ arabic ] = "я«ѕ—";
     Text[ dutch ] = "Kader";
     Text[ chinese_simplified ] = "њт";
     Text[ greek ] = "–есягсбммб";
