@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:13:25 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ SwFlyFrm::~SwFlyFrm()
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
             {
                 SdrObject *pObj = (*pFrm->GetDrawObjs())[0];
-                if ( pObj->IsWriterFlyFrame() )
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
                     delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                 else
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
@@ -1273,7 +1273,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                     for ( USHORT i = 0; i < nCnt; ++i )
                     {
                         SdrObject *pO = (*GetDrawObjs())[i];
-                        if ( pO->IsWriterFlyFrame() )
+                        if ( pO->ISA(SwVirtFlyDrawObj) )
                         {
                             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                             if( pFly->IsFlyLayFrm() &&
@@ -1454,7 +1454,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                 for ( USHORT i = 0; i < nCnt; ++i )
                 {
                     SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-                    if ( pO->IsWriterFlyFrame() )
+                    if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         pFly->InvalidatePos();
@@ -2293,7 +2293,7 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
         for ( USHORT i = 0; i < nCnt; ++i )
         {
             SdrObject *pO = (*GetDrawObjs())[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 // Bei autopositionierten (am Zeichen geb.) Rahmen vertrauen wir
@@ -2409,7 +2409,7 @@ void SwLayoutFrm::NotifyFlys()
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
             SdrObject *pO = rObjs[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
 
@@ -2453,7 +2453,7 @@ void SwFlyFrm::NotifyDrawObj()
     pDrawObj->SetRect();
     pDrawObj->_SetRectsDirty();
     pDrawObj->SetChanged();
-    pDrawObj->SendRepaintBroadcast( TRUE ); //Broadcast ohne Repaint!
+    pDrawObj->BroadcastObjectChange();
     if ( GetFmt()->GetSurround().IsContour() )
         ClrContourCache( pDrawObj );
 }
