@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:54:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 16:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,12 +391,27 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     }
 
     const SwNodeIndex* pCntIdx = pFmt->GetCntnt().GetCntntIdx();
-    if( pCntIdx )
+    if( pCntIdx && !DoesUndo() )
     {
         //Verbindung abbauen, falls es sich um ein OLE-Objekt handelt.
         SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
+        {
+            SwDoc* pDoc = (SwDoc*)pFmt->GetDoc();
+            if( pDoc )
+            {
+                SvPersist* p = pDoc->GetPersist();
+                if( p )     // muss da sein
+                {
+                    SvInfoObjectRef aRef( p->Find( pOLENd->GetOLEObj().GetName() ) );
+                    if( aRef.Is() )
+                        aRef->SetObj(0);
+                }
+            }
+
             pOLENd->GetOLEObj().GetOleRef()->DoClose();
+            pOLENd->GetOLEObj().GetOleRef().Clear();
+        }
     }
 
     //Frms vernichten.
