@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:47 $
+#   last change: $Author: nn $ $Date: 2000-11-09 19:50:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,11 @@ PACKAGE=com$/sun$/star$/sheet
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    RangeSelectionArguments.idl\
+    RangeSelectionEvent.idl\
+    XRangeSelection.idl\
+    XRangeSelectionChangeListener.idl\
+    XRangeSelectionListener.idl\
     AddIn.idl\
     Border.idl\
     CellAnnotation.idl\
