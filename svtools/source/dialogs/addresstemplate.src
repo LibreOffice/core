@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 06:01:19 $
+ *  last change: $Author: pb $ $Date: 2001-12-12 12:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,23 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text = "Vorlagen: Adressbuch-Zuordnung";
     Text [ english ] = "Templates: Address Book assignment";
     Text [ english_us ] = "Templates: Address Book Assignment";
+    Text[ portuguese ] = "Modelos: atribuir livro de endereços";
+    Text[ russian ] = "Øàáëîíû: íàçíà÷åíèå àäðåñíîé êíèãè";
+    Text[ greek ] = "Ðñüôõðá: Áíôéóôïß÷éóç áôæÝíôáò äéåõèýíóåùí";
+    Text[ dutch ] = "Sjablonen: adresboek";
+    Text[ french ] = "Modèles : Assignation du carnet d'adresses";
+    Text[ spanish ] = "Plantillas: Asignación de libreta de direcciones";
+    Text[ italian ] = "Modelli: assegnazione rubrica";
+    Text[ danish ] = "Templates: Address Book assignment";
+    Text[ swedish ] = "Mallar: adressbokstilldelning";
+    Text[ polish ] = "Szablony: Przyporz¹dkowanie ksi¹¿ki adresowej";
+    Text[ portuguese_brazilian ] = "Templates: Address Book assignment";
+    Text[ japanese ] = "ÃÝÌßÚ°Ä: ±ÄÞÚ½’ ‚Ì‡˜";
+    Text[ korean ] = "ÅÛÇÃ¸´: ÁÖ¼Ò·Ï ÇÒ´ç";
+    Text[ chinese_simplified ] = "ÑùÊ½£ºÖ¸¶¨Í¨Ñ¶²¾";
+    Text[ chinese_traditional ] = "¼Ë¦¡¡G«ü©w³q°T¿ý";
+    Text[ turkish ] = "Templates: Address Book assignment";
+    Text[ arabic ] = "ÞæÇáÈ: ÊÚííä ÏÝÊÑ ÇáÚäÇæíä";
 
     FixedLine FL_DATASOURCEFRAME
     {
@@ -144,7 +161,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     {
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 105, 13 ) ;
-        Size = MAP_APPFONT ( 87, 55 ) ;
+        Size = MAP_APPFONT ( 96, 55 ) ;
 
         DropDown = TRUE;
         TabStop = TRUE;
@@ -155,7 +172,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text [ english ] = "~Administrate ...";
         Text [ english_us ] = "~Administrate...";
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 198, 13 ) ;
+        Pos = MAP_APPFONT ( 204, 13 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE;
         Text[ portuguese ] = "~Administrar...";
@@ -212,7 +229,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     {
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 105, 30 ) ;
-        Size = MAP_APPFONT ( 87, 55 ) ;
+        Size = MAP_APPFONT ( 96, 55 ) ;
 
         DropDown = TRUE;
         TabStop = TRUE;
@@ -269,41 +286,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             DropDown = TRUE;    \
             TabStop = TRUE; \
         }
-    Text[ portuguese ] = "Modelos: atribuir livro de endereços";
-    Text[ russian ] = "Øàáëîíû: íàçíà÷åíèå àäðåñíîé êíèãè";
-    Text[ greek ] = "Ðñüôõðá: Áíôéóôïß÷éóç áôæÝíôáò äéåõèýíóåùí";
-    Text[ dutch ] = "Sjablonen: adresboek";
-    Text[ french ] = "Modèles : Assignation du carnet d'adresses";
-    Text[ spanish ] = "Plantillas: Asignación de libreta de direcciones";
-    Text[ italian ] = "Modelli: assegnazione rubrica";
-    Text[ danish ] = "Templates: Address Book assignment";
-    Text[ swedish ] = "Mallar: adressbokstilldelning";
-    Text[ polish ] = "Szablony: Przyporz¹dkowanie ksi¹¿ki adresowej";
-    Text[ portuguese_brazilian ] = "Templates: Address Book assignment";
-    Text[ japanese ] = "ÃÝÌßÚ°Ä: ±ÄÞÚ½’ ‚Ì‡˜";
-    Text[ korean ] = "ÅÛÇÃ¸´: ÁÖ¼Ò·Ï ÇÒ´ç";
-    Text[ chinese_simplified ] = "ÑùÊ½£ºÖ¸¶¨Í¨Ñ¶²¾";
-    Text[ chinese_traditional ] = "¼Ë¦¡¡G«ü©w³q°T¿ý";
-    Text[ turkish ] = "Templates: Address Book assignment";
-    Text[ arabic ] = "ÞæÇáÈ: ÊÚííä ÏÝÊÑ ÇáÚäÇæíä";
-
-    Text[ portuguese ] = "Templates: Address Book assignment";
-    Text[ russian ] = "Templates: Address Book assignment";
-    Text[ greek ] = "Templates: Address Book assignment";
-    Text[ dutch ] = "Templates: Address Book assignment";
-    Text[ french ] = "Templates: Address Book assignment";
-    Text[ spanish ] = "Plantillas: Asignación de libreta de direcciones";
-    Text[ italian ] = "Modelli: assegnazione rubrica";
-    Text[ danish ] = "Templates: Address Book assignment";
-    Text[ swedish ] = "Mallar: adressbokstilldelning";
-    Text[ polish ] = "Szablony: Przyporz¹dkowanie ksi¹¿ki adresowej";
-    Text[ portuguese_brazilian ] = "Templates: Address Book assignment";
-    Text[ japanese ] = "Templates: Address Book assignment";
-    Text[ korean ] = "Templates: Address Book assignment";
-    Text[ chinese_simplified ] = "Templates: Address Book assignment";
-    Text[ chinese_traditional ] = "Templates: Address Book assignment";
-    Text[ turkish ] = "Templates: Address Book assignment";
-    Text[ arabic ] = "ÞæÇáÈ: ÊÚííä ÏÝÊÑ ÇáÚäÇæíä";
 
 #if FIELD_PAIRS_VISIBLE > 0
     DECLARE_FIELD( 0, 0 );
