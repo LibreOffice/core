@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:22:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,7 @@
 #include <scitems.hxx>
 #endif
 
-#include <offmgr/fltrcfg.hxx>
-#include <offmgr/app.hxx>
+#include <svtools/fltrcfg.hxx>
 
 #include <svtools/wmf.hxx>
 
@@ -557,7 +556,7 @@ void ImportExcel8::PostDocLoad( void )
     // BASIC
     if( bHasBasic && pShell )
     {
-        OfaFilterOptions*   pFiltOpt = OFF_APP()->GetFilterOptions();
+        SvtFilterOptions*   pFiltOpt = SvtFilterOptions::Get();
 
         if( pFiltOpt )
         {
