@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-28 11:14:04 $
+ *  last change: $Author: mt $ $Date: 2001-12-07 13:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,7 +1581,6 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 EditPaM EditDoc::RemoveChars( EditPaM aPaM, USHORT nChars )
 {
     // Evtl. Features entfernen!
-    aPaM.GetNode()->Copy( aPaM.GetIndex(), nChars );
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
     aPaM.GetNode()->CollapsAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
 
