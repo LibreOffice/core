@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:40:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,7 +1944,11 @@ bool SwFEShell::SelTblRowCol( const Point& rPt )
                     }
                     else if ( bRow )
                     {
-                        bRet = SwCrsrShell::_SelTblRowOrCol( true, true );
+                        // --> FME 2004-07-30 #i36662# We take the common row
+                        // selection algorithm to prevent a crash. Set second
+                        // parameter to false.
+                        bRet = SwCrsrShell::_SelTblRowOrCol( true, false );
+                        // <--
                     }
                     else if ( bCol )
                         bRet = SwCrsrShell::SelTblCol();
