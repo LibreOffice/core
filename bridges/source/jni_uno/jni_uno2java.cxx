@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:58 $
+ *  last change: $Author: dbo $ $Date: 2002-11-04 14:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,35 @@
  *
  ************************************************************************/
 
-#include <malloc.h>
+#include <alloca.h>
 
 #include "jni_bridge.h"
 
 
 using namespace ::std;
 using namespace ::rtl;
+
+namespace
+{
+extern "C"
+{
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_unoInterfaceProxy_free(
+    uno_ExtEnvironment * env, void * proxy )
+    SAL_THROW_EXTERN_C();
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
+    SAL_THROW_EXTERN_C();
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_unoInterfaceProxy_release( uno_Interface * pUnoI )
+    SAL_THROW_EXTERN_C();
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_unoInterfaceProxy_dispatch(
+    uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
+    void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
+    SAL_THROW_EXTERN_C();
+}
+}
 
 namespace jni_bridge
 {
@@ -287,7 +309,7 @@ void jni_Bridge::call_java(
 //==== a uno proxy wrapping a java interface =======================================================
 struct jni_unoInterfaceProxy : public uno_Interface
 {
-    oslInterlockedCount                 m_ref;
+    mutable oslInterlockedCount         m_ref;
     jni_Bridge const *                  m_bridge;
 
     // mapping information
@@ -296,22 +318,110 @@ struct jni_unoInterfaceProxy : public uno_Interface
     jstring                             m_jo_oid;
     JNI_type_info const *               m_type_info;
 
+    inline void acquire() const SAL_THROW( () );
+    inline void release() const SAL_THROW( () );
+
     // ctor
     inline jni_unoInterfaceProxy(
         JNI_attach const & attach, jni_Bridge const * bridge,
         jobject javaI, jstring jo_oid, OUString const & oid, JNI_type_info const * info )
         SAL_THROW( () );
 };
+//__________________________________________________________________________________________________
+inline jni_unoInterfaceProxy::jni_unoInterfaceProxy(
+    JNI_attach const & attach, jni_Bridge const * bridge,
+    jobject javaI, jstring jo_oid, OUString const & oid, JNI_type_info const * info )
+    SAL_THROW( () )
+    : m_ref( 1 ),
+      m_oid( oid ),
+      m_type_info( info )
+{
+    bridge->acquire();
+    m_bridge = bridge;
+    m_javaI = attach->NewGlobalRef( javaI );
+    m_jo_oid = (jstring)attach->NewGlobalRef( jo_oid );
+
+    // uno_Interface
+    uno_Interface::acquire = jni_unoInterfaceProxy_acquire;
+    uno_Interface::release = jni_unoInterfaceProxy_release;
+    uno_Interface::pDispatcher = jni_unoInterfaceProxy_dispatch;
+}
+//__________________________________________________________________________________________________
+inline void jni_unoInterfaceProxy::acquire() const SAL_THROW( () )
+{
+    if (1 == osl_incrementInterlockedCount( &m_ref ))
+    {
+        // rebirth of proxy zombie
+        void * that = const_cast< jni_unoInterfaceProxy * >( this );
+        // register at uno env
+        (*m_bridge->m_uno_env->registerProxyInterface)(
+            m_bridge->m_uno_env, &that,
+            jni_unoInterfaceProxy_free, m_oid.pData,
+            (typelib_InterfaceTypeDescription *)m_type_info->m_td.get() );
+#ifdef DEBUG
+        OSL_ASSERT( this == that );
+#endif
+    }
+}
+//__________________________________________________________________________________________________
+inline void jni_unoInterfaceProxy::release() const SAL_THROW( () )
+{
+    if (0 == osl_decrementInterlockedCount( &m_ref ))
+    {
+        // revoke from uno env on last release
+        (*m_bridge->m_uno_env->revokeInterface)(
+            m_bridge->m_uno_env, const_cast< jni_unoInterfaceProxy * >( this ) );
+    }
+}
+
+//##################################################################################################
+
+//__________________________________________________________________________________________________
+uno_Interface * jni_Bridge::map_java2uno(
+    JNI_attach const & attach,
+    jobject javaI, JNI_type_info const * info ) const
+{
+    JLocalAutoRef jo_oid( attach, compute_oid( attach, javaI ) );
+    OUString oid( jstring_to_oustring( attach, (jstring)jo_oid.get() ) );
+
+    uno_Interface * pUnoI = 0;
+    (*m_uno_env->getRegisteredInterface)(
+        m_uno_env, (void **)&pUnoI,
+        oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
+
+    if (0 == pUnoI) // no existing interface, register new proxy
+    {
+        JLocalAutoRef jo_iface(
+            attach, m_jni_info->java_env_registerInterface(
+                attach, javaI, (jstring)jo_oid.get(), info->m_jo_type ) );
+
+        // refcount initially 1
+        pUnoI = new jni_unoInterfaceProxy(
+            attach, const_cast< jni_Bridge * >( this ),
+            jo_iface.get(), (jstring)jo_oid.get(), oid, info );
+
+        (*m_uno_env->registerProxyInterface)(
+            m_uno_env, (void **)&pUnoI,
+            jni_unoInterfaceProxy_free,
+            oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
+    }
+    return pUnoI;
+}
+
+}
+
+using namespace ::jni_bridge;
+
+namespace
+{
+extern "C"
+{
 
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_unoInterfaceProxy_dispatch(
-    jni_unoInterfaceProxy * that, const typelib_TypeDescription * td_member,
-    void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
-    SAL_THROW( () );
-//--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_unoInterfaceProxy_free(
-    uno_ExtEnvironment * env, jni_unoInterfaceProxy * that ) SAL_THROW( () )
+void SAL_CALL jni_unoInterfaceProxy_free( uno_ExtEnvironment * env, void * proxy )
+    SAL_THROW_EXTERN_C()
 {
+    jni_unoInterfaceProxy const * that = reinterpret_cast< jni_unoInterfaceProxy const * >( proxy );
     OSL_ASSERT( env == that->m_bridge->m_uno_env );
 #ifdef DEBUG
     OString cstr_msg(
@@ -353,59 +463,27 @@ static void SAL_CALL jni_unoInterfaceProxy_free(
     delete that;
 }
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_unoInterfaceProxy_acquire( jni_unoInterfaceProxy * that ) SAL_THROW( () )
+void SAL_CALL jni_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
+    SAL_THROW_EXTERN_C()
 {
-    if (1 == osl_incrementInterlockedCount( &that->m_ref ))
-    {
-        // rebirth of proxy zombie
-#ifdef DEBUG
-        void * p = that;
-#endif
-        // register at uno env
-        (*that->m_bridge->m_uno_env->registerProxyInterface)(
-            that->m_bridge->m_uno_env, reinterpret_cast< void ** >( &that ),
-            (uno_freeProxyFunc)jni_unoInterfaceProxy_free, that->m_oid.pData,
-            (typelib_InterfaceTypeDescription *)that->m_type_info->m_td.get() );
-#ifdef DEBUG
-        OSL_ASSERT( p == that );
-#endif
-    }
+    jni_unoInterfaceProxy const * that = static_cast< jni_unoInterfaceProxy const * >( pUnoI );
+    that->acquire();
 }
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_unoInterfaceProxy_release( jni_unoInterfaceProxy * that ) SAL_THROW( () )
+void SAL_CALL jni_unoInterfaceProxy_release( uno_Interface * pUnoI )
+    SAL_THROW_EXTERN_C()
 {
-    if (0 == osl_decrementInterlockedCount( &that->m_ref ))
-    {
-        // revoke from uno env on last release
-        (*that->m_bridge->m_uno_env->revokeInterface)( that->m_bridge->m_uno_env, that );
-    }
-}
-//__________________________________________________________________________________________________
-inline jni_unoInterfaceProxy::jni_unoInterfaceProxy(
-    JNI_attach const & attach, jni_Bridge const * bridge,
-    jobject javaI, jstring jo_oid, OUString const & oid, JNI_type_info const * info )
-    SAL_THROW( () )
-    : m_ref( 1 ),
-      m_oid( oid ),
-      m_type_info( info )
-{
-    bridge->acquire();
-    m_bridge = bridge;
-    m_javaI = attach->NewGlobalRef( javaI );
-    m_jo_oid = (jstring)attach->NewGlobalRef( jo_oid );
-
-    // uno_Interface
-    uno_Interface::acquire = (void (SAL_CALL *)( uno_Interface * ))jni_unoInterfaceProxy_acquire;
-    uno_Interface::release = (void (SAL_CALL *)( uno_Interface * ))jni_unoInterfaceProxy_release;
-    uno_Interface::pDispatcher = (uno_DispatchMethod)jni_unoInterfaceProxy_dispatch;
+    jni_unoInterfaceProxy * that = static_cast< jni_unoInterfaceProxy * >( pUnoI );
+    that->release();
 }
 
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_unoInterfaceProxy_dispatch(
-    jni_unoInterfaceProxy * that, const typelib_TypeDescription * member_td,
-    void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
-    SAL_THROW( () )
+void SAL_CALL jni_unoInterfaceProxy_dispatch(
+    uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
+    void * uno_ret, void * uno_args [], uno_Any ** uno_exc )
+    SAL_THROW_EXTERN_C()
 {
+    jni_unoInterfaceProxy const * that = static_cast< jni_unoInterfaceProxy const * >( pUnoI );
 #ifdef DEBUG
     OString cstr_msg(
         OUStringToOString(
@@ -530,7 +608,7 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
                                 that->m_jo_oid, that->m_oid, info );
 
                             (*bridge->m_uno_env->registerProxyInterface)(
-                                bridge->m_uno_env, reinterpret_cast< void ** >( &pUnoI ),
+                                bridge->m_uno_env, (void **)&pUnoI,
                                 (uno_freeProxyFunc)jni_unoInterfaceProxy_free,
                                 that->m_oid.pData,
                                 (typelib_InterfaceTypeDescription *)info->m_td.get() );
@@ -557,12 +635,12 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
                 }
                 break;
             }
-            case 1: // acquire uno interface
-                (*that->acquire)( that );
+            case 1: // acquire this proxy
+                jni_unoInterfaceProxy_acquire( const_cast< jni_unoInterfaceProxy * >( that ) );
                 *uno_exc = 0;
                 break;
-            case 2: // release uno interface
-                (*that->release)( that );
+            case 2: // release this proxy
+                jni_unoInterfaceProxy_release( const_cast< jni_unoInterfaceProxy * >( that ) );
                 *uno_exc = 0;
                 break;
             default: // arbitrary method call
@@ -599,38 +677,5 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
     }
 }
 
-//##################################################################################################
-
-//__________________________________________________________________________________________________
-uno_Interface * jni_Bridge::map_java2uno(
-    JNI_attach const & attach,
-    jobject javaI, JNI_type_info const * info ) const
-{
-    JLocalAutoRef jo_oid( attach, compute_oid( attach, javaI ) );
-    OUString oid( jstring_to_oustring( attach, (jstring)jo_oid.get() ) );
-
-    uno_Interface * pUnoI = 0;
-    (*m_uno_env->getRegisteredInterface)(
-        m_uno_env, (void **)&pUnoI,
-        oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
-
-    if (0 == pUnoI) // no existing interface, register new proxy
-    {
-        JLocalAutoRef jo_iface(
-            attach, m_jni_info->java_env_registerInterface(
-                attach, javaI, (jstring)jo_oid.get(), info->m_jo_type ) );
-
-        // refcount initially 1
-        pUnoI = new jni_unoInterfaceProxy(
-            attach, const_cast< jni_Bridge * >( this ),
-            jo_iface.get(), (jstring)jo_oid.get(), oid, info );
-
-        (*m_uno_env->registerProxyInterface)(
-            m_uno_env, reinterpret_cast< void ** >( &pUnoI ),
-            (uno_freeProxyFunc)jni_unoInterfaceProxy_free,
-            oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
-    }
-    return pUnoI;
 }
-
 }

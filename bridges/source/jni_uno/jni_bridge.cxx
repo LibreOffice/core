@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 12:20:27 $
+ *  last change: $Author: dbo $ $Date: 2002-11-04 14:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,119 @@
 using namespace ::std;
 using namespace ::rtl;
 using namespace ::osl;
+using namespace ::jni_bridge;
+
+namespace
+{
+extern "C"
+{
+
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_Mapping_acquire( uno_Mapping * mapping )
+    SAL_THROW_EXTERN_C()
+{
+    jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
+    that->m_bridge->acquire();
+}
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_Mapping_release( uno_Mapping * mapping )
+    SAL_THROW_EXTERN_C()
+{
+    jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
+    that->m_bridge->release();
+}
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_Mapping_java2uno(
+    uno_Mapping * mapping, void ** ppOut,
+    void * pIn, typelib_InterfaceTypeDescription * td )
+    SAL_THROW_EXTERN_C()
+{
+    uno_Interface ** ppUnoI = (uno_Interface **)ppOut;
+    jobject javaI = (jobject)pIn;
+
+    OSL_ASSERT( sizeof (void *) == sizeof (jobject) );
+    OSL_ENSURE( ppUnoI && td, "### null ptr!" );
+
+    if (0 != *ppUnoI)
+    {
+        uno_Interface * pUnoI = *(uno_Interface **)ppUnoI;
+        (*pUnoI->release)( pUnoI );
+        *ppUnoI = 0;
+    }
+    if (0 != javaI)
+    {
+        try
+        {
+            jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
+            jni_Bridge const * bridge = that->m_bridge;
+            JNI_attach attach( bridge->m_java_env );
+            JNI_type_info const * info =
+                bridge->m_jni_info->get_type_info( attach, (typelib_TypeDescription *)td );
+            *ppUnoI = bridge->map_java2uno( attach, javaI, info );
+        }
+        catch (BridgeRuntimeError & err)
+        {
+#ifdef _DEBUG
+            OString cstr_msg(
+                OUStringToOString(
+                    OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, cstr_msg.getStr() );
+#endif
+        }
+    }
+}
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL jni_Mapping_uno2java(
+    uno_Mapping * mapping, void ** ppOut,
+    void * pIn, typelib_InterfaceTypeDescription * td )
+    SAL_THROW_EXTERN_C()
+{
+    jobject * ppJavaI = (jobject *)ppOut;
+    uno_Interface * pUnoI = (uno_Interface *)pIn;
+
+    OSL_ASSERT( sizeof (void *) == sizeof (jobject) );
+    OSL_ENSURE( ppJavaI && td, "### null ptr!" );
+
+    try
+    {
+        jni_Mapping const * that = static_cast< jni_Mapping const * >( mapping );
+        jni_Bridge const * bridge = that->m_bridge;
+        JNI_attach attach( bridge->m_java_env );
+
+        if (0 != *ppJavaI)
+        {
+            attach->DeleteGlobalRef( *ppJavaI );
+            *ppJavaI = 0;
+        }
+        if (0 != pUnoI)
+        {
+            JNI_type_info const * info =
+                bridge->m_jni_info->get_type_info( attach, (typelib_TypeDescription *)td );
+            jobject jlocal = bridge->map_uno2java( attach, pUnoI, info );
+            *ppJavaI = attach->NewGlobalRef( jlocal );
+            attach->DeleteLocalRef( jlocal );
+        }
+    }
+    catch (BridgeRuntimeError & err)
+    {
+#ifdef _DEBUG
+        OString cstr_msg(
+            OUStringToOString(
+                OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( 0, cstr_msg.getStr() );
+#endif
+    }
+}
+//__________________________________________________________________________________________________
+void SAL_CALL jni_Bridge_free( uno_Mapping * mapping )
+    SAL_THROW_EXTERN_C()
+{
+    jni_Mapping * that = static_cast< jni_Mapping * >( mapping );
+    delete that->m_bridge;
+}
+
+}
+}
 
 namespace jni_bridge
 {
@@ -76,11 +189,6 @@ namespace jni_bridge
 //==================================================================================================
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
-//__________________________________________________________________________________________________
-static void SAL_CALL jni_Bridge_free( uno_Mapping * mapping ) SAL_THROW( () )
-{
-    delete static_cast< jni_Mapping * >( mapping )->m_bridge;
-}
 //__________________________________________________________________________________________________
 void jni_Bridge::acquire() const SAL_THROW( () )
 {
@@ -113,92 +221,6 @@ void jni_Bridge::release() const SAL_THROW( () )
             : const_cast< jni_Mapping * >( &m_uno2java ) );
     }
 }
-
-//--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_Mapping_acquire( jni_Mapping * that ) SAL_THROW( () )
-{
-    that->m_bridge->acquire();
-}
-//--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_Mapping_release( jni_Mapping * that ) SAL_THROW( () )
-{
-    that->m_bridge->release();
-}
-//--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_Mapping_java2uno(
-    jni_Mapping * that, uno_Interface ** ppUnoI,
-    jobject javaI, typelib_InterfaceTypeDescription * td )
-    SAL_THROW( () )
-{
-    OSL_ASSERT( sizeof (void *) == sizeof (jobject) );
-    OSL_ENSURE( ppUnoI && td, "### null ptr!" );
-
-    if (0 != *ppUnoI)
-    {
-        uno_Interface * pUnoI = *(uno_Interface **)ppUnoI;
-        (*pUnoI->release)( pUnoI );
-        *ppUnoI = 0;
-    }
-    if (0 != javaI)
-    {
-        try
-        {
-            jni_Bridge const * bridge = that->m_bridge;
-            JNI_attach attach( bridge->m_java_env );
-            JNI_type_info const * info =
-                bridge->m_jni_info->get_type_info( attach, (typelib_TypeDescription *)td );
-            *ppUnoI = bridge->map_java2uno( attach, javaI, info );
-        }
-        catch (BridgeRuntimeError & err)
-        {
-#ifdef _DEBUG
-            OString cstr_msg(
-                OUStringToOString(
-                    OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr_msg.getStr() );
-#endif
-        }
-    }
-}
-//--------------------------------------------------------------------------------------------------
-static void SAL_CALL jni_Mapping_uno2java(
-    jni_Mapping * that, jobject * ppJavaI,
-    uno_Interface * pUnoI, typelib_InterfaceTypeDescription * td )
-    SAL_THROW( () )
-{
-    OSL_ASSERT( sizeof (void *) == sizeof (jobject) );
-    OSL_ENSURE( ppJavaI && td, "### null ptr!" );
-
-    try
-    {
-        jni_Bridge const * bridge = that->m_bridge;
-        JNI_attach attach( bridge->m_java_env );
-
-        if (0 != *ppJavaI)
-        {
-            attach->DeleteGlobalRef( *ppJavaI );
-            *ppJavaI = 0;
-        }
-        if (0 != pUnoI)
-        {
-            JNI_type_info const * info =
-                bridge->m_jni_info->get_type_info( attach, (typelib_TypeDescription *)td );
-            jobject jlocal = bridge->map_uno2java( attach, pUnoI, info );
-            *ppJavaI = attach->NewGlobalRef( jlocal );
-            attach->DeleteLocalRef( jlocal );
-        }
-    }
-    catch (BridgeRuntimeError & err)
-    {
-#ifdef _DEBUG
-        OString cstr_msg(
-            OUStringToOString(
-                OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
-#endif
-    }
-}
-
 //__________________________________________________________________________________________________
 jni_Bridge::jni_Bridge(
     uno_Environment * java_env, uno_ExtEnvironment * uno_env, bool register_java2uno )
@@ -215,14 +237,14 @@ jni_Bridge::jni_Bridge(
     m_jni_info = reinterpret_cast< JNI_info * >( jvm_context->m_extra );
 
     // java2uno
-    m_java2uno.acquire = (void (SAL_CALL *)( uno_Mapping * ))jni_Mapping_acquire;
-    m_java2uno.release = (void (SAL_CALL *)( uno_Mapping * ))jni_Mapping_release;
+    m_java2uno.acquire = jni_Mapping_acquire;
+    m_java2uno.release = jni_Mapping_release;
     m_java2uno.mapInterface = (uno_MapInterfaceFunc)jni_Mapping_java2uno;
     m_java2uno.m_bridge = this;
     // uno2java
-    m_uno2java.acquire = (void (SAL_CALL *)( uno_Mapping * ))jni_Mapping_acquire;
-    m_uno2java.release = (void (SAL_CALL *)( uno_Mapping * ))jni_Mapping_release;
-    m_uno2java.mapInterface = (uno_MapInterfaceFunc)jni_Mapping_uno2java;
+    m_uno2java.acquire = jni_Mapping_acquire;
+    m_uno2java.release = jni_Mapping_release;
+    m_uno2java.mapInterface = jni_Mapping_uno2java;
     m_uno2java.m_bridge = this;
 
     (*g_moduleCount.modCnt.acquire)( &g_moduleCount.modCnt );
@@ -352,24 +374,24 @@ void JNI_attach::throw_bridge_error() const
     throw BridgeRuntimeError( OUString( (rtl_uString *)ustr_mem.release(), SAL_NO_ACQUIRE ) );
 }
 
-//##################################################################################################
-
-//--------------------------------------------------------------------------------------------------
-static void SAL_CALL java_env_disposing( uno_Environment * java_env )
-    SAL_THROW( () )
-{
-    JavaVMContext * context = reinterpret_cast< JavaVMContext * >( java_env->pContext );
-    delete reinterpret_cast< JNI_info * >( context->m_extra );
-    java_env->pContext = 0;
-    delete context;
-}
-
 }
 
 using namespace ::jni_bridge;
 
 extern "C"
 {
+namespace
+{
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL java_env_disposing( uno_Environment * java_env )
+    SAL_THROW_EXTERN_C()
+{
+    JavaVMContext * context = reinterpret_cast< JavaVMContext * >( java_env->pContext );
+    delete reinterpret_cast< JNI_info * >( context->m_extra );
+    java_env->pContext = 0;
+    delete context;
+}
+}
 //##################################################################################################
 void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:58 $
+ *  last change: $Author: dbo $ $Date: 2002-11-04 14:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <malloc.h>
+#include <alloca.h>
 
 #include "jni_bridge.h"
 
@@ -321,10 +321,12 @@ using namespace ::jni_bridge;
 
 extern "C"
 {
+
 //##################################################################################################
 JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle,
     jstring jo_decl_class, jstring jo_method, jobjectArray jo_args /* may be 0 */ )
+    SAL_THROW_EXTERN_C()
 {
     jni_Bridge const * bridge = reinterpret_cast< jni_Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
@@ -504,6 +506,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
 //##################################################################################################
 JNIEXPORT void JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle )
+    SAL_THROW_EXTERN_C()
 {
     jni_Bridge const * bridge = reinterpret_cast< jni_Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
@@ -532,4 +535,5 @@ JNIEXPORT void JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J
     // release bridge handle
     bridge->release();
 }
+
 }
