@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: tbe $ $Date: 2002-03-18 17:41:12 $
+ *  last change: $Author: tbe $ $Date: 2002-04-08 18:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1999,6 +1999,8 @@ void Edit::ImplSetSelection( const Selection& rSelection, BOOL bPaint )
                     ImplRepaint( nStart, nEnd );
                 }
                 ImplShowCursor();
+
+                ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
             }
         }
     }
