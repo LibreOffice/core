@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ ModalDialog DLG_MORPH
         Text[ japanese ] = "‘®«‚πΜª°Δήµ°Κή°";
         Text[ chinese_traditional ] = "¥ζ΄ΐΕγ¥άµe­±―S©Κ";
         Text[ arabic ] = "ΚΫΨνΙ ΣγΗΚ ΗαίΗΖδ";
-        Text[ greek ] = "Βαθμιαίος αποχρωματισμός ιδιοτήτων";
+        Text[ greek ] = "Ιδιοτήτες σε πρώτο πλάνο";
         Text[ korean ] = "ΌΣΌΊ ΏΐΉφ ·¦";
         Text[ turkish ] = "Φznitelikler: Serme";
         Text[ language_user1 ] = " ";
