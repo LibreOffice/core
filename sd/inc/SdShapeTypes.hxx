@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 14:36:20 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,8 @@ enum SdShapeTypes
 /** Factory method that creates accessibility objects corresponding to the
     type of the given shape.
 */
-::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>
-    createSdAccessibleShape (const ::com::sun::star::uno::Reference<
+AccessibleShape*
+    CreateSdAccessibleShape (const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape
