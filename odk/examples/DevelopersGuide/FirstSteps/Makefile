@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:23:39 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:27:04 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,43 +48,60 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=FirstStepsExamples
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+EXAMPLE_NAME=FirstStepsExamples
+OUT_APP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
-JAVAFILES  = \
-	FirstConnection.java	\
-	FirstLoadComponent.java	\
-	HelloTextTableShape.java
-
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+APP1_NAME=FirstUnoContact
+APP1_JAR=$(OUT_APP_CLASS)/$(APP1_NAME).jar
+APP2_NAME=FirstLoadComponent
+APP2_JAR=$(OUT_APP_CLASS)/$(APP2_NAME).jar
+APP3_NAME=HelloTextTableShape
+APP3_JAR=$(OUT_APP_CLASS)/$(APP3_NAME).jar
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
 
 
 # Targets
 .PHONY: ALL
 ALL : \
-	FirstStepsExamples
+	$(EXAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(JAVAFILES)
+$(OUT_APP_CLASS)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_APP_CLASS) $<
 
-FirstStepsExamples : $(CLASSFILES)
+$(OUT_APP_CLASS)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(OUT_APP_CLASS)/%.jar : $(OUT_APP_CLASS)/%.mf $(OUT_APP_CLASS)/%.class
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(OUT_APP_CLASS)) && $(SDK_JAR) cvfm $(@F) $*.mf $*.class
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+$(APP1_JAR) : $(OUT_APP_CLASS)/$(APP1_NAME).mf $(OUT_APP_CLASS)/$(APP1_NAME).class
+$(APP2_JAR) : $(OUT_APP_CLASS)/$(APP2_NAME).mf $(OUT_APP_CLASS)/$(APP2_NAME).class
+$(APP3_JAR) : $(OUT_APP_CLASS)/$(APP3_NAME).mf $(OUT_APP_CLASS)/$(APP3_NAME).class
+
+$(EXAMPLE_NAME) : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make FirstConnection.run
-	@echo make FirstLoadComponent.run
-	@echo make HelloTextTableShape.run
+	@echo make $(APP1_NAME).run
+	@echo make $(APP2_NAME).run
+	@echo make $(APP3_NAME).run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(OUT_APP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_CLASS))
