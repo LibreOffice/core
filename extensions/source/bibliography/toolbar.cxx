@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:58:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,11 +311,13 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     Rectangle aRect=GetItemRect(TBC_FT_SOURCE);
     aFtSource.SetText(aStr);
     aFtSource.SetSizePixel(aRect.GetSize());
+    aFtSource.SetBackground(Wallpaper( COL_TRANSPARENT ));
 
     aStr=GetItemText(TBC_FT_QUERY);
     aRect=GetItemRect(TBC_FT_QUERY);
     aFtQuery.SetText(aStr);
     aFtQuery.SetSizePixel(aRect.GetSize());
+    aFtQuery.SetBackground(Wallpaper( COL_TRANSPARENT ));
 
     SetItemWindow(TBC_FT_SOURCE,&aFtSource);
     SetItemWindow(TBC_LB_SOURCE,&aLBSource);
