@@ -8,15 +8,15 @@
     This component provides ...
 </Description>
 
-<SupportedService>com.sun.star.text.TextCursor</SupportedService>
+<ModuleName>sc</ModuleName>
+
+<LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
 
 <Language>c++</Language>
 
 <Status StatusValue="final"/>
 
-<ModuleName>sc</ModuleName>
-
-<LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+<SupportedService>com.sun.star.text.TextCursor</SupportedService>
 
 <!--
 <ServiceDependency>...</ServiceDependency>
