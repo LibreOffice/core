@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-06 15:21:28 $
+ *  last change: $Author: ama $ $Date: 2001-02-13 14:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1448,10 +1448,14 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     if( rMulti.HasRotation() )
     {
         SwTwips nH = rMulti.Width();
+        SwTwips nAsc = rMulti.GetAscent() + ( nH - rMulti.Height() )/2;
+        if( nAsc > nH )
+            nAsc = nH;
+        else if( nAsc < 0 )
+            nAsc = 0;
         rMulti.Width( rMulti.Height() );
         rMulti.Height( KSHORT(nH) );
-        if( rMulti.GetAscent() > nH )
-            rMulti.SetAscent( KSHORT(nH) );
+        rMulti.SetAscent( KSHORT(nAsc) );
         if( nTmpX + rMulti.Width() > rInf.Width() )
         {
             bRet = sal_True;
