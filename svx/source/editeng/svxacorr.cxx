@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-03 08:05:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2507,7 +2507,11 @@ BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
     {
         MakeUserStorage_Impl();
         SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
-        SvStorageRef xStg = aMedium.GetStorage();
+
+        // #i5746#
+        // Use GetOutputStorage(...) instead of GetStorage() here to
+        // create new files if necessary
+        SvStorageRef xStg = aMedium.GetOutputStorage(sal_True);
 
         SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
 
@@ -2532,7 +2536,11 @@ BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
     {
         MakeUserStorage_Impl();
         SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
-        SvStorageRef xStg = aMedium.GetStorage();
+
+        // #i5746#
+        // Use GetOutputStorage(...) instead of GetStorage() here to
+        // create new files if necessary
+        SvStorageRef xStg = aMedium.GetOutputStorage(sal_True);
 
         SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
 
@@ -2572,7 +2580,11 @@ void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
 {
     MakeUserStorage_Impl();
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetStorage();
+
+    // #i5746#
+    // Use GetOutputStorage(...) instead of GetStorage() here to
+    // create new files if necessary
+    SvStorageRef xStg = aMedium.GetOutputStorage(sal_True);
 
     SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
 
@@ -2622,7 +2634,11 @@ void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
 {
     MakeUserStorage_Impl();
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetStorage();
+
+    // #i5746#
+    // Use GetOutputStorage(...) instead of GetStorage() here to
+    // create new files if necessary
+    SvStorageRef xStg = aMedium.GetOutputStorage(sal_True);
 
     SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
 
