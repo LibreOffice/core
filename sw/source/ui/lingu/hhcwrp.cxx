@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:39:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,12 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -157,19 +163,29 @@ static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
 SwHHCWrapper::SwHHCWrapper(
         SwView* pSwView,
         const uno::Reference< lang::XMultiServiceFactory >& rxMSF,
-        const lang::Locale& rLocale,
+        LanguageType nSourceLanguage,
+        LanguageType nTargetLanguage,
+        const Font *pTargetFont,
+        sal_Int32 nConvOptions,
+        sal_Bool bIsInteractive,
         sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection ) :
-    svx::HangulHanjaConversion( &pSwView->GetEditWin(), rxMSF, rLocale ),
+    svx::HangulHanjaConversion( &pSwView->GetEditWin(), rxMSF,
+                                SvxCreateLocale( nSourceLanguage ),
+                                SvxCreateLocale( nTargetLanguage ),
+                                pTargetFont,
+                                nConvOptions,
+                                bIsInteractive ),
     rWrtShell( pSwView->GetWrtShell() )
 {
     nLastPos        = 0;
     nUnitOffset     = 0;
-    nLang           = SvxLocaleToLanguage( rLocale );
 
+#ifdef TL_OLD
     // currently this implementation only works for Korean (Hangu/Hanja conversion)
     // since it is derived by 'HangulHanjaConversion' and there is not
     // a more general base class for text conversion yet...
-    DBG_ASSERT( nLang == LANGUAGE_KOREAN, "unexpected language" );
+    DBG_ASSERT( nSourceLang == LANGUAGE_KOREAN, "unexpected language" );
+#endif
 
     pView           = pSwView;
     pWin            = &pSwView->GetEditWin();
@@ -197,7 +213,7 @@ SwHHCWrapper::~SwHHCWrapper()
     {
         Cursor *pSave = pView->GetWindow()->GetCursor();
         {
-            SdrHHCWrapper aSdrSpell( pView, nLang );
+            SdrHHCWrapper aSdrSpell( pView, GetSourceLanguage(), GetTargetLanguage(), GetTargetFont(), GetConversionOptions(), IsInteractive() );
             aSdrSpell.StartTextConversion();
         }
         pView->GetWindow()->SetCursor( pSave );
@@ -358,8 +374,44 @@ void SwHHCWrapper::ReplaceUnit(
     else
     {
         rWrtShell.StartUndo( UNDO_OVERWRITE );
-        rWrtShell.Delete();
+         rWrtShell.Delete();
         rWrtShell.Insert( aNewTxt );
+
+        // change language and font if necessary
+        if (GetSourceLanguage() != GetTargetLanguage())
+        {
+            rWrtShell.SetMark();
+            rWrtShell.GetCrsr()->GetMark()->nContent -= (xub_StrLen) aNewTxt.getLength();
+
+            DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
+                    "SwHHCWrapper::ReplaceUnit : unexpected target language" );
+
+            sal_uInt16 aRanges[] = {
+                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+                    RES_CHRATR_CJK_FONT,     RES_CHRATR_CJK_FONT,
+                    0, 0, 0  };
+
+            SfxItemSet aSet( rWrtShell.GetAttrPool(), aRanges );
+            aSet.Put( SvxLanguageItem( GetTargetLanguage(), RES_CHRATR_CJK_LANGUAGE ) );
+
+            const Font *pTargetFont = GetTargetFont();
+            DBG_ASSERT( pTargetFont, "target font missing?" );
+            if (pTargetFont)
+            {
+                SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( RES_CHRATR_CJK_FONT );
+                aFontItem.GetFamilyName()   = pTargetFont->GetName();
+                aFontItem.GetFamily()       = pTargetFont->GetFamily();
+                aFontItem.GetStyleName()    = pTargetFont->GetStyleName();
+                aFontItem.GetPitch()        = pTargetFont->GetPitch();
+                aFontItem.GetCharSet()      = pTargetFont->GetCharSet();
+                aSet.Put( aFontItem );
+            }
+
+            rWrtShell.SetAttr( aSet );
+
+            rWrtShell.ClearMark();
+        }
+
         rWrtShell.EndUndo( UNDO_OVERWRITE );
     }
 
@@ -494,13 +546,13 @@ sal_Bool SwHHCWrapper::HasOtherCnt_impl()
 void SwHHCWrapper::ConvStart_impl( SvxSpellArea eSpell )
 {
     SetDrawObj( SVX_SPELL_OTHER == eSpell );
-    pView->SpellStart( eSpell, bStartDone, bEndDone, TRUE );
+    pView->SpellStart( eSpell, bStartDone, bEndDone, this );
 }
 
 
 void SwHHCWrapper::ConvEnd_impl()
 {
-    pView->SpellEnd( TRUE );
+    pView->SpellEnd( this );
     //ShowLanguageErrors();
 }
 
@@ -511,8 +563,8 @@ sal_Bool SwHHCWrapper::ConvContinue_impl()
 //    bLastRet = aConvText.getLength() == 0;
     aConvText = OUString();
     uno::Any  aRet = bProgress ?
-        pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, TRUE ) :
-        pView->GetWrtShell().SpellContinue( &nPageCount, NULL, TRUE );
+        pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, this ) :
+        pView->GetWrtShell().SpellContinue( &nPageCount, NULL, this );
     aRet >>= aConvText;
     return aConvText.getLength() != 0;
 }
