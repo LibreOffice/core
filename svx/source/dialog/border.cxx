@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:00:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,10 +433,15 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_TLBR, aFrameSel, svx::FRAMEBORDER_TLBR ) );
     if( aFrameSel.IsBorderEnabled( svx::FRAMEBORDER_BLTR ) )
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_BLTR, aFrameSel, svx::FRAMEBORDER_BLTR ) );
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, aMergeWithNextCB, sfx::ITEMCONN_CLONE_ITEM | sfx::ITEMCONN_SHOW_KNOWN ) );
-    AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, aMergeAdjacentBordersCB, sfx::ITEMCONN_CLONE_ITEM | sfx::ITEMCONN_SHOW_KNOWN ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_BORDER_CONNECT, aPropertiesFL, sfx::ITEMCONN_SHOW_KNOWN ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_SW_COLLAPSING_BORDERS, aPropertiesFL, sfx::ITEMCONN_SHOW_KNOWN ) );
+    // --> OD 2005-03-01 #i43593# - item connection doesn't work for Writer,
+    // because the Writer item sets contain these items
+    // checkbox "Merge with next paragraph" only visible for Writer dialog format.paragraph
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, aMergeWithNextCB, sfx::ITEMCONN_CLONE_ITEM | sfx::ITEMCONN_DEFAULT ) );
+    aMergeWithNextCB.Hide();
+    // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
+    AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, aMergeAdjacentBordersCB, sfx::ITEMCONN_CLONE_ITEM | sfx::ITEMCONN_DEFAULT ) );
+    aMergeAdjacentBordersCB.Hide();
+    // <--
 }
 
 // -----------------------------------------------------------------------
@@ -1276,7 +1281,23 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     SFX_ITEMSET_ARG (&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pSWModeItem)
+    {
         SetSWMode(pSWModeItem->GetValue());
+        // --> OD 2005-03-01 #i43593#
+        // show checkbox <aMergeWithNextCB> for format.paragraph
+        if ( nSWMode == SW_BORDER_MODE_PARA )
+        {
+            aMergeWithNextCB.Show();
+            aPropertiesFL.Show();
+        }
+        // show checkbox <aMergeAdjacentBordersCB> for format.paragraph
+        else if ( nSWMode == SW_BORDER_MODE_TABLE )
+        {
+            aMergeAdjacentBordersCB.Show();
+            aPropertiesFL.Show();
+        }
+        // <--
+    }
     if (pFlagItem)
         if ( ( pFlagItem->GetValue() & SVX_HIDESHADOWCTL ) == SVX_HIDESHADOWCTL )
             HideShadowControls();
