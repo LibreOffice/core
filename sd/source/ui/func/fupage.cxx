@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:09:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@
 
 
 #include "strings.hrc"
-#include "dlgpage.hxx"
+//CHINA001 #include "dlgpage.hxx"
 #include "sdpage.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
@@ -147,7 +147,8 @@
 #endif
 #include "unchss.hxx"
 #include "undoback.hxx"
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "dlgpage.hrc" //CHINA001
 namespace sd {
 
 class Window;
@@ -375,8 +376,11 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
 
         aMergedAttr.Put(aNewAttr);
 
-        SdPageDlg* pDlg = new SdPageDlg( pDocSh, NULL, &aMergedAttr, bDisplayBackgroundTabPage );
-
+        //CHINA001 SdPageDlg* pDlg = new SdPageDlg( pDocSh, NULL, &aMergedAttr, bDisplayBackgroundTabPage );
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        SfxAbstractTabDialog* pDlg = pFact->CreateSdTabDialog(ResId( TAB_PAGE ), NULL, &aMergedAttr, pDocSh, bDisplayBackgroundTabPage );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         USHORT nResult = pDlg->Execute();
 
         switch( nResult )
