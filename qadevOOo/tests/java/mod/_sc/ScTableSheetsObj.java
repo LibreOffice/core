@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableSheetsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:10 $
+ *  last change:$Date: 2003-02-04 17:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,7 @@ public class ScTableSheetsObj extends TestCase {
     * @see com.sun.star.sheet.XSpreadsheetDocument
     * @see com.sun.star.sheet.Spreadsheet
     */
-    public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
@@ -181,7 +180,10 @@ public class ScTableSheetsObj extends TestCase {
         log.println( "adding INSTANCEn as mod relation to environment" );
         XComponent xComp = (XComponent)
             UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
-        int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        int THRCNT = 1;
+        if ((String)Param.get("THRCNT") != null) {
+            THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        }
         try {
             for (int n = 1; n < (THRCNT+1) ;n++ ) {
                 log.println(
