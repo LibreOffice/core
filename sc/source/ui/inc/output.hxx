@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:13:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ private:
     long nScrY;
     long nScrW;                 // Ausgabe Groesse (Pixel)
     long nScrH;
+    long nMirrorW;              // Visible output width for mirroring (default: nScrW)
     USHORT nX1;                 // Start-/Endkoordinaten
     USHORT nY1;                 //  ( incl. versteckte )
     USHORT nX2;
@@ -175,18 +176,24 @@ private:
     BOOL    bAnyClipped;        // intern
     BOOL    bTabProtected;
     BYTE    nTabTextDirection;  // EEHorizontalTextDirection values
+    BOOL    bLayoutRTL;
 
-                            // private Methoden
+                            // private methods
 
     BOOL            GetMergeOrigin( USHORT nX, USHORT nY, USHORT nArrY,
-                                    USHORT& rOverX, USHORT& rOverY,
-                                    long& rVirtPosX, long& rVirtPosY,
-                                    BOOL bClipVirt, BOOL bVisRowChanged );
+                                    USHORT& rOverX, USHORT& rOverY, BOOL bVisRowChanged );
     BOOL            IsEmptyCellText( RowInfo* pThisRowInfo, USHORT nX, USHORT nY );
     void            GetVisibleCell( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell*& rpCell );
 
     BOOL            IsAvailable( USHORT nX, USHORT nY );
     long            GetAvailableWidth( USHORT nX, USHORT nY, long nNeeded );
+    void            GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPosY,
+                                    USHORT nCellX, USHORT nCellY, long nNeeded,
+                                    const ScPatternAttr& rPattern,
+                                    USHORT nHorJustify, BOOL bCellIsValue,
+                                    BOOL bBreak, BOOL bOverwrite,
+                                    Rectangle& rAlignRect, Rectangle& rClipRect,
+                                    BOOL& rLeftClip, BOOL& rRightClip );
 
     void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
     void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
@@ -229,6 +236,7 @@ public:
     void    SetShowNullValues ( BOOL bSet = TRUE );
     void    SetShowFormulas   ( BOOL bSet = TRUE );
     void    SetShowSpellErrors( BOOL bSet = TRUE );
+    void    SetMirrorWidth( long nNew );
     long    GetScrW() const     { return nScrW; }
     long    GetScrH() const     { return nScrH; }
 
