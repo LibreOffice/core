@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:11:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,7 +1577,6 @@ ScXMLImport::ScXMLImport(
     nPrevCellType(0),
     nSolarMutexLocked(0),
     pScUnoGuard(NULL),
-    nRangeOverflowType(0),
     bSelfImportingXMLSet(sal_False)
 
 //  pParaItemMapper( 0 ),
@@ -2584,3 +2583,14 @@ void ScXMLImport::UnlockSolarMutex()
         }
     }
 }
+
+void ScXMLImport::SetRangeOverflowType(sal_uInt32 nType)
+{
+    //  #i31130# Overflow is stored in the document, because the ScXMLImport object
+    //  isn't available in ScXMLImportWrapper::ImportFromComponent when using the
+    //  OOo->Oasis transformation.
+
+    if ( pDoc )
+        pDoc->SetRangeOverflowType( nType );
+}
+
