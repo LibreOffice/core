@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:14:54 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ portuguese ] = "Atalhos" ;
         Text[ chinese_simplified ] = "Â·¾¶";
         Text[ russian ] = "Ïóòè";
-        Text[ polish ] = "?cie¿ki";
+        Text[ polish ] = "Œcie¿ki";
         Text[ japanese ] = "Êß½";
         Text[ chinese_traditional ] = "¸ô®|";
         Text[ arabic ] = "ÇáãÓÇÑÇÊ";
@@ -203,7 +203,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     };
     Text[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
     Text[ russian ] = "Âûáğàòü ïóòè";
-    Text[ polish ] = "Wybierz ?cie¿ki";
+    Text[ polish ] = "Wybierz œcie¿ki";
     Text[ japanese ] = "Êß½‚Ì‘I‘ğ";
     Text[ chinese_traditional ] = "¿ï¾Ü¸ô®|";
     Text[ arabic ] = "ÊÍÏíÏ ÇáãÓÇÑÇÊ";
@@ -231,7 +231,7 @@ String RID_MULTIPATH_DBL_ERR
     Text [ portuguese ] = "O atalho %1 já existe." ;
     Text[ chinese_simplified ] = "Õâ¸öÂ·¾¶ %1 ÒÑ¾­´æÔÚ¡£";
     Text[ russian ] = "Ïóòü %1 óæå èìååòñÿ.";
-    Text[ polish ] = "?cie¿ka %1 ju¿ istnieje.";
+    Text[ polish ] = "Œcie¿ka %1 ju¿ istnieje.";
     Text[ japanese ] = "%1‚ÌÊß½‚ÍŠù‚É‚ ‚è‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó¸ô®| %1 ¤w¸g¦s¦b¡C";
     Text[ arabic ] = "ÇáãÓÇÑ %1 ãæÌæÏ ãÓÈŞÇğ.";
