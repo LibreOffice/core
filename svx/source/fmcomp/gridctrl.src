@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:08:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,13 +426,13 @@ Menu RID_SVXMNU_COLS
                         Text [ spanish ] = "Campo enmascarado" ;
                         Text [ french ] = "Champ masqué" ;
                         Text [ dutch ] = "Patroonveld" ;
-                        Text[ chinese_simplified ] = "ÑÚÂëÇø";
+                        Text[ chinese_simplified ] = "ÑÚÂë×Ö¶Î";
                         Text[ russian ] = "Ïîëå îáğàçöà";
                         Text[ polish ] = "Pole wzorca";
                         Text[ japanese ] = "ÊßÀ°İÌ¨°ÙÄŞ";
                         Text[ chinese_traditional ] = "¾B¸nÄæ¦ì";
                         Text[ dutch ] = "Patroonveld";
-                        Text[ chinese_simplified ] = "ÑÚÂëÇø";
+                        Text[ chinese_simplified ] = "ÑÚÂë×Ö¶Î";
                         Text[ greek ] = "Êáëõììİíï ğåäßï";
                         Text[ korean ] = "¸¶½ºÅ©µÈ ÇÊµå";
                         Text[ arabic ] = "ÍŞá ãõŞäøóÚ";
@@ -460,7 +460,7 @@ Menu RID_SVXMNU_COLS
                         Text[ portuguese_brazilian ] = "Formatted Field";
                         Text[ japanese ] = "‘®İ’è‚³‚ê‚½Ì¨°ÙÄŞ";
                         Text[ korean ] = "Æ÷¸ËµÈ ÇÊµå";
-                        Text[ chinese_simplified ] = "¸ñÊ½»¯µÄÇøÓò";
+                        Text[ chinese_simplified ] = "¸ñÊ½»¯µÄ×Ö¶Î";
                         Text[ chinese_traditional ] = "®æ¦¡¤ÆªºÄæ¦ì";
                         Text[ arabic ] = "ÍŞá ãõäÓøóŞ";
                         Text[ turkish ] = "Formatlı alan";
@@ -730,6 +730,7 @@ Menu RID_SVXMNU_CELL
         };
     };
 };
+
 
 
 
