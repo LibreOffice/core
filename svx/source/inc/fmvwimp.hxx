@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-11 14:04:27 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,12 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifdef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
+#include <com/sun/star/awt/XFocusListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
-
+#endif
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
 #endif
@@ -99,8 +103,8 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -117,9 +121,12 @@ class FmFormObj;
 class FmFormModel;
 class Window;
 class OutputDevice;
-FORWARD_DECLARE_INTERFACE( awt, XControl )
-FORWARD_DECLARE_INTERFACE( beans, XPropertySet )
-FORWARD_DECLARE_INTERFACE( util, XNumberFormats )
+
+FORWARD_DECLARE_INTERFACE(awt,XControl)
+FORWARD_DECLARE_INTERFACE(awt,XWindow)
+FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
+FORWARD_DECLARE_INTERFACE(util,XNumberFormats)
+
 class FmXFormController;
 
 namespace svx {
@@ -174,8 +181,9 @@ typedef vector<FmXPageViewWinRec*> FmWinRecList;
 //==================================================================
 // FmXFormView
 //==================================================================
-class FmXFormView : public ::cppu::WeakImplHelper2<
+class FmXFormView : public ::cppu::WeakImplHelper3<
                             ::com::sun::star::form::XFormControllerListener,
+                            ::com::sun::star::awt::XFocusListener,
                             ::com::sun::star::container::XContainerListener>
 {
     friend class FmFormView;
@@ -185,7 +193,8 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>                   m_xWindow;
 
     FmFormView*     m_pView;
     sal_uInt32      m_nActivationEvent;
@@ -236,6 +245,10 @@ public:
 // ::com::sun::star::form::XFormControllerListener
     virtual void SAL_CALL formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
+
+    // XFocusListener
+    virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     FmFormView* getView() const {return m_pView;}
     FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC ) const;
