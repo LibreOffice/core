@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2002-10-02 17:17:17 $
+ *  last change: $Author: er $ $Date: 2002-11-11 16:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,9 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, ScDocument* pDocP,
     nIndent( 0 ),
     bAll( bAllP ),
     bTabHasGraphics( FALSE ),
-    bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() )
+    bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() ),
+    bTableDataHeight( TRUE ),
+    bTableDataWidth( TRUE )
 {
     strcpy( sIndent, sIndentSource );
     sIndent[0] = 0;
@@ -940,12 +942,16 @@ void ScHTMLExport::WriteTables()
 
         // <TBODY> fuer RULES=GROUPS
         IncIndent(1); TAG_ON_LF( sHTML_tbody );
+        // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
+        // <COL WIDTH=x> specified, but needs a width at every column.
+        bTableDataWidth = TRUE;     // widths in first row
         for ( USHORT nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
             if ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN )
                 continue;   // for
 
             IncIndent(1); TAG_ON_LF( sHTML_tablerow );
+            bTableDataHeight = TRUE;  // height at every first cell of each row
             for ( USHORT nCol=nStartCol; nCol<=nEndCol; nCol++ )
             {
                 if ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN )
@@ -954,7 +960,9 @@ void ScHTMLExport::WriteTables()
                 if ( nCol == nEndCol )
                     IncIndent(-1);
                 WriteCell( nCol, nRow, nTab );
+                bTableDataHeight = FALSE;
             }
+            bTableDataWidth = FALSE;    // widths only in first row
 
             if ( nRow < nEndRow && HasBottomBorder( nRow, nTab,
                     nStartCol, nEndCol ) )
@@ -1083,12 +1091,10 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
         nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
     }
 
-    // trotz der <TABLE COLS=n> und <COL WIDTH=x> Angaben noetig,
-    // da die nicht von Netscape beachtet werden..
-    // Spaltenbreite
-    (((aStrTD += ' ') += sHTML_O_width) += '=') += ByteString::CreateFromInt32( nWidthPixel );
-    // Zeilenhoehe
-    (((aStrTD += ' ') += sHTML_O_height) += '=') += ByteString::CreateFromInt32( nHeightPixel );
+    if ( bTableDataWidth )
+        (((aStrTD += ' ') += sHTML_O_width) += '=') += ByteString::CreateFromInt32( nWidthPixel );
+    if ( bTableDataHeight )
+        (((aStrTD += ' ') += sHTML_O_height) += '=') += ByteString::CreateFromInt32( nHeightPixel );
 
     const SvxFontItem&          rFontItem       = (const SvxFontItem&)      pAttr->GetItem( ATTR_FONT, pCondItemSet );
     const SvxFontHeightItem&    rFontHeightItem = (const SvxFontHeightItem&)pAttr->GetItem( ATTR_FONT_HEIGHT, pCondItemSet );

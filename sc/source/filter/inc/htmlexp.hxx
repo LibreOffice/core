@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-04-09 13:11:52 $
+ *  last change: $Author: er $ $Date: 2002-11-11 16:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ class ScHTMLExport : public ScExportBase
     BOOL                bTabAlignedLeft;
     BOOL                bCalcAsShown;
     BOOL                bCopyLocalFileToINet;
+    BOOL                bTableDataWidth;
+    BOOL                bTableDataHeight;
 
     const SfxItemSet&   PageDefaults( USHORT nTab );
 
