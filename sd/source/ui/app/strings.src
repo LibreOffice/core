@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:34:00 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4970,7 +4970,7 @@ String STR_UNDO_INSERT_TEXTFRAME
     Text[ chinese_simplified ] = "²åÈëÎÄ±¾¿ò";
     Text[ russian ] = "Âñòàâèòü òåêñòîâóş ğàìêó";
     Text[ polish ] = "Wstaw ramkê tekstu";
-    Text[ japanese ] = "Ã·½Ä˜g‚Ì‘}“ü";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì‘}“ü";
     Text[ greek ] = "ÅéóáãùãŞ ğëáéóßïõ êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ® Æ² »ğÀÔ";
     Text[ chinese_traditional ] = "´¡¤J¤å¦r¤è¶ô";
