@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:16:18 $
+ *  last change: $Author: ssa $ $Date: 2001-01-29 13:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,6 +716,32 @@ void Dialog::EndDialog( long nResult )
         mpResult    = NULL;
         mbInExecute = FALSE;
     }
+}
+
+// -----------------------------------------------------------------------
+
+void Dialog::EndAllDialogs(Window* pParent)
+{
+   ImplSVData*  pSVData = ImplGetSVData();
+   Dialog*      pTempModDialog;
+   Dialog*      pModDialog = pSVData->maWinData.mpLastExecuteDlg;
+   while ( pModDialog )
+   {
+     pTempModDialog = pModDialog->mpPrevExecuteDlg;
+
+     Window *dlgParent = pModDialog->GetParent();
+     while ( dlgParent != pParent )
+     {
+       if ( dlgParent ) dlgParent = dlgParent->GetParent();
+       else             break;
+     }
+     if ( dlgParent == pParent )
+     {
+        pModDialog->EndDialog( FALSE );
+        pModDialog->PostUserEvent( Link() );
+     }
+     pModDialog = pTempModDialog;
+   }
 }
 
 // -----------------------------------------------------------------------
