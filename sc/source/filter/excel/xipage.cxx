@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:47:26 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,6 @@
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
-
-
-#include "namebuff.hxx"
-
 
 // Page settings ==============================================================
 
@@ -292,7 +288,6 @@ void XclImpPageSettings::SetPaperSize( sal_uInt16 nXclPaperSize, bool bPortrait 
     mbValidPaper = true;
 }
 
-
 // ----------------------------------------------------------------------------
 
 namespace {
@@ -300,26 +295,33 @@ namespace {
 void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginInch )
 {
     sal_uInt16 nMarginTwips = XclTools::GetTwipsFromInch( fMarginInch );
-    if( (nRecId == EXC_ID_TOPMARGIN) || (nRecId == EXC_ID_BOTTOMMARGIN) )
+    switch( nRecId )
     {
-        SvxULSpaceItem aItem( GETITEM( rItemSet, SvxULSpaceItem, ATTR_ULSPACE ) );
-        if( nRecId == EXC_ID_TOPMARGIN )
-            aItem.SetUpperValue( nMarginTwips );
-        else
-            aItem.SetLowerValue( nMarginTwips );
-        rItemSet.Put( aItem );
+        case EXC_ID_TOPMARGIN:
+        case EXC_ID_BOTTOMMARGIN:
+        {
+            SvxULSpaceItem aItem( GETITEM( rItemSet, SvxULSpaceItem, ATTR_ULSPACE ) );
+            if( nRecId == EXC_ID_TOPMARGIN )
+                aItem.SetUpperValue( nMarginTwips );
+            else
+                aItem.SetLowerValue( nMarginTwips );
+            rItemSet.Put( aItem );
+        }
+        break;
+        case EXC_ID_LEFTMARGIN:
+        case EXC_ID_RIGHTMARGIN:
+        {
+            SvxLRSpaceItem aItem( GETITEM( rItemSet, SvxLRSpaceItem, ATTR_LRSPACE ) );
+            if( nRecId == EXC_ID_LEFTMARGIN )
+                aItem.SetLeftValue( nMarginTwips );
+            else
+                aItem.SetRightValue( nMarginTwips );
+            rItemSet.Put( aItem );
+        }
+        break;
+        default:
+            DBG_ERRORFILE( "XclImpPageSettings::SetMarginItem - unknown record id" );
     }
-    else if( (nRecId == EXC_ID_LEFTMARGIN) || (nRecId == EXC_ID_RIGHTMARGIN) )
-    {
-        SvxLRSpaceItem aItem( GETITEM( rItemSet, SvxLRSpaceItem, ATTR_LRSPACE ) );
-        if( nRecId == EXC_ID_LEFTMARGIN )
-            aItem.SetLeftValue( nMarginTwips );
-        else
-            aItem.SetRightValue( nMarginTwips );
-        rItemSet.Put( aItem );
-    }
-    else
-        DBG_ERRORFILE( "XclImpPageSettings::SetMarginItem - unknown record id" );
 }
 
 } // namespace
@@ -332,8 +334,9 @@ void XclImpPageSettings::CreatePageStyle()
     // *** create page style sheet ***
 
     String aStyleName( RTL_CONSTASCII_USTRINGPARAM( "PageStyle_" ) );
-    if( const String* pTableName = mpRD->pTabNameBuff->Get( static_cast<sal_uInt16>(nScTab) ) )
-        aStyleName.Append( *pTableName );
+    String aTableName;
+    if( GetDoc().GetName( nScTab, aTableName ) )
+        aStyleName.Append( aTableName );
     else
         aStyleName.Append( String::CreateFromInt32( nScTab + 1 ) );
 
@@ -352,11 +355,6 @@ void XclImpPageSettings::CreatePageStyle()
     sal_uInt16 nStartPage = maData.mbManualStart ? maData.mnStartPage : 0;
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, nStartPage ), true );
 
-    lclPutMarginItem( rItemSet, EXC_ID_LEFTMARGIN,   maData.mfLeftMargin );
-    lclPutMarginItem( rItemSet, EXC_ID_RIGHTMARGIN,  maData.mfRightMargin );
-    lclPutMarginItem( rItemSet, EXC_ID_TOPMARGIN,    maData.mfTopMargin );
-    lclPutMarginItem( rItemSet, EXC_ID_BOTTOMMARGIN, maData.mfBottomMargin );
-
     if( maData.mpBrushItem.get() )
         rItemSet.Put( *maData.mpBrushItem );
 
@@ -373,6 +371,23 @@ void XclImpPageSettings::CreatePageStyle()
     else if( maData.mbValid )
         rItemSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, maData.mnScaling ) );
 
+    // *** margin preparations ***
+
+    double fLeftMargin   = maData.mfLeftMargin;
+    double fRightMargin  = maData.mfRightMargin;
+    double fTopMargin    = maData.mfTopMargin;
+    double fBottomMargin = maData.mfBottomMargin;
+    // distances between header/footer and page area
+    double fHeaderHeight = 0.0;
+    double fHeaderDist = 0.0;
+    double fFooterHeight = 0.0;
+    double fFooterDist = 0.0;
+    // in Calc, "header/footer left/right margin" is X distance between header/footer and page margin
+    double fHdrLeftMargin  = maData.mfHdrLeftMargin  - maData.mfLeftMargin;
+    double fHdrRightMargin = maData.mfHdrRightMargin - maData.mfRightMargin;
+    double fFtrLeftMargin  = maData.mfFtrLeftMargin  - maData.mfLeftMargin;
+    double fFtrRightMargin = maData.mfFtrRightMargin - maData.mfRightMargin;
+
     // *** header and footer ***
 
     XclImpHFConverter aHFConv( GetRoot() );
@@ -382,30 +397,79 @@ void XclImpPageSettings::CreatePageStyle()
     SvxSetItem aHdrSetItem( GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_HEADERSET ) );
     SfxItemSet& rHdrItemSet = aHdrSetItem.GetItemSet();
     rHdrItemSet.Put( SfxBoolItem( ATTR_PAGE_ON, bHasHeader ) );
-    lclPutMarginItem( rHdrItemSet, EXC_ID_BOTTOMMARGIN, maData.mfHeaderMargin );
-    rItemSet.Put( aHdrSetItem );
-
     if( bHasHeader )
     {
         aHFConv.ParseString( maData.maHeader );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_HEADERLEFT );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_HEADERRIGHT );
+        // #i23296# In Calc, "top margin" is distance to header
+        fTopMargin = maData.mfHeaderMargin;
+        // Calc uses distance between header and sheet data area
+        fHeaderHeight = XclTools::GetInchFromTwips( aHFConv.GetTotalHeight() );
+        fHeaderDist = maData.mfTopMargin - maData.mfHeaderMargin - fHeaderHeight;
     }
+    if( fHeaderDist < 0.0 )
+    {
+        /*  #i23296# Header overlays sheet data:
+            -> set fixed header height to get correct sheet data position. */
+        ScfTools::PutItem( rHdrItemSet, SfxBoolItem( ATTR_PAGE_DYNAMIC, false ), true );
+        // shrink header height
+        long nHdrHeight = XclTools::GetTwipsFromInch( fHeaderHeight + fHeaderDist );
+        ScfTools::PutItem( rHdrItemSet, SvxSizeItem( ATTR_PAGE_SIZE, Size( 0, nHdrHeight ) ), true );
+        lclPutMarginItem( rHdrItemSet, EXC_ID_BOTTOMMARGIN, 0.0 );
+    }
+    else
+    {
+        // use dynamic header height
+        ScfTools::PutItem( rHdrItemSet, SfxBoolItem( ATTR_PAGE_DYNAMIC, true ), true );
+        lclPutMarginItem( rHdrItemSet, EXC_ID_BOTTOMMARGIN, fHeaderDist );
+    }
+    lclPutMarginItem( rHdrItemSet, EXC_ID_LEFTMARGIN,   fHdrLeftMargin );
+    lclPutMarginItem( rHdrItemSet, EXC_ID_RIGHTMARGIN,  fHdrRightMargin );
+    rItemSet.Put( aHdrSetItem );
 
     // footer
     bool bHasFooter = (maData.maFooter.Len() != 0);
     SvxSetItem aFtrSetItem( GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_FOOTERSET ) );
     SfxItemSet& rFtrItemSet = aFtrSetItem.GetItemSet();
     rFtrItemSet.Put( SfxBoolItem( ATTR_PAGE_ON, bHasFooter ) );
-    lclPutMarginItem( rFtrItemSet, EXC_ID_TOPMARGIN, maData.mfFooterMargin );
-    rItemSet.Put( aFtrSetItem );
-
     if( bHasFooter )
     {
         aHFConv.ParseString( maData.maFooter );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_FOOTERLEFT );
         aHFConv.FillToItemSet( rItemSet, ATTR_PAGE_FOOTERRIGHT );
+        // #i23296# In Calc, "bottom margin" is distance to footer
+        fBottomMargin = maData.mfFooterMargin;
+        // Calc uses distance between footer and sheet data area
+        fFooterHeight = XclTools::GetInchFromTwips( aHFConv.GetTotalHeight() );
+        fFooterDist = maData.mfBottomMargin - maData.mfFooterMargin - fFooterHeight;
     }
+    if( fFooterDist < 0.0 )
+    {
+        /*  #i23296# Footer overlays sheet data:
+            -> set fixed footer height to get correct sheet data end position. */
+        ScfTools::PutItem( rFtrItemSet, SfxBoolItem( ATTR_PAGE_DYNAMIC, false ), true );
+        // shrink footer height
+        long nFtrHeight = XclTools::GetTwipsFromInch( fFooterHeight + fFooterDist );
+        ScfTools::PutItem( rFtrItemSet, SvxSizeItem( ATTR_PAGE_SIZE, Size( 0, nFtrHeight ) ), true );
+        lclPutMarginItem( rFtrItemSet, EXC_ID_TOPMARGIN, 0.0 );
+    }
+    else
+    {
+        // use dynamic footer height
+        ScfTools::PutItem( rFtrItemSet, SfxBoolItem( ATTR_PAGE_DYNAMIC, true ), true );
+        lclPutMarginItem( rFtrItemSet, EXC_ID_TOPMARGIN, fFooterDist );
+    }
+    lclPutMarginItem( rFtrItemSet, EXC_ID_LEFTMARGIN,   fFtrLeftMargin );
+    lclPutMarginItem( rFtrItemSet, EXC_ID_RIGHTMARGIN,  fFtrRightMargin );
+    rItemSet.Put( aFtrSetItem );
+
+    // *** set final margins ***
+
+    lclPutMarginItem( rItemSet, EXC_ID_LEFTMARGIN,   fLeftMargin );
+    lclPutMarginItem( rItemSet, EXC_ID_RIGHTMARGIN,  fRightMargin );
+    lclPutMarginItem( rItemSet, EXC_ID_TOPMARGIN,    fTopMargin );
+    lclPutMarginItem( rItemSet, EXC_ID_BOTTOMMARGIN, fBottomMargin );
 
     // *** put style sheet into document ***
 
@@ -423,7 +487,6 @@ void XclImpPageSettings::CreatePageStyle()
     // set to defaults for next sheet
     maData.SetDefaults();
 }
-
 
 // ============================================================================
 
