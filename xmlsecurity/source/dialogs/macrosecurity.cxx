@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:22:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert );
+            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, FALSE );
             aViewer.Execute();
         }
     }
@@ -362,7 +362,6 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
     maTrustCertLB.Clear();
 
     sal_uInt32      nCountEntries = maTrustedAuthors.getLength();
-    String          aCN_Id( String::CreateFromAscii( "CN" ) );
     for( sal_uInt32 nEntry = 0 ; nEntry < nCountEntries ; ++nEntry )
     {
         cssu::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
@@ -371,8 +370,8 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
         // create from RawData
         xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
-        SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
-        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName(), aCN_Id ), pLBEntry, 1 );
+        SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
+        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
         maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotAfter() ), pLBEntry, 2 );
         pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
     }
