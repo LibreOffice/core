@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-20 11:57:05 $
+ *  last change: $Author: sj $ $Date: 2002-08-21 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,12 @@
 #include <com/sun/star/text/FontRelief.hpp>
 #endif
 
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #include <svtools/fltcall.hxx>
 
 //#include <svx/xbtmpit.hxx>
@@ -1722,6 +1728,9 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( ( pPara->meParagraphPunctation == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ) ) )
             nPropertyFlags |= 0x00080000;
+        if ( ( pPara->meBiDi == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_BiDi, pPara->mnBiDi ) ) )
+            nPropertyFlags |= 0x00200000;
 
 
         sal_Int32 nBuRealSize = pPara->nBulletRealSize;
@@ -1781,6 +1790,8 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
                 nAsianSettings |= 4;
             rOut << nAsianSettings;
         }
+        if ( nPropertyFlags & 0x200000 )
+            rOut << pPara->mnBiDi;
     }
 }
 
@@ -3001,6 +3012,21 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaIsHangingPunctuation" ) ), bGetPropStateValue ) )
         mAny >>= mbParagraphPunctation;
     meParagraphPunctation = ePropState;
+
+    mnBiDi = 0;
+    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ), bGetPropStateValue ) )
+    {
+        sal_Int16 nWritingMode;
+        mAny >>= nWritingMode;
+
+        SvxFrameDirection eWritingMode( (SvxFrameDirection)nWritingMode );
+        if ( ( eWritingMode == FRMDIR_HORI_RIGHT_TOP )
+            || ( eWritingMode == FRMDIR_VERT_TOP_RIGHT ) )
+        {
+            mnBiDi = 1;
+        }
+    }
+    meBiDi = ePropState;
 }
 
 void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
@@ -3014,6 +3040,7 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     mbLastParagraph = rParagraphObj.mbLastParagraph;
     mbParagraphPunctation = rParagraphObj.mbParagraphPunctation;
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
+    mnBiDi = rParagraphObj.mnBiDi;
 
     for ( void* pPtr = rParagraphObj.First(); pPtr; pPtr = rParagraphObj.Next() )
         Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );

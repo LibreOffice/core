@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-08 12:42:12 $
+ *  last change: $Author: sj $ $Date: 2002-08-21 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2271,6 +2271,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
         rLev.mnBulletOfs = nBulletOfs;
         rLev.mnDefaultTab = nDefaultTab;
         rLev.mnAsianSettings = 2;
+        rLev.mnBiDi = 0;
 
         rLev.mbExtendedBulletsUsed = FALSE;
         rLev.mnBulletId = 0xffff;
@@ -2329,6 +2330,9 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         if ( aParagraphObj.mbParagraphPunctation )
             rLev.mnAsianSettings |= 4;
     }
+
+    if ( aParagraphObj.meBiDi == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+        rLev.mnBiDi = aParagraphObj.mnBiDi;
 
     rLev.mbIsBullet = aParagraphObj.mbIsBullet; //( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
 
@@ -2391,7 +2395,9 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sa
     sal_uInt32 nParaFlags = 0x3ffdff;
     sal_uInt16 nBulletFlags = ( rLev.mbIsBullet ) ? 0xf : 0xe;
 
-    if ( nLev || bSimpleText )
+    if ( nLev )
+        nParaFlags &= 0x207fff;
+    if ( bSimpleText )
         nParaFlags &= 0x7fff;
     sal_uInt32 nBulletColor = rLev.mnBulletColor;
     if ( nBulletColor == COL_AUTO )
@@ -2418,13 +2424,18 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sa
         << rLev.mnBulletOfs;
 
     if ( bSimpleText || nLev )
-        return;
-
-    rSt << rLev.mnDefaultTab
-        << (sal_uInt16)0
-        << (sal_uInt16)0
-        << rLev.mnAsianSettings
-        << (sal_uInt16)0;
+    {
+        if ( nParaFlags & 0x200000 )
+            rSt << rLev.mnBiDi;
+    }
+    else
+    {
+        rSt << rLev.mnDefaultTab
+            << (sal_uInt16)0
+            << (sal_uInt16)0
+            << rLev.mnAsianSettings
+            << rLev.mnBiDi;
+    }
 }
 
 
@@ -2482,6 +2493,7 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
         case ParaAttr_TextOfs : return ( rPara.mnTextOfs != nValue );
         case ParaAttr_BulletOfs : return ( rPara.mnBulletOfs != nValue );
         case ParaAttr_DefaultTab : return ( rPara.mnDefaultTab != nValue );
+        case ParaAttr_BiDi : return ( rPara.mnBiDi != nValue );
         case CharAttr_Bold : nFlag = 1; break;
         case CharAttr_Italic : nFlag = 2; break;
         case CharAttr_Underline : nFlag = 4; break;

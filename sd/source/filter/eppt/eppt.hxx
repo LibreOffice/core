@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-05 09:07:17 $
+ *  last change: $Author: sj $ $Date: 2002-08-21 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_CHARSET_HPP_
 #include <com/sun/star/awt/CharSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
 #endif
 
 enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
@@ -488,6 +491,7 @@ enum PPTExTextAttr
     ParaAttr_AsianLB_1,
     ParaAttr_AsianLB_2,
     ParaAttr_AsianLB_3,
+    ParaAttr_BiDi,
     CharAttr_Bold,
     CharAttr_Italic,
     CharAttr_Underline,
@@ -547,7 +551,7 @@ struct PPTExParaLevel
     sal_uInt32      mnMappedNumType;
     sal_uInt32      mnNumberingType;
     sal_uInt16      mnAsianSettings;
-
+    sal_uInt16      mnBiDi;
 };
 
 struct PPTExParaSheet
@@ -816,13 +820,15 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         ::com::sun::star::beans::PropertyState  meLineSpacingBottom;
         ::com::sun::star::beans::PropertyState  meForbiddenRules;
         ::com::sun::star::beans::PropertyState  meParagraphPunctation;
+        ::com::sun::star::beans::PropertyState  meBiDi;
 
-        sal_uInt16          mnTextAdjust;
-        sal_Int16           mnLineSpacing;
-        sal_Int16           mnLineSpacingTop;
-        sal_Int16           mnLineSpacingBottom;
-        sal_Bool            mbForbiddenRules;
-        sal_Bool            mbParagraphPunctation;
+        sal_uInt16                              mnTextAdjust;
+        sal_Int16                               mnLineSpacing;
+        sal_Int16                               mnLineSpacingTop;
+        sal_Int16                               mnLineSpacingBottom;
+        sal_Bool                                mbForbiddenRules;
+        sal_Bool                                mbParagraphPunctation;
+        sal_uInt16                              mnBiDi;
 
                         ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
