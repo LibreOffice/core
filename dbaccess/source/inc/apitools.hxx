@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:56:32 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 12:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@ public:
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
             throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
 
     inline operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () const
         { return (::com::sun::star::uno::XWeak *)this; }
