@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 11:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,10 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
-#endif
 #include <svtools/svstdarr.hxx>
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -104,6 +101,9 @@
 #endif
 #ifndef _SVX_CSCOITEM_HXX
 #include <svx/cscoitem.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
@@ -181,6 +181,9 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+#ifndef _CHARATR_HXX
+#include <charatr.hxx>
+#endif
 
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
@@ -212,8 +215,8 @@ const sal_Char* pBulletChar = "+*-\x96\x97";    // plus endash & emdash
 const int cnPosEnDash = 2, cnPosEmDash = 4, cnPosEnd = 5;
 #endif // PM2 / UNX
 #endif // MAC
-const sal_Char cStartBatsEnDash = '\x96';
-const sal_Char cStartBatsEmDash = '\x97';
+const sal_Unicode cStarBatsEnDash = 0xF096;
+const sal_Unicode cStarBatsEmDash = 0xF097;
 
 
 SvxSwAutoFmtFlags* SwEditShell::pAutoFmtFlags = 0;
@@ -233,7 +236,13 @@ class SwAutoFormat
     SwDoc* pDoc;
     SwTxtNode* pAktTxtNd;       // der akt. TextNode
     SwTxtFrm* pAktTxtFrm;       // Frame vom akt. TextNode
+    CharClass* pCharClass;      // Character classification
     ULONG nEndNdIdx;            // fuer die Prozent-Anzeige
+    LanguageType eCharClassLang;
+
+    USHORT nLastHeadLvl, nLastCalcHeadLvl;
+    USHORT nLastEnumLvl, nLastCalcEnumLvl;
+    USHORT nRedlAutoFmtSeqId;
 
     enum
     {
@@ -267,9 +276,19 @@ class SwAutoFormat
     BOOL bEmptyLine : 1;
     BOOL bMoreLines : 1;
 
-    USHORT nLastHeadLvl, nLastCalcHeadLvl;
-    USHORT nLastEnumLvl, nLastCalcEnumLvl;
-    USHORT nRedlAutoFmtSeqId;
+
+    // ------------- private methods -----------------------------
+    void _GetCharClass( LanguageType eLang );
+    CharClass& GetCharClass( LanguageType eLang ) const
+    {
+        if( !pCharClass || eLang != eCharClassLang )
+        {
+            SwAutoFormat* pThis = (SwAutoFormat*)this;
+            pThis->_GetCharClass( eLang );
+        }
+        return *pCharClass;
+    }
+
 
     BOOL IsSpace( const sal_Unicode c ) const
         { return (' ' == c || '\t' == c || 0x0a == c) ? TRUE : FALSE; }
@@ -297,10 +316,10 @@ class SwAutoFormat
     xub_StrLen GetLeadingBlanks( const String& rStr ) const;
     xub_StrLen GetTrailingBlanks( const String& rStr ) const;
 
-    const sal_Unicode GetFirstChar( const String& rStr,
-                                    BOOL bSkipDigit = TRUE ) const;
-    USHORT GetDigitLevel( const sal_Unicode** ppStr, String* pPreFix = 0,
-                        String* pPostFix = 0, String* pNumTypes = 0 ) const;
+    BOOL IsFirstCharCapital( const SwTxtNode& rNd ) const;
+    USHORT GetDigitLevel( const SwTxtNode& rTxtNd, xub_StrLen& rPos,
+                            String* pPreFix = 0, String* pPostFix = 0,
+                            String* pNumTypes = 0 ) const;
         // hole den FORMATIERTEN TextFrame
     SwTxtFrm* GetFrm( const SwTxtNode& rTxtNd ) const;
 
@@ -370,6 +389,13 @@ SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
             pFrm->SetCompletePaint();
     }
     return ((SwTxtFrm*)pFrm)->GetFormatted();
+}
+
+void SwAutoFormat::_GetCharClass( LanguageType eLang )
+{
+    delete pCharClass;
+    pCharClass = new CharClass( SvxCreateLocale( eLang ));
+    eCharClassLang = eLang;
 }
 
 void SwAutoFormat::_SetRedlineTxt( USHORT nActionId )
@@ -497,17 +523,18 @@ BOOL SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
 
 BOOL SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 {
-    String sTmp( rNd.GetTxt() );
+    const String& rTxt = rNd.GetTxt();
+    String sTmp( rTxt );
     xub_StrLen nBlnks = GetLeadingBlanks( sTmp );
-    xub_StrLen nLen = rNd.GetTxt().Len() - nBlnks;
+    xub_StrLen nLen = rTxt.Len() - nBlnks;
     if( !nLen )
         return FALSE;
 
     // -, +, * getrennt durch Blank ??
-    const sal_Unicode *pTmp = sTmp.GetBuffer() + nBlnks;
-    if( 2 < nLen && IsSpace( *(pTmp+1) ) )
+    if( 2 < nLen && IsSpace( rTxt.GetChar( nBlnks + 1 ) ) )
     {
-        if( *pTmp < 256 && strchr( pBulletChar, *pTmp ) )
+        if( rTxt.GetChar( nBlnks ) < 256 &&
+            strchr( pBulletChar, rTxt.GetChar( nBlnks ) ) )
             return TRUE;
         // sollte an der Position ein Symbolfont existieren ?
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
@@ -516,7 +543,7 @@ BOOL SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
     }
 
     // 1.) / 1. / 1.1.1 / (1). / (1) / ....
-    return USHRT_MAX != GetDigitLevel( &pTmp );
+    return USHRT_MAX != GetDigitLevel( rNd, nBlnks );
 }
 
 
@@ -551,7 +578,7 @@ BOOL SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 USHORT SwAutoFormat::CalcLevel( const SwTxtNode& rNd, USHORT *pDigitLvl ) const
 {
     USHORT nLvl = 0, nBlnk = 0;
-    const sal_Unicode* pTmp = rNd.GetTxt().GetBuffer();
+    const String& rTxt = rNd.GetTxt();
     if( pDigitLvl )
         *pDigitLvl = USHRT_MAX;
 
@@ -567,21 +594,22 @@ USHORT SwAutoFormat::CalcLevel( const SwTxtNode& rNd, USHORT *pDigitLvl ) const
         ++nLvl;
     }
 
-    while( *pTmp )
+
+    for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd; ++n )
     {
-        switch( *pTmp )
+        switch( rTxt.GetChar( n ) )
         {
-        case ' ':   if( 3 == ++nBlnk )  ++nLvl, nBlnk = 0;
+        case ' ':   if( 3 == ++nBlnk )
+                        ++nLvl, nBlnk = 0;
                     break;
         case '\t':  ++nLvl, nBlnk = 0;
                     break;
         default:
             if( pDigitLvl )
                 // Teste auf 1.) / 1. / 1.1.1 / (1). / (1) / ....
-                *pDigitLvl = GetDigitLevel( &pTmp );
+                *pDigitLvl = GetDigitLevel( rNd, n );
             return nLvl;
         }
-        ++pTmp;
     }
     return nLvl;
 }
@@ -615,12 +643,13 @@ BOOL SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
     //              bestimmen.
     xub_StrLen nANChar = 0, nBlnk = 0;
 
-    const International& rInter = Application::GetAppInternational();
-    for( const sal_Unicode* pTmp = rStr.GetBuffer(); *pTmp; ++pTmp )
-        if( IsSpace( *pTmp ) )
+    CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
+    for( xub_StrLen n = 0, nEnd = rStr.Len(); n < nEnd; ++n )
+        if( IsSpace( rStr.GetChar( n ) ) )
             ++nBlnk;
-        else if( rInter.IsAlphaNumeric( *pTmp ))
+        else if( rCC.isLetterNumeric( rStr, n ))
             ++nANChar;
+
     // sind zu 75% keine Alpha-Nummerische-Zeichen, dann TRUE
     ULONG nLen = rStr.Len() - nBlnk;
     nLen = ( nLen * 3 ) / 4;            // long overflow, if the strlen > USHORT
@@ -843,40 +872,39 @@ xub_StrLen SwAutoFormat::GetTrailingBlanks( const String& rStr ) const
 }
 
 
-const sal_Unicode SwAutoFormat::GetFirstChar( const String& rStr,
-                                                BOOL bSkipDigit ) const
+BOOL SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
 {
-    const sal_Unicode* pTmp = rStr.GetBuffer();
-    BOOL bFirstNo = FALSE;
-    while( *pTmp )
-    {
-        if( !IsSpace( *pTmp ))
+    const String& rTxt = rNd.GetTxt();
+    for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd; ++n )
+        if( !IsSpace( rTxt.GetChar( n ) ) )
         {
-            // Teste auf 1.) / 1. / 1.1.1 / (1). / (1) / ....
-            if( bSkipDigit || bFirstNo ||
-                USHRT_MAX == GetDigitLevel( &pTmp ) )
-                return *pTmp;
-            bFirstNo = TRUE;
+            CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().
+                                        GetLanguage().GetLanguage() );
+            sal_Int32 nCharType = rCC.getCharacterType( rTxt, n );
+            return CharClass::isLetterType( nCharType ) &&
+                   0 != ( ::com::sun::star::lang::KCharacterType::UPPER &
+                                                    nCharType );
         }
-        ++pTmp;
-    }
-    return *pTmp;
+    return FALSE;
 }
 
 
-USHORT SwAutoFormat::GetDigitLevel( const sal_Unicode** ppStr,
+USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
         String* pPreFix, String* pPostFix, String* pNumTypes ) const
 {
     // Teste auf 1.) / 1. / 1.1.1 / (1). / (1) / ....
-    const sal_Unicode* pTmp = *ppStr;
+    const String& rTxt = rNd.GetTxt();
+    xub_StrLen nPos = rPos;
     int eScan = NONE;
 
     USHORT nStart = 0;
     BYTE nDigitLvl = 0, nDigitCnt = 0;
-    const International& rInter = Application::GetAppInternational();
-    while( *pTmp )
+
+    CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
+
+    while( nPos < rTxt.Len() )
     {
-        if( rInter.IsNumeric( *pTmp ) )
+        if( '0' <= rTxt.GetChar( nPos ) &&  '9' >= rTxt.GetChar( nPos ))
         {
             if( eScan & DELIM )
             {
@@ -903,12 +931,15 @@ USHORT SwAutoFormat::GetDigitLevel( const sal_Unicode** ppStr,
             if( 3 == ++nDigitCnt )  // mehr als 2 Nummern sind kein Enum mehr
                 return USHRT_MAX;
 
-            nStart *= 10; nStart += USHORT( *pTmp - '0' );
+            nStart *= 10;
+            nStart += rTxt.GetChar( nPos ) - '0';
         }
-        else if( rInter.IsAlpha( *pTmp ) )
+        else if( rCC.isAlpha( rTxt, nPos ) )
         {
-            BOOL bIsUpper = rInter.IsUpper( *pTmp );
-            sal_Unicode cLow = rInter.Lower( *pTmp ), cNumTyp;
+            BOOL bIsUpper =
+                0 != ( ::com::sun::star::lang::KCharacterType::UPPER &
+                                        rCC.getCharacterType( rTxt, nPos ));
+            sal_Unicode cLow = rCC.toLower( rTxt, nPos, 1 ).GetChar(0), cNumTyp;
             int eTmpScan;
 
             // roemische Zeichen sind "mdclxvi". Da man aber eher mal eine
@@ -1056,13 +1087,14 @@ CHECK_ROMAN_5:
             eScan |= eTmpScan;          // Digit rein
             ++nDigitCnt;
         }
-        else if( 256 > *pTmp && strchr( /*".,)([]{}"*/ ".,)(<>", *pTmp ) )
+        else if( 256 > rTxt.GetChar( nPos ) &&
+                 strchr( /*".,)([]{}"*/ ".,)(<>", rTxt.GetChar( nPos ) ) )
         {
             // nur wenn noch keine Zahlen gelesen wurden!
             if( pPreFix && !( eScan & ( NO_DELIM | CHG )) )
-                *pPreFix += *pTmp;
+                *pPreFix += rTxt.GetChar( nPos );
             else if( pPostFix )
-                *pPostFix += *pTmp;
+                *pPostFix += rTxt.GetChar( nPos );
 
             if( NO_DELIM & eScan )
             {
@@ -1078,15 +1110,16 @@ CHECK_ROMAN_5:
         }
         else
             break;
-        ++pTmp;
+        ++nPos;
     }
-    if( !( CHG & eScan ) || *ppStr == pTmp || !*pTmp || !IsSpace( *pTmp ))
+    if( !( CHG & eScan ) || rPos == nPos ||
+        nPos == rTxt.Len() || !IsSpace( rTxt.GetChar( nPos ) ))
         return USHRT_MAX;
 
     if( (NO_DELIM & eScan) && pPreFix )     // den letzen nicht vergessen
         (*pPreFix += (sal_Unicode)1) += String::CreateFromInt32( nStart );
 
-    *ppStr = pTmp;
+    rPos = nPos;
     return nDigitLvl;       // von 0 .. 5
 }
 
@@ -1521,13 +1554,14 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         aRule = *pCur;
 
     // ersetze das Bullet-Zeichen mit dem definiertem
-    const sal_Unicode* pStt = pAktTxtNd->GetTxt().GetBuffer(), *pOrigStt = pStt;
+    const String& rStr = pAktTxtNd->GetTxt();
+    xub_StrLen nTxtStt = 0, nOrigTxtStt = 0;
     const sal_Char* pFndBulletChr;
 //  if( aFlags.bAFmtByInput ? aFlags.bSetNumRule : aFlags.bChgEnumNum &&
     if( aFlags.bChgEnumNum &&
-        2 < pAktTxtNd->GetTxt().Len() && 256 > *pStt &&
-        0 != ( pFndBulletChr = strchr( pBulletChar, *pStt )) &&
-        IsSpace( *(pStt+1) ) )
+        2 < rStr.Len() && 256 > rStr.GetChar( nTxtStt ) &&
+        0 != ( pFndBulletChr = strchr( pBulletChar, rStr.GetChar( nTxtStt ) ))
+        && IsSpace( rStr.GetChar( nTxtStt + 1 ) ) )
     {
         if( aFlags.bAFmtByInput )
         {
@@ -1540,7 +1574,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                 if( !aRule.GetNumFmt( nLvl ) )
                 {
                     int nBulletPos = pFndBulletChr - pBulletChar;
-                    sal_Char cBullChar;
+                    sal_Unicode cBullChar;
                     const Font* pBullFnt;
                     if( nBulletPos < cnPosEnDash )
                     {
@@ -1550,8 +1584,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     else
                     {
                         cBullChar = nBulletPos < cnPosEmDash
-                                        ? cStartBatsEnDash
-                                        : cStartBatsEmDash;
+                                        ? cStarBatsEnDash
+                                        : cStarBatsEmDash;
                         pBullFnt = &SwNumRule::GetDefBulletFont();
                     }
 
@@ -1596,8 +1630,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         //              (Einrueckungs-)Level.
 
         String aPostFix, aPreFix, aNumTypes;
-        if( USHRT_MAX != ( nDigitLevel = GetDigitLevel(
-                                &pStt, &aPreFix, &aPostFix, &aNumTypes )) )
+        if( USHRT_MAX != ( nDigitLevel = GetDigitLevel( *pAktTxtNd, nTxtStt,
+                                        &aPreFix, &aPostFix, &aNumTypes )) )
         {
             bChgEnum = TRUE;
 
@@ -1707,16 +1741,16 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         }
         else
             aDelPam.GetPoint()->nContent.Assign( pAktTxtNd,
-                        bChgEnum ? (pStt - pOrigStt) : 0 );
+                        bChgEnum ? (nTxtStt - nOrigTxtStt) : 0 );
         aDelPam.SetMark();
 
         if( bChgBullet )
-            pStt += 2;
+            nTxtStt += 2;
 
-        while( IsSpace( *pStt ))
-            pStt++;
+        while( nTxtStt < rStr.Len() && IsSpace( rStr.GetChar( nTxtStt ) ))
+            nTxtStt++;
 
-        aDelPam.GetPoint()->nContent = USHORT( pStt - pOrigStt );
+        aDelPam.GetPoint()->nContent = nTxtStt - nOrigTxtStt;
         DeleteSel( aDelPam );
 
         if( !aFlags.bSetNumRule )
@@ -1911,6 +1945,11 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     const String* pTxt = &pAktTxtNd->GetTxt();
     if( nPos >= pTxt->Len() )
         return;
+
+    BOOL bGetLanguage = aFlags.bChgOrdinalNumber ||
+                        aFlags.bChgToEnEmDash || aFlags.bSetINetAttr ||
+                        aFlags.bCptlSttWrd || aFlags.bCptlSttSntnc;
+
 
     aDelPam.DeleteMark();
     aDelPam.GetPoint()->nNode = aNdIdx;
@@ -2111,32 +2150,26 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                 continue;       // nichts weiter mehr abpruefen
             }
 
+            LanguageType eLang = (bGetLanguage && pAktTxtNd)
+                                           ? pAktTxtNd->GetLang( nSttPos )
+                                           : LANGUAGE_SYSTEM;
+
             if( ( aFlags.bChgFracionSymbol &&
                     SetRedlineTxt( STR_AUTOFMTREDL_FRACTION ) &&
                     pATst->FnChgFractionSymbol( aACorrDoc, *pTxt, nSttPos, nPos ) ) ||
                 ( aFlags.bChgOrdinalNumber &&
                     SetRedlineTxt( STR_AUTOFMTREDL_ORDINAL ) &&
-                    pATst->FnChgOrdinalNumber( aACorrDoc, *pTxt, nSttPos, nPos ) ) ||
+                    pATst->FnChgOrdinalNumber( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bChgToEnEmDash &&
                     SetRedlineTxt( STR_AUTOFMTREDL_DASH ) &&
-                    pATst->FnChgToEnEmDash( aACorrDoc, *pTxt, nSttPos, nPos ) ) ||
+                    pATst->FnChgToEnEmDash( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bSetINetAttr &&
                     ( nPos == pTxt->Len() || IsSpace( pTxt->GetChar( nPos )) ) &&
                     SetRedlineTxt( STR_AUTOFMTREDL_DETECT_URL ) &&
-                    pATst->FnSetINetAttr( aACorrDoc, *pTxt, nLastBlank, nPos ) ) )
+                    pATst->FnSetINetAttr( aACorrDoc, *pTxt, nLastBlank, nPos, eLang ) ) )
                     nPos = aDelPam.GetPoint()->nContent.GetIndex();
             else
             {
-                    LanguageType eLang = LANGUAGE_SYSTEM;
-                    if( pAktTxtNd )
-                    {
-                        SfxItemSet aSet( pEditShell->GetDoc()->GetAttrPool(),
-                                        RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE );
-                        if( pAktTxtNd->GetAttr( aSet, nPos, nPos ))
-                            eLang = ((const SvxLanguageItem&)aSet.Get( RES_CHRATR_LANGUAGE ))
-                                                .GetLanguage();
-                    }
-
                 // Zwei Grossbuchstaben am Wort-Anfang ??
                 if( aFlags.bCptlSttWrd )
                 {
@@ -2178,6 +2211,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     pEditShell( pEdShell ),
     pDoc( pEdShell->GetDoc() ),
     pAktTxtNd( 0 ), pAktTxtFrm( 0 ),
+    pCharClass( 0 ),
     nRedlAutoFmtSeqId( 0 )
 {
     ASSERT( (pSttNd && pEndNd) || (!pSttNd && !pEndNd),
@@ -2188,9 +2222,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
     BOOL bReplaceStyles = !aFlags.bAFmtByInput || aFlags.bReplaceStyles;
 
-    const International& rInter = Application::GetAppInternational();
-
-    String aStr;
     const SwTxtNode* pNxtNd;
     BOOL bNxtEmpty, bNxtAlpha;
     USHORT nNxtLevel;
@@ -2252,7 +2283,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
         {
         case READ_NEXT_PARA:
             {
-                aStr = GoNextPara();
+                GoNextPara();
                 eStat = bEnde ? IS_ENDE : TST_EMPTY_LINE;
             }
             break;
@@ -2415,7 +2446,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 if( !bReplaceStyles )
                     break;
 
-                String sClrStr( aStr );
+                String sClrStr( pAktTxtNd->GetTxt() );
 
                 if( !DelLeadingBlanks( sClrStr ).Len() )
                 {
@@ -2425,9 +2456,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 }
 
                 // Teste auf Ueberschrift
-                if( !bEmptyLine ||
-                    ((INTN_CHAR_UPPER | INTN_CHAR_ALPHA) != rInter.
-                        GetCharType( GetFirstChar( aStr ) )) ||
+                if( !bEmptyLine || !IsFirstCharCapital( *pAktTxtNd ) ||
                     IsBlanksInString( *pAktTxtNd ) )
                     break;
 

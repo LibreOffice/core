@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 11:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,21 +487,14 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
     if(!m_pSequArr->Count())
     {
         SwTOXSortTabBases aSortArr;
-        SwClientIter aIter(*this);
-        const International* pIntl = &Application::GetAppInternational();
-        LanguageType eLang = ((const SvxLanguageItem&)m_pDoc->GetAttrPool().
-                            GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage();
+        SwClientIter aIter( *this );
 
-        BOOL bDelIntl = FALSE;
-        if( !( eLang == ::GetSystemLanguage() &&
-            LANGUAGE_SYSTEM == pIntl->GetLanguage() ) &&
-            eLang != pIntl->GetLanguage() )
-        {
-            bDelIntl = TRUE;
-            pIntl = new International( eLang );
-        }
+        SwTOXInternational aIntl(
+                        ((const SvxLanguageItem&)m_pDoc->GetAttrPool().
+                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage());
+
         for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-                                    pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+                                pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
         {
             SwAuthorityField* pAFld = (SwAuthorityField*)pFmtFld->GetFld();
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
@@ -513,7 +506,8 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
                 rTxtNode.GetNodes().IsDocNodes() )
             {
-                SwTOXAuthority* pNew = new SwTOXAuthority( rTxtNode, *pFmtFld, *pIntl );
+                SwTOXAuthority* pNew = new SwTOXAuthority( rTxtNode,
+                                                            *pFmtFld, aIntl );
     //          InsertSorted(pNew);
     //          aSortArr
                 Range aRange(0, aSortArr.Count());
@@ -544,8 +538,6 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
                 bInsert = TRUE;
             }
         }
-        if(bDelIntl)
-            delete (International*)pIntl;
 
         for(USHORT i = 0; i < aSortArr.Count(); i++)
         {
