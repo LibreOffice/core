@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:58:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ Text[ english_us ] = "Phonetic reading";    \
     Text[ danish ] = "Phonetic reading";    \
     Text[ swedish ] = "Fonetiskt uttal";    \
     Text[ polish ] = "Phonetic reading";    \
-    Text[ portuguese_brazilian ] = "Phonetic reading";  \
+    Text[ portuguese_brazilian ] = "Leitura fonética";  \
     Text[ japanese ] = "èª­ã¿";    \
     Text[ korean ] = "ë°œìŒ í‘œê¸°";   \
     Text[ chinese_simplified ] = "è¯­éŸ³æè¿°";    \
@@ -110,7 +110,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ english_us ] = "Insert";\
             Text[ portuguese ] = "Inserir";\
             Text[ russian ] = "Âñòàâèòü";\
-            Text[ greek ] = "ĞñïóèŞêç";\
+            Text[ greek ] = "ÅéóáãùãŞ";\
             Text[ dutch ] = "Invoegen";\
             Text[ french ] = "Insérer";\
             Text[ spanish ] = "Insertar";\
@@ -719,12 +719,12 @@ ModalDialog DLG_EDIT_IDXMARK
     Sizeable = FALSE ;
     HelpID = FN_EDIT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
-    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL  
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 118 ) ;
     #define GB_HEIGHT 109
     #define DCB_INDEX_WIDTH 94
     #define PHONETIC_HIDDEN TRUE
-    #define LIST_WIDTH      94 
+    #define LIST_WIDTH      94
     #define COL_BUTTONS     IDX_COL_BUTTONS_NORMAL
     #define COL_BUTTONS_2   (COL_BUTTONS+26)
     #define WINDOW_HEIGHT   118
@@ -759,7 +759,7 @@ ModelessDialog DLG_INSIDXMARK
 //  Zoomable = TRUE ;
     HelpID = FN_INSERT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
-    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL  
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 138) ;
 //  Moveable = TRUE ;
     #define GB_HEIGHT 129
@@ -907,7 +907,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ danish ] = "Opret nyt brugerdefineret indeks";
     Text[ swedish ] = "Skapa ny användardefinierad förteckning";
     Text[ polish ] = "Utwórz nowy indeks definiowany przez u¿ytkownika";
-    Text[ portuguese_brazilian ] = "Criar Novo Índice Personalizado do Usuário";
+    Text[ portuguese_brazilian ] = "Criar novo índice personalizado do usuário";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç¨®é¡ã®ä½œæˆ";
     Text[ korean ] = "ìƒˆ ì‚¬ìš©ì ì •ì˜ ìƒ‰ì¸ ë§Œë“¤ê¸°";
     Text[ chinese_simplified ] = "æ–°å»ºä½¿ç”¨è€…è‡ªå®šç›®å½•";
@@ -930,7 +930,7 @@ String STR_IDXMRK_EDIT
     Text [ ENGLISH ] = "Edit index entry" ;
     Text [ norwegian ] = "Rediger stikkordregisterinngang" ;
     Text [ italian ] = "Modifica voce di indice" ;
-    Text [ portuguese_brazilian ] = "Editar Entrada do Índice" ;
+    Text [ portuguese_brazilian ] = "Editar entrada do índice" ;
     Text [ portuguese ] = "Editar entrada de índice" ;
     Text [ finnish ] = "Muokkaa hakemistomerkintää" ;
     Text [ danish ] = "Rediger indekselement" ;
@@ -963,7 +963,7 @@ String STR_IDXMRK_INSERT
     Text [ ENGLISH ] = "Insert index entry" ;
     Text [ norwegian ] = "Sett inn oppføring i stikkkordregister" ;
     Text [ italian ] = "Inserisci voce di indice" ;
-    Text [ portuguese_brazilian ] = "Inserir Entrada do Índice" ;
+    Text [ portuguese_brazilian ] = "Inserir entrada do índice" ;
     Text [ portuguese ] = "Inserir entrada no índice" ;
     Text [ finnish ] = "Lisää hakemistomerkintä" ;
     Text [ danish ] = "Indsæt indekselement" ;
@@ -1230,7 +1230,7 @@ String STR_IDXMRK_INSERT
             Text[ english_us ] = "Insert";\
             Text[ portuguese ] = "Inserir";\
             Text[ russian ] = "Âñòàâèòü";\
-            Text[ greek ] = "ĞñïóèŞêç";\
+            Text[ greek ] = "ÅéóáãùãŞ";\
             Text[ dutch ] = "Invoegen";\
             Text[ french ] = "Insérer";\
             Text[ spanish ] = "Insertar";\
@@ -1524,7 +1524,7 @@ String STR_AUTHMRK_EDIT
     Text[ chinese_traditional ] = "ç·¨è¼¯åƒè€ƒæ–‡ç»ç›®éŒ„æ¢ç›®";
     Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişini düzenle";
-    Text[ language_user1 ] = "EM28; EM28.9.01: MODALDIALOG title";
+    Text[ language_user1 ] = "; EM28; EM28.9.01: MODALDIALOG title";
     Text[ catalan ] = "Edita entrada de bibliografia";
     Text[ finnish ] = "Muokkaa lähdeluettelomerkintää";
     Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
@@ -1556,7 +1556,7 @@ String STR_AUTHMRK_INSERT
     Text[ chinese_traditional ] = "æ’å…¥åƒè€ƒæ–‡ç»ç›®éŒ„æ¢ç›®";
     Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişi ekle";
-    Text[ language_user1 ] = "EM28; EM28.9.01: MODALDIALOG title";
+    Text[ language_user1 ] = "; EM28; EM28.9.01: MODALDIALOG title";
     Text[ catalan ] = "Insereix entrada de bibliografia";
     Text[ finnish ] = "Lisää lähdeluettelomerkintä";
     Text[ thai ] = "à¹à¸—à¸£à¸à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
@@ -1597,6 +1597,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤¹à¥ˆ, à¤²à¥‡à¤•à¤¿à¤¨ à¤…à¤²à¤— à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¹à¥ˆ à¥¤ à¤†à¤ª à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¥‡ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
     MESSAGE[ slovak ] = "Dokument uÅ¾ obsahuje zÃ¡znam zoznamu pouÅ¾itej literatÃºry, ale s inÃ½mi Ãºdajmi. Chcete upraviÅ¥ existujÃºce zÃ¡znamy?";
 };
+
 
 
 
