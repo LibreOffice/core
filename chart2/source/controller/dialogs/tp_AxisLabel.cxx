@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_AxisLabel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2004-08-04 14:33:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,36 +112,37 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
 
         aCbShowDescription( this, SchResId( CB_AXIS_LABEL_SCHOW_DESCR ) ),
 
-#if 0 // DR: TODO new control types
-        aWOAngle( this,
-                  SchResId( CT_AXIS_LABEL_DIAL ),
-                  SchResId( PB_AXIS_LABEL_TEXTSTACKED ),
-                  SchResId( FT_AXIS_LABEL_DEGREES ),
-                  SchResId( NF_AXIS_LABEL_ORIENT ),
-                  SchResId( FT_UNUSED ),
-                  SchResId( CT_UNUSED ),
-                  SchResId( FL_AXIS_LABEL_ORIENTATION ) ),
-#endif
-
-        aFlTextFlow( this, SchResId( FL_AXIS_LABEL_TEXTFLOW ) ),
-        aCbTextOverlap( this, SchResId( CB_AXIS_LABEL_TEXTOVERLAP ) ),
-        aCbTextBreak( this, SchResId( CB_AXIS_LABEL_TEXTBREAK ) ),
-
         aFlOrder( this, SchResId( FL_AXIS_LABEL_ORDER ) ),
         aRbSideBySide( this, SchResId( RB_AXIS_LABEL_SIDEBYSIDE ) ),
         aRbUpDown( this, SchResId( RB_AXIS_LABEL_UPDOWN ) ),
         aRbDownUp( this, SchResId( RB_AXIS_LABEL_DOWNUP ) ),
         aRbAuto( this, SchResId( RB_AXIS_LABEL_AUTOORDER ) ),
 
-           aFlSeparator( this, SchResId( FL_SEPARATOR ) ),
+        aFlSeparator( this, SchResId( FL_SEPARATOR ) ),
+        aFlTextFlow( this, SchResId( FL_AXIS_LABEL_TEXTFLOW ) ),
+        aCbTextOverlap( this, SchResId( CB_AXIS_LABEL_TEXTOVERLAP ) ),
+        aCbTextBreak( this, SchResId( CB_AXIS_LABEL_TEXTBREAK ) ),
+
+        aFlOrient( this, SchResId( FL_AXIS_LABEL_ORIENTATION ) ),
+        aCtrlDial( this, SchResId( CT_AXIS_LABEL_DIAL ) ),
+        aFtRotate( this, SchResId( FT_AXIS_LABEL_DEGREES ) ),
+        aNfRotate( this, SchResId( NF_AXIS_LABEL_ORIENT ) ),
+        aCbStacked( this, SchResId( PB_AXIS_LABEL_TEXTSTACKED ) ),
+        aOrientHlp( this, aCtrlDial, aNfRotate, aCbStacked ),
 
         m_bShowStaggeringControls( true ),
 ////        bAllowTextOverlap( TRUE ),
 
         m_nInitialDegrees( 0 ),
-        m_bInitialStacking( FALSE )
+        m_bHasInitialDegrees( true ),
+        m_bInitialStacking( false ),
+        m_bHasInitialStacking( true )
 {
     FreeResource();
+
+    aCbStacked.EnableTriState( FALSE );
+    aOrientHlp.AddDependentWindow( aFlOrient );
+    aOrientHlp.AddDependentWindow( aFtRotate, STATE_CHECK );
 
     aCbShowDescription.SetClickHdl( LINK( this, SchAxisLabelTabPage, ToggleShowLabel ) );
 
@@ -166,39 +167,20 @@ SfxTabPage* SchAxisLabelTabPage::Create( Window* pParent, const SfxItemSet& rAtt
 
 BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
-#if 0 // DR: TODO new control types
-//  SvxChartTextOrient eOrient;
-    BOOL bIsStacked = FALSE;
-    long nDegrees = aWOAngle.GetDegrees() * 100L;
-
-    if( nDegrees != m_nInitialDegrees )
+    bool bStacked = false;
+    if( aOrientHlp.GetStackedState() != STATE_DONTKNOW )
     {
-        rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
+        bStacked = aOrientHlp.GetStackedState() == STATE_CHECK;
+        if( !m_bHasInitialStacking || (bStacked != m_bInitialStacking) )
+            rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
     }
 
-    BOOL bStacked = aWOAngle.IsStackedTxt();
-    if( bStacked != m_bInitialStacking )
+    if( aCtrlDial.HasRotation() )
     {
-        if( aWOAngle.IsStackedTxt() )
-        {
-//             eOrient = CHTXTORIENT_STACKED;
-            bIsStacked = TRUE;
-//             rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, 0 ) );
-        }
+        sal_Int32 nDegrees = bStacked ? 0 : aCtrlDial.GetRotation();
+        if( !m_bHasInitialDegrees || (nDegrees != m_nInitialDegrees) )
+            rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
-
-//     if( eOrient != CHTXTORIENT_STACKED )
-//  {
-//      if( nDegrees == 0L )
-//          eOrient = CHTXTORIENT_STANDARD;
-//      else if( nDegrees <= 18000L )
-//          eOrient = CHTXTORIENT_BOTTOMTOP;
-//      else
-//          eOrient = CHTXTORIENT_TOPBOTTOM;
-//  }
-
-//  rOutAttrs.Put( SvxChartTextOrientItem( eOrient ) );
-    rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bIsStacked ) );
 
     if( m_bShowStaggeringControls )
     {
@@ -223,11 +205,9 @@ BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     if( aCbTextOverlap.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_OVERLAP, aCbTextOverlap.IsChecked() ) );
     if( aCbTextBreak.GetState() != STATE_DONTKNOW )
-//         rOutAttrs.Put( SfxBoolItem( SID_TEXTBREAK, aCbTextBreak.IsChecked() ) );
         rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXTBREAK, aCbTextBreak.IsChecked() ) );
     if( aCbShowDescription.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, aCbShowDescription.IsChecked() ) );
-#endif
 
     return TRUE;
 }
@@ -257,55 +237,30 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     }
 
     // Rotation as orient item or in degrees ----------
-    BOOL bStacked = FALSE;
-    short nDegrees = 0;
 
     // check new degree item
+    m_nInitialDegrees = 0;
     aState = rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, FALSE, &pPoolItem );
-    if( aState == SFX_ITEM_DONTCARE )
-    {
-        // tristate for SvxWinOrientation missing
-        nDegrees = 0;
-    }
-    else if( aState == SFX_ITEM_SET )
-    {
-        nDegrees = static_cast< short >( static_cast< const SfxInt32Item * >( pPoolItem )->GetValue() / 100L );
-    }
+    if( aState == SFX_ITEM_SET )
+        m_nInitialDegrees = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
 
-    // check old orientation item
-//     if( rInAttrs.GetItemState( SCHATTR_TEXT_ORIENT, TRUE, &pPoolItem ) == SFX_ITEM_SET )
-//  {
-//      SvxChartTextOrient eOrient = static_cast< const SvxChartTextOrientItem * >( pPoolItem )->GetValue();
-//      switch( eOrient )
-//      {
-//          case CHTXTORIENT_AUTOMATIC:
-//          case CHTXTORIENT_STANDARD:
-//              break;
-//          case CHTXTORIENT_TOPBOTTOM:
-//              if( !nDegrees )
-//                     nDegrees = 270;
-//              break;
-//          case CHTXTORIENT_BOTTOMTOP:
-//              if( !nDegrees )
-//                     nDegrees = 90;
-//              break;
-//          case CHTXTORIENT_STACKED:
-//                 bStacked = TRUE;
-//              break;
-//      }
-//  }
+    m_bHasInitialDegrees = aState != SFX_ITEM_DONTCARE;
+    if( m_bHasInitialDegrees )
+        aCtrlDial.SetRotation( m_nInitialDegrees );
+    else
+        aCtrlDial.SetNoRotation();
 
-    if( rInAttrs.GetItemState( SCHATTR_TEXT_STACKED, TRUE, &pPoolItem ) == SFX_ITEM_SET )
-    {
-        bStacked = reinterpret_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-    }
+    // check stacked item
+    m_bInitialStacking = false;
+    aState = rInAttrs.GetItemState( SCHATTR_TEXT_STACKED, FALSE, &pPoolItem );
+    if( aState == SFX_ITEM_SET )
+        m_bInitialStacking = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
 
-#if 0 // DR: TODO new control types
-    aWOAngle.SetDegrees( nDegrees );
-    aWOAngle.SetStackedTxt( bStacked );
-#endif
-    m_nInitialDegrees = nDegrees;
-    m_bInitialStacking = bStacked;
+    m_bHasInitialStacking = aState != SFX_ITEM_DONTCARE;
+    if( m_bHasInitialDegrees )
+        aOrientHlp.SetStackedState( m_bInitialStacking ? STATE_CHECK : STATE_NOCHECK );
+    else
+        aOrientHlp.SetStackedState( STATE_DONTKNOW );
 
     // Text overlap ----------
     aState = rInAttrs.GetItemState( SCHATTR_TEXT_OVERLAP, FALSE, &pPoolItem );
@@ -327,7 +282,6 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     }
 
     // text break ----------
-//     aState = rInAttrs.GetItemState( SID_TEXTBREAK, FALSE, &pPoolItem );
     aState = rInAttrs.GetItemState( SCHATTR_TEXTBREAK, FALSE, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
@@ -400,13 +354,7 @@ IMPL_LINK ( SchAxisLabelTabPage, ToggleShowLabel, void *, EMPTYARG )
 {
     BOOL bEnable = ( aCbShowDescription.GetState() != STATE_NOCHECK );
 
-#if 0 // DR: TODO new control types
-    if( bEnable )
-        aWOAngle.Enable();
-    else
-        aWOAngle.Disable();
-#endif
-
+    aOrientHlp.Enable( bEnable );
     aFlOrder.Enable( bEnable );
     aRbSideBySide.Enable( bEnable );
     aRbUpDown.Enable( bEnable );
