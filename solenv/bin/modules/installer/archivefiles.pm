@@ -2,9 +2,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:25:11 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:14:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ sub resolving_archive_flag
 
     my $unziplistfile = $loggingdir . "unziplist_" . $installer::globals::build . "_" . $installer::globals::compiler . "_" . $$languagestringref . ".txt";
 
-    my $commonunzipdirbase = installer::systemactions::create_directories("unzip", ""); # for zip files from common directory
+    # no more common unzipping, because of race conditions
+    # my $commonunzipdirbase = installer::systemactions::create_directories("unzip", "");   # for zip files from common directory
     my $platformunzipdirbase = installer::systemactions::create_directories("zipfiles", "");    # for zip files from common directory
 
     installer::logger::include_header_into_logfile("Files with flag ARCHIVE:");
@@ -118,8 +119,10 @@ sub resolving_archive_flag
 
             my $unzipdir;
 
-            if ($iscommonfile) { $unzipdir = $commonunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
-            else { $unzipdir = $platformunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
+            # if ($iscommonfile) { $unzipdir = $commonunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
+            # else { $unzipdir = $platformunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
+
+            $unzipdir = $platformunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator;
 
             installer::systemactions::create_directory($unzipdir);  # creating language specific subdirectories
 
