@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:06:49 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,10 +680,10 @@ void SwFlyFrmAttrMgr::SetVertOrientation(SvxFrameVertOrient eOrient)
     aSet.Put( aVertOrient );
 }
 
-void SwFlyFrmAttrMgr::SetSizeType( SwFrmSize eType )
+void SwFlyFrmAttrMgr::SetHeightSizeType( SwFrmSize eType )
 {
     SwFmtFrmSize aSize( GetFrmSize() );
-    aSize.SetSizeType( eType );
+    aSize.SetHeightSizeType( eType );
     aSet.Put( aSize );
 }
 
@@ -724,7 +724,8 @@ void SwFlyFrmAttrMgr::SetAttrSet(const SfxItemSet& rSet)
  --------------------------------------------------------------------*/
 
 SwFrmValid::SwFrmValid() :
-    bAuto(0),
+    bAutoHeight( FALSE ),
+    bAutoWidth( FALSE ),
     bMirror(0),
     // OD 18.09.2003 #i18732#
     bFollowTextFlow( false ),
