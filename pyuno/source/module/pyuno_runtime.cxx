@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:01:58 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,6 +827,87 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
     }
     return a;
+}
+
+Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, const PyRef &excTraceback) const
+{
+    PyRef str;
+    Any ret;
+    if( excTraceback.is() )
+    {
+        PyRef unoModule( impl ? impl->cargo->getUnoModule() : 0 );
+        if( unoModule.is() )
+        {
+            PyRef extractTraceback(
+                PyDict_GetItemString(unoModule.get(),"_uno_extract_printable_stacktrace" ) );
+
+            if( extractTraceback.is() )
+            {
+                PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE );
+                PyTuple_SetItem( args.get(), 0, excTraceback.getAcquired() );
+                str = PyRef( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
+            }
+            else
+            {
+                str = PyRef(
+                    PyString_FromString( "Couldn't find uno._uno_extract_printable_stacktrace" ),
+                    SAL_NO_ACQUIRE );
+            }
+        }
+        else
+        {
+            str = PyRef(
+                PyString_FromString( "Couldn't find uno.py, no stacktrace available" ),
+                SAL_NO_ACQUIRE );
+        }
+
+    }
+    else
+    {
+        // it may occur, that no traceback is given (e.g. only native code below)
+        str = PyRef( PyString_FromString( "no traceback available" ), SAL_NO_ACQUIRE);
+    }
+
+    if( isInstanceOfStructOrException( *this, excValue.get() ) )
+    {
+        ret = pyObject2Any( excValue );
+    }
+    else
+    {
+        OUStringBuffer buf;
+        PyRef typeName( PyObject_Str( excType.get() ), SAL_NO_ACQUIRE );
+        if( typeName.is() )
+        {
+            buf.appendAscii( PyString_AsString( typeName.get() ) );
+        }
+        else
+        {
+            buf.appendAscii( "no typename available" );
+        }
+        buf.appendAscii( ": " );
+        PyRef valueRep( PyObject_Str( excValue.get() ), SAL_NO_ACQUIRE );
+        if( valueRep.is() )
+        {
+            buf.appendAscii( PyString_AsString( valueRep.get()));
+        }
+        else
+        {
+            buf.appendAscii( "Couldn't convert exception value to a string" );
+        }
+        buf.appendAscii( ", traceback follows\n" );
+        if( str.is() )
+        {
+            buf.appendAscii( PyString_AsString( str.get() ) );
+        }
+        else
+        {
+            buf.appendAscii( ", no traceback available\n" );
+        }
+        RuntimeException e;
+        e.Message = buf.makeStringAndClear();
+        ret = com::sun::star::uno::makeAny( e );
+    }
+    return ret;
 }
 
 
