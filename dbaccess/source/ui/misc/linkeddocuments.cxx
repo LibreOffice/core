@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:52:22 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 11:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,11 +289,13 @@ namespace dbaui
         return xRet;
     }
     //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::newWithPilot(const char* _pWizardService
+    Reference< XComponent> OLinkedDocumentsAccess::newWithPilot(const char* _pWizardService
+                                                , Reference< XComponent >& _xDefinition
                                                 , const sal_Int32 _nCommandType
                                                 , const ::rtl::OUString& _rObjectName
                                                 )
     {
+        Reference< XComponent> xRet;
         try
         {
             ::svx::ODataAccessDescriptor aDesc;
@@ -311,34 +313,45 @@ namespace dbaui
                 xFormWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString::createFromAscii(_pWizardService),aDesc.createAnySequence()),UNO_QUERY);
             }
             if ( xFormWizard.is() )
+            {
                 xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
-
+                Reference<XPropertySet> xProp(xFormWizard,UNO_QUERY_THROW);
+                Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
+                if ( xInfo->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))) )
+                {
+                    _xDefinition.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"))),UNO_QUERY);
+                    xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
+                }
+            }
         }
         catch(const Exception&)
         {
             OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newWithPilot: caught an exception while loading the object!");
         }
+        return xRet;
     }
     //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::newFormWithPilot(const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
+    Reference< XComponent> OLinkedDocumentsAccess::newFormWithPilot(Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
     {
-        newWithPilot("com.sun.star.wizards.form.CallFormWizard",_nCommandType,_rObjectName);
+        return newWithPilot("com.sun.star.wizards.form.CallFormWizard",_xDefinition,_nCommandType,_rObjectName);
     }
 
     //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::newReportWithPilot(const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
+    Reference< XComponent> OLinkedDocumentsAccess::newReportWithPilot(Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
     {
-        newWithPilot("com.sun.star.wizards.report.CallReportWizard",_nCommandType,_rObjectName);
+        return newWithPilot("com.sun.star.wizards.report.CallReportWizard",_xDefinition,_nCommandType,_rObjectName);
     }
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newTableWithPilot()
     {
-        newWithPilot("com.sun.star.wizards.table.CallTableWizard");
+        Reference< XComponent > xDefinition;
+        newWithPilot("com.sun.star.wizards.table.CallTableWizard",xDefinition);
     }
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newQueryWithPilot(const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
     {
-        newWithPilot("com.sun.star.wizards.query.CallQueryWizard",_nCommandType,_rObjectName);
+        Reference< XComponent > xDefinition;
+        newWithPilot("com.sun.star.wizards.query.CallQueryWizard",xDefinition,_nCommandType,_rObjectName);
     }
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::newForm(sal_Int32 _nNewFormId,Reference< XComponent >& _xDefinition)
