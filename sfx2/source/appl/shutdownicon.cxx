@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-26 16:20:09 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ void ShutdownIcon::OpenURL( ::rtl::OUString& aURL, const Sequence< PropertyValue
             {
                 xLoader->loadComponentFromURL(
                     aURL,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
                     0,
                     aArgs );
             }

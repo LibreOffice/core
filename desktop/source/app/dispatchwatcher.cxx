@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #endif
+
+#include <tools/urlobj.hxx>
 
 #include <vector>
 
@@ -205,6 +207,7 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
 
         String aName( aDispatchRequest.aURL );
+        ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
         // is the parameter a printername ?
         if( aName.Len()>1 && *aName.GetBuffer()=='@' )
@@ -229,6 +232,9 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
             // load document for printing without user interaction
             aArgs[4].Value <<= sal_True;
+
+            // hidden documents should never be put into open tasks
+            aTarget = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") );
         }
 
         // load the document ... if they are loadable!
@@ -271,8 +277,12 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         }
         else
         {
+            INetURLObject aObj( aName );
+            if ( aObj.GetProtocol() == INET_PROT_PRIVATE )
+                aTarget = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") );
+
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
-            xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
+            xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN )
             {
                 // request is completed
