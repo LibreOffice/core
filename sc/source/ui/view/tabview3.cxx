@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:04:47 $
+ *  last change: $Author: nn $ $Date: 2002-09-25 14:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,6 +711,16 @@ void ScTabView::AlignToCursor( short nCurX, short nCurY, ScFollowMode eMode,
         short nSizeX = (short) aViewData.VisibleCellsX(eAlignX);
         short nSizeY = (short) aViewData.VisibleCellsY(eAlignY);
 
+        long nCellSizeX;
+        long nCellSizeY;
+        aViewData.GetMergeSizePixel( nCurX, nCurY, nCellSizeX, nCellSizeY );
+        Size aScrSize = aViewData.GetScrSize();
+        long nSpaceX = ( aScrSize.Width()  - nCellSizeX ) / 2;
+        long nSpaceY = ( aScrSize.Height() - nCellSizeY ) / 2;
+        //  nSpaceY: desired start position of cell for FOLLOW_JUMP, modified if dialog interferes
+
+        BOOL bForceNew = FALSE;     // force new calculation of JUMP position (vertical only)
+
         // VisibleCellsY == CellsAtY( GetPosY( eWhichY ), 1, eWhichY )
 
         //-------------------------------------------------------------------------------
@@ -766,16 +776,15 @@ void ScTabView::AlignToCursor( short nCurX, short nCurY, ScFollowMode eMode,
                         short nDiff = nWPosY - nDeltaY;
                         if ( nCurY >= nDiff )           // Pos. kann nicht negativ werden
                         {
-                            nSizeY -= nDiff;
-                            nDeltaY = nWPosY;
+                            nSpaceY = nDlgBot + ( nBotSpace - nCellSizeY ) / 2;
                             bBottom = TRUE;
+                            bForceNew = TRUE;
                         }
                     }
                     if ( !bBottom && nTopSpace > 0 )
                     {
-                        short nWPosX, nWPosY;
-                        aViewData.GetPosFromPixel( 0,nTopSpace, eAlign, nWPosX, nWPosY );
-                        nSizeY = nWPosY - nDeltaY;
+                        nSpaceY = ( nTopSpace - nCellSizeY ) / 2;
+                        bForceNew = TRUE;
                     }
                 }
             }
@@ -791,13 +800,13 @@ void ScTabView::AlignToCursor( short nCurX, short nCurY, ScFollowMode eMode,
             case SC_FOLLOW_JUMP:
                 if ( nCurX < nDeltaX || nCurX >= nDeltaX+nSizeX )
                 {
-                    nNewDeltaX = nCurX - (nSizeX / 2);
+                    nNewDeltaX = nCurX - aViewData.CellsAtX( nCurX, -1, eAlignX, nSpaceX );
                     if (nNewDeltaX < 0) nNewDeltaX = 0;
                     nSizeX = (short) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
-                if ( nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY )
+                if ( nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY || bForceNew )
                 {
-                    nNewDeltaY = nCurY - (nSizeY / 2);
+                    nNewDeltaY = nCurY - aViewData.CellsAtY( nCurY, -1, eAlignY, nSpaceY );
                     if (nNewDeltaY < 0) nNewDeltaY = 0;
                     nSizeY = (short) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
@@ -820,7 +829,7 @@ void ScTabView::AlignToCursor( short nCurX, short nCurY, ScFollowMode eMode,
                     nSizeY = (short) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
 
-                //  wie SC_FOLLOW_JUMP:
+                //  like old version of SC_FOLLOW_JUMP:
 
                 if ( nCurX < nNewDeltaX || nCurX >= nNewDeltaX+nSizeX )
                 {
