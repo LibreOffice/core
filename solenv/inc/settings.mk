@@ -1,20 +1,64 @@
-#*******************************************************************
-#*/*****************************************************************/
-#*
-#*    $Workfile:   settings.mk  $
-#*
-#*    Beschreibung      Compiler und Systemabhaengige
-#*                      Entwicklungtools-Definitionen
-#*
-#*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-13 17:00:19 $
-#*    $Revision: 1.11 $
-#*
-#*    $Logfile:   T:/solar/inc/settings.mkv  $
-#*
-#*    Copyright (c) 1990-1995, STAR DIVISION
-#*
-#*******************************************************************
+#*************************************************************************
+#
+#   $RCSfile: settings.mk,v $
+#
+#   $Revision: 1.12 $
+#
+#   last change: $Author: mh $ $Date: 2000-10-30 06:00:05 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
 
 MKFILENAME:=SETTINGS.MK
 
@@ -31,10 +75,10 @@ dmake_test_version:
 .INCLUDE : comment.mak
 .ENDIF
 
-# --- gemeinsame tool makros --------------------------------------
+# --- common tool makros --------------------------------------
 .INCLUDE : unitools.mk
 
-# --- minor.mk auf s: erzeugen ------------------------------------
+# --- set SOLARVERSION for older workspaces
 
 .IF "$(SOLARVERSION)"==""
 SOLARVERSION=$(SOLARVER)$/$(UPD)
@@ -64,7 +108,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 .INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 
 
-# --- vordefiniertes Environments zuruecksetzen --------------------
+# --- reset defined Environments --------------------
 .SUFFIXES:
 
 ASM=
@@ -195,14 +239,6 @@ RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
 
-.IF "$(WORK_STAMP)"=="LVM364"
-DMAKE=
-dmake=
-.ENDIF
-.IF "$(WORK_STAMP)"=="MIX364"
-DMAKE=
-dmake=
-.ENDIF
 DLLPOSTFIX=
 
 HC=
@@ -573,7 +609,7 @@ common_build_zip=true
 common_build_sign_jar=true
 .ENDIF			# "$(common_build)"!=""
 
-# --- ausgabebaum erzeugen -----------------------------------------
+# --- generate output tree -----------------------------------------
 
 %world.mk :
     @+_mkout $(OUT)
@@ -686,7 +722,7 @@ L=$(SOLARLIBDIR)
 #.EXPORT : SLB LB L LIB
 .EXPORT : PRJ
 
-# Class-Path fuer java-Klassen
+# Class-Path for java-classes
 # obwohl der generierte Bytecode plattformunabhg. sein sollte
 # generieren wir ihn ersteinmal ins abhaengige Verzeichnis
 CLASSDIR=$(OUT)$/class
@@ -694,11 +730,6 @@ CLASSPATH!:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(CLASSPATH)
 STARJAR=java -classpath $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARENV)$/bin$/jtools.jar com.sun.star.tool.starjar.StarJar
 
 STARDEP=javadep
-.IF "$(GUI)"=="WNT"
-#javakey_c=r:\solenv\java\starsign\javakey\Star.sign
-#signtool_c=r:\solenv\java\starsign\signtool
-#signcode_c=r:\solenv\java\starsign\signcode
-.ENDIF
 .IF "$(PRJNAME)"=="sj2"
 CLASSPATH!:=$(CLASSPATH:s/sj2/no/)
 .ENDIF
@@ -936,7 +967,7 @@ LIB:=$(LB);$(SLB);$(ILIB)
 # --- Environment-Allgemein ----------------------------------------
 
 .IF "$(CPUNAME)" == ""
-CPUNAME=CPUNAME_MUSS_UEBER_SETSOLAR_GESETZT_WERDEN
+CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)

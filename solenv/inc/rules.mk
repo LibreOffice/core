@@ -7,8 +7,8 @@
 ##*                      Regeln
 ##*
 ##*    Ersterstellung    MH 9.2.96
-##*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-06 15:03:01 $
-##*    $Revision: 1.3 $
+##*    Letzte Aenderung  $Author: mh $ $Date: 2000-10-30 06:00:04 $
+##*    $Revision: 1.4 $
 ##*
 ##*    $Logfile:   T:/solar/inc/rules.mkv  $
 ##*
@@ -315,7 +315,6 @@ $(OBJ)$/%.obj : %.c
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c
 .ELSE
-    +-@echo HAllo Ause
     +-@echo Cflags: $(CFLAGS)
     $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
 .ENDIF
@@ -597,7 +596,7 @@ $(MISC)$/%.smr : %.idl
         @+-echo }; >> $@
 .ENDIF
 
-# unoidl aufrufen
+# call unoidl 
 $(MISC)$/%.cxx : $(MISC)$/%.smr
         +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGENAME) -OH$(INCCOM)$/$(IDLPACKAGE) -OI$(MISC) $<
         +-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -P$(PRJNAME) -OH$(OUT)$/ucr $(DEPIDLFILES)
@@ -658,7 +657,7 @@ $(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/%.smr : %.idl
         @+-echo }; >> $(@)
 .ENDIF			# "$(GUI)"=="UNX"
 
-# unoidl aufrufen
+# call unoidl 
 $(INCCOM)$(SMARTPRE)$/$(IDLPACKAGE)$/%.hxx $(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/%.cxx .UPDATEALL : $(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/%.smr
         +$(UNOIDL) $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$(SMARTPRE)$/$(IDLPACKAGE) -OI$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE) $(<)
 .IF "$(UPDATER)$(GUI)"=="YESWNT"
