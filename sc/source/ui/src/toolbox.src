@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-12 18:48:19 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-02-12 18:48:19 $ $Revision: 1.12 $
+ // $Author: kz $ $Date: 2001-03-09 21:18:39 $ $Revision: 1.13 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -178,7 +178,7 @@ String SCSTR_QHELP_INPUTWND
     Text[ chinese_traditional ] = "¿é¤JÄæ";
     Text[ arabic ] = "ÓØÑ ÇáÅÏÎÇá";
     Text[ greek ] = "ÃñáììŞ åéóáãùãŞò";
-    Text[ korean ] = "¼± »ğÀÔ";
+    Text[ korean ] = "ÀÔ·ÂÇà";
     Text[ turkish ] = "Giriş satırı";
     Text[ language_user1 ] = " ";
 };
@@ -199,14 +199,14 @@ String SCSTR_QHELP_BTNCALC
     Text [ spanish ] = "AutoPiloto de funciones" ;
     Text [ english_us ] = "AutoPilot: Functions" ;
     Text[ chinese_simplified ] = "º¯Êı×Ô¶¯ÖúÀí";
-    Text[ russian ] = "Àâòîïèëîò - Ôóíêöèè";
+    Text[ russian ] = "Àâòîïèëîò ôóíêöèé";
     Text[ polish ] = "AutoPilot funkcji";
     Text[ japanese ] = "ŠÖ”µ°ÄÊß²Û¯Ä";
     Text[ chinese_traditional ] = "¨ç¼Æ¦Û°Ê§U²z";
     Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí ááÏÇáÇÊ";
     Text[ greek ] = "Function Autopilot";
-    Text[ korean ] = "ÀÚµ¿ ÆÄÀÏ·µ ±â´É";
-    Text[ turkish ] = "İşlev OtoPilotu";
+    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ±â´É";
+    Text[ turkish ] = "Fonksyon OtoPilotu";
     Text[ language_user1 ] = " ";
 };
 
@@ -517,19 +517,19 @@ String RID_PLUGINTOOLBOX
     Text [ english_us ] = "Function Bar for Plug-Ins" ;
     Text [ italian ] = "Barra delle funzioni per PlugIn" ;
     Text [ spanish ] = "Barra de funciones para Plug-ins" ;
-    Text [ french ] = "Barre de fonctions Plug-Ins" ;
-    Text [ swedish ] = "Funktionslist för PlugIns" ;
+    Text [ french ] = "Barre de fonctions Plug-ins" ;
+    Text [ swedish ] = "Funktionslist för plug-ins" ;
     Text [ danish ] = "Funktionslinje for PlugIns" ;
     Text [ portuguese ] = "Barra para Plugins" ;
     Text [ portuguese_brazilian ] = "Funktionsleiste für PlugIns" ;
     Text[ chinese_simplified ] = "Plug-In ¹¦ÄÜÀ¸";
     Text[ russian ] = "Ïàíåëü ôóíêöèé äëÿ Plug-Ins";
-    Text[ polish ] = "Pasek funkcji dla dodatków PlugIn";
+    Text[ polish ] = "Pasek funkcji dla wtyczek Plug-In";
     Text[ japanese ] = "Ìß×¸Ş²İ‚ÌÌ§İ¸¼®İÊŞ°";
     Text[ chinese_traditional ] = "Plug-In ¥\\¯à¦C";
     Text[ arabic ] = "ÔÑíØ æÙíİÉ Plug-Ins";
     Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí ãéá óõíäåüìåíåò õğïìïíÜäåò";
-    Text[ korean ] = "ÇÃ·¯±×ÀÎÀ» À§ÇÑ ±â´É ¸ğÀ½";
+    Text[ korean ] = "ÇÃ·¯±×ÀÎÀÇ ±â´É ¸ğÀ½";
     Text[ turkish ] = "PlugIn işlev çubuğu";
     Text[ language_user1 ] = " ";
 };
@@ -938,7 +938,7 @@ String RID_OBJECTBAR_PREVIEW
     Text[ chinese_traditional ] = "­¶­±ÀËµøª«¥ó¦C";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ãÚÇíäÉ ÇáÕİÍÉ";
     Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğñïåğéóêüğçóçò óåëßäáò";
-    Text[ korean ] = "ÆäÀÌÁö ¹Ì¸®º¸±â °³Ã¼ ¸ğÀ½";
+    Text[ korean ] = "ÂÊ ¹Ì¸®º¸±â °³Ã¼ ¸ğÀ½";
     Text[ turkish ] = "Sayfa önizleme nesne çubuğu";
     Text[ language_user1 ] = " ";
 };
