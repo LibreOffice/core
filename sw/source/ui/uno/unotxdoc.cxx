@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-06 05:56:09 $
+ *  last change: $Author: tl $ $Date: 2002-09-09 12:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2357,19 +2357,33 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
 
  ---------------------------------------------------------------------------*/
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
-        const uno::Any& aSelection,
-        const uno::Sequence< beans::PropertyValue >& xOptions )
+        const uno::Any& rSelection,
+        const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    return pDocShell->GetDoc()->GetPageCount();
+    sal_Int32 nRes = 0;
+
+    uno::Reference< frame::XModel > xModel;
+    rSelection >>= xModel;
+
+    if (xModel == pDocShell->GetModel())
+        nRes = pDocShell->GetDoc()->GetPageCount();
+    else
+    {
+        // used for 'export selection'
+        if (rSelection.hasValue())     // is anything selected ?
+            nRes = 1;
+    }
+
+    return nRes;
 }
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         sal_Int32 nRenderer,
-        const uno::Any& aSelection,
-        const uno::Sequence< beans::PropertyValue >& xOptions )
+        const uno::Any& rSelection,
+        const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
     const SwDoc &rDoc = *pDocShell->GetDoc();
@@ -2425,25 +2439,30 @@ void SAL_CALL SwXTextDocument::render(
     {
         SwWrtShell &rWrtSh = pView->GetWrtShell();
 
-        SwPrtOptions    aOptions( C2U("TestPDF") );
+        SfxProgress     aProgress( pView->GetObjectShell(), C2U("PDF export"), 10 );
+        SwPrtOptions    aOptions( C2U("PDF export") );
+
+        //
         // aus MakeOptions geklaut  (siehe viewfunc.hxx, viewprt.cxx)
-        {
-            SwPrtOptions& rOpts = aOptions;
-            SwPrintData* pData = (SwPrintData*) SW_MOD()->GetPrtOptions(FALSE);
-            rOpts = *pData;
+        //
+        SwPrintData* pData = (SwPrintData*) SW_MOD()->GetPrtOptions(FALSE);
+        aOptions = *pData;
+        //
+        Range aPageRange( nRenderer+1, nRenderer+1 );
+        MultiSelection aPage( aPageRange );
+        aPage.SetTotalRange( Range( 0, RANGE_MAX ) );
+        aPage.Select( aPageRange );
+        aOptions.aMulti = aPage;
+        aOptions.nCopyCount = 1;
+        aOptions.bCollate = FALSE;
+        aOptions.bJobStartet = FALSE;
+        aOptions.bPrintSelection = FALSE;
 
-            Range aPageRange( nRenderer+1, nRenderer+1 );
-            MultiSelection aPage( aPageRange );
-            aPage.SetTotalRange( Range(0,RANGE_MAX) );
-            aPage.Select( aPageRange );
-            rOpts.aMulti = aPage;
-            rOpts.nCopyCount = 1;
-            rOpts.bCollate = FALSE;
-            rOpts.bPrintSelection = FALSE;
-            rOpts.bJobStartet = FALSE;
-        }
+        uno::Reference< frame::XModel > xModel;
+        rSelection >>= xModel;
 
-        SfxProgress aProgress( pView->GetObjectShell(), C2U("ProgressExportPDF"), 10 );
+        if (xModel != pDocShell->GetModel())    // 'export selection' ?
+            aOptions.bPrintSelection = TRUE;
 
         rWrtSh.Prt( aOptions, aProgress, pOut );
     }

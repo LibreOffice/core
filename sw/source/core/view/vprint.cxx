@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-06 05:53:24 $
+ *  last change: $Author: tl $ $Date: 2002-09-09 12:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
         }
 
         // eine ViewShell darauf
-        pShell = new ViewShell( *pPrtDoc, 0, pOpt );
+        OutputDevice *pTmpDev = pPDFOut ? pPDFOut : 0;
+        pShell = new ViewShell( *pPrtDoc, 0, pOpt, pTmpDev );
         pPrtDoc->SetRefForDocShell( 0 );
     }
     else
@@ -1227,7 +1228,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                         }
                     }
 
-                    ::SetSwVisArea( pShell, pStPage->Frm() );
+                    ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
 
                     //  wenn wir einen Umschlag drucken wird ein Offset beachtet
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
@@ -1250,10 +1251,10 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                             pLastPageDesc = pStPage->GetPageDesc();
                             BOOL bLandScp = pLastPageDesc->GetLandscape();
 
-                            if( pPrt && bSetPaperBin )      // Schacht einstellen.
+                            if(bSetPaperBin )      // Schacht einstellen.
                                 pPrt->SetPaperBin( pStPage->GetFmt()->
                                                     GetPaperBin().GetValue() );
-                            if ( pPrt && bSetPaperSz )
+                            if (bSetPaperSz )
                             {
                                 Size aSize = pStPage->Frm().SSize();
                                 if ( bLandScp && bSetOrient )
@@ -1268,7 +1269,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                                 else
                                     pPrt->SetPaper( ePaper );
                             }
-                            if ( pPrt && bSetOrient )
+                            if (bSetOrient )
                             {
                                 // Orientation einstellen: Breiter als Hoch
                                 //  -> Landscape, sonst -> Portrait.
@@ -1306,7 +1307,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
                             pShell->InitPrt( pPrt, pPDFOut );
 
-                            ::SetSwVisArea( pShell, pStPage->Frm() );
+                            ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
                             nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
                         // Bei Selektionsdruck wird ggf. die erste leere Seite ausgelassen
@@ -1341,7 +1342,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                                 SwRect aTmp( pShell->VisArea() );
                                 aTmp.SSize().Height() = LONG_MAX - aTmp.Top();
                                 aTmp.SSize().Width()  = LONG_MAX - aTmp.Left();
-                                ::SetSwVisArea( pShell, aTmp );
+                                ::SetSwVisArea( pShell, aTmp, 0 != pPDFOut );
                                 while ( nDiff > 0 )
                                 {
                                     if (pPrt)
@@ -1654,6 +1655,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2002/09/06 05:53:24  tl
+      #102510# XRenderable (PDF) export implementation
+
       Revision 1.9  2002/09/03 08:06:36  od
       #102450# - add 3rd parameter to method calls SwViewImp::PaintLayer
 

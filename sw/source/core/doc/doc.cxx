@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-02 12:24:49 $
+ *  last change: $Author: tl $ $Date: 2002-09-09 12:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,6 +656,8 @@ const Size SwDoc::GetPageSize( sal_uInt16 nPageNum ) const
         const SwPageFrm* pPage = static_cast<const SwPageFrm*>
                                  (GetRootFrm()->Lower());
         while( --nPageNum && pPage->GetNext() )
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        if( pPage->IsEmptyPage() && pPage->GetNext() )
             pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
         aSize = pPage->Frm().SSize();
     }
