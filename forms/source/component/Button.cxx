@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:13:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@ InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceF
 
 //------------------------------------------------------------------
 OButtonModel::OButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-               :OImageModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_CONTROL_COMMANDBUTTON )
-                                    // use the old control name for compytibility reasons
+    :OImageModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON )
+                                    // use the old control name for compatibility reasons
 {
     DBG_CTOR( OButtonModel, NULL );
     m_nClassId = FormComponentType::COMMANDBUTTON;
