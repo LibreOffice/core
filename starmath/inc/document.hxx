@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:56:00 $
+ *  last change: $Author: tl $ $Date: 2001-03-08 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,10 @@ SO2_DECL_REF(SvStorageStream)
  * oder dann auch NULL ist, uebernimmt die DocShell in der Methode GetPrt(),
  * fuer die der Access auch Friend der DocShell ist.
 */
+
 class SmDocShell;
+class EditEngine;
+class EditEngineItemPool;
 
 class SmPrinterAccess
 {
@@ -157,7 +160,8 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject, public SfxLis
     SmNode             *pTree;
     SvInPlaceMenuBar   *pMenuBar;
     SfxMenuBarManager  *pMenuMgr;
-    SfxUndoManager     *pUndoMgr;
+    SfxItemPool        *pEditEngineItemPool;
+    EditEngine         *pEditEngine;
     SfxPrinter         *pPrinter;       //Siehe Kommentar zum SmPrinter Access!
     Printer            *pTmpPrinter;    //ebenfalls
     long                nLeftBorder,
@@ -252,7 +256,10 @@ public:
     void            Parse();
     SmParser &      GetParser() { return aInterpreter; }
     const SmNode *  GetFormulaTree() const  { return pTree; }
-    void SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
+    void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
+
+    EditEngine &    GetEditEngine();
+    SfxItemPool &   GetEditEngineItemPool();
 
     void        Draw(OutputDevice &rDev, Point &rPosition);
     Size        GetSize();
@@ -270,7 +277,7 @@ public:
     virtual void SetVisArea (const Rectangle & rVisArea);
     virtual void UIActivate (BOOL bActivate);
 
-virtual void SetModified(BOOL bModified);
+    virtual void SetModified(BOOL bModified);
 };
 
 
