@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertyMatcherFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:36 $
+ *  last change:$Date: 2003-09-08 11:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.ucb.RuleOperator;
 import com.sun.star.ucb.RuleTerm;
 import com.sun.star.ucb.SearchCriterium;
 import com.sun.star.ucb.XPropertyMatcher;
 import com.sun.star.ucb.XPropertyMatcherFactory;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.ucb.XPropertyMatcherFactory</code>
