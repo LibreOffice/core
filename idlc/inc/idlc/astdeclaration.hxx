@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:55:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _REGISTRY_REGISTRY_HXX_
 #include <registry/registry.hxx>
 #endif
-#ifndef _REGISTRY_REFLWRIT_HXX_
-#include <registry/reflwrit.hxx>
-#endif
 
 class AstScope;
 
@@ -114,19 +111,19 @@ public:
 
     // Data access
     void setName(const ::rtl::OString& name);
-    const ::rtl::OString& getLocalName()
+    const ::rtl::OString& getLocalName() const
         { return m_localName; }
-    const ::rtl::OString&   getScopedName()
+    const ::rtl::OString&   getScopedName() const
         { return m_scopedName; }
     const ::rtl::OString&   getFullName()
         { return m_fullName; }
-    virtual const sal_Char* getRelativName()
+    virtual const sal_Char* getRelativName() const
         { return m_fullName.getStr()+1; }
     AstScope* getScope()
         { return m_pScope; }
     void setScope(AstScope* pSc)
         { m_pScope = pSc; }
-    const NodeType getNodeType()
+    NodeType getNodeType() const
         { return m_nodeType; }
     sal_Bool isInMainfile() const
         { return m_bInMainFile; }
@@ -153,10 +150,10 @@ public:
     void markAsAdded()
         { m_bIsAdded = sal_True; }
 
-    sal_Bool isType();
+    sal_Bool isType() const;
     sal_Bool hasAncestor(AstDeclaration* pDecl);
 
-    virtual sal_Bool dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader);
+    virtual sal_Bool dump(RegistryKey& rKey);
 protected:
     ::rtl::OString      m_localName;
     ::rtl::OString      m_scopedName;       // full qualified name
