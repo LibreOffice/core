@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextMenuInterceptor.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:34:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 12:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -77,7 +77,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                 UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
                                           xComponent);
 
-            String infoMsg = new String("All context menus of the created document frame contains now a 'Help' entry with the submenus 'Content', 'Help Agent' and 'Tips'.\n\n Press 'Return' in the shell to remove the context menu interceptor and finish the example!");
+            String infoMsg = new String("All context menus of the created document frame contains now a 'Help' entry with the submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' in the shell to remove the context menu interceptor and finish the example!");
             xDoc.getText().setString(infoMsg);
 
             // ensure that the document content is optimal visible
@@ -110,11 +110,14 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
 
                     System.out.println( "\n ... all context menus of the created document frame contains now a 'Help' entry with the\n     submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' to remove the context menu interceptor and finish the example!");
 
-                    if (System.in.read() > 0) {
-                        xContextMenuInterception.releaseContextMenuInterceptor(
-                            xContextMenuInterceptor );
-                        System.out.println( " ... context menu interceptor removed!" );
-                    }
+                    char c = 'X';
+                    do{
+                        c = (char) System.in.read();
+                    }while ((c != 13) && (c != 10));
+
+                    xContextMenuInterception.releaseContextMenuInterceptor(
+                        xContextMenuInterceptor );
+                    System.out.println( " ... context menu interceptor removed!" );
                 }
             }
 
