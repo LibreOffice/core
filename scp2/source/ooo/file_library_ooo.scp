@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.29 $
+*  $Revision: 1.30 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 14:20:37 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:49:28 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -364,8 +364,6 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbi, dbi)
-
 #ifdef SOLAR_JAVA
 
 File gid_File_Lib_Dbjava31
@@ -408,6 +406,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Dbt, dbtools )
 
+STD_UNO_LIB_FILE( gid_File_Lib_Dbaxml, dbaxml )
 STD_UNO_LIB_FILE( gid_File_Lib_Dbu, dbu )
 
 File gid_File_Lib_Defreg
