@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-01-22 13:44:43 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 11:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,17 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
@@ -158,6 +164,7 @@ namespace fileaccess {
         public cppu::OWeakObject,
         public com::sun::star::lang::XComponent,
         public com::sun::star::lang::XServiceInfo,
+        public com::sun::star::lang::XTypeProvider,
         public com::sun::star::ucb::XCommandProcessor,
         public com::sun::star::beans::XPropertiesChangeNotifier,
         public com::sun::star::beans::XPropertyContainer,
@@ -213,6 +220,11 @@ namespace fileaccess {
         virtual void SAL_CALL
         removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
             throw( com::sun::star::uno::RuntimeException );
+
+
+        // XTypeProvider
+
+        XTYPEPROVIDER_DECL()
 
 
         // XServiceInfo

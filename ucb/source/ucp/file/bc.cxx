@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-01 08:32:03 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 11:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
 // PropertyListeners
@@ -172,7 +173,7 @@ BaseContent::BaseContent( shell* pMyShell,
 // Constructor for full featured Contents
 
 BaseContent::BaseContent( shell* pMyShell,
-                          const uno::Reference< XContentIdentifier >& xContentIdentifier,
+                          const Reference< XContentIdentifier >& xContentIdentifier,
                           const rtl::OUString& aUncPath )
     : m_pMyShell( pMyShell ),
       m_xContentIdentifier( xContentIdentifier ),
@@ -215,7 +216,7 @@ BaseContent::~BaseContent( )
 
 void SAL_CALL
 BaseContent::acquire( void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     OWeakObject::acquire();
 }
@@ -223,17 +224,17 @@ BaseContent::acquire( void )
 
 void SAL_CALL
 BaseContent::release( void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     OWeakObject::release();
 }
 
 
-uno::Any SAL_CALL
-BaseContent::queryInterface( const uno::Type& rType )
-    throw( uno::RuntimeException )
+Any SAL_CALL
+BaseContent::queryInterface( const Type& rType )
+    throw( RuntimeException )
 {
-    uno::Any aRet = cppu::queryInterface( rType,
+    Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( lang::XComponent*, this ),
                                           SAL_STATIC_CAST( lang::XServiceInfo*, this ),
                                           SAL_STATIC_CAST( XCommandProcessor*, this ),
@@ -254,8 +255,8 @@ BaseContent::queryInterface( const uno::Type& rType )
 ////////////////////////////////////////////////////////////////////////////////////////
 
 void SAL_CALL
-BaseContent::addEventListener( const uno::Reference< lang::XEventListener >& Listener )
-    throw( uno::RuntimeException )
+BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -268,8 +269,8 @@ BaseContent::addEventListener( const uno::Reference< lang::XEventListener >& Lis
 
 
 void SAL_CALL
-BaseContent::removeEventListener( const uno::Reference< lang::XEventListener >& Listener )
-    throw( uno::RuntimeException )
+BaseContent::removeEventListener( const Reference< lang::XEventListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -280,7 +281,7 @@ BaseContent::removeEventListener( const uno::Reference< lang::XEventListener >& 
 
 void SAL_CALL
 BaseContent::dispose()
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
     lang::EventObject aEvt;
@@ -308,7 +309,7 @@ BaseContent::dispose()
 
 rtl::OUString SAL_CALL
 BaseContent::getImplementationName()
-    throw( uno::RuntimeException)
+    throw( RuntimeException)
 {
     return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileContent" );
 }
@@ -317,7 +318,7 @@ BaseContent::getImplementationName()
 
 sal_Bool SAL_CALL
 BaseContent::supportsService( const rtl::OUString& ServiceName )
-    throw( uno::RuntimeException)
+    throw( RuntimeException)
 {
     if( ServiceName.compareToAscii( "com.sun.star.ucb.FileContent" ) == 0 )
         return true;
@@ -327,15 +328,32 @@ BaseContent::supportsService( const rtl::OUString& ServiceName )
 
 
 
-uno::Sequence< rtl::OUString > SAL_CALL
+Sequence< rtl::OUString > SAL_CALL
 BaseContent::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
-    uno::Sequence< rtl::OUString > ret( 1 );
+    Sequence< rtl::OUString > ret( 1 );
     ret[0] = rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContent" );
     return ret;
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//  XTypeProvider
+//////////////////////////////////////////////////////////////////////////////////////////
+
+XTYPEPROVIDER_IMPL_10( BaseContent,
+                       lang::XComponent,
+                       lang::XTypeProvider,
+                       lang::XServiceInfo,
+                       XCommandProcessor,
+                       XContentCreator,
+                       XContent,
+                       container::XChild,
+                       beans::XPropertiesChangeNotifier,
+                       beans::XPropertyContainer,
+                       beans::XPropertySetInfoChangeNotifier )
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -344,7 +362,7 @@ BaseContent::getSupportedServiceNames()
 
 sal_Int32 SAL_CALL
 BaseContent::createCommandIdentifier( void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     return m_pMyShell->getCommandId();
 }
@@ -352,19 +370,19 @@ BaseContent::createCommandIdentifier( void )
 
 void SAL_CALL
 BaseContent::abort( sal_Int32 CommandId )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     m_pMyShell->abort( CommandId );
 }
 
 
-uno::Any SAL_CALL
+Any SAL_CALL
 BaseContent::execute( const Command& aCommand,
                       sal_Int32 CommandId,
-                      const uno::Reference< XCommandEnvironment >& Environment )
-    throw( uno::Exception,
+                      const Reference< XCommandEnvironment >& Environment )
+    throw( Exception,
            CommandAbortedException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     if( CommandId )
     {
@@ -372,7 +390,7 @@ BaseContent::execute( const Command& aCommand,
                                Environment );
     }
 
-    uno::Any aAny;
+    Any aAny;
     sal_Bool success = true;   // Hope the best
 
     try
@@ -387,7 +405,7 @@ BaseContent::execute( const Command& aCommand,
         }
         else if( ! aCommand.Name.compareToAscii( "setPropertyValues" ) )
         {
-            uno::Sequence< beans::PropertyValue > sPropertyValues;
+            Sequence< beans::PropertyValue > sPropertyValues;
 
             if( ! ( aCommand.Argument >>= sPropertyValues ) )
                 throw CommandAbortedException();
@@ -396,7 +414,7 @@ BaseContent::execute( const Command& aCommand,
         }
         else if( ! aCommand.Name.compareToAscii( "getPropertyValues" ) )
         {
-            uno::Sequence< beans::Property > ListOfRequestedProperties;
+            Sequence< beans::Property > ListOfRequestedProperties;
 
             if( ! ( aCommand.Argument >>= ListOfRequestedProperties ) )
                 throw CommandAbortedException();
@@ -426,10 +444,10 @@ BaseContent::execute( const Command& aCommand,
                 aOpenArgument.Priority = aFalseCommandArgument.Priority;
                 aOpenArgument.Sink = aFalseCommandArgument.Sink;
                 aOpenArgument.Properties = aFalseCommandArgument.Properties;
-                aOpenArgument.SortingInfo = uno::Sequence< NumberedSortingInfo >( 0 );
+                aOpenArgument.SortingInfo = Sequence< NumberedSortingInfo >( 0 );
             }
 
-            uno::Reference< XDynamicResultSet > result = open( CommandId,aOpenArgument );
+            Reference< XDynamicResultSet > result = open( CommandId,aOpenArgument );
             if( result.is() )
                 aAny <<= result;
         }
@@ -486,9 +504,9 @@ BaseContent::execute( const Command& aCommand,
 
 void SAL_CALL
 BaseContent::addPropertiesChangeListener(
-    const uno::Sequence< rtl::OUString >& PropertyNames,
-    const uno::Reference< beans::XPropertiesChangeListener >& Listener )
-    throw( uno::RuntimeException )
+    const Sequence< rtl::OUString >& PropertyNames,
+    const Reference< beans::XPropertiesChangeListener >& Listener )
+    throw( RuntimeException )
 {
     if( ! Listener.is() )
         return;
@@ -503,7 +521,7 @@ BaseContent::addPropertiesChangeListener(
         m_pPropertyListener->addInterface( rtl::OUString(),Listener );
     else
     {
-        uno::Reference< beans::XPropertySetInfo > xProp = m_pMyShell->info_p( -1,m_aUncPath );
+        Reference< beans::XPropertySetInfo > xProp = m_pMyShell->info_p( -1,m_aUncPath );
         for( sal_Int32 i = 0; i < PropertyNames.getLength(); ++i )
             if( xProp->hasPropertyByName( PropertyNames[i] ) )
                 m_pPropertyListener->addInterface( PropertyNames[i],Listener );
@@ -512,9 +530,9 @@ BaseContent::addPropertiesChangeListener(
 
 
 void SAL_CALL
-BaseContent::removePropertiesChangeListener( const uno::Sequence< rtl::OUString >& PropertyNames,
-                                             const uno::Reference< beans::XPropertiesChangeListener >& Listener )
-    throw( com::sun::star::uno::RuntimeException )
+BaseContent::removePropertiesChangeListener( const Sequence< rtl::OUString >& PropertyNames,
+                                             const Reference< beans::XPropertiesChangeListener >& Listener )
+    throw( RuntimeException )
 {
     if( ! Listener.is() || ! m_pPropertyListener )
         return;
@@ -532,9 +550,9 @@ BaseContent::removePropertiesChangeListener( const uno::Sequence< rtl::OUString 
 // XContent
 /////////////////////////////////////////////////////////////////////////////////////////
 
-uno::Reference< ucb::XContentIdentifier > SAL_CALL
+Reference< ucb::XContentIdentifier > SAL_CALL
 BaseContent::getIdentifier()
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     return m_xContentIdentifier;
 }
@@ -542,7 +560,7 @@ BaseContent::getIdentifier()
 
 rtl::OUString SAL_CALL
 BaseContent::getContentType()
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     if( !( m_nState & Deleted ) )
     {
@@ -558,12 +576,12 @@ BaseContent::getContentType()
             try
             {
                 // Who am I ?
-                uno::Sequence< beans::Property > seq(1);
+                Sequence< beans::Property > seq(1);
                 seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
                                                 -1,
                                                 getCppuType( static_cast< sal_Bool* >(0) ),
                                                 0 );
-                uno::Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
+                Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
                 sal_Bool IsDocument = xRow->getBoolean( 1 );
 
                 if ( !xRow->wasNull() )
@@ -594,8 +612,8 @@ BaseContent::getContentType()
 
 void SAL_CALL
 BaseContent::addContentEventListener(
-    const uno::Reference< XContentEventListener >& Listener )
-    throw( uno::RuntimeException )
+    const Reference< XContentEventListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -610,8 +628,8 @@ BaseContent::addContentEventListener(
 
 void SAL_CALL
 BaseContent::removeContentEventListener(
-    const uno::Reference< XContentEventListener >& Listener )
-    throw( uno::RuntimeException )
+    const Reference< XContentEventListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -630,11 +648,11 @@ void SAL_CALL
 BaseContent::addProperty(
     const rtl::OUString& Name,
     sal_Int16 Attributes,
-    const uno::Any& DefaultValue )
+    const Any& DefaultValue )
     throw( beans::PropertyExistException,
            beans::IllegalTypeException,
            lang::IllegalArgumentException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name == rtl::OUString() )
     {
@@ -650,7 +668,7 @@ BaseContent::removeProperty(
     const rtl::OUString& Name )
     throw( beans::UnknownPropertyException,
            beans::NotRemoveableException,
-           uno::RuntimeException)
+           RuntimeException)
 {
 
     if( m_nState & Deleted )
@@ -663,19 +681,19 @@ BaseContent::removeProperty(
 // XContentCreator
 ////////////////////////////////////////////////////////////////////////////////
 
-uno::Sequence< ContentInfo > SAL_CALL
+Sequence< ContentInfo > SAL_CALL
 BaseContent::queryCreatableContentsInfo(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
-    uno::Sequence< ContentInfo > seq(2);
+    Sequence< ContentInfo > seq(2);
 
     // file
     seq[0].Type       = m_pMyShell->FileContentType;
     seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
                         | ContentInfoAttribute::KIND_DOCUMENT;
 
-    uno::Sequence< beans::Property > props( 1 );
+    Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
                         rtl::OUString::createFromAscii( "Title" ),
                         -1,
@@ -692,14 +710,14 @@ BaseContent::queryCreatableContentsInfo(
 }
 
 
-uno::Reference< XContent > SAL_CALL
+Reference< XContent > SAL_CALL
 BaseContent::createNewContent(
     const ContentInfo& Info )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     // Check type.
     if ( !Info.Type.getLength() )
-        return uno::Reference< XContent >();
+        return Reference< XContent >();
 
     sal_Bool bFolder
         = ( Info.Type.compareTo( m_pMyShell->FolderContentType ) == 0 );
@@ -708,7 +726,7 @@ BaseContent::createNewContent(
         if ( Info.Type.compareTo( m_pMyShell->FileContentType ) != 0 )
         {
             // Neither folder nor file to create!
-            return uno::Reference< XContent >();
+            return Reference< XContent >();
         }
     }
 
@@ -717,26 +735,26 @@ BaseContent::createNewContent(
 
     try
     {
-        uno::Sequence< beans::Property > seq(1);
+        Sequence< beans::Property > seq(1);
         seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
                                     -1,
                                     getCppuType( static_cast< sal_Bool* >(0) ),
                                     0 );
-        uno::Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
+        Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
         IsDocument = xRow->getBoolean( 1 );
 
         if ( xRow->wasNull() )
         {
             VOS_ENSURE( false,
                         "BaseContent::createNewContent - Property value was null!" );
-            return uno::Reference< XContent >();
+            return Reference< XContent >();
         }
     }
     catch ( sdbc::SQLException const & )
     {
         VOS_ENSURE( false,
                     "BaseContent::createNewContent - Caught SQLException!" );
-        return uno::Reference< XContent >();
+        return Reference< XContent >();
     }
 
     rtl::OUString dstUncPath;
@@ -750,7 +768,7 @@ BaseContent::createNewContent(
         dstUncPath = m_aUncPath;
 
     BaseContent* p = new BaseContent( m_pMyShell, dstUncPath, bFolder );
-    return uno::Reference< XContent >( p );
+    return Reference< XContent >( p );
 }
 
 
@@ -761,8 +779,8 @@ BaseContent::createNewContent(
 
 void SAL_CALL
 BaseContent::addPropertySetInfoChangeListener(
-    const uno::Reference< beans::XPropertySetInfoChangeListener >& Listener )
-    throw( uno::RuntimeException )
+    const Reference< beans::XPropertySetInfoChangeListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
     if( ! m_pPropertySetInfoChangeListeners )
@@ -774,8 +792,8 @@ BaseContent::addPropertySetInfoChangeListener(
 
 void SAL_CALL
 BaseContent::removePropertySetInfoChangeListener(
-    const uno::Reference< beans::XPropertySetInfoChangeListener >& Listener )
-    throw( uno::RuntimeException )
+    const Reference< beans::XPropertySetInfoChangeListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -788,10 +806,10 @@ BaseContent::removePropertySetInfoChangeListener(
 // XChild
 ////////////////////////////////////////////////////////////////////////////////
 
-uno::Reference< uno::XInterface > SAL_CALL
+Reference< XInterface > SAL_CALL
 BaseContent::getParent(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     rtl::OUString ParentUnq = m_pMyShell->getParentName( m_aUncPath );
     rtl::OUString ParentUrl;
@@ -799,28 +817,28 @@ BaseContent::getParent(
 
     sal_Bool err = m_pMyShell->getUrlFromUnq( ParentUnq, ParentUrl );
     if( err )
-        return uno::Reference< uno::XInterface >( 0 );
+        return Reference< XInterface >( 0 );
 
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,ParentUnq );
-    uno::Reference< XContentIdentifier > Identifier( p );
+    Reference< XContentIdentifier > Identifier( p );
 
     try
     {
-        uno::Reference< XContent > content = m_pMyShell->m_pProvider->queryContent( Identifier );
+        Reference< XContent > content = m_pMyShell->m_pProvider->queryContent( Identifier );
         return content;
     }
     catch( IllegalIdentifierException )
     {
-        return uno::Reference< uno::XInterface >();
+        return Reference< XInterface >();
     }
 }
 
 
 void SAL_CALL
 BaseContent::setParent(
-    const uno::Reference< uno::XInterface >& Parent )
+    const Reference< XInterface >& Parent )
     throw( lang::NoSupportException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     throw lang::NoSupportException();
 }
@@ -831,25 +849,25 @@ BaseContent::setParent(
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-uno::Reference< XCommandInfo > SAL_CALL
+Reference< XCommandInfo > SAL_CALL
 BaseContent::getCommandInfo(
     sal_Int32 nMyCommandIdentifier )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     if( m_nState & Deleted )
-        return uno::Reference< XCommandInfo >();
+        return Reference< XCommandInfo >();
 
     return m_pMyShell->info_c( nMyCommandIdentifier,m_aUncPath );
 }
 
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo > SAL_CALL
 BaseContent::getPropertySetInfo(
     sal_Int32 nMyCommandIdentifier )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     if( m_nState & Deleted )
-        return uno::Reference< beans::XPropertySetInfo >();
+        return Reference< beans::XPropertySetInfo >();
 
     return m_pMyShell->info_p( nMyCommandIdentifier,m_aUncPath );
 }
@@ -857,33 +875,33 @@ BaseContent::getPropertySetInfo(
 
 
 
-uno::Reference< sdbc::XRow > SAL_CALL
+Reference< sdbc::XRow > SAL_CALL
 BaseContent::getPropertyValues(
     sal_Int32 nMyCommandIdentifier,
-    const uno::Sequence< beans::Property >& PropertySet )
-    throw( uno::RuntimeException )
+    const Sequence< beans::Property >& PropertySet )
+    throw( RuntimeException )
 {
     sal_Int32 nProps = PropertySet.getLength();
     if ( !nProps )
-        return uno::Reference< sdbc::XRow >();
+        return Reference< sdbc::XRow >();
 
     if( m_nState & Deleted )
     {
-        uno::Sequence< uno::Any > aValues( nProps );
-        return uno::Reference< sdbc::XRow >( new XRow_impl( m_pMyShell, aValues ) );
+        Sequence< Any > aValues( nProps );
+        return Reference< sdbc::XRow >( new XRow_impl( m_pMyShell, aValues ) );
     }
 
     if( m_nState & JustInserted )
     {
-        uno::Sequence< uno::Any > aValues( nProps );
-        uno::Any* pValues = aValues.getArray();
+        Sequence< Any > aValues( nProps );
+        Any* pValues = aValues.getArray();
 
         const beans::Property* pProps = PropertySet.getConstArray();
 
         for ( sal_Int32 n = 0; n < nProps; ++n )
         {
             const beans::Property& rProp = pProps[ n ];
-            uno::Any& rValue = pValues[ n ];
+            Any& rValue = pValues[ n ];
 
             if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
             {
@@ -899,10 +917,10 @@ BaseContent::getPropertyValues(
                 rValue <<= sal_Bool( !m_bFolder );
             }
 //          else
-//              rValue = uno::Any();
+//              rValue = Any();
         }
 
-        return uno::Reference< sdbc::XRow >(
+        return Reference< sdbc::XRow >(
                                     new XRow_impl( m_pMyShell, aValues ) );
     }
 
@@ -915,8 +933,8 @@ BaseContent::getPropertyValues(
 void SAL_CALL
 BaseContent::setPropertyValues(
     sal_Int32 nMyCommandIdentifier,
-    const uno::Sequence< beans::PropertyValue >& Values )
-    throw( uno::RuntimeException )
+    const Sequence< beans::PropertyValue >& Values )
+    throw( RuntimeException )
 {
     if( m_nState & Deleted )
     {
@@ -990,17 +1008,17 @@ BaseContent::setPropertyValues(
 
 
 
-uno::Reference< XDynamicResultSet > SAL_CALL
+Reference< XDynamicResultSet > SAL_CALL
 BaseContent::open(
     sal_Int32 nMyCommandIdentifier,
     const OpenCommandArgument2& aCommandArgument )
     throw( CommandAbortedException )
 {
     if( ( m_nState & Deleted ) || ( m_nState & JustInserted ) )
-        return uno::Reference< XDynamicResultSet >();
+        return Reference< XDynamicResultSet >();
 
 
-    uno::Reference< io::XOutputStream > outputStream( aCommandArgument.Sink,uno::UNO_QUERY );
+    Reference< io::XOutputStream > outputStream( aCommandArgument.Sink,UNO_QUERY );
     if( outputStream.is() )
     {
         m_pMyShell->page( nMyCommandIdentifier,
@@ -1008,7 +1026,7 @@ BaseContent::open(
                           outputStream );
     }
 
-    uno::Reference< io::XActiveDataSink > activeDataSink( aCommandArgument.Sink,uno::UNO_QUERY );
+    Reference< io::XActiveDataSink > activeDataSink( aCommandArgument.Sink,UNO_QUERY );
     if( activeDataSink.is() )
     {
         activeDataSink->setInputStream( m_pMyShell->open( nMyCommandIdentifier,
@@ -1016,7 +1034,7 @@ BaseContent::open(
     }
 
 
-    uno::Reference< io::XActiveDataStreamer > activeDataStreamer( aCommandArgument.Sink,uno::UNO_QUERY );
+    Reference< io::XActiveDataStreamer > activeDataStreamer( aCommandArgument.Sink,UNO_QUERY );
     if( activeDataStreamer.is() )
     {
         activeDataStreamer->setStream( m_pMyShell->open_rw( nMyCommandIdentifier,
@@ -1092,12 +1110,12 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
 
     // Who am I ?
-    uno::Sequence< beans::Property > seq(1);
+    Sequence< beans::Property > seq(1);
     seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
                               -1,
                               getCppuType( static_cast< sal_Bool* >(0) ),
                               0 );
-    uno::Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,seq );
+    Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,seq );
     sal_Bool IsDocument = xRow->getBoolean( 1 );
     if( xRow->wasNull() )
         throw CommandAbortedException();
@@ -1126,7 +1144,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 void SAL_CALL
 BaseContent::write( sal_Int32 nMyCommandIdentifier,
                     sal_Bool OverWrite,
-                    const uno::Reference< io::XInputStream >& aInputStream )
+                    const Reference< io::XInputStream >& aInputStream )
     throw( CommandAbortedException )
 {
     sal_Bool err = ! m_pMyShell->write( nMyCommandIdentifier,
@@ -1165,12 +1183,12 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
         try
         {
-            uno::Sequence< beans::Property > seq(1);
+            Sequence< beans::Property > seq(1);
             seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
                                         -1,
                                         getCppuType( static_cast< sal_Bool* >(0) ),
                                         0 );
-            uno::Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
+            Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
             bDocument = xRow->getBoolean( 1 );
 
             success = !xRow->wasNull();
@@ -1208,7 +1226,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
 
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,m_aUncPath );
-    m_xContentIdentifier = uno::Reference< XContentIdentifier >( p );
+    m_xContentIdentifier = Reference< XContentIdentifier >( p );
 
     m_pMyShell->registerNotifier( m_aUncPath,this );
     m_pMyShell->InsertDefaultProperties( m_aUncPath );
@@ -1244,10 +1262,10 @@ BaseContent::cEXC( const rtl::OUString aNewName )
 {
     vos::OGuard aGuard( m_aMutex );
 
-    uno::Reference< XContentIdentifier > xOldRef = m_xContentIdentifier;
+    Reference< XContentIdentifier > xOldRef = m_xContentIdentifier;
     m_aUncPath = aNewName;
     FileContentIdentifier* pp = new FileContentIdentifier( m_pMyShell,aNewName );
-    m_xContentIdentifier = uno::Reference< XContentIdentifier >( pp );
+    m_xContentIdentifier = Reference< XContentIdentifier >( pp );
 
     ContentEventNotifier* p = 0;
     if( m_pContentEventListeners )
@@ -1296,7 +1314,7 @@ BaseContent::cPCL( void )
 {
     vos::OGuard aGuard( m_aMutex );
 
-    uno::Sequence< rtl::OUString > seqNames;
+    Sequence< rtl::OUString > seqNames;
 
     if( m_pPropertyListener )
         seqNames = m_pPropertyListener->getContainedTypes();
