@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:10:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ czech ] = "Změny";
         Text[ hebrew ] = "‮שינויים‬";
         Text[ hindi ] = "परिव~र्तनें";
+        Text[ slovak ] = "Sledovanie z~mien";
     };
     FixedText FT_REMOVE
     {
@@ -131,6 +132,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ czech ] = "Smazaná data";
         Text[ hebrew ] = "~Löschungen";
         Text[ hindi ] = "~मिटाना";
+        Text[ slovak ] = "Zmazané ~dáta";
     };
     FixedText FT_INSERT
     {
@@ -163,6 +165,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ czech ] = "Vložená data";
         Text[ hebrew ] = "~Einfügungen";
         Text[ hindi ] = "~जोड़ना";
+        Text[ slovak ] = "V~ložené dáta";
     };
     FixedText FT_MOVE
     {
@@ -195,6 +198,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ czech ] = "Přesunuté položky";
         Text[ hebrew ] = "~Verschiebungen";
         Text[ hindi ] = "~स्थान परिवर्तन किया हुआ प्रविष्टियाँ";
+        Text[ slovak ] = "Presu~nuté položky";
     };
     FixedLine GB_COLORCHGS
     {
@@ -227,6 +231,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ czech ] = "Barva změněných položek";
         Text[ hebrew ] = "Farbgebung für Änderungen";
         Text[ hindi ] = "परिवर्तनों केलिए रंग";
+        Text[ slovak ] = "Farba zmenených položiek";
     };
     ListBox CLB_CONTENT
     {
@@ -285,8 +290,11 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ czech ] = "Podle autora";
         Text[ hebrew ] = "Nach Autor";
         Text[ hindi ] = "लेखक से";
+        Text[ slovak ] = "Autor";
     };
 };
+
+
 
 
 
