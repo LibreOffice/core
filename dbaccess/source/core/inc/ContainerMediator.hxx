@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContainerMediator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:12:21 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ namespace dbaccess
     class OContainerMediator :   public ::comphelper::OBaseMutex
                                 ,public ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener >
     {
-        DECLARE_STL_USTRINGACCESS_MAP(OPropertyForward*,PropertyForwardList);
+        typedef ::std::pair<OPropertyForward*,::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > TPropertyForward;
+        DECLARE_STL_USTRINGACCESS_MAP(TPropertyForward,PropertyForwardList);
         PropertyForwardList                                                             m_aForwardList;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;
