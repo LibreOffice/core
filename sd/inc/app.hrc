@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:42:20 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,3 +469,7 @@
 #define SID_INSERT_PAGE_NUMBER              (SID_SD_START+411)
 #define SID_INSERT_DATE_TIME                (SID_SD_START+412)
 
+//CHINA001 add for PageCreated
+#define SID_SDMODE_FLAG                     (SID_SD_START+413)
+#define SD_DRAW_MODE        1
+#define SD_IMPRESS_MODE     2
