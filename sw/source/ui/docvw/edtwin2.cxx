@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-09-20 12:46:22 $
+ *  last change: $Author: os $ $Date: 2001-09-21 08:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,8 @@ void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    if(rSh.GetViewOptions()->IsPreventTips())
+    BOOL bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
+    if(bQuickBalloon && rSh.GetViewOptions()->IsPreventTips())
         return;
     BOOL bWeiter = TRUE;
     SET_CURR_SHELL(&rSh);
@@ -236,7 +237,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
     SdrView *pSdrView = rSh.GetDrawView();
 
-    if( rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ) )
+    if( bQuickBalloon )
     {
         if( pSdrView )
         {
@@ -246,7 +247,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
     }
 
-    if( bWeiter && rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
+    if( bWeiter && bQuickBalloon)
     {
         SwRect aFldRect;
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
@@ -415,7 +416,7 @@ aktuelle Zeichenvorlage anzeigen?
 
     }
 */
-    if( bWeiter && pSdrView && rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
+    if( bWeiter && pSdrView && bQuickBalloon)
     {
         SdrViewEvent aVEvt;
         SdrHitKind eHit = pSdrView->PickAnything(aPos, aVEvt);
