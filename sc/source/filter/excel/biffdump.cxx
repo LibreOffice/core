@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-30 08:36:23 $
+ *  last change: $Author: dr $ $Date: 2001-06-06 12:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3227,18 +3227,16 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x0080, " fGhostDirty" );
                 ADDRESERVED( 0xFF08 );
                 PRINT();
-                if( __nFlags & 0x0080 )
-                {
-                    UINT16 nXF;
-                    rIn >> nXF;
-                    LINESTART();
-                    ADDTEXT( "ix to XF: "  );       __AddDec( t, (UINT16)(nXF & 0x0FFF) );
-                    ADDTEXT( "   add. flags(" );    __AddHex( t, nXF );
-                    ADDTEXT( "):" );
-                    ADDFLAG( 0x1000, " fExAsc" );
-                    ADDFLAG( 0x2000, " fExDsc" );
-                    ADDRESERVED( 0xC000 );
-                }
+                UINT16 nXF;
+                rIn >> nXF;
+                LINESTART();
+                ADDTEXT( "ix to XF: "  );       __AddDec( t, (UINT16)(nXF & 0x0FFF) );
+                ADDTEXT( "   add. flags(" );    __AddHex( t, nXF );
+                ADDTEXT( "):" );
+                ADDFLAG( 0x1000, " fExAsc" );
+                ADDFLAG( 0x2000, " fExDsc" );
+                ADDRESERVED( 0xC000 );
+                PRINT();
             }
             break;
             case 0x0221:
