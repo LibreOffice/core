@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: oj $ $Date: 2002-06-27 07:57:17 $
+#   last change: $Author: sb $ $Date: 2002-07-22 06:59:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,9 +86,9 @@ SLOFILES=	\
             $(SLO)$/sequence.obj \
             $(SLO)$/querydeep.obj \
             $(SLO)$/regpathhelper.obj \
-            $(SLO)$/facreg.obj
+            $(SLO)$/facreg.obj \
+            $(SLO)$/accessibleeventbuffer.obj
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
