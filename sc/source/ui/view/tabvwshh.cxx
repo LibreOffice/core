@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:33:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,11 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/sbxcore.hxx>
-#include <so3/ipobj.hxx>
 #include <svtools/whiter.hxx>
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
 
 #include "tabvwsh.hxx"
 #include "client.hxx"
@@ -83,6 +86,8 @@
 #include "docsh.hxx"
 #include "sc.hrc"
 #include "drwlayer.hxx"     // GetVisibleName
+
+using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
@@ -138,9 +143,9 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OLE_DEACTIVATE:
             {
                 ScClient* pClient = (ScClient*) pVisibleSh->GetIPClient();
-                if ( pClient && pClient->IsInPlaceActive() )
+                if ( pClient && pClient->IsObjectInPlaceActive() )
                 {
-                    pClient->GetProtocol().Reset2Open();
+                    pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
                     SFX_APP()->SetViewFrame(pVisibleSh->GetViewFrame());
                 }
             }
@@ -194,10 +199,9 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     }
 }
 
-SvInPlaceObjectRef lcl_GetSelectedObj( SdrView* pDrView )       //! Member von ScDrawView?
+uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       //! Member von ScDrawView?
 {
-    SvInPlaceObjectRef xRet;
-
+    uno::Reference < embed::XEmbeddedObject > xRet;
     if (pDrView)
     {
         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
@@ -228,12 +232,10 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
             case SID_ACTIVE_OBJ_NAME:
                 {
                     String aName;
-                    SvInPlaceObjectRef xOLE = lcl_GetSelectedObj( GetSdrView() );
-                    if (xOLE.Is())
+                    uno::Reference < embed::XEmbeddedObject > xOLE = lcl_GetSelectedObj( GetSdrView() );
+                    if (xOLE.is())
                     {
-                        SvInfoObject* pInfoObj = GetViewData()->GetSfxDocShell()->Find( xOLE );
-                        if ( pInfoObj )
-                            aName = pInfoObj->GetObjName();
+                        aName = GetViewData()->GetSfxDocShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xOLE );
                     }
                     rSet.Put( SfxStringItem( nWhich, aName ) );
                 }
