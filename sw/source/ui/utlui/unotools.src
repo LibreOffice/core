@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-29 12:49:56 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ String STR_SERVICE_UNAVAILABLE
     Text[ polish ] = "Nastêpuj¹cy serwis jest niedostêpny: ";
     Text[ portuguese_brazilian ] = "The following service is not available: ";
     Text[ japanese ] = "Ÿ‚Ì»°ËŞ½‚Íg—p‚Å‚«‚Ü‚¹‚ñ: ";
-    Text[ korean ] = "´ÙÀ½ÀÇ ¼­ºñ½º´Â °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.: ";
+    Text[ korean ] = "´ÙÀ½°ú°°Àº ¼­ºñ½º´Â °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.: ";
     Text[ chinese_simplified ] = "²»´æÔÚÏÂÁĞ·şÎñ¹¦ÄÜ£º ";
     Text[ chinese_traditional ] = "³o­ÓªA°È¥\\¯à¤£¦s¦b¡G ";
     Text[ arabic ] = "ÇáÎÏãÉ ÇáÊÇáíÉ ÛíÑ ãÊæİÑÉ: ";
@@ -292,7 +292,7 @@ Resource RES_FRMEX_MENU
     };
     ItemList [ japanese ] =
     {
-            < "½Ş°Ñi~Zj" ;        ST_MENU_ZOOM; > ;
+            < "½Ş°Ñ(~Z)" ;      ST_MENU_ZOOM; > ;
         < "ã‚Ö(~U)" ;  ST_MENU_UP;     > ;
         < "‰º‚Ö(~W)" ;  ST_MENU_DOWN; > ;
     };
