@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:50:12 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,10 +398,12 @@ void SwRTFParser::ReadTable( int nToken )
                     USHORT currWidthLeft=0;
                     bool bDoubleLine=false;
                     const SvxBorderLine*   brdrline ;
+                    const Color* pPrevRightColor;
                     if(prevaBox.GetRight())
                     {
                         brdrline=prevaBox.GetRight();
                         prevWidthRight = brdrline->GetOutWidth();
+                        pPrevRightColor = &brdrline->GetColor();
                         if(brdrline->GetInWidth())
                             bDoubleLine=true;
                     }
@@ -441,7 +443,7 @@ void SwRTFParser::ReadTable( int nToken )
                         {
                             newBorderWidth =DEF_LINE_WIDTH_0;
                         }
-                        const SvxBorderLine  newbrdrline(0, newBorderWidth,0,0);
+                        const SvxBorderLine  newbrdrline(pPrevRightColor, newBorderWidth,0,0);
                         aBox.SetLine(&newbrdrline,BOX_LINE_LEFT);
                         prevaBox.SetLine(&newbrdrline,BOX_LINE_RIGHT);
                         prevpFmt->SetAttr(prevaBox);
@@ -815,6 +817,7 @@ void SwRTFParser::ReadTable( int nToken )
             ASSERT( pTNd, "wo ist der Textnode dieser Box?" );
             pTNd->ChgFmtColl( pColl );
             ++nStt;
+            nRowsToRepeat=0;
         }
 
         for( ; nStt < aBoxFmts.Count(); ++nStt )
@@ -969,8 +972,8 @@ void SwRTFParser::NewTblLine()
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
 
-    if(nRowsToRepeat>1)
-        pTableNode->GetTable().SetRowsToRepeat( nRowsToRepeat - 1 );
+    if(nRowsToRepeat>0)
+        pTableNode->GetTable().SetRowsToRepeat( nRowsToRepeat );
 
     if( !bMakeCopy &&
         64000 < pTableNode->GetTable().GetTabSortBoxes().Count() )
