@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ russian ] = "—ËÏ‚ÓÎ";
         Text[ dutch ] = "Symbool";
         Text[ french ] = "Symbole";
-        Text[ spanish ] = "Icono";
+        Text[ spanish ] = "SÌmbolo";
         Text[ italian ] = "Simbolo";
         Text[ danish ] = "Symbol";
         Text[ swedish ] = "Symbol";
