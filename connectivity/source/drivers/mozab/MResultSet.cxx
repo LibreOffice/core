@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 14:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,13 +1114,13 @@ void OResultSet::fillRowData()
         MQueryExpression::ExprVector    eVector;
 
         // LDAP does not allow a query without restriction, so we add a dummy
-        // for FirstName
+        // for PrimaryEmail
         // For other types we stick to the old behaviour of using
         // card:nsIAbCard.
         OSL_ENSURE(m_pStatement, "Cannot determine Parent Statement");
         ::rtl::OUString aStr;
         if (xConnection->isLDAP())
-            aStr = ::rtl::OUString::createFromAscii("FirstName");
+            aStr = ::rtl::OUString::createFromAscii("PrimaryEmail");
         else
             aStr = ::rtl::OUString::createFromAscii("card:nsIAbCard");
         eVector.push_back( new MQueryExpressionString(aStr, MQueryOp::Exists) );
