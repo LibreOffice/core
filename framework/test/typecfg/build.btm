@@ -1,0 +1,26 @@
+@echo off
+
+pushd
+
+rem Set flag to enable special mechanism of "FilterCache".
+rem This works for windows only! ... this batch too :-)
+set ENVCFLAGS=-DENABLE_GENERATEFILTERCACHE
+
+rem Touch header file ...
+cd ..\..\inc\classes
+attrib -r .\filtercache.hxx
+touch .\filtercache.hxx
+
+rem ... and start new build of library.
+cd ..\..
+call build debug=true
+
+rem Build command line tool too.
+cd test\typecfg
+call dmake debug=true
+
+rem Don't forget to disable build flag!
+unset ENVCFLAGS
+
+popd
+echo on

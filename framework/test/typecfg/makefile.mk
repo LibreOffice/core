@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: as $ $Date: 2001-04-24 07:51:55 $
+#   last change: $Author: as $ $Date: 2001-04-24 07:51:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,10 +59,10 @@
 #
 #
 #*************************************************************************
-PRJ=..
+PRJ=..$/..
 
 PRJNAME=			framework
-TARGET=				test
+TARGET=             typecfg
 LIBTARGET=			NO
 ENABLE_EXCEPTIONS=	TRUE
 USE_DEFFILE=		TRUE
@@ -78,16 +78,20 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- applikation: "test" --------------------------------------------------
+# --- applikation: "typecfg" --------------------------------------------------
 
-APP1TARGET= 	test
+APP3TARGET=     $(TARGET)
 
-APP1OBJS=		$(SLO)$/test.obj
+APP3OBJS=		$(SLO)$/typecfg.obj					\
+                $(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercache.obj				\
+                $(SLO)$/wildcard.obj				\
+                $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/writeguard.obj				\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/resetableguard.obj
 
-APP1LIBS=		$(SLB)$/fwk_classes.lib				\
-                $(SLB)$/fwk_helper.lib
-
-APP1STDLIBS=	$(CPPULIB)							\
+APP3STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(OSLLIB)							\
                 $(SALLIB)							\
@@ -96,41 +100,19 @@ APP1STDLIBS=	$(CPPULIB)							\
                 $(SVTOOLLIB)						\
                 $(TKLIB)							\
                 $(COMPHELPERLIB)					\
+                $(UNOTOOLSLIB)						\
                 $(SVLIB)
 
-APP1DEPN=		$(SLB)$/fwk_helper.lib				\
-                $(SLB)$/fwk_classes.lib
-
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/test.def
-.ENDIF
-
-# --- application: "threadtest" --------------------------------------------------
-
-APP2TARGET= 	threadtest
-
-APP2OBJS=		$(SLO)$/threadtest.obj				\
+APP3DEPN=		$(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercache.obj				\
+                $(SLO)$/wildcard.obj				\
                 $(SLO)$/fairrwlock.obj				\
-                $(SLO)$/resetableguard.obj			\
-                $(SLO)$/gate.obj					\
+                $(SLO)$/writeguard.obj				\
                 $(SLO)$/readguard.obj				\
-                $(SLO)$/writeguard.obj
-
-APP2STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
-                $(SALLIB)							\
-                $(VOSLIB)							\
-                $(SVLIB)
-
-APP2DEPN=		$(SLO)$/fairrwlock.obj				\
-                $(SLO)$/resetableguard.obj			\
-                $(SLO)$/gate.obj					\
-                $(SLO)$/readguard.obj				\
-                $(SLO)$/writeguard.obj
+                $(SLO)$/resetableguard.obj
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP2DEF=		$(MISC)$/threadtest.def
+APP3DEF=        $(MISC)$/$(TARGET).def
 .ENDIF
 
 # --- Targets ------------------------------------------------------
