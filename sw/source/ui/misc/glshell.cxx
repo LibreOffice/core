@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:45:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,18 @@ void SwGlosDocShell::GetState( SfxItemSet& rSet )
 
 BOOL SwGlosDocShell::Save()
 {
-    return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
+    // In case of an API object which holds this document, it is possible that the WrtShell is already
+    // dead. For instance, if the doc is modified via this API object, and then, upon office shutdown,
+    // the document's view is closed (by the SFX framework) _before_ the API object is release and
+    // tries to save the doc, again.
+    // 96380 - 2002-03-03 - fs@openoffice.org
+    if ( GetWrtShell() )
+        return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
+    else
+    {
+        SetModified( FALSE );
+        return FALSE;
+    }
 }
 
 
@@ -320,7 +331,14 @@ void SwWebGlosDocShell::GetState( SfxItemSet& rSet )
 
 BOOL SwWebGlosDocShell::Save()
 {
-    return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
+    // same comment as in SwGlosDocShell::Save - see there
+    if ( GetWrtShell() )
+        return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
+    else
+    {
+        SetModified( FALSE );
+        return FALSE;
+    }
 }
 
 /*--------------------------------------------------------------------
