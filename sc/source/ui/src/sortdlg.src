@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:59:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,13 +620,13 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ polish ] = "Jêzyk";
         Text[ portuguese_brazilian ] = "Language Settings";
         Text[ japanese ] = "Œ¾Œê(~L)";
-        Text[ korean ] = "~Language Settings";
+        Text[ korean ] = "~¾ð¾î ¼¼ÆÃ";
         Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
         Text[ chinese_traditional ] = "»y¨¥(~L)";
         Text[ turkish ] = "Language Settings";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ catalan ] = "Language Settings";
-        Text[ finnish ] = "S~prache";
+        Text[ finnish ] = "Kieli";
     };
     ListBox LB_LANGUAGE
     {
@@ -655,7 +655,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ italian ] = "Direzione" ;
         Text [ portuguese_brazilian ] = "Direção" ;
         Text [ portuguese ] = "Direcção" ;
-        Text [ finnish ] = "Richtung" ;
+        Text [ finnish ] = "Suunta" ;
         Text [ danish ] = "Retning" ;
         Text [ french ] = "Direction" ;
         Text [ swedish ] = "Riktning" ;
