@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cbutton.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-29 13:48:09 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include <tools/gen.hxx>
 #endif
 
-#ifndef _SV_COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 class Window;
