@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-10-29 16:52:34 $
+ *  last change: $Author: lkovacs $ $Date: 2002-10-30 14:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #endif
 
 #include "ScriptExecDialog.hrc"
+
+#include <util/scriptingconstants.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
 
@@ -188,35 +190,63 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
             reflection::InvocationTargetException, RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptRuntimeManager in runtimemgr invoke\n" );
+
     Any results;
+    scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+                scripting_constants::ScriptingConstantsPool::instance();
+
     // Initialise resolved context with invocation context,
     // the resolved context (resolvedCtx will be modified by the
     // resolve method to contain the storage where the script code is
     // stored
     Any resolvedCtx = invocationCtx;
 
-    LanguageType nLang = LANGUAGE_SYSTEM;
-    ResMgr *pResMgr = ResMgr::SearchCreateResMgr( "scripting" MAKE_NUMSTR(SUPD), nLang );
-    QueryBox aBox( NULL, ResId(DLG_SCRIPTEXEC, pResMgr));
-    sal_Int32 res = aBox.Execute();
-    delete pResMgr;
-    if (res == RET_NO) {
-    return results;
-    }
-
     try
     {
         Reference< XInterface > resolvedScript = resolve( scriptURI,
             resolvedCtx );
         validateXRef( resolvedScript, "ScriptRuntimeManager::invoke: No resolvedURI" );
+
+        Reference< beans::XPropertySet > xPropSetScriptingContext;
+        if ( sal_False == ( resolvedCtx >>= xPropSetScriptingContext ) )
+        {
+            throw RuntimeException( OUSTR(
+                "ScriptRuntimeManager::invoke : unable to get XPropSetScriptingContext from param" ),
+                Reference< XInterface > () );
+        }
+
+        Any any = xPropSetScriptingContext->getPropertyValue(
+            scriptingConstantsPool.RESOLVED_STORAGE_ID );
+        sal_Int32 docSid;
+        if ( sal_False == ( any >>= docSid ) )
+        {
+            throw RuntimeException( OUSTR(
+                "ScriptRuntimeManager::invoke : unable to get doc storage id from xPropSetScriptingContext" ),
+                Reference< XInterface > () );
+        }
+
+        OSL_TRACE("Storage sid is: %d\n", docSid);
+
+        if (docSid != scriptingConstantsPool.USER_STORAGE_ID &&
+            docSid != scriptingConstantsPool.SHARED_STORAGE_ID)
+        {
+            LanguageType nLang = LANGUAGE_SYSTEM;
+            ResMgr *pResMgr = ResMgr::SearchCreateResMgr( "scripting" MAKE_NUMSTR(SUPD), nLang );
+            QueryBox aBox( NULL, ResId(DLG_SCRIPTEXEC, pResMgr));
+            sal_Int32 res = aBox.Execute();
+            delete pResMgr;
+            if (res == RET_NO)
+            {
+                return results;
+            }
+        }
+
         Reference< beans::XPropertySet > invocationProps;
         resolvedCtx >>= invocationProps;
         Any aResolvedScript;
         aResolvedScript <<= resolvedScript;
 
         validateXRef( invocationProps, "ScriptRuntimeManager::invoke: failed to get XPropertySet from invocationContext" );
-        scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
-                scripting_constants::ScriptingConstantsPool::instance();
         invocationProps->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO,
                 aResolvedScript );
 
@@ -250,6 +280,18 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke InvocationTargetException: " );
         throw reflection::InvocationTargetException( temp.concat( ite.Message ),
                 Reference< XInterface > (), ite.TargetException );
+    }
+    catch ( beans::UnknownPropertyException & e )
+    {
+        OUString temp = OUSTR( "ScriptRuntimeManager::invoke UnknownPropertyException: " );
+        throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
+    }
+    catch ( lang::WrappedTargetException  & e )
+    {
+        OUString temp = OUSTR( "ScriptRuntimeManager::invoke WrappedTargetException : " );
+        throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
     }
     catch ( RuntimeException & re )
     {
