@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:55:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #define SD_VIEW_SHELL_BASE_HXX
 
+#include "ViewShell.hxx"
+
 #ifndef SD_GLOB_HXX
 #include "glob.hxx"
 #endif
@@ -70,9 +72,6 @@
 #endif
 #ifndef _VIEWFAC_HXX
 #include <sfx2/viewfac.hxx>
-#endif
-#ifndef SD_SUB_SHELL_MANAGER_HXX
-#include "SubShellManager.hxx"
 #endif
 #ifndef SD_PRINT_MANAGER_HXX
 #include "PrintManager.hxx"
@@ -85,10 +84,11 @@ class SfxRequest;
 
 namespace sd {
 
-class DrawController;
 class DrawDocShell;
-class ObjectBarManager;
+class FormShellManager;
+class PaneManager;
 class ViewShell;
+class ViewShellManager;
 
 /** SfxViewShell descendant that the stacked Draw/Impress shells are
     based on.
@@ -110,35 +110,57 @@ public:
     SFX_DECL_INTERFACE(SD_IF_SDVIEWSHELLBASE);
 
     //    ViewShellBase (SfxViewFrame *pFrame, USHORT nFlags);
-    /** This constructor is used by the view factory of the SFX
-        macros.
+    /** This constructor is used by the view factory of the SFX macros.
+        Note that LateInit() has to be called after the constructor
+        terminates and before doing anything else.
     */
-    ViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell,
+    ViewShellBase (
+        SfxViewFrame *pFrame,
+        SfxViewShell* pOldShell,
         ViewShell::ShellType eDefaultSubShell = ViewShell::ST_IMPRESS);
+
     virtual ~ViewShellBase (void);
 
-    SubShellManager& GetSubShellManager (void) const;
-    ObjectBarManager& GetObjectBarManager (void) const;
+    /** This method is part of the object construction.  It HAS to be called
+        after the constructor has created a new object.
+    */
+    virtual void LateInit (void);
 
-    /** When given a view frame this static method returns the
-        corresponding sd::ViewShell object.  In the old Impress this
-        is the single view shell associated with this frame.  In the
-        new Impress this will be one that corresponds with the central
+    ViewShellManager& GetViewShellManager (void) const;
+
+    /** Return the main view shell stacked on the called ViewShellBase
+        object.  This is usually the view shell displayed in the center
         pane.
     */
-    static ViewShell* GetMainViewShell (SfxViewFrame* pFrame);
+    ViewShell* GetMainViewShell (void) const;
+
+    PaneManager& GetPaneManager (void);
+
+    /** When given a view frame this static method returns the
+        corresponding sd::ViewShellBase object.
+        @return
+            When the SfxViewShell of the given frame is not a
+            ViewShellBase object then NULL is returned.
+    */
+    static ViewShellBase* GetViewShellBase (SfxViewFrame* pFrame);
 
     DrawDocShell* GetDocShell (void) const;
     SdDrawDocument* GetDocument (void) const;
 
-    /** Callback function for slots related to changing the view or
-        edit mode.
-    */
-    void ExecuteModeChange (SfxRequest& rRequest);
-
     /** Callback function for retrieving item values related to menu entries.
     */
     void GetMenuState (SfxItemSet& rSet);
+
+    /** Callback function for general slot calls.  At the moment these are
+        slots for switching the pane docking windows on and off.
+    */
+    void Execute (SfxRequest& rRequest);
+
+    /** Callback function for retrieving item values related to certain
+        slots.  This is the companion of Execute() and handles the slots
+        concerned with showing the pane docking windows.
+    */
+    void GetState (SfxItemSet& rSet);
 
     /** Make sure that mpMainController points to a controller that matches
         the current stacked view shell.  If that is not the case the current
@@ -146,6 +168,10 @@ public:
         without changing anything.
     */
     void UpdateController (void);
+
+    SvBorder GetBorder (bool bOuterResize);
+    virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize);
+    virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize);
 
     /** This call is forwarded to the main sub-shell.
     */
@@ -193,6 +219,8 @@ public:
         const ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
         sal_Bool bBrowse = sal_False);
+    virtual void Activate (BOOL IsMDIActivate);
+    virtual void Deactivate (BOOL IsMDIActivate);
     virtual void UIActivate (SvInPlaceObject *pIPObj);
     virtual void UIDeactivate (SvInPlaceObject *pIPObj);
     virtual void SetZoomFactor (
@@ -204,35 +232,47 @@ public:
     virtual SdrView* GetDrawView (void) const;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
+    /** Arrange GUI elements of the pane which shows the given view shell.
+        @return
+            The returned border contains the controls placed by the method.
+    */
+    SvBorder ArrangeGUIElements (const Point& rOrigin, const Size& rSize);
+
+    /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
+        whatever the busy shape looks like on the system.)
+    */
+    void SetBusyState (bool bBusy);
+
 protected:
+    osl::Mutex maMutex;
+    /** The view tab bar is the control for switching between different
+        views in one pane.
+    */
+    ::std::auto_ptr<ViewTabBar> mpViewTabBar;
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC,
         const TypeId& rBCType,
         const SfxHint& rHint,
         const TypeId& rHintType);
 
-    virtual void InnerResizePixel (const Point &rOfs, const Size &rSize);
-    virtual void OuterResizePixel (const Point &rOfs, const Size &rSize);
-
 private:
-    osl::Mutex maMutex;
-
-    ::std::auto_ptr<SubShellManager> mpSubShellManager;
-
+    ::std::auto_ptr<ViewShellManager> mpViewShellManager;
+    ::std::auto_ptr<PaneManager> mpPaneManager;
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
-
-    /** Main controller of the view shell.  During the switching from one
-        stacked shell to another this pointer may be NULL.
-    */
-    DrawController* mpController;
 
     /// The print manager is responsible for printing documents.
     PrintManager maPrintManager;
 
-    /** Code common to all constructors.
+    ::std::auto_ptr<FormShellManager> mpFormShellManager;
+
+    /** Common code of OuterResizePixel() and InnerResizePixel().
     */
-    void Construct (ViewShell::ShellType eDefaultSubShell);
+    void ResizePixel (
+        const Point& rOrigin,
+        const Size& rSize,
+        bool bOuterResize);
 };
+
 
 } // end of namespace sd
 
