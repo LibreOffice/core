@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-24 12:54:39 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 09:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,9 +846,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     else
                         pTmpFrm = SfxViewFrame::GetFirst( this );
 
-                    pTmpFrm->GetBindings().Execute( nSlotId, NULL, 0,
-                                                    SFX_CALLMODE_ASYNCHRON );
+                    pTmpFrm->GetDispatcher()->Execute( nSlotId, NULL, 0, SFX_CALLMODE_ASYNCHRON );
                 }
+
                 rReq.SetReturnValue(SfxBoolItem(SID_PRINTPREVIEW, bSet ));
             }
             break;
@@ -1192,7 +1192,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 int eState = STATE_TOGGLE;
                 BOOL bSet;
-                const SfxPoolItem* pAttr;
+                const SfxPoolItem* pAttr=NULL;
                 if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pAttr ))
                 {
                     bSet = ((SfxBoolItem*)pAttr)->GetValue();
@@ -1239,6 +1239,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst( this );
                 if( pTmpFrm )
                     pTmpFrm->GetBindings().Invalidate( aInva );
+                if ( !pAttr )
+                    rReq.AppendItem( SfxBoolItem( nWhich, bSet ) );
+                rReq.Done();
             }
             break;
 
@@ -1257,126 +1260,143 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 bDone = FALSE;
                 BOOL bCreateHtml = FN_NEW_HTML_DOC == nWhich;
-                String aFileName, sTemplateName;
-
-                const SwTxtFmtColl* pSplitColl = 0;
-
-                FileDialogHelper aDlgHelper( FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
-                //set HelpIds
-                const sal_Int16 nControlIds[] = {
-                    CommonFilePickerElementIds::PUSHBUTTON_OK,
-                    CommonFilePickerElementIds::PUSHBUTTON_CANCEL,
-                    CommonFilePickerElementIds::LISTBOX_FILTER,
-                    CommonFilePickerElementIds::CONTROL_FILEVIEW,
-                    CommonFilePickerElementIds::EDIT_FILEURL,
-                    ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION,
-                    ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                    0
-                };
-                sal_Int32 nHelpIds[8];
-                sal_Int32 nStartHelpId =
-                    bCreateHtml ?
-                        HID_SEND_HTML_CTRL_PUSHBUTTON_OK : HID_SEND_MASTER_CTRL_PUSHBUTTON_OK ;
-                for(int nHelp = 0; nHelp < 7; nHelp++)
-                    nHelpIds[nHelp] = nStartHelpId++;
-                nHelpIds[7] = 0;
-
-                aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
-                aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
-
-                Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-
-                const SfxFilter* pFlt;
-                USHORT nStrId;
-
-                if( bCreateHtml )
+                String aFileName, aTemplateName;
+                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, FALSE, &pItem ) )
                 {
-                    // fuer HTML gibts es nur einen Filter!!
-                    pFlt = SwIoSystem::GetFilterOfFormat(
-                            String::CreateFromAscii("HTML"),
-                            SwWebDocShell::Factory().GetFilterContainer() );
-                    nStrId = STR_LOAD_HTML_DOC;
-                }
-                else
-                {
-                    // Fuer Global-Dokumente bieten wir jetzt auch nur
-                    // noch den aktuellen an.
-                    pFlt = SwIoSystem::GetFilterOfFormat(
-                            String::CreateFromAscii(FILTER_XML),
-                            SwGlobalDocShell::Factory().GetFilterContainer() );
-                    nStrId = STR_LOAD_GLOBAL_DOC;
+                    aFileName = ((const SfxStringItem*)pItem)->GetValue();
+                    SFX_ITEMSET_ARG( pArgs, pTemplItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False );
+                    if ( pTemplItem )
+                        aTemplateName = pTemplItem->GetValue();
                 }
 
-                if( pFlt )
+                if ( !aFileName.Len() )
                 {
-                    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-                    const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
-                    xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
-                    xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
-                }
+                    FileDialogHelper aDlgHelper( FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
+                    //set HelpIds
+                    const sal_Int16 nControlIds[] = {
+                        CommonFilePickerElementIds::PUSHBUTTON_OK,
+                        CommonFilePickerElementIds::PUSHBUTTON_CANCEL,
+                        CommonFilePickerElementIds::LISTBOX_FILTER,
+                        CommonFilePickerElementIds::CONTROL_FILEVIEW,
+                        CommonFilePickerElementIds::EDIT_FILEURL,
+                        ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION,
+                        ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                        0
+                    };
+                    sal_Int32 nHelpIds[8];
+                    sal_Int32 nStartHelpId =
+                        bCreateHtml ?
+                            HID_SEND_HTML_CTRL_PUSHBUTTON_OK : HID_SEND_MASTER_CTRL_PUSHBUTTON_OK ;
+                    for(int nHelp = 0; nHelp < 7; nHelp++)
+                        nHelpIds[nHelp] = nStartHelpId++;
+                    nHelpIds[7] = 0;
 
-                Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
-                const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
-                Sequence<OUString> aListBoxEntries(nCount);
-                OUString* pEntries = aListBoxEntries.getArray();
-                sal_Int32 nIdx = 0;
-                sal_Int16 nSelect = 0;
-                OUString sStartTemplate;
-                SwTxtFmtColl *pFnd = 0, *pAny = 0;
-                for(USHORT i = 0; i < nCount; ++i)
-                {
-                    SwTxtFmtColl &rTxtColl =
-                                    *pDoc->GetTxtFmtColls()->GetObject( i );
-                    if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
+                    aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
+                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
+
+                    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
+                    const SfxFilter* pFlt;
+                    USHORT nStrId;
+
+                    if( bCreateHtml )
                     {
-                        if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
-                            pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
+                        // fuer HTML gibts es nur einen Filter!!
+                        pFlt = SwIoSystem::GetFilterOfFormat(
+                                String::CreateFromAscii("HTML"),
+                                SwWebDocShell::Factory().GetFilterContainer() );
+                        nStrId = STR_LOAD_HTML_DOC;
+                    }
+                    else
+                    {
+                        // Fuer Global-Dokumente bieten wir jetzt auch nur
+                        // noch den aktuellen an.
+                        pFlt = SwIoSystem::GetFilterOfFormat(
+                                String::CreateFromAscii(FILTER_XML),
+                                SwGlobalDocShell::Factory().GetFilterContainer() );
+                        nStrId = STR_LOAD_GLOBAL_DOC;
+                    }
+
+                    if( pFlt )
+                    {
+                        Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+                        const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                        xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                        xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+                    }
+
+                    Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
+                    const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
+                    Sequence<OUString> aListBoxEntries(nCount);
+                    OUString* pEntries = aListBoxEntries.getArray();
+                    sal_Int32 nIdx = 0;
+                    sal_Int16 nSelect = 0;
+                    OUString sStartTemplate;
+                    SwTxtFmtColl *pFnd = 0, *pAny = 0;
+                    for(USHORT i = 0; i < nCount; ++i)
+                    {
+                        SwTxtFmtColl &rTxtColl =
+                                        *pDoc->GetTxtFmtColls()->GetObject( i );
+                        if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
                         {
-                                nSelect = (sal_Int16)nIdx;
-                                pFnd = &rTxtColl;
-                                sStartTemplate = rTxtColl.GetName();
+                            if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
+                                pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
+                            {
+                                    nSelect = (sal_Int16)nIdx;
+                                    pFnd = &rTxtColl;
+                                    sStartTemplate = rTxtColl.GetName();
+                            }
+                            else if( !pAny )
+                                pAny = &rTxtColl;
+                            pEntries[nIdx++] = rTxtColl.GetName();
                         }
-                        else if( !pAny )
-                            pAny = &rTxtColl;
-                        pEntries[nIdx++] = rTxtColl.GetName();
+                    }
+                    if(!sStartTemplate.getLength() && pAny)
+                        sStartTemplate = pAny->GetName();
+
+                    aListBoxEntries.realloc(nIdx);
+
+                    try
+                    {
+                        Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
+
+                        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                            ListboxControlActions::ADD_ITEMS , aTemplates );
+                        Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
+                        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                            ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
+                        xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                                                String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
+                    }
+                    catch(Exception& rEx)
+                    {
+                        DBG_ERROR("control acces failed")
+                    }
+
+                    xFP->setTitle( SW_RESSTR( nStrId ));
+                    SvtPathOptions aPathOpt;
+                    xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
+                    if( ERRCODE_NONE == aDlgHelper.Execute())
+                    {
+                        aFileName = xFP->getFiles().getConstArray()[0];
+                        Any aTemplateValue = xCtrlAcc->getValue(
+                            ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                            ListboxControlActions::GET_SELECTED_ITEM );
+                        OUString sTmpl;
+                        aTemplateValue >>= sTmpl;
+                        aTemplateName = sTmpl;
+                        if ( aFileName.Len() )
+                        {
+                            rReq.AppendItem( SfxStringItem( nWhich, aFileName ) );
+                            if( aTemplateName.Len() )
+                                rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aTemplateName ) );
+                        }
                     }
                 }
-                if(!sStartTemplate.getLength() && pAny)
-                    sStartTemplate = pAny->GetName();
 
-                aListBoxEntries.realloc(nIdx);
-
-                try
-                {
-                    Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
-
-                    xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                        ListboxControlActions::ADD_ITEMS , aTemplates );
-                    Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
-                    xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                        ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
-                    xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                                            String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
-                }
-                catch(Exception& rEx)
-                {
-                    DBG_ERROR("control acces failed")
-                }
-
-                xFP->setTitle( SW_RESSTR( nStrId ));
-                SvtPathOptions aPathOpt;
-                xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
-                if( ERRCODE_NONE == aDlgHelper.Execute())
-                {
-                    aFileName = xFP->getFiles().getConstArray()[0];
-                    Any aTemplateValue = xCtrlAcc->getValue(
-                        ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                        ListboxControlActions::GET_SELECTED_ITEM );
-                    OUString sTmpl;
-                    aTemplateValue >>= sTmpl;
-                    if (sTmpl.getLength())
-                        pSplitColl = pDoc->FindTxtFmtCollByName(sTmpl);
-                }
+                const SwTxtFmtColl* pSplitColl = 0;
+                if ( aTemplateName.Len() )
+                    pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
 
                 if( aFileName.Len() )
                 {
@@ -1421,6 +1441,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
             }
             rReq.SetReturnValue(SfxBoolItem( nWhich, bDone ));
+            if (bDone)
+                rReq.Done();
+            else
+                rReq.Ignore();
             break;
 
         case SID_ATTR_YEAR2000:
@@ -1634,6 +1658,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                     "Loschen des Basics hat nicht geklappt" );
         }
     }
+
     sal_Bool bWasBrowseMode = pDoc->IsBrowseMode();
     RemoveLink();
 

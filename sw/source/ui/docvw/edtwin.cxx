@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 08:39:26 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 09:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,10 @@
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
+
+#include <charfmt.hxx>
+#include <numrule.hxx>
+#include <pagedesc.hxx>
 
 //JP 11.10.2001: enable test code for bug fix 91313
 #if !defined( PRODUCT ) && defined( DEBUG )
@@ -799,7 +803,7 @@ void SwEditWin::FlushInBuffer( SwWrtShell *pSh )
             // Request generieren und recorden
             if (pSfxShell)
             {
-                SfxRequest aReq( *pSfxShell, FN_INSERT_STRING );
+                SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
                 aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, aInBuffer ) );
                 aReq.Done();
             }
@@ -3588,6 +3592,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else
         {
+            String aStyleName;
             switch ( pApplyTempl->eType )
             {
                 case SFX_STYLE_FAMILY_PARA:
@@ -3597,6 +3602,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.SetTxtFmtColl( pApplyTempl->aColl.pTxtColl );
                         pApplyTempl->bUndo = TRUE;
                         bCallBase = FALSE;
+                        if ( pApplyTempl->aColl.pTxtColl )
+                            aStyleName = pApplyTempl->aColl.pTxtColl->GetName();
                     }
                     break;
                 case SFX_STYLE_FAMILY_CHAR:
@@ -3609,6 +3616,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.SetVisCrsr(aDocPt);
                         pApplyTempl->bUndo = TRUE;
                         bCallBase = FALSE;
+                        if ( pApplyTempl->aColl.pCharFmt )
+                            aStyleName = pApplyTempl->aColl.pCharFmt->GetName();
                     }
                     break;
                 case SFX_STYLE_FAMILY_FRAME :
@@ -3619,12 +3628,16 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, FALSE, &aDocPt );
                         pApplyTempl->bUndo = TRUE;
                         bCallBase = FALSE;
+                        if( pApplyTempl->aColl.pFrmFmt )
+                            aStyleName = pApplyTempl->aColl.pFrmFmt->GetName();
                     }
                     break;
                 }
                 case SFX_STYLE_FAMILY_PAGE:
                             // Kein Undo bei Seitenvorlagen
                     rSh.ChgCurPageDesc( *pApplyTempl->aColl.pPageDesc );
+                    if ( pApplyTempl->aColl.pPageDesc )
+                        aStyleName = pApplyTempl->aColl.pPageDesc->GetName();
                     bCallBase = FALSE;
                     break;
                 case SFX_STYLE_FAMILY_PSEUDO:
@@ -3633,8 +3646,24 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.SetCurNumRule( *pApplyTempl->aColl.pNumRule );
                         bCallBase = FALSE;
                         pApplyTempl->bUndo = TRUE;
+                        if( pApplyTempl->aColl.pNumRule )
+                            aStyleName = pApplyTempl->aColl.pNumRule->GetName();
                     }
                     break;
+            }
+
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                    rView.GetViewFrame()->GetBindings().GetRecorder();
+            if ( aStyleName.Len() && xRecorder.is() )
+            {
+                SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
+                if ( pSfxShell )
+                {
+                    SfxRequest aReq( rView.GetViewFrame(), SID_STYLE_APPLY );
+                    aReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aStyleName ) );
+                    aReq.AppendItem( SfxUInt16Item( SID_STYLE_FAMILY, (USHORT) pApplyTempl->eType ) );
+                    aReq.Done();
+                }
             }
         }
 
