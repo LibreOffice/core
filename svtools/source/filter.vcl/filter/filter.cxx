@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:19:34 $
+ *  last change: $Author: ka $ $Date: 2000-12-06 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2771,20 +2771,17 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
             break;
         }
 
-        if( aShortName.Len() )
+        if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
         {
-            if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
-            {
-                // Import
-                nFormat = GetImportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
-                nRet = ( ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == GRFILTER_OK );
-            }
-            else
-            {
-                // Export
-                nFormat = GetExportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
-                nRet = ( ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == GRFILTER_OK );
-            }
+            // Import
+            nFormat = GetImportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+            nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
+        }
+        else if( aShortName.Len() )
+        {
+            // Export
+            nFormat = GetExportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+            nRet = ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
 
         EnableOptions( bOptions );
