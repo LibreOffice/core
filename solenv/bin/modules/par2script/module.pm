@@ -2,9 +2,9 @@
 #
 #   $RCSfile: module.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:50:46 $
+#   last change: $Author: rt $ $Date: 2005-04-04 10:03:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,7 +131,7 @@ sub remove_from_modules
                     # print $infoline;
                     push(@par2script::globals::logfileinfo, $infoline);
 
-                    ${$script}[$i] =~ s/$oneassigneditem//;
+                    ${$script}[$i] =~ s/\b$oneassigneditem\b//;
                     ${$script}[$i] =~ s/\,\s*\,/\,/;
                     ${$script}[$i] =~ s/\(\s*\,\s*/\(/;
                     ${$script}[$i] =~ s/\s*\,\s*\)/\)/;
@@ -164,6 +164,9 @@ sub create_rootmodule
         for ( my $i = 0; $i <= $#{$allitemgids}; $i++ )
         {
             my $onegid = ${$allitemgids}[$i];
+
+            my $infoline = "WARNING: Adding $onegid to root module\n";
+            # print $infoline;
 
             if ($oneline eq "") { $oneline = "\t\t\t\t"; }
 
