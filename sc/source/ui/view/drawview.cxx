@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:11:23 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 18:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,91 +224,7 @@ void ScDrawView::InvalidateAttribs()
     SfxBindings& rBindings = pViewData->GetBindings();
 
         // echte Statuswerte:
-
-    // #i25616#
-    rBindings.Invalidate( SID_ATTR_FILL_SHADOW );
-
-    rBindings.Invalidate( SID_ATTR_FILL_STYLE );
-    rBindings.Invalidate( SID_ATTR_FILL_COLOR );
-
-    rBindings.Invalidate( SID_ATTR_LINE_STYLE );
-    rBindings.Invalidate( SID_ATTR_LINE_WIDTH );
-    rBindings.Invalidate( SID_ATTR_LINE_COLOR );
-
-    rBindings.Invalidate( SID_ANCHOR_PAGE );
-    rBindings.Invalidate( SID_ANCHOR_CELL );
-
-    rBindings.Invalidate( SID_OLE_OBJECT );
-    rBindings.Invalidate( SID_OPENDLG_MODCHART );
-
-    rBindings.Invalidate( SID_HYPERLINK_GETLINK );
-
-        // Funktionen, die nicht immer moeglich sind:
-
-    rBindings.Invalidate( SID_ATTRIBUTES_LINE );
-    rBindings.Invalidate( SID_ATTRIBUTES_AREA );
-    rBindings.Invalidate( SID_ATTR_LINEEND_STYLE );     // Tbx-Controller
-
-    rBindings.Invalidate( SID_GROUP );
-    rBindings.Invalidate( SID_UNGROUP );
-    rBindings.Invalidate( SID_ENTER_GROUP );
-    rBindings.Invalidate( SID_LEAVE_GROUP );
-    rBindings.Invalidate( SID_MIRROR_HORIZONTAL );
-    rBindings.Invalidate( SID_MIRROR_VERTICAL );
-
-    rBindings.Invalidate( SID_IMAP_EXEC );
-
-    rBindings.Invalidate( SID_FRAME_UP );
-    rBindings.Invalidate( SID_FRAME_DOWN );
-    rBindings.Invalidate( SID_FRAME_TO_TOP );
-    rBindings.Invalidate( SID_FRAME_TO_BOTTOM );
-    rBindings.Invalidate( SID_OBJECT_HEAVEN );
-    rBindings.Invalidate( SID_OBJECT_HELL );
-
-    rBindings.Invalidate( SID_OBJECT_ALIGN_LEFT );
-    rBindings.Invalidate( SID_OBJECT_ALIGN_CENTER );
-    rBindings.Invalidate( SID_OBJECT_ALIGN_RIGHT );
-    rBindings.Invalidate( SID_OBJECT_ALIGN_UP );
-    rBindings.Invalidate( SID_OBJECT_ALIGN_MIDDLE );
-    rBindings.Invalidate( SID_OBJECT_ALIGN_DOWN );
-
-    rBindings.Invalidate( SID_DELETE );
-    rBindings.Invalidate( SID_DELETE_CONTENTS );
-    rBindings.Invalidate( SID_CUT );
-    rBindings.Invalidate( SID_COPY );
-
-    rBindings.Invalidate( SID_ANCHOR_TOGGLE );
-    rBindings.Invalidate( SID_ORIGINALSIZE );
-    rBindings.Invalidate( SID_RENAME_OBJECT );
-
-    rBindings.Invalidate( SID_ATTR_TRANSFORM );
-
-    rBindings.Invalidate( SID_ATTR_GRAF_MODE );
-    rBindings.Invalidate( SID_ATTR_GRAF_RED );
-    rBindings.Invalidate( SID_ATTR_GRAF_GREEN );
-    rBindings.Invalidate( SID_ATTR_GRAF_BLUE );
-    rBindings.Invalidate( SID_ATTR_GRAF_LUMINANCE );
-    rBindings.Invalidate( SID_ATTR_GRAF_CONTRAST );
-    rBindings.Invalidate( SID_ATTR_GRAF_GAMMA );
-    rBindings.Invalidate( SID_ATTR_GRAF_TRANSPARENCE );
-    rBindings.Invalidate( SID_COLOR_SETTINGS );
-
-    rBindings.Invalidate( SID_GRFFILTER );
-    rBindings.Invalidate( SID_GRFFILTER_INVERT );
-    rBindings.Invalidate( SID_GRFFILTER_SMOOTH );
-    rBindings.Invalidate( SID_GRFFILTER_SHARPEN );
-    rBindings.Invalidate( SID_GRFFILTER_REMOVENOISE );
-    rBindings.Invalidate( SID_GRFFILTER_SOBEL );
-    rBindings.Invalidate( SID_GRFFILTER_MOSAIC );
-    rBindings.Invalidate( SID_GRFFILTER_EMBOSS );
-    rBindings.Invalidate( SID_GRFFILTER_POSTER );
-    rBindings.Invalidate( SID_GRFFILTER_POPART );
-    rBindings.Invalidate( SID_GRFFILTER_SEPIA );
-    rBindings.Invalidate( SID_GRFFILTER_SOLARIZE );
-
-    rBindings.Invalidate( SID_ENABLE_HYPHENATION );
-
-    rBindings.Invalidate( SID_FORMATPAINTBRUSH );
+    rBindings.InvalidateAll( TRUE );
 }
 
 void ScDrawView::InvalidateDrawTextAttrs()
