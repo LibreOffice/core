@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:37 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bCo
     mnAltContId( EXC_ID_UNKNOWN ),
     mnRecSize( 0 ),
     mnRecLeft( 0 ),
+    mcNulSubst( '?' ),
     mbCont( bContHandling ),
 #if SC_XCL_USEDECR
     mbUseDecr( false ),
@@ -808,46 +809,53 @@ sal_uInt32 XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags
 
 void XclImpStream::AppendRawUniString( String& rString, sal_uInt16 nChars, bool b16Bit )
 {
-    sal_Char* pBuffer8 = NULL;
-    sal_Unicode* pBuffer16 = NULL;
     sal_uInt32 nCharsLeft = nChars;
-    sal_uInt32 nReadSize, nReadRet;
+    sal_uInt32 nReadSize;
+
+    sal_Unicode* pcBuffer = new sal_Unicode[ nCharsLeft + 1 ];
 
     while( IsValid() && nCharsLeft )
     {
         if( b16Bit )
         {
-            if( !pBuffer16 )
-                pBuffer16 = new sal_Unicode[ nCharsLeft + 1 ];
             nReadSize = ::std::min( nCharsLeft, mnRecLeft / 2 );
             DBG_ASSERT( !mbWarnings || (nReadSize <= nCharsLeft) || !(mnRecLeft & 0x1),
                 "XclImpStream::ReadRawUniString - missing a byte" );
-            sal_Unicode* pUniChar = pBuffer16;
-            sal_Unicode* pEndChar = pBuffer16 + nReadSize;
-            for( ; IsValid() && (pUniChar < pEndChar); ++pUniChar )
-                operator>>( *pUniChar );
-            *pUniChar = 0;
-            if( *pBuffer16 )
-                rString.Append( pBuffer16 );
+        }
+        else
+            nReadSize = ::std::min( nCharsLeft, mnRecLeft );
+
+        sal_Unicode* pcUniChar = pcBuffer;
+        sal_Unicode* pcEndChar = pcBuffer + nReadSize;
+
+        if( b16Bit )
+        {
+            sal_uInt16 nReadChar;
+            for( ; IsValid() && (pcUniChar < pcEndChar); ++pcUniChar )
+            {
+                operator>>( nReadChar );
+                (*pcUniChar) = (nReadChar == EXC_NUL) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
+            }
         }
         else
         {
-            if( !pBuffer8 )
-                pBuffer8 = new sal_Char[ nCharsLeft + 1 ];
-            nReadSize = ::std::min( nCharsLeft, mnRecLeft );
-            nReadRet = Read( pBuffer8, nReadSize );
-            pBuffer8[ nReadRet ] = 0;
-            if( *pBuffer8 )
-                rString += String( pBuffer8, mrRoot.GetCharSet() );
+            sal_uInt8 nReadChar;
+            for( ; IsValid() && (pcUniChar < pcEndChar); ++pcUniChar )
+            {
+                operator>>( nReadChar );
+                (*pcUniChar) = (nReadChar == EXC_NUL_C) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
+            }
         }
+
+        *pcEndChar = '\0';
+        rString.Append( pcBuffer );
 
         nCharsLeft -= nReadSize;
         if( nCharsLeft )
             StartStringContinue( b16Bit );
     }
 
-    delete[] pBuffer8;
-    delete[] pBuffer16;
+    delete[] pcBuffer;
 }
 
 void XclImpStream::IgnoreRawUniString( sal_uInt16 nChars, bool b16Bit )
