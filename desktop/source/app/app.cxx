@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-11 14:39:35 $
+ *  last change: $Author: cd $ $Date: 2001-12-13 09:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
@@ -631,11 +634,31 @@ void Desktop::DeInit()
 
 BOOL Desktop::QueryExit()
 {
+    const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
+
     DBG_ERROR("QueryExit!");
     Reference< ::com::sun::star::frame::XDesktop >
             xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 UNO_QUERY );
-    return !xDesktop.is() || xDesktop->terminate();
+
+    Reference < ::com::sun::star::beans::XPropertySet > xPropertySet( xDesktop, UNO_QUERY );
+    if ( xPropertySet.is() )
+    {
+        Any a;
+        a <<= (sal_Bool)sal_True;
+        xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+    }
+
+    BOOL bExit = ( !xDesktop.is() || xDesktop->terminate() );
+
+    if ( !bExit && xPropertySet.is() )
+    {
+        Any a;
+        a <<= (sal_Bool)sal_False;
+        xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+    }
+
+    return bExit;
 }
 
 void Desktop::StartSetup( const OUString& aParameters )

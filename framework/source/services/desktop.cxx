@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: as $ $Date: 2001-12-12 14:32:26 $
+ *  last change: $Author: cd $ $Date: 2001-12-13 09:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,11 @@
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -208,6 +213,10 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -219,17 +228,19 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 // names of properties
-#define PROPERTYNAME_ACTIVECOMPONENT            DECLARE_ASCII("ActiveComponent" )
-#define PROPERTYNAME_ACTIVEFRAME                DECLARE_ASCII("ActiveFrame"     )
-#define PROPERTYNAME_ISPLUGGED                  DECLARE_ASCII("IsPlugged"       )
+#define PROPERTYNAME_ACTIVECOMPONENT            DECLARE_ASCII("ActiveComponent"         )
+#define PROPERTYNAME_ACTIVEFRAME                DECLARE_ASCII("ActiveFrame"             )
+#define PROPERTYNAME_ISPLUGGED                  DECLARE_ASCII("IsPlugged"               )
+#define PROPERTYNAME_SUSPENDQUICKSTARTVETO      DECLARE_ASCII("SuspendQuickstartVeto"   )
 
 // handle of properties
 #define PROPERTYHANDLE_ACTIVECOMPONENT          1
 #define PROPERTYHANDLE_ACTIVEFRAME              2
 #define PROPERTYHANDLE_ISPLUGGED                3
+#define PROPERTYHANDLE_SUSPENDQUICKSTARTVETO    4
 
 // count of ALL properties
-#define PROPERTYCOUNT                           3
+#define PROPERTYCOUNT                           4
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -242,7 +253,7 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_12                    (   Desktop                                                  ,
+DEFINE_XINTERFACE_13                    (   Desktop                                                  ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo               ),
@@ -253,9 +264,10 @@ DEFINE_XINTERFACE_12                    (   Desktop                             
                                             DIRECT_INTERFACE( css::frame::XFramesSupplier           ),
                                             DIRECT_INTERFACE( css::frame::XFrame                    ),
                                             DIRECT_INTERFACE( css::lang::XComponent                 ),
-                                            DIRECT_INTERFACE( css::frame::XDispatchResultListener           ),
+                                            DIRECT_INTERFACE( css::frame::XDispatchResultListener   ),
                                             DIRECT_INTERFACE( css::lang::XEventListener             ),
-                                            DIRECT_INTERFACE( css::task::XInteractionHandler        )
+                                            DIRECT_INTERFACE( css::task::XInteractionHandler        ),
+                                            DIRECT_INTERFACE( css::beans::XPropertySet              )
                                         )
 
 DEFINE_XTYPEPROVIDER_12                 (   Desktop                                                 ,
@@ -268,7 +280,7 @@ DEFINE_XTYPEPROVIDER_12                 (   Desktop                             
                                             css::frame::XFramesSupplier                             ,
                                             css::frame::XFrame                                      ,
                                             css::lang::XComponent                                   ,
-                                            css::frame::XDispatchResultListener                             ,
+                                            css::frame::XDispatchResultListener                     ,
                                             css::lang::XEventListener                               ,
                                             css::task::XInteractionHandler
                                         )
@@ -356,6 +368,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
         ,   m_eLoadState            ( E_NOTSET                                      )
         ,   m_aInteractionRequest   (                                               )
+        ,   m_bSuspendQuickstartVeto( sal_False                                     )
         #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further informations!
         #endif
@@ -412,9 +425,10 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     // That's why it's agood idea to hold use self alive.
     css::uno::Reference< css::frame::XDesktop > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     // Get other neccessary references.
-    css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator = m_xPipeTerminator                          ;
-    css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher  = m_xQuickLauncher                           ;
-    css::lang::EventObject                                aEvent          ( static_cast< ::cppu::OWeakObject* >(this) );
+    css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator                          ;
+    css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher                           ;
+    css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
+    sal_Bool                                              bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
@@ -445,9 +459,11 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     //-------------------------------------------------------------------------------------------------------------
     // If no veto comes we should ask our quicklauncher.
     // He stop termination of whole office .. but not closing of open tasks!!!
+    // We shouldn't ask quicklauncher if property "SuspendQuickstartVeto" is set to FALSE!!
     if(
-        ( bNormalListenerVeto == sal_False )    &&
-        ( xQuickLauncher.is() == sal_True  )
+        ( bNormalListenerVeto == sal_False  )   &&
+        ( bAskQuickStart      == sal_True   )   &&
+        ( xQuickLauncher.is() == sal_True   )
       )
     {
         try
@@ -1635,6 +1651,8 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
         case PROPERTYHANDLE_ACTIVEFRAME         :
         case PROPERTYHANDLE_ISPLUGGED           :   bReturn = sal_False; // These variables are readonly(!) and can't be changed.
                                                     break;
+        case PROPERTYHANDLE_SUSPENDQUICKSTARTVETO:  bReturn = impl_tryToChangeProperty( m_bSuspendQuickstartVeto, aValue, aOldValue, aConvertedValue );
+                                                    break;
     }
 
     // Return state of operation.
@@ -1670,6 +1688,8 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
         case PROPERTYHANDLE_ACTIVEFRAME         :
         case PROPERTYHANDLE_ISPLUGGED           :   LOG_ERROR( "Desktop::setFastPropertyValue_NoBroadcast()", "Set of readonly property not allowed." )
                                                     break;
+        case PROPERTYHANDLE_SUSPENDQUICKSTARTVETO:  aValue >>= m_bSuspendQuickstartVeto;
+                                                    break;
     }
 }
 
@@ -1704,6 +1724,8 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
         case PROPERTYHANDLE_ACTIVEFRAME         :   aValue <<= m_aChildTaskContainer.getActive();
                                                     break;
         case PROPERTYHANDLE_ISPLUGGED           :   aValue <<= impl_checkPlugInState();
+                                                    break;
+        case PROPERTYHANDLE_SUSPENDQUICKSTARTVETO:  aValue <<= m_bSuspendQuickstartVeto;
                                                     break;
     }
 }
@@ -1936,9 +1958,10 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
 
     static const css::beans::Property pProperties[] =
     {
-        css::beans::Property( PROPERTYNAME_ACTIVECOMPONENT, PROPERTYHANDLE_ACTIVECOMPONENT, ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( PROPERTYNAME_ACTIVEFRAME    , PROPERTYHANDLE_ACTIVEFRAME    , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( PROPERTYNAME_ISPLUGGED      , PROPERTYHANDLE_ISPLUGGED      , ::getBooleanCppuType()                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( PROPERTYNAME_ACTIVECOMPONENT      , PROPERTYHANDLE_ACTIVECOMPONENT        , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( PROPERTYNAME_ACTIVEFRAME          , PROPERTYHANDLE_ACTIVEFRAME            , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( PROPERTYNAME_ISPLUGGED            , PROPERTYHANDLE_ISPLUGGED              , ::getBooleanCppuType()                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( PROPERTYNAME_SUSPENDQUICKSTARTVETO, PROPERTYHANDLE_SUSPENDQUICKSTARTVETO  , ::getBooleanCppuType()                                                  , css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
     static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPERTYCOUNT );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 14:56:43 $
+ *  last change: $Author: cd $ $Date: 2001-12-13 09:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,7 @@ class Desktop   :   // interfaces
         css::uno::Reference< css::frame::XTerminateListener >           m_xPipeTerminator           ;   /// special terminate listener to close pipe and block external requests during/after terminate
         css::uno::Reference< css::frame::XTerminateListener >           m_xQuickLauncher            ;   /// special terminate listener to block terminate if tray-icon is active
         css::uno::Any                                                   m_aInteractionRequest       ;
+        sal_Bool                                                        m_bSuspendQuickstartVeto    ;   /// don't ask quickstart for a veto
 
 };      //  class Desktop
 
