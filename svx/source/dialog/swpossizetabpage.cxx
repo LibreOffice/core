@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:02:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,10 @@
  *
  *
  ************************************************************************/
-#pragma hdrstop
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 #ifndef _SVX_SWPOSSIZETABPAGE_HXX
 #include <swpossizetabpage.hxx>
