@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:25:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,10 +921,10 @@ class EventsNameReplace_Impl:
     //------------------------------------------------------------------------
     void OPropertyBrowserController::cleanupRowsetConnection()
     {
-        Reference< XComponent > xConnComp( m_xRowsetConnection, UNO_QUERY );
+        Reference< XComponent > xConnComp( m_xOwnedRowsetConnection, UNO_QUERY );
         if ( xConnComp.is() )
             xConnComp->dispose();
-        m_xRowsetConnection.clear();
+        m_xOwnedRowsetConnection.clear();
     }
 
     //------------------------------------------------------------------------
@@ -939,14 +939,10 @@ class EventsNameReplace_Impl:
             // get it's current active connection
             xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
             // do we need to connect?
-            if ( !xReturn.is() )
+            if ( !xReturn.is() && !::dbtools::isEmbeddedInDatabase( getRowSet(), xReturn ) && connectRowset() )
             {
-                if ( !::dbtools::isEmbeddedInDatabase( getRowSet(), xReturn ) )
-                {
-                    connectRowset( );
-                    // get the property again
-                    xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
-                }
+                // get the property again
+                xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
             }
         }
 
@@ -977,12 +973,12 @@ class EventsNameReplace_Impl:
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::connectRowset()
+    bool OPropertyBrowserController::connectRowset()
     {
         // if we have an own previous connection, dispose it
         cleanupRowsetConnection();
 
-        SQLExceptionInfo aErrorInfo;
+        SQLExceptionInfo aError;
         try
         {
             // the rowset
@@ -1011,16 +1007,17 @@ class EventsNameReplace_Impl:
 
                     // remember for later disposal
                     // (we opened the connection, thus we own it)
-                    m_xRowsetConnection = xConnection;
+                    m_xOwnedRowsetConnection = xConnection;
                 }
             }
         }
-        catch (SQLContext& e) { aErrorInfo = e; }
-        catch (SQLWarning& e) { aErrorInfo = e; }
-        catch (SQLException& e) { aErrorInfo = e; }
+        catch (SQLContext& e) { aError = e; }
+        catch (SQLWarning& e) { aError = e; }
+        catch (SQLException& e) { aError = e; }
+        catch (WrappedTargetException& e ) { aError = SQLExceptionInfo( e.TargetException ); }
         catch (Exception&) { }
 
-        if (aErrorInfo.isValid() && haveView())
+        if ( aError.isValid() && haveView() )
         {
             ::rtl::OUString sDataSourceName;
             try
@@ -1039,9 +1036,11 @@ class EventsNameReplace_Impl:
 
             SQLContext aContext;
             aContext.Message = sInfo;
-            aContext.NextException = aErrorInfo.get();
+            aContext.NextException = aError.get();
             showError( aContext, VCLUnoHelper::GetInterface( m_pView ), m_xORB);
         }
+
+        return isRowsetConnected();
     }
 
     //------------------------------------------------------------------------
@@ -1070,14 +1069,8 @@ class EventsNameReplace_Impl:
             if ( _bInit )
                 aProperty.sValue = GetPropertyValueStringRep( PROPERTY_COMMAND );
 
-            if ( _bConnect)
-                connectRowset();
-
             ////////////////////////////////////////////////////////////
-            // Enums setzen
-
-            sal_Bool bFailedToConnect = _bConnect && !haveRowsetConnection();
-            if ( !bFailedToConnect )
+            if ( _bConnect ? connectRowset() : isRowsetConnected() )
             {
                 sal_Int32 nCommandType = CommandType::COMMAND;
                 GetUnoPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
@@ -1107,9 +1100,9 @@ class EventsNameReplace_Impl:
         }
     }
     //------------------------------------------------------------------------
-    sal_Bool OPropertyBrowserController::haveRowsetConnection( ) const
+    bool OPropertyBrowserController::isRowsetConnected( ) const
     {
-        Reference< XConnection > xConnection = m_xRowsetConnection;
+        Reference< XConnection > xConnection;
         Reference< XPropertySet > xProps( getRowSet(), UNO_QUERY );
         if ( xProps.is() )
             xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
@@ -2970,7 +2963,7 @@ class EventsNameReplace_Impl:
                     ::rtl::OUString sDataSource;
                     aValue >>= sDataSource;
                     Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_DATABASE_CONTEXT), UNO_QUERY);
-                    if ( !xDatabaseContext.is() || !xDatabaseContext->hasByName(sDataSource) )
+                    if ( sDataSource.getLength() && ( !xDatabaseContext.is() || !xDatabaseContext->hasByName(sDataSource) ) )
                     {
                         ::svt::OFileNotation aTransformer(sDataSource);
                         sDataSource = aTransformer.get(::svt::OFileNotation::N_URL);
@@ -2984,11 +2977,7 @@ class EventsNameReplace_Impl:
                     m_xPropStateAccess->setPropertyToDefault(rName);
                 }
 
-                // try to open a connection for the new data source. Needed for filling the table list etc., but the methods doing this
-                // don't display errors, and we want to have an error message.
-                connectRowset();
-
-                SetCursorSource( sal_False, sal_True );
+                SetCursorSource( sal_True, sal_True );
                 SetListSource();
             }
             break;
@@ -3562,7 +3551,7 @@ class EventsNameReplace_Impl:
 
             bIsEnabled = ( nIntValue == CommandType::COMMAND )
                       && ( bBoolValue )
-                      && (  haveRowsetConnection()
+                      && (  isRowsetConnected()
                          || isValidDataSourceName( GetPropertyValueStringRep( PROPERTY_DATASOURCE ) )
                          );
 
