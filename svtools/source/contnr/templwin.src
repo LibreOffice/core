@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-01 08:21:33 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,22 +333,22 @@ ToolBox TB_SVT_FRAMEWIN
             HelpId = HID_TEMPLATEDLG_TB_DOCINFO;
             ItemBitmap = Bitmap { File = "info_small.bmp" ; };
             Text = "Dokumenteigenschaften" ;
-            Text [ english_us ] = "Docinfo" ;
+            Text [ english_us ] = "Document Properties" ;
             Text[ portuguese ] = "Docinfo";
             Text[ russian ] = "Docinfo";
             Text[ greek ] = "Docinfo";
             Text[ dutch ] = "Docinfo";
             Text[ french ] = "Docinfo";
-            Text[ spanish ] = "Docinfo";
+            Text[ spanish ] = "Propiedades del documento";
             Text[ finnish ] = "Docinfo";
             Text[ italian ] = "Docinfo";
             Text[ danish ] = "Docinfo";
             Text[ swedish ] = "Dokumentegenskaper";
-            Text[ polish ] = "Docinfo";
+            Text[ polish ] = "W³aœciwoœci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
             Text[ japanese ] = "Docinfo";
             Text[ korean ] = "Docinfo";
-            Text[ chinese_simplified ] = "Docinfo";
+            Text[ chinese_simplified ] = "ÎÄµµÊôÐÔ";
             Text[ chinese_traditional ] = "Docinfo";
             Text[ turkish ] = "Docinfo";
             Text[ arabic ] = "Docinfo";
@@ -368,16 +368,16 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ greek ] = "Preview";
             Text[ dutch ] = "Preview";
             Text[ french ] = "Preview";
-            Text[ spanish ] = "Preview";
+            Text[ spanish ] = "Previsualización";
             Text[ finnish ] = "Preview";
             Text[ italian ] = "Preview";
             Text[ danish ] = "Preview";
             Text[ swedish ] = "Förhandsvisning";
-            Text[ polish ] = "Preview";
+            Text[ polish ] = "Podgl¹d";
             Text[ portuguese_brazilian ] = "Preview";
             Text[ japanese ] = "Preview";
             Text[ korean ] = "Preview";
-            Text[ chinese_simplified ] = "Preview";
+            Text[ chinese_simplified ] = "Ô¤ÀÀ";
             Text[ chinese_traditional ] = "Preview";
             Text[ turkish ] = "Preview";
             Text[ arabic ] = "Preview";
@@ -537,11 +537,11 @@ StringArray STRARY_SVT_DOCINFO
         < "Keywords" ; DI_KEYWORDS ; > ;
         < "Description" ; DI_DESCRIPTION ; > ;
         < "Type" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
-        < "Theme" ; DI_THEME ; > ;
+        < "Modified on" ; DI_MODIFIEDDATE ; > ;
+        < "Modified by" ; DI_MODIFIEDBY ; > ;
+        < "Printed on" ; DI_PRINTDATE ; > ;
+        < "Printed by" ; DI_PRINTBY ; > ;
+        < "Subject" ; DI_THEME ; > ;
         < "Size" ; DI_SIZE ; > ;
     };
 ItemList [ language_user1 ] =
@@ -641,11 +641,11 @@ ItemList [ language_user1 ] =
         < "Fecha" ; DI_DATE ; > ;
         < "Palabras clave" ; DI_KEYWORDS ; > ;
         < "Descripción" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Tipo de contenido" ; DI_MIMETYPE ; > ;
+        < "Fecha de modificación" ; DI_MODIFIEDDATE ; > ;
+        < "MOdificado por" ; DI_MODIFIEDBY ; > ;
+        < "Fecha de impresión" ; DI_PRINTDATE ; > ;
+        < "Impreso por" ; DI_PRINTBY ; > ;
         < "Tema" ; DI_THEME ; > ;
         < "Tamaño" ; DI_SIZE ; > ;
     };
@@ -696,7 +696,7 @@ ItemList [ language_user1 ] =
     };
     ItemList [ swedish ] =
     {
-             < "Etikett" ; DI_TITLE ; > ;
+             < "Rubrik" ; DI_TITLE ; > ;
         < "Från" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
         < "Nyckelord" ; DI_KEYWORDS ; > ;
@@ -711,16 +711,16 @@ ItemList [ language_user1 ] =
     };
     ItemList [ polish ] =
     {
-             < "Etykieta" ; DI_TITLE ; > ;
+             < "Tytu³" ; DI_TITLE ; > ;
         < "od" ; DI_FROM ; > ;
         < "Data" ; DI_DATE ; > ;
         < "S³owa kluczowe" ; DI_KEYWORDS ; > ;
         < "Opis" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Typ zawartoœci" ; DI_MIMETYPE ; > ;
+        < "Data modyfikacji" ; DI_MODIFIEDDATE ; > ;
+        < "Zmodyfikowa³(a)" ; DI_MODIFIEDBY ; > ;
+        < "Data wydruku" ; DI_PRINTDATE ; > ;
+        < "Wydrukowa³(a)" ; DI_PRINTBY ; > ;
         < "Temat" ; DI_THEME ; > ;
         < "Rozmiar" ; DI_SIZE ; > ;
     };
@@ -773,16 +773,16 @@ ItemList [ language_user1 ] =
     {
              < "´ó±êÌâ" ; DI_TITLE ; > ;
         < "ÓÉ" ; DI_FROM ; > ;
-        < "DATE" ; DI_DATE ; > ;
-        < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
+        < "ÈÕÆÚ" ; DI_DATE ; > ;
+        < "¹Ø¼ü×Ö" ; DI_KEYWORDS ; > ;
         < "ËµÃ÷" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "ÄÚÈÝÀàÐÍ" ; DI_MIMETYPE ; > ;
+        < "ÐÞ¸ÄµÄÈÕÆÚ" ; DI_MODIFIEDDATE ; > ;
+        < "±à¼­ÐÞ¸ÄÕß" ; DI_MODIFIEDBY ; > ;
+        < "´òÓ¡µÄÈÕÆÚ" ; DI_PRINTDATE ; > ;
+        < "´òÓ¡µÄÈÕÆÚ" ; DI_PRINTBY ; > ;
         < "Ö÷Ìâ" ; DI_THEME ; > ;
-        < "Größe" ; DI_SIZE ; > ;
+        < "´óÐ¡" ; DI_SIZE ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
