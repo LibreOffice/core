@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-01 11:23:45 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 12:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,9 @@ namespace dbaui
         if (!isObject(eEntryType))
             return DND_ACTION_NONE;
 
+        if (etBookmark == eEntryType)
+            return DND_ACTION_NONE;
+
         TransferableHelper* pTransfer = implCopyObject( pHitEntry, (etTable == eEntryType || etView == eEntryType) ? CommandType::TABLE : CommandType::QUERY);
         Reference< XTransferable> xEnsureDelete = pTransfer;
 
@@ -852,6 +855,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/06/01 11:23:45  oj
+ *  #86520# insert of tabledata corrected
+ *
  *  Revision 1.12  2001/05/14 11:58:35  oj
  *  #86744# some changes for entries and views
  *
