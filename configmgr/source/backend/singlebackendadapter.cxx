@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "serviceinfohelper.hxx"
 #endif // CONFIGMGR_SERVICEINFOHELPER_HXX_
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XMULTILAYERSTRATUM_HPP_
+#include <com/sun/star/configuration/backend/XMultiLayerStratum.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_CANNOTLOADCONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
 #endif
@@ -103,53 +106,96 @@ void SAL_CALL SingleBackendAdapter::initialize(
     if (!mBackend.is())
     {
         throw com::sun::star::configuration::CannotLoadConfigurationException(
-            OUString::createFromAscii("Online Backend Adapter: Cannot operate without real (Single)Backend"),
+            OUString::createFromAscii("Online SingleBackend Adapter: Cannot operate without real (Single)Backend"),
             *this);
     }
 }
 //------------------------------------------------------------------------------
-
-uno::Reference<backenduno::XSchema>
-SAL_CALL SingleBackendAdapter::getComponentSchema(
-        const rtl::OUString& aComponent)
-    throw (backenduno::BackendAccessException,
-            lang::IllegalArgumentException,
-            uno::RuntimeException)
+static inline OUString getSingleLayerDummyEntity()
+{ return OUString(RTL_CONSTASCII_USTRINGPARAM("*")); }
+//------------------------------------------------------------------------------
+// XBackendEntities
+rtl::OUString SAL_CALL
+    SingleBackendAdapter::getOwnerEntity(  )
+        throw (uno::RuntimeException)
 {
-    return mBackend->getSchema(aComponent) ;
+    uno::Reference< backenduno::XBackendEntities > xEntities( mBackend, uno::UNO_REF_QUERY_THROW );
+
+    return xEntities->getOwnerEntity();
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<uno::Reference<backenduno::XLayer> >
-SAL_CALL SingleBackendAdapter::listOwnLayers(const rtl::OUString& aComponent)
-    throw (backenduno::BackendAccessException,
-            lang::IllegalArgumentException,
-            uno::RuntimeException)
+rtl::OUString SAL_CALL
+    SingleBackendAdapter::getAdminEntity(  )
+        throw (uno::RuntimeException)
 {
-    return listLayers(aComponent, mBackend->getOwnId()) ;
+    uno::Reference< backenduno::XBackendEntities > xEntities( mBackend, uno::UNO_REF_QUERY_THROW );
+    return xEntities->getAdminEntity();
 }
 //------------------------------------------------------------------------------
 
-uno::Reference<backenduno::XUpdateHandler>
-SAL_CALL SingleBackendAdapter::getOwnUpdateHandler(
-                                            const rtl::OUString& aComponent)
-    throw (backenduno::BackendAccessException,
-            lang::IllegalArgumentException,
-            uno::RuntimeException)
+sal_Bool SAL_CALL
+    SingleBackendAdapter::supportsEntity( const rtl::OUString& aEntity )
+    throw (backenduno::BackendAccessException, uno::RuntimeException)
 {
-    return getUpdateHandler(aComponent, mBackend->getOwnId()) ;
+    uno::Reference< backenduno::XBackendEntities > xEntities( mBackend, uno::UNO_REF_QUERY_THROW );
+    return xEntities->supportsEntity(aEntity);
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<uno::Reference<backenduno::XLayer> >
-SAL_CALL SingleBackendAdapter::listLayers(const rtl::OUString& aComponent,
+sal_Bool SAL_CALL
+    SingleBackendAdapter::isEqualEntity( const rtl::OUString& aEntity, const rtl::OUString& aOtherEntity )
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException)
+{
+    uno::Reference< backenduno::XBackendEntities > xEntities( mBackend, uno::UNO_REF_QUERY_THROW );
+    return xEntities->isEqualEntity(aEntity,aOtherEntity);
+}
+//------------------------------------------------------------------------------
+
+uno::Reference<backenduno::XSchema> SAL_CALL
+    SingleBackendAdapter::getComponentSchema(const rtl::OUString& aComponent)
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException)
+{
+    return mBackend->getComponentSchema(aComponent) ;
+}
+//------------------------------------------------------------------------------
+
+uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
+    SingleBackendAdapter::listOwnLayers(const rtl::OUString& aComponent)
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException)
+{
+    return listLayers(aComponent, this->getOwnerEntity()) ;
+}
+//------------------------------------------------------------------------------
+
+uno::Reference<backenduno::XUpdateHandler> SAL_CALL
+    SingleBackendAdapter::getOwnUpdateHandler(const rtl::OUString& aComponent)
+        throw (backenduno::BackendAccessException,
+                lang::NoSupportException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException)
+{
+    return getUpdateHandler(aComponent, this->getOwnerEntity()) ;
+}
+//------------------------------------------------------------------------------
+
+uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
+    SingleBackendAdapter::listLayers(const rtl::OUString& aComponent,
                                           const rtl::OUString& aEntity)
-    throw (backenduno::BackendAccessException,
-            lang::IllegalArgumentException,
-            uno::RuntimeException)
+        throw (backenduno::BackendAccessException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException)
 {
+    uno::Reference< backenduno::XMultiLayerStratum > xBackend( mBackend, uno::UNO_REF_QUERY_THROW );
+
     uno::Sequence<uno::Reference<backenduno::XLayer> > retCode =
-        mBackend->getLayers(mBackend->listLayerIds(aComponent, aEntity),
+        xBackend->getLayers(xBackend->listLayerIds(aComponent, aEntity),
                             rtl::OUString()) ;
 
     // There might be non-existent layers in the list if there's no
@@ -170,22 +216,39 @@ SAL_CALL SingleBackendAdapter::listLayers(const rtl::OUString& aComponent,
 }
 //------------------------------------------------------------------------------
 
-uno::Reference<backenduno::XUpdateHandler>
-SAL_CALL SingleBackendAdapter::getUpdateHandler(const rtl::OUString& aComponent,
+uno::Reference<backenduno::XUpdateHandler> SAL_CALL
+    SingleBackendAdapter::getUpdateHandler(const rtl::OUString& aComponent,
                                                 const rtl::OUString& aEntity)
-    throw (backenduno::BackendAccessException,
-            lang::IllegalArgumentException,
-            uno::RuntimeException)
+        throw (backenduno::BackendAccessException,
+                lang::NoSupportException,
+                lang::IllegalArgumentException,
+                uno::RuntimeException)
 {
-    static const rtl::OUString kUpdateMerger(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.backend.LayerUpdateMerger")) ;
+    uno::Reference< backenduno::XMultiLayerStratum > xBackend( mBackend, uno::UNO_REF_QUERY_THROW );
+
     uno::Sequence<uno::Any> arguments(1) ;
 
-    arguments [0] <<= mBackend->getUpdatableLayer(
-                                        mBackend->getUpdateLayerId(aComponent,
+    arguments [0] <<= xBackend->getUpdatableLayer(
+                                        xBackend->getUpdateLayerId(aComponent,
                                                                    aEntity)) ;
-    return uno::Reference<backenduno::XUpdateHandler>::query(
-        mFactory->createInstanceWithArguments(kUpdateMerger, arguments)) ;
+    uno::Reference< uno::XInterface > xHandler;
+    try
+    {
+        const rtl::OUString kUpdateMerger(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.backend.LayerUpdateMerger")) ;
+
+        xHandler = mFactory->createInstanceWithArguments(kUpdateMerger, arguments);
+    }
+    catch (uno::RuntimeException & )
+    {throw;}
+    catch (uno::Exception & e)
+    {
+        const rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM(
+                    "Configuration SingleBackendAdapter: Cannot create UpdateMerger - error message: ")) ;
+        throw uno::RuntimeException(sMessage.concat(e.Message),*this);
+    }
+
+    return uno::Reference<backenduno::XUpdateHandler>(xHandler, uno::UNO_REF_QUERY_THROW) ;
 }
 //------------------------------------------------------------------------------
 
@@ -217,7 +280,7 @@ const ServiceRegistrationInfo *getSingleBackendAdapterServiceInfo()
 }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateSingleBackendAdapter(const CreationContext& xContext)
+    instantiateSingleBackendAdapter(const CreationContext& xContext)
 {
     return *new SingleBackendAdapter(xContext) ;
 }
@@ -226,34 +289,39 @@ instantiateSingleBackendAdapter(const CreationContext& xContext)
 static const rtl::OUString kImplementationName(
                                 RTL_CONSTASCII_USTRINGPARAM(kImplementation)) ;
 
-rtl::OUString SAL_CALL SingleBackendAdapter::getName(void) {
+rtl::OUString SAL_CALL
+    SingleBackendAdapter::getName(void)
+{
     return kImplementationName ;
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL SingleBackendAdapter::getImplementationName(void)
-    throw (uno::RuntimeException)
+rtl::OUString SAL_CALL
+    SingleBackendAdapter::getImplementationName(void)
+        throw (uno::RuntimeException)
 {
     return ServiceInfoHelper(&kServiceInfo).getImplementationName() ;
 }
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL SingleBackendAdapter::supportsService(const rtl::OUString& aServiceName)
-    throw (uno::RuntimeException)
+sal_Bool SAL_CALL
+    SingleBackendAdapter::supportsService(const rtl::OUString& aServiceName)
+        throw (uno::RuntimeException)
 {
     return  ServiceInfoHelper(&kServiceInfo).supportsService(aServiceName) ;
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL SingleBackendAdapter::getServices()
+uno::Sequence<rtl::OUString> SAL_CALL
+    SingleBackendAdapter::getServices()
 {
     return ServiceInfoHelper(&kServiceInfo).getSupportedServiceNames() ;
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString>
-SAL_CALL SingleBackendAdapter::getSupportedServiceNames(void)
-    throw (uno::RuntimeException)
+uno::Sequence<rtl::OUString> SAL_CALL
+    SingleBackendAdapter::getSupportedServiceNames(void)
+        throw (uno::RuntimeException)
 {
     return ServiceInfoHelper(&kServiceInfo).getSupportedServiceNames() ;
 }
