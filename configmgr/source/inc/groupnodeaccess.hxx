@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupnodeaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace configmgr
             typedef GroupNodeAddress::DataType const    DataType;
             typedef DataType * NodePointerType;
             typedef NodeAddress                         ChildAddressType;
-            typedef NodeAccess                          ChildAccessType;
+            typedef NodeAccessRef                       ChildAccessType;
 
             GroupNodeAccess(Accessor const& _aAccessor, NodeAddressType const& _aNodeRef)
             : m_aAccessor(_aAccessor)
@@ -101,7 +101,14 @@ namespace configmgr
             {
             }
 
-            static bool isInstance(NodeAccess const & _aNode)
+            explicit
+            GroupNodeAccess(NodeAccessRef const & _aNode)
+            : m_aAccessor(_aNode.accessor())
+            , m_pData(check(_aNode))
+            {
+            }
+
+            static bool isInstance(NodeAccessRef const & _aNode)
             {
                 return check(_aNode) != NULL;
             }
@@ -117,17 +124,17 @@ namespace configmgr
             { return implGetChild(_aName).is(); }
 
             ChildAccessType getChildNode(Name const& _aName) const
-            { return NodeAccess(m_aAccessor, implGetChild(_aName)); }
+            { return NodeAccessRef(&m_aAccessor, implGetChild(_aName)); }
 
             NodeAddressType address()   const { return NodeAddressType(m_pData); }
-            Accessor accessor()         const { return m_aAccessor; }
+            Accessor const& accessor()  const { return m_aAccessor; }
 
-            operator NodeAccess()       const { return NodeAccess(m_aAccessor,NodeAddress(m_pData)); }
+            operator NodeAccessRef()    const { return NodeAccessRef(&m_aAccessor,NodeAddress(m_pData)); }
 
             DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
 
         private:
-            static AddressType check(NodeAccess const&);
+            static AddressType check(NodeAccessRef const&);
             static AddressType check(Accessor const&, NodePointerType);
 
             ChildAddressType implGetChild(Name const& _aName) const;
@@ -145,7 +152,7 @@ namespace configmgr
 
         inline
         NodeAccess::Attributes GroupNodeAccess::getAttributes() const
-        { return data().info.getAttributes(); }
+        { return sharable::node(data()).getAttributes(); }
 
         inline
         bool GroupNodeAccess::isDefault()   const
