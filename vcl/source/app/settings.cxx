@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 11:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,6 +559,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnDisplayOptions            = rData.mnDisplayOptions;
     mnOptions                   = rData.mnOptions;
     mnHighContrast              = rData.mnHighContrast;
+    mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
 }
 
 // -----------------------------------------------------------------------
@@ -637,6 +638,7 @@ void ImplStyleData::SetStandardStyles()
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
+    mnUseSystemUIFonts          = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -735,6 +737,7 @@ void ImplStyleData::SetStandardOS2Styles()
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
+    mnUseSystemUIFonts          = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -817,6 +820,7 @@ void ImplStyleData::SetStandardMacStyles()
     mnTearOffTitleHeight        = 7;
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
+    mnUseSystemUIFonts          = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1012,6 +1016,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnPushButtonStyle         == rSet.mpData->mnPushButtonStyle)          &&
          (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
          (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
+         (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
