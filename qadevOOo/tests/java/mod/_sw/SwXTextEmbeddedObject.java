@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextEmbeddedObject.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:50:24 $
+ *  last change:$Date: 2003-09-08 12:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,19 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._sw;
 
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XComponent;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextEmbeddedObjectsSupplier;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -78,8 +69,21 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 import util.utils;
 
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextEmbeddedObjectsSupplier;
+import com.sun.star.text.XTextFrame;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 
 /**
  *
@@ -93,33 +97,7 @@ import com.sun.star.uno.Type;
  *
  */
 public class SwXTextEmbeddedObject extends TestCase {
-
     XTextDocument xTextDoc;
-    public XComponent oDoc;
-
-    /**
-     * in general this method creates a testdocument
-     *
-     *  @param tParam    class which contains additional test parameters
-     *  @param log        class to log the test state and result
-     *
-     *
-     *  @see TestParameters
-     *    @see PrintWriter
-     *
-     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
-
-        try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
-        }
-    }
 
     /**
      * in general this method disposes the testenvironment and document
@@ -132,12 +110,19 @@ public class SwXTextEmbeddedObject extends TestCase {
      *    @see PrintWriter
      *
      */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
-        oDoc.dispose();
-    }
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
 
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
+    }
 
     /**
      *    creating a Testenvironment for the interfaces to be tested
@@ -150,46 +135,60 @@ public class SwXTextEmbeddedObject extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
-    protected TestEnvironment createTestEnvironment
-            (TestParameters tParam, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
         XInterface oObj = null;
+
         // create testobject here
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
         String testdoc = utils.getFullTestURL("SwXTextEmbeddedObject.sdw");
         System.out.println(testdoc);
+
         try {
-            oDoc = SOF.loadDocument(testdoc);
-        }
-        catch (com.sun.star.uno.Exception e) {
+            xTextDoc = (XTextDocument) UnoRuntime.queryInterface(
+                               XTextDocument.class, SOF.loadDocument(testdoc));
+        } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't open document",e);
+            throw new StatusException("Couldn't open document", e);
         }
-        XTextEmbeddedObjectsSupplier oTEOS = (XTextEmbeddedObjectsSupplier)
-            UnoRuntime.queryInterface(XTextEmbeddedObjectsSupplier.class, oDoc);
+
+        XTextEmbeddedObjectsSupplier oTEOS = (XTextEmbeddedObjectsSupplier) UnoRuntime.queryInterface(
+                                                     XTextEmbeddedObjectsSupplier.class,
+                                                     xTextDoc);
 
         XNameAccess oEmObj = oTEOS.getEmbeddedObjects();
-        XIndexAccess oEmIn = (XIndexAccess)UnoRuntime.queryInterface(
-                                                    XIndexAccess.class, oEmObj);
+        XIndexAccess oEmIn = (XIndexAccess) UnoRuntime.queryInterface(
+                                     XIndexAccess.class, oEmObj);
 
-        try{
+        try {
             oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),oEmIn.getByIndex(0));
-        }
-        catch(com.sun.star.uno.Exception e){
+                           new Type(XInterface.class), oEmIn.getByIndex(0));
+        } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get Object",e);
+            throw new StatusException("Couldn't get Object", e);
         }
 
-
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("NoAttach", "SwXTextEmbeddedObject");
 
-        tEnv.addObjRelation("NoSetSize","SwXTextEmbeddedObject");
-        tEnv.addObjRelation("NoPos","SwXTextEmbeddedObject");
+        XTextFrame aFrame = SOF.createTextFrame(xTextDoc, 500, 500);
+        XText oText = xTextDoc.getText();
+        XTextCursor oCursor = oText.createTextCursor();
+        XTextContent the_content = (XTextContent) UnoRuntime.queryInterface(
+                                           XTextContent.class, aFrame);
+
+        try {
+            oText.insertTextContent(oCursor, the_content, true);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            log.println("Couldn't insert frame " + e.getMessage());
+        }
+
+        tEnv.addObjRelation("TextFrame", aFrame);
+
+        tEnv.addObjRelation("NoSetSize", "SwXTextEmbeddedObject");
+        tEnv.addObjRelation("NoPos", "SwXTextEmbeddedObject");
+
         return tEnv;
     } // finish method getTestEnvironment
-
-}// finish class SwXTextEmbeddedObject
-
+} // finish class SwXTextEmbeddedObject
