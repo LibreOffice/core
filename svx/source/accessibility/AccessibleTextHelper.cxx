@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:11:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,16 @@ namespace accessibility
                     DBG_TRACE5("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
                                this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
 
+                    // #108947# Sort new range before calling FireEvent
+                    ::std::pair< xub_StrLen, xub_StrLen > sortedSelection(
+                        makeSortedPair(::std::min( aSelection.nStartPara, nMaxValidParaIndex ),
+                                       ::std::min( aSelection.nEndPara, nMaxValidParaIndex ) ) );
+
+                    // #108947# Sort last range before calling FireEvent
+                    ::std::pair< xub_StrLen, xub_StrLen > sortedLastSelection(
+                        makeSortedPair(::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
+                                       ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
+
                     // #107037# notify selection change
                     if( maLastSelection.nStartPara == EE_PARA_NOT_FOUND )
                     {
@@ -731,8 +741,8 @@ namespace accessibility
                             aSelection.nStartPara != aSelection.nEndPara )
                         {
                             // selection was undefined, now is on
-                            maParaManager.FireEvent( aSelection.nStartPara,
-                                                     aSelection.nEndPara+1,
+                            maParaManager.FireEvent( sortedSelection.first,
+                                                     sortedSelection.second+1,
                                                      AccessibleEventId::SELECTION_CHANGED );
                         }
                     }
@@ -745,13 +755,8 @@ namespace accessibility
                              aSelection.nStartPara == aSelection.nEndPara) )
                         {
                             // selection was on, now is empty
-
-                            // #108947# Sort range befor calling FireEvent
-                            ::std::pair< xub_StrLen, xub_StrLen > sortedSel(
-                                makeSortedPair( static_cast< xub_StrLen >( ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ) ),
-                                               static_cast< xub_StrLen >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1) ) );
-
-                            maParaManager.FireEvent( sortedSel.first, sortedSel.second,
+                            maParaManager.FireEvent( sortedLastSelection.first,
+                                                     sortedLastSelection.second+1,
                                                      AccessibleEventId::SELECTION_CHANGED );
                         }
                         else if( (maLastSelection.nStartPos == maLastSelection.nEndPos &&
@@ -760,22 +765,17 @@ namespace accessibility
                                   aSelection.nStartPara != aSelection.nEndPara) )
                         {
                             // selection was empty, now is on
-                            maParaManager.FireEvent( aSelection.nStartPara,
-                                                     aSelection.nEndPara+1,
+                            maParaManager.FireEvent( sortedSelection.first,
+                                                     sortedSelection.second+1,
                                                      AccessibleEventId::SELECTION_CHANGED );
                         }
                         else
                         {
-                            // selection was on, now is different
-
-                            // #108947# Sort range befor calling FireEvent
-                            ::std::pair< xub_StrLen, xub_StrLen > sortedSel(
-                                makeSortedPair( static_cast< xub_StrLen >( ::std::min(aSelection.nStartPara,
-                                                           ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ))),
-                                                static_cast< xub_StrLen >( ::std::max( (xub_StrLen)aSelection.nEndPara,
-                                                            static_cast< USHORT >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) ) + 1 ) ) );
-
-                            maParaManager.FireEvent( sortedSel.first, sortedSel.second,
+                            // selection was on, now is different: take union of ranges
+                            maParaManager.FireEvent( ::std::min(sortedSelection.first,
+                                                           sortedLastSelection.second),
+                                                     ::std::max(sortedSelection.first,
+                                                           sortedLastSelection.second)+1,
                                                      AccessibleEventId::SELECTION_CHANGED );
                         }
                     }
