@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-01 12:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,18 +1430,20 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             else
             {
                 // special treatment for ruby portions in grid mode
-
-                // Portions which are bigger than on grid distance
-                // are centered inside the whole line.
-                // this does not apply to portions inside the ruby line
-                USHORT nAdjustment = 0;
-                if ( rMulti.IsRuby() &&
-                    ( ( bRubyTop && pLay != &rMulti.GetRoot() ) ||
-                    ( ! bRubyTop && pLay == &rMulti.GetRoot() ) ) )
+                SwTwips nAdjustment = 0;
+                if ( rMulti.IsRuby() )
                 {
-                    ASSERT( pCurr->Height() - nRubyHeight >= pPor->Height(),
-                            "Wrong adjusting of ruby portion" )
-                    nAdjustment = ( pCurr->Height() - nRubyHeight - pPor->Height() ) / 2;
+                    if ( ( bRubyTop && pLay != &rMulti.GetRoot() ) ||
+                         ( ! bRubyTop && pLay == &rMulti.GetRoot() ) )
+                    {
+                        // adjust base text
+                        ASSERT( pCurr->Height() - nRubyHeight >= pPor->Height(),
+                                "Wrong adjusting of ruby portion" )
+                        nAdjustment = ( pCurr->Height() - nRubyHeight - pPor->Height() ) / 2;
+                    }
+                    else
+                        // adjust ruby text
+                        nAdjustment = ( nRubyHeight - pPor->Height() ) / 2;
                 }
 
                 GetInfo().Y( nOfst + nAdjustment + pPor->GetAscent() );

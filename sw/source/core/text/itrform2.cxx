@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-01 12:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
 #ifdef VERTICAL_LAYOUT
     const sal_Bool bHasGrid =
-        pFrm->GetGridValue( GRID_ON );
+        pFrm->GetGridValue( GRID_ON ) && pFrm->GetGridValue( GRID_CELLS );
     const USHORT nGridWidth =
         pFrm->GetGridValue( GRID_HEIGHT );
 
@@ -1087,8 +1087,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 #ifdef VERTICAL_LAYOUT
         if ( ! pPor && ! pCurr->GetPortion() )
         {
-            SwPageFrm* pPageFrm = GetTxtFrm()->FindPageFrm();
-            if ( pPageFrm->HasGrid() )
+            if ( GetTxtFrm()->GetGridValue( GRID_ON ) &&
+                 GetTxtFrm()->GetGridValue( GRID_CELLS ) )
                 pPor = new SwKernPortion( *pCurr );
         }
 #endif
@@ -1144,8 +1144,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 #ifdef VERTICAL_LAYOUT
         if ( ! pPor && ! pCurr->GetPortion() )
         {
-            SwPageFrm* pPageFrm = GetTxtFrm()->FindPageFrm();
-            if ( pPageFrm->HasGrid() )
+            if ( GetTxtFrm()->GetGridValue( GRID_ON ) &&
+                 GetTxtFrm()->GetGridValue( GRID_CELLS ) )
                 pPor = new SwKernPortion( *pCurr );
         }
 #endif
