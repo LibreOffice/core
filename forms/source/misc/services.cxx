@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:58:56 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,201 +62,9 @@
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
 #endif
-#ifndef FORMS_MODULE_HXX
-#include "formsmodule.hxx"
+#ifndef FRM_MODULE_HXX
+#include "frm_module.hxx"
 #endif
-
-//... namespace frm .......................................................
-namespace frm
-{
-//.........................................................................
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
-
-IMPLEMENT_CONSTASCII_USTRING(AWT_CONTROL_TEXTFIELD, "com.sun.star.awt.TextField");
-
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_EDIT, "stardiv.vcl.control.Edit");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_LISTBOX, "stardiv.vcl.control.ListBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_COMBOBOX, "stardiv.vcl.control.ComboBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_RADIOBUTTON, "stardiv.vcl.control.RadioButton");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_GROUPBOX, "stardiv.vcl.control.GroupBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_FIXEDTEXT, "stardiv.vcl.control.FixedText");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_COMMANDBUTTON, "stardiv.vcl.control.Button");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_CHECKBOX, "stardiv.vcl.control.CheckBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_IMAGEBUTTON, "stardiv.vcl.control.ImageButton");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_FILECONTROL, "stardiv.vcl.control.FileControl");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_TIMEFIELD, "stardiv.vcl.control.TimeField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_DATEFIELD, "stardiv.vcl.control.DateField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_NUMERICFIELD, "stardiv.vcl.control.NumericField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_CURRENCYFIELD, "stardiv.vcl.control.CurrencyField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_PATTERNFIELD, "stardiv.vcl.control.PatternField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_FORMATTEDFIELD, "stardiv.vcl.control.FormattedField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROL_IMAGECONTROL, "stardiv.vcl.control.ImageControl");
-
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_EDIT, "stardiv.vcl.controlmodel.Edit");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_LISTBOX, "stardiv.vcl.controlmodel.ListBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_COMBOBOX, "stardiv.vcl.controlmodel.ComboBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_RADIOBUTTON, "stardiv.vcl.controlmodel.RadioButton");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_GROUPBOX, "stardiv.vcl.controlmodel.GroupBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_FIXEDTEXT, "stardiv.vcl.controlmodel.FixedText");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_COMMANDBUTTON, "stardiv.vcl.controlmodel.Button");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_CHECKBOX, "stardiv.vcl.controlmodel.CheckBox");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_IMAGEBUTTON, "stardiv.vcl.controlmodel.ImageButton");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_FILECONTROL, "stardiv.vcl.controlmodel.FileControl");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_TIMEFIELD, "stardiv.vcl.controlmodel.TimeField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_DATEFIELD, "stardiv.vcl.controlmodel.DateField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_NUMERICFIELD, "stardiv.vcl.controlmodel.NumericField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_CURRENCYFIELD, "stardiv.vcl.controlmodel.CurrencyField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_PATTERNFIELD, "stardiv.vcl.controlmodel.PatternField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_FORMATTEDFIELD, "stardiv.vcl.controlmodel.FormattedField");
-IMPLEMENT_CONSTASCII_USTRING(VCL_CONTROLMODEL_IMAGECONTROL, "stardiv.vcl.controlmodel.ImageControl");
-
-IMPLEMENT_CONSTASCII_USTRING( VCL_CONTROLMODEL_SCROLLBAR,  "com.sun.star.awt.UnoControlScrollBarModel" );
-IMPLEMENT_CONSTASCII_USTRING( VCL_CONTROL_SCROLLBAR,       "com.sun.star.awt.UnoControlScrollBar" );
-IMPLEMENT_CONSTASCII_USTRING( VCL_CONTROLMODEL_SPINBUTTON, "com.sun.star.awt.UnoControlSpinButtonModel" );
-IMPLEMENT_CONSTASCII_USTRING( VCL_CONTROL_SPINBUTTON,      "com.sun.star.awt.UnoControlSpinButton" );
-
-// -----------------------
-// service names for compatibility
-// -----------------------
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_FORM, "stardiv.one.form.component.Form");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_EDIT, "stardiv.one.form.component.Edit");            // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_TEXTFIELD, "stardiv.one.form.component.TextField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_LISTBOX, "stardiv.one.form.component.ListBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_COMBOBOX, "stardiv.one.form.component.ComboBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_RADIOBUTTON, "stardiv.one.form.component.RadioButton");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_GROUPBOX, "stardiv.one.form.component.GroupBox");        // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_FIXEDTEXT, "stardiv.one.form.component.FixedText");      // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_COMMANDBUTTON, "stardiv.one.form.component.CommandButton");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_CHECKBOX, "stardiv.one.form.component.CheckBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_GRID, "stardiv.one.form.component.Grid");            // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_GRIDCONTROL, "stardiv.one.form.component.GridControl");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_IMAGEBUTTON, "stardiv.one.form.component.ImageButton");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_FILECONTROL, "stardiv.one.form.component.FileControl");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_TIMEFIELD, "stardiv.one.form.component.TimeField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_DATEFIELD, "stardiv.one.form.component.DateField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_NUMERICFIELD, "stardiv.one.form.component.NumericField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_CURRENCYFIELD, "stardiv.one.form.component.CurrencyField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_PATTERNFIELD, "stardiv.one.form.component.PatternField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_HIDDEN, "stardiv.one.form.component.Hidden");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_HIDDENCONTROL, "stardiv.one.form.component.HiddenControl");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_IMAGECONTROL, "stardiv.one.form.component.ImageControl");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COMPONENT_FORMATTEDFIELD, "stardiv.one.form.component.FormattedField");
-
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_EDIT, "stardiv.one.form.control.Edit");                    // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_TEXTFIELD, "stardiv.one.form.control.TextField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_LISTBOX, "stardiv.one.form.control.ListBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_COMBOBOX, "stardiv.one.form.control.ComboBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_RADIOBUTTON, "stardiv.one.form.control.RadioButton");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_GROUPBOX, "stardiv.one.form.control.GroupBox");                // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_FIXEDTEXT, "stardiv.one.form.control.FixedText");          // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_COMMANDBUTTON, "stardiv.one.form.control.CommandButton");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_CHECKBOX, "stardiv.one.form.control.CheckBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_GRID, "stardiv.one.form.control.Grid");                    // compatibility
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_GRIDCONTROL, "stardiv.one.form.control.GridControl");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_IMAGEBUTTON, "stardiv.one.form.control.ImageButton");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_TIMEFIELD, "stardiv.one.form.control.TimeField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_DATEFIELD, "stardiv.one.form.control.DateField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_NUMERICFIELD, "stardiv.one.form.control.NumericField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_CURRENCYFIELD, "stardiv.one.form.control.CurrencyField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_PATTERNFIELD, "stardiv.one.form.control.PatternField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_IMAGECONTROL, "stardiv.one.form.control.ImageControl");
-IMPLEMENT_CONSTASCII_USTRING(FRM_CONTROL_FORMATTEDFIELD, "stardiv.one.form.control.FormattedField");
-
-// -----------------------
-// new (sun) service names
-// -----------------------
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_FORM,           "com.sun.star.form.component.Form"              );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_HTMLFORM,       "com.sun.star.form.component.HTMLForm"          );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATAFORM,       "com.sun.star.form.component.DataForm"          );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_TEXTFIELD,      "com.sun.star.form.component.TextField"         );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_LISTBOX,        "com.sun.star.form.component.ListBox"           );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_COMBOBOX,       "com.sun.star.form.component.ComboBox"          );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_RADIOBUTTON,    "com.sun.star.form.component.RadioButton"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_GROUPBOX,       "com.sun.star.form.component.GroupBox"          );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_FIXEDTEXT,      "com.sun.star.form.component.FixedText"         );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_COMMANDBUTTON,  "com.sun.star.form.component.CommandButton"     );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_CHECKBOX,       "com.sun.star.form.component.CheckBox"          );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_GRIDCONTROL,    "com.sun.star.form.component.GridControl"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_IMAGEBUTTON,    "com.sun.star.form.component.ImageButton"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_FILECONTROL,    "com.sun.star.form.component.FileControl"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_TIMEFIELD,      "com.sun.star.form.component.TimeField"         );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATEFIELD,      "com.sun.star.form.component.DateField"         );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_NUMERICFIELD,   "com.sun.star.form.component.NumericField"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_CURRENCYFIELD,  "com.sun.star.form.component.CurrencyField"     );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_PATTERNFIELD,   "com.sun.star.form.component.PatternField"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_HIDDENCONTROL,  "com.sun.star.form.component.HiddenControl"     );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_FORMATTEDFIELD, "com.sun.star.form.component.FormattedField"    );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_SCROLLBAR,      "com.sun.star.form.component.ScrollBar"         );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_SPINBUTTON,     "com.sun.star.form.component.SpinButton"        );
-
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_IMAGECONTROL,           "com.sun.star.form.component.DatabaseImageControl"  );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_RADIOBUTTON,   "com.sun.star.form.component.DatabaseRadioButton"   );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_CHECKBOX,      "com.sun.star.form.component.DatabaseCheckBox"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_LISTBOX,       "com.sun.star.form.component.DatabaseListBox"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_COMBOBOX,      "com.sun.star.form.component.DatabaseComboBox"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD,"com.sun.star.form.component.DatabaseFormattedField");
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_TEXTFIELD,     "com.sun.star.form.component.DatabaseTextField"     );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_DATEFIELD,     "com.sun.star.form.component.DatabaseDateField"     );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_TIMEFIELD,     "com.sun.star.form.component.DatabaseTimeField"     );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_NUMERICFIELD,  "com.sun.star.form.component.DatabaseNumericField"  );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_CURRENCYFIELD, "com.sun.star.form.component.DatabaseCurrencyField" );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_COMPONENT_DATABASE_PATTERNFIELD,  "com.sun.star.form.component.DatabasePatternField"  );
-
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_TEXTFIELD,      "com.sun.star.form.control.TextField"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_LISTBOX,        "com.sun.star.form.control.ListBox"        );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_COMBOBOX,       "com.sun.star.form.control.ComboBox"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_RADIOBUTTON,    "com.sun.star.form.control.RadioButton"    );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_GROUPBOX,       "com.sun.star.form.control.GroupBox"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_FIXEDTEXT,      "com.sun.star.form.control.FixedText"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_COMMANDBUTTON,  "com.sun.star.form.control.CommandButton"  );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_CHECKBOX,       "com.sun.star.form.control.CheckBox"       );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_GRIDCONTROL,    "com.sun.star.form.control.GridControl"    );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_IMAGEBUTTON,    "com.sun.star.form.control.ImageButton"    );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_TIMEFIELD,      "com.sun.star.form.control.TimeField"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_DATEFIELD,      "com.sun.star.form.control.DateField"      );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_NUMERICFIELD,   "com.sun.star.form.control.NumericField"   );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_CURRENCYFIELD,  "com.sun.star.form.control.CurrencyField"  );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_PATTERNFIELD,   "com.sun.star.form.control.PatternField"   );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_IMAGECONTROL,   "com.sun.star.form.control.ImageControl"   );
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_CONTROL_FORMATTEDFIELD, "com.sun.star.form.control.FormattedField" );
-
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATABASE_CHECK_BOX,        "com.sun.star.form.binding.BindableDatabaseCheckBox"        );
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATABASE_COMBO_BOX,        "com.sun.star.form.binding.BindableDatabaseComboBox"        );
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATABASE_FORMATTED_FIELD,  "com.sun.star.form.binding.BindableDatabaseFormattedField"  );
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATABASE_LIST_BOX,         "com.sun.star.form.binding.BindableDatabaseListBox"         );
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATABASE_NUMERIC_FIELD,    "com.sun.star.form.binding.BindableDatabaseNumericField"    );
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATABASE_RADIO_BUTTON,     "com.sun.star.form.binding.BindableDatabaseRadioButton"     );
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATABASE_TEXT_FIELD,       "com.sun.star.form.binding.BindableDatabaseTextField"       );
-
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_CONTROL_MODEL,               "com.sun.star.form.binding.BindableControlModel"            );
-IMPLEMENT_CONSTASCII_USTRING( BINDABLE_DATA_AWARE_CONTROL_MODEL,    "com.sun.star.form.binding.BindableDataAwareControlModel"   );
-IMPLEMENT_CONSTASCII_USTRING( DATA_AWARE_CONTROL_MODEL,             "com.sun.star.form.binding.DataAwareControlModel"           );
-IMPLEMENT_CONSTASCII_USTRING( VALIDATABLE_CONTROL_MODEL,            "com.sun.star.form.binding.ValidatableControlModel"         );
-IMPLEMENT_CONSTASCII_USTRING( VALIDATABLE_BINDABLE_CONTROL_MODEL,   "com.sun.star.form.binding.ValidatableBindableControlModel" );
-
-
-IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.Forms");
-
-IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATTER, "com.sun.star.util.NumberFormatter");
-IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATS_SUPPLIER, "com.sun.star.util.NumberFormatsSupplier");
-
-IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_ROWSET, "com.sun.star.sdb.RowSet");
-IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_CONNECTION, "com.sun.star.sdb.Connection");
-IMPLEMENT_CONSTASCII_USTRING(SRV_SDBC_STATEMENT, "com.sun.star.sdbc.Statement");
-
-IMPLEMENT_CONSTASCII_USTRING(SRV_AWT_POINTER, "com.sun.star.awt.Pointer");
-
-// -----------------------
-// common
-// -----------------------
-IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComponent" );
-
-//.........................................................................
-}
-//... namespace frm .......................................................
 
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
@@ -271,9 +79,9 @@ IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComp
 #include <uno/mapping.hxx>
 #endif
 
-namespace starregistry  = ::com::sun::star::registry;
-namespace staruno       = ::com::sun::star::uno;
-namespace starlang      = ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::registry;
 
 //---------------------------------------------------------------------------------------
 //.......................................................................................
@@ -326,16 +134,12 @@ DECLARE_SERVICE_INFO(OFormattedFieldWrapper);
     // the object was instantiated and the stream contains a FormattedModel, it switches permanently to
     // formatted.)
 namespace frm { \
-    extern Reference<XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException); \
+    extern Reference< XInterface > SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException); \
 }
 
 DECLARE_SERVICE_INFO(OFormsCollection)
 
 //---------------------------------------------------------------------------------------
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 
 static Sequence< ::rtl::OUString >                      s_aClassImplementationNames;
 static Sequence<Sequence< ::rtl::OUString > >   s_aClassServiceNames;
@@ -507,12 +311,12 @@ void ensureClassInfos()
 }
 
 //---------------------------------------------------------------------------------------
-void registerServiceProvider(const ::rtl::OUString& _rServiceImplName, const Sequence< ::rtl::OUString >& _rServices, starregistry::XRegistryKey* _pKey)
+void registerServiceProvider(const ::rtl::OUString& _rServiceImplName, const Sequence< ::rtl::OUString >& _rServices, XRegistryKey* _pKey)
 {
     ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
     sMainKeyName += _rServiceImplName;
     sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
-    Reference<starregistry::XRegistryKey> xNewKey = _pKey->createKey(sMainKeyName);
+    Reference< XRegistryKey > xNewKey = _pKey->createKey(sMainKeyName);
     OSL_ENSURE(xNewKey.is(), "forms::registerProvider : could not create a registry key !");
     if (!xNewKey.is())
         return;
@@ -531,6 +335,8 @@ void SAL_CALL createRegistryInfo_ODatabaseForm();
 void SAL_CALL createRegistryInfo_OFilterControl();
 void SAL_CALL createRegistryInfo_OScrollBarModel();
 void SAL_CALL createRegistryInfo_OSpinButtonModel();
+void SAL_CALL createRegistryInfo_ONavigationBarModel();
+void SAL_CALL createRegistryInfo_ONavigationBarControl();
 
 //---------------------------------------------------------------------------------------
 void SAL_CALL createRegistryInfo_FORMS()
@@ -542,6 +348,8 @@ void SAL_CALL createRegistryInfo_FORMS()
         createRegistryInfo_OFilterControl();
         createRegistryInfo_OScrollBarModel();
         createRegistryInfo_OSpinButtonModel();
+        createRegistryInfo_ONavigationBarModel();
+        createRegistryInfo_ONavigationBarControl();
         bInit = sal_True;
     }
 }
@@ -553,7 +361,7 @@ void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvType
 }
 
 //---------------------------------------------------------------------------------------
-sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XRegistryKey* _pRegistryKey)
+sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, XRegistryKey* _pRegistryKey)
 {
     if (_pRegistryKey)
     {
@@ -592,7 +400,7 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XReg
 
             return sal_True;
         }
-        catch (starregistry::InvalidRegistryException &)
+        catch ( InvalidRegistryException& )
         {
             OSL_ENSURE(sal_False, "forms::component_writeInfo : InvalidRegistryException !");
         }
