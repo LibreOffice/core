@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-12 17:32:48 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,8 +212,8 @@ PptEscherEx::~PptEscherEx()
 void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
 {
     *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | 0xf  ) << n_EscherContainer << (UINT32)0;
-    mpOffsets[ ++mnLevel ] = mpOutStrm->Tell() - 4;
-    mpRecTypes[ mnLevel ] = n_EscherContainer;
+    mOffsets.push_back( mpOutStrm->Tell() - 4 );
+    mRecTypes.push_back( n_EscherContainer );
 
     switch( n_EscherContainer )
     {
@@ -258,111 +258,126 @@ void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
 
 void PptEscherEx::CloseContainer()
 {
-    UINT32 nSize, nPos = mpOutStrm->Tell();
-    nSize = ( nPos - mpOffsets[ mnLevel ] ) - 4;
-    mpOutStrm->Seek( mpOffsets[ mnLevel ] );
-    *mpOutStrm << nSize;
-
-    switch( mpRecTypes[ mnLevel ] )
+    /* SJ: #Issue 26747#
+       not creating group objects with a depth higher than 16, because then
+       PPT is having a big performance problem when starting a slide show
+    */
+    if ( ( mRecTypes.back() != ESCHER_SpgrContainer ) || ( mnGroupLevel < 12 ) )
     {
-        case ESCHER_DgContainer :
-        {
-            if ( mbEscherDg )
-            {
-                mbEscherDg = FALSE;
-                if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
-                {
-                    // shapeanzahl des drawings setzen
-                    mnTotalShapesDgg += mnTotalShapesDg;
-                    *mpOutStrm << mnTotalShapesDg << mnCurrentShapeMaximumID;
+        UINT32 nSize, nPos = mpOutStrm->Tell();
+        nSize = ( nPos - mOffsets.back() ) - 4;
+        mpOutStrm->Seek( mOffsets.back() );
+        *mpOutStrm << nSize;
 
-                    if ( !mnTotalShapesDg )
+        switch( mRecTypes.back() )
+        {
+            case ESCHER_DgContainer :
+            {
+                if ( mbEscherDg )
+                {
+                    mbEscherDg = FALSE;
+                    if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
                     {
-                        maFIDCLs << (UINT32)0
-                                 << (UINT32)0;
-                    }
-                    else
-                    {
-                        if ( mnTotalShapeIdUsedDg )
+                        // shapeanzahl des drawings setzen
+                        mnTotalShapesDgg += mnTotalShapesDg;
+                        *mpOutStrm << mnTotalShapesDg << mnCurrentShapeMaximumID;
+
+                        if ( !mnTotalShapesDg )
                         {
-                            UINT32 i, nFIDCL = ( ( mnTotalShapeIdUsedDg - 1 ) / 0x400 );
-                            if ( nFIDCL )
-                                mnFIDCLs += nFIDCL;
-                            for ( i = 0; i <= nFIDCL; i++ )
+                            maFIDCLs << (UINT32)0
+                                    << (UINT32)0;
+                        }
+                        else
+                        {
+                            if ( mnTotalShapeIdUsedDg )
                             {
-                                maFIDCLs << mnCurrentDg;            // drawing number
-                                if ( i < nFIDCL )
-                                    maFIDCLs << 0x400;
-                                else
+                                UINT32 i, nFIDCL = ( ( mnTotalShapeIdUsedDg - 1 ) / 0x400 );
+                                if ( nFIDCL )
+                                    mnFIDCLs += nFIDCL;
+                                for ( i = 0; i <= nFIDCL; i++ )
                                 {
-                                    UINT32 nShapesLeft = mnTotalShapeIdUsedDg % 0x400;
-                                    if ( !nShapesLeft )
-                                        nShapesLeft = 0x400;        // shape count in this IDCL
-                                    maFIDCLs << (UINT32)nShapesLeft;
+                                    maFIDCLs << mnCurrentDg;            // drawing number
+                                    if ( i < nFIDCL )
+                                        maFIDCLs << 0x400;
+                                    else
+                                    {
+                                        UINT32 nShapesLeft = mnTotalShapeIdUsedDg % 0x400;
+                                        if ( !nShapesLeft )
+                                            nShapesLeft = 0x400;        // shape count in this IDCL
+                                        maFIDCLs << (UINT32)nShapesLeft;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
-        break;
+            break;
 
-        case ESCHER_SpgrContainer :
-        {
-            if ( mbEscherSpgr )
+            case ESCHER_SpgrContainer :
             {
-                mbEscherSpgr = FALSE;
+                if ( mbEscherSpgr )
+                {
+                    mbEscherSpgr = FALSE;
 
+                }
             }
-        }
-        break;
+            break;
 
-        default:
-        break;
+            default:
+            break;
+        }
+        mOffsets.pop_back();
+        mRecTypes.pop_back();
+        mpOutStrm->Seek( nPos );
     }
-    --mnLevel;
-    mpOutStrm->Seek( nPos );
 }
 
 // ---------------------------------------------------------------------------------------------
 
 void PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
 {
-    Rectangle aRect;
-    if ( pBoundRect )
-        aRect = *pBoundRect;
-
-    OpenContainer( ESCHER_SpgrContainer );
-    OpenContainer( ESCHER_SpContainer );
-    AddAtom( 16, ESCHER_Spgr, 1 );
-    PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-    *mpOutStrm  << (INT32)aRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
-                << (INT32)aRect.Top()
-                << (INT32)aRect.Right()
-                << (INT32)aRect.Bottom();
-
-    if ( !mnGroupLevel )
-        AddShape( ESCHER_ShpInst_Min, 5 );                              // Flags: Group | Patriarch
-    else
+    /* SJ: #Issue 26747#
+       not creating group objects with a depth higher than 16, because then
+       PPT is having a big performance problem when starting a slide show
+    */
+    if ( mnGroupLevel < 12 )
     {
-        AddShape( ESCHER_ShpInst_Min, 0x201 );                          // Flags: Group | HaveAnchor
-        AddAtom( 8, ESCHER_ClientAnchor );
-        PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
-        *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
-    }
-    if ( pClientData )
-    {
-        pClientData->Seek( STREAM_SEEK_TO_END );
-        sal_uInt32 nSize = pClientData->Tell();
-        if ( nSize )
+        Rectangle aRect;
+        if ( pBoundRect )
+            aRect = *pBoundRect;
+
+        OpenContainer( ESCHER_SpgrContainer );
+        OpenContainer( ESCHER_SpContainer );
+        AddAtom( 16, ESCHER_Spgr, 1 );
+        PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
+        *mpOutStrm  << (INT32)aRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
+                    << (INT32)aRect.Top()
+                    << (INT32)aRect.Right()
+                    << (INT32)aRect.Bottom();
+
+        if ( !mnGroupLevel )
+            AddShape( ESCHER_ShpInst_Min, 5 );                              // Flags: Group | Patriarch
+        else
         {
-            *mpOutStrm << (sal_uInt32)( ( ESCHER_ClientData << 16 ) | 0xf )
-                       << nSize;
-            mpOutStrm->Write( pClientData->GetData(), nSize );
+            AddShape( ESCHER_ShpInst_Min, 0x201 );                          // Flags: Group | HaveAnchor
+            AddAtom( 8, ESCHER_ClientAnchor );
+            PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
+            *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
         }
+        if ( pClientData )
+        {
+            pClientData->Seek( STREAM_SEEK_TO_END );
+            sal_uInt32 nSize = pClientData->Tell();
+            if ( nSize )
+            {
+                *mpOutStrm << (sal_uInt32)( ( ESCHER_ClientData << 16 ) | 0xf )
+                        << nSize;
+                mpOutStrm->Write( pClientData->GetData(), nSize );
+            }
+        }
+        CloseContainer();                                               // ESCHER_SpContainer
     }
-    CloseContainer();                                               // ESCHER_SpContainer
     mnGroupLevel++;
 }
 
