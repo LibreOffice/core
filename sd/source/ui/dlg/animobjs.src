@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:27:42 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,6 +833,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Εφαρμογή αντικειμένου";
         QuickHelpText[ korean ] = "Apply Object";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Objekt όbernehmen";
     };
     ImageButton BTN_GET_ALL_OBJECTS
     {
@@ -868,6 +869,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Εφαρμογή αντικειμένων μεμονωμένα";
         QuickHelpText[ korean ] = "Apply Objects Individually";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Objekte einzeln όbernehmen";
     };
     ImageButton BTN_REMOVE_BITMAP
     {
@@ -903,6 +905,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Διαγραφή τρέχων εικόνας";
         QuickHelpText[ korean ] = "Delete Current Image";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Aktuelles Bild lφschen";
     };
     ImageButton BTN_REMOVE_ALL
     {
@@ -938,6 +941,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Διαγραφή όλων των εικόνων";
         QuickHelpText[ korean ] = "Delete All Images";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Alle Bilder lφschen";
     };
     FixedText FT_COUNT
     {
