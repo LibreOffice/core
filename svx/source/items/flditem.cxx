@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:31:17 $
+ *  last change: $Author: thb $ $Date: 2001-09-20 07:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #pragma hdrstop
 
 #define _SVX_FLDITEM_CXX
+
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 
 #define ITEMID_FIELD    0
 #include "flditem.hxx"
@@ -938,7 +942,24 @@ XubString SvxExtFileField::GetFormatted() const
 
     INetURLObject aURLObj( aFile );
 
-    if( INET_PROT_FILE == aURLObj.GetProtocol() )
+    if( INET_PROT_NOT_VALID == aURLObj.GetProtocol() )
+    {
+        // invalid? try to interpret string as system file name
+        String aURLStr;
+
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFile, aURLStr );
+
+        aURLObj.SetURL( aURLStr );
+    }
+
+    // #92009# Be somewhat liberate when trying to
+    // get formatted content out of the FileField
+    if( INET_PROT_NOT_VALID == aURLObj.GetProtocol() )
+    {
+        // still not valid? Then output as is
+        aString = aFile;
+    }
+    else if( INET_PROT_FILE == aURLObj.GetProtocol() )
     {
         switch( eFormat )
         {
