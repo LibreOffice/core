@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:30:43 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,8 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     {
         SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
-        pNew->Put( SfxStringItem( SID_FILTER_NAME, xDoc->GetFactory().GetFilter(0)->GetFilterName() ) );
+        pNew->ClearItem( SID_FILTER_NAME );
+        //pNew->Put( SfxStringItem( SID_FILTER_NAME, xDoc->GetFactory().GetFilter(0)->GetFilterName() ) );
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
         TransformItems( SID_OPENDOC, *pNew, aArgs );
         sal_Int32 nLength = aArgs.getLength();
