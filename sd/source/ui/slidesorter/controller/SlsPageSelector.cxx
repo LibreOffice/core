@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageSelector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:57:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #include "sdpage.hxx"
 #include "ViewShell.hxx"
+#include "DrawViewShell.hxx"
 #include "ViewShellBase.hxx"
 
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
@@ -250,9 +251,23 @@ bool PageSelector::IsPageSelected (int nPageIndex)
 
 void PageSelector::SetCurrentPage (PageDescriptor& rDescriptor)
 {
-    // Set current page.
+    // Set current page.  At the moment we have to do this in two different
+    // ways.  The UNO way is the preferable one but, alas, it does not work
+    // always correctly (after some kinds of model changes).  Therefore, we
+    // call DrawViewShell::SwitchPage(), too.
     try
     {
+        // First the traditional way.
+        DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(
+            mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
+        if (pDrawViewShell != NULL)
+        {
+            USHORT nPageNumber = (rDescriptor.GetPage()->GetPageNum()-1)/2;
+            pDrawViewShell->SwitchPage(nPageNumber);
+            pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
+        }
+
+        // Now the UNO way.
         do
         {
             Reference<beans::XPropertySet> xSet (
@@ -275,6 +290,17 @@ void PageSelector::SetCurrentPage (PageDescriptor& rDescriptor)
         // This is sad but still leaves us in a valid state.  Therefore,
         // this exception is silently ignored.
     }
+}
+
+
+
+
+void PageSelector::SetCurrentPage (const SdPage* pPage)
+{
+    int nPageIndex = (pPage->GetPageNum()-1) / 2;
+    PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
+    if (pDescriptor!=NULL && pDescriptor->GetPage()==pPage)
+        SetCurrentPage(*pDescriptor);
 }
 
 
