@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ ModalDialog DLG_MERGE_TABLE
         Text = "Modus" ;
         Text [ ENGLISH ] = "Mode" ;
         Text [ english_us ] = "Mode" ;
-        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modo" ;
         Text [ swedish ] = "Läge" ;
         Text [ danish ] = "Modus" ;
         Text [ italian ] = "Modo" ;
@@ -114,11 +114,14 @@ ModalDialog DLG_MERGE_TABLE
         Text[ arabic ] = "ÇáÃÓáæÈ";
         Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
         Text[ korean ] = "ëª¨ë“œ";
-        Text[ turkish ] = "Kip";
+        Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
+        Text[ czech ] = "ReÅ¾im";
+        Text[ hebrew ] = "Modus";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤•à¤¾à¤° ";
     };
     RadioButton RB_MERGE_PREV
     {
@@ -137,19 +140,22 @@ ModalDialog DLG_MERGE_TABLE
         Text[ italian ] = "Unisci alla tabella precedente";
         Text[ danish ] = "flet med forrige tabel";
         Text[ swedish ] = "sammanfoga med den ~föregående tabellen";
-        Text[ polish ] = "Po³¹cz z poprzedni¹ tabel¹";
-        Text[ portuguese_brazilian ] = "Join with ~previous table";
+        Text[ polish ] = "Z³¹cz z ~poprzedni¹ tabel¹";
+        Text[ portuguese_brazilian ] = "Juntar com a tabela ~anterior";
         Text[ japanese ] = "å‰ã®è¡¨ã¨çµåˆ(~P)";
         Text[ chinese_simplified ] = "å’Œä¸Šä¸€ä¸ªè¡¨æ ¼åˆå¹¶(~P)";
         Text[ chinese_traditional ] = "å’Œä¸Šä¸€å€‹è¡¨æ ¼åˆä½µ(~P)";
         Text[ arabic ] = "ÇáÑÈØ ãÚ ÇáÌÏæá ÇáÓÇÈŞ";
         Text[ greek ] = "İíùóç ìå ğñïçãïıìåíï ğßíáêá";
         Text[ korean ] = "ì´ì „ í‘œì— ì—°ê²°(~P)";
-        Text[ turkish ] = "~Önceki tablo ile birleştir";
+        Text[ turkish ] = "Önceki ~tablo ile birleştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Uneix a la taula ~anterior";
         Text[ finnish ] = "Liitä ~edelliseen taulukkoon";
         Text[ thai ] = "à¸£à¹ˆà¸§à¸¡à¸”à¹‰à¸§à¸¢à¸•à¸²à¸£à¸²à¸‡~à¸à¹ˆà¸­à¸™";
+        Text[ czech ] = "Spojit s pÅ™edchozÃ­ tabulkou";
+        Text[ hebrew ] = "mit der ~vorherigen Tabelle verbinden";
+        Text[ hindi ] = "~à¤ªà¤¿à¤›à¤²à¥‡ à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‡ à¤¸à¤¾à¤¥ à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     RadioButton RB_MERGE_NEXT
     {
@@ -166,8 +172,8 @@ ModalDialog DLG_MERGE_TABLE
         Text[ italian ] = "Unisci alla tabella successiva";
         Text[ danish ] = "flet med efterfølgende tabel";
         Text[ swedish ] = "sammanfoga med den ~efterföljande tabellen";
-        Text[ polish ] = "Po³¹cz z nastêpn¹ tabel¹";
-        Text[ portuguese_brazilian ] = "Join with ~next table";
+        Text[ polish ] = "Z³¹cz z ~nastêpn¹ tabel¹";
+        Text[ portuguese_brazilian ] = "Juntar com a tabela ~seguinte";
         Text[ japanese ] = "æ¬¡ã®è¡¨ã¨çµåˆ(~N)";
         Text[ chinese_simplified ] = "å’Œä¸‹ä¸€ä¸ªè¡¨æ ¼åˆå¹¶(~N)";
         Text[ chinese_traditional ] = "å’Œä¸‹ä¸€å€‹è¡¨æ ¼åˆä½µ(~N)";
@@ -179,6 +185,9 @@ ModalDialog DLG_MERGE_TABLE
         Text[ catalan ] = "uneix amb la taula ~següent";
         Text[ finnish ] = "Liitä ~seuraavaan taulukkoon";
         Text[ thai ] = "à¸£à¹ˆà¸§à¸¡à¸”à¹‰à¸§à¸¢à¸•à¸²à¸£à¸²à¸‡~à¸–à¸±à¸”à¹„à¸›";
+        Text[ czech ] = "Spojit s nÃ¡sledujÃ­cÃ­ tabulkou";
+        Text[ hebrew ] = "mit der ~nachfolgenden Tabelle verbinden";
+        Text[ hindi ] = "~à¤…à¤—à¤²à¥‡ à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‡ à¤¸à¤¾à¤¥ à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     Text[ english_us ] = "Merge Tables";
     Text[ portuguese ] = "Unir tabelas";
@@ -189,8 +198,8 @@ ModalDialog DLG_MERGE_TABLE
     Text[ italian ] = "Unisci tabelle";
     Text[ danish ] = "Flet tabeller";
     Text[ swedish ] = "Sammanfoga tabeller";
-    Text[ polish ] = "Sprzêgaj tabele";
-    Text[ portuguese_brazilian ] = "Join tables";
+    Text[ polish ] = "Scal tabele";
+    Text[ portuguese_brazilian ] = "Mesclar Tabelas";
     Text[ japanese ] = "è¡¨ã®çµåˆ";
     Text[ chinese_simplified ] = "è¿æ¥è¡¨æ ¼";
     Text[ chinese_traditional ] = "é€£æ¥è¡¨æ ¼";
@@ -202,7 +211,23 @@ ModalDialog DLG_MERGE_TABLE
     Text[ catalan ] = "Fusiona les taules";
     Text[ finnish ] = "Yhdistä taulukot";
     Text[ thai ] = "à¸œà¸ªà¸²à¸™à¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "SlouÄit tabulky";
+    Text[ hebrew ] = "Tabellen verbinden";
+    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤®à¤¿à¤²à¤¾à¤“";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
