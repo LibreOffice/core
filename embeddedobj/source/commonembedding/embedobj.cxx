@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:52:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
@@ -361,8 +365,25 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 // dispatch provider may not be provided
                 uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
 
+                // get the container module name
+                ::rtl::OUString aModuleName;
+                try
+                {
+                    uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
+                    uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
+
+                    uno::Reference< frame::XModuleManager > xManager(
+                        m_xFactory->createInstance(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ),
+                        uno::UNO_QUERY_THROW );
+
+                    aModuleName = xManager->identify( xContDoc );
+                }
+                catch( uno::Exception& )
+                {}
+
                 // TODO/LATER: wrong order of calls; but with the correct order the statusbar is set to the wrong place
-                sal_Bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP );
+                sal_Bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
                 xInplaceClient->activatingUI();
 
                 if ( bOk )
