@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:05:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,14 +181,8 @@
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
 #include "PreviewChildWindow.hxx"
 #endif
-#ifndef SD_EFFECT_CHILD_WINDOW_HXX
-#include "EffectChildWindow.hxx"
-#endif
 #ifndef SD_LAZER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
-#endif
-#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
-#include "SlideChangeChildWindow.hxx"
 #endif
 //#include "3dchld.hxx"
 #include "app.hrc"
@@ -242,10 +236,11 @@ void SdDLL::RegisterControllers()
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_FLOWCHART, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
-    SdTbxCtlDiaEffect::RegisterControl(0, pMod);
-    SdTbxCtlDiaSpeed::RegisterControl(0, pMod);
-    SdTbxCtlDiaAuto::RegisterControl(0, pMod);
-    SdTbxCtlDiaTime::RegisterControl(0, pMod);
+//  SdTbxCtlDiaEffect::RegisterControl(0, pMod);
+//  SdTbxCtlDiaSpeed::RegisterControl(0, pMod);
+//  SdTbxCtlDiaAuto::RegisterControl(0, pMod);
+//  SdTbxCtlDiaTime::RegisterControl(0, pMod);
+
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
 
@@ -253,9 +248,7 @@ void SdDLL::RegisterControllers()
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::DrawViewShell::_GetInterfaceIdImpl(), pMod );
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::GraphicViewShell::_GetInterfaceIdImpl(), pMod );
     ::sd::PreviewChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::EffectChildWindow::RegisterChildWindow(0, pMod);
     ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::SlideChangeChildWindow::RegisterChildWindow(0, pMod);
     //Sd3DChildWindow::RegisterChildWindow(0, pMod);
 /*
     SvxChildWinCustomShapesBasic::RegisterChildWindow( 0, pMod );
