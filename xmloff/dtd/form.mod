@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.15 2003-12-11 12:06:36 kz Exp $
+	$Id: form.mod,v 1.16 2004-05-07 15:58:55 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -145,7 +145,7 @@
                     %data-field;
                     %linked-cell;>
 
-<!ELEMENT form:textarea (form:properties?, office:events?)>
+<!ELEMENT form:textarea (form:properties?, office:events?, text:p*)>
 <!ATTLIST form:textarea %current-value;
                         %disabled;
                         %max-length;
