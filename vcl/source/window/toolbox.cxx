@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-29 15:30:42 $
+ *  last change: $Author: ssa $ $Date: 2002-05-31 07:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3562,6 +3562,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                 mnHighItemId = pItem->mnId;
                                 ImplDrawItem( nTempPos, 2 );
                                 ImplShowFocus();
+                                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
                             }
                         }
                         if ( mnOutStyle & TOOLBOX_STYLE_HANDPOINTER )
@@ -4976,9 +4977,12 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 
             mnHighItemId = pItem->mnId;
             ImplDrawItem( aPos, mbSelection ? 1 : 2 );
+
             if( mbSelection )
                 mnCurPos = aPos;
             ImplShowFocus();
+
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
         }
     }
     else
