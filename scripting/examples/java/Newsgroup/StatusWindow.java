@@ -125,7 +125,7 @@ public class StatusWindow extends JFrame
         if( enable )
         {
             cancelButton.setEnabled( true );
-            cancelButton.setText( "Close" );
+            cancelButton.setText( "Finish" );
         }
         else
         {
