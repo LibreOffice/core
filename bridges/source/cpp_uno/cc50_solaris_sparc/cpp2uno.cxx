@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 11:01:55 $
+ *  last change: $Author: dbo $ $Date: 2001-09-07 14:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,31 +469,31 @@ const MediateClassData::ClassDataBuffer* MediateClassData::getClassData( typelib
 //==================================================================================================
 int cpp_vtable_call( int nTableEntry, void** pCallStack )
 {
-    long nRegReturn[2];
-    typelib_TypeClass aType =
-        cpp_mediate( nTableEntry, pCallStack+17, (sal_Int64*)nRegReturn );
+    sal_Int64 nRegReturn;
+    typelib_TypeClass aType = cpp_mediate( nTableEntry, pCallStack+17, &nRegReturn );
+    OSL_ASSERT( sizeof(void *) == sizeof(sal_Int32) );
     switch( aType )
     {
         // move return value into register space
         // (will be loaded by machine code snippet)
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
-            pCallStack[ 17 ] = (void*)(((char*)nRegReturn)[0]);
+            pCallStack[ 17 ] = (void*)*(char*)&nRegReturn;
             break;
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
-            pCallStack[ 17 ] = (void*)(((short*)nRegReturn)[0]);
+            pCallStack[ 17 ] = (void*)*(short*)&nRegReturn;
             break;
         case typelib_TypeClass_DOUBLE:
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             // move long to %i1
-            pCallStack[ 18 ] = (void*) nRegReturn[ 1 ];
+            pCallStack[ 18 ] = (void*) ((void **)&nRegReturn)[ 1 ];
         case typelib_TypeClass_FLOAT:
         default:
             // move long to %i0
-            pCallStack[ 17 ] = (void*) nRegReturn[ 0 ];
+            pCallStack[ 17 ] = (void*) ((void **)&nRegReturn)[ 0 ];
             break;
     }
     return aType;
