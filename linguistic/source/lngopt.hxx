@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-08 12:45:36 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,12 @@
 #include <vcl/timer.hxx>
 #include <svtools/itemprop.hxx>
 
+#ifndef _LINGUISTIC_MISC_HXX_
 #include "misc.hxx"
+#endif
+#ifndef _LINGUISTIC_DEFS_HXX_
 #include "defs.hxx"
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -150,6 +154,9 @@ public:
 
     const ::com::sun::star::uno::Sequence< rtl::OUString >
             GetActiveDics() const   { return pData->aActiveDics; }
+
+    const ::com::sun::star::uno::Sequence< rtl::OUString >
+            GetActiveConvDics() const   { return pData->aActiveConvDics; }
 };
 
 
