@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 13:26:41 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 16:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2726,6 +2726,30 @@ void ScChangeTrack::NotifyModified( ScChangeTrackMsgType eMsgType,
 }
 
 
+void lcl_EnsureSorting( StrCollection& rCollection )
+{
+    BOOL bSorted = TRUE;
+    USHORT nCount = rCollection.GetCount();
+    USHORT i;
+    for (i=0; i+1<nCount; i++)
+        if ( rCollection.Compare( rCollection[i], rCollection[i+1] ) != -1 )
+            bSorted = FALSE;
+
+    if ( !bSorted )
+    {
+        //  if not sorted, rebuild collection
+        StrCollection aNewColl;
+        for (i=0; i<nCount; i++)
+        {
+            DataObject* pNewObj = rCollection[i]->Clone();
+            if (!aNewColl.Insert(pNewObj))
+                delete pNewObj;
+        }
+        rCollection = aNewColl;
+    }
+}
+
+
 BOOL ScChangeTrack::Load( SvStream& rStrm, USHORT nVer )
 {
     BOOL bOk = TRUE;
@@ -2874,6 +2898,9 @@ BOOL ScChangeTrack::Load( SvStream& rStrm, USHORT nVer )
     }
 
     SetLoadSave( FALSE );
+
+    // versions between 583 and 633 had the sorting wrong -> correct (after loading the actions)
+    lcl_EnsureSorting( aUserCollection );
 
     // den aktuellen User erst einfuegen, wenn die Actions bereits ihre User haben
     SetUser( aUser );
