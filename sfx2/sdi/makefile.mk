@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:55:28 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:55:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,9 +92,6 @@ SVSDIDEPEND= \
         object.sdi \
         frmslots.sdi \
                 genslots.sdi
-SRS1NAME=$(TARGET)
-SRC1FILES =  \
-        sfxslots.src
 
 # --- Targets -------------------------------------------------------
 
