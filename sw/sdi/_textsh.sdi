@@ -2,7 +2,7 @@
 
     $Workfile:   _textsh.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.6 2001-02-27 14:35:36 jp Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.7 2001-04-18 10:20:34 os Exp $
 
     Beschreibung:   Basis-interfaces fuer Text
 
@@ -1199,25 +1199,25 @@ interface BaseText : Selection
     SID_TRANSLITERATE_HALFWIDTH
     [
         ExecMethod = ExecTransliteration;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_TRANSLITERATE_FULLWIDTH
     [
         ExecMethod = ExecTransliteration;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_TRANSLITERATE_HIRAGANA
     [
         ExecMethod = ExecTransliteration;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_TRANSLITERATE_KATAGANA
     [
         ExecMethod = ExecTransliteration;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -1228,6 +1228,9 @@ interface BaseText : Selection
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/02/27 14:35:36  jp
+    move transliteration menu into SVX
+
     Revision 1.5  2001/01/10 16:14:47  os
     Ruby dialog
 
