@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:30:29 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 15:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
@@ -193,8 +196,8 @@ void SvXMLExport::_InitCtor()
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
 
-    sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "./Pictures/" ) );
-    sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.GraphicObject:" ) );
+    sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
+    sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
 }
 
 SvXMLExport::SvXMLExport(
@@ -697,7 +700,7 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
 OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
 {
     OUString sRet( rGraphicObjectURL );
-    if( 0 == rGraphicObjectURL .compareTo( sGraphicObjectProtocol,
+    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
                              sGraphicObjectProtocol.getLength() ) &&
         xEmbeddedGraphicObjects.is() )
     {
@@ -708,6 +711,12 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
 
         sRet = sPicturesPath;
         sRet += rGraphicObjectURL.copy( sGraphicObjectProtocol.getLength() );
+    }
+    else
+    {
+        String sTmp( sRet );
+        INetURLObject::AbsToRel( sTmp );
+        sRet = sTmp;
     }
 
     return sRet;
