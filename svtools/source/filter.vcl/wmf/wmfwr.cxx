@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2000-09-27 12:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,10 +310,10 @@ void WMFWriter::WritePointYX(const Point & rPoint)
 }
 
 
-void WMFWriter::WriteDX(long nDX)
+sal_Int32 WMFWriter::ScaleWidth( sal_Int32 nDX )
 {
     Size aSz( pVirDev->LogicToLogic(Size(nDX,0),aSrcMapMode,aTargetMapMode) );
-    *pWMF << ((short)aSz.Width());
+    return aSz.Width();
 }
 
 
@@ -433,6 +433,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     switch (rFont.GetCharSet())
     {
         case RTL_TEXTENCODING_SYMBOL :  nCharSet = W_SYMBOL_CHARSET; break;
+        case RTL_TEXTENCODING_MS_932 :  nCharSet = 0x3c; break;
         default:                        nCharSet = W_ANSI_CHARSET;
     }
     *pWMF << nCharSet;
@@ -454,15 +455,12 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     }
     *pWMF << nPitchFamily;
 
-    ByteString aFontName( rFont.GetName(), RTL_TEXTENCODING_UTF8 );
+    ByteString aFontName( rFont.GetName(), gsl_getSystemTextEncoding() );
     for ( i = 0; i < W_LF_FACESIZE; i++ )
     {
-        if ( i < aFontName.Len() )
-            *pWMF << (BYTE)aFontName.GetChar( i );
-        else
-            *pWMF << (BYTE)0;
+        sal_Char nChar = ( i < aFontName.Len() ) ? aFontName.GetChar( i ) : 0;
+        *pWMF << nChar;
     }
-
     UpdateRecordHeader();
 }
 
@@ -529,49 +527,74 @@ void WMFWriter::WMFRecord_Ellipse(const Rectangle & rRect)
 }
 
 
-void WMFWriter::WMFRecord_ExtTextOut(const Point & rPoint, const ByteString & rString, const long * pDXAry)
+void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rString, const long * pDXAry )
 {
-    USHORT nLen,i;
+    sal_uInt16  nOriginalTextLen, nNewTextLen, i;
+    sal_Int32   j;
+    nOriginalTextLen = rString.Len();
 
-    nLen=rString.Len();
-    if (nLen<=1 || pDXAry==NULL)
+    rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
+    if ( eChrSet == RTL_TEXTENCODING_DONTKNOW )
+        eChrSet = gsl_getSystemTextEncoding();
+    ByteString aByteString( rString, eChrSet );
+
+    if ( ( nOriginalTextLen <= 1 ) || ( pDXAry == NULL ) )
     {
-        WMFRecord_TextOut(rPoint,rString);
+        WMFRecord_TextOut( rPoint, aByteString );
         return;
     }
+    WriteRecordHeader( 0, W_META_EXTTEXTOUT );
+    WritePointYX( rPoint );
+    nNewTextLen = aByteString.Len();
+    *pWMF << nNewTextLen << (sal_uInt16)0;
 
-    WriteRecordHeader(0,W_META_EXTTEXTOUT);
-    WritePointYX(rPoint);
-    *pWMF << nLen << (USHORT)0;
+    for ( i = 0; i < nNewTextLen; i++ )
+        *pWMF << (sal_uInt8)aByteString.GetChar( i );
+    if ( nNewTextLen & 1 )
+        *pWMF << (sal_uInt8)0;
 
-    for ( i = 0; i < nLen; i++ )
-        *pWMF << (BYTE)rString.GetChar( i );
-    if ((nLen&1)!=0) *pWMF << (BYTE)0;
-    WriteDX(pDXAry[0]);
-    for (i=1; i<(nLen-1); i++) WriteDX(pDXAry[i]-pDXAry[i-1]);
-    WriteDX(pDXAry[nLen-2]/(nLen-1));
+    sal_Int16* pConvertedDXAry = new sal_Int16[ nOriginalTextLen ];
+    j = 0;
+    pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
+    for ( i = 1; i < ( nOriginalTextLen - 1 ); i++ )
+        pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ i ] - pDXAry[ i - 1 ] );
+    pConvertedDXAry[ j ] = (sal_Int16)ScaleWidth( pDXAry[ nOriginalTextLen - 2 ] / ( nOriginalTextLen - 1 ) );
+
+    for ( i = 0; i < nOriginalTextLen; i++ )
+    {
+        sal_Int16 nDx = pConvertedDXAry[ i ];
+        *pWMF << nDx;
+        if ( nOriginalTextLen < nNewTextLen )
+        {
+            ByteString aTemp( rString.GetChar( i ), eChrSet );
+            j = aTemp.Len();
+            while ( --j > 0 )
+                *pWMF << (sal_uInt16)0;
+        }
+    }
+    delete pConvertedDXAry;
     UpdateRecordHeader();
 }
 
 
-void WMFWriter::WMFRecord_ExtTextOut(const Point & rPoint, const ByteString & rString, ULONG nWidth)
+void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rString, ULONG nWidth )
 {
     USHORT nLen,i;
     long * pDXAry;
     sal_Int32   nNormSize;
 
-    pVirDev->SetFont(aSrcFont);
-    nLen=rString.Len();
-    pDXAry=new long[nLen];
-    nNormSize = pVirDev->GetTextArray( UniString( rString, RTL_TEXTENCODING_UTF8 ),pDXAry );
-    if (nLen<=1 || nNormSize ==(long)nWidth )
+    pVirDev->SetFont( aSrcFont );
+    nLen = rString.Len();
+    pDXAry = new long[ nLen ];
+    nNormSize = pVirDev->GetTextArray( rString, pDXAry );
+    if ( nLen <= 1 || nNormSize ==(long)nWidth )
+        WMFRecord_ExtTextOut( rPoint, rString, (const long*)NULL );
+    else
     {
-        WMFRecord_TextOut(rPoint,rString);
-        delete pDXAry;
-        return;
+        for ( i = 0; i < ( nLen - 1 ); i++ )
+            pDXAry[ i ] = pDXAry[ i ] * ( (long)nWidth ) / nNormSize;
+        WMFRecord_ExtTextOut( rPoint, rString, pDXAry );
     }
-    for (i=0; i<(nLen-1); i++) pDXAry[i]=pDXAry[i]*((long)nWidth)/nNormSize;
-    WMFRecord_ExtTextOut(rPoint,rString,pDXAry);
     delete pDXAry;
 }
 
@@ -1150,12 +1173,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-                    rtl_TextEncoding eTargetChrSet = RTL_TEXTENCODING_MS_1252;
                     if ( eChrSet == RTL_TEXTENCODING_DONTKNOW )
                         eChrSet = gsl_getSystemTextEncoding();
-                    if ( eChrSet != RTL_TEXTENCODING_SYMBOL )
-                        eTargetChrSet = RTL_TEXTENCODING_SYMBOL;
-                    ByteString aStr( aTemp, eChrSet, eTargetChrSet );
+                    ByteString aStr( aTemp, eChrSet );
                     SetAttrForText();
                     WMFRecord_TextOut( pA->GetPoint(), aStr );
                 }
@@ -1166,15 +1186,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
 
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-                    rtl_TextEncoding eTargetChrSet = RTL_TEXTENCODING_MS_1252;
-                    if ( eChrSet == RTL_TEXTENCODING_DONTKNOW )
-                        eChrSet = gsl_getSystemTextEncoding();
-                    if ( eChrSet != RTL_TEXTENCODING_SYMBOL )
-                        eTargetChrSet = RTL_TEXTENCODING_SYMBOL;
-                    ByteString aStr( aTemp, eChrSet, eTargetChrSet );
                     SetAttrForText();
-                    WMFRecord_ExtTextOut( pA->GetPoint(), aStr,pA->GetDXArray() );
+                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
                 }
                 break;
 
@@ -1182,15 +1195,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction *) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-                    rtl_TextEncoding eTargetChrSet = RTL_TEXTENCODING_MS_1252;
-                    if ( eChrSet == RTL_TEXTENCODING_DONTKNOW )
-                        eChrSet = gsl_getSystemTextEncoding();
-                    if ( eChrSet != RTL_TEXTENCODING_SYMBOL )
-                        eTargetChrSet = RTL_TEXTENCODING_SYMBOL;
-                    ByteString aStr( aTemp, eChrSet, eTargetChrSet );
                     SetAttrForText();
-                    WMFRecord_ExtTextOut( pA->GetPoint(),aStr,pA->GetWidth() );
+                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetWidth() );
                 }
                 break;
 

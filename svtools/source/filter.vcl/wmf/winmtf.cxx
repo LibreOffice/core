@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2000-09-27 12:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
     Size    aFontSize( Size( 0, rFont.lfHeight ) );
 
-    aFont.SetName( UniString( (char*)rFont.lfFaceName, RTL_TEXTENCODING_UTF8 ) );
+    aFont.SetName( UniString( (char*)rFont.lfFaceName, gsl_getSystemTextEncoding() ) );
     aFont.SetSize( aFontSize );
 
     CharSet eCharSet;

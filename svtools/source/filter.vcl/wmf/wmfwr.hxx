@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2000-09-27 12:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ private:
 
     void WritePointXY(const Point & rPoint);
     void WritePointYX(const Point & rPoint);
-    void WriteDX(long nDX);
+    sal_Int32 ScaleWidth( sal_Int32 nDX );
     void WriteSize(const Size & rSize);
     void WriteHeightWidth(const Size & rSize);
     void WriteRectangle(const Rectangle & rRect);
@@ -188,8 +188,8 @@ private:
     void WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo );
     void WMFRecord_DeleteObject(USHORT nObjectHandle);
     void WMFRecord_Ellipse(const Rectangle & rRect);
-    void WMFRecord_ExtTextOut(const Point & rPoint, const ByteString & rString, const long * pDXAry);
-    void WMFRecord_ExtTextOut(const Point & rPoint, const ByteString & rString, ULONG nWidth);
+    void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, const long * pDXAry);
+    void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, ULONG nWidth);
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);
     void WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);

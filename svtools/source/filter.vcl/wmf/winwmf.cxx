@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2000-09-27 12:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,12 +432,14 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
 
         case W_META_EXTTEXTOUT:
         {
-            USHORT      i,nLen,nOptions,nData;
-            long        nRecordSize,nRecSizeLeft, *pDXAry;
+            sal_uInt16  i, nLen, nOptions, nData;
+            sal_Int32   nRecordPos, nRecordSize, nOriginalTextLen, nNewTextLen;
             Point       aPosition;
             Rectangle   aRect;
+            sal_Int32*  pDXAry = NULL;
 
             pWMF->SeekRel(-6);
+            nRecordPos = pWMF->Tell();
             *pWMF >> nRecordSize;
             pWMF->SeekRel(2);
             aPosition = ReadYX();
@@ -445,37 +447,58 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             // Nur wenn der Text auch Zeichen enthaelt, macht die Ausgabe Sinn
             if( nLen )
             {
+                nOriginalTextLen = nLen;
                 if( nOptions )
                 {
                     const Point aPt1( ReadPoint() );
                     const Point aPt2( ReadPoint() );
                     aRect = Rectangle( aPt1, aPt2 );
                 }
-                char* pChar = new char[ ( nLen + 1 ) &~ 1 ];
-                pWMF->Read( pChar, ( nLen + 1 ) &~ 1 );
-                String aText( pChar, nLen, pOut->GetCharSet() );
-                delete pChar;
+                char* pChar = new char[ ( nOriginalTextLen + 1 ) &~ 1 ];
+                pWMF->Read( pChar, ( nOriginalTextLen + 1 ) &~ 1 );
+                String aText( pChar, nOriginalTextLen, pOut->GetCharSet() );    // after this conversion the text may contain
+                nNewTextLen = aText.Len();                                      // less character (japanese version), so the
+                delete pChar;                                                   // dxAry will not fit
 
-                nRecSizeLeft=(nRecordSize-7-(((long)nLen+1)>>1))<<1;
-
-                if( nOptions )
-                    nRecSizeLeft-=8;
-
-                if( nRecSizeLeft >= (long) nLen )
+                if ( nNewTextLen )
                 {
-                    pDXAry = new long[ nLen ];
+                    sal_Int32   nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
+                    sal_Int32   nDxArySize =  nMaxStreamPos - pWMF->Tell();
+                    sal_Int32   nDxAryEntries = nDxArySize >> 1;
+                    sal_Bool    bUseDXAry = FALSE;
 
-                    for( i = 0; i < nLen; i++ )
+                    if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                     {
-                        *pWMF >> nData;
-                        pDXAry[ i ] = nData;
+                        pDXAry = new sal_Int32[ nNewTextLen ];
+                        for ( i = 0; i < nNewTextLen; i++ )
+                        {
+                            if ( pWMF->Tell() >= nMaxStreamPos )
+                                break;
+                            *pWMF >> nData;
+                            if ( nNewTextLen != nOriginalTextLen )
+                            {
+                                ByteString aTmp( aText.GetChar( i ), pOut->GetCharSet() );
+                                if ( aTmp.Len() > 1 )
+                                {
+                                    sal_Int32 nToSkip = ( aTmp.Len() - 1 ) << 1;
+                                    if ( ( nToSkip + pWMF->Tell() ) > nMaxStreamPos )
+                                        break;
+                                    pWMF->SeekRel( nToSkip );
+                                }
+                            }
+                            pDXAry[ i ] = nData;
+                        }
+                        if ( i == nNewTextLen )
+                            bUseDXAry = TRUE;
                     }
-                    pOut->DrawText( aPosition, aText, pDXAry );
-                    delete[] pDXAry;
+                    if ( pDXAry && bUseDXAry )
+                        pOut->DrawText( aPosition, aText, pDXAry );
+                    else
+                        pOut->DrawText( aPosition, aText );
                 }
-                else
-                    pOut->DrawText( aPosition, aText );
             }
+            delete pDXAry;
+
         }
         break;
 
