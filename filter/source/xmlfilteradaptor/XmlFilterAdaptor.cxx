@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aidan $ $Date: 2002-04-09 09:03:43 $
+ *  last change: $Author: aidan $ $Date: 2002-04-10 13:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 using com::sun::star::frame::XConfigManager;
 
-sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
     throw (RuntimeException)
 {
     sal_Int32 nLength = aDescriptor.getLength();
@@ -137,19 +137,19 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     OUString udConvertClass=msUserData[0];
     OUString udJarPath=msUserData[1];
     OUString udImport =msUserData[2];
-    OUString udExport =msUserData[3];
+    OUString udExport =msUserData[3];   
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-
+     
       if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
             pValue[i].Value >>= xInputStream;
-
+            
       else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FileName" ) ) )
             pValue[i].Value >>= sFileName;
       else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
         {
-            pValue[i].Value >>= sURL;
+            pValue[i].Value >>= sURL;       
                     sal_Int32 stringIndex = sURL.lastIndexOf(OUString::createFromAscii("/"));
             sFileName = sURL.copy(stringIndex+1, sURL.getLength()-stringIndex);
             sDirectory = sURL.copy(7,sURL.getLength()-7);
@@ -162,45 +162,45 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     }
     Reference<XConfigManager > xConfMgr( mxMSF->createInstance(
                       OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")),UNO_QUERY );
-
+    
     if(! xConfMgr.is()){
       fprintf (stderr, "::com::sun::star::frame::XConfigManager service missing\n" );
       return sal_False;
     }
     else
       fprintf (stderr, "::com::sun::star::frame::XConfigManager service Created\n" );
-
-    OUString installPath = xConfMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
+    
+    OUString installPath = xConfMgr->substituteVariables(OUString::createFromAscii("$(progurl)")); 
     installPath= installPath.concat(OUString::createFromAscii("/"));     // Extra slash onto end of URL
 
-
+    
     /*
     nLength = msUserData.getLength();
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        fprintf(stderr,"UserData :  %s",OUStringToOString( msUserData[i], RTL_TEXTENCODING_ASCII_US ).getStr());
+        fprintf(stderr,"UserData :  %s",::rtl::OUStringToOString( msUserData[i], RTL_TEXTENCODING_ASCII_US ).getStr());
         fprintf(stderr,"\n");
-
+        
     }
     */
     const OUString sSaxParser ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser") );
-
+    
     /* The idea is that we could invoke a different export component based on the filter name.
      * we will default to importing writer documents*/
 
     OUString sXMLImportService (  udImport  );
+    
 
-
-
+    
     Reference < XParser > xSaxParser( mxMSF->createInstance( sSaxParser ), UNO_QUERY );
     Reference < XDocumentHandler > xHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument ( mxDoc );
-
+    
     // Creating a ConverterBridge instance
     fprintf(stderr, "now creating the xConverter instance \n");
     Reference< XInterface > xConvBridge;
-
+    
     xConvBridge = mxMSF->createInstance( udConvertClass );
     try{
       if(! xConvBridge.is()){
@@ -214,20 +214,20 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         return sal_False;
      }
     fprintf(stderr, "now creating the ConverterBridge instance\n");
-
+    
 
     Reference< com::sun::star::documentconversion::XConverterBridge > xConverter;
-
+    
     try {
       xConverter = Reference< com::sun::star::documentconversion::XConverterBridge > ( xConvBridge, UNO_QUERY );
     }
     catch( Exception& e)
       {
-        fprintf(stderr, "Fell into the catch block!: %s\n",OUStringToOString(
+        fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString( 
                                          e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
         fprintf(stderr, "Casting failure!\n");
       }
-    fprintf(stderr, "Created ConverterBridge instance\n");
+    fprintf(stderr, "Created ConverterBridge instance\n"); 
 
     //pipe creation //
     Reference <XInterface> xPipe;
@@ -238,16 +238,16 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     }
     else
       fprintf(stderr,"pipe created\n");
-
-
+    
+    
     Reference< XInputStream > xPipeInput (xPipe,UNO_QUERY);
 
     //inputStream from pipe
-
+    
     Reference< XOutputStream > xTmpOutputStream (xPipe,UNO_QUERY);
 
     sal_Bool bRet = sal_True;
-
+       
 
     //Call the ConverterBridge
     fprintf(stderr,"Calling converter!!");
@@ -256,25 +256,25 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     InputSource aInput;
     aInput.sSystemId = sFileName;
     aInput.aInputStream =  xPipeInput;
-
+    
     xSaxParser->setDocumentHandler ( xHandler );
     try
     {
-
+         
         xSaxParser->parseStream ( aInput );
     }
     catch( Exception &exc)
     {
             fprintf(stderr,"\nParseStream Exception\n");
-        fprintf(stderr, "Fell into the catch block!: %s\n",OUStringToOString(
+        fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString( 
                 exc.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
         bRet = sal_False;
     }
-
+    
     return bRet;
 }
 
-sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
     throw (RuntimeException)
 {
     sal_Int32 nLength = aDescriptor.getLength();
@@ -285,11 +285,11 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     OUString udConvertClass=msUserData[0];
     OUString udJarPath=msUserData[1];
     OUString udImport =msUserData[2];
-    OUString udExport =msUserData[3];
+    OUString udExport =msUserData[3];   
     Reference < XOutputStream > xOutputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-
+      
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "OutputStream" ) ) )
         {
             pValue[i].Value >>= xOutputStream;
@@ -309,20 +309,20 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     }
     Reference<XConfigManager > xConfMgr( mxMSF->createInstance(
                       OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")),UNO_QUERY );
-
+    
     if(! xConfMgr.is()){
       fprintf (stderr, "::com::sun::star::frame::XConfigManager service missing\n" );
       return sal_False;
     }
     else
       fprintf (stderr, "::com::sun::star::frame::XConfigManager service Created\n" );
-
-    OUString installPath = xConfMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
+    
+    OUString installPath = xConfMgr->substituteVariables(OUString::createFromAscii("$(progurl)")); 
     installPath= installPath.concat(OUString::createFromAscii("/"));
-
-
-
-
+    
+    
+    
+    
     const OUString sSaxWriter ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer") );
 
     /* The idea is that we could invoke a different export component based on the filter name.
@@ -330,14 +330,14 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
     //OUString sXMLExportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLExporter" ) );
     OUString sXMLExportService (  udExport  );
-
+    
     Reference < XActiveDataSource > xSaxWriter( mxMSF->createInstance( sSaxWriter ), UNO_QUERY );
 
         // Set up converter bridge.
     //
     fprintf(stderr, "going to create converterbridge!\n");
     Reference< XInterface > xConvBridge;
-
+    
     xConvBridge = mxMSF->createInstance(
                         udConvertClass );
     if(! xConvBridge.is()){
@@ -345,20 +345,20 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
       return sal_False;
     }
         fprintf(stderr, "now creating the xConverter instance\n");
-
+ 
     Reference< com::sun::star::documentconversion::XConverterBridge > xConverter;
-
+    
     try {
       xConverter = Reference< com::sun::star::documentconversion::XConverterBridge > ( xConvBridge, UNO_QUERY );
     }
     catch( Exception& e){
-      fprintf(stderr, "Fell into the catch block!: %s\n",OUStringToOString(
+      fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString( 
                                            e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
       fprintf(stderr, "Casting failure!\n");
     }
-
+    
     fprintf(stderr, "created converterbridge\n");
-
+    
     // Set up pipe and setOutputStream to the pipe.
     //
     Reference< XInterface > xPipe;
@@ -370,10 +370,10 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     }
     else
       fprintf(stderr, "pipe created\n");
-
-
+       
+    
     Reference< XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
-
+    
     // Get InputStream from pipe.
     //
         Reference<XInputStream> xTmpInputStream ( xPipe, UNO_QUERY );
@@ -385,26 +385,26 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     Reference < XFilter > xFilter( xExporter, UNO_QUERY );
     xExporter->setSourceDocument ( mxDoc );
     xFilter->filter ( aDescriptor );
-
+    
     // Make the call to the bridge.
     //
     xConverter->convert(xTmpInputStream, xOutputStream,true,installPath.concat(udJarPath),sFileName);
     xOutputStream->closeOutput();
     xTmpInputStream->closeInput();
-
+    
     return(sal_True);
 }
-sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
   throw (RuntimeException)
 {
     return meType == FILTER_EXPORT ? exportImpl ( aDescriptor ) : importImpl ( aDescriptor );
 }
-void SAL_CALL XmlFilterAdaptor::cancel(  )
+void SAL_CALL XmlFilterAdaptor::cancel(  ) 
     throw (RuntimeException)
 {
 }
 // XExporter
-void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc ) 
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     meType = FILTER_EXPORT;
@@ -412,14 +412,14 @@ void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::
 }
 
 // XImporter
-void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc ) 
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 // XInitialization
-void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments ) 
     throw (Exception, RuntimeException)
 {
     Sequence < PropertyValue > aAnySeq;
@@ -431,19 +431,19 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-
+          
             if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
             {
                  pValue[i].Value >>= msFilterName;
-
+                 
             }
             else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "UserData" ) ) )
             {
-
+                
                 pValue[i].Value >>= msUserData;
-
+                
             }
-
+            
         }
     }
 }
@@ -454,13 +454,13 @@ OUString XmlFilterAdaptor_getImplementationName ()
 }
 #define SERVICE_NAME1 "com.sun.star.document.ExportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ImportFilter"
-sal_Bool SAL_CALL XmlFilterAdaptor_supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL XmlFilterAdaptor_supportsService( const OUString& ServiceName ) 
     throw (RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
            ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) );
 }
-Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -479,17 +479,17 @@ Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Referenc
 }
 
 // XServiceInfo
-OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
+OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  ) 
     throw (RuntimeException)
 {
     return XmlFilterAdaptor_getImplementationName();
 }
-sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName ) 
     throw (RuntimeException)
 {
     return XmlFilterAdaptor_supportsService( rServiceName );
 }
-Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     return XmlFilterAdaptor_getSupportedServiceNames();
