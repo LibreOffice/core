@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:44:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-23 10:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     // have to clear the list of removed presentation
                     // objects held by the model which references the
                     // former list.
-                    pDoc->ClearDeletedPresObjList();
+                    GetDoc()->ClearDeletedPresObjList();
 
                     GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
                                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
