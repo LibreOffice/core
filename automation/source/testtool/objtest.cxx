@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:08:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ String CRevNames::GetName( SmartId aUId )
         if ( aUId.Equals( UID_ACTIVE ) )
             return CUniString("Active");
         else
-            return GEN_RES_STR1( S_NAME_NOT_THERE, aUId.GetStr() );
+            return GEN_RES_STR1( S_NAME_NOT_THERE, aUId.GetText() );
     }
 }
 
@@ -583,10 +583,12 @@ void TestToolObj::InitTestToolObj()
 
     pImpl->nErrorCount = 0;
     pImpl->nWarningCount = 0;
+    pImpl->nQAErrorCount = 0;
     pImpl->nIncludeFileWarningCount = 0;
 
     pImpl->xErrorList = new SbxDimArray( SbxSTRING );
     pImpl->xWarningList = new SbxDimArray( SbxSTRING );
+    pImpl->xQAErrorList = new SbxDimArray( SbxSTRING );
     pImpl->xIncludeFileWarningList = new SbxDimArray( SbxSTRING );
 
     pImpl->nTestCaseLineNr = 0;
@@ -670,10 +672,12 @@ void TestToolObj::InitTestToolObj()
 /// active constants returning error and warning count
     MAKE_TT_KEYWORD( "GetErrorCount", SbxCLASS_METHOD, SbxULONG, ID_GetErrorCount );
     MAKE_TT_KEYWORD( "GetWarningCount", SbxCLASS_METHOD, SbxULONG, ID_GetWarningCount );
+    MAKE_TT_KEYWORD( "GetQAErrorCount", SbxCLASS_METHOD, SbxULONG, ID_GetQAErrorCount );
     MAKE_TT_KEYWORD( "GetUseFileWarningCount", SbxCLASS_METHOD, SbxULONG, ID_GetUseFileWarningCount );
 
     MAKE_TT_KEYWORD( "GetErrorList", SbxCLASS_METHOD, SbxOBJECT, ID_GetErrorList );
     MAKE_TT_KEYWORD( "GetWarningList", SbxCLASS_METHOD, SbxOBJECT, ID_GetWarningList );
+    MAKE_TT_KEYWORD( "GetQAErrorList", SbxCLASS_METHOD, SbxOBJECT, ID_GetQAErrorList );
     MAKE_TT_KEYWORD( "GetUseFileWarningList", SbxCLASS_METHOD, SbxOBJECT, ID_GetUseFileWarningList );
 
     MAKE_TT_KEYWORD( "GetTestCaseName", SbxCLASS_METHOD, SbxSTRING, ID_GetTestCaseName );
@@ -703,12 +707,6 @@ void TestToolObj::InitTestToolObj()
     MAKE_USHORT_CONSTANT("AlignTop",CONST_ALIGN_TOP);
     MAKE_USHORT_CONSTANT("AlignRight",CONST_ALIGN_RIGHT);
     MAKE_USHORT_CONSTANT("AlignBottom",CONST_ALIGN_BOTTOM);
-
-/// What bar to use in RC_ShowBar and RC_IsBarVisible
-    MAKE_USHORT_CONSTANT("MenuBar",CONST_MenuBar);
-    MAKE_USHORT_CONSTANT("ToolBar",CONST_ToolBar);
-    MAKE_USHORT_CONSTANT("LocationBar",CONST_LocationBar);
-    MAKE_USHORT_CONSTANT("PersonalBar",CONST_PersonalBar);
 
 /// What dialog to use in RC_CloseSysDialog or RC_ExistsSysDialog
     MAKE_USHORT_CONSTANT("FilePicker",CONST_FilePicker);
@@ -963,6 +961,9 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
 
         BOOL bUnoName = ( aLongname.Copy( 0, 5 ).EqualsIgnoreCaseAscii( ".uno:" )
             || aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "http" )
+            || aLongname.Copy( 0, 15 ).EqualsIgnoreCaseAscii( "private:factory" )
+            || aLongname.Copy( 0, 8 ).EqualsIgnoreCaseAscii( "service:" )
+            || aLongname.Copy( 0, 6 ).EqualsIgnoreCaseAscii( "macro:" )
             || aLongname.Copy( 0, 8 ).EqualsIgnoreCaseAscii( ".HelpId:" ) );
         BOOL bMozillaName = ( !bIsFlat && aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( ".moz" ) );
 
@@ -1659,6 +1660,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             pArg = rPar->Get( 2 );
                             pImpl->ProgParam = pArg->GetString();
                         }
+                        else
+                            pImpl->ProgParam.Erase();
 
                         String aTmpStr(ProgPath);
                         aTmpStr += ' ';
@@ -2507,6 +2510,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         pVar->PutULong( pImpl->nWarningCount );
                     }
                     break;
+                case ID_GetQAErrorCount:
+                    {
+                        pVar->PutULong( pImpl->nQAErrorCount );
+                    }
+                    break;
                 case ID_GetUseFileWarningCount:
                     {
                         pVar->PutULong( pImpl->nIncludeFileWarningCount );
@@ -2524,6 +2532,13 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if ( ! pImpl->xWarningList->GetDims() )
                             pImpl->xWarningList->AddDim( 1, 32000 );
                         pVar->PutObject( pImpl->xWarningList );
+                    }
+                    break;
+                case ID_GetQAErrorList:
+                    {
+                        if ( ! pImpl->xQAErrorList->GetDims() )
+                            pImpl->xQAErrorList->AddDim( 1, 32000 );
+                        pVar->PutObject( pImpl->xQAErrorList );
                     }
                     break;
                 case ID_GetUseFileWarningList:
@@ -2651,10 +2666,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
         {
             pImpl->nErrorCount = 0;
             pImpl->nWarningCount = 0;
+            pImpl->nQAErrorCount = 0;
             pImpl->nIncludeFileWarningCount = 0;
 
             pImpl->xErrorList->SbxArray::Clear();   // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
             pImpl->xWarningList->SbxArray::Clear(); // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
+            pImpl->xQAErrorList->SbxArray::Clear();   // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
             pImpl->xIncludeFileWarningList->SbxArray::Clear();  // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
 
             if (pFehlerListe)
@@ -2687,10 +2704,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
             pImpl->nErrorCount = 0;
             pImpl->nWarningCount = 0;
+            pImpl->nQAErrorCount = 0;
             pImpl->nIncludeFileWarningCount = 0;
 
             pImpl->xErrorList->SbxArray::Clear();   // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
             pImpl->xWarningList->SbxArray::Clear(); // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
+            pImpl->xQAErrorList->SbxArray::Clear();   // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
             pImpl->xIncludeFileWarningList->SbxArray::Clear();  // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
         }  // if( nHintId == SBX_HINT_BASICSTOP )
         WaitForAnswer();
@@ -2819,7 +2838,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.11 $
+    // search $Revision: 1.12 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
