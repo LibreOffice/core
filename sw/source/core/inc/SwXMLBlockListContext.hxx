@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 15:53:18 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@ class SwXMLTextBlockParContext : public SvXMLImportContext
 {
 private:
     SwXMLTextBlockImport & rLocalRef;
-    ::rtl::OUString sContent;
 public:
     SwXMLTextBlockParContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
