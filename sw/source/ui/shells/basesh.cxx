@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-10 12:56:03 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 16:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
         case SID_PASTE:
             {
                 TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                        &rSh.GetView().GetEditWin() ) );
 
                 if( aDataHelper.GetTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
@@ -503,7 +504,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     pArgs->GetItemState( nId, FALSE, &pFmt ))
                 {
                     TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                            &rSh.GetView().GetEditWin()) );
                     if( aDataHelper.GetTransferable().is()
                         /*&& SwTransferable::IsPaste( rSh, aDataHelper )*/ )
                     {
@@ -525,7 +527,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
         case FN_PASTESPECIAL:
             {
                 TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                        &rSh.GetView().GetEditWin()) );
                 if( aDataHelper.GetTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
@@ -592,7 +595,8 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
         case SID_CLIPBOARD_FORMAT_ITEMS:
             {
                 TransferableDataHelper aDataHelper(
-                    TransferableDataHelper::CreateFromSystemClipboard() );
+                    TransferableDataHelper::CreateFromSystemClipboard(
+                                            &rSh.GetView().GetEditWin()) );
 
                 SvxClipboardFmtItem aFmtItem( nWhich );
                 SwTransferable::FillClipFmtItem( rSh, aDataHelper, aFmtItem );
