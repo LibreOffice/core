@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:16:41 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ int __cdecl main( int argc, char * argv[] )
     try
     {
         OUString aLibName( RTL_CONSTASCII_USTRINGPARAM(
-                               "corereflection.uno" SAL_DLLEXTENSION) );
+                               "reflection.uno" SAL_DLLEXTENSION) );
 
         Reference< XMultiServiceFactory > xMgr(
             createRegistryServiceFactory(
