@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-11 11:10:07 $
+ *  last change: $Author: af $ $Date: 2002-11-22 11:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ SdWindow::SdWindow(Window* pParent) :
     aViewSize(1000, 1000),  // werden
     nMinZoom(MIN_ZOOM),
     nMaxZoom(MAX_ZOOM),
-    bMinZoomAutoCalc(TRUE),
+    bMinZoomAutoCalc(FALSE),
     bCalcMinZoomByMinSide(TRUE),
     bCenterAllowed(TRUE),
     nTicks (0)
