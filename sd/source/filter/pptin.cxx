@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-23 11:55:48 $
+ *  last change: $Author: sj $ $Date: 2001-11-20 16:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2171,6 +2171,7 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
     pInfo->nVerb = pAnim->nOLEVerb;                                 // fuer OLE-Objekt
     pInfo->eSpeed = ::com::sun::star::presentation::AnimationSpeed_MEDIUM;                          // Geschwindigkeit der Animation
     pInfo->eEffect = pAnim->GetAnimationEffect( pInfo->eSpeed );    // Animationseffekt
+    pInfo->eTextEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
     pInfo->bDimPrevious = FALSE;                                    // Objekt abblenden
     pInfo->aDimColor = Color(COL_WHITE);                            // Default-Ausblendfarbe auf weiss
 
@@ -2215,24 +2216,22 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
             }
             break;
         }
-    }
-    if ( pAnim->nBuildType > 1 )                                // texteffect active ( paragraph grouping level )
-    {
-        pInfo->eTextEffect = pInfo->eEffect;
-        if ( ! ( pAnim->nFlags & 0x4000 ) )
-        {   // Verknuepfte Form animieren aus
-//          switch ( pAnim->nSubEffect )
-//          {
-//              case 0 :                                        // Text einfuehren - Paragraphweise
-//              case 1 :                                        // Text einfuehren - Wortweise
-//              case 2 :                                        // Text einfuehren - Zeichenweise
-//          }
-            if ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
-                pInfo->eEffect = ::com::sun::star::presentation::AnimationEffect_APPEAR;
+        if ( pAnim->nBuildType > 1 )                        // texteffect active ( paragraph grouping level )
+        {
+            pInfo->eTextEffect = pInfo->eEffect;
+            if ( ! ( pAnim->nFlags & 0x4000 ) )
+            {
+    // Verknuepfte Form animieren aus
+    //          switch ( pAnim->nSubEffect )
+    //          {
+    //              case 0 :                                // Text einfuehren - Paragraphweise
+    //              case 1 :                                // Text einfuehren - Wortweise
+    //              case 2 :                                // Text einfuehren - Zeichenweise
+    //          }
+                pInfo->eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
+            }
         }
     }
-    else
-        pInfo->eTextEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
 
 //  if ( nFlags & 1 )                                   // Koennen wir nicht: In umgekehrter Reihenfolge an
 }
@@ -2621,10 +2620,24 @@ SdrObject* SdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* p
                                     pInfo = new SdAnimationInfo( pDoc );
                                 ( (SdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aAnimationInfo );
 
-                                if ( pInfo->eEffect == ::com::sun::star::presentation::AnimationEffect_NONE )
+                                if ( ( pInfo->eEffect == ::com::sun::star::presentation::AnimationEffect_NONE )
+                                    && ( pInfo->eTextEffect == ::com::sun::star::presentation::AnimationEffect_NONE ) )
                                     delete pInfo;
                                 else
-                                {   // transparency color: ppt does not support one, so a not used color is to set
+                                {
+                                    // #94897# do not use standard effect if the object uses texteffect if
+                                    // no line and fill style is set
+                                    if ( ( pInfo->eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
+                                        && ( pInfo->eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
+                                            && ( pObj->ISA( SdrObjGroup ) != TRUE ) )
+                                    {
+                                        XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetItem(XATTR_FILLSTYLE))).GetValue();
+                                        XLineStyle eLineStyle = ((XLineStyleItem&)(pObj->GetItem(XATTR_LINESTYLE))).GetValue();
+                                        if ( ( eFillStyle == XFILL_NONE ) && ( eLineStyle == XLINE_NONE ) )
+                                            pInfo->eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
+                                    }
+
+                                    // transparency color: ppt does not support one, so a not used color is to set
                                     // ( #71012# on badly configured systems only 16 system colors are available, so
                                     // get the standard palette by temporarly create a 4Bit depth Bitmap );
                                     Color aBlueScreen( 0x00, 0xff, 0xff );
