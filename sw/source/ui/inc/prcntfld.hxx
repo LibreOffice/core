@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prcntfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:00:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,11 @@
 #include <vcl/field.hxx>
 #endif
 
-class PercentField : public MetricField
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+class SW_DLLPUBLIC PercentField : public MetricField
 {
     long        nRefValue;      // 100%-Wert fuer Umrechnung (in Twips)
     long        nOldMax, nOldMin, nOldSpinSize, nOldBaseValue;
@@ -75,7 +79,7 @@ class PercentField : public MetricField
     sal_Bool    bLockAutoCalculation; //prevent recalcution of percent values when the
                                         //reference value is changed
 
-    long        ImpPower10(USHORT n);
+    SW_DLLPRIVATE long      ImpPower10(USHORT n);
 
 public:
     virtual void  SetValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
