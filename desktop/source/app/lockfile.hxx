@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-15 08:36:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,14 +99,14 @@ namespace desktop {
 
     private:
         // data in lockfile
-        static const ByteString m_aGroup;
-        static const ByteString m_aUserkey;
-        static const ByteString m_aHostkey;
-        static const ByteString m_aStampkey;
-        static const ByteString m_aTimekey;
-        static const ByteString m_aIPCkey;
+        static const ByteString Group();
+        static const ByteString Userkey();
+        static const ByteString Hostkey();
+        static const ByteString Stampkey();
+        static const ByteString Timekey();
+        static const ByteString IPCkey();
         // lockfilename
-        static const OUString m_aSuffix;
+        static const OUString Suffix();
         bool m_bIPCserver;
         // full qualified name (file://-url) of the lockfile
         OUString m_aLockname;
