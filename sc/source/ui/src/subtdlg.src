@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:21:09 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 12:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ chinese_traditional ] = "°Ο°μ¥ύ«φ·ΣΈs²Υ±Ζ§Η(~S)";
         Text[ arabic ] = "έΡÒ ΗαδΨΗή ήΘα Παί ΝΣΘ ΗαγΜγζΪΗΚ";
         Text[ greek ] = "Να γίνει πριν ταξινόμη~ση της περιοχής κατά ομάδες";
-        Text[ korean ] = "±Χ·μΏ΅ µϋ¶σ ΏµΏªΐ» ΉΜΈ® Α¤·Δ(~S)";
+        Text[ korean ] = "±Χ·μΏ΅ µϋ¶σ Ήόΐ§Έ¦ »ηΐόΏ΅ ΊΠ·ω(~S)";
         Text[ turkish ] = "Bφlόmό φnce gruplara gφre ~sύrala";
         Text[ language_user1 ] = " ";
     };
@@ -210,7 +210,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ chinese_traditional ] = "¦Ϋ­q±Ζ§Η³W«h(~C)";
         Text[ arabic ] = "ΚΡΚνΘ ΗαέΡÒ ΚΘΪΗπ αΚΪΡνέ ΗαγΣΚΞΟγ";
         Text[ greek ] = "Σειρά ταξινόμησης οριζόμενη από τον χρήστη";
-        Text[ korean ] = "ΏάΊΞ Α¤·Δ ΌψΌ­(~U)";
+        Text[ korean ] = "»ηΏλΐΪ°΅ Α¤ΐΗΗΡ  Α¤·Δ ΌψΌ­(~U)";
         Text[ turkish ] = "~Kullanύcύ tanύmlύ sύralama dόzeni";
         Text[ language_user1 ] = " ";
     };
