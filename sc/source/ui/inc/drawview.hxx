@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:26:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ class ScDrawView: public FmFormView
     ScViewData*             pViewData;
     OutputDevice*           pDev;                   //! noetig ?
     ScDocument*             pDoc;
-    USHORT                  nTab;
+    SCTAB                   nTab;
     Fraction                aScaleX;                // Faktor fuer Drawing-MapMode
     Fraction                aScaleY;
     SdrViewUserMarker*      pDropMarker;
@@ -97,7 +97,7 @@ protected:
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
-                    ScDrawView( OutputDevice* pOut, ScDocument* pDocument, USHORT nTable );
+                    ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable );
     virtual         ~ScDrawView();
 
     virtual void    MarkListHasChanged();
@@ -122,7 +122,7 @@ public:
     void            GetScale( Fraction& rFractX, Fraction& rFractY ) const;
     void            RecalcScale();
     void            UpdateWorkArea();
-    USHORT          GetTab() const      { return nTab; }
+    SCTAB           GetTab() const      { return nTab; }
 
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
