@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 09:32:03 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 08:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,14 @@ namespace dbaccess
                     ,public ODBTable_PROP
                     ,public OTable_Base
                     ,public OConfigurationFlushable
+                    ,public IColumnFactory
     {
     protected:
         //  OWeakConnection                                                                 m_aConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   m_xTable;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
+
     // <properties>
         sal_Int32                                                                       m_nPrivileges;
     // </properties>
@@ -146,6 +149,9 @@ namespace dbaccess
 
         // ODescriptor
         virtual void     setNew(sal_Bool _bNew);
+
+        // IColumnFactory
+        virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
 
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
