@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 11:11:34 $
+ *  last change: $Author: hdu $ $Date: 2002-04-17 09:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,15 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     aXVisualInfo.visualid = _pVisual->visualid;
     int nVisuals = 0;
     XVisualInfo* pXVisualInfo = XGetVisualInfo( mpDisplay, VisualIDMask, &aXVisualInfo, &nVisuals );
+    int nMaxDepth = 0;
     for( int i = nVisuals; --i >= 0; )
+    {
+        if( nMaxDepth < pXVisualInfo[i].depth )
+            nMaxDepth = pXVisualInfo[i].depth;
         if( ((pXVisualInfo[i].c_class==PseudoColor) || (pXVisualInfo[i].depth<24))
         && ((pXVisualInfo[i].c_class>GrayScale) || (pXVisualInfo[i].depth!=8) ) )
             mbForcedAA = false;
+    }
     if( pXVisualInfo != NULL )
         XFree( pXVisualInfo );
 
@@ -195,6 +200,10 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
         if( pVisualFormat != NULL )
             mbUsingXRender = true;
     }
+
+    // #97763# disable XRENDER on <15bit displays for XFree<=4.2.0
+    if( (nMaxDepth < 15) && (nRenderVersion <= 0x02) )
+        mbUsingXRender = false;
 
     if( (nEnvAntiAlias & 2) != 0 )
         mbUsingXRender = false;
