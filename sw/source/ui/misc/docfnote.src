@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:20:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ korean ] = "°¢ÁÖ";
                 Text[ turkish ] = "Dipnot";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Notas al pie";
             };
             PageItem
             {
@@ -138,6 +139,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ korean ] = "¹ÌÁÖ";
                 Text[ turkish ] = "Sonnot";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Notas finales";
             };
         };
     };
@@ -151,6 +153,7 @@ TabDialog DLG_DOC_FOOTNOTE
     Text[ korean ] = "°¢ÁÖ ¼³Á¤";
     Text[ turkish ] = "Dipnot ayarlarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones de notas al pie";
 };
 TabPage TP_FOOTNOTEOPTION
 {
@@ -187,6 +190,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "ÀÚµ¿ ¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Otomatik numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración automática";
     };
     FixedText FT_NUMTYPE
     {
@@ -195,7 +199,7 @@ TabPage TP_FOOTNOTEOPTION
         Text = "Nu~mmerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
         Text[ english_us ] = "Num~bering";
-        Text[ portuguese ] = "Numbering";
+        Text[ portuguese ] = "N~umeração";
         Text[ russian ] = "Íóìåðàöèÿ";
         Text[ greek ] = "Áñßè~ìçóç";
         Text[ dutch ] = "~Nummering";
@@ -212,6 +216,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "½s¸¹(~B)";
         Text[ turkish ] = "Numbering";
         Text[ arabic ] = "ÇáÊÑÞíã";
+        Text[ catalan ] = "~Numeración";
     };
     ListBox LB_NUMVIEW
     {
@@ -248,6 +253,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "½ÃÀÛÇÒ °÷(~S)";
         Text[ turkish ] = "B~aþlangýç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comen~zar en";
     };
     NumericField FLD_OFFSET
     {
@@ -268,7 +274,7 @@ TabPage TP_FOOTNOTEOPTION
         Text = "~Zählung" ;
         Text [ ENGLISH ] = "Counting" ;
         Text[ english_us ] = "~Counting";
-        Text[ portuguese ] = "Counting";
+        Text[ portuguese ] = "~Contar";
         Text[ russian ] = "Ñ÷åò";
         Text[ greek ] = "ÌÝôñçóç";
         Text[ dutch ] = "~Telling";
@@ -285,6 +291,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "­p¼Æ(~C)";
         Text[ turkish ] = "Counting";
         Text[ arabic ] = "ÊÚÏÇÏ";
+        Text[ catalan ] = "Contar";
     };
     ListBox LB_NUMCOUNT
     {
@@ -433,6 +440,12 @@ TabPage TP_FOOTNOTEOPTION
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Por página" ; > ;
+        < "Por capítulo" ; > ;
+        < "Por documento" ; > ;
+    };
     };
     FixedText FT_PREFIX
     {
@@ -462,6 +475,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "ÀÌÀü(~B)";
         Text[ turkish ] = "Ön~ünde";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Delante";
     };
     Edit ED_PREFIX
     {
@@ -500,6 +514,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "ÀÌÈÄ(~A)";
         Text[ turkish ] = "A~rkasýnda";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "D~etrás";
     };
     Edit ED_SUFFIX
     {
@@ -535,6 +550,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición";
     };
     RadioButton RB_POS_PAGE
     {
@@ -565,6 +581,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "ÂÊ ¸¶Áö¸·(~E)";
         Text[ turkish ] = "Sayfa so~nu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fin de ~página";
     };
     RadioButton RB_POS_CHAPTER
     {
@@ -593,6 +610,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "¹®¼­ ³¡(~D)";
         Text[ turkish ] = "~Belge sonu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "F~in del documento";
     };
     GroupBox GB_TEMPL
     {
@@ -621,6 +639,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Biçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilos";
     };
     FixedText FT_PARA_TEMPL
     {
@@ -650,6 +669,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "´Ü¶ô(~R)";
         Text[ turkish ] = "~Paragraf";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Párra~fo";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -689,6 +709,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "ÂÊ(~P)";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pá~gina";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -724,6 +745,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ arabic ] = "ÃäãÇØ ÃÍÑÝ";
         Text[ turkish ] = "Karakter biçimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilos de carácter";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -751,6 +773,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "ÅØ½ºÆ®¡¡¿µ¿ª(~X)";
         Text[ turkish ] = "Metin a~laný";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de ~texto";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -787,6 +810,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "°¢ÁÖ ¿µ¿ª(~F)";
         Text[ turkish ] = "D~ipnot alaný";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de ~nota al pie";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -824,6 +848,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "¿©·¯ ÂÊÀÇ °¢ÁÖ¿¡ ´ëÇÑ Âü°í";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Indicación para notas al pie en varias páginas";
     };
     FixedText FT_CONT
     {
@@ -853,6 +878,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ korean ] = "°¢ÁÖ ³¡¿¡(~O)";
         Text[ turkish ] = "~Dipnot altýnda";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Final de n~ota al pie";
     };
     Edit ED_CONT
     {
@@ -891,6 +917,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ greek ] = "Óôçí å~ðüìåíç óåëßäá";
         Text[ korean ] = "´ÙÀ½ ÂÊ¿¡(~T)";
         Text[ turkish ] = "~Sonraki sayfada";
+        Text[ catalan ] = "En pág. sig~uiente";
     };
     Edit ED_CONT_FROM
     {
@@ -937,6 +964,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "ÀÚµ¿ ¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Otomatik numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración automática";
     };
     FixedText FT_NUMTYPE
     {
@@ -945,7 +973,7 @@ TabPage TP_ENDNOTEOPTION
         Text = "Nu~mmerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
         Text[ english_us ] = "~Numbering";
-        Text[ portuguese ] = "Numbering";
+        Text[ portuguese ] = "N~umeração";
         Text[ russian ] = "Íóìåðàöèÿ";
         Text[ greek ] = "Áñßèì~çóç";
         Text[ dutch ] = "Nu~mmering";
@@ -962,6 +990,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "½s¸¹(~N)";
         Text[ turkish ] = "Numbering";
         Text[ arabic ] = "ÇáÊÑÞíã";
+        Text[ catalan ] = "Numeración";
     };
     ListBox LB_NUMVIEW
     {
@@ -1009,6 +1038,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "½ÃÀÛ¿¡¼­(~S)";
         Text[ turkish ] = "B~aþlangýç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comen~zar en";
     };
     NumericField FLD_OFFSET
     {
@@ -1064,6 +1094,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "ÀÌÀü(~B)";
         Text[ turkish ] = "Önünde";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Delante";
     };
     Edit ED_PREFIX
     {
@@ -1102,6 +1133,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "ÀÌÈÄ(~A)";
         Text[ turkish ] = "A~rkasýnda";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "D~etrás";
     };
     Edit ED_SUFFIX
     {
@@ -1147,6 +1179,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "ÂÊ ¸¶Áö¸·(~O)";
         Text[ turkish ] = "Sayfa so~nu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fin de ~página";
     };
     RadioButton RB_POS_CHAPTER
     {
@@ -1175,6 +1208,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "¹®¼­ ³¡(~D)";
         Text[ turkish ] = "~Belge sonu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fin del ~documento";
     };
     GroupBox GB_TEMPL
     {
@@ -1203,6 +1237,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Biçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilos";
     };
     FixedText FT_PARA_TEMPL
     {
@@ -1232,6 +1267,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "´Ü¶ô(~R)";
         Text[ turkish ] = "~Paragraf";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Párra~fo";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -1271,6 +1307,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "ÂÊ(~P)";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pá~gina";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -1305,6 +1342,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ arabic ] = "ÃäãÇØ ÃÍÑÝ";
         Text[ turkish ] = "Karakter biçimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilos de carácter";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -1331,6 +1369,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ greek ] = "Ðåäßï êåéìÝíïõ";
         Text[ korean ] = "ÅØ½ºÆ® ¿µ¿ª(~X)";
         Text[ turkish ] = "Metin ~alaný";
+        Text[ catalan ] = "Área de ~texto";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -1366,6 +1405,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ greek ] = "Ðåñéï÷Þ óçìåßùóçò ôÝëïõò";
         Text[ korean ] = "¹ÌÁÖ ¿µ¿ª(~E)";
         Text[ turkish ] = "S~onnot alaný";
+        Text[ catalan ] = "Área de n~ota al final";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -1404,6 +1444,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "¿©·¯ ÂÊÀÇ °¢ÁÖ¿¡ ´ëÇÑ Âü°í";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Indicación para notas al pie en varias páginas";
     };
     FixedText FT_CONT
     {
@@ -1433,6 +1474,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "´ÙÀ½ ÂÊ(~F)";
         Text[ turkish ] = "~Sonraki sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Página ~siguiente";
     };
     Edit ED_CONT
     {
@@ -1471,6 +1513,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ greek ] = "Åêêßíçóç";
         Text[ korean ] = "½ÃÀÛ(~S)";
         Text[ turkish ] = "~Baþlangýç";
+        Text[ catalan ] = "~Comenzar";
     };
     Edit ED_CONT_FROM
     {
