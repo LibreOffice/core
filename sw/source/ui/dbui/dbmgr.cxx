@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 13:00:50 $
+ *  last change: $Author: os $ $Date: 2001-08-02 08:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,20 +942,18 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             // Beim Speichern wurde kein Abbruch gedrueckt
             // neue DocShell erzeugen, alle gelinkten Bereiche embedden
             // und unter temporaerem Namen wieder speichern.
-            BOOL bDelTempFile = TRUE;
             String sTmpName;
             const SfxFilter* pSfxFlt;
 
             {
                 SfxMedium* pOrig = pSh->GetView().GetDocShell()->GetMedium();
-
-                pSfxFlt = SwIoSystem::GetFileFilter( pOrig->GetURLObject().GetMainURL(),
+                pSfxFlt = SwIoSystem::GetFileFilter(
+                        pOrig->GetURLObject().GetMainURL(),
                                                         ::aEmptyStr );
 
-                sTmpName = URIHelper::SmartRelToAbs(
-                                utl::TempFile::CreateTempName(0) );
+                sTmpName = utl::TempFile::CreateTempName(0);
+                sTmpName = URIHelper::SmartRelToAbs(sTmpName);
 
-                BOOL bCopyCompleted = TRUE;
                 try
                 {
                     String sMain(sTmpName);
@@ -965,46 +963,17 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                     ::ucb::Content aNewContent( sMain, Reference< XCommandEnvironment > ());
                     Any aAny;
                     TransferInfo aInfo;
-                    aInfo.NameClash = NameClash::OVERWRITE;
+                    aInfo.NameClash = NameClash::ERROR;
                     aInfo.NewTitle = INetURLObject(sTmpName).GetName();
-                    aInfo.SourceURL = pOrig->GetPhysicalName();
+                    aInfo.SourceURL = pOrig->GetURLObject().GetMainURL();
                     aInfo.MoveData  = FALSE;
                     aAny <<= aInfo;
                     aNewContent.executeCommand( C2U( "transfer" ), aAny);
                 }
-                catch( Exception& )
+                catch( Exception& rEx)
                 {
-                    bCopyCompleted = FALSE;
                 }
-
-                if( !bCopyCompleted )
-                {
-                    // Neues Dokument erzeugen.
-                    SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
-                    SfxMedium* pMed = new SfxMedium( sTmpName, STREAM_READ, TRUE );
-                    pMed->SetFilter( pSfxFlt );
-
-                    // alle gelinkten Bereiche/Grafiken aufs lokale FileSystem
-                    // einbetten
-                    if( xDocSh->DoLoad( pOrig->GetStorage() ) &&
-                        ((SwDocShell*)(&xDocSh))->EmbedAllLinks() )
-                    {
-                        xDocSh->DoSaveAs(*pMed);
-                        xDocSh->DoSaveCompleted(pMed);
-                    }
-                    else
-                        bDelTempFile = FALSE;
-
-                    xDocSh->DoClose();
-                }
-                else
-                    bDelTempFile = FALSE;
-
-                if( !bDelTempFile )
-                    sTmpName = pOrig->GetPhysicalName();
             }
-
-
             String sAddress;
             ULONG nDocNo = 1;
             bCancel = FALSE;
@@ -1023,10 +992,11 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             aReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(URL_PREFIX_PRIV_SOFFICE )));
 
             pOffApp->ExecuteSlot( aReq, pOffApp->SfxApplication::GetInterface());
-            if( aReq.IsDone() )
+            const SfxPoolItem* pReturnValue = aReq.GetReturnValue();
+            if(pReturnValue)
             {
                 // DocShell besorgen
-                SfxViewFrameItem* pVItem = (SfxViewFrameItem*)aReq.GetReturnValue();
+                SfxViewFrameItem* pVItem = (SfxViewFrameItem*)pReturnValue;
                 SwView* pView = (SwView*) pVItem->GetFrame()->GetViewShell();
                 SwWrtShell& rSh = pView->GetWrtShell();
                 pView->AttrChangedNotify( &rSh );//Damit SelectShell gerufen wird.
@@ -1085,22 +1055,18 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                 pView->GetDocShell()->OwnerLock( FALSE );
 
             }
-            // jetzt noch die temp Datei entfernen
-            if( bDelTempFile )
+            // remove the temporary file
+            try
             {
-                try
-                {
-                    ::ucb::Content aTempContent(
-                        sTmpName,
-                        Reference< XCommandEnvironment > ());
-                    aTempContent.executeCommand( C2U( "delete" ),
-                                        makeAny( sal_Bool( sal_True ) ) );
-                }
-                catch( Exception& )
-                {
-                    DBG_ERRORFILE( "Exception" );
-                }
-
+                ::ucb::Content aTempContent(
+                    sTmpName,
+                    Reference< XCommandEnvironment > ());
+                aTempContent.executeCommand( C2U( "delete" ),
+                                    makeAny( sal_Bool( sal_True ) ) );
+            }
+            catch( Exception& rEx)
+            {
+                DBG_ERRORFILE( "Exception" );
             }
             SW_MOD()->SetView(&pSh->GetView());
         }
