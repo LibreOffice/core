@@ -71,6 +71,8 @@ import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.LabelCell;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.CellValue;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.FloatNumber;
 
 /**
  *  This class is used by {@link
@@ -83,7 +85,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
 
     private PxlDocument pxlDoc;
     private LinkedList ws = new LinkedList();
-    private LabelCell cell;
+    private CellValue cell;
     private int maxRows = 0;
     private int maxCols = 0;
     private int wsIndex;
@@ -188,10 +190,10 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         boolean success = false;
 
         if (cellValue < ws.size()){
-            cell = (LabelCell) ws.get(cellValue);
+            cell = (CellValue) ws.get(cellValue);
             cellValue++;
             readCellFormat();
-            Debug.log(Debug.TRACE,"Current Cell : " + cell.getLabel());
+            Debug.log(Debug.TRACE,"Current Cell : " + cell.getValue());
             return true;
         }
         else {
@@ -268,7 +270,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
 
         if (cell != null) {
             try {
-            contents = cell.getLabel();
+            contents = cell.getValue();
             }
             catch (IOException e) {
                 System.err.println("Could Not retrieve Cell contents");
@@ -289,7 +291,9 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      */
     public String getCellDataType() {
 
-        return OfficeConstants.CELLTYPE_STRING;
+        String type = getCellFormatType();
+
+        return type;
     }
 
 
@@ -301,7 +305,12 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      */
     String getCellFormatType() {
 
-        return OfficeConstants.CELLTYPE_STRING;
+        String type = OfficeConstants.CELLTYPE_STRING;
+
+        if(cell instanceof FloatNumber)
+            type = OfficeConstants.CELLTYPE_FLOAT;
+
+        return type;
     }
 
 
