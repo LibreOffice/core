@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:24:26 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,17 @@
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
+#ifndef _SHL_HXX //autogen
+#include <tools/shl.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
 #endif
 
 #ifndef _ERRHDL_HXX
@@ -119,7 +125,7 @@ TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 // --------------------------------------------------------------------------
 String MakeSender()
 {
-    SvxAddressItem aAdr;
+    SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
 
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
@@ -131,7 +137,7 @@ String MakeSender()
         if(sToken.EqualsAscii("COMPANY"))
         {
             xub_StrLen nOldLen = sRet.Len();
-            sRet += aAdr.GetToken( POS_COMPANY );
+            sRet += rUserOpt.GetCompany();
             bLastLength = sRet.Len() != nOldLen;
         }
         else if(sToken.EqualsAscii("CR"))
@@ -141,19 +147,19 @@ String MakeSender()
             bLastLength = TRUE;
         }
         else if(sToken.EqualsAscii("FIRSTNAME"))
-            sRet += aAdr.GetFirstName();
+            sRet += rUserOpt.GetFirstName();
         else if(sToken.EqualsAscii("LASTNAME"))
-            sRet += aAdr.GetName();
+            sRet += rUserOpt.GetLastName();
         else if(sToken.EqualsAscii("ADDRESS"))
-            sRet += aAdr.GetToken( POS_STREET );
+            sRet += rUserOpt.GetStreet();
         else if(sToken.EqualsAscii("COUNTRY"))
-            sRet += aAdr.GetToken( POS_COUNTRY );
+            sRet += rUserOpt.GetCountry();
         else if(sToken.EqualsAscii("POSTALCODE"))
-            sRet += aAdr.GetToken( POS_PLZ );
+            sRet += rUserOpt.GetZip();
         else if(sToken.EqualsAscii("CITY"))
-            sRet += aAdr.GetToken( POS_CITY );
+            sRet += rUserOpt.GetCity();
         else if(sToken.EqualsAscii("STATEPROV"))
-            sRet += aAdr.GetToken( POS_STATE );
+            sRet += rUserOpt.GetState();
         else if(sToken.Len()) //spaces
             sRet += sToken;
     }
