@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:09:30 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Název";
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "~Názov";
     };
     ComboBox ED_NAME
     {
@@ -154,6 +155,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Rozsah";
         Text[ hebrew ] = "~Bereich";
         Text[ hindi ] = "~फैलाव";
+        Text[ slovak ] = "~Rozsah";
     };
     Edit ED_DBAREA
     {
@@ -194,6 +196,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedLine FL_OPTIONS
     {
@@ -227,6 +230,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "ऑप्शन्स";
+        Text[ slovak ] = "Nastavenia";
     };
     CheckBox BTN_HEADER
     {
@@ -262,6 +266,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Obsahuje záhlaví sloupců";
         Text[ hebrew ] = "enthält ~Spaltenbeschriftungen";
         Text[ hindi ] = "स्तंभ शीर्षकों को स~म्मिलित किया है";
+        Text[ slovak ] = "O~bsahuje záhlavia stĺpcov";
     };
     CheckBox BTN_SIZE
     {
@@ -296,6 +301,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Vložit nebo smazat buňky";
         Text[ hebrew ] = "Zellen ~einfügen/löschen";
         Text[ hindi ] = "~कोष्ठों को जोड़ो अथवा मिटाओ";
+        Text[ slovak ] = "Vložiť ale~bo zmazať bunky";
     };
     CheckBox BTN_FORMAT
     {
@@ -330,6 +336,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Ponechat formátování";
         Text[ hebrew ] = "~Formatierung beibehalten";
         Text[ hindi ] = "~रचना करते रहो";
+        Text[ slovak ] = "Ponechať ~formátovanie";
     };
     CheckBox BTN_STRIPDATA
     {
@@ -364,6 +371,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Neukládat importovaná data";
         Text[ hebrew ] = "~Importierte Daten nicht speichern";
         Text[ hindi ] = "~निर्यात किया हुआ ड़ॉटा को संचित मत करो";
+        Text[ slovak ] = "Neukladať ~importované dáta";
     };
     FixedText FT_SOURCE
     {
@@ -397,6 +405,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Zdroj:";
         Text[ hebrew ] = "Quelle:";
         Text[ hindi ] = "मूल:";
+        Text[ slovak ] = "Zdroj:";
     };
     FixedText FT_OPERATIONS
     {
@@ -430,6 +439,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Operace:";
         Text[ hebrew ] = "Operationen:";
         Text[ hindi ] = "कार्य:";
+        Text[ slovak ] = "Operácie:";
     };
     OKButton BTN_OK
     {
@@ -477,6 +487,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton BTN_REMOVE
     {
@@ -511,6 +522,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     HelpButton BTN_HELP
     {
@@ -556,6 +568,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     String STR_MODIFY
     {
@@ -587,6 +600,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Změnit";
         Text[ hebrew ] = "~Ändern";
         Text[ hindi ] = "सु~धारो";
+        Text[ slovak ] = "Zmen~iť";
     };
     String STR_DB_INVALID
     {
@@ -617,6 +631,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ czech ] = "Neplatný rozsah";
         Text[ hebrew ] = "Ungültiger Bereich";
         Text[ hindi ] = "अमान्य फैलाव";
+        Text[ slovak ] = "Neplatný rozsah";
     };
     Text[ chinese_simplified ] = "定义数据库区域";
     Text[ russian ] = "���������� �������� ������";
@@ -633,7 +648,10 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ czech ] = "Definovat rozsah databáze";
     Text[ hebrew ] = "Datenbankbereich festlegen";
     Text[ hindi ] = "लेखासंचय फैलाव को परिभाषा दो";
+    Text[ slovak ] = "Definovať rozsah databázy";
 };
+
+
 
 
 
