@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.42 2001-08-14 13:44:47 bm Exp $
+	$Id: style.mod,v 1.43 2001-11-07 14:52:25 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -373,7 +373,7 @@
 
 <!ATTLIST style:properties fo:page-width %length; #IMPLIED>
 <!ATTLIST style:properties fo:page-height %length; #IMPLIED>
-<!ATTLIST style:properties style:paper-tray-number %positiveNumberOrDefault; #IMPLIED>
+<!ATTLIST style:properties style:paper-tray-name %string; #IMPLIED>
 <!ATTLIST style:properties style:print-orientation (portrait|landscape) #IMPLIED>
 <!ATTLIST style:properties style:print CDATA #IMPLIED>
 <!ATTLIST style:properties style:print-page-order (ttb|ltr) #IMPLIED>
