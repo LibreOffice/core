@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: jbu $ $Date: 2000-12-08 08:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,22 @@ sal_Int32 ODataInputStream::readLong(void) throw (IOException, RuntimeException)
 
 sal_Int64 ODataInputStream::readHyper(void) throw (IOException, RuntimeException)
 {
-    throw WrongFormatException( );
-    return 0;
+    Sequence<sal_Int8> aTmp(8);
+    if( 8 != readBytes( aTmp, 8 ) )
+    {
+        throw UnexpectedEOFException( );
+    }
+
+    const sal_uInt8 * pBytes = ( const sal_uInt8 * ) aTmp.getConstArray();
+    return
+        (((sal_Int64)pBytes[0]) << 56) +
+        (((sal_Int64)pBytes[1]) << 48) +
+        (((sal_Int64)pBytes[2]) << 40) +
+        (((sal_Int64)pBytes[3]) << 32) +
+        (((sal_Int64)pBytes[4]) << 24) +
+        (((sal_Int64)pBytes[5]) << 16) +
+        (((sal_Int64)pBytes[6]) << 8) +
+        pBytes[7];
 }
 
 float ODataInputStream::readFloat(void) throw (IOException, RuntimeException)
@@ -735,7 +749,17 @@ void ODataOutputStream::writeHyper(sal_Int64 Value)
     throw ( IOException,
             RuntimeException)
 {
-    throw WrongFormatException();
+    Sequence<sal_Int8> aTmp( 8 );
+    sal_Int8 * pBytes = aTmp.getArray();
+    pBytes[0] = sal_Int8(Value >> 56);
+    pBytes[1] = sal_Int8(Value >> 48);
+    pBytes[2] = sal_Int8(Value >> 40);
+    pBytes[3] = sal_Int8(Value >> 32);
+    pBytes[4] = sal_Int8(Value >> 24);
+    pBytes[5] = sal_Int8(Value >> 16);
+    pBytes[6] = sal_Int8(Value >> 8);
+    pBytes[7] = sal_Int8(Value);
+    writeBytes( aTmp );
 }
 
 
