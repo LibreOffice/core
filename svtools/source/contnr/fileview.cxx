@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-22 14:04:36 $
+ *  last change: $Author: pb $ $Date: 2001-11-28 11:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,26 +199,28 @@ using namespace ::ucb;
 #define ROW_DATE_CREATE     4
 #define ROW_IS_FOLDER       5
 #define ROW_TARGET_URL      6
+#define ROW_IS_HIDDEN       7
 
 DECLARE_LIST( StringList_Impl, OUString* );
 
-#define ROW_HEIGHT  17  // the height of a row has to be a little higher than the bitmap
+#define ROW_HEIGHT              17      // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
 
 // structs   -------------------------------------------------------------
 
 struct SortingData_Impl
 {
-    DateTime    maModDate;
 private:
     OUString    maFilename;     // only filename in upper case - for compare purposes
     OUString    maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
     OUString    maLowerTitle;
+
 public:
     OUString    maType;
     OUString    maTargetURL;
     OUString    maImageURL;
     OUString    maDisplayText;
+    DateTime    maModDate;
     Image       maImage;
     sal_Int64   maSize;
     sal_Bool    mbIsFolder;
@@ -228,6 +230,7 @@ public:
     inline const OUString&  GetFileName() const;
     inline void             SetNewTitle( const OUString& rNewTitle );       // new maTitle is set -> maFilename is set to same!
     inline void             ChangeTitle( const OUString& rChangedTitle );   // maTitle is changed, maFilename is unchanged!
+
 private:
     void                    SetTitles( const OUString& rNewTitle );
 };
@@ -1720,7 +1723,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
         Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(6);
+        Sequence< OUString > aProps(7);
 
         aProps[0] = OUString::createFromAscii( "Title" );
         aProps[1] = OUString::createFromAscii( "Size" );
@@ -1728,6 +1731,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
         aProps[3] = OUString::createFromAscii( "DateCreated" );
         aProps[4] = OUString::createFromAscii( "IsFolder" );
         aProps[5] = OUString::createFromAscii( "TargetURL" );
+        aProps[6] = OUString::createFromAscii( "IsHidden" );
 
         try
         {
@@ -1758,53 +1762,58 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
                 while ( xResultSet->next() )
                 {
-                    pData = new SortingData_Impl;
-
-                    aDT = xRow->getTimestamp( ROW_DATE_MOD );
-                    if ( xRow->wasNull() )
-                        aDT = xRow->getTimestamp( ROW_DATE_CREATE );
-
-                    OUString aContentURL = xContentAccess->queryContentIdentifierString();
-                    OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
-                    sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
-                    pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
-                    pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
-                    pData->maSize = xRow->getLong( ROW_SIZE );
-
-                    if ( bHasTargetURL &&
-                         INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
+                    sal_Bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
+                    // don't show hidden files
+                    if ( !bIsHidden )
                     {
-                        Content aCnt( aTargetURL, Reference< XCommandEnvironment > () );
-                        aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
-                        aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
-                    }
+                        pData = new SortingData_Impl;
 
-                    CONVERT_DATETIME( aDT, pData->maModDate );
+                        aDT = xRow->getTimestamp( ROW_DATE_MOD );
+                        if ( xRow->wasNull() )
+                            aDT = xRow->getTimestamp( ROW_DATE_CREATE );
 
-                    if ( bHasTargetURL )
-                        pData->maTargetURL = aTargetURL;
-                    else
-                        pData->maTargetURL = aContentURL;
+                        OUString aContentURL = xContentAccess->queryContentIdentifierString();
+                        OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
+                        sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
+                        pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
+                        pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
+                        pData->maSize = xRow->getLong( ROW_SIZE );
 
-                    pData->maType =
-                        SvFileInformationManager::GetDescription( INetURLObject( pData->maTargetURL ) );
+                        if ( bHasTargetURL &&
+                             INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
+                        {
+                            Content aCnt( aTargetURL, Reference< XCommandEnvironment > () );
+                            aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
+                            aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
+                        }
 
-                    // replace names on demand
-                    if( mbReplaceNames )
-                    {
-                        OUString aNewTitle;
-                        sal_Bool bTranslated;
+                        CONVERT_DATETIME( aDT, pData->maModDate );
 
-                        if( pData->mbIsFolder )
-                            bTranslated = GetTranslatedName( pData->GetTitle(), aNewTitle );
+                        if ( bHasTargetURL )
+                            pData->maTargetURL = aTargetURL;
                         else
-                            bTranslated = GetDocTitle( pData->maTargetURL, aNewTitle );
+                            pData->maTargetURL = aContentURL;
 
-                        if( bTranslated )
-                            pData->ChangeTitle( aNewTitle );
+                        pData->maType =
+                            SvFileInformationManager::GetDescription( INetURLObject( pData->maTargetURL ) );
+
+                        // replace names on demand
+                        if( mbReplaceNames )
+                        {
+                            OUString aNewTitle;
+                            sal_Bool bTranslated;
+
+                            if( pData->mbIsFolder )
+                                bTranslated = GetTranslatedName( pData->GetTitle(), aNewTitle );
+                            else
+                                bTranslated = GetDocTitle( pData->maTargetURL, aNewTitle );
+
+                            if( bTranslated )
+                                pData->ChangeTitle( aNewTitle );
+                        }
+
+                        maContent.push_back( pData );
                     }
-
-                    maContent.push_back( pData );
                 }
             }
             catch( CommandAbortedException& )
