@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:01 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,7 @@ namespace xmloff
     //= OControlExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OControlExport::OControlExport(SvXMLExport& _rContext, IExportImplementation* _pCallback,
-        const Reference< XPropertySet >& _rxControl,
+    OControlExport::OControlExport(IFormsExportContext& _rContext,  const Reference< XPropertySet >& _rxControl,
         const ::rtl::OUString& _rControlId, const ::rtl::OUString& _rReferringControls)
         :OPropertyExport(_rContext, _rxControl)
         ,m_sControlId(_rControlId)
@@ -146,7 +145,6 @@ namespace xmloff
         ,m_nIncludeEvents(0)
         ,m_nClassId(FormComponentType::CONTROL)
         ,m_pXMLElement(NULL)
-        ,m_pCallback(_pCallback)
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
     }
@@ -175,7 +173,7 @@ namespace xmloff
     void OControlExport::startExportElement()
     {
         // first add the attributes necessary for the element
-        m_rContext.ClearAttrList();
+        m_rContext.getGlobalContext().ClearAttrList();
 
         // common control attributes
         exportCommonControlAttributes();
@@ -191,7 +189,7 @@ namespace xmloff
 
         // TODO: add the event attributes
 
-        m_pXMLElement = new SvXMLElementExport(m_rContext, XML_NAMESPACE_FORM, getElementName(m_eType), sal_True, sal_True);
+        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, getElementName(m_eType), sal_True, sal_True);
     }
 
     //---------------------------------------------------------------------
@@ -225,11 +223,10 @@ namespace xmloff
                 break;
             case GRID:
             {   // a grid control requires us to store all columns as sub elements
-                OSL_ENSURE(m_pCallback, "OControlExport::exportSubTags: need a callback for the export of GridControls!");
                 Reference< XIndexAccess > xColumnContainer(m_xProps, UNO_QUERY);
                 OSL_ENSURE(xColumnContainer.is(), "OControlExport::exportSubTags: a grid control which is no IndexAccess?!!");
                 if (xColumnContainer.is())
-                    m_pCallback->exportCollectionElements(xColumnContainer);
+                    m_rContext.exportCollectionElements(xColumnContainer);
             }
             break;
             case COMBOBOX:
@@ -243,12 +240,12 @@ namespace xmloff
                 const ::rtl::OUString* pListItems = aListItems.getConstArray();
                 for (sal_Int32 i=0; i<aListItems.getLength(); ++i, ++pListItems)
                 {
-                    m_rContext.ClearAttrList();
+                    m_rContext.getGlobalContext().ClearAttrList();
                     AddAttribute(
                         getCommonControlAttributeNamespace(CCA_LABEL),
                         getCommonControlAttributeName(CCA_LABEL),
                         *pListItems);
-                    SvXMLElementExport aFormElement(m_rContext, XML_NAMESPACE_FORM, "item", sal_True, sal_True);
+                    SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", sal_True, sal_True);
                 }
             }
             break;
@@ -772,7 +769,7 @@ namespace xmloff
         // the string for "true" and "false"
         ::rtl::OUString sTrue;
         ::rtl::OUStringBuffer sBuffer;
-        m_rContext.GetMM100UnitConverter().convertBool(sBuffer, sal_True);
+        m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(sBuffer, sal_True);
         sTrue = sBuffer.makeStringAndClear();
 
         // loop through both lists ('til the maximum of both lengths)
@@ -783,7 +780,7 @@ namespace xmloff
         sal_Int32 nMaxLen = max(nItems, nValues);
         for (sal_Int16 i=0; i<nMaxLen; ++i, ++pItems, ++pValues)
         {
-            m_rContext.ClearAttrList();
+            m_rContext.getGlobalContext().ClearAttrList();
             if (i < nItems)
                 // there is an item at this position
                 AddAttribute(
@@ -812,7 +809,7 @@ namespace xmloff
                     sTrue
                     );
             }
-            SvXMLElementExport aFormElement(m_rContext, XML_NAMESPACE_FORM, "option", sal_True, sal_True);
+            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", sal_True, sal_True);
         }
     }
 
@@ -1059,8 +1056,8 @@ namespace xmloff
     //= OColumnExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OColumnExport::OColumnExport(SvXMLExport& _rContext, const Reference< XPropertySet >& _rxControl)
-        :OControlExport(_rContext, NULL, _rxControl, ::rtl::OUString(), ::rtl::OUString())
+    OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl)
+        :OControlExport(_rContext, _rxControl, ::rtl::OUString(), ::rtl::OUString())
         ,m_pColumnXMLElement(NULL)
     {
     }
@@ -1098,7 +1095,7 @@ namespace xmloff
         // a grid column
 
         // the attributes:
-        m_rContext.ClearAttrList();
+        m_rContext.getGlobalContext().ClearAttrList();
 
         // the attribute "name"
         exportStringPropertyAttribute(
@@ -1129,7 +1126,7 @@ namespace xmloff
             PROPERTY_LABEL);
 
         // start the extra element indicating that we're a column
-        m_pColumnXMLElement = new SvXMLElementExport(m_rContext, XML_NAMESPACE_FORM, "column", sal_True, sal_True);
+        m_pColumnXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "column", sal_True, sal_True);
 
         // let the base class do it's handling
         OControlExport::startExportElement();
@@ -1139,19 +1136,18 @@ namespace xmloff
     //= OFormExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OFormExport::OFormExport(SvXMLExport& _rContext, IExportImplementation* _pCallback, const Reference< XPropertySet >& _rxForm)
+    OFormExport::OFormExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxForm)
         :OPropertyExport(_rContext, _rxForm)
-        ,m_pCallback(_pCallback)
         ,m_pXMLElement(NULL)
     {
-        OSL_ENSURE(m_xProps.is() && m_pCallback, "OFormExport::OFormExport: invalid arguments!");
+        OSL_ENSURE(m_xProps.is(), "OFormExport::OFormExport: invalid arguments!");
 
         // add the attributes
-        m_rContext.ClearAttrList();
+        m_rContext.getGlobalContext().ClearAttrList();
         exportAttributes();
 
         // start the form element
-        m_pXMLElement = new SvXMLElementExport(m_rContext, XML_NAMESPACE_FORM, "form", sal_True, sal_True);
+        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "form", sal_True, sal_True);
 
         // the properties which where not exported 'til now
         exportRemainingProperties();
@@ -1162,8 +1158,8 @@ namespace xmloff
         Reference< XIndexAccess > xCollection(m_xProps, UNO_QUERY);
         OSL_ENSURE(xCollection.is(), "OFormLayerXMLExport::implExportForm: a form which is not an index access? Suspicíous!");
 
-        if (xCollection.is() && m_pCallback)
-            m_pCallback->exportCollectionElements(xCollection);
+        if (xCollection.is())
+            m_rContext.exportCollectionElements(xCollection);
     }
 
     //---------------------------------------------------------------------
@@ -1296,6 +1292,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/18 13:25:01  mib
+ *  #82036#: new graphic properties
+ *
  *  Revision 1.5  2000/12/13 10:38:10  fs
  *  moved some code to a more central place to reuse it
  *

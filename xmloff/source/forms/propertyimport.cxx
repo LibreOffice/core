@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,12 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-
+#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
+#ifndef _XMLOFF_PRSTYLEI_HXX_
+#include "prstylei.hxx"
+#endif
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
 #endif
@@ -120,10 +125,10 @@ namespace xmloff
     //= OPropertyImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OPropertyImport::OPropertyImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            OAttribute2Property& _rAttributeMap)
-        :SvXMLImportContext(_rImport, _nPrefix, _rName)
-        ,m_rAttributeMap(_rAttributeMap)
+    OPropertyImport::OPropertyImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName)
+        :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
+        ,m_rContext(_rImport)
+        ,m_pStyleElement(NULL)
     {
     }
 
@@ -133,7 +138,7 @@ namespace xmloff
     {
         if (0 == _rLocalName.compareToAscii("properties"))
         {
-            return new OPropertyElementsContext(GetImport(), _nPrefix, _rLocalName, this);
+            return new OPropertyElementsContext(m_rContext.getGlobalContext(), _nPrefix, _rLocalName, this);
         }
         else
         {
@@ -159,7 +164,7 @@ namespace xmloff
         ::rtl::OUString sLocalName;
         for (sal_Int16 i=0; i<nAttributeCount; ++i)
         {
-            nNamespace = GetImport().GetNamespaceMap().GetKeyByAttrName(_rxAttrList->getNameByIndex(i), &sLocalName);
+            nNamespace = m_rContext.getGlobalContext().GetNamespaceMap().GetKeyByAttrName(_rxAttrList->getNameByIndex(i), &sLocalName);
             handleAttribute(nNamespace, sLocalName, _rxAttrList->getValueByIndex(i));
         }
 
@@ -176,7 +181,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        const OAttribute2Property::AttributeAssignment* pProperty = m_rAttributeMap.getAttributeTranslation(_rLocalName);
+        const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
         if (pProperty)
         {
             // create and store a new PropertyValue
@@ -184,11 +189,31 @@ namespace xmloff
             aNewValue.Name = pProperty->sPropertyName;
 
             // convert the value string into the target type
-            aNewValue.Value = convertString(GetImport(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap);
+            aNewValue.Value = convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap);
             m_aValues.push_back(aNewValue);
         }
         else
-            OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties!");
+        {   // maybe it's the style attribute
+            static const ::rtl::OUString s_sStyleAttribute = ::rtl::OUString::createFromAscii("style-name");
+            if (s_sStyleAttribute == _rLocalName)
+            {
+                const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement(_rValue);
+                OSL_ENSURE(pStyleContext, "OPropertyImport::handleAttribute: do not know the style!");
+                // remember the element for later usage. Derived classes have to call implSetStyleProperties
+                // if necessary
+                m_pStyleElement = static_cast<const XMLPropStyleContext*>(pStyleContext);
+            }
+            else
+                OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties or the style!");
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OPropertyImport::implSetStyleProperties(const Reference< XPropertySet >& _rxObject)
+    {
+        if (!m_pStyleElement || !_rxObject.is())
+            return;
+        const_cast<XMLPropStyleContext*>(m_pStyleElement)->FillPropertySet(_rxObject);
     }
 
     //---------------------------------------------------------------------
@@ -524,6 +549,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.2  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *

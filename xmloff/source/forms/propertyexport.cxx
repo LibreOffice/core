@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:01 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include "families.hxx"
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -108,6 +111,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
+#include "callbacks.hxx"
 #endif
 
 #ifndef _UNOTOOLS_DATETIME_HXX_
@@ -229,15 +235,15 @@ namespace xmloff
     //= OPropertyExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OPropertyExport::OPropertyExport(SvXMLExport& _rContext, const Reference< XPropertySet >& _rxProps)
+    OPropertyExport::OPropertyExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxProps)
         :m_rContext(_rContext)
         ,m_xProps(_rxProps)
     {
         // caching
         ::rtl::OUStringBuffer aBuffer;
-        m_rContext.GetMM100UnitConverter().convertBool(aBuffer, sal_True);
+        m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(aBuffer, sal_True);
         m_sValueTrue = aBuffer.makeStringAndClear();
-        m_rContext.GetMM100UnitConverter().convertBool(aBuffer, sal_False);
+        m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(aBuffer, sal_False);
         m_sValueFalse = aBuffer.makeStringAndClear();
 
         m_xPropertyInfo = m_xProps->getPropertySetInfo();
@@ -251,7 +257,7 @@ namespace xmloff
     void OPropertyExport::exportRemainingProperties()
     {
         // the properties tag
-        SvXMLElementExport aPropertiesTag(m_rContext, XML_NAMESPACE_FORM, "properties", sal_True, sal_True);
+        SvXMLElementExport aPropertiesTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "properties", sal_True, sal_True);
 
         Reference< XPropertyState > xPropertyState(m_xProps, UNO_QUERY);
 
@@ -304,15 +310,15 @@ namespace xmloff
                 AddAttribute(XML_NAMESPACE_FORM, "property-is-list", m_sValueTrue);
 
             // start the property tag
-            SvXMLElementExport aValueTag(m_rContext, XML_NAMESPACE_FORM, "property", sal_True, sal_True);
+            SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property", sal_True, sal_True);
 
             if (!bIsSequence)
             {   // the simple case
                 sValue = implConvertAny(aValue);
 
-                SvXMLElementExport aValueTag(m_rContext, XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
+                SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
                     // (no whitespace inside the tag)
-                m_rContext.GetDocHandler()->characters(sValue);
+                m_rContext.getGlobalContext().GetDocHandler()->characters(sValue);
                 // done with this property
                 continue;
             }
@@ -351,9 +357,9 @@ namespace xmloff
                 ::rtl::OUString sCurrent;
                 while (pSequenceIterator->hasMoreElements())
                 {
-                    SvXMLElementExport aValueTag(m_rContext, XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
+                    SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
                         // (no whitespace inside the tag)
-                    m_rContext.GetDocHandler()->characters(implConvertAny(pSequenceIterator->nextElement()));
+                    m_rContext.getGlobalContext().GetDocHandler()->characters(implConvertAny(pSequenceIterator->nextElement()));
                 }
             }
             delete pSequenceIterator;
@@ -444,7 +450,7 @@ namespace xmloff
         {
             // let the formatter of the export context build a string
             ::rtl::OUStringBuffer sBuffer;
-            m_rContext.GetMM100UnitConverter().convertNumber(sBuffer, (sal_Int32)nCurrentValue);
+            m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(sBuffer, (sal_Int32)nCurrentValue);
 
             AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
         }
@@ -468,7 +474,7 @@ namespace xmloff
         {
             // let the formatter of the export context build a string
             ::rtl::OUStringBuffer sBuffer;
-            m_rContext.GetMM100UnitConverter().convertEnum(sBuffer, (sal_uInt16)nCurrentValue, _pValueMap);
+            m_rContext.getGlobalContext().GetMM100UnitConverter().convertEnum(sBuffer, (sal_uInt16)nCurrentValue, _pValueMap);
 
             AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
         }
@@ -493,9 +499,22 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::implExportStyleReference()
     {
-        // TODO: style export/style references
+        // the current state of the style-relevant properties
+        ::std::vector< XMLPropertyState > aStyleProperties = m_rContext.getStylePropertyMapper()->Filter(m_xProps);
+        // find the style name for this state
+        ::rtl::OUString sStyleName = m_rContext.getGlobalContext().GetAutoStylePool()->Find(XML_STYLE_FAMILY_CONTROL_ID, aStyleProperties);
+
+        // export this style
+        AddAttribute(XML_NAMESPACE_FORM, "style-name", sStyleName);
+
+        // flag all the properties which are part of the style as "handled"
+        UniReference< XMLPropertySetMapper > xStylePropertiesSupplier = m_rContext.getStylePropertyMapper()->getPropertySetMapper();
+        for (sal_Int32 i=0; i<xStylePropertiesSupplier->GetEntryCount(); ++i)
+            exportedProperty(xStylePropertiesSupplier->GetEntryAPIName(i));
+
+        // the font properties are exported as single properties, but there is a FontDescriptor property which
+        // collects them all-in-one, this has been exported implicitly
         exportedProperty(PROPERTY_FONT);
-        exportedProperty(PROPERTY_BACKGROUNDCOLOR);
     }
 
     //---------------------------------------------------------------------
@@ -652,7 +671,7 @@ namespace xmloff
             break;
             case TypeClass_DOUBLE:
                 // let the unit converter format is as string
-                m_rContext.GetMM100UnitConverter().convertNumber(aBuffer, getDouble(_rValue));
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, getDouble(_rValue));
                 break;
             case TypeClass_BOOLEAN:
                 aBuffer = getBOOL(_rValue) ? m_sValueTrue : m_sValueFalse;
@@ -661,7 +680,7 @@ namespace xmloff
             case TypeClass_SHORT:
             case TypeClass_LONG:
                 // let the unit converter format is as string
-                m_rContext.GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
                 break;
             case TypeClass_HYPER:
                 // TODO
@@ -672,7 +691,7 @@ namespace xmloff
                 // convert it into an int32
                 sal_Int32 nValue;
                 ::cppu::enum2int(nValue, _rValue);
-                m_rContext.GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
             }
             break;
             default:
@@ -711,7 +730,7 @@ namespace xmloff
                     break;
                 }
                 // let the unit converter format is as string
-                m_rContext.GetMM100UnitConverter().convertNumber(aBuffer, fValue);
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, fValue);
             }
             break;
         }
@@ -759,10 +778,10 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
     {
-        OSL_ENSURE(0 == m_rContext.GetXAttrList()->getValueByName(::rtl::OUString::createFromAscii(_pName)).getLength(),
+        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::rtl::OUString::createFromAscii(_pName)).getLength(),
             "OPropertyExport::AddAttribute: already have such an attribute");
 
-        m_rContext.AddAttribute(_nPrefix, _pName, _rValue);
+        m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue);
     }
 
     //---------------------------------------------------------------------
@@ -801,6 +820,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/12/18 13:25:01  mib
+ *  #82036#: new graphic properties
+ *
  *  Revision 1.6  2000/12/13 10:38:49  fs
  *  slightly modified some documentations
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:38:10 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #include "valueproperties.hxx"
 #endif
 
-class SvXMLExport;
 class SvXMLElementExport;
 //.........................................................................
 namespace xmloff
@@ -110,7 +109,6 @@ namespace xmloff
         sal_Int32               m_nIncludeDatabase;     // common database attributes to include
         sal_Int32               m_nIncludeSpecial;      // special attributes to include
         sal_Int32               m_nIncludeEvents;       // events to include
-        IExportImplementation*  m_pCallback;            // the callback to export collections - (GridControls are collections)
 
         SvXMLElementExport*     m_pXMLElement;          // XML element doing the concrete startElement etc.
 
@@ -126,7 +124,7 @@ namespace xmloff
             @param _rReferringControls
                 the comma-separated list of control-ids of all the controls referring to this one as LabelControl
         */
-        OControlExport(SvXMLExport& _rContext, IExportImplementation* _pCallback,
+        OControlExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
             const ::rtl::OUString& _rControlId,
             const ::rtl::OUString& _rReferringControls);
@@ -225,7 +223,7 @@ namespace xmloff
         /** ctor
             @see OColumnExport::OColumnExport
         */
-        OColumnExport(SvXMLExport& _rContext,
+        OColumnExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
 
         ~OColumnExport();
@@ -248,13 +246,12 @@ namespace xmloff
                 ,public OPropertyExport
     {
     protected:
-        IExportImplementation*      m_pCallback;
         SvXMLElementExport*         m_pXMLElement;          // XML element doing the concrete startElement etc.
+
     public:
         /** constructs an object capable of exporting controls
         */
-        OFormExport(SvXMLExport& _rContext,
-            IExportImplementation* _pCallback,
+        OFormExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm);
 
         /** dtor.
@@ -275,6 +272,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/13 10:38:10  fs
+ *  moved some code to a more central place to reuse it
+ *
  *  Revision 1.3  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

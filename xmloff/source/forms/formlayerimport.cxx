@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,18 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLImport::setAutoStyleContext(SvXMLStylesContext* _pAutoStyles)
+    {
+        m_pImpl->setAutoStyleContext(_pAutoStyles);
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportPropertyMapper* OFormLayerXMLImport::getStylePropertyMapper() const
+    {
+        return m_pImpl->getStylePropertyMapper();
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         m_pImpl->seekPage(_rxDrawPage);
@@ -133,6 +145,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.2  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *

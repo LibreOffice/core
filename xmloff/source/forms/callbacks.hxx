@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:35:50 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,15 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 
 class SvXMLImport;
+class SvXMLExport;
+class SvXMLExportPropertyMapper;
+class SvXMLStyleContext;
+
 //.........................................................................
 namespace xmloff
 {
@@ -81,11 +88,14 @@ namespace xmloff
     class OAttribute2Property;
 
     //=====================================================================
-    //= IExportImplementation
+    //= IFormsExportContext
     //=====================================================================
-    class IExportImplementation
+    class IFormsExportContext
     {
     public:
+        virtual SvXMLExport&                                getGlobalContext() = 0;
+        virtual ::vos::ORef< SvXMLExportPropertyMapper >    getStylePropertyMapper() = 0;
+
         /** steps through a collection and exports all children of this collection
         */
         virtual void    exportCollectionElements(
@@ -127,11 +137,12 @@ namespace xmloff
     class IFormsImportContext
     {
     public:
-        virtual IControlIdMap&          getControlIdMap() = 0;
-        virtual OAttribute2Property&    getAttributeMap() = 0;
+        virtual IControlIdMap&              getControlIdMap() = 0;
+        virtual OAttribute2Property&        getAttributeMap() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        getServiceFactory() = 0;
-        virtual SvXMLImport&            getGlobalContext() = 0;
+                                            getServiceFactory() = 0;
+        virtual SvXMLImport&                getGlobalContext() = 0;
+        virtual const SvXMLStyleContext*    getStyleElement(const ::rtl::OUString& _rStyleName) const = 0;
     };
 
 //.........................................................................
@@ -143,6 +154,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/13 10:35:50  fs
+ *  included XPropertySet.hpp
+ *
  *  Revision 1.2  2000/12/12 12:00:37  fs
  *  +IControlIdMap / +IFormsImportContext
  *

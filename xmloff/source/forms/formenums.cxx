@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
 #include <com/sun/star/form/ListSourceType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
+#include <com/sun/star/awt/TextAlign.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
+#include <com/sun/star/awt/FontWidth.hpp>
+#endif
 
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
@@ -99,9 +105,13 @@ namespace xmloff
 
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::awt;
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
+        NULL,
+        NULL,
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -230,7 +240,50 @@ namespace xmloff
                     rReturn = aCheckStateMap;
                 };
                 break;
-
+                case epTextAlign:
+                {
+                    static SvXMLEnumMapEntry aTextAlignMap[] =
+                    {
+                        { "default", -1 },
+                        { "left", TextAlign::LEFT },
+                        { "center", TextAlign::CENTER },
+                        { "right", TextAlign::RIGHT },
+                        { NULL, 0 }
+                    };
+                    rReturn = aTextAlignMap;
+                };
+                break;
+                case epBorderType:
+                {
+                    static SvXMLEnumMapEntry aBorderTypeMap[] =
+                    {
+                        { "none", 0 },
+                        { "3D", 1 },
+                        { "flat", 2 },
+                        { NULL, 0 }
+                    };
+                    rReturn = aBorderTypeMap;
+                };
+                break;
+                case epFontWidth:
+                {
+                    static SvXMLEnumMapEntry aFontWidthMap[] =
+                    {
+                        { "dontknow",       FontWidth::DONTKNOW },
+                        { "ultra-condensed",FontWidth::ULTRACONDENSED },
+                        { "extra-condensed",FontWidth::EXTRACONDENSED },
+                        { "condensed",      FontWidth::CONDENSED },
+                        { "semi-condensed", FontWidth::SEMICONDENSED },
+                        { "normal",         FontWidth::NORMAL },
+                        { "semi-expanded",  FontWidth::SEMIEXPANDED },
+                        { "expanded",       FontWidth::EXPANDED },
+                        { "extra-expanded", FontWidth::EXTRAEXPANDED },
+                        { "ultra-expanded", FontWidth::ULTRAEXPANDED },
+                        { NULL, 0 }
+                    };
+                    rReturn = aFontWidthMap;
+                };
+                break;
             }
         }
 
@@ -244,6 +297,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.1  2000/11/17 19:01:56  fs
  *  initial checkin - export and/or import the applications form layer
  *

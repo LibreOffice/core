@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,24 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+
+        // OPropertyImport overridables
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+            const ::rtl::OUString& _rLocalName,
+            const ::rtl::OUString& _rValue);
+    };
+
+    //=====================================================================
+    //= OPasswordImport
+    //=====================================================================
+    class OPasswordImport : public OControlImport
+    {
+    public:
+        OPasswordImport(
+            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType
+        );
 
         // OPropertyImport overridables
         virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
@@ -494,6 +512,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.2  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *

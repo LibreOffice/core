@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_DETAILFIELDS,       "DetailFields");
     XMLFORM_CONSTASCII_STRING( PROPERTY_COLUMNSERVICENAME,  "ColumnServiceName");
     XMLFORM_CONSTASCII_STRING( PROPERTY_FORMATKEY,          "FormatKey");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_ALIGN,              "Align");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_BORDER,             "Border");
 
     // services
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION, "com.sun.star.form.Forms" );
@@ -231,6 +233,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/19 15:41:32  fs
+ *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
+ *
  *  Revision 1.1  2000/11/17 19:03:33  fs
  *  initial checkin - export and/or import the applications form layer
  *

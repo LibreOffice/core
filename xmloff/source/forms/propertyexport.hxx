@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:38:49 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,16 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-
+#ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
+#endif
 
 //.........................................................................
 namespace xmloff
 {
 //.........................................................................
 
+    class IFormsExportContext;
     //=====================================================================
     //= OPropertyExport
     //=====================================================================
@@ -95,7 +97,7 @@ namespace xmloff
             // see examinePersistence
 
     protected:
-        SvXMLExport&    m_rContext;
+        IFormsExportContext&    m_rContext;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xProps;
@@ -113,7 +115,7 @@ namespace xmloff
             @param  m_xControl
                 the property set to be exported
         */
-        OPropertyExport(SvXMLExport& _rContext,
+        OPropertyExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps);
 
     protected:
@@ -392,6 +394,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/13 10:38:49  fs
+ *  slightly modified some documentations
+ *
  *  Revision 1.4  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

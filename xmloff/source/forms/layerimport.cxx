@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,18 @@
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
 #endif
+#ifndef _XMLOFF_XMLSTYLE_HXX
+#include "xmlstyle.hxx"
+#endif
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include "families.hxx"
+#endif
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include "xmlprmap.hxx"
+#endif
+#ifndef _XMLOFF_XMLIMPPR_HXX
+#include "xmlimppr.hxx"
+#endif
 #ifndef _COM_SUN_STAR_FORM_FORMSUBMITENCODING_HPP_
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
 #endif
@@ -104,6 +116,14 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #endif
+#ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
+#include "controlpropertyhdl.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
+#include "controlpropertymap.hxx"
+#endif
+
+SV_IMPL_REF( SvXMLStylesContext );
 
 //.........................................................................
 namespace xmloff
@@ -253,6 +273,18 @@ namespace xmloff
             TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
             &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
+        // add our style family to the export context's style pool
+        m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory;
+        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
+        m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
+
+//      m_rContext.GetAutoStylePool()->AddFamily(
+//          XML_STYLE_FAMILY_CONTROL_ID,
+//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME)),
+//          m_xExportMapper.getBodyPtr(),
+//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_PREFIX)));
+
+        // 'initialize'
         m_aCurrentPageIds = m_aControlIds.end();
     }
 
@@ -287,6 +319,21 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const ::rtl::OUString& _rStyleName) const
+    {
+        OSL_ENSURE(m_xAutoStyles.Is(), "OFormLayerXMLImport_Impl::getStyleElement: have no auto style context!");
+            // did you use setAutoStyleContext?
+
+        const SvXMLStyleContext* pControlStyle =
+            m_xAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_CONTROL_ID, _rStyleName);
+        OSL_ENSURE(pControlStyle,
+                    ::rtl::OString("OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"")
+                +=  ::rtl::OString(_rStyleName.getStr(), _rStyleName.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=  ::rtl::OString("\"!"));
+        return pControlStyle;
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rId)
     {
         OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::registerControlId: no current page!");
@@ -302,6 +349,19 @@ namespace xmloff
         OSL_ENSURE(_rReferringControls.getLength(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
         OSL_ENSURE(_rxControl.is(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (NULL) control!");
         m_aControlReferences.push_back(ControlReference(_rxControl, _rReferringControls));
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportPropertyMapper* OFormLayerXMLImport_Impl::getStylePropertyMapper() const
+    {
+        return m_xImportMapper.getBodyPtr();
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pAutoStyles)
+    {
+        m_xAutoStyles = _pAutoStyles;
+        OSL_ENSURE(m_xAutoStyles.Is(), "OFormLayerXMLImport_Impl::setAutoStyleContext: invalid auto style context!");
     }
 
     //---------------------------------------------------------------------
@@ -422,6 +482,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.2  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *

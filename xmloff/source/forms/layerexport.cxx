@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-13 12:29:30 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,26 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include "xmlprmap.hxx"
+#endif
+#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
+#include "prhdlfac.hxx"
+#endif
 #ifndef _XMLOFF_ELEMENTEXPORT_HXX_
 #include "elementexport.hxx"
 #endif
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include "families.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
+#include "controlpropertyhdl.hxx"
+#endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
+#endif
+#ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
+#include "controlpropertymap.hxx"
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -118,8 +133,20 @@ namespace xmloff
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)
         :m_rContext(_rContext)
     {
-        m_aCurrentPageIds = m_aControlIds.end();
-        m_aCurrentPageReferring = m_aReferringControls.end();
+        initializePropertyMaps();
+
+        // add our style family to the export context's style pool
+        m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory;
+        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
+        m_xExportMapper = new SvXMLExportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
+
+        m_rContext.GetAutoStylePool()->AddFamily(
+            XML_STYLE_FAMILY_CONTROL_ID,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME)),
+            m_xExportMapper.getBodyPtr(),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_PREFIX)));
+
+        clear();
     }
 
     //---------------------------------------------------------------------
@@ -149,7 +176,7 @@ namespace xmloff
     void OFormLayerXMLExport_Impl::exportGridColumn(const Reference< XPropertySet >& _rxColumn)
     {
         // do the exporting
-        OColumnExport aExportImpl(m_rContext, _rxColumn);
+        OColumnExport aExportImpl(*this, _rxColumn);
         aExportImpl.doExport();
     }
 
@@ -170,7 +197,7 @@ namespace xmloff
             sControlId = aControlId->second;
 
         // do the exporting
-        OControlExport aExportImpl(m_rContext, this, _rxControl, sControlId, sReferringControls);
+        OControlExport aExportImpl(*this, _rxControl, sControlId, sReferringControls);
         aExportImpl.doExport();
     }
 
@@ -178,8 +205,20 @@ namespace xmloff
     void OFormLayerXMLExport_Impl::exportForm(const Reference< XPropertySet >& _rxProps) throw (Exception)
     {
         OSL_ENSHURE(_rxProps.is(), "OFormLayerXMLExport_Impl::exportForm: invalid property set!");
-        OFormExport aAttributeHandler(m_rContext, this, _rxProps);
+        OFormExport aAttributeHandler(*this, _rxProps);
             // this object will do everything necessary ...
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLExport& OFormLayerXMLExport_Impl::getGlobalContext()
+    {
+        return m_rContext;
+    }
+
+    //---------------------------------------------------------------------
+    ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport_Impl::getStylePropertyMapper()
+    {
+        return m_xExportMapper;
     }
 
     //---------------------------------------------------------------------
@@ -236,6 +275,7 @@ namespace xmloff
         m_aReferringControls.clear();
         m_aCurrentPageIds = m_aControlIds.end();
         m_aCurrentPageReferring = m_aReferringControls.end();
+
     }
 
     //---------------------------------------------------------------------
@@ -322,6 +362,13 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::exportAutoStyles()
+    {
+        m_rContext.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_CONTROL_ID,
+            m_rContext.GetDocHandler(), m_rContext.GetMM100UnitConverter(), m_rContext.GetNamespaceMap());
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::examineForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         // get the forms collection of the page
@@ -395,6 +442,11 @@ namespace xmloff
                             sReferencedBy += sCurrentId;
                         }
                     }
+
+                    // get the styles of the object
+                    ::std::vector< XMLPropertyState > xStylePropState = m_xExportMapper->Filter(xCurrent);
+                    // and add them to the style pool
+                    m_rContext.GetAutoStylePool()->Add(XML_STYLE_FAMILY_CONTROL_ID, xStylePropState);
                 }
                 else
                 {
@@ -431,6 +483,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/13 12:29:30  kz
+ *  DEBUG -> _DEBUG for OSL_ENSURE
+ *
  *  Revision 1.5  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,13 @@
 #ifndef _XMLOFF_FORMS_IFACECOMPARE_HXX_
 #include "ifacecompare.hxx"
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 
 class SvXMLExport;
+class XMLPropertyHandlerFactory;
+class SvXMLExportPropertyMapper;
 //.........................................................................
 namespace xmloff
 {
@@ -84,12 +89,16 @@ namespace xmloff
     /** the implementation class for OFormLayerXMLExport
     */
     class OFormLayerXMLExport_Impl
-                :public IExportImplementation
+                :public IFormsExportContext
     {
         friend class OFormLayerXMLExport;
 
     protected:
-        SvXMLExport&    m_rContext;
+        SvXMLExport&                        m_rContext;
+
+        // style handling
+        ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
+        ::vos::ORef< SvXMLExportPropertyMapper >    m_xExportMapper;
 
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::rtl::OUString, OPropertySetCompare, MapPropertySet2String);
             // maps objects (property sets) to strings, e.g. control ids.
@@ -149,9 +158,10 @@ namespace xmloff
         ::rtl::OUString
                 getControlId(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
 
-        /** implements the export of a collection of forms/controls
-        */
-        void    exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
+        // IFormsExportContext
+        virtual void exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
+        virtual SvXMLExport& getGlobalContext();
+        virtual ::vos::ORef< SvXMLExportPropertyMapper > getStylePropertyMapper();
 
         /** clear any structures which have been build in the recent <method>examine</method> calls.
         */
@@ -188,6 +198,9 @@ namespace xmloff
         void exportForms(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
 
+        /// exports the auto-styles collected during the examineForms calls
+        void exportAutoStyles();
+
     protected:
         sal_Bool implCheckPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
@@ -211,6 +224,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.4  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

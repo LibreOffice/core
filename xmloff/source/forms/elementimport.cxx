@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     OElementImport::OElementImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
-        :OPropertyImport(_rImport.getGlobalContext(), _nPrefix, _rName, _rImport.getAttributeMap())
+        :OPropertyImport(_rImport, _nPrefix, _rName)
         ,m_xParentContainer(_rxParentContainer)
         ,m_rFormImport(_rImport)
     {
@@ -265,6 +265,9 @@ namespace xmloff
                 }
             }
         }
+
+        // set the style properties
+        implSetStyleProperties(m_xElement);
 
         // insert the element into the parent container
         if (!m_sName.getLength())
@@ -555,6 +558,37 @@ namespace xmloff
         static const ::rtl::OUString s_sReferenceAttributeName = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_FOR));
         if (_rLocalName == s_sReferenceAttributeName)
             m_sReferringControls = _rValue;
+        else
+            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+    }
+
+    //=====================================================================
+    //= OPasswordImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OPasswordImport::OPasswordImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
+        :OControlImport(_rImport, _nPrefix, _rName, _rxParentContainer, _eType)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    {
+        static const ::rtl::OUString s_sEchoCharAttributeName = ::rtl::OUString::createFromAscii(getSpecialAttributeName(SCA_ECHO_CHAR));
+        if (_rLocalName == s_sEchoCharAttributeName)
+        {
+            // need a special handling for the EchoChar property
+            PropertyValue aEchoChar;
+            aEchoChar.Name = PROPERTY_ECHOCHAR;
+            OSL_ENSURE(_rValue.getLength() == 1, "OPasswordImport::handleAttribute: invalid echo char attribute!");
+                // we ourself should not have written values other than of length 1
+            if (_rValue.getLength() >= 1)
+                aEchoChar.Value <<= (sal_Int16)_rValue.getStr()[0];
+            else
+                aEchoChar.Value <<= (sal_Int16)0;
+            implPushBackPropertyValue(aEchoChar);
+        }
         else
             OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
@@ -934,6 +968,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.2  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *

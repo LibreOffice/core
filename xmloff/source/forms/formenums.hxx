@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@ namespace xmloff
             epButtonType,
             epListSourceType,
             epCheckState,
+            epTextAlign,
+            epBorderType,
+            epFontWidth,
 
             KNOWN_ENUM_PROPERTIES
         };
@@ -107,6 +110,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.1  2000/11/17 19:02:06  fs
  *  initial checkin - export and/or import the applications form layer
  *

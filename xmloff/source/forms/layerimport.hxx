@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,19 @@
 #ifndef _XMLOFF_FORMS_IFACECOMPARE_HXX_
 #include "ifacecompare.hxx"
 #endif
+#ifndef _REF_HXX
+#include <tools/ref.hxx>
+#endif
 
 class SvXMLImport;
 class SvXMLImportContext;
+class XMLPropertyHandlerFactory;
+class SvXMLImportPropertyMapper;
+
+SV_DECL_REF( SvXMLStylesContext );
+    // unfortunately, we can't put this into our namespace, as the macro expands to (amongst others) a forward
+    // declaration of the class name, which then would be in the namespace, too
+
 //.........................................................................
 namespace xmloff
 {
@@ -123,8 +133,13 @@ namespace xmloff
         OAttribute2Property                 m_aAttributeMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                             m_xForms;   // the forms of the currently imported page
+        SvXMLStylesContextRef               m_xAutoStyles;
 
     protected:
+        // style handling
+        ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
+        ::vos::ORef< SvXMLImportPropertyMapper >    m_xImportMapper;
+
         DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, MapString2PropertySet );
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapString2PropertySet, ODrawPageCompare, MapDrawPage2Map);
 
@@ -149,10 +164,19 @@ namespace xmloff
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                         getServiceFactory();
         virtual SvXMLImport&            getGlobalContext();
+        const SvXMLStyleContext*        getStyleElement(const ::rtl::OUString& _rStyleName) const;
 
     protected:
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
         ~OFormLayerXMLImport_Impl();
+
+        /** announces the AutoStyleContext to the importer.
+        */
+        void    setAutoStyleContext(SvXMLStylesContext* _pAutoStyles);
+
+        /** retrieves the property mapper form form related auto styles.
+        */
+        SvXMLImportPropertyMapper* getStylePropertyMapper() const;
 
         /** start importing the forms of the given page
         */
@@ -191,6 +215,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/13 10:40:15  fs
+ *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
+ *
  *  Revision 1.2  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *
