@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRowLocate.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:03 $
+ *  last change:$Date: 2003-09-08 10:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sdbcx;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.XRowLocate;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sdbcx.XRowLocate</code>
@@ -98,13 +99,11 @@ public class _XRowLocate extends MultiMethodTest {
     * <code>XNameAccess</code> object, FAILED otherwise.
     */
     public void _getBookmark() {
-        boolean result = true ;
 
         try {
             bookmark1 = oObj.getBookmark() ;
         } catch (SQLException e) {
             log.println("Exception occured :" + e) ;
-            result = false ;
         }
 
         tRes.tested("getBookmark()", bookmark1 != null) ;

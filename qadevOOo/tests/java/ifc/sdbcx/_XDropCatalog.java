@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDropCatalog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:04 $
+ *  last change:$Date: 2003-09-08 10:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 package ifc.sdbcx;
 
 import lib.MultiMethodTest;
+import lib.Status;
+
 import com.sun.star.sdbcx.XDropCatalog;
 
 /**
@@ -77,6 +79,6 @@ public class _XDropCatalog extends MultiMethodTest {
     public XDropCatalog oObj = null;
 
     public void _dropCatalog() {
-        tRes.tested("dropCatalog()", tRes.skipped(false));
+        tRes.tested("dropCatalog()", Status.skipped(false));
     }
 }
