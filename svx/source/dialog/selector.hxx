@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:17:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ friend class SvxConfigGroupListBox_Impl;
     Timer                           aTimer;
     SvLBoxEntry*                    pCurEntry;
     SvxGroupInfoArr_Impl            aArr;
+    SvLBoxEntry*                    m_pDraggingEntry;
 
     DECL_LINK(                      TimerHdl, Timer* );
     virtual void                    MouseMove( const MouseEvent& rMEvt );
@@ -154,8 +155,17 @@ public:
     String                          GetHelpText( SvLBoxEntry *pEntry );
     USHORT                          GetCurId()
                                     { return GetId( FirstSelected() ); }
+    SvLBoxEntry*                    GetLastSelectedEntry();
     SfxMacroInfo*                   GetMacroInfo();
     void                            FunctionSelected();
+
+    // drag n drop methods
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+
+    virtual DragDropMode    NotifyStartDrag(
+        TransferDataContainer&, SvLBoxEntry* );
+
+    virtual void        DragFinished( sal_Int8 );
 };
 
 class SfxSlotPool;

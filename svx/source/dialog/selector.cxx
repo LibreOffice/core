@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:17:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ SV_IMPL_PTRARR(SvxGroupInfoArr_Impl, SvxGroupInfoPtr);
 SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, const ResId& rResId)
     : SvTreeListBox( pParent, rResId )
     , pCurEntry( 0 )
+    , m_pDraggingEntry( 0 )
 {
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
@@ -177,6 +178,18 @@ SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, c
 SvxConfigFunctionListBox_Impl::~SvxConfigFunctionListBox_Impl()
 {
     ClearAll();
+}
+
+SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetLastSelectedEntry()
+{
+    if ( m_pDraggingEntry != NULL )
+    {
+        return m_pDraggingEntry;
+    }
+    else
+    {
+        return FirstSelected();
+    }
 }
 
 void SvxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& rMEvt )
@@ -264,7 +277,7 @@ SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
 
 SfxMacroInfo* SvxConfigFunctionListBox_Impl::GetMacroInfo()
 {
-    SvLBoxEntry *pEntry = FirstSelected();
+    SvLBoxEntry *pEntry = GetLastSelectedEntry();
     if ( pEntry )
     {
         SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
@@ -315,6 +328,25 @@ String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
 void SvxConfigFunctionListBox_Impl::FunctionSelected()
 {
     Help::ShowBalloon( this, Point(), String() );
+}
+
+// drag and drop support
+DragDropMode SvxConfigFunctionListBox_Impl::NotifyStartDrag(
+    TransferDataContainer& aTransferDataContainer, SvLBoxEntry* pEntry )
+{
+    m_pDraggingEntry = pEntry;
+    return GetDragDropMode();
+}
+
+void SvxConfigFunctionListBox_Impl::DragFinished( sal_Int8 nDropAction )
+{
+    m_pDraggingEntry = NULL;
+}
+
+sal_Int8
+SvxConfigFunctionListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    return DND_ACTION_NONE;
 }
 
 SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
@@ -1636,7 +1668,7 @@ SvxScriptSelectorDialog::SetRunLabel()
 USHORT
 SvxScriptSelectorDialog::GetSelectedId()
 {
-    return aCommands.GetCurId();
+    return aCommands.GetId( aCommands.GetLastSelectedEntry() );
 }
 
 // Currently we only return a URL if a Scripting Framework script is
@@ -1659,11 +1691,11 @@ SvxScriptSelectorDialog::GetScriptURL()
 String
 SvxScriptSelectorDialog::GetSelectedDisplayName()
 {
-    return aCommands.GetEntryText( aCommands.FirstSelected() );
+    return aCommands.GetEntryText( aCommands.GetLastSelectedEntry() );
 }
 
 String
 SvxScriptSelectorDialog::GetSelectedHelpText()
 {
-    return aCommands.GetHelpText( aCommands.FirstSelected() );
+    return aCommands.GetHelpText( aCommands.GetLastSelectedEntry() );
 }
