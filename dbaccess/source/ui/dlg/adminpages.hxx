@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,53 +65,78 @@
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
-#include <vcl/edit.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/imagebtn.hxx>
-#endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
-#include <vcl/combobox.hxx>
-#endif
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
 #ifndef _DBAUI_CHARSETS_HXX_
 #include "charsets.hxx"
 #endif
-#ifndef _DBAUI_CURLEDIT_HXX_
-#include "curledit.hxx"
-#endif
-#ifndef _DBAUI_TABLETREE_HXX_
-#include "tabletree.hxx"
-#endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
+#ifndef _SVTOOLS_WIZARDMACHINE_HXX_
+#include <svtools/wizardmachine.hxx>
 #endif
 
-class ToolBox;
-class Accelerator;
-
+class NumericField;
+class Edit;
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
+    /// helper class to wrap the savevalue and disable call
+    class SAL_NO_VTABLE ISaveValueWrapper
+    {
+    public:
+        virtual bool SaveValue() = 0;
+        virtual bool Disable() = 0;
+    };
+
+    template < class T > class OSaveValueWrapper : public ISaveValueWrapper
+    {
+        T*  m_pSaveValue;
+    public:
+        OSaveValueWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
+        { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
+
+        virtual bool SaveValue() { m_pSaveValue->SaveValue(); return true;} // bool return value only for stl
+        virtual bool Disable() { m_pSaveValue->Disable(); return true;} // bool return value only for stl
+    };
+
+    template < class T > class ODisableWrapper : public ISaveValueWrapper
+    {
+        T*  m_pSaveValue;
+    public:
+        ODisableWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
+        { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
+
+        virtual bool SaveValue() { return true;} // bool return value only for stl
+        virtual bool Disable() { m_pSaveValue->Disable(); return true;} // bool return value only for stl
+    };
+
+    struct TSaveValueWrapperFunctor : public unary_function< ISaveValueWrapper, bool>
+    {
+        bool operator() (ISaveValueWrapper* lhs)
+        {
+            return lhs->SaveValue();
+        }
+    };
+    struct TDisableWrapperFunctor : public unary_function< ISaveValueWrapper, bool>
+    {
+        bool operator() (ISaveValueWrapper* lhs)
+        {
+            return lhs->Disable();
+        }
+    };
+
+    struct TDeleteWrapperFunctor : public unary_function< ISaveValueWrapper, bool>
+    {
+        bool operator() (ISaveValueWrapper* lhs)
+        {
+            delete lhs;
+            return true;
+        }
+    };
 
     //=========================================================================
     //= OPageSettings
@@ -121,34 +146,50 @@ namespace dbaui
         virtual ~OPageSettings();
     };
 
-    //=========================================================================
-    //= OToolboxedPageViewSettings
-    //=========================================================================
-    struct OToolboxedPageViewSettings : public OPageSettings
-    {
-        sal_uInt16      nDelayedToolboxAction;
-
-        OToolboxedPageViewSettings() : nDelayedToolboxAction(0) { }
-    };
 
     //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
-    class ODbAdminDialog;
-    class OGenericAdministrationPage : public SfxTabPage
+    class IAdminHelper;
+    class IItemSetHelper;
+    class OGenericAdministrationPage : public SfxTabPage, public svt::IWizardPage
     {
     private:
-        Accelerator*    m_pKeyAccel;        // for accelerating toolbox slots
-        ToolBox*        m_pToolBox;         // pointer to derived class' member
-
         Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
 
+    protected:
+        IAdminHelper* m_pAdminDialog;
+        IItemSetHelper* m_pItemSetHelper;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                            m_xORB;
     public:
         OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet);
         ~OGenericAdministrationPage();
 
         /// set a handler which gets called every time something on the page has been modified
-        void            SetModifiedHandler(const Link& _rHandler) { m_aModifiedHandler = _rHandler; }
+        void SetModifiedHandler(const Link& _rHandler) { m_aModifiedHandler = _rHandler; }
+
+        /** Sets the ParentDialog
+            @param  _pAdminDialog
+                the ParentDialog
+            @param  _pItemSetHelper
+                the itemset helper
+        */
+        inline void SetAdminDialog(IAdminHelper* _pDialog,IItemSetHelper* _pItemSetHelper)
+        {
+            OSL_ENSURE(_pDialog && _pItemSetHelper,"Values are NULL!");
+            m_pAdminDialog = _pDialog;
+            m_pItemSetHelper = _pItemSetHelper;
+        }
+
+        /** Sets the ServiceFactory
+            @param  _rxORB
+                The service factory.
+        */
+        virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
+        {
+            m_xORB = _rxORB;
+        }
 
         /** create an instance of view settings for the page
             <p>The caller is responsible for destroying the object later on.</p>
@@ -166,8 +207,8 @@ namespace dbaui
             <p>This method is necessary because during applying, the page may die and be re-created.</p>
 
             @param _pPageState
-                the page state as given in <method>ODbAdminDialog::applyChangesAsync</method>
-            @see ODbAdminDialog::applyChangesAsync
+                the page state as given in <method>IAdminHelper::applyChangesAsync</method>
+            @see IAdminHelper::applyChangesAsync
         */
         virtual void            restoreViewSettings(const OPageSettings* _pSettings);
 
@@ -182,6 +223,10 @@ namespace dbaui
         */
         sal_Bool getSelectedDataSource(DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn);
 
+        // svt::IWizardPage
+        virtual void enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess );
+        virtual void initializePage();
+        virtual sal_Bool commitPage(COMMIT_REASON _eReason);
 
     protected:
         /// default implementation: call FillItemSet, call checkItems,
@@ -191,7 +236,8 @@ namespace dbaui
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_True
         virtual void ActivatePage(const SfxItemSet& _rSet);
 
-        virtual long PreNotify( NotifyEvent& _rNEvt );
+        // TabPage overridables
+        virtual void    ActivatePage();
 
     protected:
         void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call((void*)this); }
@@ -202,42 +248,60 @@ namespace dbaui
         /** called from within Reset and ActivatePage, use to initialize the controls with the items from the given set
             @param      _bSaveValue     if set to sal_True, the implementation should call SaveValue on all relevant controls
         */
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) { }
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) { postInitControls(_rSet, _bSaveValue); }
 
         /// analyze the invalid and the readonly flag which may be present in the set
         void getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly);
 
-        /** prepares an action which requires a connection to work with.
-
-            <p>It is checked if the current data source is modified. If in this case the dialog is appliable, and
-            the user confirms the apply, an asyncApplyChanges (on the dialog) with the page settings given is executed.
-
-            <p>If no async apply is necessary, the settings given (if not <NULL/> are deleted.</p>
-            @return
-                <TRUE/> if the action can be continued, <FALSE/> otherwise
+        /** will be called inside <method>postInitControl</method> to save the value if necessary
+            @param  _rControlList
+                The list must be filled with the controls.
+                It is not allowed to clear the list before pusching data into it.
         */
-        sal_Bool prepareConnectionAction( ODbAdminDialog* _pDialog, const String& _rActionDescription, OPageSettings** _pViewSettings = NULL );
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) = 0;
 
-        /** enables keyboard acceleration for toolbox slots
-            @param _pDerivedClassToolBox
-                the toolbox which is a member of the derived class
-            @see
-                addToolboxAccelerator
+        /** will be called inside <method>postInitControl</method> to disable if necessary
+            @param  _rControlList
+                The list must be filled with the controls.
+                It is not allowed to clear the list before pusching data into it.
         */
-        void    enableToolBoxAcceleration( ToolBox* _pDerivedClassToolBox );
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) = 0;
 
-        /** adds a accelerator for a toolbox item
-            @param _nToolboxItemId
-                the id of the toolbox item
-            @param _rKey
-                the key which should toggly the item
+        /** fills the Boolean value into the item set when the value changed.
+            @param  _rSet
+                The item set where to put the new value into.
+            @param  _pCheckBox
+                The check box which is checked.
+            @param  _nID
+                The id in the itemset to set whith the new value.
+            @param  _bChangedSomething
+                <TRUE/> if something changed otherwise <FALSE/>
         */
-        void    addToolboxAccelerator( sal_uInt16 _nToolboxItemId, const KeyCode& _rKey );
+        void fillBool(SfxItemSet& _rSet,CheckBox* _pCheckBox,USHORT _nID,sal_Bool& _bChangedSomething);
 
-        /** called when the accelerator simulates a toolbox slot
-            <p>The default implementation does nothing</p>
+        /** fills the int value into the item set when the value changed.
+            @param  _rSet
+                The item set where to put the new value into.
+            @param  _pEdit
+                The check box which is checked.
+            @param  _nID
+                The id in the itemset to set whith the new value.
+            @param  _bChangedSomething
+                <TRUE/> if something changed otherwise <FALSE/>
         */
-        virtual void onToolBoxAction( sal_uInt16 _nClickedItemId );
+        void fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
+
+        /** fills the String value into the item set when the value changed.
+            @param  _rSet
+                The item set where to put the new value into.
+            @param  _pEdit
+                The check box which is checked.
+            @param  _nID
+                The id in the itemset to set whith the new value.
+            @param  _bChangedSomething
+                <TRUE/> if something changed otherwise <FALSE/>
+        */
+        void fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
 
     protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control
@@ -249,7 +313,7 @@ namespace dbaui
         Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 
     private:
-        DECL_LINK( OnAccelSelected, void*);
+        void postInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
     };
 
 //.........................................................................
