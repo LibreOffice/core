@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-27 09:54:17 $
+ *  last change: $Author: mav $ $Date: 2002-10-11 08:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2401,6 +2401,33 @@ const SfxVersionTableDtor* SfxMedium::GetVersionList()
 
     return pImp->pVersions;
 }
+
+SfxVersionTableDtor* SfxMedium::GetVersionList( SvStorage* pStor )
+{
+    SfxVersionTableDtor* pVersions = NULL;
+
+    if( pStor )
+    {
+        SvStorageStreamRef aStream =
+            pStor->OpenStream( DEFINE_CONST_UNICODE( "VersionList" ), SFX_STREAM_READONLY | STREAM_NOCREATE );
+        if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
+        {
+            pVersions = new SfxVersionTableDtor;
+            pVersions->Read( *aStream );
+        }
+        else
+        {
+            SfxVersionTableDtor *pList = new SfxVersionTableDtor;
+            if ( SfxXMLVersList_Impl::ReadInfo( pStor, pList ) )
+                pVersions = pList;
+            else
+                delete pList;
+        }
+    }
+
+    return pVersions;
+}
+
 
 sal_uInt16 SfxMedium::AddVersion_Impl( SfxVersionInfo& rInfo )
 {
