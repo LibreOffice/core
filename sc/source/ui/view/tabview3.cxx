@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 14:59:21 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ void ScTabView::ClickCursor( USHORT nPosX, USHORT nPosY, BOOL bControl )
 void ScTabView::UpdateAutoFillMark()
 {
     ScRange aMarkRange;
-    BOOL bMarked = aViewData.GetSimpleArea( aMarkRange, TRUE );     // einfach oder nur Cursor
+    BOOL bMarked = aViewData.GetSimpleArea( aMarkRange );       // single selection or cursor
 
     USHORT i;
     for (i=0; i<4; i++)
