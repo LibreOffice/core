@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:50:17 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -403,6 +402,19 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                     // due to the movement
                     SwObjPositioningInProgress aObjPosInProgress( *pAnchoredObj );
                     pAnchoredObj->SetObjLeft( _pPageFrm->Frm().Right() );
+                    // --> OD 2004-11-24 #115759# - reset character rectangle,
+                    // top of line and relative position in order to assure,
+                    // that anchored object is correctly positioned.
+                    pAnchoredObj->ClearCharRectAndTopOfLine();
+                    pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
+                    if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
+                            == FLY_IN_CNTNT )
+                    {
+                        pAnchoredObj->AnchorFrm()
+                                ->Prepare( PREP_FLY_ATTR_CHG,
+                                           &(pAnchoredObj->GetFrmFmt()) );
+                    }
+                    // <--
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
@@ -791,6 +803,11 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     // Do the recalculation
     //
     ::lcl_CalcLayout( &rLastLine, LONG_MAX );
+    // --> OD 2004-11-23 #115759# - force a format of the last line in order to
+    // get the correct height.
+    rLastLine.InvalidateSize();
+    rLastLine.Calc();
+    // <--
 
     //
     // Unlock this tab frame and its follow
@@ -1379,28 +1396,39 @@ BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom )
     SWRECTFN( pLay )
     while ( pCnt && pLay->GetUpper()->IsAnLower( pCnt ) )
     {
-        bRet |= !pCnt->IsValid();
-        // --> OD 2004-10-06 #i26945# - no extra invalidation of floating
-        // screen objects needed.
-        // Thus, delete call of method <SwFrm::InvalidateObjs( true )>
-        // <--
-        pCnt->Calc();
-        // OD 2004-05-11 #i28701# - usage of new method <::FormatObjsAtFrm(..)>
-        // to format the floating screen objects
-        if ( pCnt->IsTxtFrm() )
+        // --> OD 2004-11-23 #115759# - check, if a format of content frame is
+        // possible. Thus, 'copy' conditions, found at the beginning of
+        // <SwCntntFrm::MakeAll(..)>, and check these.
+        const bool bFormatPossible = !pCnt->IsJoinLocked() &&
+                                     ( !pCnt->IsTxtFrm() ||
+                                       !static_cast<SwTxtFrm*>(pCnt)->IsLocked() ) &&
+                                     ( pCnt->IsFollow() || !StackHack::IsLocked() );
+        if ( bFormatPossible )
         {
-            // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame to
-            // the object formatter
-            if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
-                                                      *(pCnt->FindPageFrm()) ) )
+            bRet |= !pCnt->IsValid();
+            // --> OD 2004-10-06 #i26945# - no extra invalidation of floating
+            // screen objects needed.
+            // Thus, delete call of method <SwFrm::InvalidateObjs( true )>
             // <--
+            pCnt->Calc();
+            // OD 2004-05-11 #i28701# - usage of new method <::FormatObjsAtFrm(..)>
+            // to format the floating screen objects
+            if ( pCnt->IsTxtFrm() )
             {
-                // restart format with first content
-                pCnt = pLay->ContainsCntnt();
-                continue;
+                // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame to
+                // the object formatter
+                if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
+                                                          *(pCnt->FindPageFrm()) ) )
+                // <--
+                {
+                    // restart format with first content
+                    pCnt = pLay->ContainsCntnt();
+                    continue;
+                }
             }
+            pCnt->GetUpper()->Calc();
         }
-        pCnt->GetUpper()->Calc();
+        // <--
         if( ! bAll && (*fnRect->fnYDiff)((pCnt->Frm().*fnRect->fnGetTop)(), nBottom) > 0 )
             break;
         pCnt = pCnt->GetNextCntntFrm();
@@ -1423,8 +1451,10 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
     {
         // --> OD 2004-10-15 #i26945# - parameter <_bOnlyRowsAndCells> controls,
         // if only row and cell frames are formatted.
+        // --> OD 2004-11-25 #115759# - always format table frames
         if ( pFrm->IsLayoutFrm() &&
-             ( !_bOnlyRowsAndCells || pFrm->IsRowFrm() || pFrm->IsCellFrm() ) )
+             ( !_bOnlyRowsAndCells || pFrm->IsTabFrm() ||
+               pFrm->IsRowFrm() || pFrm->IsCellFrm() ) )
         // <--
         {
             bRet |= !pFrm->IsValid();
@@ -1465,7 +1495,13 @@ void MA_FASTCALL lcl_CalcLayout( SwLayoutFrm *pLay, long nBottom )
         {
             bCheck = false;
             if( lcl_CalcLowers( pLay, nBottom ) )
+            {
+                // --> OD 2004-11-23 #115759# - force another format of the
+                // lowers, if at least one of it was invalid.
+                bCheck = true;
+                // <--
                 continue;
+            }
         }
         break;
     } while( true );
@@ -3862,7 +3898,12 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
                     ASSERT( ((SwFrm*)pLast)->IsRowFrm(),
                                 "Non-row frame registered in table line" )
                     SwRowFrm* pRow = (SwRowFrm*)pLast;
-                    if ( pRow->GetTabLine() == pPrevTabLine )
+                    // --> OD 2004-11-23 #115759# - do *not* take repeated
+                    // headlines, because during split of table it can be
+                    // invalid and thus can't provide correct border values.
+                    if ( pRow->GetTabLine() == pPrevTabLine &&
+                         !pRow->IsRepeatedHeadline() )
+                    // <--
                     {
                         pPreviousRow = pRow;
                         break;
@@ -4355,12 +4396,16 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         pFly->GetVirtDrawObj()->SetChanged();
                         // <--
 
-                        // --> OD 2004-10-08 #i26945# - no registration of
-                        // fly frame at page of layout frame, because table
-                        // line can split.
                         if ( pFly->IsFlyInCntFrm() )
                         {
                             static_cast<SwFlyInCntFrm*>(pFly)->AddRefOfst( lDiff );
+                            // --> OD 2004-12-02 #115759# - reset current relative
+                            // position to get re-positioned, if not directly moved.
+                            if ( bNoDirectMove )
+                            {
+                                pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
+                            }
+                            // <--
                         }
                         else if( pFly->IsAutoPos() )
                         {
@@ -4369,12 +4414,18 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             // <mnLastTopOfLine> has also been adjusted.
                             pFly->AddLastTopOfLineY( lDiff );
                         }
-                        // <--
-                        // --> OD 2004-11-05 #i26945#
+                        // --> OD 2004-11-05 #i26945# - re-registration at
+                        // page frame of anchor frame, if table frame isn't
+                        // a follow table and table frame isn't in its
+                        // rebuild of last line.
                         SwTabFrm* pTabFrm = pLay->FindTabFrm();
-                        if ( !( pTabFrm->IsFollow() &&
+                        // --> OD 2004-11-23 #115759#
+                        // - save: check, if table frame is found.
+                        if ( pTabFrm &&
+                             !( pTabFrm->IsFollow() &&
                                 pTabFrm->FindMaster()->IsRebuildLastLine() ) &&
                              pFly->IsFlyFreeFrm() )
+                        // <--
                         {
                             SwPageFrm* pPageFrm = pFly->GetPageFrm();
                             SwPageFrm* pPageOfAnchor = pFrm->FindPageFrm();
@@ -4412,7 +4463,8 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         SwTabFrm* pTabFrm = pLay->FindTabFrm();
                         if ( !( pTabFrm->IsFollow() &&
                                 pTabFrm->FindMaster()->IsRebuildLastLine() ) &&
-                             pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_IN_CNTNT )
+                             !pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
+                                                            == FLY_IN_CNTNT )
                         {
                             SwPageFrm* pPageFrm = pAnchoredObj->GetPageFrm();
                             SwPageFrm* pPageOfAnchor = pFrm->FindPageFrm();
@@ -4898,18 +4950,38 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
 
                     // --> FME, OD 2004-07-15 #i26831#, #i26520#
                     // The additional lower space of the current last.
-                    if ( pLast && pLast->IsFlowFrm() )
+                    // --> OD 2004-11-25 #115759# - do *not* consider the
+                    // additional lower space for 'master' text frames
+                    if ( pLast && pLast->IsFlowFrm() &&
+                         ( !pLast->IsTxtFrm() ||
+                           !static_cast<const SwTxtFrm*>(pLast)->GetFollow() ) )
+                    // <--
                     {
                         nReal += SwFlowFrm::CastFlowFrm(pLast)->CalcAddLowerSpaceAsLastInTableCell();
                     }
                     // Don't forget the upper space and lower space,
-                    if ( pTmp->IsFlowFrm() )
+                    // --> OD 2004-11-25 #115759# - do *not* consider the upper
+                    // and the lower space for follow text frames.
+                    if ( pTmp->IsFlowFrm() &&
+                         ( !pTmp->IsTxtFrm() ||
+                           !static_cast<const SwTxtFrm*>(pTmp)->IsFollow() ) )
                     {
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace( NULL, pLast);
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
                     }
                     // <--
-
+                    // --> OD 2004-11-25 #115759# - consider additional lower
+                    // space of <pTmp>, if contains only one line.
+                    // In this case it would be the new last text frame, which
+                    // would have no follow and thus would add this space.
+                    if ( pTmp->IsTxtFrm() &&
+                         const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pTmp))
+                                            ->GetLineCount( STRING_LEN ) == 1 )
+                    {
+                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)
+                                        ->CalcAddLowerSpaceAsLastInTableCell();
+                    }
+                    // <--
                     if ( nReal > 0 )
                         nTmpHeight -= nReal;
                 }
@@ -4977,7 +5049,12 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
             nTmpHeight = (Frm().*fnRect->fnGetHeight)();
         else if ( !bSplittable )
             nTmpHeight += (pFirstRow->Frm().*fnRect->fnGetHeight)();
-        else
+        // --> FME 2004-11-18 #118411#
+        // Optimization: lcl_CalcHeightOfFirstContentLine actually can trigger
+        // a formatting of the row frame (via the GetFormatted()). We don't
+        // want this formatting if the row does not have a height.
+        else if ( 0 != (pFirstRow->Frm().*fnRect->fnGetHeight)() )
+        // <--
         {
             const bool bOldJoinLock = IsJoinLocked();
             ((SwTabFrm*)this)->LockJoin();
