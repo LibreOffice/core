@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:35:11 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,24 +80,24 @@ TabPage TP_OPTLOAD_PAGE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Aktualisierung" ;
         Text [ English ] = "Updating" ;
-        Text[ english_us ] = "Updating";
+        Text[ english_us ] = "Update";
         Text[ portuguese ] = "Updating";
-        Text[ russian ] = "Updating";
-        Text[ greek ] = "Updating";
+        Text[ russian ] = "Îáíîâëåíèå";
+        Text[ greek ] = "Åíçìİñùóç";
         Text[ dutch ] = "Updating";
         Text[ french ] = "Updating";
         Text[ spanish ] = "Updating";
         Text[ italian ] = "Updating";
         Text[ danish ] = "Updating";
-        Text[ swedish ] = "Updating";
-        Text[ polish ] = "Updating";
+        Text[ swedish ] = "Uppdatering";
+        Text[ polish ] = "Aktualizacja";
         Text[ portuguese_brazilian ] = "Updating";
-        Text[ japanese ] = "Updating";
+        Text[ japanese ] = "XV";
         Text[ korean ] = "Updating";
-        Text[ chinese_simplified ] = "Updating";
+        Text[ chinese_simplified ] = "¸üĞÂ";
         Text[ chinese_traditional ] = "§ó·s";
         Text[ turkish ] = "Updating";
-        Text[ arabic ] = "Updating";
+        Text[ arabic ] = "ÊÍÏíË";
     };
     FixedText FT_LINK
     {
@@ -107,22 +107,22 @@ TabPage TP_OPTLOAD_PAGE
         Text [ English ] = "Update links when loading" ;
         Text[ english_us ] = "Update links when loading";
         Text[ portuguese ] = "Update links when loading";
-        Text[ russian ] = "Update links when loading";
-        Text[ greek ] = "Update links when loading";
+        Text[ russian ] = "Îáíîâëÿòü ññûëêè ïğè çàãğóçêå";
+        Text[ greek ] = "Åíçìİñùóç óõíäİóåùí êáôÜ ôç öüñôùóç";
         Text[ dutch ] = "Update links when loading";
         Text[ french ] = "Update links when loading";
         Text[ spanish ] = "Update links when loading";
         Text[ italian ] = "Update links when loading";
         Text[ danish ] = "Update links when loading";
-        Text[ swedish ] = "Update links when loading";
-        Text[ polish ] = "Update links when loading";
+        Text[ swedish ] = "Uppdatera länkar vid laddning";
+        Text[ polish ] = "Aktualizuj ³¹cza podczas ³adowania";
         Text[ portuguese_brazilian ] = "Update links when loading";
-        Text[ japanese ] = "Update links when loading";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ“Ç‚İ‚İ‚ÉØİ¸‚ÌXV";
         Text[ korean ] = "Update links when loading";
-        Text[ chinese_simplified ] = "Update links when loading";
+        Text[ chinese_simplified ] = "ÔÚ×°ÈëÊ±¸üĞÂÁ´½Ó";
         Text[ chinese_traditional ] = "¸ü¤J®É§ó·s±¶®|";
         Text[ turkish ] = "Update links when loading";
-        Text[ arabic ] = "Update links when loading";
+        Text[ arabic ] = "ÊÍÏíË ÇáÇÑÊÈÇØÇÊ ÚäÏ ÇáÊÍãíá";
     };
     RadioButton RB_ALWAYS
     {
@@ -299,7 +299,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ spanish ] = "Etiqueta";
         Text[ english_us ] = "Caption";
         Text[ chinese_simplified ] = "±êÇ©";
-        Text[ russian ] = "Íàçâàíèå";
+        Text[ russian ] = "Ïîäïèñü";
         Text[ polish ] = "Opis";
         Text[ japanese ] = "}•\\”Ô†";
         Text[ chinese_traditional ] = "¼ĞÅÒ";
@@ -331,7 +331,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ japanese ] = "©“®";
         Text[ chinese_traditional ] = "¦Û°Ê";
         Text[ arabic ] = "ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôá";
+        Text[ greek ] = "~Áõôüìáôá";
         Text[ korean ] = "ÀÚµ¿";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Otomatik";
@@ -358,7 +358,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ japanese ] = "µÌŞ¼Şª¸Ä‘I‘ğ:";
         Text[ chinese_traditional ] = "¿ï¾Üª«¥ó¡G";
         Text[ arabic ] = "ÇÎÊíÇÑ ÇáßÇÆäÇÊ:";
-        Text[ greek ] = "ÅğéëïãŞ áíôéêåéìİíïõ:";
+        Text[ greek ] = "Åğéë~ïãŞ áíôéêåéìİíïõ:";
         Text[ korean ] = "°³Ã¼ ¼±ÅÃ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Nesne seçimi:";
@@ -377,22 +377,22 @@ TabPage TP_OPTLOAD_PAGE
         Text [ ENGLISH ] = "Settings" ;
         Text[ english_us ] = "Settings";
         Text[ portuguese ] = "Settings";
-        Text[ russian ] = "Settings";
-        Text[ greek ] = "Settings";
+        Text[ russian ] = "Íàñòğîéêè";
+        Text[ greek ] = "Ñõèìßóåéò";
         Text[ dutch ] = "Settings";
         Text[ french ] = "Settings";
         Text[ spanish ] = "Settings";
         Text[ italian ] = "Settings";
         Text[ danish ] = "Settings";
-        Text[ swedish ] = "Settings";
-        Text[ polish ] = "Settings";
+        Text[ swedish ] = "Inställningar";
+        Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "Settings";
+        Text[ japanese ] = "İ’è";
         Text[ korean ] = "Settings";
-        Text[ chinese_simplified ] = "Settings";
+        Text[ chinese_simplified ] = "Éè¶¨";
         Text[ chinese_traditional ] = "³]©w";
         Text[ turkish ] = "Settings";
-        Text[ arabic ] = "Settings";
+        Text[ arabic ] = "ÇáÅÚÏÇÏÇÊ";
     };
     FixedText FT_METRIC
     {
@@ -409,10 +409,10 @@ TabPage TP_OPTLOAD_PAGE
         Text [ dutch ] = "Maateenheid";
         Text [ spanish ] = "Unidad de medida";
         Text [ english_us ] = "Measurement unit";
-        Text[ chinese_simplified ] = "¶ÈÁ¿µ¥Î»";
+        Text[ chinese_simplified ] = "¼ÆÁ¿µ¥Î»";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
-        Text[ japanese ] = "’PˆÊ";
+        Text[ japanese ] = "g‚¤’PˆÊ";
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ finnish ] = "Metriset yksiköt" ;
         Text[ chinese_traditional ] = "­p¶q³æ¦ì";
@@ -601,7 +601,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     ItemList [ russian ] =
     {
-            < "Ìèëèìåòğû" ; FUNIT_MM ; > ;
+            < "Ìèëëèìåòğû" ; FUNIT_MM ; > ;
         < "Ñàíòèìåòğû" ; FUNIT_CM ; > ;
         < "Ìåòğû" ; FUNIT_M ; > ;
         < "Êèëîìåòğû" ; FUNIT_KM ; > ;
@@ -609,7 +609,7 @@ TabPage TP_OPTLOAD_PAGE
         < "Ôóòû" ; FUNIT_FOOT ; > ;
         < "Ìèëè" ; FUNIT_MILE ; > ;
         < "Ïèêè" ; FUNIT_PICA ; > ;
-        < "Ïóíêò" ; FUNIT_POINT ; > ;
+        < "Òî÷êè" ; FUNIT_POINT ; > ;
     };
     ItemList [ polish ] =
     {
@@ -649,7 +649,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     ItemList [ arabic ] =
     {
-            < "ãáíãÊÑ" ; FUNIT_MM ; > ;
+            < "ãíáíãÊÑ" ; FUNIT_MM ; > ;
         < "ÓäÊíãÊÑ" ; FUNIT_CM ; > ;
         < "ãÊÑ" ; FUNIT_M ; > ;
         < "ßíáæãÊÑ" ; FUNIT_KM ; > ;
@@ -663,12 +663,12 @@ TabPage TP_OPTLOAD_PAGE
     {
             < "×éëéïóôÜ" ; FUNIT_MM ; > ;
         < "ÅêáôïóôÜ" ; FUNIT_CM ; > ;
-        < "Ìİôñá" ; FUNIT_M ; > ;
-        < "×éëéüìåôñá" ; FUNIT_KM ; > ;
+        < "Ìİôñï" ; FUNIT_M ; > ;
+        < "×éëéüìåôñï" ; FUNIT_KM ; > ;
         < "ºíôóåò" ; FUNIT_INCH ; > ;
         < "Ğüäé" ; FUNIT_FOOT ; > ;
         < "Ìßëéá" ; FUNIT_MILE ; > ;
-        < "Pica" ; FUNIT_PICA ; > ;
+        < "Pica (Ğßêá)" ; FUNIT_PICA ; > ;
         < "Óçìåßï" ; FUNIT_POINT ; > ;
     };
     ItemList [ korean ] =
@@ -877,7 +877,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ english_us ] = "%PRODUCTNAME Writer Table";
         Text[ chinese_simplified ] = "%PRODUCTNAME Writer ±í¸ñ";
         Text[ russian ] = "%PRODUCTNAME Writer - Òàáëèöà";
-        Text[ polish ] = "Tabela %PRODUCTNAME Writer";
+        Text[ polish ] = "%PRODUCTNAME Writer - Tabela";
         Text[ japanese ] = "%PRODUCTNAME Writer •\\";
         Text[ chinese_traditional ] = "%PRODUCTNAME Writer ªí®æ";
         Text[ arabic ] = "ÌÏæá %PRODUCTNAME Writer";
@@ -901,7 +901,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ english_us ] = "%PRODUCTNAME Writer Frame";
         Text[ chinese_simplified ] = "%PRODUCTNAME Writer ¿ò";
         Text[ russian ] = "%PRODUCTNAME Writer - Ğàìêà";
-        Text[ polish ] = "Ramka %PRODUCTNAME Writer";
+        Text[ polish ] = "%PRODUCTNAME Writer - Ramka";
         Text[ japanese ] = "%PRODUCTNAME Writer ˜g";
         Text[ chinese_traditional ] = "%PRODUCTNAME Writer °T®Ø";
         Text[ arabic ] = "ßÇÏÑ %PRODUCTNAME Writer";
@@ -925,7 +925,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ english_us ] = "%PRODUCTNAME Writer Graphics";
         Text[ chinese_simplified ] = "%PRODUCTNAME Writer Í¼ĞÎ";
         Text[ russian ] = "%PRODUCTNAME Writer - Ğèñóíîê";
-        Text[ polish ] = "Grafika %PRODUCTNAME Writer";
+        Text[ polish ] = "%PRODUCTNAME Writer - Grafika";
         Text[ japanese ] = "%PRODUCTNAME Writer }";
         Text[ chinese_traditional ] = "%PRODUCTNAME Writer ¹Ï§Î";
         Text[ arabic ] = "ÑÓãÉ %PRODUCTNAME Writer";
@@ -947,10 +947,10 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ dutch ] = "Meer OLE objecten";
         Text[ spanish ] = "Otros objetos OLE";
         Text[ english_us ] = "Further OLE objects";
-        Text[ chinese_simplified ] = "ÆäËüµÄ OLE ¶ÔÏó";
+        Text[ chinese_simplified ] = "ÆäËü OLE ¶ÔÏó";
         Text[ russian ] = "Äîïîëíèòåëüíûå îáúåêòû OLE";
-        Text[ polish ] = "Dalsze obiekty OLE";
-        Text[ japanese ] = "‚»‚Ì‘¼‚ÌOLEµÌŞ¼Şª¸Ä";
+        Text[ polish ] = "Pozosta³e obiekty OLE";
+        Text[ japanese ] = "‚»‚Ì‘¼‚Ì OLE µÌŞ¼Şª¸Ä";
         Text[ chinese_traditional ] = "¨ä¥¦ OLE ª«¥ó";
         Text[ arabic ] = "ßÇÆäÇÊ OLE ÃÎÑì";
         Text[ greek ] = "Ğåñéóóüôåñá áíôéêåßìåíá OLE";
@@ -983,7 +983,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ japanese ] = "¶ÃºŞØ°";
         Text[ chinese_traditional ] = "¤ÀÃş";
         Text[ arabic ] = "ÇáİÆÉ";
-        Text[ greek ] = "Êáôçãïñßá";
+        Text[ greek ] = "~Êáôçãïñßá";
         Text[ korean ] = "¹üÁÖ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Kategori";
@@ -1162,7 +1162,7 @@ TabPage TP_OPTCAPTION_PAGE
         };
         stringlist [ swedish ] =
         {
-            < "Inga" ; > ;
+            < "Ingen" ; > ;
         };
         stringlist [ danish ] =
         {
@@ -1233,7 +1233,7 @@ TabPage TP_OPTCAPTION_PAGE
         TEXT [ English ] = "~Separator" ;
         Text [ english_us ] = "Separator" ;
         Text [ portuguese_brazilian ] = "~Trenner" ;
-        Text [ swedish ] = "A~vdelare" ;
+        Text [ swedish ] = "Skilje~tecken" ;
         Text [ danish ] = "Separator" ;
         Text [ italian ] = "~Separatore" ;
         Text [ spanish ] = "~Separador" ;
@@ -1246,7 +1246,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ japanese ] = "‹æØ‚è‹L†";
         Text[ chinese_traditional ] = "¤À¹j²Å";
         Text[ arabic ] = "İÇÕá";
-        Text[ greek ] = "Äéá÷ùñéóôéêü";
+        Text[ greek ] = "Äéá÷ùñéó~ôéêü";
         Text[ korean ] = "±¸ºĞÀÚ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Ayırma işrt.";
@@ -1357,11 +1357,11 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ finnish ] = "Yläpuolella" ;
         Text [ danish ] = "Over" ;
         Text [ french ] = "Supra" ;
-        Text [ swedish ] = "Över" ;
+        Text [ swedish ] = "Ovanför" ;
         Text [ dutch ] = "Boven" ;
         Text [ spanish ] = "Encima" ;
         Text [ english_us ] = "Above" ;
-        Text[ chinese_simplified ] = "ÔÚÊ×¶Ë";
+        Text[ chinese_simplified ] = "Ö®ÉÏ";
         Text[ russian ] = "Íàä";
         Text[ polish ] = "Powy¿ej";
         Text[ japanese ] = "ã‚É";
@@ -1399,7 +1399,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ turkish ] = "Aşağıda";
     };
     Text[ chinese_simplified ] = "±êÇ©";
-    Text[ russian ] = "Íàçâàíèå";
+    Text[ russian ] = "Ïîäïèñü";
     Text[ polish ] = "Opis";
     Text[ japanese ] = "}•\\”Ô†";
     Text[ chinese_traditional ] = "¼ĞÅÒ";
