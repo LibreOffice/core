@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2001-03-14 17:50:31 $
+#   last change: $Author: kz $ $Date: 2001-03-28 16:06:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -381,11 +381,11 @@ CFLAGSPROF=
 CFLAGSDEBUG=
 .ENDIF			# "$(syntax)"!=""
 .IF "$(COMEX)"=="3"
-CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS -D_USE_NAMESPACE=1
+CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
 CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="7"
-CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS -D_USE_NAMESPACE=1
+CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
 CDEFS+=-D_MT
 .ENDIF
 
