@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_hijri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-08-15 03:09:37 $
+ *  last change: $Author: bustamam $ $Date: 2002-09-16 19:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@ using namespace ::rtl;
 
 #define ERROR RuntimeException()
 
+#define GREGORIAN_CROSSOVER 2299161
+
 static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
 
 // radians per degree (pi/180)
@@ -110,14 +112,14 @@ void SAL_CALL Calendar_hijri::mapToGregorian() throw(RuntimeException)
         sal_Int32 month = (sal_Int32)fieldSetValue[CalendarFieldIndex::MONTH] + 1;
         sal_Int32 year = (sal_Int32)fieldSetValue[CalendarFieldIndex::YEAR];
         if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
-        year = 1 - year;
+        year *= -1;
 
         ToGregorian(&day, &month, &year);
 
         fieldSetValue[CalendarFieldIndex::ERA] = year <= 0 ? 0 : 1;
         fieldSetValue[CalendarFieldIndex::MONTH] = (sal_Int32) (month - 1);
         fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16) day;
-        fieldSetValue[CalendarFieldIndex::YEAR] = (sal_Int16) year;
+        fieldSetValue[CalendarFieldIndex::YEAR] = (sal_Int16) abs(year);
         fieldSet |= FIELDS;
     }
 }
@@ -131,14 +133,14 @@ void SAL_CALL Calendar_hijri::mapFromGregorian() throw(RuntimeException)
     month = (sal_Int32)fieldValue[CalendarFieldIndex::MONTH] + 1;
     year = (sal_Int32)fieldValue[CalendarFieldIndex::YEAR];
     if (fieldValue[CalendarFieldIndex::ERA] == 0)
-        year = 1 - year;
+        year *= -1;
 
     // Get Hijri date
     getHijri(&day, &month, &year);
 
     fieldValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)day;
     fieldValue[CalendarFieldIndex::MONTH] = month - 1;
-    fieldValue[CalendarFieldIndex::YEAR] = (sal_Int16)year;
+    fieldValue[CalendarFieldIndex::YEAR] = (sal_Int16) abs(year);
     fieldValue[CalendarFieldIndex::ERA] = (sal_Int16) year < 1 ? 0 : 1;
 }
 
@@ -228,20 +230,6 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 
     do {
         newjd = NewMoon(newsyn);
-        dayfraction = (newjd - (sal_Int32)newjd);   // Get fraction of day
-
-        // If new moon appears during the first half of the day, take the next day
-        if (dayfraction <= 0.5) {
-            newjd += 1.0;
-        }
-
-        // Convert to localtime (assuming Mecca)
-        dayfraction = (dayfraction - 0.5) * 24.0 + SA_TimeZone;
-
-        // if new moon starts after second half of the day
-        if (dayfraction > EveningPeriod) {
-            newjd += 1.0;
-        }
 
         // Decrement syndonic months
         newsyn--;
@@ -262,11 +250,11 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     // If month negative, consider it previous year
     if (syndiff != 0 && *month <= 0) {
         *month += 12;
-        *year--;
+        (*year)--;
     }
 
     // If Before Hijri subtract 1
-    if (*year <= 0) *year--;
+    if (*year <= 0) (*year)--;
 }
 
 void
@@ -277,10 +265,10 @@ Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     double jday;
     sal_Int32 dayint;
 
-    if ( *year < 0 ) *year++;
+    if ( *year < 0 ) (*year)++;
 
     // Number of month from reference point
-    nmonth = (*month + 1) + *year * 12 - (GregRef * 12 + 1);
+    nmonth = *month + *year * 12 - (GregRef * 12 + 1);
 
     // Add Synodic Reference point
     nmonth += SynRef;
@@ -288,24 +276,62 @@ Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     // Get Julian days add time too
     jday = NewMoon(nmonth) + *day;
 
-    // Convert the julian day to Gregorian
-    jday = jday - 1721119;
-    *year = (4 * jday - 1)/146097;
-    jday = 4 * jday - 1 - 146097 * *year;
-    *day = jday/4;
-    jday = (4 * *day + 3) /1461;
-    *day = 4 * *day + 3 - 1461 * jday;
-    *day = (*day + 4) /4;
-    *month = (5 * *day - 3) / 153;
-    *day = 5 * *day - 3 - 153 * *month;
-    *day = (*day + 5) / 5;
-    *year = 100 * *year + jday;
-    if ( *month < 10 ) {
-    *month = *month + 3;
-    } else {
-    *month = *month - 9;
-    *year = *year + 1;
+    // Round-up
+    jday = (double)((sal_Int32)(jday + 0.5));
+
+    // Use algorithm from "Numerical Recipes in C"
+    getGregorianDay((sal_Int32)jday, day, month, year);
+
+    // Julian -> Gregorian only works for non-negative year
+    if ( *year <= 0 ) {
+    *day = -1;
+    *month = -1;
+    *year = -1;
     }
+}
+
+/* this algorithm is taken from "Numerical Recipes in C", 2nd ed, pp 14-15. */
+/* this algorithm only valid for non-negative gregorian year
+void
+Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear)
+{
+    /* working variables */
+    long lFactorA, lFactorB, lFactorC, lFactorD, lFactorE;
+    long lAdjust;
+
+    /* test whether to adjust for the Gregorian calendar crossover */
+    if (lJulianDay >= GREGORIAN_CROSSOVER) {
+    /* calculate a small adjustment */
+    lAdjust = (long) (((float) (lJulianDay - 1867216) - 0.25) / 36524.25);
+
+    lFactorA = lJulianDay + 1 + lAdjust - ((long) (0.25 * lAdjust));
+
+    } else {
+    /* no adjustment needed */
+    lFactorA = lJulianDay;
+    }
+
+    lFactorB = lFactorA + 1524;
+    lFactorC = (long) (6680.0 + ((float) (lFactorB - 2439870) - 122.1) / 365.25);
+    lFactorD = (long) (365 * lFactorC + (0.25 * lFactorC));
+    lFactorE = (long) ((lFactorB - lFactorD) / 30.6001);
+
+    /* now, pull out the day number */
+    *pnDay = lFactorB - lFactorD - (long) (30.6001 * lFactorE);
+
+    /* ...and the month, adjusting it if necessary */
+    *pnMonth = lFactorE - 1;
+    if (*pnMonth > 12)
+    (*pnMonth) -= 12;
+
+    /* ...and similarly for the year */
+    *pnYear = lFactorC - 4715;
+    if (*pnMonth > 2)
+    (*pnYear)--;
+
+// Negative year adjustments
+    if (*pnYear <= 0)
+    (*pnYear)--;
 }
 
 double

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_hijri.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-08-15 03:10:04 $
+ *  last change: $Author: bustamam $ $Date: 2002-09-16 19:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ private:
     double NewMoon(sal_Int32 n);
     void getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
     void ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
+    void getGregorianDay(sal_Int32 jd, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear);
     double getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
 };
 
