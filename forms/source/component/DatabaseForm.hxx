@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 15:25:58 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 14:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,8 +282,8 @@ class ODatabaseForm :public OFormComponents
     ::osl::Mutex                        m_aResetSafety;
     ::com::sun::star::uno::Any          m_aCycle;
     ::com::sun::star::uno::Any          m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
-    StringSequence                      m_aMasterFields;
-    StringSequence                      m_aDetailFields;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aMasterFields;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aDetailFields;
     ::std::vector<bool>                 m_aParameterVisited;
 
     // the object doin' most of the work - an SDB-rowset
@@ -475,7 +475,14 @@ public:
     // com::sun::star::lang::XServiceInfo
     virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName)  throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
-    virtual StringSequence SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
+
+    // com::sun::star::lang::XServiceInfo - static version
+    static  ::rtl::OUString SAL_CALL getImplementationName_Static();
+    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
+    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCurrentServiceNames_Static();
+    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCompatibleServiceNames_Static();
+    static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODatabaseForm::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     // com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);

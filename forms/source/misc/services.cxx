@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 06:26:58 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 13:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,18 @@
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
 #endif
+#ifndef FORMS_MODULE_HXX
+#include "formsmodule.hxx"
+#endif
 
 //... namespace frm .......................................................
 namespace frm
 {
 //.........................................................................
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::registry;
 
 IMPLEMENT_CONSTASCII_USTRING(AWT_CONTROL_TEXTFIELD, "com.sun.star.awt.TextField");
 
@@ -199,7 +206,6 @@ IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_CONTROL_FORMATTEDFIELD, "com.sun.star.form.
 
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.Forms");
 
-IMPLEMENT_CONSTASCII_USTRING(FRM_DATA_ENGINE, "com.sun.star.data.DatabaseEngine");
 IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATTER, "com.sun.star.util.NumberFormatter");
 IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATS_SUPPLIER, "com.sun.star.util.NumberFormatsSupplier");
 
@@ -234,7 +240,7 @@ namespace starlang      = ::com::sun::star::lang;
 //.......................................................................................
 #define DECLARE_SERVICE_INFO(classImplName) \
     namespace frm { \
-        extern staruno::Reference<staruno::XInterface> SAL_CALL classImplName##_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException); \
+        extern Reference<XInterface> SAL_CALL classImplName##_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException); \
     }
 
 //---------------------------------------------------------------------------------------
@@ -281,24 +287,23 @@ DECLARE_SERVICE_INFO(OFormattedFieldWrapper);
     // the object was instantiated and the stream contains a FormattedModel, it switches permanently to
     // formatted.)
 namespace frm { \
-    extern staruno::Reference<staruno::XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (staruno::RuntimeException); \
+    extern Reference<XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException); \
 }
 
 DECLARE_SERVICE_INFO(OFormsCollection)
-DECLARE_SERVICE_INFO(ODatabaseForm)
 
 //---------------------------------------------------------------------------------------
 
-static staruno::Sequence< ::rtl::OUString >                     s_aClassImplementationNames;
-static staruno::Sequence<staruno::Sequence< ::rtl::OUString > > s_aClassServiceNames;
-static staruno::Sequence<sal_Int64>                             s_aFactories;
+static Sequence< ::rtl::OUString >                      s_aClassImplementationNames;
+static Sequence<Sequence< ::rtl::OUString > >   s_aClassServiceNames;
+static Sequence<sal_Int64>                              s_aFactories;
     // need to use sal_Int64 instead of ComponentInstantiation, as ComponentInstantiation has no cppuType, so
     // it can't be used with sequences
 
 //---------------------------------------------------------------------------------------
 void registerClassInfo(
         ::rtl::OUString _rClassImplName,                                // the ImplName of the class
-        const staruno::Sequence< ::rtl::OUString >& _rServiceNames,     // the services supported by this class
+        const Sequence< ::rtl::OUString >& _rServiceNames,      // the services supported by this class
         ::cppu::ComponentInstantiation _pCreateFunction                 // the method for instantiating such a class
         )
 {
@@ -360,7 +365,7 @@ void ensureClassInfos()
     if (s_aClassImplementationNames.getLength())
         // nothing to do
         return;
-    staruno::Sequence< ::rtl::OUString > aServices;
+    Sequence< ::rtl::OUString > aServices;
 
     // ========================================================================
     // = ControlModels
@@ -454,17 +459,15 @@ void ensureClassInfos()
     // ========================================================================
     // = various
     REGISTER_CLASS1(OFormsCollection, FRM_SUN_FORMS_COLLECTION);
-    REGISTER_CLASS4(ODatabaseForm, FRM_COMPONENT_FORM, FRM_SUN_COMPONENT_FORM, FRM_SUN_COMPONENT_HTMLFORM, FRM_SUN_COMPONENT_DATAFORM);
-
 }
 
 //---------------------------------------------------------------------------------------
-void registerServiceProvider(const ::rtl::OUString& _rServiceImplName, const staruno::Sequence< ::rtl::OUString >& _rServices, starregistry::XRegistryKey* _pKey)
+void registerServiceProvider(const ::rtl::OUString& _rServiceImplName, const Sequence< ::rtl::OUString >& _rServices, starregistry::XRegistryKey* _pKey)
 {
     ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
     sMainKeyName += _rServiceImplName;
     sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
-    staruno::Reference<starregistry::XRegistryKey> xNewKey = _pKey->createKey(sMainKeyName);
+    Reference<starregistry::XRegistryKey> xNewKey = _pKey->createKey(sMainKeyName);
     OSL_ENSURE(xNewKey.is(), "forms::registerProvider : could not create a registry key !");
     if (!xNewKey.is())
         return;
@@ -479,6 +482,20 @@ extern "C"
 {
 
 //---------------------------------------------------------------------------------------
+void SAL_CALL createRegistryInfo_ODatabaseForm();
+
+//---------------------------------------------------------------------------------------
+void SAL_CALL createRegistryInfo_FORMS()
+{
+    static sal_Bool bInit = sal_False;
+    if (!bInit)
+    {
+        createRegistryInfo_ODatabaseForm();
+        bInit = sal_True;
+    }
+}
+
+//---------------------------------------------------------------------------------------
 void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** _ppEnv)
 {
     *_ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -491,6 +508,18 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XReg
     {
         try
         {
+            // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+            // the real way - use the OModule
+            createRegistryInfo_FORMS();
+            if ( !::frm::OFormsModule::writeComponentInfos(
+                    static_cast<XMultiServiceFactory*>( _pServiceManager ),
+                    static_cast<XRegistryKey*>( _pRegistryKey ) )
+                )
+                return sal_False;
+
+            // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+            // a lot of stuff which is implemented "manually" here in this file
+
             // collect the class infos
             ensureClassInfos();
 
@@ -501,7 +530,7 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XReg
 
             // loop through the sequences and register the service providers
             const ::rtl::OUString* pClasses = s_aClassImplementationNames.getConstArray();
-            const staruno::Sequence< ::rtl::OUString >* pServices = s_aClassServiceNames.getConstArray();
+            const Sequence< ::rtl::OUString >* pServices = s_aClassServiceNames.getConstArray();
 
             for (sal_Int32 i=0; i<nClasses; ++i, ++pClasses, ++pServices)
                 registerServiceProvider(*pClasses, *pServices, _pRegistryKey);
@@ -509,6 +538,7 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XReg
             s_aClassImplementationNames.realloc(0);
             s_aClassServiceNames.realloc(0);
             s_aFactories.realloc(0);
+
             return sal_True;
         }
         catch (starregistry::InvalidRegistryException &)
@@ -523,11 +553,13 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XReg
 }
 
 //---------------------------------------------------------------------------------------
-void* SAL_CALL component_getFactory(const sal_Char* _pImplName, starlang::XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
+void* SAL_CALL component_getFactory(const sal_Char* _pImplName, XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
 {
-    if (!_pServiceManager)
+    if (!_pServiceManager || !_pImplName)
         return NULL;
 
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // a lot of stuff which is implemented "manually" here in this file
     void* pRet = NULL;
 
     // collect the class infos
@@ -541,7 +573,7 @@ void* SAL_CALL component_getFactory(const sal_Char* _pImplName, starlang::XMulti
 
     // loop through the sequences and register the service providers
     const ::rtl::OUString* pClasses = s_aClassImplementationNames.getConstArray();
-    const staruno::Sequence< ::rtl::OUString >* pServices = s_aClassServiceNames.getConstArray();
+    const Sequence< ::rtl::OUString >* pServices = s_aClassServiceNames.getConstArray();
     const sal_Int64* pFunctionsAsInts = s_aFactories.getConstArray();
 
     for (sal_Int32 i=0; i<nClasses; ++i, ++pClasses, ++pServices, ++pFunctionsAsInts)
@@ -551,7 +583,7 @@ void* SAL_CALL component_getFactory(const sal_Char* _pImplName, starlang::XMulti
             ::cppu::ComponentInstantiation aCurrentCreateFunction =
                 reinterpret_cast< ::cppu::ComponentInstantiation>(*pFunctionsAsInts);
 
-            staruno::Reference<starlang::XSingleServiceFactory> xFactory(
+            Reference<XSingleServiceFactory> xFactory(
                 ::cppu::createSingleFactory(
                     _pServiceManager,
                     *pClasses,
@@ -568,8 +600,25 @@ void* SAL_CALL component_getFactory(const sal_Char* _pImplName, starlang::XMulti
         }
     }
 
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // the real way - use the OModule
+    if ( !pRet )
+    {
+        createRegistryInfo_FORMS();
+        {
+            // let the module look for the component
+            Reference< XInterface > xRet;
+            xRet = ::frm::OFormsModule::getComponentFactory(
+                ::rtl::OUString::createFromAscii( _pImplName ),
+                static_cast< XMultiServiceFactory* >( _pServiceManager ) );
+
+            if ( xRet.is() )
+                xRet->acquire();
+            pRet = xRet.get();
+        }
+    }
+
     return pRet;
 }
 
 }
-

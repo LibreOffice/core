@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-09 15:30:36 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 14:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,9 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+#ifndef FORMS_MODULE_HXX
+#include "formsmodule.hxx"
+#endif
 
 // compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
 namespace com {
@@ -288,6 +291,12 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::data;
 using namespace ::com::sun::star::util;
+
+//--------------------------------------------------------------------------
+extern "C" void SAL_CALL createRegistryInfo_ODatabaseForm()
+{
+    static ::frm::OMultiInstanceAutoRegistration< ::frm::ODatabaseForm > aAutoRegistration;
+}
 
 //.........................................................................
 namespace frm
@@ -686,9 +695,9 @@ void OFormSubmitResetThread::processEvent(
 //==================================================================
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL ODatabaseForm_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
+Reference< XInterface > SAL_CALL ODatabaseForm::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
-    return *(new ODatabaseForm(_rxFactory));
+    return *( new ODatabaseForm( _rxFactory ) );
 }
 
 //------------------------------------------------------------------------------
@@ -1972,8 +1981,8 @@ void ODatabaseForm::fillProperties(
 
         DECL_IFACE_PROP3(ACTIVE_CONNECTION,         XConnection,    BOUND, TRANSIENT, MAYBEVOID);
         DECL_PROP1(NAME,            ::rtl::OUString,                BOUND);
-        DECL_PROP1(MASTERFIELDS,    StringSequence,                 BOUND);
-        DECL_PROP1(DETAILFIELDS,    StringSequence,                 BOUND);
+        DECL_PROP1(MASTERFIELDS,    Sequence< ::rtl::OUString >,                    BOUND);
+        DECL_PROP1(DETAILFIELDS,    Sequence< ::rtl::OUString >,                    BOUND);
         DECL_PROP2(DATASOURCE,      ::rtl::OUString,                BOUND, CONSTRAINED);
         DECL_PROP3(CYCLE,           TabulatorCycle,                 BOUND, MAYBEVOID, MAYBEDEFAULT);
         DECL_PROP1(NAVIGATION,      NavigationBarMode,              BOUND);
@@ -4034,34 +4043,77 @@ void SAL_CALL ODatabaseForm::clearParameters() throw( SQLException, RuntimeExcep
 
 // com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName() throw( RuntimeException )
+::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
 {
     return DATABASEFORM_IMPLEMENTATION_NAME;
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( RuntimeException )
+Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCompatibleServiceNames_Static()
 {
-    StringSequence aServices;
-    Reference<com::sun::star::lang::XServiceInfo> xInfo;
+    Sequence< ::rtl::OUString > aServices( 1 );
+    ::rtl::OUString* pServices = aServices.getArray();
+
+    *pServices++ = FRM_COMPONENT_FORM;
+
+    return aServices;
+}
+
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Static()
+{
+    Sequence< ::rtl::OUString > aServices( 5 );
+    ::rtl::OUString* pServices = aServices.getArray();
+
+    *pServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponent");
+    *pServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponents");
+    *pServices++ = FRM_SUN_COMPONENT_FORM;
+    *pServices++ = FRM_SUN_COMPONENT_HTMLFORM;
+    *pServices++ = FRM_SUN_COMPONENT_DATAFORM;
+
+    return aServices;
+}
+
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames_Static()
+{
+    return ::comphelper::concatSequences(
+        getCurrentServiceNames_Static(),
+        getCompatibleServiceNames_Static()
+    );
+}
+
+//------------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName() throw( RuntimeException )
+{
+    return getImplementationName_Static();
+}
+
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( RuntimeException )
+{
+    // the services of our aggregate
+    Sequence< ::rtl::OUString > aServices;
+    Reference< XServiceInfo > xInfo;
     if (query_aggregation(m_xAggregate, xInfo))
         aServices = xInfo->getSupportedServiceNames();
 
-    sal_Int32 nOldLen = aServices.getLength();
-    aServices.realloc(nOldLen + 6);
-    ::rtl::OUString* pAdditionalServices = aServices.getArray() + nOldLen;
-    *pAdditionalServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponent");
-    *pAdditionalServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponents");
-    *pAdditionalServices++ = FRM_SUN_COMPONENT_FORM;
-    *pAdditionalServices++ = FRM_SUN_COMPONENT_HTMLFORM;
-    *pAdditionalServices++ = FRM_SUN_COMPONENT_DATAFORM;
-    return aServices;
+    // concat with out own services
+    return ::comphelper::concatSequences(
+        getCurrentServiceNames_Static(),
+        aServices
+    );
+    // use getCurrentXXX instead of getSupportedXXX, because at runtime, we do not want to have
+    // the compatible names
+    // This is maily to be consistent with the implementation before fixing #97083#, though the
+    // better solution _may_ be to return the compatible names at runtime, too
+    // 04.03.2002 - fs@openoffice.org
 }
 
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseForm::supportsService(const ::rtl::OUString& ServiceName) throw( RuntimeException )
 {
-    StringSequence aSupported(getSupportedServiceNames());
+    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pArray = aSupported.getConstArray();
     for( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray )
         if( pArray->equals(ServiceName) )
