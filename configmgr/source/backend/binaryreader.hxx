@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binaryreader.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:45:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ namespace configmgr
             void reopen()   SAL_THROW( (io::IOException, uno::RuntimeException) );
             void close()    SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            typedef uno::Sequence< sal_Int8 > Binary;
+            typedef uno::Sequence< sal_Int8 >       Binary;
+            typedef uno::Sequence< rtl::OUString >  StringList;
 
             void read(sal_Bool &_nValue)    SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(sal_Int8 &_nValue)    SAL_THROW( (io::IOException, uno::RuntimeException) );
@@ -123,7 +124,8 @@ namespace configmgr
             void read(sal_Int64 &_nValue)   SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(double &_nValue)      SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(rtl::OUString& _aStr) SAL_THROW( (io::IOException, uno::RuntimeException) );
-            void read(Binary &_aValue) SAL_THROW( (io::IOException, uno::RuntimeException) );
+            void read(Binary &_aValue)      SAL_THROW( (io::IOException, uno::RuntimeException) );
+            void read(StringList &_aValue)  SAL_THROW( (io::IOException, uno::RuntimeException) );
 
         private:
             inline uno::Reference<io::XDataInputStream> getDataInputStream();
