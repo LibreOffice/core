@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:52:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,9 @@ SwHTMLTableLayout::SwHTMLTableLayout(
 
 SwHTMLTableLayout::~SwHTMLTableLayout()
 {
-    for( USHORT i=0; i<nCols; i++ )
+    USHORT i;
+
+    for( i = 0; i < nCols; i++ )
         delete aColumns[i];
     delete[] aColumns;
 
@@ -1514,7 +1516,9 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
 
             USHORT nAbs = 0, nRel = 0;
             USHORT nFixedCols = 0;
-            for( USHORT i=0; i<nCols; i++ )
+            USHORT i;
+
+            for( i = 0; i < nCols; i++ )
             {
                 SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
                 if( !pColumn->IsRelWidthOption() || !pColumn->GetWidthOption() )
