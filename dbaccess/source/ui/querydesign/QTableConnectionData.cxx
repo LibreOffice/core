@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnectionData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:33:04 $
+ *  last change: $Author: rt $ $Date: 2001-02-08 16:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDesc& rDragLeft, c
     m_strDestTableName = pDestWin->GetTableName();
     m_aDestWinName = pDestWin->GetWinName();
 
-    AppendConnLine(rDragLeft.GetField(),rDragRight.GetField());
+    AppendConnLine((::rtl::OUString)rDragLeft.GetField(),(::rtl::OUString)rDragRight.GetField());
 }
 // -----------------------------------------------------------------------------
 OTableConnectionData* OQueryTableConnectionData::NewInstance() const
