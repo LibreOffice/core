@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:31:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_MAIL_XSMTPSERVICE_HPP_
+#include "com/sun/star/mail/XSmtpService.hpp"
+#endif
 
 #include <sfx2/viewfrm.hxx>
 
@@ -212,6 +215,13 @@
 #ifndef _SWDBMGR_HXX
 #include <dbmgr.hxx>
 #endif
+#ifndef _MMCONFIGITEM_HXX
+#include <mmconfigitem.hxx>
+#endif
+#ifndef _MAILMERGEHELPER_HXX
+#include <mailmergehelper.hxx>
+#endif
+#include <memory>
 
 #define C2U(x)         OUString::createFromAscii(x)
 #define SN_MAIL_MERGE               "com.sun.star.text.MailMerge"
@@ -563,7 +573,11 @@ SwXMailMerge::SwXMailMerge() :
     pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_MAILMERGE ) ),
     aEvtListeners   ( GetMailMergeMutex() ),
     aMergeListeners ( GetMailMergeMutex() ),
-    aPropListeners  ( GetMailMergeMutex() )
+    aPropListeners  ( GetMailMergeMutex() ),
+    bSendAsHTML(sal_False),
+    bSendAsAttachment(sal_False),
+    bSaveAsSingleFile(sal_False)
+
 {
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
@@ -671,6 +685,34 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             bOK = rValue >>= bCurSinglePrintJobs;
         else if (rName.equalsAscii( GetPropName( UNO_NAME_FILE_NAME_FROM_COLUMN ) ))
             bOK = rValue >>= bCurFileNameFromColumn;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_SUBJECT ) ))
+            bOK = rValue >>= sSubject;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_ADDRESS_FROM_COLUMN ) ))
+            bOK = rValue >>= sAddressFromColumn;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_SEND_AS_HTML ) ))
+            bOK = rValue >>= bSendAsHTML;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_MAIL_BODY ) ))
+            bOK = rValue >>= sMailBody;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_ATTACHMENT_NAME ) ))
+            bOK = rValue >>= sAttachmentName;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_ATTACHMENT_FILTER ) ))
+            bOK = rValue >>= sAttachmentFilter;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_COPIES_TO ) ))
+            bOK = rValue >>= aCopiesTo;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_BLIND_COPIES_TO ) ))
+            bOK = rValue >>= aBlindCopiesTo;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_SEND_AS_ATTACHMENT ) ))
+            bOK = rValue >>= bSendAsAttachment;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_PRINT_OPTIONS ) ))
+            bOK = rValue >>= aPrintSettings;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_AS_SINGLE_FILE ) ))
+            bOK = rValue >>= bSaveAsSingleFile;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_FILTER ) ))
+            bOK = rValue >>= sSaveFilter;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_IN_SERVER_PASSWORD ) ))
+            bOK = rValue >>= sInServerPassword;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_OUT_SERVER_PASSWORD ) ))
+            bOK = rValue >>= sOutServerPassword;
         else
             throw UnknownPropertyException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is unknown: " ) ) + rName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -793,6 +835,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     {
         case MailMergeType::PRINTER : nMergeType = DBMGR_MERGE_MAILMERGE; break;
         case MailMergeType::FILE    : nMergeType = DBMGR_MERGE_MAILFILES; break;
+        case MailMergeType::MAIL    : nMergeType = DBMGR_MERGE_MAILING; break;
         default:
             throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Invalid value of property:" ) ) + C2U("OutputType"), static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
@@ -801,6 +844,11 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     //force layout creation
     rSh.CalcLayout();
     DBG_ASSERT( pMgr, "database manager missing" );
+
+    SwMergeDescriptor aMergeDesc( nMergeType, rSh, aDescriptor );
+
+    std::auto_ptr< SwMailMergeConfigItem > pMMConfigItem;
+    uno::Reference< mail::XMailService > xInService;
     if (MailMergeType::PRINTER == nCurOutputType)
     {
         SwPrintData aPrtData = *SW_MOD()->GetPrtOptions( FALSE );
@@ -809,8 +857,12 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             aPrtData = *pShellPrintData;
         aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
         rSh.SetPrintData( aPrtData );
+        // #i25686# printing should not be done asynchronously to prevent dangling offices
+        // when mail merge is called as command line macro
+        aMergeDesc.bPrintAsync = sal_False;
+        aMergeDesc.aPrintOptions = aPrintSettings;
     }
-    else if (MailMergeType::FILE == nCurOutputType)
+    else /* FILE and MAIL*/
     {
         INetURLObject aURLObj;
         aURLObj.SetSmartProtocol( INET_PROT_FILE );
@@ -850,7 +902,39 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             pMgr->SetEMailColumn( String() );
         }
         pMgr->SetSubject( aPath );
+        if(MailMergeType::FILE == nCurOutputType)
+        {
+            aMergeDesc.sSaveToFilter = sSaveFilter;
+            aMergeDesc.bCreateSingleFile = bSaveAsSingleFile;
+        }
+        else /*if(MailMergeType::MAIL == nCurOutputType)*/
+        {
+            pMgr->SetEMailColumn( sAddressFromColumn );
+            if(!sAddressFromColumn.getLength())
+                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM (
+                        "Mail address column not set." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+            aMergeDesc.sSaveToFilter     = sAttachmentFilter;
+            aMergeDesc.sSubject          = sSubject;
+            aMergeDesc.sMailBody         = sMailBody;
+            aMergeDesc.sAttachmentName   = sAttachmentName;
+            aMergeDesc.aCopiesTo         = aCopiesTo;
+            aMergeDesc.aBlindCopiesTo    = aBlindCopiesTo;
+            aMergeDesc.bSendAsHTML       = bSendAsHTML;
+            aMergeDesc.bSendAsAttachment = bSendAsAttachment;
+
+            aMergeDesc.bCreateSingleFile = sal_False;
+            pMMConfigItem = std::auto_ptr< SwMailMergeConfigItem >(new SwMailMergeConfigItem);
+            aMergeDesc.pMailMergeConfigItem = pMMConfigItem.get();
+            aMergeDesc.xSmtpServer = SwMailMergeHelper::ConnectToSmtpServer(
+                    *pMMConfigItem,
+                    xInService,
+                    sInServerPassword, sOutServerPassword );
+            if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
+                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM (
+                        "Failed to connect to mail server." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        }
     }
+
 
     // save document with temporary filename
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
@@ -881,9 +965,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
     DBG_ASSERT( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
-    // #i25686# printing should be done asynchronously to prevent dangling offices
-    // when mail merge is called as command line macro
-    BOOL bSucc = pMgr->MergeNew( nMergeType, rSh, aDescriptor, sal_False );
+    BOOL bSucc = pMgr->MergeNew( aMergeDesc );
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 
     if ( xCurModel.get() != xModel.get() )
@@ -895,6 +977,12 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     if (!bSucc)
         throw Exception( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Mail merge failed. Sorry, no further information available." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+
+    //de-initialize services
+    if(xInService.is() && xInService->isConnected())
+        xInService->disconnect();
+    if(aMergeDesc.xSmtpServer.is() && aMergeDesc.xSmtpServer->isConnected())
+        aMergeDesc.xSmtpServer->disconnect();
 
     return makeAny( sal_True );
 }
@@ -968,6 +1056,20 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             case WID_SINGLE_PRINT_JOBS :        pData = &bSinglePrintJobs;  break;
             case WID_FILE_NAME_FROM_COLUMN :    pData = &bFileNameFromColumn;  break;
             case WID_FILE_NAME_PREFIX :         pData = &aFileNamePrefix;  break;
+            case WID_MAIL_SUBJECT:              pData = &sSubject; break;
+            case WID_ADDRESS_FROM_COLUMN:       pData = &sAddressFromColumn; break;
+            case WID_SEND_AS_HTML:              pData = &bSendAsHTML; break;
+            case WID_SEND_AS_ATTACHMENT:        pData = &bSendAsAttachment; break;
+            case WID_MAIL_BODY:                 pData = &sMailBody; break;
+            case WID_ATTACHMENT_NAME:           pData = &sAttachmentName; break;
+            case WID_ATTACHMENT_FILTER:         pData = &sAttachmentFilter;break;
+            case WID_PRINT_OPTIONS:             pData = &aPrintSettings; break;
+            case WID_SAVE_AS_SINGLE_FILE:       pData = &bSaveAsSingleFile; break;
+            case WID_SAVE_FILTER:               pData = &sSaveFilter; break;
+            case WID_COPIES_TO:                 pData = &aCopiesTo; break;
+            case WID_BLIND_COPIES_TO:           pData = &aBlindCopiesTo;break;
+            case WID_IN_SERVER_PASSWORD:        pData = &sInServerPassword; break;
+            case WID_OUT_SERVER_PASSWORD:       pData = &sOutServerPassword; break;
             default :
                 DBG_ERROR("unknown WID");
         }
@@ -1025,6 +1127,34 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 bOK = rValue >>= bFileNameFromColumn;
             else if (pData == &aFileNamePrefix)
                 bOK = rValue >>= aFileNamePrefix;
+            else if (pData == &sSubject)
+                bOK = rValue >>= sSubject;
+            else if (pData == &sAddressFromColumn)
+                bOK = rValue >>= sAddressFromColumn;
+            else if (pData == &bSendAsHTML)
+                bOK = rValue >>= bSendAsHTML;
+            else if (pData == &bSendAsAttachment)
+                bOK = rValue >>= bSendAsAttachment;
+            else if (pData == &sMailBody)
+                bOK = rValue >>= sMailBody;
+            else if (pData == &sAttachmentName)
+                bOK = rValue >>= sAttachmentName;
+            else if (pData == &sAttachmentFilter)
+                bOK = rValue >>= sAttachmentFilter;
+            else if (pData == &aPrintSettings)
+                bOK = rValue >>= aPrintSettings;
+            else if (pData == &bSaveAsSingleFile)
+                bOK = rValue >>= bSaveAsSingleFile;
+            else if (pData == &sSaveFilter)
+                bOK = rValue >>= sSaveFilter;
+            else if (pData == &aCopiesTo)
+                bOK = rValue >>= aCopiesTo;
+            else if (pData == &aBlindCopiesTo)
+                bOK = rValue >>= aBlindCopiesTo;
+            else if(pData == &sInServerPassword)
+                bOK = rValue >>= sInServerPassword;
+            else if(pData == &sOutServerPassword)
+                bOK = rValue >>= sInServerPassword;
             else
                 DBG_ERROR( "invalid pointer" );
             DBG_ASSERT( bOK, "set value failed" );
@@ -1072,6 +1202,20 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
             case WID_SINGLE_PRINT_JOBS :        aRet <<= bSinglePrintJobs;  break;
             case WID_FILE_NAME_FROM_COLUMN :    aRet <<= bFileNameFromColumn;  break;
             case WID_FILE_NAME_PREFIX :         aRet <<= aFileNamePrefix;  break;
+            case WID_MAIL_SUBJECT:              aRet <<= sSubject; break;
+            case WID_ADDRESS_FROM_COLUMN:       aRet <<= sAddressFromColumn; break;
+            case WID_SEND_AS_HTML:              aRet <<= bSendAsHTML; break;
+            case WID_SEND_AS_ATTACHMENT:        aRet <<= bSendAsAttachment; break;
+            case WID_MAIL_BODY:                 aRet <<= sMailBody; break;
+            case WID_ATTACHMENT_NAME:           aRet <<= sAttachmentName; break;
+            case WID_ATTACHMENT_FILTER:         aRet <<= sAttachmentFilter;break;
+            case WID_PRINT_OPTIONS:             aRet <<= aPrintSettings; break;
+            case WID_SAVE_AS_SINGLE_FILE:       aRet <<= bSaveAsSingleFile; break;
+            case WID_SAVE_FILTER:               aRet <<= sSaveFilter; break;
+            case WID_COPIES_TO:                 aRet <<= aCopiesTo; break;
+            case WID_BLIND_COPIES_TO:           aRet <<= aBlindCopiesTo;break;
+            case WID_IN_SERVER_PASSWORD:        aRet <<= sInServerPassword; break;
+            case WID_OUT_SERVER_PASSWORD:       aRet <<= sOutServerPassword; break;
             default :
                 DBG_ERROR("unknown WID");
         }
