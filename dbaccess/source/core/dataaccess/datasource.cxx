@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:30 $
+ *  last change: $Author: obo $ $Date: 2001-07-23 10:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,8 @@ public:
 
     void operator()(OWeakConnection& _xConnection)
     {
-        Reference< XUnoTunnel > xTunnel(Reference<XConnection>(_xConnection), UNO_QUERY);
+                Reference< XConnection > xCon (_xConnection);
+                Reference< XUnoTunnel > xTunnel(xCon, UNO_QUERY);
         OConnection* pObjectImpl = NULL;
         if (xTunnel.is())
         {
