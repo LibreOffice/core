@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,6 @@
 #include "fmobj.hxx"
 #endif
 
-#ifndef _MULTIPRO_HXX
-#include "multipro.hxx"
-#endif
-
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -192,6 +188,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
@@ -299,6 +298,7 @@
 #include "dialogs.hrc" //CHINA001
 
 #include <algorithm>
+#include <functional>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 sal_uInt16 DatabaseSlotMap[] =
@@ -339,6 +339,8 @@ sal_Int16 DlgSlotMap[] =    // slots des Controllers
     SID_FM_SHOW_PROPERTIES,
     SID_FM_PROPERTY_CONTROL,
     SID_FM_FMEXPLORER_CONTROL,
+    SID_FM_SHOW_DATANAVIGATOR,
+    SID_FM_DATANAVIGATOR_CONTROL,
     0
 };
 
@@ -366,6 +368,7 @@ sal_Int16 SelObjectSlotMap[] =  // vom SelObject abhaengige Slots
     SID_FM_CONVERTTO_NAVIGATIONBAR,
 
     SID_FM_FMEXPLORER_CONTROL,
+    SID_FM_DATANAVIGATOR_CONTROL,
 
     0
 };
@@ -454,11 +457,54 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::form::binding;
 using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 using namespace ::svx;
+
+//==============================================================================
+//= helper
+//==============================================================================
+namespace
+{
+    void collectInterfacesFromMarkList( const SdrMarkList& _rMarkList, InterfaceBag& /* [out] */ _rInterfaces )
+    {
+        _rInterfaces.clear();
+
+        sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
+        for ( sal_uInt32 i = 0; i < nMarkCount; ++i)
+        {
+            SdrObject* pCurrent = _rMarkList.GetMark( i )->GetObj();
+
+            SdrObjListIter* pGroupIterator = NULL;
+            if ( pCurrent->IsGroupObject() )
+            {
+                pGroupIterator = new SdrObjListIter( *pCurrent->GetSubList() );
+                pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
+            }
+
+            while ( pCurrent )
+            {
+                FmFormObj* pAsFormObject = PTR_CAST( FmFormObj, pCurrent );
+                if ( pAsFormObject )
+                {
+                    Reference< XInterface > xControlModel( pAsFormObject->GetUnoControlModel(), UNO_QUERY );
+                        // the UNO_QUERY is important for normalization
+                    if ( xControlModel.is() )
+                        _rInterfaces.insert( xControlModel );
+                }
+
+                // next element
+                pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
+            }
+
+            if ( pGroupIterator )
+                delete pGroupIterator;
+        }
+    }
+}
 
 //------------------------------------------------------------------------------
 sal_Bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>& _rContainer) const
@@ -541,102 +587,18 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
 }
 
 //------------------------------------------------------------------------
-Reference< XForm> GetForm(const Reference< XInterface>& xElement)
+Reference< XForm > GetForm(const Reference< XInterface>& _rxElement)
 {
-    Reference< XChild> xChild(xElement, UNO_QUERY);
-    Reference< XInterface> xParent;
-    if (xChild.is())
-        xParent = xChild->getParent();
+    Reference< XForm > xForm( _rxElement, UNO_QUERY );
+    if ( xForm.is() )
+        return xForm;
 
-    Reference< XForm> xForm(xParent, UNO_QUERY);
-    if (!xForm.is() && xParent.is())
-        xForm = GetForm(xParent);
+    Reference< XChild > xChild( _rxElement, UNO_QUERY );
+    if ( xChild.is() )
+        return GetForm( xChild->getParent() );
 
-    return xForm;
+    return Reference< XForm >();
 }
-
-//------------------------------------------------------------------------
-Reference< XForm> GetForm(const FmFormObj* pObj)
-{
-    Reference< XForm> xForm;
-    if (pObj)
-    {
-        Reference< XFormComponent> xFormComponent(pObj->GetUnoControlModel(), UNO_QUERY);
-        if (xFormComponent.is())
-            xForm = Reference< XForm>(xFormComponent->getParent(), UNO_QUERY);
-    }
-    return xForm;
-}
-
-//------------------------------------------------------------------------
-Reference< XForm> FmXFormShell::DetermineCurForm(const SdrMarkList& rMarkList, sal_Bool& bMixedWithFormControls)
-{
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    // gibt es eine aktuelle Form, wird ermittelt aus den selektierten Objekten
-    Reference< XForm> xReferenceForm;
-    bMixedWithFormControls = sal_False;
-    sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
-
-    sal_Bool bHasFormControls = sal_False;
-    sal_Bool bHasForeignControls = sal_False;
-
-    Reference< XForm> xForm;
-    for (sal_uInt32 i=0; i<nMarkCount; i++)
-    {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
-        if (pObj->GetObjInventor() == FmFormInventor)
-        {
-            FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
-            xForm = GetForm(pFormObj);
-
-            if (!xReferenceForm.is())
-            {
-                xReferenceForm = xForm;
-                bHasFormControls = sal_True;
-            }
-            else if (xForm.is() && (XForm*)xReferenceForm.get() != (XForm*)xForm.get())
-            {
-                // mehr als eine Form selektiert
-                bMixedWithFormControls = sal_True;
-                return Reference< XForm>();
-            }
-        }
-        else if (pObj->IsGroupObject())
-        {
-            SdrObjListIter aIter(*pObj->GetSubList());
-            while (aIter.IsMore())
-            {
-                SdrObject* pObj = aIter.Next();
-                if (pObj->GetObjInventor() == FmFormInventor)
-                {
-                    FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
-                    xForm = GetForm(pFormObj);
-
-                    if (!xReferenceForm.is())
-                    {
-                        xReferenceForm = xForm;
-                        bHasFormControls = sal_True;
-                    }
-                    else if (xForm.is() && (XForm*)xReferenceForm.get() != (XForm*)xForm.get())
-                    {
-                        // mehr als eine Form selektiert
-                        bMixedWithFormControls = sal_True;
-                        return Reference< XForm>();
-                    }
-                } else
-                    // irgendein Nicht-Form-Control
-                    bHasForeignControls = sal_True;
-            }
-        } else
-            bHasForeignControls = sal_True;
-    }
-
-    // hierher komme ich nicht mehr, wenn Controls aus mindestens zwei Forms selektiert sind, also ermittelt sich
-    // bMixedWithFormControls wie folgt
-    bMixedWithFormControls = bHasForeignControls && bHasFormControls;
-    return xReferenceForm;
-}
-
 
 //========================================================================
 // class FmXFormShell_Base_Disambiguation
@@ -944,15 +906,16 @@ void FmXFormShell::disposing()
     m_xNavigationController     = NULL;
     m_xActiveForm               = NULL;
     m_xForms                    = NULL;
-    m_xSelObject                = NULL;
-    m_xCurControl               = NULL;
-    m_xCurForm                  = NULL;
+    m_xCurrentForm              = NULL;
     m_xLastGridFound            = NULL;
     m_xAttachedFrame            = NULL;
     m_xExternalViewController   = NULL;
     m_xExtViewTriggerController = NULL;
     m_xExternalDisplayedForm    = NULL;
     m_xLastGridFound            = NULL;
+
+    InterfaceBag aEmpty;
+    m_aCurrentSelection.swap( aEmpty );
 
     m_aActiveControllerFeatures.dispose();
     m_aNavControllerFeatures.dispose();
@@ -1056,241 +1019,267 @@ PopupMenu* FmXFormShell::GetConversionMenu()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXFormShell::IsControlConversionSlot(sal_uInt16 nSlotId)
+bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 {
     for (int i=0; i<sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i)
         if (nConvertSlots[i] == nSlotId)
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXFormShell::ExecuteControlConversionSlot(const Reference< XFormComponent>& xContext, sal_uInt16 nSlotId)
+bool FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    for (int i=0; i<sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i)
+    OSL_PRECOND( canConvertCurrentSelectionToControl( _nSlotId ), "FmXFormShell::executeControlConversionSlot: illegal call!" );
+    InterfaceBag::const_iterator aSelectedElement = m_aCurrentSelection.begin();
+    if ( aSelectedElement == m_aCurrentSelection.end() )
+        return false;
+
+    return executeControlConversionSlot( Reference< XFormComponent >( *aSelectedElement, UNO_QUERY ), _nSlotId );
+}
+
+//------------------------------------------------------------------------------
+bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent >& _rxObject, sal_uInt16 _nSlotId )
+{
+    OSL_ENSURE( _rxObject.is(), "FmXFormShell::executeControlConversionSlot: invalid object!" );
+    if ( !_rxObject.is() )
+        return false;
+
+    OSL_ENSURE( isSolelySelected( _rxObject ),
+        "FmXFormShell::executeControlConversionSlot: hmm ... shouldn't this parameter be redundant?" );
+
+    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed, "FmXFormShell::executeControlConversionSlot: Object already disposed!" );
+    for ( sal_Int32 lookupSlot = 0; lookupSlot < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++lookupSlot )
     {
-        if (nConvertSlots[i] == nSlotId)
-            return ConvertControlTo(xContext, nObjectTypes[i]);
+        if (nConvertSlots[lookupSlot] == _nSlotId)
+        {
+            FmFormPage* pCurrentPage = m_pShell->GetCurPage();
+
+            SdrUnoObj* pFound = NULL;
+            for (sal_uInt32 obj=0; obj<pCurrentPage->GetObjCount(); ++obj)
+            {
+                SdrObject* pCurrent = pCurrentPage->GetObj(obj);
+
+                // wenn das Ding eine Gruppierung ist -> durchiterieren
+                SdrObjListIter* pGroupIterator = NULL;
+                if (pCurrent->IsGroupObject())
+                {
+                    pGroupIterator = new SdrObjListIter(*pCurrent->GetSubList());
+                    pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
+                }
+
+                Reference< XInterface > xNormalizedObject( _rxObject, UNO_QUERY );
+                while (pCurrent)
+                {
+                    if (pCurrent->IsUnoObj())
+                    {
+                        Reference< XInterface > xCurrentNormalized( static_cast< SdrUnoObj* >( pCurrent )->GetUnoControlModel(), UNO_QUERY );
+                        if ( xCurrentNormalized == xNormalizedObject )
+                            break;
+                    }
+
+                    if (pGroupIterator)     // ich iteriere gerade durch eine Gruppe von Controls
+                        pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
+                    else
+                        pCurrent = NULL;
+                }
+                delete pGroupIterator;
+
+                if (pCurrent)
+                {
+                    pFound = (SdrUnoObj*)pCurrent;
+                    break;
+                }
+            }
+
+            if (!pFound)
+                return false;
+
+            ::rtl::OUString sNewName( getServiceNameByControlType( nObjectTypes[ lookupSlot ] ) );
+            Reference< XControlModel> xNewModel( ::comphelper::getProcessServiceFactory()->createInstance( sNewName ), UNO_QUERY );
+            if (!xNewModel.is())
+                return false;
+
+            Reference< XControlModel> xOldModel(pFound->GetUnoControlModel());
+            Reference< XServiceInfo> xModelInfo(xOldModel, UNO_QUERY);
+            sal_Int16 nOldModelType = xModelInfo.is() ? getControlTypeByObject(xModelInfo) : OBJ_FM_CONTROL;
+
+            // Properties uebertragen
+            Reference< XPropertySet> xOldSet(xOldModel, UNO_QUERY);
+            Reference< XPropertySet> xNewSet(xNewModel, UNO_QUERY);
+
+
+            Locale aNewLanguage = Application::GetSettings().GetUILocale();
+            TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
+
+            Sequence< ::com::sun::star::script::ScriptEventDescriptor> aOldScripts;
+            Reference< XChild> xChild(xOldModel, UNO_QUERY);
+            if (xChild.is())
+            {
+                Reference< XIndexAccess> xParent(xChild->getParent(), UNO_QUERY);
+
+                // remember old script events
+                Reference< ::com::sun::star::script::XEventAttacherManager> xEvManager(xChild->getParent(), UNO_QUERY);
+                if (xParent.is() && xEvManager.is())
+                {
+                    sal_Int32 nIndex = getElementPos(xParent, xOldModel);
+                    if (nIndex>=0 && nIndex<xParent->getCount())
+                        aOldScripts = xEvManager->getScriptEvents(nIndex);
+                }
+
+                // replace the mdoel within the parent container
+                Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);   //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+                if (xIndexParent.is())
+                {
+                    // the form container works with FormComponents
+                    Reference< XFormComponent> xComponent(xNewModel, UNO_QUERY);
+                    DBG_ASSERT(xComponent.is(), "FmXFormShell::executeControlConversionSlot: the new model is no form component !");
+                    Any aNewModel(makeAny(xComponent));
+                    try
+                    {
+                        //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+                        sal_Int32 nIndex = getElementPos(xParent, xOldModel);
+                        if (nIndex>=0 && nIndex<xParent->getCount())
+                            xIndexParent->replaceByIndex(nIndex, aNewModel);
+                        else
+                        {
+                            DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                            Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
+                            if (xNewComponent.is())
+                                xNewComponent->dispose();
+                            return false;
+                        }
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                        Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
+                        if (xNewComponent.is())
+                            xNewComponent->dispose();
+                        return false;
+                    }
+
+                }
+            }
+
+            // special handling for the LabelControl-property : can only be set when the model is placed
+            // within the forms hierarchy
+            if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xOldSet) && ::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xNewSet))
+            {
+                try
+                {
+                    xNewSet->setPropertyValue(FM_PROP_CONTROLLABEL, xOldSet->getPropertyValue(FM_PROP_CONTROLLABEL));
+                }
+                catch(Exception&)
+                {
+                }
+
+            }
+
+            // neues Model setzen
+            pFound->SetChanged();
+            pFound->SetUnoControlModel(xNewModel);
+
+            // transfer script events
+            // (do this _after_ SetUnoControlModel as we need the new (implicitly created) control)
+            if (aOldScripts.getLength())
+            {
+                // das Control zum Model suchen
+                Reference< XControlContainer > xControlContainer( getControlContainerForView() );
+
+                Sequence< Reference< XControl> > aControls( xControlContainer->getControls() );
+                const Reference< XControl>* pControls = aControls.getConstArray();
+
+                sal_uInt32 nLen = aControls.getLength();
+                Reference< XControl> xControl;
+                for (sal_uInt32 i=0 ; i<nLen; ++i)
+                {
+                    if (pControls[i]->getModel() == xNewModel)
+                    {
+                        xControl = pControls[i];
+                        break;
+                    }
+                }
+                TransferEventScripts(xNewModel, xControl, aOldScripts);
+            }
+
+            // transfer value bindings, if possible
+            {
+                Reference< XBindableValue > xOldBindable( xOldModel, UNO_QUERY );
+                Reference< XBindableValue > xNewBindable( xNewModel, UNO_QUERY );
+                if ( xOldBindable.is() && xNewBindable.is() )
+                {
+                    xNewBindable->setValueBinding( xOldBindable->getValueBinding() );
+                    xOldBindable->setValueBinding( NULL );
+                }
+            }
+            // same for list entry sources
+            {
+                Reference< XListEntrySink > xOldSink( xOldModel, UNO_QUERY );
+                Reference< XListEntrySink > xNewSink( xNewModel, UNO_QUERY );
+                if ( xOldSink.is() && xNewSink.is() )
+                {
+                    xNewSink->setListEntrySource( xOldSink->getListEntrySource() );
+                    xOldSink->setListEntrySource( NULL );
+                }
+            }
+
+            // create an undo action
+            FmFormModel* pModel = m_pShell->GetFormModel();
+            DBG_ASSERT(pModel != NULL, "FmXFormShell::executeControlConversionSlot: my shell has no model !");
+            if (pModel)
+                pModel->AddUndo(new FmUndoModelReplaceAction(*pModel, pFound, xOldModel));
+
+            return true;
+        }
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXFormShell::IsConversionPossible(const Reference< XPropertySet>& xContext, sal_Int16 nConversionSlot)
+bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot )
 {
-    Reference< XServiceInfo> xInfo(xContext, UNO_QUERY);
-    if (!xInfo.is())
-        return sal_False;
+    if ( m_aCurrentSelection.empty() )
+        return false;
 
-    sal_Int16 nObjectType = getControlTypeByObject(xInfo);
+    InterfaceBag::const_iterator aCheck = m_aCurrentSelection.begin();
+    Reference< XServiceInfo > xElementInfo( *aCheck, UNO_QUERY );
+    if ( !xElementInfo.is() )
+        // no service info -> cannot determine this
+        return false;
 
-    if ((OBJ_FM_HIDDEN == nObjectType) || (OBJ_FM_CONTROL == nObjectType) || (OBJ_FM_GRID == nObjectType))
-        return sal_False;   // hiddens koennen nicht konvertiert werden
+    if (  ++aCheck != m_aCurrentSelection.end() )
+        // more than one element
+        return false;
+
+    if ( Reference< XForm >::query( xElementInfo ).is() )
+        // it's a form
+        return false;
+
+    sal_Int16 nObjectType = getControlTypeByObject( xElementInfo );
+
+    if (  ( OBJ_FM_HIDDEN == nObjectType )
+       || ( OBJ_FM_CONTROL == nObjectType )
+       || ( OBJ_FM_GRID == nObjectType )
+       )
+        return false;   // those types cannot be converted
 
     DBG_ASSERT(sizeof(nConvertSlots)/sizeof(nConvertSlots[0]) == sizeof(nObjectTypes)/sizeof(nObjectTypes[0]),
-        "FmXFormShell::IsConversionPossible : nConvertSlots & nObjectTypes must have the same size !");
+        "FmXFormShell::canConvertCurrentSelectionToControl: nConvertSlots & nObjectTypes must have the same size !");
 
     for (sal_Int16 i=0; i<sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i)
         if (nConvertSlots[i] == nConversionSlot)
             return nObjectTypes[i] != nObjectType;
 
-    return sal_True;    // alle anderen Slots nehmen wir als gueltig an
+    return sal_True;    // all other slots: assume "yes"
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::CheckControlConversionSlots(const Reference< XPropertySet>& xContext, Menu& rMenu)
+void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
 {
     for (sal_Int16 i=0; i<rMenu.GetItemCount(); ++i)
         // der Context ist schon von einem Typ, der dem Eitnrag entspricht -> disable
-        rMenu.EnableItem(rMenu.GetItemId(i), IsConversionPossible(xContext, rMenu.GetItemId(i)));
-}
-
-//------------------------------------------------------------------------------
-sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel, sal_uInt16 nTargetObjectId)
-{
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    if (!xModel.is())
-        // das wuerde ausser einem Performance-Verlust nix machen, aber trotzdem ...
-        return sal_False;
-
-    FmFormPage* pCurrentPage = m_pShell->GetCurPage();
-
-    SdrUnoObj* pFound = NULL;
-    for (sal_uInt32 i=0; i<pCurrentPage->GetObjCount(); ++i)
-    {
-        SdrObject* pCurrent = pCurrentPage->GetObj(i);
-
-        // wenn das Ding eine Gruppierung ist -> durchiterieren
-        SdrObjListIter* pGroupIterator = NULL;
-        if (pCurrent->IsGroupObject())
-        {
-            pGroupIterator = new SdrObjListIter(*pCurrent->GetSubList());
-            pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
-        }
-
-        while (pCurrent)
-        {
-            if (pCurrent->IsUnoObj())
-            {
-                Reference< XFormComponent> xCurrent(((SdrUnoObj*)pCurrent)->GetUnoControlModel(), UNO_QUERY);
-                if ((XFormComponent*)xCurrent.get() == (XFormComponent*)xModel.get())
-                    break;
-            }
-
-            if (pGroupIterator)     // ich iteriere gerade durch eine Gruppe von Controls
-                pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
-            else
-                pCurrent = NULL;
-        }
-        delete pGroupIterator;
-
-        if (pCurrent)
-        {
-            pFound = (SdrUnoObj*)pCurrent;
-            break;
-        }
-    }
-
-    if (!pFound)
-        return sal_False;
-
-    ::rtl::OUString uNewName(getServiceNameByControlType(nTargetObjectId));
-    Reference< XControlModel> xNewModel(::comphelper::getProcessServiceFactory()->createInstance(uNewName), UNO_QUERY);
-    if (!xNewModel.is())
-        return sal_False;
-
-    Reference< XControlModel> xOldModel(pFound->GetUnoControlModel());
-    Reference< XServiceInfo> xModelInfo(xOldModel, UNO_QUERY);
-    sal_Int16 nOldModelType = xModelInfo.is() ? getControlTypeByObject(xModelInfo) : OBJ_FM_CONTROL;
-
-    // Properties uebertragen
-    Reference< XPropertySet> xOldSet(xOldModel, UNO_QUERY);
-    Reference< XPropertySet> xNewSet(xNewModel, UNO_QUERY);
-
-
-    Locale aNewLanguage = Application::GetSettings().GetUILocale();
-    TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
-
-    Sequence< ::com::sun::star::script::ScriptEventDescriptor> aOldScripts;
-    Reference< XChild> xChild(xOldModel, UNO_QUERY);
-    if (xChild.is())
-    {
-        Reference< XIndexAccess> xParent(xChild->getParent(), UNO_QUERY);
-
-        // remember old script events
-        Reference< ::com::sun::star::script::XEventAttacherManager> xEvManager(xChild->getParent(), UNO_QUERY);
-        if (xParent.is() && xEvManager.is())
-        {
-            sal_Int32 nIndex = getElementPos(xParent, xOldModel);
-            if (nIndex>=0 && nIndex<xParent->getCount())
-                aOldScripts = xEvManager->getScriptEvents(nIndex);
-        }
-
-        // replace the mdoel within the parent container
-        Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);   //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
-        if (xIndexParent.is())
-        {
-            // the form container works with FormComponents
-            Reference< XFormComponent> xComponent(xNewModel, UNO_QUERY);
-            DBG_ASSERT(xComponent.is(), "FmXFormShell::ConvertControlTo : the new model is no form component !");
-            Any aNewModel(makeAny(xComponent));
-            try
-            {
-                //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
-                sal_Int32 nIndex = getElementPos(xParent, xOldModel);
-                if (nIndex>=0 && nIndex<xParent->getCount())
-                    xIndexParent->replaceByIndex(nIndex, aNewModel);
-                else
-                {
-                    DBG_ERROR("FmXFormShell::ConvertControlTo : could not replace the model !");
-                    Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
-                    if (xNewComponent.is())
-                        xNewComponent->dispose();
-                    return sal_False;
-                }
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("FmXFormShell::ConvertControlTo : could not replace the model !");
-                Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
-                if (xNewComponent.is())
-                    xNewComponent->dispose();
-                return sal_False;
-            }
-
-        }
-    }
-
-    // special handling for the LabelControl-property : can only be set when the model is placed
-    // within the forms hierarchy
-    if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xOldSet) && ::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xNewSet))
-    {
-        try
-        {
-            xNewSet->setPropertyValue(FM_PROP_CONTROLLABEL, xOldSet->getPropertyValue(FM_PROP_CONTROLLABEL));
-        }
-        catch(Exception&)
-        {
-        }
-
-    }
-
-    // neues Model setzen
-    pFound->SetChanged();
-    pFound->SetUnoControlModel(xNewModel);
-
-    // transfer script events
-    // (do this _after_ SetUnoControlModel as we need the new (implicitly created) control)
-    if (aOldScripts.getLength())
-    {
-        // das Control zum Model suchen
-        Reference< XControlContainer > xControlContainer( getControlContainerForView() );
-
-        Sequence< Reference< XControl> > aControls( xControlContainer->getControls() );
-        const Reference< XControl>* pControls = aControls.getConstArray();
-
-        sal_uInt32 nLen = aControls.getLength();
-        Reference< XControl> xControl;
-        for (sal_uInt32 i=0 ; i<nLen; ++i)
-        {
-            if (pControls[i]->getModel() == xNewModel)
-            {
-                xControl = pControls[i];
-                break;
-            }
-        }
-        TransferEventScripts(xNewModel, xControl, aOldScripts);
-    }
-
-    // transfer value bindings, if possible
-    {
-        Reference< XBindableValue > xOldBindable( xOldModel, UNO_QUERY );
-        Reference< XBindableValue > xNewBindable( xNewModel, UNO_QUERY );
-        if ( xOldBindable.is() && xNewBindable.is() )
-        {
-            xNewBindable->setValueBinding( xOldBindable->getValueBinding() );
-            xOldBindable->setValueBinding( NULL );
-        }
-    }
-    // same for list entry sources
-    {
-        Reference< XListEntrySink > xOldSink( xOldModel, UNO_QUERY );
-        Reference< XListEntrySink > xNewSink( xNewModel, UNO_QUERY );
-        if ( xOldSink.is() && xNewSink.is() )
-        {
-            xNewSink->setListEntrySource( xOldSink->getListEntrySource() );
-            xOldSink->setListEntrySource( NULL );
-        }
-    }
-
-    // create an undo action
-    FmFormModel* pModel = m_pShell->GetFormModel();
-    DBG_ASSERT(pModel != NULL, "FmXFormShell::ConvertControlTo : my shell has no model !");
-    if (pModel)
-        pModel->AddUndo(new FmUndoModelReplaceAction(*pModel, pFound, xOldModel));
-
-    return sal_True;
+        rMenu.EnableItem( rMenu.GetItemId(i), canConvertCurrentSelectionToControl( rMenu.GetItemId( i ) ) );
 }
 
 //------------------------------------------------------------------------------
@@ -1429,7 +1418,6 @@ void FmXFormShell::ExecuteSearch()
 
     // eine Sammlung aller (logischen) Formulare
     Reference< XInterface> xAllForms(m_pShell->GetCurPage()->GetForms(),UNO_QUERY);
-    //  ::fml::convertIFace((XInterface*),xAllForms);
     CollectFormContexts(xAllForms, String(), sTestContexts);
     sTestContexts.EraseLeadingChars(';');
 
@@ -1440,12 +1428,12 @@ void FmXFormShell::ExecuteSearch()
     for (; aIter != m_arrSearchContexts.rend(); ++aIter,i--)
     {
         FmSearchContext fmscTest;
-        fmscTest.nContext = i-1;
+        fmscTest.nContext = static_cast< sal_Int16 >(i-1);
         sal_uInt32 lValidControls = LINK(this, FmXFormShell, OnSearchContextRequest).Call(&fmscTest);
         if (lValidControls == 0)
         {
             m_arrSearchContexts.erase(aIter.base()-1);
-            sTestContexts.SetToken(i-1, ';', String());
+            sTestContexts.SetToken( static_cast< USHORT >(i-1), ';', String() );
         }
     }
 
@@ -1691,7 +1679,6 @@ void FmXFormShell::CloseExternalFormViewer()
 
     xExternalViewFrame->setComponent(NULL,NULL);
     ::comphelper::disposeComponent(xExternalViewFrame);
-
     m_xExternalViewController   = NULL;
     m_xExtViewTriggerController = NULL;
     m_xExternalDisplayedForm    = NULL;
@@ -1873,108 +1860,125 @@ void FmXFormShell::setActiveController( const Reference< XFormController>& xCont
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::setCurControl( const SdrMarkList& rMarkList )
+void FmXFormShell::getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    if (isControlList(rMarkList))
-    {
-        // Aktuell selektiertes Objekt setzen
-        sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
-        FmFormObj* pSelFormObj = NULL;
-        if (nMarkCount==1)
-        {
-            SdrObject *pObj=rMarkList.GetMark(0)->GetObj();
-
-            if( pObj->IsGroupObject() ) // Mehrfachselektion
-            {
-                Reference< XPropertyState> xMultiIFace(FmXMultiSet::Create( rMarkList ));
-                setCurControl( xMultiIFace );
-            }
-            else
-            {
-                pSelFormObj = PTR_CAST(FmFormObj, rMarkList.GetMark(0)->GetObj());
-
-                if ( pSelFormObj ) // Einfachselektion
-                {
-                    Reference< XFormComponent> xFormComponent(pSelFormObj->GetUnoControlModel(), UNO_QUERY);
-                    if (xFormComponent.is())
-                        setCurControl(xFormComponent);
-                    else
-                        setCurControl( Reference< XInterface>() );
-                }
-                else
-                    setCurControl( Reference< XInterface>() );
-            }
-        }
-        else if (nMarkCount > 1)            // Mehrfachselektion
-        {
-            Reference< XPropertyState> xMultiIFace(FmXMultiSet::Create( rMarkList ));
-            setCurControl( xMultiIFace );
-        }
-    }
-    else // Keine Selektion oder gemischt
-        setCurControl( Reference< XInterface>() );
+    _rSelection = m_aCurrentSelection;
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::setCurControl(const Reference< XInterface>& xNewControl)
+bool FmXFormShell::setCurrentSelectionFromMark( const SdrMarkList& _rMarkList )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT(m_pShell->IsDesignMode(), "nur im designmode verwenden");
+    m_aLastKnownMarkedControls.clear();
 
-    if (m_xCurControl == xNewControl)
+    if ( ( _rMarkList.GetMarkCount() > 0 ) && isControlList( _rMarkList ) )
+        collectInterfacesFromMarkList( _rMarkList, m_aLastKnownMarkedControls );
+
+    return setCurrentSelection( m_aLastKnownMarkedControls );
+}
+
+//------------------------------------------------------------------------------
+bool FmXFormShell::selectLastMarkedControls()
+{
+    return setCurrentSelection( m_aLastKnownMarkedControls );
+}
+
+//------------------------------------------------------------------------------
+bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
+{
+    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed, "FmXFormShell::setCurrentSelection: object already disposed!" );
+    DBG_ASSERT( m_pShell->IsDesignMode(), "FmXFormShell::setCurrentSelection: only to be used in design mode!" );
+
+    if ( _rSelection.empty() && m_aCurrentSelection.empty() )
+        // nothing to do
+        return false;
+
+    if ( _rSelection.size() == m_aCurrentSelection.size() )
+    {
+        InterfaceBag::const_iterator aNew = _rSelection.begin();
+        InterfaceBag::const_iterator aOld = m_aCurrentSelection.begin();
+        for ( ; aNew != _rSelection.end(); ++aNew, ++aOld )
+        {
+            OSL_ENSURE( Reference< XInterface >( *aNew, UNO_QUERY ).get() == aNew->get(), "FmXFormShell::setCurrentSelection: new interface not normalized!" );
+            OSL_ENSURE( Reference< XInterface >( *aOld, UNO_QUERY ).get() == aOld->get(), "FmXFormShell::setCurrentSelection: old interface not normalized!" );
+
+            if ( aNew->get() != aOld->get() )
+                break;
+        }
+
+        if ( aNew == _rSelection.end() )
+            // both bags equal
+            return false;
+    }
+
+    // the following is some strange code to ensure that when you have two grid controls in a document,
+    // only one of them can have a selected column.
+    // TODO: this should happen elsewhere, but not here - shouldn't it?
+    if ( !m_aCurrentSelection.empty() )
+    {
+        Reference< XChild > xCur; if ( m_aCurrentSelection.size() == 1 ) xCur = xCur.query( *m_aCurrentSelection.begin() );
+        Reference< XChild > xNew; if ( _rSelection.size() == 1 ) xNew = xNew.query( *_rSelection.begin() );
+
+        // is there nothing to be selected, or the parents differ, and the parent of the current object
+        // is a selection supplier, then deselect
+        if ( xCur.is() && ( !xNew.is() || ( xCur->getParent() != xNew->getParent() ) ) )
+        {
+            Reference< XSelectionSupplier > xSel( xCur->getParent(), UNO_QUERY );
+            if ( xSel.is() )
+                xSel->select( Any() );
+        }
+    }
+
+    m_aCurrentSelection = _rSelection;
+
+    // determine the form which all the selected objécts belong to, if any
+    m_xCurrentForm = NULL;
+    for ( InterfaceBag::const_iterator loop = m_aCurrentSelection.begin();
+          loop != m_aCurrentSelection.end();
+          ++loop
+        )
+    {
+        Reference< XForm > xThisRoundsForm( GetForm( *loop ) );
+        OSL_ENSURE( xThisRoundsForm.is(), "FmXFormShell::setCurrentSelection: *everything* should belong to a form!" );
+
+        if ( !m_xCurrentForm.is() )
+        {   // the first form we encounterd
+            m_xCurrentForm = xThisRoundsForm;
+        }
+        else if ( m_xCurrentForm != xThisRoundsForm )
+        {   // different forms -> no "current form" at all
+            m_xCurrentForm.clear();
+            break;
+        }
+    }
+
+
+    // ensure some slots are updated
+    InvalidateSlot(SID_FM_CTL_PROPERTIES);
+    for ( sal_Int16 i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
+        InvalidateSlot( SelObjectSlotMap[i] );
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool FmXFormShell::isSolelySelected( const Reference< XInterface >& _rxObject )
+{
+    return ( m_aCurrentSelection.size() == 1 ) && ( *m_aCurrentSelection.begin() == _rxObject );
+}
+
+//------------------------------------------------------------------------------
+void FmXFormShell::forgetCurrentForm()
+{
+    if ( !m_xCurrentForm.is() )
         return;
 
-    // Stammen beide Objecte vom gleichen Container
-    if (m_xCurControl.is())
-    {
-        Reference< XChild> xCur(m_xCurControl, UNO_QUERY);
-        Reference< XChild> xNew(xNewControl, UNO_QUERY);
-        // wenn nichts selektiert oder unterschiedliche Väter und der Vater von xCurControl ist ein XSelectionSupplier
-        // dann muß dieser deselektieren.
-        if (!xNew.is() || xCur->getParent() != xNew->getParent())
-        {
-            Reference< ::com::sun::star::view::XSelectionSupplier> xSel(xCur->getParent(), UNO_QUERY);
-            if (xSel.is())
-            {
-                xSel->select(Any());
-            }
-        }
-    }
+    m_xCurrentForm.clear();
+    FmFormPage* pPage = m_pShell->GetCurPage();
+    if ( pPage )
+        pPage->GetImpl()->setCurForm( m_xCurrentForm );
 
-    m_xCurControl = xNewControl;
-
-    InvalidateSlot(SID_FM_CTL_PROPERTIES);
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::setSelObject(const Reference< XInterface>& xNewObj)
-{
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT(m_pShell->IsDesignMode(), "nur im designmode verwenden");
-
-    if (m_xSelObject != xNewObj)
-    {
-        m_xSelObject = xNewObj;
-        for (sal_Int16 i = 0; i<sizeof(SelObjectSlotMap)/sizeof(SelObjectSlotMap[0]); ++i)
-            InvalidateSlot(SelObjectSlotMap[i]);
-    }
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::setCurForm(const Reference< XForm>& xF)
-{
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT(m_pShell->IsDesignMode(), "nur im designmode verwenden");
-    if (xF != m_xCurForm)
-    {
-        m_xCurForm = xF;
-        FmFormPage* pPage = m_pShell->GetCurPage();
-        if (pPage)
-            pPage->GetImpl()->setCurForm( xF );
-        for (sal_Int16 i = 0; i<sizeof(DlgSlotMap)/sizeof(DlgSlotMap[0]); ++i)
-            InvalidateSlot(DlgSlotMap[i]);
-    }
+    for ( sal_Int16 i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
+        InvalidateSlot( DlgSlotMap[i] );
 }
 
 //------------------------------------------------------------------------------
@@ -2076,19 +2080,16 @@ void FmXFormShell::stopListening()
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::ShowProperties(const Reference< XInterface>& rxObject, sal_Bool bShow)
+void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    // Evtl. noch aktuelles Objekt umsetzen
-    if (rxObject != m_xSelObject)
-        setSelObject( rxObject );
+    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed, "FmXFormShell::ShowSelectionProperties: Object already disposed!" );
 
-    // Wenn Fenster bereits angezeigt wird, nur StatusUpdate
-    sal_Bool bHasChild = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES);
-    if (bHasChild && bShow)
-        InvalidateSlot(SID_FM_PROPERTY_CONTROL, sal_True, sal_True);
+    // if the window is already visible, only update the state
+    sal_Bool bHasChild = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_PROPERTIES );
+    if ( bHasChild && bShow )
+        InvalidateSlot( SID_FM_PROPERTY_CONTROL, sal_True, sal_True );
 
-    // Ansonsten Fenster ein-/ausblenden
+    // else toggle state
     else
         m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow(SID_FM_SHOW_PROPERTIES);
 
@@ -2511,39 +2512,28 @@ void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
 void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    Reference< ::com::sun::star::view::XSelectionSupplier> xSupplier(rEvent.Source, UNO_QUERY);
-    Any aSelObj( xSupplier->getSelection() );
-    if (aSelObj.getValueTypeClass() != TypeClass_INTERFACE)
-        return;
-    Reference< XInterface> xSelObj;
-    aSelObj >>= xSelObj;
 
+    Reference< XSelectionSupplier > xSupplier( rEvent.Source, UNO_QUERY );
+    Reference< XInterface > xSelObj( xSupplier->getSelection(), UNO_QUERY );
     // es wurde eine Selektion weggenommen, dieses kann nur durch die Shell vorgenommen werden
-    if (!xSelObj.is())
+    if ( !xSelObj.is() )
         return;
 
-    Reference< XInterface> xPreviousObject( getSelObject());
     EnableTrackProperties(sal_False);
 
     sal_Bool bMarkChanged = m_pShell->GetFormView()->checkUnMarkAll(rEvent.Source);
-    Reference< XForm> xNewForm( GetForm(rEvent.Source));
+    Reference< XForm > xNewForm( GetForm( rEvent.Source ) );
 
-    setCurControl(xSelObj);
-    setCurForm(xNewForm);
+    InterfaceBag aNewSelection;
+    aNewSelection.insert( Reference< XInterface >( xSelObj, UNO_QUERY ) );
 
-    // wurde vorher Form angezeigt, dann wieder die Form anzeigen
-    Reference< XForm> xOldForm(xPreviousObject, UNO_QUERY);
-    if (xOldForm.is())
-        setSelObject(m_xCurForm);
-    else
-        setSelObject(m_xCurControl);
-
-    if (IsPropBrwOpen() && m_xSelObject != xPreviousObject)
-        ShowProperties(m_xSelObject, sal_True);
+    if ( setCurrentSelection( aNewSelection ) && IsPropBrwOpen() )
+        ShowSelectionProperties( sal_True );
 
     EnableTrackProperties(sal_True);
+
     if ( bMarkChanged )
-        m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
+        m_pShell->NotifyMarkListChanged( m_pShell->GetFormView() );
 }
 
 //------------------------------------------------------------------------------
@@ -2574,33 +2564,8 @@ void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 //------------------------------------------------------------------------
 void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    // Aktuelles Objekt setzen
-    Reference< XInterface> xPreviousObject( m_xSelObject);
-    sal_Bool bMixedWithFormControls = sal_True;
-    Reference< XForm> xNewForm( DetermineCurForm(rMarkList, bMixedWithFormControls));
-
-    // Aktuelle Form anpassen
-    if (xNewForm.is() || bMixedWithFormControls)
-    {
-        // die Form wird nur angepasst, wenn eine eindeutige From gefunden wurde oder eine gemischte Selektion existiert,
-        // die auch FormControls enthaelt (NICHT bei einer Selektion ohne solche oder bei leerer Selektion)
-        if ((XForm*)xNewForm.get() != (XForm*)m_xCurForm.get())
-            setCurForm( xNewForm );
-    }
-
-    setCurControl(rMarkList);
-
-    // wurde vorher Form angezeigt, dann wieder die Form anzeigen
-    Reference< XForm> xOldForm(m_xSelObject, UNO_QUERY);
-    if (xOldForm.is())
-        setSelObject(xNewForm);
-    else
-        setSelObject(m_xCurControl);
-
-    // Falls ein Propertybrowser angezeigt wird, diesen invalidieren
-    if (IsPropBrwOpen() && xPreviousObject != m_xSelObject)
-        ShowProperties(m_xSelObject, sal_True);
+    if ( setCurrentSelectionFromMark( rMarkList ) && IsPropBrwOpen() )
+        ShowSelectionProperties( sal_True );
 }
 
 //------------------------------------------------------------------------------
@@ -2723,12 +2688,10 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
     if (bDesign && m_bHadPropBrw)
     {
         // The UIFeatureChanged performes an update (a check of the available features) asynchronously.
-        // So we can't call ShowProperties directly as the according feature isn't enabled yet.
+        // So we can't call ShowSelectionProperties directly as the according feature isn't enabled yet.
         // That's why we use an asynchron execution on the dispatcher.
         // (And that's why this has to be done AFTER the UIFeatureChanged.)
-        FmInterfaceItem aInterfaceItem( SID_FM_SHOW_PROPERTY_BROWSER, getSelObject() );
-        m_pShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
-            &aInterfaceItem, 0L );
+        m_pShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON );
     }
     m_bChangingDesignMode = sal_False;
 }
@@ -4064,14 +4027,11 @@ void FmXFormShell::SetControlActivationHandler( const Link& _rHdl )
 {
     m_pTextShell->SetControlActivationHandler( _rHdl );
 }
-
 //------------------------------------------------------------------------
 void FmXFormShell::handleShowPropertiesRequest()
 {
-//    if ( onlyControlsAreMarked() )
-//        ShowSelectionProperties( sal_True );
-    if ( getCurControl().is() )
-        ShowProperties( getCurControl(), sal_True );
+    if ( onlyControlsAreMarked() )
+        ShowSelectionProperties( sal_True );
 }
 
 //------------------------------------------------------------------------
@@ -4082,10 +4042,8 @@ void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
     {
         if ( _rViewEvent.eHit == SDRHIT_MARKEDOBJECT )
         {
-//            if ( onlyControlsAreMarked() )
-//                ShowSelectionProperties( sal_True );
-            if ( getCurControl().is() )
-                ShowProperties( getCurControl(), sal_True );
+            if ( onlyControlsAreMarked() )
+                ShowSelectionProperties( sal_True );
         }
     }
 }
@@ -4174,7 +4132,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
 {
     if (nSID == GetId())
         SfxMenuControl::StateChanged(nSID, eState, pState);
-    else if (FmXFormShell::IsControlConversionSlot(nSID))
+    else if (FmXFormShell::isControlConversionSlot(nSID))
     {
         if ((m_pConversionMenu->GetItemPos(nSID) != MENU_ITEM_NOTFOUND) && (eState == SFX_ITEM_DISABLED))
         {
