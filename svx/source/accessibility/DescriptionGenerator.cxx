@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 11:58:43 $
+ *  last change: $Author: af $ $Date: 2002-05-29 15:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,8 +370,15 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
         uno::Reference<container::XNameAccess> xNA (xColorTable, uno::UNO_QUERY);
         if (xNA.is())
         {
-            // Get list of color names in order to iterate over the color table.
-            uno::Sequence<OUString> aNames = xNA->getElementNames();
+            // Get list of color names in order to iterate over the color
+            // table.
+            uno::Sequence<OUString> aNames;
+            {
+                // Look the solar mutex here as workarround for missing lock
+                // in called function.
+                ::vos::OGuard aGuard (::Application::GetSolarMutex());
+                aNames = xNA->getElementNames();
+            }
             long i;
             for (i=0; i<aNames.getLength(); i++)
             {
