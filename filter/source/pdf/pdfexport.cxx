@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-26 08:37:42 $
+ *  last change: $Author: sj $ $Date: 2002-09-04 13:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                                     bRet = ImplExportPage( *pPDFWriter, aMtf, nCompressMode ) || bRet;
 
                                 pOut->Pop();
+                                delete pXDevice;
                             }
                         }
                     }
