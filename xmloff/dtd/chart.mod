@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.26 2001-11-19 13:23:39 bm Exp $
+	$Id: chart.mod,v 1.27 2001-12-14 18:47:17 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -95,7 +95,8 @@
 		  chart:lines-used %nonNegativeInteger; "0"
 		  chart:connect-bars %boolean; "false"
 		  chart:spline-order %nonNegativeInteger; "2"
-		  chart:spline-resolution %nonNegativeInteger; "20">
+		  chart:spline-resolution %nonNegativeInteger; "20"
+          chart:pie-offset %nonNegativeInteger; "0">
 
 <!-- Main/Sub Title -->
 <!-- the cell-address attribute is currently not supported for titles -->

@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.37 2001-12-06 18:35:56 dvo Exp $
+	$Id: text.mod,v 1.38 2001-12-14 18:47:17 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -721,21 +721,22 @@
 							 text:ordered-list|text:unordered-list)*>
 
 <!ENTITY % sectionText "(text:h|text:p|text:ordered-list|
-						text:unordered-list|table:table|chart:chart|draw:page|
-						draw:a|draw:text-box|draw:image|text:section|
+						text:unordered-list|table:table|text:section|
 						text:table-of-content|text:illustration-index|
 						text:table-index|text:object-index|text:user-index|
 						text:alphabetical-index|text:bibliography|
 						text:index-title|%change-marks;)*">
+<!ENTITY % sectionAttr "text:name CDATA #REQUIRED
+                        text:style-name %styleName; #IMPLIED
+                        text:protected %boolean; 'false' ">
+
 
 <!ELEMENT text:section ((text:section-source|office:dde-source)?,
 						%sectionText;) >
 
-<!ATTLIST text:section text:name CDATA #REQUIRED>
-<!ATTLIST text:section text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:section %sectionAttr;>
 <!ATTLIST text:section text:display (true|none|condition) "true">
 <!ATTLIST text:section text:condition %formula; #IMPLIED>
-<!ATTLIST text:section text:protected %boolean; "false">
 <!ATTLIST text:section text:protection-key CDATA #IMPLIED>
 
 <!ELEMENT text:section-source EMPTY>
@@ -747,8 +748,7 @@
 
 <!ELEMENT text:table-of-content (text:table-of-content-source, 
 								 text:index-body)   >
-<!ATTLIST text:table-of-content text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:table-of-content text:protected %boolean; "false">
+<!ATTLIST text:table-of-content %sectionAttr;>
 
 <!ELEMENT text:table-of-content-source (text:index-title-template? , 
 										text:table-of-content-entry-template*,
@@ -779,8 +779,7 @@
 
 <!ELEMENT text:illustration-index 
 			(text:illustration-index-source, text:index-body)>
-<!ATTLIST text:illustration-index text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:illustration-index text:protected %boolean; "false">
+<!ATTLIST text:illustration-index %sectionAttr;>
 
 <!ELEMENT text:illustration-index-source (text:index-title-template?,
 									text:illustration-index-entry-template?) >
@@ -806,8 +805,7 @@
 									%styleName; #REQUIRED>
 
 <!ELEMENT text:table-index (text:table-index-source, text:index-body)>
-<!ATTLIST text:table-index text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:table-index text:protected %boolean; "false">
+<!ATTLIST text:table-index %sectionAttr;>
 
 <!ELEMENT text:table-index-source (text:index-title-template?, 
 									text:table-index-entry-template?) >
@@ -832,8 +830,7 @@
 											%styleName; #REQUIRED>
 
 <!ELEMENT text:object-index ( text:object-index-source, text:index-body ) >
-<!ATTLIST text:object-index text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:object-index text:protected %boolean; "false">
+<!ATTLIST text:object-index %sectionAttr;>
 
 <!ELEMENT text:object-index-source ( text:index-title-template?,
 									 text:object-index-entry-template? ) >
@@ -859,8 +856,7 @@
 											%styleName; #REQUIRED >
 
 <!ELEMENT text:user-index (text:user-index-source, text:index-body) >
-<!ATTLIST text:user-index text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:user-index text:protected %boolean; "false">
+<!ATTLIST text:user-index %sectionAttr;>
 
 <!ELEMENT text:user-index-source ( text:index-title-template?,
 								   text:user-index-entry-template*,
@@ -891,8 +887,7 @@
 
 <!ELEMENT text:alphabetical-index (text:alphabetical-index-source, 
 									text:index-body)>
-<!ATTLIST text:alphabetical-index text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:alphabetical-index text:protected %boolean; "false">
+<!ATTLIST text:alphabetical-index %sectionAttr;>
 
 <!ELEMENT text:alphabetical-index-source ( text:index-title-template?, 
 							text:alphabetical-index-entry-template* ) >
@@ -936,8 +931,7 @@
 <!ATTLIST text:alphabetical-index-auto-mark-file xlink:type (simple) #FIXED "simple">
 
 <!ELEMENT text:bibliography (text:bibliography-source, text:index-body) >
-<!ATTLIST text:bibliography text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:bibliography text:protected %boolean; "false">
+<!ATTLIST text:bibliography %sectionAttr;>
 
 <!ELEMENT text:bibliography-source ( text:index-title-template?,
 									 text:bibliography-entry-template* ) >

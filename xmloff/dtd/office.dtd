@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: office.dtd,v 1.5 2001-03-23 07:47:56 sab Exp $
+	$Id: office.dtd,v 1.6 2001-12-14 18:47:17 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -58,10 +58,10 @@
 %dtypes-mod;
 <!ENTITY % nmspace-mod SYSTEM "nmspace.mod">
 %nmspace-mod;
-<!ENTITY % style-mod SYSTEM "style.mod">
-%style-mod;
 <!ENTITY % office-mod SYSTEM "office.mod">
 %office-mod;
+<!ENTITY % style-mod SYSTEM "style.mod">
+%style-mod;
 <!ENTITY % meta-mod SYSTEM "meta.mod">
 %meta-mod;
 <!ENTITY % script-mod SYSTEM "script.mod">
