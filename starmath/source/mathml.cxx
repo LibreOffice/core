@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
+ *  last change: $Author: mib $ $Date: 2001-03-07 15:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,9 +574,11 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     OUString sStreamName = OUString::createFromAscii(pStreamName);
     xDocStream = pStorage->OpenStream( sStreamName,
                                        STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
     if (! xDocStream.Is())
         return sal_False;
-    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
+
+    xDocStream->SetSize( 0 );
 
     String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
     OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
