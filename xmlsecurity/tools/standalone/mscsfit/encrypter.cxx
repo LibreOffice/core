@@ -235,7 +235,7 @@ int SAL_CALL main( int argc, char **argv )
             "Encryptor - "
             "Cannot get interface of \"XXMLSecurityContext\" from service \"xsec.XMLSecurityContext\"" ) ;
 
-        xSecCtx->setSecurityEnvironment( xSecEnv ) ;
+        xSecCtx->addSecurityEnvironment( xSecEnv ) ;
 
         //Get encrypter
         Reference< XInterface > xmlencrypter =
@@ -250,10 +250,21 @@ int SAL_CALL main( int argc, char **argv )
             "Cannot get interface of \"XXMLEncryption\" from service \"xsec.XMLEncryption\"" ) ;
 
         //perform encryption
-        xTemplate = xEncrypter->encrypt( xTemplate , xSecCtx ) ;
+        xTemplate = xEncrypter->encrypt( xTemplate , xSecEnv ) ;
         OSL_ENSURE( xTemplate.is() ,
             "Encryptor - "
             "Cannot encrypt the xml document" ) ;
+
+
+        com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus = xTemplate->getStatus();
+        if (m_nStatus == SecurityOperationStatus_OPERATION_SUCCEEDED)
+        {
+            fprintf( stdout, "Operation succeeds.\n") ;
+        }
+        else
+        {
+            fprintf( stdout, "Operation fails.\n") ;
+        }
     } catch( Exception& e ) {
         fprintf( stderr , "Error Message: %s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
         goto done ;
