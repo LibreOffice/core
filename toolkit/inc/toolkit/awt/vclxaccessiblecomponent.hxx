@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-25 11:21:20 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 14:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +100,6 @@ namespace utl {
 class AccessibleStateSetHelper;
 }
 
-//class MutexHelper_Impl
-//{
-//protected:
-//  ::osl::Mutex    maMutex;
-//};
-
-//typedef cppu::WeakComponentImplHelper3<
-//    ::drafts::com::sun::star::accessibility::XAccessibleContext,
-//  ::drafts::com::sun::star::accessibility::XAccessibleExtendedComponent,
-//    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
-//    > VCLXAccessibleComponentBase;
-
 typedef ::comphelper::OAccessibleExtendedComponentHelper    VCLXAccessibleComponentBase;
 
 //  ----------------------------------------------------
@@ -132,7 +120,6 @@ private:
     void*                           pDummy2;
 
 protected:
-//  ::osl::Mutex&   GetMutex() { return maMutex; }
      DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
