@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringrepresentation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:12:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ namespace pcr
                 aBuffer.append( (sal_Int32)aUnoDateTime.Minutes );
                 aBuffer.appendAscii( ":" );
                 aBuffer.append( (sal_Int32)aUnoDateTime.Seconds );
-                aBuffer.appendAscii( ":" );
+                aBuffer.appendAscii( "." );
                 aBuffer.append( (sal_Int32)aUnoDateTime.HundredthSeconds );
 
                 _rStringRep = aBuffer.makeStringAndClear();
@@ -533,10 +533,10 @@ namespace pcr
                 nSepPos = _rStringRep.indexOf( ':', nPrevSepPos = nSepPos + 1 );
                 aUnoDateTime.Minutes = (sal_Int16)_rStringRep.copy( nPrevSepPos, nSepPos - nPrevSepPos ).toInt32();
 
-                nSepPos = _rStringRep.indexOf( ':', nPrevSepPos = nSepPos + 1 );
+                nSepPos = _rStringRep.indexOf( '.', nPrevSepPos = nSepPos + 1 );
                 aUnoDateTime.Seconds = (sal_Int16)_rStringRep.copy( nPrevSepPos, nSepPos - nPrevSepPos ).toInt32();
 
-                aUnoDateTime.Seconds = (sal_Int16)_rStringRep.copy( nSepPos + 1 ).toInt32();
+                aUnoDateTime.HundredthSeconds = (sal_Int16)_rStringRep.copy( nSepPos + 1 ).toInt32();
 
                 _rValue <<= aUnoDateTime;
             }
