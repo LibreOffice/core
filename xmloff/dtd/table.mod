@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.0 NT (http://www.xmlspy.com) by Jumper (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.3 2000-10-10 10:38:31 sab Exp $
+	$Id: table.mod,v 1.4 2000-10-12 08:33:14 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -63,7 +63,7 @@
 <!ENTITY % table-row-groups "( %table-header-rows; |
 			(%table-header-rows;?, %table-rows;) |
             (%table-rows;, %table-header-rows;, %table-rows;?) )">
-<!ELEMENT table:table (table:scenario, %table-column-groups;, %table-row-groups;)>
+<!ELEMENT table:table (table:scenario?, %table-column-groups;, %table-row-groups;)>
 <!ATTLIST table:table
 	table:name %string; #REQUIRED
 	table:style-name %styleName; #IMPLIED
