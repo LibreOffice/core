@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontsizemenucontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:00:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ void SAL_CALL FontSizeMenuController::disposing( const EventObject& Source ) thr
 void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     com::sun::star::awt::FontDescriptor                 aFontDescriptor;
-    drafts::com::sun::star::frame::status::FontHeight   aFontHeight;
+    ::com::sun::star::frame::status::FontHeight   aFontHeight;
 
     if ( Event.State >>= aFontDescriptor )
     {
