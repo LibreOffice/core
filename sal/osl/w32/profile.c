@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-21 12:14:04 $
+ *  last change: $Author: obr $ $Date: 2001-11-21 14:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ typedef struct _osl_TProfileImpl
     sal_Char**  m_Lines;
     rtl_uString *m_strFileName;
     osl_TProfileSection* m_Sections;
-    sal_Bool    m_bIsSoffice;
 } osl_TProfileImpl;
 
 
@@ -213,8 +212,6 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl*);
 static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
 static rtl_uString* osl_ProfileGenerateExtension(rtl_uString* ustrFileName, rtl_uString* ustrExtension);
 
-static sal_Bool bGlobalSofficeFlag=sal_False;
-
 static sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl_uString** strProfileName);
 
 /*****************************************************************************/
@@ -226,7 +223,6 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
     osl_TFile*        pFile;
     osl_TProfileImpl* pProfile;
     rtl_uString       *FileName=NULL;
-    rtl_uString*      ustrSoffice=0;
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile\n");
@@ -289,26 +285,6 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 
 
     pProfile = (osl_TProfileImpl*)calloc(1, sizeof(osl_TProfileImpl));
-
-
-    pProfile->m_bIsSoffice = sal_False;
-
-    rtl_uString_newFromAscii(&ustrSoffice,"soffice.ini");
-
-    if ( rtl_ustr_indexOfStr( FileName->buffer, ustrSoffice->buffer ) > 0 )
-    {
-        if ( bGlobalSofficeFlag == sal_True )
-        {
-            OSL_ENSURE(0,"Attempt to open soffice.ini more than once\n");
-        }
-        else
-        {
-            bGlobalSofficeFlag=sal_True;
-        }
-        pProfile->m_bIsSoffice=sal_True;
-    }
-
-    rtl_uString_release(ustrSoffice);
 
 
     pProfile->m_Flags = Flags & FLG_USER;
@@ -2091,14 +2067,6 @@ static sal_Bool storeProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile, sal_B
             for (i = 0; i < pProfile->m_NoLines; i++)
             {
                 OSL_VERIFY(putLine(pTmpFile, pProfile->m_Lines[i]));
-            }
-
-            if ( pProfile->m_bIsSoffice == sal_True )
-            {
-/*                  OSL_ENSURE( ( ( pTmpFile->m_nWriteBufLen - pTmpFile->m_nWriteBufFree ) > 5000 ), "Profile to write is less than 5000 bytes\n"); */
-/*                  OSL_ENSURE( ( pProfile->m_NoSections > 15 ), "Profile to write has less than 15 Sections\n"); */
-/*                  OSL_ENSURE( ( pProfile->m_NoLines > 170 ), "Profile to write has less than 170 lines\n"); */
-/*                  OSL_ENSURE( ( i > 170 ), "less than 170 lines to be written in Profile\n");             */
             }
 
             if ( ! writeProfileImpl(pTmpFile) )
