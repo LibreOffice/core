@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:02:43 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
 
 protected:
-    sal_Char *cClass;
+    const sal_Char *cClass;
 
 private:
     Transliteration_casemapping *trans;
