@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-10-21 15:01:47 $
+ *  last change: $Author: od $ $Date: 2002-11-01 11:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,11 +172,9 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
         {
             if ( pFrm != this )
             {
-#ifdef VERTICAL_LAYOUT
                 if( pFrm->IsVertical() )
                     nWidth -= pFrm->Frm().Width();
                 else
-#endif
                     nHeight -= pFrm->Frm().Height();
             }
             pFrm = pFrm->GetNext();
@@ -184,14 +182,11 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
         if ( nHeight < 0 )
             nHeight = 0;
         Frm().Height( nHeight );
-#ifdef VERTICAL_LAYOUT
         if( IsVertical() && !IsReverse() && nWidth != Frm().Width() )
             Frm().Pos().X() += Frm().Width() - nWidth;
-#endif
         Frm().Width( nWidth );
     }
 
-#ifdef VERTICAL_LAYOUT
     BOOL bNoGrid = TRUE;
     if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() )
     {
@@ -223,7 +218,6 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
         }
     }
     if( bNoGrid )
-#endif
     {
         Prt().Pos().X() = Prt().Pos().Y() = 0;
         Prt().Height( Frm().Height() );
@@ -246,7 +240,6 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     pDesc( pPgDsc ),
     nPhyPageNum( 0 )
 {
-#ifdef VERTICAL_LAYOUT
     SetDerivedVert( FALSE );
     SetDerivedR2L( FALSE );
     if( pDesc )
@@ -258,7 +251,6 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     }
     else
         bHasGrid = FALSE;
-#endif
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
     nType = FRMC_PAGE;
@@ -354,7 +346,6 @@ SwPageFrm::~SwPageFrm()
     }
 }
 
-#ifdef VERTICAL_LAYOUT
 
 void SwPageFrm::CheckGrid( BOOL bInvalidate )
 {
@@ -382,7 +373,6 @@ void SwPageFrm::CheckGrid( BOOL bInvalidate )
 
 void SwPageFrm::CheckDirection( BOOL bVert )
 {
-#ifdef VERTICAL_LAYOUT
     UINT16 nDir =
             ((SvxFrameDirectionItem&)GetFmt()->GetAttr( RES_FRAMEDIR )).GetValue();
     if( bVert )
@@ -408,21 +398,7 @@ void SwPageFrm::CheckDirection( BOOL bVert )
             bRightToLeft = 0;
         bInvalidR2L = 0;
     }
-#else
-    if( bVert )
-    {
-        bVertical = 0;
-        bReverse = 0;
-        bInvalidVert = 0;
-    }
-    else
-    {
-        bRightToLeft = 0;
-        bInvalidR2L = 0;
-    }
-#endif
 }
-#endif
 
 /*************************************************************************
 |*
@@ -655,9 +631,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             const SwFmtFooter &rNewF = pNewFmt->GetFooter();
             if( rOldF != rNewF )
                 rInvFlags |= 0x10;
-#ifdef VERTICAL_LAYOUT
             CheckDirChange();
-#endif
         }
             /* kein break hier */
         case RES_FRM_SIZE:
@@ -666,7 +640,16 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             if ( GetFmt()->GetDoc()->IsBrowseMode() )
             {
                 bValidSize = FALSE;
-                MakeAll();
+                // OD 28.10.2002 #97265# - Don't call <SwPageFrm::MakeAll()>
+                // Calculation of the page is not necessary, because its size is
+                // is invalidated here and further invalidation is done in the
+                // calling method <SwPageFrm::Modify(..)> and probably by calling
+                // <SwLayoutFrm::Modify(..)> at the end.
+                // It can also causes inconsistences, because the lowers are
+                // adjusted, but not calculated, and a <SwPageFrm::MakeAll()> of
+                // a next page is called. This is performed on the switch to the
+                // online layout.
+                //MakeAll();
             }
             else
             {
@@ -704,11 +687,9 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_FOOTER:
             rInvFlags |= 0x10;
             break;
-#ifdef VERTICAL_LAYOUT
         case RES_TEXTGRID:
             rInvFlags |= 0x60;
             break;
-#endif
 
         case RES_PAGEDESC_FTNINFO:
             //Die derzeit einzig sichere Methode:
@@ -720,11 +701,9 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             //Hier wird die Seite ggf. zerstoert!
             ((SwRootFrm*)GetUpper())->RemoveFtns( 0, FALSE, TRUE );
             break;
-#ifdef VERTICAL_LAYOUT
         case RES_FRAMEDIR :
             CheckDirChange();
             break;
-#endif
 
         default:
             bClear = FALSE;
@@ -885,7 +864,6 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
     pRoot->bCheckSuperfluous = bOld;
 }
 
-#ifdef VERTICAL_LAYOUT
 void MA_FASTCALL lcl_AdjustRoot( SwFrm *pPage, long nOld )
 {
     //Groesse der groessten Seite ermitteln.
@@ -1000,133 +978,6 @@ void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
             ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
     }
 }
-#else
-void MA_FASTCALL lcl_ChgRootSize( SwFrm *pP, SwTwips nVal )
-{
-    if ( pP->bVarHeight )
-        pP->GetUpper()->ChgSize( Size( nVal, pP->GetUpper()->Frm().Height()));
-    else
-        pP->GetUpper()->ChgSize( Size( pP->GetUpper()->Frm().Width(), nVal));
-}
-
-void MA_FASTCALL lcl_AdjustRoot( SwFrm *pPage, SzPtr pFix, long nOld )
-{
-    //Groesse der groessten Seite ermitteln.
-    //nOld enthaelt den alten Wert wenn die Seite geschrumpft ist und
-    //den aktuellen Wert wenn sie etwa ausgeschnitten wurde. Dadurch
-    //kann abgebrochen werden, wenn eine Seite gefunden wird, deren Wert
-    //dem alten entspricht.
-    long nMax = pPage->Frm().SSize().*pFix;
-    if ( nMax == nOld )
-        nMax = 0;
-    const SwFrm *pFrm = pPage->GetUpper()->Lower();
-    while ( pFrm )
-    {
-        if ( pFrm != pPage )
-        {
-            const SwTwips nTmp = pFrm->Frm().SSize().*pFix;
-            if ( nTmp == nOld )
-            {
-                nMax = 0;
-                break;
-            }
-            else if ( nTmp > nMax )
-                nMax = nTmp;
-        }
-        pFrm = pFrm->GetNext();
-    }
-    if ( nMax )
-        lcl_ChgRootSize( pPage, nMax );
-}
-
-void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
-{
-    if ( !GetUpper() )
-        return;
-
-    const SwRect aOld( GetUpper()->Frm() );
-
-    SzPtr pFix = pFIXSIZE;
-    SzPtr pVar = pVARSIZE;
-    const SwTwips nVar = Frm().SSize().*pVar;
-    SwTwips nFix = Frm().SSize().*pFix;
-    SwTwips nDiff = 0;
-
-    switch ( eChgType )
-    {
-        case CHG_NEWPAGE:
-            {
-                if ( nFix > GetUpper()->Prt().SSize().*pFix )
-                    ::lcl_ChgRootSize( this, nFix );
-                nDiff = nVar;
-                if ( GetPrev() && !((SwPageFrm*)GetPrev())->IsEmptyPage() )
-                {
-                    if( !IsEmptyPage() || !GetNext() )
-                        nDiff += DOCUMENTBORDER/2;
-                }
-                else if ( !IsEmptyPage() && GetNext() )
-                    nDiff += DOCUMENTBORDER/2;
-            }
-            break;
-        case CHG_CUTPAGE:
-            {
-                if ( nFix == GetUpper()->Prt().SSize().*pFix )
-                    ::lcl_AdjustRoot( this, pFix, nFix );
-                nDiff = -nVar;
-                if ( GetPrev() && !((SwPageFrm*)GetPrev())->IsEmptyPage() )
-                    nDiff -= DOCUMENTBORDER/2;
-                else if ( !IsEmptyPage() && GetNext() )
-                    nDiff -= DOCUMENTBORDER/2;
-                if ( IsEmptyPage() && GetNext() )
-                    nDiff = -nVar;
-            }
-            break;
-        case CHG_CHGPAGE:
-            {
-                ASSERT( pOld, "ChgPage ohne OldValue nicht moeglich." );
-                if ( pOld->SSize().*pFix < nFix )
-                {
-                    if ( nFix > GetUpper()->Prt().SSize().*pFix )
-                        ::lcl_ChgRootSize( this, nFix );
-                }
-                else if ( pOld->SSize().*pFix > nFix )
-                    ::lcl_AdjustRoot( this, pFix, pOld->SSize().*pFix );
-                nDiff = nVar - pOld->SSize().*pVar;
-            }
-            break;
-
-        default:
-            ASSERT( FALSE, "Neuer Typ fuer PageChg." );
-    }
-
-    if ( nDiff > 0 )
-        GetUpper()->Grow( nDiff, pVar );
-    else if ( nDiff < 0 )
-        GetUpper()->Shrink( -nDiff, pVar );
-
-    //Fix(8522): Calc auf die Root damit sich dir PrtArea sofort einstellt.
-    //Anderfalls gibt es Probleme wenn mehrere Aenderungen innerhalb einer
-    //Action laufen.
-    GetUpper()->Calc();
-
-    if ( aOld != GetUpper()->Frm() )
-    {
-        SwLayoutFrm *pUp = GetUpper();
-        if ( eChgType == CHG_CUTPAGE )
-        {
-            //Seiten vorher kurz aushaengen, weil sonst falsch formatiert wuerde.
-            SwFrm *pSibling = GetNext();
-            if ( ((SwRootFrm*)pUp)->GetLastPage() == this )
-                ::SetLastPage( (SwPageFrm*)GetPrev() );
-            Remove();
-            ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
-            InsertBefore( pUp, pSibling );
-        }
-        else
-            ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
-    }
-}
-#endif
 
 /*************************************************************************
 |*
@@ -1240,20 +1091,7 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     else
         ::SetLastPage( this );
 
-#ifdef VERTICAL_LAYOUT
     if( Frm().Width() != pParent->Prt().Width() )
-#else
-    //ggf. die Memberpointer korrigieren.
-    const SwFmtFillOrder &rFill =((SwLayoutFrm*)pParent)->GetFmt()->GetFillOrder();
-    if ( rFill.GetFillOrder() == ATT_BOTTOM_UP ||
-         rFill.GetFillOrder() == ATT_TOP_DOWN )
-        bVarHeight = TRUE;
-    else
-        bVarHeight = FALSE;
-
-    const SzPtr pFix = pFIXSIZE;
-    if( Frm().SSize().*pFix != pParent->Prt().SSize().*pFix )
-#endif
         _InvalidateSize();
     InvalidatePos();
 
@@ -1374,8 +1212,10 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 
         if ( bActOdd != bOdd ||
              pDesc != pPage->GetPageDesc() ||       //falscher Desc
-             (pFmtWish != pPage->GetFmt()  &&       //falsches Format und
-             (!pPage->IsEmptyPage() || pFmtWish)))  //nicht Leerseite
+             ( pFmtWish != pPage->GetFmt()  &&      //falsches Format und
+               ( !pPage->IsEmptyPage() || pFmtWish ) //nicht Leerseite
+             )
+           )
         {
             //Wenn wir schon ein Seite veraendern muessen kann das eine
             //Weile dauern, deshalb hier den WaitCrsr pruefen.
@@ -1421,10 +1261,13 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             {
                 pPage->SetPageDesc( pDesc, 0 );
             }
-            else if ( !pPage->IsEmptyPage() && bActOdd != bOdd &&   //3
+            else if ( !pPage->IsEmptyPage() &&      //3.
+                      bActOdd != bOdd &&
                       ( ( !pPage->GetPrev() && !bOdd ) ||
                         ( pPage->GetPrev() &&
-                        !((SwPageFrm*)pPage->GetPrev())->IsEmptyPage() ) ) )
+                          !((SwPageFrm*)pPage->GetPrev())->IsEmptyPage() )
+                      )
+                    )
             {
                 if ( pPage->GetPrev() )
                     pDesc = ((SwPageFrm*)pPage->GetPrev())->GetPageDesc();
@@ -1665,8 +1508,6 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 |*
 |*************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
-
 SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
     if ( !bTst )
@@ -1690,36 +1531,6 @@ SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         Frm().SSize().Height() -= nDist;
     return nDist;
 }
-
-#else
-
-SwTwips SwRootFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
-                            BOOL bTst, BOOL bInfo )
-{
-    if ( !bTst )
-        Frm().SSize().*pDirection += nDist;
-    return nDist;
-}
-/*************************************************************************
-|*
-|*  SwRootFrm::ShrinkFrm()
-|*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
-|*
-|*************************************************************************/
-SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
-                              BOOL bTst, BOOL bInfo )
-{
-    ASSERT( nDist >= 0, "nDist < 0." );
-    ASSERT( nDist <= Frm().SSize().*pDirection, "nDist > als aktuelle Groesse." );
-
-    if ( !bTst )
-        Frm().SSize().*pDirection -= nDist;
-    return nDist;
-}
-
-#endif
 
 /*************************************************************************
 |*
@@ -1971,12 +1782,7 @@ void SwRootFrm::ChgSize( const Size& aNewSize )
 {
     Frm().SSize() = aNewSize;
     _InvalidatePrt();
-#ifdef VERTICAL_LAYOUT
     bFixSize = FALSE;
-#else
-    bFixHeight =  bVarHeight;
-    bFixWidth  = !bVarHeight;
-#endif
 }
 
 /*************************************************************************
