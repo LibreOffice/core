@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-18 10:50:00 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:04:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,10 @@ TARGET=app
 .INCLUDE :	sv.mk
 
 CDEFS+=-DDLLSUFFIX=$(DLLSUFFIX)
+
+.IF "$(SYSTEM_NAS)"=="YES"
+CFLAGS+=-I$(NAS_INCLUDES)
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
