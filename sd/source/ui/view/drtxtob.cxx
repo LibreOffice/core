@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 07:25:48 $
+ *  last change: $Author: cl $ $Date: 2002-09-13 10:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,9 +506,11 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                 case FRMDIR_HORI_LEFT_TOP:
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, TRUE ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, FALSE ) );
                 break;
 
                 case FRMDIR_HORI_RIGHT_TOP:
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, FALSE ) );
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, TRUE ) );
                 break;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 07:25:49 $
+ *  last change: $Author: cl $ $Date: 2002-09-13 10:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
         }
         break;
 
+
         default:
         {
             SfxItemSet aEditAttr( pView->GetDoc()->GetPool() );
@@ -472,19 +473,6 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                         aNewAttr.Put( aItem );
                     }
                     break;
-                    case SID_ATTR_PARA_LEFT_TO_RIGHT:
-                    {
-                        aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
-                    }
-                    break;
-                    case SID_ATTR_PARA_RIGHT_TO_LEFT:
-                    {
-                        aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT ) );
-                    }
-                    break;
-
                     case SID_SET_SUPER_SCRIPT:
                     {
                         SvxEscapementItem aItem;
@@ -568,6 +556,40 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                         }
                     }
                     break;
+                }
+
+                rReq.Done( aNewAttr );
+                pArgs = rReq.GetArgs();
+            }
+            else if ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ||
+                      nSlot == SID_ATTR_PARA_RIGHT_TO_LEFT )
+            {
+                sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
+
+                const SfxPoolItem* pPoolItem;
+                if( SFX_ITEM_SET == pArgs->GetItemState( nSlot, TRUE, &pPoolItem ) )
+                {
+                    if( false == ( (SfxBoolItem*)pPoolItem)->GetValue() )
+                    {
+                        bLeftToRight = !bLeftToRight;
+                    }
+                }
+
+                USHORT nAdjust = SVX_ADJUST_LEFT;
+                if( SFX_ITEM_ON == aEditAttr.GetItemState(ITEMID_ADJUST, TRUE, &pPoolItem ) )
+                    nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
+
+                if( bLeftToRight )
+                {
+                    aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+                    if( nAdjust == SVX_ADJUST_RIGHT )
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
+                }
+                else
+                {
+                    aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+                    if( nAdjust == SVX_ADJUST_LEFT )
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT ) );
                 }
 
                 rReq.Done( aNewAttr );
