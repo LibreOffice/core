@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 15:58:49 $
+ *  last change: $Author: hdu $ $Date: 2002-08-05 07:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,8 +202,8 @@ void VirtDevServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     vdev.SetFont( aFont );
 
     // get glyph metrics
-    long nCharWidth;
-    vdev.GetCharWidth( nGlyphIndex, nGlyphIndex, &nCharWidth );
+    long nCharWidth = 10;
+// TODO:    vdev.GetCharWidth( nGlyphIndex, nGlyphIndex, &nCharWidth );
     rGD.SetCharWidth( nCharWidth );
 
     const Rectangle aRect = vdev.GetTextRect( aRect, nGlyphIndex );
@@ -295,6 +295,9 @@ ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) cons
 
 bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
 {
+#if 1
+    return false;
+#else
     Font aFont;
     aFont.SetName       ( GetFontSelData().maName );
     aFont.SetStyleName  ( GetFontSelData().maStyleName );
@@ -308,6 +311,7 @@ bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly
 
     const bool bOptimize = true;
     return vdev.GetGlyphOutline( nGlyphIndex, rPolyPoly, bOptimize );
+#endif
 }
 
 // =======================================================================
