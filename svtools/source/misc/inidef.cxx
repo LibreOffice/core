@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inidef.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
-#endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #include "inetdef.hxx"
 #include "inidef.hxx"
