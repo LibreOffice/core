@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:18:46 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,9 +311,16 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 
     pStp->Seek( STREAM_SEEK_TO_BEGIN );
 
+#ifdef DEBUGDUMP
+    SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".pct"));
+    pDbg->Seek(0x200); //Prepend extra 0x200 of zeros to make this a valid PICT
+    sw::hack::DumpStream(*pStp, *pDbg);
+    delete pDbg;
+#endif
+
     // Mac-Pict steht im 03PICT-StorageStream allerdings ohne die ersten 512
     // Bytes, die bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
-    return SwWW8ImplReader::GetPictGrafFromStream( rGraph, *pStp );
+    return SwWW8ImplReader::GetPictGrafFromStream(rGraph, *pStp);
 }
 
 SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
@@ -360,6 +367,8 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     const SfxItemSet* pFlySet)
 {
+    SwFrmFmt* pFmt = 0;
+
     ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
     GrafikCtor();
 
@@ -368,7 +377,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
     // create flyset
     SfxItemSet* pTempSet = 0;
-    if (!pFlySet)
+    if( !pFlySet )
     {
         pTempSet = new SfxItemSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
             RES_FRMATR_END-1);
@@ -398,7 +407,6 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         }
     }
 
-    SwFrmFmt* pFmt = 0;
     if (pRet)       // Ole-Object wurde eingefuegt
     {
         if (pRet->ISA(SdrOle2Obj))
@@ -450,6 +458,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 {
     SdrObject* pRet = 0;
     ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
+
+    ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
     long nX=0, nY=0;                // nX, nY is graphic size
     bool bOleOk = true;
@@ -506,11 +516,15 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
     if (!(bIsHeader || bIsFooter))
     {
+        //Can't put them in headers/footers :-(
         uno::Reference< drawing::XShape > xRef;
-        if (pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
+        ASSERT(pFormImpl, "Impossible");
+        if (pFormImpl && pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
         {
             pRet = GetSdrObjectFromXShape(xRef);
-            pRet->SetLogicRect(aRect);
+            ASSERT(pRet, "Impossible");
+            if (pRet)
+                pRet->SetLogicRect(aRect);
             return pRet;
         }
     }
@@ -531,10 +545,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 pTmpData->Seek( nObjLocFc );
             }
 
-            SvStorageRef xDst0( rDoc.GetDocShell()->GetStorage() );
-
             pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                aSrcStgName, xSrc0, xDst0, rGraph, aRect, pTmpData,
+                aSrcStgName, xSrc0, mxDstStg, rGraph, aRect, pTmpData,
                 SwMSDffManager::GetFilterFlags());
             pDataStream->Seek( nOldPos );
         }
