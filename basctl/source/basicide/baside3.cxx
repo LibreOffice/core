@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:29:40 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,9 +201,11 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog, StarBASIC* 
         Any aElement = xLib->getByName( aOUDlgName );
         Reference< XInputStreamProvider > xISP;
         aElement >>= xISP;
-
-        Reference< XInputStream > xInput( xISP->createInputStream() );
-        ::xmlscript::importDialogModel( xInput, xDialogModel );
+        if( xISP.is() )
+        {
+            Reference< XInputStream > xInput( xISP->createInputStream() );
+            ::xmlscript::importDialogModel( xInput, xDialogModel );
+        }
     }
     else
     {
