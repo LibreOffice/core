@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 11:51:19 $
+#   last change: $Author: hjs $ $Date: 2002-04-22 14:54:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,13 +113,6 @@ DEF1DES 	=StarObjectsTools
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @+echo ------------------------------
     @+echo Making: $@
-    @+echo WEP>$@
-    @+echo LIBMAIN>>$@
-    @+echo LibMain>>$@
-.IF "$(GUI)"!="UNX"
-    @+echo CT??_R0?AV>>$@
-    @+echo CTA2?AV>>$@
-        @+echo CTA3?AV>>$@
-.ENDIF
+    +$(TYPE) sot.flt > $@
 
 .INCLUDE :  target.pmk
