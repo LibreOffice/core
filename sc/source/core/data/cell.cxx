@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:39:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ void ScBaseCell::Delete()
 
 void ScBaseCell::SetNote( const ScPostIt& rNote )
 {
-    if (rNote.GetText().Len() > 0)
+    if (!rNote.IsEmpty())
     {
         if (!pNote)
             pNote = new ScPostIt(rNote);
@@ -237,9 +237,9 @@ ScBaseCell* ScBaseCell::CreateTextCell( const String& rString, ScDocument* pDoc 
         return new ScStringCell( rString );
 }
 
-void ScBaseCell::LoadNote( SvStream& rStream )
+void ScBaseCell::LoadNote( SvStream& rStream, ScDocument* pDoc )
 {
-    pNote = new ScPostIt;
+    pNote = new ScPostIt(pDoc);
     rStream >> *pNote;
 }
 
