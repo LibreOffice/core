@@ -36,7 +36,7 @@
 </Markers>
 <TimeAM>AM</TimeAM>
 <TimePM>PM</TimePM>
-<MeasurementSystem>metric</MeasurementSystem>
+<MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT>
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
@@ -371,9 +371,9 @@
 </Currency>
 </LC_CURRENCY>
 <LC_TRANSLITERATION>
+<Transliteration unoid="LOWERCASE_UPPERCASE"/>
 <Transliteration unoid="UPPERCASE_LOWERCASE"/>
 <Transliteration unoid="IGNORE_CASE"/>
-<Transliteration unoid="LOWERCASE_UPPERCASE" />
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ReservedWords>
@@ -450,7 +450,7 @@
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="27A2"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E006"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E004"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=")" BulletChar="E004"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
