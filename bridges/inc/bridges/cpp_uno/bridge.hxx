@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:38:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ inline void SAL_CALL cppu_cppInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
     ::typelib_typedescription_release( (typelib_TypeDescription *)pThis->pTypeDescr );
     pThis->pBridge->release();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
@@ -209,7 +209,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
     ::typelib_typedescription_release( (typelib_TypeDescription *)pThis->pTypeDescr );
     pThis->pBridge->release();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
@@ -221,7 +221,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) SAL
     {
         // rebirth of proxy zombie
         // register at uno env
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         void * pThis = pUnoI;
 #endif
         (*static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pBridge->pUnoEnv->registerProxyInterface)(
@@ -230,7 +230,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) SAL
             (uno_freeProxyFunc)cppu_unoInterfaceProxy_free,
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->oid.pData,
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pTypeDescr );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OSL_ASSERT( pThis == pUnoI );
 #endif
     }
