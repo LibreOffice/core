@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 08:52:39 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 16:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,6 +820,22 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
 
     if ( pFrame != pViewFrame )
     {
+        if ( !pFrame && !bDowning )
+        {
+            // activate any frame to avoid CurrentViewFrame == NULL
+            SfxFrameArr_Impl& rArr = *pAppData_Impl->pTopFrames;
+            for( sal_uInt16 nPos = rArr.Count(); nPos--; )
+            {
+                SfxFrame* pCurFrame = rArr[ nPos ];
+                SfxViewFrame* pView = pCurFrame->GetCurrentViewFrame();
+                if ( pView && pView != pViewFrame )
+                {
+                    pFrame = pView;
+                    break;
+                }
+            }
+        }
+
         SfxInPlaceFrame *pOld = PTR_CAST( SfxInPlaceFrame, pViewFrame );
         SfxInPlaceFrame *pNew = PTR_CAST( SfxInPlaceFrame, pFrame );
         FASTBOOL bTaskActivate = !pNew;
