@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-03-02 12:47:06 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
                     sBuffer.append( " this="                        );
                     sBuffer.append( (sal_Int32)(this)               );
                     sBuffer.append( " )\n"                          );
-                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );
+                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
                     m_pMutex->acquire();
                 }
 
@@ -128,7 +128,7 @@
                 sBuffer.append( " this="                    );
                 sBuffer.append( (sal_Int32)(this)           );
                 sBuffer.append( " )\n"                      );
-                WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );
+                WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
             }
 
             dbgGuard( ::osl::Mutex& rMutex, const char* sMethod )
@@ -145,7 +145,7 @@
                     sBuffer.append( " this="                        );
                     sBuffer.append( (sal_Int32)(this)               );
                     sBuffer.append( " )\n"                          );
-                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );
+                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
                     m_pMutex->acquire();
                 }
 
@@ -156,7 +156,7 @@
                 sBuffer.append( " this="                    );
                 sBuffer.append( (sal_Int32)(this)           );
                 sBuffer.append( " )\n"                      );
-                WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );
+                WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
             }
 
             inline ~dbgGuard()
@@ -178,7 +178,7 @@
                     sBuffer.append( " this="                );
                     sBuffer.append( (sal_Int32)(this)       );
                     sBuffer.append( " )\n"                  );
-                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );
+                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
 
                     m_pMutex = NULL;
                 }
@@ -209,7 +209,7 @@
 //                      sBuffer.append( "mutex aquire block at \""  );                                          \
 //                      sBuffer.append( SMETHOD                     );                                          \
 //                      sBuffer.append( "\" ...\n"                  );                                          \
-//                      WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );                  \
+//                      WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                           \
 //                  }                                                                                           \
 //                  else                                                                                        \
 //                  {   /* Don't forget to release successfull aquired mutex again! */                          \
@@ -224,7 +224,7 @@
 //                  sBuffer.append( "mutex successfull aquired at \""   );                                      \
 //                  sBuffer.append( SMETHOD                             );                                      \
 //                  sBuffer.append( "\" ....\n"                         );                                      \
-//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );                      \
+//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                               \
 //              }
 
     /*_____________________________________________________________________________________________________________
@@ -248,7 +248,7 @@
 //                      sBuffer.append( "\tAttention:\tglobal mutex aquire block at \"" );                      \
 //                      sBuffer.append( SMETHOD                                         );                      \
 //                      sBuffer.append( "\" ...\n"                                      );                      \
-//                      WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );                  \
+//                      WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                           \
 //                  }                                                                                           \
 //                  else                                                                                        \
 //                  {   /* Don't forget to release successfull aquired mutex again! */                          \
@@ -263,7 +263,7 @@
 //                  sBuffer.append( "global mutex successfull aquired at \"");                                  \
 //                  sBuffer.append( SMETHOD                                 );                                  \
 //                  sBuffer.append( "\" ....\n"                             );                                  \
-//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );                      \
+//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                               \
 //              }
 
     /*_____________________________________________________________________________________________________________
@@ -283,7 +283,7 @@
 //                  sBuffer.append( "mutex cleared at \""   );                                                  \
 //                  sBuffer.append( SMETHOD                 );                                                  \
 //                  sBuffer.append( "\" sucessful ...\n"    );                                                  \
-//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear().getStr() );                      \
+//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                               \
 //              }
 
 #else   // #ifdef ENABLE_MUTEXDEBUG

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registration.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
                     ::rtl::OStringBuffer sOut( 1024 );                                                          \
                     sOut.append( "component_writeInfo():" );                                                    \
                     sOut.append( SINFOTEXT                );                                                    \
-                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear().getStr() )                   \
+                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )                            \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -112,7 +112,7 @@
                     ::rtl::OStringBuffer sOut( 1024 );                                                          \
                     sOut.append( "component_getFactory():" );                                                   \
                     sOut.append( SINFOTEXT                 );                                                   \
-                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear().getStr() )                   \
+                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )                            \
                 }
 
 #else   // #ifdef ENABLE_REGISTRATIONDEBUG

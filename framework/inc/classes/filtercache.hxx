@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-04-05 13:26:56 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,13 @@
 #include <rtl/ustring>
 #endif
 
+#define ENABLE_GENERATEFILTERCACHE
+#ifdef ENABLE_GENERATEFILTERCACHE
+    #ifndef _RTL_USTRBUF_HXX_
+    #include <rtl/ustrbuf.hxx>
+    #endif
+#endif
+
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -189,6 +196,19 @@ class StringList : public ::std::vector< ::rtl::OUString >
         }
 };
 
+class StringHash : public ::std::hash_map<  ::rtl::OUString                     ,
+                                            ::rtl::OUString                     ,
+                                            StringHashFunction                  ,
+                                            ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
+
 //*****************************************************************************************************************
 // These struct define a type, which present the type of a file.
 // He is used for easy filter detection without file stream detection!
@@ -214,13 +234,12 @@ struct FileType
 
         inline void impl_clear()
         {
-            bPreferred          = sal_False                                         ;
-            sName               = ::rtl::OUString()                                 ;
-            sUIName             = ::rtl::OUString()                                 ;
-            lUINames            = css::uno::Sequence< css::beans::PropertyValue >() ;
-            sMediaType          = ::rtl::OUString()                                 ;
-            sClipboardFormat    = ::rtl::OUString()                                 ;
-            nDocumentIconID     = 0                                                 ;
+            bPreferred          = sal_False         ;
+            sName               = ::rtl::OUString() ;
+            sMediaType          = ::rtl::OUString() ;
+            sClipboardFormat    = ::rtl::OUString() ;
+            nDocumentIconID     = 0                 ;
+            lUINames.free   ();
             lURLPattern.free();
             lExtensions.free();
         }
@@ -229,7 +248,6 @@ struct FileType
         {
             bPreferred          = rCopy.bPreferred      ;
             sName               = rCopy.sName           ;
-            sUIName             = rCopy.sUIName         ;
             lUINames            = rCopy.lUINames        ;
             sMediaType          = rCopy.sMediaType      ;
             sClipboardFormat    = rCopy.sClipboardFormat;
@@ -244,15 +262,14 @@ struct FileType
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        sal_Bool                                        bPreferred          ;
-        ::rtl::OUString                                 sName               ;
-        ::rtl::OUString                                 sUIName             ;
-        css::uno::Sequence< css::beans::PropertyValue > lUINames            ;
-        ::rtl::OUString                                 sMediaType          ;
-        ::rtl::OUString                                 sClipboardFormat    ;
-        sal_Int32                                       nDocumentIconID     ;
-        StringList                                      lURLPattern         ;
-        StringList                                      lExtensions         ;
+        sal_Bool            bPreferred          ;
+        ::rtl::OUString     sName               ;
+        StringHash          lUINames            ;
+        ::rtl::OUString     sMediaType          ;
+        ::rtl::OUString     sClipboardFormat    ;
+        sal_Int32           nDocumentIconID     ;
+        StringList          lURLPattern         ;
+        StringList          lExtensions         ;
 };
 
 //*****************************************************************************************************************
@@ -283,21 +300,19 @@ struct Filter
         {
             sName               = ::rtl::OUString()                                 ;
             sType               = ::rtl::OUString()                                 ;
-            sUIName             = ::rtl::OUString()                                 ;
-            lUINames            = css::uno::Sequence< css::beans::PropertyValue >() ;
             sDocumentService    = ::rtl::OUString()                                 ;
             sFilterService      = ::rtl::OUString()                                 ;
             nFlags              = 0                                                 ;
             nFileFormatVersion  = 0                                                 ;
             sTemplateName       = ::rtl::OUString()                                 ;
-            lUserData.free();
+            lUINames.free   ();
+            lUserData.free  ();
         }
 
         inline Filter& impl_copy( const Filter& rCopy )
         {
             sName               = rCopy.sName               ;
             sType               = rCopy.sType               ;
-            sUIName             = rCopy.sUIName             ;
             lUINames            = rCopy.lUINames            ;
             sDocumentService    = rCopy.sDocumentService    ;
             sFilterService      = rCopy.sFilterService      ;
@@ -313,16 +328,15 @@ struct Filter
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        ::rtl::OUString                                     sName               ;
-        ::rtl::OUString                                     sType               ;
-        ::rtl::OUString                                     sUIName             ;
-        css::uno::Sequence< css::beans::PropertyValue >     lUINames            ;
-        ::rtl::OUString                                     sDocumentService    ;
-        ::rtl::OUString                                     sFilterService      ;
-        sal_Int32                                           nFlags              ;
-        StringList                                          lUserData           ;
-        sal_Int32                                           nFileFormatVersion  ;
-        ::rtl::OUString                                     sTemplateName       ;
+        ::rtl::OUString     sName               ;
+        ::rtl::OUString     sType               ;
+        StringHash          lUINames            ;
+        ::rtl::OUString     sDocumentService    ;
+        ::rtl::OUString     sFilterService      ;
+        sal_Int32           nFlags              ;
+        StringList          lUserData           ;
+        sal_Int32           nFileFormatVersion  ;
+        ::rtl::OUString     sTemplateName       ;
 };
 
 //*****************************************************************************************************************
@@ -395,16 +409,14 @@ struct Loader
 
         inline void impl_clear()
         {
-            sName       = ::rtl::OUString()                                 ;
-            sUIName     = ::rtl::OUString()                                 ;
-            lUINames    = css::uno::Sequence< css::beans::PropertyValue >() ;
-            lTypes.free();
+            sName = ::rtl::OUString();
+            lUINames.free   ();
+            lTypes.free     ();
         }
 
         inline Loader& impl_copy( const Loader& rCopy )
         {
             sName       = rCopy.sName       ;
-            sUIName     = rCopy.sUIName     ;
             lUINames    = rCopy.lUINames    ;
             lTypes      = rCopy.lTypes      ;
             return (*this);
@@ -415,10 +427,9 @@ struct Loader
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        ::rtl::OUString                                 sName           ;
-        ::rtl::OUString                                 sUIName         ;
-        css::uno::Sequence< css::beans::PropertyValue > lUINames        ;
-        StringList                                      lTypes          ;
+        ::rtl::OUString sName       ;
+        StringHash      lUINames    ;
+        StringList      lTypes      ;
 };
 
 //*****************************************************************************************************************
@@ -495,24 +506,14 @@ class PerformanceHash   :   public  ::std::hash_map<    ::rtl::OUString         
         }
 };
 
-class PreferredHash     :   public  ::std::hash_map<    ::rtl::OUString                     ,
-                                                        ::rtl::OUString                     ,
-                                                        StringHashFunction                  ,
-                                                        ::std::equal_to< ::rtl::OUString >  >
-{
-    public:
-        void free()
-        {
-            erase( begin(), end() );
-            clear();
-        }
-};
+typedef StringHash  PreferredHash;
 
 //*****************************************************************************************************************
 // Defines "pointers" to items of our hash maps.
 //*****************************************************************************************************************
-typedef StringList::iterator                                        StringIterator              ;
-typedef StringList::const_iterator                                  ConstStringIterator         ;
+typedef StringList::iterator                                        StringListIterator          ;
+typedef StringList::const_iterator                                  ConstStringListIterator     ;
+typedef StringHash::const_iterator                                  ConstStringHashIterator     ;
 typedef FileTypeHash::const_iterator                                ConstTypeIterator           ;
 typedef FilterHash::const_iterator                                  ConstFilterIterator         ;
 typedef DetectorHash::const_iterator                                ConstDetectorIterator       ;
@@ -810,6 +811,8 @@ class FilterCache   :   private FairRWLockBase
         static void impl_convertLoaderToPropertySequence    (   const   Loader&                                             aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
         static void impl_convertDetectorToPropertySequence  (   const   Detector&                                           aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
         static void impl_convertPropertySequenceToFilter    (   const   css::uno::Sequence< css::beans::PropertyValue >&    lSource,    Filter&                                             aDestination    );
+        static void impl_convertStringHashToSequence        (   const   StringHash&                                         lSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void impl_convertSequenceToStringHash        (   const   css::uno::Sequence< css::beans::PropertyValue >&    lSource,    StringHash&                                         lDestination    );
 
         /*-****************************************************************************************************//**
             @short      extract extension from given URL
@@ -826,23 +829,62 @@ class FilterCache   :   private FairRWLockBase
         static ::rtl::OUString impl_extractURLExtension( const ::rtl::OUString& sURL );
 
         /*-****************************************************************************************************//**
-            @short      eliminate "*." from every extension
-            @descr      Our configuration save extensions as "*.nnn" everytime. But this isn't a realy effective method
-                        to search for mathcing with a given URL. That's why we eleminate this obsolete letters from every
-                        saved extension in our internal cache. Now a normal compare is enough!
+            @short      filter all "*." from an extension
+            @descr      We search for extensions without wildcards at runtime!
+                        Our configuration contains sometimes extensions WITH wildcards ..
+                        We should correct it at runtime.
 
-            @ATTENTION  impl_extractURLExtension() must return strings with same format!
-
-            @seealso    method impl_extractURLExtensions()
             @seealso    search methods
 
-            @param      "lExtension", string vector with extensions to convert
-            @return     Parameter "lExtensions" is an in/out parameter!
+            @param      "lExtensions", list of extensions to correct
+            @return     -
 
             @onerror    No error should occure.
         *//*-*****************************************************************************************************/
 
-//obsolete      static void impl_correctExtensions( StringList& lExtensions );
+        static void impl_correctExtensions( StringList& lExtensions );
+
+        /*-****************************************************************************************************//**
+            @short      extract localized strings from given configuration item or reverse
+            @descr      It exist to methods to get a localized value from our configuration.
+                        a) cfg returns one value for current set locale
+                        b) cfg returns a list of values for all possible locales
+                        These method detect it and fills our internal "localelized" hash automaticly or
+                        convert internal structures to external ones.
+
+            @seealso    baseclass ConfigItem
+            @seealso    method impl_setLocalelizedString()
+            @seealso    method impl_getLocalelizedString()
+
+            @param      "pLocale"   , is used by a) only to insert value at right hash position
+            @param      "aCFGValue" , contains a) [OUString] ... or b) [Sequence< PropertyValue >]
+            @param      "lLocales"  , internal description of localized values!
+            @return     List of sorted locales with values.
+
+            @onerror    No error should occure.
+        *//*-*****************************************************************************************************/
+
+        static void impl_extractLocalizedStrings( const ::rtl::OUString* pCurrentLocale, const  css::uno::Any& aCFGValue,       StringHash& lLocales );
+        static void impl_packLocalizedStrings   ( const ::rtl::OUString* pCurrentLocale,        css::uno::Any& aCFGValue, const StringHash& lLocales );
+
+        /*-****************************************************************************************************//**
+            @short      return right value from list of all localized ones
+            @descr      We hold a list of all e.g. UINames for every set item.
+                        If user whish to get current UIName for current set locale ... you can call
+                        this method to get this information.
+
+            @seealso    method impl_extractLocalizedStrings()
+
+            @param      "lLocales"  , list of all localized values
+            @param      "sLocale"   , current set locale
+            @param      "sValue"    , new localized value to set in list for current locale
+            @return     Matching UIName for current locale from list.
+
+            @onerror    No error should occure.
+        *//*-*****************************************************************************************************/
+
+        static ::rtl::OUString  impl_getLocalelizedString(  const   StringHash& lLocales,   const   ::rtl::OUString*    pLocale                                         );
+        static void             impl_setLocalelizedString(          StringHash& lLocales,   const   ::rtl::OUString*    pLocale,    const   ::rtl::OUString&    sValue  );
 
         /*-****************************************************************************************************//**
             @short      fill our cache with values from configuration
@@ -969,13 +1011,6 @@ class FilterCache   :   private FairRWLockBase
             @descr      The stl vector is not suitable enough to show informations about his current content.
                         To get a overview you can call this special debug method. It will log all important informations
                         to a file on disk.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_FILTERCACHEDEBUG
@@ -983,6 +1018,8 @@ class FilterCache   :   private FairRWLockBase
     public:
 
         void impldbg_generateHTMLView           ();
+
+    private:
 
         void impl_generateTypeListHTML          ();
         void impl_generateFilterListHTML        ();
@@ -997,6 +1034,78 @@ class FilterCache   :   private FairRWLockBase
         void impl_generateDefaultFiltersHTML    ();
 
     #endif  //  #ifdef ENABLE_FILTERCACHEDEBUG
+
+        /*-****************************************************************************************************//**
+            @short      special methods to support comfortable changing of our configuration files
+            @descr      We need a configuration file written in xml-format ... but we must generate it as an xcd file
+                        and compile it to xml target format.
+        *//*-*****************************************************************************************************/
+
+    #ifdef ENABLE_GENERATEFILTERCACHE
+
+    public:
+
+        void    impldbg_generateXCD             (   const   sal_Char*                   sFileName                           ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+
+    private:
+
+        void    impl_generateCopyright          (           ::rtl::OUStringBuffer&      sXCD                                );
+        void    impl_generateTypeTemplate       (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                            sal_Bool                    bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateFilterTemplate     (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateDetectorTemplate   (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                            sal_Bool                    bWriteable                          ,
+                                                            sal_Unicode                 cSeparator                          );
+        void    impl_generateLoaderTemplate     (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateFilterFlagTemplate (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                       const    ::rtl::OUString&            sName                               ,
+                                                               sal_Int32                    nValue                              ,
+                                                       const    ::rtl::OString&             sDescription = ::rtl::OString()     );
+        void    impl_generateTypeSet            (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                            sal_Bool                    bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateFilterSet          (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateDetectorSet        (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateLoaderSet          (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateDefaults           (           ::rtl::OUStringBuffer&      sXCD                                );
+        void    impl_generateIntProperty        (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                    const   ::rtl::OUString&            sName                               ,
+                                                               sal_Int32                    nValue                              ,
+                                                               sal_Bool                 bWriteable                          );
+        void    impl_generateBoolProperty       (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                    const   ::rtl::OUString&            sName                               ,
+                                                               sal_Bool                 bValue                              ,
+                                                               sal_Bool                 bWriteable                          );
+        void    impl_generateStringProperty     (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                       const    ::rtl::OUString&            sName                               ,
+                                                       const    ::rtl::OUString&            sValue                              ,
+                                                               sal_Bool                 bWriteable                          );
+        void    impl_generateStringListProperty (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                       const    ::rtl::OUString&            sName                               ,
+                                                       const    StringList&                 lValue                              ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        void    impl_generateUINamesProperty    (           ::rtl::OUStringBuffer&      sXCD                                ,
+                                                       const    ::rtl::OUString&            sName                               ,
+                                                       const    StringHash&                 lUINames                            ,
+                                                               sal_Bool                 bWriteable                          ,
+                                                               sal_Unicode                  cSeparator                          );
+        ::rtl::OUString impl_filterSpecialSigns (   const   ::rtl::OUString&            sValue                              );
+
+    #endif  //  #ifdef ENABLE_GENERATEFILTERCACHE
 
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
@@ -1015,6 +1124,7 @@ class FilterCache   :   private FairRWLockBase
         static PreferredHash*           m_pPreferredTypesCache  ;
         static Detector*                m_pDefaultDetector      ;
         static Loader*                  m_pGenericLoader        ;
+        static ::rtl::OUString*         m_pLocale               ;
 
 };      //  class FilterCache
 

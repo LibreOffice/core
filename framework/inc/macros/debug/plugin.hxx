@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-12-19 10:12:24 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@
                     sBuffer.append( "\", externalURL=\"");                                                  \
                     sBuffer.append( U2B( SEXTERNALURL ) );                                                  \
                     sBuffer.append( "\" ) to browser.\n");                                                  \
-                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear().getStr() )                  \
+                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear() )                           \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -138,7 +138,7 @@
                     sBuffer.append( "\", internalURL=\""    );                                              \
                     sBuffer.append( U2B( SINTERNALURL )     );                                              \
                     sBuffer.append( "\" ) from browser.\n"  );                                              \
-                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear().getStr() )                  \
+                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear() )                           \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -169,7 +169,7 @@
                         sBuffer.append( "empty Any )"   );                                                  \
                     }                                                                                       \
                     sBuffer.append( "\n"    );                                                              \
-                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear().getStr() )                  \
+                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear() )                           \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -212,7 +212,7 @@
                         sBuffer.append( "empty Any )"   );                                                  \
                     }                                                                                       \
                     sBuffer.append( "\n"    );                                                              \
-                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear().getStr() )                  \
+                    WRITE_LOGFILE( LOGFILE_PLUGIN, sBuffer.makeStringAndClear() )                           \
                 }
 
 #else   // #ifdef ENABLE_PLUGINDEBUG

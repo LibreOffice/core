@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:17 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,9 +330,6 @@ void TestApplication::Main()
     LOG_ASSERT( !(m_xFactory.is()           ==sal_False ), "TestApplication::Main()\nCan't create global service manager.\n\n"          )
     LOG_ASSERT( !(getProcessServiceFactory()!=m_xFactory), "TestApplication::Main()\nGlobal servicemanager not set in UNOTOOLS.\n\n"    )
 
-    // For some follow operations, we need the vcl-toolkit!
-    InitExtVclToolkit();
-
     /**-***********************************************************************************************************
         test area
     **************************************************************************************************************/
@@ -488,7 +485,7 @@ void TestApplication::impl_testTypeDetection()
         }
     }
 
-    WRITE_LOGFILE( "testTypeDetection.log", U2B(sBuffer.makeStringAndClear()).getStr() )
+    WRITE_LOGFILE( "testTypeDetection.log", U2B(sBuffer.makeStringAndClear()) )
 }
 #endif
 
@@ -567,7 +564,7 @@ void TestApplication::impl_testFilterCache()
         }
     }
 
-    WRITE_LOGFILE( "test_FilterCache.log", U2B(sBuffer.makeStringAndClear()).getStr() )
+    WRITE_LOGFILE( "test_FilterCache.log", U2B(sBuffer.makeStringAndClear()) )
 }
 #endif
 
@@ -593,27 +590,27 @@ void TestApplication::impl_testLoginDialog()
     UniString sExternalURL = OUString();
 
     OString sOut = "internal: ";
-    sOut += OUStringToOString( sInternalURL, RTL_TEXTENCODING_UTF8 ).getStr();
+    sOut += OUStringToOString( sInternalURL, RTL_TEXTENCODING_UTF8 );
     sOut += "\nexternal: ";
-    sOut += OUStringToOString( sExternalURL, RTL_TEXTENCODING_UTF8 ).getStr();
+    sOut += OUStringToOString( sExternalURL, RTL_TEXTENCODING_UTF8 );
     sOut += "\n";
-    LOG_ASSERT( sal_False, sOut.getStr() )
+    LOG_ASSERT( sal_False, sOut )
 
     INetURLObject::translateToExternal( sInternalURL, sExternalURL );
     sOut = "internal: ";
-    sOut += OUStringToOString( sInternalURL, RTL_TEXTENCODING_UTF8 ).getStr();
+    sOut += OUStringToOString( sInternalURL, RTL_TEXTENCODING_UTF8 );
     sOut += "\nexternal: ";
-    sOut += OUStringToOString( sExternalURL, RTL_TEXTENCODING_UTF8 ).getStr();
+    sOut += OUStringToOString( sExternalURL, RTL_TEXTENCODING_UTF8 );
     sOut += "\n";
-    LOG_ASSERT( sal_False, sOut.getStr() )
+    LOG_ASSERT( sal_False, sOut )
 
     INetURLObject::translateToInternal( sExternalURL, sInternalURL );
     sOut = "internal: ";
-    sOut += OUStringToOString( sInternalURL, RTL_TEXTENCODING_UTF8 ).getStr();
+    sOut += OUStringToOString( sInternalURL, RTL_TEXTENCODING_UTF8 );
     sOut += "\nexternal: ";
-    sOut += OUStringToOString( sExternalURL, RTL_TEXTENCODING_UTF8 ).getStr();
+    sOut += OUStringToOString( sExternalURL, RTL_TEXTENCODING_UTF8 );
     sOut += "\n";
-    LOG_ASSERT( sal_False, sOut.getStr() )
+    LOG_ASSERT( sal_False, sOut )
 
     // Work with properties of dialog.
     Reference< XPropertySet > xPropertySet( xDialog, UNO_QUERY );
@@ -670,11 +667,11 @@ void TestApplication::impl_testLoginDialog()
     xPropertySet->getPropertyValue( DECLARE_ASCII("ConnectionType"  ) ) >>= sConnectionType ;
     xPropertySet->getPropertyValue( sConnectionType ) >>= nPort ;
 
-    LOG_ASSERT( sal_False, OUStringToOString( sUserName, RTL_TEXTENCODING_UTF8 ).getStr() )
-    LOG_ASSERT( sal_False, OUStringToOString( sPassword, RTL_TEXTENCODING_UTF8 ).getStr() )
-    LOG_ASSERT( sal_False, OUStringToOString( sServer  , RTL_TEXTENCODING_UTF8 ).getStr() )
-    LOG_ASSERT( sal_False, OUStringToOString( sConnectionType  , RTL_TEXTENCODING_UTF8 ).getStr() )
-    LOG_ASSERT( sal_False, OString::valueOf( (sal_Int32)nPort ).getStr() )
+    LOG_ASSERT( sal_False, OUStringToOString( sUserName, RTL_TEXTENCODING_UTF8 ) )
+    LOG_ASSERT( sal_False, OUStringToOString( sPassword, RTL_TEXTENCODING_UTF8 ) )
+    LOG_ASSERT( sal_False, OUStringToOString( sServer  , RTL_TEXTENCODING_UTF8 ) )
+    LOG_ASSERT( sal_False, OUStringToOString( sConnectionType  , RTL_TEXTENCODING_UTF8 ) )
+    LOG_ASSERT( sal_False, OString::valueOf( (sal_Int32)nPort ) )
 }
 #endif
 
@@ -1137,7 +1134,7 @@ void TestApplication::impl_logTree( const Reference< XDesktop >& xDesktop )
     // And write it to logfile.
     OString sOutPut = OUStringToOString( sTreeNamesStream, RTL_TEXTENCODING_UTF8 );
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "\nNew tree log:\n\n"  );
-//  WRITE_LOGFILE( LOGFILENAME_TREE, sOutPut.getStr()           );
+//  WRITE_LOGFILE( LOGFILENAME_TREE, sOutPut            );
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "\n"                       );
 #endif
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generic.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-12-12 10:14:24 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 _________________________________________________________________________________________________________________*/
 
 #define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ))
+    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
 
 /*_________________________________________________________________________________________________________________
     U2B( SUNICODEVALUE )

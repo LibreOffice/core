@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assertion.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 14:30:52 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,13 +113,13 @@
         #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                                                       \
                     if ( ( BCONDITION ) == sal_True )                                                           \
                     {                                                                                           \
-                        ::rtl::OStringBuffer sBuffer( 256 );                                                    \
-                        sBuffer.append( "ASSERT:\n\t"   );                                                      \
-                        sBuffer.append( SMETHOD         );                                                      \
-                        sBuffer.append( "\n\t\""        );                                                      \
-                        sBuffer.append( STEXT           );                                                      \
-                        sBuffer.append( "\"\n"          );                                                      \
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, sBuffer.makeStringAndClear().getStr() )              \
+                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
+                        _sAssertBuffer.append( SMETHOD          );                                              \
+                        _sAssertBuffer.append( "\n\t\""         );                                              \
+                        _sAssertBuffer.append( STEXT            );                                              \
+                        _sAssertBuffer.append( "\"\n"           );                                              \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )                \
                     }
 
     #endif
@@ -143,13 +143,13 @@
         #define LOG_ASSERT2( BCONDITION, SMETHODE, STEXT )                                                      \
                     if ( ( BCONDITION ) == sal_True )                                                           \
                     {                                                                                           \
-                        ::rtl::OStringBuffer sBuffer( 256 );                                                    \
-                        sBuffer.append( "ASSERT:\n\t"   );                                                      \
-                        sBuffer.append( SMETHOD         );                                                      \
-                        sBuffer.append( "\n\t\""        );                                                      \
-                        sBuffer.append( STEXT           );                                                      \
-                        sBuffer.append( "\"\n"          );                                                      \
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, sBuffer.makeStringAndClear().getStr() )              \
+                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
+                        _sAssertBuffer.append( SMETHOD          );                                              \
+                        _sAssertBuffer.append( "\n\t\""         );                                              \
+                        _sAssertBuffer.append( STEXT            );                                              \
+                        _sAssertBuffer.append( "\"\n"           );                                              \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )                \
                         exit(-1);                                                                               \
                     }
 
@@ -169,13 +169,13 @@
 
         #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                                                       \
                     {                                                                                           \
-                        ::rtl::OStringBuffer sBuffer( 256 );                                                    \
-                        sBuffer.append( "ASSERT:\n\t"   );                                                      \
-                        sBuffer.append( SMETHOD         );                                                      \
-                        sBuffer.append( "\n\t\""        );                                                      \
-                        sBuffer.append( STEXT           );                                                      \
-                        sBuffer.append( "\"\n"          );                                                      \
-                        OSL_ENSURE( !( BCONDITION ), sBuffer.makeStringAndClear().getStr() );                   \
+                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
+                        _sAssertBuffer.append( SMETHOD          );                                              \
+                        _sAssertBuffer.append( "\n\t\""         );                                              \
+                        _sAssertBuffer.append( STEXT            );                                              \
+                        _sAssertBuffer.append( "\"\n"           );                                              \
+                        OSL_ENSURE( !( BCONDITION ), _sAssertBuffer.makeStringAndClear() );                     \
                     }
 
     #endif
@@ -198,11 +198,11 @@
 
     #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                            \
                 {                                                                                               \
-                    ::rtl::OStringBuffer sBuffer( 256 );                                                        \
-                    sBuffer.append( SOWNMESSAGE             );                                                  \
-                    sBuffer.append( "\n"                    );                                                  \
-                    sBuffer.append( U2B(SEXCEPTIONMESSAGE)  );                                                  \
-                    LOG_ERROR( SMETHOD, sBuffer.makeStringAndClear().getStr() )                                 \
+                    ::rtl::OStringBuffer _sAssertBuffer( 256 );                                                 \
+                    _sAssertBuffer.append( SOWNMESSAGE              );                                          \
+                    _sAssertBuffer.append( "\n"                     );                                          \
+                    _sAssertBuffer.append( U2B(SEXCEPTIONMESSAGE)   );                                          \
+                    LOG_ERROR( SMETHOD, _sAssertBuffer.makeStringAndClear() )                                   \
                 }
 
 #else   // #ifdef ENABLE_ASSERTIONS

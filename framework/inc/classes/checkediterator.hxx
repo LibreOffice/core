@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:32 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,28 @@ class CheckedIterator
         }
 
         /*-****************************************************************************************************//**
+            @short      set internal states to E_END
+            @descr      Sometimes we need a "walking" check-iterator which is initialized with the END-state!
+                        We need it to return one default value if no other ones exist ...
+
+            @seealso    using in class FilterCache!
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        inline void setEnd()
+        {
+            m_pContainer    = NULL          ;
+            m_eEndState     = E_END         ;
+            m_bReverse      = sal_False     ;
+            m_nForward      = 0             ;
+            m_nBackward     = 0             ;
+        }
+
+        /*-****************************************************************************************************//**
             @short      set internal states to E_AFTEREND
             @descr      Sometimes we need a "walking" check-iterator which is initialized with AFTEREND-state!
                         We need it if we don't have a container but must prevent us against further searching!
@@ -265,7 +287,7 @@ class CheckedIterator
 
         inline sal_Bool isUninitialized()
         {
-            return  ( m_eEndState == E_UNKNOWN );
+            return( m_eEndState == E_UNKNOWN );
         }
 
         /*-****************************************************************************************************//**

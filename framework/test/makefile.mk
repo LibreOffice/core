@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: as $ $Date: 2001-03-29 13:17:17 $
+#   last change: $Author: as $ $Date: 2001-04-11 11:24:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,7 +140,11 @@ APP3TARGET= 	typecfg
 APP3OBJS=		$(SLO)$/typecfg.obj					\
                 $(SLO)$/servicemanager.obj			\
                 $(SLO)$/filtercache.obj				\
-                $(SLO)$/wildcard.obj
+                $(SLO)$/wildcard.obj				\
+                $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/writeguard.obj				\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/resetableguard.obj
 
 APP3STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -151,6 +155,7 @@ APP3STDLIBS=	$(CPPULIB)							\
                 $(SVTOOLLIB)						\
                 $(TKLIB)							\
                 $(COMPHELPERLIB)					\
+                $(UNOTOOLSLIB)						\
                 $(SVLIB)
 
 APP3DEPN=		$(SLO)$/servicemanager.obj			\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: event.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@
                                     break;                                                                                              \
                     }                                                                                                                   \
                     sBuffer.append( " ... event to listener.\n\n" );                                                                    \
-                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear().getStr() )                                          \
+                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear() )                                                   \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -144,7 +144,7 @@
                     sBuffer.append( " ] \""                                 );                                                          \
                     sBuffer.append( U2B( SFRAMENAME )                       );                                                          \
                     sBuffer.append( "\" send dispose event to listener.\n\n");                                                          \
-                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear().getStr() )                                          \
+                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear() )                                                   \
                 }
 
 #else   // #ifdef ENABLE_EVENTDEBUG

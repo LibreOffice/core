@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targeting.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:24 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@
                     sBufferParam.append( "\"\n"                                                 );              \
                     sBufferSteps.append( U2B( SFRAMENAME )                                      );              \
                     sBufferSteps.append( "--"                                                   );              \
-                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBufferParam.makeStringAndClear().getStr() )            \
-                    WRITE_LOGFILE( LOGFILE_TARGETSTEPS, sBufferSteps.makeStringAndClear().getStr() )            \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBufferParam.makeStringAndClear() )                     \
+                    WRITE_LOGFILE( LOGFILE_TARGETSTEPS, sBufferSteps.makeStringAndClear() )                     \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -138,7 +138,7 @@
                     sBuffer.append( "\", "                                                  );                          \
                     sBuffer.append( ::rtl::OString::valueOf( sal_Int32( NSEARCHFLAGS ) )    );                          \
                     sBuffer.append( " )\n"                                                  );                          \
-                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear() )                                  \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -173,7 +173,7 @@
                         }                                                                                               \
                     }                                                                                                   \
                     sBuffer.append( " )\n"                                                  );                          \
-                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear() )                                  \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -196,7 +196,7 @@
                     {                                                                                                   \
                         sBufferParam.append( "return with valid frame.\n"       );                                      \
                         sBufferSteps.append( "OK ["                             );                                      \
-                        sBufferSteps.append( U2B( XFRAME->getName() ).getStr()  );                                      \
+                        sBufferSteps.append( U2B( XFRAME->getName() )           );                                      \
                         sBufferSteps.append( "]\n"                              );                                      \
                     }                                                                                                   \
                     else                                                                                                \
@@ -204,8 +204,8 @@
                         sBufferParam.append( "return with NULL frame!\n");                                              \
                         sBufferSteps.append( "??\n"                     );                                              \
                     }                                                                                                   \
-                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBufferParam.makeStringAndClear().getStr() )                    \
-                    WRITE_LOGFILE( LOGFILE_TARGETSTEPS, sBufferSteps.makeStringAndClear().getStr() )                    \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBufferParam.makeStringAndClear() )                             \
+                    WRITE_LOGFILE( LOGFILE_TARGETSTEPS, sBufferSteps.makeStringAndClear() )                             \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -232,7 +232,7 @@
                         sBuffer.append( "::queryDispatch() return with NULL dispatcher!"    );                          \
                     }                                                                                                   \
                     sBuffer.append( "\n" );                                                                             \
-                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear() )                                  \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -259,7 +259,7 @@
                         sBuffer.append( "::loadComponentFromURL() return with NULL component!"  );                      \
                     }                                                                                                   \
                     sBuffer.append( "\n" );                                                                             \
-                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear().getStr() )                         \
+                    WRITE_LOGFILE( LOGFILE_TARGETPARAM, sBuffer.makeStringAndClear() )                                  \
                 }
 
 #else   // #ifdef ENABLE_TARGETINGDEBUG

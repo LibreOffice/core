@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadtest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:17 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ using namespace ::framework ;
             sLog.append( " ] call setA( "       );                              \
             sLog.append( NA                     );                              \
             sLog.append( " )\n"                 );                              \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_SETA_END( NA, EREASON, NID )                                    \
@@ -186,7 +186,7 @@ using namespace ::framework ;
                 sLog.append( " ] was refused at setA( ");                       \
             sLog.append( NA     );                                              \
             sLog.append( " )\n" );                                              \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_GETA_START( NID )                                               \
@@ -198,7 +198,7 @@ using namespace ::framework ;
             sLog.append( ": Thread[ "           );                              \
             sLog.append( NID                    );                              \
             sLog.append( " ] call getA()\n"     );                              \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_GETA_END( NRETURN, EREASON, NID )                               \
@@ -215,7 +215,7 @@ using namespace ::framework ;
                 sLog.append( " ] was refused at getA() with "   );              \
             sLog.append( NRETURN    );                                          \
             sLog.append( "\n"       );                                          \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_WORKA_START( NA, NID )                                          \
@@ -229,7 +229,7 @@ using namespace ::framework ;
             sLog.append( " ] call workA( "      );                              \
             sLog.append( NA                     );                              \
             sLog.append( " )\n"                 );                              \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_WORKA_END( NRETURN, EREASON, NID )                              \
@@ -246,7 +246,7 @@ using namespace ::framework ;
                 sLog.append( " ] was refused at workA() with "  );              \
             sLog.append( NRETURN    );                                          \
             sLog.append( "\n"       );                                          \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_INITEXCEPTION( SMETHOD, NID )                                   \
@@ -260,7 +260,7 @@ using namespace ::framework ;
             sLog.append( " ] get EInitException from \""    );                  \
             sLog.append( SMETHOD                            );                  \
             sLog.append( "\"\n"                             );                  \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_CLOSEEXCEPTION( SMETHOD, NID )                                  \
@@ -274,7 +274,7 @@ using namespace ::framework ;
             sLog.append( " ] get ECloseException from \""   );                  \
             sLog.append( SMETHOD                            );                  \
             sLog.append( "\"\n"                             );                  \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_INIT( NA, NID )                                                 \
@@ -288,7 +288,7 @@ using namespace ::framework ;
             sLog.append( " ] initialize me with "   );                          \
             sLog.append( NA                         );                          \
             sLog.append( "\n"                       );                          \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
     #define LOG_CLOSE( NID )                                                    \
@@ -300,7 +300,7 @@ using namespace ::framework ;
             sLog.append( ": Thread[ "           );                              \
             sLog.append( NID                    );                              \
             sLog.append( " ] close me\n"        );                              \
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear().getStr() )        \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 #else
     #define LOG_SETA_START( NA, NID )
@@ -460,7 +460,7 @@ void ThreadSafeClass::setA( sal_Int32 nA, sal_Int32 nThreadID   )
 
     // Try to set a write lock ... but look for
     // rejected calls. We must react for.
-    ERefusalReason  eReason;
+    ERejectReason   eReason;
     WriteGuard      aGuard( m_aLock, eReason );
     switch( eReason )
     {
@@ -501,7 +501,7 @@ sal_Int32 ThreadSafeClass::getA( sal_Int32 nThreadID )
     // rejected calls. We must react for.
     // Define a default return value for this case.
     sal_Int32       nReturn = 0;
-    ERefusalReason  eReason;
+    ERejectReason   eReason;
     ReadGuard       aGuard( m_aLock, eReason );
     switch( eReason )
     {
@@ -540,7 +540,7 @@ sal_Int32 ThreadSafeClass::workA(   sal_Int32   nA          ,
     // rejected calls. We must react for.
     // Define a default return value for this case.
     sal_Int32       nReturn = 0;
-    ERefusalReason  eReason;
+    ERejectReason   eReason;
     WriteGuard      aGuard( m_aLock, eReason );
     switch( eReason )
     {
@@ -823,6 +823,6 @@ void TestApplication::Main()
         sBuf.append( "\n"           );
     }
 
-    WRITE_LOGFILE( STATISTICS_FILE, sBuf.makeStringAndClear().getStr() );
+    WRITE_LOGFILE( STATISTICS_FILE, sBuf.makeStringAndClear() );
     LOG_ERROR( "TApplication::Main()", "Test finish successful!" )
 }
