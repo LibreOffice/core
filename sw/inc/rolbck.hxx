@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:59:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,6 @@ public:
     void Add( const SwTxtAttr* pTxtHt, ULONG nNodeIdx,
                 BOOL bNewAttr = TRUE );
     void Add( const SwFmtColl*, ULONG nNodeIdx, BYTE nWhichNd );
-    void Add( const SwFmt*, ULONG nNodeIdx, BYTE nWhichNd );
     void Add( const SwBookmark&, BYTE );
     void Add( const SwFrmFmt& rFmt );
     void Add( const SwFlyFrmFmt&, USHORT& rSetPos );
@@ -426,8 +425,6 @@ class SwRegHistory : public SwClient
     void _MakeSetWhichIds();
 public:
     SwRegHistory( SwHistory* pHst );
-    SwRegHistory( SwTxtNode* pTxtNd, SwTxtAttr* pTxtHt,
-                    USHORT nFlags, SwHistory* pHst );
     SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
                 xub_StrLen nStart, xub_StrLen nEnd, USHORT nFlags,
                 SwHistory* pHst );
