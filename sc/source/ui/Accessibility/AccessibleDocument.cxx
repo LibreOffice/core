@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 16:34:01 $
+ *  last change: $Author: sab $ $Date: 2002-01-23 13:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,17 @@
 #include "unonames.hxx"
 #endif
 
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
+#include <com/sun/star/util/XProtectable.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -175,7 +184,20 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleDocument::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
 {
-    return uno::Reference<XAccessibleStateSet>();
+    uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
+    uno::Reference<XAccessibleStateSet> xParentStates = xParentContext->getAccessibleStateSet();
+    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    if (IsDefunc(xParentStates))
+        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    if (IsEditable(xParentStates))
+        pStateSet->AddState(AccessibleStateType::EDITABLE);
+    pStateSet->AddState(AccessibleStateType::ENABLED);
+    pStateSet->AddState(AccessibleStateType::OPAQUE);
+    if (IsShowing(xParentStates))
+        pStateSet->AddState(AccessibleStateType::SHOWING);
+    if (IsVisible(xParentStates))
+        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    return pStateSet;
 }
 
     //=====  XServiceInfo  ====================================================
@@ -219,5 +241,30 @@ sal_Bool ScAccessibleDocument::HasDrawPages(
         bRet = ::cppu::any2bool( aAny );
     }
     return bRet;
+}
+
+sal_Bool ScAccessibleDocument::IsDefunc(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    return !mxModel.is() || (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+}
+
+sal_Bool ScAccessibleDocument::IsEditable(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    // what is with document protection?
+    return sal_True;
+}
+
+sal_Bool ScAccessibleDocument::IsShowing(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::SHOWING));
+}
+
+sal_Bool ScAccessibleDocument::IsVisible(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 16:33:13 $
+ *  last change: $Author: sab $ $Date: 2002-01-23 13:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,19 @@ private:
     sal_Bool ScAccessibleDocument::HasDrawPages(
                 com::sun::star::uno::Reference
                     <com::sun::star::sheet::XSpreadsheetDocument>& rxDoc);
+
+    sal_Bool IsDefunc(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsEditable(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsShowing(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsVisible(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 };
 
 
