@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 14:05:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #ifndef _SV_LINEINFO_HXX
 #include <lineinfo.hxx>
 #endif
-#pragma hdrstop
+
 
 static Wallpaper ImplBlackWall( COL_BLACK );
 static Wallpaper ImplWhiteWall( COL_LIGHTGRAY );
