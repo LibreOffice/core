@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:19:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ void SaneDlg::InitFields()
                     maReslBox.InsertValue( (long)pDouble[1] );
                 }
                 if( pDouble )
-                    delete pDouble;
+                    delete [] pDouble;
             }
             else
                 maReslBox.Enable( FALSE );
@@ -321,7 +321,7 @@ void SaneDlg::InitFields()
                         pField->SetMax( (long)pDouble[ nValue-1 ] );
                     else
                         pField->SetMax( (long)pDouble[ 1 ] );
-                    delete pDouble;
+                    delete [] pDouble;
                 }
                 switch( i ) {
                     case 0: maMinTopLeft.X() = pField->GetMin();break;
@@ -452,7 +452,34 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
         }
         else if( pButton == &maButtonOption )
         {
-            mrSane.ActivateButtonOption( mnCurrentOption );
+
+            SANE_Value_Type nType = mrSane.GetOptionType( mnCurrentOption );
+            switch( nType )
+            {
+                case SANE_TYPE_BUTTON:
+                    mrSane.ActivateButtonOption( mnCurrentOption );
+                    break;
+                case SANE_TYPE_FIXED:
+                case SANE_TYPE_INT:
+                {
+                    int nElements = mrSane.GetOptionElements( mnCurrentOption );
+                    double* x = new double[ nElements ];
+                    double* y = new double[ nElements ];
+                    for( int i = 0; i < nElements; i++ )
+                        x[ i ] = (double)i;
+                    mrSane.GetOptionValue( mnCurrentOption, y );
+
+                    GridWindow aGrid( x, y, nElements, this );
+                    aGrid.SetText( mrSane.GetOptionName( mnCurrentOption ) );
+                    aGrid.setBoundings( 0, mfMin, nElements, mfMax );
+                    if( aGrid.Execute() && aGrid.getNewYValues() )
+                        mrSane.SetOptionValue( mnCurrentOption, aGrid.getNewYValues() );
+
+                    delete [] x;
+                    delete [] y;
+                }
+                break;
+            }
         }
         else if( pButton == &maAdvancedBox )
         {
@@ -534,6 +561,7 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
                 case SANE_TYPE_INT:
                 {
                     nConstraint = mrSane.GetOptionConstraintType( mnCurrentOption );
+                    int nElements = mrSane.GetOptionElements( mnCurrentOption );
                     mnCurrentElement = 0;
                     if( nConstraint == SANE_CONSTRAINT_RANGE ||
                         nConstraint == SANE_CONSTRAINT_WORD_LIST )
@@ -543,7 +571,6 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
                         mfMin = mfMax = 0.0;
                         EstablishNumericOption();
                     }
-                    int nElements = mrSane.GetOptionElements( mnCurrentOption );
                     if( nElements > 1 )
                     {
                         if( nElements <= 10 )
@@ -557,20 +584,9 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
                         }
                         else
                         {
-                            double* x = new double[ nElements ];
-                            double* y = new double[ nElements ];
-                            for( int i = 0; i < nElements; i++ )
-                            {
-                                x[ i ] = (double)i;
-                                mrSane.GetOptionValue( mnCurrentOption, x[i], i );
-                            }
-                            GridWindow aGrid( x, y, nElements, this );
-                            aGrid.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-                            aGrid.setBoundings( 0, mfMin, nElements, mfMax );
-                            aGrid.Execute();
-
-                            delete x;
-                            delete y;
+                            DisableOption();
+                            // bring up dialog only on button click
+                            EstablishButtonOption();
                         }
                     }
                 }
@@ -687,7 +703,11 @@ IMPL_LINK( SaneDlg, ReloadSaneOptionsHdl, Sane*, pSane )
      mnCurrentOption = -1;
      mnCurrentElement = 0;
      DisableOption();
+    // #92024# preserve preview rect, should only be set
+    // initially or in AcquirePreview
+    Rectangle aPreviewRect = maPreviewRect;
     InitFields();
+    maPreviewRect = aPreviewRect;
     Rectangle aDummyRect( Point( 0, 0 ), GetSizePixel() );
     Paint( aDummyRect );
     return 0;
@@ -839,7 +859,7 @@ void SaneDlg::EstablishQuantumRange()
 {
     if( mpRange )
     {
-        delete mpRange;
+        delete [] mpRange;
         mpRange = 0;
     }
     int nValues = mrSane.GetRange( mnCurrentOption, mpRange );
@@ -847,7 +867,7 @@ void SaneDlg::EstablishQuantumRange()
     {
         mfMin = mpRange[ 0 ];
         mfMax = mpRange[ 1 ];
-        delete mpRange;
+        delete [] mpRange;
         mpRange = 0;
         EstablishNumericOption();
     }
@@ -1410,7 +1430,7 @@ BOOL SaneDlg::SetAdjustedNumericalValue(
         if( fValue > pValues[1] )
             fValue = pValues[1];
     }
-    delete pValues;
+    delete [] pValues;
     mrSane.SetOptionValue( nOption, fValue, nElement );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "yields %lg\n", fValue );
