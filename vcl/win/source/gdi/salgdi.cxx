@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:06:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,12 @@ void ImplRenderPath( HDC hdc, ULONG nPoints, const SalPoint* pPtAry, const BYTE*
 WinSalGraphics::WinSalGraphics()
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
+    {
         mhFonts[ i ] = 0;
+        mpWinFontData[ i ]  = NULL;
+        mpWinFontEntry[ i ] = NULL;
+    }
+
     mhDC                = 0;
     mhPen               = 0;
     mhBrush             = 0;
