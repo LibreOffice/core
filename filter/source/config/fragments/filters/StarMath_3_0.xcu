@@ -9,5 +9,5 @@
         <prop oor:name="UIName">
             <value xml:lang="en-US">StarMath 3.0</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT OWN ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="Flags"><value>IMPORT OWN ALIEN 3RDPARTYFILTER</value></prop>
     </node>
