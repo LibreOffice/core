@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2005-02-02 14:00:36 $
+ *  last change:$Date: 2005-02-24 17:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,25 +167,23 @@ public class utils {
 
    public static String getFullURL( String sDocName ) {
         String fullDocPath = sDocName;
-//        System.out.println("##### getFullURL (in): "+sDocName);
+        fullDocPath = fullDocPath.replace('\\','/');
+
         if (fullDocPath.startsWith("http:")) {
-            return fullDocPath;
-        }
-        if (fullDocPath.startsWith("file:")) {
             return fullDocPath;
         }
         if (fullDocPath.startsWith("ftp:")) {
             return fullDocPath;
         }
-        fullDocPath = fullDocPath.replace('\\','/');
         String prefix = "";
-        if (fullDocPath.startsWith("//")) {
-            prefix="file:";
-        } else {
-            if (fullDocPath.startsWith("/")) prefix="file://";
-                                    else prefix="file:///";
+        if (! fullDocPath.startsWith("file:///")){
+            if (fullDocPath.startsWith("//")) {
+                prefix="file:";
+            } else {
+                if (fullDocPath.startsWith("/")) prefix="file://";
+                                        else prefix="file:///";
+            }
         }
-
         if (!fullDocPath.endsWith("/")) {
             File aFile = new File(fullDocPath);
             if (aFile.isDirectory()) {
@@ -193,7 +191,7 @@ public class utils {
             }
         }
         String fulldocURL = prefix+fullDocPath;
-//        System.out.println("##### getFullURL (out): "+fulldocURL);
+
         return fulldocURL;
     }
 
