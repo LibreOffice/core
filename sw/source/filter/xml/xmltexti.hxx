@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-09 16:05:43 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,28 +101,29 @@ public:
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
                                       const ::rtl::OUString& rHRef,
-                                         const ::rtl::OUString& rClassId,
                                          sal_Int32 nWidth, sal_Int32 nHeight );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
-        createApplet(
-            const ::rtl::OUString &rCode,
+        createAndInsertApplet(
             const ::rtl::OUString &rName,
+            const ::rtl::OUString &rCode,
             sal_Bool bMayScript,
             const ::rtl::OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
-        createPlugin(
+        createAndInsertPlugin(
             const ::rtl::OUString &rMimeType,
             const ::rtl::OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
-        createFloatingFrame(
+        createAndInsertFloatingFrame(
             const ::rtl::OUString &rName,
+            const ::rtl::OUString &rHRef,
+            const ::rtl::OUString &rStyleName,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual void endAppletOrPlugin(

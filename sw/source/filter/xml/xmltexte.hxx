@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-16 12:50:15 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _XMLOFF_TEXTPARAE_HXX_
 #include <xmloff/txtparae.hxx>
 #endif
+#ifndef _GLOBNAME_HXX
+#include <tools/globname.hxx>
+#endif
 
 class SwXMLExport;
 class SvXMLAutoStylePoolP;
@@ -78,6 +81,11 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const ::rtl::OUString sTextTable;
     const ::rtl::OUString sEmbeddedObjectProtocol;
 
+    const SvGlobalName aAppletClassId;
+    const SvGlobalName aPluginClassId;
+    const SvGlobalName aIFrameClassId;
+    const SvGlobalName aOutplaceClassId;
+
     SwNoTxtNode *GetNoTxtNode(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet ) const;
@@ -87,6 +95,9 @@ protected:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle );
 
+    virtual void _collectTextEmbeddedAutoStyles(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::beans::XPropertySet > & rPropSet );
     virtual void _exportTextEmbedded(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropSet,

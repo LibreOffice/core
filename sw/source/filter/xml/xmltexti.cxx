@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-09 16:05:55 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,18 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _XMLOFF_PRSTYLEI_HXX_
+#include <xmloff/prstylei.hxx>
+#endif
+#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
+#include <xmloff/maptype.hxx>
+#endif
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include <xmloff/xmlprmap.hxx>
+#endif
+#ifndef _XMLOFF_TXTPRMAP_HXX
+#include <xmloff/txtprmap.hxx>
 #endif
 #ifndef _UNOCRSR_HXX
 #include "unocrsr.hxx"
@@ -187,7 +199,6 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
 Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
            SvXMLImport& rImport,
         const OUString& rHRef,
-        const OUString& rClassId,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference < XPropertySet > xPropSet;
@@ -218,9 +229,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     return xPropSet;
 }
 
-Reference< XPropertySet > SwXMLTextImportHelper::createApplet(
-        const OUString &rCode,
+Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         const OUString &rName,
+        const OUString &rCode,
         sal_Bool bMayScript,
         const OUString& rHRef,
         sal_Int32 nWidth, sal_Int32 nHeight )
@@ -246,7 +257,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createApplet(
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
 }
-Reference< XPropertySet > SwXMLTextImportHelper::createPlugin(
+Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         const OUString &rMimeType,
         const OUString& rHRef,
         sal_Int32 nWidth, sal_Int32 nHeight )
@@ -281,8 +292,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createPlugin(
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
 }
-Reference< XPropertySet > SwXMLTextImportHelper::createFloatingFrame(
+Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
+        const OUString& rName,
         const OUString& rHRef,
+        const OUString& rStyleName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference < XPropertySet > xPropSet;
@@ -301,6 +314,74 @@ Reference< XPropertySet > SwXMLTextImportHelper::createFloatingFrame(
     SfxFrameDescriptor *pFrameDesc = new SfxFrameDescriptor( 0 );
 
     pFrameDesc->SetURL( INetURLObject::RelToAbs( rHRef ) );
+    pFrameDesc->SetName( rName );
+
+    ScrollingMode eScrollMode = ScrollingAuto;
+    sal_Bool bHasBorder = sal_False;
+    sal_Bool bIsBorderSet = sal_False;
+    Size aMargin( SIZE_NOT_SET, SIZE_NOT_SET );
+    const XMLPropStyleContext *pStyle = 0;
+    if( rStyleName.getLength() )
+    {
+        pStyle = FindAutoFrameStyle( rStyleName );
+        if( pStyle )
+        {
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                pStyle->GetStyles()
+                      ->GetImportPropertyMapper(pStyle->GetFamily());
+            ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
+            if( xImpPrMap.is() )
+            {
+                UniReference<XMLPropertySetMapper> rPropMapper =
+                xImpPrMap->getPropertySetMapper();
+
+                sal_Int32 nCount = pStyle->GetProperties().size();
+                for( sal_Int32 i=0; i < nCount; i++ )
+                {
+                    const XMLPropertyState& rProp = pStyle->GetProperties()[i];
+                    sal_Int32 nIdx = rProp.mnIndex;
+                    if( -1 == nIdx )
+                        continue;
+
+                    switch( rPropMapper->GetEntryContextId(nIdx) )
+                    {
+                    case CTF_FRAME_DISPLAY_SCROLLBAR:
+                        {
+                            sal_Bool bYes = *(sal_Bool *)rProp.maValue.getValue();
+                            eScrollMode = bYes ? ScrollingYes : ScrollingNo;
+                        }
+                        break;
+                    case CTF_FRAME_DISPLAY_BORDER:
+                        {
+                            bHasBorder = *(sal_Bool *)rProp.maValue.getValue();
+                            bIsBorderSet = sal_True;
+                        }
+                        break;
+                    case CTF_FRAME_MARGIN_HORI:
+                        {
+                            sal_Int32 nVal = SIZE_NOT_SET;
+                            rProp.maValue >>= nVal;
+                            aMargin.Width() = nVal;
+                        }
+                        break;
+                    case CTF_FRAME_MARGIN_VERT:
+                        {
+                            sal_Int32 nVal = SIZE_NOT_SET;
+                            rProp.maValue >>= nVal;
+                            aMargin.Height() = nVal;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    pFrameDesc->SetScrollingMode( eScrollMode );
+    if( bIsBorderSet )
+        pFrameDesc->SetFrameBorder( bHasBorder );
+    else
+        pFrameDesc->ResetBorder();
+    pFrameDesc->SetMargin( aMargin );
 
     SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
     SfxFrameObjectRef pFrame = new SfxFrameObject();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 14:08:46 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 
     sal_Int32 i=0;
     Any aAny;
+#if 0
     for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
             pFrame;
             i++, pFrame = SfxViewFrame::GetNext(*pFrame ) )
@@ -472,6 +473,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
         aAny <<= aSequence;
         xBox->insertByIndex(i, aAny);
     }
+#endif
     aAny <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
 
     aProps.realloc( NUM_EXPORTED_PROPERTIES ); // Currently exporting 9 properties
@@ -593,10 +595,12 @@ void SwXMLExport::_ExportContent()
             Reference<XFormsSupplier> xFormSupp(xPage, UNO_QUERY);
             if (xFormSupp->getForms()->hasElements())
             {
+#if 0
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
 
                 GetFormExport()->seekPage(xPage);
                 GetFormExport()->exportForms(xPage);
+#endif
             }
         }
     }

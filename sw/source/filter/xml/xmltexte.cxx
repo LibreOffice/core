@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-16 12:50:14 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
+#endif
 #ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
 #endif
@@ -77,6 +80,9 @@
 #endif
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
+#endif
+#ifndef _XMLOFF_TXTPRMAP_HXX
+#include <xmloff/txtprmap.hxx>
 #endif
 
 #include <svx/svdobj.hxx>
@@ -258,7 +264,11 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
          SvXMLAutoStylePoolP& rAutoStylePool ) :
     XMLTextParagraphExport( rExp, rAutoStylePool ),
     sTextTable( RTL_CONSTASCII_USTRINGPARAM( "TextTable" ) ),
-    sEmbeddedObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) )
+    sEmbeddedObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) ),
+    aAppletClassId( SO3_APPLET_CLASSID ),
+    aPluginClassId( SO3_PLUGIN_CLASSID ),
+    aIFrameClassId( SO3_IFRAME_CLASSID ),
+    aOutplaceClassId( SO3_OUT_CLASSID )
 {
 }
 
@@ -281,7 +291,7 @@ void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
     if( pInfo )
     {
         SvGlobalName aClassName( pInfo->GetClassName() );
-        rExtern = !SvFactory::IsIntern( aClassName, 0 );
+        rExtern = aOutplaceClassId == aClassName;
     }
 }
 
@@ -321,26 +331,116 @@ static void lcl_addURL ( SvXMLExport &rExport, const String &rURL)
     }
 }
 
+void lcl_addFrameProperties(
+        const SfxFrameDescriptor *pDescriptor,
+        const XMLPropertyState **pStates,
+        const UniReference < XMLPropertySetMapper >& rMapper )
+{
+    if( ScrollingAuto != pDescriptor->GetScrollingMode() )
+    {
+        sal_Bool bValue = ScrollingYes == pDescriptor->GetScrollingMode();
+        Any aAny( &bValue, ::getBooleanCppuType() );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), aAny );
+        pStates++;
+    }
+    if( pDescriptor->IsFrameBorderSet() )
+    {
+        sal_Bool bValue = pDescriptor->IsFrameBorderOn();
+        Any aAny( &bValue, ::getBooleanCppuType() );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), aAny );
+        pStates++;
+    }
+    const Size& rMargins = pDescriptor->GetMargin();
+    if( SIZE_NOT_SET != rMargins.Width() )
+    {
+        Any aAny;
+        aAny <<= (sal_Int32)rMargins.Width();
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), aAny );
+        pStates++;
+    }
+    if( SIZE_NOT_SET != rMargins.Height() )
+    {
+        Any aAny;
+        aAny <<= (sal_Int32)rMargins.Height();
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), aAny );
+        pStates++;
+    }
+}
+
+void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
+        const Reference < XPropertySet > & rPropSet )
+{
+    SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
+    SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
+    SvPersist *pPersist = pOLENd->GetDoc()->GetPersist();
+    ASSERT( pPersist, "no persist" );
+    const SvInfoObject *pInfo = pPersist->Find( rOLEObj.GetName() );
+    ASSERT( pInfo, "no info" );
+
+    SvGlobalName aClassId( pInfo->GetClassName() );
+
+    if( aIFrameClassId == aClassId )
+    {
+        SfxFrameObjectRef xFrame( rOLEObj.GetOleRef() );
+        ASSERT( xFrame.Is(), "wrong class id for frame" );
+
+        const XMLPropertyState *aStates[5] = { 0, 0, 0, 0, 0 };
+        lcl_addFrameProperties( xFrame->GetFrameDescriptor(), aStates,
+               GetAutoFramePropMapper()->getPropertySetMapper() );
+
+        Add( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, aStates );
+        const XMLPropertyState **pStates = aStates;
+        while( *pStates )
+        {
+            delete *pStates;
+            pStates++;
+        }
+    }
+    else
+    {
+        XMLTextParagraphExport::_collectTextEmbeddedAutoStyles( rPropSet );
+    }
+}
+
 void SwXMLTextParagraphExport::_exportTextEmbedded(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
-    SvPlugInObjectRef pPlugin ( rOLEObj.GetOleRef() );
-    SvAppletObjectRef pApplet ( rOLEObj.GetOleRef() );
-    SfxFrameObjectRef pFrame  ( rOLEObj.GetOleRef() );
+    SvPersist *pPersist = pOLENd->GetDoc()->GetPersist();
+    ASSERT( pPersist, "no persist" );
+    const SvInfoObject *pInfo = pPersist->Find( rOLEObj.GetName() );
+    ASSERT( pInfo, "no info" );
+
+    SvGlobalName aClassId( pInfo->GetClassName() );
+
     SvEmbeddedObjectTypes nType = SV_EMBEDDED_UNKNOWN;
+    SvPlugInObjectRef xPlugin;
+    SvAppletObjectRef xApplet;
+    SfxFrameObjectRef xFrame;
+    if( aPluginClassId == aClassId )
+    {
+        xPlugin = SvPlugInObjectRef( rOLEObj.GetOleRef() );
+        ASSERT( xPlugin.Is(), "wrong class id for plugin" );
+        nType = SV_EMBEDDED_PLUGIN;
+    }
+    else if( aAppletClassId == aClassId )
+    {
+        xApplet = SvAppletObjectRef( rOLEObj.GetOleRef() );
+        ASSERT( xApplet.Is(), "wrong class id for applet" );
+        nType = SV_EMBEDDED_APPLET;
+    }
+    else if( aIFrameClassId == aClassId )
+    {
+        xFrame = SfxFrameObjectRef( rOLEObj.GetOleRef() );
+        ASSERT( xFrame.Is(), "wrong class id for frame" );
+        nType = SV_EMBEDDED_FRAME;
+    }
+
     SvULongs aParams;
     sal_Char *pElementName;
     SvXMLExport &rExport = GetExport();
-
-    if (pApplet.Is())
-        nType = SV_EMBEDDED_APPLET;
-    else if (pPlugin.Is())
-        nType = SV_EMBEDDED_PLUGIN;
-    else if (pApplet.Is())
-        nType = SV_EMBEDDED_APPLET;
 
     if ( nType == SV_EMBEDDED_UNKNOWN )
     {
@@ -357,8 +457,20 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             aAny >>= sStyle;
         }
 
+        const XMLPropertyState *aStates[5] = { 0, 0, 0, 0, 0 };
+        if( SV_EMBEDDED_FRAME == nType )
+            lcl_addFrameProperties( xFrame->GetFrameDescriptor(), aStates,
+                GetAutoFramePropMapper()->getPropertySetMapper() );
+
         OUString sAutoStyle( sStyle );
-        sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
+        sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle,
+                           aStates );
+        const XMLPropertyState **pStates = aStates;
+        while( *pStates )
+        {
+            delete *pStates;
+            pStates++;
+        }
         if( sAutoStyle.getLength() )
             rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
                                   sAutoStyle );
@@ -369,17 +481,17 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             case SV_EMBEDDED_APPLET:
             {
                 // It's an applet!
-                const XubString & rURL = pApplet->GetCodeBase();
+                const XubString & rURL = xApplet->GetCodeBase();
                 if (rURL.Len() )
                     lcl_addURL(rExport, rURL);
 
-                const String &rName = pApplet->GetName();
+                const String &rName = xApplet->GetName();
                 if (rName.Len())
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rName );
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_applet_name, rName );
 
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_code, pApplet->GetClass() );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_code, xApplet->GetClass() );
 
-                const SvCommandList& rCommands = pApplet->GetCommandList();
+                const SvCommandList& rCommands = xApplet->GetCommandList();
 
                 ULONG i = rCommands.Count();
                 while ( i > 0 )
@@ -393,7 +505,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                         aParams.Insert( i, aParams.Count() );
                 }
 
-                if ( pApplet->IsMayScript ( ) )
+                if ( xApplet->IsMayScript ( ) )
                     rExport.AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_may_script, sXML_true );
                 else
                     rExport.AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_may_script, sXML_false );
@@ -403,8 +515,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             case SV_EMBEDDED_PLUGIN:
             {
                 // It's a plugin!
-                lcl_addURL( rExport, pPlugin->GetURL()->GetMainURL() );
-                const String &rType = pPlugin->GetMimeType();
+                lcl_addURL( rExport, xPlugin->GetURL()->GetMainURL() );
+                const String &rType = xPlugin->GetMimeType();
                 if (rType.Len())
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_mime_type, rType );
                 pElementName = sXML_plugin;
@@ -413,13 +525,13 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             case SV_EMBEDDED_FRAME:
             {
                 // It's a floating frame!
-                const SfxFrameDescriptor *pDescriptor = pFrame->GetFrameDescriptor();
+                const SfxFrameDescriptor *pDescriptor = xFrame->GetFrameDescriptor();
 
                 lcl_addURL( rExport, pDescriptor->GetURL().GetMainURL() );
 
                 const String &rName = pDescriptor->GetName();
                 if (rName.Len())
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rName );
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_frame_name, rName );
                 pElementName = sXML_floating_frame;
                 break;
             }
@@ -429,7 +541,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, pElementName, sal_False, sal_True );
         if ( nType == SV_EMBEDDED_APPLET)
         {
-            const SvCommandList& rCommands = pApplet->GetCommandList();
+            const SvCommandList& rCommands = xApplet->GetCommandList();
             USHORT ii = aParams.Count();
             while ( ii > 0 )
             {
@@ -439,7 +551,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         else if (nType == SV_EMBEDDED_PLUGIN )
         {
-            const SvCommandList& rCommands = pPlugin->GetCommandList();
+            const SvCommandList& rCommands = xPlugin->GetCommandList();
             ULONG nCommands = rCommands.Count();
             for ( ULONG i = 0; i < nCommands; i++)
             {
