@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:49:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,6 +1321,14 @@ BOOL ScAttrArray::HasAttrib( USHORT nRow1, USHORT nRow2, USHORT nMask ) const
             const SvxFrameDirectionItem& rDirection =
                     (const SvxFrameDirectionItem&) pPattern->GetItem( ATTR_WRITINGDIR );
             if ( rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP )
+                bFound = TRUE;
+        }
+        if ( nMask & HASATTR_RIGHTORCENTER )
+        {
+            //  called only if the sheet is LTR, so physical=logical alignment can be assumed
+            SvxCellHorJustify eHorJust = (SvxCellHorJustify)
+                    ((const SvxHorJustifyItem&) pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+            if ( eHorJust == SVX_HOR_JUSTIFY_RIGHT || eHorJust == SVX_HOR_JUSTIFY_CENTER )
                 bFound = TRUE;
         }
     }
