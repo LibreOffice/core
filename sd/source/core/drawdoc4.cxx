@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:11:39 $
+ *  last change: $Author: vg $ $Date: 2003-07-14 12:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,8 +860,9 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 #ifndef SVX_LIGHT
 IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, pTimer)
 {
-    if (!pOnlineSpellingList || !bOnlineSpell ||
-        pOnlineSpellingList->GetCurPos() < pOnlineSpellingList->Count() + 1)
+    if (pOnlineSpellingList!=NULL
+        && ( !bOnlineSpell ||
+            pOnlineSpellingList->GetCurPos() < pOnlineSpellingList->Count() + 1))
     {
         /**********************************************************************
         * Naechstes Objekt spellen
