@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2003-03-31 16:23:49 $
+#   last change: $Date: 2004-07-23 13:40:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ TARGET = runner_basichelper
 
 # --- Files --------------------------------------------------------
 
-JARFILES       = sandbox.jar ridl.jar jurt.jar unoil.jar
+JARFILES       = ridl.jar jurt.jar unoil.jar
 JAVAFILES      = AttributeList.java DocumentHandler.java Filter.java \
                  Connector.java DispatchProviderInterceptor.java \
                  ThreadRunner.java
