@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-04 11:18:44 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 15:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
             if ( maRbtEditLater.IsChecked() )
             {
-                BOOL bResult = pViewFrame->DoClose();
+                BOOL bResult = pViewFrame->GetObjectShell()->DoClose();
             }
         }
     }
