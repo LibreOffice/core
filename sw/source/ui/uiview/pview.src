@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:57:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Daðýlým";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Distribución";
+        TEXT[ finnish ] = "Jakelu";
     };
     FixedText FT_ROWS
     {
@@ -131,6 +132,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Sa~týr";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Filas";
+        TEXT[ finnish ] = "~Rivit";
     };
     NumericField NF_ROWS
     {
@@ -176,6 +178,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~Sütun";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Columnas";
+        TEXT[ finnish ] = "~Sarakkeet";
     };
     NumericField NF_COLS
     {
@@ -221,6 +224,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Kenarlar";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Márgenes";
+        TEXT[ finnish ] = "Reunat";
     };
     FixedText FT_LMARGIN
     {
@@ -251,6 +255,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "S~ol";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Izquierda";
+        TEXT[ finnish ] = "~Vasen";
     };
     MetricField MF_LMARGIN
     {
@@ -297,6 +302,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Sa~ð";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Derecha";
+        TEXT[ finnish ] = "~Oikea";
     };
     MetricField MF_RMARGIN
     {
@@ -343,6 +349,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~Üst";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "A~rriba";
+        TEXT[ finnish ] = "~Yläosa";
     };
     MetricField MF_TMARGIN
     {
@@ -389,6 +396,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~Alt";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "A~bajo";
+        TEXT[ finnish ] = "~Alaosa";
     };
     MetricField MF_BMARGIN
     {
@@ -435,6 +443,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Aralýk";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Espacio";
+        TEXT[ finnish ] = "Välit";
     };
     FixedText FT_HMARGIN
     {
@@ -465,6 +474,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~Yatay";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Horizontal";
+        TEXT[ finnish ] = "~Vaakataso";
     };
 
     MetricField MF_HMARGIN
@@ -512,6 +522,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~Dikey";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Vertical";
+        TEXT[ finnish ] = "~Pystytaso";
     };
 
     MetricField MF_VMARGIN
@@ -558,6 +569,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Format";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Formato";
+        TEXT[ finnish ] = "Muotoile";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -589,6 +601,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Ya~tay";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Horizontal";
+        TEXT[ finnish ] = "~Vaaka";
     };
     RadioButton RB_PORTRAIT
     {
@@ -618,6 +631,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Di~key";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Vertical";
+        TEXT[ finnish ] = "~Pysty";
     };
     GroupBox GB_PREVIEW
     {
@@ -647,6 +661,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Önizleme";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Previsualización";
+        TEXT[ finnish ] = "Esikatselu";
     };
     Window WIN_PREVIEW
     {
@@ -702,6 +717,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "±âº»°ª(~D)";
         TEXT[ turkish ] = "Standar~t";
         TEXT[ catalan ] = "~Predeterminado";
+        TEXT[ finnish ] = "~Oletusarvo";
     };
     TEXT[ italian ] = "Opzioni di stampa";
     TEXT[ portuguese_brazilian ] = "Druckoptionen";
@@ -725,6 +741,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     TEXT[ turkish ] = "Yazdýrma seçenekleri";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Opciones de impresión";
+    TEXT[ finnish ] = "Tulostusasetukset";
 };
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
@@ -739,7 +756,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text [ italian ] = "Zoom" ;
     Text [ portuguese_brazilian ] = "Zoom" ;
     Text [ portuguese ] = "Zoom" ;
-    Text [ finnish ] = "Zoomaus" ;
+    Text [ finnish ] = "Zoomaa" ;
     Text [ danish ] = "Målestok" ;
     Text [ french ] = "Zoom" ;
     Text [ swedish ] = "Skala" ;
@@ -931,6 +948,7 @@ String RID_PVIEW_TOOLBOX
     Text[ turkish ] = "Sayfa önizleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vista preliminar";
+    Text[ finnish ] = "Sivun esikatselu";
 };
 ToolBox RID_PVIEW_TOOLBOX
 {
