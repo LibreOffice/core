@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:07:42 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:44:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,15 +64,12 @@ PRJ=..$/..
 
 PRJNAME=cpputools
 TARGET=regcomp
-TARGETTYPE=CUI
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -96,22 +93,15 @@ UNOTYPES=\
 # --- Files --------------------------------------------------------
 CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 
-
-CXXFILES=	registercomponent.cxx
-
+DEPOBJFILES=   $(OBJ)$/registercomponent.obj 
 
 APP1TARGET= $(TARGET)
-APP1OBJS=   $(OBJ)$/registercomponent.obj 
+APP1OBJS=$(DEPOBJFILES)  
 
 APP1STDLIBS=\
             $(SALLIB) \
             $(CPPULIB)	\
             $(CPPUHELPERLIB)
-
-.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
-APP1STDLIBS+= \
-            $(CPPULIB)
-.ENDIF
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS+= \
@@ -121,3 +111,4 @@ APP1STDLIBS+= \
 
 
 .INCLUDE :  target.mk
+
