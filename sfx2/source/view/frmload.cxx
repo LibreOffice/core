@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-14 13:24:22 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,6 +565,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
+        aMedium.UseInteractionHandler( TRUE );
         BOOL bIsStorage = aMedium.IsStorage();
         if ( bIsStorage )
             aMedium.GetStorage();
