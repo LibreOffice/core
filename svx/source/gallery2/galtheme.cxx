@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:45:09 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,7 +794,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, BO
                 aPathURL.removeSegment();
                 aPathURL.removeFinalSlash();
                 pRet = new GalleryThemeEntry( aPathURL, aThemeName,
-                                              rURL.GetBase().Copy( 2, 6 ).ToInt32(),
+                                              String(rURL.GetBase()).Copy( 2, 6 ).ToInt32(),
                                               bReadOnly, FALSE, FALSE, nThemeId,
                                               bThemeNameFromResource );
             }
@@ -1401,23 +1401,22 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         else
         {
             aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-            bRel = ( ( aPath.Erase( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).Len() ) ) == aRelURL1.GetMainURL( INetURLObject::NO_DECODE ) );
+            bRel = ( ( aPath.Erase( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) == String(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ) ));
 
-            if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).Len() > ( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).Len() + 1 ) ) )
+            if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
             {
                 aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                aPath = aPath.Erase( 0, aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).Len() );
+                aPath = aPath.Erase( 0, aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
             }
             else
             {
                 aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
+                bRel = ( ( aPath.Erase( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) == String(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ) ));
 
-                bRel = ( ( aPath.Erase( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).Len() ) ) == aRelURL2.GetMainURL( INetURLObject::NO_DECODE ) );
-
-                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).Len() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).Len() + 1 ) ) )
+                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
                 {
                     aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    aPath = aPath.Erase( 0, aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).Len() );
+                    aPath = aPath.Erase( 0, aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
                 }
                 else
                     aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
