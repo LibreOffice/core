@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:07:52 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 11:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ class   PushButton;
 class   FixedText;
 class   SwPaM;
 class   SwgReaderOption;
-class   SvEmbeddedRegistryInfo;
 
 class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
                   public SfxListener
@@ -269,7 +268,6 @@ public:
                                    String * pLongUserName,
                                    String * pUserName,
                                    long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
-    virtual void FillRegInfo( SvEmbeddedRegistryInfo * );
 
     virtual void LoadStyles( SfxObjectShell& rSource );
 
