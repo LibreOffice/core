@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:38:22 $
+ *  last change: $Author: ssa $ $Date: 2002-08-30 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,6 +1128,19 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
             // ContextMenu
             if ( (nCode == KEY_CONTEXTMENU) || ((nCode == KEY_F10) && aKeyCode.IsShift()) )
                 nRet = !ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, FALSE );
+            else if ( ( (nCode == KEY_F2) && aKeyCode.IsShift() ) || ( (nCode == KEY_F1) && aKeyCode.IsMod1() ) )
+            {
+                // TipHelp via Keyboard (Shift-F2 or Ctrl-F1)
+                // simulate mouseposition at center of window
+                Size aSize = pChild->GetOutputSize();
+                Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+                aPos = pChild->OutputToScreenPixel( aPos );
+
+                HelpEvent aHelpEvent( aPos, HELPMODE_BALLOON );
+                aHelpEvent.SetKeyboardActivated( TRUE );
+                pSVData->maHelpData.mbKeyboardHelp = TRUE;
+                pChild->RequestHelp( aHelpEvent );
+            }
             else if ( (nCode == KEY_F1) || (nCode == KEY_HELP) )
             {
                 if ( !aKeyCode.GetModifier() )
@@ -1148,18 +1161,6 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
                     else
                         nRet = 0;
                 }
-            }
-            else if ( (nCode == KEY_F2) && aKeyCode.IsShift() )
-            {
-                // simulate mouseposition at center of window
-                Size aSize = pChild->GetOutputSize();
-                Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
-                aPos = pChild->OutputToScreenPixel( aPos );
-
-                HelpEvent aHelpEvent( aPos, HELPMODE_BALLOON );
-                aHelpEvent.SetKeyboardActivated( TRUE );
-                pSVData->maHelpData.mbKeyboardHelp = TRUE;
-                pChild->RequestHelp( aHelpEvent );
             }
             else
             {
