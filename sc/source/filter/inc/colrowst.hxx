@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:01:14 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,6 @@ private:
     // ACHTUNG: Col-/Row-Angaben in TWIPS
     friend ScExtDocOptions;
 
-    ScfUInt16List*      pHorizPb;   // horizontale Seitenumbrueche
-    ScfUInt16List*      pVertPb;    // vertikale ~
-
     ScExtTabOptions*    pExtTabOpt;
     INT32*              pWidth;
     BOOL*               pColHidden;
@@ -149,9 +146,6 @@ public:
                             { GetExtTabOpt().SetSelection( rSel ); }
     inline void         SetDimension( const ScRange& rDim )
                             { GetExtTabOpt().SetDimension( rDim ); }
-
-    void                SetHorizPagebreak( const UINT16 nRow );
-    void                SetVertPagebreak( const UINT16 nCol );
 
     /** Inserts all column and row settings of the specified sheet, except the hidden flags. */
     void                Apply( sal_uInt16 nScTab );
