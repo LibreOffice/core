@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachefactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-12 14:10:33 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <rtl/ref.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
@@ -75,8 +79,11 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     struct CacheFactory
     {
+        typedef com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter >
+            TypeConverterRef;
+
         rtl::Reference<TreeManager>
-            createCacheManager(IConfigSession * pSession, OOptions const & _rOptions);
+            createCacheManager(IConfigSession * pSession, TypeConverterRef const & _xTCV);
 
         static CacheFactory & instance();
     };

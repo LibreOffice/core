@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:40:17 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,6 @@
 #include <vos/ref.hxx>
 #endif
 
-namespace com { namespace sun { namespace star {
-
-    namespace script    { class XTypeConverter; }
-}   }   }
-
 namespace configmgr
 {
     namespace css  = ::com::sun::star;
@@ -99,9 +94,6 @@ namespace configmgr
 
     class OOptions : public salhelper::SimpleReferenceObject
     {
-        typedef css::uno::Reference< css::script::XTypeConverter > TypeConverterRef;
-        TypeConverterRef m_xConverter;  // typeconverter used
-
         RequestOptions  m_aRequestOptions;  // current options to use
         RequestOptions  m_aDefaultOptions;  // default options used as base
 
@@ -111,19 +103,16 @@ namespace configmgr
         typedef RequestOptions::Locale Locale;
         typedef RequestOptions::Entity Entity;
 
-        explicit
-        OOptions(TypeConverterRef const & _xConverter)
-        : m_xConverter(_xConverter)
-        , m_aRequestOptions()
+        OOptions()
+        : m_aRequestOptions()
         , m_aDefaultOptions()
         , m_bLazyWrite(true)
         , m_bForceWritable(false)
         {}
 
         explicit
-        OOptions(TypeConverterRef const & _xConverter, const RequestOptions& _aDefaultOptions)
-        : m_xConverter(_xConverter)
-        , m_aRequestOptions(_aDefaultOptions, true)
+        OOptions(const RequestOptions& _aDefaultOptions)
+        : m_aRequestOptions(_aDefaultOptions, true)
         , m_aDefaultOptions(_aDefaultOptions)
         , m_bLazyWrite(true)
         , m_bForceWritable(false)
@@ -131,15 +120,12 @@ namespace configmgr
         }
 
         OOptions(const OOptions& _rOptions)
-        : m_xConverter(_rOptions.m_xConverter)
-        , m_aRequestOptions(_rOptions.m_aRequestOptions, true)
+        : m_aRequestOptions(_rOptions.m_aRequestOptions, true)
         , m_aDefaultOptions(_rOptions.m_aDefaultOptions)
         , m_bLazyWrite(_rOptions.m_bLazyWrite)
         , m_bForceWritable(_rOptions.m_bForceWritable)
         {
         }
-
-        TypeConverterRef getTypeConverter() const {return m_xConverter;}
 
         bool isForSessionUser()     const { return ! m_aRequestOptions.hasEntity(); }
         bool canUseCache()          const { return ! m_aRequestOptions.isForcingReload(); }
