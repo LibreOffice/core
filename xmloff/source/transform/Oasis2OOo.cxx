@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:54:25 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ static XMLTransformerActionInit aActionTable[] =
                 OASIS_TEXT_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( TEXT, INDEX_ENTRY_LINK_END, XML_ETACTION_PROC_ATTRS,
                 OASIS_TEXT_STYLE_REF_ACTIONS ), /* generated entry */
-    ENTRY1( DRAW, MASTER_PAGE, XML_ETACTION_PROC_ATTRS,
+    ENTRY1( DRAW, PAGE, XML_ETACTION_PROC_ATTRS,
                 OASIS_MASTER_PAGE_REF_ACTIONS ), /* generated entry */
     // --> OD 2005-01-10 #i40011#, #i40015#
     // - conversion of attribute <table:style-name> for <table:table-row> and
