@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-06 09:25:33 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,11 +176,11 @@ public:
 };
 
 SfxTopWindow_Impl::SfxTopWindow_Impl( SfxTopFrame* pF )
-        : Window( pF->pImp->pWindow, WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
+        : Window( pF->pImp->pWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
         , pModalDialog( 0 )
 {
-    SetBackground();
+    SetBackgroundBrush( Brush( Color( COL_WHITE )) );
 }
 
 SfxTopWindow_Impl::~SfxTopWindow_Impl( )
@@ -292,7 +292,7 @@ public:
                             pFrame( p ),
                             bActive( FALSE )
                         {
-//                            SetBorderStyle( WINDOW_BORDER_NOBORDER );
+                            p->GetFrame()->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
                         }
 
     virtual void        Resize();
