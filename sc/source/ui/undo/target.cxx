@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 09:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "target.hxx"
@@ -79,32 +75,6 @@
 
 TYPEINIT1(ScTabViewTarget, SfxRepeatTarget);
 
-SEG_EOFGLOBALS()
-
-#pragma SEG_FUNCDEF(target_01)
-
 __EXPORT ScTabViewTarget::~ScTabViewTarget()
 {
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/09/17 14:09:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.2  2000/08/31 16:38:39  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.1  1995/10/09 14:48:40  NN
-    Initial revision.
-
-
-      Rev 1.0   09 Oct 1995 15:48:40   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
-
