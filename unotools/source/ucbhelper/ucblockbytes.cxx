@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sb $ $Date: 2001-03-05 14:48:59 $
+ *  last change: $Author: mba $ $Date: 2001-03-08 11:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,6 +462,7 @@ UcbLockBytes::~UcbLockBytes()
     if ( !m_bDontClose )
     {
         if ( m_xInputStream.is() )
+        {
             try
             {
                 m_xInputStream->closeInput();
@@ -470,7 +471,10 @@ UcbLockBytes::~UcbLockBytes()
             {}
             catch ( IOException const & )
             {}
+        }
+
         if ( m_xOutputStream.is() )
+        {
             try
             {
                 m_xOutputStream->closeOutput();
@@ -479,6 +483,7 @@ UcbLockBytes::~UcbLockBytes()
             {}
             catch ( IOException const & )
             {}
+        }
     }
 }
 
@@ -664,8 +669,25 @@ ErrCode UcbLockBytes::Flush() const
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::SetSize (ULONG)
+ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
 {
+    SvLockBytesStat aStat;
+    Stat( &aStat, (SvLockBytesStatFlag) 0 );
+    ULONG nSize = aStat.nSize;
+    if ( nSize < nNewSize )
+    {
+        ULONG nDiff = nNewSize-nSize, nCount=0;
+        BYTE* pBuffer = new BYTE[ nDiff ];
+        WriteAt( nSize, pBuffer, nDiff, &nCount );
+        delete pBuffer;
+        if ( nCount != nDiff )
+            return ERRCODE_IO_CANTWRITE;
+    }
+    else if ( nSize > nNewSize )
+    {
+        DBG_WARNING( "Can't shrink UCBLockBytes!" );
+    }
+
     return ERRCODE_NONE;
 }
 
