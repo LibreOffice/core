@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
+ *  last change: $Author: mt $ $Date: 2001-08-02 11:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,8 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
         else if ( bCharAttribFound )
         {
             bFormatted = FALSE;
-            if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
+            // #90520# Check everytime...
+//          if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
             {
                 pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
                 if ( bCheckLanguage )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-31 09:44:47 $
+ *  last change: $Author: mt $ $Date: 2001-08-02 11:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,8 +906,11 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
                         pPortion->GetKind() = PORTIONKIND_TAB;
                         pPortion->SetExtraValue( aCurrentTab.aTabStop.GetFill() );
-                        pPortion->GetSize().Height() = 0;
                         pPortion->GetSize().Width() = aCurrentTab.nTabPos - (nTmpWidth+nStartX);
+
+                        // #90520# Height needed...
+                        SeekCursor( pNode, nTmpPos+1, aTmpFont );
+                        pPortion->GetSize().Height() = aTmpFont.QuickGetTextSize( GetRefDevice(), String(), 0, 0, NULL ).Height();
 
                         DBG_ASSERT( pPortion->GetSize().Width() >= 0, "Tab falsch berechnet!" );
 
@@ -1160,7 +1163,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
         if ( aTextSize.Height() == 0 )
         {
-            SeekCursor( pNode, pLine->GetStart(), aTmpFont );
+            SeekCursor( pNode, pLine->GetStart()+1, aTmpFont );
             aTmpFont.SetPhysFont( pRefDev );
             aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev, String() ).Height();
             pLine->SetHeight( (sal_uInt16)aTextSize.Height() );
@@ -2423,11 +2426,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             sal_uInt16 nLines = pPortion->GetLines().Count();
             sal_uInt16 nLastLine = nLines-1;
 
-            long nParaStartY( aStartPos.Y() );
             if ( !IsVertical() )
                 aStartPos.Y() += pPortion->GetFirstLineOffset();
             else
                 aStartPos.X() -= pPortion->GetFirstLineOffset();
+
+            Point aParaStart( aStartPos );
 
             const SvxLineSpacingItem& rLSItem = ((const SvxLineSpacingItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
             sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
@@ -2456,7 +2460,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     if ( ( nLine == 0 ) && !bStripOnly )    // erste Zeile
                     {
                         // VERT???
-                        GetEditEnginePtr()->PaintingFirstLine( n, Point( aStartPos.X(), nParaStartY ), aTmpPos.Y(), aOrigin, nOrientation, pOutDev );
+                        GetEditEnginePtr()->PaintingFirstLine( n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, pOutDev );
                     }
                     // --------------------------------------------------
                     // Ueber die Portions der Zeile...
