@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-09-02 13:03:20 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,16 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Settings for high contrast appearance";
         Text[ greek ] = "Settings for high contrast appearance";
         Text[ dutch ] = "Settings for high contrast appearance";
-        Text[ french ] = "Utiliser les param�tres pour l'affichage du contraste �lev�";
-        Text[ spanish ] = "Utilizar configuraci�n de la visualizaci�n del contraste";
+        Text[ french ] = "Utiliser les param�tres syst�me pour le contraste �lev�";
+        Text[ spanish ] = "Utilizar la configuraci�n del sistema para la visualizaci�n del contraste";
         Text[ finnish ] = "Settings for high contrast appearance";
-        Text[ italian ] = "Impostazioni per immagine schermo a contrasto elevato";
+        Text[ italian ] = "Usa le impostazioni di sistema per immagine a contrasto elevato";
         Text[ danish ] = "Settings for high contrast appearance";
-        Text[ swedish ] = "Anv�nd inst�llningar f�r h�gkontrastvisning";
+        Text[ swedish ] = "Anv�nd systeminst�llningar f�r h�gkontrastvisning";
         Text[ polish ] = "Settings for high contrast appearance";
         Text[ japanese ] = "ハイコントラスト設定の使用";
-        Text[ korean ] = "운영 체제 고대비 디스플레이로 설정하여 사용";
-        Text[ chinese_simplified ] = "使用高对比度的设定";
+        Text[ korean ] = "고대비 디스플레이로 설정하여 사용";
+        Text[ chinese_simplified ] = "使用作业系统的高对比度的设定";
         Text[ chinese_traditional ] = "使用操作系統的高對比度的設定";
         Text[ turkish ] = "Settings for high contrast appearance";
         Text[ arabic ] = "Settings for high contrast appearance";
@@ -403,6 +403,26 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text = "Te~xtauswahlcursor in schreibgesch�tzten Textdokumenten verwenden" ;
         Text[ english_us ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ portuguese ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ russian ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ greek ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ dutch ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ french ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ spanish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ finnish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ italian ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ danish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ swedish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ polish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ portuguese_brazilian ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ japanese ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ korean ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ chinese_simplified ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標";
+        Text[ turkish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ arabic ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ catalan ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ thai ] = "Use te~xt selection cursor in read-only text documents";
     };
     CheckBox CB_ACCESSIBILITY_TOOL
     {
