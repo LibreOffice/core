@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-24 11:55:41 $
+ *  last change: $Author: abi $ $Date: 2002-10-24 16:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <memory>
 #include <vector>
 #include <rtl/memory.h>
+#include <rtl/uri.hxx>
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -102,6 +103,7 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
@@ -473,6 +475,10 @@ Any SAL_CALL FTPContent::execute(
                 }
                 insert(aInsertArgument,Environment);
             }
+            else if(aCommand.Name.compareToAscii("delete") == 0) {
+                m_aFTPURL.del();
+                deleted();
+            }
             else if(aCommand.Name.compareToAscii( "open" ) == 0) {
                 OpenCommandArgument2 aOpenCommand;
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
@@ -717,6 +723,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
     // May not be reached, because both mkdir and insert can throw curl-
     // exceptions
     m_bInserted = false;
+    inserted();
 }
 
 
@@ -779,14 +786,46 @@ Sequence<Any> FTPContent::setPropertyValues(
         getProperties(Reference<XCommandEnvironment>(0));
 
     Sequence<Any> ret(seqPropVal.getLength());
+    Sequence<PropertyChangeEvent > evt;
 
     osl::MutexGuard aGuard(m_aMutex);
     for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
-        if(m_bInserted && seqPropVal[i].Name.equalsAscii("Title")) {
+        if(seqPropVal[i].Name.equalsAscii("Title")) {
             rtl::OUString Title;
-            seqPropVal[i].Value >>= Title;
-            m_aFTPURL.child(Title);
-            m_bTitleSet = true;
+            if(!(seqPropVal[i].Value >>= Title)) {
+                ret[i] <<= IllegalTypeException();
+                continue;
+            } else if(!Title.getLength()) {
+                ret[i] <<= IllegalArgumentException();
+                continue;
+            }
+
+            Title =
+                rtl::Uri::encode(Title,
+                                 rtl_UriCharClassPchar,
+                                 rtl_UriEncodeIgnoreEscapes,
+                                 RTL_TEXTENCODING_UTF8);
+
+            if(m_bInserted) {
+                m_aFTPURL.child(Title);
+                m_bTitleSet = true;
+            } else
+                try {
+                    rtl::OUString OldTitle = m_aFTPURL.ren(Title);
+                    evt.realloc(1);
+                    evt[0].PropertyName =
+                        rtl::OUString::createFromAscii("Title");
+                    evt[0].Further = false;
+                    evt[0].PropertyHandle = -1;
+                    evt[0].OldValue <<= OldTitle;
+                    evt[0].NewValue <<= Title;
+                } catch(const curl_exception&) {
+                    InteractiveIOException excep;
+                    // any better possibility here?
+                    // ( the error code is always CURLE_FTP_QUOTE_ERROR )
+                    excep.Code = IOErrorCode_ACCESS_DENIED;
+                    ret[i] <<= excep;
+                }
         } else {
             // either not unknown or illegal
             ret[i] <<= UnknownPropertyException();
@@ -798,5 +837,7 @@ Sequence<Any> FTPContent::setPropertyValues(
         }
     }
 
+    if(evt.getLength())
+        notifyPropertiesChange(evt);
     return ret;
 }

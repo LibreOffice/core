@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentcaps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-17 16:28:21 $
+ *  last change: $Author: abi $ $Date: 2002-10-24 16:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ Sequence< CommandInfo > FTPContent::getCommands(
     //
     //=================================================================
 
-#define COMMAND_COUNT 6
+#define COMMAND_COUNT 7
 
     static CommandInfo aCommandInfoTable[] =
     {
@@ -181,6 +181,11 @@ Sequence< CommandInfo > FTPContent::getCommands(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
             -1,
             getCppuType( static_cast< InsertCommandArgument * >( 0 ) )
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+            -1,
+            getCppuType( static_cast< sal_Bool * >( 0 ) )
         )
     };
 

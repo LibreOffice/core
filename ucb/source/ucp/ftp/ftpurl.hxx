@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-23 08:00:11 $
+ *  last change: $Author: abi $ $Date: 2002-10-24 16:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,12 @@ namespace ftp {
 
         void mkdir(bool ReplaceExisting) const
             throw(curl_exception);
+
+        rtl::OUString ren(const rtl::OUString& NewTitle)
+            throw(curl_exception);
+
+        void del() const;
+
 
     private:
 

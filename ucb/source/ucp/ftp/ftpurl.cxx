@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-24 11:55:41 $
+ *  last change: $Author: abi $ $Date: 2002-10-24 16:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,3 +762,87 @@ void FTPURL::mkdir(bool ReplaceExisting) const
     if(err != CURLE_OK)
         throw curl_exception(err);
 }
+
+
+rtl::OUString FTPURL::ren(const rtl::OUString& NewTitle)
+    throw(curl_exception)
+{
+    CURL *curl = m_pFCP->handle();
+
+    // post request
+    rtl::OString renamefrom("RNFR ");
+    rtl::OUString OldTitle = net_title();
+    renamefrom +=
+        rtl::OString(OldTitle.getStr(),
+                     OldTitle.getLength(),
+                     RTL_TEXTENCODING_UTF8);
+
+    rtl::OString renameto("RNTO ");
+    renameto +=
+        rtl::OString(NewTitle.getStr(),
+                     NewTitle.getLength(),
+                     RTL_TEXTENCODING_UTF8);
+
+    struct curl_slist *slist = 0;
+    slist = curl_slist_append(slist,renamefrom.getStr());
+    slist = curl_slist_append(slist,renameto.getStr());
+    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
+
+    SET_CONTROL_CONTAINER;
+    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
+
+    rtl::OUString url(parent(true));
+    if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
+        url += rtl::OUString::createFromAscii("/");
+    SET_URL(url);
+
+    CURLcode err = curl_easy_perform(curl);
+    curl_slist_free_all(slist);
+    if(err != CURLE_OK)
+        throw curl_exception(err);
+    else if(m_aPathSegmentVec.size() &&
+            !m_aPathSegmentVec.back().equalsAscii(".."))
+        m_aPathSegmentVec.back() = NewTitle;
+    return OldTitle;
+}
+
+
+
+void FTPURL::del() const
+    throw(curl_exception)
+{
+    FTPDirentry aDirentry(direntry());
+
+    rtl::OString dele(aDirentry.m_aName.getStr(),
+                      aDirentry.m_aName.getLength(),
+                      RTL_TEXTENCODING_UTF8);
+
+    if(aDirentry.m_nMode & INETCOREFTP_FILEMODE_ISDIR)
+        dele = rtl::OString("RMD ") + dele;
+    else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
+        dele = rtl::OString("DELE ") + dele;
+    else
+        return;
+
+    // post request
+    CURL *curl = m_pFCP->handle();
+    struct curl_slist *slist = 0;
+    slist = curl_slist_append(slist,dele.getStr());
+    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
+
+    SET_CONTROL_CONTAINER;
+    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
+
+    rtl::OUString url(parent(true));
+    if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
+        url += rtl::OUString::createFromAscii("/");
+    SET_URL(url);
+
+    CURLcode err = curl_easy_perform(curl);
+    curl_slist_free_all(slist);
+    if(err != CURLE_OK)
+        throw curl_exception(err);
+}
+
