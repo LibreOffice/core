@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:08:45 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ public:
     virtual String  CreateSbxDescription();
     virtual BOOL    AllowUndo();
     virtual void    SetReadOnly( BOOL bReadOnly );
-
+    virtual BOOL    IsReadOnly();
 
     SbModule*       GetSbModule() { return xModule; }
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
@@ -433,6 +433,7 @@ public:
     BasicStatus&    GetBasicStatus() { return aStatus; }
 
     virtual BOOL    IsModified();
+    virtual BOOL    IsPasteAllowed();
 
     void            FrameWindowMoved();
     void            ShowCursor( BOOL bOn );

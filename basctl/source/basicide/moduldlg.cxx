@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:10 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
@@ -102,9 +105,33 @@ ExtBasicTreeListBox::~ExtBasicTreeListBox()
 
 BOOL __EXPORT ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
-    DBG_ASSERT( pEntry, "Kein Eintrag?" );
-    USHORT nDepth = GetModel()->GetDepth( pEntry );
-    return nDepth == 2 ? TRUE : FALSE;
+    BOOL bRet = FALSE;
+
+    if ( pEntry )
+    {
+        USHORT nDepth = GetModel()->GetDepth( pEntry );
+
+        if ( nDepth == 2 )
+        {
+            SvLBoxEntry* pLibEntry = GetParent( pEntry );
+            BasicManager* pBasMgr = BasicIDE::FindBasicManager( GetEntryText( GetParent( pLibEntry ) ) );
+            if ( pBasMgr )
+            {
+                SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+                ::rtl::OUString aOULibName( GetEntryText( pLibEntry ) );
+                Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+                Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+                if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+                        ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) ) )
+                {
+                    // allow editing only for libraries, which are not readonly
+                    bRet = TRUE;
+                }
+            }
+        }
+    }
+
+    return bRet;
 }
 
 BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
@@ -167,8 +194,35 @@ BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const Strin
 
 DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry )
 {
-    USHORT nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;
-    return nDepth == 2 ? GetDragDropMode() : 0;
+    DragDropMode nMode = SV_DRAGDROP_NONE;
+
+    if ( pEntry )
+    {
+        USHORT nDepth = GetModel()->GetDepth( pEntry );
+
+        if ( nDepth == 2 )
+        {
+            nMode = SV_DRAGDROP_CTRL_COPY;
+
+            SvLBoxEntry* pLibEntry = GetParent( pEntry );
+            BasicManager* pBasMgr = BasicIDE::FindBasicManager( GetEntryText( GetParent( pLibEntry ) ) );
+            if ( pBasMgr )
+            {
+                SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+                ::rtl::OUString aOULibName( GetEntryText( pLibEntry ) );
+                Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+                Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+                if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+                        ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) ) )
+                {
+                    // allow MOVE mode only for libraries, which are not readonly
+                    nMode |= SV_DRAGDROP_CTRL_MOVE;
+                }
+            }
+        }
+    }
+
+    return nMode;
 }
 
 
@@ -185,22 +239,29 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     else if ( ( nDepth == 2 ) && ( GetParent( pEntry ) == GetParent( pSelected ) ) )
         bValid = FALSE;
 
-    // don't drop on a library, which is not loaded or password protected
-    if ( bValid && ( nDepth == 1 ) )
+    // don't drop on a library, which is not loaded, readonly or password protected
+    if ( bValid && ( nDepth == 1 || nDepth == 2) )
     {
-        String aLibName = GetEntryText( pEntry );
-        String aBasMgrName = GetEntryText( GetParent( pEntry ) );
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( aBasMgrName );
+        SvLBoxEntry* pLibEntry = 0;
+        if ( nDepth == 1 )
+            pLibEntry = pEntry;
+        else if ( nDepth == 2 )
+            pLibEntry = GetParent( pEntry );
+
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( GetEntryText( GetParent( pLibEntry ) ) );
         if ( pBasMgr )
         {
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            ::rtl::OUString aOULibName( aLibName );
+            ::rtl::OUString aOULibName( GetEntryText( pLibEntry ) );
 
-            // check if module library is loaded and password protected
-            Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            // check if module library is not loaded, readonly or password protected
+            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
+                    bValid = FALSE;
+
+                if ( xModLibContainer->isLibraryReadOnly( aOULibName ) )
                     bValid = FALSE;
 
                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
@@ -208,10 +269,16 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
                     bValid = FALSE;
             }
 
-            // check if dialog library is loaded
-            Reference< script::XLibraryContainer > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
-                bValid = FALSE;
+            // check if dialog library is not loaded or readonly
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+            {
+                if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+                    bValid = FALSE;
+
+                if ( xDlgLibContainer->isLibraryReadOnly( aOULibName ) )
+                    bValid = FALSE;
+            }
         }
         else
             bValid = FALSE;
@@ -583,6 +650,7 @@ void __EXPORT ObjectPage::DeactivatePage()
 
 void ObjectPage::CheckButtons()
 {
+    BOOL bReadOnly = FALSE;
     BOOL bEnableNew = FALSE;
 
 //  String aEditText( aEdit.GetText() );
@@ -591,10 +659,46 @@ void ObjectPage::CheckButtons()
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     USHORT nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
 
+    // enable/disable edit button
     if ( nDepth == 2 )
         aEditButton.Enable();
     else
         aEditButton.Disable();
+
+    // check, if corresponding libraries are readonly
+    if ( nDepth == 1 || nDepth == 2 )
+    {
+        SvLBoxEntry* pLibEntry = 0;
+        if ( nDepth == 1 )
+            pLibEntry = pCurEntry;
+        else if ( nDepth == 2)
+            pLibEntry = aBasicBox.GetParent( pCurEntry );
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( aBasicBox.GetEntryText( aBasicBox.GetParent( pLibEntry ) ) );
+        if ( pBasMgr )
+        {
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            ::rtl::OUString aOULibName( aBasicBox.GetEntryText( pLibEntry ) );
+            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+            {
+                bReadOnly = TRUE;
+            }
+        }
+    }
+
+    // enable/disable new module/dialog buttons
+    if ( bReadOnly )
+    {
+        aNewModButton.Disable();
+        aNewDlgButton.Disable();
+    }
+    else
+    {
+        aNewModButton.Enable();
+        aNewDlgButton.Enable();
+    }
 
     SvLBoxEntry* pEntry = pCurEntry;
     while ( pEntry && ( ((BasicEntry*)pEntry->GetUserData())->GetType() != OBJTYPE_LIB ) )
@@ -628,7 +732,7 @@ void ObjectPage::CheckButtons()
         if ( pCurEntry )
         {
             BYTE nType = ((BasicEntry*)pCurEntry->GetUserData())->GetType();
-            if ( ( nType == OBJTYPE_OBJECT ) || ( nType == OBJTYPE_MODULE ) )
+            if ( !bReadOnly && ( ( nType == OBJTYPE_OBJECT ) || ( nType == OBJTYPE_MODULE ) ) )
                 aDelButton.Enable();
             else
                 aDelButton.Disable();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #include <sfx2/passwd.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
@@ -247,6 +250,11 @@ void IDEBaseWindow::SetReadOnly( BOOL )
 {
 }
 
+BOOL IDEBaseWindow::IsReadOnly()
+{
+    return FALSE;
+}
+
 void __EXPORT IDEBaseWindow::BasicStarted()
 {
 }
@@ -258,6 +266,11 @@ void __EXPORT IDEBaseWindow::BasicStopped()
 BOOL __EXPORT IDEBaseWindow::IsModified()
 {
     return TRUE;
+}
+
+BOOL __EXPORT IDEBaseWindow::IsPasteAllowed()
+{
+    return FALSE;
 }
 
 Window* __EXPORT IDEBaseWindow::GetLayoutWindow()
@@ -583,6 +596,29 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
             aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
             aPopup.EnableItem( SID_BASICIDE_HIDECURPAGE, FALSE );
         }
+
+        if ( pCurrentLib )
+        {
+            BasicManager* pBasMgr = BasicIDE::FindBasicManager( pCurrentLib );
+            if ( pBasMgr )
+            {
+                SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+                ::rtl::OUString aOULibName( pCurrentLib->GetName() );
+                Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+                Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+                if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+                     ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+                {
+                    aPopup.EnableItem( aPopup.GetItemId( 0 ), FALSE );
+                    //aPopup.EnableItem( SID_BASICIDE_NEWMODULE, FALSE );
+                    //aPopup.EnableItem( SID_BASICIDE_NEWDIALOG, FALSE );
+                    aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
+                    aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
+                    //aPopup.RemoveDisabledEntries();
+                }
+            }
+        }
+
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
@@ -590,7 +626,9 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
         {
             pDispatcher->Execute( aPopup.Execute( this, aPos ) );
         }
+
     }
+
     /*
     else if ( ( rCEvt.GetCommand() == COMMAND_STARTDRAG ) && pCurrentLib && !IsInEditMode() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include <sfx2/minfitem.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -499,6 +502,31 @@ void MacroChooser::CheckButtons()
     SbxVariable* pVar = aBasicBox.FindVariable( pCurEntry );
     SbMethod* pMethod = GetMacro();
 
+    // check, if corresponding libraries are readonly
+    BOOL bReadOnly = FALSE;
+    USHORT nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
+    if ( nDepth == 1 || nDepth == 2 )
+    {
+        SvLBoxEntry* pLibEntry = 0;
+        if ( nDepth == 1 )
+            pLibEntry = pCurEntry;
+        else if ( nDepth == 2)
+            pLibEntry = aBasicBox.GetParent( pCurEntry );
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( aBasicBox.GetEntryText( aBasicBox.GetParent( pLibEntry ) ) );
+        if ( pBasMgr )
+        {
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            ::rtl::OUString aOULibName( aBasicBox.GetEntryText( pLibEntry ) );
+            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+            {
+                bReadOnly = TRUE;
+            }
+        }
+    }
+
     // Run...
     BOOL bEnable = pMethod ? TRUE : FALSE;
     if ( ( nMode != MACROCHOOSER_CHOOSEONLY ) && StarBASIC::IsRunning() )
@@ -518,7 +546,7 @@ void MacroChooser::CheckButtons()
 
     // aNewDelButton....
     EnableButton( aNewDelButton,
-        !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ) && !aBasicBox.IsEntryProtected( aBasicBox.GetCurEntry() ) );
+        !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ) && !aBasicBox.IsEntryProtected( aBasicBox.GetCurEntry() ) && !bReadOnly );
     BOOL bPrev = bNewDelIsDel;
     bNewDelIsDel = pMethod ? TRUE : FALSE;
     if ( ( bPrev != bNewDelIsDel ) && ( nMode != MACROCHOOSER_CHOOSEONLY ) )

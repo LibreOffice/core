@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-09 15:41:40 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,8 +1047,11 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
         break;
         case SID_CUT:
         {
-            GetEditView()->Cut();
-            BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+            if ( !IsReadOnly() )
+            {
+                GetEditView()->Cut();
+                BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+            }
         }
         break;
         case SID_COPY:
@@ -1058,8 +1061,11 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
         break;
         case SID_PASTE:
         {
-            GetEditView()->Paste();
-            BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+            if ( !IsReadOnly() )
+            {
+                GetEditView()->Paste();
+                BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+            }
         }
         break;
         case SID_BASICIDE_BRKPNTSCHANGED:
@@ -1081,29 +1087,28 @@ void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
         switch ( nWh )
         {
             // allgemeine Items:
-//          case SID_CUT:
+            case SID_CUT:
+            {
+                if ( !GetEditView() || !GetEditView()->HasSelection() )
+                    rSet.DisableItem( nWh );
+
+                if ( IsReadOnly() )
+                    rSet.DisableItem( nWh );
+            }
+            break;
             case SID_COPY:
             {
-//              if ( !GetEditView() || !GetEditView()->HasSelection() )
-//                  rSet.DisableItem( nWh );
+                if ( !GetEditView() || !GetEditView()->HasSelection() )
+                    rSet.DisableItem( nWh );
             }
             break;
-            case SID_DELETE:
-            {
-                ;
-            }
-            break;
-            case SID_CUT:
             case SID_PASTE:
             {
-                // disable slots for readonly libraries
-                SfxObjectShell* pShell = GetShell();
-                ::rtl::OUString aOULibName( GetLibName() );
-                Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-                if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
-                {
+                if ( !IsPasteAllowed() )
                     rSet.DisableItem( nWh );
-                }
+
+                if ( IsReadOnly() )
+                    rSet.DisableItem( nWh );
             }
             break;
             case SID_BASICIDE_STAT_POS:
@@ -1339,6 +1344,42 @@ void ModulWindow::SetReadOnly( BOOL b )
 {
     if ( GetEditView() )
         GetEditView()->SetReadOnly( b );
+}
+
+BOOL ModulWindow::IsReadOnly()
+{
+    BOOL bReadOnly = FALSE;
+
+    if ( GetEditView() )
+        bReadOnly = GetEditView()->IsReadOnly();
+
+    return bReadOnly;
+}
+
+BOOL ModulWindow::IsPasteAllowed()
+{
+    BOOL bPaste = FALSE;
+
+    // get clipboard
+    Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
+    if ( xClipboard.is() )
+    {
+        // get clipboard content
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
+        if ( xTransf.is() )
+        {
+            datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( xTransf->isDataFlavorSupported( aFlavor ) )
+            {
+                bPaste = TRUE;
+            }
+        }
+    }
+
+    return bPaste;
 }
 
 ModulWindowLayout::ModulWindowLayout( Window* pParent ) :

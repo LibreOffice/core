@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-17 10:17:18 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 
-enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST };
+enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST, DLGED_READONLY };
 
 //============================================================================
 // DlgEditor
@@ -179,7 +179,7 @@ public:
     void            Copy();
     void            Paste();
     void            Delete();
-    BOOL            IsPasteAllowed() const;
+    BOOL            IsPasteAllowed();
 
     void            ShowProperties();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-09 11:29:59 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,11 +770,11 @@ void EditorWindow::CreateEditEngine()
     Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
     {
-        pEditView->SetReadOnly( TRUE );
+        pModulWindow->SetReadOnly( TRUE );
     }
 
     if ( pShell && pShell->IsReadOnly() )
-        pEditView->SetReadOnly( TRUE );
+        pModulWindow->SetReadOnly( TRUE );
 }
 
 void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

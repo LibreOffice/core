@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ IMPL_LINK( BasicIDEShell, TabBarHdl, TabBar *, pCurTabBar )
     IDEBaseWindow* pWin = aIDEWindowTable.Get( nCurId );
     DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
     SetCurWindow( pWin );
+    ((BasicIDETabBar*)pCurTabBar)->SetCurrentLib( pWin->GetBasic() );
 
     return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-17 10:14:13 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,20 +538,25 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
 void DlgEditor::SetMode( DlgEdMode eNewMode )
 {
-    if( eMode != eNewMode )
+    if ( eMode != eNewMode )
     {
-        if( pFunc )
+        if ( pFunc )
             delete pFunc;
     }
 
     eMode = eNewMode;
-    if( eMode == DLGED_INSERT )
+    if ( eMode == DLGED_INSERT )
         pFunc = new DlgEdFuncInsert( this );
     else
         pFunc = new DlgEdFuncSelect( this );
 
-    if( eMode == DLGED_TEST )
+    if ( eMode == DLGED_TEST )
         ShowDialog();
+
+    if ( eMode == DLGED_READONLY )
+        pSdrModel->SetReadOnly( TRUE );
+    else
+        pSdrModel->SetReadOnly( FALSE );
 }
 
 //----------------------------------------------------------------------------
@@ -838,9 +843,9 @@ void DlgEditor::Delete()
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEditor::IsPasteAllowed() const
+BOOL DlgEditor::IsPasteAllowed()
 {
-    BOOL bIsPasteAllowed = FALSE;
+    BOOL bPaste = FALSE;
 
     // get clipboard
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
@@ -854,12 +859,12 @@ BOOL DlgEditor::IsPasteAllowed() const
         {
             if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
             {
-                bIsPasteAllowed = TRUE;
+                bPaste = TRUE;
             }
         }
     }
 
-    return bIsPasteAllowed;
+    return bPaste;
 }
 
 //----------------------------------------------------------------------------

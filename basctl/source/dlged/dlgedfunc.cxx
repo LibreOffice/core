@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-17 10:14:13 $
+ *  last change: $Author: tbe $ $Date: 2001-11-12 22:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aPos, nHitLog) )
+        if ( pView->IsMarkedHit(aPos, nHitLog) && pParent->GetMode() != DLGED_READONLY )
             pParent->ShowProperties();
     }
 
@@ -405,7 +405,7 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aMDPos, nHitLog) )
+        if ( pView->IsMarkedHit(aMDPos, nHitLog) && pParent->GetMode() != DLGED_READONLY )
             pParent->ShowProperties();
     }
 
