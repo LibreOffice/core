@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:48:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,31 +389,21 @@ sal_Bool lcl_IsLocalProperty(const OUString& rSubTree, const OUString& rProperty
     static const sal_Char* aLocalProperties[] =
     {
         "Office.Common/Path/Current/Storage",
-        "Office.Common/Path/Current/Temp",
-        "Security/MountPoints"
+        "Office.Common/Path/Current/Temp"
     };
     static const int aLocalPropLen[] =
     {
         34,
-        31,
-        20
+        31
     };
     OUString sProperty(rSubTree);
     sProperty += C2U("/");
     sProperty += rProperty;
 
     if(sProperty.equalsAsciiL( aLocalProperties[0], aLocalPropLen[0]) ||
-        sProperty.equalsAsciiL( aLocalProperties[1], aLocalPropLen[1]) ||
-        sProperty.
-            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                             "Office.Common/Path/Current/OfficeInstall")) ||
-        sProperty.
-            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                             "UserProfile/Office/InstallPath")))
+        sProperty.equalsAsciiL( aLocalProperties[1], aLocalPropLen[1]))
         return sal_True;
 
-    if(!sProperty.compareToAscii( aLocalProperties[2],  aLocalPropLen[2]))
-        return sal_True;
     return sal_False;
 }
 /* -----------------------------10.04.01 15:00--------------------------------
