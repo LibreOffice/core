@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:27:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ String STR_HUMAN_SWWEBDOC_NAME
     Text[ czech ] = "HTML";
     Text[ hebrew ] = "HTML";
     Text[ hindi ] = "HTML";
+    Text[ slovak ] = "HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_40
 {
@@ -142,6 +143,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text[ czech ] = "%PRODUCTNAME 4.0 HTML";
     Text[ hebrew ] = "%PRODUCTNAME 4.0 HTML";
     Text[ hindi ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ slovak ] = "%PRODUCTNAME 4.0 HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_50
 {
@@ -174,6 +176,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text[ czech ] = "%PRODUCTNAME 5.0 HTML";
     Text[ hebrew ] = "%PRODUCTNAME 5.0 HTML";
     Text[ hindi ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ slovak ] = "%PRODUCTNAME 5.0 HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
@@ -203,6 +206,7 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ czech ] = "HTML dokument %PRODUCTNAME 6.0";
     Text[ hebrew ] = "%PRODUCTNAME 6.0 HTML-Dokument";
     Text[ hindi ] = "%PRODUCTNAME 6.0 HTML लेखपत्र";
+    Text[ slovak ] = "HTML dokument %PRODUCTNAME 6.0";
 };
 String STR_SHELLNAME_WEBTEXT
 {
@@ -235,6 +239,7 @@ String STR_SHELLNAME_WEBTEXT
     Text[ czech ] = "Text/Web";
     Text[ hebrew ] = "Text/Web";
     Text[ hindi ] = "टेक्स्ट्/वेब";
+    Text[ slovak ] = "Text/Web";
 };
 String STR_SHELLNAME_WEBFRAME
 {
@@ -267,6 +272,7 @@ String STR_SHELLNAME_WEBFRAME
     Text[ czech ] = "Rámec/Web";
     Text[ hebrew ] = "Rahmen/Web";
     Text[ hindi ] = "फ्रेम/वेब";
+    Text[ slovak ] = "Rámec/Web";
 };
 String RID_WEBTOOLS_TOOLBOX
 {
@@ -299,6 +305,7 @@ String RID_WEBTOOLS_TOOLBOX
     Text[ czech ] = "Hlavní panel/Web";
     Text[ hebrew ] = "Werkzeugleiste/Web";
     Text[ hindi ] = "मुख्य औज़ार पट्टी/वेब";
+    Text[ slovak ] = "Hlavný panel/Web";
 };
 ToolBox RID_WEBTOOLS_TOOLBOX
 {
@@ -452,6 +459,7 @@ String RID_WEBTEXT_TOOLBOX
     Text[ czech ] = "Panel textových objektů/Web";
     Text[ hebrew ] = "Textobjektleiste/Web";
     Text[ hindi ] = "टेक्स्ट् वस्तु पट्टी/वेब";
+    Text[ slovak ] = "Panel textových objektov";
 };
 ToolBox RID_WEBTEXT_TOOLBOX
 {
@@ -535,6 +543,7 @@ String RID_WEBFRAME_TOOLBOX
     Text[ czech ] = "Panel objektů/Web";
     Text[ hebrew ] = "Rahmenobjektleiste/Web";
     Text[ hindi ] = "फ्रेम वस्तु पट्टी/वेब";
+    Text[ slovak ] = "Panel objektov/Web";
 };
 ToolBox RID_WEBFRAME_TOOLBOX
 {
@@ -606,6 +615,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text[ czech ] = "Panel grafických objektů/Web";
     Text[ hebrew ] = "Grafikobjektleiste/Web";
     Text[ hindi ] = "सुचित्र वस्तु पट्टी/वेब";
+    Text[ slovak ] = "Panel grafických objektov/Web";
 };
 ToolBox RID_WEBGRAPHIC_TOOLBOX
 {
@@ -673,6 +683,7 @@ String RID_WEBOLE_TOOLBOX
     Text[ czech ] = "Objekt";
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
+    Text[ slovak ] = "Objekt";
 };
 ToolBox RID_WEBOLE_TOOLBOX
 {
@@ -711,6 +722,8 @@ ToolBox RID_WEBOLE_TOOLBOX
 /*************************************************************************
 
 *************************************************************************/
+
+
 
 
 
