@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-22 10:13:33 $
+ *  last change: $Author: ama $ $Date: 2002-02-15 09:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3196,7 +3196,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             }
         }
         const long nDiff = nWidth - (Frm().*fnRect->fnGetWidth)();
-        (Frm().*fnRect->fnAddRight)( nDiff );
+        if( IsNeighbourFrm() && IsRightToLeft() )
+            (Frm().*fnRect->fnSubLeft)( nDiff );
+        else
+            (Frm().*fnRect->fnAddRight)( nDiff );
         (Prt().*fnRect->fnAddRight)( nDiff );
 
         //Jetzt die Hoehe einstellen, sie wird vom Inhalt und den Raendern

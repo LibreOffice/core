@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-08 14:47:49 $
+ *  last change: $Author: ama $ $Date: 2002-02-15 09:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             {
                 const SwFmtFrmSize &rSz = nWhich == RES_FMT_CHG ?
                         ((SwFmtChg*)pNew)->pChangedFmt->GetFrmSize() :
-                        (SwFmtFrmSize&)*pNew;
+                        (const SwFmtFrmSize&)*pNew;
 
                 Frm().Height( Max( rSz.GetHeight(), long(MINLAY) ) );
                 Frm().Width ( Max( rSz.GetWidth(),  long(MINLAY) ) );

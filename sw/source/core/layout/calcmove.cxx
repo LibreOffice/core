@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:39:56 $
+ *  last change: $Author: ama $ $Date: 2002-02-15 09:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,7 +855,11 @@ void SwLayoutFrm::MakeAll()
                     if( pNxt )
                         nPrtWidth -= pNxt->Frm().Height();
                 }
-                (aFrm.*fnRect->fnSetWidth)( nPrtWidth );
+                const long nDiff = nPrtWidth - (Frm().*fnRect->fnGetWidth)();
+                if( IsNeighbourFrm() && IsRightToLeft() )
+                    (Frm().*fnRect->fnSubLeft)( nDiff );
+                else
+                    (Frm().*fnRect->fnAddRight)( nDiff );
             }
             else
             {   // Don't leave your upper
