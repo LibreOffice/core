@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:47:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1729,6 +1729,17 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
         switch ( nId )
         {
+            // --> OD 2005-03-03 #i43775# - sub shells will be destroyed by the
+            // dispatcher, if the view frame is dying. Thus, reset member <pShell>.
+            case SFX_HINT_DYING:
+                {
+                    if ( &rBC == GetViewFrame() )
+                    {
+                        ResetSubShell();
+                    }
+                }
+                break;
+            // <--
             case SFX_HINT_MODECHANGED:
                 {
                     // Modalmodus-Umschaltung?
