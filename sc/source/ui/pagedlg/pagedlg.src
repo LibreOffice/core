@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:29:40 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ ModelessDialog RID_SCDLG_AREAS
     StringList [ chinese_traditional ] =
     {
             < "- µL -" ; Default ; > ;
-        < "-¦Û­q -" ; Default ; > ;
+        < "-¨Ï¥ÎªÌ¦Û­q -" ; Default ; > ;
         < "- ¿ï¨ú -" ; Default ; > ;
     };
     StringList [ arabic ] =
@@ -417,7 +417,7 @@ ModelessDialog RID_SCDLG_AREAS
     StringList [ chinese_traditional ] =
     {
             < "- µL -" ; Default ; > ;
-        < "- ¦Û­q -" ; Default ; > ;
+        < "- ¨Ï¥ÎªÌ¦Û­q -" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -598,7 +598,7 @@ ModelessDialog RID_SCDLG_AREAS
     StringList [ chinese_traditional ] =
     {
             < "- µL -" ; Default ; > ;
-        < "- ¦Û­q -" ; Default ; > ;
+        < "- ¨Ï¥ÎªÌ¦Û­q -" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -666,7 +666,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ russian ] = "Ïğàâêà îáëàñòåé ïå÷àòè";
     Text[ polish ] = "Edytuj obszar wydruku";
     Text[ japanese ] = "ˆóü”ÍˆÍ‚Ì•ÒW";
-    Text[ chinese_traditional ] = "½s¿è¦C¦L­S³ò";
+    Text[ chinese_traditional ] = "½s¿è¦C¦L½d³ò";
     Text[ arabic ] = "ÊÍÑíÑ äØÇŞÇÊ ÇáØÈÇÚÉ";
     Text[ greek ] = "Åğåîåñãáóßá ğåñéï÷şí åêôığùóçò";
     Text[ korean ] = "ÀÎ¼â ¹üÀ§ ÆíÁı";
