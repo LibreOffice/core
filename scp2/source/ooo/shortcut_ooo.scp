@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: is $ $Date: 2004-02-05 18:10:15 $
+*  last change: $Author: hr $ $Date: 2004-05-10 14:19:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,30 +60,6 @@
 ************************************************************************/
 
 #include "macros.inc"
-
-Shortcut gid_Shortcut_Setup
-    FileID = gid_File_Bin_Setup;
-    Dir = PREDEFINED_PROGDIR;
-  #ifdef WNT
-    Name = "%PRODUCTNAME Setup";
-    Styles = (NETWORK, WORKSTATION, STANDALONE, RELATIVE);
-  #else
-    Name = "setup";
-    Styles = (STANDALONE, NETWORK, RELATIVE);
-  #endif
-End
-
-Shortcut gid_Shortcut_Soffice
-    FileID = gid_File_Bin_Soffice;
-    Dir = PREDEFINED_PROGDIR;
-  #ifdef WNT
-    Name = "%PRODUCTNAME %PRODUCTVERSION";
-    Styles = (NETWORK, STANDALONE, WORKSTATION, RELATIVE);
-  #else
-    Name = "soffice";
-    Styles = (NETWORK ,STANDALONE, RELATIVE);
-  #endif
-End
 
 #ifdef UNX
 
@@ -398,17 +374,6 @@ Shortcut gid_Shortcut_Soffice_Pkgchk
     FileID = gid_File_Bin_Soffice;
     Dir = gid_Dir_Program;
     Name = "pkgchk";
-    Styles = (STANDALONE, NETWORK, RELATIVE);
-End
-
-#endif
-
-#ifdef UNX
-
-Shortcut gid_Shortcut_Spadmin
-    FileID = gid_File_Bin_Soffice;
-    Dir = PREDEFINED_PROGDIR;
-    Name = "spadmin";
     Styles = (STANDALONE, NETWORK, RELATIVE);
 End
 
