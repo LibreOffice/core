@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:54:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,58 +1249,57 @@ BOOL SwFEShell::CanUnProtectCells() const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  IsHeadlineRepeat(), SetHeadlineRepeat()
-#*  Datum      :  MA 02. Feb. 94
-#*  Update     :  MA 27. Jul. 95
+#*  Methoden   :  GetRowsToRepeat(), SetRowsToRepeat()
 #***********************************************************************/
-BOOL SwFEShell::IsHeadlineRepeat() const
+USHORT SwFEShell::GetRowsToRepeat() const
 {
     const SwFrm *pFrm = GetCurrFrm();
     const SwTabFrm *pTab = pFrm->FindTabFrm();
     if( pTab )
-        return pTab->GetTable()->IsHeadlineRepeat();
-    return FALSE;
+        return pTab->GetTable()->GetRowsToRepeat();
+    return 0;
 }
 
-void SwFEShell::SetHeadlineRepeat( BOOL bSet )
+void SwFEShell::SetRowsToRepeat( USHORT nSet )
 {
     SwFrm    *pFrm = GetCurrFrm();
     SwTabFrm *pTab = pFrm->FindTabFrm();
-    if( pTab && pTab->GetTable()->IsHeadlineRepeat() != bSet )
+    if( pTab && pTab->GetTable()->GetRowsToRepeat() != nSet )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetHeadlineRepeat( *pTab->GetTable(), bSet );
+        GetDoc()->SetRowsToRepeat( *pTab->GetTable(), nSet );
         EndAllActionAndCall();
     }
 }
 
-BOOL SwFEShell::IsInHeadline() const
+/*
+ * 1. case: bRepeat = true
+ * returns true if the current frame is located inside a table headline in
+ * a follow frame
+ *
+ * 2. case: bRepeat = false
+ * returns true if the current frame is localed inside a table headline OR
+ * inside the first line of a table!!!
+ */
+BOOL SwFEShell::CheckHeadline( bool bRepeat ) const
 {
     BOOL bRet = FALSE;
     if ( !IsTableMode() )
     {
-        SwFrm *pFrm = GetCurrFrm();
-        if ( pFrm->IsInTab() && ((SwLayoutFrm*)pFrm->FindTabFrm()->Lower())->IsAnLower( pFrm))
-            bRet = TRUE;
-    }
-    return bRet;
-}
-
-BOOL SwFEShell::IsInRepeatedHeadline() const
-{
-    BOOL bRet = FALSE;
-    if ( !IsTableMode() )
-    {
-        SwFrm *pFrm = GetCurrFrm();
+        SwFrm *pFrm = GetCurrFrm();  // DONE MULTIIHEADER
         if ( pFrm->IsInTab() )
         {
-            SwTabFrm *pTab = pFrm->FindTabFrm();
-            if ( pTab->IsFollow() && pTab->GetTable()->IsHeadlineRepeat() &&
-                 ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pFrm ) )
+            SwTabFrm* pTab = pFrm->FindTabFrm();
+            if ( bRepeat )
             {
-                bRet = TRUE;
+                bRet = pTab->IsFollow() && pTab->IsInHeadline( *pFrm );
+            }
+            else
+            {
+                bRet =  ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pFrm ) ||
+                        pTab->IsInHeadline( *pFrm );
             }
         }
     }
