@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:17:49 $
+ *  last change: $Author: fs $ $Date: 2001-01-25 10:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1891,25 +1891,66 @@ BOOL OResultSet::OpenImpl()
     m_aSQLAnalyzer.setParameterColumns(m_xParamColumns);
     anylizeSQL();
 
-    // now check which columns are bound
-    OValueVector::iterator aRowIter = m_aRow->begin();
-    ::comphelper::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
     sal_Int32 i=0;
-    Reference<XPropertySet> xProp;
-    ++aRowIter;
-    for(OSQLColumns::iterator aIter = m_xColumns->begin();aIter != m_xColumns->end();++aIter,++i,++aRowIter)
+    // initialize the column index map (mapping select columns to table columns)
+    m_aColMapping.resize(m_xColumns->size() + 1);
+    for (i=0; i<m_aColMapping.size(); ++i)
+        m_aColMapping[i] = i;
+
+    // now check which columns are bound
+    ::comphelper::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
+
+    Reference<XPropertySet> xTableColumn;
+    ::rtl::OUString sTableColumnName, sSelectColumnRealName;
+    OValueVector::iterator aRowIter = m_aRow->begin();
+    for (   i=0, ++aRowIter;    // the first column is the bookmark column
+            aRowIter != m_aRow->end();
+            ++i, ++aRowIter
+        )
     {
-        xNames->getByIndex(i) >>= xProp;
         try
         {
-            aRowIter->setBound(aCase(connectivity::getString(xProp->getPropertyValue(PROPERTY_NAME)),connectivity::getString((*aIter)->getPropertyValue(PROPERTY_REALNAME))));
-            sal_Int32 nType;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
+            // get the table column and it's name
+            xTableColumn.clear();
+            ::cppu::extractInterface(xTableColumn, xNames->getByIndex(i));
+            OSL_ENSURE(xTableColumn.is(), "OResultSet::OpenImpl: invalid table column!");
+            if (xTableColumn.is())
+                xTableColumn->getPropertyValue(PROPERTY_NAME) >>= sTableColumnName;
+            else
+                sTableColumnName = ::rtl::OUString();
+
+            // look if we have such a select column
+            // TODO: would like to have a O(log n) search here ...
+            for (   OSQLColumns::iterator aIter = m_xColumns->begin();
+                    aIter != m_xColumns->end();
+                    ++aIter
+                )
+            {
+                (*aIter)->getPropertyValue(PROPERTY_REALNAME) >>= sSelectColumnRealName;
+                if (aCase(sTableColumnName, sSelectColumnRealName))
+                    break;
+            }
+            sal_Bool bBind = aIter != m_xColumns->end();
+                // TRUE -> found the table column within the select columns
+
+            if (bBind)
+            {
+                sal_Int32 nSelectColumnPos = aIter - m_xColumns->begin() + 1;
+                    // the getXXX methods are 1-based ...
+                sal_Int32 nTableColumnPos = i + 1;
+                    // get first table column is the bookmark column ...
+                m_aColMapping[nSelectColumnPos] = nTableColumnPos;
+            }
+
+            aRowIter->setBound(bBind);
+            sal_Int32 nType = DataType::OTHER;
+            if (xTableColumn.is())
+                xTableColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
             aRowIter->setTypeKind(nType);
         }
-        catch(...)
+        catch (Exception&)
         {
-            OSL_ENSHURE(0,"OResultSet::OpenImpl() Exeception catched!");
+            OSL_ENSHURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
         }
     }
 
