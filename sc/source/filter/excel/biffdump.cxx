@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:46:46 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,16 +334,27 @@ inline static void __Add16p16( ByteString& r, UINT32 n )
 }
 
 
-static void __AddRef( ByteString& r, const UINT16 nC, const UINT16 nR )
+static void lcl_AddRef( ByteString& rStr, sal_uInt16 nCol, sal_uInt16 nRow )
 {
-    ScTripel    aRef( nC, nR, 0 );
-    r += GETSTR( aRef.GetColRowString() );
+    ScTripel aRef( nCol, nRow, 0 );
+    rStr.Append( GETSTR( aRef.GetColRowString() ) );
+}
+
+
+static void lcl_AddRangeRef( ByteString& rStr, sal_uInt16 nCol1, sal_uInt16 nRow1, sal_uInt16 nCol2, sal_uInt16 nRow2 )
+{
+    lcl_AddRef( rStr, nCol1, nRow1 );
+    if( (nCol1 != nCol2) || (nRow1 != nRow2) )
+    {
+        rStr.Append( ':' );
+        lcl_AddRef( rStr, nCol2, nRow2 );
+    }
 }
 
 
 static void __AddCellHead( ByteString& r, const UINT16 nC, const UINT16 nR, const UINT16 nXF )
 {
-    __AddRef( r, (UINT8) nC, nR );
+    lcl_AddRef( r, (UINT8) nC, nR );
     r += " (XF=";
     __AddDec( r, nXF );
     r += ')';
@@ -474,38 +485,41 @@ static void AddRef( ByteString& t, UINT16 nRow, UINT16 nC, BOOL bName, UINT16 nT
     if( bName )
     {
         // dump relative: [Column|Row]
-        // C-1, R-1 = one column left/row up
-        // C+1, R+1 = one column right/row down
-        // C,   R   = same column/row
-        // C=B, R=2 = absolute column B/row 2
-        t += "[C";
+        // C(-1), R(-1) = one column left/row up
+        // C(+1), R(+1) = one column right/row down
+        // C(0),  R(0)  = same column/row
+        // C(=B), R(=2) = absolute column B/row 2
+        t += "C";
         if( bColRel )
         {
+            t += '(';
             if( nRelCol > 0 )
                 t += '+';
-            if( nRelCol )
-                __AddDec( t, (INT16)nRelCol );
+            __AddDec( t, (INT16)nRelCol );
+            t += ')';
         }
         else
         {
-            t += '=';
+            t += "(=";
             t += GETSTR( ::ColToAlpha( nCol ) );
+            t += ')';
         }
-        t += "|R";
 
+        t += 'R';
         if( bRowRel )
         {
+            t += '(';
             if( nRelRow > 0 )
                 t += "+";
-            if( nRelRow )
-                __AddDec( t, nRelRow );
+            __AddDec( t, nRelRow );
+            t += ')';
         }
         else
         {
-            t += '=';
-            __AddDec( t, (UINT16)(nRow + 1) );
+            t += "(=";
+            __AddDec( t, (INT32)nRow + 1 );
+            t += ')';
         }
-        t += ']';
     }
     else
     {
@@ -652,7 +666,6 @@ DUMP_ERR::~DUMP_ERR()
 #define ADDDOUBLE()             __AddDouble( t, rIn.ReadDouble() )
 #define ADD16P16()              __Add16p16( t, Read4( rIn ) )
 #define ADDTEXT(T)              t += T
-#define ADDCOLROW(c,r)          __AddRef( t, c, r )
 #define PRINT()                 Print( t )
 #define PreDump(LEN)            {rIn.PushPosition();ContDump(LEN);rIn.PopPosition();}
 #define ADDCELLHEAD()           {UINT16 nR,nC,nX;rIn>>nR>>nC>>nX;__AddCellHead(t,nC,nR,nX);}
@@ -799,15 +812,15 @@ UINT16 Biff8RecDumper::DumpXF( XclImpStream& rStrm, const sal_Char* pPre )
     return 0;
 }
 
-// 16 bit pseudo password
 void Biff8RecDumper::DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre )
 {
     ByteString  t;
-    UINT16 nPasswd;
-    rIn >> nPasswd;
+    UINT16 nHash;
+    rIn >> nHash;
     LINESTART();
-    __AddHex( t, nPasswd );
-    if( nPasswd )
+    ADDTEXT( "hash=" );
+    __AddHex( t, nHash );
+    if( nHash )
     {
         ByteString  sPasswd;
         ByteString  sDummy;
@@ -815,48 +828,47 @@ void Biff8RecDumper::DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre 
         UINT16  nDummy;
         UINT16  nNewChar;
 
-        nPasswd ^= 0xCE4B;
-        nDummy = nPasswd;
-        ADDTEXT( "   without mask: " );
-        __AddHex( t, nPasswd );
-        sPasswd.Erase();
+        nHash ^= 0xCE4B;
+        nDummy = nHash;
+        ADDTEXT( "   without-mask=" );
+        __AddHex( t, nHash );
         while( !(nDummy & 0x8000) && nLen )
         {
             nLen--;
             nDummy <<= 1;
         }
         if( !nLen ) nLen = 2;
-        if( (nLen ^ nPasswd) & 0x0001 ) nLen++;
+        if( (nLen ^ nHash) & 0x0001 ) nLen++;
         if( nLen == 9 )
         {
             nLen = 10;
-            nPasswd ^= 0x8001;
+            nHash ^= 0x8001;
         }
-        nPasswd ^= nLen;
-        if( nLen < 9 ) nPasswd <<= (8 - nLen);
+        nHash ^= nLen;
+        if( nLen < 9 ) nHash <<= (8 - nLen);
         for( UINT16 iChar = nLen; iChar > 0; iChar-- )
         {
             switch( iChar )
             {
                 case 10:
-                    nNewChar = (nPasswd & 0xC000) | 0x0400;
-                    nPasswd ^= nNewChar;
+                    nNewChar = (nHash & 0xC000) | 0x0400;
+                    nHash ^= nNewChar;
                     nNewChar >>= 2;
                     break;
                 case 9:
                     nNewChar = 0x4200;
-                    nPasswd ^= nNewChar;
+                    nHash ^= nNewChar;
                     nNewChar >>= 1;
                     break;
                 case 1:
-                    nNewChar = nPasswd & 0xFF00;
+                    nNewChar = nHash & 0xFF00;
                     break;
                 default:
-                    nNewChar = (nPasswd & 0xE000) ^ 0x2000;
-                    if( !nNewChar ) nNewChar = (nPasswd & 0xF000) ^ 0x1800;
+                    nNewChar = (nHash & 0xE000) ^ 0x2000;
+                    if( !nNewChar ) nNewChar = (nHash & 0xF000) ^ 0x1800;
                     if( nNewChar == 0x6000 ) nNewChar = 0x6100;
-                    nPasswd ^= nNewChar;
-                    nPasswd <<= 1;
+                    nHash ^= nNewChar;
+                    nHash <<= 1;
                     break;
             }
             nNewChar >>= 8;
@@ -865,9 +877,9 @@ void Biff8RecDumper::DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre 
             sPasswd = (sal_Char) nNewChar;
             sPasswd += sDummy;
         }
-        ADDTEXT( "   valid password: \"" );
+        ADDTEXT( "   valid-password='" );
         t += sPasswd;
-        ADDTEXT( "\"" );
+        ADDTEXT( "'" );
     }
     PRINT();
 }
@@ -1007,8 +1019,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "   last row+1: " );         __AddHex( t, nR2 );
                 ADDTEXT( "   first col: " );          __AddHex( t, nC1 );
                 ADDTEXT( "   last col+1: " );         __AddHex( t, nC2 );
-                ADDTEXT( "   (" );                    __AddRef( t, nC1, (UINT16)nR1 );
-                ADDTEXT( ":" );                       __AddRef( t, nC2-1, (UINT16)nR2-1 );
+                ADDTEXT( "   (" );                    lcl_AddRangeRef( t, nC1, (UINT16)nR1, nC2-1, (UINT16)nR2-1 );
                 ADDTEXT( ")" );
                 PRINT();
             }
@@ -1151,7 +1162,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "   active cell: " );
                 UINT16 nR, nC;
                 rIn >> nR >> nC;
-                __AddRef( t, nC, nR );
+                lcl_AddRef( t, nC, nR );
                 ADDTEXT( "   active index: " );     ADDDEC( 2 );
                 ADDTEXT( "   ref count: " );
                 UINT16 nCount;
@@ -1165,8 +1176,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     UINT8 nC1, nC2;
                     rIn >> nR1 >> nR2 >> nC1 >> nC2;
                     ADDTEXT( "ref#" );      __AddDec( t, nIndex, 3 );
-                    ADDTEXT( ": " );        __AddRef( t, nC1, nR1 );
-                    ADDTEXT( ":" );         __AddRef( t, nC2, nR2 );
+                    ADDTEXT( ": " );        lcl_AddRangeRef( t, nC1, nR1, nC2, nR2 );
                     PRINT();
                 }
             }
@@ -1178,6 +1188,109 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 ADDDOUBLE();
                 PRINT();
+            break;
+            case 0x002F:        // FILEPASS
+            {
+                LINESTART();
+                sal_uInt16 nType;
+                rIn >> nType;
+                ADDTEXT( "encrypt-type=" );     __AddHex( t, nType );
+                ADDTEXT( " (" );
+                switch( nType )
+                {
+                    case 0x0000:
+                    {
+                        ADDTEXT( "BIFF2-BIFF7 XOR)   key=" );
+                        ADDHEX( 2 );
+                        ADDTEXT( "   hash=" );
+                        ADDHEX( 2 );
+                        PRINT();
+                    }
+                    break;
+
+                    case 0x0001:
+                    {
+                        ADDTEXT( "BIFF8 standard/strong)" );
+                        PRINT();
+                        LINESTART();
+                        ADDTEXT( "reserved=" );     ADDHEX( 2 );
+                        sal_uInt16 nMode;
+                        rIn >> nMode;
+                        ADDTEXT( "   mode=" );      __AddHex( t, nMode );
+                        ADDTEXT( " (" );
+                        switch( nMode )
+                        {
+                            case 0x0001:
+                            {
+                                ADDTEXT( "BIFF8 standard)   key=..." );
+                                PRINT();
+                                ContDump( rIn.GetRecLeft() );
+                            }
+                            break;
+                            case 0x0002:
+                            {
+                                ADDTEXT( "BIFF8X strong)   flags=" );
+                                ADDHEX( 4 );
+                                PRINT();
+                                LINESTART();
+                                ADDTEXT( "info-size=" );        ADDHEX( 4 );
+                                ADDTEXT( "    flags=" );        ADDHEX( 4 );
+                                ADDTEXT( "    unknown=" );      ADDHEX( 4 );
+                                PRINT();
+                                LINESTART();
+                                ADDTEXT( "stream-crypt-id=" );  ADDHEX( 4 );
+                                ADDTEXT( "   hash-algo-id=" );  ADDHEX( 4 );
+                                ADDTEXT( "   hash-key-len=" );  ADDDEC( 4 );
+                                PRINT();
+                                LINESTART();
+                                ADDTEXT( "unknown=" );          ADDHEX( 4 );
+                                ADDTEXT( "   unknown=" );       ADDHEX( 4 );
+                                ADDTEXT( "   unknown=" );       ADDHEX( 4 );
+                                PRINT();
+                                LINESTART();
+                                ADDTEXT( "crypto-provider='" );
+                                sal_uInt16 nChar;
+                                do
+                                {
+                                    rIn >> nChar;
+                                    if( nChar )
+                                        t += (sal_Char)(((32 <= nChar) && (nChar <=127)) ? nChar : '.');
+                                }
+                                while( nChar );
+                                ADDTEXT( "'" );
+                                PRINT();
+                                LINESTART();
+                                sal_uInt32 nLen;
+                                rIn >> nLen;
+                                ADDTEXT( "*** key1 ***   len=" );   __AddHex( t, nLen );
+                                PRINT();
+                                ContDump( 2 * nLen );
+                                LINESTART();
+                                rIn >> nLen;
+                                ADDTEXT( "*** key2 ***   len=" );   __AddHex( t, nLen );
+                                PRINT();
+                                ContDump( nLen );
+                            }
+                            break;
+                            default:
+                            {
+                                ADDTEXT( "!unknown!)" );
+                                PRINT();
+                                ContDump( rIn.GetRecLeft() );
+                            }
+                        }
+                    }
+                    break;
+
+                    default:
+                    {
+                        ADDTEXT( "!unknown!)" );
+                        PRINT();
+                        ContDump( rIn.GetRecLeft() );
+                    }
+                }
+                bBIFF8 = FALSE;     // continue in hex mode
+            }
             break;
             case 0x0031:        // FONT
             case 0x0231:
@@ -1226,9 +1339,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 UINT16  nR1, nR2;
                 UINT8   nC1, nC2;
                 rIn >> nR1 >> nR2 >> nC1 >> nC2;
-                ADDCOLROW( nC1, nR1 );
-                ADDTEXT( " : " );
-                ADDCOLROW( nC2, nR2 );
+                lcl_AddRangeRef( t, nC1, nR1, nC2, nR2 );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "workbook: " );
@@ -2328,8 +2439,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDRESERVED( 0xFFFE );
                 UINT16 nCol1, nRow1, nCol2, nRow2;
                 rIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-                ADDTEXT( "   range: " );        __AddRef( t, nCol1, nRow1 );
-                ADDTEXT( ":" );                 __AddRef( t, nCol2, nRow2 );
+                ADDTEXT( "   range: " );        lcl_AddRangeRef( t, nCol1, nRow1, nCol2, nRow2 );
                 ADDTEXT( "   unknown: " );      ADDHEX( 4 );
                 PRINT();
             }
@@ -2376,7 +2486,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "   format: " );       ADDHEX( 2 );
                 UINT16 nCol, nRow;
                 rIn >> nRow >> nCol;
-                ADDTEXT( "   address: " );      __AddRef( t, nCol, nRow );
+                ADDTEXT( "   address: " );      lcl_AddRef( t, nCol, nRow );
                 PRINT();
                 LINESTART();
                 UINT16 nOldLen;
@@ -2508,11 +2618,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn >> nTab2 >> nRow11 >> nRow12 >> nCol11 >> nCol12 >> nRow21 >> nRow22 >> nCol21 >> nCol22 >> nTab1;
                 LINESTART();
                 ADDTEXT( "move range from: tab=" );     __AddDec( t, nTab1 );
-                ADDTEXT( " " );                         __AddRef( t, nCol11, nRow11 );
-                ADDTEXT( ":" );                         __AddRef( t, nCol12, nRow12 );
+                ADDTEXT( " " );                         lcl_AddRangeRef( t, nCol11, nRow11, nCol12, nRow12 );
                 ADDTEXT( "   to: tab=" );               __AddDec( t, nTab2 );
-                ADDTEXT( " " );                         __AddRef( t, nCol21, nRow21 );
-                ADDTEXT( ":" );                         __AddRef( t, nCol22, nRow22 );
+                ADDTEXT( " " );                         lcl_AddRangeRef( t, nCol21, nRow21, nCol22, nRow22 );
                 ADDTEXT( "   unknown: " );              ADDHEX( 4 );
                 PRINT();
             }
@@ -2814,213 +2922,199 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x01B0:        // CONDFMT
             {
-                PreDump( nL );
-
-                INT32   nCntDwn = nL;
-                UINT16  nNum;
                 LINESTART();
-                ADDTEXT( "# of formats: " );
-                rIn >> nNum;
-                __AddDec( t, nNum );
+                ADDTEXT( "cf-count=" );         ADDDEC( 2 );
                 rIn >> __nFlags;
                 ADDTEXT( "   " );
                 STARTFLAG();
-                ADDFLAG( 0x0001, "fToughRecalc" );
+                ADDFLAG( 0x0001, "tough-recalc" );
                 ADDRESERVED( 0xFFFE );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "range: " );
-                UINT16  nR1, nR2, nC1, nC2;
-                rIn >> nR1 >> nR2 >> nC1 >> nC2;
-                nCntDwn -= 12;
-                ADDCOLROW( nC1, nR1 );
-                if( nC1 != nC2 || nR1 != nR2 )
-                {
-                    ADDTEXT( ":" );
-                    ADDCOLROW( nC2, nR2 );
-                }
+                sal_uInt16 nR1, nR2, nC1, nC2, nCount;
+                rIn >> nR1 >> nR2 >> nC1 >> nC2 >> nCount;
+                ADDTEXT( "max-range=" );        lcl_AddRangeRef( t, nC1, nR1, nC2, nR2 );
+                ADDTEXT( "   range-count=" );   __AddDec( t, nCount );
                 PRINT();
-                UINT16  nC = 0;
-                UINT16  nMac;
-                while( nCntDwn >= 10 )
+
+                for( sal_uInt16 nRange = 0; rIn.IsValid() && (nRange < nCount); ++nRange )
                 {
-                    LINESTART();
-                    ADDTEXT( "SQREF #" );
-                    __AddDec( t, nC );
-                    ADDTEXT( " [" );
-                    rIn >> nMac;
-                    nCntDwn -= 2;
-                    __AddDec( t, nMac );
-                    ADDTEXT( "]" );
-                    PRINT();
-                    if( nMac )
+                    if( !(nRange % 4) )
                     {
                         LINESTART();
                         ADDTEXT( pPre );
-                        while( nMac && nCntDwn >= 8 )
-                        {
-                            rIn >> nR1 >> nR2 >> nC1 >> nC2;
-                            nCntDwn -= 8;
-                            ADDCOLROW( nC1, nR1 );
-                            if( nC1 != nC2 || nR1 != nR2 )
-                            {
-                                ADDTEXT( ":" );
-                                ADDCOLROW( nC2, nR2 );
-                            }
-                            nMac--;
-                            if( nMac )
-                                ADDTEXT( " - " );
-                        }
-                        PRINT();
                     }
-
-                    nC++;
+                    rIn >> nR1 >> nR2 >> nC1 >> nC2;
+                    ByteString aRef;
+                    lcl_AddRangeRef( aRef, nC1, nR1, nC2, nR2 );
+                    aRef.Expand( 16, ' ' );
+                    ADDTEXT( aRef );
+                    if( (nRange % 4 == 3) || (nRange + 1 == nCount) )
+                        PRINT();
                 }
-                if( nCntDwn > 0 )
-                    ContDump( nCntDwn );
             }
             break;
             case 0x01B1:        // CF - conditional format
             {
-                UINT8   nCcf, nCp;
-                UINT16  nCce1, nCce2;
-                ULONG   nStartPos = rIn.GetRecPos();
-                rIn >> nCcf >> nCp >> nCce1 >> nCce2;
+                sal_uInt8 nType, nOp;
+                sal_uInt16 nSize1, nSize2;
+                sal_uInt32 nFlags;
+                rIn >> nType >> nOp >> nSize1 >> nSize2 >> nFlags;
                 LINESTART();
-                ADDTEXT( "type (" );
-                __AddHex( t, nCcf );
-                ADDTEXT( "): " );
-                switch( nCcf )
+                ADDTEXT( "type=" );                 __AddHex( t, nType );
+                ADDTEXT( " (" );
+                switch( nType )
                 {
-                    case 0x01:  p = "cond";         break;
-                    case 0x02:  p = "form";         break;
-                    default:    p = pU;
+                    case 0x01:  ADDTEXT( "compare" );   break;
+                    case 0x02:  ADDTEXT( "formula" );    break;
+                    default:    ADDTEXT( "!unknown!" );
                 }
-                ADDTEXT( p );
-                ADDTEXT( "   operator (" );
-                __AddHex( t, nCp );
-                ADDTEXT( "): " );
-                switch( nCp )
+                ADDTEXT( ")   operator=" );         __AddHex( t, nOp );
+                ADDTEXT( " (" );
+                switch( nOp )
                 {
-                    case 0x00:  p = "-/-";          break;
-                    case 0x01:  p = "between";      break;
-                    case 0x02:  p = "not between";  break;
-                    case 0x03:  p = "=";            break;
-                    case 0x04:  p = "!=";           break;
-                    case 0x05:  p = ">";            break;
-                    case 0x06:  p = "<";            break;
-                    case 0x07:  p = ">=";           break;
-                    case 0x08:  p = "<=";           break;
-                    default:    p = NULL;
+                    case 0x00:  ADDTEXT( "none" );          break;
+                    case 0x01:  ADDTEXT( "between" );       break;
+                    case 0x02:  ADDTEXT( "not-between" );   break;
+                    case 0x03:  ADDTEXT( "equal" );         break;
+                    case 0x04:  ADDTEXT( "not-equal" );     break;
+                    case 0x05:  ADDTEXT( "greater" );       break;
+                    case 0x06:  ADDTEXT( "less" );          break;
+                    case 0x07:  ADDTEXT( "greater-eq" );    break;
+                    case 0x08:  ADDTEXT( "less-eq" );       break;
+                    default:    ADDTEXT( "!unknown!" );
                 }
-                if( p )
-                    ADDTEXT( p );
-                else
-                    __AddHex( t, nCp );
+                ADDTEXT( ")" );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "cce1: " );
-                __AddDec( t, nCce1 );
-                ADDTEXT( "  cce2: " );
-                __AddDec( t, nCce2 );
+                ADDTEXT( "formula-size-1=" );       __AddDec( t, nSize1 );
+                ADDTEXT( "   formula-size-2=" );    __AddDec( t, nSize2 );
                 PRINT();
-
-                ULONG nPreForm = rIn.GetRecLeft() - nCce1 - nCce2;
-                if( nPreForm > 0 )
+                LINESTART();
+                sal_uInt32 __nFlags = nFlags;
+                STARTFLAG();
+                __nFlags = ~__nFlags;
+                ADDFLAG( 0x00000400, "bord-lft" );
+                ADDFLAG( 0x00000800, "bord-rgt" );
+                ADDFLAG( 0x00001000, "bord-top" );
+                ADDFLAG( 0x00002000, "bord-bot" );
+                ADDFLAG( 0x00010000, "patt-style" );
+                ADDFLAG( 0x00020000, "patt-fgcol" );
+                ADDFLAG( 0x00040000, "patt-bgcol" );
+                __nFlags = ~__nFlags;
+                ADDFLAG( 0x04000000, "font" );
+                ADDFLAG( 0x10000000, "bord" );
+                ADDFLAG( 0x20000000, "patt" );
+                ADDRESERVED( 0xCBC00000 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "unknown=" );              ADDHEX( 2 );
+                PRINT();
+                if( nFlags & 0x04000000 )
                 {
+                    LINESTART(); ADDTEXT( "*** FONT ***" ); PRINT();
+                    ContDump( 64 );
                     LINESTART();
-                    ADDTEXT( "len rgbdxf: " );
-                    __AddDec( t, nPreForm );
+                    ADDTEXT( "height=" );           ADDHEX( 4 );
+                    rIn >> __nFlags;
+                    ADDTEXT( "   style-" );
+                    STARTFLAG();
+                    ADDFLAG( 0x00000002, "italic" );
+                    ADDFLAG( 0x00000080, "strikeout" );
+                    ADDRESERVED( 0xFFFFFF7D );
+                    ADDTEXT( "   weight=" );        ADDDEC( 2 );
                     PRINT();
-
-                    ULONG nPosPreForm = rIn.GetRecPos();
-                    ContDump( nPreForm );
-
-                    rIn.Seek( nPosPreForm );    // start
-                    UINT32  nFlags = Read4( rIn );
-                    IGNORE( 2 );
-                    BOOL    bFont = TRUEBOOL( nFlags & 0x04000000 );
-                    BOOL    bLine = TRUEBOOL( nFlags & 0x10000000 );
-                    BOOL    bPatt = TRUEBOOL( nFlags & 0x20000000 );
-
                     LINESTART();
-                    ADDTEXT( "start = " );
-                    __AddPureBin( t, nFlags );
+                    sal_uInt16 nEsc;
+                    rIn >> nEsc;
+                    ADDTEXT( "escapement=" );       __AddDec( t, nEsc );
+                    ADDTEXT( " (" );
+                    switch( nEsc )
+                    {
+                        case 0x0000:    ADDTEXT( "none" );  break;
+                        case 0x0001:    ADDTEXT( "super" ); break;
+                        case 0x0002:    ADDTEXT( "sub" );   break;
+                        default:        ADDTEXT( "!unknown!" );
+                    }
+                    sal_uInt8 nUnd;
+                    rIn >> nUnd;
+                    ADDTEXT( ")   underline=" );    __AddDec( t, nUnd );
+                    ADDTEXT( " (" );
+                    switch( nUnd )
+                    {
+                        case 0x00:  ADDTEXT( "none" );      break;
+                        case 0x01:  ADDTEXT( "single" );    break;
+                        case 0x02:  ADDTEXT( "double" );    break;
+                        default:    ADDTEXT( "!unknown!" );
+                    }
+                    ADDTEXT( ")   unknown=" );      ADDHEX( 1 );
+                    ADDTEXT( " " );                 ADDHEX( 1 );
+                    ADDTEXT( " " );                 ADDHEX( 1 );
                     PRINT();
-
-                    if( bFont )
-                    {
-                        LINESTART();
-                        ADDTEXT( "- FONT -   [ 118 ]" );
-                        PRINT();
-
-                        LINESTART();
-                        ADDTEXT( "const:     [  20 ]" );
-                        PRINT();
-                        ContDump( 20 );
-
-                        LINESTART();
-                        ADDTEXT( "1. var:    [  44 ]" );
-                        PRINT();
-                        ContDump( 44 );
-
-                        LINESTART();
-                        ADDTEXT( "const:     [   4 ]" );
-                        PRINT();
-                        ContDump( 4 );
-
-                        LINESTART();
-                        ADDTEXT( "2. var:    [  33 ]" );
-                        PRINT();
-                        ContDump( 33 );
-
-                        LINESTART();
-                        ADDTEXT( "const:     [  17 ]" );
-                        PRINT();
-                        ContDump( 17 );
-                    }
-
-                    if( bLine )
-                    {
-                        LINESTART();
-                        ADDTEXT( "- BORDER - [   8 ]" );
-                        PRINT();
-                        ContDump( 8 );
-                    }
-
-                    if( bPatt )
-                    {
-                        LINESTART();
-                        ADDTEXT( "- PATTERN -[   4 ]" );
-                        PRINT();
-                        LINESTART();
-                        UINT16 nVal;
-                        rIn >> nVal;
-                        ADDTEXT( "Pattern(" );      __AddHex( t, nVal );
-                        ADDTEXT( "): " );           __AddDec( t, (UINT16)((nVal >> 10) & 0x003F) );
-                        rIn >> nVal;
-                        ADDTEXT( "   Colors(" );    __AddHex( t, nVal );
-                        ADDTEXT( "): fg=" );        __AddDec( t, (UINT16)(nVal & 0x007F) );
-                        ADDTEXT( " bg=" );          __AddDec( t, (UINT16)((nVal >> 7) & 0x007F) );
-                        PRINT();
-                    }
-
-                    rIn.Seek( nPosPreForm + nPreForm );
+                    LINESTART();
+                    ADDTEXT( "color=" );            ADDHEX( 4 );
+                    ADDTEXT( "   unknown=" );       ADDHEX( 4 );
+                    rIn >> __nFlags;
+                    ADDTEXT( "   used-" );
+                    STARTFLAG();
+                    __nFlags = ~__nFlags;
+                    ADDFLAG( 0x00000002, "italic" );
+                    ADDFLAG( 0x00000080, "strikeout" );
+                    __nFlags = ~__nFlags;
+                    ADDRESERVED( 0xFFFFFF65 );
+                    PRINT();
+                    LINESTART();
+                    ADDTEXT( "escape-def=" );       ADDHEX( 4 );
+                    ADDTEXT( "   underl-def=" );    ADDHEX( 4 );
+                    PRINT();
+                    ContDump( 18 );
                 }
-
-                if( rIn.GetRecLeft() >= nCce1 )
+                if( nFlags & 0x10000000 )
                 {
+                    LINESTART(); ADDTEXT( "*** BORDER ***" ); PRINT();
+                    sal_uInt16 nLine;
+                    sal_uInt32 nColor;
+                    rIn >> nLine >> nColor;
                     LINESTART();
-                    ADDTEXT( "form1:" );
+                    ADDTEXT( "line-style=" );       __AddHex( t, nLine );
+                    ADDTEXT( " (lft=" );            __AddDec( t, (sal_uInt16)(nLine & 0x000F) );
+                    ADDTEXT( " rgt=" );             __AddDec( t, (sal_uInt16)((nLine & 0x00F0) >> 4) );
+                    ADDTEXT( " top=" );             __AddDec( t, (sal_uInt16)((nLine & 0x0F00) >> 8) );
+                    ADDTEXT( " bot=" );             __AddDec( t, (sal_uInt16)((nLine & 0xF000) >> 12) );
+                    ADDTEXT( ")" );
                     PRINT();
-                    FormulaDump( nCce1, FT_RangeName );
+                    LINESTART();
+                    ADDTEXT( "line-color=" );       __AddHex( t, nColor );
+                    ADDTEXT( " (lft=" );            __AddDec( t, (sal_uInt16)(nColor & 0x0000007F) );
+                    ADDTEXT( " rgt=" );             __AddDec( t, (sal_uInt16)((nColor & 0x00003F80) >> 7) );
+                    ADDTEXT( " top=" );             __AddDec( t, (sal_uInt16)((nColor & 0x007F0000) >> 16) );
+                    ADDTEXT( " bot=" );             __AddDec( t, (sal_uInt16)((nColor & 0x3F800000) >> 23) );
+                    ADDTEXT( ")   unknown=" );      ADDHEX( 2 );
+                    PRINT();
                 }
-                if( rIn.GetRecLeft() >= nCce2 )
+                if( nFlags & 0x20000000 )
                 {
+                    LINESTART(); ADDTEXT( "*** AREA ***" ); PRINT();
+                    sal_uInt16 nPatt, nColor;
+                    rIn >> nPatt >> nColor;
                     LINESTART();
-                    ADDTEXT( "form2:" );
+                    ADDTEXT( "pattern=" );          __AddHex( t, nPatt );
+                    ADDTEXT( " (" );                __AddDec( t, (sal_uInt16)((nPatt & 0xFC00) >> 10) );
+                    ADDTEXT( ")   color=" );        __AddHex( t, nColor );
+                    ADDTEXT( " (fg=" );             __AddDec( t, (sal_uInt16)(nColor & 0x007F) );
+                    ADDTEXT( " bg=" );              __AddDec( t, (sal_uInt16)((nColor & 0x3F80) >> 7) );
+                    ADDTEXT( ")" );
                     PRINT();
-                    FormulaDump( nCce2, FT_RangeName );
+                }
+                if( rIn.IsValid() && nSize1 && (rIn.GetRecLeft() >= nSize1) )
+                {
+                    LINESTART(); ADDTEXT( "*** FORMULA 1 ***" ); PRINT();
+                    FormulaDump( nSize1, FT_RangeName );
+                }
+                if( rIn.IsValid() && nSize2 && (rIn.GetRecLeft() >= nSize2) )
+                {
+                    LINESTART(); ADDTEXT( "*** FORMULA 2 ***" ); PRINT();
+                    FormulaDump( nSize2, FT_RangeName );
                 }
             }
             break;
@@ -3213,12 +3307,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 UINT16 nR1, nR2, nC1, nC2;
                 rIn >> nR1 >> nR2 >> nC1 >> nC2;
                 ADDTEXT( "Cellrange=" );
-                __AddRef( t, nC1, nR1 );
-                if( (nR1 != nR2) || (nC1 != nC2) )
-                {
-                    ADDTEXT( ":" );
-                    __AddRef( t, nC2, nR2 );
-                }
+                lcl_AddRangeRef( t, nC1, nR1, nC2, nR2 );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "GUID StdLink=" );     __AddGUID( t, rIn );
@@ -3434,9 +3523,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn >> nR1 >> nR2 >> nC1 >> nC2 >> __nFlags;
                 LINESTART();
                 ADDTEXT( "range: " );
-                ADDCOLROW( nC1, nR1 );
-                ADDTEXT( " - " );
-                ADDCOLROW( nC2, nR2 );
+                lcl_AddRangeRef( t, nC1, nR1, nC2, nR2 );
                 PRINT();
                 LINESTART();
                 STARTFLAG();
@@ -3496,7 +3583,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDTEXT( " (" );
                     static const sal_Char* ppcStyles[] = {
                         "Normal", "RowLevel", "ColLevel", "Comma", "Currency",
-                        "Percent", "Comma_0", "Currency_0" };
+                        "Percent", "Comma_0", "Currency_0",
+                        "Hyperlink", "Followed_Hyperlink" };
                     if( nStyleId < STATIC_TABLE_SIZE( ppcStyles ) )
                         ADDTEXT( ppcStyles[ nStyleId ] );
                     else
@@ -3527,9 +3615,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 UINT8   nC1, nC2;
                 LINESTART();
                 rIn >> nR1 >> nR2 >> nC1 >> nC2;
-                __AddRef( t, nC1, nR1 );
-                ADDTEXT( " - " );
-                __AddRef( t, nC2, nR2 );
+                lcl_AddRangeRef( t, nC1, nR1, nC2, nR2 );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "reserved = " );
@@ -5121,7 +5207,6 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
 #undef  IGNORE
 #undef  ADDHEX
 #undef  ADDDEC
-#undef  ADDCOLROW
 #undef  PRINT
 #undef  PreDump
 #undef  ADDCELLHEAD
@@ -5820,17 +5905,24 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
         switch( nOp )   //                              Buch Seite:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
-                    // Array Formula or Shared Formula       [    277]
+            {
                 STARTTOKEN( "Exp" );
-                t += "array formula or shared formula";
-                pIn->Ignore( 4 );
+                sal_uInt16 nRow, nCol;
+                *pIn >> nRow >> nCol;
+                t += "array formula or shared formula, base-address=";
+                lcl_AddRef( t, nCol, nRow );
                 aStack.PushOperand( "ARRAY()" );
+            }
             break;
             case 0x02: // Data Table                            [325 277]
+            {
                 STARTTOKEN( "Tbl" );
-                t += "multiple operation";
-                pIn->Ignore( 4 );
+                sal_uInt16 nRow, nCol;
+                *pIn >> nRow >> nCol;
+                t += "multiple operation, base-address=";
+                lcl_AddRef( t, nCol, nRow );
                 aStack.PushOperand( "MULTIPLE.OPERATIONS()" );
+            }
             break;
             case 0x03: // Addition                              [312 264]
                 STARTTOKEN( "Add" );
