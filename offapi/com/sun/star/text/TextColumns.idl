@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextColumns.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-26 14:25:14 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextColumns
-/** provides access to columns in text (e.g. in TextFrames ).
+/** provides access to columns in text (e.g., in TextFrames ).
  */
 service TextColumns
 {
@@ -84,34 +84,33 @@ service TextColumns
     interface com::sun::star::text::XTextColumns;
 
     //------------------------------------------------------------------------
-    /** determins whether the columns all have equal width. This flag is set if XTextColumns::setColumnCount() is called
+    /** determines whether the columns all have equal width. This flag is set if XTextColumns::setColumnCount() is called
      and it is reset if XTextColumns::setColumns() is called.
      */
     [readonly, property]  boolean IsAutomatic;
     //------------------------------------------------------------------------
     /** contains the distance between the columns. It is valid if the property IsAutomatic is set.
-     The half of this distance is set to the left and right margins of all columns except for the left margin
-     of the first and the right margin of the last column.
-     */
+ <!-- The h -->Half of this distance is set to the left and right margins of all columns,
+    except for the left margin of the first column, and the right margin of the last column.*/
     [property]  long AutomaticDistance;
     //------------------------------------------------------------------------
-    /** determins the width of the separator lines between the columns.
+    /** determines the width of the separator lines between the columns.
      */
     [property]  long SeparatorLineWidth;
     //------------------------------------------------------------------------
-    /** determins the color of the separator lines between the columns.
+    /** determines the color of the separator lines between the columns.
      */
     [property]  long SeparatorLineColor;
     //------------------------------------------------------------------------
-    /** determins the relative height of the separator lines between the columns.
+    /** determines the relative height of the separator lines between the columns.
      */
     [property]  long SeparatorLineRelativeHeight;
     //------------------------------------------------------------------------
-    /** determins the vertical alignment of the separator lines between the columns.
+    /** determines the vertical alignment of the separator lines between the columns.
      */
     [property]  com::sun::star::style::VerticalAlignment SeparatorLineVerticalAlignment;
     //------------------------------------------------------------------------
-    /** determins whether separator lines are on.
+    /** determines whether separator lines are on.
      */
     [property]  boolean SeparatorLineIsOn;
     //------------------------------------------------------------------------

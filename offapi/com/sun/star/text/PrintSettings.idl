@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintSettings.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 13:35:55 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ service PrintSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintReverse
-    /** determines if the pages are printed in the reverse order starting with the last page.
+    /** determines if the pages are printed in the reverse order, starting with the last page.
      */
     [property] boolean PrintReversed;
 

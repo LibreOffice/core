@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SizeType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ constants SizeType
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::SizeType::MIN
-    /** The height property determins the minimum height of the object but the
+    /** The height property determines the minimum height of the object, but the
              actual height will be increased if the content demands it.
      */
     const short MIN = 2;
@@ -108,6 +108,9 @@ constants SizeType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:03  hjs
     initial import
 

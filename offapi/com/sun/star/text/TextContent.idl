@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextContent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module text {
 
 //=============================================================================
 /** is an object which can be anchored in a text, like instances of
-    <type>TextFrame</type> or <type>TextFields</type>. @
+    <type>TextFrame</type> or <type>TextFields</type>.
 
     <p>If the concrete <type>TextContent</type> has a textual
     representation which fades into the surrounding text, then

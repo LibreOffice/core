@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReferenceFieldPart.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:26 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,13 @@ constants ReferenceFieldPart
 
     //-------------------------------------------------------------------------
     /** The reference text is displayed.
-     <p>If the source of the reference is a sequence field then the complete text
-         of the paragraph is displayed. This is usefull to reference to captions. </p>
+     <p>If the source of the reference is a sequence field, then the complete text
+         of the paragraph is displayed. This is useful to reference to captions. </p>
     */
     const short TEXT = 2;
 
     //-------------------------------------------------------------------------
-    /** The reference is displayed as one of the (localized) words "above" or "below".
+    /** The reference is displayed as one of the (localized) words, "above" or "below".
     */
     const short UP_DOWN = 3;
 

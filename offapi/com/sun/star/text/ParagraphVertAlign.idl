@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphVertAlign.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-04-24 06:58:49 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 constants ParagraphVertAlign
 {
     //-------------------------------------------------------------------------
-    /** In automatic mode horizontal text is aligned to the baseline. The same applies to
+    /** In automatic mode, horizontal text is aligned to the baseline. The same applies to
      text that is rotated 90&deg;. Text that is rotated 270 &deg; is aligned to the center.
      */
     const short AUTOMATIC = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseIndex.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 14:04:23 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ service BaseIndex
     // DocMerge: empty anyway
     [optional, property] com::sun::star::container::XIndexReplace LevelFormat;
     /** determins if the content of the document index is created from the
-         complete document content or form the current chapter only.
+         complete document content or from the current chapter only.
      <p> It is not available in the bibliography</p>*/
     [optional, property] boolean CreateFromChapter;
     //------------------------------------------------------------------------

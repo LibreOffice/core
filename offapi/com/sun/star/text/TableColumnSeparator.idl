@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableColumnSeparator.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     </p>
     <p>The real width of a table depends on the environment (page style and
-    number of text columns at the table's position, alignment, left and
+    number of text columns at the table's position, alignment, and left and
     right margins).  For that reason, the table column separator does not
     contain metric values for the column widths. The values are relative
     to the value of the property <member>TableColumnSeparator::TableColumnRelativeSum</member>.
@@ -138,6 +138,9 @@ struct TableColumnSeparator
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:03  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelOrientation.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@ constants RelOrientation
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::FRAME
-    /** paragraph including margins
+    /** paragraph, including margins
      */
     const short FRAME = 0;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::PRINT_AREA
-    /** paragraph without margins
+    /** paragraph, without margins
      */
     const short PRINT_AREA = 1;
 
@@ -134,7 +134,9 @@ constants RelOrientation
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_PRINT_AREA
     /** page without borders (for page anchored frames identical with
-                <const>RelOrientation::PRINT_AREA</const>
+                <const>RelOrientation::PRINT_AREA</const>).
+
+<!-- JRH: does not make sense -->
      */
     const short PAGE_PRINT_AREA = 8;
 
@@ -147,6 +149,9 @@ constants RelOrientation
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:02  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingRules.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 14:17:36 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ service NumberingRules
 
     // DocMerge from xml: property com::sun::star::text::NumberingRules::IsAutomatic
     /** determins if the numbering rules are automatically created
-        as opposite to numbering rules that are part of a numbering style.
+        as opposed to numbering rules that are part of a numbering style.
      */
     [optional, property] boolean IsAutomatic;
     //-------------------------------------------------------------------------
@@ -138,6 +138,9 @@ service NumberingRules
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 14:17:36  cl
+    #82348# made functionality not available in impress/draw optional
+
     Revision 1.3  2000/11/08 12:44:26  mi
     moved from api
 

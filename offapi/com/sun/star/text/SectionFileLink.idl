@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SectionFileLink.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
     </p>
     <p>
     <member>SectionFileLink::FilterName</member> is the internal name of
-    the document filter.  To use this struct it is not necessary to set
+    the document filter.  To use this struct, it is not necessary to set
     <member>SectionFileLink::FilterName</member>. It will be automatically
     assigned.</p>
  */
@@ -110,6 +110,9 @@ struct SectionFileLink
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:02  hjs
     initial import
 

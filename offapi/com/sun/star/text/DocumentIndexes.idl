@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndexes.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 09:23:44 $
+ *  last change: $Author: mi $ $Date: 2001-11-02 11:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 service DocumentIndexes
 {
     /** This interface makes it possible to access all <type>BaseIndex</type>
-                instances within this context (e.g. a document) by its name.
+                instances within this context (e.g., a document) by its name.
 
                 <p>The type of the interfaces returned by this collection is
                 always <type>XDocumentIndex</type>.
@@ -89,7 +89,7 @@ service DocumentIndexes
     interface com::sun::star::container::XNameAccess;
 
     /** This interface makes it possible to access all <type>BaseIndex</type>
-                instances within this context (e.g. a document) by its index.
+                instances within this context (e.g., a document) by its index.
 
                 <p>The type of the interfaces returned by this collection is
                 always <type>XDocumentIndex</type>.
