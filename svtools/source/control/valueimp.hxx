@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-21 07:45:29 $
+ *  last change: $Author: ka $ $Date: 2002-06-05 15:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <rtl/uuid.h>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
@@ -239,10 +239,11 @@ public:
 // - ValueItemAcc -
 // ----------------
 
-class ValueItemAcc : public ::cppu::WeakImplHelper4< ::drafts::com::sun::star::accessibility::XAccessible,
+class ValueItemAcc : public ::cppu::WeakImplHelper5< ::drafts::com::sun::star::accessibility::XAccessible,
                                                      ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                                      ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                                                     ::drafts::com::sun::star::accessibility::XAccessibleComponent >
+                                                     ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+                                                     ::com::sun::star::lang::XUnoTunnel >
 {
 private:
 
@@ -250,12 +251,19 @@ private:
     ValueSetItem*                                                                                                           mpParent;
     ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >  mxEventListeners;
 
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+
 public:
 
             ValueItemAcc( ValueSetItem* pParent );
             ~ValueItemAcc();
 
     void    ParentDestroyed();
+
+    void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+    BOOL    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
+
+    static ValueItemAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 
 public:
 
@@ -287,4 +295,7 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 };
