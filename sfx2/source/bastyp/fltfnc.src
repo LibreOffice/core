@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:59:13 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text [ English ] = "The selected filter $(FILTER) is not included in your edition.\nOrdering informations can be found on our website.";
     Text[ english_us ] = "The selected filter $(FILTER) is not included in your edition.\nYou can find information about orders on our homepage.";
     Text[ portuguese ] = "O filtro seleccionado $(FILTER) nгo estб incluнdo na sua versгo.\nEncontrarб as informaзхes necessбrias para uma possнvel encomenda na nossa pбgina principal.";
-    Text[ russian ] = "Выбранный фильтр $(FILTER) не содержится в Вашей версии.\nИнформацию о возможностях заказа Вы найдете на нашей домашней странице.";
+    Text[ russian ] = "Выбранный фильтр $(FILTER) не содержится в вашей версии.\nИнформацию о возможностях заказа вы найдете на нашей начальной странице.";
     Text[ dutch ] = "De geselecteerde filter $(FILTER) komt in uw versie niet voor.\nVoor informatie over bestelmogelijkheden zie onze homepage.";
     Text[ french ] = "Le filtre $(FILTER) que vous avez sйlectionnй n'est pas inclus dans votre version.\nVous trouverez les renseignements nйcessaires а une йventuelle commande sur notre page d'accueil.";
     Text[ spanish ] = "El filtro seleccionado $(FILTER) no estб incluido en su ediciуn.\nEn nuestra pбgina de Internet encontrarб las informaciones para poder pedirlos.";
