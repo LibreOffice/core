@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:28:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,12 +124,9 @@
 #include "minarray.hxx"
 #include "tabdlg.hxx"
 
-class SfxMenuManager;
-class SfxAcceleratorManager;
 class SfxMacroInfoArr_Impl;
 class SfxMacroInfoItem;
 class SfxMacroInfo;
-class SfxConfigManager;
 
 #define SFX_CFGGROUP_FUNCTION 1
 #define SFX_CFGGROUP_BASICMGR 2
@@ -299,7 +296,7 @@ public:
     void                            SetScriptType( const String& rScriptType );
     void                            SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
-
+/*
 class SfxMenuConfigEntry
 {
 private:
@@ -464,7 +461,7 @@ public:
 
 
 class SfxAcceleratorManager;
-
+*/
 // class SfxAcceleratorConfigListBox *************************************************
 
 class SfxAcceleratorConfigPage;
@@ -586,7 +583,7 @@ public:
     void                        CopySource2Target(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xSourceAccMgr,
                                                   const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xTargetAccMgr);
 };
-
+/*
 class SfxConfigDialog : public SfxTabDialog
 {
     const SfxMacroInfoItem*     pMacroInfo;
@@ -607,7 +604,7 @@ public:
     static String               FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle );
     static SfxConfigManager*    MakeCfgMgr_Impl( const String& rName, BOOL bWriting, BOOL& bCreated );
 };
-/*
+
 class SfxStatusBarManager;
 class SfxStbInfoArr_Impl;
 
