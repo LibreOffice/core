@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,8 +398,9 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
         {
             rPictureStorageName = aURLStr.GetToken( 0, '/' );
 
-            if( rPictureStorageName.getLength() && rPictureStorageName.getStr()[ 0 ] == '#' )
-                rPictureStorageName = rPictureStorageName.copy( 1 );
+            DBG_ASSERT( rPictureStorageName.getLength() &&
+                       rPictureStorageName.getStr()[ 0 ] != '#',
+                       "invalid relative URL" );
 
             rPictureStreamName = aURLStr.GetToken( 1, '/' );
             bRet = sal_True;
@@ -652,7 +653,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 if( mbDirect && aStreamName.Len() )
                     ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId );
 
-                rURLPair.second = String( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
+                rURLPair.second = String( RTL_CONSTASCII_USTRINGPARAM( "Pictures/" ) );
                 rURLPair.second += aStreamName;
             }
         }
