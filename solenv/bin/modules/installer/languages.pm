@@ -2,9 +2,9 @@
 #
 #   $RCSfile: languages.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:27:38 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:52:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,14 +77,27 @@ sub analyze_languagelist
 
     $first =~ s/\_/\,/g;    # substituting "_" by ",", in case of dmake definition 01_49
 
-    while ($first =~ /^(\S+)\#(\S+)$/)
+    if ( $installer::globals::is_unix_multi )
+    {
+        if ( $installer::globals::languagelist =~ /\#/ )
+        {
+            installer::exiter::exit_program("ERROR: Hash not allowed in language list for Unix multlingual installation sets: $installer::globals::languagelist", "analyze_languagelist");
+        }
+
+        $first =~ s/\,/\#/g; # !!! That is the trick, to make different products for Unix multilingual installation sets
+
+        $installer::globals::unixmultipath = $installer::globals::languagelist;
+        $installer::globals::unixmultipath =~ s/\,/\_/g;    # hashes not allowed, comma to underline
+    }
+
+    while ($first =~ /^(\S+)\#(\S+?)$/) # Minimal matching, to keep the order of languages
     {
         $first = $1;
         my $last = $2;
-        push(@installer::globals::languageproducts, $last);
+        unshift(@installer::globals::languageproducts, $last);
     }
 
-    push(@installer::globals::languageproducts, $first);
+    unshift(@installer::globals::languageproducts, $first);
 }
 
 ####################################################
