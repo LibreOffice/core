@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:19:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
         Text[ turkish ] = "Standar~t";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Predeterminado";\
+        Text[ finnish ] = "~Oletusarvo";\
     };
 
  // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
@@ -266,7 +267,7 @@
                     Text [ italian ] = "~Giustificato" ; \
                     Text [ portuguese_brazilian ] = "~Justificado" ; \
                     Text [ portuguese ] = "~Justificado" ; \
-                    Text [ finnish ] = "~Reunat" ; \
+                    Text [ finnish ] = "~Tasattu" ; \
                     Text [ danish ] = "~Lige margener" ; \
                     Text [ french ] = "~Justifié" ; \
                     Text [ swedish ] = "~Marginaljusterad" ; \
@@ -389,6 +390,7 @@
         Text[ turkish ] = "~Metin...";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Te~xto...";\
+        Text[ finnish ] = "~Teksti";\
     };
 
 #define MN_ORIGINALSIZE \
@@ -403,7 +405,7 @@
         Text [ italian ] = "Dimensione ori~ginale" ; \
         Text [ portuguese_brazilian ] = "Tamanho real" ; \
         Text [ portuguese ] = "Tamanho original" ; \
-        Text [ finnish ] = "Todellinen koko" ; \
+        Text [ finnish ] = "~Alkuperäinen koko" ; \
         Text [ danish ] = "Oprindelig størrelse" ; \
         Text [ french ] = "Taille d'origine" ; \
         Text [ swedish ] = "Ori~ginalstorlek" ; \
@@ -434,7 +436,7 @@
         Text [ italian ] = "Ri~specchia" ; \
         Text [ portuguese_brazilian ] = "~Espelho" ; \
         Text [ portuguese ] = "~Reflectir" ; \
-        Text [ finnish ] = "P~eilaa" ; \
+        Text [ finnish ] = "~Käännä" ; \
         Text [ danish ] = "Spejl~vend" ; \
         Text [ french ] = "~Refléter" ; \
         Text [ swedish ] = "Sp~egelvänd" ; \
@@ -455,7 +457,7 @@
                     Text [ italian ] = "~Verticale" ; \
                     Text [ portuguese_brazilian ] = "~Vertical" ; \
                     Text [ portuguese ] = "~Vertical" ; \
-                    Text [ finnish ] = "~Rinnakkain" ; \
+                    Text [ finnish ] = "~Pystytaso" ; \
                     Text [ danish ] = "~Lodret" ; \
                     Text [ french ] = "~Verticalement" ; \
                     Text [ swedish ] = "~Vertikalt" ; \
@@ -484,7 +486,7 @@
                     Text [ italian ] = "Orizzontale" ; \
                     Text [ portuguese_brazilian ] = "~Horizontal" ; \
                     Text [ portuguese ] = "~Horizontal" ; \
-                    Text [ finnish ] = "~Allekkain" ; \
+                    Text [ finnish ] = "~Vaakataso" ; \
                     Text [ danish ] = "~Vandret" ; \
                     Text [ french ] = "H~orizontale" ; \
                     Text [ swedish ] = "~Horisontellt" ; \
@@ -529,7 +531,7 @@
         Text [ italian ] = "~Disponi" ; \
         Text [ portuguese_brazilian ] = "Organizar" ; \
         Text [ portuguese ] = "~Dispoção" ; \
-        Text [ finnish ] = "Järjestä" ; \
+        Text [ finnish ] = "~Järjestä" ; \
         Text [ danish ] = "Pl~acering" ; \
         Text [ french ] = "~Disposition" ; \
         Text [ swedish ] = "Pl~acering" ; \
@@ -555,7 +557,7 @@
                     Text [ italian ] = "Porta più ~avanti" ; \
                     Text [ portuguese_brazilian ] = "Tazer Para Frente" ; \
                     Text [ portuguese ] = "~Trazer para a frente" ; \
-                    Text [ finnish ] = "Yksi eteen" ; \
+                    Text [ finnish ] = "~Tuo eteenpäin" ; \
                     Text [ danish ] = "F~lyt fremad" ; \
                     Text [ french ] = "V~ers l'avant" ; \
                     Text [ swedish ] = "Flytta l~ängre fram" ; \
@@ -585,7 +587,7 @@
                     Text [ italian ] = "Porta più indietro" ; \
                     Text [ portuguese_brazilian ] = "Enviar Para o Fundo" ; \
                     Text [ portuguese ] = "Enviar para o ~fundo" ; \
-                    Text [ finnish ] = "Yksi taakse" ; \
+                    Text [ finnish ] = "~Vie taaksepäin" ; \
                     Text [ danish ] = "Flyt bag~ud" ; \
                     Text [ french ] = "~Vers l'arrière" ; \
                     Text [ swedish ] = "Flytta lä~ngre bak" ; \
@@ -674,6 +676,7 @@
                     Text[ turkish ] = "Sayfa~da";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la ~página";\
+                    Text[ finnish ] = "~Sivulle";\
                 };\
                 MenuItem\
                 {\
@@ -701,6 +704,7 @@
                     Text[ turkish ] = "Hücre~de";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la ~celda";\
+                    Text[ finnish ] = "~Soluun";\
                 };\
             };\
         };\
@@ -719,6 +723,7 @@
         Text[ turkish ] = "Sa~bitleyici";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Anclaje";\
+        Text[ finnish ] = "~Ankkuri";\
     };
 
 #define MN_ALIGNSUB \
@@ -800,7 +805,7 @@ String RID_DRAW_OBJECTBAR
     Text [ italian ] = "Barra degli oggetti per disegno" ;
     Text [ portuguese_brazilian ] = "Barra de Ferramentas para desenhar objetos" ;
     Text [ portuguese ] = "Barra de objectos de desenho" ;
-    Text [ finnish ] = "Piirto-objektien työkalurivi" ;
+    Text [ finnish ] = "Piirrosobjektipalkki" ;
     Text [ danish ] = "Tegneobjektlinje" ;
     Text [ french ] = "Barre d'objets de dessin" ;
     Text [ swedish ] = "Ritobjektslist" ;
@@ -974,7 +979,7 @@ String RID_TEXT_TOOLBOX
     Text [ italian ] = "Barra degli oggetti di testo" ;
     Text [ portuguese_brazilian ] = "Barra de ferramentas para objetos de texto" ;
     Text [ portuguese ] = "Barra de objectos de texto" ;
-    Text [ finnish ] = "Tekstiobjektien työkalurivi" ;
+    Text [ finnish ] = "Tekstiobjektipalkki" ;
     Text [ danish ] = "Tekstobjektlinje" ;
     Text [ french ] = "Barre d'objets de texte" ;
     Text [ swedish ] = "Textobjektlist" ;
@@ -1180,6 +1185,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ turkish ] = "Toolbar for graphic objects";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
     Text[ catalan ] = "Barra de objetos gráficos";
+    Text[ finnish ] = "Grafiikkaobjektipalkki";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
 {
@@ -1428,7 +1434,7 @@ String RID_POPUP_DRAW
     Text [ spanish ] = "Menú emergente para objetos de dibujo" ;
     Text [ danish ] = "Popup-menu for tegneobjekter" ;
     Text [ swedish ] = "Popup-meny för ritobjekt" ;
-    Text [ finnish ] = "Toolbar for drawing objects" ;
+    Text [ finnish ] = "Piirrosobjektien ponnahdusvalikko" ;
     Text [ english_us ] = "Pop-up menu for drawing objects" ;
     Text[ chinese_simplified ] = "»æÍ¼µ¯³öÊ½²Ëµ¥";
     Text[ russian ] = "Âñïëûâàþùåå ìåíþ äëÿ ãðàôè÷åñêèõ îáúåêòîâ";
@@ -1595,6 +1601,7 @@ Menu RID_POPUP_CHART
             Text[ turkish ] = "~Veri alanýný deðiþtir...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Modificar área de ~datos...";
+            Text[ finnish ] = "~Muokkaa tietoaluetta";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1632,6 +1639,7 @@ String RID_POPUP_DRAWTEXT
     Text[ turkish ] = "Metin nesneleri için açýlan mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergente para objetos de texto";
+    Text[ finnish ] = "Tekstiobjektien ponnahdusvalikko";
 };
 
 Menu RID_POPUP_DRAWTEXT
