@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-12-03 10:59:49 $
+ *  last change: $Author: pb $ $Date: 2001-12-20 11:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,10 +415,13 @@ void SvtSecurityOptions_Impl::Commit()
             case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
                                                         seqValues[nProperty] <<= m_bExecutePlugins;
                                                     }
+                                                    break;
             case PROPERTYHANDLE_WARNINGENABLED  :   {
                                                         seqValues[nProperty] <<= m_bWarning;
                                                     }
-            case PROPERTYHANDLE_CONFIRMATIONENABLED  :   {
+                                                    break;
+            case PROPERTYHANDLE_CONFIRMATIONENABLED  :
+                                                    {
                                                         seqValues[nProperty] <<= m_bConfirmation;
                                                     }
                                                     break;
