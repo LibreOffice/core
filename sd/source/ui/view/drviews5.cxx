@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-08 14:49:21 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,70 +550,84 @@ void SdDrawViewShell::WriteFrameViewData()
 
 void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 {
-    if (pWin)
+    if( pWin )
     {
-        /**********************************************************************
-        * Wiese um die Seite herum zeichnen - es sei denn, das Paint kommt
-        * vom Fenster der DiaShow, da soll keine Wiese zu sehen sein
-        **********************************************************************/
-
-        if (!pFuSlideShow || pWin != (SdWindow*)pFuSlideShow->GetShowWindow())
+        if( !pFuSlideShow || pWin != (SdWindow*) pFuSlideShow->GetShowWindow() )
         {
+            const SdrPageView*  pPageView = pDrView->GetPageViewPvNum( 0 );
+            const Color         aOldLineColor( pWin->GetLineColor() );
+            const Color         aOldFillColor( pWin->GetFillColor() );
+            const ULONG         nOldDrawMode( pWin->GetDrawMode() );
+            svx::ColorConfig    aColorConfig;
+            Color               aFillColor;
+            const BOOL          bOldMap = pWin->IsMapModeEnabled();
+            const Rectangle     aOutputRect( Point(), pWin->GetOutputSizePixel() );
+            Rectangle           aPageRect;
 
-            const Color aOldLineColor( pWin->GetLineColor() );
-            const Color aOldFillColor( pWin->GetFillColor() );
-            const ULONG nOldDrawMode( pWin->GetDrawMode() );
+            if( pPageView )
+                aPageRect = pPageView->GetPageRect();
+            else
+                aPageRect = Rectangle( Point(), pActualPage->GetSize() );
 
-            svx::ColorConfig aColorConfig;
-            svx::ColorConfigValue aWorkspace( aColorConfig.GetColorValue( svx::APPBACKGROUND ) );
+            aPageRect = pWin->LogicToPixel( aPageRect ).Intersection( aOutputRect );
 
+            if( DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType() )
+                aFillColor = Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor );
+            else
+                aFillColor = Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+
+            pWin->EnableMapMode( FALSE );
             pWin->SetDrawMode( DRAWMODE_DEFAULT );
             pWin->SetLineColor();
-            pWin->SetFillColor( Color( aWorkspace.nColor ) );
+            pWin->SetFillColor( aFillColor );
 
-            Rectangle aSdRect( pWin->PixelToLogic( Point(0, 0) ), pWin->GetOutputSize() );
-            Rectangle aPgRect( Point(0, 0), pActualPage->GetSize() );
-            Polygon aWinPoly(aSdRect);
-            Polygon aPagePoly(aPgRect);
-            PolyPolygon aPolyPoly(aWinPoly);
-            aPolyPoly.Insert(aPagePoly);
-            pWin->DrawPolyPolygon(aPolyPoly);
+            if( aPageRect.IsEmpty() )
+                pWin->DrawRect( aOutputRect );
+            else
+            {
+                if( aPageRect.Top() > 0 )
+                    pWin->DrawRect( Rectangle( Point(), Size( aOutputRect.GetWidth(), aPageRect.Top() ) ) );
 
-            pWin->SetLineColor( aOldLineColor );
+                if( aPageRect.Left() > 0 )
+                    pWin->DrawRect( Rectangle( Point( 0, aPageRect.Top() ), Size( aPageRect.Left(), aPageRect.GetHeight() ) ) );
+
+                if( aPageRect.Right() < ( aOutputRect.GetWidth() - 1 ) )
+                    pWin->DrawRect( Rectangle( Point( aPageRect.Right() + 1, aPageRect.Top() ), Size( aOutputRect.GetWidth() - aPageRect.Right(), aPageRect.GetHeight() ) ) );
+
+                if( aPageRect.Bottom() < ( aOutputRect.GetHeight() - 1 ) )
+                    pWin->DrawRect( Rectangle( Point( 0, aPageRect.Bottom() + 1 ), Size( aOutputRect.GetWidth(), aOutputRect.GetHeight() - aPageRect.Bottom() ) ) );
+            }
+
+/*          svx::ColorConfig aColorConfig;
+            svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
+            Color aBorderColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+
+            rOut.SetFillColor( aDocColor.nColor );
+            rOut.SetLineColor( aBorderColor );
+
+            rOut.DrawRect(aRect);
+*/
             pWin->SetFillColor( aOldFillColor );
+            pWin->SetLineColor( aOldLineColor );
             pWin->SetDrawMode( nOldDrawMode );
+            pWin->EnableMapMode( bOldMap );
         }
     }
 
     /* #97517#  This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
-                character in a symbol font
-    */
-    SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
-    rOutl.SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+                character in a symbol font */
+    pDoc->GetDrawOutliner( NULL ).SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
 
-    /**************************************************************************
-    * Seite zeichnen
-    **************************************************************************/
-    pDrView->InitRedraw(pWin, Region (rRect));
+    pDrView->InitRedraw( pWin, Region( rRect ) );
 
-    if (pWin)
+    if( pWin )
     {
-        if ( pDocSh->GetActualFunction() )
-        {
-            /******************************************************************
-            * Funktion der DocShell zeichnen (z.B. Selektion, Hilfsfiguren o.a.)
-            ******************************************************************/
-            pDocSh->GetActualFunction()->Paint(rRect, pWin);
-        }
+        if( pDocSh->GetActualFunction() )
+            pDocSh->GetActualFunction()->Paint( rRect, pWin );
 
-        if (pFuActual)
-        {
-            /******************************************************************
-            * Funktion zeichnen (z.B. Selektion, Hilfsfiguren o.a.)
-            ******************************************************************/
-            pFuActual->Paint(rRect, pWin);
-        }
+        if( pFuActual )
+            pFuActual->Paint( rRect, pWin );
     }
 }
 
