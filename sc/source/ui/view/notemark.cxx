@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notemark.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:28:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,9 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, pTimer )
         Rectangle aVisPixel( Point(0,0), aSizePixel );
         Rectangle aVisible = pWindow->PixelToLogic( aVisPixel, aMapMode );
 
-        USHORT nCol = aDocPos.Col();
-        USHORT nRow = aDocPos.Row();
-        USHORT nTab = aDocPos.Tab();
+        SCCOL nCol = aDocPos.Col();
+        SCROW nRow = aDocPos.Row();
+        SCTAB nTab = aDocPos.Tab();
         pObject = ScDetectiveFunc( pDoc,nTab ).
                     ShowCommentUser( nCol, nRow, aUserText, aVisible, bLeft, FALSE, pPage );
 
