@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:46:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,13 +419,13 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                     aStrBuffer.Append(nNextCh);
                     break;
                 case '~':       // nonbreaking space
-                    aStrBuffer.Append(0xA0);
+                    aStrBuffer.Append(static_cast< sal_Unicode >(0xA0));
                     break;
                 case '-':       // optional hyphen
-                    aStrBuffer.Append(0xAD);
+                    aStrBuffer.Append(static_cast< sal_Unicode >(0xAD));
                     break;
                 case '_':       // nonbreaking hyphen
-                    aStrBuffer.Append(0x2011);
+                    aStrBuffer.Append(static_cast< sal_Unicode >(0x2011));
                     break;
 
                 case 'u':
@@ -443,7 +443,8 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             int nToken = _GetNextToken();
                             DBG_ASSERT( RTF_U == nToken, "doch kein UNI-Code Zeichen" );
                             // dont convert symbol chars
-                            aStrBuffer.Append(nTokenValue);
+                            aStrBuffer.Append(
+                                static_cast< sal_Unicode >(nTokenValue));
 
                             // overread the next n "RTF" characters. This
                             // can be also \{, \}, \'88
