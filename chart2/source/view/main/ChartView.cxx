@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-06 21:57:17 $
+ *  last change: $Author: bm $ $Date: 2003-12-12 14:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,8 +545,8 @@ bool getPosAndSizeForDiagram(
     ::drafts::com::sun::star::layout::RelativeSize aRelativeSize;
     if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativeSize" ) )>>=aRelativeSize) )
     {
-        rOutSize.Height = aRelativeSize.Secondary*rPageSize.Height;
-        rOutSize.Width = aRelativeSize.Primary*rPageSize.Width;
+        rOutSize.Height = static_cast< sal_Int32 >( aRelativeSize.Secondary*rPageSize.Height );
+        rOutSize.Width = static_cast< sal_Int32 >( aRelativeSize.Primary*rPageSize.Width );
     }
     else
         rOutSize = awt::Size(nWidth,nHeight);
