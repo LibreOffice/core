@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-26 16:15:18 $
+ *  last change: $Author: tbe $ $Date: 2001-09-27 12:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,10 @@ using namespace ::com::sun::star::ui::dialogs;
 
 LibPage::LibPage( Window * pParent ) :
         TabPage(        pParent,IDEResId( RID_TP_LIBS ) ),
+        aBasicsText(    this,   IDEResId( RID_STR_BASICS ) ),
+        aBasicsBox(     this,   IDEResId( RID_LB_BASICS ) ),
         aLibText(       this,   IDEResId( RID_STR_LIB ) ),
         aLibBox(        this,   IDEResId( RID_TRLBOX ) ),
-        aBasicsBox(     this,   IDEResId( RID_LB_BASICS ) ),
         aEditButton(    this,   IDEResId( RID_PB_EDIT ) ),
         aCloseButton(   this,   IDEResId( RID_PB_CLOSE ) ),
         aPasswordButton(this,   IDEResId( RID_PB_PASSWORD ) ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:59:44 $
+ *  last change: $Author: tbe $ $Date: 2001-09-27 12:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,9 +390,24 @@ TabPage RID_TP_LIBS
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 140 ) ;
-    FixedText RID_STR_LIB
+    FixedText RID_STR_BASICS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "Applikation/D~okument" ;
+        Text [ ENGLISH ] = "Application/D~ocument" ;
+    };
+    ListBox RID_LB_BASICS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText RID_STR_LIB
+    {
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Text = "Bibliothe~k" ;
         Text [ ENGLISH ] = "Libar~y" ;
@@ -421,8 +436,8 @@ TabPage RID_TP_LIBS
     {
         HelpID = HID_BASICIDE_LIBS_TREE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
-        Size = MAP_APPFONT ( 130 , 99 ) ;
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Size = MAP_APPFONT ( 130 , 87 ) ;
         TabStop = TRUE ;
     };
     PushButton RID_PB_EDIT
@@ -620,14 +635,6 @@ TabPage RID_TP_LIBS
         Text[ korean ] = "제거(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "Elim~inar...";
-    };
-    ListBox RID_LB_BASICS
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 130 , 80 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
     };
 };
 Resource RID_RES_CHECKBITMAPS

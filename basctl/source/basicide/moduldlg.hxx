@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:56:10 $
+ *  last change: $Author: tbe $ $Date: 2001-09-27 12:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,8 +298,9 @@ public:
 class LibPage: public TabPage
 {
 protected:
-    FixedText           aLibText;
+    FixedText           aBasicsText;
     ListBox             aBasicsBox;
+    FixedText           aLibText;
     BasicCheckBox       aLibBox;
     PushButton          aEditButton;
     CancelButton        aCloseButton;
