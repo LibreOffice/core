@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-10 15:33:31 $
+ *  last change: $Author: ssa $ $Date: 2002-06-17 13:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1429,33 +1429,36 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
             ListBox* pListBox = (ListBox*)GetWindow();
 
-            sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
-            if ( bDropDown && maActionListeners.getLength() )
+            if( pListBox )
             {
-                // Bei DropDown den ActionListener rufen...
-                ::com::sun::star::awt::ActionEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.ActionCommand = pListBox->GetSelectEntry();
-                maActionListeners.actionPerformed( aEvent );
-            }
+                sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
+                if ( bDropDown && maActionListeners.getLength() )
+                {
+                    // Bei DropDown den ActionListener rufen...
+                    ::com::sun::star::awt::ActionEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.ActionCommand = pListBox->GetSelectEntry();
+                    maActionListeners.actionPerformed( aEvent );
+                }
 
-            if ( maItemListeners.getLength() )
-            {
-                ::com::sun::star::awt::ItemEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.Highlighted = sal_False;
+                if ( maItemListeners.getLength() )
+                {
+                    ::com::sun::star::awt::ItemEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Highlighted = sal_False;
 
-                // Bei Mehrfachselektion 0xFFFF, sonst die ID
-                aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 )
-                    ? pListBox->GetSelectEntryPos() : 0xFFFF;
+                    // Bei Mehrfachselektion 0xFFFF, sonst die ID
+                    aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 )
+                        ? pListBox->GetSelectEntryPos() : 0xFFFF;
 
-                maItemListeners.itemStateChanged( aEvent );
+                    maItemListeners.itemStateChanged( aEvent );
+                }
             }
         }
         break;
 
         case VCLEVENT_LISTBOX_DOUBLECLICK:
-            if ( maActionListeners.getLength() )
+            if ( GetWindow() && maActionListeners.getLength() )
             {
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -2269,26 +2272,29 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
 
-                ::com::sun::star::awt::AdjustmentEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.Value = pScrollBar->GetThumbPos();
+                if( pScrollBar )
+                {
+                    ::com::sun::star::awt::AdjustmentEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Value = pScrollBar->GetThumbPos();
 
-                // set adjustment type
-                ScrollType aType = pScrollBar->GetType();
-                if ( aType == SCROLL_LINEUP || aType == SCROLL_LINEDOWN )
-                {
-                    aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_LINE;
-                }
-                else if ( aType == SCROLL_PAGEUP || aType == SCROLL_PAGEDOWN )
-                {
-                    aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE;
-                }
-                else if ( aType == SCROLL_DRAG )
-                {
-                    aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_ABS;
-                }
+                    // set adjustment type
+                    ScrollType aType = pScrollBar->GetType();
+                    if ( aType == SCROLL_LINEUP || aType == SCROLL_LINEDOWN )
+                    {
+                        aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_LINE;
+                    }
+                    else if ( aType == SCROLL_PAGEUP || aType == SCROLL_PAGEDOWN )
+                    {
+                        aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE;
+                    }
+                    else if ( aType == SCROLL_DRAG )
+                    {
+                        aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_ABS;
+                    }
 
-                maAdjustmentListeners.adjustmentValueChanged( aEvent );
+                    maAdjustmentListeners.adjustmentValueChanged( aEvent );
+                }
             }
             break;
 
@@ -2894,16 +2900,19 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( maItemListeners.getLength() )
             {
                 ComboBox* pComboBox = (ComboBox*)GetWindow();
-                if ( !pComboBox->IsTravelSelect() )
+                if( pComboBox )
                 {
-                    ::com::sun::star::awt::ItemEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
-                    aEvent.Highlighted = sal_False;
+                    if ( !pComboBox->IsTravelSelect() )
+                    {
+                        ::com::sun::star::awt::ItemEvent aEvent;
+                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.Highlighted = sal_False;
 
-                    // Bei Mehrfachselektion 0xFFFF, sonst die ID
-                    aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
+                        // Bei Mehrfachselektion 0xFFFF, sonst die ID
+                        aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
 
-                    maItemListeners.itemStateChanged( aEvent );
+                        maItemListeners.itemStateChanged( aEvent );
+                    }
                 }
             }
             break;
@@ -3199,7 +3208,7 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             break;
             case BASEPROPERTY_DATESHOWCENTURY:
             {
-                 aProp <<= ((DateField*)GetWindow())->IsShowDateCentury();
+                aProp <<= ((DateField*)GetWindow())->IsShowDateCentury();
             }
             break;
             default:
@@ -3892,7 +3901,7 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                 aProp <<= (sal_Bool) ((NumericField*)GetWindow())->IsUseThousandSep();
+                aProp <<= (sal_Bool) ((NumericField*)GetWindow())->IsUseThousandSep();
             }
             break;
             default:
@@ -4200,7 +4209,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                 aProp <<= (sal_Bool) ((LongCurrencyField*)GetWindow())->IsUseThousandSep();
+                aProp <<= (sal_Bool) ((LongCurrencyField*)GetWindow())->IsUseThousandSep();
             }
             break;
             default:
