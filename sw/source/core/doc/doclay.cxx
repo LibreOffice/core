@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:41:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,10 +670,6 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         ASSERT( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
         SwDrawContact *pContact = (SwDrawContact *)rSource.FindContactObj();
 
-        // --> OD 2004-10-25 #i36010# - set layout direction of the position
-        pDest->SetPositionLayoutDir(
-            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-        // <--
         pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
                                 CloneSdrObj( *pContact->GetMaster(),
                                         bCopyIsMove && this == pSrcDoc ) );
