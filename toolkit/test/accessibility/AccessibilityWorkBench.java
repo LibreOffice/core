@@ -158,12 +158,12 @@ public class AccessibilityWorkBench
         constraints.gridheight = 1;
         constraints.weightx = 3;
         constraints.weighty = 0;
-        constraints.fill = GridBagConstraints.BOTH;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         aLayout.addLayoutComponent (maMessageArea, constraints);
         maMainPanel.add (maMessageArea);
 
         //  Canvas.
-        maCanvas = new Canvas (this, maTree);
+        maCanvas = new Canvas (this);
         maCanvas.setPreferredSize (new Dimension (1050,1050));
         aScrollPane = new JScrollPane(maCanvas,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS/*AS_NEEDED*/,
@@ -181,6 +181,7 @@ public class AccessibilityWorkBench
 
         //  Accessible Tree.
         maTree = new AccessibilityTree (this, maCanvas, this);
+        maCanvas.setTree (maTree);
         aScrollPane = new JScrollPane(maTree,
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -202,7 +203,7 @@ public class AccessibilityWorkBench
         constraints = new GridBagConstraints ();
         constraints.gridx = 0;
         constraints.gridy = 3;
-        constraints.gridwidth = 3;
+        constraints.gridwidth = 2;
         constraints.weightx = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.BOTH;
