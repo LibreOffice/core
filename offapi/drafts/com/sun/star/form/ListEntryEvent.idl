@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListEntryEvent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:32:22 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ module drafts { module com {  module sun {  module star {  module form {
 
     @see XListEntrySource
     @see XListEntryListener
+
+    @deprecated
+        This structure is superseeded by <type scope="com::sun::star::form::binding">ListEntryEvent</type>
 */
 struct ListEntryEvent : com::sun::star::lang::EventObject
 {
