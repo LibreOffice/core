@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:28:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
     SdrGrafObj* pObj = new SdrGrafObj( rGraphic, aRect );
 
-    if ( bAsLink )
-        pObj->SetGraphicLink( rFileName, rFilterName );
+    // #118522# calling SetGraphicLink here doesn't work
 
     //  #49961# Path is no longer used as name for the graphics object
 
@@ -235,6 +234,12 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
     //  don't select if from (dispatch) API, to allow subsequent cell operations
     ULONG nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
     pView->InsertObject( pObj, *pPV, nInsOptions );
+
+    // #118522# SetGraphicLink has to be used after inserting the object,
+    // otherwise an empty graphic is swapped in and the contact stuff crashes.
+    // See #i37444#.
+    if ( bAsLink )
+        pObj->SetGraphicLink( rFileName, rFilterName );
 }
 
 //------------------------------------------------------------------------
