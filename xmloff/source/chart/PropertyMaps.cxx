@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-05 14:09:28 $
+ *  last change: $Author: bm $ $Date: 2001-06-15 11:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,9 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
     uno::Reference< frame::XModel > xEmptyModel;
     ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel ));
 
-    // chain text properties
-    ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper());
+    // do not chain text properties: on import this is done by shape mapper
+    // to import old documents
+//      ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper());
 }
 
 XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
