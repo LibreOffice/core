@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:22:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,17 +67,8 @@ ModalDialog DLG_EXPORT_GIF
     Size = MAP_APPFONT ( 169 , 70 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "GIF Optionen" ;
-    Text [ ENGLISH ] = "GIF options" ;
-    Text [ english_us ] = "GIF Options" ;
-    Text [ italian ] = "Opzioni GIF" ;
-    Text [ spanish ] = "Opciones GIF" ;
-    Text [ french ] = "Options GIF" ;
-    Text [ dutch ] = "GIF-opties" ;
-    Text [ swedish ] = "GIF-alternativ" ;
-    Text [ danish ] = "GIF indstillinger" ;
-    Text [ portuguese_brazilian ] = "Opções GIF" ;
-    Text [ portuguese ] = "Opções GIF" ;
+    Text [ de ] = "GIF Optionen" ;
+    Text [ en-US ] = "GIF Options" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 113 , 6 ) ;
@@ -101,177 +92,37 @@ ModalDialog DLG_EXPORT_GIF
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Modus" ;
-        Text [ ENGLISH ] = "Mode" ;
-        Text [ english_us ] = "Mode" ;
-        Text [ italian ] = "Modo" ;
-        Text [ spanish ] = "Modo" ;
-        Text [ french ] = "Mode" ;
-        Text [ dutch ] = "Modus" ;
-        Text [ swedish ] = "Läge" ;
-        Text [ danish ] = "Tilstand" ;
-        Text [ portuguese_brazilian ] = "Modo" ;
-        Text [ portuguese ] = "Modo" ;
-        Text[ chinese_simplified ] = "æ¨¡å¼";
-        Text[ russian ] = "Ğåæèì";
-        Text[ polish ] = "Tryb";
-        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
-        Text[ chinese_traditional ] = "æ¨¡å¼";
-        Text[ arabic ] = "æÖÚ";
-        Text[ dutch ] = "Modus";
-        Text[ chinese_simplified ] = "æ¨¡å¼";
-        Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
-        Text[ korean ] = "ëª¨ë“œ";
-        Text[ turkish ] = "Kip";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mode";
-        Text[ finnish ] = "Tila";
-        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
-        Text[ czech ] = "ReÅ¾im";
-        Text[ hebrew ] = "â€®××¦×‘ ×¢×‘×•×“×”â€¬";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤•à¤¾à¤°";
-        Text[ slovak ] = "ReÅ¾im";
-        Text[ hungarian ] = "MÃ³d";
-        Text[ slovenian ] = "NaÄin";
+        Text [ de ] = "Modus" ;
+        Text [ en-US ] = "Mode" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_INTERLACED
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
         TabStop = TRUE ;
-        Text = "~Interlaced" ;
-        Text [ ENGLISH ] = "~Interlaced" ;
-        Text [ english_us ] = "~Interlaced" ;
-        Text [ portuguese_brazilian ] = "~Entrelaçado" ;
-        Text [ swedish ] = "~Interlaced" ;
-        Text [ danish ] = "~Sammenflettet" ;
-        Text [ italian ] = "Interlaced" ;
-        Text [ spanish ] = "~Entrelazado" ;
-        Text [ french ] = "~Entrelacé" ;
-        Text [ dutch ] = "~Interlaced" ;
-        Text [ portuguese ] = "~Entrelaçado" ;
-        Text[ chinese_simplified ] = "äº¤é”™(~I)";
-        Text[ russian ] = "~Ñ ÷åğåäîâàíèåì";
-        Text[ polish ] = "~Z przeplotem";
-        Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ¬ãƒ¼ã‚¹æ–¹å¼(~I)";
-        Text[ chinese_traditional ] = "äº¤éŒ¯(~I)";
-        Text[ arabic ] = "ãÊÔÇÈß";
-        Text[ dutch ] = "~Interlaced";
-        Text[ chinese_simplified ] = "äº¤é”™(~I)";
-        Text[ greek ] = "Ğåğëåãìİíç";
-        Text[ korean ] = "ì¸í„°ë ˆì´ìŠ¤(~I)";
-        Text[ turkish ] = "~Karıştırılmış";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Entrellaçat";
-        Text[ finnish ] = "Lomitettu";
-        Text[ thai ] = "~à¸›à¸£à¸°à¸ªà¸²à¸™à¸à¸±à¸™";
-        Text[ czech ] = "ProklÃ¡danÃ½";
-        Text[ hebrew ] = "â€®×’×¨×¤×™×§×” ××©×•×œ×‘×ªâ€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤²à¤¾ à¤¹à¥à¤†";
-        Text[ slovak ] = "P~rekladanÃ½";
-        Text[ hungarian ] = "~VÃ¡ltottsoros";
-        Text[ slovenian ] = "~Prepleteno";
+        Text [ de ] = "~Interlaced" ;
+        Text [ en-US ] = "~Interlaced" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine GRP_DRAW
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Zeichenobjekte" ;
-        Text [ ENGLISH ] = "Drawing objects" ;
-        Text [ english_us ] = "Drawing objects" ;
-        Text [ portuguese_brazilian ] = "Objetos de desenho" ;
-        Text [ swedish ] = "Ritobjekt" ;
-        Text [ danish ] = "Tegneobjekter" ;
-        Text [ italian ] = "Oggetti di disegno" ;
-        Text [ spanish ] = "Objetos de dibujo" ;
-        Text [ french ] = "Objets de dessin" ;
-        Text [ dutch ] = "Tekenobjecten" ;
-        Text [ portuguese ] = "Objectos de desenho" ;
-        Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
-        Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-        Text[ polish ] = "Obiekty rysunkowe";
-        Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-        Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-    Text[ polish ] = "Obiekty rysunkowe";
-    Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-    Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
-    Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶";
-        Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
-        Text[ dutch ] = "Tekenobjecten";
-        Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
-        Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
-        Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´";
-        Text[ turkish ] = "Çizim nesneleri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Objectes de dibuix";
-        Text[ finnish ] = "Piirrosobjektit";
-        Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
-        Text[ czech ] = "GrafickÃ© objekty";
-        Text[ hebrew ] = "â€®×¢×¦××™ ×¡×¨×˜×•×˜â€¬";
-        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤µà¤¸à¥à¤¤à¥";
-        Text[ slovak ] = "GrafickÃ© objekty";
-        Text[ hungarian ] = "Rajzobjektumok";
-        Text[ slovenian ] = "Risani predmeti";
+        Text [ de ] = "Zeichenobjekte" ;
+        Text [ en-US ] = "Drawing objects" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TRANSLUCENT
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
         TabStop = TRUE ;
-        Text = "~Transparent speichern" ;
-        Text [ ENGLISH ] = "Save ~transparent" ;
-        Text [ english_us ] = "Save ~transparency" ;
-        Text [ portuguese_brazilian ] = "Salvar ~transparência" ;
-        Text [ swedish ] = "Spara ~transparent" ;
-        Text [ danish ] = "Gem ~transparens" ;
-        Text [ italian ] = "Salva in modo trasparente" ;
-        Text [ spanish ] = "Guardar en modo ~transparente" ;
-        Text [ french ] = "Enregistrer en t~ransparence" ;
-        Text [ dutch ] = "~Transparant opslaan" ;
-        Text [ portuguese ] = "~Guardar em modo transparente" ;
-        Text[ chinese_simplified ] = "å­˜ç›˜é€æ˜(~T)";
-        Text[ russian ] = "Ñîõğàíèòü â ïğîçğà÷íîì ğåæèìå";
-        Text[ polish ] = "Zapisz przezroczys~toœæ";
-        Text[ japanese ] = "é€éæ€§ã®ã¾ã¾ä¿å­˜(~T)";
-        Text[ chinese_traditional ] = "å„²å­˜é€æ˜(~T)";
-        Text[ arabic ] = "ÍİÙ ÔİÇİ";
-        Text[ dutch ] = "~Transparant opslaan";
-        Text[ chinese_simplified ] = "å­˜ç›˜é€æ˜(~T)";
-        Text[ greek ] = "ÁğïèŞêåõóç äéáöÜíåéáò";
-        Text[ korean ] = "íˆ¬ëª… ëª¨ë“œ ì €ì¥(~T)";
-        Text[ turkish ] = "Saydam biçimde kaydet";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desa la ~transparència";
-        Text[ finnish ] = "Tallenna läpinäkyvyys";
-        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸„à¸§à¸²à¸¡à¹‚~à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-        Text[ czech ] = "UloÅ¾it prÅ¯hlednost";
-        Text[ hebrew ] = "â€®×©××™×¨×ª ×©×§×£â€¬";
-        Text[ hindi ] = "~à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "UloÅ¾iÅ¥ p~riehÄ¾adnosÅ¥";
-        Text[ hungarian ] = "ÃtlÃ¡t~szÃ³sÃ¡g mentÃ©se";
-        Text[ slovenian ] = "Shrani pr~osojnico";
+        Text [ de ] = "~Transparent speichern" ;
+        Text [ en-US ] = "Save ~transparency" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "GIF é€‰é¡¹";
-    Text[ russian ] = "Ïàğàìåòğû GIF";
-    Text[ polish ] = "Opcje formatu GIF";
-    Text[ japanese ] = "GIF ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "GIFé¸é …";
-    Text[ arabic ] = "GIF ÎíÇÑÇÊ";
-    Text[ dutch ] = "GIF-opties";
-    Text[ chinese_simplified ] = "GIF é€‰é¡¹";
-    Text[ greek ] = "Åğéëïãİò GIF";
-    Text[ korean ] = "GIF ì˜µì…˜";
-    Text[ turkish ] = "GIF seçenekleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opcions GIF";
-    Text[ finnish ] = "GIF-vientiasetukset";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ GIF ";
-    Text[ czech ] = "Volby pro formÃ¡t GIF";
-    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª GIFâ€¬";
-    Text[ hindi ] = "GIF à¤µà¤¿à¤•à¤²à¥à¤ª";
-    Text[ slovak ] = "VoÄ¾by pre formÃ¡t GIF";
-    Text[ hungarian ] = "GIF-beÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "MoÅ¾nosti za GIF";
+    Text [ x-comment ] = " ";
 };
 
 
