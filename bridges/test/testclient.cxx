@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:29:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,14 +111,6 @@ using namespace ::com::sun::star::test::performance;
 #include "testcomp.h"
 
 
-#ifdef UNX
-#define REG_PREFIX      "lib"
-#define DLL_POSTFIX     ".so"
-#else
-#define REG_PREFIX      ""
-#define DLL_POSTFIX     ".dll"
-#endif
-
 void doPerformanceTest( const Reference < XPerformanceTest > & xBench )
 {
     printf( "not implemented\n" );
@@ -192,7 +184,7 @@ int main( int argc, char *argv[] )
 
           Reference < XConnector > rConnector(
                 createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("connectr")),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM("connector.uno" SAL_DLLEXTENSION)),
                                  rSMgr ),
                 UNO_QUERY );
 
@@ -215,12 +207,12 @@ int main( int argc, char *argv[] )
                 {
                     // just ensure that it is registered
                     createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
-                                     OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge")),
+                                     OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
                                      rSMgr );
 
                     Reference < XBridgeFactory > rFactory(
                         createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
-                                         OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr")),
+                                         OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION)),
                                          rSMgr ),
                         UNO_QUERY );
 
