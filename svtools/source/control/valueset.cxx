@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: th $ $Date: 2000-11-16 19:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,11 @@
 
 #define ITEM_OFFSET                 4
 #define ITEM_OFFSET_DOUBLE          6
+#define NAME_LINE_OFF_X             2
+#define NAME_LINE_OFF_Y             2
+#define NAME_LINE_HEIGHT            2
 #define NAME_OFFSET                 2
-#define NAME_OFFSET_FLAT            1
-#define SCRBAR_OFFSET               2
+#define SCRBAR_OFFSET               1
 #define VALUESET_ITEM_NONEITEM      0xFFFE
 
 #define VALUESET_SCROLL_OFFSET      4
@@ -165,6 +167,7 @@ void ValueSet::ImplInit( WinBits nWinStyle )
     mbDoubleSel         = FALSE;
     mbScroll            = FALSE;
     mbDropPos           = FALSE;
+    mbFullMode          = TRUE;
 
     ImplInitSettings( TRUE, TRUE, TRUE );
 }
@@ -380,15 +383,12 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
 void ValueSet::Format()
 {
     Size        aWinSize = GetOutputSizePixel();
-    Size        aOrgWinSize = aWinSize;
     ULONG       nItemCount = mpItemList->Count();
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
-    long        nStartX;
-    long        nY;
-    long        nNameOff;
     long        nOff;
     long        nSpace;
+    long        nNoneHeight;
     long        nNoneSpace;
     ScrollBar*  pDelScrBar = NULL;
 
@@ -421,25 +421,36 @@ void ValueSet::Format()
     // Groesse beruecksichtigen, wenn NameField vorhanden
     if ( nStyle & WB_NAMEFIELD )
     {
-        long nNameOffset = (nStyle & WB_FLATVALUESET) ? NAME_OFFSET_FLAT : NAME_OFFSET;
-        aWinSize.Height() -= nTxtHeight+(nNameOffset*2);
-        nNameOff = nNameOffset+2+nSpace;
+        mnTextOffset = aWinSize.Height()-nTxtHeight-NAME_OFFSET;
+        aWinSize.Height() -= nTxtHeight+NAME_OFFSET;
+
+        if ( !(nStyle & WB_FLATVALUESET) )
+        {
+            mnTextOffset -= NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
+            aWinSize.Height() -= NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
+        }
     }
     else
-        nNameOff = 0;
+        mnTextOffset = 0;
 
     // Offset und Groesse beruecksichtigen, wenn NoneField vorhanden
     if ( nStyle & WB_NONEFIELD )
     {
-        nY = nTxtHeight+nOff;
+        nNoneHeight = nTxtHeight+nOff;
         nNoneSpace = nSpace;
         if ( nStyle & WB_RADIOSEL )
-            nY += 8;
+            nNoneHeight += 8;
     }
     else
     {
-        nY = 0;
+        nNoneHeight = 0;
         nNoneSpace = 0;
+
+        if ( mpNoneItem )
+        {
+            delete mpNoneItem;
+            mpNoneItem = NULL;
+        }
     }
 
     // Breite vom ScrollBar berechnen
@@ -470,7 +481,7 @@ void ValueSet::Format()
     else if ( !mnLines )
         mnLines = 1;
 
-    long nCalcHeight = aWinSize.Height()-nY-nNameOff;
+    long nCalcHeight = aWinSize.Height()-nNoneHeight;
     if ( mnUserVisLines )
         mnVisLines = mnUserVisLines;
     else if ( mnUserItemHeight )
@@ -516,14 +527,10 @@ void ValueSet::Format()
         nItemHeight = nCalcHeight / mnVisLines;
     }
 
-    // Windowgroessen runden und virtuelles Device anlegen
-    aWinSize.Width()  = (nItemWidth*mnCols)+nColSpace+nScrBarWidth;
-    aWinSize.Height() = (nItemHeight*mnVisLines)+nY+nNameOff+nLineSpace;
-    nStartX = (aOrgWinSize.Width()-aWinSize.Width())/2;
+    // Init VirDev
     maVirDev.SetSettings( GetSettings() );
     maVirDev.SetBackground( GetBackground() );
-    maVirDev.SetOutputSizePixel( Size( aOrgWinSize.Width(),
-                                       aWinSize.Height() ), TRUE );
+    maVirDev.SetOutputSizePixel( aWinSize, TRUE );
 
     // Bei zu kleinen Items machen wir nichts
     long nMinHeight = 2;
@@ -531,12 +538,6 @@ void ValueSet::Format()
         nMinHeight = 4;
     if ( (nItemWidth <= 0) || (nItemHeight <= nMinHeight) || !nItemCount )
     {
-        for ( ULONG i = 0; i < nItemCount; i++ )
-        {
-            ValueSetItem* pItem = mpItemList->GetObject( i );
-            pItem->maRect.SetEmpty();
-        }
-
         if ( nStyle & WB_NONEFIELD )
         {
             if ( mpNoneItem )
@@ -545,13 +546,11 @@ void ValueSet::Format()
                 mpNoneItem->maText = GetText();
             }
         }
-        else
+
+        for ( ULONG i = 0; i < nItemCount; i++ )
         {
-            if ( mpNoneItem )
-            {
-                delete mpNoneItem;
-                mpNoneItem = NULL;
-            }
+            ValueSetItem* pItem = mpItemList->GetObject( i );
+            pItem->maRect.SetEmpty();
         }
 
         if ( mpScrBar )
@@ -586,38 +585,56 @@ void ValueSet::Format()
         else
             mbDoubleSel = FALSE;
 
-        // Trennlinie zum Namefield zeichnen
-        if ( nStyle & WB_NAMEFIELD )
+        // Calculate offsets
+        long nStartX;
+        long nStartY;
+        if ( mbFullMode )
         {
-            if ( !(nStyle & WB_FLATVALUESET) )
-            {
-                Point aPos1( nStartX+ITEM_OFFSET, aWinSize.Height()-2 );
-                Point aPos2( nStartX+aWinSize.Width()-ITEM_OFFSET-1,
-                             aWinSize.Height()-2 );
-                if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-                {
-                    maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-                    maVirDev.DrawLine( aPos1, aPos2 );
-                    aPos1.Y()++;
-                    aPos2.Y()++;
-                    maVirDev.SetLineColor( rStyleSettings.GetLightColor() );
-                }
-                else
-                    maVirDev.SetLineColor( rStyleSettings.GetWindowTextColor() );
-                maVirDev.DrawLine( aPos1, aPos2 );
-            }
-
-            // TextOffset befindet sich unter der Kante
-            long nNameOffset = (nStyle & WB_FLATVALUESET) ? NAME_OFFSET_FLAT : NAME_OFFSET;
-            mnTextOffset = aWinSize.Height()+nNameOffset;
+            long nAllItemWidth = (nItemWidth*mnCols)+nColSpace;
+            long nAllItemHeight = (nItemHeight*mnVisLines)+nNoneHeight+nLineSpace;
+            nStartX = (aWinSize.Width()-nScrBarWidth-nAllItemWidth)/2;
+            nStartY = (aWinSize.Height()-nAllItemHeight)/2;
+        }
+        else
+        {
+            nStartX = 0;
+            nStartY = 0;
         }
 
         // Items berechnen und zeichnen
         maVirDev.SetLineColor();
         long x = nStartX;
-        long y = nY+nNoneSpace;
+        long y = nStartY;
+
+        // NoSelection-Field erzeugen und anzeigen
+        if ( nStyle & WB_NONEFIELD )
+        {
+            if ( !mpNoneItem )
+                mpNoneItem = new ValueSetItem;
+
+            mpNoneItem->mnId            = 0;
+            mpNoneItem->meType          = VALUESETITEM_NONE;
+            mpNoneItem->maRect.Left()   = x;
+            mpNoneItem->maRect.Top()    = y;
+            mpNoneItem->maRect.Right()  = mpNoneItem->maRect.Left()+aWinSize.Width()-x-1;
+            mpNoneItem->maRect.Bottom() = y+nNoneHeight-1;
+
+            ImplFormatItem( mpNoneItem );
+
+            y += nNoneHeight+nNoneSpace;
+        }
+
+        // draw items
         ULONG nFirstItem = mnFirstLine * mnCols;
         ULONG nLastItem = nFirstItem + (mnVisLines * mnCols);
+        if ( !mbFullMode )
+        {
+            // If want also draw parts of items in the last line,
+            // then we add one more line if parts of these line are
+            // visible
+            if ( y+(mnVisLines*(nItemHeight+nSpace)) < aWinSize.Height() )
+                nLastItem += mnCols;
+        }
         for ( ULONG i = 0; i < nItemCount; i++ )
         {
             ValueSetItem* pItem = mpItemList->GetObject( i );
@@ -643,36 +660,17 @@ void ValueSet::Format()
                 pItem->maRect.SetEmpty();
         }
 
-        // NoSelection-Field erzeugen und anzeigen
-        if ( nStyle & WB_NONEFIELD )
-        {
-            if ( !mpNoneItem )
-                mpNoneItem = new ValueSetItem;
-
-            mpNoneItem->mnId            = 0;
-            mpNoneItem->meType          = VALUESETITEM_NONE;
-            mpNoneItem->maRect.Left()   = nStartX;
-            mpNoneItem->maRect.Right()  = mpNoneItem->maRect.Left()+aWinSize.Width()-1;
-            mpNoneItem->maRect.Bottom() = nY-1;
-
-            ImplFormatItem( mpNoneItem );
-        }
-        else
-        {
-            if ( mpNoneItem )
-            {
-                delete mpNoneItem;
-                mpNoneItem = NULL;
-            }
-        }
-
         // ScrollBar anordnen, Werte setzen und anzeigen
         if ( mpScrBar )
         {
-            Point   aPos( nStartX+(nItemWidth*mnCols)+nColSpace+SCRBAR_OFFSET,
-                          nY+nNoneSpace+1 );
-            Size    aSize( nScrBarWidth-SCRBAR_OFFSET,
-                           ((nItemHeight+nSpace)*mnVisLines)-2-nSpace );
+            Point   aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
+            Size    aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() );
+            // If a none field is visible, then we center the scrollbar
+            if ( nStyle & WB_NONEFIELD )
+            {
+                aPos.Y() = nStartY+nNoneHeight+1;
+                aSize.Height() = ((nItemHeight+nSpace)*mnVisLines)-2-nSpace;
+            }
             mpScrBar->SetPosSizePixel( aPos, aSize );
             mpScrBar->SetRangeMax( mnLines );
             mpScrBar->SetVisibleSize( mnVisLines );
@@ -702,6 +700,7 @@ void ValueSet::ImplDrawItemText( const XubString& rText )
 
     Size    aWinSize = GetOutputSizePixel();
     long    nTxtWidth = GetTextWidth( rText );
+    long    nTxtOffset = mnTextOffset;
 
     // Rechteck loeschen und Text ausgeben
     if ( GetStyle() & WB_FLATVALUESET )
@@ -709,12 +708,15 @@ void ValueSet::ImplDrawItemText( const XubString& rText )
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         SetLineColor();
         SetFillColor( rStyleSettings.GetFaceColor() );
-        DrawRect( Rectangle( Point( 0, mnTextOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
+        DrawRect( Rectangle( Point( 0, nTxtOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
         SetTextColor( rStyleSettings.GetButtonTextColor() );
     }
     else
-        Erase( Rectangle( Point( 0, mnTextOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
-    DrawText( Point( (aWinSize.Width()-nTxtWidth) / 2, mnTextOffset ), rText );
+    {
+        nTxtOffset += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
+        Erase( Rectangle( Point( 0, nTxtOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
+    }
+    DrawText( Point( (aWinSize.Width()-nTxtWidth) / 2, nTxtOffset+(NAME_OFFSET/2) ), rText );
 }
 
 // -----------------------------------------------------------------------
@@ -1005,7 +1007,7 @@ void ValueSet::ImplDraw()
     Point   aDefPos;
     Size    aSize = maVirDev.GetOutputSizePixel();
 
-    if ( mpScrBar )
+    if ( mpScrBar && mpScrBar->IsVisible() )
     {
         Point   aScrPos = mpScrBar->GetPosPixel();
         Size    aScrSize = mpScrBar->GetSizePixel();
@@ -1023,6 +1025,29 @@ void ValueSet::ImplDraw()
     }
     else
         DrawOutDev( aDefPos, aSize, aDefPos, aSize, maVirDev );
+
+    // Trennlinie zum Namefield zeichnen
+    if ( GetStyle() & WB_NAMEFIELD )
+    {
+        if ( !(GetStyle() & WB_FLATVALUESET) )
+        {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            Size aWinSize = GetOutputSizePixel();
+            Point aPos1( NAME_LINE_OFF_X, mnTextOffset+NAME_LINE_OFF_Y );
+            Point aPos2( aWinSize.Width()-(NAME_LINE_OFF_X*2), mnTextOffset+NAME_LINE_OFF_Y );
+            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            {
+                SetLineColor( rStyleSettings.GetShadowColor() );
+                DrawLine( aPos1, aPos2 );
+                aPos1.Y()++;
+                aPos2.Y()++;
+                SetLineColor( rStyleSettings.GetLightColor() );
+            }
+            else
+                SetLineColor( rStyleSettings.GetWindowTextColor() );
+            DrawLine( aPos1, aPos2 );
+        }
+    }
 
     ImplDrawSelect();
 }
@@ -1075,7 +1100,7 @@ BOOL ValueSet::ImplScroll( const Point& rPos )
 
 // -----------------------------------------------------------------------
 
-USHORT ValueSet::ImplGetItem( const Point& rPos, BOOL bMove )
+USHORT ValueSet::ImplGetItem( const Point& rPos, BOOL bMove ) const
 {
     if ( mpNoneItem )
     {
@@ -1083,12 +1108,20 @@ USHORT ValueSet::ImplGetItem( const Point& rPos, BOOL bMove )
             return VALUESET_ITEM_NONEITEM;
     }
 
+    Point     aDefPos;
+    Rectangle aWinRect( aDefPos, maVirDev.GetOutputSizePixel() );
+
     ULONG nItemCount = mpItemList->Count();
     for ( ULONG i = 0; i < nItemCount; i++ )
     {
         ValueSetItem* pItem = mpItemList->GetObject( i );
         if ( pItem->maRect.IsInside( rPos ) )
-            return (USHORT)i;
+        {
+            if ( aWinRect.IsInside( rPos ) )
+                return (USHORT)i;
+            else
+                return VALUESET_ITEM_NOTFOUND;
+        }
     }
 
     // Wenn Spacing gesetzt ist, wird der vorher selektierte
@@ -1096,8 +1129,6 @@ USHORT ValueSet::ImplGetItem( const Point& rPos, BOOL bMove )
     // verlassen hat
     if ( bMove && mnSpacing && mnHighItemId )
     {
-        Point     aDefPos;
-        Rectangle aWinRect( aDefPos, maVirDev.GetOutputSizePixel() );
         if ( aWinRect.IsInside( rPos ) )
             return GetItemPos( mnHighItemId );
     }
@@ -1518,22 +1549,19 @@ void ValueSet::RequestHelp( const HelpEvent& rHEvt )
     if ( (rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON)) == HELPMODE_QUICK )
     {
         Point aPos = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-        ULONG nItemCount = mpItemList->Count();
-        for ( ULONG i = 0; i < nItemCount; i++ )
+        USHORT nItemPos = ImplGetItem( aPos );
+        if ( nItemPos != VALUESET_ITEM_NOTFOUND )
         {
-            ValueSetItem* pItem = mpItemList->GetObject( i );
-            if ( pItem->maRect.IsInside( aPos ) )
-            {
-                Rectangle aItemRect = pItem->maRect;
-                Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
-                aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
-                Help::ShowQuickHelp( this, aItemRect, GetItemText( pItem->mnId ) );
-                return;
-            }
+            ValueSetItem* pItem = ImplGetItem( nItemPos );
+            Rectangle aItemRect = pItem->maRect;
+            Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
+            aItemRect.Left()   = aPt.X();
+            aItemRect.Top()    = aPt.Y();
+            aPt = OutputToScreenPixel( aItemRect.BottomRight() );
+            aItemRect.Right()  = aPt.X();
+            aItemRect.Bottom() = aPt.Y();
+            Help::ShowQuickHelp( this, aItemRect, GetItemText( pItem->mnId ) );
+            return;
         }
     }
 
@@ -1862,14 +1890,9 @@ USHORT ValueSet::GetItemId( USHORT nPos ) const
 
 USHORT ValueSet::GetItemId( const Point& rPos ) const
 {
-    ValueSetItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->maRect.IsInside( rPos ) )
-            return pItem->mnId;
-
-        pItem = mpItemList->Next();
-    }
+    USHORT nItemPos = ImplGetItem( rPos );
+    if ( nItemPos != VALUESET_ITEM_NOTFOUND )
+        return GetItemId( nItemPos );
 
     return 0;
 }
@@ -2348,8 +2371,9 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, USHORT nDesireCols,
 
     if ( nStyle & WB_NAMEFIELD )
     {
-        long nNameOffset = (nStyle & WB_FLATVALUESET) ? NAME_OFFSET_FLAT : NAME_OFFSET;
-        aSize.Height() += nTxtHeight + (nNameOffset*3) + 2 + nSpace;
+        aSize.Height() += nTxtHeight + NAME_OFFSET;
+        if ( !(nStyle & WB_FLATVALUESET) )
+            aSize.Height() += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
     }
 
     if ( nStyle & WB_NONEFIELD )
