@@ -1,4 +1,4 @@
-od	odk	:::	offapi product apiwww NULL
+od	odk	:::	unoil offapi product apiwww NULL
 od	odk					usr1	-	all	od_mkout NULL
 od	odk\source\bean\com\sun\star\beans	nmake	-	all	od_beanjava NULL
 od	odk\source\bean\native\win32		nmake	-	n	od_beanwin32 NULL
