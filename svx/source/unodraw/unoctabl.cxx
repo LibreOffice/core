@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:32:58 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
-
+#include "../customshapes/EnhancedCustomShapeEngine.hxx"
 #include <cppuhelper/implbase2.hxx>
 
 #include "xtable.hxx"
@@ -261,6 +261,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoColorTable_createInstance(const
 {
     return *new SvxUnoColorTable();
 }
+uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( const uno::Reference< lang::XMultiServiceFactory >& rxFact ) throw(uno::Exception)
+{
+    return *new EnhancedCustomShapeEngine( rxFact );
+}
 
 //
 // export this service
@@ -309,6 +313,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 
             writeInfo( pKey, SvxShapeCollection::getImplementationName_Static(), SvxShapeCollection::getSupportedServiceNames_Static() );
             writeInfo( pKey, SvxUnoColorTable::getImplementationName_Static(), SvxUnoColorTable::getSupportedServiceNames_Static() );
+            writeInfo( pKey, EnhancedCustomShapeEngine_getImplementationName(), EnhancedCustomShapeEngine_getSupportedServiceNames() );
 #ifndef SVX_LIGHT
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
 #endif
@@ -335,6 +340,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SvxUnoColorTable::getImplementationName_Static(),
                 SvxUnoColorTable_createInstance,
                 SvxUnoColorTable::getSupportedServiceNames_Static() );
+        }
+        else if ( rtl_str_compare( pImplName, "com.sun.star.drawing.EnhancedCustomShapeEngine" ) == 0 )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< NMSP_LANG::XMultiServiceFactory* >( pServiceManager ),
+                EnhancedCustomShapeEngine_getImplementationName(),
+                create_EnhancedCustomShapeEngine,
+                EnhancedCustomShapeEngine_getSupportedServiceNames() );
         }
         else if( rtl_str_compare( pImplName, "com.sun.star.drawing.SvxShapeCollection" ) == 0 )
         {
