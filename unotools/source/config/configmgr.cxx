@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 07:51:42 $
+ *  last change: $Author: os $ $Date: 2002-09-25 07:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,11 +289,14 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
 #ifdef DBG_UTIL
         catch(Exception& rEx)
         {
-            OString sMsg("CreateInstance exception: ");
-            sMsg += OString(rEx.Message.getStr(),
-                        rEx.Message.getLength(),
-                        RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, sMsg.getStr());
+            if(0 == (CONFIG_MODE_IGNORE_ERRORS & rCfgItem.GetMode()))
+            {
+                OString sMsg("CreateInstance exception: ");
+                sMsg += OString(rEx.Message.getStr(),
+                            rEx.Message.getLength(),
+                            RTL_TEXTENCODING_ASCII_US);
+                OSL_ENSURE(sal_False, sMsg.getStr());
+            }
         }
 #else
         catch(Exception&)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-02 14:51:45 $
+ *  last change: $Author: os $ $Date: 2002-09-25 07:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace utl
 #define CONFIG_MODE_DELAYED_UPDATE      0x01
 #define CONFIG_MODE_ALL_LOCALES         0x02
 #define CONFIG_MODE_RELEASE_TREE        0x04
+#define CONFIG_MODE_IGNORE_ERRORS       0x08 //prevent assertions
 
     enum  ConfigNameFormat
     {
