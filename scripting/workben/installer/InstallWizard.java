@@ -72,8 +72,8 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     int windowHeight=300;
     setSize(windowWidth,windowHeight);
     setBounds((center.x-windowWidth/2)-115,(center.y-windowWidth/2)-100, windowWidth,windowHeight);
-    setResizable(false);        
     initComponents();
+    setResizable(false);        
     }
 
     /** This method is called from within the constructor to
