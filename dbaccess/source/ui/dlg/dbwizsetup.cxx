@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:02:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-22 09:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     else
         declarePath( EVOLUTION_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
-    if ( m_pCollection->hasAuthentication(DST_DBASE))
+    if ( m_pCollection->hasAuthentication(m_pCollection->getEmbeddedDatabaseType(getORB())))
         declarePath( CREATENEW_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
     else
         declarePath( CREATENEW_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
@@ -918,16 +918,30 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
-        Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
-        INetURLObject aDBPathURL(m_sWorkPath);
-        aDBPathURL.Append(m_aDocURL.getBase());
-        createUniqueFolderName(&aDBPathURL);
-        ::rtl::OUString sPrefix = m_pCollection->getDatasourcePrefix(DST_DBASE);
-        ::rtl::OUString sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
-        xSimpleFileAccess->createFolder(sUrl);
-        //OFileNotation aFileNotation(sUrl);
-        //sUrl = aFileNotation.get(OFileNotation::N_SYSTEM);
-         sUrl = sPrefix.concat(sUrl);
+        ::rtl::OUString sUrl;
+        DATASOURCE_TYPE eType = m_pCollection->getEmbeddedDatabaseType(getORB());
+        if ( eType == DST_EMBEDDED )
+        {
+            sUrl = m_pCollection->getEmbeddedDatabaseURL(getORB());
+            Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
+            OSL_ENSURE(xDatasource.is(),"DataSource is null!");
+            if ( xDatasource.is() )
+                xDatasource->setPropertyValue(PROPERTY_INFO,makeAny(m_pCollection->getEmbeddedDatabaseProperties(getORB())));
+            m_pImpl->translateProperties(xDatasource,*m_pOutSet);
+        }
+        if ( eType == DST_DBASE )
+        {
+            Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+            INetURLObject aDBPathURL(m_sWorkPath);
+            aDBPathURL.Append(m_aDocURL.getBase());
+            createUniqueFolderName(&aDBPathURL);
+            ::rtl::OUString sPrefix = m_pCollection->getDatasourcePrefix(DST_DBASE);
+            sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
+            xSimpleFileAccess->createFolder(sUrl);
+            //OFileNotation aFileNotation(sUrl);
+            //sUrl = aFileNotation.get(OFileNotation::N_SYSTEM);
+             sUrl = sPrefix.concat(sUrl);
+        }
         m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
         m_pImpl->saveChanges(*m_pOutSet);
     }
@@ -1124,36 +1138,11 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         try
         {
-        Reference< XConnection > xConnection = createConnection();
-//        Reference<XTablesSupplier> xTablesSupplier(xConnection, UNO_QUERY);
-//        Reference<XNameAccess> xNameAccess(xTablesSupplier->getTables(), UNO_QUERY);
-        ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
-        OLinkedDocumentsAccess* oLinkedDocument = new OLinkedDocumentsAccess(this, getORB(), NULL, NULL);
-        sal_Int32 nCommandType(::com::sun::star::sdb::CommandType::TABLE);
-        String sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""));
-        oLinkedDocument->newTableWithPilot(sPath, nCommandType, sName, NULL);
-            //::OLinkedDocumentsAccess(Window* _pDialogParent
-                                                //  , const Reference< XMultiServiceFactory >& _rxORB
-                                                //  , const Reference< XNameAccess >& _rxContainer
-                                                //  ,const Reference< XConnection>& _xConnection
-                                                //  )
-//sal_Bool OLinkedDocumentsAccess::newTableWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
-//      const String& _rObjectName, const Reference< XConnection >& _rxConnection)
-
-            //   Sequence<Any> aSequence(1);
-            //PropertyValue aConnectionArgument;
-            //Any aTmp;
-      //      ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
-      //      aTmp <<= sPath;
-            //aConnectionArgument.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseLocation"));
-            //aConnectionArgument.Value = aTmp;
-            //aSequence[0] <<= aConnectionArgument;
-            //Reference< XJobExecutor > xTableWizard(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.table.CallTableWizard"))), UNO_QUERY);
-            //Reference< XInitialization > xInitialization( xTableWizard, UNO_QUERY);
-      //      if (xInitialization.is())
-      //          xInitialization->initialize(aSequence);
-      //      if ( xTableWizard.is() )
-               // xTableWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+            ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
+            OLinkedDocumentsAccess* oLinkedDocument = new OLinkedDocumentsAccess(this, getORB(), NULL, NULL);
+            sal_Int32 nCommandType(::com::sun::star::sdb::CommandType::TABLE);
+            String sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+            oLinkedDocument->newTableWithPilot(sPath, nCommandType, sName, NULL);
         }
         catch(const Exception&)
         {
