@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:28:03 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Text [ spanish ] = "Nombre del estilo" ;
         Text [ english_us ] = "Style name" ;
         Text[ chinese_simplified ] = "СщКЅГыіЖ";
-        Text[ russian ] = "Название шаблона";
+        Text[ russian ] = "Название стиля";
         Text[ polish ] = "Nazwa stylu";
         Text[ japanese ] = "ЅАІЩ–ј";
         Text[ chinese_traditional ] = "јЛ¦Ў¦WєЩ";
@@ -173,6 +173,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ catalan ] = "El estilo ya existe. їDesea sobrescribirlo?";
     };
 };
+
 
 
 
