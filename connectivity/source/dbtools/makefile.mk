@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: oj $ $Date: 2001-01-08 12:32:24 $
+#   last change: $Author: ganaya $ $Date: 2001-02-08 03:42:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,12 @@ SHL1STDLIBS=\
     $(OSLLIB)					\
     $(SALLIB)					\
     $(COMPHELPERLIB)
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+SHL1STDLIBS+=$(UCBHELPERLIB)
+.ENDIF
 
 .IF "$(COMPHELPERLIB)" == ""
 SHL1STDLIBS+= icomphelp2.lib
