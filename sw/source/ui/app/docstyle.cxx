@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:12:19 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@
 #include <unotools/intlwrapper.hxx>
 #endif
 
+#include <fmthdft.hxx>
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:
@@ -1272,6 +1273,8 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
                 if( rDoc.FindPageDescByName( pDesc->GetName(), &nPgDscPos ))
                 {
                     pNewDsc = new SwPageDesc( *pDesc );
+                    rDoc.CopyPageDesc(*pDesc, *pNewDsc); // #i7983#
+
                     pFmt = &pNewDsc->GetMaster();
                 }
             }
@@ -1334,16 +1337,20 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
             ::ItemSetToPageDesc( aSet, *pNewDsc );
             rDoc.ChgPageDesc( nPgDscPos, *pNewDsc );
             pDesc = &rDoc.GetPageDesc( nPgDscPos );
+            rDoc.PreDelPageDesc(pNewDsc); // #i7983#
             delete pNewDsc;
         }
         else
-            pFmt->SetAttr( aSet );      // alles gesetzten Putten
+            rDoc.ChgFmt(*pFmt, aSet);       // alles gesetzten Putten
     }
     else
     {
         aCoreSet.ClearItem();
         if( pNewDsc )           // den muessen wir noch vernichten!!
+        {
+            rDoc.PreDelPageDesc(pNewDsc); // #i7983#
             delete pNewDsc;
+        }
     }
 }
 
