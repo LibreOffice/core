@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:53:12 $
+ *  last change: $Author: ka $ $Date: 2001-07-03 11:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,6 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     pOwnData->bExecState = FALSE;
 
     Resize();
-
-    EnableDrop(TRUE);
 
     pOwnData->aTimer.SetTimeout( 100 );
     pOwnData->aTimer.SetTimeoutHdl( LINK( this, SvxIMapDlg, UpdateHdl ) );

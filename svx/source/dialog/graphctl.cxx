@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-03-13 21:51:35 $
+ *  last change: $Author: ka $ $Date: 2001-07-03 11:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,6 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     SetBackground( Wallpaper( rStyleSettings.GetWindowColor() ) );
     SetMapMode( aMap100 );
-    EnableDrop( TRUE );
 
     delete pView;
     pView = NULL;
