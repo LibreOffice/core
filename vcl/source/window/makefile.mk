@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.4 $
+#	$Revision: 1.5 $
 #
-#	last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+#	last change: $Author: pl $ $Date: 2001-09-13 14:39:43 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -85,7 +85,6 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/decoview.obj	\
             $(SLO)$/dialog.obj		\
             $(SLO)$/dlgctrl.obj 	\
-            $(SLO)$/filedlg.obj 	\
             $(SLO)$/floatwin.obj	\
             $(SLO)$/keycod.obj		\
             $(SLO)$/menu.obj		\
