@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:48:00 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,6 @@
 #ifndef __SGI_STL_MAP
 #include <map>
 #endif
-
-
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -592,6 +590,16 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
                                                         sStyleName,
                                                         sTblName,
                                                         nWidth, nHeight );
+                else
+                {
+                    // it should be an own OOo link that has no storage persistance
+                    xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertOOoLink( GetImport(),
+                                                        sHRef,
+                                                        sStyleName,
+                                                        sTblName,
+                                                        nWidth, nHeight );
+                }
             }
             else
             {
