@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:15:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             }
             case XML_TOK_DRAWPAGE_STYLE_NAME:
             {
-                maStyleName = sValue;
+            maStyleName = sValue;
                 break;
             }
             case XML_TOK_DRAWPAGE_MASTER_PAGE_NAME:
@@ -163,7 +163,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             }
             case XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME:
             {
-                maPageLayoutName = sValue;
+                maPageLayoutName =  sValue;
                 break;
             }
             case XML_TOK_DRAWPAGE_ID:
@@ -217,6 +217,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         if(xDrawPage.is() && xMasterPages.is())
         {
             sal_Bool bDone(FALSE);
+            OUString sDisplayName( rImport.GetStyleDisplayName(
+                            XML_STYLE_FAMILY_MASTER_PAGE, maMasterPageName ) );
 
             for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
             {
@@ -230,7 +232,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     {
                         OUString sMasterPageName = xMasterNamed->getName();
 
-                        if(sMasterPageName.getLength() && sMasterPageName.equals(maMasterPageName))
+                        if(sMasterPageName.getLength() &&
+                            sMasterPageName.equals(sDisplayName))
                         {
                             xDrawPage->setMasterPage(xMasterPage);
                             bDone = TRUE;
