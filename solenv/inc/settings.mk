@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-15 12:33:37 $
+#   last change: $Author: hjs $ $Date: 2001-10-17 10:30:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1118,7 +1118,7 @@ RSCRES=$(rscres)
 RSCGLOINC=$(RSCRES)
 .ELSE
 .IF "$(GUI)" != "UNX"
-RSCGLOINC=o:\$(WORK_STAMP)\src\res
+RSCGLOINC=$(SOLARSRC)\res
 .ENDIF
 .ENDIF
 
