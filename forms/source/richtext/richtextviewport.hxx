@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextviewport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:14:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace frm
     private:
         EditView*   m_pView;
         Link        m_aInvalidationHandler;
+        bool        m_bHideInactiveSelection;
 
     public:
         RichTextViewPort( Window* _pParent );
@@ -86,6 +87,9 @@ namespace frm
         void    setView( EditView& _rView );
 
         inline void    setAttributeInvalidationHandler( const Link& _rHandler ) { m_aInvalidationHandler = _rHandler; }
+
+        void    SetHideInactiveSelection( bool _bHide );
+        bool    GetHideInactiveSelection() const;
 
     protected:
         virtual void        Paint( const Rectangle& rRect );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextviewport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:14:29 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ namespace frm
     //--------------------------------------------------------------------
     RichTextViewPort::RichTextViewPort( Window* _pParent )
         :Control ( _pParent )
+        ,m_bHideInactiveSelection( true )
     {
     }
 
@@ -106,7 +107,7 @@ namespace frm
     void RichTextViewPort::LoseFocus()
     {
         m_pView->HideCursor();
-        m_pView->SetSelectionMode( EE_SELMODE_HIDDEN );
+        m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
         Control::LoseFocus();
     }
 
@@ -142,6 +143,21 @@ namespace frm
         implInvalidateAttributes();
     }
 
+    //--------------------------------------------------------------------
+    void RichTextViewPort::SetHideInactiveSelection( bool _bHide )
+    {
+        if ( m_bHideInactiveSelection == _bHide )
+            return;
+        m_bHideInactiveSelection = _bHide;
+        if ( !HasFocus() )
+            m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
+    }
+
+    //--------------------------------------------------------------------
+    bool RichTextViewPort::GetHideInactiveSelection() const
+    {
+        return m_bHideInactiveSelection;
+    }
 
 //........................................................................
 }   // namespace frm

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextvclcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:14:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,18 @@ namespace frm
     void RichTextControl::SetBackgroundColor( const Color& _rColor )
     {
         m_pImpl->SetBackgroundColor( _rColor );
+    }
+
+    //--------------------------------------------------------------------
+    void RichTextControl::SetHideInactiveSelection( bool _bHide )
+    {
+        m_pImpl->SetHideInactiveSelection( _bHide );
+    }
+
+    //--------------------------------------------------------------------
+    bool RichTextControl::GetHideInactiveSelection() const
+    {
+        return m_pImpl->GetHideInactiveSelection( );
     }
 
 //........................................................................
