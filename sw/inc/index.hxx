@@ -2,9 +2,9 @@
  *
  *  $RCSfile: index.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:53:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,6 @@ protected:
     void ChkArr();
 
     BOOL HasAnyIndex() const { return 0 != pFirst; }
-
-    // fuer das Move am RegArray:
-    void MoveIdx( const SwIndex& rOldPos, const SwIndex& rNewPos );
 
 public:
     SwIndexReg();
