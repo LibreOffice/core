@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: unoedsrc.cxx,v $
+ *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: thb $ $Date: 2002-02-28 12:25:39 $
  *
@@ -61,51 +61,95 @@
 
 #pragma hdrstop
 
-#ifndef _SFXBRDCST_HXX
-#include <svtools/brdcst.hxx>
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
-#include "unoedsrc.hxx"
+#include "unoedhlp.hxx"
+#include "editdata.hxx"
 
 //------------------------------------------------------------------------
 
-SvxTextForwarder::~SvxTextForwarder()
+TYPEINIT1( SvxEditSourceHint, TextHint );
+
+SvxEditSourceHint::SvxEditSourceHint( ULONG _nId ) :
+    TextHint( _nId ),
+    mnStart( 0 ),
+    mnEnd( 0 )
 {
+}
+
+SvxEditSourceHint::SvxEditSourceHint( ULONG _nId, ULONG nValue, ULONG nStart, ULONG nEnd ) :
+    TextHint( _nId, nValue ),
+    mnStart( nStart),
+    mnEnd( nEnd )
+{
+}
+
+ULONG SvxEditSourceHint::GetValue() const
+{
+    return TextHint::GetValue();
+}
+
+ULONG SvxEditSourceHint::GetStartValue() const
+{
+    return mnStart;
+}
+
+ULONG SvxEditSourceHint::GetEndValue() const
+{
+    return mnEnd;
+}
+
+void SvxEditSourceHint::SetValue( ULONG n )
+{
+    TextHint::SetValue( n );
+}
+
+void SvxEditSourceHint::SetStartValue( ULONG n )
+{
+    mnStart = n;
+}
+
+void SvxEditSourceHint::SetEndValue( ULONG n )
+{
+    mnEnd = n;
 }
 
 //------------------------------------------------------------------------
 
-SvxViewForwarder::~SvxViewForwarder()
+SfxHint SvxEditSourceHintTranslator::EENotification2Hint( EENotify* aNotify )
 {
-}
+    if( aNotify )
+    {
+        switch( aNotify->eNotificationType )
+        {
+            case EE_NOTIFY_TEXTMODIFIED:
+                return TextHint( TEXT_HINT_MODIFIED, aNotify->nParagraph );
 
-//------------------------------------------------------------------------
+            case EE_NOTIFY_PARAGRAPHINSERTED:
+                return TextHint( TEXT_HINT_PARAINSERTED, aNotify->nParagraph );
 
-SvxEditViewForwarder::~SvxEditViewForwarder()
-{
-}
+            case EE_NOTIFY_PARAGRAPHREMOVED:
+                return TextHint( TEXT_HINT_PARAREMOVED, aNotify->nParagraph );
 
-//------------------------------------------------------------------------
+            case EE_NOTIFY_PARAGRAPHSMOVED:
+                return SvxEditSourceHint( EDITSOURCE_HINT_PARASMOVED, aNotify->nParagraph, aNotify->nParam1, aNotify->nParam2 );
 
-SvxEditSource::~SvxEditSource()
-{
-}
+            case EE_NOTIFY_TEXTHEIGHTCHANGED:
+                return TextHint( TEXT_HINT_TEXTHEIGHTCHANGED, aNotify->nParagraph );
 
-SvxViewForwarder* SvxEditSource::GetViewForwarder()
-{
-    return NULL;
-}
+            case EE_NOTIFY_TEXTVIEWSCROLLED:
+                return TextHint( TEXT_HINT_VIEWSCROLLED );
 
-SvxEditViewForwarder* SvxEditSource::GetEditViewForwarder( sal_Bool bCreate )
-{
-    return NULL;
-}
+            case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED:
+                return SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED );
 
-SfxBroadcaster& SvxEditSource::GetBroadcaster() const
-{
-    DBG_ERROR("SvxEditSource::GetBroadcaster called for implementation missing this feature!");
+            default:
+                DBG_ERROR( "SvxEditSourceHintTranslator::EENotification2Hint unknown notification" );
+                break;
+        }
+    }
 
-    static SfxBroadcaster aBroadcaster;
-
-    return aBroadcaster;
+    return SfxHint();
 }

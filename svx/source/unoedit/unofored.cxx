@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:29:45 $
+ *  last change: $Author: thb $ $Date: 2002-02-28 12:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, BOOL bOnl
 {
     if( rSel.nStartPara == rSel.nEndPara )
     {
-        sal_uInt8 nFlags;
+        sal_uInt8 nFlags = 0;
         switch( bOnlyHardAttrib )
         {
         case EditEngineAttribs_All:
@@ -332,11 +332,6 @@ USHORT SvxEditEngineForwarder::GetItemState( USHORT nPara, USHORT nWhich ) const
     return rSet.GetItemState( nWhich );
 }
 
-void SvxEditEngineForwarder::SetNotifyHdl( const Link& rLink )
-{
-    rEditEngine.SetNotifyHdl( rLink );
-}
-
 LanguageType SvxEditEngineForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) const
 {
     return rEditEngine.GetLanguage(nPara, nIndex);
@@ -350,6 +345,12 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) c
 
 Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
 {
+    const Point aPnt = rEditEngine.GetDocPosTopLeft( nPara );
+    const ULONG nWidth = rEditEngine.CalcTextWidth();
+    const ULONG nHeight = rEditEngine.GetTextHeight( nPara );
+
+    return Rectangle( aPnt.X(), aPnt.Y(), nWidth, nHeight );
+
     // TODO
     return Rectangle();
 }

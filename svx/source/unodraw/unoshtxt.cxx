@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-26 12:22:03 $
+ *  last change: $Author: thb $ $Date: 2002-02-28 12:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 //#include <svx/editeng.hxx>
 
 #include <unoshtxt.hxx>
+#include <unoedhlp.hxx>
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -165,16 +166,24 @@ private:
     SdrModel*                       mpModel;
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
-    SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetEditModeTextForwarder text forwarder
+    SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
     BOOL                            mbDataValid;
     BOOL                            mbDestroyed;
     BOOL                            mbIsLocked;
     BOOL                            mbNeedsUpdate;
     BOOL                            mbOldUndoMode;
+    BOOL                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
 
     SvxTextForwarder*               GetBackgroundTextForwarder();
     SvxTextForwarder*               GetEditModeTextForwarder();
     SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
+
+    sal_Bool                        HasView() const { return mpViewForwarder ? sal_True : sal_False; }
+    sal_Bool                        IsEditMode() const
+                                    {
+                                        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+                                        return pTextObj && pTextObj->IsTextEditActive() ? sal_True : sal_False;
+                                    }
 
 public:
     SvxTextEditSourceImpl( SdrObject* pObject );
@@ -209,10 +218,11 @@ public:
 //------------------------------------------------------------------------
 
 SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
-:   mpObject        ( pObject ),
-    mpModel         ( pObject ? pObject->GetModel() : NULL ),
+  : maRefCount      ( 0 ),
+    mpObject        ( pObject ),
     mpView          ( NULL ),
     mpWindow        ( NULL ),
+    mpModel         ( pObject ? pObject->GetModel() : NULL ),
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mpViewForwarder ( NULL ),
@@ -221,7 +231,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
     mbIsLocked      ( FALSE ),
     mbNeedsUpdate   ( FALSE ),
     mbOldUndoMode   ( FALSE ),
-    maRefCount      ( 0 )
+    mbForwarderIsEditMode ( FALSE )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
 
@@ -232,10 +242,11 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
 //------------------------------------------------------------------------
 
 SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView, const Window& rWindow )
-:   mpObject        ( &rObject ),
-    mpModel         ( rObject.GetModel() ),
+  : maRefCount      ( 0 ),
+    mpObject        ( &rObject ),
     mpView          ( &rView ),
     mpWindow        ( &rWindow ),
+    mpModel         ( rObject.GetModel() ),
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mpViewForwarder ( NULL ),
@@ -244,7 +255,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
     mbIsLocked      ( FALSE ),
     mbNeedsUpdate   ( FALSE ),
     mbOldUndoMode   ( FALSE ),
-    maRefCount      ( 0 )
+    mbForwarderIsEditMode ( FALSE )
 {
     if( mpModel )
         StartListening( *mpModel );
@@ -297,34 +308,52 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( pSdrHint )
     {
-        if( pSdrHint->GetKind() == HINT_OBJCHG )
+        switch( pSdrHint->GetKind() )
         {
-            mbDataValid = FALSE;                        // Text muss neu geholt werden
-        }
-        else if( pSdrHint->GetKind() == HINT_OBJREMOVED )
-        {
-            if( mpObject == pSdrHint->GetObject() )
-            {
-                mbDestroyed = TRUE;
-            }
-        }
-        else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
-        {
-            mbDestroyed = TRUE;
-        }
-        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
-        {
-            SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
-            while( pObjList )
-            {
-                if( pSdrHint->GetObjList() == pObjList )
-                {
-                    mbDestroyed = sal_True;
-                    break;
-                }
+            case HINT_OBJCHG:
+                mbDataValid = FALSE;                        // Text muss neu geholt werden
+                break;
 
-                pObjList = pObjList->GetUpList();
+            case HINT_OBJREMOVED:
+                if( mpObject == pSdrHint->GetObject() )
+                {
+                    mbDestroyed = TRUE;
+                }
+                break;
+
+            case HINT_MODELCLEARED:
+                mbDestroyed = TRUE;
+                break;
+
+            case HINT_OBJLISTCLEAR:
+            {
+                SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
+                while( pObjList )
+                {
+                    if( pSdrHint->GetObjList() == pObjList )
+                    {
+                        mbDestroyed = sal_True;
+                        break;
+                    }
+
+                    pObjList = pObjList->GetUpList();
+                }
+                break;
             }
+
+            case HINT_BEGEDIT:
+                // invalidate old forwarder
+                if( !mbForwarderIsEditMode )
+                {
+                    delete mpTextForwarder;
+                    mpTextForwarder = NULL;
+                }
+                Broadcast( *pSdrHint );
+                break;
+
+            case HINT_ENDEDIT:
+                Broadcast( *pSdrHint );
+                break;
         }
     }
 
@@ -414,8 +443,13 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner );
 
-        // register as listener - need to broadcast state change messages
-        mpTextForwarder->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+        if( HasView() )
+        {
+            // register as listener - need to broadcast state change messages
+            mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+        }
+
+        mbForwarderIsEditMode = sal_False;
     }
 
     if( mpObject && !mbDataValid )
@@ -487,28 +521,20 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 {
-    // are we still in edit mode?
-    SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-    if( pTextObj && pTextObj->IsTextEditActive() )
+    if (!mpTextForwarder)
     {
-        if (!mpTextForwarder)
-        {
-            mpTextForwarder = new SvxOutlinerForwarder( mpModel->GetDrawOutliner() );
+        mpTextForwarder = new SvxOutlinerForwarder( mpModel->GetDrawOutliner() );
 
+        if( HasView() )
+        {
             // register as listener - need to broadcast state change messages
-            mpTextForwarder->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+            mpModel->GetDrawOutliner().SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
         }
 
-        return mpTextForwarder;
+        mbForwarderIsEditMode = sal_True;
     }
-    else
-    {
-        // no, have left it. Revert to background mode
-        delete mpTextForwarder;
-        mpTextForwarder = NULL;
 
-        return GetBackgroundTextForwarder();
-    }
+    return mpTextForwarder;
 }
 
 //------------------------------------------------------------------------
@@ -525,10 +551,22 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         return NULL;
 
     // distinguish the cases
-    // a) background Outliner, reflect changes into ParaOutliner
-    // b) edit mode active, work directly on the EditOutliner
-    if( mpViewForwarder )
-        return GetEditModeTextForwarder();
+    // a) connected to view, maybe edit mode is active, can work directly on the EditOutliner
+    // b) background Outliner, reflect changes into ParaOutlinerObject (this is exactly the old UNO code)
+    if( HasView() )
+    {
+        if( IsEditMode() != mbForwarderIsEditMode )
+        {
+            // forwarder mismatch - create new
+            delete mpTextForwarder;
+            mpTextForwarder = NULL;
+        }
+
+        if( IsEditMode() )
+            return GetEditModeTextForwarder();
+        else
+            return GetBackgroundTextForwarder();
+    }
     else
         return GetBackgroundTextForwarder();
 }
@@ -616,11 +654,11 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCre
 
 void SvxTextEditSourceImpl::UpdateData()
 {
-    // if we have a view forwarder, we're in edit mode and working
-    // with the DrawOutliner. Thus, all changes made on the text
-    // forwarder are reflected on the view and committed to the model
-    // on EndTextEdit(). Thus, no need for explicit updates here.
-    if( !mpViewForwarder )
+    // if we have a view and in edit mode, we're working with the
+    // DrawOutliner. Thus, all changes made on the text forwarder are
+    // reflected on the view and committed to the model on
+    // EndTextEdit(). Thus, no need for explicit updates here.
+    if( !HasView() || !IsEditMode() )
     {
         if( mbIsLocked  )
         {
@@ -708,42 +746,7 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint ) const
 IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
-    {
-        switch( aNotify->eNotificationType )
-        {
-            case EE_NOTIFY_TEXTMODIFIED:
-                Broadcast( SvxEditSourceHint( TEXT_HINT_MODIFIED, aNotify->nParagraph ) );
-                break;
-
-            case EE_NOTIFY_PARAGRAPHINSERTED:
-                Broadcast( SvxEditSourceHint( TEXT_HINT_PARAINSERTED, aNotify->nParagraph ) );
-                break;
-
-            case EE_NOTIFY_PARAGRAPHREMOVED:
-                Broadcast( SvxEditSourceHint( TEXT_HINT_PARAREMOVED, aNotify->nParagraph ) );
-                break;
-
-            case EE_NOTIFY_PARAGRAPHSMOVED:
-                Broadcast( SvxEditSourceHint( EDITSOURCE_HINT_PARASMOVED, aNotify->nParagraph, aNotify->nParam1, aNotify->nParam2 ) );
-                break;
-
-            case EE_NOTIFY_TEXTHEIGHTCHANGED:
-                Broadcast( SvxEditSourceHint( TEXT_HINT_TEXTHEIGHTCHANGED, aNotify->nParagraph ) );
-                break;
-
-            case EE_NOTIFY_TEXTVIEWSCROLLED:
-                Broadcast( SvxEditSourceHint( TEXT_HINT_VIEWSCROLLED ) );
-                break;
-
-            case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED:
-                Broadcast( SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED ) );
-                break;
-
-            default:
-                DBG_ERROR( "SvxTextEditSourceImpl::NotifyHdl unknown notification" );
-                break;
-        }
-    }
+        Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
 
     return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:29:45 $
+ *  last change: $Author: thb $ $Date: 2002-02-28 12:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,9 @@ using namespace ::com::sun::star;
 
 SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl ) :
     rOutliner( rOutl ),
-        mpAttribsCache( NULL ),
-        mpParaAttribsCache( NULL )
+    mpAttribsCache( NULL ),
+    mpParaAttribsCache( NULL ),
+    mnParaAttribsCache( 0 )
 {
 }
 
@@ -122,7 +123,7 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, BOOL 
 {
     if( rSel.nStartPara == rSel.nEndPara )
     {
-        sal_uInt8 nFlags;
+        sal_uInt8 nFlags = 0;
 
         switch( bOnlyHardAttrib )
         {
@@ -302,11 +303,6 @@ void SvxOutlinerForwarder::flushCache()
     }
 }
 
-void SvxOutlinerForwarder::SetNotifyHdl( const Link& rLink )
-{
-    rOutliner.SetNotifyHdl( rLink );
-}
-
 LanguageType SvxOutlinerForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) const
 {
     return rOutliner.GetLanguage(nPara, nIndex);
@@ -320,8 +316,11 @@ Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) con
 
 Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
 {
-    // TODO
-    return Rectangle();
+    Point aPnt = rOutliner.GetDocPosTopLeft( nPara );
+    ULONG nHeight = rOutliner.GetTextHeight( nPara );
+    Size aSize = rOutliner.CalcTextSize();
+
+    return Rectangle( aPnt.X(), aPnt.Y(), aSize.Width(), nHeight );
 }
 
 sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const
