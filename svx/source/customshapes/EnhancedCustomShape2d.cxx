@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:08:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2162,14 +2162,11 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
                 const XLineStyle eLineStyle = ((const XLineStyleItem&)pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
                 const XFillStyle eFillStyle = ((const XFillStyleItem&)pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
-                if(XLINE_NONE == eLineStyle && XFILL_NONE == eFillStyle)
-                {
+                //SJ: #i40600# if bLineGeometryNeededOnly is set linystyle does not matter
+                if( !bLineGeometryNeededOnly && ( XLINE_NONE == eLineStyle ) && ( XFILL_NONE == eFillStyle ) )
                     delete pObj;
-                }
                 else
-                {
                     vTempList.push_back(pObj);
-                }
             }
 
             vObjectList = vTempList;
