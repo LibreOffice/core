@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:28:06 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,12 @@ interface BaseTextEditView : View
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_SPELL_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_LINE_NUMBERING_DLG // status()
     [
         ExecMethod = Execute;
@@ -410,11 +416,6 @@ interface BaseTextEditView : View
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_SPELLING_DLG // status(final|play)
-    [
-        ExecMethod = ExecLingu ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
         SID_HANGUL_HANJA_CONVERSION // status(final|play)
         [
                 ExecMethod = ExecLingu ;
@@ -427,11 +428,6 @@ interface BaseTextEditView : View
                 StateMethod = GetState ;
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
-    FN_ADD_UNKNOWN // status(final|play)
-    [
-        ExecMethod = ExecLingu ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
     /*
     suchen und ersetzen
 */
