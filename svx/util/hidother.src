@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:50:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,61 +196,12 @@ hidspecial HID_REDLINING_PREV               { HelpID = HID_REDLINING_PREV; };
 hidspecial HID_REDLINING_NEXT               { HelpID = HID_REDLINING_NEXT; };
 hidspecial HID_REDLINING_TABCONTROL         { HelpID = HID_REDLINING_TABCONTROL; };
 
-hidspecial HID_EVT_ACTIONPERFORMED          { HelpID =HID_EVT_ACTIONPERFORMED   ;};
-hidspecial HID_EVT_AFTERDELETE              { HelpID =HID_EVT_AFTERDELETE       ;};
-hidspecial HID_EVT_AFTERINSERT              { HelpID =HID_EVT_AFTERINSERT       ;};
-hidspecial HID_EVT_AFTERUPDATE              { HelpID =HID_EVT_AFTERUPDATE       ;};
-hidspecial HID_EVT_BEFOREDELETE             { HelpID =HID_EVT_BEFOREDELETE      ;};
-hidspecial HID_EVT_BEFOREINSERT             { HelpID =HID_EVT_BEFOREINSERT      ;};
-hidspecial HID_EVT_BEFOREUPDATE             { HelpID =HID_EVT_BEFOREUPDATE      ;};
-hidspecial HID_EVT_COMPONENTHIDDEN          { HelpID =HID_EVT_COMPONENTHIDDEN   ;};
-hidspecial HID_EVT_COMPONENTMOVED           { HelpID =HID_EVT_COMPONENTMOVED    ;};
-hidspecial HID_EVT_COMPONENTPAINT           { HelpID =HID_EVT_COMPONENTPAINT    ;};
-hidspecial HID_EVT_COMPONENTRESIZED         { HelpID =HID_EVT_COMPONENTRESIZED  ;};
-hidspecial HID_EVT_COMPONENTSHOWN           { HelpID =HID_EVT_COMPONENTSHOWN    ;};
-hidspecial HID_EVT_CONFIRMDELETE            { HelpID =HID_EVT_CONFIRMDELETE     ;};
-hidspecial HID_EVT_ELEMENTINSERTED          { HelpID =HID_EVT_ELEMENTINSERTED   ;};
-hidspecial HID_EVT_ELEMENTREMOVED           { HelpID =HID_EVT_ELEMENTREMOVED    ;};
-hidspecial HID_EVT_ELEMENTREPLACED          { HelpID =HID_EVT_ELEMENTREPLACED   ;};
-hidspecial HID_EVT_ERROROCCURED             { HelpID =HID_EVT_ERROROCCURED      ;};
-hidspecial HID_EVT_FIRING                   { HelpID =HID_EVT_FIRING            ;};
-hidspecial HID_EVT_FOCUSGAINED              { HelpID =HID_EVT_FOCUSGAINED       ;};
-hidspecial HID_EVT_FOCUSLOST                { HelpID =HID_EVT_FOCUSLOST         ;};
-hidspecial HID_EVT_ITEMSTATECHANGED         { HelpID =HID_EVT_ITEMSTATECHANGED  ;};
-hidspecial HID_EVT_KEYTYPED                 { HelpID =HID_EVT_KEYTYPED          ;};
-hidspecial HID_EVT_LOADED                   { HelpID =HID_EVT_LOADED            ;};
-hidspecial HID_EVT_APPROVEPARAMETER         { HelpID =HID_EVT_APPROVEPARAMETER  ;};
-hidspecial HID_EVT_POSITIONING              { HelpID =HID_EVT_POSITIONING       ;};
-hidspecial HID_EVT_APPROVEROWCHANGE         { HelpID =HID_EVT_APPROVEROWCHANGE  ;};
-hidspecial HID_EVT_ROWCHANGE                { HelpID =HID_EVT_ROWCHANGE         ;};
-hidspecial HID_EVT_RELOADING                { HelpID =HID_EVT_RELOADING         ;};
-hidspecial HID_EVT_UNLOADING                { HelpID =HID_EVT_UNLOADING         ;};
-hidspecial HID_EVT_RELOADED                 { HelpID =HID_EVT_RELOADED          ;};
-hidspecial HID_EVT_UNLOADED                 { HelpID =HID_EVT_UNLOADED          ;};
-hidspecial HID_EVT_MOUSEDRAGGED             { HelpID =HID_EVT_MOUSEDRAGGED      ;};
-hidspecial HID_EVT_MOUSEENTERED             { HelpID =HID_EVT_MOUSEENTERED      ;};
-hidspecial HID_EVT_MOUSEEXITED              { HelpID =HID_EVT_MOUSEEXITED       ;};
-hidspecial HID_EVT_MOUSEMOVED               { HelpID =HID_EVT_MOUSEMOVED        ;};
-hidspecial HID_EVT_MOUSEPRESSED             { HelpID =HID_EVT_MOUSEPRESSED      ;};
-hidspecial HID_EVT_MOUSERELEASED            { HelpID =HID_EVT_MOUSERELEASED     ;};
-hidspecial HID_EVT_POSITIONED               { HelpID =HID_EVT_POSITIONED        ;};
-hidspecial HID_EVT_PROPERTIESCHANGE         { HelpID =HID_EVT_PROPERTIESCHANGE  ;};
-hidspecial HID_EVT_PROPERTYCHANGE           { HelpID =HID_EVT_PROPERTYCHANGE    ;};
-hidspecial HID_EVT_PROPERTYSTATECHANGE      { HelpID =HID_EVT_PROPERTYSTATECHANGE  ;};
-hidspecial HID_EVT_RESETTED                 { HelpID =HID_EVT_RESETTED          ;};
-hidspecial HID_EVT_SUBMITTED                { HelpID =HID_EVT_SUBMITTED         ;};
-hidspecial HID_EVT_TEXTCHANGED              { HelpID =HID_EVT_TEXTCHANGED       ;};
-hidspecial HID_EVT_UNLOADED                 { HelpID =HID_EVT_UNLOADED          ;};
-hidspecial HID_EVT_UPDATECANCELED           { HelpID =HID_EVT_UPDATECANCELED    ;};
-hidspecial HID_EVT_VETOABLECHANGE           { HelpID =HID_EVT_VETOABLECHANGE    ;};
-hidspecial HID_EVT_ADJUSTMENTVALUECHANGED   { HelpID =HID_EVT_ADJUSTMENTVALUECHANGED    ;};
 hidspecial HID_FORM_NAVIGATOR               { HelpID =HID_FORM_NAVIGATOR        ;};
 hidspecial HID_FORM_NAVIGATOR_WIN           { HelpID =HID_FORM_NAVIGATOR_WIN    ;};
 hidspecial HID_FIELD_SEL                    { HelpID =HID_FIELD_SEL             ;};
 hidspecial HID_FIELD_SEL_WIN                { HelpID =HID_FIELD_SEL_WIN         ;};
 hidspecial HID_FILTER_NAVIGATOR             { HelpID =HID_FILTER_NAVIGATOR      ;};
 hidspecial HID_FILTER_NAVIGATOR_WIN         { HelpID =HID_FILTER_NAVIGATOR_WIN  ;};
-hidspecial HID_EVT_CHANGED                  { HelpID =HID_EVT_CHANGED           ;};
 hidspecial HID_PROP_PRINTABLE               { HelpID =HID_PROP_PRINTABLE        ;};
 
 hidspecial HID_FM_DLG_PROP_FORM             { HelpID =HID_FM_DLG_PROP_FORM      ;};
@@ -265,11 +216,6 @@ hidspecial HID_VALUESET_SINGLENUM           { HelpID = HID_VALUESET_SINGLENUM ;}
 hidspecial HID_VALUESET_BULLET              { HelpID = HID_VALUESET_BULLET   ;};
 hidspecial HID_VALUESET_NUM                 { HelpID = HID_VALUESET_NUM      ;};
 hidspecial HID_VALUESET_NUMBMP              { HelpID = HID_VALUESET_NUMBMP   ;};
-
-hidspecial UID_EVT_MACRODLG                 { HelpID = UID_EVT_MACRODLG  ;};
-hidspecial HID_EVT_APPROVEACTIONPERFORMED   { HelpID = HID_EVT_APPROVEACTIONPERFORMED   ;};
-hidspecial HID_EVT_APPROVERESETTED          { HelpID = HID_EVT_APPROVERESETTED          ;};
-hidspecial HID_EVT_KEYUP                    { HelpID = HID_EVT_KEYUP                    ;};
 
 hidspecial HID_PROP_HELPURL                 { HelpID = HID_PROP_HELPURL  ;};
 hidspecial HID_PROP_RECORDMARKER            { HelpID = HID_PROP_RECORDMARKER ;};
