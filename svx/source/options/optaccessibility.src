@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:14:29 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text [ de ] = "Te~xtauswahlcursor in schreibgeschützten Textdokumenten verwenden" ;
         Text [ en-US ] = "Use te~xt selection cursor in read-only text documents";
     };
-    CheckBox CB_SYSTEM_FONT
+    CheckBox CB_ANIMATED_GRAPHICS
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL1, ROWA_3 );
@@ -113,7 +113,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     CheckBox CB_ANIMATED_TEXTS
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWA_5 );
+        Pos = MAP_APPFONT( COL1, ROWA_4 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Animierten ~Text zulassen" ;
         Text [ en-US ] = "Allow animated ~text";
@@ -121,7 +121,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     CheckBox CB_TIPHELP
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROWA_6 ) );
+        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROWA_5 ) );
         Size = MAP_APPFONT( DIFF(COL2,COL3), RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Tipp-~Hilfe verschwindet nach " ;
         Text [ en-US ] = "~Help tips disappear after ";
@@ -130,7 +130,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     {
         TabStop = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT( COL3, ROWA_6 );
+        Pos = MAP_APPFONT( COL3, ROWA_5 );
         Size = MAP_APPFONT( EDIT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
         Minimum = 1;
         Maximum = 99;
@@ -141,7 +141,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     };
     FixedText FT_TIPHELP
     {
-        Pos = MAP_APPFONT( COL4, OFFS_TEXTBOX_FIXEDTEXT( ROWA_6 ) );
+        Pos = MAP_APPFONT( COL4, OFFS_TEXTBOX_FIXEDTEXT( ROWA_5 ) );
         Size = MAP_APPFONT( UNIT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ de ] = "Sekunden" ;
         Text [ en-US ] = "seconds";
