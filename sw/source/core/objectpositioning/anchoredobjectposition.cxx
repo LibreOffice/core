@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:49:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-05 11:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
                                                      const bool _bVert,
                                                      const SwFrm&  _rPageAlignLayFrm,
                                                      const SwTwips _nProposedRelPosY,
->                                                    const bool _bCheckBottom ) const
+                                                     const bool _bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = _nProposedRelPosY;
 
