@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:29:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _CACHESTR_HXX //autogen
@@ -1875,6 +1878,7 @@ SfxAcceleratorManager* SfxObjectShell::GetAccMgr_Impl()
 
 SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pViewFrame )
 {
+/*
     SfxBindings& rBindings = pViewFrame->GetBindings();
     sal_Bool bCheckPlugin = SfxApplication::IsPlugin();
     const ResId* pId = bCheckPlugin ? GetFactory().GetPluginMenuBarId() : GetFactory().GetMenuBarId();
@@ -1888,6 +1892,31 @@ SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pVie
 
     SfxMenuBarManager* pMgr = new SfxMenuBarManager( *pId, rBindings, pCfgMgr, pViewFrame->ISA( SfxInPlaceFrame ) );
     return pMgr;
+*/
+
+    const ResId* pId = GetFactory().GetMenuBarId();
+    if ( pId )
+    {
+        Reference< com::sun::star::beans::XPropertySet > xPropSet( pViewFrame->GetBindings().GetActiveFrame(), UNO_QUERY );
+        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
+        if ( xPropSet.is() )
+        {
+            Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            aValue >>= xLayoutManager;
+        }
+
+        if ( xLayoutManager.is() )
+        {
+            rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+//            aMenuBarURL += rtl::OUString::valueOf( sal_Int32( pId->GetId() ));
+
+            xLayoutManager->createElement( aMenuBarURL );
+        }
+    }
+
+    return NULL;
+
 }
 
 SfxImageManager* SfxObjectShell::GetImageManager_Impl()
