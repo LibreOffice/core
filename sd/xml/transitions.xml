@@ -154,19 +154,19 @@
   <anim:transitionFilter smil:type="spiralWipe" smil:subtype="topLeftClockwise"/>
  </anim:par>
  <anim:par pres:preset-id="spiral-wipe-top-right-counter-clockwise">
-  <anim:transitionFilter smil:type="spiralWipe" smil:subtype="topRightClockwise"/>
+  <anim:transitionFilter smil:type="spiralWipe" smil:subtype="topRightCounterClockwise"/>
  </anim:par>
- <anim:par pres:preset-id="reverse-spiral-wipe-bottom-right-counter-clockwise">
+ <anim:par pres:preset-id="spiral-wipe-out-to-bottom-right-clockwise">
   <anim:transitionFilter smil:type="spiralWipe" smil:subtype="bottomRightCounterClockwise" smil:direction="reverse"/>
  </anim:par>
- <anim:par pres:preset-id="reverse-spiral-wipe-bottom-left-counter-clockwise">
-  <anim:transitionFilter smil:type="spiralWipe" smil:subtype="bottomLeftCounterClockwise" smil:direction="reverse"/>
+ <anim:par pres:preset-id="spiral-wipe-out-to-bottom-left-counter-clockwise">
+  <anim:transitionFilter smil:type="spiralWipe" smil:subtype="bottomLeftClockwise" smil:direction="reverse"/>
  </anim:par>
  <anim:par pres:preset-id="snake-wipe-top-left-vertical">
-  <anim:transitionFilter smil:type="snakeWipe" smil:subtype="topLeftHorizontal"/>
+  <anim:transitionFilter smil:type="snakeWipe" smil:subtype="topLeftVertical"/>
  </anim:par>
  <anim:par pres:preset-id="snake-wipe-top-left-horizontal">
-  <anim:transitionFilter smil:type="snakeWipe" smil:subtype="topLeftVertical"/>
+  <anim:transitionFilter smil:type="snakeWipe" smil:subtype="topLeftHorizontal"/>
  </anim:par>
  <anim:par pres:preset-id="snake-wipe-bottom-right-vertical">
   <anim:transitionFilter smil:type="snakeWipe" smil:subtype="topLeftVertical" smil:direction="reverse"/>
