@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,9 +172,14 @@ void SbiCodeGen::Save()
                    pDef = pParser->aPublics.Next() )
     {
         SbiProcDef* pProc = pDef->GetProcDef();
-        if( pProc && pProc->IsPublic() && pProc->IsDefined() )
+        if( pProc && pProc->IsDefined() )
         {
             SbMethod* pMeth = rMod.GetMethod( pProc->GetName(), pProc->GetType() );
+
+            // #110004
+            if( !pProc->IsPublic() )
+                pMeth->SetFlag( SBX_PRIVATE );
+
             pMeth->nStart = pProc->GetAddr();
             pMeth->nLine1 = pProc->GetLine1();
             pMeth->nLine2 = pProc->GetLine2();
@@ -206,7 +211,14 @@ void SbiCodeGen::Save()
                 USHORT nFlags = SBX_READ;
                 if( pPar->IsOptional() )
                     nFlags |= SBX_OPTIONAL;
+
                 pInfo->AddParam( pPar->GetName(), t, nFlags );
+                USHORT nDefaultId = pPar->GetDefaultId();
+                if( nDefaultId )
+                {
+                    SbxParamInfo* pParam = (SbxParamInfo*)pInfo->GetParam( i );
+                    pParam->nUserData = nDefaultId;
+                }
             }
             pMeth->SetInfo( pInfo );
         }
