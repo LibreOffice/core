@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImportable.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:25:28 $
+ *  last change:$Date: 2004-02-03 12:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ public class _XImportable extends MultiMethodTest {
         "DatabaseName", "SourceType", "SourceObject", "Native"
     };
     protected Type[] types = new Type[] {
-        new Type("string"), new Type("com.sun.star.sheet.DataImportMode"),
-        new Type("string"), new Type("boolean")
+        new Type(String.class), new Type(com.sun.star.sheet.DataImportMode.class),
+        new Type(String.class), new Type(Boolean.class)
     };
 
     /**
