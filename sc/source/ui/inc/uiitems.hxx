@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:43:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef SC_UIITEMS_HXX
 #define SC_UIITEMS_HXX
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 #ifndef SC_CONDITIO_HXX
 #include "conditio.hxx"
 #endif
@@ -188,7 +191,7 @@ public:
 //----------------------------------------------------------------------------
 // Parameter-Item fuer den Sortierdialog:
 
-class ScSortItem : public SfxPoolItem
+class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
 {
 public:
                             TYPEINFO();
@@ -216,7 +219,7 @@ private:
 //----------------------------------------------------------------------------
 // Parameter-Item fuer den Filterdialog:
 
-class ScQueryItem : public SfxPoolItem
+class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
 public:
                             TYPEINFO();
@@ -248,7 +251,7 @@ private:
 //----------------------------------------------------------------------------
 // Parameter-Item fuer den Zwischenergebnisdialog:
 
-class ScSubTotalItem : public SfxPoolItem
+class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
@@ -276,7 +279,7 @@ private:
 //----------------------------------------------------------------------------
 // Parameter-Item fuer die Benutzerlisten-TabPage:
 
-class ScUserListItem : public SfxPoolItem
+class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
