@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ String STR_WARNING_ITEM
     TEXT [ English ] = "Item has wrong version!" ;
     TEXT [ norwegian ] = "Element har feil versjon!" ;
     TEXT [ italian ] = "La voce ha una versione errata!" ;
-    TEXT [ portuguese_brazilian ] = "Vers?o errada do item!" ;
+    TEXT [ portuguese_brazilian ] = "Versão Incorreta!" ;
     TEXT [ portuguese ] = "O registo tem a versão errada!" ;
     TEXT [ finnish ] = "Virheellinen versio" ;
     TEXT [ danish ] = "Elementets version er forkert! " ;
@@ -78,7 +78,7 @@ String STR_WARNING_ITEM
     TEXT [ english_us ] = "Incorrect Version!" ;
     TEXT[ chinese_simplified ] = "æ¡ç›®ç‰ˆæœ¬æ— æ•ˆ";
     TEXT[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ!";
-    TEXT[ polish ] = "Wersja elementu jest nieprawid³owa!";
+    TEXT[ polish ] = "Nieprawid³owa wersja!";
     TEXT[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
     TEXT[ chinese_traditional ] = "æ¢ç›®ç‰ˆæœ¬ç„¡æ•ˆ";
     TEXT[ arabic ] = "ÇáÅÏÎÇá áå ÅÕÏÇÑ ÎÇØÆ!";
@@ -90,7 +90,19 @@ String STR_WARNING_ITEM
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Versió incorrecta!";
     TEXT[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡!";
+    TEXT[ czech ] = "NeplatnÃ¡ verze!";
+    TEXT[ hebrew ] = "â€®×’×¨×¡×” ×œ× × ×›×•× ×”!â€¬";
+    TEXT[ hindi ] = "Incorrect Version!";
 };
+
+
+
+
+
+
+
+
+
 
 
 
