@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:05:48 $
+ *  last change: $Author: hr $ $Date: 2004-04-15 11:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,17 +433,18 @@ FmXFormController::FmXFormController(const Reference< XMultiServiceFactory > & _
 
     ::comphelper::increment(m_refCount);
     {
-        m_xAggregate = Reference< XAggregation >(
-            m_xORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.TabController" ) ),
-            UNO_QUERY
-        );
-        DBG_ASSERT( m_xAggregate.is(), "FmXFormController::FmXFormController : could not create my aggregate !" );
-        m_xTabController = Reference< XTabController >( m_xAggregate, UNO_QUERY );
+        {
+            m_xAggregate = Reference< XAggregation >(
+                m_xORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.TabController" ) ),
+                UNO_QUERY
+            );
+            DBG_ASSERT( m_xAggregate.is(), "FmXFormController::FmXFormController : could not create my aggregate !" );
+            m_xTabController = Reference< XTabController >( m_xAggregate, UNO_QUERY );
+        }
 
-    if ( m_xAggregate.is() )
+        if ( m_xAggregate.is() )
             m_xAggregate->setDelegator( *this );
     }
-
     ::comphelper::decrement(m_refCount);
 
     m_aTabActivationTimer.SetTimeout( 500 );
