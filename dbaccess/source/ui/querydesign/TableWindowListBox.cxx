@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
-#endif
-#ifndef _DTRANS_HXX
-#include <so3/dtrans.hxx>
 #endif
 #ifndef _SV_EXCHANGE_HXX
 #include <vcl/exchange.hxx>
