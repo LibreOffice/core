@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:54:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,23 +272,6 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         :public OGeometryControlModel_Base
         ,public ::comphelper::OIdPropertyArrayUsageHelper< OCommonGeometryControlModel >
     {
-        typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash >                HashMapString2Int;
-        typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
-        typedef ::std::vector< ::std::vector< sal_Int32 > >                                             IntArrayArray;
-
-        // for creating class-unique PropertySetInfo's, we need some info:
-        static  HashMapString2Int   s_aServiceSpecifierMap;
-            // this one maps from a String, which is the service specifier for our aggregate, to a unique id
-        static  PropSeqArray        s_aAggregateProperties;
-            // this one contains the properties which belong to all the unique ids in s_aServiceSpecifierMap
-        static  IntArrayArray       s_aAmbiguousPropertyIds;
-            // the ids of the properties which we as well as our aggregate supply
-            // For such props, we let our base class handle them, and whenever such a prop is set, we forward this
-            // to our aggregate.
-
-        // With this, we can ensure that two instances of this class share the same PropertySetInfo if and only
-        // if both aggregates have the same service specifier.
-
     private:
         ::rtl::OUString m_sServiceSpecifier;        // the service specifier of our aggregate
         sal_Int32       m_nPropertyMapId;           // our unique property info id, used to look up in s_aAggregateProperties
