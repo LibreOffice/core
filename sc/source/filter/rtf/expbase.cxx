@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:04:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,13 +118,12 @@ BOOL ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
     while ( nStartCol <= nEndCol &&
             pDoc->GetColFlags( nEndCol, nTab ) & CR_HIDDEN )
         --nEndCol;
-    while ( nStartRow <= nEndRow &&
-            pDoc->GetRowFlags( nStartRow, nTab ) & CR_HIDDEN )
-        ++nStartRow;
-    while ( nStartRow <= nEndRow &&
-            pDoc->GetRowFlags( nEndRow, nTab ) & CR_HIDDEN )
-        --nEndRow;
-    return nStartCol <= nEndCol && nStartRow <= nEndRow;
+    nStartRow = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition( nStartRow,
+            nEndRow, CR_HIDDEN, 0);
+    nEndRow = pDoc->GetRowFlagsArray( nTab).GetLastForCondition( nStartRow,
+            nEndRow, CR_HIDDEN, 0);
+    return nStartCol <= nEndCol && nStartRow <= nEndRow && nEndRow !=
+        ::std::numeric_limits<SCROW>::max();
 }
 
 
