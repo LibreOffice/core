@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: os $ $Date: 2001-05-08 07:35:52 $
+#   last change: $Author: os $ $Date: 2001-06-25 11:34:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ IDLFILES=\
     ChainedTextFrame.idl\
     ChapterFormat.idl\
     ChapterNumberingRule.idl\
+    CharacterCompressionType.idl\
     ContentIndex.idl\
     ContentIndexMark.idl\
     ControlCharacter.idl\
