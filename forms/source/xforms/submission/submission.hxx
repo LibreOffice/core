@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:00:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,10 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
+
 #include <com/sun/star/task/XInteractionHandler.hpp>
+
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -148,6 +151,7 @@ protected:
     INetURLObject m_aURLObj;
     CSS::uno::Reference< CSS::xml::xpath::XXPathObject > m_aXPathObject;
     CSS::uno::Reference< CSS::xml::dom::XDocumentFragment > m_aFragment;
+    CSS::uno::Reference< CSS::io::XInputStream > m_aResultStream;
     rtl::OUString m_aEncoding;
 
 public:
@@ -170,7 +174,9 @@ public:
     {
         m_aEncoding = aEncoding;
     }
-    virtual SubmissionResult submit() = 0;
+    virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& ) = 0;
+
+    virtual SubmissionResult replace(const rtl::OUString&, const CSS::uno::Reference< CSS::xml::dom::XDocument >&, const CSS::uno::Reference< CSS::frame::XFrame>&);
 
 };
 

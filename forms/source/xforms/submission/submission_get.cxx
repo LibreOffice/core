@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission_get.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:00:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ CSubmissionGet::CSubmissionGet(const rtl::OUString& aURL, const CSS::uno::Refere
 {
 }
 
-CSubmission::SubmissionResult CSubmissionGet::submit()
+CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
 {
     // GET always uses apllicatin/x-www-formurlencoded
     auto_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
@@ -98,8 +98,11 @@ CSubmission::SubmissionResult CSubmissionGet::submit()
 
     // create a commandEnvironment and use the default interaction handler
     CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
-    pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+    if( aInteractionHandler.is() )
+        pHelper->m_aInteractionHandler = aInteractionHandler;
+    else
+        pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);
@@ -139,8 +142,12 @@ CSubmission::SubmissionResult CSubmissionGet::submit()
             Reference< XOutputStream > aPipe(m_aFactory->createInstance(
                 OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
             aContent.openStream(aPipe);
-            // what to do with the reply?
-
+            // get reply
+            try {
+                m_aResultStream = aContent.openStream();
+            } catch (Exception& oe) {
+                OSL_ENSURE(sal_False, "Cannot open reply stream from content");
+            }
         } catch (Exception& e)
         {
             // XXX
