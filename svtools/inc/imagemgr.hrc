@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:53:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 12:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,17 @@
 #define IMG_NEWFROMTEMPLATE             (IMAGELIST_START + 166)
 #define IMG_POWERPOINT                  (IMAGELIST_START + 167)
 #define IMG_POWERPOINTTEMPLATE          (IMAGELIST_START + 168)
-
+#define IMG_OO_DATABASE_DOC             (IMAGELIST_START + 169)
+#define IMG_OO_DRAW_DOC                 (IMAGELIST_START + 170)
+#define IMG_OO_MATH_DOC                 (IMAGELIST_START + 171)
+#define IMG_OO_GLOBAL_DOC               (IMAGELIST_START + 172)
+#define IMG_OO_IMPRESS_DOC              (IMAGELIST_START + 173)
+#define IMG_OO_CALC_DOC                 (IMAGELIST_START + 174)
+#define IMG_OO_WRITER_DOC               (IMAGELIST_START + 175)
+#define IMG_OO_DRAW_TEMPLATE            (IMAGELIST_START + 176)
+#define IMG_OO_IMPRESS_TEMPLATE         (IMAGELIST_START + 177)
+#define IMG_OO_CALC_TEMPLATE            (IMAGELIST_START + 178)
+#define IMG_OO_WRITER_TEMPLATE          (IMAGELIST_START + 179)
 
 #define RID_DESCRIPTION_START           256
 
