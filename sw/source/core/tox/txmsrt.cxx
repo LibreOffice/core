@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 10:43:38 $
+ *  last change: $Author: os $ $Date: 2001-02-14 15:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,22 +656,25 @@ String SwTOXPara::GetURL() const
     {
     case TOX_TEMPLATE:
         {
-            aTxt = '#';
-            const SwNodeNum* pNum = ((SwTxtNode*)pNd)->GetOutlineNum();
-            if( pNum && pNd->GetDoc()->GetOutlineNumRule() )
+            if( MAXLEVEL >= ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel())
             {
-                // dann noch die rel. Nummer davor setzen
-                const SwNumRule& rRule = *pNd->GetDoc()->GetOutlineNumRule();
-                for( int n = 0; n <= pNum->GetLevel(); ++n )
+                aTxt = '#';
+                const SwNodeNum* pNum = ((SwTxtNode*)pNd)->GetOutlineNum();
+                if( pNum && pNd->GetDoc()->GetOutlineNumRule() )
                 {
-                    int nNum = pNum->GetLevelVal()[ n ];
-                    nNum -= ( rRule.Get( n ).GetStartValue() - 1 );
-                    ( aTxt += String::CreateFromInt32( nNum )) += '.';
+                    // dann noch die rel. Nummer davor setzen
+                    const SwNumRule& rRule = *pNd->GetDoc()->GetOutlineNumRule();
+                    for( int n = 0; n <= pNum->GetLevel(); ++n )
+                    {
+                        int nNum = pNum->GetLevelVal()[ n ];
+                        nNum -= ( rRule.Get( n ).GetStartValue() - 1 );
+                        ( aTxt += String::CreateFromInt32( nNum )) += '.';
+                    }
                 }
+                aTxt += INetURLObject::createFragment(
+                                    ((SwTxtNode*)pNd)->GetExpandTxt() );
+                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
             }
-            aTxt += INetURLObject::createFragment(
-                                ((SwTxtNode*)pNd)->GetExpandTxt() );
-            ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
         }
         break;
 
