@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:26:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,43 +332,6 @@ sal_Bool ZipPackageStream::ParsePackageRawStream()
     return sal_True;
 }
 
-<<<<<<< ZipPackageStream.cxx
-=======
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-    //XInterface
-Any SAL_CALL ZipPackageStream::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    return ( ::cppu::queryInterface (   rType                                       ,
-                                                // OWeakObject interfaces
-                                                reinterpret_cast< XInterface*       > ( this )  ,
-                                                static_cast< XWeak*         > ( this )  ,
-                                                // ZipPackageEntry interfaces
-                                                static_cast< container::XNamed*     > ( this )  ,
-                                                static_cast< container::XChild*     > ( this )  ,
-                                                static_cast< XUnoTunnel*        > ( this )  ,
-                                                // My own interfaces
-                                                static_cast< io::XActiveDataSink*   > ( this )  ,
-                                                static_cast< beans::XPropertySet*   > ( this ) ) );
-
-}
-
-//--------------------------------------------------------------------------
-void SAL_CALL ZipPackageStream::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-//--------------------------------------------------------------------------
-void SAL_CALL ZipPackageStream::release(  )
-    throw()
-{
-    OWeakObject::release();
-}
-#endif
-
-//--------------------------------------------------------------------------
->>>>>>> 1.34.12.2
 void ZipPackageStream::SetPackageMember( sal_Bool bNewValue )
 {
     if ( bNewValue )
