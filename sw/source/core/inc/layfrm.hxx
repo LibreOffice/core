@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:06:41 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@ protected:
     long CalcRel( const SwFmtFrmSize &rSz, BOOL bWidth ) const;
 
 public:
+    // --> OD 2004-06-29 #i28701#
+    TYPEINFO();
+
     void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
     void RefreshLaySubsidiary( const SwPageFrm*, const SwRect& ) const;
     void RefreshExtraData( const SwRect & ) const;
@@ -155,9 +158,8 @@ public:
     BOOL MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
                         SwFtnBossFrm *pNewBoss, const BOOL bFtnNums );
 
-    //Sorgt dafuer, dass innenliegende Flys noetigenfalls zum clippen bzw.
-    //reformatieren invalidiert werden.
-    void NotifyFlys();
+    // --> OD 2004-07-01 #i28701# - change purpose of method and its name
+    void NotifyLowerObjs();
 
     //Invalidiert diejenigen innenliegenden Frames, deren Breite und/oder
     //Hoehe Prozentual berechnet werden. Auch Rahmen, die an this oder an
