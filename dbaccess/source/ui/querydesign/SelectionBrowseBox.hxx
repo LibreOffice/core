@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:05:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,14 @@ namespace dbaui
                 The name of the specified object.
         */
         virtual ::rtl::OUString     GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+
+        // IAccessibleTableProvider
+        /** Creates the accessible object of a data table cell.
+        @param nRow  The row index of the cell.
+        @param nColumnId  The column ID of the cell.
+        @return  The XAccessible interface of the specified cell. */
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
+
 
     protected:
         virtual sal_Bool            SeekRow( long nRow );
