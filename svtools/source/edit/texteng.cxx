@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-09 15:17:49 $
+ *  last change: $Author: pl $ $Date: 2002-10-01 19:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,13 +1130,49 @@ USHORT TextEngine::GetCharPos( ULONG nPortion, USHORT nLine, long nXPos, BOOL bS
         {
             if( pTextPortion->GetLen() > 1 )
             {
-                nTmpX -= pTextPortion->GetWidth();  // vor die Portion stellen
-                // Optimieren: Kein GetTextBreak, wenn feste Fontbreite...
+                nTmpX -= pTextPortion->GetWidth();  // begin of portion
                 Font aFont;
                 SeekCursor( nPortion, nCurIndex+1, aFont );
                 mpRefDev->SetFont( aFont );
-                nCurIndex = mpRefDev->GetTextBreak( pPortion->GetNode()->GetText(), nXPos-nTmpX, nCurIndex );
-                // MT: GetTextBreak should assure that we are not withing a CTL cell...
+
+                const String& rText = pPortion->GetNode()->GetText();
+                int nTextLen = rText.Len()-nCurIndex;
+
+                long    nDXBuffer[256];
+                long*   pDXBuffer = NULL;
+                long*   pDX = nDXBuffer;
+
+                if( 2*(rText.Len()-nCurIndex) > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+                {
+                    pDXBuffer = new long[2*(nTextLen+1)];
+                    pDX = pDXBuffer;
+                }
+
+                mpRefDev->GetCaretPositions( rText, pDX, nCurIndex, nTextLen );
+                long nDeltaX = nXPos - nTmpX;
+                for( int n = 0; n < nTextLen; n++ )
+                {
+                    long nMin = Min( pDX[2*n], pDX[2*n+1] );
+                    long nMax = Max( pDX[2*n], pDX[2*n+1] );
+                    if( nMin <= nDeltaX && nMax >= nDeltaX )
+                    {
+                        nCurIndex += n;
+                        if( nDeltaX >= (nMin+nMax)/2 )
+                        {
+                            if( pDX[2*n] < pDX[2*n+1] )
+                                nCurIndex++;
+                        }
+                        else
+                        {
+                            if( pDX[2*n] > pDX[2*n+1] ) // RTL char
+                                nCurIndex++;
+                        }
+                        break;
+                    }
+                }
+
+                if( pDXBuffer )
+                    delete [] pDXBuffer;
             }
             return nCurIndex;
         }

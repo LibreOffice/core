@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-11 11:17:30 $
+ *  last change: $Author: pl $ $Date: 2002-10-01 19:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include <vcl/rc.h>
 #include <vcl/decoview.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svmedit.hxx>
 #include <xtextedt.hxx>
@@ -385,7 +386,7 @@ void ImpSvMEdit::SetAlign( WinBits nWinStyle )
 {
     if ( nWinStyle & WB_CENTER )
         mpTextWindow->GetTextEngine()->SetTextAlign( TXTALIGN_CENTER );
-    else if ( nWinStyle & WB_RIGHT )
+    else if ( nWinStyle & WB_RIGHT || Application::GetSettings().GetLayoutRTL() )
         mpTextWindow->GetTextEngine()->SetTextAlign( TXTALIGN_RIGHT );
     else
         mpTextWindow->GetTextEngine()->SetTextAlign( TXTALIGN_LEFT );
@@ -446,13 +447,14 @@ String ImpSvMEdit::GetSelected() const
 void ImpSvMEdit::Resize()
 {
     Size aSz = pSvMultiLineEdit->GetOutputSizePixel();
+    Size aEditSize = aSz;
     long nSBWidth = pSvMultiLineEdit->GetSettings().GetStyleSettings().GetScrollBarSize();
     nSBWidth = pSvMultiLineEdit->CalcZoom( nSBWidth );
 
     if ( mpHScrollBar )
-        aSz.Height() -= nSBWidth;
+        aSz.Height() -= nSBWidth+1;
     if ( mpVScrollBar )
-        aSz.Width() -= nSBWidth;
+        aSz.Width() -= nSBWidth+1;
 
     Size aTextWindowSz( aSz );
     aTextWindowSz.Width() -= maTextWindowOffset.X();
@@ -463,10 +465,15 @@ void ImpSvMEdit::Resize()
         mpTextWindow->GetTextEngine()->SetMaxTextWidth( aSz.Width() );
 
     if ( mpHScrollBar )
-        mpHScrollBar->SetPosSizePixel( 0, aSz.Height(), aSz.Width(), nSBWidth );
+        mpHScrollBar->SetPosSizePixel( 0, aEditSize.Height()-nSBWidth, aSz.Width(), nSBWidth );
 
     if ( mpVScrollBar )
-        mpVScrollBar->SetPosSizePixel( aSz.Width(), 0, nSBWidth, aSz.Height() );
+    {
+        if( Application::GetSettings().GetLayoutRTL() )
+            mpVScrollBar->SetPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
+        else
+            mpVScrollBar->SetPosSizePixel( aEditSize.Width()-nSBWidth, 0, nSBWidth, aSz.Height() );
+    }
 
     if ( mpScrollBox )
         mpScrollBox->SetPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );

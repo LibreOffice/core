@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-29 11:49:55 $
+ *  last change: $Author: pl $ $Date: 2002-10-01 19:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,8 @@ sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor
 // -------------------------------------------------------------------------
 TextView::TextView( TextEngine* pEng, Window* pWindow )
 {
+    pWindow->EnableRTL( FALSE );
+
     mpWindow = pWindow;
     mpTextEngine = pEng;
     mpVirtDev = NULL;
@@ -1662,6 +1664,8 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
     Size aOutSz = mpWindow->GetOutputSizePixel();
     if ( aEditCursor.GetHeight() > aOutSz.Height() )
         aEditCursor.Bottom() = aEditCursor.Top() + aOutSz.Height() - 1;
+
+    aEditCursor.Left() -= 1;
 
     if ( bGotoCursor  )
     {
