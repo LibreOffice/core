@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,36 +62,26 @@
 #ifndef DBACCESS_INDEXES_HXX_
 #define DBACCESS_INDEXES_HXX_
 
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include "connectivity/sdbcx/VCollection.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _DBA_CORE_TABLE_HXX_
-#include "table.hxx"
+#ifndef CONNECTIVITY_INDEXESHELPER_HXX
+#include "connectivity/TIndexes.hxx"
 #endif
 
 namespace dbaccess
 {
-    class OIndexes : public connectivity::sdbcx::OCollection
+    class OIndexes : public connectivity::OIndexesHelper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xIndexes;
-        ODBTable*   m_pTable;
     protected:
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         virtual void appendObject( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > cloneObject(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
     public:
-        OIndexes(ODBTable* _pTable,
+        OIndexes(connectivity::OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
                  const ::std::vector< ::rtl::OUString> &_rVector,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes
-                 ) : connectivity::sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector)
-            ,m_pTable(_pTable)
+                 ) : connectivity::OIndexesHelper(_pTable,_rMutex,_rVector)
             ,m_xIndexes(_rxIndexes)
         {}
 

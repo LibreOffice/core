@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,8 +658,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    IColumnFactory* _pColFactory,
                    ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
                    sal_Bool _bAddColumn,sal_Bool _bDropColumn)
-                   : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
-    ,m_pTable(NULL)
+                   : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector)
     ,m_bInitialized(sal_False)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
@@ -676,8 +675,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         IColumnFactory* _pColFactory,
         ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
         sal_Bool _bAddColumn,sal_Bool _bDropColumn)
-       : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
-    ,m_pTable(NULL)
+       : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector)
     ,m_bInitialized(sal_False)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
@@ -1025,77 +1023,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
     }
     else if(m_pTable && !m_pTable->isNew() && m_bAddColumn)
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
-
-        ::rtl::OUString aCatalog;
-        ::rtl::OUString aSchema;
-        ::rtl::OUString aTable;
-        m_pTable->getPropertyValue(PROPERTY_CATALOGNAME)    >>= aCatalog;
-        m_pTable->getPropertyValue(PROPERTY_SCHEMANAME)     >>= aSchema;
-        m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
-
-        ::rtl::OUString aComposedName;
-        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True,::dbtools::eInTableDefinitions);
-
-        aSql += aComposedName;
-        aSql += ::rtl::OUString::createFromAscii(" ADD ");
-        aSql += ::dbtools::quoteName( aQuote,::comphelper::getString(descriptor->getPropertyValue(PROPERTY_NAME)));
-        aSql += ::rtl::OUString::createFromAscii(" ");
-
-        sal_Int32 nType = comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_TYPE));
-        Any aTypeName = descriptor->getPropertyValue(PROPERTY_TYPENAME);
-        if(aTypeName.hasValue() && comphelper::getString(aTypeName).getLength())
-            aSql += comphelper::getString(aTypeName);
-        else
-        {
-            sal_Int32 nPrec     = comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION));
-            ::rtl::OUString aTypeName;
-            //  sal_Int32 nScale    = getINT32(descriptor->getPropertyValue(PROPERTY_SCALE));
-            Reference<XResultSet> xTypes(m_pTable->getMetaData()->getTypeInfo());
-            Reference<XRow> xRow(xTypes,UNO_QUERY);
-            if ( xTypes.is() )
-                while(xTypes->next())
-                {
-                    aTypeName = xRow->getString(1); // must be fetched in order
-                    if(xRow->getInt(2) == nType && xRow->getInt(3) >= nPrec)
-                        break;
-                }
-
-            aSql += aTypeName + ::rtl::OUString::createFromAscii(" ");
-        }
-
-        switch(nType)
-        {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-                aSql += ::rtl::OUString::createFromAscii("(")
-                        + ::rtl::OUString::valueOf(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
-                        + ::rtl::OUString::createFromAscii(")");
-                break;
-
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                aSql += ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
-                            + ::rtl::OUString::createFromAscii(",")
-                            + ::rtl::OUString::valueOf(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_SCALE)))
-                            + ::rtl::OUString::createFromAscii(")");
-                break;
-        }
-        ::rtl::OUString aDefault = comphelper::getString(descriptor->getPropertyValue(PROPERTY_DEFAULTVALUE));
-
-        if(aDefault.getLength())
-            aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
-
-        if(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
-            aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
+        OColumns_BASE::appendObject(descriptor);
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
         throw SQLException();
@@ -1111,28 +1039,7 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     }
     else if(m_pTable && !m_pTable->isNew() && m_bDropColumn)
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
-
-        ::rtl::OUString aCatalog;
-        ::rtl::OUString aSchema;
-        ::rtl::OUString aTable;
-        m_pTable->getPropertyValue(PROPERTY_CATALOGNAME)    >>= aCatalog;
-        m_pTable->getPropertyValue(PROPERTY_SCHEMANAME)     >>= aSchema;
-        m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
-
-        ::rtl::OUString aComposedName;
-        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True,::dbtools::eInTableDefinitions);
-
-        aSql += aComposedName;
-        aSql += ::rtl::OUString::createFromAscii(" DROP ");
-        aSql += ::dbtools::quoteName( aQuote,_sElementName);
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        if(xStmt.is())
-            xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
+        OColumns_BASE::dropObject(_nPos,_sElementName);
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
         throw SQLException();
@@ -1148,4 +1055,5 @@ Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDes
     return xName;
 }
 // -----------------------------------------------------------------------------
+
 

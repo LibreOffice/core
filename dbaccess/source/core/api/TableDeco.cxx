@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-19 15:09:58 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,64 +567,18 @@ Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 void ODBTableDecorator::fillPrivileges() const
 {
     // somebody is asking for the privileges an we do not know them, yet
-    const_cast<ODBTableDecorator*>(this)->m_nPrivileges = 0;    // don't allow anything if something goes wrong
+    const_cast<ODBTableDecorator*>(this)->m_nPrivileges = 0;
     try
     {
         Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
-        Any aVal = xProp->getPropertyValue(PROPERTY_CATALOGNAME);
-        ::rtl::OUString sSchema,sName;
+
+        ::rtl::OUString sCatalog,sSchema,sName;
+        xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
         xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
         xProp->getPropertyValue(PROPERTY_NAME)          >>= sName;
-        Reference< XResultSet > xPrivileges = m_xMetaData->getTablePrivileges(aVal,sSchema,sName);
-        Reference< XRow > xCurrentRow(xPrivileges, UNO_QUERY);
-
-        if (xCurrentRow.is())
-        {
-            ::rtl::OUString sUserWorkingFor = m_xMetaData->getUserName();
-            // after creation the set is positioned before the first record, per definitionem
-
-            ::rtl::OUString sPrivilege, sGrantee;
-            while (xPrivileges->next())
-            {
-#ifdef DBG_UTIL
-                ::rtl::OUString sCat1, sSchema1, sName1, sGrantor1, sGrantable1;
-                sCat1       = xCurrentRow->getString(1);
-                sSchema1    = xCurrentRow->getString(2);
-                sName1      = xCurrentRow->getString(3);
-                sGrantor1   = xCurrentRow->getString(4);
-#endif
-                sGrantee    = xCurrentRow->getString(5);
-                sPrivilege  = xCurrentRow->getString(6);
-#ifdef DBG_UTIL
-                sGrantable1 = xCurrentRow->getString(7);
-#endif
-
-                if (sUserWorkingFor != sGrantee)
-                    continue;
-
-                if (sPrivilege.compareToAscii("SELECT") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::SELECT;
-                else if (sPrivilege.compareToAscii("INSERT") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::INSERT;
-                else if (sPrivilege.compareToAscii("UPDATE") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::UPDATE;
-                else if (sPrivilege.compareToAscii("DELETE") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::DELETE;
-                else if (sPrivilege.compareToAscii("READ") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::READ;
-                else if (sPrivilege.compareToAscii("CREATE") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::CREATE;
-                else if (sPrivilege.compareToAscii("ALTER") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::ALTER;
-                else if (sPrivilege.compareToAscii("REFERENCE") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::REFERENCE;
-                else if (sPrivilege.compareToAscii("DROP") == 0)
-                    const_cast<ODBTableDecorator*>(this)->m_nPrivileges |= Privilege::DROP;
-            }
-        }
-        disposeComponent(xPrivileges);
+        const_cast<ODBTableDecorator*>(this)->m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),sCatalog,sSchema, sName);
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         UNUSED(e);
         DBG_ERROR("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");

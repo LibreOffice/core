@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:31 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,13 +226,7 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
     else
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
-        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-
-        descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-        descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-        descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
-        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+        ::rtl::OUString sComposedName = ::dbtools::composeTableName(m_xMetaData,descriptor,sal_True,::dbtools::eInTableDefinitions);
         if(!sComposedName.getLength())
             ::dbtools::throwFunctionSequenceException(*this);
 

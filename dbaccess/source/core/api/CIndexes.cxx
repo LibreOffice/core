@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:28 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef DBACCESS_INDEXES_HXX_
 #include "CIndexes.hxx"
 #endif
-#ifndef DBACCESS_INDEX_HXX_
-#include "CIndex.hxx"
-#endif
 #ifndef _DBA_CORE_TABLE_HXX_
 #include "table.hxx"
 #endif
@@ -89,6 +86,7 @@
 #include <comphelper/extract.hxx>
 #endif
 
+using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -99,56 +97,16 @@ using namespace ::com::sun::star::lang;
 using namespace dbaccess;
 using namespace cppu;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
 {
     Reference< XNamed > xRet = NULL;
-    if(m_xIndexes.is() && m_xIndexes->hasByName(_rName))
-    {
-        ::cppu::extractInterface(xRet,m_xIndexes->getByName(_rName));
-    }
+    if ( m_xIndexes.is() && m_xIndexes->hasByName(_rName) )
+        m_xIndexes->getByName(_rName) >>= xRet;
     else
-    {
-        ::rtl::OUString aName,aQualifier;
-        sal_Int32 nLen = _rName.indexOf('.');
-        if(nLen != -1)
-        {
-            aQualifier  = _rName.copy(0,nLen);
-            aName       = _rName.copy(nLen+1);
-        }
-        else
-            aName       = _rName;
-
-        ::rtl::OUString aCatalog,aSchema,aTable;
-        dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
-
-        Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(makeAny(aCatalog),aSchema,aTable,sal_False,sal_False);
-
-        if(xResult.is())
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            while(xResult->next())
-            {
-                sal_Bool bUnique = !xRow->getBoolean(4);
-                if((!aQualifier.getLength() || xRow->getString(5) == aQualifier ) && xRow->getString(6) == aName)
-                {
-                    ODBIndex* pRet = new ODBIndex(m_pTable,aName,aQualifier,bUnique,
-                        sal_False,
-                        xRow->getShort(7) == IndexType::CLUSTERED);
-                    xRet = pRet;
-                    break;
-                }
-            }
-        }
-    }
+        xRet = OIndexesHelper::createObject(_rName);
 
     return xRet;
-}
-// -------------------------------------------------------------------------
-void OIndexes::impl_refresh() throw(RuntimeException)
-{
-    m_pTable->refreshIndexes();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
@@ -157,142 +115,41 @@ Reference< XPropertySet > OIndexes::createEmptyObject()
     if(xData.is())
         return xData->createDataDescriptor();
     else
-        return new ODBIndex(m_pTable);
+        return OIndexesHelper::createEmptyObject();
 }
 // -------------------------------------------------------------------------
 // XAppend
 void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 {
     Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
-    if(xData.is())
-    {
-
+    if ( xData.is() )
         xData->appendByDescriptor(descriptor);
-    }
     else
-    {
-        ::rtl::OUString aName = comphelper::getString(descriptor->getPropertyValue(PROPERTY_NAME));
-        ObjectMap::iterator aIter = m_aNameMap.find(aName);
-        if( aIter != m_aNameMap.end())
-            throw ElementExistException(aName,*this);
-
-        if(!m_pTable->isNew())
-        {
-            ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
-            ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-            ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
-
-            if(comphelper::getINT32(descriptor->getPropertyValue(PROPERTY_ISUNIQUE)))
-                aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
-            aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
-
-
-            ::rtl::OUString aCatalog,aSchema,aTable;
-            dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
-            ::rtl::OUString aComposedName;
-
-            dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True,::dbtools::eInIndexDefinitions);
-            if(aName.getLength())
-            {
-                aSql = aSql + ::dbtools::quoteName( aQuote,aName )
-                            + ::rtl::OUString::createFromAscii(" ON ")
-                            + aComposedName
-                            + ::rtl::OUString::createFromAscii(" ( ");
-
-                Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-                Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-                Reference< XPropertySet > xColProp;
-                for(sal_Int32 i=0;i<xColumns->getCount();++i)
-                {
-                    ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
-                    aSql = aSql + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
-                    aSql = aSql +   (any2bool(xColProp->getPropertyValue(PROPERTY_ISASCENDING))
-                                                ?
-                                    ::rtl::OUString::createFromAscii(" ASC")
-                                                :
-                                    ::rtl::OUString::createFromAscii(" DESC"))
-                                +   ::rtl::OUString::createFromAscii(",");
-                }
-                aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-            }
-            else
-            {
-                aSql = aSql + aComposedName;
-
-                Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-                Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-                Reference< XPropertySet > xColProp;
-                if(xColumns->getCount() != 1)
-                    throw SQLException();
-
-                xColumns->getByIndex(0) >>= xColProp;
-
-                aSql = aSql + aDot + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
-            }
-
-            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-            xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
-        }
-    }
+        OIndexesHelper::appendObject(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    if(m_xIndexes.is())
+    if ( m_xIndexes.is() )
     {
         Reference<XDrop> xData( m_xIndexes,UNO_QUERY);
-        if(xData.is())
+        if ( xData.is() )
             xData->dropByName(_sElementName);
     }
     else
-    {
-        ObjectMap::iterator aIter = m_aNameMap.find(_sElementName);
-
-        if(!m_pTable->isNew())
-        {
-            ::rtl::OUString aName,aSchema;
-            sal_Int32 nLen = _sElementName.indexOf('.');
-            if(nLen != -1)
-                aSchema = _sElementName.copy(0,nLen);
-            aName   = _sElementName.copy(nLen+1);
-
-            ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
-            ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-            ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
-
-            ::rtl::OUString aCatalog,aSchema2,aTable;
-            dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema2,aTable,::dbtools::eInDataManipulation);
-            ::rtl::OUString aComposedName;
-            dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema2,aTable,aComposedName,sal_True,::dbtools::eInIndexDefinitions);
-
-            aSql = aSql + ::dbtools::quoteName( aQuote,aSchema)
-                        + aDot   + ::dbtools::quoteName( aQuote,aName)
-                        + ::rtl::OUString::createFromAscii(" ON ")
-                        + aComposedName;
-
-            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-            xStmt->execute(aSql);
-        }
-    }
+        OIndexesHelper::dropObject(_nPos,_sElementName);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OIndexes::disposing(void)
 {
-    if(m_xIndexes.is())
+    if ( m_xIndexes.is() )
         clear_NoDispose();
     else
-        OCollection_TYPE::disposing();
+        OIndexesHelper::disposing();
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
-}
-// -----------------------------------------------------------------------------
+
 
 
 
