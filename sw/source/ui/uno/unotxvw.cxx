@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 09:22:23 $
+ *  last change: $Author: os $ $Date: 2001-07-04 06:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1371,7 +1371,16 @@ sal_Bool SwXTextViewCursor::jumpToFirstPage(void) throw( uno::RuntimeException )
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
     if(pView)
-        bRet = pView->GetWrtShell().SttDoc();
+    {
+        SwWrtShell& rSh = pView->GetWrtShell();
+        if (rSh.IsSelFrmMode())
+        {
+            rSh.UnSelectFrm();
+            rSh.LeaveSelFrmMode();
+        }
+        rSh.EnterStdMode();
+        bRet = rSh.SwCrsrShell::SttDoc();
+    }
     else
         throw uno::RuntimeException();
     return bRet;
@@ -1386,7 +1395,13 @@ sal_Bool SwXTextViewCursor::jumpToLastPage(void) throw( uno::RuntimeException )
     if(pView)
     {
         SwWrtShell& rSh = pView->GetWrtShell();
-        bRet = rSh.EndDoc();
+        if (rSh.IsSelFrmMode())
+        {
+            rSh.UnSelectFrm();
+            rSh.LeaveSelFrmMode();
+        }
+        rSh.EnterStdMode();
+        bRet = rSh.SwCrsrShell::EndDoc();
         rSh.SttPg();
     }
     else
@@ -1468,10 +1483,8 @@ sal_Int16 SwXTextViewCursor::getPage(void) throw( uno::RuntimeException )
     if(pView)
     {
         SwWrtShell& rSh = pView->GetWrtShell();
-        sal_uInt16 nPage, nLogPage;
-        rSh.GetPageNum( nPage, nLogPage,
-                           rSh.IsCrsrVisible(), sal_False);
-        nRet = (short)nPage;
+        SwPaM* pShellCrsr = rSh.GetCrsr();
+        nRet = (short)pShellCrsr->GetPageNum( TRUE, 0 );
     }
     else
         throw uno::RuntimeException();
