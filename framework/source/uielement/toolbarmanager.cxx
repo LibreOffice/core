@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:13:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,13 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     sal_Int32 idx = rResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
     OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
-    aHelpIdAsString += rResourceName.copy( idx );
+    OUString  aToolbarName = rResourceName.copy( idx );
+    aHelpIdAsString += aToolbarName;
+    if ( aToolbarName.equalsAscii( "fullscreenbar" ))
+    {
+        m_pToolBar->SetStyle( m_pToolBar->GetStyle() & ~WB_CLOSEABLE );
+        m_pToolBar->SetFloatStyle( m_pToolBar->GetFloatStyle() & ~WB_CLOSEABLE );
+    }
     m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
 }
 
@@ -1213,13 +1219,18 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     aCtrlParams.nWidth = nWidth;
                     aCtrlParamsVector.push_back( aCtrlParams );
 
+                    sal_uInt16 nHelpId = 0;
                     if ( aHelpURL.indexOf( aHelpIdPrefix ) == 0 )
                     {
                         OUString aId( aHelpURL.copy( HELPID_PREFIX_LENGTH ));
-                        sal_uInt16 nHelpId = (sal_uInt16)(aId.toInt32());
-                        if ( nHelpId > 0 )
-                            m_pToolBar->SetHelpId( nId, nHelpId );
+                        nHelpId = (sal_uInt16)(aId.toInt32());
                     }
+                    else
+                        // assume numerical value
+                        nHelpId = (sal_uInt16)(aHelpURL.toInt32());
+
+                    if ( nHelpId > 0 )
+                        m_pToolBar->SetHelpId( nId, nHelpId );
 
                     if ( !bIsVisible )
                         m_pToolBar->HideItem( nId );
