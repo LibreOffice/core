@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:28:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #endif
 
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas
