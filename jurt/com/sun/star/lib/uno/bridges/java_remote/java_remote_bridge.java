@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 11:03:46 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.34 $ $ $Date: 2004-03-25 11:03:46 $
+ * @version     $Revision: 1.35 $ $ $Date: 2004-03-25 14:53:56 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -741,12 +741,12 @@ public class java_remote_bridge
                 // message dispatcher stays in the socket read method, even if
                 // the socket has been closed.  Suspending and resuming the
                 // message dispatcher lets it notice the closed socket.  Only
-                // use this workaround for Linux JDK1.3.0 from Sun or Blackdown.
-                // This workaround is dangerouse and may hardlock the VM.
+                // use this workaround for Linux JRE 1.3.0 and 1.3.1 from Sun
+                // and Blackdown.  This workaround is dangerouse and may
+                // hardlock the VM.
                 if (System.getProperty("os.name", "").toLowerCase().equals(
                         "linux")
-                    && System.getProperty("java.version", "").startsWith(
-                        "1.3.0")
+                    && System.getProperty("java.version", "").startsWith("1.3.")
                     && (System.getProperty("java.vendor", "").toLowerCase().
                             indexOf("sun") != -1
                         || System.getProperty("java.vendor", "").toLowerCase().
