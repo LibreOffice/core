@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exceptiontree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:10:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include "codemaker/exceptiontree.hxx"
-
 #include "codemaker/typemanager.hxx"
 
 #include "osl/diagnose.h"
@@ -90,6 +89,7 @@ void ExceptionTreeNode::clearChildren() {
 }
 
 void ExceptionTree::add(rtl::OString const & name, TypeManager const & manager)
+    throw( CannotDumpException )
 {
     typedef std::vector< rtl::OString > List;
     List list;
@@ -101,6 +101,11 @@ void ExceptionTree::add(rtl::OString const & name, TypeManager const & manager)
         }
         list.push_back(n);
         typereg::Reader reader(manager.getTypeReader(n));
+        if (!reader.isValid())
+            throw CannotDumpException(
+                ::rtl::OString("Unknown type '" + n.replace('/', '.')
+                               + "', incomplete type library."));
+
         OSL_ASSERT(
             reader.getTypeClass() == RT_TYPE_EXCEPTION
             && reader.getSuperTypeCount() == 1);
