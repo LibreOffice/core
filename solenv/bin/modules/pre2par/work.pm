@@ -1,0 +1,295 @@
+#*************************************************************************
+#
+#   $RCSfile: work.pm,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: kz $ $Date: 2004-01-29 11:50:57 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+
+
+package pre2par::work;
+
+use pre2par::remover;
+use pre2par::pathanalyzer;
+
+############################################
+# pre2par working module
+############################################
+
+############################################
+# procedure to split a line, that contains
+# more than one par file lines
+############################################
+
+sub split_line
+{
+    my ($line, $parfile) = @_;
+
+    while ( $line =~ /^(.*?\;\s+)\s*(.*)$/ )
+    {
+        my $oneline = $1;
+        $line = $2;
+        pre2par::remover::remove_leading_and_ending_whitespaces(\$oneline);
+        $oneline = $oneline . "\n";
+        push(@{$parfile}, $oneline);
+    }
+
+    # the last line
+
+    pre2par::remover::remove_leading_and_ending_whitespaces(\$line);
+    $line = $line . "\n";
+    push(@{$parfile}, $line);
+
+    if ( $line =~ /^\s*End\s*$/i ) { push(@{$parfile}, "\n"); }
+}
+
+############################################
+# main working procedure
+############################################
+
+sub convert
+{
+    my ($prefile) = @_;
+
+    my @parfile = ();
+
+    my $iscodesection = 0;
+    my $ismultiliner = 0;
+    my $globalline = "";
+
+    for ( my $i = 0; $i <= $#{$prefile}; $i++ )
+    {
+        my $oneline = ${$prefile}[$i];
+
+        if ($iscodesection)
+        {
+            if ( $oneline =~ /^\s*\}\;\s*$/ )
+            {
+                $iscodesection = 0;
+            }
+            else    # nothing to do for code inside a code section
+            {
+                push(@parfile, $oneline);
+                next;
+             }
+        }
+
+        if ( $oneline =~ /^\s*$/ ) { next; }
+
+        if ( $oneline =~ /^\s*Code\s+\=\s+\{/ )
+        {
+            $iscodesection = 1;
+        }
+
+        pre2par::remover::remove_leading_and_ending_whitespaces(\$oneline);
+
+        my $insertemptyline = 0;
+
+        if ( $oneline =~ /^\s*End\s*$/i ) { $insertemptyline = 1; }
+
+        # Sometimes the complete file is in one line, then the gid line has to be separated
+
+        if ( $oneline =~ /^\s*(\w+\s+\w+)\s+(\w+\s+\=.*$)/ )    # three words before the equal sign
+        {
+            my $gidline = $1;
+            $oneline = $2;
+            $gidline = $gidline . "\n";
+
+            push(@parfile, $gidline);
+        }
+
+        if ( $oneline =~ /\;\s*\w+/ )
+        {
+            split_line($oneline, \@parfile);
+            next;
+        }
+
+        # searching for lines with brackets, like Customs = { ..., which can be parted above several lines
+
+        if ( $oneline =~ /^\s*\w+ \s+\=\s*\(.*\)\s*\;\s*$/ )        # only one line
+        {
+            $oneline =~ s/\s//g;        # removing whitespaces in lists
+            $oneline =~ s/\=/\ \=\ /;   # adding whitespace around equals sign
+        }
+
+        if (( $oneline =~ /^\s*\w+\s+\=\s*\(/ ) && (!( $oneline =~ /\)\s*\;\s*$/ )))     # several lines
+        {
+            $ismultiliner = 1;
+            $oneline =~ s/\s//g;
+            $globalline .= $oneline;
+            next;                       # not including yet
+        }
+
+        if ( $ismultiliner )
+        {
+            $oneline =~ s/\s//g;
+            $globalline .= $oneline;
+
+            if ( $oneline =~ /\)\s*\;\s*$/ ) {  $ismultiliner = 0; }
+
+            if (! ( $ismultiliner ))
+            {
+                $globalline =~ s/\=/\ \=\ /;    # adding whitespace around equals sign
+                $globalline .= "\n";
+                push(@parfile, $globalline);
+                $globalline = "";
+            }
+
+            next;
+        }
+
+        $oneline = $oneline . "\n";
+
+        $oneline =~ s/\s*\=\s*/ \= /;   # nice, to have only one whitespace around equal signs
+
+        push(@parfile, $oneline);
+
+        if ($insertemptyline) { push(@parfile, "\n"); }
+
+    }
+
+    return \@parfile;
+}
+
+############################################
+# formatting the par file
+############################################
+
+sub formatter
+{
+    my ($parfile) = @_;
+
+    my $iscodesection = 0;
+
+    my $tabcounter = 0;
+    my $isinsideitem = 0;
+    my $currentitem;
+
+    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
+    {
+        my $oneline = ${$parfile}[$i];
+        my $isitemline = 0;
+
+        if (! $isinsideitem )
+        {
+            for ( my $j = 0; $j <= $#pre2par::globals::allitems; $j++ )
+            {
+                if ( $oneline =~ /^\s*$pre2par::globals::allitems[$j]\s+\w+\s*$/ )
+                {
+                    $currentitem = $pre2par::globals::allitems[$j];
+                    $isitemline = 1;
+                    $isinsideitem = 1;
+                    $tabcounter = 0;
+                    last;
+                }
+            }
+        }
+
+        if ( $isitemline )
+        {
+            next;   # nothing to do
+        }
+
+        if ( $oneline =~ /^\s*end\s*$/i )
+        {
+            $isinsideitem = 0;
+            $tabcounter--;
+        }
+
+        if ( $isinsideitem )
+        {
+            $oneline = "\t" . $oneline;
+            ${$parfile}[$i] = $oneline;
+        }
+    }
+}
+
+
+############################################
+# Creating lng file name from corresponding
+# pre filename
+############################################
+
+sub getlngfilename
+{
+    my ($prefilename) = @_;
+
+    my $lngfilename = $prefilename;
+
+    pre2par::pathanalyzer::make_absolute_filename_to_relative_filename(\$lngfilename);
+
+    $lngfilename =~ s/\.pre\s*$/\.lng/;
+
+    return $lngfilename;
+}
+
+############################################
+# Checking if the lng file exists
+############################################
+
+sub fileexists
+{
+    my ($lngfilename) = @_;
+
+    my $fileexists = 0;
+
+    if( -f $lngfilename ) { $fileexists = 1; }
+
+    return $fileexists;
+}
+
+1;
