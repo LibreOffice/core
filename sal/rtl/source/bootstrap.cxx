@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-10-11 12:56:45 $
+ *  last change: $Author: kr $ $Date: 2001-11-01 16:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,8 +391,16 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_u
 
             if(!found) {
                 // fall back to executable rc
+                rtl_uString * pTmp = 0;
+
                   if(((Bootstrap_Impl *)handle)->_iniName != getIniFileNameImpl())
-                    found = rtl_bootstrap_get(pName, ppValue, pDefault);
+                    found = rtl_bootstrap_get(pName, &pTmp, pDefault);
+
+                if(found) {
+                    rtl_uString_assign(ppValue, pTmp);
+
+                    rtl_uString_release(pTmp);
+                }
             }
 
             if(!*ppValue)
