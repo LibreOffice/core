@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-09 16:23:25 $
+ *  last change: $Author: aw $ $Date: 2001-03-09 16:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,8 +404,6 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
             aEdgeInfo.ImpSetLineVersatz(OBJ2LINE2, *pEdgeTrack, nVals[n]);
             n++;
         }
-
-        bEdgeTrackDirty = TRUE;
     }
     else if(eKind == SDREDGE_THREELINES)
     {
@@ -430,6 +428,9 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
             aEdgeInfo.aObj2Line2.Y() = nVal2;
         }
     }
+
+    // #84649#
+    bEdgeTrackDirty = TRUE;
 }
 
 void SdrEdgeObj::ImpSetEdgeInfoToAttr()
@@ -2601,7 +2602,7 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
         if( pList == NULL || nIndex >= pList->GetCount() )
             return;
 
-        nIndex = (*pList)[nIndex].GetId();
+        nIndex = (*pList)[(sal_uInt16)nIndex].GetId();
     }
     else if( nIndex < 0 )
     {
@@ -2633,7 +2634,7 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
             if( pList == NULL || nId >= pList->GetCount() )
                 return -1;
 
-            nId = pList->FindGluePoint(nId);
+            nId = pList->FindGluePoint((sal_uInt16)nId);
             nId += 4;
         }
     }
