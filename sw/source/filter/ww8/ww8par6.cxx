@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 12:37:30 $
+ *  last change: $Author: cmc $ $Date: 2002-07-18 12:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4603,8 +4603,9 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
         nFore = COL_BLACK;
 
     //NO auto for shading so background: Auto = Weiss
-    if (nBack == COL_AUTO)
-        nBack = COL_WHITE;
+    ColorData nUseBack = nBack;
+    if (nUseBack == COL_AUTO)
+        nUseBack = COL_WHITE;
 
 
     if( nIndex >= sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] ) )
@@ -4620,7 +4621,7 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
         default:
             {
                 Color aForeColor(nFore);
-                Color aBackColor(nBack);
+                Color aBackColor(nUseBack);
 #if 0
                 //Transparancy (if thats what it is) doesn't seem to matter
                 //in word
@@ -4703,8 +4704,8 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData, BYTE bVer67)
     //Being a transparent background colour doesn't actually show the page
     //background through, it merely acts like white
     if (nBack == 0xFF000000)
-        nBack = COL_WHITE;
-    ASSERT(!(nBack & 0xFF000000),
+        nBack = COL_AUTO;
+    ASSERT(nBack == COL_AUTO || !(nBack & 0xFF000000),
         "ww8: don't know what to do with such a transparent bg colour, report");
     SwWW8Shade aShade(bVer67, nFore, nBack, nIndex);
     return aShade.aColor.GetColor();

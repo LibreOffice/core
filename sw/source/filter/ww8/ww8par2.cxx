@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-12 15:02:48 $
+ *  last change: $Author: cmc $ $Date: 2002-07-18 12:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1428,8 +1428,6 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
         return;
 
     BYTE nUnknown1 = *pParams++;
-    ASSERT(nUnknown1 == 0x3, "Unexpected value for spacing1");
-
     BYTE nSideBits = *pParams++;
     ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
     nOverrideSpacing[nWhichCell] |= nSideBits;
@@ -1501,21 +1499,22 @@ void WW8TabBandDesc::ReadShd(const BYTE* pS )
 void WW8TabBandDesc::ReadNewShd(const BYTE* pS, BYTE bVer67 )
 {
     BYTE nLen = pS ? *(pS - 1) : 0;
-    if( !nLen )
+    if (!nLen)
         return;
 
-    if( !pNewSHDs )
-    {
+    if (!pNewSHDs)
         pNewSHDs = new sal_uInt32[nWwCols];
-        memset( pNewSHDs, 0, nWwCols * sizeof(sal_uInt32) );
-    }
 
     short nAnz = nLen / 10; //10 bytes each
     if (nAnz > nWwCols)
         nAnz = nWwCols;
 
-    for(int i=0; i<nAnz; i++)
-        pNewSHDs[i] = SwWW8ImplReader::ExtractColour(pS, bVer67);
+    int i=0;
+    while (i < nAnz)
+        pNewSHDs[i++] = SwWW8ImplReader::ExtractColour(pS, bVer67);
+
+    while (i < nWwCols)
+        pNewSHDs[i++] = COL_AUTO;
 }
 
 void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
@@ -1730,9 +1729,9 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
 
         if (bTabRowJustRead)
         {
-            if (pShadeSprm && !pNewShadeSprm)
+            if (pShadeSprm)
                 pNewBand->ReadShd(pShadeSprm);
-            else if (pNewShadeSprm)
+            if (pNewShadeSprm)
                 pNewBand->ReadNewShd(pNewShadeSprm, bVer67);
         }
 
@@ -2748,20 +2747,24 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
 {
     if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
         return;                 // kuenstlich erzeugte Zellen -> Keine Farbe
-    if (pActBand->pSHDs && !pActBand->pNewSHDs)
-    {
-        WW8_SHD& rSHD = pActBand->pSHDs[nWwIdx];
-        if( !rSHD.GetValue() )      // alles weiss
-            return;
 
-        SwWW8Shade aSh( pIo->bVer67, rSHD );
-
-        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aSh.aColor));
-    }
-    else if (pActBand->pNewSHDs)
+    bool bFound=false;
+    if (pActBand->pNewSHDs && pActBand->pNewSHDs[nWwIdx] != COL_AUTO)
     {
         Color aColor(pActBand->pNewSHDs[nWwIdx]);
         pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aColor));
+        bFound = true;
+    }
+
+    //If there was no new shades, or no new shade setting
+    if (pActBand->pSHDs && !bFound)
+    {
+        WW8_SHD& rSHD = pActBand->pSHDs[nWwIdx];
+        if (!rSHD.GetValue())       // auto
+            return;
+
+        SwWW8Shade aSh( pIo->bVer67, rSHD );
+        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aSh.aColor));
     }
 }
 

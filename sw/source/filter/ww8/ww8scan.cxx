@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 13:09:06 $
+ *  last change: $Author: cmc $ $Date: 2002-07-18 12:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,13 +132,11 @@ public:
         ASSERT(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
         ::std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
 #ifdef DEBUG
-//        Expected unique to leave duplicates untouched. Didn't actually
-//        happen that way with MSVC 6++
-//        const C *pIter = ::std::unique(mpWwSprmTab, mpWwSprmTab + mnNoElems);
-
         bool bBroken=false;
         rtl::OUString sError;
-        for (const C *pIter = mpWwSprmTab; pIter < mpWwSprmTab + mnNoElems - 1; ++pIter)
+        const C *pIter = mpWwSprmTab;
+        const C *pBeforeEnd = mpWwSprmTab + mnNoElems - 1;
+        while (pIter < pBeforeEnd)
         {
             if (*pIter == *(pIter+1))
             {
@@ -147,7 +145,7 @@ public:
                     sError = rtl::OUString::createFromAscii(
                         "WW8: Duplicate in list, almost certainly don't want that!\n"
                         "(You will not see this message again unless you restart)\n"
-                        "Entries are...\n");
+                        "Extra entries are...\n");
                     bBroken=true;
                 }
 
@@ -161,7 +159,11 @@ public:
                     sError += rtl::OUString::valueOf(sal_Unicode(' '));
                 }
                 sError += rtl::OUString::valueOf(sal_Unicode('\n'));
+                while (*pIter == *(pIter+1) && pIter < pBeforeEnd)
+                    ++pIter;
             }
+            else
+                ++pIter;
         }
         if (bBroken)
             DbgError(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
