@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-03 13:33:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,22 +706,3 @@ void PADialog::UpdateDevice()
     }
 }
 
-
-// ------------------------------------------------------------------
-
-//  get a nice icon
-#include <psetupl.xpm>
-
-extern "C"
-void vcl_customIcon1(
-                       char **&iconRes1,
-                       char **&iconRes2,
-                       char **&iconRes3,
-                       char **&iconRes4
-                       )
-{
-    iconRes1 = L3PSetup_m_pm;
-    iconRes2 = NULL;
-    iconRes3 = NULL;
-    iconRes4 = NULL;
-}
