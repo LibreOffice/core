@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _basesh.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,13 +302,13 @@ interface BaseTextSelection : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-/*  SID_ATTR_BORDER_OUTER // status()
+    SID_ATTR_BORDER_OUTER // status()
     [
         ExecMethod = Execute ;
         StateMethod = GetBorderState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-*/
+
     FN_FORMAT_BACKGROUND_DLG  // status(final|play)
     [
         ExecMethod = ExecDlg ;

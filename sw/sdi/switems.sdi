@@ -2,9 +2,9 @@
  *
  *  $RCSfile: switems.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:53:23 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,11 @@ item FmtFrmSize SwFmtFrmSize;
 */
 struct Drop
 {
-    BYTE    Lines       MID_LINES;
-    BYTE    Count       MID_CHARS;
-    INT16   Distance    MID_DIST;
+    BYTE    Lines       MID_DROPCAP_LINES;
+    BYTE    Count       MID_DROPCAP_COUNT;
+    INT16   Distance    MID_DROPCAP_DISTANCE;
     BOOL    WholeWord   MID_DROPCAP_WHOLE_WORD;
+//    String  Style       MID_DROPCAP_CHAR_STYLE_NAME;
 };
 item Drop SwFmtDrop;
 

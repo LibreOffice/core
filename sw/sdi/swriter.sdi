@@ -5647,7 +5647,7 @@ SfxVoidItem LinkDialog FN_EDIT_LINK_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem LoadStyles SID_TEMPLATE_LOAD
-()
+( SfxStringItem FileName SID_TEMPLATE_NAME, SfxInt32Item Flags SID_TEMPLATE_LOAD )
 [
     /* flags: */
     AutoUpdate = FALSE,
