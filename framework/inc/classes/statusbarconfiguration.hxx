@@ -14,6 +14,11 @@
 #include <vcl/status.hxx>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 namespace framework
 {
 
@@ -37,8 +42,15 @@ SV_DECL_PTRARR_DEL( StatusBarDescriptor, StatusBarItemDescriptorPtr, 10, 2)
 class StatusBarConfiguration
 {
     public:
-        static sal_Bool LoadStatusBar( SvStream& rInStream, StatusBarDescriptor& aItems );
-        static sal_Bool StoreStatusBar( SvStream& rOutStream, const StatusBarDescriptor& aItems );
+        // #110897#
+        static sal_Bool LoadStatusBar(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rInStream, StatusBarDescriptor& aItems );
+
+        // #110897#
+        static sal_Bool StoreStatusBar(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rOutStream, const StatusBarDescriptor& aItems );
 };
 
 } // namespace framework
