@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2002-12-06 11:35:40 $
+#   last change: $Author: rt $ $Date: 2004-07-23 15:11:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,10 +68,8 @@ PACKAGE = com$/sun$/star$/comp$/jvmaccess$/workbench
 
 .INCLUDE: settings.mk
 
-JARFILES = sandbox.jar ridl.jar jurt.jar juh.jar
+JARFILES = ridl.jar jurt.jar
 JAVACLASSFILES = $(CLASSDIR)$/$(PACKAGE)$/TestComponent.class
-JAVAFILES = \
-    $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 JARCLASSDIRS = $(PACKAGE)
 JARTARGET = jvmaccesstestcomponent.jar
 JARCOMPRESS = TRUE
