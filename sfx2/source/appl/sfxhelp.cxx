@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: as $ $Date: 2001-08-30 13:42:14 $
+ *  last change: $Author: pb $ $Date: 2001-10-17 06:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
         }
         else
         {
-            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=-");
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=");
             aHelpURL += String::CreateFromInt64( nHelpId );
         }
 
