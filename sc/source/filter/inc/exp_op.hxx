@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_op.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:04:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class ScDocument;
 class ScPatternAttr;
 class ScFormulaCell;
 class ExcDocument;
+class SotStorage;
 
 
 class ExportTyp
