@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:40:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ void PackageUri::init() const
     if ( m_aUri.getLength() && !m_aPath.getLength() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
-        m_aPackage = m_aParentUri = m_aName = m_aParam = OUString();
+        m_aPackage = m_aParentUri = m_aName = m_aParam = m_aScheme = OUString();
 
         // URI must match at least: <sheme>://<non_empty_url_to_file>
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
@@ -149,12 +149,18 @@ void PackageUri::init() const
             aPureUri = m_aUri;
 
         // Scheme is case insensitive.
-        rtl::OUString aScheme
-            = aPureUri.copy( 0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
-        if ( aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( PACKAGE_URL_SCHEME ) ) )
+        m_aScheme = aPureUri.copy( 0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
+
+        if ( m_aScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_URL_SCHEME ) )
+          || m_aScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_URL_SCHEME ) ) )
         {
-            aPureUri = aPureUri.replaceAt( 0, aScheme.getLength(), aScheme );
+            if ( m_aScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_URL_SCHEME ) ) )
+            {
+                m_aParam +=  ( m_aParam.getLength() ? ::rtl::OUString::createFromAscii( "&purezip" )
+                                                    : ::rtl::OUString::createFromAscii( "?purezip" ) );
+            }
+
+            aPureUri = aPureUri.replaceAt( 0, m_aScheme.getLength(), m_aScheme );
 
             sal_Int32 nStart = PACKAGE_URL_SCHEME_LENGTH + 3;
             sal_Int32 nEnd   = aPureUri.lastIndexOf( '/' );
