@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:53:11 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 17:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,6 +1039,34 @@ static inline Color getColor( const GdkColor& rCol )
     return Color( rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
 }
 
+#if OSL_DEBUG_LEVEL > 1
+
+void printColor( const char* name, const GdkColor& rCol )
+{
+    fprintf( stderr, "   %s = 0x%2x 0x%2x 0x%2x\n",
+             name,
+             rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
+}
+
+void printStyleColors( GtkStyle* pStyle )
+{
+    static const char* pStates[] = { "NORMAL", "ACTIVE", "PRELIGHT", "SELECTED", "INSENSITIVE" };
+
+    for( int i = 0; i < 5; i++ )
+    {
+        fprintf( stderr, "state %s colors:\n", pStates[i] );
+        printColor( "bg     ", pStyle->bg[i] );
+        printColor( "fg     ", pStyle->fg[i] );
+        printColor( "light  ", pStyle->light[i] );
+        printColor( "dark   ", pStyle->dark[i] );
+        printColor( "mid    ", pStyle->mid[i] );
+        printColor( "text   ", pStyle->text[i] );
+        printColor( "base   ", pStyle->base[i] );
+        printColor( "text_aa", pStyle->text_aa[i] );
+    }
+}
+#endif
+
 void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 {
     if( ! m_pWindow )
@@ -1048,6 +1076,10 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 
     gtk_widget_ensure_style( GTK_WIDGET(m_pWindow) );
     GtkStyle* pStyle = gtk_widget_get_style( GTK_WIDGET(m_pWindow) );
+
+#if OSL_DEBUG_LEVEL > 2
+    printStyleColors( pStyle );
+#endif
 
     // text colors
     Color aTextColor = getColor( pStyle->text[GTK_STATE_NORMAL] );
@@ -1089,49 +1121,52 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aHighlightTextColor = getColor( pStyle->text[GTK_STATE_SELECTED] );
     aStyleSet.SetHighlightColor( aHighlightColor );
     aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+
+    // menu highlighting
+    aHighlightColor = getColor( pStyle->bg[ GTK_STATE_SELECTED ] );
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
+    aHighlightTextColor = getColor( pStyle->fg[ GTK_STATE_PRELIGHT ] );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
     // UI font
-    if( aStyleSet.GetUseSystemUIFonts() )
-    {
-        ByteString  aFamily = pango_font_description_get_family( pStyle->font_desc );
-        int nPixelHeight    = pango_font_description_get_size( pStyle->font_desc )/PANGO_SCALE;
-        PangoStyle  eStyle  = pango_font_description_get_style( pStyle->font_desc );
-        PangoWeight eWeight = pango_font_description_get_weight( pStyle->font_desc );
+    ByteString  aFamily = pango_font_description_get_family( pStyle->font_desc );
+    int nPixelHeight    = pango_font_description_get_size( pStyle->font_desc )/PANGO_SCALE;
+    PangoStyle  eStyle  = pango_font_description_get_style( pStyle->font_desc );
+    PangoWeight eWeight = pango_font_description_get_weight( pStyle->font_desc );
 
-        long nDPIX, nDPIY;
-        long nDispDPIY = getDisplay()->GetResolution().B();
-        getDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
-        int nHeight = nPixelHeight * nDispDPIY / nDPIY;
-        // allow for rounding in back conversion (at SetFont)
-        while( (nHeight * nDPIY / nDispDPIY) > nPixelHeight )
-            nHeight--;
-        while( (nHeight * nDPIY / nDispDPIY) < nPixelHeight )
-            nHeight++;
+    long nDPIX, nDPIY;
+    long nDispDPIY = getDisplay()->GetResolution().B();
+    getDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
+    int nHeight = nPixelHeight * nDispDPIY / nDPIY;
+    // allow for rounding in back conversion (at SetFont)
+    while( (nHeight * nDPIY / nDispDPIY) > nPixelHeight )
+        nHeight--;
+    while( (nHeight * nDPIY / nDispDPIY) < nPixelHeight )
+        nHeight++;
 
-        Font aFont( String( aFamily, RTL_TEXTENCODING_UTF8 ), Size( 0, nHeight ) );
-        if( eWeight >= PANGO_WEIGHT_BOLD )
-            aFont.SetWeight( WEIGHT_BOLD );
-        else if( PANGO_WEIGHT_LIGHT )
-            aFont.SetWeight( WEIGHT_LIGHT );
-        if( eStyle == PANGO_STYLE_OBLIQUE )
-            aFont.SetItalic( ITALIC_OBLIQUE );
-        else if( eStyle == PANGO_STYLE_ITALIC )
-            aFont.SetItalic( ITALIC_NORMAL );
+    Font aFont( String( aFamily, RTL_TEXTENCODING_UTF8 ), Size( 0, nHeight ) );
+    if( eWeight >= PANGO_WEIGHT_BOLD )
+        aFont.SetWeight( WEIGHT_BOLD );
+    else if( PANGO_WEIGHT_LIGHT )
+        aFont.SetWeight( WEIGHT_LIGHT );
+    if( eStyle == PANGO_STYLE_OBLIQUE )
+        aFont.SetItalic( ITALIC_OBLIQUE );
+    else if( eStyle == PANGO_STYLE_ITALIC )
+        aFont.SetItalic( ITALIC_NORMAL );
 
-        aStyleSet.SetAppFont( aFont );
-        aStyleSet.SetHelpFont( aFont );
-        aStyleSet.SetMenuFont( aFont );
-        aStyleSet.SetToolFont( aFont );
-        aStyleSet.SetLabelFont( aFont );
-        aStyleSet.SetInfoFont( aFont );
-        aStyleSet.SetRadioCheckFont( aFont );
-        aStyleSet.SetPushButtonFont( aFont );
-        aStyleSet.SetFieldFont( aFont );
-        aStyleSet.SetIconFont( aFont );
-        aStyleSet.SetGroupFont( aFont );
-    }
+    aStyleSet.SetAppFont( aFont );
+    aStyleSet.SetHelpFont( aFont );
+    aStyleSet.SetTitleFont( aFont );
+    aStyleSet.SetFloatTitleFont( aFont );
+    aStyleSet.SetMenuFont( aFont );
+    aStyleSet.SetToolFont( aFont );
+    aStyleSet.SetLabelFont( aFont );
+    aStyleSet.SetInfoFont( aFont );
+    aStyleSet.SetRadioCheckFont( aFont );
+    aStyleSet.SetPushButtonFont( aFont );
+    aStyleSet.SetFieldFont( aFont );
+    aStyleSet.SetIconFont( aFont );
+    aStyleSet.SetGroupFont( aFont );
 
 //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
