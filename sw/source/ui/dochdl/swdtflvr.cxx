@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-07 17:19:26 $
+ *  last change: $Author: jp $ $Date: 2001-08-08 17:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,8 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
                 bOK = SetINetBookmark( *pBkmk, rFlavor );
             break;
 
-        default:
+        case SOT_FORMATSTR_ID_EMBED_SOURCE:
+//      default:
             if( !aDocShellRef.Is() )
             {
                 SwDoc *pDoc = pClpDocFac->GetDoc();
@@ -708,6 +709,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
             }
             bOK = SetObject( &aDocShellRef, SWTRANSFER_OBJECTTYPE_SWOLE,
                             rFlavor );
+            break;
         }
     }
     return bOK;
