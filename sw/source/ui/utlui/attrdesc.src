@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:03:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1213,7 +1213,7 @@ String STR_VERT_CENTER
     Text[ arabic ] = "ΚζΣνΨ ΪγζΟν";
     Text[ dutch ] = "verticaal gecentreerd";
     Text[ chinese_simplified ] = "ε‚η›΄ε±…δΈ­";
-    Text[ greek ] = "κατακόρυφα κεντραρισμένα";
+    Text[ greek ] = "κατακόρυφα στο κέντρο";
     Text[ korean ] = "μμ§μΌλ΅ κ°€μ΄λ°";
     Text[ turkish ] = "Dikey ortalanmύώ";
     Text[ language_user1 ] = " ";
@@ -1312,7 +1312,7 @@ String STR_LINE_CENTER
     Text[ arabic ] = "γδΚΥέ ΗαΣΨΡ";
     Text[ dutch ] = "verticaal op de regel gecentreerd";
     Text[ chinese_simplified ] = "ε’θ΅ε‚η›΄ε±…δΈ­";
-    Text[ greek ] = "κατακόρυφα κεντραρισμένα ως προς τη γραμμή";
+    Text[ greek ] = "κατακόρυφα στο κέντρο ως προς τη γραμμή";
     Text[ korean ] = "μ¤„μ„ κ°€μ΄λ°λ΅";
     Text[ turkish ] = "Satύr  ortalanmύώ";
     Text[ language_user1 ] = " ";
@@ -1477,7 +1477,7 @@ String STR_HORI_CENTER
     Text[ arabic ] = "ΚζΣνΨ Γέήν";
     Text[ dutch ] = "horizontaal gecentreerd";
     Text[ chinese_simplified ] = "ζ°΄εΉ³ε±…δΈ­";
-    Text[ greek ] = "οριζοντίως κεντραρισμένα";
+    Text[ greek ] = "οριζοντίως στο κέντρο";
     Text[ korean ] = "μν‰μΌλ΅ κ°€μ΄λ°μ—";
     Text[ turkish ] = "Yatay ortalanmύώ";
     Text[ language_user1 ] = " ";
@@ -2502,11 +2502,11 @@ String STR_GRID_NONE
     Text[ danish ] = "Intet gitter";
     Text[ swedish ] = "Inget raster";
     Text[ polish ] = "No grid";
-    Text[ portuguese_brazilian ] = "No grid";
+    Text[ portuguese_brazilian ] = "Sem grade";
     Text[ japanese ] = "γªγ—";
     Text[ korean ] = "κ·Έλ¦¬λ“ μ—†μ";
-    Text[ chinese_simplified ] = "δΈδ½Ώη”¨ζ Όε­ηΊΏ";
-    Text[ chinese_traditional ] = "δΈδ½Ώη”¨ζ Όε­η·";
+    Text[ chinese_simplified ] = "δΈδ½Ώη”¨η¨ΏηΊΈ";
+    Text[ chinese_traditional ] = "δΈδ½Ώη”¨η¨Ώη΄™";
     Text[ turkish ] = "Izgara yok";
     Text[ arabic ] = "No grid";
     Text[ catalan ] = "No grid";
@@ -2515,6 +2515,7 @@ String STR_GRID_NONE
     Text[ hebrew ] = "Kein Raster";
     Text[ hindi ] = "No grid";
     Text[ slovak ] = "Bez mrieΕΎky";
+    Text[ language_user1 ] = "ZL: translation changed because of bug from Jack";
 };
 
 String STR_GRID_LINES_ONLY
@@ -2533,11 +2534,11 @@ String STR_GRID_LINES_ONLY
     Text[ danish ] = "Line grid";
     Text[ swedish ] = "Raster (bara linjer)";
     Text[ polish ] = "Line grid";
-    Text[ portuguese_brazilian ] = "Grid (lines only)";
+    Text[ portuguese_brazilian ] = "Grade (somente linhas)";
     Text[ japanese ] = "η½«η·";
     Text[ korean ] = "κ·Έλ¦¬λ“ (μ¤„ λ§)";
-    Text[ chinese_simplified ] = "ζ Όε­ηΊΏ(δ»…ηΊΏζ΅)";
-    Text[ chinese_traditional ] = "ζ Όε­η·(εƒ…η·ζΆ)";
+    Text[ chinese_simplified ] = "δΏ΅ηΊΈ(δ»…εΊ•ηΊΏ)";
+    Text[ chinese_traditional ] = "δΏ΅η΄™(εƒ…εΊ•η·)";
     Text[ turkish ] = "Izgara (sadece ηizgiler)";
     Text[ arabic ] = "Line grid";
     Text[ catalan ] = "Grid (lines only)";
@@ -2546,6 +2547,7 @@ String STR_GRID_LINES_ONLY
     Text[ hebrew ] = "Raster (nur Linien)";
     Text[ hindi ] = "Grid (lines only)";
     Text[ slovak ] = "MrieΕΎka (len riadky)";
+    Text[ language_user1 ] = "ZL: translation changed because of bug from Jack";
 };
 
 String STR_GRID_LINES_CHARS
@@ -2564,11 +2566,11 @@ String STR_GRID_LINES_CHARS
     Text[ danish ] = "Line and character grid";
     Text[ swedish ] = "Raster (linjer och tecken)";
     Text[ polish ] = "Line and character grid";
-    Text[ portuguese_brazilian ] = "Grid (lines and characters)";
+    Text[ portuguese_brazilian ] = "Grade (linhas e caracteres)";
     Text[ japanese ] = "εη¨Ώη”¨η΄™";
     Text[ korean ] = "κ·Έλ¦¬λ“ (μ¤„κ³Ό λ¬Έμ)";
-    Text[ chinese_simplified ] = "ζ Όε­ηΊΏ(ηΊΏζ΅ε’ε­—η¬¦)";
-    Text[ chinese_traditional ] = "ζ Όε­η·(η·ζΆε’ε­—ε…ƒ)";
+    Text[ chinese_simplified ] = "ζ ΌηΊΏη¨ΏηΊΈ";
+    Text[ chinese_traditional ] = "ζ Όη·η¨Ώη΄™";
     Text[ turkish ] = "Izgara (ηizgiler ve karakterler)";
     Text[ arabic ] = "Line and character grid";
     Text[ catalan ] = "Grid (lines and characters)";
@@ -2578,6 +2580,7 @@ String STR_GRID_LINES_CHARS
     Text[ hindi ] = "Grid (lines and characters)";
     Text[ slovak ] = "MrieΕΎka (riadky a znaky)";
 };
+
 
 
 
