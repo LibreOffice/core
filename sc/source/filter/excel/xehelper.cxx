@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:34:13 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,11 +742,6 @@ XclExpCachedValue::~XclExpCachedValue()
 
 // ----------------------------------------------------------------------------
 
-sal_uInt32 XclExpCachedDouble::GetSize() const
-{
-    return 9;
-}
-
 void XclExpCachedDouble::Save( XclExpStream& rStrm ) const
 {
     rStrm.SetSliceSize( 9 );
@@ -761,11 +756,6 @@ XclExpCachedString::XclExpCachedString( const String& rStr, XclStrFlags nFlags )
 {
 }
 
-sal_uInt32 XclExpCachedString::GetSize() const
-{
-    return 1 + maStr.GetSize();
-}
-
 void XclExpCachedString::Save( XclExpStream& rStrm ) const
 {
     rStrm.SetSliceSize( 6 );
@@ -775,62 +765,66 @@ void XclExpCachedString::Save( XclExpStream& rStrm ) const
 
 // ----------------------------------------------------------------------------
 
-XclExpCachedMatrix::XclExpCachedMatrix(
-        ScDocument& rDoc,
-        sal_uInt16 nCols, sal_uInt16 nRows,
-        const ScMatrix* pMatrix,
-        XclStrFlags nFlags ) :
-    mnCols( nCols ),
-    mnRows( nRows )
+XclExpCachedError::XclExpCachedError( USHORT nScError ) :
+    mnError( XclTools::GetXclErrorCode( nScError ) )
 {
-    DBG_ASSERT( pMatrix && mnCols && mnRows, "XclExpCachedMatrix::XclExpCachedMatrix - missing matrix" );
-    DBG_ASSERT( mnCols <= 256, "XclExpCachedMatrix::XclExpCachedMatrix - too many columns" );
+}
 
-    String aString;
-    double fValue;
-    BOOL bIsString;
-    for( sal_uInt16 nRow = 0; nRow < mnRows; ++nRow )
+void XclExpCachedError::Save( XclExpStream& rStrm ) const
+{
+    rStrm.SetSliceSize( 9 );
+    rStrm << EXC_CACHEDVAL_ERROR << mnError;
+    rStrm.WriteZeroBytes( 7 );
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclExpCachedMatrix::XclExpCachedMatrix( const ScMatrix& rMatrix, XclStrFlags nFlags )
+{
+    rMatrix.GetDimensions( mnScCols, mnScRows );
+    DBG_ASSERT( mnScCols && mnScRows, "XclExpCachedMatrix::XclExpCachedMatrix - empty matrix" );
+    DBG_ASSERT( mnScCols <= 256, "XclExpCachedMatrix::XclExpCachedMatrix - too many columns" );
+
+    for( USHORT nScRow = 0; nScRow < mnScRows; ++nScRow )
     {
-        for( sal_uInt16 nCol = 0; nCol < mnCols; ++nCol )
+        for( USHORT nScCol = 0; nScCol < mnScCols; ++nScCol )
         {
-            if( rDoc.GetDdeLinkResult( pMatrix, nCol, nRow, aString, fValue, bIsString ) )
-                // return value "true" means empty result
-                Append( EMPTY_STRING, nFlags );
+            XclExpCachedValue* pNewVal = NULL;
+            BOOL bIsString = FALSE;
+            const MatValue* pMatVal = rMatrix.Get( nScCol, nScRow, bIsString );
+            if( !pMatVal )
+                pNewVal = new XclExpCachedString( EMPTY_STRING, nFlags );
             else if( bIsString )
-                Append( aString, nFlags );
+                pNewVal = new XclExpCachedString( pMatVal->GetString(), nFlags );
+            else if( USHORT nScError = pMatVal->GetError() )
+                pNewVal = new XclExpCachedError( nScError );
             else
-                Append( fValue );
+                pNewVal = new XclExpCachedDouble( pMatVal->fVal );
+            maValueList.Append( pNewVal );
         }
     }
 }
 
 sal_uInt32 XclExpCachedMatrix::GetSize() const
 {
-    sal_uInt32 nSize = 3;
-    for( XclExpCachedValue* pVal = maValueList.First(); pVal; pVal = maValueList.Next() )
-        nSize += pVal->GetSize();
-    return nSize;
+    /*  The returned size may be wrong if the matrix contains strings. The only
+        effect is that the export stream has to update a wrong record size which is
+        faster than to iterate through all cached values and calculate their sizes. */
+    return 3 + 9 * maValueList.Count();
 }
 
 void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
 {
     if( rStrm.GetRoot().GetBiff() < xlBiff8 )
-        // 256 columns are saved as 0 columns
-        rStrm << static_cast< sal_uInt8 >( mnCols ) << mnRows;
+        // in BIFF2-BIFF7: 256 columns represented by 0 columns
+        rStrm << static_cast< sal_uInt8 >( mnScCols ) << static_cast< sal_uInt16 >( mnScRows );
     else
-        rStrm << static_cast< sal_uInt8 >( mnCols - 1 ) << static_cast< sal_uInt16 >( mnRows - 1 );
-    for( XclExpCachedValue* pVal = maValueList.First(); pVal; pVal = maValueList.Next() )
-        rStrm << *pVal;
-}
+        // in BIFF8: columns and rows decreaed by 1
+        rStrm << static_cast< sal_uInt8 >( mnScCols - 1 ) << static_cast< sal_uInt16 >( mnScRows - 1 );
 
-void XclExpCachedMatrix::Append( double fVal )
-{
-    maValueList.Append( new XclExpCachedDouble( fVal ) );
-}
-
-void XclExpCachedMatrix::Append( const String& rStr, XclStrFlags nFlags )
-{
-    maValueList.Append( new XclExpCachedString( rStr, nFlags ) );
+    for( const XclExpCachedValue* pValue = maValueList.First(); pValue; pValue = maValueList.Next() )
+        pValue->Save( rStrm );
 }
 
 
