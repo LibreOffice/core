@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
+ *  last change: $Author: kso $ $Date: 2001-05-30 13:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,10 @@ NeonPropFindRequest::NeonPropFindRequest(
                             inDepth,
                             propnames_results,
                             &ioResInfo );
+
+    // #87585# - Sometimes neon lies (because some servers lie).
+    if ( ioResInfo.empty() )
+        nError = HTTP_ERROR;
 }
 
 // -------------------------------------------------------------------
@@ -238,13 +242,21 @@ int NeonPropFindRequest::propfind_iter( void* userdata,
 
     if ( !bHasValue )
     {
+#if SUPD>614
         if ( rtl_str_compareIgnoreAsciiCase(
                                     pname->name, "resourcetype" ) == 0 )
+#else
+        if ( rtl_str_equalsIgnoreCase( pname->name, "resourcetype" ) )
+#endif
         {
             OString aValue( value );
             if ( aValue.getLength() )
             {
+#if SUPD>614
                 aValue = aValue.toAsciiLowerCase();
+#else
+                aValue = aValue.toLowerCase();
+#endif
                 if ( aValue.compareTo(
                         RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
                 {
@@ -262,21 +274,33 @@ int NeonPropFindRequest::propfind_iter( void* userdata,
                 thePropertyValue.Value <<= OUString();
             }
         }
+#if SUPD>614
         else if ( rtl_str_compareIgnoreAsciiCase(
                                     pname->name, "supportedlock" ) == 0 )
+#else
+        else if ( rtl_str_equalsIgnoreCase( pname->name, "supportedlock" ) )
+#endif
         {
             Sequence< LockEntry > aEntries;
             LockEntrySequence::createFromXML( value, aEntries );
             thePropertyValue.Value <<= aEntries;
         }
+#if SUPD>614
         else if ( rtl_str_compareIgnoreAsciiCase(
                                     pname->name, "lockdiscovery" ) == 0 )
+#else
+        else if ( rtl_str_equalsIgnoreCase( pname->name, "lockdiscovery" ) )
+#endif
         {
             Sequence< Lock > aLocks;
             LockSequence::createFromXML( value, aLocks );
             thePropertyValue.Value <<= aLocks;
         }
+#if SUPD>614
         else if ( rtl_str_compareIgnoreAsciiCase( pname->name, "source" ) == 0 )
+#else
+        else if ( rtl_str_equalsIgnoreCase( pname->name, "source" ) )
+#endif
         {
             Sequence< Link > aLinks;
             LinkSequence::createFromXML( value, aLinks );
