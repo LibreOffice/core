@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-26 12:54:46 $
+#   last change: $Author: vg $ $Date: 2001-06-27 15:26:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.23 $ ';
+$id_str = ' $Revision: 1.24 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -91,7 +91,7 @@ $QuantityToBuild = 0;
 %PathHash = ();
 %PlatformHash = ();
 %DeadDependencies = ();
-#%AliveDependencies = ();
+%AliveDependencies = ();
 %ParentDepsHash = ();
 @UnresolvedParents = ();
 %DeadParents = ();
@@ -102,6 +102,7 @@ $build_from = "";
 $is_from_built = 0;
 $BuildAllParents = HowToBuild();
 $ENV{mk_tmp} = "1";
+%prj_platform = ();
 
 #### main ####
 
@@ -200,7 +201,7 @@ sub MakeDir {
     chdir ($BuildDir);
     print $BuildDir, "\n";
     cwd();
-    $error = system ("$dmake");
+    $error = 0; #system ("$dmake");
     if (!$error) {
         RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
@@ -215,7 +216,8 @@ sub MakeDir {
 # Get string (list) of parent projects to build
 #
 sub GetParentsString {
-    my $PrjDir = shift;
+    my ($PrjDir);
+    $PrjDir = shift;
     if (!open (PrjBuildFile, $PrjDir."/prj/build.lst")) {
         return "";
     };
@@ -249,6 +251,23 @@ sub HowToBuild {
 }
 
 #
+# get folders' platform infos
+#
+sub get_prj_platform {
+    my $prj_alias;
+    while(<PrjBuildFile>) {
+        s/\r\n//;
+        if ($_ =~ /nmake/) {
+            $' =~ /\s+-\s+(\w+)\s+(\S+)/;
+            my $platform = $1;
+            my $alias = $2;
+            &mark_platform($alias, $platform);
+        };
+    };
+    seek(PrjBuildFile, 0, 0);
+};
+
+#
 # Getting hashes of all internal dependencies and additional
 # infos for given project
 #
@@ -260,8 +279,8 @@ sub BuildPrj {
     };
     chdir $PrjToBuild;
     cwd();
-
     open (PrjBuildFile, "prj/build.lst");
+    &get_prj_platform;
     BuildLstLoop:
     while (<PrjBuildFile>) {
         s/\r\n//;
@@ -269,21 +288,21 @@ sub BuildPrj {
             my ($Platform, $Dependencies, $Dir, $DirAlias, @Array);
             $Dependencies = $';
             $dummy = $`;
-            $dummy =~ /(\S+)(\s+)(\S+)/;
-            $Dir = $3;
-            $Dependencies =~ /(\w+)/; #/(\t\-\t)(\w+)/; #(\t)(\S+)(\s)/;
+            $dummy =~ /(\S+)\s+(\S+)/;
+            $Dir = $2;
+            $Dependencies =~ /(\w+)/;
             $Platform = $1;
             $Dependencies = $';
             while ($Dependencies =~ /,(\w+)/) {
                 $Dependencies = $';
             };
-            $Dependencies =~ /(\s+)(\S+)(\s+)/;
-            $DirAlias = $2;
-            $DirAlias .= '.'.$Platform if ($Platform ne "all");
-            if (!CheckPlatform($Platform)) {
+            $Dependencies =~ /\s+(\S+)\s+/;
+            $DirAlias = $1;
+            if (!&CheckPlatform($Platform)) {
                 $DeadDependencies{$DirAlias} = 1;
                 next BuildLstLoop;
             };
+            $PlatformHash{$DirAlias} = 1;
             $Dependencies = $';
             @Array = GetDependenciesArray($Dependencies);
             $LocalDepsHash{$DirAlias} = [@Array];
@@ -294,13 +313,25 @@ sub BuildPrj {
     close PrjBuildFile;
     %DepsArchive = %LocalDepsHash;
     foreach $Dir (keys %DeadDependencies) {
-        #next if defined $AliveDependencies{$Dir};
-        if (!IsHashNative($Dir)) {
-            RemoveFromDependencies($Dir, \%LocalDepsHash);
+        next if defined $AliveDependencies{$Dir};
+        if (!&IsHashNative($Dir)) {
+            &RemoveFromDependencies($Dir, \%LocalDepsHash);
             delete $DeadDependencies{$Dir};
         };
     };
     BuildDependent();
+};
+
+#
+# mark platform in order to proof if alias is used according to specs
+#
+sub mark_platform {
+    my $prj_alias = shift;
+    if (exists $prj_platform{$prj_alias}) {
+        $prj_platform{$prj_alias} = 'all';
+    } else {
+        $prj_platform{$prj_alias} = shift;
+    };
 };
 
 
@@ -330,8 +361,12 @@ sub CorrectPath {
 #
 sub GetDmakeCommando {
     my ($dmake, $arg);
+
     # Setting alias for dmake
     $dmake = "dmake";
+    #if (defined $ENV{PROFULLSWITCH}) {
+    #   $dmake .= " ".$ENV{PROFULLSWITCH};
+    #};
     while ($arg = pop(@ARGV)) {
         $dmake .= " "."$arg";
     };
@@ -357,7 +392,8 @@ sub GetQuantityToBuild {
 # Procedure prooves if current dir is a root dir of the drive
 #
 sub IsRootDir {
-    my $Dir = shift;
+    my ($Dir);
+    $Dir = shift;
     if (        (($ENV{GUI} eq "UNX") ||
                  ($ENV{GUI} eq "MACOSX")) &&
                 ($Dir eq "\/")) {
@@ -445,7 +481,8 @@ sub PickPrjToBuild {
 # Make a decision if the project should be built on this platform
 #
 sub CheckPlatform {
-    my $Platform = shift;
+    my ($Platform);
+    $Platform = shift;
     if ($Platform eq "all") {
         return 1;
     } elsif (($ENV{GUI} eq "WNT") &&
@@ -523,7 +560,7 @@ sub FindIndepPrj {
                 print " ", ${$$Dependencies{$Prj}}[$i];
             };
         };
-        print "\nhave dead or circular dependencies.\nCheck if the projects are platform dependent tagged.\n\n";
+        print "\nhave dead or circular dependencies\n\n";
         $ENV{mk_tmp} = "";
         exit (1);
     };
@@ -535,7 +572,8 @@ sub FindIndepPrj {
 # Check if given entry is HASH-native, that is not a user-defined data
 #
 sub IsHashNative {
-    my $Prj = shift;
+    my ($Prj);
+    $Prj = shift;
     if ($Prj =~ /^HASH\(0x[\d | a | b | c | d | e | f]{6,}\)/) {
         return 1;
     } else {
@@ -555,14 +593,25 @@ sub GetDependenciesArray {
         $DepString =~ /(\S+)\s+/;
         $ParentPrj = $1;
         $DepString = $';
-        #if ($ParentPrj =~ /(\S+)(\.)(\w)/) {
-        #   $ParentPrj = $1;
-        #   if (CheckPlatform($3)) {
-        #       push(@Dependencies, $ParentPrj);
-        #   };
-        #} else {
-        push(@Dependencies, $ParentPrj);
-        #};
+        if ($ParentPrj =~ /\.(\w+)$/) {
+            $ParentPrj = $`;
+            if (($prj_platform{$ParentPrj} ne $1) &&
+                ($prj_platform{$ParentPrj} ne 'all')) {
+                print "$ParentPrj\.$1 is a wrong used alias!\n";
+                exit (1);
+            };
+            if (&CheckPlatform($1)) {
+                $AliveDependencies{$ParentPrj} = 1;
+            }
+            push(@Dependencies, $ParentPrj);
+        } else {
+            if ((exists($prj_platform{$ParentPrj})) &&
+                ($prj_platform{$ParentPrj} ne 'all') ) {
+                print "$ParentPrj is a wrong used alias!\n";
+                exit (1);
+            };
+            push(@Dependencies, $ParentPrj);
+        };
     };
     return @Dependencies;
 };
@@ -572,7 +621,8 @@ sub GetDependenciesArray {
 # Getting current directory list
 #
 sub GetDirectoryList {
-    my $Path = shift;
+    my ($Path);
+    $Path = shift;
     opendir(CurrentDirList, $Path);
     @DirectoryList = readdir(CurrentDirList);
     closedir(CurrentDirList);
