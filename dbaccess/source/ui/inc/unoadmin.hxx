@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace dbaui
 {
 //.........................................................................
 
-class ODbAdminDialog;
+class IAdminHelper;
 
 //=========================================================================
 //= ODatabaseAdministrationDialog
@@ -89,7 +89,6 @@ class ODbAdminDialog;
 typedef ::svt::OGenericUnoDialog ODatabaseAdministrationDialogBase;
 class ODatabaseAdministrationDialog
         :public ODatabaseAdministrationDialogBase
-        ,public ::comphelper::OPropertyArrayUsageHelper< ODatabaseAdministrationDialog >
         ,public OModuleClient
 {
 protected:
@@ -98,42 +97,15 @@ protected:
     SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
     ODsnTypeCollection*     m_pCollection;          // datasource type collection
 
-    ::rtl::OUString         m_sInitialSelection;
-    ::rtl::OUString         m_sOperationMode;
+    ::com::sun::star::uno::Any          m_aInitialSelection;
 
 protected:
     ODatabaseAdministrationDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
-    ~ODatabaseAdministrationDialog();
-
-public:
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >&);
-
-    // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-    // OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-
+    virtual ~ODatabaseAdministrationDialog();
 protected:
 // OGenericUnoDialog overridables
-    virtual Dialog* createDialog(Window* _pParent);
     virtual void destroyDialog();
     virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
-
-private:
-    void    implSetOperationMode(ODbAdminDialog* _pDialog);
 };
 
 //.........................................................................
