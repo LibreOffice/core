@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:54:04 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,6 +725,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/05/30 19:54:04  kz
+ *  Merge SRC633: 30.05.01 - 21:53:08
+ *
  *  Revision 1.12  2001/05/16 15:45:11  kz
  *  Merge SRC632: 16.05.01 - 17:45:00 (NoBranch)
  *
@@ -764,4 +767,5 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
 
