@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zcodec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:13:05 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ void ZCodec::BeginCompression( ULONG nCompressMethod )
 
 long ZCodec::EndCompression()
 {
-    long retvalue;
+    long retvalue = 0;
 
     if ( mbInit != 0 )
     {
@@ -199,7 +199,7 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
             break;
         }
     };
-    return ( mbStatus ) ? PZSTREAM->total_in - nOldTotal_In : -1;
+    return ( mbStatus ) ? (long)(PZSTREAM->total_in - nOldTotal_In) : -1;
 }
 
 // ------------------------------------------------------------------------
@@ -246,7 +246,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
 
     if ( err == Z_STREAM_END )
         mbFinish = TRUE;
-    return ( mbStatus ) ? PZSTREAM->total_out - nOldTotal_Out : -1;
+    return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
 
 // ------------------------------------------------------------------------
@@ -273,7 +273,7 @@ long ZCodec::Write( SvStream& rOStm, const BYTE* pData, ULONG nSize )
             break;
         }
     }
-    return ( mbStatus ) ? nSize : -1;
+    return ( mbStatus ) ? (long)nSize : -1;
 }
 
 // ------------------------------------------------------------------------
@@ -320,7 +320,7 @@ long ZCodec::Read( SvStream& rIStm, BYTE* pData, ULONG nSize )
     if ( err == Z_STREAM_END )
         mbFinish = TRUE;
 
-    return (mbStatus ? nSize - PZSTREAM->avail_out : -1);
+    return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
 
 // ------------------------------------------------------------------------
@@ -329,7 +329,7 @@ long ZCodec::Read( SvStream& rIStm, BYTE* pData, ULONG nSize )
 
 long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
 {
-    char    err;
+    char    err = 0;
     ULONG   nInToRead;
 
     if ( mbFinish )
@@ -380,7 +380,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
     if ( err == Z_STREAM_END )
         mbFinish = TRUE;
 
-    return (mbStatus ? nSize - PZSTREAM->avail_out : -1);
+    return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
 
 #pragma optimize ("",on)
