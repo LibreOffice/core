@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2001-05-07 13:49:39 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,14 +85,13 @@ SHL1STDLIBS=\
         $(CPPUHELPERLIB) 	\
         $(CPPULIB)			\
         $(SALLIB)
-
+SHL1VERSIONMAP=$(TARGET).map
 SHL1DEPN=		
 SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS= 		$(SLB)$/$(TARGET).lib 
 SHL1DEF= 		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 

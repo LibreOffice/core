@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-19 10:39:31 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,12 @@
 #include <osl/diagnose.h>
 #endif
 
-
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
+#include <cppuhelper/implbase1.hxx>
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
@@ -88,12 +89,30 @@ using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
 using namespace osl;
 using namespace rtl;
+using namespace cppu;
 
 #ifdef _DEBUG
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
 #else
 #define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
+
+class EmptyComponentContext : public WeakImplHelper1< XComponentContext >
+{
+public:
+    virtual Any SAL_CALL getValueByName( const OUString& Name )
+        throw (RuntimeException)
+        {
+            return Any();
+        }
+    virtual Reference< XMultiComponentFactory > SAL_CALL getServiceManager(  )
+        throw (RuntimeException)
+        {
+            return Reference< XMultiComponentFactory > ();
+        }
+
+};
+
 
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
@@ -103,7 +122,7 @@ int _cdecl main( int argc, char * argv[] )
 {
     Reference<XInterface> xIFace;
 
-    Module* pModule = new Module(OUString());
+    Module module;
 
 #ifdef SAL_W32
     OUString dllName( OUString::createFromAscii("cpld.dll") );
@@ -115,11 +134,11 @@ int _cdecl main( int argc, char * argv[] )
 #endif
 #endif
 
-    if (pModule->load(dllName))
+    if (module.load(dllName))
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            pModule->getSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
+            module.getSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
 
         if (pCompFactoryFunc)
         {
@@ -135,11 +154,11 @@ int _cdecl main( int argc, char * argv[] )
 
     TEST_ENSHURE( xIFace.is(), "testloader error1");
 
-    Reference<XSingleServiceFactory> xFactory( Reference<XSingleServiceFactory>::query(xIFace) );
+    Reference<XSingleComponentFactory> xFactory( Reference<XSingleComponentFactory>::query(xIFace) );
 
     TEST_ENSHURE( xFactory.is(), "testloader error2");
 
-    Reference<XInterface> xLoader = xFactory->createInstance();
+    Reference<XInterface> xLoader = xFactory->createInstanceWithContext( new EmptyComponentContext );
 
     TEST_ENSHURE( xLoader.is(), "testloader error3");
 
@@ -155,8 +174,6 @@ int _cdecl main( int argc, char * argv[] )
     xFactory.clear();
     xLoader.clear();
     xServInfo.clear();
-
-    delete pModule;
 
     printf("Test Dll ComponentLoader, OK!\n");
 

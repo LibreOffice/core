@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-08 15:58:11 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -203,7 +203,7 @@ ALLIDLFILES:=	testcorefl.idl language_binding.idl testintrosp.idl
 # --- Target ------------------------------------------------
 
 .IF "$(depend)" == ""
-ALL : 		unoheader	\
+ALL : 	$(MISC)$/test_types_generated.flag	\
         ALLTAR 
 .ELSE
 ALL: 		ALLDEP
@@ -216,7 +216,20 @@ CPPUMAKERFLAGS =
 CPPUMAKERFLAGS = -L
 .ENDIF
 
-FACTORYTYPES:=com.sun.star.lang.XSingleComponentFactory;com.sun.star.uno.XComponentContext;com.sun.star.container.XEnumeration;com.sun.star.lang.XComponent;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;com.sun.star.lang.XMultiServiceFactory;com.sun.star.loader.XImplementationLoader;com.sun.star.registry.XImplementationRegistration;com.sun.star.container.XSet;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XServiceInfo
+FACTORYTYPES:= 	-T com.sun.star.lang.XSingleComponentFactory \
+        -T com.sun.star.uno.XComponentContext \
+        -T com.sun.star.uno.XWeak \
+        -T com.sun.star.container.XEnumeration \
+        -T com.sun.star.lang.XComponent \
+        -T com.sun.star.registry.XSimpleRegistry \
+        -T com.sun.star.lang.XInitialization \
+        -T com.sun.star.lang.XMultiServiceFactory\
+        -T com.sun.star.loader.XImplementationLoader \
+        -T com.sun.star.registry.XImplementationRegistration \
+        -T com.sun.star.container.XSet \
+        -T com.sun.star.lang.XSingleServiceFactory\
+        -T com.sun.star.lang.XServiceInfo
+
 TESTCOREFL:=ModuleC;ModuleC.XInterfaceA;ModuleC.XInterfaceB;ModuleA.XInterface1;com.sun.star.reflection.XIdlReflection;com.sun.star.reflection.XIdlField;com.sun.star.reflection.XIdlArray;com.sun.star.reflection.XIdlMethod;com.sun.star.reflection.XIdlClass;com.sun.star.beans.XPropertySet;com.sun.star.lang.XComponent;com.sun.star.container.XHierarchicalNameAccess
 TESTIADAPTER:=com.sun.star.beans.XIntrospection;com.sun.star.beans.MethodConcept;com.sun.star.beans.XExactName;com.sun.star.lang.XTypeProvider;com.sun.star.uno.XAggregation;com.sun.star.script.XInvocationAdapterFactory;com.sun.star.script.XInvocation;com.sun.star.lang.XMultiServiceFactory;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;test.XLanguageBindingTest
 TESTINTROSP:=ModuleA;ModuleA.XIntroTest;com.sun.star.beans.XPropertySet;com.sun.star.container.XIndexAccess;com.sun.star.container.XNameAccess;com.sun.star.beans.PropertyAttribute;com.sun.star.beans.PropertyConcept
@@ -229,10 +242,11 @@ $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
     +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
     touch $@
 
-unoheader: $(BIN)$/stoctest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTIADAPTER);$(FACTORYTYPES)" $(BIN)$/stoctest.rdb
+$(MISC)$/test_types_generated.flag : $(BIN)$/stoctest.rdb  makefile.mk
+    -rm -f $(MISC)$/test_types_generated.flag
+    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(FACTORYTYPES) -T"$(TESTIADAPTER)" $(BIN)$/stoctest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTCOREFL)" $(BIN)$/stoctest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTINTROSP)" $(BIN)$/stoctest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTCONV)" $(BIN)$/stoctest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTPROXYFAC)" $(BIN)$/stoctest.rdb
-
+    touch $(MISC)$/test_types_generated.flag

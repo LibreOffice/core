@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultregistry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-19 12:40:58 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #ifndef _REGISTRY_REGISTRY_HXX_
 #include <registry/registry.hxx>
@@ -101,11 +104,43 @@ using namespace osl;
 using namespace rtl;
 
 
-#define NESTED_SERVICENAME "com.sun.star.registry.NestedRegistry"
-#define NESTED_IMPLNAME    "com.sun.star.comp.stoc.NestedRegistry"
+#define SERVICENAME "com.sun.star.registry.NestedRegistry"
+#define IMPLNAME       "com.sun.star.comp.stoc.NestedRegistry"
 
 namespace stoc_defreg
 {
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > defreg_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+OUString defreg_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 //*************************************************************************
 // NestedRegistryImpl
@@ -115,11 +150,7 @@ class NestedKeyImpl;
 class NestedRegistryImpl    : public WeakAggImplHelper3 < XSimpleRegistry, XInitialization, XServiceInfo >
 {
 public:
-    NestedRegistryImpl( const Reference<XMultiServiceFactory> & rXSMgr );
-
-    NestedRegistryImpl( const Reference<XMultiServiceFactory> & rXSMgr,
-                        Reference<XSimpleRegistry>& localReg,
-                         Reference<XSimpleRegistry>& systemReg );
+    NestedRegistryImpl( );
 
     ~NestedRegistryImpl();
 
@@ -127,8 +158,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
-    static OUString SAL_CALL getImplementationName_Static(  );
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
@@ -151,8 +180,6 @@ protected:
     Reference<XSimpleRegistry>  m_localReg;
     Reference<XSimpleRegistry>  m_defaultReg;
 
-private:
-    Reference<XMultiServiceFactory> m_xSMgr;
 };
 
 //*************************************************************************
@@ -1174,32 +1201,23 @@ OUString SAL_CALL NestedKeyImpl::getResolvedName( const OUString& aKeyName )
 // DefaultRegistry Implementation
 //
 //*************************************************************************
-NestedRegistryImpl::NestedRegistryImpl( const Reference<XMultiServiceFactory> & rSMgr )
+NestedRegistryImpl::NestedRegistryImpl( )
     : m_state(0)
-    , m_xSMgr(rSMgr)
 {
-}
-
-NestedRegistryImpl::NestedRegistryImpl( const Reference<XMultiServiceFactory> & rSMgr,
-                                          Reference<XSimpleRegistry>& localReg,
-                                          Reference<XSimpleRegistry>& defaultReg)
-    : m_state(0)
-    , m_localReg(localReg)
-    , m_defaultReg(defaultReg)
-    , m_xSMgr(rSMgr)
-{
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 //*************************************************************************
 NestedRegistryImpl::~NestedRegistryImpl()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //*************************************************************************
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii( NESTED_IMPLNAME );
+    return defreg_getImplementationName();
 }
 
 //*************************************************************************
@@ -1219,14 +1237,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    return getSupportedServiceNames_Static();
-}
-
-//*************************************************************************
-Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames_Static(  )
-{
-    OUString aStr( OUString::createFromAscii( NESTED_SERVICENAME ) );
-    return Sequence< OUString >( &aStr, 1 );
+    return defreg_getSupportedServiceNames();
 }
 
 //*************************************************************************
@@ -1360,11 +1371,11 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
 }
 
 //*************************************************************************
-Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XMultiServiceFactory>& rSMgr )
+Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XComponentContext>& xCtx )
     throw(Exception)
 {
     Reference<XInterface>   xRet;
-    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new NestedRegistryImpl(rSMgr);
+    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new NestedRegistryImpl;
 
     if (pRegistry)
     {
@@ -1376,8 +1387,26 @@ Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XM
 
 } // namespace stco_defreg
 
+using namespace stoc_defreg;
+
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        NestedRegistry_CreateInstance, defreg_getImplementationName,
+        defreg_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
+
 extern "C"
 {
+
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -1388,52 +1417,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            // NestedRegistry
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" NESTED_IMPLNAME "/UNO/SERVICES" ) ) );
-
-            Sequence< OUString > & rSNL = ::stoc_defreg::NestedRegistryImpl::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-    if ( rtl_str_compare( pImplName, NESTED_IMPLNAME ) == 0 )
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            ::stoc_defreg::NestedRegistry_CreateInstance,
-            ::stoc_defreg::NestedRegistryImpl::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
-
-

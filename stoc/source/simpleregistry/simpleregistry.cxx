@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:37:29 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #ifndef _REGISTRY_REGISTRY_HXX_
 #include <registry/registry.hxx>
@@ -106,6 +109,39 @@ using namespace rtl;
 
 namespace stoc_simreg {
 
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > simreg_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+OUString simreg_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
+
 //*************************************************************************
 // class RegistryKeyImpl the implenetation of interface XRegistryKey
 //*************************************************************************
@@ -117,8 +153,7 @@ class RegistryKeyImpl;
 class SimpleRegistryImpl    : public WeakImplHelper2< XSimpleRegistry, XServiceInfo >
 {
 public:
-    SimpleRegistryImpl( const Reference<XMultiServiceFactory> & rXSMgr,
-                        const Registry& rRegistry );
+    SimpleRegistryImpl( const Registry& rRegistry );
 
     ~SimpleRegistryImpl();
 
@@ -126,7 +161,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XSimpleRegistry
     virtual OUString SAL_CALL getURL() throw(RuntimeException);
@@ -143,8 +177,6 @@ protected:
     Mutex       m_mutex;
     OUString    m_url;
     Registry    m_registry;
-
-    Reference<XMultiServiceFactory> m_xSMgr;
 };
 
 
@@ -995,24 +1027,23 @@ OUString SAL_CALL RegistryKeyImpl::getResolvedName( const OUString& aKeyName )
 }
 
 //*************************************************************************
-SimpleRegistryImpl::SimpleRegistryImpl( const Reference<XMultiServiceFactory> & rXSMgr,
-                                        const Registry& rRegistry )
-    : m_xSMgr(rXSMgr)
-    , m_registry(rRegistry)
+SimpleRegistryImpl::SimpleRegistryImpl( const Registry& rRegistry )
+    : m_registry(rRegistry)
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 //*************************************************************************
 SimpleRegistryImpl::~SimpleRegistryImpl()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //*************************************************************************
 OUString SAL_CALL SimpleRegistryImpl::getImplementationName(  )
     throw(RuntimeException)
 {
-    Guard< Mutex > aGuard( m_mutex );
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return simreg_getImplementationName();
 }
 
 //*************************************************************************
@@ -1032,15 +1063,7 @@ sal_Bool SAL_CALL SimpleRegistryImpl::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL SimpleRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    Guard< Mutex > aGuard( m_mutex );
-    return getSupportedServiceNames_Static();
-}
-
-//*************************************************************************
-Sequence<OUString> SAL_CALL SimpleRegistryImpl::getSupportedServiceNames_Static(  )
-{
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
-    return Sequence< OUString >( &aName, 1 );
+    return simreg_getSupportedServiceNames();
 }
 
 //*************************************************************************
@@ -1178,7 +1201,7 @@ void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
 }
 
 //*************************************************************************
-Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XMultiServiceFactory>& rSMgr )
+Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XComponentContext>& xCtx )
 {
     Reference<XInterface>   xRet;
     RegistryLoader          aLoader;
@@ -1187,7 +1210,7 @@ Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XM
     {
         Registry reg(aLoader);
 
-        XSimpleRegistry *pRegistry = (XSimpleRegistry*) new SimpleRegistryImpl(rSMgr, reg);
+        XSimpleRegistry *pRegistry = (XSimpleRegistry*) new SimpleRegistryImpl(reg);
 
         if (pRegistry)
         {
@@ -1200,9 +1223,25 @@ Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XM
 
 }
 
+using namespace stoc_simreg;
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        SimpleRegistry_CreateInstance, simreg_getImplementationName,
+        simreg_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -1213,51 +1252,13 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL =
-                ::stoc_simreg::SimpleRegistryImpl::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
-            ::stoc_simreg::SimpleRegistry_CreateInstance,
-            ::stoc_simreg::SimpleRegistryImpl::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
 

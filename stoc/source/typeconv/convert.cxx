@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 11:33:34 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 #include <typelib/typedescription.hxx>
@@ -86,12 +87,46 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace rtl;
+using namespace osl;
 
 #define SERVICENAME "com.sun.star.script.Converter"
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
 
 namespace stoc_tcv
 {
+
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > tcv_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString tcv_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 const double MIN_DOUBLE     = -DBL_MAX;
 const double MAX_DOUBLE     = DBL_MAX;
@@ -264,8 +299,8 @@ class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo 
         throw( CannotConvertException );
 
 public:
-    static OUString getImplementationName_Static(void);
-    static Sequence< OUString > getSupportedServiceNames_Static(void) throw( RuntimeException );
+    TypeConverter_Impl();
+    ~TypeConverter_Impl();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( RuntimeException );
@@ -277,16 +312,20 @@ public:
     virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType ) throw( IllegalArgumentException, CannotConvertException, RuntimeException);
 };
 
+TypeConverter_Impl::TypeConverter_Impl()
+{
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+}
+
+TypeConverter_Impl::~TypeConverter_Impl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
+
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException )
 {
-    return getImplementationName_Static();
-}
-
-// XServiceInfo Helper
-OUString TypeConverter_Impl::getImplementationName_Static(void)
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+    return tcv_getImplementationName();
 }
 
 // XServiceInfo
@@ -303,15 +342,7 @@ sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw(
 // XServiceInfo
 Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    return getSupportedServiceNames_Static();
-}
-
-// ORegistryServiceManager_Static
-Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames_Static(void) throw( RuntimeException )
-{
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME ) );
-    return aSNS;
+    return tcv_getSupportedServiceNames();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -926,10 +957,22 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
 //*************************************************************************
 Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
-    const Reference< XMultiServiceFactory > & rSMgr )
+    const Reference< XComponentContext > & rSMgr )
     throw( RuntimeException )
 {
-    return (XWeak *)(OWeakObject *)new TypeConverter_Impl();
+    Reference< XInterface > rRet;
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        static WeakReference < XInterface > rwInstance;
+        rRet = rwInstance;
+
+        if( ! rRet.is() )
+        {
+            rRet = (OWeakObject *)new TypeConverter_Impl();
+            rwInstance = rRet;
+        }
+    }
+    return rRet;
 }
 
 }
@@ -938,10 +981,25 @@ Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
 //##################################################################################################
 //##################################################################################################
 //##################################################################################################
+using namespace stoc_tcv;
 
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        TypeConverter_Impl_CreateInstance, tcv_getImplementationName,
+        tcv_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -952,53 +1010,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL =
-                stoc_tcv::TypeConverter_Impl::getSupportedServiceNames_Static();
-
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            stoc_tcv::TypeConverter_Impl_CreateInstance,
-            stoc_tcv::TypeConverter_Impl::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
-

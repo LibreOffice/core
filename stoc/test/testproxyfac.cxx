@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/unload.h>
 
 #include <stdio.h>
 
@@ -86,6 +88,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+using namespace com::sun::star::beans;
 
 
 static sal_Int32 s_n = 0;
@@ -208,40 +211,48 @@ int main( int argc, char * argv[] )
 int __cdecl main( int argc, char * argv[] )
 #endif
 {
-    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
-
     sal_Bool bSucc = sal_False;
-    try
     {
-        Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ), UNO_QUERY );
-        OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
+        Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
 
-        OUString aLibName( OUString::createFromAscii(REG_PREFIX) );
-        aLibName += OUString::createFromAscii("proxyfac");
+        try
+        {
+            Reference< XImplementationRegistration > xImplReg(
+                xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ), UNO_QUERY );
+            OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
+
+            OUString aLibName( OUString::createFromAscii(REG_PREFIX) );
+            aLibName += OUString::createFromAscii("proxyfac");
 #ifndef OS2
-        aLibName += OUString::createFromAscii(DLL_POSTFIX);
+            aLibName += OUString::createFromAscii(DLL_POSTFIX);
 #endif
-        xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+            xImplReg->registerImplementation(
+                OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
-        Reference< XProxyFactory > xProxyFac( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.ProxyFactory") ), UNO_QUERY );
-        OSL_ENSURE( xProxyFac.is(), "### no proxy factory!" );
+            Reference< XInterface > r = xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.ProxyFactory") );
+            Reference< XProxyFactory > xProxyFac(r , UNO_QUERY );
+            OSL_ENSURE( xProxyFac.is(), "### no proxy factory!" );
 
-        bSucc = test_proxyfac( xProxyFac );
+            bSucc = test_proxyfac( xProxyFac );
+        }
+        catch (Exception & rExc)
+        {
+            OSL_ENSURE( sal_False, "### exception occured!" );
+            OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_TRACE( "### exception occured: " );
+            OSL_TRACE( aMsg.getStr() );
+            OSL_TRACE( "\n" );
+        }
+
+        Reference< XPropertySet > rProps( xMgr , UNO_QUERY );
+        Any a = rProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) );
+        Reference< XComponent > rComp;
+        a >>= rComp;
+        rComp->dispose();
+
     }
-    catch (Exception & rExc)
-    {
-        OSL_ENSURE( sal_False, "### exception occured!" );
-        OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
-        OSL_TRACE( "\n" );
-    }
-
-    Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
-
+    rtl_unloadUnusedModules(0);
     printf( "testproxyfac %s !\n", (bSucc ? "succeeded" : "failed") );
     return (bSucc ? 0 : -1);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-19 08:40:44 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 #ifndef _RTL_UNLOAD_H_
 #include <rtl/unload.h>
 #endif
@@ -136,6 +139,74 @@ using namespace std;
 namespace stoc_smgr
 {
 
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > smgr_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(2);
+            seqNames.getArray()[0] = OUString(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
+            seqNames.getArray()[1] = OUString(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.ServiceManager") );
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString smgr_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName(
+                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.OServiceManager" ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
+
+static Sequence< OUString > regsmgr_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(2);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory"));
+            seqNames.getArray()[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.RegistryServiceManager"));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString regsmgr_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.ORegistryServiceManager" ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 
 
@@ -194,8 +265,13 @@ public:
     ServiceEnumeration_Impl( const Sequence< Reference<XInterface > > & rFactories )
         : aFactories( rFactories )
         , nIt( 0 )
-        {}
-    virtual ~ServiceEnumeration_Impl() {};
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    virtual ~ServiceEnumeration_Impl()
+        {
+            g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+        };
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements()
@@ -235,7 +311,9 @@ public:
     ImplementationEnumeration_Impl( const HashSet_Ref & rImplementationMap )
         : aImplementationMap( rImplementationMap )
         , aIt( aImplementationMap.begin() )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
     virtual ~ImplementationEnumeration_Impl();
 
     // XEnumeration
@@ -254,6 +332,7 @@ private:
 
 ImplementationEnumeration_Impl::~ImplementationEnumeration_Impl()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XEnumeration
@@ -377,7 +456,7 @@ public:
     friend void SAL_CALL smgrUnloadingListener(void* id);
 
     OServiceManager( Reference< XComponentContext > const & xContext );
-    ~OServiceManager();
+    virtual ~OServiceManager();
 
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw()
@@ -388,10 +467,9 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     static OUString getImplementationName_Static() throw(::com::sun::star::uno::RuntimeException)
-        { return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManager") ); }
+        { return smgr_getImplementationName(); }
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
     // XMultiComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
@@ -462,6 +540,7 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
     : OComponentHelper( m_mutex )
     , m_xContext( xContext )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_nUnloadingListenerId= rtl_addUnloadingListener( smgrUnloadingListener, this);
 }
 
@@ -472,6 +551,8 @@ OServiceManager::~OServiceManager()
 {
     if( m_nUnloadingListenerId != 0)
         rtl_removeUnloadingListener( m_nUnloadingListenerId );
+
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // OComponentHelper
@@ -725,18 +806,9 @@ sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
 Sequence< OUString > OServiceManager::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return smgr_getSupportedServiceNames();
 }
 
-// OServiceManager_Static
-Sequence< OUString > OServiceManager::getSupportedServiceNames_Static()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
-    aSNS.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.ServiceManager") );
-    return aSNS;
-}
 
 Reference< XInterface > OServiceManager::queryServiceFactory( const OUString& aServiceName )
 {
@@ -976,13 +1048,10 @@ public:
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    static OUString getImplementationName_Static() throw(::com::sun::star::uno::RuntimeException)
-        { return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.ORegistryServiceManager") ); }
+    OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException)
+        { return regsmgr_getImplementationName(); }
 
-    //sal_Bool                      supportsService(const OUString& ServiceName) throw( () );
     Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
     // XMultiServiceFactory
     Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(::com::sun::star::uno::RuntimeException);
@@ -1043,6 +1112,7 @@ ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext >
     , m_init( false )
 #endif
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 /**
@@ -1050,6 +1120,7 @@ ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext >
  */
 ORegistryServiceManager::~ORegistryServiceManager()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // OComponentHelper
@@ -1285,28 +1356,12 @@ Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
 }
 
 // XServiceInfo
-OUString ORegistryServiceManager::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return getImplementationName_Static();
-}
-
-// XServiceInfo
 Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return regsmgr_getSupportedServiceNames();
 }
 
-// ORegistryServiceManager_Static
-Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames_Static()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
-    aSNS.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.RegistryServiceManager") );
-    return aSNS;
-}
 
 // OServiceManager
 Reference< XInterface > ORegistryServiceManager::queryServiceFactory(
@@ -1496,9 +1551,30 @@ extern "C" void SAL_CALL smgrUnloadingListener(void* id)
 //##################################################################################################
 //##################################################################################################
 
+using namespace stoc_smgr;
+
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        OServiceManager_CreateInstance, smgr_getImplementationName,
+        smgr_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    {
+        ORegistryServiceManager_CreateInstance, regsmgr_getImplementationName,
+        regsmgr_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -1509,73 +1585,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            OUStringBuffer buf( 32 );
-            // OServiceManager
-            buf.append( (sal_Unicode)'/' );
-            buf.append( stoc_smgr::OServiceManager::getImplementationName_Static() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/UNO/SERVICES") );
-            Reference<XRegistryKey> xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( buf.makeStringAndClear() ) );
-            const Sequence<OUString > & rSMnames =
-                stoc_smgr::OServiceManager::getSupportedServiceNames_Static();
-            const OUString * pNames = rSMnames.getConstArray();
-            sal_Int32 nPos;
-            for ( nPos = rSMnames.getLength(); nPos--; )
-                xNewKey->createKey( pNames[nPos] );
-
-            // ORegistryServiceManager
-            buf.append( (sal_Unicode)'/' );
-            buf.append( stoc_smgr::ORegistryServiceManager::getImplementationName_Static() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/UNO/SERVICES") );
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                buf.makeStringAndClear() );
-            const Sequence<OUString > & rRSMnames =
-                stoc_smgr::ORegistryServiceManager::getSupportedServiceNames_Static();
-            pNames = rRSMnames.getConstArray();
-            for ( nPos = rRSMnames.getLength(); nPos--; )
-                xNewKey->createKey( pNames[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    Reference< XInterface > xFactory;
-
-    if (stoc_smgr::OServiceManager::getImplementationName_Static().compareToAscii( pImplName ) == 0)
-    {
-        xFactory = createSingleComponentFactory(
-            stoc_smgr::OServiceManager_CreateInstance,
-            stoc_smgr::OServiceManager::getImplementationName_Static(),
-            stoc_smgr::OServiceManager::getSupportedServiceNames_Static() );
-    }
-    else if (stoc_smgr::ORegistryServiceManager::getImplementationName_Static().compareToAscii( pImplName ) == 0)
-    {
-        xFactory = createSingleComponentFactory(
-            stoc_smgr::ORegistryServiceManager_CreateInstance,
-            stoc_smgr::ORegistryServiceManager::getImplementationName_Static(),
-            stoc_smgr::ORegistryServiceManager::getSupportedServiceNames_Static() );
-    }
-
-    if (xFactory.is())
-    {
-        xFactory->acquire();
-        return xFactory.get();
-    }
-    return 0;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
-

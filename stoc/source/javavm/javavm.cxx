@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-11 15:31:34 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include <uno/environment.h>
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -140,6 +141,40 @@ using namespace cppu;
 using namespace osl;
 
 namespace stoc_javavm {
+
+    static Sequence< OUString > javavm_getSupportedServiceNames()
+    {
+        static Sequence < OUString > *pNames = 0;
+        if( ! pNames )
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( !pNames )
+            {
+                static Sequence< OUString > seqNames(1);
+                seqNames.getArray()[0] = OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.java.JavaVirtualMachine") );
+                pNames = &seqNames;
+            }
+        }
+        return *pNames;
+    }
+
+    static OUString javavm_getImplementationName()
+    {
+        static OUString *pImplName = 0;
+        if( ! pImplName )
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( ! pImplName )
+            {
+                static OUString implName(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaVirtualMachine" ) );
+                pImplName = &implName;
+            }
+        }
+        return *pImplName;
+    }
+
     static jint JNICALL vm_vfprintf( FILE *fp, const char *format, va_list args ) {
 #ifdef DEBUG
         char buff[1024];
@@ -194,14 +229,15 @@ namespace stoc_javavm {
         uno_Environment               * _pJava_environment;
         JavaVMContext                 * _pVMContext;
 
-        Reference<XMultiServiceFactory> _xSMgr;
+        Reference<XComponentContext>        _xCtx;
+        Reference<XMultiComponentFactory > _xSMgr;
 
         Module    _javaLib;
 
     public:
         OUString _error;
 
-        JavaVirtualMachine_Impl(const Reference<XMultiServiceFactory> & rSMgr) throw();
+        JavaVirtualMachine_Impl(const Reference<XComponentContext> & xCtx) throw();
         ~JavaVirtualMachine_Impl() throw();
 
         // XJavaVM
@@ -220,15 +256,6 @@ namespace stoc_javavm {
         virtual Sequence<OUString> SAL_CALL getSupportedServiceNames(void)               throw(RuntimeException);
 
 
-        static OUString SAL_CALL getImplementationName_Static() throw() {
-            return OUString::createFromAscii("com.sun.star.comp.stoc.JavaVirtualMachine");
-        }
-
-        static Sequence<OUString> SAL_CALL getSupportedServiceNames_Static() throw() {
-            Sequence<OUString> aSNS(1);
-            aSNS.getArray()[0] = OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine");
-            return aSNS;
-        }
 
         JavaVM *                createJavaVM(const JVM & jvm) throw(RuntimeException);
         void                    disposeJavaVM() throw();
@@ -297,8 +324,9 @@ namespace stoc_javavm {
 
 
     // XServiceInfo
-    OUString SAL_CALL JavaVirtualMachine_Impl::getImplementationName() throw(RuntimeException) {
-        return JavaVirtualMachine_Impl::getImplementationName_Static();
+    OUString SAL_CALL JavaVirtualMachine_Impl::getImplementationName() throw(RuntimeException)
+    {
+        return javavm_getImplementationName();
     }
 
     // XServiceInfo
@@ -314,13 +342,18 @@ namespace stoc_javavm {
     }
 
     // XServiceInfo
-    Sequence<OUString> SAL_CALL JavaVirtualMachine_Impl::getSupportedServiceNames() throw(RuntimeException) {
-        return getSupportedServiceNames_Static();
+    Sequence<OUString> SAL_CALL JavaVirtualMachine_Impl::getSupportedServiceNames() throw(RuntimeException)
+    {
+        return javavm_getSupportedServiceNames();
     }
 
-
-    static void getDefaultLocaleFromConfig(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw(Exception) {
-        Reference<XInterface> xConfRegistry = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")));
+    static void getDefaultLocaleFromConfig(JVM * pjvm,
+                                           const Reference<XMultiComponentFactory> & xSMgr,
+                                           const Reference<XComponentContext> &xCtx ) throw(Exception)
+    {
+        Reference<XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")),
+            xCtx );
         if(!xConfRegistry.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
         Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
@@ -381,8 +414,13 @@ namespace stoc_javavm {
             pjvm->pushProp(OUString::createFromAscii("user.timezone=ECT"));
     }
 
-    static void getINetPropsFromConfig(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw (Exception) {
-        Reference<XInterface> xConfRegistry = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")));
+    static void getINetPropsFromConfig(JVM * pjvm,
+                                       const Reference<XMultiComponentFactory> & xSMgr,
+                                       const Reference<XComponentContext> &xCtx ) throw (Exception)
+    {
+        Reference<XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")),
+            xCtx );
         if(!xConfRegistry.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
         Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
@@ -428,8 +466,13 @@ namespace stoc_javavm {
         xConfRegistry_simple->close();
     }
 
-    static void getJavaPropsFromConfig(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw(Exception) {
-        Reference<XInterface> xConfRegistry = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")));
+    static void getJavaPropsFromConfig(JVM * pjvm,
+                                       const Reference<XMultiComponentFactory> & xSMgr,
+                                       const Reference<XComponentContext> &xCtx) throw(Exception)
+    {
+        Reference<XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")),
+            xCtx);
         if(!xConfRegistry.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
         Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
@@ -444,7 +487,9 @@ namespace stoc_javavm {
 
         OUString rcPath = key_InstallPath->getStringValue();
 
-        Reference<XInterface> xIniManager(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.INIManager"))));
+        Reference<XInterface> xIniManager(xSMgr->createInstanceWithContext(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.INIManager")),
+            xCtx));
         if(!xIniManager.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get: com.sun.star.config.INIManager")), Reference<XInterface>());
 
         Reference<XSimpleRegistry> xIniManager_simple(xIniManager, UNO_QUERY);
@@ -510,11 +555,13 @@ namespace stoc_javavm {
         }
     }
 
-    static void initVMConfiguration(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw() {
+    static void initVMConfiguration(JVM * pjvm,
+                                    const Reference<XMultiComponentFactory> & xSMgr,
+                                    const Reference<XComponentContext > &xCtx) throw() {
         try {
             JVM jvm;
 
-            getINetPropsFromConfig(&jvm, xSMgr);
+            getINetPropsFromConfig(&jvm, xSMgr, xCtx);
 
             *pjvm = jvm;
         }
@@ -528,7 +575,7 @@ namespace stoc_javavm {
         try {
             JVM jvm;
 
-            getDefaultLocaleFromConfig(&jvm, xSMgr);
+            getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
         }
         catch(Exception & exception) {
 #ifdef DEBUG
@@ -541,7 +588,7 @@ namespace stoc_javavm {
 
             JVM jvm;
 
-            getJavaPropsFromConfig(&jvm, xSMgr);
+            getJavaPropsFromConfig(&jvm, xSMgr,xCtx);
 
             *pjvm = jvm;
         }
@@ -562,11 +609,12 @@ namespace stoc_javavm {
 //          pjvm->setAbort(vm_abort);
     }
 
-    JavaVirtualMachine_Impl::JavaVirtualMachine_Impl(const Reference<XMultiServiceFactory> & rSMgr) throw()
-        : _pVMContext(NULL),
-           _xSMgr(rSMgr),
-          _creatorThread(this),
-           _pJava_environment(NULL)
+    JavaVirtualMachine_Impl::JavaVirtualMachine_Impl(const Reference< XComponentContext > &xCtx) throw()
+        : _pVMContext(NULL)
+        ,  _creatorThread(this)
+        ,  _pJava_environment(NULL)
+        , _xSMgr( xCtx->getServiceManager() )
+        , _xCtx( xCtx )
     {
     }
 
@@ -681,7 +729,7 @@ namespace stoc_javavm {
                 JVM jvm;
                 JavaVM * pJavaVM;
 
-                initVMConfiguration(&jvm, _xSMgr);
+                initVMConfiguration(&jvm, _xSMgr, _xCtx);
 
                 if (jvm.isEnabled()) {
                     // create the java vm
@@ -728,7 +776,7 @@ namespace stoc_javavm {
     sal_Bool JavaVirtualMachine_Impl::isVMEnabled(void) throw(RuntimeException) {
         JVM jvm;
 
-        initVMConfiguration(&jvm, _xSMgr);
+        initVMConfiguration(&jvm, _xSMgr, _xCtx);
 
         return jvm.isEnabled();
     }
@@ -759,11 +807,26 @@ namespace stoc_javavm {
 
 
     // JavaVirtualMachine_Impl_CreateInstance()
-    static Reference<XInterface> SAL_CALL JavaVirtualMachine_Impl_createInstance(const Reference<XMultiServiceFactory> & rSMgr)
+    static Reference<XInterface> SAL_CALL JavaVirtualMachine_Impl_createInstance(const Reference<XComponentContext> & xCtx)
         throw (RuntimeException)
      {
-        XJavaVM *pJVM= static_cast<XJavaVM *>(new JavaVirtualMachine_Impl(rSMgr));
-        return Reference<XInterface>(pJVM);
+        Reference< XInterface > xRet;
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            // The javavm is never destroyed !
+            static Reference< XInterface > *pStaticRef = 0;
+            if( pStaticRef )
+            {
+                xRet = *pStaticRef;
+            }
+            else
+            {
+                xRet = *new JavaVirtualMachine_Impl( xCtx);
+                pStaticRef = new Reference< XInterface> ( xRet );
+            }
+        }
+
+        return xRet;
     }
 
 
@@ -776,50 +839,38 @@ namespace stoc_javavm {
     }
 }
 
-extern "C" {
-    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv){
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
+using namespace stoc_javavm;
 
-    sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKey) throw() {
-        if (pRegistryKey) {
-            try     {
-                Reference<XRegistryKey> xNewKey(reinterpret_cast<XRegistryKey *>(pRegistryKey)->createKey(
-                    OUString::createFromAscii("/") +
-                    stoc_javavm::JavaVirtualMachine_Impl::getImplementationName_Static() +
-                    OUString::createFromAscii("/UNO/SERVICES")));
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        JavaVirtualMachine_Impl_createInstance, javavm_getImplementationName,
+        javavm_getSupportedServiceNames, createSingleComponentFactory,
+        0 , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
-                const Sequence<OUString> & rSNL = stoc_javavm::JavaVirtualMachine_Impl::getSupportedServiceNames_Static();
-                const OUString * pArray = rSNL.getConstArray();
-                for(sal_Int32 nPos = rSNL.getLength(); nPos--;)
-                    xNewKey->createKey(pArray[nPos]);
+extern "C"
+{
+// NOTE: component_canUnload is not exported, as the library cannot be unloaded.
 
-                return sal_True;
-            }
-            catch (InvalidRegistryException &) {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-            }
-        }
-        return sal_False;
-    }
-
-    void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey) throw() {
-        void * pRet = 0;
-
-        if (stoc_javavm::JavaVirtualMachine_Impl::getImplementationName_Static().equals(OUString::createFromAscii(pImplName))) {
-            Reference<XSingleServiceFactory> xFactory( createOneInstanceFactory(
-                reinterpret_cast<XMultiServiceFactory *>(pServiceManager),
-                stoc_javavm::JavaVirtualMachine_Impl::getImplementationName_Static(),
-                stoc_javavm::JavaVirtualMachine_Impl_createInstance,
-                stoc_javavm::JavaVirtualMachine_Impl::getSupportedServiceNames_Static()));
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-
-        return pRet;
-    }
+//==================================================================================================
+void SAL_CALL component_getImplementationEnvironment(
+    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
+}
+//==================================================================================================
+void * SAL_CALL component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+{
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
+}
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,6 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstULong")) == aConstULong, "test_RegCoreReflection(): error 4m");
     TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstFloat")) == aConstFloat, "test_RegCoreReflection(): error 4o");
     TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstDouble")) == aConstDouble, "test_RegCoreReflection(): error 4q");
-    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstString")) == aConstString, "test_RegCoreReflection(): error 4s");
 
     // Enums
 
@@ -247,7 +246,6 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     aStructC.aShort = aConstShort;
     aStructC.aFloat = aConstFloat;
     aStructC.aDouble = aConstDouble;
-    aStructC.aString = aConstString;
     aStructC.aInterfaceSeq = Sequence<Reference<XInterface > >();
 
     Any aAny;

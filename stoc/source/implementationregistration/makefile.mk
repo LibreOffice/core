@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2001-05-07 13:51:24 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ SLOFILES= \
         $(SLO)$/implreg.obj
 
 SHL1TARGET=	$(TARGET)
+SHL1VERSIONMAP=$(TARGET).map
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
@@ -93,7 +94,6 @@ SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 

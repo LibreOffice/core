@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-16 08:02:28 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,10 @@ public:
         , _bIn( bIn )
         , _bOut( bOut )
         , _nPosition( nPosition )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    virtual ~MethodParameterImpl();
 
     // XMethodParameter
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -111,6 +114,10 @@ public:
     virtual sal_Int32 SAL_CALL getPosition() throw(::com::sun::star::uno::RuntimeException);
 };
 
+MethodParameterImpl::~MethodParameterImpl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 // XMethodParameter
 //__________________________________________________________________________________________________
 OUString MethodParameterImpl::getName()
@@ -209,7 +216,9 @@ public:
         , _pExceptions( 0 )
         , _bIsOneWay( bIsOneWay )
         , _nPosition( nPosition )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
     virtual ~InterfaceMethodImpl();
 
     // XTypeDescription
@@ -231,6 +240,7 @@ InterfaceMethodImpl::~InterfaceMethodImpl()
 {
     delete _pParams;
     delete _pExceptions;
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XTypeDescription
@@ -415,7 +425,10 @@ public:
         , _aMemberTypeName( rMemberTypeName )
         , _bReadOnly( bReadOnly )
         , _nPosition( nPosition )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    virtual ~InterfaceAttributeImpl();
 
     // XTypeDescription
     virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
@@ -430,6 +443,10 @@ public:
     virtual Reference< XTypeDescription > SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
 };
 
+InterfaceAttributeImpl::~InterfaceAttributeImpl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 // XTypeDescription
 //__________________________________________________________________________________________________
 TypeClass InterfaceAttributeImpl::getTypeClass()
@@ -512,6 +529,7 @@ InterfaceTypeDescriptionImpl::InterfaceTypeDescriptionImpl(
     , _pMethods( 0 )
 {
     // uik
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     _aUik.m_Data1 = rUik.m_Data1;
     _aUik.m_Data2 = rUik.m_Data2;
     _aUik.m_Data3 = rUik.m_Data3;
@@ -523,6 +541,7 @@ InterfaceTypeDescriptionImpl::~InterfaceTypeDescriptionImpl()
 {
     delete _pAttributes;
     delete _pMethods;
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XTypeDescription

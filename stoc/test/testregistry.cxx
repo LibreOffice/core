@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-19 11:02:16 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
 void test_SimpleRegistry()
 {
     Reference<XInterface> xIFace;
-    Module* pModule = new Module(OUString());
+    Module module;
 
 #ifdef SAL_W32
     OUString dllName( OUString::createFromAscii("simreg.dll") );
@@ -199,11 +199,11 @@ void test_SimpleRegistry()
 #endif
 #endif
 
-    if (pModule->load(dllName))
+    if (module.load(dllName))
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            pModule->getSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
+            module.getSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
 
         if (pCompFactoryFunc)
         {
@@ -449,8 +449,6 @@ void test_SimpleRegistry()
     }
 
     xReg.clear();
-
-    delete pModule;
 
     printf("Test SimpleRegistry, OK!\n");
 }

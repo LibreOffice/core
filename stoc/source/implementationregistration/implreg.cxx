@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 11:30:27 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #include <uno/mapping.hxx>
 #include <osl/thread.h>
@@ -89,8 +92,6 @@
 #endif
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
@@ -100,7 +101,6 @@
 #include <io.h>
 #endif
 
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::beans;
@@ -108,12 +108,46 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace rtl;
+using namespace osl;
 
 namespace stoc_impreg
 {
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.stoc.ImplementationRegistration"
-#define SERVICE_NAME        "com.sun.star.registry.ImplementationRegistration"
+#define IMPLNAME "com.sun.star.comp.stoc.ImplementationRegistration"
+#define SERVICENAME         "com.sun.star.registry.ImplementationRegistration"
+
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > impreg_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString impreg_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 //*************************************************************************
 //  static getTempName()
@@ -1152,14 +1186,13 @@ class ImplementationRegistration
     : public WeakImplHelper3< XImplementationRegistration, XServiceInfo, XInitialization >
 {
 public:
-                                ImplementationRegistration( const Reference < XMultiServiceFactory > & rSMgr );
+                                ImplementationRegistration( const Reference < XComponentContext > & rSMgr );
                                  ~ImplementationRegistration();
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw();
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw();
     Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw();
-    static Sequence< OUString >     SAL_CALL getSupportedServiceNames_Static(void) throw();
 
     // Methoden von XImplementationRegistration
     virtual void SAL_CALL registerImplementation(
@@ -1188,7 +1221,8 @@ public: // XInitialization
 
 private: // helper methods
 
-    static sal_Bool doRegistration( const Reference < XMultiServiceFactory >& xSMgr,
+    static sal_Bool doRegistration( const Reference < XMultiComponentFactory >& xSMgr,
+                                    const Reference < XComponentContext > &xCtx,
                                     const Reference < XImplementationLoader >& xAct,
                                     const Reference < XSimpleRegistry >& xDest,
                                     const OUString& implementationLoaderUrl,
@@ -1197,18 +1231,23 @@ private: // helper methods
 
     Reference< XSimpleRegistry > getRegistryFromServiceManager();
 
-    static Reference< XSimpleRegistry > createTemporarySimpleRegistry( const Reference < XMultiServiceFactory > & r );
+    static Reference< XSimpleRegistry > createTemporarySimpleRegistry(
+        const Reference< XMultiComponentFactory > &rSMgr,
+        const Reference < XComponentContext > & rCtx );
 
 private: // members
-    Reference < XMultiServiceFactory >  m_xSMgr;
+    Reference < XMultiComponentFactory >    m_xSMgr;
+    Reference < XComponentContext >         m_xCtx;
 };
 
 //*************************************************************************
 // ImplementationRegistration()
 //
-ImplementationRegistration::ImplementationRegistration( const Reference < XMultiServiceFactory > & rSMgr )
-    : m_xSMgr( rSMgr )
+ImplementationRegistration::ImplementationRegistration( const Reference < XComponentContext > & xCtx )
+    : m_xSMgr( xCtx->getServiceManager() )
+    , m_xCtx( xCtx )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 //*************************************************************************
@@ -1216,13 +1255,14 @@ ImplementationRegistration::ImplementationRegistration( const Reference < XMulti
 //
 ImplementationRegistration::~ImplementationRegistration()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
 // XServiceInfo
 OUString ImplementationRegistration::getImplementationName() throw()
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return impreg_getImplementationName();
 }
 
 // XServiceInfo
@@ -1239,17 +1279,8 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > ImplementationRegistration::getSupportedServiceNames(void) throw()
 {
-    return getSupportedServiceNames_Static();
+    return impreg_getSupportedServiceNames();
 }
-
-// ORegistryServiceManager_Static
-Sequence< OUString > ImplementationRegistration::getSupportedServiceNames_Static(void) throw ()
-{
-    OUString aServiceName( OUString::createFromAscii( SERVICE_NAME ) );
-    Sequence< OUString > aSNS( &aServiceName, 1 );
-    return aSNS;
-}
-
 
 Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager()
 {
@@ -1332,7 +1363,7 @@ void ImplementationRegistration::initialize(
 
 
     // TODO : SimpleRegistry in doRegistration von hand anziehen !
-    if (!doRegistration(m_xSMgr, rLoader , rReg, loaderServiceName , locationUrl, sal_True)) {
+    if (!doRegistration(m_xSMgr, m_xCtx, rLoader , rReg, loaderServiceName , locationUrl, sal_True)) {
         throw Exception();
     }
 
@@ -1365,7 +1396,8 @@ void ImplementationRegistration::registerImplementation(
     }
 
     if( m_xSMgr.is() ) {
-        Reference < XImplementationLoader > xAct(  m_xSMgr->createInstance(activatorName) , UNO_QUERY );
+        Reference < XImplementationLoader > xAct(
+            m_xSMgr->createInstanceWithContext(activatorName, m_xCtx) , UNO_QUERY );
         if (xAct.is())
         {
             Reference < XSimpleRegistry > xRegistry;
@@ -1382,7 +1414,7 @@ void ImplementationRegistration::registerImplementation(
 
             if ( xRegistry.is())
             {
-                if (!doRegistration(m_xSMgr, xAct, xRegistry, implLoaderUrl, locationUrl, sal_True))
+                if (!doRegistration(m_xSMgr, m_xCtx, xAct, xRegistry, implLoaderUrl, locationUrl, sal_True))
                     throw CannotRegisterImplementationException();
 
                 return;
@@ -1426,7 +1458,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
 
     if (xRegistry.is())
     {
-        ret = doRegistration(m_xSMgr, Reference< XImplementationLoader > (), xRegistry, OUString(), location, sal_False);
+        ret = doRegistration(m_xSMgr, m_xCtx, Reference< XImplementationLoader > (), xRegistry, OUString(), location, sal_False);
     }
 
     return ret;
@@ -1456,12 +1488,14 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 
     if( m_xSMgr.is() ) {
 
-        Reference < XImplementationLoader > xAct( m_xSMgr->createInstance( activatorName ), UNO_QUERY );
+        Reference < XImplementationLoader > xAct(
+            m_xSMgr->createInstanceWithContext( activatorName, m_xCtx ), UNO_QUERY );
 
         if (xAct.is())
         {
 
-            Reference < XSimpleRegistry > xReg =    createTemporarySimpleRegistry( m_xSMgr);
+            Reference < XSimpleRegistry > xReg =
+                createTemporarySimpleRegistry( m_xSMgr, m_xCtx);
 
             if (xReg.is())
             {
@@ -1539,7 +1573,8 @@ Sequence< OUString > ImplementationRegistration::checkInstantiation(const OUStri
 // helper function doRegistration
 //
 sal_Bool ImplementationRegistration::doRegistration(
-    const Reference< XMultiServiceFactory > & xSMgr,
+    const Reference< XMultiComponentFactory > & xSMgr,
+    const Reference< XComponentContext > &xCtx,
     const Reference < XImplementationLoader > & xAct,
     const Reference < XSimpleRegistry >& xDest,
     const OUString& implementationLoaderUrl,
@@ -1592,7 +1627,8 @@ sal_Bool ImplementationRegistration::doRegistration(
         }
     } else
     {
-        Reference < XSimpleRegistry >   xReg = createTemporarySimpleRegistry( xSMgr );
+        Reference < XSimpleRegistry >   xReg =
+            createTemporarySimpleRegistry( xSMgr, xCtx );
         Reference < XRegistryKey >      xSourceKey;
 
         if (xAct.is() && xReg.is() && xDest.is())
@@ -1663,40 +1699,46 @@ sal_Bool ImplementationRegistration::doRegistration(
 
 
 Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRegistry(
-    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+    const Reference< XMultiComponentFactory > &rSMgr,
+    const Reference < XComponentContext > & xCtx)
 {
 
     Reference < XSimpleRegistry > xReg =    Reference< XSimpleRegistry >::query(
-        rSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry") ) ) );
+        rSMgr->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry") ),
+            xCtx ));
     OSL_ASSERT( xReg.is() );
-//      if( ! xReg.is() ) {
-//          // use as fallback ( bootstrap )
-
-//          Reference< XInterface > r = ::cppu::__loadLibComponentFactory(
-//               "simreg",
-//               "com.sun.star.comp.stoc.SimpleRegistry",
-//               rSMgr ,
-//               Reference < XRegistryKey >() )->createInstance();
-
-//           xReg = Reference< XSimpleRegistry > ( r , UNO_QUERY );
-//      }
-
     return xReg;
 }
 
 
 
 //*************************************************************************
-static Reference<XInterface> SAL_CALL ImplementationRegistration_CreateInstance( const Reference<XMultiServiceFactory> & rSMgr ) throw(Exception)
+static Reference<XInterface> SAL_CALL ImplementationRegistration_CreateInstance( const Reference<XComponentContext> & xCtx ) throw(Exception)
 {
-    return (XImplementationRegistration *)new ImplementationRegistration(rSMgr);
+    return (XImplementationRegistration *)new ImplementationRegistration(xCtx);
 }
 
 }
+
+using namespace stoc_impreg;
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        ImplementationRegistration_CreateInstance, impreg_getImplementationName,
+        impreg_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -1707,51 +1749,13 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL =
-                ::stoc_impreg::ImplementationRegistration::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            ::stoc_impreg::ImplementationRegistration_CreateInstance,
-            ::stoc_impreg::ImplementationRegistration::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
 

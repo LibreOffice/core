@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 11:47:36 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX__
+#include <cppuhelper/implementationentry.hxx>
+#endif
 #include <cppuhelper/typeprovider.hxx>
 
 #include <com/sun/star/script/FailReason.hpp>
@@ -103,8 +106,8 @@
 #include <search.h>
 #endif
 
-#define SERVICE_NAME "com.sun.star.script.Invocation"
-#define IMPL_NAME    "com.sun.star.comp.stoc.Invocation"
+#define SERVICENAME "com.sun.star.script.Invocation"
+#define IMPLNAME     "com.sun.star.comp.stoc.Invocation"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -120,6 +123,38 @@ using namespace osl;
 
 namespace stoc_inv
 {
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > inv_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString inv_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 // TODO: Zentral implementieren
 inline Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
@@ -143,13 +178,12 @@ public:
     Invocation_Impl( const Any & rAdapted, const Reference<XTypeConverter> &,
                                            const Reference<XIntrospection> &,
                                            const Reference<XIdlReflection> & );
-
+    virtual ~Invocation_Impl();
 
     // XInterface
     virtual Any         SAL_CALL queryInterface( const Type & aType) throw( RuntimeException );
     virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
     virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
-    //void*             getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 
     // XTypeProvider
@@ -291,7 +325,13 @@ Invocation_Impl::Invocation_Impl
     , xTypeConverter( rTC )
     , xCoreReflection( rCR )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     setMaterial( rAdapted );
+}
+
+Invocation_Impl::~Invocation_Impl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //##################################################################################################
@@ -999,8 +1039,6 @@ void Invocation_Impl::fillInfoForMethod
 }
 
 
-// XIdlClassProvider
-
 // XTypeProvider
 Sequence< Type > SAL_CALL Invocation_Impl::getTypes(void) throw( RuntimeException )
 {
@@ -1024,39 +1062,6 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  ) throw( Ru
   return (*pId).getImplementationId();
 }
 
-/*
-Sequence< Reference<XIdlClass> > Invocation_Impl::getIdlClasses(void) throw( RuntimeException )
-{
-    Reflection * ppReflection[7];
-    Usal_Int16 i = 0;
-    ppReflection[i++] = XInvocation_getReflection();
-    if( _xElementAccess.is() )
-        ppReflection[i++] = XElementAccess_getReflection();
-    if( _xEnumerationAccess.is() )
-        ppReflection[i++] = XEnumerationAccess_getReflection();
-    if( _xIndexAccess.is() )
-        ppReflection[i++] = XIndexAccess_getReflection();
-    if( _xNameAccess.is() )
-        ppReflection[i++] = XNameAccess_getReflection();
-    if( _xIndexContainer.is() )
-        ppReflection[i++] = XIndexContainer_getReflection();
-    if( _xNameContainer.is() )
-        ppReflection[i++] = XNameContainer_getReflection();
-
-    // Ivocation does not support XExactName, if direct object supports
-    // XInvocation, but not XExactName.
-    if ((_xDirect.is() && _xENDirect.is()) ||
-        (!_xDirect.is() && (_xENIntrospection.is() || _xENNameAccess.is())))
-    {
-        ppReflection[i++] = XExactName_getReflection();
-    }
-
-    Reference<XIdlClass> xClass = createStandardClass( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.Invocation")),
-                                                  OWeakObject::getStaticIdlClass(), i,
-                                                  ppReflection );
-    return Sequence<Reference<XIdlClass>>( &xClass, 1 );
-}
-*/
 //==================================================================================================
 //==================================================================================================
 //==================================================================================================
@@ -1067,21 +1072,14 @@ class InvocationService
     , public XTypeProvider
 {
 public:
-            InvocationService( const Reference<XMultiServiceFactory> & rSMgr )
-                : mxSMgr( rSMgr )
-                , xTypeConverter( Reference<XTypeConverter>::query( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ) ) )
-                , xIntrospection( Reference<XIntrospection>::query( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ) ) )
-                , xCoreReflection( Reference<XIdlReflection>::query( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ) ) )
-            {}
+    InvocationService( const Reference<XComponentContext> & xCtx );
+    virtual ~InvocationService();
 
     // XInterface
     virtual Any         SAL_CALL queryInterface( const Type & aType ) throw( RuntimeException );
     virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
     virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
-    //void*             getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
-    // XIdlClassProvider
-  //    virtual Sequence< Reference<XIdlClass> >    SAL_CALL getIdlClasses(void) throw( RuntimeException );
     // XTypeProvider
     virtual Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
        throw(RuntimeException);
@@ -1090,25 +1088,47 @@ public:
 
     // XServiceInfo
     OUString                    SAL_CALL getImplementationName() throw( RuntimeException );
-    static OUString             SAL_CALL getImplementationName_Static() throw( RuntimeException )
-                                {
-                                    return OUString::createFromAscii( IMPL_NAME );
-                                }
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException );
     Sequence< OUString >        SAL_CALL getSupportedServiceNames(void) throw( RuntimeException );
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw( RuntimeException );
 
     // XSingleServiceFactory
     Reference<XInterface>       SAL_CALL createInstance(void) throw( Exception, RuntimeException );
     Reference<XInterface>       SAL_CALL createInstanceWithArguments(
         const Sequence<Any>& rArguments ) throw( Exception, RuntimeException );
 private:
-
-    Reference<XMultiServiceFactory> mxSMgr;
+    Reference<XComponentContext> mxCtx;
+    Reference<XMultiComponentFactory> mxSMgr;
     Reference<XTypeConverter> xTypeConverter;
     Reference<XIntrospection> xIntrospection;
     Reference<XIdlReflection> xCoreReflection;
 };
+
+InvocationService::InvocationService( const Reference<XComponentContext> & xCtx )
+    : mxSMgr( xCtx->getServiceManager() )
+    , mxCtx( xCtx )
+{
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    xTypeConverter = Reference<XTypeConverter>(
+        mxSMgr->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")),
+            xCtx ),
+        UNO_QUERY );
+    xIntrospection = Reference<XIntrospection>(
+        mxSMgr->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")),
+            xCtx),
+        UNO_QUERY);
+    xCoreReflection = Reference<XIdlReflection>(
+        mxSMgr->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")),
+            xCtx),
+        UNO_QUERY);
+}
+
+InvocationService::~InvocationService()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
 //--------------------------------------------------------------------------------------------------
 Any SAL_CALL InvocationService::queryInterface( const Type & aType )
@@ -1126,7 +1146,6 @@ Any SAL_CALL InvocationService::queryInterface( const Type & aType )
 
     return OWeakObject::queryInterface( aType );
 }
-
 
 // XTypeProvider
 Sequence< Type > SAL_CALL InvocationService::getTypes(void) throw( RuntimeException )
@@ -1162,18 +1181,10 @@ Sequence< sal_Int8 > SAL_CALL InvocationService::getImplementationId(  ) throw( 
   return (*pId).getImplementationId();
 }
 
-// // XIdlClassProvider
-// Sequence< Reference<XIdlClass> > InvocationService::getIdlClasses(void) throw( RuntimeException )
-// {
-//  Sequence< Reference<XIdlClass> > aSeq( &getStaticIdlClass(), 1 );
-//  return aSeq;
-// }
-
-
 // XServiceInfo
 OUString InvocationService::getImplementationName() throw( RuntimeException )
 {
-    return getImplementationName_Static();
+    return inv_getImplementationName();
 }
 
 // XServiceInfo
@@ -1190,15 +1201,7 @@ sal_Bool InvocationService::supportsService(const OUString& ServiceName) throw( 
 // XServiceInfo
 Sequence< OUString > InvocationService::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    return getSupportedServiceNames_Static();
-}
-
-// ORegistryServiceManager_Static
-Sequence< OUString > InvocationService::getSupportedServiceNames_Static(void) throw( RuntimeException )
-{
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
-    return aSNS;
+    return inv_getSupportedServiceNames();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1227,17 +1230,33 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
 
 
 //*************************************************************************
-Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference<XMultiServiceFactory> & rSMgr )
+Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
     throw( RuntimeException )
 {
-    Reference<XInterface> xService = Reference< XInterface > ( *new InvocationService( rSMgr ) );
+    Reference<XInterface> xService = Reference< XInterface > ( *new InvocationService( xCtx ) );
     return xService;
 }
 
 }
 
+using namespace stoc_inv;
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        InvocationService_CreateInstance, inv_getImplementationName,
+        inv_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
+
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -1248,52 +1267,15 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" IMPL_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL =
-                stoc_inv::InvocationService::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPL_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            stoc_inv::InvocationService_CreateInstance,
-            stoc_inv::InvocationService::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
+
 
 

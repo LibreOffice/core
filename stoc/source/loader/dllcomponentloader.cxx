@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:35:30 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX__
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -117,12 +120,46 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace rtl;
-
-namespace stoc_loader
-{
+using namespace osl;
 
 #define SERVICENAME "com.sun.star.loader.SharedLibrary"
 #define IMPLNAME    "com.sun.star.comp.stoc.DLLComponentLoader"
+
+namespace stoc_loader
+{
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > loader_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString loader_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
+
 
 //*************************************************************************
 // DllComponentLoader
@@ -133,14 +170,13 @@ class DllComponentLoader
                               XServiceInfo >
 {
 public:
-    DllComponentLoader( const Reference<XMultiServiceFactory> & rXSMgr );
+    DllComponentLoader( const Reference<XComponentContext> & xCtx );
     ~DllComponentLoader();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -154,21 +190,23 @@ private:
 };
 
 //*************************************************************************
-DllComponentLoader::DllComponentLoader( const Reference<XMultiServiceFactory> & rXSMgr )
-    : m_xSMgr( rXSMgr )
+DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCtx )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    m_xSMgr = Reference< XMultiServiceFactory > ( xCtx->getServiceManager(), UNO_QUERY );
 }
 
 //*************************************************************************
 DllComponentLoader::~DllComponentLoader()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //*************************************************************************
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return loader_getImplementationName();
 }
 
 //*************************************************************************
@@ -187,38 +225,32 @@ sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return getSupportedServiceNames_Static();
-}
-
-//*************************************************************************
-Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames_Static(  )
-{
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
-    return Sequence< OUString >( &aName, 1 );
+    return loader_getSupportedServiceNames();
 }
 
 //*************************************************************************
 void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArgs )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    if( aArgs.getLength() != 1 )
-    {
-        throw IllegalArgumentException();
-    }
+    OSL_ENSURE( 0, "dllcomponentloader::initialize should not be called !" );
+//      if( aArgs.getLength() != 1 )
+//      {
+//          throw IllegalArgumentException();
+//      }
 
-    Reference< XMultiServiceFactory > rServiceManager;
+//      Reference< XMultiServiceFactory > rServiceManager;
 
-    if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE )
-    {
-        aArgs.getConstArray()[0] >>= rServiceManager;
-    }
+//      if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE )
+//      {
+//          aArgs.getConstArray()[0] >>= rServiceManager;
+//      }
 
-    if( !rServiceManager.is() )
-    {
-        throw IllegalArgumentException();
-    }
+//      if( !rServiceManager.is() )
+//      {
+//          throw IllegalArgumentException();
+//      }
 
-    m_xSMgr = rServiceManager;
+//      m_xSMgr = rServiceManager;
 }
 
 
@@ -245,11 +277,11 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
 
 
 //*************************************************************************
-Reference<XInterface> SAL_CALL DllComponentLoader_CreateInstance( const Reference<XMultiServiceFactory> & rSMgr ) throw(Exception)
+Reference<XInterface> SAL_CALL DllComponentLoader_CreateInstance( const Reference<XComponentContext> & xCtx ) throw(Exception)
 {
     Reference<XInterface> xRet;
 
-    XImplementationLoader *pXLoader = (XImplementationLoader *)new DllComponentLoader(rSMgr);
+    XImplementationLoader *pXLoader = (XImplementationLoader *)new DllComponentLoader(xCtx);
 
     if (pXLoader)
     {
@@ -261,8 +293,24 @@ Reference<XInterface> SAL_CALL DllComponentLoader_CreateInstance( const Referenc
 
 }
 
+using namespace stoc_loader;
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        DllComponentLoader_CreateInstance, loader_getImplementationName,
+        loader_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
+
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -273,54 +321,15 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL =
-                ::stoc_loader::DllComponentLoader::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
-            ::stoc_loader::DllComponentLoader_CreateInstance,
-            ::stoc_loader::DllComponentLoader::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
 
 
 

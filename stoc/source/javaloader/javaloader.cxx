@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-18 09:16:56 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "jni.h"
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 #include <cppuhelper/implbase2.hxx>
 
@@ -103,23 +104,52 @@ using namespace ::com::sun::star::registry;
 
 using namespace ::cppu;
 using namespace ::rtl;
+using namespace ::osl;
 
-namespace loader {
+namespace stoc_javaloader {
+    static Sequence< OUString > loader_getSupportedServiceNames()
+    {
+        static Sequence < OUString > *pNames = 0;
+        if( ! pNames )
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( !pNames )
+            {
+                static Sequence< OUString > seqNames(1);
+                seqNames.getArray()[0] = OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
+                pNames = &seqNames;
+            }
+        }
+        return *pNames;
+    }
+
+    static OUString loader_getImplementationName()
+    {
+        static OUString *pImplName = 0;
+        if( ! pImplName )
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( ! pImplName )
+            {
+                static OUString implName(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaComponentLoader" ) );
+                pImplName = &implName;
+            }
+        }
+        return *pImplName;
+    }
+
     class JavaComponentLoader : public WeakImplHelper2<XImplementationLoader, XServiceInfo> {
-        Reference<XMultiServiceFactory>  _xSMgr;
+        Reference<XMultiComponentFactory>  _xSMgr;
+        Reference<XComponentContext>  _xCtx;
         Reference<XImplementationLoader> _javaLoader;
 
-    protected:
-        JavaComponentLoader(const Reference<XMultiServiceFactory> & rXSMgr) throw(RuntimeException);
+    public:
+        JavaComponentLoader(const Reference<XComponentContext> & xCtx) throw(RuntimeException);
         virtual ~JavaComponentLoader() throw();
 
     public:
-        static const OUString implname;
-        static const OUString servname;
-
-        static Reference<XInterface> SAL_CALL CreateInstance(const Reference<XMultiServiceFactory> & rSMgr) throw(Exception);
-        static Sequence<OUString>    SAL_CALL getSupportedServiceNames_Static() throw();
-
         // XServiceInfo
         virtual OUString           SAL_CALL getImplementationName()                      throw(RuntimeException);
         virtual sal_Bool           SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException);
@@ -130,32 +160,9 @@ namespace loader {
         virtual sal_Bool SAL_CALL writeRegistryInfo(const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl) throw(CannotRegisterImplementationException, RuntimeException);
     };
 
-    const OUString JavaComponentLoader::implname = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaComponentLoader"));
-    const OUString JavaComponentLoader::servname = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java2"));
-
-    Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames_Static() throw() {
-        return Sequence<OUString>(&servname, 1);
-    }
-
-
-    Reference<XInterface> SAL_CALL JavaComponentLoader::CreateInstance(const Reference<XMultiServiceFactory> & rSMgr) throw(Exception) {
-        Reference<XInterface> xRet;
-
-        try {
-            XImplementationLoader *pXLoader = (XImplementationLoader *)new JavaComponentLoader(rSMgr);
-
-            xRet = Reference<XInterface>::query(pXLoader);
-        }
-        catch(RuntimeException & runtimeException) {
-            OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
-            osl_trace("javaloader - could not init javaloader cause of %s", message.getStr());
-        }
-
-        return xRet;
-    }
-
-    JavaComponentLoader::JavaComponentLoader(const Reference<XMultiServiceFactory> & rSMgr) throw(RuntimeException)
-        : _xSMgr(rSMgr)
+    JavaComponentLoader::JavaComponentLoader(const Reference<XComponentContext> & xCtx) throw(RuntimeException)
+        : _xSMgr(xCtx->getServiceManager())
+        , _xCtx( xCtx )
     {
         sal_Int32 size = 0;
         uno_Environment ** ppJava_environments = NULL;
@@ -169,7 +176,9 @@ namespace loader {
 
         try {
             // get a java vm, where we can create a loader
-            javaVM = rSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine")));
+            javaVM = _xSMgr->createInstanceWithContext(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine")),
+                xCtx );
             if(!javaVM.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 10")), Reference<XInterface>());
             Reference<XJavaVM>    javaVM_xJavaVM(javaVM, UNO_QUERY);
             if(!javaVM_xJavaVM.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 11")), Reference<XInterface>());
@@ -281,8 +290,9 @@ namespace loader {
     }
 
     // XServiceInfo
-    OUString SAL_CALL JavaComponentLoader::getImplementationName() throw(::com::sun::star::uno::RuntimeException) {
-        return implname;
+    OUString SAL_CALL JavaComponentLoader::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
+    {
+        return loader_getImplementationName();
     }
 
     sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName) throw(::com::sun::star::uno::RuntimeException) {
@@ -296,8 +306,9 @@ namespace loader {
         return bSupport;
     }
 
-    Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) {
-        return getSupportedServiceNames_Static();
+    Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+    {
+        return loader_getSupportedServiceNames();
     }
 
 
@@ -319,59 +330,82 @@ namespace loader {
     {
         return _javaLoader->activate(rImplName, blabla, rLibName, xKey);
     }
+
+    static Mutex & getInitMutex()
+    {
+        static Mutex * pMutex = 0;
+        if( ! pMutex )
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( ! pMutex )
+            {
+                static Mutex mutex;
+                pMutex = &mutex;
+            }
+        }
+        return *pMutex;
+    }
+    Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(const Reference<XComponentContext> & xCtx) throw(Exception)
+    {
+        Reference<XInterface> xRet;
+
+        try {
+            MutexGuard guard( getInitMutex() );
+            // The javaloader is never destroyed and there can be only one!
+            // Note that the first context wins ....
+            static Reference< XInterface > *pStaticRef = 0;
+            if( pStaticRef )
+            {
+                xRet = *pStaticRef;
+            }
+            else
+            {
+                xRet = *new JavaComponentLoader(xCtx);
+                pStaticRef = new Reference< XInterface > ( xRet );
+            }
+        }
+        catch(RuntimeException & runtimeException) {
+            OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
+            osl_trace("javaloader - could not init javaloader cause of %s", message.getStr());
+        }
+
+        return xRet;
+    }
 }
 
 
+using namespace stoc_javaloader;
+
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        JavaComponentLoader_CreateInstance, loader_getImplementationName,
+        loader_getSupportedServiceNames, createSingleComponentFactory,
+        0 , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
+
 extern "C"
 {
-    SAL_DLLEXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv)   {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
+// NOTE: component_canUnload is not exported, as the library cannot be unloaded.
 
-    SAL_DLLEXPORT sal_Bool SAL_CALL component_writeInfo(XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
-        sal_Bool bRes = sal_False;
-
-        if (pRegistryKey) {
-            try {
-                OUString x = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-                x += ::loader::JavaComponentLoader::implname;
-                x += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-                Reference<XRegistryKey> xNewKey(pRegistryKey->createKey(x));
-
-                const Sequence<OUString> rSNL = ::loader::JavaComponentLoader::getSupportedServiceNames_Static();
-                const OUString * pArray = rSNL.getConstArray();
-                for (sal_Int32 nPos = rSNL.getLength(); nPos--;)
-                    xNewKey->createKey(pArray[nPos]);
-
-                bRes = sal_True;
-            }
-            catch (InvalidRegistryException &) {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-            }
-        }
-
-        return bRes;
-    }
-
-    SAL_DLLEXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
-        void * pRet = 0;
-
-
-        if (pServiceManager && ::loader::JavaComponentLoader::implname.equals(OUString::createFromAscii(pImplName)))
-        {
-            Reference<XSingleServiceFactory> xFactory(createOneInstanceFactory(pServiceManager,
-                                                                               OUString::createFromAscii(pImplName),
-                                                                               ::loader::JavaComponentLoader::CreateInstance,
-                                                                               ::loader::JavaComponentLoader::getSupportedServiceNames_Static()));
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-
-        return pRet;
-    }
+//==================================================================================================
+void SAL_CALL component_getImplementationEnvironment(
+    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
+}
+//==================================================================================================
+void * SAL_CALL component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+{
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
+}
 }

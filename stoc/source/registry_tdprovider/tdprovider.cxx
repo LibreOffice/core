@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:34:44 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +100,42 @@
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 
-
 namespace stoc_rdbtdp
 {
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > rdbtdp_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString rdbtdp_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 typedef ::std::list< Reference< XRegistryKey > > RegistryKeyList;
-
-//--------------------------------------------------------------------------------------------------
-inline static Sequence< OUString > getSupportedServiceNames()
-{
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
-    return Sequence< OUString >( &aName, 1 );
-}
 
 struct MutexHolder
 {
@@ -149,6 +173,7 @@ ProviderImpl::ProviderImpl( const Reference< XComponentContext > & xContext )
     : WeakComponentImplHelper2< XServiceInfo, XHierarchicalNameAccess >( _aComponentMutex )
     , _xContext( xContext )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xContext->getValueByName(
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get single instance \"TypeDescriptionManager\" from context!" );
@@ -176,7 +201,9 @@ ProviderImpl::ProviderImpl( const Reference< XComponentContext > & xContext )
 //__________________________________________________________________________________________________
 ProviderImpl::~ProviderImpl()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
+
 //__________________________________________________________________________________________________
 void ProviderImpl::disposing()
 {
@@ -196,7 +223,7 @@ void ProviderImpl::disposing()
 OUString ProviderImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return rdbtdp_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool ProviderImpl::supportsService( const OUString & rServiceName )
@@ -215,7 +242,7 @@ sal_Bool ProviderImpl::supportsService( const OUString & rServiceName )
 Sequence< OUString > ProviderImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return stoc_rdbtdp::getSupportedServiceNames();
+    return rdbtdp_getSupportedServiceNames();
 }
 
 // XHierarchicalNameAccess
@@ -375,10 +402,25 @@ static Reference< XInterface > SAL_CALL ProviderImpl_create(
 //##################################################################################################
 //##################################################################################################
 //##################################################################################################
+using namespace stoc_rdbtdp;
 
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        ProviderImpl_create, rdbtdp_getImplementationName,
+        rdbtdp_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -389,52 +431,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL = stoc_rdbtdp::getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-            {
-                xNewKey->createKey( pArray[nPos] );
-            }
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XInterface > xFactory( createSingleComponentFactory(
-            stoc_rdbtdp::ProviderImpl_create,
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
-            stoc_rdbtdp::getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
-

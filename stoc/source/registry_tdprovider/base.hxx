@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-16 08:02:28 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #include <vector>
 
@@ -100,7 +103,7 @@ using namespace com::sun::star::reflection;
 
 namespace stoc_rdbtdp
 {
-
+extern rtl_StandardModuleCount g_moduleCount;
 //--------------------------------------------------------------------------------------------------
 inline sal_Int32 getRTValueAsInt32( const RTConstValue & rVal )
 {
@@ -183,7 +186,10 @@ public:
     TypeDescriptionImpl( TypeClass eTypeClass, const OUString & rName )
         : _eTypeClass( eTypeClass )
         , _aName( rName )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    virtual ~TypeDescriptionImpl();
 
     // XTypeDescription
     virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
@@ -250,7 +256,9 @@ public:
         , _aBaseType( rBaseName )
         , _pMembers( 0 )
         , _pMemberNames( 0 )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
     virtual ~CompoundTypeDescriptionImpl();
 
     // XTypeDescription
@@ -299,7 +307,9 @@ public:
         , _pMemberDiscriminants( 0 )
         , _pMembers( 0 )
         , _pMemberNames( 0 )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
     virtual ~UnionTypeDescriptionImpl();
 
     // XTypeDescription
@@ -338,7 +348,9 @@ public:
         , _aBytes( rBytes )
         , _pEnumNames( 0 )
         , _pEnumValues( 0 )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
     virtual ~EnumTypeDescriptionImpl();
 
     // XTypeDescription
@@ -367,7 +379,10 @@ public:
         : _xTDMgr( xTDMgr )
         , _aName( rName )
         , _aRefName( rRefName )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    virtual ~TypedefTypeDescriptionImpl();
 
     // XTypeDescription
     virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);

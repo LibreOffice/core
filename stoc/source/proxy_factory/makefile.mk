@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:18:57 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SLOFILES= \
         $(SLO)$/proxyfac.obj
 
 SHL1TARGET=$(TARGET)
+SHL1VERSIONMAP=$(TARGET).map
 
 SHL1STDLIBS= \
     $(CPPULIB)		\

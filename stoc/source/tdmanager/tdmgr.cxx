@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 11:31:37 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #include "lrucache.hxx"
 
@@ -115,10 +118,37 @@ static const sal_Int32 CACHE_SIZE = 512;
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeDescriptionManager"
 
 //--------------------------------------------------------------------------------------------------
-inline static Sequence< OUString > getSupportedServiceNames()
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > tdmgr_getSupportedServiceNames()
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
-    return Sequence< OUString >( &aName, 1 );
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString tdmgr_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
 }
 
 typedef vector< Reference< XHierarchicalNameAccess > > ProviderVector;
@@ -134,7 +164,10 @@ class EventListenerImpl : public ImplHelper1< XEventListener >
 public:
     EventListenerImpl( ManagerImpl * pMgr )
         : _pMgr( pMgr )
-        {}
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    virtual ~EventListenerImpl();
 
     // lifetime delegated to manager
     virtual void SAL_CALL acquire() throw();
@@ -143,6 +176,11 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const EventObject & rEvt ) throw(::com::sun::star::uno::RuntimeException);
 };
+
+EventListenerImpl::~EventListenerImpl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
 //==================================================================================================
 class ManagerImpl
@@ -281,12 +319,14 @@ ManagerImpl::ManagerImpl(
     , _aElements( nCacheSize )
     , _bProviderInit( sal_False )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 ManagerImpl::~ManagerImpl()
 {
     OSL_ENSURE( _aProviders.size() == 0, "### still providers left!" );
     OSL_TRACE( "> TypeDescriptionManager shut down. <\n" );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void ManagerImpl::disposing()
@@ -295,6 +335,7 @@ void ManagerImpl::disposing()
     _bCaching = sal_False;
     _aElements.clear();
     _xContext.clear();
+    _aProviders.clear();
 }
 //__________________________________________________________________________________________________
 inline void ManagerImpl::initProviders()
@@ -366,7 +407,7 @@ inline void ManagerImpl::initProviders()
 OUString ManagerImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return tdmgr_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool ManagerImpl::supportsService( const OUString & rServiceName )
@@ -385,7 +426,7 @@ sal_Bool ManagerImpl::supportsService( const OUString & rServiceName )
 Sequence< OUString > ManagerImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return stoc_tdmgr::getSupportedServiceNames();
+    return tdmgr_getSupportedServiceNames();
 }
 
 // XElementAccess
@@ -851,14 +892,28 @@ static Reference< XInterface > SAL_CALL ManagerImpl_create(
 //##################################################################################################
 //##################################################################################################
 //##################################################################################################
+using namespace stoc_tdmgr;
 
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        ManagerImpl_create, tdmgr_getImplementationName,
+        tdmgr_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
-typedef struct _uno_Environment uno_Environment;
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -866,52 +921,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL = stoc_tdmgr::getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-            {
-                xNewKey->createKey( pArray[nPos] );
-            }
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( 0, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    sal_Char const * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (0 == ::rtl_str_compare( pImplName, IMPLNAME ))
-    {
-        Reference< XSingleComponentFactory > xFactory( createSingleComponentFactory(
-            stoc_tdmgr::ManagerImpl_create,
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
-            stoc_tdmgr::getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:34:20 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
@@ -111,11 +114,37 @@ using namespace com::sun::star::lang;
 namespace stoc_invadp
 {
 
-//--------------------------------------------------------------------------------------------------
-static inline Sequence< OUString > getSupportedServiceNames()
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > invadp_getSupportedServiceNames()
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME ) );
-    return Sequence< OUString >( &aName, 1 );
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString invadp_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
 }
 
 //==================================================================================================
@@ -127,6 +156,7 @@ class FactoryImpl
 
 public:
     FactoryImpl();
+    virtual ~FactoryImpl();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
@@ -608,6 +638,7 @@ inline AdapterImpl::~AdapterImpl()
 //__________________________________________________________________________________________________
 FactoryImpl::FactoryImpl()
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
     OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
 
@@ -616,6 +647,10 @@ FactoryImpl::FactoryImpl()
     OSL_ENSURE( _aUno2Cpp.is() && _aCpp2Uno.is(), "### no uno / c++ mappings!" );
 }
 
+FactoryImpl::~FactoryImpl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 // XInvocationAdapterFactory
 //__________________________________________________________________________________________________
 Reference< XInterface > FactoryImpl::createAdapter(
@@ -652,7 +687,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
 OUString FactoryImpl::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return invadp_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
@@ -671,15 +706,27 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return stoc_invadp::getSupportedServiceNames();
+    return invadp_getSupportedServiceNames();
 }
 
 //==================================================================================================
 static Reference< XInterface > SAL_CALL FactoryImpl_create(
-    const Reference< XMultiServiceFactory > & xMgr )
+    const Reference< XComponentContext > & xMgr )
     throw (Exception)
 {
-    return Reference< XInterface >( *new FactoryImpl() );
+    Reference< XInterface > rRet;
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        static WeakReference < XInterface > rwInstance;
+        rRet = rwInstance;
+
+        if( ! rRet.is() )
+        {
+            rRet = (OWeakObject *)new FactoryImpl();
+            rwInstance = rRet;
+        }
+    }
+    return rRet;
 }
 
 }
@@ -688,10 +735,25 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
 //##################################################################################################
 //##################################################################################################
 //##################################################################################################
+using namespace stoc_invadp;
 
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        FactoryImpl_create, invadp_getImplementationName,
+        invadp_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -702,51 +764,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL = stoc_invadp::getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
-            stoc_invadp::FactoryImpl_create,
-            stoc_invadp::getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namingservice.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:36:04 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -108,6 +111,38 @@ using namespace com::sun::star::registry;
 
 namespace stoc_namingservice
 {
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > ns_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString ns_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 struct equalOWString_Impl
 {
@@ -158,36 +193,28 @@ public:
 };
 
 //==================================================================================================
-static Reference<XInterface> SAL_CALL NamingService_Impl_create( const Reference<XMultiServiceFactory> & )
+static Reference<XInterface> SAL_CALL NamingService_Impl_create( const Reference<XComponentContext> & )
 {
-    static Reference<XNamingService> * pNS = 0;
-
-    if( !pNS )
-    {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-        // only one Naming Service for the hole process
-        static Reference<XNamingService> xNS = new NamingService_Impl();
-        pNS = &xNS;
-    }
-
-    return *pNS;
+    return *new NamingService_Impl();
 }
 
 //==================================================================================================
 NamingService_Impl::NamingService_Impl()
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 //==================================================================================================
 NamingService_Impl::~NamingService_Impl()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XServiceInfo
 OUString NamingService_Impl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString::createFromAscii( IMPLNAME );
+    return ns_getImplementationName();
 }
 
 // XServiceInfo
@@ -208,7 +235,7 @@ sal_Bool NamingService_Impl::supportsService( const OUString & rServiceName )
 Sequence< OUString > NamingService_Impl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return ns_getSupportedServiceNames();
 }
 
 // XServiceInfo
@@ -238,8 +265,24 @@ void NamingService_Impl::revokeObject( const OUString& Name )
 
 }
 
+using namespace stoc_namingservice;
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        NamingService_Impl_create, ns_getImplementationName,
+        ns_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
+
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -250,52 +293,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            // NamingService
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" IMPLNAME "/UNO/SERVICES" ) ) );
-
-            Sequence< OUString > & rSNL =
-                ::stoc_namingservice::NamingService_Impl::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            ::stoc_namingservice::NamingService_Impl_create,
-            ::stoc_namingservice::NamingService_Impl::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:36:16 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 #include <vector>
 
@@ -95,6 +96,38 @@ using namespace com::sun::star::registry;
 
 namespace stoc_proxyfac
 {
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > proxyfac_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString proxyfac_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 
 //--------------------------------------------------------------------------------------------------
 static inline uno_Interface * uno_queryInterface(
@@ -173,6 +206,7 @@ struct FactoryImpl : public WeakImplHelper2< XServiceInfo, XProxyFactory >
     Mapping     aCpp2Uno;
 
     FactoryImpl();
+    virtual ~FactoryImpl();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
@@ -244,6 +278,7 @@ inline ProxyRoot::ProxyRoot( FactoryImpl * pFactory_, const Reference< XInterfac
     : pFactory( pFactory_ )
     , pTarget( 0 )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     pFactory->acquire();
     pFactory->aCpp2Uno.mapInterface( (void **)&pTarget, xTarget_.get(), ::getCppuType( &xTarget_ ) );
     OSL_ENSURE( pTarget, "### mapping interface failed!" );
@@ -262,6 +297,7 @@ ProxyRoot::~ProxyRoot()
     }
     (*pTarget->release)( pTarget );
     pFactory->release();
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,12 +379,17 @@ FactoryImpl::FactoryImpl()
     : aUno2Cpp( OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
                 OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) )
     , aCpp2Uno( OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) )
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     OSL_ENSURE( aUno2Cpp.is(), "### cannot get bridge uno <-> C++!" );
-    OSL_ENSURE( aCpp2Uno.is(), "### cannot get bridge C++ <-> uno!" );
+      OSL_ENSURE( aCpp2Uno.is(), "### cannot get bridge C++ <-> uno!" );
 }
 
+FactoryImpl::~FactoryImpl()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 // XProxyFactory
 //__________________________________________________________________________________________________
 Reference< XAggregation > FactoryImpl::createProxy( const Reference< XInterface > & xTarget )
@@ -361,7 +402,7 @@ Reference< XAggregation > FactoryImpl::createProxy( const Reference< XInterface 
 OUString FactoryImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return proxyfac_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
@@ -380,14 +421,27 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return stoc_proxyfac::getSupportedServiceNames();
+    return proxyfac_getSupportedServiceNames();
 }
 
 //==================================================================================================
-static Reference< XInterface > SAL_CALL FactoryImpl_create( const Reference< XMultiServiceFactory > & xMgr )
+static Reference< XInterface > SAL_CALL FactoryImpl_create(
+    const Reference< XComponentContext > & xMgr )
     throw(::com::sun::star::uno::Exception)
 {
-    return Reference< XInterface >( *new FactoryImpl() );
+    Reference< XInterface > rRet;
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        static WeakReference < XInterface > rwInstance;
+        rRet = rwInstance;
+
+        if( ! rRet.is() )
+        {
+               rRet = (OWeakObject*)new FactoryImpl();
+              rwInstance = rRet;
+        }
+    }
+    return rRet;
 }
 
 }
@@ -397,9 +451,26 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create( const Reference< XMu
 //##################################################################################################
 //##################################################################################################
 
+
+using namespace stoc_proxyfac;
+
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        FactoryImpl_create, proxyfac_getImplementationName,
+        proxyfac_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -410,50 +481,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL = stoc_proxyfac::getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
-            stoc_proxyfac::FactoryImpl_create,
-            stoc_proxyfac::getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-15 13:13:28 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1608,8 +1608,10 @@ int __cdecl main( int argc, char * argv[] )
 #endif
 #endif
 //          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
+        fprintf(stderr, "1\n" );
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
+        fprintf(stderr, "2\n" );
         Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
@@ -1624,12 +1626,16 @@ int __cdecl main( int argc, char * argv[] )
 #endif
 #endif
 //          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
+        fprintf(stderr, "3\n" );
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
+        fprintf(stderr, "4\n" );
         Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
+        fprintf(stderr, "before test_introsp\n" );
         bSucc = test_introsp( xMgr, xRefl, xIntrosp );
+        fprintf(stderr, "after test_introsp\n" );
         //bSucc = test_corefl( xRefl );
     }
     catch (Exception & rExc)
