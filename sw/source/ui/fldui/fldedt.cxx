@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 10:26:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 10:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,15 +441,7 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if(RET_OK == pDlg->Execute())
     {
-        //CHINA001 const SfxItemSet* pSfxItemSet = aDlg.GetOutputItemSet();
-        const SfxItemSet* pSfxItemSet = pDlg->GetOutputItemSet(); //CHINA001
-        const SfxPoolItem* pItem;
-        if( pSfxItemSet && SFX_ITEM_SET == pSfxItemSet->GetItemState(
-                SID_ATTR_ADDRESS, FALSE, &pItem ) )
-        {
-            ((SvxAddressItem*)pItem)->Store();
-            pSh->UpdateFlds( *pCurFld );
-        }
+        pSh->UpdateFlds( *pCurFld );
     }
     delete pDlg; //CHINA001
     return 0;
