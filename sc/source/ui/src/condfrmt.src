@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:56:13 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 15:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 163 ) ;
+    Size = MAP_APPFONT ( 316 , 161 ) ;
     Text = "Bedingte Formatierung" ;
     Text [ ENGLISH ] = "Conditional format" ;
     Moveable = TRUE ;
@@ -74,36 +74,36 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     CheckBox CBX_COND1
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Bedingung 1" ;
-        Text [ ENGLISH ] = "Condition 1" ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text = "Bedingung ~1" ;
+        Text [ ENGLISH ] = "Condition ~1" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition 1" ;
-        Text [ italian ] = "Condizione 1" ;
-        Text [ spanish ] = "CondiciÛn 1" ;
-        Text [ french ] = "Condition 1" ;
-        Text [ dutch ] = "Voorwaarde 1" ;
-        Text [ swedish ] = "Villkor 1" ;
-        Text [ danish ] = "Betingelse 1" ;
-        Text [ portuguese_brazilian ] = "Bedingung 1" ;
-        Text [ portuguese ] = "CondiÁ„o 1" ;
-        Text[ chinese_simplified ] = "Ãıº˛ 1";
-        Text[ russian ] = "”ÒÎÓ‚ËÂ 1";
-        Text[ polish ] = "Warunek 1";
-        Text[ japanese ] = "èåè 1";
-        Text[ chinese_traditional ] = "±¯•Û 1";
-        Text[ arabic ] = "«·‘—ÿ 1";
-        Text[ greek ] = "”ıÌËﬁÍÁ 1";
-        Text[ korean ] = "¡∂∞« 1";
-        Text[ turkish ] = "Ko˛ul 1";
+        Text [ english_us ] = "Condition ~1" ;
+        Text [ italian ] = "Condizione ~1" ;
+        Text [ spanish ] = "CondiciÛn ~1" ;
+        Text [ french ] = "Condition ~1" ;
+        Text [ dutch ] = "Voorwaarde ~1" ;
+        Text [ swedish ] = "Villkor ~1" ;
+        Text [ danish ] = "Betingelse ~1" ;
+        Text [ portuguese_brazilian ] = "Bedingung ~1" ;
+        Text [ portuguese ] = "CondiÁ„o ~1" ;
+        Text[ chinese_simplified ] = "Ãıº˛ ~1";
+        Text[ russian ] = "”ÒÎÓ‚ËÂ ~1";
+        Text[ polish ] = "Warunek ~1";
+        Text[ japanese ] = "èåè ~1";
+        Text[ chinese_traditional ] = "±¯•Û ~1";
+        Text[ arabic ] = "«·‘—ÿ ~1";
+        Text[ greek ] = "”ıÌËﬁÍÁ ~1";
+        Text[ korean ] = "¡∂∞« ~1";
+        Text[ turkish ] = "Ko˛ul ~1";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CondiciÛn 1";
-        Text[ finnish ] = "Ehto 1";
+        Text[ catalan ] = "CondiciÛn ~1";
+        Text[ finnish ] = "Ehto ~1";
     };
     ListBox LB_COND1_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -226,7 +226,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     ListBox LB_COND1_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 18 ) ;
+        Pos = MAP_APPFONT ( 58 , 19 ) ;
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -478,7 +478,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Edit EDT_COND1_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122 , 18 ) ;
+        Pos = MAP_APPFONT ( 124 , 19 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
         TabStop = TRUE ;
     };
@@ -486,7 +486,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 165 , 18 ) ;
+        Pos = MAP_APPFONT ( 167 , 19 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -498,7 +498,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -514,8 +514,9 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     FixedText FT_COND1_AND
     {
-        Pos = MAP_APPFONT ( 182 , 20 ) ;
-        Size = MAP_APPFONT ( 16 , 10 ) ;
+        Pos = MAP_APPFONT ( 181 , 21 ) ;
+        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Center = TRUE ;
         Text = "und" ;
         Text [ ENGLISH ] = "and" ;
         Text [ english_us ] = "and" ;
@@ -543,7 +544,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Edit EDT_COND1_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 200 , 18 ) ;
+        Pos = MAP_APPFONT ( 199 , 19 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
         TabStop = TRUE ;
     };
@@ -551,7 +552,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 243 , 18 ) ;
+        Pos = MAP_APPFONT ( 242 , 19 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -563,7 +564,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -579,10 +580,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     FixedText FT_COND1_TEMPLATE
     {
-        Pos = MAP_APPFONT ( 12 , 36 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Zellvorlage" ;
-        Text [ ENGLISH ] = "Cell template" ;
+        Pos = MAP_APPFONT ( 6 , 37 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Right = TRUE ;
+        Text = "~Zellvorlage" ;
+        Text [ ENGLISH ] = "~Cell style" ;
         Text [ english_us ] = "Cell Style" ;
         Text [ italian ] = "Modello di cella" ;
         Text [ spanish ] = "Estilo de celda" ;
@@ -608,44 +610,49 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     ListBox LB_COND1_TEMPLATE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 33 ) ;
+        Pos = MAP_APPFONT ( 58 , 35 ) ;
         Size = MAP_APPFONT ( 62 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    CheckBox CBX_COND2
+    FixedLine FL_SEP1
     {
         Pos = MAP_APPFONT ( 6 , 51 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Bedingung 2" ;
-        Text [ ENGLISH ] = "Condition 2" ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
+    CheckBox CBX_COND2
+    {
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text = "Bedingung ~2" ;
+        Text [ ENGLISH ] = "Condition ~2" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition 2" ;
-        Text [ italian ] = "Condizione 2" ;
-        Text [ spanish ] = "CondiciÛn 2" ;
-        Text [ french ] = "Condition 2" ;
-        Text [ dutch ] = "Voorwaarde 2" ;
-        Text [ swedish ] = "Villkor 2" ;
-        Text [ danish ] = "Betingelse 2" ;
-        Text [ portuguese_brazilian ] = "Bedingung 2" ;
-        Text [ portuguese ] = "CondiÁ„o 2" ;
-        Text[ chinese_simplified ] = "Ãıº˛ 2";
-        Text[ russian ] = "”ÒÎÓ‚ËÂ 2";
-        Text[ polish ] = "Warunek 2";
-        Text[ japanese ] = "èåè 2";
-        Text[ chinese_traditional ] = "±¯•Û 2";
-        Text[ arabic ] = "«·‘—ÿ 2";
-        Text[ greek ] = "”ıÌËﬁÍÁ 2";
-        Text[ korean ] = "¡∂∞« 2";
-        Text[ turkish ] = "Ko˛ul 2";
+        Text [ english_us ] = "Condition ~2" ;
+        Text [ italian ] = "Condizione ~2" ;
+        Text [ spanish ] = "CondiciÛn ~2" ;
+        Text [ french ] = "Condition ~2" ;
+        Text [ dutch ] = "Voorwaarde ~2" ;
+        Text [ swedish ] = "Villkor ~2" ;
+        Text [ danish ] = "Betingelse ~2" ;
+        Text [ portuguese_brazilian ] = "Bedingung ~2" ;
+        Text [ portuguese ] = "CondiÁ„o ~2" ;
+        Text[ chinese_simplified ] = "Ãıº˛ ~2";
+        Text[ russian ] = "”ÒÎÓ‚ËÂ ~2";
+        Text[ polish ] = "Warunek ~2";
+        Text[ japanese ] = "èåè ~2";
+        Text[ chinese_traditional ] = "±¯•Û ~2";
+        Text[ arabic ] = "«·‘—ÿ ~2";
+        Text[ greek ] = "”ıÌËﬁÍÁ ~2";
+        Text[ korean ] = "¡∂∞« ~2";
+        Text[ turkish ] = "Ko˛ul ~2";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CondiciÛn 2";
-        Text[ finnish ] = "Ehto 2";
+        Text[ catalan ] = "CondiciÛn ~2";
+        Text[ finnish ] = "Ehto ~2";
     };
     ListBox LB_COND2_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        Pos = MAP_APPFONT ( 6 , 73 ) ;
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -768,7 +775,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     ListBox LB_COND2_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 63 ) ;
+        Pos = MAP_APPFONT ( 58 , 73 ) ;
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1020,7 +1027,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Edit EDT_COND2_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122 , 63 ) ;
+        Pos = MAP_APPFONT ( 124 , 73 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
         TabStop = TRUE ;
     };
@@ -1028,7 +1035,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 165 , 63 ) ;
+        Pos = MAP_APPFONT ( 167 , 73 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -1056,8 +1063,9 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     FixedText FT_COND2_AND
     {
-        Pos = MAP_APPFONT ( 182 , 65 ) ;
-        Size = MAP_APPFONT ( 16 , 10 ) ;
+        Pos = MAP_APPFONT ( 181 , 75 ) ;
+        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Center = TRUE ;
         Text = "und" ;
         Text [ ENGLISH ] = "and" ;
         Text [ english_us ] = "and" ;
@@ -1085,7 +1093,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Edit EDT_COND2_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 200 , 63 ) ;
+        Pos = MAP_APPFONT ( 199 , 73 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
         TabStop = TRUE ;
     };
@@ -1093,7 +1101,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 243 , 63 ) ;
+        Pos = MAP_APPFONT ( 242 , 73 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -1105,7 +1113,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -1121,10 +1129,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     FixedText FT_COND2_TEMPLATE
     {
-        Pos = MAP_APPFONT ( 12 , 81 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Zellvorlage" ;
-        Text [ ENGLISH ] = "Cell template" ;
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Right = TRUE ;
+        Text = "Z~ellvorlage" ;
+        Text [ ENGLISH ] = "C~ell style" ;
         Text [ english_us ] = "Cell Style" ;
         Text [ italian ] = "Modello di cella" ;
         Text [ spanish ] = "Estilo de celda" ;
@@ -1150,44 +1159,49 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     ListBox LB_COND2_TEMPLATE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 78 ) ;
+        Pos = MAP_APPFONT ( 58 , 89 ) ;
         Size = MAP_APPFONT ( 62 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
+    FixedLine FL_SEP2
+    {
+        Pos = MAP_APPFONT ( 6 , 105 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
     CheckBox CBX_COND3
     {
-        Pos = MAP_APPFONT ( 6 , 96 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Bedingung 3" ;
-        Text [ ENGLISH ] = "Condition 3" ;
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text = "Bedingung ~3" ;
+        Text [ ENGLISH ] = "Condition ~3" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition 3" ;
-        Text [ italian ] = "Condizione 3" ;
-        Text [ spanish ] = "CondiciÛn 3" ;
-        Text [ french ] = "Condition 3" ;
-        Text [ dutch ] = "Voorwaarde 3" ;
-        Text [ swedish ] = "Villkor 3" ;
-        Text [ danish ] = "Betingelse 3" ;
-        Text [ portuguese_brazilian ] = "Bedingung 3" ;
-        Text [ portuguese ] = "CondiÁ„o 3" ;
-        Text[ chinese_simplified ] = "Ãıº˛ 3";
-        Text[ russian ] = "”ÒÎÓ‚ËÂ 3";
-        Text[ polish ] = "Warunek 3";
-        Text[ japanese ] = "èåè 3";
-        Text[ chinese_traditional ] = "±¯•Û 3";
-        Text[ arabic ] = "«·‘—ÿ 3";
-        Text[ greek ] = "”ıÌËﬁÍÁ 3";
-        Text[ korean ] = "¡∂∞« 3";
-        Text[ turkish ] = "Ko˛ul 3";
+        Text [ english_us ] = "Condition ~3" ;
+        Text [ italian ] = "Condizione ~3" ;
+        Text [ spanish ] = "CondiciÛn ~3" ;
+        Text [ french ] = "Condition ~3" ;
+        Text [ dutch ] = "Voorwaarde ~3" ;
+        Text [ swedish ] = "Villkor ~3" ;
+        Text [ danish ] = "Betingelse ~3" ;
+        Text [ portuguese_brazilian ] = "Bedingung ~3" ;
+        Text [ portuguese ] = "CondiÁ„o ~3" ;
+        Text[ chinese_simplified ] = "Ãıº˛ ~3";
+        Text[ russian ] = "”ÒÎÓ‚ËÂ ~3";
+        Text[ polish ] = "Warunek ~3";
+        Text[ japanese ] = "èåè ~3";
+        Text[ chinese_traditional ] = "±¯•Û ~3";
+        Text[ arabic ] = "«·‘—ÿ ~3";
+        Text[ greek ] = "”ıÌËﬁÍÁ ~3";
+        Text[ korean ] = "¡∂∞« ~3";
+        Text[ turkish ] = "Ko˛ul ~3";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CondiciÛn 3";
-        Text[ finnish ] = "Ehto 3";
+        Text[ catalan ] = "CondiciÛn ~3";
+        Text[ finnish ] = "Ehto ~3";
     };
     ListBox LB_COND3_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1310,7 +1324,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     ListBox LB_COND3_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 108 ) ;
+        Pos = MAP_APPFONT ( 58 , 127 ) ;
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1562,7 +1576,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Edit EDT_COND3_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122 , 108 ) ;
+        Pos = MAP_APPFONT ( 124 , 127 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
         TabStop = TRUE ;
     };
@@ -1570,7 +1584,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 165 , 108 ) ;
+        Pos = MAP_APPFONT ( 167 , 127 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -1598,8 +1612,9 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     FixedText FT_COND3_AND
     {
-        Pos = MAP_APPFONT ( 182 , 110 ) ;
-        Size = MAP_APPFONT ( 16 , 10 ) ;
+        Pos = MAP_APPFONT ( 181 , 129 ) ;
+        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Center = TRUE ;
         Text = "und" ;
         Text [ ENGLISH ] = "and" ;
         Text [ english_us ] = "and" ;
@@ -1627,7 +1642,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Edit EDT_COND3_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 200 , 108 ) ;
+        Pos = MAP_APPFONT ( 199 , 127 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
         TabStop = TRUE ;
     };
@@ -1635,7 +1650,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 243 , 108 ) ;
+        Pos = MAP_APPFONT ( 242 , 127 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -1663,10 +1678,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     FixedText FT_COND3_TEMPLATE
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "Zellvorlage" ;
-        Text [ ENGLISH ] = "Cell template" ;
+        Pos = MAP_APPFONT ( 6 , 145 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Right = TRUE ;
+        Text = "Ze~llvorlage" ;
+        Text [ ENGLISH ] = "Ce~ll style" ;
         Text [ english_us ] = "Cell Style" ;
         Text [ italian ] = "Modello di cella" ;
         Text [ spanish ] = "Estilo de celda" ;
@@ -1692,27 +1708,27 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     ListBox LB_COND3_TEMPLATE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 123 ) ;
+        Pos = MAP_APPFONT ( 58 , 143 ) ;
         Size = MAP_APPFONT ( 62 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 151 , 143 ) ;
+        Pos = MAP_APPFONT ( 260 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 205 , 143 ) ;
+        Pos = MAP_APPFONT ( 260 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 89 , 143 ) ;
+        Pos = MAP_APPFONT ( 260 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };

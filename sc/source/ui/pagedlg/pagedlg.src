@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:51:45 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 15:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 ModelessDialog RID_SCDLG_AREAS
 {
     HelpId = HID_SCPAGE_AREAS ;
-    Size = MAP_APPFONT ( 316 , 123 ) ;
+    Size = MAP_APPFONT ( 316 , 90 ) ;
     OutputSize = TRUE ;
     Moveable = TRUE ;
      //Closeable = TRUE;    // Dieser Dialog hat einen Cancel-Button !
@@ -92,12 +92,12 @@ ModelessDialog RID_SCDLG_AREAS
         Pos = MAP_APPFONT ( 260 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    GroupBox GB_PRINTAREA
+    FixedLine FL_PRINTAREA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 34 ) ;
-        Text = "Druckbereich" ;
-        Text [ ENGLISH ] = "Print area" ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "~Druckbereich" ;
+        Text [ ENGLISH ] = "~Print area" ;
         Text [ NORWEGIAN ] = "Print area" ;
         Text [ DANISH ] = "UdskriftsomrÂde" ;
         Text [ ENGLISH_US ] = "Print range" ;
@@ -123,7 +123,7 @@ ModelessDialog RID_SCDLG_AREAS
     ListBox LB_PRINTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
         DropDown = TRUE ;
         StringList =
@@ -274,14 +274,14 @@ ModelessDialog RID_SCDLG_AREAS
     Edit ED_PRINTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 17 ) ;
-        Size = MAP_APPFONT ( 126 , 12 ) ;
+        Pos = MAP_APPFONT ( 108 , 14 ) ;
+        Size = MAP_APPFONT ( 127 , 12 ) ;
     };
     ImageButton RB_PRINTAREA
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 236 , 17 ) ;
+        Pos = MAP_APPFONT ( 239 , 14 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -293,7 +293,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -305,12 +305,12 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ catalan ] = "Reducir";
         QuickHelpText[ finnish ] = "Pienenn‰!";
     };
-    GroupBox GB_REPEATROW
+    FixedLine FL_REPEATROW
     {
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 248 , 34 ) ;
-        Text = "Wiederholungszeile" ;
-        Text [ ENGLISH ] = "Row to repeat at top" ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Wiederholungs~zeile" ;
+        Text [ ENGLISH ] = "~Row to repeat at top" ;
         Text [ NORWEGIAN ] = "Row to repeat at top" ;
         Text [ DANISH ] = "GentagelsesrÊkke" ;
         Text [ ENGLISH_US ] = "Rows to repeat" ;
@@ -336,7 +336,7 @@ ModelessDialog RID_SCDLG_AREAS
     ListBox LB_REPEATROW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 57 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
         DropDown = TRUE ;
         StringList =
@@ -463,14 +463,14 @@ ModelessDialog RID_SCDLG_AREAS
     Edit ED_REPEATROW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 57 ) ;
-        Size = MAP_APPFONT ( 126 , 12 ) ;
+        Pos = MAP_APPFONT ( 108 , 43 ) ;
+        Size = MAP_APPFONT ( 127 , 12 ) ;
     };
     ImageButton RB_REPEATROW
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 236 , 57 ) ;
+        Pos = MAP_APPFONT ( 239 , 43 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -482,7 +482,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -494,12 +494,12 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ catalan ] = "Reducir";
         QuickHelpText[ finnish ] = "Pienenn‰!";
     };
-    GroupBox GB_REPEATCOL
+    FixedLine FL_REPEATCOL
     {
-        Pos = MAP_APPFONT ( 6 , 83 ) ;
-        Size = MAP_APPFONT ( 248 , 34 ) ;
-        Text = "Wiederholungsspalte" ;
-        Text [ ENGLISH ] = "Columns to repeat at left" ;
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Wiederholungs~spalte" ;
+        Text [ ENGLISH ] = "~Columns to repeat at left" ;
         Text [ NORWEGIAN ] = "Columns to repeat at left" ;
         Text [ DANISH ] = "Gentagelseskolonne" ;
         Text [ ENGLISH_US ] = "Repeat column" ;
@@ -525,7 +525,7 @@ ModelessDialog RID_SCDLG_AREAS
     ListBox LB_REPEATCOL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
         DropDown = TRUE ;
         StringList =
@@ -652,14 +652,14 @@ ModelessDialog RID_SCDLG_AREAS
     Edit ED_REPEATCOL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 97 ) ;
-        Size = MAP_APPFONT ( 126 , 12 ) ;
+        Pos = MAP_APPFONT ( 108 , 72 ) ;
+        Size = MAP_APPFONT ( 127 , 12 ) ;
     };
     ImageButton RB_REPEATCOL
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 236 , 97 ) ;
+        Pos = MAP_APPFONT ( 239 , 72 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -671,7 +671,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";

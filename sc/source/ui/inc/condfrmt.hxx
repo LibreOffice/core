@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 15:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ private:
     ScRefButton         aRbCond12;
     FixedText           aFtCond1Template;
     ListBox             aLbCond1Template;
+    FixedLine           aFlSep1;
 
     CheckBox            aCbxCond2;
     ListBox             aLbCond21;
@@ -121,6 +122,7 @@ private:
     ScRefButton         aRbCond22;
     FixedText           aFtCond2Template;
     ListBox             aLbCond2Template;
+    FixedLine           aFlSep2;
 
     CheckBox            aCbxCond3;
     ListBox             aLbCond31;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 15:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef SC_ANYREFDG_HXX
@@ -98,17 +98,17 @@ public:
 
 private:
     ListBox         aLbPrintArea;
-    GroupBox        aGbPrintArea;
+    FixedLine       aFlPrintArea;
     ScRefEdit       aEdPrintArea;
     ScRefButton     aRbPrintArea;
 
     ListBox         aLbRepeatRow;
-    GroupBox        aGbRepeatRow;
+    FixedLine       aFlRepeatRow;
     ScRefEdit       aEdRepeatRow;
     ScRefButton     aRbRepeatRow;
 
     ListBox         aLbRepeatCol;
-    GroupBox        aGbRepeatCol;
+    FixedLine       aFlRepeatCol;
     ScRefEdit       aEdRepeatCol;
     ScRefButton     aRbRepeatCol;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:46:30 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 15:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aRbCond12           ( this, ScResId( RB_COND1_2 ), &aEdtCond12 ),
         aFtCond1Template    ( this, ScResId( FT_COND1_TEMPLATE ) ),
         aLbCond1Template    ( this, ScResId( LB_COND1_TEMPLATE ) ),
+        aFlSep1             ( this, ScResId( FL_SEP1 ) ),
 
         aCbxCond2           ( this, ScResId( CBX_COND2 ) ),
         aLbCond21           ( this, ScResId( LB_COND2_1 ) ),
@@ -120,6 +121,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aRbCond22           ( this, ScResId( RB_COND2_2 ), &aEdtCond22 ),
         aFtCond2Template    ( this, ScResId( FT_COND2_TEMPLATE ) ),
         aLbCond2Template    ( this, ScResId( LB_COND2_TEMPLATE ) ),
+        aFlSep2             ( this, ScResId( FL_SEP2 ) ),
 
         aCbxCond3           ( this, ScResId( CBX_COND3 ) ),
         aLbCond31           ( this, ScResId( LB_COND3_1 ) ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:56:18 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 15:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,17 +118,17 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
     :   ScAnyRefDlg     ( pB, pCW, pParent, RID_SCDLG_AREAS),
         //
         aLbPrintArea    ( this, ScResId( LB_PRINTAREA ) ),
-        aGbPrintArea    ( this, ScResId( GB_PRINTAREA ) ),
+        aFlPrintArea    ( this, ScResId( FL_PRINTAREA ) ),
         aEdPrintArea    ( this, ScResId( ED_PRINTAREA ) ),
         aRbPrintArea    ( this, ScResId( RB_PRINTAREA ), &aEdPrintArea ),
         //
         aLbRepeatRow    ( this, ScResId( LB_REPEATROW ) ),
-        aGbRepeatRow    ( this, ScResId( GB_REPEATROW ) ),
+        aFlRepeatRow    ( this, ScResId( FL_REPEATROW ) ),
         aEdRepeatRow    ( this, ScResId( ED_REPEATROW ) ),
         aRbRepeatRow    ( this, ScResId( RB_REPEATROW ), &aEdRepeatRow ),
         //
         aLbRepeatCol    ( this, ScResId( LB_REPEATCOL ) ),
-        aGbRepeatCol    ( this, ScResId( GB_REPEATCOL ) ),
+        aFlRepeatCol    ( this, ScResId( FL_REPEATCOL ) ),
         aEdRepeatCol    ( this, ScResId( ED_REPEATCOL ) ),
         aRbRepeatCol    ( this, ScResId( RB_REPEATCOL ), &aEdRepeatCol ),
         //
