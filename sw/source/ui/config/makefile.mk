@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:19:47 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:08:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,12 @@ LIBTARGET=NO
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
+IMGLST_SRS=$(SRS)$/config.srs
+BMP_IN=$(PRJ)$/win/imglst
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
+        mailconfigpage.src \
         optdlg.src \
         optload.src \
         optcomp.src \
@@ -95,6 +98,9 @@ SLOFILES =	\
         $(SLO)$/usrpref.obj \
         $(SLO)$/viewopt.obj \
         $(SLO)$/swlinguconfig.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/mailconfigpage.obj 
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
