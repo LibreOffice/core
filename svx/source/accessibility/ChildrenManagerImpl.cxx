@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 11:57:07 $
+ *  last change: $Author: af $ $Date: 2002-05-17 16:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,12 @@
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
 #include "AccessibleShapeInfo.hxx"
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBLE_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
 
 using namespace ::rtl;
@@ -654,6 +660,75 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
     return bResult;
 }
 
+
+
+
+/** Update the selection state of all children.
+    Iterate over all descriptors of visible accessible shapes and look them
+    up in the selection.
+*/
+void ChildrenManagerImpl::UpdateSelection (void)
+{
+
+    Reference<view::XSelectionSupplier> xSelectionSupplier (maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+    if ( ! xSelectionSupplier.is())
+        return;
+
+    // Try to cast the selection both to a multi selection and to a single
+    // selection.
+    Reference<container::XIndexAccess> xSelectedShapeAccess (
+        xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+    Reference<drawing::XShape> xSelectedShape (
+        xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+
+    // Remember the current and new focused shape.
+    AccessibleShape* pCurrentlyFocusedShape = NULL;
+    AccessibleShape* pNewFocusedShape = NULL;
+
+    ChildDescriptorListType::iterator I;
+    for (I=maVisibleChildren.begin(); I!=maVisibleChildren.end(); I++)
+    {
+        AccessibleShape* pAccessibleShape = I->GetAccessibleShape();
+        if (I->mxAccessibleShape.is() && I->mxShape.is() && pAccessibleShape!=NULL)
+        {
+            bool bShapeIsSelected = false;
+
+            // Look up the shape in the selection.
+            if (xSelectedShape.is())
+            {
+                bShapeIsSelected = (I->mxShape == xSelectedShape);
+                if (bShapeIsSelected)
+                    pNewFocusedShape = pAccessibleShape;
+            }
+            else if (xSelectedShapeAccess.is())
+            {
+                for (sal_Int32 i=0,nCount=xSelectedShapeAccess->getCount(); i<nCount&&!bShapeIsSelected; i++)
+                    if (xSelectedShapeAccess->getByIndex(i) == I->mxShape)
+                    {
+                        bShapeIsSelected = true;
+                        if (nCount == 1)
+                            pNewFocusedShape = pAccessibleShape;
+                    }
+            }
+
+            // Set or reset the SELECTED state.
+            if (bShapeIsSelected)
+                pAccessibleShape->SetState (AccessibleStateType::SELECTED);
+            else
+                pAccessibleShape->ResetState (AccessibleStateType::SELECTED);
+
+            // Does the shape have the current selection?
+            if (pAccessibleShape->GetState (AccessibleStateType::FOCUSED))
+                pCurrentlyFocusedShape = pAccessibleShape;
+        }
+    }
+
+    // Now reset and then set the FOCUSED state.
+    if (pCurrentlyFocusedShape != NULL)
+        pCurrentlyFocusedShape->ResetState (AccessibleStateType::FOCUSED);
+    if (pNewFocusedShape != NULL)
+        pNewFocusedShape->ResetState (AccessibleStateType::FOCUSED);
+}
 
 
 

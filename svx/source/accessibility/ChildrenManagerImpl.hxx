@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-05-13 12:25:57 $
+ *  last change: $Author: af $ $Date: 2002-05-17 16:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,11 @@ public:
     */
     void SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
+    /** Update the SELECTED state of all visible children according to the
+        given selection.  This includes setting <em>and</em> resetting the
+        state.
+    */
+    void UpdateSelection (void);
 
     //=====  lang::XEventListener  ============================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-04-29 12:50:15 $
+ *  last change: $Author: af $ $Date: 2002-05-17 16:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
+using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
@@ -79,8 +80,8 @@ namespace accessibility {
 //=====  AccessibleChildrenManager  ===========================================
 
 ChildrenManager::ChildrenManager (
-    const uno::Reference<XAccessible>& rxParent,
-    const uno::Reference<drawing::XShapes>& rxShapeList,
+    const Reference<XAccessible>& rxParent,
+    const Reference<drawing::XShapes>& rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
     : mpImpl (NULL)
@@ -116,9 +117,7 @@ long ChildrenManager::GetChildCount (void) const throw ()
 
 
 
-::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>
-    ChildrenManager::GetChild (long nIndex)
+Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
     OSL_ASSERT (mpImpl != NULL);
@@ -169,6 +168,15 @@ void ChildrenManager::SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo)
 {
     OSL_ASSERT (mpImpl != NULL);
     mpImpl->SetInfo (rShapeTreeInfo);
+}
+
+
+
+
+void ChildrenManager::UpdateSelection (void)
+{
+    OSL_ASSERT (mpImpl != NULL);
+    mpImpl->UpdateSelection ();
 }
 
 
