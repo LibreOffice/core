@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:42:36 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xComposerHelper;
 
     protected:
+        virtual void SAL_CALL disposing();
         virtual ~OQueryComposer();
     public:
 
