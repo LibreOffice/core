@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:27:49 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,13 +1170,17 @@ void SvXMLNumFmtElementContext::EndElement()
 
         case XML_TOK_STYLE_FRACTION:
             {
-                aNumInfo.nDecimals = 0;
-                rParent.AddNumber( aNumInfo );      // number without decimals
+                if ( aNumInfo.nInteger >= 0 )
+                {
+                    // add integer part only if min-integer-digits attribute is there
+                    aNumInfo.nDecimals = 0;
+                    rParent.AddNumber( aNumInfo );      // number without decimals
+                    rParent.AddToCode( OUString::valueOf((sal_Unicode)' ') );
+                }
 
                 //! build string and add at once
 
                 sal_Int32 i;
-                rParent.AddToCode( OUString::valueOf((sal_Unicode)' ') );
                 for (i=0; i<aNumInfo.nNumerDigits; i++)
                     rParent.AddToCode( OUString::valueOf((sal_Unicode)'?') );
                 rParent.AddToCode( OUString::valueOf((sal_Unicode)'/') );
