@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-22 14:41:08 $
+ *  last change: $Author: avy $ $Date: 2001-03-30 09:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,7 +793,8 @@ void WinMtfOutput::UpdateClipRegion()
 
 void WinMtfOutput::ImplSetNonPersistentLineColorTransparenz()
 {
-    WinMtfLineStyle aTransparentLine( Color( COL_TRANSPARENT ), TRUE );
+    Color aColor(  COL_TRANSPARENT);
+    WinMtfLineStyle aTransparentLine( aColor, TRUE );
     if ( ! ( maLatestLineStyle == aTransparentLine ) )
     {
         maLatestLineStyle = aTransparentLine;
