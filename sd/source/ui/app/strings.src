@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:31:00 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String STR_DRAW_DEFAULTTOOLBOX
     Text[ chinese_simplified ] = "Ή¤ΎίΐΈ";
     Text[ russian ] = "Οΰνελό τσνκφθι";
     Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "Μ§έΈΌ®έ Κή°";
+    Text[ japanese ] = "Μ§έΈΌ®έΚή°";
     Text[ greek ] = "Γραμμή λειτουργιών";
     Text[ korean ] = "±β΄Ι Έπΐ½";
     Text[ chinese_traditional ] = "¤u¨γ¦C";
@@ -126,7 +126,7 @@ String STR_GRAPHIC_TOOLBOX
     Text[ chinese_simplified ] = "»ζΝΌΉ¤ΎίΐΈ/ΝΌΠΞ";
     Text[ russian ] = "Οΰνελό θνρςπσμενςξβ πθρξβΰνθÿ/Γπΰτθκΰ";
     Text[ polish ] = "Pasek narzκdzi rysunkowych/Grafika";
-    Text[ japanese ] = "}`•`‰ζΒ°ΩΚή°/ΈήΧΜ¨―Έ";
+    Text[ japanese ] = "}`•`‰ζΒ°ΩΚή°/}";
     Text[ greek ] = "Γραμμή σχεδίασης/Γραφικά";
     Text[ korean ] = "±ΧΈ®±βµµ±Έ Έπΐ½/±Χ·΅ΗΘ";
     Text[ chinese_traditional ] = "ΓΈΉΟ¤u¨γ¦C/ΉΟ§Ξ";
@@ -149,7 +149,7 @@ String RID_PLUGINTOOLBOX
     Text[ chinese_simplified ] = "Plug-In ΐΈ";
     Text[ russian ] = "Οΰνελό Plug-In";
     Text[ polish ] = "Pasek dodatkσw";
-    Text[ japanese ] = "ΜίΧΈή²έ Κή°";
+    Text[ japanese ] = "ΜίΧΈή²έΚή°";
     Text[ greek ] = "Γραμμή συνδεόμενης υπομονάδας";
     Text[ korean ] = "ΗΓ·―±ΧΐΞ Έπΐ½";
     Text[ chinese_traditional ] = "Plug-In ¦C";
@@ -174,7 +174,7 @@ String STR_SLIDE_TOOLBOX
     Text[ chinese_simplified ] = "»ΓµΖΖ¬Ή¤ΎίΐΈ";
     Text[ russian ] = "Οΰνελό θνρςπσμενςξβ ρλΰιδξβ";
     Text[ polish ] = "Pasek narzκdzi slajdowych";
-    Text[ japanese ] = "½Χ²Δή Β°ΩΚή°";
+    Text[ japanese ] = "½Χ²Δή¥Β°ΩΚή°";
     Text[ greek ] = "Γραμμή εργαλειών διαφανειών";
     Text[ korean ] = "½½¶σΐΜµε µµ±ΈΈπΐ½";
     Text[ chinese_traditional ] = "§λΌv¤ω¤u¨γ¦C";
@@ -247,7 +247,7 @@ String STR_GRAPHIC_OBJ_TOOLBOX
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσΐΈ/ΝΌΠΞ";
     Text[ russian ] = "Οΰνελό ξαϊεκςξβ πθρξβΰνθÿ/Γπΰτθκΰ";
     Text[ polish ] = "Pasek obiektσw graficznych/Grafika";
-    Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔΚή°/ΈήΧΜ¨―Έ";
+    Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔΚή°/}";
     Text[ greek ] = "Γραμμή αντικειμένων σχεδίασης/Γραφικά";
     Text[ korean ] = "±ΧΈ®±β°³ΓΌ Έπΐ½/±Χ·΅ΗΘ";
     Text[ chinese_traditional ] = "ΓΈΉΟª«¥σ¦C/ΉΟ§Ξ";
@@ -342,7 +342,7 @@ String STR_SLIDE_OBJ_TOOLBOX
     Text[ chinese_simplified ] = "»ΓµΖΖ¬¶ΤΟσΐΈ";
     Text[ russian ] = "Οΰνελό ξαϊεκςξβ ρλΰιδΰ";
     Text[ polish ] = "Pasek obiektσw slajdowych";
-    Text[ japanese ] = "½Χ²Δή µΜήΌήªΈΔΚή°";
+    Text[ japanese ] = "½Χ²Δή¥µΜήΌήªΈΔΚή°";
     Text[ greek ] = "Γραμμή αντικειμένων διαφανειών";
     Text[ korean ] = "½½¶σΐΜµε °³ΓΌ Έπΐ½";
     Text[ chinese_traditional ] = "§λΌv¤ωª«¥σ¦C";
@@ -1874,7 +1874,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύΥβΈφΟίΜυΚ½ΡωΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςεόνξ υξςθςε σδΰλθςό ύςξς ρςθλό λθνθθ?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ styl linii?";
-    Text[ japanese ] = "ό‚Μν—ή‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
+    Text[ japanese ] = "ό½ΐ²Ω‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το στυλ γραμμής;";
     Text[ korean ] = "Ό± ΐ―Ηόΐ» Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z―u­n§R°£½u±ψΌΛ¦΅΅H";
@@ -2434,7 +2434,7 @@ String STR_OUTLINE_MODE
     Text[ chinese_simplified ] = "΄σΈΩΚΣΝΌ";
     Text[ russian ] = "Βθδ ρςπσκςσπϋ";
     Text[ polish ] = "Tryb konspektu";
-    Text[ japanese ] = "±³ΔΧ²έ Σ°Δή";
+    Text[ japanese ] = "±³ΔΧ²έΣ°Δή";
     Text[ greek ] = "Προβολή διάρθρωσης";
     Text[ korean ] = "΄Ω΄ά°θ ΊΈ±β";
     Text[ chinese_traditional ] = "¤jΊυΉwΔύ";
@@ -3054,7 +3054,7 @@ String STR_AL_TITLE_VERT_OUTLINE
     Text = "Titel, vertikaler text" ;
     Text [ ENGLISH ] = "Title, vertical text" ;
     Text [ english_us ] = "Title, vertical text" ;
-    Text[ portuguese ] = "Title, vertical text";
+    Text[ portuguese ] = "Tνtulo, texto vertical";
     Text[ russian ] = "Ηΰγξλξβξκ, βεπςθκΰλόνϋι ςεκρς";
     Text[ greek ] = "Τίτλος, κατακόρυφο κείμενο";
     Text[ dutch ] = "Titel, verticale tekst";
@@ -3077,7 +3077,7 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text = "Titel, vertikaler Text, Clipart" ;
     Text [ ENGLISH ] = "Title, vertical text, clipart" ;
     Text [ english_us ] = "Title, vertical text, clipart" ;
-    Text[ portuguese ] = "Title, vertical text, clipart";
+    Text[ portuguese ] = "Tνtulo, texto vertical, clipart";
     Text[ russian ] = "Ηΰγξλξβξκ, βεπςθκΰλόνϋι ςεκρς, κΰπςθνκΰ";
     Text[ greek ] = "Τίτλος, κατακόρυφο κείμενο, Clipart";
     Text[ dutch ] = "Titel, verticale tekst, clipart";
@@ -3100,7 +3100,7 @@ String STR_AL_VERT_TITLE_TEXT_CHART
     Text = "Vertikaler Titel, Text, Diagramm" ;
     Text [ ENGLISH ] = "Vertical title, text, chart" ;
     Text [ english_us ] = "Vertical title, text, chart" ;
-    Text[ portuguese ] = "Vertical title, text, chart";
+    Text[ portuguese ] = "Tνtulo vertical, texto, grαfico";
     Text[ russian ] = "Βεπςθκΰλόνϋι ηΰγξλξβξκ, ςεκρς, δθΰγπΰμμΰ";
     Text[ greek ] = "Kατακόρυφος τίτλος, κείμενο, διάγραμμα";
     Text[ dutch ] = "Verticale titel, tekst, diagram";
@@ -3123,7 +3123,7 @@ String STR_AL_VERT_TITLE_VERT_OUTLINE
     Text = "Vertikaler Titel, vertikaler Text" ;
     Text [ ENGLISH ] = "Vertical title, vertical text" ;
     Text [ english_us ] = "Vertical title, vertical text" ;
-    Text[ portuguese ] = "Vertical title, vertical text";
+    Text[ portuguese ] = "Tνtulo vertical, texto vertical";
     Text[ russian ] = "Βεπςθκΰλόνϋι ηΰγξλξβξκ, βεπςθκΰλόνϋι ςεκρς";
     Text[ greek ] = "Κατακόρυφος τίτλος, κατακόρυφο κείμενο";
     Text[ dutch ] = "Verticale titel, verticale tekst";
@@ -3337,7 +3337,7 @@ String STR_PAGEMODE
     Text[ chinese_simplified ] = "Ò³ΓζΚΣΝΌ";
     Text[ russian ] = "Πεζθμ ρλΰιδξβ";
     Text[ polish ] = "Tryb slajdu";
-    Text[ japanese ] = "½Χ²ΔήΣ°Δή";
+    Text[ japanese ] = "Νί°ΌήΣ°Δή";
     Text[ greek ] = "Προβολή σελίδας";
     Text[ korean ] = "½½¶σΐΜµε ΊΈ±β";
     Text[ chinese_traditional ] = "§λΌv¤ωΉwΔύ";
@@ -3364,7 +3364,7 @@ String STR_LAYERMODE
     Text[ chinese_simplified ] = "·Φ²γΚΣΝΌ";
     Text[ russian ] = "Πεζθμ ρλξεβ";
     Text[ polish ] = "Tryb warstw";
-    Text[ japanese ] = "K‘wΣ°Δή";
+    Text[ japanese ] = "‘wΣ°Δή";
     Text[ greek ] = "Προβολή επιπέδου";
     Text[ korean ] = "°θΓώ ΊΈ±β";
     Text[ chinese_traditional ] = "¤ΐ―ΕΉwΔύ";
@@ -3617,7 +3617,7 @@ String STR_EXPORT_UNKNOWN_FORMAT
     Text[ chinese_simplified ] = "²»ΓχµΔΞΔΌώΈρΚ½£΅";
     Text[ russian ] = "Νεθηβερςνϋι τξπμΰς τΰιλΰ!";
     Text[ polish ] = "Nieznany format pliku!";
-    Text[ japanese ] = "•s–Ύ‚ΘΜ§²Ω‘®!";
+    Text[ japanese ] = "•s–Ύ‚ΘΜ§²Ω‘®B";
     Text[ greek ] = "Άγνωστη μορφή αρχείου!";
     Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐΊ ΖΔΐΟΌ­½Δ!";
     Text[ chinese_traditional ] = "¤£©ϊªΊΐΙ®Χ®ζ¦΅΅I";
@@ -4655,7 +4655,7 @@ String STR_ASK_DELETE_PAGE
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύÒ³ '$' £Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό '$'?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ stronκ '$'?";
-    Text[ japanese ] = "Νί°Όή'$'‚π–{“–‚Ιν‚µ‚ά‚·‚©?";
+    Text[ japanese ] = "Νί°Όή '$' ‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί η σελίδα \"$\"?";
     Text[ korean ] = "ΒΚ\"$\"ΐ»£¨Έ¦£© Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z―u­n§R°£­¶ '$' ΅H";
@@ -4970,7 +4970,7 @@ String STR_UNDO_INSERT_TEXTFRAME
     Text[ chinese_simplified ] = "²εΘλΞΔ±ΎΏς";
     Text[ russian ] = "Βρςΰβθςό ςεκρςξβσώ πΰμκσ";
     Text[ polish ] = "Wstaw ramkκ tekstu";
-    Text[ japanese ] = "Γ·½ΔΞή―Έ½‚Μ‘}“ό";
+    Text[ japanese ] = "Γ·½Δg‚Μ‘}“ό";
     Text[ greek ] = "Εισαγωγή πλαισίου κειμένου";
     Text[ korean ] = "ΕΨ½ΊΖ® Ζ² »πΐΤ";
     Text[ chinese_traditional ] = "΄΅¤J¤ε¦r¤θ¶τ";
@@ -5144,7 +5144,7 @@ String STR_WRITE_DATA_ERROR
     Text[ chinese_simplified ] = "Ξή·¨±£΄ζΥβΈφΞΔΌώ£΅";
     Text[ russian ] = "Ρξυπΰνθςό ύςξς τΰιλ νε σδΰεςρÿ!";
     Text[ polish ] = "Plik nie mσg³ zostaζ zapisany!";
-    Text[ japanese ] = "Μ§²Ω‚Ν•Ϋ‘¶‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½!";
+    Text[ japanese ] = "Μ§²Ω‚Ν•Ϋ‘¶‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
     Text[ greek ] = "Δεν ήταν δυνατή η αποθήκευση του αρχείου!";
     Text[ korean ] = "ΖΔΐΟΐ» ΐϊΐεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω!";
     Text[ chinese_traditional ] = "µLªk«O¦s³o­ΣΐΙ®Χ΅I";
@@ -5193,7 +5193,7 @@ String STR_SCALE_OBJECTS
     Text[ chinese_simplified ] = "ÒΡΎ­ΟΰΣ¦µχΥϋΑΛΠΒ½¨Ò³ΓζµΔΈρΚ½΅£\nÒ²ÒªΟΰΣ¦µχΥϋΥβΈφ¶ΤΟσΒπ£Ώ";
     Text[ russian ] = "Τξπμΰς νξβξι ρςπΰνθφϋ ασδες ρξγλΰρξβΰν.\nΒϋ υξςθςε ςΰκζε ρξγλΰρξβΰςό ξαϊεκςϋ?";
     Text[ polish ] = "Format nowych stron zostanie dopasowany.\nCzy dopasowaζ rσwnieΏ obiekty?";
-    Text[ japanese ] = "V‚µ‚ΆΝί°Όή‚Μ‘®‚ª’²®‚³‚κ‚ά‚·B\nµΜήΌήªΈΔ‚ΰ’²®‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "V‚µ‚ΆΝί°Όή‚Μ‘®‚π“K‡‚³‚Ή‚ά‚·B\nµΜήΌήªΈΔ‚ΰ“K‡‚³‚Ή‚ά‚·‚©B";
     Text[ greek ] = "Η μορφή των νέων σελιδών θα προσαρμοστεί.\nΘέλετε να γίνει προσαρμογή και των αντικειμένων;";
     Text[ korean ] = "»υ ΒΚΐΗ Ό­½ΔΐΜ Α¶Α¤µΙ °ΝΐΤ΄Ο΄Ω. \n°³ΓΌµµ Α¶Α¤ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "·s­¶ªΊ®ζ¦΅¤wΈgΕά§σ΅C\n±z¤]­n½ΥΎγ³o­Σª«¥σ΅H";
@@ -5473,7 +5473,7 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ swedish ] = "Den hδr εtgδrden tar bort den valda sidan. \nSidan innehεller ritobjekt!";
     Text[ polish ] = "Akcja ta usuwa zaznaczonΉ stronκ.\nStrona ta zawiera obiekty graficzne.";
     Text[ portuguese_brazilian ] = "This action will delete the selected page.\nNote: the page contains drawing objects!";
-    Text[ japanese ] = "‚±‚Μμ‹Ζ‚Ν‘I‘πΝί°Όή‚πν‚µ‚ά‚·B\n‚±‚Μƒy[ƒW‚Ν•`‰ζµΜήΌήªΈΔ‚πά‚ρ‚Ε‚Ά‚ά‚·!";
+    Text[ japanese ] = "‚±‚Μ±ΈΌ®έ‚Ν‘I‘πΝί°Όή‚πν‚µ‚ά‚·B\n‚±‚Μƒy[ƒW‚Ν•`‰ζµΜήΌήªΈΔ‚πά‚ρ‚Ε‚Ά‚ά‚·B";
     Text[ korean ] = "ΐΜ°Νΐ» ½ΗΗΰΗΟΈι Ό±ΕΓµΘ ΒΚΐΜ »θΑ¦µΛ΄Ο΄Ω.\nΐΜ ΒΚΐΊ ±ΧΈ®±β°³ΓΌΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!";
     Text[ chinese_simplified ] = "ΥβΟξ²ΩΧχ»αΙΎ³ύΡ΅ΦΠµΔÒ³Γζ΅£\n΄ΛÒ³ΓζΊ¬ΣΠ»ζΝΌ¶ΤΟσ£΅";
     Text[ chinese_traditional ] = "³o­Σ°Κ§@·|§R°£Ώο¨ϊªΊ­¶­±΅C\nµω·N΅G³o­Σ­¶­±¤Ί§tΓΈΉΟª«¥σ΅I";
@@ -5522,7 +5522,7 @@ String STR_WARN_DEL_SHAPE
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύΥβΈφΝΌ±κΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς ρθμβξλ?";
     Text[ polish ] = "Czy na pewno usunΉζ symbol?";
-    Text[ japanese ] = "‚±‚ΜΌέΞήΩ‚π–{“–‚Ιν‚µ‚Δ‚ζ‚λ‚µ‚Ά‚Ε‚·‚©?";
+    Text[ japanese ] = "‚±‚ΜΌέΞήΩ‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί το σύμβολο;";
     Text[ korean ] = "ΐΜ ±βΘ£Έ¦ Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­ΣΉΟ¥ά΅H";
@@ -5713,7 +5713,7 @@ String STR_IMPORT_GRFILTER_FORMATERROR
     Text[ chinese_simplified ] = "²»ΓχµΔΝΌΠΞΈρΚ½";
     Text[ russian ] = "Νεθηβερςνϋι τξπμΰς γπΰτθκθ";
     Text[ polish ] = "Nieznany format graficzny";
-    Text[ japanese ] = "•s–Ύ‚ΘΈήΧΜ¨―Έ‘®";
+    Text[ japanese ] = "•s–Ύ‚Θ}‚Μ‘®";
     Text[ greek ] = "Άγνωστη μορφή γραφικού";
     Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐΊ ±Χ·΅ΗΘΌ­½Δ";
     Text[ chinese_traditional ] = "¤£©ϊªΊΉΟ§Ξ®ζ¦΅";
@@ -5830,7 +5830,7 @@ String STR_END_SEARCHING
     Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΛΡΡ°ΥβΈφΞΔµµ£΅";
     Text[ russian ] = "Οξθρκ ύςξγξ δξκσμενςΰ ηΰκξνχεν!";
     Text[ polish ] = "Szukanie dokumentu zosta³o zakoρczone!";
-    Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μυ‚ΝI—Ή‚µ‚ά‚µ‚½!";
+    Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μυ‚ΝI—Ή‚µ‚ά‚µ‚½B";
     Text[ greek ] = "Η αναζήτηση του εγγράφου ολοκληρώθηκε!";
     Text[ korean ] = "ΐΜ Ή®Ό­ΐΗ Ε½»φΐ» Έ¶ΓΖ½ΐ΄Ο΄Ω.";
     Text[ chinese_traditional ] = "¤wΈg§Ή¦¨·j΄M³o­ΣΐΙ®Χ΅I";
@@ -5854,7 +5854,7 @@ String STR_END_SPELLING
     Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΥϋΈφΞΔµµµΔΖ΄Π΄Όμ²ι£΅";
     Text[ russian ] = "Οπξβεπκΰ οπΰβξοθρΰνθÿ ύςξγξ δξκσμενςΰ ηΰκξνχενΰ!";
     Text[ polish ] = "Sprawdzanie pisowni dla tego dokumentu zosta³o zakoρczone!";
-    Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μ½ΝίΩ Αª―Έ‚ΝI—Ή‚µ‚ά‚µ‚½!";
+    Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μ½ΝίΩ Αª―Έ‚ΝI—Ή‚µ‚ά‚µ‚½B";
     Text[ greek ] = "Ο έλεγχος ορθογραφίας για ολόκληρο το έγγραφο ολοκληρώθηκε!";
     Text[ korean ] = "ΐΜ Ή®Ό­Ώ΅ ΄λΗΡ ΈΒΓγΉύ °Λ»ηΈ¦ ΏΟ·αΗΟΏ΄½ΐ΄Ο΄Ω!";
     Text[ chinese_traditional ] = "¤wΈg§Ή¦¨³o­Σ¤ε¥σªΊ«χΌgΐΛ¬d΅I";
@@ -6403,7 +6403,7 @@ String STR_PRINT_NOTES
     Text[ chinese_simplified ] = "(±ΈΧΆ)";
     Text[ russian ] = "(Οπθμεχΰνθε)";
     Text[ polish ] = "(Notatki)";
-    Text[ japanese ] = "(ÒΣ’ )";
+    Text[ japanese ] = "(Ι°Δ)";
     Text[ greek ] = "(Σημειώσεις)";
     Text[ korean ] = " (ΈήΈπ)";
     Text[ chinese_traditional ] = "(³Ζµω)";
@@ -9300,7 +9300,7 @@ String STR_EFFECT_STRETCH_FROM_L
     Text[ chinese_simplified ] = "ΟςΧσΙμΥΉ";
     Text[ russian ] = "Νΰρλξενθε ρλεβΰ";
     Text[ polish ] = "Kropla z lewej";
-    Text[ japanese ] = "¶‚©‚ηLk";
+    Text[ japanese ] = "¶‚©‚η½ΔΪ―Α";
     Text[ greek ] = "Σταγόνα από αριστερά";
     Text[ korean ] = "ΏήΒΚΊΞΕΝ ΘπΎξ»ΡΈ®±β";
     Text[ chinese_traditional ] = "±q¥ª¦ω®i";
@@ -9346,7 +9346,7 @@ String STR_EFFECT_STRETCH_FROM_R
     Text[ chinese_simplified ] = "ΟςΣÒΙμΥΉ";
     Text[ russian ] = "Νΰρλξενθε ροπΰβΰ";
     Text[ polish ] = "Kropla z prawej";
-    Text[ japanese ] = "‰E‚©‚ηLk";
+    Text[ japanese ] = "‰E‚©‚η½ΔΪ―Α";
     Text[ greek ] = "Σταγόνα από δεξιά";
     Text[ korean ] = "ΏΐΈ¥ΒΚΊΞΕΝ ΘπΎξ»ΡΈ®±β";
     Text[ chinese_traditional ] = "±q¥k¦ω®i";
@@ -10606,7 +10606,7 @@ String STR_TWAIN_NO_SOURCE_UNX
     Text[ russian ] = "Β νΰρςξÿωθι μξμενς θρςξχνθκ SANE νεδξρςσοεν.";
     Text[ greek ] = "Δεν υπάρχει διαθέσιμη προέλευση SANE αυτή τη στιγμή.";
     Text[ polish ] = "Nie jest narazie dostκpne rσd³o SANE.";
-    Text[ japanese ] = "‚½‚Ύ΅SANEΏ°½‚ªg—p‚Ε‚«‚ά‚Ή‚ρB";
+    Text[ japanese ] = "SANE Ώ°½‚Ν‘ό΅g—p‚Ε‚«‚ά‚Ή‚ρB";
     Text[ korean ] = "Αφ±έΐΊ SANE ΌÒ½ΊΈ¦ »ηΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "µ±Η°Ξή·¨ΜαΉ©SANEΧΚΤ΄΅£";
     Text[ chinese_traditional ] = "·ν«eµLªk΄£¨Ρ SANE ¨Σ·½΅C";
@@ -10954,7 +10954,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text [ italian ] = "Presentazione %PRODUCTNAME 6.0" ;
     Text [ spanish ] = "%PRODUCTNAME 6.0 Presentaciσn" ;
     Text [ french ] = "%PRODUCTNAME 6.0 Prιsentation" ;
-    Text [ portuguese ] = "Apresentaηγo (%PRODUCTNAME 6.0)" ;
+    Text [ portuguese ] = "%PRODUCTNAME 6.0 Apresentaηγo" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Prδsentation" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ΡέΚΎΞΔΈε";
     Text[ russian ] = "Οπεηενςΰφθÿ β %PRODUCTNAME 6.0";
@@ -11088,7 +11088,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
     Text = "%PRODUCTNAME 6.0 Zeichnung" ;
     Text [ ENGLISH ] = "StarOffice 6.0 Drawing" ;
     Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing" ;
-    Text [ portuguese ] = "Desenho (%PRODUCTNAME 6.0)" ;
+    Text [ portuguese ] = "%PRODUCTNAME 6.0 Desenho" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Zeichnung" ;
     Text [ swedish ] = "%PRODUCTNAME 6.0 teckning" ;
     Text [ danish ] = "%PRODUCTNAME 6.0 tegning" ;
@@ -11262,7 +11262,7 @@ String STR_PUBDLG_SAMENAME
     Text[ chinese_simplified ] = "ÒΡΎ­ΣΠÒ»ΈφΝ¬ΓϋµΔΡωΚ½΅£\nΔϊÒªΈ²Π΄ΛόΒπ£Ώ";
     Text[ russian ] = "Δθηΰιν ρ  ςΰκθμ θμενεμ σζε ρσωερςβσες\nΗΰμενθςό?";
     Text[ polish ] = "Istnieje juΏ projekt o tej nazwie.\nCzy ma on zostaζ skasowany przez zapisanie?";
-    Text[ japanese ] = "‚±‚Μ–Ό‘O‚ΜΓή»ή²έ‚Ν‚·‚Ε‚Ι‚ ‚θ‚ά‚·\nγ‘‚«‚µ‚Δ‚ΰ‚ζ‚λ‚µ‚Ά‚Ε‚·‚©?";
+    Text[ japanese ] = "‚±‚Μ–Ό‘O‚ΜΓή»ή²έ‚Ν‚·‚Ε‚Ι‚ ‚θ‚ά‚·B\nγ‘‚«‚µ‚ά‚·‚©B";
     Text[ language_user1 ] = "θλθ: Δθηΰιν - - - -";
     Text[ greek ] = "Υπάρχει ήδη ένα σχέδιο με αυτό το όνομα.\nΘέλετε να αντικατασταθεί;";
     Text[ korean ] = "ΐΜ ΐΜΈ§ΐ» °΅Αψ µπΐΪΐΞΐΜ ΐΜΉΜ ΐΦ½ΐ΄Ο΄Ω \nµ¤ΎξΎΊΏμ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -11431,7 +11431,7 @@ String STR_HTMLEXP_CLICKSTART
     Text[ chinese_simplified ] = "°΄»χΥβΐοΖτ¶―";
     Text[ russian ] = "Ωελκνσςό ηδερό δλÿ ηΰοσρκΰ";
     Text[ polish ] = "Kliknij tutaj, aby rozpoczΉζ";
-    Text[ japanese ] = "‚±‚±‚πΈΨ―Έ‚µ‚ΔJn‚µ‚Δ‰Ί‚³‚Ά";
+    Text[ japanese ] = "‚±‚±‚πΈΨ―Έ‚µ‚ΔJn‚µ‚ά‚·";
     Text[ greek ] = "Πατήστε εδώ για την εκκίνηση";
     Text[ korean ] = "½ΓΐΫΗΟ·ΑΈι Ώ©±βΈ¦ Ε¬Έ―ΗΟ½Κ½ΓΏΐ";
     Text[ chinese_traditional ] = "«φ¤@¤U³oωΨ±Ò°Κ";
@@ -11813,7 +11813,7 @@ String STR_PRES_SOFTEND
     Text[ italian ] = "Clicca per terminare la presentazione...";
     Text[ danish ] = "Klik venligst for at afslutte prζsentationen...";
     Text[ swedish ] = "Klicka fφr att avsluta presentationen...";
-    Text[ polish ] = "Proszκ kliknΉζ, aby zakoρczyζ prezentacjκ...";
+    Text[ polish ] = "Kliknij, aby zakoρczyζ prezentacjκ...";
     Text[ portuguese_brazilian ] = "Click, please, to end presentation...";
     Text[ japanese ] = "Ο³½ΈΨ―Έ‚ΕΜίΪΎήέΓ°Ό®έ‚ΜI—Ή...";
     Text[ chinese_simplified ] = "Ηλµ¥»χΚσ±κ£¬½αΚψΡέΚΎΉύ³Μ...";
@@ -12033,7 +12033,7 @@ String STR_WARNING_NOSOUNDFILE
     Text[ swedish ] = "Fil %\nδr ingen giltig ljudfil !";
     Text[ polish ] = "Plik %\nnie jest prawid³owym plikiem dzwiκkowym !";
     Text[ portuguese_brazilian ] = "The file %\nis no valid soundfile !";
-    Text[ japanese ] = "Μ§²Ω %\n ‚Ν—Lψ‚Θ»³έΔήΜ§²Ω‚Ε‚Ν‚ ‚θ‚ά‚Ή‚ρ!";
+    Text[ japanese ] = "Μ§²Ω % ‚Ν\n—Lψ‚Θ»³έΔήΜ§²Ω‚Ε‚Ν‚ ‚θ‚ά‚Ή‚ρB";
     Text[ korean ] = "ΖΔΐΟ%\\ΐΊ£¨΄Β£© ΐ―ΘΏΗΡ »ηΏξµε ΖΔΐΟΐΜ ΎΖ΄Υ΄Ο΄Ω !";
     Text[ chinese_simplified ] = "ΞΔΌώ%\nΚΗ·ΗΣΠΠ§ΙωÒτΞΔΌώ£΅";
     Text[ chinese_traditional ] = "ΐΙ®Χ %\n¤£¬O¦³®ΔªΊΑn­µΐΙ®Χ΅I";
