@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProtectable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module util {
 
 /** makes it possible to protect objects from modifications.
  */
-interface XProtectable: com::sun::star::uno::XInterface
+published interface XProtectable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** activates the protection.
