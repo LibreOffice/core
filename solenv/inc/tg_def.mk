@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-26 15:36:31 $
+#   last change: $Author: hjs $ $Date: 2002-01-30 14:27:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,9 +143,10 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
-# don't forget to hav the right DEFSTAG set!
+# don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -180,9 +181,10 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .IF "$(UPDATER)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
-# don't forget to hav the right DEFSTAG set!
+# don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
