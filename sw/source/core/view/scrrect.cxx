@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:42:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,11 @@ void ViewShell::Scroll()
                         // OD 18.02.2003 #107562# - use aligned rectangle for scrolling
                         SwRect aAlignedScrollRect( aRectangle );
                         ::SwAlignRect( aAlignedScrollRect, this );
+                        // OD 2004-05-28 #i29527# - add flag SCROLL_NOWINDOWINVALIDATE
+                        // to avoid repaint, due to invalidate window areas.
                         GetWin()->Scroll( 0, rScroll.GetOffs(),
                                           aAlignedScrollRect.SVRect(),
-                                          SCROLL_CHILDREN );
+                                          SCROLL_CHILDREN | SCROLL_NOWINDOWINVALIDATE );
                         SwRect aRect( aRectangle );
                         Imp()->ScrolledRect( aRect, rScroll.GetOffs() );
                         if ( bPositive )
