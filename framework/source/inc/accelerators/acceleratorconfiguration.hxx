@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorconfiguration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:07:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,20 +108,20 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XUIConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
+#include <com/sun/star/ui/XUIConfiguration.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
+#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HDL_
-#include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HDL_
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
@@ -171,9 +171,9 @@ class AcceleratorConfiguration : protected ThreadHelpBase                       
                                , public    ::cppu::OWeakObject
                                , public    css::lang::XTypeProvider
                                , public    css::form::XReset                    // TODO use XPresetHandler instead if available
-                               , public    dcss::ui::XAcceleratorConfiguration  // => dcss::ui::XUIConfigurationPersistence
-                                                                                //    dcss::ui::XUIConfigurationStorage
-                                                                                //    dcss::ui::XUIConfiguration
+                               , public    css::ui::XAcceleratorConfiguration  // => css::ui::XUIConfigurationPersistence
+                                                                                //    css::ui::XUIConfigurationStorage
+                                                                                //    css::ui::XUIConfiguration
 {
     //______________________________________
     // member
@@ -276,10 +276,10 @@ class AcceleratorConfiguration : protected ThreadHelpBase                       
             throw(css::uno::RuntimeException);
 
         // XUIConfiguration
-        virtual void SAL_CALL addConfigurationListener(const css::uno::Reference< dcss::ui::XUIConfigurationListener >& xListener)
+        virtual void SAL_CALL addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener)
             throw(css::uno::RuntimeException);
 
-        virtual void SAL_CALL removeConfigurationListener(const css::uno::Reference< dcss::ui::XUIConfigurationListener >& xListener)
+        virtual void SAL_CALL removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener)
             throw(css::uno::RuntimeException);
 
         // XReset
