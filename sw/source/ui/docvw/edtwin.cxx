@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 14:41:15 $
+ *  last change: $Author: os $ $Date: 2002-06-12 08:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@
 #endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+#ifdef ACCESSIBLE_LAYOUT
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
 #endif
 
 #ifndef _SV_HELP_HXX //autogen
@@ -2204,10 +2209,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
     aStartPos = rMEvt.GetPosPixel();
     aRszMvHdlPt.X() = 0, aRszMvHdlPt.Y() = 0;
 
+    BYTE nMouseTabCol = 0;
     if ( !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
          rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons() &&
          !rSh.IsTableMode() &&
-         rSh.IsMouseTabCol( aDocPos ) )
+         0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ))
     {
         //Zuppeln von Tabellenspalten aus dem Dokument heraus.
         rView.SetTabColFromDoc( TRUE );
@@ -2215,7 +2221,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
         rView.InvalidateRulerPos();
         SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
         rBind.Update();
-        if ( RulerClook( rView , rMEvt ) )
+        if ( RulerColumnDrag( rView , rMEvt, SW_TABCOL_VERT == nMouseTabCol ) )
         {
             rView.SetTabColFromDoc( FALSE );
             rView.InvalidateRulerPos();
@@ -2886,11 +2892,13 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
         return;
     }
 
+    BYTE nMouseTabCol;
     if( !bIsDocReadOnly && bInsWin && !pApplyTempl && !rSh.IsInSelect() &&
-         rSh.IsMouseTabCol( aDocPt ) && !rSh.IsTableMode())
+         0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt )) && !rSh.IsTableMode())
     {
         //Zuppeln von Tabellenspalten aus dem Dokument heraus.
-        SetPointer( POINTER_HSIZEBAR );
+
+        SetPointer( SW_TABCOL_VERT == nMouseTabCol ? POINTER_VSIZEBAR : POINTER_HSIZEBAR );
         return;
     }
 
@@ -3846,6 +3854,9 @@ void SwEditWin::GetFocus()
 #endif
     rView.GotFocus();
     Window::GetFocus();
+#ifdef ACCESSIBLE_LAYOUT
+    rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
 }
 
 /******************************************************************************
@@ -3856,6 +3867,9 @@ void SwEditWin::GetFocus()
 
 void SwEditWin::LoseFocus()
 {
+#ifdef ACCESSIBLE_LAYOUT
+    rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
     Window::LoseFocus();
     if( pQuickHlpData->bClear )
         pQuickHlpData->Stop( rView.GetWrtShell() );
@@ -4187,8 +4201,14 @@ void SwEditWin::SetChainMode( BOOL bOn )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
                                                         // happend already!!!
-    SwWrtShell &rSh = rView.GetWrtShell();
-    return rSh.CreateAccessible();
+    SwWrtShell *pSh = rView.GetWrtShellPtr();
+    ASSERT( pSh, "no writer shell, no accessible object" );
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    if( pSh )
+        xAcc = pSh->CreateAccessible();
+
+    return xAcc;
 }
 #endif
 
