@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:30:55 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,15 +832,6 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_TEXTCOLOR) )
                 m_xDestObject->setPropertyValue(PROPERTY_TEXTCOLOR,m_xSourceObject->getPropertyValue(PROPERTY_TEXTCOLOR));
             // can not be copied yet, because the filter or and order clause could the old table name
-
-//          if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ORDER))
-//          {
-//              m_xDestObject->setPropertyValue(PROPERTY_ORDER,m_xSourceObject->getPropertyValue(PROPERTY_ORDER));
-//          }
-//          if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILTER))
-//          {
-//              m_xDestObject->setPropertyValue(PROPERTY_FILTER,m_xSourceObject->getPropertyValue(PROPERTY_FILTER));
-//          }
         }
         // now append the columns
         const ODatabaseExport::TColumnVector* pVec = getDestVector();
