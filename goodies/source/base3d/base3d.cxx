@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-03 13:44:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 #include <tools/shl.hxx>
 #endif
 
-#ifndef _SV_POLY_HXX
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 
