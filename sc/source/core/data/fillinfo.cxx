@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-05 11:32:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include "scitems.hxx"
 #include <svx/boxitem.hxx>
+#include <svx/editdata.hxx>     // can be removed if table has a bLayoutRTL flag
 #include <svx/shaditem.hxx>
 
 #include "document.hxx"
@@ -197,6 +198,8 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                             BOOL bPageMode, BOOL bFormulaMode, const ScMarkData* pMarkData )
 {
     DBG_ASSERT( pTab[nTab], "Tabelle existiert nicht" );
+
+    BOOL bLayoutRTL = IsLayoutRTL( nTab );
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
     ScStyleSheetPool* pStlPool = xPoolHelper->GetStylePool();
@@ -350,7 +353,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                 pInfo->bMarked = FALSE;
             pInfo->nWidth = 0;
 
-            pInfo->bStandard    = FALSE;    //! umbenennen in bClipped
+            pInfo->nClipMark    = SC_CLIPMARK_NONE;
             pInfo->bMerged      = FALSE;
             pInfo->bHOverlapped = FALSE;
             pInfo->bVOverlapped = FALSE;
@@ -855,14 +858,11 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
             BOOL bTop = ( nArrY == 0 );
             BOOL bBottom = ( nArrY+1 == nArrCount );
 
-//          short nY = nArrY ? pRowInfo[nArrY].nRowNo : ((short)nY1)-1;
-
             for (nArrX=nX1; nArrX<=nX2+2; nArrX++)                  // links und rechts einer mehr
             {
                 BOOL bLeft = ( nArrX == nX1 );
                 BOOL bRight = ( nArrX == nX2+2 );
 
-//              short nX = ((short) nArrX) - 1;
                 CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nArrX];
                 const SvxShadowItem* pThisAttr = pInfo->pShadowAttr;
                 SvxShadowLocation eLoc = pThisAttr ? pThisAttr->GetLocation() : SVX_SHADOW_NONE;
@@ -886,6 +886,17 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                             CELLINFO(0,-1).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
                     BOOL bBottomDiff = !bBottom &&
                             CELLINFO(0,1).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+
+                    if ( bLayoutRTL )
+                    {
+                        switch (eLoc)
+                        {
+                            case SVX_SHADOW_BOTTOMRIGHT: eLoc = SVX_SHADOW_BOTTOMLEFT;  break;
+                            case SVX_SHADOW_BOTTOMLEFT:  eLoc = SVX_SHADOW_BOTTOMRIGHT; break;
+                            case SVX_SHADOW_TOPRIGHT:    eLoc = SVX_SHADOW_TOPLEFT;     break;
+                            case SVX_SHADOW_TOPLEFT:     eLoc = SVX_SHADOW_TOPRIGHT;    break;
+                        }
+                    }
 
                     switch (eLoc)
                     {
