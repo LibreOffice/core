@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:18:35 $
+ *  last change: $Author: ka $ $Date: 2001-03-28 11:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,15 @@ XubString SdrGrafObj::GetName() const
 void SdrGrafObj::ForceSwapIn() const
 {
     pGraphic->FireSwapInRequest();
+
+    if( pGraphic->IsSwappedOut() ||
+        ( pGraphic->GetType() == GRAPHIC_NONE ) ||
+        ( pGraphic->GetType() == GRAPHIC_DEFAULT ) )
+    {
+        Graphic aDefaultGraphic;
+        aDefaultGraphic.SetDefaultType();
+        pGraphic->SetGraphic( aDefaultGraphic );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -827,7 +836,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     }
 
     FASTBOOL        bDraft = ( 0 != ( rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF ) );
-    FASTBOOL        bSwappedOut = pGraphic->IsSwappedOut();
+    FASTBOOL        bSwappedOut = pGraphic->IsSwappedOut() || ( pGraphic->GetType() == GRAPHIC_NONE );
     FASTBOOL        bLoading = FALSE;
     OutputDevice*   pOutDev = rOut.GetOutDev();
     OutDevType      eOutDevType = ( pOutDev ? pOutDev->GetOutDevType() : OUTDEV_DONTKNOW );
@@ -859,8 +868,12 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
         }
     }
 
-    if( !bDraft && ( pGraphic->IsSwappedOut() || pGraphic->GetType() == GRAPHIC_NONE || pGraphic->GetType() == GRAPHIC_DEFAULT ) )
-        bDraft = TRUE;
+    if( pGraphic->IsSwappedOut() ||
+        pGraphic->GetType() == GRAPHIC_NONE ||
+        pGraphic->GetType() == GRAPHIC_DEFAULT )
+    {
+        bDraft=TRUE;
+    }
 
     long          nDrehWink = aGeo.nDrehWink, nShearWink = aGeo.nShearWink;
     FASTBOOL      bRotate = ( nDrehWink != 0 && nDrehWink != 18000 );
