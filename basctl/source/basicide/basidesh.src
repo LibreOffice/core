@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 22:05:59 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ String RID_STR_SOURCETOBIG
     Text[ arabic ] = "δΥ ΗαγΥΟΡ ίΘνΡ αΟΡΜΙ νΚΪΠΡ γΪεΗ ΝέΩε΅ Γζ ΚΡΜγΚε.\nήγ ΘΝΠέ ΘΪΦ ΗαΚΪανήΗΚ΅ Γζ Ηδήα ΘΪΦ ΗαΓΣΗανΘ Εαμ ζΝΟΙ δγΨνΙ ΓΞΡμ.";
     Text[ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele commentaren of verplaats enkele methodes naar een andere module.";
     Text[ chinese_simplified ] = "Τ΄ΞΔ±ΎΜ«΄σ£¬Ξή·¨΄ζΕΜΊΝ±ΰÒλ΅£\nΗλΔϊΙΎ³ύÒ»Π©ΧΆ½β»ςΥί½«ΌΈΈφ·½·¨ΧªÒΖµ½Ò»ΈφΖδΛϋµΔΔ£ΏιΦ®ΦΠ΅£";
-    Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε μερικά σχόλια ή μεταφέρετε μερικές μεθόδους σε μια άλλη λειτουργική μονάδα.";
+    Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε ορισμένα σχόλια ή μεταφέρετε μερικές μεθόδους σε μια άλλη λειτουργική μονάδα.";
     Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ®°΅ ³ΚΉ« ΔΏΌ­ ΐϊΐε ¶Η΄Β ΔΔΖΔΐΟΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω. \n ΐΟΊΞ ΑΦΌ®ΐ» »θΑ¦ΗΟ°Ε³ª, ΈξΈξ ΈήΌÒµεΈ¦ ΄ΩΈ¥ Έπµβ·Ξ ΏΕ±β½Κ½ΓΏΐ.";
     Text[ turkish ] = "Kaynak metin uzunluπu nedeniyle kaydedilemiyor ve derlenemiyor.\nBazύ aηύklamalarύ silin ya da bazύ yφntemleri baώka bir modόle aktarύn.";
 };
@@ -614,7 +614,7 @@ String RID_STR_COULDNTWRITE
     Text[ arabic ] = "ΚΪΠΡ ΝέΩ Ηαγαέ";
     Text[ dutch ] = "Het bestand kon niet worden opgeslagen.";
     Text[ chinese_simplified ] = "Ξή·¨΄ζΕΜΞΔΌώ΅£";
-    Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η αποθήκευση του αρχείου";
+    Text[ greek ] = "Δεν ήταν δυνατή η αποθήκευση του αρχείου";
     Text[ korean ] = "ΖΔΐΟΐ» ΐϊΐεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω";
     Text[ turkish ] = "Dosya kaydedilemedi";
 };
