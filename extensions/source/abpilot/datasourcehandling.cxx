@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 08:03:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,14 +670,23 @@ namespace abp
         {
             try
             {
-                // prepend some context info
-                SQLContext aDetailedError;
-                aDetailedError.Message = String( ModuleRes( RID_STR_NOCONNECTION ) );
-                aDetailedError.Details = String( ModuleRes( RID_STR_PLEASECHECKSETTINGS ) );
-                aDetailedError.NextException = aError;
-
-                // handle (aka display) the error
-                xInteractions->handle( new OInteractionRequest( makeAny( aDetailedError ) ) );
+                SQLException aException;
+                  aError >>= aException;
+                  if ( !aException.Message.getLength() )
+                  {
+                    // prepend some context info
+                    SQLContext aDetailedError;
+                    aDetailedError.Message = String( ModuleRes( RID_STR_NOCONNECTION ) );
+                    aDetailedError.Details = String( ModuleRes( RID_STR_PLEASECHECKSETTINGS ) );
+                    aDetailedError.NextException = aError;
+                    // handle (aka display) the new context info
+                    xInteractions->handle( new OInteractionRequest( makeAny( aDetailedError ) ) );
+                  }
+                  else
+                  {
+                      // handle (aka display) the original error
+                    xInteractions->handle( new OInteractionRequest( makeAny( aException ) ) );
+                }
             }
             catch( const Exception& )
             {
