@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,24 +62,126 @@
 #define _USRPREF_HXX
 
 
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
+
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
+#ifndef _FLDUPDE_HXX
+#include <fldupde.hxx>
 #endif
 #include "viewopt.hxx"
 
-class SwMasterUsrPref: public SwViewOption, public SfxConfigItem
+/* -----------------------------28.09.00 09:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwMasterUsrPref;
+class SwContentViewConfig : public utl::ConfigItem
 {
-protected:
-    virtual int     Load(SvStream&);
-    virtual BOOL    Store(SvStream&);
-    virtual void    UseDefault();
+    SwMasterUsrPref&        rParent;
+    BOOL                    bWeb;
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    public:
+        SwContentViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        ~SwContentViewConfig();
+
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Commit();
+    void                    Load();
+    void                    SetModified(){ConfigItem::SetModified();}
+};
+/* -----------------------------28.09.00 09:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwLayoutViewConfig : public utl::ConfigItem
+{
+    SwMasterUsrPref&    rParent;
+    BOOL                bWeb;
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    public:
+        SwLayoutViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        ~SwLayoutViewConfig();
+
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Commit();
+    void                    Load();
+    void                    SetModified(){ConfigItem::SetModified();}
+};
+/* -----------------------------28.09.00 09:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwMasterUsrPref : public SwViewOption
+{
+    friend class SwContentViewConfig;
+    friend class SwLayoutViewConfig;
+
+    SwContentViewConfig aContentConfig;
+    SwLayoutViewConfig  aLayoutConfig;
+
+    sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
+    sal_Int32   nLinkUpdateMode;
+    FieldUnit   eUserMetric;
+
+    sal_Int32   nDefTab;            //default tab stop distance
 
 public:
-    SwMasterUsrPref(USHORT nType);
-
-    virtual String GetName() const;
+    SwMasterUsrPref(BOOL bWeb);
 
     void SetUsrPref(const SwViewOption &rCopy);
+
+    void Commit()
+        {
+            aContentConfig.Commit();
+            aLayoutConfig.Commit();
+        }
+    void SetModified()
+        {
+            aContentConfig.SetModified();
+            aLayoutConfig.SetModified();
+        }
+
+    void SetUpdateLinkMode(sal_Int32 nSet)  {nLinkUpdateMode = nSet; SetModified();}
+    sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
+
+    void SetUpdateFields(BOOL bSet)
+        {
+            if(bSet && nFldUpdateFlags == AUTOUPD_OFF)
+            {
+                nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                SetModified();
+             }
+            else if(!bSet)
+            {
+                nFldUpdateFlags = AUTOUPD_OFF;
+                SetModified();
+            }
+        };
+    sal_Bool IsUpdateFields()const {return nFldUpdateFlags != AUTOUPD_OFF; }
+
+    sal_Int32   GetFldUpdateFlags()const {return nFldUpdateFlags;}
+    void        SetFldUpdateFlags(sal_Int32 nSet){nFldUpdateFlags = nSet;}
+
+    void SetUpdateCharts(BOOL bSet)
+        {
+            if(bSet)
+            {
+                nFldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
+                SetModified();
+             }
+             else if(nFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
+             {
+                nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                SetModified();
+             }
+        };
+    sal_Bool IsUpdateCharts()const {return nFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
+
+    FieldUnit   GetMetric() const { return eUserMetric;}
+    void        SetMetric(FieldUnit eSet) { eUserMetric = eSet; SetModified();};
+
+    sal_Int32   GetDefTab() const { return nDefTab;}
+    void        SetDefTab( sal_Int32  nSet ) {  nDefTab = nSet; SetModified();}
 };
 
 #endif

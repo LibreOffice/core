@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,7 +766,7 @@ void SwDocShell::SubInitNew()
         aHyp.GetMinTrail()  = sal_Int8(nVal);
         aDfltSet.Put( aHyp );
 
-        sal_uInt16 nNewPos = SW_MOD()->GetModuleConfig()->GetDefTab();
+        sal_uInt16 nNewPos = SW_MOD()->GetUsrPref(FALSE)->GetDefTab();
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                             SVX_TAB_ADJUST_DEFAULT ) );
@@ -777,6 +777,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:31  hr
+    initial import
+
     Revision 1.209  2000/09/18 16:05:11  willem.vandorp
     OpenOffice header added.
 

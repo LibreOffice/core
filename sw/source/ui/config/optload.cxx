@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,9 @@
 #endif
 
 #include "swmodule.hxx"
-#include "modcfg.hxx"
+#include "usrpref.hxx"
 #include "wrtsh.hxx"
+#include "linkenum.hxx"
 
 #include "globals.hrc"
 #include "cmdid.h"
@@ -151,7 +152,8 @@ SfxTabPage* __EXPORT SwLoadOptPage::Create( Window* pParent,
 BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bRet = FALSE;
-    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    SwModule* pMod = SW_MOD();
+//  SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     BOOL bFldDocOnly = aFldDocOnlyCB.IsChecked();
     BOOL bLinkDocOnly = aLinkDocOnlyCB.IsChecked();
 
@@ -170,7 +172,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
             aAutoUpdateCharts.IsChecked() != aAutoUpdateCharts.GetSavedValue())
     {
         if (!bFldDocOnly || !pWrtShell)
-            pModOpt->SetFldUpdateFlags(nFldFlags);
+            pMod->ApplyFldUpdateFlags(nFldFlags);
         if(pWrtShell)
         {
             USHORT nSet = bFldDocOnly ? nFldFlags : AUTOUPD_GLOBALSETTING;
@@ -182,7 +184,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     if (nNewLinkMode != nOldLinkMode)
     {
         if (!bLinkDocOnly || !pWrtShell)
-            pModOpt->SetLinkMode(nNewLinkMode);
+            pMod->ApplyLinkMode(nNewLinkMode);
 
         if (pWrtShell)
         {
@@ -211,7 +213,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 
 void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 {
-    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(FALSE);
     const SfxPoolItem* pItem;
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, FALSE, &pItem))
@@ -233,12 +235,12 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     }
     if(nOldLinkMode == GLOBALSETTING)
     {
-        nOldLinkMode = pModOpt->GetLinkMode();
+        nOldLinkMode = pUsrPref->GetUpdateLinkMode();
         bLinkDocOnly = FALSE;
     }
     if(nFldFlags == AUTOUPD_GLOBALSETTING)
     {
-        nFldFlags = pModOpt->GetFldUpdateFlags();
+        nFldFlags = pUsrPref->GetFldUpdateFlags();
         bFldDocOnly = FALSE;
     }
 
@@ -268,6 +270,9 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 /*--------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:33  hr
+    initial import
+
     Revision 1.12  2000/09/18 16:05:17  willem.vandorp
     OpenOffice header added.
 

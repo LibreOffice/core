@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,16 +119,16 @@ class SwDocShell;
 #define VIEWOPT_CORE2_INDEX_BACKGROUND  0x00000020L
 #define VIEWOPT_CORE2_BIGMARKHDL        0x00000040L
 
-#define VIEWOPT_2_TOOLBOX           0x00000001L
-#define VIEWOPT_2_TOOLBOXTEXT       0x00000002L
-#define VIEWOPT_2_TOOLBOXBITMAP     0x00000004L
-#define VIEWOPT_2_TOOLBOXBOTH       0x00000008L
-#define VIEWOPT_2_TOOLBOXLEFT       0x00000010L
-#define VIEWOPT_2_TOOLBOXRIGHT      0x00000020L
-#define VIEWOPT_2_TOOLBOXTOP        0x00000040L
-#define VIEWOPT_2_TOOLBOXBOTTOM     0x00000080L
+//#define VIEWOPT_2_TOOLBOX         0x00000001L
+//#define VIEWOPT_2_TOOLBOXTEXT     0x00000002L
+//#define VIEWOPT_2_TOOLBOXBITMAP       0x00000004L
+//#define VIEWOPT_2_TOOLBOXBOTH     0x00000008L
+//#define VIEWOPT_2_TOOLBOXLEFT     0x00000010L
+//#define VIEWOPT_2_TOOLBOXRIGHT      0x00000020L
+//#define VIEWOPT_2_TOOLBOXTOP      0x00000040L
+//#define VIEWOPT_2_TOOLBOXBOTTOM       0x00000080L
 #define VIEWOPT_2_UNUSED1           0x00000100L
-#define VIEWOPT_2_RIBBONBAR         0x00000200L
+//#define VIEWOPT_2_RIBBONBAR           0x00000200L
 #define VIEWOPT_2_TABWIN            0x00000400L
 #define VIEWOPT_2_VSCROLLBAR        0x00000800L
 #define VIEWOPT_2_HSCROLLBAR        0x00001000L
@@ -485,10 +485,8 @@ public:
     Optionen aus nUIOptions
 ----------------------------------------------------------------------------*/
 
-    BOOL    IsViewToolbox()    const
-        { return nUIOptions & VIEWOPT_2_TOOLBOX ? TRUE : FALSE;   }
-    BOOL    IsViewRibbonBar()  const
-        { return nUIOptions & VIEWOPT_2_RIBBONBAR ? TRUE : FALSE; }
+//  BOOL    IsViewRibbonBar()  const
+//      { return nUIOptions & VIEWOPT_2_RIBBONBAR ? TRUE : FALSE; }
     BOOL    IsViewVScrollBar() const
         { return nUIOptions & VIEWOPT_2_VSCROLLBAR ? TRUE : FALSE;    }
     BOOL    IsViewHScrollBar() const
@@ -508,16 +506,14 @@ public:
 
     BYTE    GetTblDest() const    { return nTblDest; }
 
-    void   SetViewToolbox   (BOOL b)
-        { b ? (nUIOptions |= VIEWOPT_2_TOOLBOX ) : ( nUIOptions &= ~VIEWOPT_2_TOOLBOX); }
-    void   SetViewRibbonBar (BOOL b)
-        { b ? (nUIOptions |= VIEWOPT_2_RIBBONBAR ) : ( nUIOptions &= ~VIEWOPT_2_RIBBONBAR); }
+//  void   SetViewRibbonBar (BOOL b)
+//      { b ? (nUIOptions |= VIEWOPT_2_RIBBONBAR ) : ( nUIOptions &= ~VIEWOPT_2_RIBBONBAR); }
     void   SetViewVScrollBar(BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_VSCROLLBAR ) : ( nUIOptions &= ~VIEWOPT_2_VSCROLLBAR); }
     void   SetViewHScrollBar(BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_HSCROLLBAR ) : ( nUIOptions &= ~VIEWOPT_2_HSCROLLBAR); }
-    void   SetViewSVLook    (BOOL b)
-        { b ? (nUIOptions |= VIEWOPT_2_SVLOOK ) : ( nUIOptions &= ~VIEWOPT_2_SVLOOK); }
+//  void   SetViewSVLook    (BOOL b)
+//      { b ? (nUIOptions |= VIEWOPT_2_SVLOOK ) : ( nUIOptions &= ~VIEWOPT_2_SVLOOK); }
     void   SetKeepRatio     (BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_KEEPASPECTRATIO ) : ( nUIOptions &= ~VIEWOPT_2_KEEPASPECTRATIO); }
     void   SetGrfKeepZoom   (BOOL b)

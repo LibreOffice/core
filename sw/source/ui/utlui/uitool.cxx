@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,11 +168,11 @@
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
-#ifndef _MODCFG_HXX
-#include <modcfg.hxx>
-#endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
+#endif
+#ifndef _USRPREF_HXX
+#include "usrpref.hxx"
 #endif
 
 #ifndef _ERROR_H
@@ -703,7 +703,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 
 FieldUnit   GetDfltMetric(BOOL bWeb)
 {
-    return SW_MOD()->GetModuleConfig()->GetMetric(bWeb);
+    return SW_MOD()->GetUsrPref(bWeb)->GetMetric();
 }
 
 /*--------------------------------------------------------------------
@@ -713,24 +713,7 @@ FieldUnit   GetDfltMetric(BOOL bWeb)
 
 void    SetDfltMetric( FieldUnit eMetric, BOOL bWeb )
 {
-        SwModuleOptions* pCfg = SW_MOD()->GetModuleConfig();
-        FieldUnit eOldMetric = pCfg->GetMetric(bWeb);
-        if(eOldMetric != eMetric)
-            pCfg->SetMetric(eMetric, bWeb);
-
-        SwView* pTmpView = SwModule::GetFirstView();
-
-        // fuer alle MDI-Fenster das Lineal umschalten
-        while(pTmpView)
-        {
-            if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
-            {
-                pTmpView->ChangeVLinealMetric(eMetric);
-                pTmpView->ChangeTabMetric(eMetric);
-            }
-
-            pTmpView = SwModule::GetNextView(pTmpView);
-        }
+    SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
 /*-----------------15.07.97 10:49-------------------
@@ -895,6 +878,9 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:50  hr
+    initial import
+
     Revision 1.124  2000/09/18 16:06:19  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ int SwModuleOptions::Load(SvStream& rStream)
         UINT32 nColor;
         UINT16 nVal;
         rStream >>  nVal;
-        nDefTab = nVal;
+//      nDefTab = nVal;
 
         rStream >>  nVal;
         nTblHMove = nVal;
@@ -225,11 +225,11 @@ int SwModuleOptions::Load(SvStream& rStream)
 
         BYTE bVal;
         rStream >> bVal;
-        eUserMetric = (FieldUnit)bVal;
+//      eUserMetric = (FieldUnit)bVal;
         if (nVersion >= VERSION_08)
         {
             rStream >> bVal;
-            eWebUserMetric = (FieldUnit)bVal;
+//          eWebUserMetric = (FieldUnit)bVal;
         }
 
 
@@ -317,7 +317,7 @@ int SwModuleOptions::Load(SvStream& rStream)
             {
                 rStream >> bVal;    bInsTblFormatNum = bVal;
                 rStream >> bVal;    bInsTblAlignNum = bVal;
-                rStream >> nVal;    nLinkMode = nVal;
+                rStream >> nVal;    //nLinkMode = nVal;
 
                 if (nVersion == VERSION_12)
                     rStream >> bVal;    // Flag gibts nicht mehr
@@ -328,10 +328,10 @@ int SwModuleOptions::Load(SvStream& rStream)
                 }
                 if(nVersion >= VERSION_14)
                 {
-                    rStream>> nVal; nFldUpdateFlags = nVal;
+                    rStream>> nVal; //nFldUpdateFlags = nVal;
                 }
-                else
-                    nFldUpdateFlags = AUTOUPD_OFF;
+//              else
+//                  nFldUpdateFlags = AUTOUPD_OFF;
                 if(nVersion >= VERSION_15)
                 {
                     rStream >> bVal; bHTMLInsWithCaption = bVal;
@@ -387,13 +387,13 @@ BOOL SwModuleOptions::Store(SvStream& rStream)
 {
     rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
     rStream << (UINT16) MODCFG_VERSION;
-    rStream << (UINT16) nDefTab;
+    rStream << (UINT16) 0;//nDefTab;
     rStream << (UINT16) nTblHMove;
     rStream << (UINT16) nTblVMove;
     rStream << (UINT16) nTblHInsert;
     rStream << (UINT16) nTblVInsert;
-    rStream << (BYTE)   eUserMetric;
-    rStream << (BYTE)   eWebUserMetric;
+    rStream << (BYTE)   0;//eUserMetric;
+    rStream << (BYTE)   0;//eWebUserMetric;
     rStream << (BYTE)   eTblChgMode;
     rStream << (BYTE)   bGrfToGalleryAsLnk;
     rStream << (BYTE)   nMailingFormats;
@@ -420,9 +420,9 @@ BOOL SwModuleOptions::Store(SvStream& rStream)
         rStream << *aCapOptions[i];
     rStream << (BYTE)   bInsTblFormatNum;
     rStream << (BYTE)   bInsTblAlignNum;
-    rStream << (UINT16) nLinkMode;
+    rStream << (UINT16) 0;//nLinkMode;
     rStream << (UINT16) nInsTblFlags;
-    rStream << (UINT16) nFldUpdateFlags;
+    rStream << (UINT16) 0;//nFldUpdateFlags;
 
     rStream << (BYTE)   bHTMLInsWithCaption;
     rStream << (BYTE)   bHTMLInsTblFormatNum;
@@ -446,7 +446,7 @@ BOOL SwModuleOptions::Store(SvStream& rStream)
 
 void SwModuleOptions::UseDefault()
 {
-    MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
+/*  MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
     if(MEASURE_METRIC != eSys)
     {
         eUserMetric = eWebUserMetric = FUNIT_INCH;
@@ -462,7 +462,7 @@ void SwModuleOptions::UseDefault()
         nTblHMove = nTblVMove = MM50;   // 0,5  cm
         nTblHInsert = MM50;             // 0,5  cm
         nTblVInsert = 1415;             // 2,5  cm
-    }
+    }*/
 
     eTblChgMode = TBLVAR_CHGABS;
 
@@ -494,8 +494,8 @@ void SwModuleOptions::UseDefault()
     bHTMLInsTblChangeNumFormat = bInsTblChangeNumFormat = TRUE;
     bHTMLInsTblAlignNum = bInsTblAlignNum = TRUE;
 
-    nLinkMode = MANUAL;
-    nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
+//  nLinkMode = MANUAL;
+//  nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
 
     bShowAutoTextPreview = TRUE;
     bShowIndexPreview = TRUE;
@@ -530,6 +530,9 @@ String SwModuleOptions::GetName() const
 /*--------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:33  hr
+    initial import
+
     Revision 1.34  2000/09/18 16:05:15  willem.vandorp
     OpenOffice header added.
 

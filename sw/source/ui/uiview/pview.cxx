@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,8 +403,8 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
 
 
     SwDocShell* pDocShell = rPreView.GetDocShell();
-    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    FieldUnit eFieldUnit = pModOpt->GetMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(0 != PTR_CAST(SwWebDocShell, pDocShell));
+    FieldUnit eFieldUnit = pUsrPref->GetMetric();
     ::SetFieldUnit( aLSpaceMF, eFieldUnit );
     ::SetFieldUnit( aRSpaceMF, eFieldUnit );
     ::SetFieldUnit( aTSpaceMF, eFieldUnit );
@@ -1068,7 +1068,6 @@ void SwPagePreViewWin::SetPagePreview( BYTE nRow, BYTE nCol )
         pOpt->SetPagePrevRow( nRow );
         pOpt->SetPagePrevCol( nCol );
         pOpt->SetModified();
-        pOpt->SetDefault( FALSE );
 
         //VScrollbar updaten!
         if( rView.StatVScrollbar() )
@@ -2221,6 +2220,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:48  hr
+      initial import
+
       Revision 1.201  2000/09/18 16:06:10  willem.vandorp
       OpenOffice header added.
 

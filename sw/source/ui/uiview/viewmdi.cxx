@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             pUsrPref->SetZoom    ( USHORT(nFac) );
             pUsrPref->SetZoomType( BYTE( eZoomType ) );
             SW_MOD()->ApplyUsrPref( *pUsrPref, 0 );
-            pUsrPref->SetDefault ( FALSE );
+            pUsrPref->SetModified();
         }
         if ( pOpt->GetZoom() != (USHORT) nFac )
         {
@@ -711,6 +711,9 @@ void SwView::SetImageButtonColor(Color& rColor)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.126  2000/09/18 16:06:13  willem.vandorp
     OpenOffice header added.
 

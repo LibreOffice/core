@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 
     // hier werden die Optionen fuer die Web- und den Textdialog zusmmengesetzt
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
+        SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
         BOOL bFrameDoc = FALSE;
         //kein MakeUsrPref, da hier nur die Optionen von Textdoks genommen werden duerfen
         SwView* pAppView = GetView();
@@ -233,8 +234,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(aBool);
     }
 
-    SwModuleOptions* pMCfg = GetModuleConfig();
-    pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, pMCfg->GetMetric(!bTextDialog)));
+    pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, pPref->GetMetric()));
     if(bTextDialog)
     {
         if(pAppView)
@@ -245,7 +245,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                 pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, (USHORT)::GetTabDist(rDefTabs)));
         }
         else
-            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, pMCfg->GetDefTab()));
+            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, pPref->GetDefTab()));
     }
 
     /*-----------------01.02.97 11.13-------------------
@@ -368,7 +368,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
                                                             FALSE, &pItem ) )
             {
                 USHORT nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
-                pMCfg->SetDefTab(nTabDist);
+                pUsrPref->SetDefTab(nTabDist);
                 if(pAppView)
                 {
                     SvxTabStopItem aDefTabs( 0, 0 );
@@ -545,6 +545,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:31  hr
+    initial import
+
     Revision 1.163  2000/09/18 16:05:10  willem.vandorp
     OpenOffice header added.
 

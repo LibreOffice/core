@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLISTEVENTLISTENER_HPP_
 #include <com/sun/star/linguistic/XDictionaryListEventListener.hpp>
+#endif
+#ifndef _VCL_FLDUNIT_HXX
+#include <vcl/fldunit.hxx>
 #endif
 
 class SvStringsDtor;
@@ -191,11 +194,14 @@ public:
     void                ExecDB(SfxRequest &);       // DBManager
 
     // Benutzereinstellungen modifizieren
-    const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb);
+    const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
     const SwViewOption* GetViewOption(sal_Bool bWeb);
     void                MakeUsrPref( SwViewOption &rToFill, sal_Bool bWeb ) const;
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
+    void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
+    void ApplyFldUpdateFlags(sal_Int32 nFldFlags);
+    void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // ConfigItems erzeugen
     SwSrcViewConfig*    GetSourceViewConfig();

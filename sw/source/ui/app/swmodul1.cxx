@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,8 +475,8 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
 
     if(!bViewOnly)
     {
-        pPref->SetDefault( sal_False );
         pPref->SetUsrPref( rUsrPref );
+        pPref->SetModified();
     }
 
     if( !pView )
@@ -510,6 +510,42 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     // zum Schluss wird das Idle-Flag wieder gesetzt
     // #42510#
     pPref->SetIdle(sal_True);
+
+}
+/* -----------------------------28.09.00 12:36--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
+{
+        SwMasterUsrPref* pPref;
+        if(bWeb)
+        {
+            if(!pWebUsrPref)
+                GetUsrPref(sal_True);
+            pPref = pWebUsrPref;
+        }
+        else
+        {
+            if(!pUsrPref)
+                GetUsrPref(sal_False);
+            pPref = pUsrPref;
+        }
+        FieldUnit eOldMetric = pPref->GetMetric();
+        if(eOldMetric != eMetric)
+            pPref->SetMetric(eMetric);
+
+        SwView* pTmpView = SwModule::GetFirstView();
+        // fuer alle MDI-Fenster das Lineal umschalten
+        while(pTmpView)
+        {
+            if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
+            {
+                pTmpView->ChangeVLinealMetric(eMetric);
+                pTmpView->ChangeTabMetric(eMetric);
+            }
+
+            pTmpView = SwModule::GetNextView(pTmpView);
+        }
 
 }
 /*-----------------13.11.96 11.57-------------------
@@ -891,25 +927,67 @@ const String& SwModule::GetDocStatWordDelim() const
 {
     return pModuleConfig->GetWordDelimiter();
 }
+/* ---------------------------------------------------------------------------
 
-
+ ---------------------------------------------------------------------------*/
 // Durchreichen der Metric von der ModuleConfig (fuer HTML-Export)
 sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
 {
-    return pModuleConfig->GetMetric( bWeb );
+    SwMasterUsrPref* pPref;
+    if(bWeb)
+    {
+        if(!pWebUsrPref)
+            GetUsrPref(sal_True);
+        pPref = pWebUsrPref;
+    }
+    else
+    {
+        if(!pUsrPref)
+            GetUsrPref(sal_False);
+        pPref = pUsrPref;
+    }
+    return pPref->GetMetric();
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 // Update-Stati durchreichen
 sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 {
-    return pModuleConfig->GetLinkMode();
+    if(!pUsrPref)
+        GetUsrPref(sal_False);
+    return pUsrPref->GetUpdateLinkMode();
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_uInt16 SwModule::GetFldUpdateFlags( sal_Bool ) const
 {
-    return pModuleConfig->GetFldUpdateFlags();
+    if(!pUsrPref)
+        GetUsrPref(sal_False);
+    return (sal_uInt16)pUsrPref->GetFldUpdateFlags();
 }
+/* -----------------------------28.09.00 14:18--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SwModule::ApplyFldUpdateFlags(sal_Int32 nFldFlags)
+{
+    if(!pUsrPref)
+        GetUsrPref(sal_False);
+    pUsrPref->SetFldUpdateFlags(nFldFlags);
+}
+/* -----------------------------28.09.00 14:18--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
+{
+    if(!pUsrPref)
+        GetUsrPref(sal_False);
+    pUsrPref->SetUpdateLinkMode(nNewLinkMode);
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
 void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
         sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain )
 {
@@ -931,162 +1009,4 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
     }
 }
 
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.50  2000/09/18 16:05:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.49  2000/09/08 15:11:56  os
-    use configuration service
-
-    Revision 1.48  2000/09/07 15:59:20  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.47  2000/09/07 08:25:24  os
-    SwPrintOptions uses configuration service
-
-    Revision 1.46  2000/07/18 12:50:07  os
-    replace ofadbmgr
-
-    Revision 1.45  2000/05/26 07:21:28  os
-    old SW Basic API Slots removed
-
-    Revision 1.44  2000/05/16 09:15:11  os
-    project usr removed
-
-    Revision 1.43  2000/05/11 12:05:29  tl
-    if[n]def ONE_LINGU entfernt
-
-    Revision 1.42  2000/03/30 13:28:04  os
-    UNO III
-
-    Revision 1.41  2000/03/29 12:46:55  jp
-    Bug #74570#: ShowDBObj - if no table and no query exist, set default to table
-
-    Revision 1.40  2000/03/21 15:47:50  os
-    UNOIII
-
-    Revision 1.39  2000/02/11 14:43:07  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.38  2000/02/09 07:58:08  os
-    #72824# check if beamer is available
-
-    Revision 1.37  2000/01/13 11:31:37  tl
-    #70735# fixed CheckSpellChanges bug
-
-    Revision 1.36  2000/01/11 10:33:54  tl
-    #70735# CheckSpellChanges moved from SwDoc to here
-
-    Revision 1.35  2000/01/06 12:54:01  hr
-    #65293#: END_CATCH
-
-    Revision 1.34  2000/01/06 07:32:38  os
-    #71436# mail merge dialog: execute via status method disposed
-
-    Revision 1.33  1999/06/22 15:37:58  JP
-    Bug #43028#: disableflag for edit in mailbody
-
-
-      Rev 1.32   22 Jun 1999 17:37:58   JP
-   Bug #43028#: disableflag for edit in mailbody
-
-      Rev 1.31   20 Apr 1999 18:59:24   JP
-   Task #65061#: neu: ZahlenFormaterkennung abschaltbar
-
-      Rev 1.30   12 Mar 1999 09:55:32   JP
-   Task #61405#: Optionen setzen
-
-      Rev 1.29   12 Mar 1999 09:45:04   OS
-   #63044# Datenbank-Fehlermeldung anzeigen
-
-      Rev 1.28   01 Mar 1999 16:20:52   MA
-   #62490# Altlast entfernt (Drucken und Briefumschlaege/Etiketten und Datenbank)
-
-      Rev 1.27   23 Feb 1999 16:19:38   OS
-   #62281# UsrPrefs per UNO nur auf aktuelle sdbcx::View anwenden
-
-      Rev 1.26   17 Feb 1999 08:37:24   OS
-   #58158# Einfuegen TabPage auch in HTML-Docs
-
-      Rev 1.25   27 Jan 1999 10:05:22   OS
-   #58677# Cursor in Readonly-Bereichen
-
-      Rev 1.24   26 Jan 1999 11:50:10   MIB
-   #60875#: Beim HTML-Export Einheit aus Extras/Optionen/Text-/HTML-Dokument nehmen
-
-      Rev 1.23   23 Nov 1998 17:36:52   JP
-   Bug #59754#: TerminateHdl wird nicht mehr fuers Clipboard benoetigt
-
-      Rev 1.22   20 Nov 1998 14:01:32   OM
-   #59720# Neue Tabellenoptionen beim Einfuegen
-
-      Rev 1.21   05 Oct 1998 17:16:54   OM
-   #57458# Auch Queries ueber F4 anzeigen
-
-      Rev 1.20   24 Sep 1998 13:33:02   OS
-   #52654# #56685# XTerminateListener fuer die Anmeldung an der Application
-
-      Rev 1.19   24 Aug 1998 12:20:54   OM
-   #54552# Serienbriefdialog: Statusupdate immer erzwingen
-
-      Rev 1.18   14 Jul 1998 12:09:06   OS
-   Scrollbars nur umschalten, wenn sich die ViewOptions wirklich veraendert haben #52708#
-
-      Rev 1.17   25 May 1998 12:41:28   JP
-   nMergeType wurde private, ueber SetMergeType setzen
-
-      Rev 1.16   15 May 1998 12:50:02   OM
-   Worttrenner
-
-      Rev 1.15   14 May 1998 16:46:00   OM
-   Worttrenner konfigurierbar
-
-      Rev 1.14   24 Apr 1998 19:36:54   JP
-   neu: DocStat WordDelimiter aus der Configuration holen
-
-      Rev 1.13   24 Mar 1998 17:45:28   OM
-   Formataenderung anzeigen
-
-      Rev 1.12   24 Mar 1998 13:43:56   JP
-   neu: Redline fuer harte Attributierung
-
-      Rev 1.11   16 Mar 1998 19:09:48   OM
-   Zugriff auf Ini optimiert
-
-      Rev 1.10   15 Mar 1998 16:57:22   MA
-   #48342# richtig initialisieren
-
-      Rev 1.9   10 Mar 1998 12:23:42   OM
-   Get...AuthorAttr
-
-      Rev 1.8   05 Mar 1998 14:44:08   OM
-   Redline-Attribute in Module-Cfg speichern
-
-      Rev 1.7   03 Mar 1998 17:00:46   OS
-   GetViewOption
-
-      Rev 1.6   28 Feb 1998 15:12:42   OM
-   Accept / reject changes
-
-      Rev 1.5   24 Feb 1998 15:32:04   OM
-   Redline-Darstellungsoptionen setzen
-
-      Rev 1.4   08 Dec 1997 11:46:16   OS
-   benannte Numerierungen entfernt
-
-      Rev 1.3   24 Nov 1997 14:22:36   MA
-   includes
-
-      Rev 1.2   18 Nov 1997 14:33:42   OM
-   Sba-Umstellung 372
-
-      Rev 1.1   02 Sep 1997 10:21:08   OS
-   includes
-
-      Rev 1.0   01 Sep 1997 13:09:16   OS
-   Initial revision.
-
-
--------------------------------------------------------------------------*/
 
