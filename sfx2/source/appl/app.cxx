@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: gh $ $Date: 2001-08-13 14:45:12 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 16:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ void SfxApplication::SetApp( SfxApplication* pSfxApp )
     ::osl::MutexGuard aGuard( aProtector );
 
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxApplication::SetApp" );
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
 #endif
     DBG_ASSERT( !pApp, "SfxApplication already created!" );
     if ( pApp )
@@ -456,7 +456,7 @@ SfxApplication::SfxApplication()
     , nInterfaces( 0 )
 {
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxApplication::SfxApplication" );
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
 #endif
 
     GetpApp()->SetPropertyHandler( GetOrCreatePropertyHandler() );
