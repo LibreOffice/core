@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlComboBox.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:04:17 $
+ *  last change:$Date: 2004-01-05 20:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,15 +108,7 @@ public class UnoControlComboBox extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+util.DesktopTools.closeDoc(xTextDoc);
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters Param,
