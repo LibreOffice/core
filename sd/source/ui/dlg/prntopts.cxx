@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
+ *  last change: $Author: cl $ $Date: 2002-07-02 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,24 +282,11 @@ IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
 {
     BOOL bPageNameAllowed = TRUE;
 
-    if( !aCbxDraw.IsChecked() &&
-        !aCbxNotes.IsChecked() &&
-        !aCbxOutline.IsChecked() )
-    {
-        if ( !aCbxHandout.IsChecked() )
-            pCbx->Check();
+    // there must be at least one of them checked
+    if( !aCbxDraw.IsChecked() && !aCbxNotes.IsChecked() && !aCbxOutline.IsChecked() && !aCbxHandout.IsChecked() )
+        pCbx->Check();
 
-        aCbxPagename.Check( FALSE );
-        aCbxPagename.Enable( FALSE );
-    }
-    else
-    {
-        if( aRbtBooklet.IsChecked() )
-            aCbxPagename.Enable( FALSE );
-        else
-            aCbxPagename.Enable( TRUE );
-    }
-
+    updateControls();
     return 0;
 }
 
@@ -307,26 +294,21 @@ IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
 
 IMPL_LINK( SdPrintOptions, ClickBookletHdl, CheckBox *, EMPTYARG )
 {
-    if( aRbtBooklet.IsChecked() )
-    {
-        aCbxFront.Enable();
-        aCbxBack.Enable();
-
-        aCbxDate.Enable( FALSE );
-        aCbxTime.Enable( FALSE );
-        aCbxPagename.Enable( FALSE );
-    }
-    else
-    {
-        aCbxFront.Enable( FALSE );
-        aCbxBack.Enable( FALSE );
-
-        aCbxDate.Enable();
-        aCbxTime.Enable();
-        aCbxPagename.Enable();
-    }
+    updateControls();
     return 0;
 }
+
+void SdPrintOptions::updateControls()
+{
+    aCbxFront.Enable(aRbtBooklet.IsChecked());
+    aCbxBack.Enable(aRbtBooklet.IsChecked());
+
+    aCbxDate.Enable( !aRbtBooklet.IsChecked() );
+    aCbxTime.Enable( !aRbtBooklet.IsChecked() );
+
+    aCbxPagename.Enable( !aRbtBooklet.IsChecked() && (aCbxDraw.IsChecked() || aCbxNotes.IsChecked() || aCbxOutline.IsChecked()) );
+}
+
 /* -----------------------------04.05.01 10:53--------------------------------
 
  ---------------------------------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-25 13:31:54 $
+ *  last change: $Author: cl $ $Date: 2002-07-02 14:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ private:
 
     DECL_LINK( ClickCheckboxHdl, CheckBox * );
     DECL_LINK( ClickBookletHdl, CheckBox * );
+
+    void updateControls();
 
 public:
             SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs);
