@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:34:02 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,14 +118,14 @@ rtl::OUString EnhancedCustomShapeEngine_getImplementationName()
 sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const rtl::OUString& ServiceName )
     throw( NMSP_UNO::RuntimeException )
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "drafts.com.sun.star.drawing.CustomShapeEngine" ) );
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShapeEngine" ) );
 }
 SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
     throw( NMSP_UNO::RuntimeException )
 {
     SEQ( rtl::OUString ) aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = B2UCONST( "drafts.com.sun.star.drawing.CustomShapeEngine" );
+    pArray[0] = B2UCONST( "com.sun.star.drawing.CustomShapeEngine" );
     return aRet;
 }
 
@@ -338,7 +338,7 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
     return aPolyPolygonBezierCoords;
 }
 
-SEQ( REF( drafts::com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL EnhancedCustomShapeEngine::getInteraction()
+SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL EnhancedCustomShapeEngine::getInteraction()
     throw ( NMSP_UNO::RuntimeException )
 {
     sal_uInt32 i, nHdlCount = 0;
@@ -348,7 +348,7 @@ SEQ( REF( drafts::com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL Enhan
         EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
         nHdlCount = aCustomShape2d.GetHdlCount();
     }
-    SEQ( REF( drafts::com::sun::star::drawing::XCustomShapeHandle ) ) aSeq( nHdlCount );
+    SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) aSeq( nHdlCount );
     for ( i = 0; i < nHdlCount; i++ )
         aSeq[ i ] = new EnhancedCustomShapeHandle( mxShape, i );
     return aSeq;
