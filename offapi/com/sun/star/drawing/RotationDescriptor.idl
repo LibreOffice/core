@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RotationDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 12:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::drawing::RotationDescriptor
 /** This abstract service specifies the general characteristics of an optional
     rotation and shearing for a <type>Shape</type>.
  */
@@ -76,40 +75,15 @@ service RotationDescriptor
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::RotationDescriptor::RotateAngle
     /** This is the angle for rotation of this <type>Shape</type>.
      */
     [property] long RotateAngle;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::RotationDescriptor::RotationPointX
-    /** This defines the x coordinate for rotation.
-
-
-
-        <p>This is only used if you change the <type>RotationDescriptor::RotateAngle</type> property.</p>
-     */
-    [property] long RotationPointX;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::drawing::RotationDescriptor::RotationPointY
-    /** This defines the y coordinate for rotation.
-
-
-
-        <p>This is only used if you change the <type>RotationDescriptor::RotateAngle</type> property.</p>
-     */
-    [property] long RotationPointY;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::drawing::RotationDescriptor::ShearAngle
     /** This is the amount of shearing for this <type>Shape</type>.
      */
     [property] long ShearAngle;
-
 };
 
 //=============================================================================
@@ -119,6 +93,9 @@ service RotationDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:14  hjs
     initial import
 
