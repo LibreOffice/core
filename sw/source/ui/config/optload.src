@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:44:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 21:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ greek ] = "Πεδία και διαγράμματα";
         Text[ dutch ] = "Velden en diagrammen actualiseren";
         Text[ french ] = "Automatique";
-        Text[ spanish ] = "Campos y diagramas";
+        Text[ spanish ] = "Automαtico";
         Text[ finnish ] = "Felder und Diagramme aktualisieren";
         Text[ italian ] = "Campi e diagrammi";
         Text[ danish ] = "Felter og diagrammer";
@@ -256,7 +256,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ greek ] = "Αυτόματη ενημέρωση ~εντολών πεδίων";
         Text[ dutch ] = "V~eldopdrachten automatisch";
         Text[ french ] = "Champs";
-        Text[ spanish ] = "Actualizar ~campos automαticamente";
+        Text[ spanish ] = "~Campos";
         Text[ finnish ] = "F~eldbefehle automatisch";
         Text[ italian ] = "Aggiorna i comandi di campo automaticamente";
         Text[ danish ] = "Opdater felter automatisk";
@@ -284,7 +284,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ greek ] = "Αυτόματη ενημέρωση δια~γραμμάτων";
         Text[ dutch ] = "~Diagrammen automatisch";
         Text[ french ] = "Diagrammes";
-        Text[ spanish ] = "Actualizar ~diagramas automαticamente";
+        Text[ spanish ] = "~Diagramas";
         Text[ finnish ] = "Dia~gramme automatisch";
         Text[ italian ] = "Aggiorna i diagrammi automaticamente";
         Text[ danish ] = "Opdater diagrammer automatisk";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
