@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-08 12:46:50 $
+ *  last change: $Author: oj $ $Date: 2001-01-16 09:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     aRow.push_back(Any());
     aRow.push_back(makeAny((sal_Int32)ColumnValue::NULLABLE));
     aRow.push_back(makeAny((sal_Int32)1));
-    aRow.push_back(makeAny((sal_Int32)ColumnSearch::CHAR));
+    aRow.push_back(makeAny((sal_Int32)ColumnSearch::FULL));
     aRow.push_back(makeAny((sal_Int32)1));
     aRow.push_back(makeAny((sal_Int32)0));
     aRow.push_back(makeAny((sal_Int32)0));
