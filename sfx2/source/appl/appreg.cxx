@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:03:29 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,34 +113,11 @@ void SfxApplication::Registrations_Impl()
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
 
     // Controller
-/*
-    SfxObjectVerbsControl::RegisterControl(SID_OBJECT);
-    SfxMenuControl::RegisterControl(SID_QUITAPP);
-    SfxMenuControl::RegisterControl(SID_SAVEASDOC);
-    SfxMenuControl::RegisterControl(SID_SAVEDOC);
-    SfxMenuControl::RegisterControl(SID_OPENDOC);
-    SfxMenuControl::RegisterControl(SID_CLOSEDOC);
-    SfxMenuControl::RegisterControl(SID_OBJECTMENU0);
-    SfxMenuControl::RegisterControl(SID_OBJECTMENU1);
-    SfxMenuControl::RegisterControl(SID_OBJECTMENU2);
-    SfxMenuControl::RegisterControl(SID_OBJECTMENU3);
-    SfxMenuControl::RegisterControl(SID_UNDO);
-    SfxMenuControl::RegisterControl(SID_REDO);
-    SfxMenuControl::RegisterControl(SID_REPEAT);
-    SfxMenuControl::RegisterControl(SID_MAIL_SENDDOC);
-    SfxAppMenuControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
-    SfxAppMenuControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
-*/
-//  SfxToolBoxControl::RegisterControl(SID_UNDO);
-//  SfxToolBoxControl::RegisterControl(SID_REDO);
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
     SfxCancelToolBoxControl_Impl::RegisterControl(SID_BROWSE_STOP);
     SfxAppToolBoxControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
     SfxAppToolBoxControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
-//  SfxDragToolBoxControl_Impl::RegisterControl( SID_TOPDOC );
-//  SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_FORWARD );
-//  SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_BACKWARD );
     SfxReloadToolBoxControl_Impl::RegisterControl( SID_RELOAD );
     SfxAddonsToolBoxControl_Impl::RegisterControl( SID_ADDONS );
 };
