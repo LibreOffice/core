@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 07:15:00 $
+ *  last change: $Author: tl $ $Date: 2002-05-23 08:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1134,6 +1134,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
 #define FN_PARAM_NUM_LEVEL              (FN_PARAM2+16) /* rtf filter*/
 #define FN_PARAM_COUNTOUR_PP            (FN_PARAM2+17) /* contour PolyPolygon*/
+
+#define FN_ANCHOR_POSITION              (FN_PARAM2+18) /* AnchorPosition property */
 /*--------------------------------------------------------------------
     Bereich: Druckoptionen
  --------------------------------------------------------------------*/
