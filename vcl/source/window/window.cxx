@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:35:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,6 +837,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
         mpFrameData->mbInternalDragGestureRecognizer = FALSE;
+        mpFrameData->mbTriggerHangulHanja = FALSE;
     }
 
     // init data
