@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-02 12:21:42 $
+ *  last change: $Author: jb $ $Date: 2001-11-06 15:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
+#endif
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -1261,9 +1264,31 @@ namespace {
         }
     }
 // ---------------------------------------------------------------------------------------
+    // need an exported symbol of this shared object
+    extern "C" sal_Bool SAL_CALL component_writeInfo(void* , void* );
 
+    static OUString getCurrentModuleDirectory()
+    {
+        OUString aFileURL;
+        if ( !osl::Module::getUrlFromAddress((void*)&component_writeInfo,aFileURL) )
+        {
+            OSL_TRACE(false, "Cannot locate current module - using executable instead");
+
+            OSL_VERIFY(osl_Process_E_None == osl_getExecutableFile(&aFileURL.pData));
+        }
+
+        OSL_ENSURE(0 < aFileURL.lastIndexOf('/'), "Cannot find directory for module URL");
+
+        return aFileURL.copy(0, aFileURL.lastIndexOf('/'));
+    }
+// ---------------------------------------------------------------------------------------
+    static OUString getConfigurationBootstrapURL()
+    {
+        return getCurrentModuleDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_CONFIGMGR_DATA));
+    }
+// ---------------------------------------------------------------------------------------
     BootstrapSettings::Impl::Impl()
-    : m_data(ITEM(BOOTSTRAP_CONFIGMGR_DATA))
+    : m_data(getConfigurationBootstrapURL())
     {
     }
 // ---------------------------------------------------------------------------------------
