@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:52:36 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, BOOL bOnlyInSel )
             if(pField->GetTyp()->Which() == RES_DROPDOWN)
                 bCancel = StartDropDownFldDlg( pField, TRUE, &aDlgPos );
             else
-                bCancel = StartInputFldDlg( pField, TRUE, &aDlgPos);
+                bCancel = StartInputFldDlg( pField, TRUE, 0, &aDlgPos);
 
             // Sonst Updatefehler bei Multiselektion:
             pTmp->GetField( i )->GetTyp()->UpdateFlds();
@@ -266,7 +266,8 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, BOOL bOnlyInSel )
 
 
 
-BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton, ByteString* pWindowState )
+BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
+                                    Window* pParentWin, ByteString* pWindowState )
 {
 //JP 14.08.96: Bug 30332 - nach Umbau der modularietaet im SFX, muss jetzt
 //              das TopWindow der Application benutzt werden.
@@ -276,7 +277,7 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton, ByteString* 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
     AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( ResId(DLG_FLD_INPUT),
-                                                        NULL, *this, pFld, bNextButton);
+                                                        pParentWin, *this, pFld, bNextButton);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
@@ -309,7 +310,7 @@ BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString
     GetWin()->Update();
     if(RET_YES == nRet)
     {
-        GetView().GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FIELD, SFX_CALLMODE_ASYNCHRON);
+        GetView().GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FIELD, SFX_CALLMODE_SYNCHRON);
     }
     return bRet;
 }
