@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:56:45 $
+ *  last change: $Author: dvo $ $Date: 2000-11-22 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ public:
     static const sal_Char* MapReferenceSource(sal_Int16 nType);
     static const sal_Char* MapReferenceType(sal_Int16 nType);
     static const sal_Char* MapCountFieldName(sal_Int16 nToken);
+    static const sal_Char* MapBibliographyFieldName(::rtl::OUString sName);
     const sal_Char* MapPageNumberName(const ::com::sun::star::uno::Reference<
                       ::com::sun::star::beans::XPropertySet> & xPropSet,
                       sal_Int32& nOffset);  /// also adjust page offset
@@ -318,19 +319,17 @@ protected:
         const ::com::sun::star::util::DateTime& rTime,      /// date/time value
         sal_Bool bIsDate );             /// export as date (rather than date/time)?
 
+    /// export all attributes for bibliography data fields
+    void ProcessBibliographyData(
+        ::com::sun::star::uno::Reference <
+            ::com::sun::star::beans::XPropertySet > & rPropertySet);
+
     /// for XDependentTextFields, get PropertySet of FieldMaster
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
     GetMasterPropertySet(const ::com::sun::star::uno::Reference <
                          ::com::sun::star::text::XTextField > & rTextField);
 
-//  /// get PropertySet of (any) DependentTextField for this FieldMaster
-//  ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
-//  GetDependentFieldPropertySet(const ::rtl::OUString& sFieldMasterName,
-//                               const ::com::sun::star::uno::Reference<
-//                               ::com::sun::star::frame::XModel> & rModel);
-
     /// get PropertySet of (any) DependentTextField for this FieldMaster
-    // (real version)
     sal_Bool GetDependentFieldPropertySet(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xmaster,
@@ -429,6 +428,7 @@ private:
     const ::rtl::OUString sPropertySequenceValue;
     const ::rtl::OUString sPropertyURL;
     const ::rtl::OUString sPropertyTargetFrame;
+    const ::rtl::OUString sPropertyFields;
 
     const ::rtl::OUString sEmpty;
 };
