@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:22 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,9 @@ inline void _defaultConstructArray(
             *((sal_Int32 *)pMem + i) = ((typelib_EnumTypeDescription *)pElementType)->nDefaultEnumValue;
         }
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         for (i=0; i < nTotalElements; i++)
@@ -249,11 +247,9 @@ inline void _defaultConstructData(
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
