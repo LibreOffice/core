@@ -18671,3 +18671,5 @@ _real@8@4005f000000000000000
 ??_R0?AVSQLContext@sdb@star@sun@com@@@8
 ??_R0?AVSQLWarning@sdbc@star@sun@com@@@8
 ?get@?$Reference@VXConnection@sdbc@star@sun@com@@@uno@star@sun@com@@QBAPAVXConnection@sdbc@345@XZ
+??1?$Reference@VXFlushableClipboard@clipboard@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?s_pType_com_sun_star_datatransfer_clipboard_XFlushableClipboard@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFlushableClipboard@clipboard@datatransfer@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
