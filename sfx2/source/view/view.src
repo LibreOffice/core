@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 20:17:49 $
+ *  last change: $Author: cd $ $Date: 2001-10-08 05:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,8 +731,8 @@ InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    MESSAGE = "Fehler beim Versenden der Nachricht." ;
-    MESSAGE [ English ] = "Error while sending mail." ;
+    MESSAGE = "Fehler beim Versenden der Nachricht. Mögliche Fehler sind ein fehlendes Benutzerkonto oder ein fehlerhaftes Setup.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME oder die ihres e-mail Programms." ;
+    MESSAGE [ English ] = "Error while sending mail. Possible errors are a missing account or an incorrect setup.\nPlease check your settings within %PRODUCTNAME or within your e-mail client." ;
     MESSAGE [ norwegian ] = "Feil ved sending av mail." ;
     MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
