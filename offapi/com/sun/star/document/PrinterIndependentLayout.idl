@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrinterIndependentLayout.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:29:29 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,20 @@ constants PrinterIndependentLayout
     /** use printer-dependent metrics for layout */
     const short DISABLED = 1;
 
-    /** use printer-independent metrics for layout */
-    const short ENABLED = 2;
+    /** use printer-independent metrics for layout,
+        assuming a generic 600dpi printer */
+    const short LOW_RESOLUTION = 2;
+
+    /** @deprecated ENABLED changed to LOW_RESOLUTION,
+                    to distinguish from HIGH_RESOLUTION */
+    const short ENABLED = LOW_RESOLUTION;
+
+    /** use printer-independent metrics for layout,
+        assuming a generic high-resolution printer (4800dpi) */
+    const short HIGH_RESOLUTION = 3;
 
     /** [future:] use printer-independent-layout settings from parent object
-    const short LIKE_PARENT = 3;
+    const short LIKE_PARENT = 4;
      */
 };
 
