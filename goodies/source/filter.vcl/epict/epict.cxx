@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-28 13:27:19 $
+ *  last change: $Author: sj $ $Date: 2000-10-23 13:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ struct PictWriterAttrStackMember {
     RasterOp                            eRasterOp;
     Font                                aFont;
     MapMode                             aMapMode;
+    Rectangle                           aClipRect;
 };
 
 
@@ -122,12 +123,13 @@ private:
     SvStream * pPict;
 
     // Aktuelle Attribute im Quell-Metafile:
-    Color    aLineColor;
-    Color    aFillColor;
-    RasterOp eSrcRasterOp;
-    Font     aSrcFont;
-    MapMode  aSrcMapMode;
-    MapMode  aTargetMapMode;
+    Color       aLineColor;
+    Color       aFillColor;
+    RasterOp    eSrcRasterOp;
+    Font        aSrcFont;
+    MapMode     aSrcMapMode;
+    MapMode     aTargetMapMode;
+    Rectangle   aClipRect;
     PictWriterAttrStackMember * pAttrStack;
 
     // Aktuelle Attribute im Ziel-Metafile, und ob sie gueltig sind
@@ -163,6 +165,7 @@ private:
     Polygon PolyPolygonToPolygon(const PolyPolygon & rPoly);
         // Macht aus einem PolyPolygon ein halbwegs vernuenftiges Polygon
 
+    Rectangle MapRectangle( const Rectangle& rRect );
     void WritePoint(const Point & rPoint);
     void WriteSize(const Size & rSize);
     void WriteRGBColor(const Color & rColor);
@@ -190,6 +193,7 @@ private:
     void WriteOpcode_LineFrom(const Point & rNewPt);
     void WriteOpcode_Text(const Point & rPoint, const String& rString, BOOL bDelta);
     void WriteOpcode_FontName(const Font & rFont);
+    void WriteOpcode_ClipRect( const Rectangle& rRect );
     void WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & rRect);
     void WriteOpcode_SameRect(PictDrawingMethod eMethod);
     void WriteOpcode_RRect(PictDrawingMethod eMethod, const Rectangle & rRect);
@@ -376,31 +380,23 @@ void PictWriter::WriteString( const String & rString )
         *pPict << aByteString.GetChar( i );
 }
 
+Rectangle PictWriter::MapRectangle( const Rectangle& rRect )
+{
+    Point   aPoint = OutputDevice::LogicToLogic( rRect.TopLeft(), aSrcMapMode, aTargetMapMode );
+    Size    aSize = OutputDevice::LogicToLogic( rRect.GetSize(), aSrcMapMode, aTargetMapMode );
+    Rectangle aRect( aPoint, aSize );
+    aRect.Justify();
+    aRect.nBottom++;
+    aRect.nRight++;
+    return aRect;
+}
 
 void PictWriter::WriteRectangle(const Rectangle & rRect)
 {
-    Point   aPoint = OutputDevice::LogicToLogic( rRect.TopLeft(),
-                                                 aSrcMapMode,
-                                                 aTargetMapMode );
-    Size    aSize = OutputDevice::LogicToLogic( rRect.GetSize(),
-                                                aSrcMapMode,
-                                                aTargetMapMode );
-    Rectangle aRect( aPoint, aSize );
-
-
-    short x1,y1,x2,y2,t;
-
-    x1=(short) aRect.Left();
-    y1=(short) aRect.Top();
-    x2=(short) aRect.Right();
-    y2=(short) aRect.Bottom();
-    if (x1>x2) { t=x1; x1=x2; x2=t; }
-    if (y1>y2) { t=y1; y1=y2; y2=t; }
-    x2++;
-    y2++;
-    *pPict << y1 << x1 << y2 << x2;
+    Rectangle aRect( MapRectangle( rRect ) );
+    *pPict  << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()
+            << (sal_Int16)aRect.Bottom() << (sal_Int16)aRect.Right();
 }
-
 
 void PictWriter::WritePolygon(const Polygon & rPoly)
 {
@@ -800,6 +796,17 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
     }
 }
 
+void PictWriter::WriteOpcode_ClipRect( const Rectangle& rRect )
+{
+    Rectangle aRect( MapRectangle( rRect ) );
+    aRect.nBottom++;
+    aRect.nRight++;
+    *pPict  << (sal_uInt16)1    // opcode 1
+            << (sal_uInt16)10   // data size
+            << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()
+            << (sal_Int16)aRect.Bottom() << (sal_Int16)aRect.Right();
+    aClipRect = aRect;
+}
 
 void PictWriter::WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & rRect)
 {
@@ -1858,7 +1865,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_ISECTRECTCLIPREGION_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_ISECTRECTCLIPREGION_ACTION!" );
+                const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pMA;
+                WriteOpcode_ClipRect( pA->GetRect() );
             }
             break;
 
@@ -2000,6 +2008,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 pAt->eRasterOp=eSrcRasterOp;
                 pAt->aFont=aSrcFont;
                 pAt->aMapMode=aSrcMapMode;
+                pAt->aClipRect=aClipRect;
                 pAt->pSucc=pAttrStack;
                 pAttrStack=pAt;
             }
@@ -2016,6 +2025,15 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     eSrcRasterOp=pAt->eRasterOp;
                     aSrcFont=pAt->aFont;
                     aSrcMapMode=pAt->aMapMode;
+                    if ( pAt->aClipRect != aClipRect )
+                    {
+                        Rectangle aRect( pAt->aClipRect );
+                        *pPict  << (sal_uInt16)1    // opcode 1
+                                << (sal_uInt16)10   // data size
+                                << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()
+                                << (sal_Int16)aRect.Bottom() << (sal_Int16)aRect.Right();
+                    }
+                    aClipRect=pAt->aClipRect;
                     pAttrStack=pAt->pSucc;
                     delete pAt;
                 }
@@ -2092,11 +2110,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
 {
     USHORT  i;
-    Size    aSize( OutputDevice::LogicToLogic( rMTF.GetPrefSize(),
-                                               rMTF.GetPrefMapMode(),
-                                               aTargetMapMode ) );
-    short   nWidth = (short) ( aSize.Width() + 1L );
-    short   nHeight = (short) ( aSize.Height() + 1L );
+    Rectangle   aRect( Point(), rMTF.GetPrefSize() );
 
     // 512 Bytes "Muell" am Anfang:
     for (i=0;i<128;i++) *pPict << (ULONG)0;
@@ -2105,8 +2119,7 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
     *pPict << (USHORT)0; // wird spaeter durch UpdateHeader() berichtigt
 
     // Das Bounding-Rectangle (y1,x1,y2,x2 !):
-    *pPict << (short)0 << (short)0
-           << nHeight << nWidth;
+    WriteRectangle( aRect );
 
     // Version 2:
     *pPict << (ULONG)0x001102ff;
@@ -2116,21 +2129,14 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
            << (USHORT)0xfffe                            // Version (?)
            << (USHORT)0x0000                            // Reserved
            << (ULONG) 0x00480000                        // hRes
-           << (ULONG) 0x00480000                        // vRes
-           << (USHORT)0x0000                            // SrcRect-Y1
-           << (USHORT)0x0000                            // SrcRect-X1
-           << nHeight                                   // SrcRect-Y2
-           << nWidth                                    // SrcRect-X2
-           << (ULONG)0x00000000;                        // Reserved
+           << (ULONG) 0x00480000;
+    WriteRectangle( aRect );
+    *pPict << (ULONG)0x00000000;                        // Reserved
 
     // viele Import-Filter verlangen die Angabe eines
     // Clipping-Bereichs am Anfang
-    *pPict << (USHORT)0x0001
-           << (USHORT)0x000a
-           << (USHORT)0x0000
-           << (USHORT)0x0000
-           << nHeight
-           << nWidth;
+
+    WriteOpcode_ClipRect( aRect );
 }
 
 
