@@ -3,12 +3,12 @@ set platform = `uname`
 
 if ( ! -f $SRC_ROOT/dmake/dmake ) then
 
-cd dmake
+cd $SRC_ROOT/dmake
 
 if ($platform == "SunOS") then
    make Solaris2.1
 else if ($platform == "Linux" || $platform == "NetBSD" || $platform == "FreeBSD") then
-   make linux
+   autogen.sh;configure;make;make install
 else if ($platform == "OSF1") then
    make tru64
 else if ($platform == "IRIX" || $platform == "IRIX64") then
