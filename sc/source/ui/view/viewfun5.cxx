@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-09-07 19:37:38 $
+ *  last change: $Author: cl $ $Date: 2001-10-04 11:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,14 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef SVX_UNOMODEL_HXX
+#include <svx/unomodel.hxx>
+#endif
+
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
 
 //------------------------------------------------------------------
 
@@ -389,13 +397,9 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);
 
-            //  SdrModel stream operator doesn't support XML
-            //! call XML export here!
-            xStm->SetVersion(SOFFICE_FILEFORMAT_50);
+            com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+            SvxDrawingLayerImport( pModel, xInputStream );
 
-            pModel->SetStreamingSdrModel(TRUE);
-            pModel->GetItemPool().Load(*xStm);
-            *xStm >> *pModel;
             pModel->SetStreamingSdrModel(FALSE);
 
                                         // set everything to right layer:
