@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.61 $
+*  $Revision: 1.62 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:40 $
+*  last change: $Author: hr $ $Date: 2004-11-09 11:55:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1000,9 +1000,6 @@ End
 
 #endif
 
-
-#ifdef SOLAR_JAVA
-
 File gid_File_Lib_Jvmaccess
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -1013,8 +1010,6 @@ File gid_File_Lib_Jvmaccess
   #endif
     Styles = (PACKED, SETUPZIP);
 End
-
-#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Lng, lng)
 
