@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmslots.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 17:58:45 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,16 @@ interface Form : Object
         StateMethod = GetState ;
     ]
     SID_FM_FORMATTEDFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SCROLLBAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SPINBUTTON
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -477,6 +487,16 @@ shell FmFormShell
         StateMethod = GetState ;
     ]
     SID_FM_CONVERTTO_FORMATTED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_SCROLLBAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_SPINBUTTON
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
