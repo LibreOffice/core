@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 08:13:09 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1741,12 +1741,58 @@ void MA_FASTCALL lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
     }
 }
 
+#ifdef VERTICAL_LAYOUT
+
+class SwShortCut
+{
+    SwRectDist fnCheck;
+    long nLimit;
+public:
+    SwShortCut( const SwFrm& rFrm, const SwRect& rRect );
+    BOOL Stop( const SwRect& rRect ) const
+        { return (rRect.*fnCheck)( nLimit ) < 0; }
+};
+
+SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
+{
+    BOOL bVert = rFrm.IsVertical();
+    BOOL bR2L = rFrm.IsRightToLeft();
+    if( rFrm.IsNeighbourFrm() && bVert == bR2L )
+    {
+        if( bVert )
+        {
+            fnCheck = &SwRect::GetBottomDistance;
+            nLimit = rRect.Top();
+        }
+        else
+        {
+            fnCheck = &SwRect::GetLeftDistance;
+            nLimit = rRect.Left() + rRect.Width();
+        }
+    }
+    else if( bVert == rFrm.IsNeighbourFrm() )
+    {
+        fnCheck = &SwRect::GetTopDistance;
+        nLimit = rRect.Top() + rRect.Height();
+    }
+    else
+    {
+        fnCheck = &SwRect::GetRightDistance;
+        nLimit = rRect.Left();
+    }
+}
+
+#endif
 
 void SwLayoutFrm::Paint( const SwRect& rRect ) const
 {
     const SwFrm *pFrm = Lower();
     if ( !pFrm )
         return;
+
+#ifdef VERTICAL_LAYOUT
+    SwShortCut aShortCut( *pFrm, rRect );
+#endif
 
     BOOL bCnt;
     if ( TRUE == (bCnt = pFrm->IsCntntFrm()) )
@@ -1763,7 +1809,11 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
     while ( IsAnLower( pFrm ) )
     {
         SwRect aPaintRect( pFrm->PaintArea() );
+#ifdef VERTICAL_LAYOUT
+        if( aShortCut.Stop( aPaintRect ) )
+#else
         if( ::IsShortCut( rRect, aPaintRect ) )
+#endif
             break;
         if ( bCnt && pProgress )
             pProgress->Reschedule();
@@ -2613,11 +2663,11 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
     SwRect aRect( rRect );
     (aRect.*fnRect->fnSubLeft)( nPenHalf + nPixelSzW );
     (aRect.*fnRect->fnAddRight)( nPenHalf + nPixelSzW );
-
+    SwRectGet fnGetX = IsRightToLeft() ? fnRect->fnGetLeft : fnRect->fnGetRight;
     while ( pCol->GetNext() )
     {
         (aLineRect.*fnRect->fnSetPosX)
-            ( (pCol->Frm().*fnRect->fnGetRight)() - nPenHalf );
+            ( (pCol->Frm().*fnGetX)() - nPenHalf );
         if ( aRect.IsOver( aLineRect ) )
             PaintBorderLine( aRect, aLineRect , pPage, &rFmtCol.GetLineColor());
         pCol = pCol->GetNext();
@@ -2677,6 +2727,9 @@ void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
     const SwFrm *pFrm = pLay->Lower();
     if ( pFrm )
     {
+#ifdef VERTICAL_LAYOUT
+        SwShortCut aShortCut( *pFrm, rRect );
+#endif
         OutputDevice *pOut = pGlobalShell->GetOut();
         pOut->Push( PUSH_FILLCOLOR );
         do
@@ -2690,8 +2743,11 @@ void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
                 pFrm->PaintBorder( rRect, pPage, rAttrs );
             }
             pFrm = pFrm->GetNext();
-
+#ifdef VERTICAL_LAYOUT
+        } while ( pFrm && !aShortCut.Stop( pFrm->Frm() ) );
+#else
         } while ( pFrm && !::IsShortCut( rRect, pFrm->Frm() ) );
+#endif
         pOut->Pop();
     }
 }
@@ -2904,6 +2960,9 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
         aRect._Intersection( rRect );
         SwRect aBorderRect( aRect );
         ::SizeBorderRect( aBorderRect );
+#ifdef VERTICAL_LAYOUT
+        SwShortCut aShortCut( *pFrm, aBorderRect );
+#endif
         do
         {   if ( pProgress )
                 pProgress->Reschedule();
@@ -2922,7 +2981,11 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             }
             pFrm = pFrm->GetNext();
         } while ( pFrm && pFrm->GetUpper() == this &&
+#ifdef VERTICAL_LAYOUT
+                  !aShortCut.Stop( aFrmRect ) );
+#else
                   !::IsShortCut( aBorderRect, aFrmRect ) );
+#endif
     }
 }
 
@@ -3023,7 +3086,14 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
         PaintSubsidiaryLines( pPage, rRect );
 
     const SwFrm *pLow = Lower();
+#ifdef VERTICAL_LAYOUT
+    if( !pLow )
+        return;
+    SwShortCut aShortCut( *pLow, rRect );
+    while( pLow && !aShortCut.Stop( pLow->Frm() ) )
+#else
     while ( pLow && !::IsShortCut( rRect, pLow->Frm() ) )
+#endif
     {   if ( pLow->Frm().IsOver( rRect ) && pLow->Frm().HasArea() )
         {
             if ( pLow->IsLayoutFrm() )
