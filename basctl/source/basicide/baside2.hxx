@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-09 15:16:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ class SvxSearchItem;
 #include "svtools/lstner.hxx"
 #endif
 
-#ifndef _SVX_COLORCFG_HXX
-#include "svx/colorcfg.hxx"
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 #include <sfx2/progress.hxx>
@@ -498,7 +498,7 @@ private:
     ModulWindow * m_pModulWindow;
 
     Color m_aSyntaxColors[TT_KEYWORD + 1];
-    svx::ColorConfig m_aColorConfig;
+    svtools::ColorConfig m_aColorConfig;
 
     ImageList m_aImagesNormal;
     ImageList m_aImagesHighContrast;

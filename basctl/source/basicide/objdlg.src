@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 06:27:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,3 +277,5 @@ FloatingWindow RID_BASICIDE_OBJCAT
     Text[ catalan ] = "Objectes";
     Text[ thai ] = "วัตถุ";
 };
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2002-07-09 15:08:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,19 +1410,19 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     m_aSyntaxColors[TT_EOL] = aColor;
     StartListening(m_aColorConfig);
     m_aSyntaxColors[TT_IDENTIFIER]
-        = Color(m_aColorConfig.GetColorValue(svx::BASICIDENTIFIER).nColor);
+        = Color(m_aColorConfig.GetColorValue(svtools::BASICIDENTIFIER).nColor);
     m_aSyntaxColors[TT_NUMBER]
-        = Color(m_aColorConfig.GetColorValue(svx::BASICNUMBER).nColor);
+        = Color(m_aColorConfig.GetColorValue(svtools::BASICNUMBER).nColor);
     m_aSyntaxColors[TT_STRING]
-        = Color(m_aColorConfig.GetColorValue(svx::BASICSTRING).nColor);
+        = Color(m_aColorConfig.GetColorValue(svtools::BASICSTRING).nColor);
     m_aSyntaxColors[TT_COMMENT]
-        = Color(m_aColorConfig.GetColorValue(svx::BASICCOMMENT).nColor);
+        = Color(m_aColorConfig.GetColorValue(svtools::BASICCOMMENT).nColor);
     m_aSyntaxColors[TT_ERROR]
-        = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
+        = Color(m_aColorConfig.GetColorValue(svtools::BASICERROR).nColor);
     m_aSyntaxColors[TT_OPERATOR]
-        = Color(m_aColorConfig.GetColorValue(svx::BASICOPERATOR).nColor);
+        = Color(m_aColorConfig.GetColorValue(svtools::BASICOPERATOR).nColor);
     m_aSyntaxColors[TT_KEYWORD]
-        = Color(m_aColorConfig.GetColorValue(svx::BASICKEYWORD).nColor);
+        = Color(m_aColorConfig.GetColorValue(svtools::BASICKEYWORD).nColor);
 
     Font aFont( GetFont() );
     Size aSz( aFont.GetSize() );
@@ -1636,33 +1636,33 @@ void ModulWindowLayout::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
         && (static_cast< SfxSimpleHint const & >(rHint).GetId()
             == SFX_HINT_COLORS_CHANGED))
     {
-        Color aColor(m_aColorConfig.GetColorValue(svx::BASICIDENTIFIER).
+        Color aColor(m_aColorConfig.GetColorValue(svtools::BASICIDENTIFIER).
                      nColor);
         bool bChanged = aColor != m_aSyntaxColors[TT_IDENTIFIER];
         m_aSyntaxColors[TT_IDENTIFIER] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICNUMBER).nColor);
+        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICNUMBER).nColor);
     if (bChanged || aColor != m_aSyntaxColors[TT_NUMBER])
             bChanged = true;
         m_aSyntaxColors[TT_NUMBER] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICSTRING).nColor);
+        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICSTRING).nColor);
         if (bChanged || aColor != m_aSyntaxColors[TT_STRING])
             bChanged = true;
         m_aSyntaxColors[TT_STRING] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICCOMMENT).
+        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICCOMMENT).
                        nColor);
         if (bChanged || aColor != m_aSyntaxColors[TT_COMMENT])
             bChanged = true;
         m_aSyntaxColors[TT_COMMENT] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
+        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICERROR).nColor);
         if (bChanged || aColor != m_aSyntaxColors[TT_ERROR])
             bChanged = true;
         m_aSyntaxColors[TT_ERROR] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICOPERATOR).
+        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICOPERATOR).
                        nColor);
         if (bChanged || aColor != m_aSyntaxColors[TT_OPERATOR])
             bChanged = true;
         m_aSyntaxColors[TT_OPERATOR] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICKEYWORD).
+        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICKEYWORD).
                        nColor);
         if (bChanged || aColor != m_aSyntaxColors[TT_KEYWORD])
             bChanged = true;

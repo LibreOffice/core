@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 16:14:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@ TabDialog RID_TD_ORGANIZE
     TEXT[ italian ] = "Gestione macro";
     TEXT[ portuguese_brazilian ] = "Gerenciar";
     TEXT[ portuguese ] = "Gerir macros";
-    TEXT[ danish ] = "Makroadministration";
+    TEXT[ danish ] = "Administrer makroer";
     TEXT[ french ] = "Gestion de macros";
     TEXT[ swedish ] = "Administrera makron";
     TEXT[ dutch ] = "Macro's beheren";
     TEXT[ spanish ] = "Administrar";
     TEXT[ english_us ] = "Macro Organizer";
     TEXT[ chinese_simplified ] = "ç®¡ç†å®";
-    TEXT[ russian ] = "Îğãàíèçîâàòü ìàêğîñû";
+    TEXT[ russian ] = "Óïğàâëåíèå ìàêğîñàìè";
     TEXT[ polish ] = "Zarz¹dzaj makrami";
     TEXT[ japanese ] = "ãƒã‚¯ãƒ­ã®ç®¡ç†";
     TEXT[ chinese_traditional ] = "ç®¡ç†å·¨é›†";
@@ -120,6 +120,7 @@ TabDialog RID_TD_ORGANIZE
                 Text[ korean ] = "ëª¨ë“ˆ";
                 Text[ turkish ] = "Modüller";
                 Text[ catalan ] = "Mòduls";
+                Text[ thai ] = "à¹‚à¸¡à¸”à¸¹à¸¥";
             };
             PageItem
             {
@@ -146,6 +147,7 @@ TabDialog RID_TD_ORGANIZE
                 Text[ turkish ] = "Kitaplıklar";
                 Text[ catalan ] = "Biblioteques";
                 Text[ finnish ] = "Kirjastot";
+                Text[ thai ] = "à¹„à¸¥à¸šà¸£à¸²à¸£à¸µ";
             };
         };
     };
@@ -153,7 +155,7 @@ TabDialog RID_TD_ORGANIZE
     Text [ english_us ] = "Macro Organizer" ;
     Text [ portuguese_brazilian ] = "Gerenciar" ;
     Text [ swedish ] = "Administrera makron" ;
-    Text [ danish ] = "Makroadministration" ;
+    Text [ danish ] = "Administrer makroer" ;
     Text [ italian ] = "Gestione macro" ;
     Text [ spanish ] = "Administrar" ;
     Text [ french ] = "Gestion de macros" ;
@@ -163,6 +165,7 @@ TabDialog RID_TD_ORGANIZE
     Text[ turkish ] = "Makroları yönet";
     Text[ catalan ] = "Organitzador de macros";
     Text[ finnish ] = "Makrojen järjestelytyökalu";
+    Text[ thai ] = "à¸•à¸±à¸§à¸ˆà¸±à¸”à¸£à¸°à¹€à¸šà¸µà¸¢à¸šà¸¡à¸²à¹‚à¸„à¸£";
 };
 TabPage RID_TP_MODULS
 {
@@ -181,14 +184,14 @@ TabPage RID_TP_MODULS
         Text [ portuguese_brazilian ] = "M~?ulo/Di logo" ;
         Text [ portuguese ] = "M~ódulo/Diálogo" ;
         Text [ finnish ] = "M~oduuli/valintaikkuna" ;
-        Text [ danish ] = "Modul/Dialog" ;
+        Text [ danish ] = "M~odul/Dialog" ;
         Text [ french ] = "M~odule/boîte de dialogue" ;
         Text [ swedish ] = "M~odul/dialog" ;
         Text [ dutch ] = "M~odule/dialoogvenster" ;
         Text [ spanish ] = "Mód~ulo/Diálogo" ;
         Text [ english_us ] = "M~odule/Dialog" ;
         Text[ chinese_simplified ] = "æ¨¡å—/å¯¹è¯æ¡†(~O)";
-        Text[ russian ] = "Ìîäóëü/Äèàëîã";
+        Text[ russian ] = "Ìîäóëü/äèàëîã";
         Text[ polish ] = "Modu³/Dialog";
         Text[ japanese ] = "ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«/ãƒ€ã‚¤ã‚¢ãƒ­ã‚°(~O)";
         Text[ chinese_traditional ] = "æ¨¡å¡Š/å°è©±æ–¹å¡Š(~O)";
@@ -197,6 +200,7 @@ TabPage RID_TP_MODULS
         Text[ korean ] = "ëª¨ë“ˆ/ëŒ€í™” ìƒì(~O)";
         Text[ turkish ] = "Modül/diyalog";
         Text[ catalan ] = "Mòdul/Diàleg";
+        Text[ thai ] = "à¹‚à¸¡~à¸”à¸¹à¸¥/à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸";
     };
     /*
     Edit RID_EDIT
@@ -247,13 +251,14 @@ TabPage RID_TP_MODULS
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text[ arabic ] = "ÊÍÑíÑ";
-        Text[ russian ] = "~Ïğàâêà";
+        Text[ russian ] = "~Èçìåíèòü";
         Text[ greek ] = "Åğåîåñãáóßá";
         Text[ polish ] = "~Edytuj";
         Text[ japanese ] = "ç·¨é›†(~E)";
         Text[ korean ] = "í¸ì§‘(~E)";
         Text[ turkish ] = "Düzenle";
         Text[ catalan ] = "~Edita";
+        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -294,6 +299,7 @@ TabPage RID_TP_MODULS
         Text[ korean ] = "ë‹«ê¸°";
         Text[ turkish ] = "Kapat";
         Text[ catalan ] = "Tanca";
+        Text[ thai ] = "à¸›à¸´à¸”";
     };
     PushButton RID_PB_NEWMOD
     {
@@ -305,12 +311,12 @@ TabPage RID_TP_MODULS
         Text [ italian ] = "Nuovo ~modulo..." ;
         Text [ portuguese_brazilian ] = "~M?ulo novo" ;
         Text [ portuguese ] = "~Novo módulo..." ;
-        Text [ finnish ] = "Uusi ~moduuli" ;
-        Text [ danish ] = "Nyt modul..." ;
+        Text [ finnish ] = "Uusi ~moduuli..." ;
+        Text [ danish ] = "Nyt ~modul..." ;
         Text [ french ] = "Nouveau ~module..." ;
         Text [ swedish ] = "Ny ~modul..." ;
         Text [ dutch ] = "Nieuwe ~module..." ;
-        Text [ spanish ] = "Nuevo ~módulo..." ;
+        Text [ spanish ] = "~Módulo nuevo..." ;
         Text [ english_us ] = "New ~Module..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å»ºæ¨¡å—(~M)...";
@@ -323,6 +329,7 @@ TabPage RID_TP_MODULS
         Text[ korean ] = "ìƒˆ ëª¨ë“ˆ(~M)...";
         Text[ turkish ] = "Yeni modül...";
         Text[ catalan ] = "~Mòdul nou...";
+        Text[ thai ] = "à¹‚~à¸¡à¸”à¸¹à¸¥à¹ƒà¸«à¸¡à¹ˆ...";
     };
     PushButton RID_PB_NEWDLG
     {
@@ -334,12 +341,12 @@ TabPage RID_TP_MODULS
         Text [ italian ] = "Nuovo dialo~go" ;
         Text [ portuguese_brazilian ] = "Di lo~go novo" ;
         Text [ portuguese ] = "Novo diálo~go..." ;
-        Text [ finnish ] = "~Uusi valintaikkuna" ;
-        Text [ danish ] = "Ny dialog..." ;
-        Text [ french ] = "Nouveau ~dialogue" ;
+        Text [ finnish ] = "~Uusi valintaikkuna..." ;
+        Text [ danish ] = "Ny dialo~g..." ;
+        Text [ french ] = "Nouvelle boîte de dialogue" ;
         Text [ swedish ] = "Ny dialo~g..." ;
-        Text [ dutch ] = "Nieuwe ~dialoog..." ;
-        Text [ spanish ] = "Nuevo diálo~go..." ;
+        Text [ dutch ] = "Nieuw ~dialoogvenster..." ;
+        Text [ spanish ] = "Diálo~go nuevo..." ;
         Text [ english_us ] = "~New Dialog..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å»ºå¯¹è¯æ¡†(~N)...";
@@ -352,6 +359,7 @@ TabPage RID_TP_MODULS
         Text[ korean ] = "ìƒˆ ëŒ€í™”ìƒì(~N)...";
         Text[ turkish ] = "Yeni diyalog...";
         Text[ catalan ] = "Diàleg ~nou...";
+        Text[ thai ] = "à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¹ƒ~à¸«à¸¡à¹ˆ...";
     };
     PushButton RID_PB_DELETE
     {
@@ -365,11 +373,11 @@ TabPage RID_TP_MODULS
         Text [ portuguese_brazilian ] = "~Apagar..." ;
         Text [ portuguese ] = "E~liminar..." ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet..." ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ra~dera..." ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "E~liminar..." ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -379,9 +387,10 @@ TabPage RID_TP_MODULS
         Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì œê±°(~D)...";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Suprimeix...";
+        Text[ thai ] = "~à¸¥à¸š";
     };
 };
 TabPage RID_TP_LIBS
@@ -398,14 +407,14 @@ TabPage RID_TP_LIBS
         Text [ ENGLISH ] = "Application/D~ocument" ;
         Text[ english_us ] = "Application/D~ocument";
         Text[ portuguese ] = "Aplicação/D~ocumento";
-        Text[ russian ] = "Ïğèëîæåíèå/Äîêóìåíò";
+        Text[ russian ] = "Ïğèëîæåíèå/äîêóìåíò";
         Text[ greek ] = "Application/D~ocument";
-        Text[ dutch ] = "Applicatie/D~ocument";
+        Text[ dutch ] = "Toepassing/D~ocument";
         Text[ french ] = "Application/D~ocument";
         Text[ spanish ] = "Aplicación/D~ocumento";
-        Text[ finnish ] = "Application/D~ocument";
+        Text[ finnish ] = "Sovellus/Asia~kirja";
         Text[ italian ] = "Applicazione/D~ocumento";
-        Text[ danish ] = "Application/D~ocument";
+        Text[ danish ] = "Program/d~okument";
         Text[ swedish ] = "Tillämpning/d~okument";
         Text[ polish ] = "Aplikacja/D~okument";
         Text[ portuguese_brazilian ] = "Application/D~ocument";
@@ -415,7 +424,8 @@ TabPage RID_TP_LIBS
         Text[ chinese_traditional ] = "æ‡‰ç”¨ç¨‹å¼/æ–‡ä»¶(~O)";
         Text[ turkish ] = "Application/D~ocument";
         Text[ arabic ] = "Application/D~ocument";
-        Text[ catalan ] = "Application/D~ocument";
+        Text[ catalan ] = "Aplicació/D~ocument";
+        Text[ thai ] = "à¹à¸­à¸à¸à¸¥à¸´à¹€à¸„à¸Šà¸±à¹ˆà¸™/à¹€~à¸­à¸à¸ªà¸²à¸£";
     };
     ListBox RID_LB_BASICS
     {
@@ -437,7 +447,7 @@ TabPage RID_TP_LIBS
         Text [ spanish ] = "~Biblioteca" ;
         Text [ french ] = "Bibliothè~que" ;
         Text [ swedish ] = "Bibliote~k" ;
-        Text [ danish ] = "Bibliotek" ;
+        Text [ danish ] = "Bibliote~k" ;
         Text [ portuguese ] = "Bibliote~ca" ;
         Text [ portuguese_brazilian ] = "Bibliothe~k" ;
         Text[ chinese_simplified ] = "ç¨‹åºåº“(~L)";
@@ -451,6 +461,7 @@ TabPage RID_TP_LIBS
         Text[ turkish ] = "Kitaplık";
         Text[ catalan ] = "~Biblioteca";
         Text[ finnish ] = "~Kirjasto";
+        Text[ thai ] = "à¹„~à¸¥à¸šà¸£à¸²à¸£à¸µ";
     };
     Control RID_TRLBOX
     {
@@ -492,13 +503,14 @@ TabPage RID_TP_LIBS
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text[ arabic ] = "ÊÍÑíÑ";
-        Text[ russian ] = "~Ïğàâêà";
+        Text[ russian ] = "~Èçìåíèòü";
         Text[ greek ] = "Åğåîåñãáóßá";
         Text[ polish ] = "~Edytuj";
         Text[ japanese ] = "ç·¨é›†(~E)";
         Text[ korean ] = "í¸ì§‘(~E)";
         Text[ turkish ] = "Düzenle";
         Text[ catalan ] = "~Edita";
+        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -539,6 +551,7 @@ TabPage RID_TP_LIBS
         Text[ korean ] = "ë‹«ê¸°";
         Text[ turkish ] = "Kapat";
         Text[ catalan ] = "Tanca";
+        Text[ thai ] = "à¸›à¸´à¸”";
     };
     PushButton RID_PB_PASSWORD
     {
@@ -550,8 +563,8 @@ TabPage RID_TP_LIBS
         Text [ italian ] = "~Password..." ;
         Text [ portuguese_brazilian ] = "~Senha..." ;
         Text [ portuguese ] = "~Senha..." ;
-        Text [ finnish ] = "~Salasana" ;
-        Text [ danish ] = "Adgangskode..." ;
+        Text [ finnish ] = "~Salasana..." ;
+        Text [ danish ] = "A~dgangskode..." ;
         Text [ french ] = "Mot de passe..." ;
         Text [ swedish ] = "Lös~enord..." ;
         Text [ dutch ] = "W~achtwoord..." ;
@@ -565,9 +578,10 @@ TabPage RID_TP_LIBS
         Text[ chinese_traditional ] = "å¯†ç¢¼(~P)...";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ...";
         Text[ greek ] = "Êùäéêüò ~ğñüóâáóçò";
-        Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ(~P)...";
+        Text[ korean ] = "ì•”í˜¸(~P)...";
         Text[ turkish ] = "Şifre...";
         Text[ catalan ] = "~Contrasenya...";
+        Text[ thai ] = "~à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™...";
     };
     PushButton RID_PB_NEWLIB
     {
@@ -582,13 +596,13 @@ TabPage RID_TP_LIBS
         Text [ french ] = "Nouveau..." ;
         Text [ dutch ] = "~Nieuw..." ;
         Text [ spanish ] = "~Nuevo..." ;
-        Text [ danish ] = "Ny..." ;
+        Text [ danish ] = "~Ny..." ;
         Text [ swedish ] = "~Nytt..." ;
-        Text [ finnish ] = "~Uusi" ;
+        Text [ finnish ] = "~Uusi..." ;
         Text [ english_us ] = "~New..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å»º(~N)...";
-        Text[ russian ] = "Ñîçäàòü...";
+        Text[ russian ] = "Íîâàÿ áèáëèîòåêà";
         Text[ polish ] = "Nowy...";
         Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)...";
         Text[ chinese_traditional ] = "æ–°å»º(~N)...";
@@ -597,6 +611,7 @@ TabPage RID_TP_LIBS
         Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)...";
         Text[ turkish ] = "Yeni...";
         Text[ catalan ] = "~Nou...";
+        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ...";
     };
     PushButton RID_PB_APPEND
     {
@@ -608,10 +623,10 @@ TabPage RID_TP_LIBS
         Text [ dutch ] = "Toe~voegen..." ;
         Text [ english_us ] = "~Append..." ;
         Text [ italian ] = "Aggi~ungi..." ;
-        Text [ spanish ] = "~Añadir..." ;
+        Text [ spanish ] = "~Adjuntar..." ;
         Text [ french ] = "~Ajouter..." ;
         Text [ swedish ] = "Lägg ~till..." ;
-        Text [ danish ] = "Tilføj..." ;
+        Text [ danish ] = "Til~føj..." ;
         Text [ portuguese_brazilian ] = "Hin~zuf?en..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)...";
@@ -624,7 +639,8 @@ TabPage RID_TP_LIBS
         Text[ korean ] = "ì¶”ê°€(~A)...";
         Text[ turkish ] = "Ekle...";
         Text[ catalan ] = "~Afegeix...";
-        Text[ finnish ] = "~Liitä";
+        Text[ finnish ] = "~Liitä...";
+        Text[ thai ] = "~à¸œà¸™à¸§à¸...";
     };
     PushButton RID_PB_DELETE
     {
@@ -638,11 +654,11 @@ TabPage RID_TP_LIBS
         Text [ portuguese_brazilian ] = "~Apagar..." ;
         Text [ portuguese ] = "E~liminar..." ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet..." ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ra~dera..." ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "Elim~inar..." ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -652,9 +668,10 @@ TabPage RID_TP_LIBS
         Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~D)...";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Suprimeix...";
+        Text[ thai ] = "~à¸¥à¸š";
     };
 };
 ModalDialog RID_DLG_LIBS
@@ -717,6 +734,7 @@ ModalDialog RID_DLG_LIBS
         Text[ turkish ] = "Seçenekler";
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     CheckBox RID_CB_REF
     {
@@ -729,11 +747,11 @@ ModalDialog RID_DLG_LIBS
         Text [ english_us ] = "Insert as reference (read-only)" ;
         Text [ portuguese_brazilian ] = "Referenzen (nur lesen)" ;
         Text [ swedish ] = "Infoga som referens (bara läsning)" ;
-        Text [ danish ] = "Indsæt som reference (skrivebeskyttet)" ;
+        Text [ danish ] = "Indsæt som reference (kun læse)" ;
         Text [ italian ] = "Inserisci come riferimento (sola lettura)" ;
-        Text [ spanish ] = "Insertar como referencia (solo leer)" ;
+        Text [ spanish ] = "Insertar como referencia (sólo lectura)" ;
         Text [ french ] = "Insérer comme référence (lecture seule)" ;
-        Text [ dutch ] = "Als verwijzing invoegen (alleen lezen)" ;
+        Text [ dutch ] = "Als verwijzing invoegen (alleen-lezen)" ;
         Text [ portuguese ] = "Inserir como referência (só leitura)" ;
         Text[ chinese_simplified ] = "å½“ä½œå¼•ç”¨æ’å…¥(åªè¯»)";
         Text[ russian ] = "Âñòàâèòü êàê ññûëêó (òîëüêî äëÿ ÷òåíèÿ)";
@@ -742,10 +760,11 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_traditional ] = "ç•¶ä½œåƒç…§æ’å…¥(å”¯è®€)";
         Text[ arabic ] = "ÅÏÑÇÌ ßãÑÌÚ (ááŞÑÇÁÉ İŞØ)";
         Text[ greek ] = "ÅéóáãùãŞ ùò áíáöïñÜ (ìüíï ãéá áíÜãíùóç)";
-        Text[ korean ] = "ì°¸ì¡°ë¡œì„œ ì‚½ì… (ì½ê¸° ì „ìš©)";
+        Text[ korean ] = "ì°¸ì¡°ë¡œ ì‚½ì…(ì½ê¸° ì „ìš©)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
         Text[ catalan ] = "Insereix com a referència (només de lectura)";
-        Text[ finnish ] = "Lisää viite (vain luku)";
+        Text[ finnish ] = "Lisää viittaus (vain luku)";
+        Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™à¸à¸²à¸£à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡ (à¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§)";
     };
     CheckBox RID_CB_REPL
     {
@@ -757,7 +776,7 @@ ModalDialog RID_DLG_LIBS
         Text [ english_us ] = "Replace existing libraries" ;
         Text [ portuguese_brazilian ] = "Bibliotheken ersetzen" ;
         Text [ swedish ] = "Ersätt existerande bibliotek" ;
-        Text [ danish ] = "Erstat de eksisterende biblioteker" ;
+        Text [ danish ] = "Erstat eksisterende biblioteker" ;
         Text [ italian ] = "Sostituisci library esistenti" ;
         Text [ spanish ] = "Reemplazar bibliotecas existentes" ;
         Text [ french ] = "Remplacer les bibliothèques existantes" ;
@@ -773,6 +792,7 @@ ModalDialog RID_DLG_LIBS
         Text[ turkish ] = "Mevcut kitaplığı değiştir";
         Text[ catalan ] = "Reemplaça les biblioteques existents";
         Text[ finnish ] = "Korvaa nykyiset kirjastot";
+        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¸—à¸µà¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
     };
 };
 ModalDialog RID_DLG_NEWLIB
@@ -804,7 +824,7 @@ ModalDialog RID_DLG_NEWLIB
         Text [ english_us ] = "~Name:" ;
         Text [ portuguese_brazilian ] = "~Name:" ;
         Text [ swedish ] = "~Namn:" ;
-        Text [ danish ] = "Navn:" ;
+        Text [ danish ] = "~Navn:" ;
         Text [ italian ] = "~Nome:" ;
         Text [ spanish ] = "~Nombre:" ;
         Text [ french ] = "~Nom :" ;
@@ -821,6 +841,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ turkish ] = "Ad:";
         Text[ catalan ] = "~Nom:";
         Text[ finnish ] = "~Nimi:";
+        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­:";
     };
     Edit RID_ED_LIBNAME
     {
@@ -829,36 +850,12 @@ ModalDialog RID_DLG_NEWLIB
         Size = MAP_APPFONT ( 92 , 12 ) ;
         TabStop = TRUE ;
     };
-    CheckBox RID_CHKB_EXTRAFILE
-    {
-        Pos = MAP_APPFONT ( 6 , 37 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
-        TabStop = TRUE ;
-        Text = "~Separate Datei anlegen" ;
-        Text [ English ] = "~Separate Datei anlegen" ;
-        Text [ portuguese ] = "~Criar ficheiro separado" ;
-        Text [ english_us ] = "~Create separate file" ;
-        Text [ portuguese_brazilian ] = "~Separate Datei anlegen" ;
-        Text [ swedish ] = "Skapa ~separat fil" ;
-        Text [ danish ] = "Opret separat fil" ;
-        Text [ italian ] = "~Crea file distinto" ;
-        Text [ spanish ] = "Crear archivo ~separado" ;
-        Text [ french ] = "~Créer un fichier distinct" ;
-        Text [ dutch ] = "~Apart bestand maken" ;
-        Hide = TRUE ;
-        Text[ chinese_simplified ] = "å»ºç«‹ä¸€ä¸ªå¦å¤–çš„æ–‡ä»¶(~C)";
-        Text[ russian ] = "Ñîçäàòü îòäåëüíûé ôàéë";
-        Text[ polish ] = "Utwórz oddzielny plik";
-        Text[ japanese ] = "åˆ¥ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ(~C)";
-        Text[ chinese_traditional ] = "å¦é–‹å•Ÿæ–°æª”(~C)";
-        Text[ arabic ] = "ÅäÔÇÁ ãáİ ãäİÕá";
-        Text[ greek ] = "Äçìéïõñãßá îå÷ùñé~óôïı áñ÷åßïõ";
-        Text[ korean ] = "ë³„ë„ íŒŒì¼ ì‘ì„±(~C)";
-        Text[ turkish ] = "Ayrı dosya oluştur";
-        Text[ catalan ] = "Crea un fitxer ~separat";
-        Text[ finnish ] = "~Luo erillinen tiedosto";
-    };
 };
+
+
+
+
+
 
 
 

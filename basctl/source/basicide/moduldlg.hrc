@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:50:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,5 @@
 
 #define RID_FT_NEWLIB           40
 #define RID_ED_LIBNAME          41
-#define RID_CHKB_EXTRAFILE      42
 
 #endif  // _MODULDLG_HRC

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-01 15:06:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,19 +506,16 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString DlgEdObj::GetServiceName() const
+sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
 {
-    ::rtl::OUString aServiceName;
+    sal_Bool bSupports = sal_False;
+
     Reference< lang::XServiceInfo > xServiceInfo( GetUnoControlModel() , UNO_QUERY );
+        // TODO: cache xServiceInfo as member?
+    if ( xServiceInfo.is() )
+        bSupports = xServiceInfo->supportsService( ::rtl::OUString::createFromAscii( _pServiceName ) );
 
-    if (xServiceInfo.is())
-    {
-        Sequence< ::rtl::OUString > aServiceNames( xServiceInfo->getSupportedServiceNames() );
-        DBG_ASSERT( aServiceNames.getLength() == 1 , "DlgEdObj: aServiceNames.getLength() != 1" );
-        aServiceName = aServiceNames.getArray()[ 0 ];
-    }
-
-    return aServiceName;
+    return bSupports;
 }
 
 //----------------------------------------------------------------------------
@@ -527,85 +524,83 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
 {
     sal_uInt16 nResId = 0;
     ::rtl::OUString aDefaultName;
-    ::rtl::OUString aServiceName = GetServiceName();
-
-    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDialogModel") ))
+    if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ) )
     {
         nResId = RID_STR_CLASS_DIALOG;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
     {
         nResId = RID_STR_CLASS_BUTTON;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
     {
         nResId = RID_STR_CLASS_RADIOBUTTON;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
     {
         nResId = RID_STR_CLASS_CHECKBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlListBoxModel" ) )
     {
         nResId = RID_STR_CLASS_LISTBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ) )
     {
         nResId = RID_STR_CLASS_COMBOBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) )
     {
         nResId = RID_STR_CLASS_GROUPBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlEditModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlEditModel" ) )
     {
         nResId = RID_STR_CLASS_EDIT;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
     {
         nResId = RID_STR_CLASS_FIXEDTEXT;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlImageControlModel" ) )
     {
         nResId = RID_STR_CLASS_IMAGECONTROL;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ) )
     {
         nResId = RID_STR_CLASS_PROGRESSBAR;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ) )
     {
         nResId = RID_STR_CLASS_SCROLLBAR;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ) )
     {
         nResId = RID_STR_CLASS_FIXEDLINE;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ) )
     {
         nResId = RID_STR_CLASS_DATEFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ) )
     {
         nResId = RID_STR_CLASS_TIMEFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ) )
     {
         nResId = RID_STR_CLASS_NUMERICFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) )
     {
         nResId = RID_STR_CLASS_CURRENCYFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
     {
         nResId = RID_STR_CLASS_FORMATTEDFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ) )
     {
         nResId = RID_STR_CLASS_PATTERNFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ) )
     {
         nResId = RID_STR_CLASS_FILECONTROL;
     }
@@ -654,85 +649,83 @@ sal_uInt32 DlgEdObj::GetObjInventor()   const
 
 sal_uInt16 DlgEdObj::GetObjIdentifier() const
 {
-    ::rtl::OUString aServiceName = GetServiceName();
-
-    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDialogModel") ))
+    if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ))
     {
         return OBJ_DLG_DIALOG;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ))
     {
         return OBJ_DLG_PUSHBUTTON;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ))
     {
         return OBJ_DLG_RADIOBUTTON;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ))
     {
         return OBJ_DLG_CHECKBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlListBoxModel" ))
     {
         return OBJ_DLG_LISTBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ))
     {
         return OBJ_DLG_COMBOBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ))
     {
         return OBJ_DLG_GROUPBOX;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlEditModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlEditModel" ))
     {
         return OBJ_DLG_EDIT;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ))
     {
         return OBJ_DLG_FIXEDTEXT;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlImageControlModel" ))
     {
         return OBJ_DLG_IMAGECONTROL;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ))
     {
         return OBJ_DLG_PROGRESSBAR;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ))
     {
         return OBJ_DLG_HSCROLLBAR;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ))
     {
         return OBJ_DLG_HFIXEDLINE;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ))
     {
         return OBJ_DLG_DATEFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ))
     {
         return OBJ_DLG_TIMEFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ))
     {
         return OBJ_DLG_NUMERICFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ))
     {
         return OBJ_DLG_CURRENCYFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ))
     {
         return OBJ_DLG_FORMATTEDFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ))
     {
         return OBJ_DLG_PATTERNFIELD;
     }
-    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ))
+    else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ))
     {
         return OBJ_DLG_FILECONTROL;
     }
@@ -900,18 +893,17 @@ void DlgEdObj::SetDefaults()
         xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
 
         // set labels
-        ::rtl::OUString aServiceName = GetServiceName();
-        if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) ||
-            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) ||
-            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) ||
-            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) ||
-            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) )
+        if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) ||
+            supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) ||
+            supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) ||
+            supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) ||
+            supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
         {
             xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
         }
 
         // set number formats supplier for formatted field
-        if ( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ) )
+        if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
         {
             Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor()->GetNumberFormatsSupplier();
             if ( xSupplier.is() )
@@ -1162,9 +1154,7 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
 
 SdrObject* DlgEdObj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
 {
-    ::rtl::OUString aServiceName = GetServiceName();
-
-    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+    if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ))
     {
         Rectangle aROuter = aOutRect;
         aROuter.Left()   -= nTol;

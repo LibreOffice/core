@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1090,11 +1090,13 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         if ( pCurWin )
         {
             SetWindow( pCurWin );
+            SfxObjectShell::SetWorkingDocument( pCurWin->GetShell() );
         }
         else
         {
             SetWindow( pModulLayout );
             GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
+            SfxObjectShell::SetWorkingDocument( NULL );
         }
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
         InvalidateBasicIDESlots();

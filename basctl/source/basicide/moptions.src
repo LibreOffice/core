@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:34:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ ModalDialog RID_MACROOPTIONS
         Text[ korean ] = "ì„¤ëª…";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Descripción";
+        Text[ catalan ] = "Descripció";
+        Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
     };
     MultiLineEdit RID_ME_DESCR
     {
@@ -161,20 +162,21 @@ ModalDialog RID_MACROOPTIONS
         Text [ danish ] = "Hjælp-information" ;
         Text [ french ] = "Informations - Aide" ;
         Text [ swedish ] = "Hjälp-information" ;
-        Text [ dutch ] = "Help informatie" ;
-        Text [ spanish ] = "Informaciones - Ayuda" ;
+        Text [ dutch ] = "Help-informatie" ;
+        Text [ spanish ] = "Información sobre la Ayuda" ;
         Text [ english_us ] = "Help information" ;
         Text[ chinese_simplified ] = "å¸®åŠ©ä¿¡æ¯";
-        Text[ russian ] = "Ñïğàâêà-èíôîğìàöèÿ";
+        Text[ russian ] = "Ñïğàâî÷íàÿ èíôîğìàöèÿ";
         Text[ polish ] = "Pomoc - Informacje";
-        Text[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿæƒ…å ±";
+        Text[ japanese ] = "ãƒ˜ãƒ«ãƒ—æƒ…å ±";
         Text[ chinese_traditional ] = "èªªæ˜è³‡è¨Š";
         Text[ arabic ] = "ãÚáæãÇÊ Úä ÇáãÓÇÚÏÉ";
         Text[ greek ] = "Ğëçñïöïñßåò âïŞèåéáò";
         Text[ korean ] = "ë„ì›€ë§ ì •ë³´";
         Text[ turkish ] = "Yardım bilgileri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Informaciones - Ayuda";
+        Text[ catalan ] = "Informacions - Ajuda";
+        Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
     };
     FixedText RID_FT_HELPID
     {
@@ -191,20 +193,21 @@ ModalDialog RID_MACROOPTIONS
         Text [ danish ] = "Hjælp-identifikation" ;
         Text [ french ] = "ID de l'aide" ;
         Text [ swedish ] = "Hjälp-identifikation" ;
-        Text [ dutch ] = "Help ID" ;
-        Text [ spanish ] = "Identificación de ayuda" ;
+        Text [ dutch ] = "Help-ID" ;
+        Text [ spanish ] = "Identificación de la Ayuda" ;
         Text [ english_us ] = "Help ID" ;
         Text[ chinese_simplified ] = "å¸®åŠ©æ ‡å¿—";
-        Text[ russian ] = "ID ñïğàâêè";
+        Text[ russian ] = "ID Ñïğàâêè";
         Text[ polish ] = "Pomoc - Identyfikacja";
-        Text[ japanese ] = "ï¾ï¾™ï¾Œï¾ŸID";
+        Text[ japanese ] = "ãƒ˜ãƒ«ãƒ—ID";
         Text[ chinese_traditional ] = "èªªæ˜è­˜åˆ¥ç¬¦";
         Text[ arabic ] = "ÊÚÑíİ ÇáãÓÇÚÏÉ";
         Text[ greek ] = "Ôáõôüôçôá âïŞèåéáò";
         Text[ korean ] = "ë„ì›€ë§ ID";
         Text[ turkish ] = "Yardım tanıtıcısı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Identificación de ayuda";
+        Text[ catalan ] = "Identificador d'ajuda";
+        Text[ thai ] = "ID à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
     };
     NumericField RID_NF_HELPID
     {
@@ -232,19 +235,20 @@ ModalDialog RID_MACROOPTIONS
         Text [ french ] = "Nom du fichier de l'aide" ;
         Text [ swedish ] = "Hjälp-filnamn" ;
         Text [ dutch ] = "Help-bestandsnaam" ;
-        Text [ spanish ] = "Nombre del archivo de ayuda" ;
+        Text [ spanish ] = "Nombre del archivo de la Ayuda" ;
         Text [ english_us ] = "Help file name" ;
         Text[ chinese_simplified ] = "å¸®åŠ©æ–‡ä»¶å";
-        Text[ russian ] = "Èìÿ ôàéëà ñïğàâêè";
+        Text[ russian ] = "Èìÿ ôàéëà Ñïğàâêè";
         Text[ polish ] = "Pomoc - Nazwa pliku";
-        Text[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿã®ï¾Œï½§ï½²ï¾™å";
+        Text[ japanese ] = "ãƒ˜ãƒ«ãƒ—ã®ãƒ•ã‚¡ã‚¤ãƒ«å";
         Text[ chinese_traditional ] = "èªªæ˜æª”æ¡ˆåç¨±";
         Text[ arabic ] = "ÇÓã ãáİ ÇáãÓÇÚÏÉ";
         Text[ greek ] = "¼íïìá áñ÷åßïõ âïŞèåéáò";
         Text[ korean ] = "ë„ì›€ë§ íŒŒì¼ ì´ë¦„";
         Text[ turkish ] = "Yardım dosyası adı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre del archivo de ayuda";
+        Text[ catalan ] = "Nom del fitxer d'ajuda";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
     };
     Edit RID_ED_HELPNAME
     {
@@ -263,8 +267,11 @@ ModalDialog RID_MACROOPTIONS
     Text[ korean ] = "ì„¤ëª…";
     Text[ turkish ] = "Açıklama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Descripción";
+    Text[ catalan ] = "Descripció";
+    Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
 };
+
+
 
 
 

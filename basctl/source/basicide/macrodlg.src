@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:25:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "ε·¨ι›†η„δΎ†ζΊ(~F)";
         Text[ arabic ] = "γΗίΡζ γδ";
         Text[ greek ] = "Μακροεντολή από";
-        Text[ korean ] = "λ§¤ν¬λ΅ μ„μΉ(~F)";
+        Text[ korean ] = "λ§¤ν¬λ΅ κΈ°λ΅ μ„μΉ(~F)";
         Text[ turkish ] = "Makro kaynaπύ";
         Text[ catalan ] = "Macro ~des de";
         Text[ thai ] = "ΰΈ΅ΰΈ²ΰΉ‚ΰΈ„ΰΈ£~ΰΈΰΈ²ΰΈ";
@@ -341,7 +341,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "ζ‡ε®(~A)...";
         Text[ arabic ] = "ΚΪννδ...";
         Text[ greek ] = "Αντιστοίχιση...";
-        Text[ korean ] = "μ§€μ •(~A)...";
+        Text[ korean ] = "ν• λ‹Ή(~A)...";
         Text[ turkish ] = "Ata...";
         Text[ catalan ] = "~Assigna...";
         Text[ thai ] = "~ΰΈΰΈ³ΰΈ«ΰΈ™ΰΈ”...";
@@ -448,7 +448,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ra~dera..." ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar..." ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ε ι™¤(~D)...";
@@ -560,7 +560,7 @@ String RID_STR_BTNDEL
     Text [ french ] = "Supprimer" ;
     Text [ swedish ] = "Ra~dera..." ;
     Text [ dutch ] = "~Wissen" ;
-    Text [ spanish ] = "~Eliminar..." ;
+    Text [ spanish ] = "~Borrar" ;
     Text [ english_us ] = "~Delete" ;
     Text[ chinese_simplified ] = "ε ι™¤(~D)";
     Text[ russian ] = "Σδΰλθςό";
@@ -569,7 +569,7 @@ String RID_STR_BTNDEL
     Text[ chinese_traditional ] = "εªι™¤(~D)";
     Text[ arabic ] = "ΝΠέ";
     Text[ greek ] = "Διαγραφή";
-    Text[ korean ] = "μ κ±°(~D)...";
+    Text[ korean ] = "μ‚­μ (~D)";
     Text[ turkish ] = "Sil...";
     Text[ catalan ] = "~Suprimeix...";
     Text[ thai ] = "~ΰΈ¥ΰΈ";
@@ -713,4 +713,9 @@ String RID_STR_RECORD
     Text[ catalan ] = "~Registre";
     Text[ thai ] = "~ΰΈ£ΰΈ°ΰΉ€ΰΈΰΈµΰΈΆΰΈ™";
 };
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 14:48:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ public:
     virtual void        operator= (const SdrObject& rObj);                      // not working yet
     virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
-    virtual ::rtl::OUString GetServiceName() const;
+    virtual sal_Bool        supportsService( const sal_Char* _pServiceName ) const;
     virtual ::rtl::OUString GetDefaultName() const;
     virtual ::rtl::OUString GetUniqueName() const;
 

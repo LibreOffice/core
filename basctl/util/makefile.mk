@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-18 11:35:10 $
+#   last change: $Author: hr $ $Date: 2003-03-18 16:17:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=basctl
 TARGET=basctl
 #svx.hid generieren
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -138,20 +139,6 @@ RESLIB1SRSFILES= $(SRSFILELIST)
 
 .INCLUDE :  target.mk
 
-
-ALLTAR: $(SRS)$/hidother.hid
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"!="WNTI" || "$(product)"!="full"
-    @echo nix
-.ELSE
-.IF "$(BUILD_SOSL)" == ""
-    @+echo NO HIDS!!!
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)    
-.ENDIF
-.ENDIF
 
 
 .ENDIF                  # "$(header)" == ""
