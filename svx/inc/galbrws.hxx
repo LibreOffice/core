@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 11:33:06 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 09:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,18 +106,19 @@ class FmFormModel;
 
 class GalleryBrowser1;
 class GalleryBrowser2;
-class Splitter;
+class GallerySplitter;
 class Gallery;
 
 class GalleryBrowser : public SfxDockingWindow
 {
     friend class GalleryBrowser1;
     friend class GalleryBrowser2;
+    friend class GallerySplitter;
 
 private:
 
     Size                    maLastSize;
-    Splitter*               mpSplitter;
+    GallerySplitter*        mpSplitter;
     GalleryBrowser1*        mpBrowser1;
     GalleryBrowser2*        mpBrowser2;
     Gallery*                mpGallery;

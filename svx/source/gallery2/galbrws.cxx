@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 09:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,43 @@
 #include "galbrws2.hxx"
 #include "galbrws.hxx"
 
+// -------------------
+// - GallerySplitter -
+// -------------------
+
+class GallerySplitter : public Splitter
+{
+protected:
+
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
+public:
+
+                    GallerySplitter( Window* pParent, const ResId& rResId );
+    virtual         ~GallerySplitter();
+};
+
+// -----------------------------------------------------------------------------
+
+GallerySplitter::GallerySplitter( Window* pParent, const ResId& rResId ) :
+    Splitter( pParent, rResId )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+GallerySplitter::~GallerySplitter()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Splitter::DataChanged( rDCEvt );
+    static_cast< GalleryBrowser* >( GetParent() )->InitSettings();
+}
+
 // -------------------------
 // - SvxGalleryChildWindow -
 // -------------------------
@@ -103,7 +140,7 @@ GalleryBrowser::GalleryBrowser( SfxBindings* pBindings, SfxChildWindow* pCW,
 {
     mpGallery = Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
     mpBrowser1 = new GalleryBrowser1( this, GAL_RESID( GALLERY_BROWSER1 ), mpGallery );
-    mpSplitter = new Splitter( this, GAL_RESID( GALLERY_SPLITTER ) );
+    mpSplitter = new GallerySplitter( this, GAL_RESID( GALLERY_SPLITTER ) );
     mpBrowser2 = new GalleryBrowser2( this, GAL_RESID( GALLERY_BROWSER2 ), mpGallery );
 
     FreeResource();
@@ -134,6 +171,10 @@ GalleryBrowser::~GalleryBrowser()
 
 void GalleryBrowser::InitSettings()
 {
+    SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
+    SetControlBackground( GALLERY_DLG_COLOR );
+    SetControlForeground( GALLERY_DLG_COLOR );
+
     mpSplitter->SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
     mpSplitter->SetControlBackground( GALLERY_DLG_COLOR );
     mpSplitter->SetControlForeground( GALLERY_DLG_COLOR );
