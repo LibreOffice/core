@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:21:34 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #define RID_SVXIMGLIST_FMEXPL_HC                    (RID_FORMS_START + 2)
 
 // Image-Id's -----------------------------------------------------------
+#define SID_FMSLOTS_START                           (SID_SVX_START + 592)
 #define RID_SVXIMG_FORM                             SID_FM_CONFIG
 #define RID_SVXIMG_CONTROL                          SID_CHOOSE_CONTROLS
 #define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
@@ -84,7 +85,6 @@
 #define RID_SVXIMG_EDIT                             SID_FM_EDIT
 #define RID_SVXIMG_LISTBOX                          SID_FM_LISTBOX
 #define RID_SVXIMG_COMBOBOX                         SID_FM_COMBOBOX
-#define RID_SVXIMG_URLBUTTON                        SID_FM_URLBUTTON
 #define RID_SVXIMG_FORMS                            (RID_FORMS_START +13)
 #define RID_SVXIMG_IMAGEBUTTON                      SID_FM_IMAGEBUTTON
 #define RID_SVXIMG_IMAGECONTROL                     SID_FM_IMAGECONTROL
