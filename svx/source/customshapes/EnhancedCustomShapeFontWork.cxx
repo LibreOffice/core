@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:12:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,14 @@
 #include <vector>
 #include <numeric>
 #include <algorithm>
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
 
 using namespace com::sun::star::uno;
 
@@ -570,9 +578,11 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
     }
 }
 
-PolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
+//BFS09PolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
+::basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
 {
-    PolyPolygon aOutlines2d;
+//BFS09 PolyPolygon aOutlines2d;
+    ::basegfx::B2DPolyPolygon aOutlines2d;
 
     SdrObjListIter aObjListIter( *pShape2d, IM_DEEPWITHGROUPS );
     while( aObjListIter.IsMore() )
@@ -583,17 +593,26 @@ PolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
             if (!((SdrShadowItem&)pPartObj->GetMergedItem( SDRATTR_SHADOW )).GetValue())
             {
                 const XPolyPolygon& rXPolyPoly = ((SdrPathObj*)pPartObj)->GetPathPoly();
-                sal_uInt16 i, nCount = rXPolyPoly.Count();
-                for ( i = 0; i < nCount; i++ )
+                ::basegfx::B2DPolyPolygon aCandidate(rXPolyPoly.getB2DPolyPolygon());
+                if(aCandidate.areControlPointsUsed())
                 {
-                    Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i ), NULL ) );
-                    Polygon aSimplePoly;
-                    aPoly.GetSimple( aSimplePoly );
-                    aOutlines2d.Insert( aSimplePoly, POLYPOLY_APPEND );
+                    aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
                 }
+                aOutlines2d.append(aCandidate);
+
+//BFS09             sal_uInt16 i, nCount = rXPolyPoly.Count();
+//BFS09             for ( i = 0; i < nCount; i++ )
+//BFS09             {
+//BFS09//BFS09                  Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i ), NULL ) );
+//BFS09                 Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i )) );
+//BFS09                 Polygon aSimplePoly;
+//BFS09                 aPoly.GetSimple( aSimplePoly );
+//BFS09                 aOutlines2d.Insert( aSimplePoly, POLYPOLY_APPEND );
+//BFS09             }
             }
         }
     }
+
     return aOutlines2d;
 }
 
@@ -796,13 +815,28 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                             sal_uInt16 i, nPolyCount = rPolyPoly.Count();
                             for ( i = 0; i < nPolyCount; i++ )
                             {
-                                 Polygon& rPoly = rPolyPoly[ i ];
-                                InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, rPoly );
-                                InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, rPoly );
-                                sal_uInt16 j, nPointCount = rPoly.GetSize();
+                                // #i35928#
+                                ::basegfx::B2DPolygon aCandidate(rPolyPoly[ i ].getB2DPolygon());
+
+                                if(aCandidate.areControlVectorsUsed())
+                                {
+                                    aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                                }
+
+                                // create local polygon copy to work on
+                                 Polygon aLocalPoly(aCandidate);
+
+                                InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, aLocalPoly );
+                                InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, aLocalPoly );
+
+//BFS09                                 Polygon& rPoly = rPolyPoly[ i ];
+//BFS09                             InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, rPoly );
+//BFS09                             InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, rPoly );
+
+                                sal_uInt16 j, nPointCount = aLocalPoly.GetSize();
                                 for ( j = 0; j < nPointCount; j++ )
                                 {
-                                    Point& rPoint = rPoly[ j ];
+                                    Point& rPoint = aLocalPoly[ j ];
                                     rPoint.X() -= nLeft;
                                     rPoint.Y() -= nTop;
                                     double fX = (double)rPoint.X() / (double)nWidth;
@@ -816,6 +850,9 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                                     rPoint.X() = (sal_Int32)( fx1 + fWidth * fY );
                                     rPoint.Y() = (sal_Int32)( fy1 + fHeight* fY );
                                 }
+
+                                // write back polygon
+                                rPolyPoly[ i ] = aLocalPoly;
                             }
                             aOutlineIter++;
                         }

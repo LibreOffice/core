@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:11:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,8 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
                 {
                     sal_uInt16 i;
                     for ( i = 0; i < pPP->Count(); i++ )
-                        aXPolyPoly.Insert( XOutCreatePolygon( pPP->GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
+                        aXPolyPoly.Insert( XOutCreatePolygon( pPP->GetObject( i )), XPOLYPOLY_APPEND );
+//BFS09                     aXPolyPoly.Insert( XOutCreatePolygon( pPP->GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
                 }
                 delete pNewObj;
             }
