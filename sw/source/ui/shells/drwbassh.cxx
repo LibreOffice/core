@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:41:25 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             {
                 pDlg->GetName( sName );
                 pObj->SetName(sName);
+                pSh->SetModified();
             }
             delete pDlg;
         }
