@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:27:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,6 +997,7 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 
 SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const String &rTxt,
+                                      const String& rSeparator,
                                       const BOOL bBef,
                                       const USHORT nId,
                                       const String& rCharacterStyle,
@@ -1004,6 +1005,7 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
     : SwUndo( UNDO_INSERTLABEL ),
       eType( eTyp ),
       sText( rTxt ),
+      sSeparator( rSeparator ),
       sCharacterStyle( rCharacterStyle ),
       bBefore( bBef ),
       nFldId( nId ),
@@ -1139,7 +1141,7 @@ void SwUndoInsertLabel::Repeat( SwUndoIter& rIter )
 
     if( nIdx )
     {
-        rDoc.InsertLabel( eType, sText, bBefore, nFldId, nIdx, sCharacterStyle, bCpyBrd );
+        rDoc.InsertLabel( eType, sText, sSeparator, bBefore, nFldId, nIdx, sCharacterStyle, bCpyBrd );
     }
 }
 
