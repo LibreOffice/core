@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 11:06:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,16 @@
 #include <outdev.h>
 #endif
 
-#ifndef __SGI_STL_MAP
+#ifndef _STLP_MAP
 #include <map>
 #endif
-#ifndef __SGI_STL_VECTOR
+#ifndef _STLP_VECTOR
 #include <vector>
 #endif
-#ifndef __SGI_STL_ALGORITHM
+#ifndef _STLP_ALGORITHM
 #include <algorithm>
 #endif
-#ifndef __SGI_STL_FUNCTIONAL
+#ifndef _STLP_FUNCTIONAL
 #include <functional>
 #endif
 
@@ -1233,13 +1233,9 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
         for (aEntry.cIndex = 0xFF; aEntry.cIndex >= 0x20; --aEntry.cIndex)
         {
             if (sal_Unicode cChar = r.pTab[aEntry.cIndex-0x20])
-#if 1
                 maMagicMap.insert(
                     ::std::multimap<sal_Unicode, SymbolEntry>::value_type(
                     cChar, aEntry));
-#else
-                maMagicMap.insert(::std::make_pair(cChar, aEntry));
-#endif
         }
     }
 
@@ -1270,14 +1266,9 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
         for (int j = r.mnSize / sizeof(r.mpTable[0]); j >=0; --j)
         {
             aEntry.cIndex = r.mpTable[j].cMS;
-#if 1
             maMagicMap.insert(
                 ::std::multimap<sal_Unicode, SymbolEntry>::value_type(
                 r.mpTable[j].cStar, aEntry));
-#else
-            maMagicMap.insert(::std::make_pair(r.mpTable[j].cStar,aEntry));
-#endif
-
         }
     }
 }
@@ -1317,11 +1308,7 @@ String StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
 String StarSymbolToMSMultiFontImpl::ConvertString(String &rString,
     xub_StrLen& rIndex)
 {
-#if 1
     typedef ::std::multimap<sal_Unicode, SymbolEntry>::iterator MI;
-#else
-    typedef ::std::multimap<sal_Unicode, SymbolEntry>::const_iterator MI;
-#endif
     typedef ::std::pair<MI, MI> Result;
 
     String sRet;
