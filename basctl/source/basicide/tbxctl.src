@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-16 09:19:08 $
+ *  last change: $Author: tbe $ $Date: 2001-05-17 15:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_PUSHBUTTON ;
             Identifier = SID_INSERT_PUSHBUTTON ;
             RadioCheck = TRUE ;
-            Text = "CommandButton" ;
+            Text = "Schaltfläche" ;
+            Text [ english ] = "CommandButton" ;
             Text [ english_us ] = "CommandButton" ;
             Text [ italian ] = "Pulsante di comando" ;
             Text [ spanish ] = "Botón de comando" ;
@@ -160,7 +161,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_CHECKBOX ;
             Identifier = SID_INSERT_CHECKBOX ;
             RadioCheck = TRUE ;
-            Text = "CheckBox" ;
+            Text = "Markierfeld" ;
+            Text [ english ] = "CheckBox" ;
             Text [ english_us ] = "CheckBox" ;
             Text [ italian ] = "Casella di controllo" ;
             Text [ spanish ] = "Casilla de verificación" ;
@@ -189,7 +191,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_FIXEDTEXT ;
             Identifier = SID_INSERT_FIXEDTEXT ;
             RadioCheck = TRUE ;
-            Text = "Label" ;
+            Text = "Beschriftungsfeld" ;
+            Text [ english ] = "Label" ;
             Text [ english_us ] = "Label" ;
             Text [ italian ] = "Testo fisso" ;
             Text [ spanish ] = "Etiqueta" ;
@@ -218,7 +221,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_LISTBOX ;
             Identifier = SID_INSERT_LISTBOX ;
             RadioCheck = TRUE ;
-            Text = "ListBox" ;
+            Text = "Listenfeld" ;
+            Text [ english ] = "ListBox" ;
             Text [ english_us ] = "ListBox" ;
             Text [ italian ] = "Casella di riepilogo" ;
             Text [ spanish ] = "Listado" ;
@@ -247,9 +251,10 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_HSCROLLBAR ;
             Identifier = SID_INSERT_HSCROLLBAR ;
             RadioCheck = TRUE ;
-            Text = "HScrollBar" ;
+            Text = "Horizontale Bildlaufleiste" ;
+            Text [ english ] = "Horizontal ScrollBar" ;
+            Text [ english_us ] = "Horizontal ScrollBar" ;
             Text [ dutch ] = "HScrollBar" ;
-            Text [ english_us ] = "HScrollBar" ;
             Text [ italian ] = "Barra di scorrimento oriz." ;
             Text [ spanish ] = "BarraDesplazHoriz." ;
             Text [ french ] = "Barre de défilement horiz." ;
@@ -276,9 +281,10 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_GROUPBOX ;
             Identifier = SID_INSERT_GROUPBOX ;
             RadioCheck = TRUE ;
-            Text = "FrameControl" ;
+            Text = "Gruppierungsrahmen" ;
+            Text [ english ] = "FrameControl" ;
+            Text [ english_us ] = "FrameControl" ;
             Text [ dutch ] = "FrameControl" ;
-            Text [ english_us ] = "GroupBox" ;
             Text [ italian ] = "FrameControl" ;
             Text [ spanish ] = "FrameControl" ;
             Text [ french ] = "FrameControl" ;
@@ -305,8 +311,9 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_HFIXEDLINE ;
             Identifier = SID_INSERT_HFIXEDLINE ;
             RadioCheck = TRUE ;
-            Text = "HFixedLine" ;
-            Text [ english_us ] = "HFixedLine" ;
+            Text = "Horizontale Linie" ;
+            Text [ english ] = "Horizontal FixedLine" ;
+            Text [ english_us ] = "Horizontal FixedLine" ;
         };
         ToolBoxItem { Type = TOOLBOXITEM_SPACE ; };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
@@ -315,7 +322,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_SHOW_BROWSER ;
             Identifier = SID_SHOW_BROWSER ;
             Text = "Eigenschaften" ;
-            Text [ ENGLISH ] = "Properties" ;
+            Text [ english ] = "Properties" ;
+            Text [ english_us ] = "Properties" ;
             Text [ norwegian ] = "Browser" ;
             Text [ italian ] = "Proprietà" ;
             Text [ portuguese_brazilian ] = "Paginar" ;
@@ -326,7 +334,6 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Egenskaper" ;
             Text [ dutch ] = "Eigenschappen" ;
             Text [ spanish ] = "Propiedades" ;
-            Text [ english_us ] = "Properties" ;
             Text[ chinese_simplified ] = "ÊôÐÔ";
             Text[ russian ] = "Ñâîéñòâà";
             Text[ polish ] = "W³aœciwoœci";
@@ -345,7 +352,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_IMAGECONTROL ;
             Identifier = SID_INSERT_IMAGECONTROL ;
             RadioCheck = TRUE ;
-            Text = "ImageControl" ;
+            Text = "Grafisches Kontrollfeld" ;
+            Text [ english ] = "ImageControl" ;
             Text [ english_us ] = "ImageControl" ;
         };
         ToolBoxItem
@@ -353,9 +361,10 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_RADIOBUTTON ;
             Identifier = SID_INSERT_RADIOBUTTON ;
             RadioCheck = TRUE ;
-            Text = "OptionButton" ;
-            Text [ dutch ] = "OptionButton" ;
+            Text = "Optionsfeld" ;
+            Text [ english ] = "OptionButton" ;
             Text [ english_us ] = "OptionButton" ;
+            Text [ dutch ] = "OptionButton" ;
             Text [ italian ] = "Pulsante di scelta" ;
             Text [ spanish ] = "Botón de opción" ;
             Text [ french ] = "Bouton radio" ;
@@ -382,9 +391,10 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_EDIT ;
             Identifier = SID_INSERT_EDIT ;
             RadioCheck = TRUE ;
-            Text = "TextField" ;
-            Text [ dutch ] = "TextField" ;
+            Text = "Textfeld" ;
+            Text [ english ] = "TextField" ;
             Text [ english_us ] = "TextField" ;
+            Text [ dutch ] = "TextField" ;
             Text [ italian ] = "Casella di testo" ;
             Text [ spanish ] = "Cuadro de texto" ;
             Text [ french ] = "Zone de texte" ;
@@ -411,10 +421,10 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_COMBOBOX ;
             Identifier = SID_INSERT_COMBOBOX ;
             RadioCheck = TRUE ;
-            Text = "ComboBox" ;
-            Text [ ENGLISH ] = "ComboBox" ;
-            Text [ dutch ] = "ComboBox" ;
+            Text = "Kombinationsfeld" ;
+            Text [ english ] = "ComboBox" ;
             Text [ english_us ] = "ComboBox" ;
+            Text [ dutch ] = "ComboBox" ;
             Text [ italian ] = "Casella combinata" ;
             Text [ spanish ] = "Cuadro combinado" ;
             Text [ french ] = "Zone combinée" ;
@@ -441,8 +451,9 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_VSCROLLBAR ;
             Identifier = SID_INSERT_VSCROLLBAR ;
             RadioCheck = TRUE ;
-            Text = "VScrollBar" ;
-            Text [ english_us ] = "VScrollBar" ;
+            Text = "Vertikale Bildlaufleiste" ;
+            Text [ english ] = "Vertical ScrollBar" ;
+            Text [ english_us ] = "Vertical ScrollBar" ;
             Text [ italian ] = "Barra di scorrimento vert." ;
             Text [ spanish ] = "Barra de desplazamiento vert." ;
             Text [ french ] = "Barre de défilement vert." ;
@@ -470,7 +481,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_PROGRESSBAR ;
             Identifier = SID_INSERT_PROGRESSBAR ;
             RadioCheck = TRUE ;
-            Text = "ProgressBar" ;
+            Text = "Fortschrittsbalken" ;
+            Text [ english ] = "ProgressBar" ;
             Text [ english_us ] = "ProgressBar" ;
         };
         ToolBoxItem
@@ -478,8 +490,9 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_VFIXEDLINE ;
             Identifier = SID_INSERT_VFIXEDLINE ;
             RadioCheck = TRUE ;
-            Text = "VFixedLine" ;
-            Text [ english_us ] = "VFixedLine" ;
+            Text = "Vertikale Linie" ;
+            Text [ english ] = "Vertical FixedLine" ;
+            Text [ english_us ] = "Vertical FixedLine" ;
         };
         ToolBoxItem
         {
@@ -487,7 +500,8 @@ ToolBox RID_TOOLBOX
             Identifier = SID_OBJECT_SELECT ;
             RadioCheck = TRUE ;
             Text = "Auswahl" ;
-            Text [ ENGLISH ] = "Select" ;
+            Text [ english ] = "Select" ;
+            Text [ english_us ] = "Select" ;
             Text [ norwegian ] = "Select" ;
             Text [ italian ] = "Seleziona" ;
             Text [ portuguese_brazilian ] = "Selecionar" ;
@@ -498,7 +512,6 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Urval" ;
             Text [ dutch ] = "Selectie" ;
             Text [ spanish ] = "Selección" ;
-            Text [ english_us ] = "Select" ;
             Text[ chinese_simplified ] = "Ñ¡Ôñ";
             Text[ russian ] = "Âûáîð";
             Text[ polish ] = "Wybór";
@@ -517,7 +530,8 @@ ToolBox RID_TOOLBOX
             HelpId = SID_DIALOG_TESTMODE ;
             Identifier = SID_DIALOG_TESTMODE ;
             Text = "Testmodus aktivieren" ;
-            Text [ ENGLISH ] = "Activate testmode" ;
+            Text [ english ] = "Activate testmode" ;
+            Text [ english_us ] = "Activate Test Mode" ;
             Text [ norwegian ] = "Activate testmode" ;
             Text [ italian ] = "Attiva modo testo" ;
             Text [ portuguese_brazilian ] = "Ativar modoteste" ;
@@ -528,7 +542,6 @@ ToolBox RID_TOOLBOX
             Text [ swedish ] = "Aktivera testläge" ;
             Text [ dutch ] = "Testmodus inschakelen" ;
             Text [ spanish ] = "Activar modo prueba" ;
-            Text [ english_us ] = "Activate Test Mode" ;
             Text[ chinese_simplified ] = "¼¤»îÊÔÑéÄ£Ê½";
             Text[ russian ] = "Àêòèâèðîâàòü ðåæèì òåñòà";
             Text[ polish ] = "Uaktywnij tryb sprawdzania";
