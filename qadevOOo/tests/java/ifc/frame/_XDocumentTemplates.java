@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDocumentTemplates.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:21 $
+ *  last change:$Date: 2003-02-06 09:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import util.utils;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 /**
 * Testing <code>com.sun.star.frame.XDesktop</code>
 * interface methods:
@@ -272,7 +275,8 @@ public class _XDocumentTemplates extends MultiMethodTest {
 
         XDynamicResultSet DynResSet = null;
         try {
-            DynResSet = (XDynamicResultSet)comProc.execute(command, 0, null);
+            DynResSet = (XDynamicResultSet) AnyConverter.toObject(
+                new Type(XDynamicResultSet.class),comProc.execute(command, 0, null));
         } catch(com.sun.star.ucb.CommandAbortedException e) {
             log.println("Couldn't execute command:" + e);
         } catch(com.sun.star.uno.Exception e) {
