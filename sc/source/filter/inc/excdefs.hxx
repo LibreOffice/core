@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:36:48 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,19 +81,6 @@
 
 // height
 #define EXC_FONTHGHT_COEFF          20.0
-
-// (0x005D) OBJ ===============================================================
-
-#define EXC_OBJT_LINE               0x01
-#define EXC_OBJT_RECT               0x02
-#define EXC_OBJT_ELLIP              0x03
-#define EXC_OBJT_ARC                0x04
-#define EXC_OBJT_CHART              0x05
-#define EXC_OBJT_TEXT               0x06
-#define EXC_OBJT_PICT               0x08
-#define EXC_OBJT_POLYGON            0x09
-#define EXC_OBJT_NOTE               0x19
-#define EXC_OBJT_DRAWING            0x1E
 
 // (0x0092) PALETTE ===========================================================
 
