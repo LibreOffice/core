@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-26 09:00:18 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 12:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,7 @@
 #define HID_OPTIONS_COLORCONFIG                 (HID_SVX_START + 429)
 #define HID_OPTIONS_COLORCONFIG_SAVE_SCHEME     (HID_SVX_START + 430)
 #define HID_OPTIONS_ACCESSIBILITYCONFIG         (HID_SVX_START + 431)
+#define HID_OPTIONS_COLORCONFIG_COLORLIST_WIN   (HID_SVX_EXT0_START + 0)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
@@ -506,6 +507,14 @@
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
+#endif
+
+// overrun check 2
+
+#define ACT_SVX_HID_END2 HID_OPTIONS_COLORCONFIG_COLORLIST_WIN
+
+#if ACT_SVX_HID2_END > HID_SVX_EXT0_END
+#error resource overrun in #line, #file
 #endif
 
 #endif
