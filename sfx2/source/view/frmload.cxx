@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-05 14:24:06 $
+ *  last change: $Author: mba $ $Date: 2000-12-06 09:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,6 +1042,7 @@ IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
 {
     DBG_ASSERT( pLoader, "No Loader created, but LoadDone ?!" );
 
+    Reference< XFrameLoader > xTHIS( static_cast< XFrameLoader* >( this ), UNO_QUERY );
     if ( pLoader->GetError() )
     {
         SfxFrame* pFrame = pLoader->GetFrame();
