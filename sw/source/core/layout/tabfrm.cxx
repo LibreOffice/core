@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:30 $
+ *  last change: $Author: vg $ $Date: 2003-03-28 13:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,7 +1910,7 @@ void SwTabFrm::Cut()
     if ( pUp )
     {
         ASSERT( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
-        SwSectionFrm *pSct;
+        SwSectionFrm *pSct = 0;
         if( !pUp->Lower() && pUp->IsInSct() &&
             !(pSct = pUp->FindSctFrm())->ContainsCntnt() )
         {
