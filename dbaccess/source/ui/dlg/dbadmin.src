@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-22 23:24:07 $
+ *  last change: $Author: kz $ $Date: 2001-12-04 18:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2203,7 +2203,7 @@ TabPage PAGE_TEXT
         Text [ russian ] = "Òΰκθε οξδρςΰνξβξχνϋε ηνΰκθ, κΰκ *,? β #1 νεδξοσρςθμϋ.";
         Text [ polish ] = "Symboli wieloznacznych jak *,? nie moΏna uΏyζ w #1.";
         Text [ japanese ] = "*γ€? γ®γ‚γ†γªοΎο½²οΎ™οΎ„οΎο½¶ο½°οΎ„οΎγ― #1 γ§γ―δ½ΏγγΎγ›γ‚“γ€‚";
-        Text [ chinese_traditional ] = "#1 δΈθƒ½ε¤ ε«ζ‰ι€ι…η¬¦<*,?>γ€‚";
+        Text [ chinese_traditional ] = "#1 δΈθƒ½ε¤ ε«ζ‰θ¬η”¨ε­—ε…ƒ<*,?>γ€‚";
         Text [ arabic ] = "αΗ νυΣγΝ ΘΓΝΡέ ΗαΘΟα΅ γΛα *,?΅ έν #1.";
         Text [ greek ] = "Δεν επιτρέπονται τα σύμβολα κράτησης θέσης όπως (?,*) στο #1.";
         Text [ korean ] = "#1 μ—μ„ ? λ° *μ™€ κ°™μ€ μ™€μΌλ“μΉ΄λ“ λ¬Έμ μ‚¬μ©ν•  μ μ—†μµλ‹λ‹¤.";
@@ -2356,7 +2356,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ greek ] = "Προβολή στηλών έκδοσης (αν είναι διαθέσιμες)";
         Text [ dutch ] = "Versiekolommen weergeven (indien beschikbaar)";
         Text [ french ] = "Afficher les colonnes de version (si disponibles)";
-        Text [ spanish ] = "Suprimir columnas de versiσn (si estαn disponibles)";
+        Text [ spanish ] = "Mostrar columnas de versiσn (si estαn disponibles)";
         Text [ italian ] = "Mostra colonne di versione (se disponibili)";
         Text [ danish ] = "Suppress version columns";
         Text [ swedish ] = "Visa versionskolumner (om tillgδngliga)";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.81  2001/11/22 23:24:07  obo
+ *  Merge SRC641: 22.11.01 - 23:24:16
+ *
  *  Revision 1.80  2001/11/13 23:23:22  rt
  *  Merge SRC641: 13.11.01 - 23:24:02
  *
@@ -3425,6 +3428,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
