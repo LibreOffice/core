@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 02:45:30 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ ModalDialog DLG_VECTORIZE
         Text [ portuguese ] = "Definições" ;
         Text [ portuguese_brazilian ] = "Einstellungen" ;
         Text[ chinese_simplified ] = "Éè¶¨";
-        Text[ russian ] = "Óñòàíîâêè";
+        Text[ russian ] = "Íàñòğîéêè";
         Text[ polish ] = "Ustawienia";
         Text[ japanese ] = "İ’è";
         Text[ chinese_traditional ] = "³]©w";
@@ -185,7 +185,7 @@ ModalDialog DLG_VECTORIZE
         Text[ chinese_traditional ] = "ÃC¦âªº¼Æ¥Ø¡G";
         Text[ arabic ] = "ÚÏÏ ÇáÃáæÇä:";
         Text[ greek ] = "Áñéèìüò ÷ñùìÜôùí:";
-        Text[ korean ] = "»ö»ó¡¡°³¼ö:";
+        Text[ korean ] = "»ö»ó °³¼ö:";
         Text[ turkish ] = "Renk sayısı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cantidad de colores:";
@@ -417,7 +417,7 @@ ModalDialog DLG_VECTORIZE
         Text[ danish ] = "Fremgang";
         Text[ french ] = "Progression";
         Text[ swedish ] = "Framsteg";
-        Text[ dutch ] = "Vooruitgang";
+        Text[ dutch ] = "Voortgang";
         Text[ spanish ] = "Progreso";
         Text[ chinese_simplified ] = "½øÕ¹";
         Text[ russian ] = "Ïğîãğåññ";
@@ -461,6 +461,7 @@ ModalDialog DLG_VECTORIZE
     Text[ catalan ] = "Convertir en polígono";
     Text[ finnish ] = "Muunna monikulmioksi";
 };
+
 
 
 
