@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCharacterClassification.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-01-29 11:32:35 $
+ *  last change: $Author: er $ $Date: 2001-02-09 20:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,14 +302,14 @@ constants KParseTokens
     /** Additional flags set in <member>ParseResult::StartFlags</member> or
         <member>ParseResult::ContFlags</member>.
         Set if none of the above UNI_... single values match a character. */
-    const long UNI_OTHER            = 0x40000000;
+    const long UNI_OTHER            = 0x20000000;
 
     /** Only valid for <em>nStartCharFlags</em> parameter to
         <member>ChararacterClassification::parseAnyToken</member> and
         <member>ChararacterClassification::parsePredefinedToken</member>,
         ignored on <em>nContCharFlags</em> parameter.
         <strong>Not</strong> set in <type>ParseResult</type>. */
-    const long IGNORE_LEADING_WS    = 0x80000000;
+    const long IGNORE_LEADING_WS    = 0x40000000;
 
     /// Useful combinations
     const long ASC_ALPHA            = ASC_UPALPHA | ASC_LOALPHA;
@@ -358,7 +358,7 @@ constants KParseType
     const long UNI_NUMBER           = 0x00000040;
 
     /// Set (ored) if SINGLE_QUOTE_NAME or DOUBLE_QUOTE_STRING has no closing quote.
-    const long MISSING_QUOTE        = 0x80000000;
+    const long MISSING_QUOTE        = 0x40000000;
 
     /// Useful combinations
     const long ANY_NUMBER           = ASC_NUMBER | UNI_NUMBER;
