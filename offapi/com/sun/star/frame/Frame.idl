@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:10:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_frame_XDispatchInformationProvider_idl__
+#include <com/sun/star/frame/XDispatchInformationProvider.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
@@ -146,6 +150,13 @@ published service Frame
         @see XFrame::findFrame()
     */
     interface XDispatchProvider;
+
+    //-------------------------------------------------------------------------
+    /** provides information about supported commands
+
+        @since OOo 2.0
+    */
+    [optional] interface XDispatchInformationProvider;
 
     //-------------------------------------------------------------------------
     /** supports interception mechanism for dispatched URLs
