@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 08:00:51 $
+ *  last change: $Author: kso $ $Date: 2001-05-10 14:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,10 @@ private:
       * @param rxSMgr is a Service Manager.
       * @param rArguments are the arguments to pass to the
       *        com.sun.star.ucb.UniversalContentBroker service when creating it.
-      *        Currently, this must be a sequence containing exactly one
-      *        boolean. If this boolean is true, the Broker is automatically
-      *        configured (the appropriate content provider services are
-      *        registered); if the boolean is false, the Broker is left
-      *        unconfigured (no content providers are registered).
+      *        Currently, this must be a sequence containing exactly two
+      *        strings, a primary and a secondary configuration key.
+      *        Refer to http://ucb.openoffice.org/docs/ucb-configuration.html
+      *        for more information on UCB configuration.
       */
     ContentBroker( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
@@ -129,16 +128,15 @@ public:
     /** Initialize "the one and only" Broker.  This method must be called
       * exactly once, before the Broker is used in any way.
       *
-      * @param  rSMgr is a factory to create services needed in the Broker's
-      *         implementation.
+      * @param rSMgr is a factory to create services needed in the Broker's
+      *        implementation.
       *
-      * @param  rArguments are the arguments to pass to the
-      *         com.sun.star.ucb.UniversalContentBroker service when creating
-      *         it. Currently, this must be a sequence containing exactly one
-      *         boolean.    If this boolean is true, the Broker is automatically
-      *         configured (the appropriate content provider services are
-      *         registered); if the boolean is false, the Broker is left
-      *         unconfigured (no content providers are registered).
+      * @param rArguments are the arguments to pass to the
+      *        com.sun.star.ucb.UniversalContentBroker service when creating
+      *        it. Currently, this must be a sequence containing exactly two
+      *        strings, a primary and a secondary configuration key.
+      *        Refer to http://ucb.openoffice.org/docs/ucb-configuration.html
+      *        for more information on UCB configuration.
       *
       * @return True if creation and possible configuration of the Broker
       *         was successful.
