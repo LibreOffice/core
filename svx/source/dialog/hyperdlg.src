@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2002-08-16 20:16:47 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 11:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 #include "helpid.hrc"
 #include "hyperdlg.hrc"
 
-#ifndef STD_MASKCOLOR
-#define STD_MASKCOLOR Color { Red=0xC000; Green=0xC000; Blue=0xC000; }
-#endif
-
 #define STD_MAGENTA_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
+
+#ifndef STD_MASKCOLOR
+#define STD_MASKCOLOR   STD_MAGENTA_MASKCOLOR
+#endif
 
 /*************************************************************************
 |
@@ -3074,19 +3074,19 @@ Image RID_SVXBMP_HLDOCNTP
 Image RID_SVXBMP_HLINETTP_H
 {
     ImageBitmap = Bitmap { File = "hlinettp_h.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 
 Image RID_SVXBMP_HLMAILTP_H
 {
     ImageBitmap = Bitmap { File = "hlmailtp_h.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 
 Image RID_SVXBMP_HLDOCTP_H
 {
     ImageBitmap = Bitmap { File = "hldoctp_h.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 
 Image RID_SVXBMP_HLDOCNTP_H
