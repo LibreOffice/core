@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-26 00:20:18 $
+#   last change: $Author: mh $ $Date: 2004-07-02 15:55:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -718,7 +718,7 @@ sub get_rcmd_root
     if ( $server =~ /$remote/o ) {
         $repository = '/shared/data/helm/cvs/repository';
         $root = ":$method:$vcsid\@$server:$repository";
-        if ( !is_valid_login($root) ) {
+        if ( !is_valid_login($repository) ) {
             print STDERR "\nThe cvs rdiff command is broken for the OOo CVS server.\n";
             print STDERR "To fix this problem you have to issue the following cvs login command:\n\n";
             print STDERR "    cvs -d $root login\n\n";
