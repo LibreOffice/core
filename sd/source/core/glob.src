@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:21:34 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 19:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,7 @@ String STR_PRESVIEWSHELL
     Text[ spanish ] = "Modo presentaciÛn";
     Text[ finnish ] = "Presentation mode";
     Text[ italian ] = "Modo presentazione";
-    Text[ danish ] = "Presentation mode";
+    Text[ danish ] = "PrÊsentationsmodus";
     Text[ swedish ] = "Presentationsl‰ge";
     Text[ polish ] = "Tryb prezentacji";
     Text[ portuguese_brazilian ] = "Presentation mode";
@@ -1058,7 +1058,7 @@ String STR_PREVIEWVIEWSHELL
     Text[ spanish ] = "Ventana de previsualizaciÛn";
     Text[ finnish ] = "Preview window";
     Text[ italian ] = "Anteprima";
-    Text[ danish ] = "Preview window";
+    Text[ danish ] = "Eksempelvindue";
     Text[ swedish ] = "Fˆrhandsvisningsfˆnster";
     Text[ polish ] = "Okno podglπdu";
     Text[ portuguese_brazilian ] = "Preview window";
@@ -2088,7 +2088,7 @@ String STR_POWERPOINT_IMPORT
     Text[ french ] = "Import PowerPoint";
     Text[ spanish ] = "ImportaciÛn PowerPoint";
     Text[ italian ] = "Importazione PowerPoint";
-    Text[ danish ] = "PowerPoint import";
+    Text[ danish ] = "PowerPoint-import";
     Text[ swedish ] = "PowerPoint-import";
     Text[ polish ] = "Import PowerPoint";
     Text[ portuguese_brazilian ] = "PowerPoint import";
@@ -2233,7 +2233,7 @@ Resource RID_SD_ERRHDL
         Text [ french ] = "Erreur de format dans le fichier, position $(ARG1)(ligne,colonne)." ;
         Text [ dutch ] = "Formaatfout ontdekt op positie $(ARG1)(rij,kolom) in het bestand" ;
         Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) uppt‰ckt i filen" ;
-        Text [ danish ] = "Der blev opdaget en formatfejl i filen pÂ position $(ARG1)(rÊkke,spalte)" ;
+        Text [ danish ] = "Der er konstateret formatfejl i filen pÂ position $(ARG1)(linje,kolonne)" ;
         Text [ portuguese ] = "Descoberto erro de formato na posiÁ„o $(ARG1)(linha, coluna) no ficheiro" ;
         Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
         Text[ chinese_simplified ] = "Âú®Êñá‰ª∂ÁöÑ $(ARG1)(Ë°åÔºåÂàó)Â§ÑÂèëÁé∞Ê†ºÂºèÈîôËØØ";
@@ -2261,7 +2261,7 @@ Resource RID_SD_ERRHDL
         Text[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         Text[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciÛn $(ARG2)(fila,columna)";
         Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
-        Text[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ danish ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) pÂ position $(ARG2)(linje,kolonne) i filen";
         Text[ swedish ] = "Det har uppt‰ckts ett formatfel i filen:  deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
         Text[ polish ] = "Wykryto b≥πd w formacie dokumentu podrzÍdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
@@ -2286,7 +2286,7 @@ Resource RID_SD_ERRHDL
         Text[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         Text[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciÛn $(ARG2)(fila,columna)";
         Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
-        Text[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ danish ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) pÂ position $(ARG2)(linje,kolonne) i filen";
         Text[ swedish ] = "Det har uppt‰ckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
         Text[ polish ] = "Wykryto b≥πd w formacie dokumentu podrzÍdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
