@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-11 20:48:38 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 21:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,20 +135,20 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Western characters and Asian punctuation" ;
         Text[ english_us ] = "Western ~text and Asian punctuation";
         Text[ portuguese ] = "~Texto ocidental e pontuação";
-        Text[ russian ] = "Çàïàäíûé òåêñò è ïóíêòóàöèÿ";
+        Text[ russian ] = "Çàïàäíûå çíàêè è àçèàòñêàÿ ïóíêòóàöèÿ";
         Text[ greek ] = "Äõôéêü êåßìåíï êáé óçìåßá óôßîçò";
         Text[ dutch ] = "~Westerse tekst en interpunctie";
-        Text[ french ] = "Texte ~occidental et ponctuation asiatique";
-        Text[ spanish ] = "Texto y puntuación occidentales";
+        Text[ french ] = "Caractères ~occidentaux et ponctuation asiatique";
+        Text[ spanish ] = "Texto occidental y puntuación asiática";
         Text[ finnish ] = "~Westlicher Text und Interpunktion";
         Text[ italian ] = "~Testo occidentale e punteggiatura asiatica";
         Text[ danish ] = "Western text and punctuation";
-        Text[ swedish ] = "~Västlig text och asiatisk interpunktion";
-        Text[ polish ] = "Tekst i interpunkcja zachodnia";
+        Text[ swedish ] = "~Västliga tecken och asiatisk interpunktion";
+        Text[ polish ] = "Znaki zachodnie i interpunkcja azjatycka";
         Text[ portuguese_brazilian ] = "Western text and punctuation";
         Text[ japanese ] = "åŠè§’è‹±å­—ã¨åŒºåˆ‡ã‚Šè¨˜å·(~T)";
         Text[ korean ] = "ì•ŒíŒŒë²³ ë¬¸ì í…ìŠ¤íŠ¸ì™€ êµ¬ë‘ì (~T)";
-        Text[ chinese_simplified ] = "è¥¿æ–‡å’Œä¸­æ—¥éŸ©æ ‡ç‚¹ç¬¦å·(~T)";
+        Text[ chinese_simplified ] = "è¥¿æ–‡å­—ç¬¦å’Œä¸­æ—¥éŸ©æ ‡ç‚¹ç¬¦å·";
         Text[ chinese_traditional ] = "è¥¿æ–‡å’Œä¸­æ—¥éŸ“æ–‡å­—æ¨™é»ç¬¦è™Ÿ(~T)";
         Text[ turkish ] = "Western text and punctuation";
         Text[ arabic ] = "äÕ ÛÑÈí æÚáÇãÇÊ ÊäŞíØ";
@@ -466,6 +466,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ catalan ] = "Proxy";
     Text[ finnish ] = "Välityspalvelin";
 };
+
 
 
 
