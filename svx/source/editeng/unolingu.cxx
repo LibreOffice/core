@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:25:31 $
+ *  last change: $Author: tl $ $Date: 2000-11-14 09:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #include <unolingu.hxx>
 
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
@@ -74,6 +71,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -548,7 +548,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
         OUString aRplc( aHyphenatedWord.copy( nTxtStart, nTxtLen ) );
 
         aRes.aReplacement       = aRplc;
-        aRes.nChangedPos        = nPosL;
+        aRes.nChangedPos        = (INT16) nPosL;
         aRes.nChangedLength     = nChgLen;
         aRes.bIsAltSpelling     = TRUE;
         aRes.xHyphWord          = rHyphWord;
@@ -634,19 +634,11 @@ sal_Int32 SvxGetLanguagePos(const Sequence< Language > &rSeq, Language nLang)
 String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
 {
     // get directory to use
-    SfxIniManager  *pIniMgr = SfxIniManager::Get();
-    sal_uInt16 nSfxIniKey = bIsUserDic ?
-            SFX_KEY_USERDICTIONARY_DIR : SFX_KEY_DICTIONARY_PATH;
-    String aDirName ( pIniMgr->Get( nSfxIniKey ) );
-
-    INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
-    aURLObj.SetSmartURL( aDirName );
-    DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-    aURLObj.Append( rDicName );
-    DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-
-    return aURLObj.GetMainURL();
+    String aURL ( rDicName );
+    SvtPathOptions::Pathes ePath = bIsUserDic ?
+        SvtPathOptions::PATH_USERDICTIONARY : SvtPathOptions::PATH_DICTIONARY;
+    BOOL bRes = SvtPathOptions().SearchFile( aURL, ePath );
+    return bRes ? aURL : String();
 }
 
 //TL:TODO: soll mal den rictigen Rückgabetyp bekommen!
@@ -718,8 +710,8 @@ sal_Bool SvxSaveDictionaries( const Reference< XDictionaryList >  &xDicList )
 
     Sequence< Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
-    sal_Int16 nCount = aDics.getLength();
-    for (sal_Int16 i = 0;  i < nCount;  i++)
+    INT32 nCount = aDics.getLength();
+    for (INT32 i = 0;  i < nCount;  i++)
     {
         try
         {
