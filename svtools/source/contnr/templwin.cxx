@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-04 06:59:27 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,7 +1019,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
             aTarget = ASCII_STR("_self");
         else
         {
-            aTarget = ASCII_STR("_blank");
+            aTarget = ASCII_STR("_default");
             xProv = Reference < XDispatchProvider >( ::comphelper::getProcessServiceFactory()->
                 createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
         }
