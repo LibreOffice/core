@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-30 15:53:21 $
+ *  last change: $Author: mt $ $Date: 2001-07-31 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,12 +885,12 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
                         // Tab-Pos suchen...
                         long nCurPos = nTmpWidth+nStartX;
-                        nCurPos -= rLRItem.GetTxtLeft();    // Tabs relativ zu LI
+//                      nCurPos -= rLRItem.GetTxtLeft();    // Tabs relativ zu LI
                         // Skalierung rausrechnen
                         if ( aStatus.DoStretch() && ( nStretchX != 100 ) )
                             nCurPos = nCurPos*100/nStretchX;
 
-                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos, aEditDoc.GetDefTab() );
+                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - rLRItem.GetTxtLeft(), aEditDoc.GetDefTab() );
                         aCurrentTab.nTabPos = GetXValue( (long) ( aCurrentTab.aTabStop.GetTabPos() + rLRItem.GetTxtLeft() ) );
                         aCurrentTab.bValid = FALSE;
                         if ( ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_RIGHT ) ||
@@ -1023,7 +1023,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                     nW = nWidthAfterTab;
                     String aText = GetSelected( EditSelection(  EditPaM( pParaPortion->GetNode(), nTmpPos ),
                                                                 EditPaM( pParaPortion->GetNode(), nTmpPos + pPortion->GetLen() ) ) );
-                        USHORT nDecPos = aText.Search( aCurrentTab.aTabStop.GetDecimal() );
+                    USHORT nDecPos = aText.Search( aCurrentTab.aTabStop.GetDecimal() );
                     if ( nDecPos != STRING_NOTFOUND )
                     {
                         nW -= pParaPortion->GetTextPortions().GetObject( nTmpPortion )->GetSize().Width();
@@ -1031,14 +1031,14 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         aCurrentTab.bValid = FALSE;
                     }
                 }
-                long nMaxW = aCurrentTab.nTabPos - aCurrentTab.nStartPosX;
+                long nMaxW = aCurrentTab.nTabPos - aCurrentTab.nStartPosX - nStartX;
                 if ( nW >= nMaxW )
                 {
                     nW = nMaxW;
                     aCurrentTab.bValid = FALSE;
                 }
                 TextPortion* pTabPortion = pParaPortion->GetTextPortions().GetObject( aCurrentTab.nTabPortion );
-                pTabPortion->GetSize().Width() = aCurrentTab.nTabPos - aCurrentTab.nStartPosX - nW;
+                pTabPortion->GetSize().Width() = aCurrentTab.nTabPos - aCurrentTab.nStartPosX - nW - nStartX;
                 nTmpWidth = aCurrentTab.nStartPosX + pTabPortion->GetSize().Width() + nWidthAfterTab;
             }
 
