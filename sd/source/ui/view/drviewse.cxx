@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-30 10:14:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@
 
 #include <svtools/urihelper.hxx>
 #include <sfx2/topfrm.hxx>
+#include <sfx2/docfile.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -1732,7 +1733,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
             aTmp <<= rtl::OUString( rText );
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), aTmp );
 
-            aTmp <<= rtl::OUString( ::URIHelper::SmartRelToAbs( rURL, FALSE,
+            aTmp <<= rtl::OUString( ::URIHelper::SmartRel2Abs( INetURLObject( GetDocSh()->GetMedium()->GetBaseURL() ), rURL, URIHelper::GetMaybeFileHdl(), true, false,
                                                                 INetURLObject::WAS_ENCODED,
                                                                 INetURLObject::DECODE_UNAMBIGUOUS ) );
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aTmp );
@@ -1772,7 +1773,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
         aTmp <<= rtl::OUString(rText);
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), aTmp );
 
-        aTmp <<= rtl::OUString( ::URIHelper::SmartRelToAbs( rURL, FALSE,
+        aTmp <<= rtl::OUString( ::URIHelper::SmartRel2Abs( INetURLObject( GetDocSh()->GetMedium()->GetBaseURL() ), rURL, URIHelper::GetMaybeFileHdl(), true, false,
                                                             INetURLObject::WAS_ENCODED,
                                                             INetURLObject::DECODE_UNAMBIGUOUS ) );
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aTmp );
