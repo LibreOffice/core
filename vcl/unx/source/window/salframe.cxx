@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:08:10 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,10 +242,10 @@ static char* getFrameResName()
         {
             const char* pEnv = getenv( "RESOURCE_NAME" );
             if( pEnv && *pEnv )
-                strncpy( pResName, pEnv, sizeof(pResName)-1 );
+                snprintf( pResName, sizeof(pResName), "%s", pEnv );
         }
         if( !*pResName )
-            strcpy( pResName, "VCLSalFrame" );
+            snprintf( pResName, sizeof(pResName), "%s", "VCLSalFrame" );
     }
     return pResName;
 }
@@ -264,10 +264,10 @@ static char* getFrameClassName()
 
         if( aProduct.getLength() )
         {
-            strncpy( pClassName, ::rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ).getStr(), sizeof( pClassName )-1 );
+            snprintf( pClassName, sizeof(pClassName), "%s", ::rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ).getStr() );
         }
         else
-            strcpy( pClassName, "VCLSalFrame" );
+            snprintf( pClassName, sizeof(pClassName), "%s", "VCLSalFrame" );
     }
     return pClassName;
 }
