@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>WITA (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">WITA</value>
+            <value>WITA</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

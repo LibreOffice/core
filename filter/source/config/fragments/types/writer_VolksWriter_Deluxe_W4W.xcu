@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>VolksWriter Deluxe (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">VolksWriter Deluxe</value>
+            <value>VolksWriter Deluxe</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
