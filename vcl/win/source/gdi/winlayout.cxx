@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-02 12:12:17 $
+ *  last change: $Author: vg $ $Date: 2002-08-06 10:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,7 +1031,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     rPos = GetDrawPosition( aRelativePos );
 
     if( pCharIndexes && !mpGlyphs2Chars )
-        ; //TODO: implement, also see usage below
+        {} //TODO: implement, also see usage below
 
     int nCount = 0;
     while( nCount < nLen )
@@ -1437,7 +1437,12 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
 
 BOOL SalGraphics::GetLayoutOutline( const SalLayout& rSalLayout, PolyPolygon& rPolyPoly )
 {
+#ifdef REMOTE_APPSERVER
+    // TODO: cleanup remote case
+    return FALSE;
+#else
     return rSalLayout.GetOutline( *this, rPolyPoly );
+#endif
 }
 
 // =======================================================================
