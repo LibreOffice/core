@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.57 2001-06-10 10:04:09 cl Exp $
+	$Id: drawing.mod,v 1.58 2001-06-11 14:28:58 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -226,6 +226,7 @@
 <!ATTLIST draw:g draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:page-thumbnail EMPTY>
+<!ATTLIST draw:page-thumbnail draw:page-number %positiveInteger; #IMPLIED>
 <!ATTLIST draw:page-thumbnail %draw-position; >
 <!ATTLIST draw:page-thumbnail %draw-size; >
 <!ATTLIST draw:page-thumbnail %draw-style-name; >
