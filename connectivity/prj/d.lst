@@ -10,6 +10,11 @@
 ..\%__SRC%\lib\libodbc*.so %_DEST%\lib%_EXT%\libodbc*.so
 ..\%__SRC%\lib\libdbase*.so %_DEST%\lib%_EXT%\libdbase*.so
 ..\%__SRC%\lib\libadabas*.so %_DEST%\lib%_EXT%\libadabas*.so
+..\%__SRC%\lib\libsdbc*.dylib %_DEST%\lib%_EXT%\libsdbc*.dylib
+..\%__SRC%\lib\libjdbc*.dylib %_DEST%\lib%_EXT%\libjdbc*.dylib
+..\%__SRC%\lib\libodbc*.dylib %_DEST%\lib%_EXT%\libodbc*.dylib
+..\%__SRC%\lib\libdbase*.dylib %_DEST%\lib%_EXT%\libdbase*.dylib
+..\%__SRC%\lib\libadabas*.dylib %_DEST%\lib%_EXT%\libadabas*.dylib
 ..\%__SRC%\lib\libconnectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\slb\connectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 
