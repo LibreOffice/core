@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:58:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,10 +239,10 @@ static __FAR_DATA SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, XML_TOK_TABLE_NUM_ROWS_SPANNED },
     { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, XML_TOK_TABLE_NUM_COLS_REPEATED },
     { XML_NAMESPACE_TABLE, XML_FORMULA, XML_TOK_TABLE_FORMULA },
-    { XML_NAMESPACE_TABLE, XML_VALUE, XML_TOK_TABLE_VALUE },
-    { XML_NAMESPACE_TABLE, XML_TIME_VALUE, XML_TOK_TABLE_TIME_VALUE },
-    { XML_NAMESPACE_TABLE, XML_DATE_VALUE, XML_TOK_TABLE_DATE_VALUE },
-    { XML_NAMESPACE_TABLE, XML_BOOLEAN_VALUE, XML_TOK_TABLE_BOOLEAN_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_VALUE, XML_TOK_TABLE_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_TIME_VALUE, XML_TOK_TABLE_TIME_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_DATE_VALUE, XML_TOK_TABLE_DATE_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, XML_TOK_TABLE_BOOLEAN_VALUE },
     { XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TOK_TABLE_PROTECTED },
     { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
 
@@ -552,7 +552,12 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 nColRepeat = 1UL;
             break;
         case XML_TOK_TABLE_FORMULA:
-            sFormula = rValue;
+            {
+                OUString sTmp;
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                        GetKeyByAttrName( rValue, &sTmp );
+                sFormula = XML_NAMESPACE_OOOW == nPrefix ? sTmp : rValue;
+            }
             break;
         case XML_TOK_TABLE_VALUE:
             {
@@ -646,8 +651,27 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
+    sal_Bool bSubTable = sal_False;
     if( XML_NAMESPACE_TABLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_SUB_TABLE ) )
+        IsXMLToken( rLocalName, XML_TABLE ) )
+    {
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        {
+            const OUString& rAttrName = xAttrList->getNameByIndex( i );
+
+            OUString aLocalName;
+            sal_uInt16 nPrefix =
+                GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                                &aLocalName );
+            if( XML_NAMESPACE_TABLE == nPrefix &&
+                 IsXMLToken( aLocalName, XML_IS_SUB_TABLE ) &&
+                 IsXMLToken( xAttrList->getValueByIndex( i ), XML_TRUE ) )
+                bSubTable = sal_True;
+        }
+    }
+
+    if( bSubTable )
     {
         if( !HasContent() )
         {
@@ -2803,7 +2827,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         pStNd = pTxtCrsr->GetPaM()->GetNode()->FindTableBoxStartNode();
         bFirstSection = sal_False;
         OUString sStyleName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
-        GetImport().GetTextImport()->SetStyleAndAttrs(
+        GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
             GetImport().GetTextImport()->GetCursor(), sStyleName, sal_True );
     }
     else
