@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.23 $
- *  last change: $Author: hr $ $Date: 2003-07-16 17:46:32 $
+ *  $Revision: 1.24 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #endif
 
 #ifndef _SV_GCACHFTYP_HXX
-#include <freetype/freetype.h>
 #include <gcach_ftyp.hxx>
 #endif
 
@@ -213,27 +212,20 @@ public:
                             {}
 
     virtual const void*     getFontTable(LETag tableTag) const;
-    virtual le_bool         canDisplay(LEUnicode32 ch) const;
     virtual le_int32        getUnitsPerEM() const;
-
-    virtual void            mapCharsToGlyphs( const LEUnicode chars[],
-                                le_int32 offset, le_int32 count, le_bool reverse,
-                                const LECharMapper* mapper, LEGlyphID glyphs[] ) const;
-    virtual LEGlyphID       mapCharToGlyph( LEUnicode32 ch, const LECharMapper* mapper) const;
-
-    virtual le_int32        getName( le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID,
-                                le_uint16 nameID, LEUnicode *name ) const;
-    virtual void            getGlyphAdvance( LEGlyphID glyph, LEPoint &advance ) const;
-    virtual le_bool         getGlyphPoint( LEGlyphID glyph, le_int32 pointNumber, LEPoint& point ) const;
     virtual float           getXPixelsPerEm() const;
     virtual float           getYPixelsPerEm() const;
-    virtual float           xUnitsToPoints( float xUnits ) const;
-    virtual float           yUnitsToPoints( float xUnits ) const;
-    virtual void            unitsToPoints( LEPoint &units, LEPoint &points ) const;
-    virtual float           xPixelsToUnits( float xPixels ) const;
-    virtual float           yPixelsToUnits( float xPixels ) const;
-    virtual void            pixelsToUnits( LEPoint &pixels, LEPoint &units ) const;
-    virtual void            transformFunits( float xFunits, float yFunits, LEPoint &pixels ) const;
+    virtual float           getScaleFactorX() const;
+    virtual float           getScaleFactorY() const;
+
+    virtual LEGlyphID       mapCharToGlyph( LEUnicode32 ch ) const;
+
+    virtual le_int32        getAscent() const;
+    virtual le_int32        getDescent() const;
+    virtual le_int32        getLeading() const;
+
+    virtual void            getGlyphAdvance( LEGlyphID glyph, LEPoint &advance ) const;
+    virtual le_bool         getGlyphPoint( LEGlyphID glyph, le_int32 pointNumber, LEPoint& point ) const;
 };
 
 // -----------------------------------------------------------------------
@@ -260,14 +252,6 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
 
 // -----------------------------------------------------------------------
 
-le_bool IcuFontFromServerFont::canDisplay( LEUnicode32 ch ) const
-{
-    le_bool rc = (mrServerFont.GetRawGlyphIndex( ch ) != 0);
-    return rc;
-}
-
-// -----------------------------------------------------------------------
-
 le_int32 IcuFontFromServerFont::getUnitsPerEM() const
 {
     return mrServerFont.GetEmUnits();
@@ -275,46 +259,73 @@ le_int32 IcuFontFromServerFont::getUnitsPerEM() const
 
 // -----------------------------------------------------------------------
 
-void IcuFontFromServerFont::mapCharsToGlyphs( const LEUnicode pChars[],
-    le_int32 nOffset, le_int32 nCount, le_bool bReverse,
-    const LECharMapper* pMapper, LEGlyphID pGlyphs[] ) const
+float IcuFontFromServerFont::getXPixelsPerEm() const
 {
-    if( !bReverse )
-        pMapper = NULL;
-    for( int i = 0; i < nCount; ++i )
-        pGlyphs[i] = mapCharToGlyph( pChars[nOffset+i], pMapper );
-
-    if( bReverse )
-    {
-        for( LEGlyphID *p1=pGlyphs, *p2=p1+nCount; p1 < --p2; ++p1 )
-        {
-            LEGlyphID t = *p1; *p1 = *p2; *p2 = t;
-        }
-    }
+    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
+    float fX = r.mnWidth ? r.mnWidth : r.mnHeight;
+    return fX;
 }
 
 // -----------------------------------------------------------------------
 
-LEGlyphID IcuFontFromServerFont::mapCharToGlyph( LEUnicode32 c1,
-    const LECharMapper* pMapper ) const
+float IcuFontFromServerFont::getYPixelsPerEm() const
 {
-    LEUnicode32 c2 = c1;
-    if( pMapper )
-        c2 = pMapper->mapChar( c1 );
-    LEGlyphID nGlyphIndex = mrServerFont.GetRawGlyphIndex( c2 );
+    float fY = mrServerFont.GetFontSelData().mnHeight;
+    return fY;
+}
+
+// -----------------------------------------------------------------------
+
+float IcuFontFromServerFont::getScaleFactorX() const
+{
+    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
+    float fXScale = r.mnWidth ? r.mnWidth : r.mnHeight;
+    fXScale /= mrServerFont.GetEmUnits();
+    return fXScale;
+}
+
+// -----------------------------------------------------------------------
+
+float IcuFontFromServerFont::getScaleFactorY() const
+{
+    float fYScale = mrServerFont.GetFontSelData().mnHeight;
+    fYScale /= mrServerFont.GetEmUnits();
+    return fYScale; //TODO
+}
+
+// -----------------------------------------------------------------------
+
+LEGlyphID IcuFontFromServerFont::mapCharToGlyph( LEUnicode32 ch ) const
+{
+    LEGlyphID nGlyphIndex = mrServerFont.GetRawGlyphIndex( ch );
     return nGlyphIndex;
 }
 
+// -----------------------------------------------------------------------
+
+le_int32 IcuFontFromServerFont::getAscent() const
+{
+    const FT_Size_Metrics& rMetrics = mrServerFont.GetMetricsFT();
+    le_int32 nAscent = (+rMetrics.ascender + 32) >> 6;
+    return nAscent;
+}
 
 // -----------------------------------------------------------------------
-le_int32 IcuFontFromServerFont::getName(
-    le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID,
-    le_uint16 nameID, LEUnicode *name ) const
+
+le_int32 IcuFontFromServerFont::getDescent() const
 {
-    //TODO: replace dummy implementation
-    if( name )
-        name[0] = '#';
-    return 1;
+    const FT_Size_Metrics& rMetrics = mrServerFont.GetMetricsFT();
+    le_int32 nDescent = (-rMetrics.descender + 32) >> 6;
+    return nDescent;
+}
+
+// -----------------------------------------------------------------------
+
+le_int32 IcuFontFromServerFont::getLeading() const
+{
+    const FT_Size_Metrics& rMetrics = mrServerFont.GetMetricsFT();
+    le_int32 nLeading = ((rMetrics.height - rMetrics.ascender + rMetrics.descender) + 32) >> 6;
+    return nLeading;
 }
 
 // -----------------------------------------------------------------------
@@ -337,92 +348,6 @@ le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID glyph,
     fprintf(stderr,"getGlyphPoint(%d)\n", pointNumber );
 #endif
     return false;
-}
-
-// -----------------------------------------------------------------------
-
-float IcuFontFromServerFont::getXPixelsPerEm() const
-{
-    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
-    float fX = r.mnWidth ? r.mnWidth : r.mnHeight;
-    return fX;
-}
-
-// -----------------------------------------------------------------------
-
-float IcuFontFromServerFont::getYPixelsPerEm() const
-{
-    float fY = mrServerFont.GetFontSelData().mnHeight;
-    return fY;
-}
-
-// -----------------------------------------------------------------------
-
-float IcuFontFromServerFont::xUnitsToPoints( float xUnits ) const
-{
-    // TODO: avoid assumption: pixels==points
-    float fPoints = xUnits;
-    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
-    fPoints *= r.mnWidth ? r.mnWidth : r.mnHeight;
-    fPoints /= mrServerFont.GetEmUnits();
-    return fPoints;
-}
-
-// -----------------------------------------------------------------------
-
-float IcuFontFromServerFont::yUnitsToPoints( float yUnits ) const
-{
-    // TODO: avoid assumption pixels==points
-    float fPoints = yUnits;
-    fPoints *= mrServerFont.GetFontSelData().mnHeight;
-    fPoints /= mrServerFont.GetEmUnits();
-    return fPoints;
-}
-
-// -----------------------------------------------------------------------
-
-void IcuFontFromServerFont::unitsToPoints( LEPoint &units, LEPoint &points ) const
-{
-    points.fX = xUnitsToPoints( units.fX );
-    points.fY = yUnitsToPoints( units.fY );
-}
-
-// -----------------------------------------------------------------------
-
-float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
-{
-    float fPixels = xPixels;
-    fPixels *= mrServerFont.GetEmUnits();
-    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
-    fPixels /= r.mnWidth ? r.mnWidth : r.mnHeight;
-    return fPixels;
-}
-
-// -----------------------------------------------------------------------
-
-float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
-{
-    float fPixels = yPixels;
-    fPixels *= mrServerFont.GetEmUnits();
-    fPixels /= mrServerFont.GetFontSelData().mnHeight;
-    return fPixels;
-}
-
-// -----------------------------------------------------------------------
-
-void IcuFontFromServerFont::pixelsToUnits( LEPoint &pixels, LEPoint &units ) const
-{
-    units.fX = xPixelsToUnits( pixels.fX );
-    units.fY = yPixelsToUnits( pixels.fY );
-}
-
-// -----------------------------------------------------------------------
-
-void IcuFontFromServerFont::transformFunits( float xFunits, float yFunits, LEPoint &pixels ) const
-{
-    // TODO: avoid assumption pixels==points
-    LEPoint units = { xFunits, yFunits };
-    unitsToPoints( units, pixels );
 }
 
 // =======================================================================
