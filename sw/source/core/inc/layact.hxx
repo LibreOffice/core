@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:31:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ class SwLayAction
     BOOL bPaintExtraData;   //Anzeige von Zeilennumerierung o. ae. eingeschaltet?
     BOOL bActionInProgress; // wird in Action() anfangs gesetzt und zum Schluss geloescht
 
+    // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
+    sal_Bool    mbFormatCntntOnInterrupt;
 #ifdef _LAYACT_CXX
 
     void _AddScrollRect( const SwCntntFrm *, const SwPageFrm *,
@@ -153,12 +155,13 @@ class SwLayAction
     BOOL FormatFlyCntnt( const SwPageFrm *, sal_Bool bDontShrink );
     BOOL _FormatFlyCntnt( const SwFlyFrm * );
     BOOL __FormatFlyCntnt( const SwCntntFrm * );
-    void FormatFlyInCnt( SwFlyInCntFrm * );
+    void FormatFlyInCnt( SwFlyInCntFrm* );
     BOOL FormatLayout( SwLayoutFrm *, BOOL bAddRect = TRUE );
     BOOL FormatLayoutTab( SwTabFrm *, BOOL bAddRect = TRUE );
     BOOL FormatLayoutFly( SwFlyFrm *, BOOL bAddRect = TRUE );
-    BOOL FormatCntnt( const SwPageFrm * );
-    void _FormatCntnt( const SwCntntFrm *, const SwPageFrm *pPage );
+    BOOL FormatCntnt( const SwPageFrm* pPage );
+    void _FormatCntnt( const SwCntntFrm* pCntnt,
+                       const SwPageFrm* pPage );
     BOOL IsShortCut( SwPageFrm *& );
 
     BOOL TurboAction();
