@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 11:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,9 +697,9 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     // extra settings for odbc
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, ::rtl::OUString::createFromAscii("UseCatalog")));
     // extra settings for a ldap address book
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_HOSTNAME, ::rtl::OUString::createFromAscii("Hostname")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_HOSTNAME, ::rtl::OUString::createFromAscii("HostName")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, ::rtl::OUString::createFromAscii("BaseDN")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_PORTNUMBER, ::rtl::OUString::createFromAscii("Portnumber")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_PORTNUMBER, ::rtl::OUString::createFromAscii("PortNumber")));
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -2655,6 +2655,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.53  2001/05/29 13:33:12  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.52  2001/05/29 10:18:26  fs
  *  #86082# set the service factory on the general page
  *

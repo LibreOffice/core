@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 15:10:24 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 11:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,10 +1016,10 @@ namespace dbaui
             {
                 static ::rtl::OUString sAddressBookTypes[]=
                 {
-                    ::rtl::OUString::createFromAscii("sdbc:address:outlook"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:outlookexp"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:ldap"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:mozilla")
+                    ::rtl::OUString::createFromAscii("sdbc:address:outlook:"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:outlookexp:"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:ldap:"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:mozilla:")
                 };
                 static String sAddressBookTypesTrans[]=
                 {
@@ -1170,6 +1170,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/30 15:10:24  fs
+ *  #65293# include CommandAbortedException (solaris can't catch incomplete types)
+ *
  *  Revision 1.6  2001/05/30 07:44:07  fs
  *  #87403# removed an obsolete ifdef FS_PRIV_DEBUG
  *
