@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:07:19 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,7 +1333,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Οπθμενθςό ρφενΰπθι";
         Text[ polish ] = "UΏyj scenariusza";
         Text[ japanese ] = "ΌΕΨµ‚Μ“K—p";
-        Text[ chinese_traditional ] = "¨Ο¥Ξ¤θ®Χ";
+        Text[ chinese_traditional ] = "¨Ο¥Ξ¤ΐªRΒΕ¥»";
         Text[ arabic ] = "ΗΣΚΞΟΗγ ΗαΣνδΗΡνζ";
         Text[ greek ] = "Εφαρμογή σεναρίου";
         Text[ korean ] = "½Γ³ªΈ®Ώΐ ΐϋΏλ";
@@ -1359,7 +1359,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ρξηδΰςό ρφενΰπθι";
         Text[ polish ] = "Utwσrz scenariusz";
         Text[ japanese ] = "ΌΕΨµ‚Μμ¬";
-        Text[ chinese_traditional ] = "«Ψ¥ί¤θ®Χ";
+        Text[ chinese_traditional ] = "«Ψ¥ί¤ΐªRΒΕ¥»";
         Text[ arabic ] = "ΕδΤΗΑ ΣνδΗΡνζ";
         Text[ greek ] = "Δημιουργία σεναρίου";
         Text[ korean ] = "½Γ³ªΈ®Ώΐ ΈΈµι±β";
@@ -1385,7 +1385,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θημενενθε ρφενΰπθÿ";
         Text[ polish ] = "Edytuj scenariusz";
         Text[ japanese ] = "ΌΕΨµ‚Μ•ÒW";
-        Text[ chinese_traditional ] = "½sΏθ¤θ®Χ";
+        Text[ chinese_traditional ] = "½sΏθ¤ΐªRΒΕ¥»";
         Text[ arabic ] = "ΚΝΡνΡ ΣνδΗΡνζ";
         Text[ greek ] = "Επεξεργασία σεναρίου";
         Text[ korean ] = "½Γ³ªΈ®Ώΐ ΖνΑύ";
@@ -2245,7 +2245,7 @@ Resource RID_GLOBSTR
         Text[ english_us ] = "Case/Characters";
         Text[ portuguese ] = "Caixa/Caracteres";
         Text[ russian ] = "Ηΰγλΰβνϋε/ρςπξχνϋε ασκβϋ";
-        Text[ greek ] = "Change case";
+        Text[ greek ] = "Κεφαλαία/Πεζά";
         Text[ dutch ] = "Hoofd-/kleine letters belangrijk";
         Text[ french ] = "Casse/Caractθres";
         Text[ spanish ] = "Mayϊsculas/minϊsculas";
@@ -4342,7 +4342,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "#MACRO?" ;
         Text [ finnish ] = "NAME?" ;
         Text [ english_us ] = "#MACRO?" ;
-        Text[ chinese_simplified ] = "#MACRO?";
+        Text[ chinese_simplified ] = "#Ίκ£Ώ";
         Text[ russian ] = "#MACRO?";
         Text[ polish ] = "#MACRO?";
         Text[ japanese ] = "#MACRO?";
@@ -4454,7 +4454,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Πΰρψθπθςό ρφενΰπθι νΰ βϋδελεννϋε ξαλΰρςθ?";
         Text[ polish ] = "Rozszerzyζ scenariusz wokσ³ zaznaczonych obszarσw?";
         Text[ japanese ] = "ΌΕΨµ‚Ι‘I‘π‚µ‚½”ΝΝ‚π’Η‰Α‚µ‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "­n±NΏο¨ϊªΊ°Ο°μ¥[¤J¤θ®Χ΅H";
+        Text[ chinese_traditional ] = "­n±NΏο¨ϊªΊ°Ο°μ¥[¤J¤ΐªRΒΕ¥»΅H";
         Text[ arabic ] = "εα ΚΡνΟ ΕΦΗέΙ ΗαδΨΗήΗΚ ΗαγΝΟΟΙ Εαμ ΗαΣνδΗΡνζΏ";
         Text[ greek ] = "Επέκταση σεναρίου κατά τις επιλεγμένες περιοχές;";
         Text[ korean ] = "½Γ³ªΈ®ΏΐΈ¦ Έ¶Ε·µΘ Ήόΐ§ΈΈΕ­ Θ®ΐεΗÒ±ξΏδ?";
@@ -4482,7 +4482,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Δλÿ ρξηδΰνθÿ ρφενΰπθÿ νεξαυξδθμξ βϋδελθςό ξαλΰρςθ ρφενΰπθÿ.";
         Text[ polish ] = "Do utworzenia scenariusza naleΏy zaznaczyζ obszary scenariusza.";
         Text[ japanese ] = "ΌΕΨµ‚πμ¬‚·‚ι‚Ι‚ΝAΌΕΨµ”ΝΝ‚π•K‚Έ‘I‘π‚µ‚ά‚·B";
-        Text[ chinese_traditional ] = "­n«Ψ¥ί¤@­Σ¤θ®Χ΄N¥²¶·¥ύ³]©w¤@­Σ¤θ®Χ°Ο°μ΅C";
+        Text[ chinese_traditional ] = "­n«Ψ¥ί¤@­Σ¤ΐªRΒΕ¥»΄N¥²¶·¥ύ³]©w¤@­Σ¤ΐªRΒΕ¥»ªΊ°Ο°μ΅C";
         Text[ arabic ] = "αΕδΤΗΑ ΣνδΗΡνζ νΜΘ Γδ νΚγ ΚΝΟνΟ δΨΗήΗΚ ΗαΣνδΗΡνζ.";
         Text[ greek ] = "Για τη δημιουργία ενός σεναρίου πρέπει να επιλεχθούν οι περιοχές του.";
         Text[ korean ] = "»υ·ΞΏξ ½Γ³ªΈ®ΏΐΈ¦ ΈΈµιΌφ ΐΦµµ·Ο ΗΟ±β ΐ§ΗΨΌ­΄Β½Γ³ªΈ®Ώΐ Ήόΐ§°΅ Έ¶Ε·µΗΎξΎί ΗΥ΄Ο΄Ω.";
@@ -5912,23 +5912,23 @@ Resource RID_GLOBSTR
         Text = "Fehler: AddIn nicht gefunden" ;
         Text [ ENGLISH ] = "Error: AddIn not found" ;
         Text [ norwegian ] = "Error: AddIn not found" ;
-        Text [ italian ] = "Error: AddIn not found" ;
+        Text [ italian ] = "Errore: AddIn non trovato" ;
         Text [ portuguese_brazilian ] = "Error: AddIn not found" ;
         Text [ portuguese ] = "Error: AddIn not found" ;
         Text [ finnish ] = "Error: AddIn not found" ;
         Text [ danish ] = "Error: AddIn not found" ;
-        Text [ french ] = "Error: AddIn not found" ;
+        Text [ french ] = "Erreur : Add-in non dιtectι" ;
         Text [ swedish ] = "Error: AddIn not found" ;
         Text [ dutch ] = "Error: AddIn not found" ;
-        Text [ spanish ] = "Error: AddIn not found" ;
-        Text [ english_us ] = "Error: AddIn not found" ;
-        Text[ chinese_simplified ] = "Error: AddIn not found";
-        Text[ russian ] = "Error: AddIn not found";
-        Text[ polish ] = "Error: AddIn not found";
-        Text[ japanese ] = "Error: AddIn not found";
+        Text [ spanish ] = "Error: no se ha encontrado Add-in" ;
+        Text [ english_us ] = "Error: Add-in not found" ;
+        Text[ chinese_simplified ] = "΄νΞσ£Ί›]ΣΠΥÒµ½ AddIn";
+        Text[ russian ] = "Ξψθακΰ: AddIn νε νΰιδενϋ";
+        Text[ polish ] = "B³Ήd: nie znaleziono dodatku Add-in";
+        Text[ japanese ] = "΄Χ°: ±Δή²έ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρ";
         Text[ chinese_traditional ] = "Error: AddIn not found";
         Text[ arabic ] = "Error: AddIn not found";
-        Text[ greek ] = "Error: AddIn not found";
+        Text[ greek ] = "Σφάλμα: Δεν βρέθηκε το AddIn";
         Text[ korean ] = "Error: AddIn not found";
         Text[ turkish ] = "Error: AddIn not found";
         Text[ language_user1 ] = " ";
@@ -5939,23 +5939,23 @@ Resource RID_GLOBSTR
         Text = "Fehler: Makro nicht gefunden" ;
         Text [ ENGLISH ] = "Error: Macro not found" ;
         Text [ norwegian ] = "Error: Macro not found" ;
-        Text [ italian ] = "Error: Macro not found" ;
+        Text [ italian ] = "Errore: macro non trovata" ;
         Text [ portuguese_brazilian ] = "Error: Macro not found" ;
         Text [ portuguese ] = "Error: Macro not found" ;
         Text [ finnish ] = "Error: Macro not found" ;
         Text [ danish ] = "Error: Macro not found" ;
-        Text [ french ] = "Error: Macro not found" ;
+        Text [ french ] = "Erreur : Macro non dιtectιe" ;
         Text [ swedish ] = "Error: Macro not found" ;
         Text [ dutch ] = "Error: Macro not found" ;
-        Text [ spanish ] = "Error: Macro not found" ;
+        Text [ spanish ] = "Error: No se ha encontrado la macro" ;
         Text [ english_us ] = "Error: Macro not found" ;
-        Text[ chinese_simplified ] = "Error: Macro not found";
-        Text[ russian ] = "Error: Macro not found";
-        Text[ polish ] = "Error: Macro not found";
-        Text[ japanese ] = "Error: Macro not found";
+        Text[ chinese_simplified ] = "΄νΞσ£ΊΓ»ΣΠΥÒµ½Ίκ";
+        Text[ russian ] = "Ξψθακΰ: μΰκπξρ νε νΰιδεν";
+        Text[ polish ] = "B³Ήd: nie znaleziono makra";
+        Text[ japanese ] = "΄Χ°: ΟΈΫ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρ";
         Text[ chinese_traditional ] = "Error: Macro not found";
         Text[ arabic ] = "Error: Macro not found";
-        Text[ greek ] = "Error: Macro not found";
+        Text[ greek ] = "Σφάλμα: Δεν βρέθηκε η μακροεντολή";
         Text[ korean ] = "Error: Macro not found";
         Text[ turkish ] = "Error: Macro not found";
         Text[ language_user1 ] = " ";
@@ -6755,7 +6755,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Βϋ υξςθςε σδΰλθςό βϋδελεννϋι ρφενΰπθι?";
         Text[ polish ] = "Chcesz usunΉζ zaznaczony scenariusz?";
         Text[ japanese ] = "‘I‘π‚µ‚½ΌΕΨµ‚πν‚µ‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "±z―u­n§R°£³o­ΣΏο¨ϊªΊ¤θ®Χ΅H";
+        Text[ chinese_traditional ] = "±z―u­n§R°£³o­ΣΏο¨ϊªΊ¤ΐªRΒΕ¥»΅H";
         Text[ arabic ] = "εα ΚΡνΟ ΝΠέ ΗαΣνδΗΡνζ ΗαγυΝΟΟΏ";
         Text[ greek ] = "Θέλετε να διαγράψετε το επιλεγμένο σενάριο;";
         Text[ korean ] = "Ό±ΕΓµΘ ½Γ³ªΈ®ΏΐΈ¦ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -7286,7 +7286,7 @@ Resource RID_GLOBSTR
         Text[ japanese ] = " ‚±‚κ‚Ν—ή‹`κ«“T‚Εg‚¦‚ά‚Ή‚ρB\n²έ½Δ°Ω‚πΑª―Έ‚µ‚Δ‚­‚Ύ‚³‚ΆB\ng—p‚·‚ιΎκ‚π²έ½Δ°Ω‚·‚ι•K—v‚ª‚ ‚ι‚©‚ΰ‚µ‚κ‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "µό¨εµLªk¨Ο¥Ξ΅C\n½ΠΐΛ¬d±zªΊ¦wΈΛµ{§Η΅A­Y¦³¥²­n΅A½Π¦wΈΛ­n¨Ο¥ΞªΊ»y¨¥ª©¥»΅C";
         Text[ arabic ] = "ΫνΡ γΚζέΡ αήΗγζΣ ΗαγΡΗΟέΗΚ. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
-        Text[ greek ] = "δεν είναι διαθέσιμο για τον θησαυρό λέξεων.\nΠαρακαλώ ελέγξτε την εγκατάσταση και αν χρειαστεί, να \nγίνει εγκατάσταση της γλώσσας που επιθυ";
+        Text[ greek ] = "δεν είναι διαθέσιμο για τον θησαυρό λέξεων.\nΠαρακαλώ ελέγξτε την εγκατάσταση και αν χρειαστεί\nεγκαταστήστε την γλώσσα που επιθυμείτε";
         Text[ korean ] = " µΏΐΗΎξ »ηΐόΐΗ »ηΏλΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.\n»ηΏλΐΪΐΗΌ³Δ΅Έ¦ Θ®ΐΞΗΟ½Γ°ν \nΗΚΏδΗΟ΄ΩΈι Ώδ±ΈµΘ ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "eώanlamlύlar sφzlόπό iηin mevcut deπil. \nKurulumu kontrol edip  \ngerekirse istenilen dili yόkleyin.";
         Text[ language_user1 ] = " ";
@@ -7997,7 +7997,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ρφενΰπθι νε νΰιδεν";
         Text[ polish ] = "Scenariusza nie znaleziono";
         Text[ japanese ] = "ΌΕΨµ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "¨S¦³§δ¨μ¤θ®Χ";
+        Text[ chinese_traditional ] = "¨S¦³§δ¨μ¤ΐªRΒΕ¥»";
         Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ΗαΣνδΗΡνζ";
         Text[ greek ] = "Το σενάριο δεν βρέθηκε";
         Text[ korean ] = "½Γ³ªΈ®ΏΐΈ¦΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
@@ -10035,7 +10035,7 @@ Resource RID_GLOBSTR
         Text = "Mit dieser Aktion wird die Aufzeichnung von Δnderungen beendet.\nDie Information όber Δnderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
         Text [ ENGLISH ] = "This Action will remove the change history.\nThe information about changes will be lost.\n\n Remove the change history." ;
         Text [ portuguese ] = "Com esta acηγo serα cancelado o registo das modificaηυes.\nAs informaηυes sobre modificaηυes prιvias desaparecerγo.\n\nCancelar?\n\n" ;
-        Text [ english_us ] = "This action will exit record changes.\nAny information about changes will be lost.\n\nExit record changes?\n\n" ;
+        Text [ english_us ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
         Text [ portuguese_brazilian ] = "Mit dieser Aktion wird die Aufzeichnung von ?nderungen beendet.\nDie Information ?er ?nderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
         Text [ swedish ] = "Den hδr εtgδrden avslutar registreringen av δndringar.\nInformationen om δndringar gεr dε fφrlorad.\n\nAvsluta inspelningen?" ;
         Text [ danish ] = "Denne handling afslutter registreringen af ζndringer.\nAlle informationer om ζndringer vil herigennem gε tabt.\nVil du afslutte registreringen?" ;
@@ -10049,7 +10049,7 @@ Resource RID_GLOBSTR
         Text[ japanese ] = "•ΟX‚Μ‹L^‚π‚±‚Μ±ΈΌ®έ‚ΕI—Ή‚µ‚ά‚·B\n“―‚Ι•ΟX‚µ‚½ξ•ρ‚ΰ®‘S‚ΙΈ‚ν‚κ‚ά‚·B\n\n‹L^‚πI—Ή‚µ‚ά‚·‚©B\n\n";
         Text[ chinese_traditional ] = "³o­Σ°Κ§@·|µ²§τ­Χ§ο΅C\n­Χ§ο¤Ί®e΄N·|¬y¥Ά΅C\n\n±zΑΩ¬O­nΔ~Δς΅H\n\n";
         Text[ arabic ] = "εΠΗ ΗαΕΜΡΗΑ Σζέ νΔΟν Εαμ ΕδεΗΑ ΪγανΙ ΚΣΜνα ΗαΚΫννΡΗΚ.\nΣζέ νΔΟν εΠΗ ΘΟζΡε Εαμ ΦνΗΪ ΗαγΪαζγΗΚ ΗαΞΗΥΙ ΘΗαΚΫννΡΗΚ.\n\nεα ΚΡνΟ ΕδεΗΑ ΗαΚΣΜναΏ\n\n";
-        Text[ greek ] = "Με αυτή την ενέργεια τερματίζεται η καταγραφή αλλαγών. Η \nπληροφορίες σχετικά με τις αλλαγές πρόκειται να χαθούν.\n\nΝα τερματιστεί η εγγραφ";
+        Text[ greek ] = "Με αυτή την ενέργεια τερματίζεται η καταγραφή των αλλαγών.\nΟι πληροφορίες σχετικά με τις αλλαγές πρόκειται να χαθούν.\n\nΝα τερματιστεί η εγγραφή;\n\n";
         Text[ korean ] = "ΐΜ΅΅µΏΐΫ°ϊ΅΅΄υΊÒΎξ΅΅Ί―°ζ΅΅±β·ΟΐΊ΅΅ΑΎ·αµΛ΄Ο΄Ω.\nΐΜΏΝ΅΅΄υΊÒΎξ΅΅ΐΜΐό Ί―°ζΏ΅΄λΗΡ  Α¤ΊΈ΄Β »σ½Η µΙ°ΝΐΤ΄Ο΄Ω .\n\n±β·Οΐ»΅΅ΑΎ·αΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n\n";
         Text[ turkish ] = "Bu iώlem ile deπiώikliklerin izlenmesi sona erdirilecek.\nDaha φnceki deπiώiklikler ile ilgili tόm bilgiler kaybolacak.\n\nKayύt durdurulsun mu?\n\n";
         Text[ language_user1 ] = " ";
@@ -10169,5 +10169,6 @@ Resource RID_GLOBSTR
     };
 */
 };
+
 
 
