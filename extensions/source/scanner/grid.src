@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:49:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@ ModalDialog GRID_DIALOG
         Text[ slovak ] = "Exponenciálne rastúci";
     };
 };
+
 
 
 
