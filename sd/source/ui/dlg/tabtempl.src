@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 10:46:55 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ TabDialog TAB_TEMPLATE
     Text = "Grafikobjektvorlage" ;
     Text [ ENGLISH ] = "Stylesheets" ;
     Text [ norwegian ] = "Stilark" ;
-    Text [ italian ] = "Modello di oggetto grafico" ;
+    Text [ italian ] = "Modello di oggetti grafici" ;
     Text [ portuguese_brazilian ] = "Folhas de Estilo" ;
     Text [ portuguese ] = "Estilos de objecto gráfico" ;
     Text [ finnish ] = "Tyylitiedostot" ;
