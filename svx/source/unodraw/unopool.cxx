@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-11 13:51:49 $
+ *  last change: $Author: cl $ $Date: 2001-08-01 13:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,15 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
             break;
         }
     default:
-        pPool->GetDefaultItem( (USHORT)pEntry->mnHandle ).QueryValue( rValue, pEntry->mnMemberId & (~SFX_METRIC_ITEM) );
+        {
+            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pEntry->mnHandle) : SFX_MAPUNIT_100TH_MM;
+
+            BYTE nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
+            if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+                nMemberId &= (~CONVERT_TWIPS);
+
+            pPool->GetDefaultItem( (USHORT)pEntry->mnHandle ).QueryValue( rValue, nMemberId );
+        }
     }
 
 
@@ -234,11 +242,20 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
             break;
 
     default:
-        SfxPoolItem* pNewItem = pPool->GetDefaultItem( nWhich ).Clone();
-        if( !pNewItem->PutValue( aValue, pEntry->mnMemberId & (~SFX_METRIC_ITEM) ) )
-            throw IllegalArgumentException();
+        {
+            SfxPoolItem* pNewItem = pPool->GetDefaultItem( nWhich ).Clone();
 
-        pPool->SetPoolDefaultItem( *pNewItem );
+            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric(nWhich) : SFX_MAPUNIT_100TH_MM;
+
+            BYTE nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
+            if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+                nMemberId &= (~CONVERT_TWIPS);
+
+            if( !pNewItem->PutValue( aValue, nMemberId ) )
+                throw IllegalArgumentException();
+
+            pPool->SetPoolDefaultItem( *pNewItem );
+        }
     }
 }
 

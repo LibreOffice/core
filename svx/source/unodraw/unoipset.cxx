@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-23 15:14:31 $
+ *  last change: $Author: cl $ $Date: 2001-08-01 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,15 +209,20 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, c
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
     }
 
+    const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+
+    BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+        nMemberId &= (~CONVERT_TWIPS);
+
     // item-Wert als UnoAny zurueckgeben
     if(pItem)
     {
-        pItem->QueryValue( aVal, pMap->nMemberId & (~SFX_METRIC_ITEM) );
+        pItem->QueryValue( aVal, nMemberId );
 
         if( pMap->nMemberId & SFX_METRIC_ITEM )
         {
             // check for needed metric translation
-            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
             if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
             {
                 SvxUnoConvertToMM( eMapUnit, aVal );
@@ -270,10 +275,11 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
     {
         uno::Any aValue( rVal );
 
+        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+
         if( pMap->nMemberId & SFX_METRIC_ITEM )
         {
             // check for needed metric translation
-            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
             if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
             {
                 SvxUnoConvertFromMM( eMapUnit, aValue );
@@ -281,7 +287,12 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
         }
 
         pNewItem = pItem->Clone();
-        if( pNewItem->PutValue( aValue, pMap->nMemberId & (~SFX_METRIC_ITEM) ) )
+
+        BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+        if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+            nMemberId &= (~CONVERT_TWIPS);
+
+        if( pNewItem->PutValue( aValue, nMemberId ) )
         {
             // neues item in itemset setzen
             rSet.Put( *pNewItem, pMap->nWID );
@@ -310,6 +321,11 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
         pItemPool->SetSecondaryPool(pOutlPool);
     }
 
+    const SfxMapUnit eMapUnit = pItemPool ? pItemPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+    BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+        nMemberId &= (~CONVERT_TWIPS);
+
     uno::Any aVal;
     SfxItemSet aSet( *pItemPool, pMap->nWID, pMap->nWID);
 
@@ -326,7 +342,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
         SfxItemState eState = aSet.GetItemState( pMap->nWID, sal_True, &pItem );
         if(eState >= SFX_ITEM_DEFAULT && pItem)
         {
-            pItem->QueryValue( aVal, pMap->nMemberId );
+            pItem->QueryValue( aVal, nMemberId );
             ((SvxItemPropertySet*)this)->AddUsrAnyForID(aVal, pMap->nWID);
         }
     }
@@ -334,7 +350,6 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
     if( pMap->nMemberId & SFX_METRIC_ITEM )
     {
         // check for needed metric translation
-        const SfxMapUnit eMapUnit = pItemPool ? pItemPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
         if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
         {
             SvxUnoConvertToMM( eMapUnit, aVal );
