@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCertificate.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:51:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,12 @@ interface XCertificate : com::sun::star::uno::XInterface
     /**
      * the validity NotBefore date attribute of the certificate.
      */
-    [attribute, readonly] com::sun::star::util::DateTime NotBefore ;
+    [attribute, readonly] com::sun::star::util::DateTime NotValidBefore ;
 
     /**
      * the validity NotAfter date attribute of the certificate.
      */
-    [attribute, readonly] com::sun::star::util::DateTime NotAfter ;
+    [attribute, readonly] com::sun::star::util::DateTime NotValidAfter ;
 
     /**
      * the issuer unique ID attribute of the certificate.
@@ -157,7 +157,12 @@ interface XCertificate : com::sun::star::uno::XInterface
     /**
      * Find a extension with a object identifier.
      */
-    XCertificateExtension findCertExtension( [in]sequence< byte > oid ) ;
+    XCertificateExtension findCertificateExtension( [in]sequence< byte > oid ) ;
+
+    /**
+     * get the certificate usage
+     */
+    long getCertificateUsage();
 } ;
 
 } ; } ; } ; } ;
