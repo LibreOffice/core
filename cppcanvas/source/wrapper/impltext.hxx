@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #endif
 
 #include <cppcanvas/text.hxx>
-#include "canvasgraphichelper.hxx"
+#include <canvasgraphichelper.hxx>
 
 
 namespace cppcanvas
