@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 06:05:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 09:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -282,6 +285,9 @@ namespace dbp
     {
         if (!OControlWizard::onFinish(_nResult))
             return sal_False;
+
+        if (RET_OK != _nResult)
+            return sal_True;
 
         implApplySettings();
         return sal_True;
@@ -615,6 +621,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/07/04 06:05:02  oj
+ *  #89191# sLinkedListField isn't used when combobox
+ *
  *  Revision 1.7  2001/05/30 16:48:06  fs
  *  #86714# show the data source of the form on the first not data source related page
  *
