@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.38 $
+*  $Revision: 1.39 $
 *
-*  last change: $Author: kz $ $Date: 2004-08-31 13:44:19 $
+*  last change: $Author: kz $ $Date: 2004-09-01 16:28:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -201,14 +201,13 @@ End
 
 
 
+// BM: #117495# remove chart2 from setup.  I just comment this
+// out, because it will later be re-added
 
-STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
-
-STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
-
-STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
-
-STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
+// STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
+// STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
+// STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
+// STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
 
 
 #if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
