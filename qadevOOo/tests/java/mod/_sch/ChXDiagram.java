@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChXDiagram.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:14 $
+ *  last change:$Date: 2003-02-05 10:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ import com.sun.star.document.XEmbeddedObjectSupplier;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.awt.Rectangle;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by the following services:
@@ -255,11 +258,15 @@ public class ChXDiagram extends TestCase {
         XIndexAccess oIndexSheets = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         try {
-            oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
         } catch(com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get sheet", e);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get sheet", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get sheet", e);
         }
@@ -353,13 +360,17 @@ public class ChXDiagram extends TestCase {
         // get the TableChart
         XTableChart oChart = null;
         try {
-            oChart = (XTableChart)((XNameAccess)
-                UnoRuntime.queryInterface(
-                    XNameAccess.class, oCharts)).getByName("ChXDiagram");
+            oChart = (XTableChart) AnyConverter.toObject(
+                new Type(XTableChart.class),((XNameAccess)
+                    UnoRuntime.queryInterface(
+                        XNameAccess.class, oCharts)).getByName("ChXDiagram"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get TableChart", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get TableChart", e);
+        }  catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get TableChart", e);
         }
