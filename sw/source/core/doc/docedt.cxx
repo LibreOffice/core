@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:47:44 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2469,3 +2469,25 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
         pTNd->CountWords( rStat, nSttCnt, nEndCnt );
 }
 
+void SwDoc::RemoveLeadingChars(const SwPosition & rPos, sal_Unicode sChar)
+{
+    const SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
+    if ( pTNd )
+    {
+        const String& rTxt = pTNd->GetTxt();
+        xub_StrLen nIdx = 0;
+        while( nIdx < rTxt.Len() && sChar == rTxt.GetChar( nIdx ) )
+        {
+            ++nIdx;
+        }
+
+        if ( nIdx > 0 )
+        {
+            SwPaM aPam(rPos);
+            aPam.GetPoint()->nContent = 0;
+            aPam.SetMark();
+            aPam.GetMark()->nContent = nIdx;
+            Delete( aPam );
+        }
+    }
+}
