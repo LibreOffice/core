@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:40:19 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,8 +488,8 @@ SetResetImpl::SetResetImpl(
     bool _bNoCheck
 )
 : SetChangeImpl(_bNoCheck)
-, m_rElementFactory(_rElementFactory)
 , m_aDefaultData(_pDefaultData)
+, m_rElementFactory(_rElementFactory)
 , m_aTreeChanges()
 {
 }
