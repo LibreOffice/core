@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.44 $
+*  $Revision: 1.45 $
 *
-*  last change: $Author: rt $ $Date: 2004-09-09 08:09:13 $
+*  last change: $Author: obo $ $Date: 2004-09-13 17:16:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -604,6 +604,7 @@ End
 
 #endif
 
+#if 0
 #ifdef UNX
 #ifdef ENABLE_GTK
 #ifndef MACOSX
@@ -614,6 +615,7 @@ File gid_File_Lib_Fps_Gnome
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libfps_gnome,UNXSUFFIX));
 End
+#endif
 #endif
 #endif
 #endif
