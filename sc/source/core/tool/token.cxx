@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:19 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 13:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,6 +1029,14 @@ ScToken* ScTokenArray::AddMatrix( ScMatrix* p )
 {
     ScToken t;
     t.SetMatrix( p );
+    return AddToken( t );
+}
+
+ScToken* ScTokenArray::AddColRowName( const SingleRefData& rRef )
+{
+    ScToken t;
+    t.SetSingleReference( rRef );
+    t.eOp = ocColRowName;
     return AddToken( t );
 }
 

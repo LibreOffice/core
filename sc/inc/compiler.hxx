@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: gt $ $Date: 2000-09-22 13:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,6 +930,7 @@ public:
     ScToken* AddName( USHORT n );
     ScToken* AddMatrix( ScMatrix* p );
     ScToken* AddExternal( const sal_Unicode* pStr );
+    ScToken* AddColRowName( const SingleRefData& rRef );
     ScToken* AddBad( const sal_Unicode* pStr );     // ocBad mit String
 
     // Zuweisung mit Referenzen auf Tokens
