@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:53:51 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include <osl/thread.h>
 #include <rtl/digest.h>
 
+#include "file_path_helper.h"
 
 #define ACT_IGNORE  1
 #define ACT_ABORT   2
@@ -178,8 +179,41 @@ static sal_Bool               bSetWINCHHandler = sal_False;
 static sal_Bool               bSetILLHandler = sal_False;
 
 static void SignalHandlerFunction(int);
-extern char * osl_impl_getExecutableName(char * buffer, size_t n);
-oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max);
+
+static void getExecutableName_Impl (rtl_String ** ppstrProgName)
+{
+    rtl_uString * ustrProgFile = 0;
+    osl_getExecutableFile (&ustrProgFile);
+    if (ustrProgFile)
+    {
+        rtl_uString * ustrProgName = 0;
+        osl_systemPathGetFileNameOrLastDirectoryPart (ustrProgFile, &ustrProgName);
+        if (ustrProgName != 0)
+        {
+            rtl_uString2String (
+                ppstrProgName,
+                rtl_uString_getStr (ustrProgName), rtl_uString_getLength (ustrProgName),
+                osl_getThreadTextEncoding(),
+                OUSTRING_TO_OSTRING_CVTFLAGS);
+            rtl_uString_release (ustrProgName);
+        }
+        rtl_uString_release (ustrProgFile);
+    }
+}
+
+static sal_Bool is_soffice_Impl (void)
+{
+    sal_Int32    index       = -1;
+    rtl_String * strProgName = 0;
+
+    getExecutableName_Impl (&strProgName);
+    if (strProgName)
+    {
+        index = rtl_str_indexOfStr (rtl_string_getStr (strProgName), "soffice");
+        rtl_string_release (strProgName);
+    }
+    return (index != -1);
+}
 
 static sal_Bool InitSignal()
 {
@@ -187,16 +221,29 @@ static sal_Bool InitSignal()
     struct sigaction act;
     struct sigaction oact;
 
-    char ProgFile[512];
-
-    if( (NULL != osl_impl_getExecutableName(ProgFile, sizeof(ProgFile))) &&
-        (NULL != strstr(ProgFile, "soffice")) )
+    if (is_soffice_Impl())
     {
-        char CmdLine[512];
+        sal_uInt32  argi;
+        sal_uInt32  argc;
+        rtl_uString *ustrCommandArg = 0;
 
-        if ((osl_getCommandArgs(CmdLine, sizeof(CmdLine)) ==  osl_Process_E_None) &&
-             (strstr(CmdLine, "-bean") != NULL))
-            bDoHardKill = sal_True;
+        argc = osl_getCommandArgCount();
+        for ( argi = 0; argi < argc; argi++ )
+        {
+            if (osl_Process_E_None == osl_getCommandArg (argi, &ustrCommandArg))
+            {
+                if (0 == rtl_ustr_ascii_compare (rtl_uString_getStr (ustrCommandArg), "-bean"))
+                {
+                    bDoHardKill = sal_True;
+                    break;
+                }
+            }
+        }
+        if (ustrCommandArg)
+        {
+            rtl_uString_release (ustrCommandArg);
+            ustrCommandArg = 0;
+        }
 
         // WORKAROUND FOR SEGV HANDLER CONFLICT
         //
