@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNamespaceMap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-15 11:27:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,18 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SfxItemPool;
 
 namespace svx {
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool );
+SVX_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
 /** deprecated */
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 );
+SVX_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 );
 
 }
 
