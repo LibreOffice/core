@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:12:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ String ERR_INET_GENERAL
     Text [ swedish ] = "Ett allmδnt Internet-fel uppstod" ;
     Text [ danish ] = "Der opstod en generel Internetfejl" ;
     Text [ portuguese ] = "Surgiu um erro geral na αrea da Internet." ;
-    Text [ portuguese_brazilian ] = "Erro geral relativo Γ  Internet." ;
+    Text [ portuguese_brazilian ] = "Ocorreu um erro geral relativo ΰ Internet." ;
     Text[ chinese_simplified ] = "ε¨ε›½ι™…δΊ’θ”η½‘ε†…ε‘η”δΈ€δΈªδΈ€θ¬ι”™θ――γ€‚";
     Text[ russian ] = "Ξψθακΰ δξρςσοΰ β Θνςεπνες";
     Text[ polish ] = "B³Ήd ogσlny Internetu";
@@ -226,7 +226,7 @@ String ERR_WRONG_URL
     Text [ swedish ] = "Felaktig URL\n" ;
     Text [ danish ] = "Fejlagtig URL\n" ;
     Text [ portuguese ] = "Erro no URL\n" ;
-    Text [ portuguese_brazilian ] = "Erro no URL\n" ;
+    Text [ portuguese_brazilian ] = "Ocorreu um erro na URL\n" ;
     Text[ chinese_simplified ] = "URLε°ε€δΈε®ζ•΄\n";
     Text[ russian ] = "Νεοπΰβθλόνϋι URL\n";
     Text[ polish ] = "Nieprawid³owy adres URL\n";
@@ -249,7 +249,7 @@ String ERR_ACTIVEDOWNLOADS
     Text = "Es sind noch Downloads aktiv.\nWollen Sie wirklich abbrechen?\n" ;
     Text [ english_us ] = "There are still downloads that are active.\nAre you sure you want to quit?\n" ;
     Text[ italian ] = "Ci sono ancora dei download attivi.\nVolete davvero terminare?\n";
-    Text[ portuguese_brazilian ] = "Existem ainda alguns downloads ativos.\nVocκ deseja cancelα-los?\n";
+    Text[ portuguese_brazilian ] = "Existem ainda alguns downloads ativos.\nDeseja cancelα-los?\n";
     Text[ portuguese ] = "Existem ainda alguns downloads em curso.\nCancelar?\n";
     Text[ danish ] = "Der er fortsat aktive overfψrsler.\nEr du sikker pε, at du vil annullere?\n";
     Text[ french ] = "Vous avez des tιlιchargements en cours.\nVoulez-vous vraiment annuler ?\n";
@@ -279,7 +279,7 @@ String ERR_QUEUEDDOWNLOADS
     Text [ english ] = "There are still downloads in the queue.\nDo you really want to quit?\n" ;
     Text [ english_us ] = "There are still downloads to be performed.\nDo you really want to quit?\n" ;
     Text [ portuguese ] = "Ainda existem downloads em fila de espera.\\Deseja realmente cancelar?\n" ;
-    Text [ portuguese_brazilian ] = "Ainda existem downloads na fila de espera.\nVocκ deseja cancelα-los?\n" ;
+    Text [ portuguese_brazilian ] = "Ainda existem downloads na fila de espera.\nDeseja cancelα-los?\n" ;
     Text [ swedish ] = "Det finns fortfarande nedladdningar i kφ.\nVill du δndε avsluta?\n" ;
     Text [ danish ] = "Der er fortsat overfψrsler i kψ.\nEr du sikker pε, at du vil afslutte?\n" ;
     Text [ italian ] = "Ci sono ancora dei download in corso.\nVolete davvero terminare?\n" ;
@@ -309,7 +309,7 @@ String ERR_FILEISLOCAL
     Text [ english ] = "The file already exists on your computer.\nDo you really want to copy?" ;
     Text [ english_us ] = "The file already exists on your computer.\nDo you want to copy it anyway?" ;
     Text [ portuguese ] = "O ficheiro jα se encontra no seu computador.\nMesmo assim copiar?" ;
-    Text [ portuguese_brazilian ] = "O arquivo jα existe no seu computador.\nVocκ deseja copiar mesmo assim?" ;
+    Text [ portuguese_brazilian ] = "O arquivo jα existe no seu computador.\nDeseja copiar mesmo assim?" ;
     Text [ swedish ] = "Filen finns redan lokalt pε din dator.\nSkall den δndε kopieras?" ;
     Text [ danish ] = "Filen findes allerede lokalt pε din computer.\nSkal den kopieres alligevel?" ;
     Text [ italian ] = "Il file si trova giΰ sul computer dell'utente.\nVolete copiarlo lo stesso?" ;
@@ -339,7 +339,7 @@ String ERR_FILENAMECHECK83
     Text [ english ] = "Der eingegebene Dateiname ist ungόltig.\nBitte beachten sie, daί der Dateiname maximal 8 Zeichen\n und die Dateierweiterung maximal 3 Zeichen lang sein dόrfen." ;
     Text [ english_us ] = "The file name entered is invalid.\nPlease note that file names may not exceed 8 characters\n and the file extension may only consist of 3 characters." ;
     Text [ portuguese ] = "O nome do ficheiro indicado nγo ι vαlido.\nO nome do ficheiro deverα ter no mαximo 8 caracteres\n e a respectiva extensγo o mαximo de 3." ;
-    Text [ portuguese_brazilian ] = "O nome do arquivo especificado nγo ι vαlido.\nPor favor, observe que o nome do arquivo nγo pode exceder o mαximo de 8 caracteres\n e a respectiva extensγo no mαximo de 3." ;
+    Text [ portuguese_brazilian ] = "O nome do arquivo especificado nγo ι vαlido.\nObserve que o nome do arquivo nγo pode exceder o mαximo de 8 caracteres\n e a respectiva extensγo no mαximo de 3." ;
     Text [ swedish ] = "Det inmatade filnamnet δr ogiltigt.\nVar vδnlig och se till att filnamnet innehεller maximalt 8 tecken\n och filnamnstillδgget maximalt 3 tecken." ;
     Text [ danish ] = "Det indtastede navn er ugyldigt.\nBemζrk venligst at filnavnet hψjst mε indeholde 8 tegn \nog filypenavnet hψjst mε bestε af 3 tegn." ;
     Text [ italian ] = "Il nome del file digitato non θ valido.\nTenete presente che il nome del file puς avere una lunghezza massima di 8 caratteri\ne l'estensione del file di 3." ;
@@ -352,7 +352,7 @@ String ERR_FILENAMECHECK83
     Text[ japanese ] = "ζ‡ε®γ—γγƒ•γ‚΅γ‚¤γƒ«εγη„΅εΉγ§γ™γ€‚\nγƒ•γ‚΅γ‚¤γƒ«εγ―ζ€ι«8ζ–‡ε­—γΎγ§γ€\nγƒ•γ‚΅γ‚¤γƒ«ζ‹΅εΌµε­γ―ζ€ι«3ζ–‡ε­—γΎγ§γ¨ε¶ι™γγ‚γ‚γΎγ™γ€‚ζ³¨ζ„γ—γ¦γγ γ•γ„γ€‚";
     Text[ chinese_traditional ] = "θΌΈε…¥η„ζª”ζ΅εη„΅ζ•γ€‚\nθ«‹ζ‚¨η•™ζ„ζª”ζ΅εδΈεΎ—θ¶…ι8ε€‹ε­—ε…ƒγ€‚\nε‰―ζª”εδΈεΎ—θ¶…ι 3 ε€‹ε­—ε…ƒγ€‚";
     Text[ arabic ] = "ΗΣγ Ηαγαέ ΗαγυΟΞα ΫνΡ ΥΗαΝ.\n ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗΣγ Ηαγαέ νΜΘ ΓαΗ νÒνΟ Ϊδ\nΛγΗδνΙ ΝΡζέ ζΗγΚΟΗΟε Ϊδ ΛαΗΛΙ.";
-    Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n ? ";
+    Text[ greek ] = "Το όνομα αρχείου που πληκτρολογήσατε δεν είναι έγκυρο.\nΣημειώστε ότι τα ονόματα αρχείων δεν μπορούν να υπερβαίνουν τους 8 χαρακτήρες\n και η επέκταση αρχείου μπορεί να αποτελείται μόνο από 3 χαρακτήρες.";
     Text[ korean ] = "μ§€μ •λ νμΌ μ΄λ¦„μ΄ μλª»λμ—μµλ‹λ‹¤.\nνμΌμ μ΄λ¦„μ΄ 8λ¬Έμλ¥Ό μ΄κ³Όν•  μ μ—†λ‹¤λ” μ κ³Ό\nν™•μ¥μκ°€ 3λ¬Έμλ¥Ό μ΄κ³Ό ν•  μ μ—†λ‹¤λ” μ μ„ μ μν•μ‹­μ‹μ¤.";
     Text[ turkish ] = "Girilen dosya adύ geηerli deπil.\nDosya adύ en fazla 8 ve dosyan\\uzantύsύ en fazla 3 karakter uzunluπunda olabilir.";
     Text[ catalan ] = "El nom del fitxer especificat no ιs vΰlid.\nTingueu en compte que el nom ha de tenir un mΰxim de 8 carΰcters\ni l'extensiσ 3.";
@@ -368,7 +368,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text = "Die Datei %1 wird grφίer als der zur Verfόgung stehende Plattenplatz.\nWollen Sie fortfahren ?\n" ;
     Text [ english_us ] = "The file %1 exceeds the available disk space.\nDo you want to continue anyway?\n" ;
     Text[ italian ] = "Il file %1 occupa piω spazio di quello disponibile sul disco.\nVolete continuare?\n";
-    Text[ portuguese_brazilian ] = "O arquivo %1 excede o espaηo disponνvel no disco.\nVocκ deseja continuar mesmo assim?\n";
+    Text[ portuguese_brazilian ] = "O arquivo %1 excede o espaηo disponνvel no disco.\nDeseja continuar mesmo assim?\n";
     Text[ portuguese ] = "O ficheiro %1 excede o espaηo disponνvel no disco.\nContinuar?\n";
     Text[ danish ] = "Filen %1 overskrider den tilgζngelige diskplads.\nVil du fortsζtte alligevel?\n";
     Text[ french ] = "La taille du fichier %1 dιpasse l'espace libre sur votre disque dur.\nSouhaitez-vous poursuivre ?\n";
@@ -379,7 +379,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ russian ] = "Ξαϊεμ τΰιλΰ %1 αξλόψε, χεμ δξρςσονξ μερςΰ νΰ δθρκε.\nΟπξδξλζθςό, νερμξςπÿ νΰ ύςξ?\n";
     Text[ polish ] = "Rozmiar pliku %1 przekracza iloζ miejsca na dysku.\nCzy mimo to kontynuowaζ?\n";
     Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ« %1γ―η©Ίγγƒ‡γ‚Ήγ‚―ε®Ήι‡ι εγ‚’θ¶γγ¦γ„γΎγ™ο½΅\nη¶θ΅γ—γΎγ™γ‹?\n";
-    Text[ chinese_traditional ] = "ζª”ζ΅ %1 ζ‰€ι€η©Ίι–“ε¤§ζ–ΌηΎε­η„ε―η”¨η©Ίι–“γ€‚\nθ¦ηΉΌηΊοΉ–\n";
+    Text[ chinese_traditional ] = "ζª”ζ΅ %1 ζ‰€ι€η©Ίι–“ε¤§ζ–ΌηΎε­η„ε―η”¨η©Ίι–“γ€‚\nδΈ‹δΈ€ζ­¥οΉ–\n";
     Text[ arabic ] = "Σζέ νΥΘΝ Ηαγαέ %1 ΓίΘΡ γδ ΗαγΣΗΝΙ ΗαγΚΗΝΙ Ϊαμ ΗαήΡΥ.\nεα ΚΡνΟ ΗαγΚΗΘΪΙΏ\n";
     Text[ greek ] = "Το αρχείο %1 υπερβαίνει τον διαθέσιμο χώρο αποθήκευσης.\nΘέλετε να συνεχίσετε;\n";
     Text[ korean ] = "νμΌ %1μ΄(κ°€) μ‚¬μ© κ°€λ¥ν• λ””μ¤ν¬ κ³µκ°„λ³΄λ‹¤ ν½λ‹λ‹¤.\nκ³„μ† μ§„ν–‰ν•μ‹κ² μµλ‹κΉ?\n";
@@ -557,7 +557,7 @@ Resource RID_DLSTATUS2
         Text [ french ] = "Connexion ΰ : $(HOST). Attend rιponse..." ;
         Text [ swedish ] = "Ansluter till: $(HOST). Vδntar pε svar..." ;
         Text [ danish ] = "Forbindelse til: $(HOST). Venter pε svar..." ;
-        Text [ portuguese_brazilian ] = "Conectando Γ : $(HOST). Aguardando resposta ..." ;
+        Text [ portuguese_brazilian ] = "Conectando com: $(HOST). Aguardando resposta ..." ;
         Text [ portuguese ] = "Ligaηγo com: $(HOST). Esperando resposta ..." ;
         Text[ chinese_simplified ] = "θΏζ¥οΌ$(HOST)γ€‚ζ­£ε¨η­‰ε€™ε›εΊ”...";
         Text[ russian ] = "Οξδκλώχενθε κ: $(HOST). Ξζθδΰνθε ξςκλθκΰ...";
@@ -567,7 +567,7 @@ Resource RID_DLSTATUS2
         Text[ arabic ] = "ΗαΗΚΥΗα Θά: $(HOST). έν ΗδΚΩΗΡ ΗαΡΟ...";
         Text[ dutch ] = "Verbinding met: $(HOST). Wacht op antwoord...";
         Text[ chinese_simplified ] = "θΏζ¥οΌ$(HOST)γ€‚ζ­£ε¨η­‰ε€™ε›εΊ”...";
-        Text[ greek ] = "Σύνδεση με: $(HOST). Περιμένοντας απάντηση...";
+        Text[ greek ] = "Σύνδεση με: $(HOST). Αναμονή απάντησης...";
         Text[ korean ] = "λ‹¤μμ— μ—°κ²°: $(HOST). μ‘λ‹µμ„ κΈ°λ‹¤λ¦½λ‹λ‹¤...";
         Text[ turkish ] = "Baπlanύyor: $(HOST). Yanύt bekleniyor...";
         Text[ language_user1 ] = " ";
@@ -685,6 +685,7 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
 
 
 
