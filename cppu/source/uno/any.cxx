@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-12-08 12:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,38 @@ using namespace cppu;
 
 extern "C"
 {
+//##################################################################################################
+SAL_DLLEXPORT void SAL_CALL uno_type_any_assign(
+    uno_Any * pDest, void * pSource,
+    typelib_TypeDescriptionReference * pType,
+    uno_AcquireFunc acquire, uno_ReleaseFunc release )
+{
+    __destructAny( pDest, release );
+    if (pType)
+    {
+        __copyConstructAny( pDest, pSource, pType, 0, acquire, 0 );
+    }
+    else
+    {
+        __CONSTRUCT_EMPTY_ANY( (uno_Any *)pDest );
+    }
+}
+//##################################################################################################
+SAL_DLLEXPORT void SAL_CALL uno_any_assign(
+    uno_Any * pDest, void * pSource,
+    typelib_TypeDescription * pTypeDescr,
+    uno_AcquireFunc acquire, uno_ReleaseFunc release )
+{
+    __destructAny( pDest, release );
+    if (pTypeDescr)
+    {
+        __copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
+    }
+    else
+    {
+        __CONSTRUCT_EMPTY_ANY( pDest );
+    }
+}
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
