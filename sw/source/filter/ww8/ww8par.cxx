@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-10 10:51:11 $
+ *  last change: $Author: cmc $ $Date: 2001-04-12 15:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1827,8 +1827,8 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
     BOOL bStartAttr = pPlcxMan->Get( &aRes ); // hole Attribut-Pos
 
     if( aRes.nFlags & MAN_MASK_NEW_SEP ){   // neue Section
-        CreateSep( rTxtPos );               // PageDesc erzeugen und fuellen
-        bPgSecBreak = FALSE;                // -> 0xc war ein Sectionbreak, aber
+        bPgSecBreak = FALSE;                // PageDesc erzeugen und fuellen
+        CreateSep( rTxtPos );               // -> 0xc war ein Sectionbreak, aber
     }                                       // kein Pagebreak;
 
     if(    ( aRes.nFlags & MAN_MASK_NEW_PAP )   // neuer Absatz ueber Plcx.Fkp.papx
@@ -2046,7 +2046,9 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
             // the plcf will already be sitting on the correct location
             // if it is there.
             WW8PLCFxDesc aTemp;
-            pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
+            aTemp.nStartPos = aTemp.nEndPos = LONG_MAX;
+            if (pPlcxMan->GetSepPLCF())
+                pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
             if ((aTemp.nStartPos != l) && (aTemp.nEndPos != l))
             {
                 /*
@@ -3090,11 +3092,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.17 2001-04-10 10:51:11 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.18 2001-04-12 15:15:55 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/04/10 10:51:11  cmc
+      CJK Kerning and Punctionation {im|ex}port
+
       Revision 1.16  2001/04/02 08:58:16  cmc
       ##515## improve anchoring of graphics that are anchored to a character run ending in a pagebreak
 
