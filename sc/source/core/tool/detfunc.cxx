@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:38:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
+#endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #include "detfunc.hxx"
@@ -869,7 +872,11 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
         pCaption = new SdrCaptionObj( aTextRect, aTailPos );
 
     if(!bNewNote)
+    {
+        const SfxItemSet& rSet = aCellNote.GetItemSet();
+        BOOL bVertical = static_cast<const SvxWritingModeItem&> (rSet.Get (SDRATTR_TEXTDIRECTION)).GetValue() == com::sun::star::text::WritingMode_TB_RL;
         rData.UpdateCaptionSet(aCellNote.GetItemSet());
+    }
     SfxItemSet& rAttrSet = rData.GetCaptionSet();
 
 
@@ -898,7 +905,15 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
     else
     {
         pPage->InsertObject( pCaption );
-        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
+
+        // To support different paragraph alignments using the
+        // ScNoteEditEngine(), it is necessary to apply the
+        // ItemSet of the container before the creation of the
+        // EditTextObject(). But to support Vertical text, the opposite
+        // is true.
+        BOOL bVertical = static_cast<const SvxWritingModeItem&> (rAttrSet.Get (SDRATTR_TEXTDIRECTION)).GetValue() == com::sun::star::text::WritingMode_TB_RL;
+        if(!bVertical)
+            pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
 
         // Keep the existing rectangle size.
         if(!bNewNote)
@@ -914,6 +929,8 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
                 pCaption->NbcSetOutlinerParaObject( pOPO );
             }
         }
+        if(bVertical)
+            pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
      }
 
     if (bHasUserText)
