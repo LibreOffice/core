@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="Java" xmlns:parcel="scripting.dtd">
+    <script language="Java">
+        <locale lang="en">
+            <displayname value="Script Selector"/>
+            <description>
+                Prototype Script Selector GUI for StarOffice
+            </description>
+        </locale>
+        <functionname value="ScriptSelector.go"/>
+        <logicalname value="ScriptSelector.go"/>
+        <languagedepprops>
+          <prop name="classpath" value="selector.jar"/>
+        </languagedepprops>
+    </script>
+</parcel>

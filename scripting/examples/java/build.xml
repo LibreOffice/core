@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-08-27 14:09:09 $
+#   last change: $Author: toconnor $ $Date: 2003-09-04 09:48:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,6 +147,32 @@
 
     <delete>
         <fileset dir="${out}/class/examples/java/debugger" includes="*.class"/>
+    </delete>
+
+    <mkdir dir="${out}/class/examples/java/selector"/>
+    <javac srcdir="${prj}/examples/java/selector"
+           destdir="${out}/class/examples/java/selector"
+              includes="*.java"
+           classpathref="scriptexampleclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <copy todir="${out}/class/examples/java/selector">
+        <fileset dir="${prj}/examples/java/selector">
+            <include name="**/*.java"/>
+            <include name="*.xml"/>
+        </fileset>
+    </copy>
+
+    <jar jarfile="${out}/class/examples/java/selector/selector.jar"
+        basedir="${out}/class/examples/java/selector" includes="*.class">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
+        </manifest>
+    </jar>
+
+    <delete>
+        <fileset dir="${out}/class/examples/java/selector" includes="*.class"/>
     </delete>
 
     <mkdir dir="${out}/class/examples/java/Highlight"/>
