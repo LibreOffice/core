@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:48:43 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ TabPage TP_CONDCOLL
         Text[ greek ] = "Ως εξαρτώμενο πρότυπο";
         Text[ korean ] = "μ΅°κ±΄λ¶€ μ¤νƒ€μΌ(~C)";
         Text[ turkish ] = "~Koώullu biηim olarak";
-        Text[ language_user1 ] = "\"Vor; \"Vorlagen\" Styles are capitalized. EM15.5.00";
+        Text[ language_user1 ] = "; \"Vor; \"Vorlagen\" Styles are capitalized. EM15.5.00";
         Text[ catalan ] = "~Estil condicional";
         Text[ finnish ] = "~Ehdollinen Tyyli";
         Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΉ€~ΰΈ‡ΰΈ·ΰΉΰΈ­ΰΈ™ΰΉ„ΰΈ‚";
@@ -874,7 +874,7 @@ TabPage TP_CONDCOLL
     {
             < "Κεφαλίδα πίνακα" ; > ;
         < "Πίνακας" ; > ;
-        < "Περίγραμμα" ; > ;
+        < "Πλαίσιο" ; > ;
         < "Ενότητα" ; > ;
         < "Υποσημείωση" ; > ;
         < "Σημείωση τέλους" ; > ;
@@ -1245,6 +1245,7 @@ TabPage TP_CONDCOLL
     };
 };
  // ********************************************************************** EOF
+
 
 
 
