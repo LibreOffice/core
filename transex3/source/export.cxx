@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-30 13:55:58 $
+ *  last change: $Author: er $ $Date: 2002-12-12 17:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ extern char *GetOutputFile( int argc, char* argv[])
         // command line is valid
         bEnableExport = TRUE;
         char *pReturn = new char[ sOutputFile.Len() + 1 ];
-        strcpy( pReturn, sOutputFile.GetBuffer());
+        strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
         return pReturn;
     }
 

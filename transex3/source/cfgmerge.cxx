@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-03 13:02:59 $
+ *  last change: $Author: er $ $Date: 2002-12-12 17:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ extern char *GetOutputFile( int argc, char* argv[])
         // command line is valid
         bEnableExport = TRUE;
         char *pReturn = new char[ sOutputFile.Len() + 1 ];
-        strcpy( pReturn, sOutputFile.GetBuffer());
+        strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
         return pReturn;
     }
 
