@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:59:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@
 #include "linepolypolygon.hxx"
 #include "canvasbitmap.hxx"
 
+#include <numeric>
+
 
 using namespace ::com::sun::star;
 
@@ -256,6 +258,69 @@ namespace vclcanvas
             return true;
         }
 
+        bool isPolyPolygonEqualRectangle( const PolyPolygon& rPolyPoly,
+                                          const Rectangle&   rRect )
+        {
+            // exclude some cheap cases first
+            if( rPolyPoly.Count() != 1 )
+                return false;
+
+            const ::Polygon& rPoly( rPolyPoly[0] );
+
+            USHORT nCount( rPoly.GetSize() );
+            if( nCount != 4 && nCount != 5 )
+                return false;
+
+            // fill array with rectangle vertices
+            const ::Point aPoints[4] =
+              {
+                  rRect.TopLeft(),
+                  rRect.TopRight(),
+                  rRect.BottomRight(),
+                  rRect.BottomLeft()
+              };
+
+            // now match polygon and rectangle start points, to
+            // facilitate point-by-point comparison
+            const ::Point*       aIter;
+            const ::Point* const aEnd( &aPoints[5] );
+            if( (aIter=::std::find( aPoints, aEnd,
+                                    rPoly[0] )) == aEnd )
+                return false; // point not found
+
+            // determine index from iterator
+            const ::std::size_t nIndexOfFirstPoint( aIter - aPoints );
+
+            bool bNotMatching( false ); // when true, at least on
+                                        // point does not match
+
+            // start point found, now try forward sweep to match
+            // points
+            for( USHORT i=0; i<4; ++i )
+            {
+                if( rPoly[i] != aPoints[ (i+nIndexOfFirstPoint)%4 ] )
+                {
+                    bNotMatching = true;
+                    break;
+                }
+            }
+
+            if( !bNotMatching )
+                return true; // all points match, done
+
+            // at least one point doesn't match, try reverse sweep to
+            // match points
+            for( USHORT i=0; i<4; ++i )
+            {
+                if( rPoly[i] != aPoints[ (4-i+nIndexOfFirstPoint)%4 ] )
+                    return false; // nothing more to try, exit directly
+            }
+
+            // all points for reverse sweep match
+            return true;
+        }
+
+
         // VCL-Canvas related
         //---------------------------------------------------------------------
 
@@ -290,8 +355,8 @@ namespace vclcanvas
         }
 
         ::BitmapEx transformBitmap( const BitmapEx&                 rBitmap,
-                                    const rendering::ViewState&     rViewState,
-                                    const rendering::RenderState&   rRenderState,
+                                    const ::basegfx::B2DHomMatrix&  rTransform,
+                                    const uno::Sequence< double >&  rDeviceColor,
                                     ModulationMode                  eModulationMode )
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::tools::transformBitmap()" );
@@ -301,11 +366,6 @@ namespace vclcanvas
             // generated. Note, that the translational components are
             // deleted from the transformation; this can be handled by
             // an offset when painting the bitmap
-            ::basegfx::B2DHomMatrix aTransform;
-            ::canvas::tools::mergeViewAndRenderTransform(aTransform,
-                                                         rViewState,
-                                                         rRenderState);
-
             const Size                  aBmpSize( rBitmap.GetSizePixel() );
             ::basegfx::B2DRectangle     aDestRect;
 
@@ -317,7 +377,7 @@ namespace vclcanvas
                                                                                 0,
                                                                                 aBmpSize.Width(),
                                                                                 aBmpSize.Height()),
-                                                        aTransform );
+                                                        rTransform );
 
             // re-center bitmap, such that it's left, top border is
             // aligned with (0,0). The method takes the given
@@ -326,15 +386,15 @@ namespace vclcanvas
             ::basegfx::B2DHomMatrix aLocalTransform;
             ::canvas::tools::calcRectToOriginTransform( aLocalTransform,
                                                         aDestRect,
-                                                        aTransform );
+                                                        rTransform );
 
             const bool bModulateColors( eModulationMode == MODULATE_WITH_DEVICECOLOR &&
-                                        rRenderState.DeviceColor.getLength() > 2 );
-            const double nRedModulation( bModulateColors ? rRenderState.DeviceColor[0] : 1.0 );
-            const double nGreenModulation( bModulateColors ? rRenderState.DeviceColor[1] : 1.0 );
-            const double nBlueModulation( bModulateColors ? rRenderState.DeviceColor[2] : 1.0 );
-            const double nAlphaModulation( bModulateColors && rRenderState.DeviceColor.getLength() > 3 ?
-                                           rRenderState.DeviceColor[3] : 1.0 );
+                                        rDeviceColor.getLength() > 2 );
+            const double nRedModulation( bModulateColors ? rDeviceColor[0] : 1.0 );
+            const double nGreenModulation( bModulateColors ? rDeviceColor[1] : 1.0 );
+            const double nBlueModulation( bModulateColors ? rDeviceColor[2] : 1.0 );
+            const double nAlphaModulation( bModulateColors && rDeviceColor.getLength() > 3 ?
+                                           rDeviceColor[3] : 1.0 );
 
             Bitmap aSrcBitmap( rBitmap.GetBitmap() );
             Bitmap aSrcAlpha;
@@ -364,6 +424,33 @@ namespace vclcanvas
                                   "transformBitmap(): could not access source bitmap" );
             }
 
+            // mapping table, to translate pAlphaReadAccess' pixel
+            // values into destination alpha values (needed e.g. for
+            // paletted 1-bit masks).
+            sal_uInt8 aAlphaMap[256];
+
+            if( rBitmap.IsTransparent() )
+            {
+                if( rBitmap.IsAlpha() )
+                {
+                    // source already has alpha channel - 1:1 mapping,
+                    // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
+                    ::std::iota( aAlphaMap, &aAlphaMap[256], 0 );
+                }
+                else
+                {
+                    // mask transparency - determine used palette colors
+                    const BitmapColor& rCol0( pAlphaReadAccess->GetPaletteColor( 0 ) );
+                    const BitmapColor& rCol1( pAlphaReadAccess->GetPaletteColor( 1 ) );
+
+                    // shortcut for true luminance calculation
+                    // (assumes that palette is grey-level)
+                    aAlphaMap[0] = rCol0.GetRed();
+                    aAlphaMap[1] = rCol1.GetRed();
+                }
+            }
+            // else: mapping table is not used
+
             const Size aDestBmpSize( ::basegfx::fround( aDestRect.getMaxX() ),
                                      ::basegfx::fround( aDestRect.getMaxY() ) );
 
@@ -387,11 +474,12 @@ namespace vclcanvas
 
                 if( pWriteAccess.get() != NULL &&
                     pAlphaWriteAccess.get() != NULL &&
-                    aTransform.isInvertible() )
+                    rTransform.isInvertible() )
                 {
                     // we're doing inverse mapping here, i.e. mapping
                     // points from the destination bitmap back to the
                     // source
+                    ::basegfx::B2DHomMatrix aTransform( rTransform );
                     aTransform.invert();
 
                     // for the time being, always read as ARGB
@@ -438,9 +526,9 @@ namespace vclcanvas
                                                                          static_cast<BYTE>(
                                                                              nAlphaModulation*
                                                                              (255U
-                                                                              - pAlphaReadAccess->GetPixel(
-                                                                                  nSrcY,
-                                                                                  nSrcX ).GetIndex() ) + .5 ) ) );
+                                                                              - aAlphaMap[ pAlphaReadAccess->GetPixel(
+                                                                                               nSrcY,
+                                                                                               nSrcX ).GetIndex() ] ) + .5 ) ) );
 
                                         BitmapColor aColor( pReadAccess->GetPixel( nSrcY,
                                                                                    nSrcX ) );
@@ -537,8 +625,9 @@ namespace vclcanvas
                                     else
                                     {
                                         pAlphaWriteAccess->SetPixel( y, x,
-                                                                     pAlphaReadAccess->GetPixel( nSrcY,
-                                                                                                 nSrcX ) );
+                                                                     aAlphaMap[
+                                                                         pAlphaReadAccess->GetPixel( nSrcY,
+                                                                                                     nSrcX ) ] );
 
                                         pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY,
                                                                                              nSrcX ) );
