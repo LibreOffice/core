@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-23 13:51:59 $
+ *  last change: $Author: ama $ $Date: 2002-01-23 15:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3030,7 +3030,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                 SwTwips nBottom = aInter.Top() + aInter.Height();
                 if( IsVertical() )
                 {
-                    SwTwips nOrig = aGrid.Left() + aGrid.Width() + aAdd[1];
+                    SwTwips nOrig = aGrid.Left() + aGrid.Width() + aAdd[2];
                     SwTwips nY = nOrig + nRegSum *
                                  ( ( nOrig - aInter.Left() ) / nRegSum );
                     SwRect aTmp( Point( nY + aAdd[2], aInter.Top() ),
@@ -3047,7 +3047,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         {
                             nIdx = 3;
                             SwTwips nPosY = Max( aInter.Left(), nY );
-                            SwTwips nHeight = Min(nRight, aTmp.Pos().Y())-nPosY;
+                            SwTwips nHeight = Min(nRight, aTmp.Pos().X())-nPosY;
                             if( nHeight > 0 )
                             {
                                 SwRect aVert( Point( nPosY, nX ),
@@ -3068,11 +3068,12 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         if( !nIdx )
                         {
                             nIdx = 3;
-                            SwTwips nHeight = Min(nRight, aTmp.Pos().Y()) - nY;
+                            SwTwips nHeight = aTmp.Pos().X()
+                                              - Max(aInter.Left(), nY );
                             if( nHeight > 0 )
                             {
-                                SwRect aVert( Point( nY, nX ),
-                                            Size( nHeight, 1 ) );
+                                SwRect aVert( Point( aTmp.Pos().X() - nHeight,
+                                                     nX ), Size( nHeight, 1 ) );
                                 while( aVert.Top() < nBottom )
                                 {
                                     pOut->DrawRect( aVert.SVRect() );
