@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-08 15:41:37 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:48:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.62 $$"
+LIBSMKREV!:="$$Revision: 1.63 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -71,8 +71,9 @@ LIBPRE=libr
 #
 #externe libs in plattform.mk
 #
-
-ICUI18NLIB=-licui18n -licuuc -licule -licudata
+ICUINLIB=-licui18n
+ICULELIB=-licule
+ICUUCLIB=-licuuc
 I18NUTILLIB=-li18nutil$(COMID)
 GPC3RDLIB=-lgpc
 SALHELPERLIB=-lsalhelper$(COMID)
@@ -234,7 +235,9 @@ USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) $(UNOLIB) \
                     $(USED_UNO_LIBS)
 
 .ELSE				# "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
-ICUI18NLIB=icuin.lib icuuc.lib icudata.lib icule.lib
+ICUINLIB=icuin.lib
+ICULELIB=icule.lib
+ICUUCLIB=icuuc.lib
 I18NUTILLIB=$(LIBPRE) ii18nutil.lib
 GPC3RDLIB=gpc.lib
 SALHELPERLIB=$(LIBPRE) isalhelper.lib
