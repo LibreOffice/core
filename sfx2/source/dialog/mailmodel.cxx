@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-20 20:54:01 $
+ *  last change: $Author: pb $ $Date: 2001-02-07 09:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,24 @@
 
 // includes --------------------------------------------------------------
 
-#ifndef _COM_SUN_STAR_UCB_XDATACONTAINER_HPP_
-#include <com/sun/star/ucb/XDataContainer.hpp>
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XDATACONTAINER_HPP_
+#include <com/sun/star/ucb/XDataContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+
+#ifndef _UNOTOOLS_STREAMHELPER_HXX_
+#include <unotools/streamhelper.hxx>
 #endif
 
 #include "mailmodel.hxx"
@@ -93,8 +100,9 @@
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 
-using namespace com::sun::star::ucb;
+using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
 // class AddressList_Impl ------------------------------------------------
@@ -174,7 +182,7 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
         SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
         SfxBoolItem aSaveTo( SID_SAVETO, TRUE );
         SfxStringItem* pFilterName = NULL;
-        if ( bHasFilter && pFilter )
+        if ( pFilter && bHasFilter )
             pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetName() );
         pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_API,
                         &aFileName, &aPicklist, &aSaveTo, pFilterName, 0L );
@@ -273,19 +281,54 @@ sal_Bool SfxMailModel_Impl::Send()
 {
     sal_Bool bSend = sal_False;
     String aFileName, aContentType;
+    String aFileNameText, aContentTypeText;
     if ( SaveDocument( aFileName, aContentType ) )
     {
+        SvStream* pStream = new SvFileStream( aFileName, STREAM_STD_READ );
         Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
         Reference < XDataContainer > xData(
             xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.DataContainer") ), UNO_QUERY );
         if ( xData.is() )
         {
             xData->setContentType( aContentType );
-            xData->setDataURL( aFileName );
+            SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
+            Reference < XInputStream > xStream = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
+            Reference < XActiveDataSink > xSink( xData, UNO_QUERY );
+            if ( xSink.is() )
+                xSink->setInputStream( xStream );
+            else
+            {
+                try
+                {
+                    Sequence< sal_Int8 > aData( 65536 );
+                    sal_Int8* pData = aData.getArray();
+                    Sequence< sal_Int8 > aBuffer;
+                    sal_Int32 nPos = 0, nRead = xStream->readSomeBytes( aBuffer, 65536 );
+                    while ( nRead > 0 )
+                    {
+                        if ( aData.getLength() < ( nPos + nRead ) )
+                            aData.realloc( nPos + nRead );
+
+                        aBuffer.realloc( nRead );
+                        rtl_copyMemory( (void*)pData, (const void*)aBuffer.getConstArray(), nRead );
+                        pData += nRead;
+                        nPos += nRead;
+
+                        aBuffer.realloc( 0 );
+                        nRead = xStream->readSomeBytes( aBuffer, 65536 );
+                    }
+
+                    aData.realloc( nPos );
+                    xData->setData( aData );
+                }
+                catch ( NotConnectedException const & ) {}
+                catch ( BufferSizeExceededException const & ) {}
+                catch ( IOException const & ) {}
+            }
 
             try
             {
-                Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
+                Reference< XCommandEnvironment > aCmdEnv;
                 String aURL = ::rtl::OUString( DEFINE_CONST_UNICODE("vnd.sun.staroffice.out:///~") );
                 ::ucb::Content aOutbox( aURL, aCmdEnv );
                 ::ucb::Content aMessage( aURL, aCmdEnv );
@@ -341,7 +384,7 @@ sal_Bool SfxMailModel_Impl::Send()
             {
                 DBG_ERRORFILE( "ContentCreationException" );
             }
-            catch( ::com::sun::star::ucb::CommandAbortedException& e )
+            catch( CommandAbortedException& e )
             {
                 ByteString aError( UniString( e.Message ), RTL_TEXTENCODING_MS_1252 );
                 DBG_ERRORFILE( aError.GetBuffer() );
@@ -351,9 +394,10 @@ sal_Bool SfxMailModel_Impl::Send()
                 DBG_ERRORFILE( "Any other exception" );
             }
         }
+
+        delete pStream;
     }
 
     return bSend;
 }
-
 
