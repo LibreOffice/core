@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: hdu $ $Date: 2002-08-27 11:27:17 $
+#   last change: $Author: hr $ $Date: 2002-08-27 18:02:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -268,6 +268,19 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 
 .IF "$(GUI)"=="UNX"
 
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS += -ldl -lstdc++ -lstlport_gcc
+.ENDIF
+
+.IF "$(GUIBASE)"=="aqua"
+SHL1STDLIBS += -framework Cocoa
+.ENDIF
+
+.IF "$(GUIBASE)"=="unx"
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS += -lXext
+.ENDIF
+
 # Solaris
 .IF "$(OS)"=="SOLARIS"
 
@@ -277,21 +290,15 @@ SHL1STDLIBS += -lXp Xext -lSM -lICE -lX11
 SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
 
-# MacOSX
-.ELSE           # "$(OS)"=="SOLARIS"
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += -framework Cocoa
-
 # Others
-.ELSE           # "$(OS)"=="MACOSX"
-
+.ELSE           # "$(OS)"=="SOLARIS"
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXext -lSM -lICE -lX11
 .ELSE
 SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
-.ENDIF          # "$(OS)"=="MACOSX"
 .ENDIF          # "$(OS)"=="SOLARIS"
+.ENDIF          # "$(GUIBASE)"=="unx"
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
 SHL1STDLIBS += -laudio
