@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-02 17:57:57 $
+ *  last change: $Author: hdu $ $Date: 2002-08-05 07:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5727,22 +5727,6 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
-                                 long* pWidthAry ) const
-{
-    DBG_TRACE( "OutputDevice::GetCharWidth()" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_ASSERT( nFirstChar <= nLastChar, "OutputDevice::GetCharWidth(): nFirst > nLast" );
-
-    for( sal_Unicode aChar = nFirstChar; aChar <= nLastChar; ++aChar )
-    {
-        String aStr( &aChar, 1 );
-        *(pWidthAry++) = GetTextWidth( aStr, 0, 1 );
-    };
-}
-
-// -----------------------------------------------------------------------
-
 void OutputDevice::DrawText( const Rectangle& rRect,
                              const String& rOrigStr, USHORT nStyle,
                              MetricVector* pVector, String* pDisplayText )
@@ -6729,251 +6713,6 @@ void OutputDevice::GetKerningPairs( ULONG nPairs, KerningPair* pKernPairs ) cons
 
 // -----------------------------------------------------------------------
 
-// TODO: deprecate
-BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL bOptimize )
-{
-    DBG_TRACE( "OutputDevice::GetGlyphBoundRect()" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    BOOL bRet = FALSE;
-if(1) {//###
-    String aStr( &cChar, 1 );
-    bRet = GetTextBoundRect( rRect, aStr, 0, 0, 1 );
- }//###
-
-/*
-    // #83068#
-    if( GetFont().GetOrientation() )
-    {
-        PolyPolygon aPolyPoly;
-
-        if( GetGlyphOutline( cChar, aPolyPoly, bOptimize ) )
-        {
-            rRect = aPolyPoly.GetBoundRect();
-            bRet = TRUE;
-        }
-
-        return bRet;
-    }
-
-#ifndef REMOTE_APPSERVER
-    if ( mpGraphics || ImplGetGraphics() )
-    {
-        Font    aOldFont( GetFont() );
-        Font    aFont( aOldFont );
-        long    nLeft, nTop, nWidth, nHeight;
-        long    nFontWidth, nFontHeight;
-        long    nOrgWidth, nOrgHeight;
-
-        if ( bOptimize )
-        {
-            Size aFontSize( LogicToPixel( aFont.GetSize() ) );
-
-            if ( aFontSize.Width() && aFontSize.Height() )
-            {
-                const double fFactor = (double) aFontSize.Width() / aFontSize.Height();
-
-                if ( fFactor < 1.0 )
-                {
-                    aFontSize.Width() = FRound( fFactor * 500. );
-                    aFontSize.Height() = 500;
-                }
-                else
-                {
-                    aFontSize.Width() = 500;
-                    aFontSize.Height() = FRound( 500. / fFactor );
-                }
-
-                aFont.SetSize( PixelToLogic( aFontSize ) );
-                ((OutputDevice*)this)->SetFont( aFont );
-                nFontWidth = aFont.GetSize().Width();
-                nFontHeight = aFont.GetSize().Height();
-                nOrgWidth = aOldFont.GetSize().Width();
-                nOrgHeight = aOldFont.GetSize().Height();
-            }
-            else
-            {
-                aFont.SetSize( PixelToLogic( Size( 0, 500 ) ) );
-                nFontWidth = nFontHeight = aFont.GetSize().Height();
-                nOrgWidth = nOrgHeight = aOldFont.GetSize().Height();
-            }
-        }
-
-        ((OutputDevice*)this)->SetFont( aFont );
-
-
-        if ( mbNewFont )
-            ImplNewFont();
-
-        if ( mbInitFont )
-            ImplInitFont();
-
-        if( mpFontEntry->mpConversion )
-            cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
-
-        if ( mpGraphics->GetCharBoundRect( cChar, &nLeft, &nTop, &nWidth, &nHeight ) )
-        {
-            if ( bOptimize )
-            {
-                nLeft = ImplDevicePixelToLogicWidth( nLeft ) * nOrgWidth / nFontWidth;
-                nTop = ImplDevicePixelToLogicHeight( nTop ) * nOrgHeight / nFontHeight;
-                nWidth = ImplDevicePixelToLogicWidth( nWidth ) * nOrgWidth / nFontWidth;
-                nHeight = ImplDevicePixelToLogicHeight( nHeight ) * nOrgHeight / nFontHeight;
-            }
-            else
-            {
-                nLeft = ImplDevicePixelToLogicWidth( nLeft );
-                nTop = ImplDevicePixelToLogicHeight( nTop );
-                nWidth = ImplDevicePixelToLogicWidth( nWidth );
-                nHeight = ImplDevicePixelToLogicHeight( nHeight );
-            }
-
-            rRect = Rectangle( Point( nLeft, nTop ), Size( nWidth, nHeight ) );
-            bRet = TRUE;
-        }
-
-        ((OutputDevice*)this)->SetFont( aOldFont );
-    }
-#else
-    if ( mbNewFont )
-        ImplNewFont();
-    if ( mbInitFont )
-        ImplInitFont();
-
-    if( mpFontEntry->mpConversion )
-        cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
-
-    bRet = mpGraphics->GetCharBoundRect( cChar, rRect, bOptimize );
-
-    if ( bRet )
-    {
-        rRect = Rectangle( Point( ImplDevicePixelToLogicWidth( rRect.Left() ),
-                                  ImplDevicePixelToLogicHeight( rRect.Top() ) ),
-                           Size( ImplDevicePixelToLogicWidth( rRect.GetWidth() ),
-                                 ImplDevicePixelToLogicHeight( rRect.GetHeight() ) ) );
-    }
-#endif
-    if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
-    {
-        if ( bOptimize )
-        {
-            if ( mbNewFont )
-                ImplNewFont();
-
-            if ( mbInitFont )
-                ImplInitFont();
-        }
-
-        VirtualDevice*  pVDev = new VirtualDevice( 1 );
-        long            nWidth = 100;//###ImplGetTextWidth( &cChar, 1, NULL );
-        long            nHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
-        Point           aOffset( nWidth >> 1, 8 );
-        Size            aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
-
-        if ( pVDev->SetOutputSizePixel( aSize ) )
-        {
-            Font    aFont( GetFont() );
-            Bitmap  aBmp;
-
-            aFont.SetShadow( FALSE );
-            aFont.SetOutline( FALSE );
-            aFont.SetRelief( RELIEF_NONE );
-            aFont.SetOrientation( 0 );
-            aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
-
-            pVDev->SetFont( aFont );
-            pVDev->SetTextAlign( ALIGN_TOP );
-            pVDev->SetTextColor( Color( COL_BLACK ) );
-            pVDev->SetTextFillColor();
-            pVDev->ImplNewFont();
-            pVDev->ImplInitFont();
-            pVDev->ImplInitTextColor();
-//###            pVDev->ImplDrawText( aOffset.X(), aOffset.Y(), &cChar, 1, NULL );
-            aBmp = pVDev->GetBitmap( Point(), aSize );
-            delete pVDev;
-
-            BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
-
-            if ( pAcc )
-            {
-                const long          nW = pAcc->Width();
-                const long          nW1 = nW - 1L;
-                const long          nH = pAcc->Height();
-                long                nLeft, nTop, nRight, nBottom;
-                const BitmapColor   aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                BOOL                bLineDone;
-
-                nLeft = nW;
-                nTop = nH;
-                nRight = nBottom = -1L;
-
-                for( long nY = 0L; nY < nH; nY++ )
-                {
-                    bLineDone = FALSE;
-
-                    for( long nX = 0L; ( nX < nW ) && !bLineDone; nX++ )
-                    {
-                        if( pAcc->GetPixel( nY, nX ) == aBlack )
-                        {
-                            // find y minimum
-
-                            if( nY < nTop )
-                                nTop = nY;
-
-                            // find y maximum
-                            if( nY > nBottom )
-                                nBottom = nY;
-
-                            // find x minimum
-                            if( nX < nLeft )
-                                nLeft = nX;
-
-                            // find x maximum (last pixel in line)
-                            for( long nX2 = nW1; nX2 >= nX; nX2-- )
-
-                            {
-                                if( pAcc->GetPixel( nY, nX2 ) == aBlack )
-                                {
-                                    if( nX2 > nRight )
-                                        nRight = nX2;
-
-                                    bLineDone = TRUE;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if( nLeft < nW && nTop < nH && nRight > -1L && nBottom > -1L )
-                {
-                    nLeft -= aOffset.X(), nTop -= aOffset.Y();
-                    nRight -= aOffset.X(), nBottom -= aOffset.Y();
-
-                    nWidth = ImplDevicePixelToLogicWidth( nRight - nLeft + 1L );
-                    nHeight = ImplDevicePixelToLogicHeight( nBottom - nTop + 1L );
-                    nLeft = ImplDevicePixelToLogicWidth( nLeft );
-                    nTop = ImplDevicePixelToLogicHeight( nTop );
-                    rRect = Rectangle( Point( nLeft, nTop ), Size( nWidth, nHeight ) );
-                    bRet = TRUE;
-                }
-
-                aBmp.ReleaseAccess( pAcc );
-            }
-        }
-        else
-            delete pVDev;
-    }
-*/
-
-    if ( !bRet )
-        rRect.SetEmpty();
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen,  int nBase, MetricVector& rVector )
 {
     DBG_TRACE( "OutputDevice::GetGlyphBoundRect_CTL()" );
@@ -7002,7 +6741,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
     xub_StrLen nLen ) const
 {
-    DBG_TRACE( "OutputDevice::GetGlyphBoundRect_CTL()" );
+    DBG_TRACE( "OutputDevice::GetTextBoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     BOOL bRet = FALSE;
@@ -7165,19 +6904,6 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-// TODO: deprecate
-BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, BOOL bOptimize )
-{
-    DBG_TRACE( "OutputDevice::GetGlyphOutline()" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    String aStr( &cChar, 1 );
-    BOOL bRet = GetTextOutline( rPolyPoly, aStr, 0, 0, 1, bOptimize );
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
     BOOL bOptimize ) const
@@ -7314,6 +7040,22 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     if( GetFont().GetOrientation() )
         rPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
 
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rPPVector,
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
+    xub_StrLen nLen, BOOL bOptimize ) const
+{
+    // TODO: fix dummy implementation
+    BOOL bRet = FALSE;
+    rPPVector.clear();
+    PolyPolygon aPolyPoly;
+    bRet = GetTextOutline( aPolyPoly, rStr, nBase, nIndex, nLen, bOptimize );
+    if( bRet )
+        rPPVector.push_back( aPolyPoly );
     return bRet;
 }
 
