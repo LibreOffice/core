@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:13:57 $
+ *  last change: $Author: mtg $ $Date: 2001-11-30 15:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1210,17 +1210,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
                 else
                 {
-                    INetURLObject aOld ( sGrfName ), aNew ( sTmp );
-                    if ( aNew.GetProtocol () == INET_PROT_NOT_VALID )
-                    {
-                        // if the new one doesn't have a valid protocol URL,
-                        // then it's a relative URL so convert it...
-                        bool bWasAbs = true;
-                        aNew = aOld.smartRel2Abs ( sTmp, bWasAbs );
-                        sGrfName = aNew.GetMainURL();
-                    }
-                    else
-                        sGrfName = sTmp;
+                    sGrfName = sTmp;
                 }
             }
             else
