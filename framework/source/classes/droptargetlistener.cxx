@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-19 17:03:30 $
+ *  last change: $Author: pb $ $Date: 2001-09-06 13:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 
+#ifndef _FILELIST_HXX
+#include <sot/filelist.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -148,42 +152,21 @@ void SAL_CALL DropTargetListener::drop( const css::datatransfer::dnd::DropTarget
             TransferableDataHelper aHelper( dtde.Transferable );
             sal_uInt32 nFormatCount = aHelper.GetFormatCount();
             sal_Bool bFormatFound = sal_False;
-            for ( sal_uInt32 i = 0; i < nFormatCount; ++i )
+            FileList aFileList;
+
+            // at first check filelist format
+            if ( aHelper.GetFileList( SOT_FORMAT_FILE_LIST, aFileList ) )
             {
-                SotFormatStringId nId = aHelper.GetFormat(i);
-                String aTemp;
-
-                if ( ( SOT_FORMAT_FILE == nId || SOT_FORMAT_FILE_LIST == nId ) &&
-                     aHelper.GetString( nId, aTemp ) )
-                {
-                    if ( SOT_FORMAT_FILE_LIST == nId )
-                    {
-                        LOG_ERROR( "DropTargetListener::drop()", "filelist format not implemented yet" )
-                        continue;
-                    }
-
-                    String aFileURL;
-                    if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemp, aFileURL ) )
-                        aFileURL = aTemp;
-
-                    // open file
-                    css::uno::Reference< css::frame::XFrame > xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
-                    if ( xTargetFrame.is() == sal_True )
-                    {
-                        css::util::URL aURL;
-                        aURL.Complete = aFileURL;
-                        css::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, css::uno::UNO_QUERY );
-                        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, SPECIALTARGET_BLANK, 0 );
-
-                        if ( xDispatcher.is() )
-                        {
-                            xDispatcher->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue >() );
-                        }
-                    }
-
-                    break;
-                }
+                ULONG i, nCount = aFileList.Count();
+                for ( i = 0; i < nCount; ++i )
+                    impl_OpenFile( aFileList.GetFile(i) );
+                bFormatFound = sal_True;
             }
+
+            // then, if necessary, the file format
+            String aFilePath;
+            if ( !bFormatFound && aHelper.GetString( SOT_FORMAT_FILE, aFilePath ) )
+                impl_OpenFile( aFilePath );
         }
     }
     catch( const ::com::sun::star::uno::Exception& )
@@ -282,6 +265,28 @@ sal_Bool DropTargetListener::impl_IsDropFormatSupported( SotFormatStringId nForm
     }
 
     return bRet;
+}
+
+void DropTargetListener::impl_OpenFile( const String& rFilePath )
+{
+    String aFileURL;
+    if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )
+        aFileURL = rFilePath;
+
+    // open file
+    css::uno::Reference< css::frame::XFrame > xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
+    if ( xTargetFrame.is() == sal_True )
+    {
+        css::util::URL aURL;
+        aURL.Complete = aFileURL;
+        css::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, css::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, SPECIALTARGET_BLANK, 0 );
+
+        if ( xDispatcher.is() )
+        {
+            xDispatcher->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue >() );
+        }
+    }
 }
 
 }

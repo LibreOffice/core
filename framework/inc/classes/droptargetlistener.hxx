@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-15 09:26:57 $
+ *  last change: $Author: pb $ $Date: 2001-09-06 13:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class DropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::dat
         void                    impl_BeginDrag( const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& rSupportedDataFlavors );
         void                    impl_EndDrag();
         sal_Bool                impl_IsDropFormatSupported( SotFormatStringId nFormat );
+        void                    impl_OpenFile( const String& rFilePath );
 
     public:
 
