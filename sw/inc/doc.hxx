@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:02:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,8 @@ enum SwMoveFlags
 // OD 2004-02-16 #106629# - flag for adding paragraph and table spacing at
 // bottom of table cells
 #define DUMMY_ADD_PARA_SPACING_TO_TABLE_CELLS 0x10
+// OD 2004-03-12 #i11860#
+#define DUMMY_USE_FORMER_OBJECT_POS 0x20
 
 //
 // COMPATIBILITY FLAGS END
@@ -2006,6 +2008,23 @@ public:
         else
         {
             n8Dummy2 &= ~DUMMY_USE_FORMER_LINESPACING;
+        }
+    }
+
+    // OD 2004-03-12 #i11860
+    sal_Bool IsFormerObjectPositioning() const
+    {
+        return n8Dummy2 & DUMMY_USE_FORMER_OBJECT_POS;
+    }
+    void SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos )
+    {
+        if ( _bUseFormerObjPos )
+        {
+            n8Dummy2 |= DUMMY_USE_FORMER_OBJECT_POS;
+        }
+        else
+        {
+            n8Dummy2 &= ~DUMMY_USE_FORMER_OBJECT_POS;
         }
     }
 
