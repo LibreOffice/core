@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:13:58 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:50:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=layout
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -81,49 +79,7 @@ CDEFS+=-Dmydebug
 CDEFS+=-DDEBUG
 .ENDIF
 
-#		"Querdarstellung des Dokumentes"
-#		CDEFS=$(CDEFS) -DQUER
-
-# 		CDEFS=$(CDEFS) -DPAGE
-
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:512
-.ENDIF
-
-
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        atrfrm.cxx \
-        calcmove.cxx \
-        colfrm.cxx \
-        findfrm.cxx \
-        flowfrm.cxx \
-        fly.cxx \
-        flycnt.cxx \
-        flyincnt.cxx \
-        flylay.cxx \
-        flypos.cxx \
-        frmtool.cxx \
-        ftnfrm.cxx \
-        hffrm.cxx \
-        layact.cxx \
-                laycache.cxx \
-        layouter.cxx \
-        newfrm.cxx \
-        pagechg.cxx \
-        pagedesc.cxx \
-        pageiter.cxx \
-        paintfrm.cxx \
-        sectfrm.cxx \
-        ssfrm.cxx \
-        tabfrm.cxx \
-        trvlfrm.cxx \
-        unusedf.cxx \
-        virtoutp.cxx \
-        wsfrm.cxx
-
-
 
 SLOFILES =  \
         $(SLO)$/atrfrm.obj \
@@ -157,8 +113,6 @@ SLOFILES =  \
 
 .IF "$(product)"==""
 .IF "$(cap)"==""
-CXXFILES += \
-        dbg_lay.cxx
 SLOFILES +=  \
         $(SLO)$/dbg_lay.obj
 .ENDIF
