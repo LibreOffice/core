@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 12:13:18 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,7 @@
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
@@ -1086,17 +1087,19 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
 
     const DbGridRowRef& xRow = GetCurrentRow();
     // waehrend Positionierung wird kein abgleich  der Properties vorgenommen
-    if (!xRow.Is() || !CompareBookmark(getDataSource()->getBookmark(), xRow->GetBookmark()))
-        return;
-    if (evt.PropertyName == FM_PROP_ISMODIFIED)
+    Reference<XPropertySet> xSet(evt.Source,UNO_QUERY);
+    if (xRow.Is() && (::cppu::any2bool(xSet->getPropertyValue(FM_PROP_ISNEW))|| CompareBookmark(getDataSource()->getBookmark(), xRow->GetBookmark())))
     {
-        // modified or clean ?
-        GridRowStatus eStatus = ::comphelper::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN;
-        if (eStatus != xRow->GetStatus())
+        if (evt.PropertyName == FM_PROP_ISMODIFIED)
         {
-            xRow->SetStatus(eStatus);
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            RowModified(GetCurrentPos());
+            // modified or clean ?
+            GridRowStatus eStatus = ::comphelper::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN;
+            if (eStatus != xRow->GetStatus())
+            {
+                xRow->SetStatus(eStatus);
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                RowModified(GetCurrentPos());
+            }
         }
     }
 }
