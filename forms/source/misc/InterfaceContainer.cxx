@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-29 15:26:20 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 15:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,10 +400,6 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
         Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
         m_xEventAttacher->attach( i, xAsIFace, makeAny( xAsSet ) );
     }
-
-    // We're reading a document in SO 5.2 format (or even from earlier versions)
-    // -> convert the events to the new runtime format
-    transformEvents( efVersionSO6x );
 }
 
 //------------------------------------------------------------------------------
