@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 07:51:13 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 15:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,8 +846,10 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
         if ( !pViewFrame )
             pViewFrame = pViewFrame->GetFirst();
 
-        ::framework::MenuConfiguration aConf( ::comphelper::getProcessServiceFactory() );
-        *ppMenu = aConf.CreateBookmarkMenu( pViewFrame->GetFrame()->GetFrameInterface(), sKey );
+        Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+        ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
+        Reference<com::sun::star::frame::XFrame> aXFrame(pViewFrame->GetFrame()->GetFrameInterface());
+        *ppMenu = aConf.CreateBookmarkMenu( aXFrame, sKey );
         if ( *ppMenu )
             (*ppMenu)->SetSelectHdl( Link( this, Select_Impl ) );
     }
