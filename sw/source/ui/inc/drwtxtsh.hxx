@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 12:01:23 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ class SwDrawTextShell: public SfxShell
     BOOL        bSelMove: 1;
 
     void        SetAttrToMarked(const SfxItemSet& rAttr);
-    void        InsertSymbol();
+    void        InsertSymbol(SfxRequest& rReq);
     BOOL        IsTextEdit();
 public:
     SFX_DECL_INTERFACE(SW_DRWTXTSHELL);
