@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 11:11:30 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 09:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,46 +86,44 @@
 
 interface XCompletedConnection;
 interface XQueryDefinitionsSupplier;
+interface XBookmarksSupplier;
 
-
-// DocMerge from xml: service com::sun::star::sdb::DataSource
 /** is a factory to establish database connections. It should be registered at
     a NamingService.@see com::sun::star::sdb::DatabaseContext
  */
 service DataSource
 {
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::sdb::XCompletedConnection
     /** useful for establishing connections with the completion of connection parameters
                 provided during user interaction.
      */
     interface XCompletedConnection;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::util::XFlushable
     /** is provided to flush a DataSource within to a Database Context.
      */
     interface com::sun::star::util::XFlushable;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::sdb::XQueryDefinitionsSupplier
     /** provides the access to DataSource related queries.
         <p>The object returned by the <method>XQueryDefinitionsSupplier::getQueryDefinitions</method> supports the
         <service>DefinitionContainer</service> service.</p>
      */
     interface XQueryDefinitionsSupplier;
 
+    /** provides the access to bookmarks to documents associated with the data source
+        <p>The object returned by the <method>XBookmarksSupplier::getBookmarks</method> supports the
+        <service>DefinitionContainer</service> service.</p>
+     */
+    [optional] interface XBookmarksSupplier;
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSource::Name
     /** is the name of the data source.
      */
     [readonly, property] string Name;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSource::URL
     /** indicates a database url of the form <br>
         <code> jdbc:<em>subprotocol</em>:<em>subname</em></code> or
         <code> sdbc:<em>subprotocol</em>:<em>subname</em></code>
@@ -133,7 +131,6 @@ service DataSource
     [property] string URL;
 
 
-    // DocMerge from idl: property com::sun::star::sdb::DataSource::Info
     /** is a list of arbitrary string tag/value pairs as
              connection arguments; normally at least a "user" and
              "password" property should be included.
@@ -141,19 +138,16 @@ service DataSource
     [property] sequence<com::sun::star::beans::PropertyValue> Info;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSource::User
     /** determines a users login name.
      */
     [property] string User;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSource::Password
     /** determines a users password. The password is not persistent.
      */
     [property] string Password;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSource::IsPasswordRequired
     /** indicates that a password is always necessary.
      */
     [property] boolean IsPasswordRequired;
@@ -164,28 +158,24 @@ service DataSource
     [property] boolean SuppressVersionColumns;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSource::IsReadOnly
     /** determines whether modifications on the data source are are allowed
         or not.
      */
     [readonly, property] boolean IsReadOnly;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSource::NumberFormatsSupplier
     /** provides an object for formatting numbers.
      */
     [readonly, property] com::sun::star::util::XNumberFormatsSupplier
                         NumberFormatsSupplier;
 
 
-    // DocMerge from idl: property com::sun::star::sdb::DataSource::TableFilter
     /** defines a list of tables, on which the DataSource should have it's focus.
              If empty, all the tables of the are used.
      */
     [property] sequence<string> TableFilter;
 
 
-    // DocMerge from idl: property com::sun::star::sdb::DataSource::TableTypeFilter
     /** defines a list of table types, on which the DataSource should have it's focus.
              If empty, all the tables types of the are used.
      */
@@ -198,6 +188,9 @@ service DataSource
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/07 11:11:30  fs
+    a new missing detail ...
+
     Revision 1.4  2001/02/06 07:56:02  fs
     removed XFormDocumentsSupplier / XReportDocumentsSupplier from the service description - they're obsolete
 
