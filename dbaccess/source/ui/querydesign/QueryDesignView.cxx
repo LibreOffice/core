@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:44:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 14:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,7 +1080,7 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
                     {
                         Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
                         if(xColumns->hasByName(aFieldName))
-                            ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
+                            xColumns->getByName(aFieldName) >>= xColumn;
                     }
                     ::rtl::OUString aErrorMsg;
                     ::connectivity::OSQLParser* pParser = static_cast<OQueryController*>(getController())->getParser();

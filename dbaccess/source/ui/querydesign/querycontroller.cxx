@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 13:57:57 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 14:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,8 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_SAVEASDOC:
         case ID_BROWSER_SAVEDOC:
             doSaveAsDoc(ID_BROWSER_SAVEASDOC == _nId);
-            if(m_bCreateView)
+            // check we have a view and if we could saved it correctly
+            if(m_bCreateView && !isModified())
                 closeTask();
             break;
         case SID_PRINTDOCDIRECT:
@@ -790,7 +791,7 @@ sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeExc
         {
             case RET_YES:
                 doSaveAsDoc(sal_False);
-                bRet = m_sName.getLength() != 0;
+                bRet = m_sName.getLength() != 0 && !isModified();
                 break;
             case RET_CANCEL:
                 bRet = sal_False;
@@ -1144,7 +1145,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     }
                     else
                     {
-                        ::cppu::extractInterface(xProp,xElements->getByName(m_sName));
+                        xElements->getByName(m_sName) >>= xProp;
                     }
 
 
@@ -1249,11 +1250,24 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     }
                     setModified(sal_False);
                 }
-                catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
-                catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
-                catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
+                catch(SQLContext& e)
+                {
+                    m_sName = ::rtl::OUString();
+                    aInfo = SQLExceptionInfo(e);
+                }
+                catch(SQLWarning& e)
+                {
+                    m_sName = ::rtl::OUString();
+                    aInfo = SQLExceptionInfo(e);
+                }
+                catch(SQLException& e)
+                {
+                    m_sName = ::rtl::OUString();
+                    aInfo = SQLExceptionInfo(e);
+                }
                 catch(Exception&)
                 {
+                    m_sName = ::rtl::OUString();
                     OSL_ENSURE(0,"OQueryController::doSaveAsDoc: Query could not be inserted!");
                 }
                 showError(aInfo);
