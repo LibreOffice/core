@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:01:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 17:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@
 
 #define ADVANCED_PAGE_X     200
 #define ADVANCED_PAGE_Y     (105 + 4*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS)
+
 //-------------------------------------------------------------------------
+
 #define AUTO_APPENDTABLEALIAS(AUTO_Y)                                               \
     CheckBox CB_APPENDTABLEALIAS                                                    \
     {                                                                               \
@@ -98,9 +100,10 @@
         HelpId = HID_DSADMIN_APPENDTABLEALIAS;                                      \
         Text [ de ] = "Den Alias Namen von Tabellen im SELECT Ausdruck anhängen";           \
         Text[ en-US ] = "Append the table alias name on SELECT statements"; \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_IGNOREINDEXAPPENDIX(AUTO_Y)                                            \
     CheckBox CB_IGNOREINDEXAPPENDIX                                                 \
     {                                                                               \
@@ -110,9 +113,11 @@
         HelpId = HID_DSADMIN_IGNOREINDEXAPPENDIX;                                   \
         Text [ de ] = "Index mit ASC- oder DESC-Befehl erstellen";                  \
         Text[ en-US ] = "Create index with ASC or DESC statement";          \
-    }
+    };
+
 
 //-------------------------------------------------------------------------
+
 #define AUTO_SUPPRESVERSIONCOLUMN(AUTO_Y)                                           \
     CheckBox CB_SUPPRESVERSIONCL                                                    \
     {                                                                               \
@@ -123,9 +128,11 @@
         HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;                                    \
         Text [ de ] = "Versionsspalten anzeigen (wenn verfuegbar)";                     \
         Text [ en-US ] = "Display version columns (when available)";            \
-    }
+    };
+
 
 //-------------------------------------------------------------------------
+
 #define AUTO_ENABLEOUTERJOIN(AUTO_Y)                                            \
     CheckBox CB_ENABLEOUTERJOIN                                                     \
     {                                                                               \
@@ -136,9 +143,11 @@
         HelpId = HID_DSADMIN_ENABLEOUTERJOIN;                                       \
         Text [ de ] = "Für Outer Joins die Syntax '{OJ }' verwenden";                       \
         Text [ en-US ] = "Use Outer Join syntax '{OJ }'";                       \
-    }
+    };
+
 
 //-------------------------------------------------------------------------
+
 #define AUTO_DOSLINEENDS(AUTO_Y)                                            \
     CheckBox CB_DOSLINEENDS                                                         \
     {                                                                               \
@@ -149,9 +158,11 @@
         HelpId = HID_DSADMIN_DOSLINEENDS;                                           \
         Text [ de ] = "Textzeilen mit CR+LF beenden";                                       \
         Text [ en-US ] = "End text lines with CR+LF";                           \
-    }
+    };
+
 
 //-------------------------------------------------------------------------
+
 #define AUTO_SCHEMA(AUTO_Y)                                         \
     CheckBox CB_SCHEMA                                                      \
     {                                                                               \
@@ -162,9 +173,11 @@
         HelpId = HID_DSADMIN_SCHEMA;                                                \
         Text [ de ] = "Den Schemanamen im SELECT Ausdruck verwenden.";                  \
         Text [ en-US ] = "Use schema name in SELECT statements";                \
-    }
+    };
+
 
 //-------------------------------------------------------------------------
+
 #define AUTO_CATALOG(AUTO_Y)                                            \
     CheckBox CB_CATALOG                                                     \
     {                                                                               \
@@ -175,9 +188,15 @@
         HelpId = HID_DSADMIN_CATALOG;                                               \
         Text [ de ] = "Den Katalognamen im SELECT Ausdruck verwenden.";                 \
         Text [ en-US ] = "Use catalog name in SELECT statements";               \
-    }
+    };
+
 
 //-------------------------------------------------------------------------
+
+
+
+// ListBox removed due merge errors
+/*
 #define AUTO_BOOLEANCOMPARISON(AUTO_Y)                                          \
     FixedText FT_BOOLEANCOMPARISON                                                  \
     {                                                                               \
@@ -196,7 +215,7 @@
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
         HelpId = HID_DSADMIN_BOOLEANCOMPARISON;                                     \
-        StringList =                                                                \
+        StringList [ de ] =                                                             \
         {                                                                           \
             < "Normal" ; Default ; > ;                                              \
             < "SQL" ; Default ; > ;                                                 \
@@ -210,9 +229,20 @@
             < "Mixed" ; Default ; > ;                                               \
             < "MS Access" ; Default ; > ;                                           \
         };                                                                          \
-    }
+    };
+*/
+#define AUTO_BOOLEANCOMPARISON(AUTO_Y)                                          \
+    FixedText FT_BOOLEANCOMPARISON                                                  \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( 100 , FIXEDTEXT_HEIGHT ) ;          \
+        Text [ de ] = "Vergleich von Wahrheitswerten";                      \
+        Text [ en-US ] = "Comparison of Boolean values";            \
+    };                                                                              \
+
 
 //-------------------------------------------------------------------------
+
 #define AUTO_IGNOREDRIVER_PRIV(AUTO_Y)                                              \
     CheckBox CB_IGNOREDRIVER_PRIV                                                   \
     {                                                                               \
@@ -222,9 +252,10 @@
         HelpId = HID_DSADMIN_IGNOREDRIVER_PRIV;                                     \
         Text [ de ] = "Die Rechte vom Datenbank Treiber ignorieren";                        \
         Text[ en-US ] = "Ignore the privileges from the database driver";       \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_SQL92CHECK(AUTO_Y)                                                     \
     CheckBox CB_SQL92CHECK                                                          \
     {                                                                               \
@@ -234,9 +265,10 @@
         HelpId = HID_DSADMIN_SQL92CHECK;                                            \
         Text [ de ] = "SQL92 Namensbeschränkung verwenden";                             \
         Text[ en-US ] = "Use SQL92 naming constraints";                     \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_USECATALOG(AUTO_Y)                                                     \
     CheckBox CB_USECATALOG                                                                                                                                  \
     {                                                                                                                                                       \
@@ -246,9 +278,10 @@
         HelpId = HID_DSADMIN_USECATALOG;                                                                                                                    \
         Text [ de ] = "Katalog verwenden bei dateibasierten Datenbanken";                                                                                           \
         Text[ en-US ] = "Use catalog for file-based databases";                                                                                     \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_PARAMETERNAMESUBST(AUTO_Y)                                             \
     CheckBox CB_PARAMETERNAMESUBST                                                  \
     {                                                                               \
@@ -258,9 +291,10 @@
         HelpId = HID_DSADMIN_PARAMETERNAMESUBST;                                    \
         Text [ de ] = "Benannte Parameter durch '?' ersetzen";                              \
         Text[ en-US ] = "Replace named parameters with '?'";                    \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_INCREMENT_CONTROLS(AUTO_Y)                                     \
     FixedLine FL_SEPARATORAUTO                                              \
     {                                                                       \
@@ -311,9 +345,10 @@
         Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 2*UNRELATED_CONTROLS, EDIT_HEIGHT ) ;                                   \
         TabStop = TRUE ;                                                    \
         HelpId = HID_DSADMIN_RETRIEVE_AUTO;                                 \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_CHARSET(AUTO_Y)                                                \
     FixedLine FL_DATACONVERT                                                    \
     {                                                                       \
@@ -338,9 +373,10 @@
         HelpId = HID_DSADMIN_CHARSET;                                       \
         DropDown = TRUE ;                                                   \
         CurPos = 0 ;                                                        \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_DATAHANDLING(AUTO_Y)                                           \
     FixedLine FL_DATAHANDLING                                               \
     {                                                                       \
@@ -348,9 +384,10 @@
         Size = MAP_APPFONT ( ADVANCED_PAGE_X - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;        \
         Text [ de ] = "Optionen";                                           \
         Text [ en-US ] = "Options";                             \
-    }
+    };
 
 //-------------------------------------------------------------------------
+
 #define AUTO_SPECIAL_JDBC(AUTO_Y)                                                                       \
     FixedLine FL_SEPARATOR1                                                                             \
     {                                                                                                   \
@@ -390,8 +427,9 @@
         HelpId = HID_DSADMIN_PORTNUMBER;                                                                \
         Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT -1 ) ; \
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
-    }
+    };
 //-------------------------------------------------------------------------
+
 TabDialog DLG_DATABASE_ADMINISTRATION
 {
     OutputSize = TRUE ;
@@ -428,7 +466,9 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Text [ de ] = "Datenbankeigenschaften" ;
     Text [ en-US ] = "Database properties" ;
 };
+
 // -----------------------------------------------------------------------------
+
 ModalDialog DLG_DATABASE_TYPE_CHANGE
 {
     OutputSize = TRUE ;
@@ -446,7 +486,9 @@ ModalDialog DLG_DATABASE_TYPE_CHANGE
     Text [ de ] = "Datenbankeigenschaften" ;
     Text [ en-US ] = "Database properties" ;
 };
+
 //-------------------------------------------------------------------------
+
 Image IMG_DATABASE
 {
     ImageBitmap = Bitmap { File = "db.bmp"; };
@@ -459,6 +501,7 @@ Image IMG_DATABASE_SCH
 };
 
 //-------------------------------------------------------------------------
+
 TabPage PAGE_GENERAL
 {
     SVLook = TRUE ;
@@ -594,6 +637,7 @@ TabPage PAGE_GENERAL
 };
 
 //.........................................................................
+
 TabPage PAGE_DBASE
 {
     SVLook = TRUE ;
@@ -602,7 +646,7 @@ TabPage PAGE_DBASE
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_PAGE_DBASE;
 
-    AUTO_CHARSET(         UNRELATED_CONTROLS) ;
+    AUTO_CHARSET(         UNRELATED_CONTROLS)
 
     FixedLine FL_SEPARATOR1
     {
@@ -645,6 +689,7 @@ TabPage PAGE_DBASE
 };
 
 //.........................................................................
+
 TabPage PAGE_ADO
 {
     SVLook = TRUE ;
@@ -652,120 +697,294 @@ TabPage PAGE_ADO
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ADO;
-    AUTO_CHARSET(UNRELATED_CONTROLS);
+    AUTO_CHARSET(UNRELATED_CONTROLS)
 };
+
 //.........................................................................
+
 TabPage PAGE_GENERATED_VALUES
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_INCREMENT_CONTROLS ( UNRELATED_CONTROLS);
+    AUTO_INCREMENT_CONTROLS ( UNRELATED_CONTROLS)
 };
+
 //.........................................................................
+
 TabPage PAGE_DS_PROPERTIES_1
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
-    AUTO_APPENDTABLEALIAS(        RELATED_CONTROLS + FIXEDTEXT_HEIGHT +                     RELATED_CONTROLS ) ;
-    AUTO_BOOLEANCOMPARISON(     2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +     CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_APPENDTABLEALIAS(        RELATED_CONTROLS + FIXEDTEXT_HEIGHT +                     RELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(     2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +     CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+
+    ListBox LB_BOOLEANCOMPARISON
+    {
+        Pos     = MAP_APPFONT ( 107 ,2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +     CHECKBOX_HEIGHT + UNRELATED_CONTROLS -1) ;
+        Size    = MAP_APPFONT ( 60 , CHECKBOX_HEIGHT ) ;
+        Group   = TRUE ;
+        TabStop = TRUE ;
+        SvLook = TRUE;
+        DropDown = TRUE;
+        Border = TRUE;
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;
+        StringList [ de ] =
+        {
+            < "Normal" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Gemischt" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Mixed" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+    };
+
 };
+
 //.........................................................................
+
 TabPage PAGE_DS_PROPERTIES_2
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
-    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
-    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_SUPPRESVERSIONCOLUMN(  3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_DOSLINEENDS(           4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
-    AUTO_BOOLEANCOMPARISON(     5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS )
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_SUPPRESVERSIONCOLUMN(  3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_DOSLINEENDS(           4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(     5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    ListBox LB_BOOLEANCOMPARISON
+    {
+        Pos     = MAP_APPFONT ( 107 , 5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS  -1) ;
+        Size    = MAP_APPFONT ( 60 , CHECKBOX_HEIGHT ) ;
+        Group   = TRUE ;
+        TabStop = TRUE ;
+        SvLook = TRUE;
+        DropDown = TRUE;
+        Border = TRUE;
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;
+        StringList [ de ] =
+        {
+            < "Normal" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Gemischt" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Mixed" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+    };
+
 };
+
 //.........................................................................
+
 TabPage PAGE_DS_PROPERTIES_3
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
-    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
-    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_SUPPRESVERSIONCOLUMN(  4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_DOSLINEENDS(           5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
-    AUTO_BOOLEANCOMPARISON(     6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS )
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_SUPPRESVERSIONCOLUMN(  4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_DOSLINEENDS(           5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(     6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    ListBox LB_BOOLEANCOMPARISON
+    {
+        Pos     = MAP_APPFONT ( 107 , 6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + UNRELATED_CONTROLS -1) ;
+        Size    = MAP_APPFONT ( 60 , CHECKBOX_HEIGHT ) ;
+        Group   = TRUE ;
+        TabStop = TRUE ;
+        SvLook = TRUE;
+        DropDown = TRUE;
+        Border = TRUE;
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;
+        StringList [ de ] =
+        {
+            < "Normal" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Gemischt" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Mixed" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+    };
+
 };
+
 //.........................................................................
+
 TabPage PAGE_DS_PROPERTIES_FILE
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
-    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
-    AUTO_DOSLINEENDS(           2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS )
+    AUTO_DOSLINEENDS(           2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
 };
+
 //.........................................................................
+
 TabPage PAGE_DS_PROPERTIES_ACCESS
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
-    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
-    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_DOSLINEENDS(           4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
-    AUTO_BOOLEANCOMPARISON(     5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS )
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_DOSLINEENDS(           4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(     5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    ListBox LB_BOOLEANCOMPARISON
+    {
+        Pos     = MAP_APPFONT ( 107 , 5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + UNRELATED_CONTROLS -1) ;
+        Size    = MAP_APPFONT ( 60 , CHECKBOX_HEIGHT ) ;
+        Group   = TRUE ;
+        TabStop = TRUE ;
+        SvLook = TRUE;
+        DropDown = TRUE;
+        Border = TRUE;
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;
+        StringList [ de ] =
+        {
+            < "Normal" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Gemischt" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Mixed" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+    };
+
 };
+
 //.........................................................................
+
 TabPage PAGE_DS_PROPERTIES_ENABLEOJ
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
-    AUTO_ENABLEOUTERJOIN(         RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
-    AUTO_IGNOREDRIVER_PRIV(     2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_APPENDTABLEALIAS(      3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_PARAMETERNAMESUBST(    4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_SUPPRESVERSIONCOLUMN(  5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_DOSLINEENDS(           6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
-    AUTO_BOOLEANCOMPARISON(     7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 6*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_ENABLEOUTERJOIN(         RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS )
+    AUTO_IGNOREDRIVER_PRIV(     2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_APPENDTABLEALIAS(      3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_PARAMETERNAMESUBST(    4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_SUPPRESVERSIONCOLUMN(  5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_DOSLINEENDS(           6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(     7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 6*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    ListBox LB_BOOLEANCOMPARISON
+    {
+        Pos     = MAP_APPFONT ( 107 , 7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 6*CHECKBOX_HEIGHT + UNRELATED_CONTROLS -1) ;
+        Size    = MAP_APPFONT ( 60 , CHECKBOX_HEIGHT ) ;
+        Group   = TRUE ;
+        TabStop = TRUE ;
+        SvLook = TRUE;
+        DropDown = TRUE;
+        Border = TRUE;
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;
+        StringList [ de ] =
+        {
+            < "Normal" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Gemischt" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Mixed" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+    };
+
 };
+
 //.........................................................................
+
 TabPage PAGE_DS_PROPERTIES_4
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
     Hide = TRUE;
-    AUTO_DATAHANDLING(            RELATED_CONTROLS ) ;
-    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS ) ;
-    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_IGNOREDRIVER_PRIV(     4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_PARAMETERNAMESUBST(    5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_SUPPRESVERSIONCOLUMN(  6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_CATALOG(               7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 6*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_SCHEMA(                8*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 7*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_IGNOREINDEXAPPENDIX(   9*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 8*CHECKBOX_HEIGHT + RELATED_CONTROLS ) ;
-    AUTO_DOSLINEENDS(          10*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 9*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
-    AUTO_BOOLEANCOMPARISON(    11*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 10*CHECKBOX_HEIGHT + UNRELATED_CONTROLS ) ;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_SQL92CHECK(              RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   RELATED_CONTROLS )
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +   CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_ENABLEOUTERJOIN(       3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_IGNOREDRIVER_PRIV(     4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_PARAMETERNAMESUBST(    5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_SUPPRESVERSIONCOLUMN(  6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 5*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_CATALOG(               7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 6*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_SCHEMA(                8*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 7*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_IGNOREINDEXAPPENDIX(   9*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 8*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_DOSLINEENDS(          10*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 9*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(    11*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 10*CHECKBOX_HEIGHT + UNRELATED_CONTROLS )
+     ListBox LB_BOOLEANCOMPARISON
+    {
+        Pos     = MAP_APPFONT ( 107 , 11*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 10*CHECKBOX_HEIGHT + UNRELATED_CONTROLS -1) ;
+        Size    = MAP_APPFONT ( 60 , CHECKBOX_HEIGHT ) ;
+        Group   = TRUE ;
+        TabStop = TRUE ;
+        SvLook = TRUE;
+        DropDown = TRUE;
+        Border = TRUE;
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;
+        StringList [ de ] =
+        {
+            < "Normal" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Gemischt" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "SQL" ; Default ; > ;
+            < "Mixed" ; Default ; > ;
+            < "MS Access" ; Default ; > ;
+        };
+    };
+
 };
 
 //.........................................................................
+
 TabPage PAGE_ODBC
 {
     SVLook = TRUE ;
@@ -774,7 +993,7 @@ TabPage PAGE_ODBC
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ODBC;
 
-    AUTO_CHARSET( UNRELATED_CONTROLS) ;
+    AUTO_CHARSET( UNRELATED_CONTROLS)
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( 4 , 2*UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
@@ -799,7 +1018,7 @@ TabPage PAGE_ODBC
         HelpId = HID_DSADMIN_ODBC_OPTIONS;
     };
 
-    AUTO_USECATALOG(        3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
+    AUTO_USECATALOG(        3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS )
 };
 
 TabPage PAGE_ADABAS
@@ -922,7 +1141,7 @@ TabPage PAGE_ADABAS
         Text[ en-US ] = "E~xtended...";
     };
 
-    AUTO_CHARSET(           7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
+    AUTO_CHARSET(           7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT)
 };
 
 //.........................................................................
@@ -937,7 +1156,7 @@ TabPage PAGE_MYSQL_ODBC
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
 
-    AUTO_CHARSET(             UNRELATED_CONTROLS ) ;
+    AUTO_CHARSET(             UNRELATED_CONTROLS )
 };
 
 TabPage PAGE_MYSQL_JDBC
@@ -947,7 +1166,7 @@ TabPage PAGE_MYSQL_JDBC
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
 
-    AUTO_SPECIAL_JDBC( UNRELATED_CONTROLS );
+    AUTO_SPECIAL_JDBC( UNRELATED_CONTROLS )
 
     FixedText FT_JDBCDRIVERCLASS
     {
@@ -972,7 +1191,7 @@ TabPage PAGE_MYSQL_JDBC
         Text [ en-US ] = "Test class" ;
     };
 
-    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT ) ;
+    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT )
 };
 
 TabPage PAGE_ORACLE_JDBC
@@ -982,7 +1201,7 @@ TabPage PAGE_ORACLE_JDBC
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
 
-    AUTO_SPECIAL_JDBC( UNRELATED_CONTROLS );
+    AUTO_SPECIAL_JDBC( UNRELATED_CONTROLS )
 
     FixedText FT_JDBCDRIVERCLASS
     {
@@ -1009,10 +1228,11 @@ TabPage PAGE_ORACLE_JDBC
         Text [ en-US ] = "Test class" ;
     };
 
-    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT ) ;
+    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT )
 };
 
 //.........................................................................
+
 TabPage PAGE_LDAP
 {
     SVLook = TRUE ;
@@ -1088,7 +1308,9 @@ TabPage PAGE_LDAP
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
     };
 };
+
 //.........................................................................
+
 TabPage PAGE_TEXT
 {
     SVLook = TRUE ;
@@ -1109,8 +1331,11 @@ TabPage PAGE_TEXT
 
     AUTO_CHARSET(143) ;
 
+
 };
+
 //.........................................................................
+
 TabPage PAGE_USERDRIVER
 {
     SVLook = TRUE ;
@@ -1164,6 +1389,6 @@ TabPage PAGE_USERDRIVER
         Border = TRUE ;
         TabStop = TRUE ;
     };
-    AUTO_CHARSET(           4*UNRELATED_CONTROLS    + 3*FIXEDTEXT_HEIGHT +   RELATED_CONTROLS) ;
+    AUTO_CHARSET(           4*UNRELATED_CONTROLS    + 3*FIXEDTEXT_HEIGHT +   RELATED_CONTROLS)
 };
 
