@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 12:57:31 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,6 +1192,29 @@ sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
         bException = sal_True;
 
     return nRet;
+}
+/*-- 09.06.2004 12:18:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+String lcl_CreateOutlineString( USHORT nIndex,
+            const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
+{
+    String sEntry;
+    const SwNodeNum* pNum = rOutlineNodes[ nIndex ]->GetTxtNode()->GetOutlineNum();
+    if( pNum && pOutlRule && MAXLEVEL >= pNum->GetLevel())
+        for( sal_Int8 nLevel = 0;
+             nLevel <= pNum->GetLevel();
+             nLevel++ )
+        {
+            sal_uInt16 nVal = pNum->GetLevelVal()[nLevel];
+            nVal ++;
+            nVal -= pOutlRule->Get(nLevel).GetStart();
+            sEntry += String::CreateFromInt32( nVal );
+            sEntry += '.';
+        }
+    sEntry += rOutlineNodes[ nIndex ]->
+                    GetTxtNode()->GetExpandTxt( 0, STRING_LEN, sal_False );
+    return sEntry;
 }
 /*-- 18.12.98 11:55:25---------------------------------------------------
 
@@ -2953,9 +2976,10 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
 
                 for (sal_uInt16 i = 0; i < nOutlineCount && !bFound; ++i)
                 {
-                    const SwNodes& rNds = pDoc->GetNodes();
+                    const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
+                    const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
                     if(sParam ==
-                        rNds.GetOutLineNds()[ i ]->GetTxtNode()->GetExpandTxt( 0, STRING_LEN, sal_True ))
+                        lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
                     {
                         Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
                         aRet.setValue(&xOutline, ::getCppuType((Reference<XPropertySet>*)0));
@@ -2992,16 +3016,17 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
             throw RuntimeException();
 
         SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
-        sal_uInt16 nOutlineCount = pDoc->GetNodes().GetOutLineNds().Count();
+        const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
+        sal_uInt16 nOutlineCount = rOutlineNodes.Count();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
         String sSuffix('|');
         sSuffix += UniString::CreateFromAscii(pMarkToOutline);
+        const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
+        const SwNodes& rNds = pDoc->GetNodes();
         for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
         {
-            const SwNodes& rNds = pDoc->GetNodes();
-            String sEntry(
-                rNds.GetOutLineNds()[ i ]->GetTxtNode()->GetExpandTxt( 0, STRING_LEN, sal_True ));
+            String sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule);
             sEntry += sSuffix;
             pResArr[i] = sEntry;
         }
@@ -3043,9 +3068,10 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
 
                 for (sal_uInt16 i = 0; i < nOutlineCount && !bRet; ++i)
                 {
-                    const SwNodes& rNds = pDoc->GetNodes();
+                    const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
+                    const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
                     if(sParam ==
-                        rNds.GetOutLineNds()[ i ]->GetTxtNode()->GetExpandTxt( 0, STRING_LEN, sal_True ))
+                        lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
                     {
                         bRet = sal_True;
                     }
