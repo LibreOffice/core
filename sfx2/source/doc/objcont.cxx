@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:03:52 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 11:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ SfxDocumentInfo& SfxObjectShell::UpdateTime_Impl(SfxDocumentInfo &rInfo)
         if (nDays==0)
         {
             // If no day between now and last editing - calculate time directly.
-            nAddTime    =   aNow-pImp->nTime ;
+            nAddTime    =   (const Time&)aNow - (const Time&)pImp->nTime ;
         }
         else
         // If time of working without save greater then 1 month (!) ....
@@ -1382,7 +1382,7 @@ BOOL SfxObjectShell::Print
                 aHeader += *pObjectName;
             else
                 aHeader += GetTitle();
-            ULONG nTextHeight( rPrt.GetTextHeight() );
+            long nTextHeight( rPrt.GetTextHeight() );
             rPrt.DrawText(aOutPos, aHeader);
             aOutPos.Y() += nTextHeight;
             aOutPos.Y() += nTextHeight/2;
@@ -1399,7 +1399,7 @@ BOOL SfxObjectShell::Print
                 nTextHeight = rPrt.GetTextHeight();
                 // Seitenwechsel
                 if ( aOutPos.Y() + nTextHeight*2 >
-                    aPageSize.Height() - nYIndent )
+                    aPageSize.Height() - (long) nYIndent )
                 {
                     rPrt.EndPage();
                     rPrt.StartPage();
@@ -1420,12 +1420,12 @@ BOOL SfxObjectShell::Print
                 while(nIdx < aStr.Len())
                 {
                     USHORT  nOld = nIdx;
-                    ULONG   nTextWidth;
+                    long nTextWidth;
                     nIdx = aStr.Search(cDelim, nStart);
                     nTextWidth = rPrt.GetTextWidth(aStr, nStart, nIdx-nStart);
                     while(nIdx != STRING_NOTFOUND &&
                           aOutPos.X() + nTextWidth <
-                          aPageSize.Width() - nXIndent)
+                          aPageSize.Width() - (long) nXIndent)
                     {
                         nOld = nIdx;
                         nIdx = aStr.Search(cDelim, nIdx+1);
