@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.sdi,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:41:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,11 +261,6 @@ interface SlideSorterView : Object
         StateMethod = GetCtrlState ;
         Asynchron , Volatile , AutoUpdate ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
-    ]
-    SID_SPELLING // ole : no, status : ?
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetMenuState ;
     ]
     SID_SEARCH_DLG // ole : no, status : ?
     [
