@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:58:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ SvNumberformat::SvNumberformat(String& rString,
                             sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DBNum" ) );
                             //! eSymbolType is negative
                             BYTE nNum = 1 - (eSymbolType - SYMBOLTYPE_DBNUM1);
-                            sStr += '0' + nNum;
+                            sStr += static_cast< sal_Unicode >('0' + nNum);
                             NumFor[nIndex].SetNatNumNum( nNum, TRUE );
                         }
                     }
