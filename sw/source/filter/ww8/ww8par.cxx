@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:01:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,12 +694,6 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
     }
 }
 
-//-----------------------------------------
-//            Tabs
-//-----------------------------------------
-#define DEF_TAB_ANZ 13          // So viele Default-Tabs
-
-
 /*
  For styles we will do our tabstop arithmetic in word style and adjust them to
  writer style after all the styles have been finished and the just settles as
@@ -855,6 +849,12 @@ void SwWW8ImplReader::ImportDop()
             rDoc.SetInfo(aNeuDocInf);
         }
     }
+
+    // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
+    // Abst. des ersten und oberem Abst. des zweiten
+    rDoc.SetParaSpaceMax(!pWDop->fDontUseHTMLAutoSpacing, true);
+    // move tabs on alignment
+    rDoc.SetTabCompat(true);
 
     // Import Default-Tabs
     long nDefTabSiz = pWDop->dxaTab;
@@ -1820,6 +1820,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             graphic preview of an associated ole2 object (or a simple
             graphic of course)
             */
+            if (!IsInlineEscherHack())
             {
                 SwFrmFmt *pResult = 0;
                 if (bObj)
@@ -1840,20 +1841,12 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     // reset the flags.
                     bObj = bEmbeddObj = false;
                     nObjLocFc = 0;
-                    //##515## set nLastFlyNode so we can determine if a section
-                    //has ended with this paragraph unclosed
-                    nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
                 }
             }
             break;
         case 0x8:
             if( !bObj )
-            {
                 Read_GrafLayer( nPosCp );
-                //##515##. Set nLastFlyNode so we can determine if a
-                //section has ended with this paragraph unclosed
-                nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
-            }
             break;
         case 0xd:
             bNewParaEnd = bRet = true;
@@ -2220,8 +2213,6 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pNumFldType = 0;
     nFldNum = 0;
 
-    nLastFlyNode = ULONG_MAX;
-
     nLFOPosition = USHRT_MAX;
     nListLevel = WW8ListManager::nMaxLevel;
     eHardCharSet = RTL_TEXTENCODING_DONTKNOW;
@@ -2318,7 +2309,7 @@ void wwSectionManager::InsertSegments(bool bIsNewDoc)
                     bInsertSection = true;
             }
 
-            if (aIter->maSep.fTitlePage)
+            if (aIter->HasTitlePage())
             {
                 if (bIsNewDoc && aIter == aStart)
                 {
@@ -2348,7 +2339,7 @@ void wwSectionManager::InsertSegments(bool bIsNewDoc)
             {
                 USHORT nPos = mrReader.rDoc.MakePageDesc(
                     ViewShell::GetShellRes()->GetPageDescName(nDesc,
-                        false, aIter->maSep.fTitlePage),
+                        false, aIter->HasTitlePage()),
                         aIter->mpTitlePage, false);
                 aIter->mpPage = &mrReader.rDoc._GetPageDesc(nPos);
             }
@@ -2366,7 +2357,7 @@ void wwSectionManager::InsertSegments(bool bIsNewDoc)
                 SetSegmentToPageDesc(*aIter, true, bIgnoreCols);
             SetSegmentToPageDesc(*aIter, false, bIgnoreCols);
 
-            SwFmtPageDesc aPgDesc(aIter->maSep.fTitlePage ?
+            SwFmtPageDesc aPgDesc(aIter->HasTitlePage() ?
                     aIter->mpTitlePage : aIter->mpPage);
 
             if (aIter->mpTitlePage)
@@ -2604,15 +2595,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 aSttNdIdx = pPaM->GetPoint()->nNode;
 
             ::StartProgress( STR_STATSTR_W4WREAD, 0, 100, rDoc.GetDocShell() );
-
-            if (mbNewDoc)
-            {
-                // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
-                // Abst. des ersten und oberem Abst. des zweiten
-                rDoc.SetParaSpaceMax(true, true);
-                // move tabs on alignment
-                rDoc.SetTabCompat(true);
-            }
 
             // read Font Table
             pFonts = new WW8Fonts( *pTableStream, *pWwFib );
