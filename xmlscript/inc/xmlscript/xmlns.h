@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlns.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,19 +62,15 @@
 #define _XMLSCRIPT_XMLNS_H_
 
 #define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
-#define XMLNS_DIALOGS_UID 1
 #define XMLNS_DIALOGS_PREFIX "dlg"
 
 #define XMLNS_SCRIPT_URI "http://openoffice.org/2000/script"
-#define XMLNS_SCRIPT_UID 2
 #define XMLNS_SCRIPT_PREFIX "script"
 
 #define XMLNS_LIBRARY_URI "http://openoffice.org/2000/library"
-#define XMLNS_LIBRARY_UID 3
 #define XMLNS_LIBRARY_PREFIX "library"
 
 #define XMLNS_XLINK_URI "http://www.w3.org/1999/xlink"
-#define XMLNS_XLINK_UID 4
 #define XMLNS_XLINK_PREFIX "xlink"
 
 #endif
