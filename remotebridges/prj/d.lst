@@ -1,6 +1,6 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
 ..\source\factory\brdgfctr.xml %_DEST%\xml%_EXT%\brdgfctr.xml
-..\source\iiop\iiopbrdg.xml %_DEST%\xml%_EXT%\iiopbrdg.xml
+..\source\bridge\remotebridge.xml %_DEST%\xml%_EXT%\remotebridge.xml
 ..\source\unourl_resolver\uuresolver.xml %_DEST%\xml%_EXT%\uuresolver.xml
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
