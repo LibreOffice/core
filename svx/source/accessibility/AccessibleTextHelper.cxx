@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-02 17:09:36 $
+ *  last change: $Author: thb $ $Date: 2002-10-23 12:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,10 +480,14 @@ namespace accessibility
 
             // we just received the focus, also send caret event then
             UpdateSelection();
+
+            DBG_TRACE1("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d received focus", nChild );
         }
         else
         {
             maParaManager.SetFocus( -1 );
+
+            DBG_TRACE1("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d lost focus", nChild );
 
             if( mbGroupHasFocus )
                 SetShapeFocus( sal_True );
@@ -497,6 +501,8 @@ namespace accessibility
 
         mbGroupHasFocus = sal_True;
         maParaManager.SetFocus( nNewChild );
+
+        DBG_TRACE1("AccessibleTextHelper_Impl::ChangeChildFocus(): Paragraph %d received focus", nNewChild );
     }
 
     void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
@@ -508,9 +514,15 @@ namespace accessibility
         if( bOldFocus != bHaveFocus )
         {
             if( bHaveFocus )
+            {
                 GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+                DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
+            }
             else
+            {
                 LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+                DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
+            }
         }
     }
 
@@ -576,7 +588,9 @@ namespace accessibility
             {
                 if( !maLastSelection.IsEqual( aSelection ) )
                 {
-                    DBG_ASSERT( !mbThisHasFocus, "AccessibleTextHelper_Impl::UpdateSelection: editing, but focus on parent" );
+                    // #103998# Not that important, changed from assertion to trace
+                    if( mbThisHasFocus )
+                        DBG_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
 
                     // notify all affected paragraphs (TODO: may be suboptimal,
                     // since some paragraphs might stay selected)
@@ -617,10 +631,10 @@ namespace accessibility
                                                  aOldCursor );
                     }
 
-                    maLastSelection = aSelection;
-
                     DBG_TRACE5("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
                                this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
+
+                    maLastSelection = aSelection;
                 }
             }
         }
