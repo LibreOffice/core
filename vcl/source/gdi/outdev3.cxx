@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:09:45 $
+ *  last change: $Author: hdu $ $Date: 2002-10-30 14:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6887,17 +6887,18 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     SalLayout* pSalLayout = NULL;
 
     // calculate offset when nBase!=nIndex
-    // TODO: fix offset calculation for Bidi case
     long nXOffset = 0;
     if( nBase != nIndex )
     {
         xub_StrLen nStart = std::min( nBase, nIndex );
-        xub_StrLen nLength = std::max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nLength, Point(0,0) );
+        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0) );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->FillDXArray( NULL );
+            nXOffset /= pSalLayout->GetUnitsPerPixel();
             pSalLayout->Release();
+            // TODO: fix offset calculation for Bidi case
             if( nBase > nIndex)
                 nXOffset = -nXOffset;
         }
@@ -6925,10 +6926,11 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
                     = static_cast< long >(aPixelRect.Top() * fFactor);
                 aPixelRect.Bottom()
                     = static_cast< long >(aPixelRect.Bottom() * fFactor);
-                nXOffset /= nWidthFactor;
             }
 
-            aPixelRect += Point( mnTextOffX + nXOffset, mnTextOffY );
+            Point aRotatedOfs = pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
+            aRotatedOfs += Point( mnTextOffX, mnTextOffY );
+            aPixelRect += aRotatedOfs;
             rRect = ImplDevicePixelToLogic( aPixelRect );
         }
 
@@ -7081,17 +7083,17 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     SalLayout* pSalLayout = NULL;
 
     // calculate offset when nBase!=nIndex
-    // TODO: fix offset calculation for Bidi case
     long nXOffset = 0;
     if( nBase != nIndex )
     {
         xub_StrLen nStart = std::min( nBase, nIndex );
-        xub_StrLen nLength = std::max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nLength, Point(0,0) );
+        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0) );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->FillDXArray( NULL );
             pSalLayout->Release();
+            // TODO: fix offset calculation for Bidi case
             if( nBase > nIndex)
                 nXOffset = -nXOffset;
         }
@@ -7110,10 +7112,10 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
 
             if( nXOffset | mnTextOffX | mnTextOffY )
             {
-                Point aOffset( mnTextOffX*nWidthFactor + nXOffset,
-                               mnTextOffY*nWidthFactor );
+                Point aRotatedOfs = pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
+                aRotatedOfs += Point( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
                 for( aIt = rVector.begin(); aIt != rVector.end(); ++aIt )
-                    aIt->Move( aOffset.X(), aOffset.Y() );
+                    aIt->Move( aRotatedOfs.X(), aRotatedOfs.Y() );
             }
 
             if( nWidthFactor > 1 )
