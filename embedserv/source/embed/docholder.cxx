@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-27 16:18:27 $
+ *  last change: $Author: abi $ $Date: 2003-03-31 13:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -252,8 +255,13 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
 
 void DocumentHolder::show()
 {
-    if(m_xFrame.is())
+    if(m_xFrame.is()) {
         m_xFrame->activate();
+        uno::Reference<awt::XTopWindow> xTopWindow(
+            m_xFrame->getContainerWindow(),uno::UNO_QUERY);
+        if(xTopWindow.is())
+            xTopWindow->toFront();
+    }
     else {
         uno::Reference<frame::XComponentLoader> xComponentLoader(
             DocumentFrame(),uno::UNO_QUERY);
