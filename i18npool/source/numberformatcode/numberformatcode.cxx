@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:23:00 $
+ *  last change: $Author: er $ $Date: 2001-11-12 16:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,3 +319,28 @@ NumberFormatCodeMapper::createLocaleDataObject() {
             x >>= xlocaleData;
     }
 }
+
+::rtl::OUString SAL_CALL
+NumberFormatCodeMapper::getImplementationName(void)
+                throw( ::com::sun::star::uno::RuntimeException )
+{
+    return ::rtl::OUString::createFromAscii("com.sun.star.i18n.NumberFormatCodeMapper");
+}
+
+const sal_Char cNumFormat[] = "com.sun.star.i18n.NumberFormatMapper";
+
+sal_Bool SAL_CALL
+NumberFormatCodeMapper::supportsService(const rtl::OUString& rServiceName)
+                throw( ::com::sun::star::uno::RuntimeException )
+{
+    return !rServiceName.compareToAscii(cNumFormat);
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+NumberFormatCodeMapper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
+    aRet[0] = ::rtl::OUString::createFromAscii(cNumFormat);
+    return aRet;
+}
+

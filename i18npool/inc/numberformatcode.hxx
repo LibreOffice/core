@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:22:59 $
+ *  last change: $Author: er $ $Date: 2001-11-12 16:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
@@ -73,10 +73,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
-class NumberFormatCodeMapper : public cppu::WeakImplHelper1
+class NumberFormatCodeMapper : public cppu::WeakImplHelper2
 <
-    ::com::sun::star::i18n::XNumberFormatCode
+    ::com::sun::star::i18n::XNumberFormatCode,
+    ::com::sun::star::lang::XServiceInfo
 >
 {
 public:
@@ -88,6 +92,14 @@ public:
     virtual ::com::sun::star::i18n::NumberFormatCode SAL_CALL getFormatCode( sal_Int16 nFormatIndex, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > SAL_CALL getAllFormatCode( sal_Int16 nFormatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > SAL_CALL getAllFormatCodes( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
+                throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+                throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+                throw( ::com::sun::star::uno::RuntimeException );
 
 private:
     ::com::sun::star::lang::Locale aLocale;
