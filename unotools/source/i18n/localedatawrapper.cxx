@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:39:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_I18N_NUMBERFORMATINDEX_HPP_
 #include <com/sun/star/i18n/NumberFormatIndex.hdl>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #define LOCALEDATA_LIBRARYNAME "i18npool"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
@@ -124,11 +127,18 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
-uno::Sequence< lang::Locale > LocaleDataWrapper::xInstalledLocales =
-    uno::Sequence< lang::Locale >(0);
-uno::Sequence< sal_uInt16 > LocaleDataWrapper::xInstalledLanguageTypes =
-    uno::Sequence< sal_uInt16 >(0);
+namespace
+{
+    struct InstalledLocales
+        : public rtl::Static<
+            uno::Sequence< lang::Locale >, InstalledLocales >
+    {};
 
+    struct InstalledLanguageTypes
+        : public rtl::Static<
+            uno::Sequence< sal_uInt16 >, InstalledLanguageTypes >
+    {};
+}
 
 LocaleDataWrapper::LocaleDataWrapper(
             const Reference< lang::XMultiServiceFactory > & xSF,
@@ -403,13 +413,15 @@ void LocaleDataWrapper::invalidateData()
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
 {
-    if ( xInstalledLocales.getLength() )
-        return xInstalledLocales;
+    uno::Sequence< lang::Locale > &rInstalledLocales = InstalledLocales::get();
+
+    if ( rInstalledLocales.getLength() )
+        return rInstalledLocales;
 
     try
     {
         if ( xLD.is() )
-            xInstalledLocales = xLD->getAllInstalledLocaleNames();
+            rInstalledLocales = xLD->getAllInstalledLocaleNames();
     }
     catch ( Exception& e )
     {
@@ -419,7 +431,7 @@ void LocaleDataWrapper::invalidateData()
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
     }
-    return xInstalledLocales;
+    return rInstalledLocales;
 }
 
 
@@ -428,20 +440,25 @@ void LocaleDataWrapper::invalidateData()
 // static
 ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > LocaleDataWrapper::getInstalledLocaleNames()
 {
-    if ( !xInstalledLocales.getLength() )
+    const uno::Sequence< lang::Locale > &rInstalledLocales =
+        InstalledLocales::get();
+
+    if ( !rInstalledLocales.getLength() )
     {
         LocaleDataWrapper aLDW( ::comphelper::getProcessServiceFactory(), lang::Locale() );
         aLDW.getAllInstalledLocaleNames();
     }
-    return xInstalledLocales;
+    return rInstalledLocales;
 }
-
 
 // static
 ::com::sun::star::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
 {
-    if ( xInstalledLanguageTypes.getLength() )
-        return xInstalledLanguageTypes;
+    uno::Sequence< sal_uInt16 > &rInstalledLanguageTypes =
+        InstalledLanguageTypes::get();
+
+    if ( rInstalledLanguageTypes.getLength() )
+        return rInstalledLanguageTypes;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
         getInstalledLocaleNames();
@@ -531,11 +548,10 @@ void LocaleDataWrapper::invalidateData()
     }
     if ( nLanguages < nCount )
         xLang.realloc( nLanguages );
-    xInstalledLanguageTypes = xLang;
+    rInstalledLanguageTypes = xLang;
 
-    return xInstalledLanguageTypes;
+    return rInstalledLanguageTypes;
 }
-
 
 const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {
