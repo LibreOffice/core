@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:21:28 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,13 +381,26 @@ namespace svxform
     }
 
     //----------------------------------------------------------------
-    Reference< XConnection > OStaticDataAccessTools::getComponentContextConnection( const Reference< XInterface >& _rxComponent )
+    bool OStaticDataAccessTools::isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Reference< XConnection >& _rxActualConnection )
     {
-        Reference< XConnection > xReturn;
+        bool bReturn = false;
         checkIfLoaded();
         if ( m_xDataAccessTools.is() )
-            xReturn = m_xDataAccessTools->getComponentContextConnection( _rxComponent );
-        return xReturn;
+            bReturn = m_xDataAccessTools->isEmbeddedInDatabase( _rxComponent, _rxActualConnection );
+        return bReturn;
+    }
+
+    //----------------------------------------------------------------
+    bool OStaticDataAccessTools::isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent )
+    {
+        bool bReturn = false;
+        checkIfLoaded();
+        if ( m_xDataAccessTools.is() )
+        {
+            Reference< XConnection > xDummy;
+            bReturn = m_xDataAccessTools->isEmbeddedInDatabase( _rxComponent, xDummy );
+        }
+        return bReturn;
     }
 
 //........................................................................
