@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 09:08:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 09:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,14 @@
 #include <unotools/ucblockbytes.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/dialogs/FilePickerElementID.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -147,7 +147,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 

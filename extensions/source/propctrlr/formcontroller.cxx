@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:30:29 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 09:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,14 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/dialogs/FilePickerElementID.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -269,7 +269,7 @@ namespace pcr
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
-    using namespace ::com::sun::star::ui;
+    using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
@@ -2519,6 +2519,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2001/06/11 11:30:29  fs
+ *  #86096# moved the functionallity of ChangeFontProperty to the ControlCharacterDialog
+ *
  *  Revision 1.33  2001/06/08 12:23:34  fs
  *  #86096# corrected setting the FontSlant
  *
