@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:50:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ arabic ] = "ÍŞæá";
         Text[ dutch ] = "~Velden";
         Text[ chinese_simplified ] = "å­—æ®µ(~F)";
-        Text[ greek ] = "Ğåäßá";
+        Text[ greek ] = "Ğå~äßá";
         Text[ korean ] = "í•„ë“œ(~F)";
         Text[ turkish ] = "~Alanlar";
         Text[ catalan ] = "~Camps";
@@ -297,7 +297,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ dutch ] = "Op~maak";
         Text[ chinese_simplified ] = "æ ¼å¼(~M)";
-        Text[ greek ] = "~ÌïñöŞ";
+        Text[ greek ] = "Ìïñ~öŞ";
         Text[ korean ] = "ì„œì‹(~M)";
         Text[ turkish ] = "For~mat";
         Text[ catalan ] = "For~mat";
@@ -509,7 +509,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     {
         Pos = MAP_APPFONT ( 137 , 31 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        
+
         Text = "Tabe~llenspalte(n)" ;
         Text [ ENGLISH ] = "Tab~le column(s)" ;
         Text [ english_us ] = "Tab~le column(s)" ;
@@ -563,7 +563,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ english_us ] = "Insert table heading";
         Text[ portuguese ] = "Inserir título da tabela";
         Text[ russian ] = "Âñòàâèòü çàãîëîâîê òàáëèöû";
-        Text[ greek ] = "Åíåñãïğïßçóç";
+        Text[ greek ] = "ÅéóáãùãŞ åğéêåöáëßäáò ğßíáêá";
         Text[ dutch ] = "Tabelopschrift invoegen";
         Text[ french ] = "Insérer le titre de la table";
         Text[ spanish ] = "Insertar encabezado de tabla";
@@ -597,7 +597,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ english_us ] = "Apply column ~name";
         Text[ portuguese ] = "~Aplicar nomes das colunas";
         Text[ russian ] = "Ïğèíÿòü èìåíà ñòîëáöîâ";
-        Text[ greek ] = "Ïíüìáôá óôŞëçò";
+        Text[ greek ] = "ÅöáñìïãŞ ïíüìá~ôïò óôŞëçò";
         Text[ dutch ] = "K~olomnaam overnemen";
         Text[ french ] = "Appliquer les noms des colonnes";
         Text[ spanish ] = "Aplicar ~nombres de columnas";
@@ -630,7 +630,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ english_us ] = "Create row only";
         Text[ portuguese ] = "~Criar só uma linha";
         Text[ russian ] = "Ñîçäàòü òîëüêî ñòğîêó";
-        Text[ greek ] = "êåíü";
+        Text[ greek ] = "Äçìéïõñãßá ìüíï ãñáììŞò";
         Text[ dutch ] = "Lege regel invoegen";
         Text[ french ] = "Créer uniquement une ligne";
         Text[ spanish ] = "Crear sólo fila";
@@ -647,7 +647,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ turkish ] = "Sadece sütun oluştur";
         Text[ arabic ] = "İÇÑÛ";
         Text[ catalan ] = "~buit";
-        Text[ language_user1 ] = "(EM1; (EM1; (EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle auswählen und mindestens eine Zeile selektieren. Danach den Button “Daten in Text” drücken. Dann erscheint der Dialog “Datenbankspalten einfügen”. Optionsfeld “Tabelle” auswählen.";
+        Text[ language_user1 ] = "; (EM1; (EM1; (EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle auswählen und mindestens eine Zeile selektieren. Danach den Button “Daten in Text” drücken. Dann erscheint der Dialog “Datenbankspalten einfügen”. Optionsfeld “Tabelle” auswählen.";
         Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸šà¸£à¸£à¸—à¸±à¸”à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
         Text[ czech ] = "VytvoÅ™it jen Å™Ã¡dek";
         Text[ hebrew ] = "Nur Zeile erstellen";
@@ -773,7 +773,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ arabic ] = "ÅÏÑÇÌ ÃÚãÏÉ ŞÇÚÏÉ ÈíÇäÇÊ";
     Text[ dutch ] = "Databasekolommen invoegen";
     Text[ chinese_simplified ] = "æ’å…¥æ•°æ®åº“æ ä½";
-    Text[ greek ] = "ĞñïóèŞêç óôçëşí âÜóçò äåäïìİíùí";
+    Text[ greek ] = "ÅéóáãùãŞ óôçëşí âÜóçò äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì—´ ì‚½ì…";
     Text[ turkish ] = "Veritabanı sütunu ekle";
     Text[ catalan ] = "Insereix les columnes de la base de dades";
@@ -784,6 +784,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤¸à¥à¤¤à¤‚à¤­à¥‹à¤‚ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
     Text[ slovak ] = "VloÅ¾iÅ¥ stÄºpce databÃ¡zy";
 };
+
 
 
 
