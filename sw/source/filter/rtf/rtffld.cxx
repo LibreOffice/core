@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:08:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 11:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,6 @@
 #include <svx/fhgtitem.hxx>
 #endif
 
-#ifndef _REFFLD_HXX //autogen wg. SwGetRefField
-#include <reffld.hxx>
-#endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
 #endif
@@ -145,6 +142,9 @@
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
+#endif
+#ifndef _REFFLD_HXX //autogen wg. SwGetRefField
+#include <reffld.hxx>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -936,9 +936,13 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 }
             }
             SwGetRefField aFld(
-                (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
-                sOrigBkmName,REF_BOOKMARK,0,REF_PAGE);
-            pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+                    (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
+                    sOrigBkmName,REF_BOOKMARK,0,REF_PAGE);
+
+            if(!bNestedField)
+                pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+            else
+                bNestedField = false;
         }
         break;
 
@@ -1092,8 +1096,12 @@ void SwRTFParser::ReadField()
                     case RTFFLD_HYPERLINK:
                         if( sFieldStr.Len() )
                         {
+                            if(sNestedFieldStr.Len())
+                                sFieldStr.Insert(sNestedFieldStr);
+
+                            sNestedFieldStr.Erase();
                             // im FieldStr steht der anzuzeigenden Text, im
-                            pDoc->Insert( *pPam, sFieldStr );
+                             pDoc->Insert( *pPam, sFieldStr );
 
                             String sTarget( sFieldNm.GetToken( 1, '\1' ));
                             if( sTarget.Len() )
@@ -1106,10 +1114,21 @@ void SwRTFParser::ReadField()
                                             SwFmtINetFmt( sFieldNm, sTarget ),
                                             SETATTR_DONTEXPAND );
                             pPam->DeleteMark();
+
                         }
                         break;
                     }
                 }
+                else if(bNestedField)
+                {
+                    if(nRet == RTFFLD_PAGEREF)
+                    {
+                        // #17371 Nasty hack to get a pageref within a hyperlink working
+                        sNestedFieldStr = sFieldStr;
+                    }
+
+                }
+
             }
             break;
 
@@ -1132,8 +1151,12 @@ void SwRTFParser::ReadField()
             break;
 
         case RTF_DATAFIELD:
-        case RTF_FIELD:
             SkipGroup();
+            break;
+
+        case RTF_FIELD:
+            bNestedField = true;
+            ReadField();
             break;
 
         case RTF_FLDINST:
