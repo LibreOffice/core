@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:51:22 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 10:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_CONDCOLL
         Text[ chinese_traditional ] = "·ν§@¦³±ψ¥σªΊΌΛ¦΅(~S)";
         Text[ arabic ] = "ίδγΨ γΤΡζΨ";
         Text[ greek ] = "Ως εξαρτώμενο πρότυπο";
-        Text[ korean ] = "Α¶°Ηΐϋ ΐ―Ηό(~C)";
+        Text[ korean ] = "Α¶°Ηΐϋ ΐ―Ηό";
         Text[ turkish ] = "~Koώullu biηim olarak";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are capitalized. EM15.5.00";
     };
@@ -121,7 +121,7 @@ TabPage TP_CONDCOLL
         Text[ japanese ] = "ΊέΓ·½Δ(~C)";
         Text[ chinese_traditional ] = "¤W¤U¤ε(~C)";
         Text[ arabic ] = "ΗαΣνΗή";
-        Text[ greek ] = "Συμφραζόμενα";
+        Text[ greek ] = "Περιβάλλον";
         Text[ korean ] = "³»Ώλ(~C)";
         Text[ turkish ] = "Baπlam";
         Text[ language_user1 ] = " ";
