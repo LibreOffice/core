@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:05:06 $
+#   last change: $Author: obo $ $Date: 2003-10-20 17:12:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,14 +67,14 @@ TARGET=fop
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/types.rdb
+UNOUCROUT=$(OUT)$/inc$/fop
+INCPRE+=$(OUT)$/inc$/fop
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-.INCLUDE : ..$/..$/cppumaker.mk
 
 # enable rtti
 CFLAGS+=-GR
