@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:08:37 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,16 +120,30 @@
 #include "sddll.hxx"
 #include "pres.hxx"
 #include "optsitem.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "sdattr.hxx"
 #include "sdpage.hxx"
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "assclass.hxx"
 #include "dlgass.hxx"
 #include "sdresid.hxx"
-#include "outlnvsh.hxx"
-#include "frmview.hxx"
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_FACTORY_IDS_HXX
+#include "FactoryIds.hxx"
+#endif
 
 
 /*************************************************************************
@@ -163,7 +177,7 @@ void SdModule::Execute(SfxRequest& rReq)
             {
                 BOOL bOnlineSpelling = ( (const SfxBoolItem*) pItem )->GetValue();
                 // am Dokument sichern:
-                SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+                ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if( pDocSh )
                 {
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
@@ -181,7 +195,7 @@ void SdModule::Execute(SfxRequest& rReq)
             {
                 BOOL bHideSpell = ( (const SfxBoolItem*) pItem )->GetValue();
                 // am Dokument sichern:
-                SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+                ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if( pDocSh )
                 {
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
@@ -205,7 +219,7 @@ void SdModule::Execute(SfxRequest& rReq)
                     case FUNIT_PICA:
                     case FUNIT_POINT:
                         {
-                            SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+                            ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
                             if(pDocSh)
                             {
                                 DocumentType eDocType = pDocSh->GetDoc()->GetDocumentType();
@@ -235,7 +249,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, FALSE, &pItem ) )
             {
                 // am Dokument sichern:
-                SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+                ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if ( pDocSh )
                 {
                     LanguageType eLanguage = ( (SvxLanguageItem*)pItem )->GetValue();
@@ -270,8 +284,10 @@ void SdModule::Execute(SfxRequest& rReq)
                 if( bNewDocDirect && !bStartWithTemplate )
                 {
                     SfxObjectShellLock xDocShell;
-                    SdDrawDocShell* pNewDocSh;
-                    xDocShell = pNewDocSh = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD, FALSE);
+                    ::sd::DrawDocShell* pNewDocSh;
+                    xDocShell = pNewDocSh = new ::sd::DrawDocShell(
+                        SFX_CREATE_MODE_STANDARD,
+                        FALSE);
                     if(pNewDocSh)
                     {
                         pNewDocSh->DoInitNew(NULL);
@@ -413,16 +429,20 @@ void SdModule::Execute(SfxRequest& rReq)
 
                     if( pShell && pViewFrame )
                     {
-                        SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,pShell);
+                        ::sd::DrawDocShell* pDocShell =
+                              PTR_CAST(::sd::DrawDocShell,pShell);
                         SdDrawDocument* pDoc = pDocShell->GetDoc();
 
-                        SdViewShell* pViewSh = (SdViewShell*) pViewFrame->GetViewShell();
+                        ::sd::ViewShell* pViewSh =
+                              ::sd::ViewShellBase::GetMainViewShell (
+                                  pViewFrame);
                         SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
 
                         if (pOptions && pViewSh)
                         {
                             // The AutoPilot-document shall be open without its own options
-                            FrameView* pFrameView = pViewSh->GetFrameView();
+                            ::sd::FrameView* pFrameView =
+                                  pViewSh->GetFrameView();
                             pFrameView->Update(pOptions);
                             pViewSh->ReadFrameViewData(pFrameView);
                         }
@@ -614,10 +634,10 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_OPENDOC:
         {
             BOOL bIntercept = FALSE;
-            SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+            ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
             if (pDocShell)
             {
-                SdViewShell* pViewShell = pDocShell->GetViewShell();
+                ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
                 if (pViewShell)
                 {
                     if (pViewShell->GetSlideShow())
@@ -628,51 +648,6 @@ void SdModule::Execute(SfxRequest& rReq)
                             // e.g. open button during a presentation.
                             bIntercept = TRUE;
                         }
-                        /* Since #110295# the following block is not
-                           necessary anymore: Star/OpenOffice
-                           documents can be opened during a show.
-
-                        else
-                        {
-                            String aBookmark(((SfxStringItem&)pSet->Get(SID_FILE_NAME)).GetValue());
-
-                            // interner Sprung?
-                            String aDocName(aBookmark.GetToken(0, '#'));
-                            if (aBookmark.Search( '#' ) != STRING_NOTFOUND &&
-                                aDocName.Len() > 0 &&
-                                pDocShell->GetMedium()->GetName() != aDocName &&
-                                pDocShell->GetName() != aDocName              &&
-                                aDocName.Search( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".wav" ) ) ) == STRING_NOTFOUND )
-                            {
-                                bIntercept = TRUE;
-
-                                // nur ein Frame in meinem Doc?
-                                SFX_REQUEST_ARG(rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                                if (pFrmItem)
-                                {
-                                    SfxFrame* pFrame = pFrmItem->GetFrame();
-                                    SFX_REQUEST_ARG(rReq, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
-                                    if (pTargetItem)
-                                    {
-                                        pFrame = pFrame->SearchFrame(pTargetItem->GetValue());
-                                    }
-
-                                    SfxFrame* pMyFrame = pViewShell->GetViewFrame()->GetFrame();
-                                    SfxFrame* pParent = pFrame->GetParentFrame();
-
-                                    while (pParent)
-                                    {
-                                        if (pParent == pMyFrame)
-                                        {
-                                            bIntercept = FALSE;
-                                            break;
-                                        }
-                                        pParent = pParent->GetParentFrame();
-                                    }
-                                }
-                            }
-                        }
-                        */
                     }
                 }
             }
@@ -693,84 +668,8 @@ void SdModule::Execute(SfxRequest& rReq)
         break;
 
         case SID_OUTLINE_TO_IMPRESS:
-        {
-            const SfxItemSet* pSet = rReq.GetArgs();
-
-            if (pSet)
-            {
-                SvLockBytes* pBytes = ((SfxLockBytesItem&) pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
-
-                if (pBytes)
-                {
-                    SfxObjectShellLock xDocShell;
-                    SdDrawDocShell* pDocSh;
-                    xDocShell = pDocSh = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD, FALSE);
-                    if(pDocSh)
-                    {
-                        pDocSh->DoInitNew(NULL);
-                        SdDrawDocument* pDoc = pDocSh->GetDoc();
-                        if(pDoc)
-                        {
-                            pDoc->CreateFirstPages();
-                            pDoc->StopWorkStartupDelay();
-                        }
-
-                        SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                        if ( pFrmItem )
-                        {
-                            SfxFrame* pFrame = pFrmItem->GetFrame();
-                            pFrame->InsertDocument( pDocSh );
-                        }
-                        else
-                            SFX_APP()->CreateViewFrame( *pDocSh );
-
-                        SdViewShell* pViewSh = pDocSh->GetViewShell();
-
-                        if (pViewSh)
-                        {
-                            // AutoLayouts muessen fertig sein
-                            SdDrawDocument* pDoc = pDocSh->GetDoc();
-                            pDoc->StopWorkStartupDelay();
-
-                            // hide preview
-                            SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-                            SfxBoolItem aItem( SID_PREVIEW_WIN, FALSE );
-                            pViewFrame->GetDispatcher()->Execute( SID_PREVIEW_WIN, SFX_CALLMODE_SYNCHRON |
-                                                    SFX_CALLMODE_RECORD, &aItem, 0L );
-
-                            // In den Gliederungsmodus wechseln
-                            pViewFrame->GetDispatcher()->Execute(
-                            SID_VIEWSHELL2, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
-
-                            // OutlineViewShell holen
-                            SdOutlineViewShell* pViewSh = PTR_CAST(SdOutlineViewShell, pViewFrame->GetViewShell());
-
-                            if (pViewSh)
-                            {
-                                SvStream* pStream = (SvStream*) pBytes->GetStream();
-                                if ( pViewSh->Read(*pStream, EE_FORMAT_RTF) == 0 )
-                                {
-                                    // Remove the first empty pages
-                                    USHORT nPageCount = pDoc->GetPageCount();
-                                    pDoc->RemovePage( --nPageCount );  // notes page
-                                    pDoc->RemovePage( --nPageCount );  // standard page
-                                }
-                            }
-                        }
-
-                        // #97231# Undo-Stack needs to be cleared, else the user may remove the
-                        // only drawpage and this is a state we cannot handle ATM.
-                        SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
-                        DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
-                        if(pUndoManager->GetUndoActionCount())
-                            pUndoManager->Clear();
-                    }
-                }
-            }
-
-            rReq.IsDone();
-        }
-        break;
+            OutlineToImpress (rReq);
+            break;
 
         default:
         break;
@@ -782,6 +681,96 @@ void SdModule::Execute(SfxRequest& rReq)
         rReq.SetReturnValue(SfxFrameItem(0, pFrame));
     }
 }
+
+
+
+
+void SdModule::OutlineToImpress (SfxRequest& rRequest)
+{
+    const SfxItemSet* pSet = rRequest.GetArgs();
+
+    if (pSet)
+    {
+        SvLockBytes* pBytes = ((SfxLockBytesItem&) pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
+
+        if (pBytes)
+        {
+            SfxObjectShellLock xDocShell;
+            ::sd::DrawDocShell* pDocSh;
+            xDocShell = pDocSh = new ::sd::DrawDocShell(
+                SFX_CREATE_MODE_STANDARD, FALSE);
+            if(pDocSh)
+            {
+                pDocSh->DoInitNew(NULL);
+                SdDrawDocument* pDoc = pDocSh->GetDoc();
+                if(pDoc)
+                {
+                    pDoc->CreateFirstPages();
+                    pDoc->StopWorkStartupDelay();
+                }
+
+                SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+                if ( pFrmItem )
+                {
+                    SfxFrame* pFrame = pFrmItem->GetFrame();
+                    pFrame->InsertDocument( pDocSh );
+                }
+                else
+                    SFX_APP()->CreateViewFrame(*pDocSh,
+                        ::sd::OUTLINE_FACTORY_ID);
+
+                ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
+
+                if (pViewSh)
+                {
+                    // AutoLayouts muessen fertig sein
+                    SdDrawDocument* pDoc = pDocSh->GetDoc();
+                    pDoc->StopWorkStartupDelay();
+
+                    SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
+
+                    // When the view frame has not been just created
+                    // we have to switch synchronously to the outline
+                    // view.  (Otherwise the request will be ignored
+                    // anyway.)
+                    ::sd::ViewShellBase* pBase =
+                          static_cast< ::sd::ViewShellBase*>(
+                              pViewFrame->GetViewShell());
+                    pBase->GetSubShellManager().RequestMainSubShellChange (
+                        ::sd::ViewShell::ST_OUTLINE);
+
+                    // Fetch the new outline view shell.
+                    ::sd::OutlineViewShell* pViewShell =
+                          PTR_CAST(::sd::OutlineViewShell,
+                              pBase->GetSubShellManager().GetMainSubShell());
+
+                    if (pViewShell != NULL)
+                    {
+                        SvStream* pStream = (SvStream*) pBytes->GetStream();
+                        if ( pViewShell->Read(*pStream, EE_FORMAT_RTF) == 0 )
+                        {
+                            // Remove the first empty pages
+                            USHORT nPageCount = pDoc->GetPageCount();
+                            pDoc->RemovePage( --nPageCount );  // notes page
+                            pDoc->RemovePage( --nPageCount );  // standard page
+                        }
+                    }
+                }
+
+                // #97231# Undo-Stack needs to be cleared, else the user may remove the
+                // only drawpage and this is a state we cannot handle ATM.
+                SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
+                DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
+                if(pUndoManager->GetUndoActionCount())
+                    pUndoManager->Clear();
+            }
+        }
+    }
+
+    rRequest.IsDone();
+}
+
+
 
 
 /*************************************************************************
@@ -801,10 +790,10 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         }
         else
         {
-            SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+            ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
             if (pDocShell)
             {
-                SdViewShell* pViewShell = pDocShell->GetViewShell();
+                ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
                 if (pViewShell)
                 {
                     if (pViewShell->GetSlideShow())
@@ -818,7 +807,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
 
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_METRIC ) )
     {
-        SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
         if(pDocSh)
         {
             DocumentType eDocType = pDocSh->GetDoc()->GetDocumentType();
@@ -839,7 +828,8 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) ||
         SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_MARKOFF ) )
     {
-        SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocSh =
+              PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
         {
             SdDrawDocument* pDoc = pDocSh->GetDoc();
@@ -850,21 +840,21 @@ void SdModule::GetState(SfxItemSet& rItemSet)
 
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_LANGUAGE ) )
     {
-        SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE ) );
     }
 
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE ) )
     {
-        SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CJK ), SID_ATTR_CHAR_CJK_LANGUAGE ) );
     }
 
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE ) )
     {
-        SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CTL ), SID_ATTR_CHAR_CTL_LANGUAGE ) );
     }
@@ -891,7 +881,8 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
         OSL_ASSERT (pTemplatePage!=NULL);
 
         // The summary page, if it exists, is the last page.
-        SdPage* pSummaryPage = pDocument->GetSdPage (nPageCount-1, PK_STANDARD);
+        SdPage* pSummaryPage = pDocument->GetSdPage (
+            (USHORT)nPageCount-1, PK_STANDARD);
         OSL_ASSERT (pSummaryPage!=NULL);
 
         // Take the change mode of the template page as indication of the
