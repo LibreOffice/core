@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 16:19:41 $
+#   last change: $Author: hr $ $Date: 2004-05-10 13:17:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,6 +140,7 @@ IDLFILES=\
     KeyGroup.idl\
     KeyModifier.idl\
     KeyStroke.idl\
+    LineEndFormat.idl\
     MenuEvent.idl\
     MenuItemStyle.idl\
     MessageBoxCommand.idl\
