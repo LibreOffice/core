@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: os $ $Date: 2002-06-11 08:38:12 $
+ *  last change: $Author: os $ $Date: 2002-06-11 10:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1671,7 +1671,7 @@ TabPage TP_STD_FONT
     };
     String ST_SCRIPT_CTL
     {
-        Text = "CTL" ;
+        Text = "komplexe Skripte" ;
         Text [ English ] = "CTL" ;
     };
     String ST_SCRIPT_WESTERN
