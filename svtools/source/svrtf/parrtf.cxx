@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:16:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 {
     String aStrBuffer;
     int bWeiter = true;
-    while( bWeiter && IsParserWorking() )
+    while( bWeiter && IsParserWorking() && aStrBuffer.Len() < MAX_STRING_LEN)
     {
         int bNextCh = true;
         switch( nNextCh )
@@ -495,7 +495,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             break;
 
         default:
-            if( nNextCh == cBreak || aToken.Len() >= MAX_STRING_LEN)
+            if( nNextCh == cBreak || aStrBuffer.Len() >= MAX_STRING_LEN)
                 bWeiter = false;
             else
             {
@@ -509,7 +509,11 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             aToken += aStrBuffer;
                         return;
                     }
-                } while( RTF_ISALPHA( nNextCh ) || RTF_ISDIGIT( nNextCh ) );
+                } while
+                (
+                    (RTF_ISALPHA(nNextCh) || RTF_ISDIGIT(nNextCh)) &&
+                    (aStrBuffer.Len() < MAX_STRING_LEN)
+                );
                 bNextCh = false;
             }
         }
