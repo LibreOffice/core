@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:29:38 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,13 @@ XclImpObjectManager& XclImpRoot::GetObjectManager() const
     if( !mrImpData.mpObjManager.get() )
         mrImpData.mpObjManager.reset( new XclImpObjectManager( GetRoot() ) );
     return *mrImpData.mpObjManager;
+}
+
+XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
+{
+    if( !mrImpData.mpCondFmtManager.get() )
+        mrImpData.mpCondFmtManager.reset( new XclImpCondFormatManager( GetRoot() ) );
+    return *mrImpData.mpCondFmtManager;
 }
 
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
