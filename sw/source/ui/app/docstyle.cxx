@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:32:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@
 
 // Ausserdem gibt es jetzt zusaetzlich das Bit bPhysical. Ist dieses Bit
 // TRUE, werden die Pool-Formatnamen NICHT mit eingetragen.
-
 
 class SwImplShellAction
 {
@@ -1734,7 +1733,7 @@ BOOL SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
  --------------------------------------------------------------------*/
 
 
-void   SwDocStyleSheet::Create()
+void SwDocStyleSheet::Create()
 {
     switch(nFamily)
     {
@@ -1761,8 +1760,8 @@ void   SwDocStyleSheet::Create()
         case SFX_STYLE_FAMILY_FRAME:
             pFrmFmt = lcl_FindFrmFmt( rDoc, aName );
             if( !pFrmFmt )
-                pFrmFmt = rDoc.MakeFrmFmt(aName, rDoc.GetDfltFrmFmt());
-            pFrmFmt->SetAuto( FALSE );
+                pFrmFmt = rDoc.MakeFrmFmt(aName, rDoc.GetDfltFrmFmt(), FALSE);
+
             break;
 
         case SFX_STYLE_FAMILY_PAGE :
@@ -2674,6 +2673,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         for( USHORT i = 0; i < nArrLen; i++ )
         {
             SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
+
             if(pFmt->IsDefault() || pFmt->IsAuto())
             {
                 continue;
