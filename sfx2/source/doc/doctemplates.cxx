@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 15:07:40 $
+ *  last change: $Author: dv $ $Date: 2001-03-28 08:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,8 @@ class SfxDocTplService_Impl
                                               Content& rParentFolder );
     sal_Bool                    addEntry( Content& rParentFolder,
                                           const OUString& rTitle,
-                                          const OUString& rTargetURL );
+                                          const OUString& rTargetURL,
+                                          const OUString& rType );
     void                        addToStandard( Content& rRoot,
                                                Content& rFolder );
 
@@ -532,7 +533,7 @@ void SfxDocTplService_Impl::getTemplates( Content& rTargetFolder,
                 if ( aFullTitle.len() )
                     aTitle = aFullTitle;
 
-                addEntry( rParentFolder, aTitle, aId );
+                addEntry( rParentFolder, aTitle, aId, aType );
             }
         }
         catch( CommandAbortedException& )
@@ -582,7 +583,8 @@ void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
 // -----------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
                                           const OUString& rTitle,
-                                          const OUString& rTargetURL )
+                                          const OUString& rTargetURL,
+                                          const OUString& rType )
 {
     sal_Bool bAddedEntry = sal_False;
 
@@ -609,10 +611,12 @@ sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
         pValues[2] = makeAny( rTargetURL );
 
         OUString aType( RTL_CONSTASCII_USTRINGPARAM( TYPE_LINK ) );
+        OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_TYPE ) );
 
         try
         {
             rParentFolder.insertNewContent( aType, aNames, aValues, aLink );
+            setProperty( aLink, aAdditionalProp, makeAny( rType ) );
             bAddedEntry = sal_True;
         }
         catch( CommandAbortedException& )
@@ -639,18 +643,17 @@ void SfxDocTplService_Impl::addToStandard( Content& rRoot,
 
     aNewFolderURL = aNewFolderObj.GetMainURL();
 
-    if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) &&
-         ! createFolder( aNewFolderURL, sal_False, sal_False, aFolder ) )
+    if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) )
     {
-        DBG_ERRORFILE( "addToStandard(): Could not create Folder!" );
-        return;
+        if ( ! createFolder( aNewFolderURL, sal_False, sal_False, aFolder ) )
+        {
+            DBG_ERRORFILE( "addToStandard(): Could not create Folder!" );
+            return;
+        }
+
+        OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+        setProperty( aFolder, aAdditionalProp, makeAny( aFolderURL ) );
     }
-
-    // Always set the target URL, because the last one should win!
-
-    OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-
-    setProperty( aFolder, aAdditionalProp, makeAny( aFolderURL ) );
 
     getTemplates( rFolder, aFolder );
 }
@@ -1088,6 +1091,28 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     if ( !aTargetURL.getLength() )
         return sal_False;
 
+    // Get the content type
+    OUString aTitle, aType;
+
+    getTitleFromURL( rSourceURL, aTitle, aType );
+
+    // addTemplate will sometimes be called just to add an entry in the
+    // hierarchy; the target URL and the source URL will be the same in
+    // this scenario
+
+    INetURLObject   aTargetObj( aTargetURL );
+    INetURLObject   aSourceObj( rSourceURL );
+
+    aTargetObj.insertName( rTemplateName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aTargetObj.setExtension( aSourceObj.getExtension() );
+
+    aTargetURL = aTargetObj.GetMainURL();
+
+    if ( aTargetURL == rSourceURL )
+        return addEntry( aGroup, rTemplateName, rSourceURL, aType );
+
     // copy the template into the new group (targeturl)
     try
     {
@@ -1110,7 +1135,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     { return FALSE; }
 
     // create a new entry in the hierarchy
-    return addEntry( aGroup, rTemplateName, rSourceURL );
+    return addEntry( aGroup, rTemplateName, rSourceURL, aType );
 }
 
 //-----------------------------------------------------------------------------
