@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-11-29 14:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,6 +654,7 @@ void SwHTMLParser::EndMarquee()
 
     // den gesammelten Text einfuegen
     ((SdrTextObj*)pMarquee)->SetText( aContents );
+    pMarquee->SetItemSetAndBroadcast( pMarquee->GetItemSet() );
 
     if( bFixMarqueeWidth )
     {
