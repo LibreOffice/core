@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:56:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2988,17 +2988,22 @@ FASTBOOL SdrObject::IsNode() const
 
 SdrGluePoint SdrObject::GetVertexGluePoint(USHORT nPosNum) const
 {
-    Rectangle aR(GetCurrentBoundRect());
+    // #i41936# Use SnapRect for default GluePoints
+    const Rectangle aR(GetSnapRect());
     Point aPt;
-    switch (nPosNum) {
-        case 0 : aPt=aR.TopCenter();    break;
-        case 1 : aPt=aR.RightCenter();  break;
-        case 2 : aPt=aR.BottomCenter(); break;
-        case 3 : aPt=aR.LeftCenter();   break;
+
+    switch(nPosNum)
+    {
+        case 0 : aPt = aR.TopCenter();    break;
+        case 1 : aPt = aR.RightCenter();  break;
+        case 2 : aPt = aR.BottomCenter(); break;
+        case 3 : aPt = aR.LeftCenter();   break;
     }
-    aPt-=GetSnapRect().Center();
+
+    aPt -= aR.Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(FALSE);
+
     return aGP;
 }
 
