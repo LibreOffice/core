@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 13:13:57 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,18 @@
 #ifndef _FLDDOK_HXX
 #include <flddok.hxx>
 #endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _ZFORMAT_HXX
+#include <svtools/zformat.hxx>
+#endif
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -136,6 +148,8 @@ SwFldDokPage::SwFldDokPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aLevelED.SetMax(MAXLEVEL);
     aDateOffsetED.SetMin(LONG_MIN);
     aDateOffsetED.SetMax(LONG_MAX);
+    //enable 'active' language selection
+    aNumFormatLB.SetShowLanguageControl(TRUE);
 }
 
 /*--------------------------------------------------------------------
@@ -193,13 +207,19 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& rSet)
     }
     else
     {
-        nTypeId = GetCurField()->GetTypeId();
+        const SwField* pCurField = GetCurField();
+        nTypeId = pCurField->GetTypeId();
         if (nTypeId == TYP_FIXDATEFLD)
             nTypeId = TYP_DATEFLD;
         if (nTypeId == TYP_FIXTIMEFLD)
             nTypeId = TYP_TIMEFLD;
         nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
         aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+        aNumFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
+        SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
+        const SvNumberformat* pFormat = rSh.GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+        if(pFormat)
+            aNumFormatLB.SetLanguage(pFormat->GetLanguage());
     }
 
     // alte Pos selektieren
@@ -711,7 +731,7 @@ BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& rSet)
         aLevelED.GetText() != aLevelED.GetSavedValue() ||
         aDateOffsetED.GetText() != aDateOffsetED.GetSavedValue())
     {
-        InsertFld( nTypeId, nSubType, aEmptyStr, aVal, nFormat );
+        InsertFld( nTypeId, nSubType, aEmptyStr, aVal, nFormat, ' ', aNumFormatLB.IsAutomaticLanguage() );
     }
 
     return FALSE;
@@ -756,6 +776,9 @@ void    SwFldDokPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/04/23 13:13:57  os
+    #86144# PageNumberField: selection of format corrected
+
     Revision 1.2  2001/02/09 07:44:09  os
     TabPage size changed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 14:52:21 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
+#ifndef _ZFORMAT_HXX
+#include <svtools/zformat.hxx>
+#endif
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -135,6 +138,8 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aTypeTLB.SetSpaceBetweenEntries(0);
 
     aTypeTLB.SetNodeDefaultImages();
+    //enable 'active' language selection
+    aFormatLB.SetShowLanguageControl(TRUE);
 }
 
 /*--------------------------------------------------------------------
@@ -167,7 +172,15 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& rSet)
     USHORT nSubType = USHRT_MAX;
 
     if (IsFldEdit())
-        nSubType = ((SwDocInfoField*)GetCurField())->GetSubType() & 0xff;
+    {
+        const SwField* pCurField = GetCurField();
+        nSubType = ((SwDocInfoField*)pCurField)->GetSubType() & 0xff;
+        aFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
+        SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
+        const SvNumberformat* pFormat = rSh.GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+        if(pFormat)
+            aFormatLB.SetLanguage(pFormat->GetLanguage());
+    }
 
     USHORT nSelEntryData = USHRT_MAX;
     String sUserData = GetUserData();
@@ -456,7 +469,8 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& rSet)
     if (!IsFldEdit() || nOldSel != aSelectionLB.GetSelectEntryPos() ||
         nOldFormat != nFormat || aFixedCB.GetState() != aFixedCB.GetSavedValue())
     {
-        InsertFld(nTypeId, nSubType, aEmptyStr, aEmptyStr, nFormat);
+        InsertFld(nTypeId, nSubType, aEmptyStr, aEmptyStr, nFormat,
+                ' ', aFormatLB.IsAutomaticLanguage());
     }
 
     return FALSE;
@@ -497,6 +511,9 @@ void    SwFldDokInfPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/07/19 14:52:21  gt
+    #101523# node default images for SwFldDokInfPage
+
     Revision 1.1.1.1  2000/09/18 17:14:36  hr
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #include <calc.hxx>
 #endif
 
+#ifndef _ZFORMAT_HXX
+#include <svtools/zformat.hxx>
+#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -165,6 +168,8 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
         aChapterLevelLB.InsertEntry(String::CreateFromInt32(i));
 
     aChapterLevelLB.SelectEntryPos(0);
+    //enable 'active' language selection
+    aNumFormatLB.SetShowLanguageControl(TRUE);
 }
 
 /*--------------------------------------------------------------------
@@ -210,11 +215,17 @@ void SwFldVarPage::Reset(const SfxItemSet& rSet)
     }
     else
     {
-        nTypeId = GetCurField()->GetTypeId();
+        SwField* pCurField = GetCurField();
+        nTypeId = pCurField->GetTypeId();
         if (nTypeId == TYP_SETINPFLD)
             nTypeId = TYP_INPUTFLD;
         nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
         aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+        aNumFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
+        SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
+        const SvNumberformat* pFormat = rSh.GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+        if(pFormat)
+            aNumFormatLB.SetLanguage(pFormat->GetLanguage());
     }
 
     // alte Pos selektieren
@@ -1218,7 +1229,7 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& rSet)
     {
         nFormat = aNumFormatLB.GetFormat();
 
-        if (nFormat && nFormat != ULONG_MAX)
+        if (nFormat && nFormat != ULONG_MAX && aNumFormatLB.IsAutomaticLanguage())
         {
             // Sprache auf Office-Sprache umstellen, da String im Office-
             // Format vom Kalkulator erwartet wird und so in den Dlg
@@ -1309,7 +1320,8 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& rSet)
         aChapterLevelLB.GetSavedValue() != aChapterLevelLB.GetSelectEntryPos() ||
         aSeparatorED.GetSavedValue() != aSeparatorED.GetText())
     {
-        InsertFld( nTypeId, nSubType, aName, aVal, nFormat, cSeparator );
+        InsertFld( nTypeId, nSubType, aName, aVal, nFormat,
+                    cSeparator, aNumFormatLB.IsAutomaticLanguage() );
     }
 
     UpdateSubType();
@@ -1397,6 +1409,9 @@ void SwFldVarPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/09/20 12:49:58  jp
+    Bug #89582#: handle field dialog activation correct
+
     Revision 1.6  2001/08/03 14:37:05  os
     #90496# zero is a valid number format
 

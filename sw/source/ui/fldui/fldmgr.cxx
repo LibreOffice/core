@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-10-18 13:43:44 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1568,9 +1568,11 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
     }
     ASSERT(pFld, "Feld nicht vorhanden");
 
-    USHORT nLang = GetCurrLanguage();
 
     // Language
+    //the auto language flag has to be set prior to the language!
+    pFld->SetAutomaticLanguage(rData.bIsAutomaticLanguage);
+    USHORT nLang = GetCurrLanguage();
     pFld->SetLanguage(nLang);
 
     // Einfuegen

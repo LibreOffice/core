@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 09:29:47 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,8 @@ void SwFldPage::EditNewField( BOOL bOnlyActivate )
  --------------------------------------------------------------------*/
 
 BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
-                            const String& rPar2, ULONG nFormatId, sal_Unicode cSeparator)
+                            const String& rPar2, ULONG nFormatId,
+                            sal_Unicode cSeparator, BOOL bIsAutomaticLanguage)
 {
     BOOL bRet = FALSE;
     SwView* pView = GetActiveView();
@@ -228,7 +229,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 
     if (!IsFldEdit())   // Neues Feld einfuegen
     {
-        SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator );
+        SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
         bRet = aMgr.InsertFld( aData );
 
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
@@ -365,6 +366,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         pSh->StartAllAction();
 
         pCurFld->SetSubType(nSubType);
+        pCurFld->SetAutomaticLanguage(bIsAutomaticLanguage);
 
         aMgr.UpdateCurFld( nFormatId, sPar1, sPar2 );
 

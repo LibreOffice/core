@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,10 @@ void SwFldDlg::ReInitDlg()
         Close();
     }
 
-    const SwWrtShell& rSh = ::GetActiveView()->GetWrtShell();
+    SwView* pActiveView = ::GetActiveView();
+    if(!pActiveView)
+        return;
+    const SwWrtShell& rSh = pActiveView->GetWrtShell();
     GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                           !rSh.HasReadonlySel() );
 

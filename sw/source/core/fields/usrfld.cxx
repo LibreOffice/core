@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:26 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,9 @@ String SwUserField::Expand() const
 
 SwField* SwUserField::Copy() const
 {
-    return new SwUserField((SwUserFieldType*)GetTyp(), nSubType, GetFormat());
+    SwField* pTmp = new SwUserField((SwUserFieldType*)GetTyp(), nSubType, GetFormat());
+    pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
+    return pTmp;
 }
 
 String SwUserField::GetCntnt(sal_Bool bName) const
@@ -205,7 +207,7 @@ BOOL SwUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int32)GetFormat();
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::QueryValue(rAny, nMId);
     }
     return sal_True;
 }
@@ -237,7 +239,7 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::PutValue(rAny, nMId);
     }
     return sal_True;
 }

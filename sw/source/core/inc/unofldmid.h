@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofldmid.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:46:05 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 #define FIELD_PROP_DATE_TIME        25
 #define FIELD_PROP_PROP_SEQ         26
 #define FIELD_PROP_LOCALE           27
-
+#define FIELD_PROP_BOOL4            28
 
 String& GetString( const com::sun::star::uno::Any&, String& rStr );
 

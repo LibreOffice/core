@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-08 14:19:28 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0634 UNO_NAME_BACK_COLOR_TRANSPARENCY */ {MAP_CHAR_LEN("BackColorTransparency")},
 /* 0635 UNO_NAME_HEADER_DYNAMIC_SPACING */ {MAP_CHAR_LEN("HeaderDynamicSpacing")},
 /* 0636 UNO_NAME_FOOTER_DYNAMIC_SPACING */ {MAP_CHAR_LEN("FooterDynamicSpacing")},
-/* 0637 UNO_NAME_BASIC_LIBRARIES */ {MAP_CHAR_LEN("BasicLibraries")}
+/* 0637 UNO_NAME_BASIC_LIBRARIES */ {MAP_CHAR_LEN("BasicLibraries")},
+/* 0638 UNO_NAME_IS_FIXED_LANGUAGE */ {MAP_CHAR_LEN("IsFixedLanguage")}
 };
 
 #ifndef PRODUCT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:32 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,23 +135,26 @@ struct SwInsertFld_Data
     ULONG nFormatId;
     SwWrtShell* pSh;
     sal_Unicode cSeparator;
+    BOOL bIsAutomaticLanguage;
     ::com::sun::star::uno::Any aDBDataSource;
     ::com::sun::star::uno::Any aDBConnection;
     ::com::sun::star::uno::Any aDBColumn;
 
     SwInsertFld_Data(USHORT nType, USHORT nSub, const String& rPar1, const String& rPar2,
-                    ULONG nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ') :
+                    ULONG nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', BOOL bIsAutoLanguage = TRUE) :
         nTypeId(nType),
         nSubType(nSub),
         sPar1(rPar1),
         sPar2(rPar2),
         nFormatId(nFmtId),
         pSh(pShell),
-        cSeparator(cSep) {}
+        cSeparator(cSep),
+        bIsAutomaticLanguage(bIsAutoLanguage) {}
 
     SwInsertFld_Data() :
         pSh(0),
-        cSeparator(' '){}
+        cSeparator(' '),
+        bIsAutomaticLanguage(TRUE){}
 
 };
 class SwFldMgr

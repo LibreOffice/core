@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:23:38 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,9 @@ NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
     bOneArea            (FALSE),
     nDefFormat          (nDefFmt),
     pVw                 (0),
-    pOwnFormatter       (0)
+    pOwnFormatter       (0),
+    bUseAutomaticLanguage(TRUE),
+    bShowLanguageControl(FALSE)
 {
     Init(nFormatType, bUsrFmts);
 }
@@ -172,7 +174,9 @@ NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
     bOneArea            (FALSE),
     nDefFormat          (nDefFmt),
     pVw                 (pView),
-    pOwnFormatter       (0)
+    pOwnFormatter       (0),
+    bUseAutomaticLanguage(TRUE),
+    bShowLanguageControl(FALSE)
 {
     Init(nFormatType, bUsrFmts);
 }
@@ -488,6 +492,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
             SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
             SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
+            SID_ATTR_NUMBERFORMAT_ADD_AUTO, SID_ATTR_NUMBERFORMAT_ADD_AUTO,
             0 );
 
         double fValue = GetDefValue( pFormatter, nCurrFormatType);
@@ -501,8 +506,8 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         if( (NUMBERFORMAT_DATE | NUMBERFORMAT_TIME) & nCurrFormatType )
             aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, bOneArea));
 
-        // Keine Sprachauswahl im Dialog, da Sprache im Textattribut enthalten ist
-        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, TRUE));
+        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, !bShowLanguageControl));
+        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
         SwNumFmtDlg* pDlg = new SwNumFmtDlg(this, aCoreSet);
 
@@ -519,10 +524,18 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
                     pFormatter->DeleteEntry( pDelArr[i] );
             }
 
-            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState(
+            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+            if( SFX_ITEM_SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_VALUE, FALSE, &pItem ))
             {
-                SetDefFormat(((SfxUInt32Item*)pItem)->GetValue());
+                UINT32 nFormat = ((SfxUInt32Item*)pItem)->GetValue();
+                SetDefFormat(nFormat);
+                eCurLanguage = pFormatter->GetEntry(nFormat)->GetLanguage();
+            }
+            if( bShowLanguageControl && SFX_ITEM_SET == pOutSet->GetItemState(
+                SID_ATTR_NUMBERFORMAT_ADD_AUTO, FALSE, &pItem ))
+            {
+                bUseAutomaticLanguage = ((const SfxBoolItem*)pItem)->GetValue();
             }
         }
         else

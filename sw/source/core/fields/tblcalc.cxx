@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:26 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ SwField* SwTblField::Copy() const
     pTmp->sExpand     = sExpand;
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->SwTableFormula::operator=( *this );
+    pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     return pTmp;
 }
 

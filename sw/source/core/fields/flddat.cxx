@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ SwField* SwDateTimeField::Copy() const
 
     pTmp->SetValue(GetValue());
     pTmp->SetOffset(nOffset);
+    pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
 
     return pTmp;
 }
@@ -340,7 +341,7 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::QueryValue(rVal, nMId);
     }
     return TRUE;
 }
@@ -387,8 +388,8 @@ BOOL SwDateTimeField::PutValue( const uno::Any& rVal, BYTE nMId )
             SetDateTime(aDateTime.GetDate(), aDateTime.GetTime());
         }
         break;
-    default:
-        DBG_ERROR("illegal property");
+        default:
+            return SwField::PutValue(rVal, nMId);
     }
     return TRUE;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,7 @@ inline void SwFieldType::UpdateFlds() const
 class SwField
 {
     USHORT              nLang;  // Immer ueber SetLanguage aendern!
+    BOOL                bIsAutomaticLanguage;
     ULONG               nFormat;
 
     SwFieldType*        pType;
@@ -409,6 +410,9 @@ public:
     FASTBOOL            HasClickHdl() const;
     // ist es ein Fix-Feld?
     FASTBOOL            IsFixed() const;
+
+    BOOL                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
+    void                SetAutomaticLanguage(BOOL bSet){bIsAutomaticLanguage = bSet;}
 };
 
 inline SwFieldType* SwField::GetTyp() const

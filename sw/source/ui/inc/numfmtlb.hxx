@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ class NumFormatListBox : public ListBox
     SwView*             pVw;
     SvNumberFormatter*  pOwnFormatter;
     LanguageType        eCurLanguage;
+    BOOL                bShowLanguageControl; //determine whether the language control has
+                                              //to be shown in the number format dialog
+    BOOL                bUseAutomaticLanguage;//determine whether language is automatically assigned
 
     DECL_LINK( SelectHdl, ListBox * );
 
@@ -109,6 +112,13 @@ public:
     const String&   GetFormatStr() const;
 
     inline LanguageType GetCurLanguage() const { return eCurLanguage;}
+    void                SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
+
+    void            SetAutomaticLanguage(BOOL bSet){bUseAutomaticLanguage = bSet;}
+    BOOL            IsAutomaticLanguage()const {return bUseAutomaticLanguage;}
+
+    void            SetShowLanguageControl(BOOL bSet){bShowLanguageControl = bSet;}
+
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 
 #ifndef _DOC_HXX
@@ -265,7 +268,8 @@ BOOL SwFieldType::PutValue( const uno::Any& rVal, BYTE nMId )
 
 SwField::SwField(SwFieldType* pTyp, ULONG nFmt, USHORT nLng) :
     nFormat(nFmt),
-    nLang(nLng)
+    nLang(nLng),
+    bIsAutomaticLanguage(TRUE)
 {
     ASSERT( pTyp, "SwField: ungueltiger SwFieldType" );
     pType = pTyp;
@@ -470,11 +474,35 @@ void SwField::SetSubType(USHORT nType)
 
 BOOL  SwField::QueryValue( uno::Any& rVal, BYTE nMId ) const
 {
-    return FALSE;
+    nMId &= ~CONVERT_TWIPS;
+    switch( nMId )
+    {
+        case FIELD_PROP_BOOL4:
+        {
+            BOOL bFixed = !bIsAutomaticLanguage;
+            rVal.setValue(&bFixed, ::getCppuBooleanType());
+        }
+        break;
+        default:
+            DBG_ERROR("illegal property");
+    }
+    return TRUE;
 }
 BOOL SwField::PutValue( const uno::Any& rVal, BYTE nMId )
 {
-    return FALSE;
+    nMId &= ~CONVERT_TWIPS;
+    switch( nMId )
+    {
+        case FIELD_PROP_BOOL4:
+        {
+            BOOL bFixed;
+            if(rVal >>= bFixed)
+                bIsAutomaticLanguage = !bFixed;
+        break;
+        default:
+            DBG_ERROR("illegal property");
+    }
+    return TRUE;
 }
 
 
@@ -869,7 +897,8 @@ ULONG SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, ULONG nFmt)
 
 void SwValueField::SetLanguage( USHORT nLng )
 {
-    if( ((SwValueFieldType *)GetTyp())->UseFormat() &&
+    if( IsAutomaticLanguage() &&
+            ((SwValueFieldType *)GetTyp())->UseFormat() &&
         GetFormat() != ULONG_MAX )
     {
         // wegen Bug #60010

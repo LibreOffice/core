@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-10-11 12:18:21 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,7 @@ SwField* SwGetExpField::Copy() const
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->sExpand       = sExpand;
     pTmp->bIsInBodyTxt  = bIsInBodyTxt;
+    pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
 
     return pTmp;
 }
@@ -537,7 +538,7 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= rtl::OUString(GetExpStr());
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::QueryValue(rAny, nMId);
     }
     return TRUE;
 }
@@ -580,7 +581,7 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
         ChgExpStr(::GetString( rAny, sTmp ));
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::PutValue(rAny, nMId);
     }
     return TRUE;
 }
@@ -946,6 +947,7 @@ SwField* SwSetExpField::Copy() const
                                             GetFormula(), GetFormat());
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->sExpand       = sExpand;
+    pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     pTmp->SetLanguage(GetLanguage());
     pTmp->aPText        = aPText;
     pTmp->bInput        = bInput;
@@ -1115,6 +1117,7 @@ SwField* SwInputField::Copy() const
 {
     SwInputField* pFld = new SwInputField((SwInputFieldType*)GetTyp(), aContent,
                                           aPText, GetSubType(), GetFormat());
+    pFld->SetAutomaticLanguage(IsAutomaticLanguage());
     return pFld;
 }
 
@@ -1274,7 +1277,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= rtl::OUString(GetExpStr());
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::QueryValue(rAny, nMId);
     }
     return TRUE;
 }
@@ -1356,7 +1359,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
         ChgExpStr( ::GetString( rAny, sTmp ));
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::PutValue(rAny, nMId);
     }
     return TRUE;
 }

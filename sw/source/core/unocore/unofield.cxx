@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 13:12:13 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1214,6 +1214,7 @@ struct SwFieldProperties_Impl
     sal_Bool        bBool1;
     sal_Bool        bBool2;
     sal_Bool        bBool3;
+    sal_Bool        bBool4;
 
     SwFieldProperties_Impl():
         nSubType(0),
@@ -1226,6 +1227,7 @@ struct SwFieldProperties_Impl
         bBool1(sal_False),
         bBool2(sal_False),
         bBool3(sal_False),
+        bBool4(sal_True), //Automatic language
         bFormatIsDefault(sal_True),
         pDateTime(0)
         {}
@@ -1810,6 +1812,7 @@ void SwXTextField::attachToRange(
         }
         if(pFld)
         {
+            pFld->SetAutomaticLanguage(m_pProps->bBool4);
             SwFmtFld aFmt( *pFld );
 
             UnoActionContext aCont(pDoc);
@@ -2001,6 +2004,9 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         case FIELD_PROP_BOOL3 :
             pBool = &m_pProps->bBool3;
             break;
+        case FIELD_PROP_BOOL4:
+            pBool = &m_pProps->bBool3;
+        break;
         case FIELD_PROP_DATE :
         {
             if(rValue.getValueType() != ::getCppuType((const util::Date*)0))
@@ -2122,6 +2128,12 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 break;
             case FIELD_PROP_BOOL2 :
                 aRet.setValue(&m_pProps->bBool2, ::getCppuBooleanType());
+                break;
+            case FIELD_PROP_BOOL3 :
+                aRet.setValue(&m_pProps->bBool3, ::getCppuBooleanType());
+                break;
+            case FIELD_PROP_BOOL4 :
+                aRet.setValue(&m_pProps->bBool4, ::getCppuBooleanType());
                 break;
             case FIELD_PROP_DATE :
                 aRet.setValue(&m_pProps->aDate, ::getCppuType((const util::Date*)0));

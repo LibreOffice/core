@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-05 11:53:10 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1234,6 +1234,7 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
 SwField* SwDocInfoField::Copy() const
 {
     SwDocInfoField* pFld = new SwDocInfoField((SwDocInfoFieldType*)GetTyp(), nSubType, GetFormat());
+    pFld->SetAutomaticLanguage(IsAutomaticLanguage());
     pFld->aContent = aContent;
 
     return pFld;
@@ -1305,7 +1306,7 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::QueryValue(rAny, nMId);
     }
     return sal_True;
 }
@@ -1356,7 +1357,7 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, BYTE nMId )
             nSubType |= DI_SUB_TIME;
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::PutValue(rAny, nMId);
     }
     return sal_True;
 }
