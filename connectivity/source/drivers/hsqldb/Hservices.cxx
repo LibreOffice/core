@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Hservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:08:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ void REGISTER_PROVIDER(
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "ADABAS::component_writeInfo : could not create a registry key !");
 
-    for (sal_uInt32 i=0; i<Services.getLength(); ++i)
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
 
