@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:34 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,7 +1164,7 @@ ExcLabelSst::ExcLabelSst(
 {
     const XclExpRoot& rRoot = *rRootData.pER;
     XclExpString* pString = XclExpStringHelper::CreateString( rRoot, rEdCell, pAttr );
-    SetXF( rRoot.GetXFBuffer().Insert( pAttr, pString->IsWrapped() ) );
+    SetXFId( rRoot.GetXFBuffer().Insert( pAttr, pString->IsWrapped() ) );
     nIsst = rRoot.GetSst().Insert( pString );
 }
 
@@ -1316,7 +1316,9 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab ) :
     XclExpPalette& rPal = GetPalette();
     nFlags |= (nTab == rOpt.nActTab) ? (EXC_WIN2_DISPLAYED|EXC_WIN2_SELECTED) : 0;
     nFlags |= rOpt.pGridCol ? 0 : EXC_WIN2_DEFAULTCOLOR;
-    nGridColorSer = rOpt.pGridCol ? rPal.InsertColor( *rOpt.pGridCol, xlColorGrid ) : rPal.InsertIndex( 64 );
+    nGridColorSer = rOpt.pGridCol ?
+        rPal.InsertColor( *rOpt.pGridCol, xlColorGrid ) :
+        XclExpPalette::GetColorIdFromIndex( EXC_XF_AUTOCOLOR );
 
     const ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nTab );
     if( pTabOpt )
@@ -1500,14 +1502,10 @@ XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
     const String&       rStyleName = r.GetStyle();
     SfxStyleSheetBase*  pStyle =
         GetDoc().GetStyleSheetPool()->Find( rStyleName, SFX_STYLE_FAMILY_PARA );
-    XclExpPalette& rPal = GetPalette();
-
     bHasStyle = pStyle ? TRUE : FALSE;
     if( bHasStyle )
     {
         const SfxItemSet&   rSet = pStyle->GetItemSet();
-        ScPatternAttr       aAttr( new SfxItemSet( rSet ) );
-
         BOOL bHasItalic     = rSet.GetItemState( ATTR_FONT_POSTURE, TRUE ) == SFX_ITEM_SET;
         BOOL bHasUnderline  = rSet.GetItemState( ATTR_FONT_UNDERLINE, TRUE ) == SFX_ITEM_SET;
         BOOL bHasStrikeOut  = rSet.GetItemState( ATTR_FONT_CROSSEDOUT, TRUE ) == SFX_ITEM_SET;
@@ -1544,9 +1542,8 @@ XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
         // font data
         if( bHasFont )
         {
-            Font            aFont;
-            ScPatternAttr   aPattAttr( new SfxItemSet( rSet ) );
-            aPattAttr.GetFont( aFont, SC_AUTOCOL_RAW );
+            Font aFont;
+            ScPatternAttr::GetFont( aFont, rSet, SC_AUTOCOL_RAW );
 
             BOOL bItalic    = ( bHasItalic && aFont.GetItalic() != ITALIC_NONE );
             BOOL bStrikeOut = ( bHasStrikeOut && aFont.GetStrikeout() != STRIKEOUT_NONE );
@@ -1561,7 +1558,7 @@ XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
             nFontData3 = bHasUnderline ? XclExpFont::GetXclUnderline( aFont.GetUnderline() ) : 0;
 
             if( bHasColor )
-                nIcvTextSer = rPal.InsertColor( aFont.GetColor(), xlColorCellText );
+                nIcvTextSer = GetPalette().InsertColor( aFont.GetColor(), xlColorCellText );
 
             nFontData4 = bHasStrikeOut ? 0x00000018 : 0x00000098;
             nFontData4 |= (bHasWeight || bHasItalic) ? 0 : 0x00000002;
@@ -1571,11 +1568,11 @@ XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
 
         // border data
         if( bHasLine )
-            XclExpXF::GetBorder( maBorder, rPal, aAttr );
+            maBorder.FillFromItemSet( rSet, GetPalette(), GetBiff() );
 
         // background / foreground data
         if( bHasPattern )
-            XclExpXF::GetArea( maArea, rPal, aAttr );
+            maArea.FillFromItemSet( rSet, GetPalette(), GetBiff() );
     }
 
     ScTokenArray*   pScTokArry1 = r.CreateTokenArry( 0 );
@@ -1636,8 +1633,6 @@ void XclCf::SaveCont( XclExpStream& rStrm )
         0x00, 0xFF, 0xFF, 0xFF, 0x7F, 0x01, 0x00
     };
 
-    const XclExpPalette& rPal = GetPalette();
-
     rStrm << nType << nOp << nFormLen1 << nFormLen2;
     if( bHasStyle )
     {
@@ -1647,7 +1642,7 @@ void XclCf::SaveCont( XclExpStream& rStrm )
             rStrm.Write( pPre, 68 );
             rStrm << nFontData1 << nFontData2 << nFontData3;
             if( bHasColor )
-                rStrm << (UINT32) rPal.GetColorIndex( nIcvTextSer );
+                rStrm << (UINT32) GetPalette().GetColorIndex( nIcvTextSer );
             else
                 rStrm << (UINT32)0xFFFFFFFF;
             rStrm   << (UINT32)0x00000000 << nFontData4
@@ -1657,28 +1652,18 @@ void XclCf::SaveCont( XclExpStream& rStrm )
         }
         if( bHasLine )
         {
-            sal_uInt8 nLineData1, nLineData2;
-            sal_uInt16 nLineData3, nLineData4;
-            nLineData1 = (UINT8)((maBorder.mnLeftLine & 0x0F) | (maBorder.mnRightLine << 4));
-            nLineData2 = (UINT8)((maBorder.mnTopLine & 0x0F) | (maBorder.mnBottomLine << 4));
-            nLineData3 = rPal.GetColorIndex( maBorder.mnLeftColorId ) & 0x007F;
-            nLineData3 |= (rPal.GetColorIndex( maBorder.mnRightColorId ) & 0x007F) << 7;
-            nLineData4 = rPal.GetColorIndex( maBorder.mnTopColorId ) & 0x007F;
-            nLineData4 |= (rPal.GetColorIndex( maBorder.mnBottomColorId ) & 0x007F) << 7;
-
-            rStrm   << nLineData1 << nLineData2 << nLineData3 << nLineData4
-                    << (UINT16)0xBA00;
+            sal_uInt16 nLineStyle = 0;
+            sal_uInt32 nLineColor = 0;
+            maBorder.SetFinalColors( GetPalette() );
+            maBorder.FillToCF8( nLineStyle, nLineColor );
+            rStrm << nLineStyle << nLineColor << (UINT16)0xBA00;
         }
         if( bHasPattern )
         {
-            sal_uInt16 nXclForeIx, nXclBackIx;
-            sal_uInt8 nPattern = maArea.mnPattern;
-            rPal.GetMixedColors( nXclForeIx, nXclBackIx, nPattern, maArea.mnForeColorId, maArea.mnBackColorId );
-
-            UINT8   nPattData1 = (nPattern == EXC_PATT_SOLID) ? 0 : nPattern;
-            UINT16  nPattData2 = ((nXclForeIx & 0x007F ) << 7) | (nXclBackIx & 0x007F);
-
-            rStrm << (UINT8)0 << nPattData1 << nPattData2;
+            sal_uInt16 nPattern = 0, nColor = 0;
+            maArea.SetFinalColors( GetPalette() );
+            maArea.FillToCF8( nPattern, nColor );
+            rStrm << nPattern << nColor;
         }
     }
     rStrm.Write( pVarData, nVarLen );
@@ -1753,9 +1738,9 @@ ULONG XclDConRef::GetLen() const
 
 // --- class XclExpCellMerging ---------------------------------------
 
-void XclExpCellMerging::Append( UINT16 nCol1, UINT16 nColCnt, UINT16 nRow1, UINT16 nRowCnt, UINT16 nXF )
+void XclExpCellMerging::Append( UINT16 nCol1, UINT16 nColCnt, UINT16 nRow1, UINT16 nRowCnt, sal_uInt32 nXFId )
 {
-    AppendCell( new XclExpMergedCell( nCol1, nCol1 + nColCnt - 1, nRow1, nRow1 + nRowCnt - 1, nXF ) );
+    AppendCell( new XclExpMergedCell( nCol1, nCol1 + nColCnt - 1, nRow1, nRow1 + nRowCnt - 1, nXFId ) );
 }
 
 
@@ -1770,13 +1755,13 @@ BOOL XclExpCellMerging::FindNextMerge( const ScAddress& rPos, UINT16& rnCol )
 }
 
 
-BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF, UINT16& rnColCount )
+BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId, UINT16& rnColCount )
 {
     for( XclExpMergedCell* pCell = FirstCell(); pCell; pCell = NextCell() )
         if( (pCell->nCol1 <= rPos.Col()) && (rPos.Col() <= pCell->nCol2) &&
             (pCell->nRow1 <= rPos.Row()) && (rPos.Row() <= pCell->nRow2) )
         {
-            rnXF = pCell->nXF;
+            rnXFId = pCell->mnXFId;
             rnColCount = pCell->nCol2 - rPos.Col() + 1;
             return TRUE;
         }
