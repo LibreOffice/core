@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
+ *  last change: $Author: gt $ $Date: 2001-06-28 09:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,14 +797,14 @@ void ImportExcel::Array25( void )
             nFirstCol, nFirstRow, nLastCol, nLastRow, aMarkData,
             EMPTY_STRING, pErgebnis );
 
-        UINT16              nRowCnt, nColCnt;
+/*      UINT16              nRowCnt, nColCnt;
 
         for( nColCnt = nFirstCol + 1 ; nColCnt <= nLastCol ; nColCnt++ )
             for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
             {
                 pFltTab->SetXF( nColCnt, nRowCnt, nLastXF );
                 aColRowBuff.Used( nColCnt, nRowCnt );
-            }
+            }*/
     }
 }
 
@@ -1930,14 +1930,14 @@ void ImportExcel::Array34( void )
         aMarkData.SelectOneTable( nTab );
         pD->InsertMatrixFormula( nFirstCol, nFirstRow, nLastCol, nLastRow, aMarkData, EMPTY_STRING, pErgebnis);
 
-        UINT16              nRowCnt, nColCnt;
+/*      UINT16              nRowCnt, nColCnt;
 
         for( nColCnt = nFirstCol + 1 ; nColCnt <= nLastCol ; nColCnt++ )
             for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
             {
                 pFltTab->SetXF( nColCnt, nRowCnt, nLastXF );
                 aColRowBuff.Used( nColCnt, nRowCnt );
-            }
+            }*/
     }
 
     pLastFormCell = NULL;
