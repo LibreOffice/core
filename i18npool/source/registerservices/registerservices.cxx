@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 17:07:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ IMPL_CREATEINSTANCE( InputSequenceChecker_hi )
 
 IMPL_CREATEINSTANCE_MSF( TextConversionImpl )
 IMPL_CREATEINSTANCE_MSF( TextConversion_ko )
+IMPL_CREATEINSTANCE_MSF( TextConversion_zh )
 
 IMPL_CREATEINSTANCE( Transliteration_u2l )
 IMPL_CREATEINSTANCE( Transliteration_l2u )
@@ -528,6 +529,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.TextConversion_ko",
         "com.sun.star.i18n.TextConversion_ko",
         &TextConversion_ko_CreateInstance },
+    {   "com.sun.star.i18n.TextConversion_zh",
+        "com.sun.star.i18n.TextConversion_zh",
+        &TextConversion_zh_CreateInstance },
     {   TRLT_SERVICELNAME,
         TRLT_IMPLNAME ,
         &TransliterationImpl_CreateInstance },
