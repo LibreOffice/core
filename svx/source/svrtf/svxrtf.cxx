@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:34:02 $
+ *  last change: $Author: jp $ $Date: 2001-05-03 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #define ITEMID_FONT     0
 #define ITEMID_COLOR    0
+#define ITEMID_SCRIPTSPACE 0
 
 #include <ctype.h>
 
@@ -100,6 +101,8 @@
 #include <svtools/itempool.hxx>
 #endif
 
+
+#include "scriptspaceitem.hxx"
 #include "fontitem.hxx"
 #include "colritem.hxx"
 #include "svxrtf.hxx"
@@ -120,11 +123,12 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     aColorTbl( 16, 4 ),
     aFontTbl( 16, 4 ),
     nVersionNo( 0 ),
-    pSfxInfo( 0 )
+    pSfxInfo( 0 ),
+    pRTFDefaults( 0 )
 {
     bNewDoc = bReadNewDoc;
 
-    bChkStyleAttr = bCalcValue = bReadDocInfo = FALSE;
+    bChkStyleAttr = bCalcValue = bReadDocInfo = bIsInReadStyleTab = FALSE;
     bIsLeftToRightDef = TRUE;
 
     {
@@ -151,6 +155,8 @@ SvxRTFParser::~SvxRTFParser()
         ClearStyleTbl();
     if( aAttrStack.Count() )
         ClearAttrStack();
+
+    delete pRTFDefaults;
 
     delete pInsPos;
 #ifndef SVX_LIGHT
@@ -371,7 +377,9 @@ void SvxRTFParser::ReadStyleTable()
     short nStyleNo = 0;
     int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
     SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, aWhichMap.GetData() );
+    pStyle->aAttrSet.Put( GetRTFDefaults() );
 
+    bIsInReadStyleTab = TRUE;
     bChkStyleAttr = FALSE;      // Attribute nicht gegen die Styles checken
 
     while( nOpenBrakets && IsParserWorking() )
@@ -431,6 +439,7 @@ void SvxRTFParser::ReadStyleTable()
                 // alle Daten vom Style vorhanden, also ab in die Tabelle
                 aStyleTbl.Insert( nStyleNo, pStyle );
                 pStyle = new SvxRTFStyleType( *pAttrPool, aWhichMap.GetData() );
+                pStyle->aAttrSet.Put( GetRTFDefaults() );
                 nStyleNo = 0;
             }
             break;
@@ -467,6 +476,7 @@ void SvxRTFParser::ReadStyleTable()
 
     // Flag wieder auf alten Zustand
     bChkStyleAttr = bSaveChkStyleAttr;
+    bIsInReadStyleTab = FALSE;
 }
 
 void SvxRTFParser::ReadColorTable()
@@ -864,7 +874,9 @@ SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
     if( pAkt )
         pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, bCopyAttr );
     else
-        pNew = new SvxRTFItemStackType( *pAttrPool, aWhichMap.GetData(), *pInsPos );
+        pNew = new SvxRTFItemStackType( *pAttrPool, aWhichMap.GetData(),
+                                        *pInsPos );
+    pNew->SetRTFDefaults( GetRTFDefaults() );
 
     aAttrStack.Push( pNew );
     bNewGroup = FALSE;
@@ -1021,6 +1033,7 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                                             pNew->aAttrSet.Count(); ++n )
                             if( aPardMap[n] )
                                 pNew->aAttrSet.ClearItem( aPardMap[n] );
+                        pNew->SetRTFDefaults( GetRTFDefaults() );
 
                         // gab es ueberhaupt welche ?
                         if( pNew->aAttrSet.Count() == pOld->aAttrSet.Count() )
@@ -1154,6 +1167,24 @@ void SvxRTFParser::BuildWhichTbl()
     // Die Which-Map wird nicht geloescht.
     SvParser::BuildWhichTbl( aWhichMap, (USHORT*)aPardMap.GetData(), aPardMap.Count() );
     SvParser::BuildWhichTbl( aWhichMap, (USHORT*)aPlainMap.GetData(), aPlainMap.Count() );
+}
+
+const SfxItemSet& SvxRTFParser::GetRTFDefaults()
+{
+    if( !pRTFDefaults )
+    {
+        pRTFDefaults = new SfxItemSet( *pAttrPool, aWhichMap.GetData() );
+        USHORT nId;
+        if( 0 != ( nId = ((RTFPardAttrMapIds*)aPardMap.GetData())->nScriptSpace ))
+        {
+            SvxScriptSpaceItem aItem( FALSE, nId );
+            if( bNewDoc )
+                pAttrPool->SetPoolDefaultItem( aItem );
+            else
+                pRTFDefaults->Put( aItem );
+        }
+    }
+    return *pRTFDefaults;
 }
 
 /**/
@@ -1308,6 +1339,23 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
         pChildList = 0;
     }
 }
+void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
+{
+    if( rDefaults.Count() )
+    {
+        SfxItemIter aIter( rDefaults );
+        const SfxPoolItem* pItem;
+        do {
+            USHORT nWhich = aIter.GetCurItem()->Which();
+            if( SFX_ITEM_SET != aAttrSet.GetItemState( nWhich, FALSE ))
+                aAttrSet.Put( *aIter.GetCurItem() );
+
+            if( aIter.IsAtEnd() )
+                break;
+            aIter.NextItem();
+        } while( TRUE );
+    }
+}
 
 /**/
 
@@ -1362,6 +1410,10 @@ RTFPardAttrMapIds ::RTFPardAttrMapIds ( const SfxItemPool& rPool )
     nOutlineLvl = rPool.GetTrueWhich( SID_ATTR_PARA_OUTLLEVEL, FALSE );
     nSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, FALSE );
     nKeep = rPool.GetTrueWhich( SID_ATTR_PARA_KEEP, FALSE );
+    nFontAlign = rPool.GetTrueWhich( SID_PARA_VERTALIGN, FALSE );
+    nScriptSpace = rPool.GetTrueWhich( SID_ATTR_PARA_SCRIPTSPACE, FALSE );
+    nHangPunct = rPool.GetTrueWhich( SID_ATTR_PARA_HANGPUNCTUATION, FALSE );
+    nForbRule = rPool.GetTrueWhich( SID_ATTR_PARA_FORBIDDEN_RULES, FALSE );
 }
 
 

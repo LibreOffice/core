@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:33:42 $
+ *  last change: $Author: jp $ $Date: 2001-05-03 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #define ITEMID_CHARSCALE_W  0
 #define ITEMID_CHARROTATE   0
 #define ITEMID_CHARRELIEF   0
+#define ITEMID_PARAVERTALIGN 0
+#define ITEMID_FORBIDDENRULE 0
+#define ITEMID_SCRIPTSPACE 0
+#define ITEMID_HANGINGPUNCTUATION 0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
@@ -151,7 +155,6 @@
 #include "keepitem.hxx"
 #include "bolnitem.hxx"
 #include "brshitem.hxx"
-
 #include "lspcitem.hxx"
 #include "adjitem.hxx"
 #include "orphitem.hxx"
@@ -163,6 +166,11 @@
 #include "charscaleitem.hxx"
 #include "charrotateitem.hxx"
 #include "charreliefitem.hxx"
+#include "paravertalignitem.hxx"
+#include "forbiddenruleitem.hxx"
+#include "hngpnctitem.hxx"
+#include "scriptspaceitem.hxx"
+
 
 #ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
@@ -315,6 +323,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     FontEmphasisMark eEmphasis;
     bPardTokenRead = FALSE;
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
+    USHORT nFontAlign;
 
     int bChkStkPos = !bNewGroup && aAttrStack.Top();
 
@@ -353,6 +362,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
                                                 *pAkt, *pInsPos, TRUE );
                     pNew->aAttrSet.SetParent( pAkt->aAttrSet.GetParent() );
+                    pNew->SetRTFDefaults( GetRTFDefaults() );
+
                     // alle bis hierher gueltigen Attribute "setzen"
                     AttrGroupEnd();
                     aAttrStack.Push( pNew );
@@ -378,6 +389,13 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     break;
 
             case RTF_S:
+                if( bIsInReadStyleTab )
+                {
+                    if( !bFirstToken )
+                        SkipToken( -1 );
+                    bWeiter = FALSE;
+                }
+                else
                 {
                     nStyleNo = -1 == nTokenValue ? 0 : USHORT(nTokenValue);
                     // setze am akt. auf dem AttrStack stehenden Style die
@@ -604,6 +622,47 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 }
                 break;
 
+            case RTF_NOCWRAP:
+                if( PARDID->nForbRule )
+                {
+                    pSet->Put( SvxForbiddenRuleItem( FALSE,
+                                                    PARDID->nForbRule ));
+                }
+                break;
+            case RTF_NOOVERFLOW:
+                if( PARDID->nHangPunct )
+                {
+                    pSet->Put( SvxHangingPunctuationItem( FALSE,
+                                                    PARDID->nHangPunct ));
+                }
+                break;
+
+            case RTF_ASPALPHA:
+                if( PARDID->nScriptSpace )
+                {
+                    pSet->Put( SvxScriptSpaceItem( TRUE,
+                                                PARDID->nScriptSpace ));
+                }
+                break;
+
+            case RTF_FAFIXED:
+            case RTF_FAAUTO:    nFontAlign = SvxParaVertAlignItem::AUTOMATIC;
+                                goto SET_FONTALIGNMENT;
+            case RTF_FAHANG:    nFontAlign = SvxParaVertAlignItem::TOP;
+                                goto SET_FONTALIGNMENT;
+            case RTF_FAVAR:     nFontAlign = SvxParaVertAlignItem::BOTTOM;
+                                goto SET_FONTALIGNMENT;
+            case RTF_FACENTER:  nFontAlign = SvxParaVertAlignItem::CENTER;
+                                goto SET_FONTALIGNMENT;
+            case RTF_FAROMAN:   nFontAlign = SvxParaVertAlignItem::BASELINE;
+                                goto SET_FONTALIGNMENT;
+SET_FONTALIGNMENT:
+            if( PARDID->nFontAlign )
+            {
+                pSet->Put( SvxParaVertAlignItem( nFontAlign,
+                                                PARDID->nFontAlign ));
+            }
+            break;
 
 /*  */
             case RTF_B:
@@ -1742,6 +1801,8 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
                 // eine neue Gruppe aufmachen
                 SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, TRUE );
                 pNew->aAttrSet.SetParent( pAkt->aAttrSet.GetParent() );
+                pNew->SetRTFDefaults( GetRTFDefaults() );
+
                 // alle bis hierher gueltigen Attribute "setzen"
                 AttrGroupEnd();
                 aAttrStack.Push( pNew );
@@ -1762,6 +1823,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             const SfxPoolItem *pItem, *pDef;
             const USHORT* pPtr;
             USHORT nCnt;
+            const SfxItemSet* pDfltSet = &GetRTFDefaults();
             if( bPard )
             {
                 pAkt->nStyleNo = 0;
@@ -1785,16 +1847,27 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
                 else if( SFX_WHICH_MAX < *pPtr )
                     pAkt->aAttrSet.ClearItem( *pPtr );
                 else if( IsChkStyleAttr() )
-                    pAkt->aAttrSet.Put( pAttrPool->GetDefaultItem( *pPtr ) );
+                    pAkt->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
                 else if( !pAkt->aAttrSet.GetParent() )
-                    pAkt->aAttrSet.ClearItem( *pPtr );
+                {
+                    if( SFX_ITEM_SET ==
+                        pDfltSet->GetItemState( *pPtr, FALSE, &pDef ))
+                        pAkt->aAttrSet.Put( *pDef );
+                    else
+                        pAkt->aAttrSet.ClearItem( *pPtr );
+                }
                 else if( SFX_ITEM_SET == pAkt->aAttrSet.GetParent()->
                             GetItemState( *pPtr, TRUE, &pItem ) &&
-                        *( pDef = &pAttrPool->GetDefaultItem( *pPtr ))
-                                    != *pItem )
+                        *( pDef = &pDfltSet->Get( *pPtr )) != *pItem )
                     pAkt->aAttrSet.Put( *pDef );
                 else
-                    pAkt->aAttrSet.ClearItem( *pPtr );
+                {
+                    if( SFX_ITEM_SET ==
+                        pDfltSet->GetItemState( *pPtr, FALSE, &pDef ))
+                        pAkt->aAttrSet.Put( *pDef );
+                    else
+                        pAkt->aAttrSet.ClearItem( *pPtr );
+                }
             }
         }
         else if( bPard )
