@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-29 08:31:05 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 12:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 
 const GraphicObject& SdrGrafObj::GetGraphicObject() const
 {
+    ForceSwapIn();
     return *pGraphic;
 }
 
@@ -365,6 +366,7 @@ void SdrGrafObj::SetGraphic( const Graphic& rGrf )
 
 const Graphic& SdrGrafObj::GetGraphic() const
 {
+    ForceSwapIn();
     return pGraphic->GetGraphic();
 }
 
