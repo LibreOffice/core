@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:23:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,15 +228,6 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
-#ifndef _SVX_UNOAPI_HXX_
-#include <svx/unoapi.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
-#include <com/sun/star/drawing/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
 #endif
@@ -245,6 +236,10 @@
 #define MAX_USER_MOVE       2
 
 #include <ppt/pptinanimations.hxx>
+
+#ifndef _SD_PPT_97_ANIMATIONS_HXX
+#include <ppt/ppt97animations.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -1632,14 +1627,23 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
 //
 //////////////////////////////////////////////////////////////////////////
 
-struct ImplStlAnimationInfoSortHelper
+struct Ppt97AnimationStlSortHelper
 {
-    bool operator()( const std::pair< SdrObject*, const SdAnimationInfo* >& p1, const std::pair< SdrObject*, const SdAnimationInfo* >& p2 )
-    {
-        return p1.second->nPresOrder < p2.second->nPresOrder;
-    }
+    bool operator()( const std::pair< SdrObject*, Ppt97AnimationPtr >& p1, const std::pair< SdrObject*, Ppt97AnimationPtr >& p2 );
 };
 
+bool Ppt97AnimationStlSortHelper::operator()( const std::pair< SdrObject*, Ppt97AnimationPtr >& p1, const std::pair< SdrObject*, Ppt97AnimationPtr >& p2 )
+{
+    if( !p1.second.get() || !p2.second.get() )
+        return true;
+    if( *p1.second < *p2.second )
+        return true;
+    if( *p1.second > *p2.second )
+        return false;
+    if( p1.first->GetOrdNum() < p2.first->GetOrdNum() )
+        return true;
+    return false;
+}
 
 void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed )
 {
@@ -1896,65 +1900,32 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 
     if ( !bNewAnimationsUsed )
     {
-        std::vector< std::pair< SdrObject*, const SdAnimationInfo* > > aEffects;
+        tAnimationVector aAnimationsOnThisPage;
 
         // add effects from page in correct order
         SdrObjListIter aSdrIter( *pPage, IM_FLAT );
         while ( aSdrIter.IsMore() )
         {
             SdrObject* pObj = aSdrIter.Next();
-            const SdAnimationInfo *pInfo = pDoc->GetAnimationInfo( pObj );
-            if ( pInfo )
-                aEffects.push_back( std::pair< SdrObject*, const SdAnimationInfo* >( pObj, pInfo ) );
+            tAnimationMap::iterator aFound = aAnimations.find( pObj );
+            if( aFound != aAnimations.end() )
+            {
+                std::pair< SdrObject*, Ppt97AnimationPtr > aPair( (*aFound).first, (*aFound).second );
+                aAnimationsOnThisPage.push_back( aPair );
+            }
         }
 
-        ImplStlAnimationInfoSortHelper aSortHelper;
-        std::sort( aEffects.begin(), aEffects.end(), aSortHelper );
+        Ppt97AnimationStlSortHelper aSortHelper;
+        std::sort( aAnimationsOnThisPage.begin(), aAnimationsOnThisPage.end(), aSortHelper );
 
-        std::vector< std::pair< SdrObject*, const SdAnimationInfo* > >::iterator aIter( aEffects.begin() );
-        const std::vector< std::pair< SdrObject*, const SdAnimationInfo* > >::iterator aEnd( aEffects.end() );
+        tAnimationVector::iterator aIter( aAnimationsOnThisPage.begin() );
+        const tAnimationVector::iterator aEnd( aAnimationsOnThisPage.end() );
 
         for( ;aIter != aEnd; aIter++ )
         {
-            SdrObject* pObj = (*aIter).first;;
-            const SdAnimationInfo *pInfo = (*aIter).second;;
-
-            uno::Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( pObj );
-            if ( aXShape.is() )
-            {
-                uno::Reference< beans::XPropertySet > aXPropSet( aXShape, uno::UNO_QUERY );
-                if ( aXPropSet.is() )
-                {
-                    if ( ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
-                        || ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE ) )
-                    {
-                        uno::Any aAny;
-                        if ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
-                        {
-                            aAny <<= pInfo->eEffect;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Effect" )), sal_True );
-                        }
-                        if ( pInfo->eTextEffect != com::sun::star::presentation::AnimationEffect_NONE )
-                        {
-                            aAny <<= pInfo->eTextEffect;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" )), sal_True );
-                        }
-                        aAny <<= pInfo->eSpeed;
-                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Speed" )), sal_True );
-                        aAny <<= pInfo->bDimHide;
-                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimHide" )), sal_True );
-                        aAny <<= pInfo->bDimPrevious;
-                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" )), sal_True );
-                        aAny <<= (sal_Int32)( (sal_uInt32)( pInfo->aDimColor.GetBlue() | ( pInfo->aDimColor.GetGreen() << 8 ) | ( pInfo->aDimColor.GetRed() << 16 ) ) );
-                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimColor" )), sal_True );
-                        aAny <<= pInfo->bSoundOn;
-                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" )), sal_True );
-                        rtl::OUString aStr( pInfo->aSoundFile );
-                        aAny <<= aStr;
-                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" )), sal_True );
-                    }
-                }
-            }
+            Ppt97AnimationPtr pPpt97Animation = (*aIter).second;;
+            if( pPpt97Animation.get() )
+                pPpt97Animation->createAndSetCustomAnimationEffect( (*aIter).first );
         }
     }
     rStCtrl.Seek( nFilePosMerk );
@@ -2151,306 +2122,6 @@ String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 //
 //////////////////////////////////////////////////////////////////////////
 
-// Hilfsklasse zum Einlesen der PPT AnimationInfoAtom
-struct PptAnimationInfoAtom
-{
-    UINT32          nDimColor;
-    UINT32          nFlags;         // 0x0004: Zeit statt Mausklick
-    UINT32          nSoundRef;
-    INT32           nDelayTime;     // 1/1000stel Sekunden
-    UINT16          nOrderID;
-    UINT16          nSlideCount;
-    UINT8           nBuildType;
-    UINT8           nFlyMethod;
-    UINT8           nFlyDirection;
-    UINT8           nAfterEffect;
-    UINT8           nSubEffect;
-    UINT8           nOLEVerb;
-
-    // unknown, da Gesamtgroesse 28 ist
-    UINT8           nUnknown1;
-    UINT8           nUnknown2;
-
-public:
-    ::com::sun::star::presentation::AnimationEffect GetAnimationEffect(::com::sun::star::presentation::AnimationSpeed& rSpeed);
-    friend SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom);
-};
-
-SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
-{
-    rIn >> rAtom.nDimColor;
-    rIn >> rAtom.nFlags;
-    rIn >> rAtom.nSoundRef;
-    rIn >> rAtom.nDelayTime;
-    rIn >> rAtom.nOrderID;
-    rIn >> rAtom.nSlideCount;
-    rIn >> rAtom.nBuildType;
-    rIn >> rAtom.nFlyMethod;
-    rIn >> rAtom.nFlyDirection;
-    rIn >> rAtom.nAfterEffect;
-    rIn >> rAtom.nSubEffect;
-    rIn >> rAtom.nOLEVerb;
-    rIn >> rAtom.nUnknown1;
-    rIn >> rAtom.nUnknown2;
-    return rIn;
-}
-
-::com::sun::star::presentation::AnimationEffect PptAnimationInfoAtom::GetAnimationEffect( ::com::sun::star::presentation::AnimationSpeed& rSpeed )
-{
-    ::com::sun::star::presentation::AnimationEffect eRetval( ::com::sun::star::presentation::AnimationEffect_APPEAR );
-    if ( !nBuildType )
-        eRetval = ::com::sun::star::presentation::AnimationEffect_NONE;
-    else
-    {
-        switch ( nFlyMethod )
-        {
-            case 0x0:
-                eRetval = ::com::sun::star::presentation::AnimationEffect_APPEAR;                       // Erscheinen
-            break;
-            case 0x01:
-                eRetval = ::com::sun::star::presentation::AnimationEffect_RANDOM;                       // Random
-            break;
-            case 0x02:                                                  // Blinds Effekt
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRIPES;     // Horizontal
-                    break;
-                    case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRIPES;   // Vertical
-                    break;
-                }
-            }
-            break;
-            case 0x03:                                                  // (hor/ver) versetzt Einblenden
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD;  // vertikal
-                    break;
-                    case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_CHECKERBOARD;    // horizontal
-                    break;
-                }
-            }
-            break;
-            case 0x05:
-                eRetval = ::com::sun::star::presentation::AnimationEffect_DISSOLVE;                     // Aufloesen
-            break;
-            case 0x08:                                                  // (hor/ver) Linien
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_LINES;     // horizontal
-                    break;
-                    case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_LINES;       // vertikal
-                    break;
-                }
-            }
-            break;
-            case 0x09:                                                  // Diagonal
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x4:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERRIGHT; // nach links oben
-                    break;
-                    case 0x5:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERLEFT;  // nach rechts oben
-                    break;
-                    case 0x6:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERRIGHT; // nach links unten
-                    break;
-                    case 0x7:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERLEFT;  // nach rechts unten
-                    break;
-                }
-            }
-            break;
-            case 0x0a:                                                  // rollen
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_RIGHT;      // von rechts
-                    break;
-                    case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_BOTTOM;     // von unten
-                    break;
-                    case 0x2:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LEFT;       // von links
-                    break;
-                    case 0x3:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_TOP;        // von oben
-                    break;
-                }
-            }
-            break;
-            case 0x0b:                                                  // (von aussen/innen) Einblenden
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER;     // von innen
-                    break;
-                    case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;       // von aussen
-                    break;
-                }
-            }
-            break;
-            case 0x0c:                                                  // Text-Effekt
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT;
-                    break;
-                    case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP;
-                    break;
-                    case 0x2:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT;
-                    break;
-                    case 0x3:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM;
-                    break;
-                    case 0x4:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERLEFT;  // von oben links
-                    break;
-                    case 0x5:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT; // von oben rechts
-                    break;
-                    case 0x6:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERLEFT; // von unten links
-                    break;
-                    case 0x7:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT; // von unten rechts
-                    break;
-                    case 0x8:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT; // verkürzt von links
-                    break;
-                    case 0x9:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM;// verkürzt von unten
-                    break;
-                    case 0xa:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT;// verkürzt von rechts
-                    break;
-                    case 0xb:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_TOP;  // verkürzt von oben
-                    break;
-                    case 0xc:
-                    {
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT;   // langsam von links
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    }
-                    break;
-                    case 0xd:
-                    {
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP;    // langsam von oben
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    }
-                    break;
-                    case 0xe:
-                    {
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT;  // langsam von rechts
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    }
-                    break;
-                    case 0xf:
-                    {
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM; // langsam von unten
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    }
-                    break;
-                    case 0x10:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER; // Vergroessern
-                    break;
-                    case 0x11:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER; // etwas Vergroessern
-                    break;
-                    case 0x12:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;   // Verkleinern
-                    break;
-                    case 0x13:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;   // etwas Verkleinern
-                    break;
-                    case 0x14:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER; // Vergroessern von Bildschirmmitte
-                    break;
-                    case 0x15:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;   // Verkleinern von unterem Bildschirm
-                    break;
-                    case 0x16:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRETCH;   // quer dehnen
-                    break;
-                    case 0x17:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LEFT;    // von links dehnen
-                    break;
-                    case 0x18:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_TOP;     // von oben dehnen
-                    break;
-                    case 0x19:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_RIGHT;   // von rechts dehnen
-                    break;
-                    case 0x1a:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_BOTTOM;  // von unten dehnen
-                    break;
-                    case 0x1b:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_ROTATE;    // Rotieren
-                    break;
-                    case 0x1c:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT;       // Spirale
-                    break;
-                }
-            }
-            break;
-            case 0x0d:                                              // Schliessen/Oeffnen
-            {
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL;    // hor oeffnen
-                    break;
-                    case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_CLOSE_VERTICAL;   // hor schliessen
-                    break;
-                    case 0x2:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL;  // vert oeffnen
-                    break;
-                    case 0x3:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_CLOSE_HORIZONTAL; // vert schliessen
-                    break;
-                }
-            }
-            break;
-            case 0x0e:                                              // Blinken, danach unsichtbar
-            {
-                if( !nAfterEffect )
-                    nAfterEffect = 3;
-                switch ( nFlyDirection )
-                {
-                    case 0x0:
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_FAST;               // schnell
-                    break;
-                    case 0x1:
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_MEDIUM;             // mittel
-                    break;
-                    case 0x2:
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;               // langsam
-                    break;
-                }
-            }
-            break;
-        }
-    }
-    return eRetval;
-}
-
 void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName )
 {
     // Lokale Informationen in pInfo eintragen
@@ -2548,89 +2219,6 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         default :                       // 0x00: no action, else unknown action
         break;
     }
-}
-
-void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoAtom* pAnim )
-{
-    // Lokale Informationen in pInfo eintragen
-    // Praesentationsreihenfolge; diese wird
-    // eventuell (falls alle gleich sind) noch in
-    // ImportPage() korrigiert
-
-    pInfo->aBlueScreen = Color( (BYTE)1, (BYTE)2, (BYTE)3 );        // ppt does not have transparent objects, but we
-                                                                    // have to set a color. ( this color is rarely used )
-    pInfo->nPresOrder = pAnim->nOrderID;
-    pInfo->nVerb = pAnim->nOLEVerb;                                 // fuer OLE-Objekt
-    pInfo->eSpeed = ::com::sun::star::presentation::AnimationSpeed_MEDIUM;                          // Geschwindigkeit der Animation
-    pInfo->eEffect = pAnim->GetAnimationEffect( pInfo->eSpeed );    // Animationseffekt
-    pInfo->eTextEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
-    pInfo->bDimPrevious = FALSE;                                    // Objekt abblenden
-    pInfo->aDimColor = Color(COL_WHITE);                            // Default-Ausblendfarbe auf weiss
-
-    if( pAnim->nSoundRef && ( pAnim->nFlags & 0x0010 ) )            // Sound
-    {
-        pInfo->bSoundOn = sal_True;                                 // Sound ist an
-        pInfo->bPlayFull = sal_False;
-        pInfo->aSoundFile = ReadSound( pAnim->nSoundRef );          // Pfad zum Soundfile in MSDOS-Notation
-    }
-    else
-        pInfo->bSoundOn = FALSE;                                    // Sound ist aus
-
-//  if( pAnim->nFlags & 0x0040 )
-//      pInfo->bPlayFull = FALSE;                                   // Sound des vorherigen Objektes abbrechen
-//  else
-//      pInfo->bPlayFull = TRUE;
-
-
-
-//  if ( nFlags & 4 )   // mouse over effect after nDelayTime ( not supported )
-    if ( pInfo->eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
-    {
-        switch ( pAnim->nAfterEffect )
-        {
-            case 1 :                                        // zur Farbe in nDimColor ausblenden
-            {
-                pInfo->bDimPrevious = TRUE;                 // Objekt abblenden
-                pInfo->bDimHide = FALSE;                    // verstecken statt abblenden
-                pInfo->aDimColor = pAnim->nDimColor;        // zum Abblenden des Objekts
-            }
-            break;
-            case 2 :                                        // Beim naechsten Mausklick ausblenden
-            {
-                ePresChange = PRESCHANGE_MANUAL;
-                pInfo->bDimHide = TRUE;                     // verstecken statt abblenden
-            }
-            break;
-            case 3 :                                        // Nach Animation ausblenden
-                pInfo->bDimHide = TRUE;                     // verstecken statt abblenden
-            break;
-            default :
-            {
-                ePresChange = PRESCHANGE_MANUAL;
-                pInfo->bDimHide = FALSE;                    // verstecken statt abblenden
-            }
-            break;
-        }
-        if ( pAnim->nBuildType > 1 )                        // texteffect active ( paragraph grouping level )
-        {
-            pInfo->eTextEffect = pInfo->eEffect;
-            if ( pInfo->eTextEffect == ::com::sun::star::presentation::AnimationEffect_RANDOM ) // I11195
-                pInfo->eTextEffect = ::com::sun::star::presentation::AnimationEffect_APPEAR;
-            if ( ! ( pAnim->nFlags & 0x4000 ) )
-            {
-    // Verknuepfte Form animieren aus
-    //          switch ( pAnim->nSubEffect )
-    //          {
-    //              case 0 :                                // Text einfuehren - Paragraphweise
-    //              case 1 :                                // Text einfuehren - Wortweise
-    //              case 2 :                                // Text einfuehren - Zeichenweise
-    //          }
-                pInfo->eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
-            }
-        }
-    }
-
-//  if ( nFlags & 1 )                                   // Koennen wir nicht: In umgekehrter Reihenfolge an
 }
 
 SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPage* pPage,
@@ -3035,90 +2623,60 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             DffRecordHeader aHdAnimInfoAtom;
                             if ( SeekToRec( rSt, PPT_PST_AnimationInfoAtom, nHdRecEnd, &aHdAnimInfoAtom ) )
                             {
-                                // Daten holen
-                                PptAnimationInfoAtom aAnimationInfo;
-                                rSt >> aAnimationInfo;
-
-                                // Farbe aufloesen nach RGB
-                                aAnimationInfo.nDimColor = MSO_CLR_ToColor(aAnimationInfo.nDimColor).GetColor();
-
-                                SdrObject* pEffObj = pObj;
-                                if ( ( !rObjData.nCalledByGroup ) && pObj->ISA( SdrObjGroup ) )
+                                // read data from stream
+                                Ppt97AnimationPtr pAnimation( new Ppt97Animation( rSt ) );
+                                // store animation informations
+                                if( pAnimation->HasEffect() )
                                 {
-                                    if ( aAnimationInfo.nBuildType > 1 )    // ( ( aAnimationInfo.nFlags & 0x4000 ) == 0 )
-                                    {   // if texteffect is used, we will split this groupobject later
-                                        SdrObjList* pObjectList = ((SdrObjGroup*)pObj)->GetSubList();
-                                        if ( pObjectList )
-                                        {
-                                            if ( pObjectList->GetObjCount() == 2 )
+                                    // translate color to RGB
+                                    pAnimation->SetDimColor( MSO_CLR_ToColor(pAnimation->GetDimColor()).GetColor() );
+                                    // translate sound bits to file url
+                                    if( pAnimation->HasSoundEffect() )
+                                        pAnimation->SetSoundFileUrl( ReadSound( pAnimation->GetSoundRef() ) );
+
+                                    SdrObject* pEffObj = pObj;
+                                    if ( ( !rObjData.nCalledByGroup ) && pObj->ISA( SdrObjGroup ) )
+                                    {
+                                        if ( pAnimation->HasParagraphEffect() ) // ( ( pAnimation->nFlags & 0x4000 ) == 0 )
+                                        {   // if texteffect is used, we will split this groupobject later
+                                            SdrObjList* pObjectList = ((SdrObjGroup*)pObj)->GetSubList();
+                                            if ( pObjectList )
                                             {
-                                                pEffObj = pObjectList->GetObj( 1 );
-                                                ((ProcessData*)pData)->nGroupingFlags = 1;
+                                                if ( pObjectList->GetObjCount() == 2 )
+                                                {
+                                                    pEffObj = pObjectList->GetObj( 1 );
+                                                    ((ProcessData*)pData)->nGroupingFlags = 1;
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                // Objekt ist animiert
-                                SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pEffObj );
-                                if( !pInfo )
-                                    pInfo = new SdAnimationInfo( pDoc );
-                                ( (ImplSdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aAnimationInfo );
-
-                                if ( ( pInfo->eEffect == ::com::sun::star::presentation::AnimationEffect_NONE )
-                                    && ( pInfo->eTextEffect == ::com::sun::star::presentation::AnimationEffect_NONE ) )
-                                    delete pInfo;
-                                else
-                                {
-                                    // #94897# do not use standard effect if the object uses texteffect if
-                                    // no line and fill style is set
-                                    if ( ( pInfo->eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
-                                        && ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
-                                            && ( pObj->ISA( SdrObjGroup ) != TRUE ) )
+                                    bool bDontAnimateInvisibleShape = false;
                                     {
-                                        const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+                                        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
 
-                                        XFillStyle eFillStyle = ((XFillStyleItem&)(rObjItemSet.Get(XATTR_FILLSTYLE))).GetValue();
-                                        XLineStyle eLineStyle = ((XLineStyleItem&)(rObjItemSet.Get(XATTR_LINESTYLE))).GetValue();
-
-                                        if ( ( eFillStyle == XFILL_NONE ) && ( eLineStyle == XLINE_NONE ) )
-                                            pInfo->eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
-                                    }
-
-                                    // transparency color: ppt does not support one, so a not used color is to set
-                                    // ( #71012# on badly configured systems only 16 system colors are available, so
-                                    // get the standard palette by temporarly create a 4Bit depth Bitmap );
-                                    Color aBlueScreen( 0x00, 0xff, 0xff );
-                                    Bitmap aBitmap( Size( 1, 1 ), 4 );
-                                    BitmapReadAccess* pAcc = aBitmap.AcquireReadAccess();
-                                    if ( pAcc )
-                                    {
-                                        UINT16 i;
-                                        BitmapColor aForegroundColor( pAcc->GetBestMatchingColor( MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ) ) ) );
-                                        BitmapColor aBackgroundColor( pAcc->GetBestMatchingColor( MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ) ) ) );
-                                        BitmapColor aLineColor( pAcc->GetBestMatchingColor( MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor, 0 ) ) ) );
-                                        BitmapColor aLineBackColor( pAcc->GetBestMatchingColor( MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineBackColor, 0 ) ) ) );
-
-                                        for ( i = 5; i < 9; i++ )
+                                        if( pTextObj && pTextObj->HasText() &&
+                                            !pObj->ISA( SdrObjGroup ) &&
+                                            pAnimation->HasAnimateAssociatedShape() )
                                         {
-                                            if ( pAcc->GetPaletteColor( i ) == aForegroundColor )
-                                                continue;
-                                            if ( pAcc->GetPaletteColor( i ) == aBackgroundColor )
-                                                continue;
-                                            if ( pAcc->GetPaletteColor( i ) == aLineColor )
-                                                continue;
-                                            if ( pAcc->GetPaletteColor( i ) != aLineBackColor )
-                                                break;
-                                        }
-                                        aBlueScreen = pAcc->GetPaletteColor( i );
-                                        aBitmap.ReleaseAccess( pAcc );
-                                    }
-                                    if ( !bInhabitanceChecked )             // be sure that the master effects comes
-                                        pInfo->nPresOrder |= 0x80000000;    // first by setting the highest presorder bit
+                                            const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
-                                    pInfo->aBlueScreen = aBlueScreen;
-                                    pEffObj->InsertUserData( pInfo );
+                                            XFillStyle eFillStyle = ((XFillStyleItem&)(rObjItemSet.Get(XATTR_FILLSTYLE))).GetValue();
+                                            XLineStyle eLineStyle = ((XLineStyleItem&)(rObjItemSet.Get(XATTR_LINESTYLE))).GetValue();
+
+                                            if ( ( eFillStyle == XFILL_NONE ) && ( eLineStyle == XLINE_NONE ) )
+                                                bDontAnimateInvisibleShape = true;
+                                        }
+                                    }
+                                    if( bDontAnimateInvisibleShape )
+                                        pAnimation->SetAnimateAssociatedShape(false);
+
+                                    //maybe some actions necessary to ensure that animations on master pages are played before animations on normal pages
+                                    ///mabe todo in future: bool bIsEffectOnMasterPage = !bInhabitanceChecked;?
+
+                                    aAnimations[pEffObj] = pAnimation;
+
+                                    bAnimationInfoFound = TRUE;
                                 }
-                                bAnimationInfoFound = TRUE;
                             }
                         }
                         break;
@@ -3161,6 +2719,22 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                             SdrMediaObj* pMediaObj = new SdrMediaObj( pObj->GetSnapRect() );
                                             pMediaObj->SetModel( pObj->GetModel() );
                                             pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
+
+                                            //--remove object from aAnimations list and add the new object instead
+                                            bool bHasAnimation = false;
+                                            Ppt97AnimationPtr pAnimation;
+                                            {
+                                                tAnimationMap::iterator aFound = aAnimations.find( pObj );
+                                                if( aFound != aAnimations.end() )
+                                                {
+                                                    bHasAnimation =true;
+                                                    pAnimation = Ppt97AnimationPtr( aAnimations[pObj].get() );
+                                                    aAnimations.erase(aFound);
+                                                }
+                                                aAnimations[pMediaObj] = pAnimation;
+                                            }
+                                            //--
+
                                             delete pObj, pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
                                             pMediaObj->setURL( aMediaURL );
                                         }
@@ -3189,5 +2763,3 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     }
     return pObj;
 }
-
-
