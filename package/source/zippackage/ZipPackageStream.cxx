@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-24 18:25:30 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,20 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace rtl;
 
+::cppu::class_data5 ZipPackageStream::s_cd =
+{
+    5 +1, sal_False, sal_False,
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    {
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::io::XActiveDataSink *) (ZipPackageStream * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::beans::XPropertySet *) (ZipPackageStream * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XNamed *)   (ZipPackageStream * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XChild *)   (ZipPackageStream * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > const * ))    &getCppuType, ((sal_Int32)(::com::sun::star::lang::XUnoTunnel *)    (ZipPackageStream * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (ZipPackageStream * ) 16) - 16 }
+    }
+};
+
 ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 : rZipPackage(rNewPackage)
 , bToBeCompressed ( sal_True )
@@ -118,36 +132,8 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
     aEntry.nOffset = rInEntry.nOffset;
     aEntry.sName = rInEntry.sName;
 }
-    //XInterface
-Any SAL_CALL ZipPackageStream::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    return ( ::cppu::queryInterface (   rType                                       ,
-                                                // OWeakObject interfaces
-                                                reinterpret_cast< XInterface*       > ( this )  ,
-                                                static_cast< XWeak*         > ( this )  ,
-                                                // ZipPackageEntry interfaces
-                                                static_cast< container::XNamed*     > ( this )  ,
-                                                static_cast< container::XChild*     > ( this )  ,
-                                                static_cast< XUnoTunnel*        > ( this )  ,
-                                                // My own interfaces
-                                                static_cast< io::XActiveDataSink*   > ( this )  ,
-                                                static_cast< beans::XPropertySet*   > ( this ) ) );
 
-}
-
-void SAL_CALL ZipPackageStream::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ZipPackageStream::release(  )
-    throw()
-{
-    OWeakObject::release();
-}
-
-    // XActiveDataSink
+// XActiveDataSink
 void SAL_CALL ZipPackageStream::setInputStream( const Reference< io::XInputStream >& aStream )
         throw(RuntimeException)
 {
@@ -198,33 +184,18 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         return xStream;
 }
 
-// XPropertySet
-Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
-    throw (RuntimeException)
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
 
 sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw(RuntimeException)
 {
     sal_Int64 nMe = 0;
-    if (aIdentifier.getLength() == 16 &&
-        ( 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) ||
-          0 == rtl_compareMemory(ZipPackageEntry::getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) ) )
+    if ( aIdentifier.getLength() == 16 &&
+         0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }
+
+// XPropertySet
 void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
