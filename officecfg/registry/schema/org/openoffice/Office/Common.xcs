@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-05 15:16:53 $
+ *  last change: $Author: tpf $ $Date: 2002-12-06 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,6 +785,9 @@
 				</prop>
 			</group>
 			<group oor:name="EnumDelimiters">
+				<info>
+					<desc xml:lang="en-US">Contains the delimiters used to seperate values for various command line parameters of the external mailer.</desc>
+				</info>
 				<prop oor:name="base" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Contains the delimiter used between the external mailer name and the "to" field.</desc>
@@ -2264,11 +2267,15 @@
 				</prop>
 			</group>
 			<group oor:name="Localisation">
+				<info>
+					<author>SSA</author>
+					<desc xml:lang="en-US">Contains locatisation specific settings.</desc>
+				</info>
 				<prop oor:name="AutoMnemonic" oor:type="xs:boolean" oor:localized="true">
 					<!-- OldPath: International/AutoMnemonic -->
 					<!-- OldLocation: soffice.ini -->
 					<info>
-						<author>VK</author>
+						<author>SSA</author>
 						<desc xml:lang="en-US">Specifies if shortcuts are assigned automatically.</desc>
 					</info>
 				</prop>
@@ -2276,12 +2283,22 @@
 					<!-- OldPath: International/DialogScaleX -->
 					<!-- OldLocation: soffice.ini -->
 					<info>
-						<author>VK</author>
-						<desc xml:lang="en-US">Specifies the factor for increasing controls.</desc>
+						<author>SSA</author>
+						<desc xml:lang="en-US">Specifies the percentage for enlarging controls.</desc>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="100"/>
+						<minInclusive oor:value="0">
+							<info>
+								<author>SSA</author>
+								<desc xml:lang="en-US">Lower limit for enlarging the controls is 0%.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="100">
+							<info>
+								<author>SSA</author>
+								<desc xml:lang="en-US">Upper limit for enlarging the controls is 100%.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 				</prop>
 			</group>
