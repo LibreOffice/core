@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:56:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     {
         // Get tunnel from model to retrieve the SfxObjectShell pointer from it
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
-        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( (sal_Int8*) SvGlobalName( SFX_GLOBAL_CLASSID ).GetBytes(), 16 );
+        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
         if ( xObj.is() )
         {
             sal_Int64 nHandle = xObj->getSomething( aSeq );
