@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:23:04 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,9 @@ namespace configmgr
         return 0;
     }
 
-    #define ID_PREFETCH     1
+    //#define ID_PREFETCH       1
+    static const int ID_PREFETCH=1;
+    static const int ID_ENABLEASYNC=2;
 
     //=============================================================================
     //= OConfigurationProvider
@@ -322,8 +324,9 @@ namespace configmgr
         )
                            :OProvider(xContext,pServices)
                            ,m_pImpl(NULL)
+
     {
-        registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH, 0,&m_aPrefetchNodes, ::getCppuType(static_cast< uno::Sequence< rtl::OUString > const * >(0) ));
+        registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH, 0,&m_aPrefetchNodes, ::getCppuType(&m_aPrefetchNodes));
     }
 
     //-----------------------------------------------------------------------------
@@ -342,6 +345,11 @@ namespace configmgr
         implConnect(*pNewImpl,ContextReader(m_xContext));
 
         m_pImpl = pNewImpl.release();
+        if (m_pImpl)
+        {
+            registerProperty(rtl::OUString::createFromAscii("enableAsync"), ID_ENABLEASYNC, 0,
+                &m_pImpl->m_bEnableAsync, ::getCppuType(&m_pImpl->m_bEnableAsync));
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -437,6 +445,105 @@ namespace configmgr
         return m_pImpl->getDefaultOptions().getUnoLocale();
     }
 
+    //XRefreshable
+    //-----------------------------------------------------------------------------
+     void SAL_CALL OConfigurationProvider::refresh(  )
+                throw (uno::RuntimeException)
+     {
+        OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
+
+        try
+        {
+            m_pImpl->refreshAll();
+        }
+        catch (uno::RuntimeException& ) { throw; }
+        catch (uno::Exception& e)
+        {
+            throw lang::WrappedTargetRuntimeException(e.Message, *this, uno::makeAny(e));
+        }
+        //Broadcast the changes
+        uno::Reference< css::util::XRefreshListener > const * const pRefresh = 0;
+        cppu::OInterfaceContainerHelper * aInterfaceContainerHelper =
+            cppu::WeakComponentImplHelperBase::rBHelper.getContainer
+                (::getCppuType(pRefresh));
+
+        if(aInterfaceContainerHelper)
+        {
+            cppu::OInterfaceIteratorHelper aIteratorHelper
+                (*aInterfaceContainerHelper);
+            while(aIteratorHelper.hasMoreElements())
+            {
+                uno::Reference< uno::XInterface > xIface = aIteratorHelper.next();
+                uno::Reference< util::XRefreshListener > xRefresh (xIface, uno::UNO_QUERY);
+                if (xRefresh.is())
+                {
+                    lang::EventObject aEventObject(*this);
+                    xRefresh->refreshed(aEventObject);
+                }
+            }
+        }
+     }
+     //-----------------------------------------------------------------------------
+     void SAL_CALL OConfigurationProvider::addRefreshListener(
+         const uno::Reference< util::XRefreshListener >& aListener )
+            throw (uno::RuntimeException)
+     {
+         uno::Reference< css::util::XRefreshListener > const * const pRefresh = 0;
+         cppu::WeakComponentImplHelperBase::rBHelper.addListener(::getCppuType(pRefresh), *this);
+     }
+     //-----------------------------------------------------------------------------
+     void SAL_CALL OConfigurationProvider::removeRefreshListener(
+         const uno::Reference< util::XRefreshListener >& aListener )
+            throw (uno::RuntimeException)
+     {
+         uno::Reference< css::util::XRefreshListener > const * const pRefresh = 0;
+         cppu::WeakComponentImplHelperBase::rBHelper.removeListener(::getCppuType(pRefresh), *this);
+     }
+     //XFlushable
+     //-----------------------------------------------------------------------------
+     void SAL_CALL OConfigurationProvider::flush(  )
+                throw (uno::RuntimeException)
+     {
+         OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
+         m_pImpl->flushAll();
+         //Broadcast the changes
+         uno::Reference< css::util::XRefreshListener > const * const pFlush = 0;
+         cppu::OInterfaceContainerHelper * aInterfaceContainerHelper =
+            cppu::WeakComponentImplHelperBase::rBHelper.getContainer
+                (::getCppuType(pFlush));
+
+         if(aInterfaceContainerHelper)
+         {
+             cppu::OInterfaceIteratorHelper aIteratorHelper
+                (*aInterfaceContainerHelper);
+             while(aIteratorHelper.hasMoreElements())
+             {
+                 uno::Reference< uno::XInterface > xIface = aIteratorHelper.next();
+                 uno::Reference< util::XFlushListener > xFlush (xIface, uno::UNO_QUERY);
+                 if (xFlush.is())
+                 {
+                     lang::EventObject aEventObject(*this);
+                     xFlush->flushed(aEventObject);
+                 }
+             }
+         }
+     }
+     //-----------------------------------------------------------------------------
+     void SAL_CALL OConfigurationProvider::addFlushListener(
+         const uno::Reference< util::XFlushListener >& aListener )
+            throw (uno::RuntimeException)
+     {
+          uno::Reference< css::util::XFlushListener > const * const pFlush = 0;
+          cppu::WeakComponentImplHelperBase::rBHelper.addListener(::getCppuType(pFlush), *this);
+     }
+     //-----------------------------------------------------------------------------
+     void SAL_CALL OConfigurationProvider::removeFlushListener(
+         const uno::Reference< util::XFlushListener >& aListener )
+            throw (uno::RuntimeException)
+     {
+         uno::Reference< css::util::XFlushListener > const * const pFlush = 0;
+         cppu::WeakComponentImplHelperBase::rBHelper.removeListener(::getCppuType(pFlush), *this);
+     }
     // XInterface
     //-----------------------------------------------------------------------------
     ::com::sun::star::uno::Any SAL_CALL OConfigurationProvider::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -474,23 +581,52 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
+
+
     void SAL_CALL OConfigurationProvider::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue)
                                                  throw (::com::sun::star::uno::Exception)
     {
         OProvider::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
-        uno::Sequence< OUString > aNodeList;
-        rValue >>= aNodeList;
 
-        RequestOptions const aOptions = m_pImpl->getDefaultOptions();
-
-        for (sal_Int32 i = 0; i < aNodeList.getLength(); i++)
+        switch(nHandle)
         {
-            using namespace configuration;
-            AbsolutePath aModulePath = AbsolutePath::makeModulePath(aNodeList[i], AbsolutePath::NoValidate());
-            m_pImpl->fetchSubtree(aModulePath , aOptions);
+            case ID_PREFETCH:
+            {
+                uno::Sequence< OUString > aNodeList;
+                rValue >>= aNodeList;
+
+                RequestOptions const aOptions = m_pImpl->getDefaultOptions();
+
+                for (sal_Int32 i = 0; i < aNodeList.getLength(); i++)
+                {
+                    using namespace configuration;
+                    AbsolutePath aModulePath = AbsolutePath::makeModulePath(aNodeList[i], AbsolutePath::NoValidate());
+                    m_pImpl->fetchSubtree(aModulePath , aOptions);
+                }
+            }break;
+
+            case ID_ENABLEASYNC:
+            {
+                if(!m_pImpl->m_bEnableAsync)
+                {
+                    //Forward to TreeManager
+                    m_pImpl->enableAsync(false);
+                }
+                else
+                {
+                     m_pImpl->enableAsync(true);
+                }
+            }
+            break;
+            default:
+            {
+                OSL_ENSURE(false, "OConfigurationProvider::setFastPropertyValue_NoBroadcast -unknown property");
+            }
+
         }
     }
+
 
 } // namespace configmgr
 
