@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptEditorForBeanShell.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 13:14:15 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:10:48 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,6 +70,8 @@ import javax.swing.JOptionPane;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import java.io.File;
 import java.io.InputStream;
@@ -78,16 +80,18 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
+import java.util.HashMap;
 
 import bsh.Interpreter;
 
 import drafts.com.sun.star.script.provider.XScriptContext;
-import com.sun.star.script.framework.provider.PathUtils;
-import com.sun.star.script.framework.browse.ScriptMetaData;
+import com.sun.star.script.framework.provider.ScriptEditor;
+import com.sun.star.script.framework.container.ScriptMetaData;
 
-
-public class ScriptEditorForBeanShell implements ActionListener {
-
+public class ScriptEditorForBeanShell
+    implements ScriptEditor, ActionListener
+{
     private JFrame frame;
     private String filename;
 
@@ -96,8 +100,123 @@ public class ScriptEditorForBeanShell implements ActionListener {
 
     private XScriptContext context;
     private URL scriptURL = null;
+
+    // global ScriptEditorForBeanShell returned for getEditor() calls
+    private static ScriptEditorForBeanShell theScriptEditorForBeanShell;
+
+    // global list of ScriptEditors, key is URL of file being edited
+    private static Map BEING_EDITED = new HashMap();
+
+    // template for new BeanShell scripts
+    private static String BSHTEMPLATE;
+
+    // try to load the template for BeanShell scripts
+    static {
+        try {
+            URL url =
+                ScriptEditorForBeanShell.class.getResource("template.bsh");
+
+            InputStream in = url.openStream();
+            StringBuffer buf = new StringBuffer();
+            byte[] b = new byte[1024];
+            int len = 0;
+
+            while ((len = in.read(b)) != -1) {
+                buf.append(new String(b, 0, len));
+            }
+
+            in.close();
+
+            BSHTEMPLATE = buf.toString();
+        }
+        catch (IOException ioe) {
+            BSHTEMPLATE = "// BeanShell script";
+        }
+        catch (Exception e) {
+            BSHTEMPLATE = "// BeanShell script";
+        }
+    }
+
+    /**
+     *  Returns the global ScriptEditorForBeanShell instance.
+     */
+    public static ScriptEditorForBeanShell getEditor()
+    {
+        if (theScriptEditorForBeanShell == null)
+        {
+            synchronized(ScriptEditorForBeanShell.class)
+            {
+                if (theScriptEditorForBeanShell == null)
+                {
+                    theScriptEditorForBeanShell =
+                        new ScriptEditorForBeanShell();
+                }
+            }
+        }
+        return theScriptEditorForBeanShell;
+    }
+
+    /**
+     *  Get the ScriptEditorForBeanShell instance for this URL
+     *
+     * @param  url         The URL of the script source file
+     *
+     * @return             The ScriptEditorForBeanShell associated with
+     *                     the given URL if one exists, otherwise null.
+     */
+    public static ScriptEditorForBeanShell getEditor(URL url)
+    {
+        return (ScriptEditorForBeanShell)BEING_EDITED.get(url);
+    }
+
+    /**
+     *  Returns whether or not the script source being edited in this
+     *  ScriptEditorForBeanShell has been modified
+     */
+    public boolean isModified()
+    {
+        return view.isModified();
+    }
+
+    /**
+     *  Returns the text being displayed in this ScriptEditorForBeanShell
+     *
+     *  @return            The text displayed in this ScriptEditorForBeanShell
+     */
+    public String getText()
+    {
+        return view.getText();
+    }
+
+    /**
+     *  Returns the template text for BeanShell scripts
+     *
+     *  @return            The template text for BeanShell scripts
+     */
+    public String getTemplate() {
+        return BSHTEMPLATE;
+    }
+
+    /**
+     *  Returns the default extension for BeanShell scripts
+     *
+     *  @return            The default extension for BeanShell scripts
+     */
+    public String getExtension() {
+        return "bsh";
+    }
+
+    /**
+     *  Opens an editor window for the specified ScriptMetaData.
+     *  If an editor window is already open for that data it will be
+     *  moved to the front.
+     *
+     * @param  metadata    The metadata describing the script
+     * @param  context     The context in which to execute the script
+     *
+     */
     public void edit(XScriptContext context, ScriptMetaData entry) {
-        this.context = context;
+
         if (entry != null ) {
             try {
                 String sUrl = entry.getParcelLocation();
@@ -106,15 +225,36 @@ public class ScriptEditorForBeanShell implements ActionListener {
                     sUrl += "/";
                 }
                 sUrl +=  entry.getLanguageName();
-                scriptURL = PathUtils.createScriptURL( sUrl );
-                this.filename = scriptURL.getFile();
+                URL url = entry.getSourceURL();
+
+                // check if there is already an editing session for this script
+                if (BEING_EDITED.containsKey(url))
+                {
+                    ScriptEditorForBeanShell editor =
+                        (ScriptEditorForBeanShell) BEING_EDITED.get(url);
+
+                    editor.frame.toFront();
+                }
+                else
+                {
+                    new ScriptEditorForBeanShell(context, url);
+                }
             }
             catch (IOException ioe) {
-
                 showErrorMessage( "Error loading file: " + ioe.getMessage() );
             }
         }
-        this.model = new ScriptSourceModel(scriptURL);
+    }
+
+    private ScriptEditorForBeanShell() {
+    }
+
+    private ScriptEditorForBeanShell(XScriptContext context, URL url)
+    {
+        this.context   = context;
+        this.scriptURL = url;
+        this.model     = new ScriptSourceModel(url);
+        this.filename  = url.getFile();
 
         try {
             Class c = Class.forName(
@@ -142,18 +282,26 @@ public class ScriptEditorForBeanShell implements ActionListener {
         this.model.setView(this.view);
         initUI();
         frame.show();
+
+        BEING_EDITED.put(url, this);
     }
 
-    public ScriptEditorForBeanShell() {
-    }
-
-    public void showErrorMessage(String message) {
+    private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(frame, message,
             "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void initUI() {
         this.frame = new JFrame("BeanShell Debug Window");
+
+        frame.addWindowListener(
+            new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent e) {
+                    shutdown();
+                }
+            }
+        );
 
         String[] labels = {"Run", "Clear", "Save", "Close"};
         JPanel p = new JPanel();
@@ -176,40 +324,11 @@ public class ScriptEditorForBeanShell implements ActionListener {
         frame.setLocation(300, 200);
     }
 
-    private void promptForSaveName() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
-            public boolean accept(File f) {
-                if (f.isDirectory() || f.getName().endsWith(".bsh")) {
-                    return true;
-                }
-                return false;
-            }
-
-            public String getDescription() {
-                return ("BeanShell files: *.bsh");
-            }
-        });
-
-        int ret = chooser.showSaveDialog(frame);
-
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            filename = chooser.getSelectedFile().getAbsolutePath();
-            if (!filename.endsWith(".bsh")) {
-                filename += ".bsh";
-            }
-        }
-
-    }
-
     private void saveTextArea() {
         if (!view.isModified()) {
             return;
         }
 
-        /*if (filename == null) {
-            promptForSaveName();
-        }*/
         OutputStream fos = null;
         try {
             String s = view.getText();
@@ -226,7 +345,8 @@ public class ScriptEditorForBeanShell implements ActionListener {
             }
             else
             {
-                showErrorMessage( "Error saving file: couldn't open stream for file" );
+                showErrorMessage(
+                    "Error saving file: couldn't open stream for file" );
             }
 
        }
@@ -252,6 +372,13 @@ public class ScriptEditorForBeanShell implements ActionListener {
 
     }
 
+    private void shutdown()
+    {
+        if (BEING_EDITED.containsKey(scriptURL)) {
+            BEING_EDITED.remove(scriptURL);
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Run")) {
             try {
@@ -263,6 +390,7 @@ public class ScriptEditorForBeanShell implements ActionListener {
         }
         else if (e.getActionCommand().equals("Close")) {
             frame.dispose();
+            shutdown();
         }
         else if (e.getActionCommand().equals("Save")) {
             saveTextArea();
