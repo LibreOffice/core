@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-31 11:32:00 $
+ *  last change: $Author: mt $ $Date: 2001-06-01 09:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,6 +1358,9 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
 {
     if ( !pDragAndDropInfo->bVisCursor )
     {
+        if ( pOutWin->GetCursor() )
+            pOutWin->GetCursor()->Hide();
+
         Brush aOldBrush = GetWindow()->GetFillInBrush( );
         GetWindow()->SetFillInBrush( Brush( Color( COL_GRAY), BRUSH_50 ) );
 
