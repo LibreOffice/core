@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-10 18:38:25 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 13:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,6 +941,7 @@ void __EXPORT ScNavigatorDlg::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
                 case SC_HINT_DRAW_CHANGED:
                     aLbEntries.Refresh( SC_CONTENT_GRAPHIC );
                     aLbEntries.Refresh( SC_CONTENT_OLEOBJECT );
+                    aLbEntries.Refresh( SC_CONTENT_DRAWING );
                     break;
 
                 case SC_HINT_AREALINKS_CHANGED:

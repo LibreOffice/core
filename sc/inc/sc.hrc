@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-02 10:36:26 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 13:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,6 +1276,7 @@
 #define SCSTR_CONTENT_OLEOBJECT (STR_START + 255)
 #define SCSTR_CONTENT_NOTE      (STR_START + 256)
 #define SCSTR_CONTENT_AREALINK  (STR_START + 257)
+#define SCSTR_CONTENT_DRAWING   (STR_START + 258)
 //  hier ein wenig Platz fuer Erweiterungen
 
 // Eingabezeile, Quickhelp-Strings (HelpText jetzt per HelpId aus Hilfe)

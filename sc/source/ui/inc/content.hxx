@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-02 14:15:44 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 13:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ class ScAreaLink;
 #define SC_CONTENT_OLEOBJECT    5
 #define SC_CONTENT_NOTE         6
 #define SC_CONTENT_AREALINK     7
-#define SC_CONTENT_COUNT        8
+#define SC_CONTENT_DRAWING      8
+#define SC_CONTENT_COUNT        9
 
 //
 //  TreeListBox fuer Inhalte
@@ -122,6 +123,7 @@ class ScContentTree : public SvTreeListBox
     void    GetLinkNames();
     void    GetGraphicNames();
     void    GetOleNames();
+    void    GetGroupNames();
     void    GetNoteStrings();
 
     BOOL    DrawNamesChanged( USHORT nType, USHORT nId );

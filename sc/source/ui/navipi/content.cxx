@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-02 14:17:24 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 13:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ static USHORT pTypeList[SC_CONTENT_COUNT] =
     SC_CONTENT_AREALINK,
     SC_CONTENT_GRAPHIC,
     SC_CONTENT_OLEOBJECT,
-    SC_CONTENT_NOTE
+    SC_CONTENT_NOTE,
+    SC_CONTENT_DRAWING
 };
 
 BOOL ScContentTree::bIsInDrag = FALSE;
@@ -364,6 +365,7 @@ IMPL_LINK( ScContentTree, DoubleClickHdl, ScContentTree *, EMPTYARG )
                 break;
             case SC_CONTENT_OLEOBJECT:
             case SC_CONTENT_GRAPHIC:
+            case SC_CONTENT_DRAWING:
                 pParentWindow->SetCurrentObject( aText );
                 break;
             case SC_CONTENT_NOTE:
@@ -653,6 +655,9 @@ void ScContentTree::Refresh( USHORT nType )
     if ( nType == SC_CONTENT_OLEOBJECT )
         if (!DrawNamesChanged(SC_CONTENT_OLEOBJECT, OBJ_OLE2))
             return;
+    if ( nType == SC_CONTENT_DRAWING )
+        if (!DrawNamesChanged(SC_CONTENT_DRAWING, OBJ_GRUP))
+            return;
 
     SetUpdateMode(FALSE);
 
@@ -668,6 +673,8 @@ void ScContentTree::Refresh( USHORT nType )
         GetGraphicNames();
     if ( !nType || nType == SC_CONTENT_OLEOBJECT )
         GetOleNames();
+    if ( !nType || nType == SC_CONTENT_DRAWING )
+        GetGroupNames();
     if ( !nType || nType == SC_CONTENT_NOTE )
         GetNoteStrings();
     if ( !nType || nType == SC_CONTENT_AREALINK )
@@ -774,6 +781,9 @@ void ScContentTree::GetDrawNames( USHORT nType, USHORT nId )
     if (!pDoc)
         return;
 
+    // iterate in flat mode for groups
+    SdrIterMode eIter = ( nType == SC_CONTENT_DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
+
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pDrawLayer && pShell)
@@ -785,7 +795,7 @@ void ScContentTree::GetDrawNames( USHORT nType, USHORT nId )
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObjListIter aIter( *pPage, eIter );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -811,6 +821,11 @@ void ScContentTree::GetGraphicNames()
 void ScContentTree::GetOleNames()
 {
     GetDrawNames( SC_CONTENT_OLEOBJECT, OBJ_OLE2 );
+}
+
+void ScContentTree::GetGroupNames()
+{
+    GetDrawNames( SC_CONTENT_DRAWING, OBJ_GRUP );
 }
 
 void ScContentTree::GetLinkNames()
@@ -981,6 +996,9 @@ BOOL ScContentTree::DrawNamesChanged( USHORT nType, USHORT nId )
 
     SvLBoxEntry* pEntry = FirstChild( pParent );
 
+    // iterate in flat mode for groups
+    SdrIterMode eIter = ( nType == SC_CONTENT_DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
+
     BOOL bEqual = TRUE;
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
@@ -993,7 +1011,7 @@ BOOL ScContentTree::DrawNamesChanged( USHORT nType, USHORT nId )
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObjListIter aIter( *pPage, eIter );
                 SdrObject* pObject = aIter.Next();
                 while (pObject && bEqual)
                 {
@@ -1057,7 +1075,8 @@ void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, USHORT nType,
     if (pModel)
     {
         BOOL bOle = ( nType == SC_CONTENT_OLEOBJECT );
-        USHORT nDrawId = bOle ? OBJ_OLE2 : OBJ_GRAF;
+        BOOL bGraf = ( nType == SC_CONTENT_GRAPHIC );
+        USHORT nDrawId = bOle ? OBJ_OLE2 : ( bGraf ? OBJ_GRAF : OBJ_GRUP );
         USHORT nTab = 0;
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
         if (pObject)
@@ -1231,7 +1250,8 @@ void ScContentTree::DoDrag()
                                 lcl_DoDragCells( pSrcShell, aRange, SC_DROP_NAVIGATOR | SC_DROP_TABLE, this );
                             }
                         }
-                        else if ( nType == SC_CONTENT_GRAPHIC || nType == SC_CONTENT_OLEOBJECT )
+                        else if ( nType == SC_CONTENT_GRAPHIC || nType == SC_CONTENT_OLEOBJECT ||
+                                    nType == SC_CONTENT_DRAWING )
                         {
                             lcl_DoDragObject( pSrcShell, aText, nType, this );
 
