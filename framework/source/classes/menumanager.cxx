@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-07 05:50:34 $
+ *  last change: $Author: cd $ $Date: 2001-05-07 06:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ namespace framework
 #define SID_SFX_START           5000
 #define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
 #define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
+#define SID_PICKLIST            (SID_SFX_START + 510)
+#define SID_MDIWINDOWLIST       (SID_SFX_START + 610)
 
 #define SFX_REFERER_USER        "private:user"
 #define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
@@ -180,7 +182,8 @@ const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" )
 
 const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
-
+const ::rtl::OUString aSlotSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5510" ));
+const ::rtl::OUString aSlotSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5610" ));
 
 MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
     OMutexMember(), OWeakObject()
@@ -810,9 +813,11 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 
         m_bActive = TRUE;
 
-        if ( m_aMenuItemCommand == aSpecialFileMenu )
+        if ( m_aMenuItemCommand == aSpecialFileMenu ||
+             m_aMenuItemCommand == aSlotSpecialFileMenu )
             UpdateSpecialFileMenu( pMenu );
-        else if ( m_aMenuItemCommand == aSpecialWindowMenu )
+        else if ( m_aMenuItemCommand == aSpecialWindowMenu ||
+                  m_aMenuItemCommand == aSlotSpecialWindowMenu )
             UpdateSpecialWindowMenu( pMenu );
 
         if ( m_bInitialized )
