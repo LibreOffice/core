@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:22:46 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1770,7 +1770,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     RadioButton RB_EDITNOW
     {
         Pos = MAP_APPFONT( 53, 13 );
-        Size = MAP_APPFONT( 59, 10 );
+        Size = MAP_APPFONT( 89, 10 );
         Text = "Sofort ~bearbeiten";
         Text [ ENGLISH ] = "~Edit now";
         Text[ english_us ] = "Edit ~now";
@@ -1794,8 +1794,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     RadioButton RB_EDITLATER
     {
-        Pos = MAP_APPFONT( 114, 13 );
-        Size = MAP_APPFONT( 59, 10 );
+        Pos = MAP_APPFONT( 144, 13 );
+        Size = MAP_APPFONT( 89, 10 );
         Text = "~Später bearbeiten";
         Text [ ENGLISH ] = "Edit ~later";
         Text[ english_us ] = "Edit ~later";
