@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:28:36 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
     aTbSeq[1].Name = m_aPropResourceURL;
 
     Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeq( aToolBarArray.size() );
-    for ( sal_Int32 i = 0; i < aToolBarArray.size(); i++ )
+    for ( sal_uInt32 i = 0; i < aToolBarArray.size(); i++ )
     {
         aTbSeq[0].Value <<= aToolBarArray[i].aToolBarUIName;
         aTbSeq[1].Value <<= aToolBarArray[i].aToolBarResName;
@@ -694,7 +694,11 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                         xLayoutManager->showElement( aToolBarResName );
                                     }
                                     else
+                                    {
+                                        // closing means: Don't show this toolbar again.
+                                        xLayoutManager->hideElement( aToolBarResName );
                                         xLayoutManager->destroyElement( aToolBarResName );
+                                    }
                                 }
                             }
                         }
