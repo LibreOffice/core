@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.io.stm.Pipe </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    stm </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.Pipe    </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    vos         </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   vos2MSC     </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.io.XObjectInputStream                 </Type>
+<Type>   com.sun.star.io.XObjectOutputStream                    </Type>
+<Type>   com.sun.star.io.XActiveDataSource                  </Type>
+<Type>   com.sun.star.io.XActiveDataSink                    </Type>
+<Type>   com.sun.star.io.XMarkableStream                    </Type>
+<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
+<Type>   com.sun.star.io.WrongFormatException                           </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
+<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
+<Type>   com.sun.star.lang.XTypeProvider                                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
+<Type>   com.sun.star.test.XSimpleTest                              </Type>
+<Type>   com.sun.star.uno.TypeClass                                 </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.XAggregation                              </Type>
+
+</COMPONENTDESCRIPTION>
+
+
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.io.stm.DataInputStream </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    acceptor    </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.DataInputStream </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.io.XObjectInputStream                 </Type>
+<Type>   com.sun.star.io.XObjectOutputStream                    </Type>
+<Type>   com.sun.star.io.XActiveDataSource                  </Type>
+<Type>   com.sun.star.io.XActiveDataSink                    </Type>
+<Type>   com.sun.star.io.XMarkableStream                    </Type>
+<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
+<Type>   com.sun.star.io.WrongFormatException                           </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
+<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
+<Type>   com.sun.star.lang.XTypeProvider                                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
+<Type>   com.sun.star.test.XSimpleTest                              </Type>
+<Type>   com.sun.star.uno.TypeClass                                 </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.XAggregation                              </Type>
+
+</COMPONENTDESCRIPTION>
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.io.stm.DataOutputStream </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    acceptor    </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.DataOutputStream    </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.io.XObjectInputStream                 </Type>
+<Type>   com.sun.star.io.XObjectOutputStream                    </Type>
+<Type>   com.sun.star.io.XActiveDataSource                  </Type>
+<Type>   com.sun.star.io.XActiveDataSink                    </Type>
+<Type>   com.sun.star.io.XMarkableStream                    </Type>
+<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
+<Type>   com.sun.star.io.WrongFormatException                           </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
+<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
+<Type>   com.sun.star.lang.XTypeProvider                                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
+<Type>   com.sun.star.test.XSimpleTest                              </Type>
+<Type>   com.sun.star.uno.TypeClass                                 </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.XAggregation                              </Type>
+
+</COMPONENTDESCRIPTION>
+
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.io.stm.ObjectInputStream </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    acceptor    </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.ObjectInputStream   </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.io.XObjectInputStream                 </Type>
+<Type>   com.sun.star.io.XObjectOutputStream                    </Type>
+<Type>   com.sun.star.io.XActiveDataSource                  </Type>
+<Type>   com.sun.star.io.XActiveDataSink                    </Type>
+<Type>   com.sun.star.io.XMarkableStream                    </Type>
+<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
+<Type>   com.sun.star.io.WrongFormatException                           </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
+<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
+<Type>   com.sun.star.lang.XTypeProvider                                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
+<Type>   com.sun.star.test.XSimpleTest                              </Type>
+<Type>   com.sun.star.uno.TypeClass                                 </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.XAggregation                              </Type>
+
+</COMPONENTDESCRIPTION>
+
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.io.stm.ObjectOutputStream </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    acceptor    </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.ObjectOutputStream  </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.io.XObjectInputStream                 </Type>
+<Type>   com.sun.star.io.XObjectOutputStream                    </Type>
+<Type>   com.sun.star.io.XActiveDataSource                  </Type>
+<Type>   com.sun.star.io.XActiveDataSink                    </Type>
+<Type>   com.sun.star.io.XMarkableStream                    </Type>
+<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
+<Type>   com.sun.star.io.WrongFormatException                           </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
+<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
+<Type>   com.sun.star.lang.XTypeProvider                                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
+<Type>   com.sun.star.test.XSimpleTest                              </Type>
+<Type>   com.sun.star.uno.TypeClass                                 </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.XAggregation                              </Type>
+
+</COMPONENTDESCRIPTION>
+
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.io.stm.MarkableInputStream </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    acceptor    </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.MarkableInputStream </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.io.XObjectInputStream                 </Type>
+<Type>   com.sun.star.io.XObjectOutputStream                    </Type>
+<Type>   com.sun.star.io.XActiveDataSource                  </Type>
+<Type>   com.sun.star.io.XActiveDataSink                    </Type>
+<Type>   com.sun.star.io.XMarkableStream                    </Type>
+<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
+<Type>   com.sun.star.io.WrongFormatException                           </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
+<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
+<Type>   com.sun.star.lang.XTypeProvider                                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
+<Type>   com.sun.star.test.XSimpleTest                              </Type>
+<Type>   com.sun.star.uno.TypeClass                                 </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.XAggregation                              </Type>
+
+</COMPONENTDESCRIPTION>
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.io.stm.MarkableOutputStream </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    acceptor    </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.MarkableOutputStream    </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.io.XObjectInputStream                 </Type>
+<Type>   com.sun.star.io.XObjectOutputStream                    </Type>
+<Type>   com.sun.star.io.XActiveDataSource                  </Type>
+<Type>   com.sun.star.io.XActiveDataSink                    </Type>
+<Type>   com.sun.star.io.XMarkableStream                    </Type>
+<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
+<Type>   com.sun.star.io.WrongFormatException                           </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
+<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
+<Type>   com.sun.star.lang.XTypeProvider                                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
+<Type>   com.sun.star.test.XSimpleTest                              </Type>
+<Type>   com.sun.star.uno.TypeClass                                 </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.XAggregation                              </Type>
+
+</COMPONENTDESCRIPTION>
+
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Juergen Schmidt </Author>
+
+<Name>  com.sun.star.comp.stoc.Pump </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    io  </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.io.Pump    </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu1       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal1        </RuntimeModuleDependency>
+
+<Type>  com.sun.star.io.XConnectable                </Type>
+<Type>  com.sun.star.io.XActiveDataSource           </Type>
+<Type>  com.sun.star.io.XActiveDataSink             </Type>
+<Type>  com.sun.star.io.XActiveDataControl          </Type>
+<Type>  com.sun.star.lang.XTypeProvider             </Type>
+<Type>  com.sun.star.lang.XServiceInfo              </Type>
+<Type>  com.sun.star.lang.XSingleServiceFactory     </Type>
+<Type>  com.sun.star.lang.XMultiServiceFactory      </Type>
+<Type>  com.sun.star.registry.XRegistryKey          </Type>
+<Type>  com.sun.star.uno.XAggregation               </Type>
+<Type>  com.sun.star.uno.XWeak                      </Type>
+<Type>  com.sun.star.uno.TypeClass                  </Type>
+
+</COMPONENTDESCRIPTION>
+
