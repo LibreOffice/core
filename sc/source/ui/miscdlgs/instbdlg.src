@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:18:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "»õ·Î¡¡¸¸µé±â(~N)";
         Text[ turkish ] = "~Yeni tablo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Crear una nueva";
     };
     RadioButton BTN_FROMFILE
     {
@@ -130,6 +131,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "£®£®ÆÄÀÏ·ÎºÎÅÍ¡¡¸¸µé±â(~F)";
         Text[ turkish ] = "~Dosyadan oluþtur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~A partir de archivo";
     };
     MultiListBox LB_TABLES
     {
@@ -163,6 +165,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "Ã£¾Æº¸±â(~B)...";
         Text[ turkish ] = "~Tara...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~xaminar...";
     };
     CheckBox BTN_LINK
     {
@@ -190,6 +193,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "¿¬°á(~K)";
         Text[ turkish ] = "Bað~la";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vincular";
     };
     Edit ED_TABNAME
     {
@@ -243,6 +247,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición";
     };
     RadioButton RB_BEHIND
     {
@@ -270,6 +275,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "ÇöÀç ½ÃÆ® µÚ¿¡(~A)";
         Text[ turkish ] = "Açýk tablonun ~arkasýna";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Detrás de la ~hoja actual";
     };
     RadioButton RB_BEFORE
     {
@@ -297,6 +303,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "ÇöÀç ½ÃÆ® ¾Õ¿¡(~E)";
         Text[ turkish ] = "Açýk tablonun ~önüne";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Delante de la hoja actual";
     };
     GroupBox GB_TABLE
     {
@@ -323,6 +330,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "½ÃÆ®";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hoja";
     };
     NumericField NF_COUNT
     {
@@ -359,6 +367,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ korean ] = "°³¼ö(~O)";
         Text[ turkish ] = "A~det";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Núm. de hojas";
     };
     FixedText FT_NAME
     {
@@ -384,6 +393,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦WºÙ(~M)";
         Text[ turkish ] = "~Ad";
         Text[ arabic ] = "ÇáÇÓã";
+        Text[ catalan ] = "No~mbre";
     };
     Text[ chinese_simplified ] = "²åÈë¹¤×÷±í";
     Text[ russian ] = "Âñòàâèòü ëèñò";
@@ -395,4 +405,5 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Text[ korean ] = "½ÃÆ® »ðÀÔ";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar hoja";
 };
