@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:20:23 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,6 +897,24 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             rNativeContentRegion = rNativeBoundingRegion;
             returnVal = TRUE;
         }
+        if( (nType == CTRL_RADIOBUTTON || nType == CTRL_CHECKBOX) )
+        {
+            NWEnsureGTKRadio();
+            NWEnsureGTKCheck();
+            GtkWidget* widget = (nType == CTRL_RADIOBUTTON) ? gRadioWidget : gCheckWidget;
+            gint indicator_size, indicator_spacing;
+            gtk_widget_style_get( widget,
+                                  "indicator_size", &indicator_size,
+                                  "indicator_spacing", &indicator_spacing,
+                                  NULL);
+            indicator_size += 2*indicator_spacing; // guess overpaint of theme
+            rNativeBoundingRegion = rControlRegion;
+            Rectangle aIndicatorRect( Point( 0,
+                                             (rControlRegion.GetBoundRect().GetHeight()-indicator_size)/2),
+                                      Size( indicator_size, indicator_size ) );
+            rNativeContentRegion = Region( aIndicatorRect );
+            returnVal = TRUE;
+        }
 
         pWidgetMutex->release();
     }
@@ -1102,28 +1120,21 @@ BOOL GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
                                       const ImplControlValue& aValue, SalControlHandle& rControlHandle,
                                       OUString aCaption )
 {
-#define RADIO_BUTTON_MINIMUMSIZE   14 // found by experiment, TODO: should be checked at runtime if possible
-
     GtkStateType    stateType;
     GtkShadowType   shadowType;
     BOOL            isChecked = (aValue.getTristateVal()==BUTTONVALUE_ON);
-    gint            x, y, w, h;
+    gint            x, y;
     GdkRectangle    clipRect;
 
     NWEnsureGTKButton();
     NWEnsureGTKRadio();
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
-    x = rControlRectangle.Left();
-    y = rControlRectangle.Top();
-    w = rControlRectangle.GetWidth();
-    h = rControlRectangle.GetHeight();
+    gint indicator_size;
+    gtk_widget_style_get( gRadioWidget, "indicator_size", &indicator_size, NULL);
 
-    // assure minimum button size required by gtk+ to avoid clipping
-    if( w < RADIO_BUTTON_MINIMUMSIZE )
-        w = RADIO_BUTTON_MINIMUMSIZE;
-    if( h < RADIO_BUTTON_MINIMUMSIZE )
-        h = RADIO_BUTTON_MINIMUMSIZE;
+    x = rControlRectangle.Left() + (rControlRectangle.GetWidth()-indicator_size)/2;
+    y = rControlRectangle.Top() + (rControlRectangle.GetHeight()-indicator_size)/2;
 
     // Set the shadow based on if checked or not so we get a freakin checkmark.
     shadowType = isChecked ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
@@ -1143,10 +1154,9 @@ BOOL GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        // magic x+1: place for adornment, else radio button gets clipped
         gtk_paint_option( gRadioWidget->style, gdkDrawable, stateType, shadowType,
                           &clipRect, gRadioWidget, "radiobutton",
-                          x+1, y, w, h );
+                          x, y, indicator_size, indicator_size );
     }
 
     return( TRUE );
@@ -1162,28 +1172,21 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
                                       const ImplControlValue& aValue,
                                       SalControlHandle& rControlHandle, OUString aCaption )
 {
-#define CHECKBOX_MINIMUMSIZE   14 // found by experiment, TODO: should be checked at runtime if possible
-
     GtkStateType    stateType;
     GtkShadowType   shadowType;
     BOOL            isChecked = (aValue.getTristateVal()==BUTTONVALUE_ON) ? TRUE : FALSE;
     GdkRectangle    clipRect;
-    gint            x,y,w,h;
+    gint            x,y;
 
     NWEnsureGTKButton();
     NWEnsureGTKCheck();
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
-    x = rControlRectangle.Left();
-    y = rControlRectangle.Top();
-    w = rControlRectangle.GetWidth();
-    h = rControlRectangle.GetHeight();
+    gint indicator_size;
+    gtk_widget_style_get( gCheckWidget, "indicator_size", &indicator_size, NULL);
 
-    // assure minimum button size required by gtk+ to avoid clipping
-    if( w < CHECKBOX_MINIMUMSIZE )
-        w = CHECKBOX_MINIMUMSIZE;
-    if( h < CHECKBOX_MINIMUMSIZE )
-        h = CHECKBOX_MINIMUMSIZE;
+    x = rControlRectangle.Left() + (rControlRectangle.GetWidth()-indicator_size)/2;
+    y = rControlRectangle.Top() + (rControlRectangle.GetHeight()-indicator_size)/2;
 
     // Set the shadow based on if checked or not so we get a checkmark.
     shadowType = isChecked ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
@@ -1197,10 +1200,9 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        // magic x+1: place for adornment, else checkbox gets clipped
         gtk_paint_check( gCheckWidget->style, gdkDrawable, stateType, shadowType,
                          &clipRect, gCheckWidget, "checkbutton",
-                         x+1, y, w, h );
+                         x, y, indicator_size, indicator_size );
     }
 
     return( TRUE );
@@ -1397,7 +1399,7 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
         thumbRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
     }
 
-    BOOL has_slider = ! ( thumbRect.IsEmpty() );
+    BOOL has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
 
     scrollbarValues = gtk_range_get_adjustment( GTK_RANGE(scrollbarWidget) );
     if ( scrollbarValues == NULL )
@@ -2451,7 +2453,7 @@ BOOL GtkSalGraphics::NWPaintGTKMenubar(
                                 GTK_STATE_NORMAL,
                                 GTK_SHADOW_NONE,
                                 &clipRect,
-                                gMenubarWidget,
+                                GTK_WIDGET(m_pWindow),
                                 "base",
                                 x, y, w, h );
             gtk_paint_box( gMenubarWidget->style,
@@ -2533,7 +2535,7 @@ BOOL GtkSalGraphics::NWPaintGTKPopupMenu(
                                 GTK_STATE_NORMAL,
                                 GTK_SHADOW_NONE,
                                 &clipRect,
-                                gMenuWidget,
+                                GTK_WIDGET(m_pWindow),
                                 "base",
                                 x, y, w, h );
             gtk_paint_box( gMenuWidget->style,
