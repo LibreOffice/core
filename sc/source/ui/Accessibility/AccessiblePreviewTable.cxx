@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-06 13:31:33 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,13 +572,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCh
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndexInParent() throw (uno::RuntimeException)
 {
     return mnIndex;
-}
-
-uno::Reference< XAccessibleRelationSet > SAL_CALL ScAccessiblePreviewTable::getAccessibleRelationSet()
-                                throw (uno::RuntimeException)
-{
-    //! missing
-    return NULL;
 }
 
 uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAccessibleStateSet()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-04 11:55:59 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,13 +316,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
 sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleIndexInParent() throw (uno::RuntimeException)
 {
     return mnIndex;
-}
-
-uno::Reference< XAccessibleRelationSet > SAL_CALL ScAccessiblePageHeader::getAccessibleRelationSet()
-                                throw (uno::RuntimeException)
-{
-    //! missing
-    return NULL;
 }
 
 uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccessibleStateSet()

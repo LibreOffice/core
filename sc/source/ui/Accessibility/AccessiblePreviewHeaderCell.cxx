@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:14:21 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,13 +237,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
 sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent() throw (uno::RuntimeException)
 {
     return mnIndex;
-}
-
-uno::Reference< XAccessibleRelationSet > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleRelationSet()
-                                throw (uno::RuntimeException)
-{
-    //! missing
-    return NULL;
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleStateSet()
