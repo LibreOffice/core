@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractiveWrongMediumException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-12 12:56:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
 /** is thrown when the wrong medium is inserted into a removable drive during
     an operation.
 */
-exception InteractiveWrongMediumException: com::sun::star::task::ClassifiedInteractionRequest
+published exception InteractiveWrongMediumException: com::sun::star::task::ClassifiedInteractionRequest
 {
     /** identifies the medium thats needed to continue with the pending
         operation.
