@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:45:48 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     _rxOutStream->writeShort(0x0003);
     _rxOutStream->writeShort((sal_uInt16)m_eButtonType);
 
-    ::rtl::OUString sTmp(INetURLObject::decode(INetURLObject::AbsToRel(m_sTargetURL), '%', INetURLObject::DECODE_UNAMBIGUOUS));
+    ::rtl::OUString sTmp(INetURLObject::decode( m_sTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS));
     _rxOutStream << sTmp;
     _rxOutStream << m_sTargetFrame;
     writeHelpTextCompatibly(_rxOutStream);
@@ -208,18 +208,14 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) t
         case 0x0002:
         {
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
-            ::rtl::OUString sTmp;
-            _rxInStream >> sTmp;
-            m_sTargetURL = INetURLObject::RelToAbs( sTmp );
+            _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
         }
         break;
         case 0x0003:
         {
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
-            ::rtl::OUString sTmp;
-            _rxInStream >> sTmp;
-            m_sTargetURL = INetURLObject::RelToAbs( sTmp );
+            _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
             readHelpTextCompatibly(_rxInStream);
         }
