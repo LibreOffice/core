@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:52:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,15 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_VALIDATION_XFORMCOMPONENTVALIDITYLISTENER_HPP_
+#include <com/sun/star/form/validation/XFormComponentValidityListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
@@ -227,8 +236,8 @@
 #include "sqlparserclient.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE12_HXX_
 #include <cppuhelper/implbase12.hxx>
@@ -305,9 +314,12 @@ typedef ::cppu::ImplHelper12<   ::com::sun::star::util::XModeSelector
                             ,   ::com::sun::star::form::XResetListener
                             >   FmXFormController_BASE2;
 
-typedef ::cppu::ImplHelper3<    ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::ImplHelper6<    ::com::sun::star::lang::XUnoTunnel
                            ,    ::com::sun::star::frame::XDispatch
                            ,    ::com::sun::star::awt::XMouseListener
+                           ,    ::com::sun::star::form::validation::XFormComponentValidityListener
+                           ,    ::com::sun::star::task::XInteractionHandler
+                           ,    ::com::sun::star::lang::XInitialization
                            >    FmXFormController_BASE3;
 
 //==================================================================
@@ -338,6 +350,7 @@ class FmXFormController     :public ::comphelper::OBaseMutex
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     // Composer used for checking filter conditions
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xComposer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >     m_xInteractionHandler;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >   m_aControls;
     ::cppu::OInterfaceContainerHelper
@@ -385,11 +398,20 @@ class FmXFormController     :public ::comphelper::OBaseMutex
     sal_Bool                    m_bFiltering : 1;
     sal_Bool                    m_bAttachEvents : 1;
     sal_Bool                    m_bDetachEvents : 1;
+    sal_Bool                    m_bAttemptedHandlerCreation : 1;
 
     // as we want to intercept dispatches of _all_ controls we're responsible for, and an object implementing
     // the ::com::sun::star::frame::XDispatchProviderInterceptor interface can intercept only _one_ objects dispatches, we need a helper class
     DECLARE_STL_VECTOR(FmXDispatchInterceptorImpl*, Interceptors);
     Interceptors    m_aControlDispatchInterceptors;
+
+public:
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
+        getInteractionHandler() const
+    {
+        const_cast< FmXFormController* >( this )->ensureInteractionHandler();
+        return m_xInteractionHandler;
+    }
 
 public:
     FmXFormController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB,
@@ -480,6 +502,15 @@ public:
     virtual void SAL_CALL mouseReleased( const ::com::sun::star::awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL mouseEntered( const ::com::sun::star::awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL mouseExited( const ::com::sun::star::awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
+
+// XFormComponentValidityListener
+    virtual void SAL_CALL componentValidityChanged( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
+
+// XInteractionHandler
+    virtual void SAL_CALL handle( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& Request ) throw (::com::sun::star::uno::RuntimeException);
+
+// XInitialization
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::beans::XPropertyChangeListener -> aenderung der stati
     virtual void SAL_CALL propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
@@ -607,8 +638,22 @@ protected:
     void setFilter(vector<FmFieldInfo>&);
     void startListening();
     void stopListening();
-    void startControlListening(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
-    void stopControlListening(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
+
+    /** ensures that we have an interaction handler, if possible
+
+        If an interaction handler was provided at creation time (<member>initialize</member>), this
+        one will be used. Else, an attempt is made to create an <type scope="com::sun::star::sdb">InteractionHandler</type>
+        is made.
+
+        @return <TRUE/>
+            if and only if <member>m_xInteractionHandler</member> is valid when the method returns
+    */
+    bool ensureInteractionHandler();
+
+    // we're listening at all bound controls for modifications
+    void startControlModifyListening(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
+    void stopControlModifyListening(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
+
     void setLocks();
     void setControlLock(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
     void addToEventAttacher(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
@@ -620,10 +665,15 @@ protected:
     void startFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly  );
     void stopFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> findControl(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& rxCtrlModel ,sal_Bool _bRemove = sal_True,sal_Bool _bOverWrite=sal_True) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> findControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& rxCtrlModel, sal_Bool _bRemove, sal_Bool _bOverWrite ) const;
 
     void insertControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
     void removeControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
+
+    /// called when a new control is to be handled by the controller
+    void implControlInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rxControl, bool _bAddToEventAttacher );
+    /// called when a control is not to be handled by the controller anymore
+    void implControlRemoved( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rxControl, bool _bRemoveFromEventAttacher );
 
     void onModify( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
     void onActivate();
