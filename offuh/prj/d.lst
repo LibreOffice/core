@@ -60,6 +60,10 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\input
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\sax
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\dom   
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\xpath
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\dom\events
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\dom\views
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\loader
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\task
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ucb
@@ -203,6 +207,14 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\xml\input\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\input\*.hpp
 ..\%__SRC%\inc\com\sun\star\xml\sax\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\sax\*.hdl
 ..\%__SRC%\inc\com\sun\star\xml\sax\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\sax\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\dom\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\dom\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\dom\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\dom\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\dom\events\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\dom\events\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\dom\events\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\dom\events\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\dom\views\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\dom\views\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\dom\views\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\dom\views\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\xpath\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\xpath\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\xpath\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\xpath\*.hpp
 ..\%__SRC%\inc\com\sun\star\loader\*.hdl %_DEST%\inc%_EXT%\com\sun\star\loader\*.hdl
 ..\%__SRC%\inc\com\sun\star\loader\*.hpp %_DEST%\inc%_EXT%\com\sun\star\loader\*.hpp
 ..\%__SRC%\inc\com\sun\star\task\*.hdl %_DEST%\inc%_EXT%\com\sun\star\task\*.hdl
