@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:51:59 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,23 +473,23 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_CURRENT_DATABASE_DATA_SOURCE:
         {
-            SwDBData& rData = mpDoc->GetDBData();
-            if ( rValue >>= rData.sDataSource )
-                mpDoc->ChgDBData( rData );
+            SwDBData aData = mpDoc->GetDBData();
+            if ( rValue >>= aData.sDataSource )
+                mpDoc->ChgDBData( aData );
         }
         break;
         case HANDLE_CURRENT_DATABASE_COMMAND:
         {
-            SwDBData& rData = mpDoc->GetDBData();
-            if ( rValue >>= rData.sCommand )
-                mpDoc->ChgDBData( rData );
+            SwDBData aData = mpDoc->GetDBData();
+            if ( rValue >>= aData.sCommand )
+                mpDoc->ChgDBData( aData );
         }
         break;
         case HANDLE_CURRENT_DATABASE_COMMAND_TYPE:
         {
-            SwDBData& rData = mpDoc->GetDBData();
-            if ( rValue >>= rData.nCommandType )
-                mpDoc->ChgDBData( rData );
+            SwDBData aData = mpDoc->GetDBData();
+            if ( rValue >>= aData.nCommandType )
+                mpDoc->ChgDBData( aData );
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
