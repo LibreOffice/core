@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,7 +1389,7 @@ long MultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
 
-#if defined( DEBUG ) && !defined( PRODUCT )
+#if (OSL_DEBUG_LEVEL > 1) && !defined( PRODUCT )
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
