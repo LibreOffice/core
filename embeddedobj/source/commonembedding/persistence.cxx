@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:09:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,6 +1123,10 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
     if ( m_bIsLink )
+        return;
+
+    // it is allowed to call saveCompleted( false ) for nonstored objects
+    if ( !m_bWaitSaveCompleted && !bUseNew )
         return;
 
     OSL_ENSURE( m_bWaitSaveCompleted, "Unexpected saveCompleted() call!\n" );
