@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ namespace configmgr
         { setNewValue(_rNewVal); m_eMode = aMode;}
 
         bool isReplacedValue()   const {return m_aAttributes.isReplacedForUser();}
-        bool isLocalizedValue()  const {return m_aAttributes.bLocalized;}
+        bool isLocalizedValue()  const {return m_aAttributes.isLocalized();}
 
         Mode getMode() const { return m_eMode; }
 
@@ -432,7 +432,7 @@ namespace configmgr
         void swap(SubtreeChange& aOther);
 
         bool isReplacedNode()       const { return m_aAttributes.isReplacedForUser();  }
-        bool isLocalizedContainer() const { return m_aAttributes.bLocalized; }
+        bool isLocalizedContainer() const { return m_aAttributes.isLocalized(); }
 
         const node::Attributes& getAttributes() const {return m_aAttributes;}
 
