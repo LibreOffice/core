@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-04 09:14:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,8 @@ String getResourceString( USHORT id )
         static String s_brandName;
         if (s_brandName.Len() == 0) {
             OUString brandName(
-                extract_throw<OUString>(
-                    ::utl::ConfigManager::GetDirectConfigProperty(
-                        ::utl::ConfigManager::PRODUCTNAME ) ) );
+                ::utl::ConfigManager::GetDirectConfigProperty(
+                    ::utl::ConfigManager::PRODUCTNAME ).get<OUString>() );
             s_brandName = brandName;
         }
         ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", s_brandName );
