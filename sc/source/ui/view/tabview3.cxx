@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:07:20 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2047,6 +2047,7 @@ void ScTabView::PaintRangeFinder( long nNumber )
                                 //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
 
                                 BOOL bHiddenEdge = FALSE;
+                                SCROW nTmp;
                                 ScDocument* pDoc = aViewData.GetDocument();
                                 while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab ) & CR_HIDDEN ) )
                                 {
@@ -2058,14 +2059,20 @@ void ScTabView::PaintRangeFinder( long nNumber )
                                     ++nCol2;
                                     bHiddenEdge = TRUE;
                                 }
-                                while ( nRow1 > 0 && ( pDoc->GetRowFlags( nRow1, nTab ) & CR_HIDDEN ) )
+                                nTmp = pDoc->GetRowFlagsArray( nTab).GetLastForCondition( 0, nRow1, CR_HIDDEN, 0);
+                                if (!ValidRow(nTmp))
+                                    nTmp = 0;
+                                if (nTmp < nRow1)
                                 {
-                                    --nRow1;
+                                    nRow1 = nTmp;
                                     bHiddenEdge = TRUE;
                                 }
-                                while ( nRow2 < MAXROW && ( pDoc->GetRowFlags( nRow2, nTab ) & CR_HIDDEN ) )
+                                nTmp = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition( nRow2, MAXROW, CR_HIDDEN, 0);
+                                if (!ValidRow(nTmp))
+                                    nTmp = MAXROW;
+                                if (nTmp > nRow2)
                                 {
-                                    ++nRow2;
+                                    nRow2 = nTmp;
                                     bHiddenEdge = TRUE;
                                 }
 
