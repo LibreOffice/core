@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 14:20:14 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:30:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1179,9 +1179,9 @@ sub add_childprojects
     # InstallAdabas 98 SystemFolder msiexec.exe /i "[SourceDir]adabas\adabasd1201.msi" /qr
     # InstallJava 98 SystemFolder msiexec.exe /i "[SourceDir]java\Java 2 Runtime Environment, SE v1.4.2.msi" /qr REBOOT=R
 
-    my $installsetdir = $installer::globals::msifilespath . $installer::globals::separator . "adabas";
-    my $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $installsetdir);
-    if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $installsetdir !", "add_childprojects"); }
+    my $adabasinstallsetdir = $installer::globals::msifilespath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
+    my $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $adabasinstallsetdir);
+    if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $adabasinstallsetdir !", "add_childprojects"); }
 
     $line = "InstallAdabas\t98\tSystemFolder\tmsiexec.exe /i \"\[SourceDir\]adabas\\${$msifilenamesref}[0]\" \/qr\n";
     push(@{$customactiontable} ,$line);
@@ -1189,11 +1189,8 @@ sub add_childprojects
     $infoline = "Added $line into table $customactiontablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
-    $installsetdir = $installer::globals::msifilespath . $installer::globals::separator . "java";
-    $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $installsetdir);
-    if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $installsetdir !", "add_childprojects"); }
-
-    $line = "InstallJava\t98\tSystemFolder\tmsiexec.exe /i \"\[SourceDir\]java\\${$msifilenamesref}[0]\" \/qr REBOOT=R\n";
+    # $line = "InstallJava\t98\tSystemFolder\tmsiexec.exe /i \"\[SourceDir\]java\\$installer::globals::javafilename\" \/qr REBOOT=R\n";
+    $line = "InstallJava\t98\tSystemFolder\t\[SourceDir\]java\\$installer::globals::javafilename \/s \/v\"\/qr REBOOT=Suppress\"\n";
     push(@{$customactiontable} ,$line);
     installer::remover::remove_leading_and_ending_whitespaces(\$line);
     $infoline = "Added $line into table $customactiontablename\n";
