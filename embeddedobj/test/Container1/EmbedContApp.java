@@ -43,6 +43,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 {
     private XMultiServiceFactory m_xServiceFactory;
 
+    private final boolean m_bStoreVisRepl = false;
+
     private XJob m_xMainThreadExecutor;
     private NamedValue[] m_pValuesForExecutor;
 
@@ -1108,7 +1110,11 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                     Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
                     XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
 
-                    xPersist.storeAsEntry( xTargetStorage, "EmbedSub", new PropertyValue[0], new PropertyValue[0] );
+                    PropertyValue aProps[] = { new PropertyValue() };
+                    aProps[0].Name = "StoreVisualReplacement";
+                    aProps[0].Value = new Boolean( m_bStoreVisRepl );
+
+                    xPersist.storeAsEntry( xTargetStorage, "EmbedSub", new PropertyValue[0], aProps );
                     xPersist.saveCompleted( true );
 
                     // the object must be already based on new storage
@@ -1191,7 +1197,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             else
                 oEmbObj = xEmbedCreator.createInstanceInitFromEntry( xTargetStorage,
                                                                     "EmbedSub",
-                                                                    false );
+                                                                    false,
+                                                                    new PropertyValue[0] );
 
             m_xEmbedObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
 
