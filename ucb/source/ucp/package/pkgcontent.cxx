@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-18 07:39:48 $
+ *  last change: $Author: kso $ $Date: 2001-01-22 11:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -1358,7 +1361,7 @@ void Content::transfer( const TransferInfo& rInfo )
     // Is source a hierarchy content?
     if ( rInfo.SourceURL.compareToAscii(
             PACKAGE_URL_SCHEME "://", PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 )
-        throw CommandAbortedException();
+        throw InteractiveBadTransferURLException();
 
     // Is source not a parent of me / not me?
     OUString aId = m_aUri.getParentUri();
