@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-09 08:43:39 $
+ *  last change: $Author: er $ $Date: 2001-08-14 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,9 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
     }
     else
     {   // old SO5 chart format
+        //! A similar routine is implemented in
+        //! SchMemChart::ConvertChartRangeForCalc() for OldToNew. If anything
+        //! is changed here it propably must be changed there too!
         const sal_Unicode cTok = ';';
         xub_StrLen nToken;
         String aPos = ((SchMemChart&)rData).SomeData1();
@@ -217,15 +220,15 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
         {
             String aOpt = ((SchMemChart&)rData).SomeData2();
             xub_StrLen nOptToken = aOpt.GetTokenCount( cTok );
-            BOOL bNewChart = (nOptToken >= 4);      // ab 341/342
+            BOOL bNewChart = (nOptToken >= 4);      // as of 341/342
             USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
             xub_StrLen nInd = 0;
             for ( xub_StrLen j=0; j < nToken; j+=5 )
             {
                 xub_StrLen nInd2 = nInd;
                 nTab1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-                // damit alte Versionen (<341/342) das ueberlesen ist der nTab2
-                // Token Separator ein ','
+                // To make old versions (<341/342) skip it, the token separator
+                // is a ','
                 if ( bNewChart )
                     nTab2 = (USHORT) aPos.GetToken( 1, ',', nInd2 ).ToInt32();
                 else
@@ -1029,6 +1032,7 @@ void ScChartArray::SetExtraStrings( SchMemChart& rMem )
 */
 #endif
 
+    String aSheetNames;
     SchChartRange aChartRange;
     aChartRange.mbFirstColumnContainsLabels = bRowHeaders;
     aChartRange.mbFirstRowContainsLabels = bColHeaders;
@@ -1051,9 +1055,15 @@ void ScChartArray::SetExtraStrings( SchMemChart& rMem )
             pDocument->GetName( nTab, aName );
             aCellRangeAddress.msTableName = aName;
             aChartRange.maRanges.push_back( aCellRangeAddress );
+            if ( aSheetNames.Len() )
+                aSheetNames += ';';
+            aSheetNames += aName;
         }
     }
     rMem.SetChartRange( aChartRange );
+
+    // #90896# need that for OLE and clipboard of old binary file format
+    rMem.SomeData3() = aSheetNames;
 
     rMem.SetReadOnly( TRUE );   // Daten nicht im Chart per Daten-Fenster veraendern
 }
