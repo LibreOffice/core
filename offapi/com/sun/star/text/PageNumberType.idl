@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageNumberType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from xml: enum com::sun::star::text::PageNumberType
 /** determines which page number is displayed in a page number text field.
  */
-enum PageNumberType
+published enum PageNumberType
 {
     //-------------------------------------------------------------------------
     /** The number of the previous page is displayed if there is any, otherwise the
