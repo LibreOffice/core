@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:33:43 $
+ *  last change: $Author: os $ $Date: 2001-08-01 10:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,34 +174,6 @@ SfxSlotInfo FN_AUTO_CORRECT
     SlotName[ catalan ] = "AutoCorrección";
     SlotName[ finnish ] = "Automaattinen korjaus";
 };
-SfxSlotInfo FN_AUTO_CORRECT_DLG
-{
-    SlotName = "AutoKorrektur bearbeiten";
-    SlotName [ english ] =  "AutoKorrektur bearbeiten";
-    SlotName[ english_us ] = "Edit AutoCorrect";
-    SlotName[ portuguese ] = "Editar AutoCorrecção";
-    SlotName[ russian ] = "Ïğàâêà àâòîçàìåíû";
-    SlotName[ dutch ] = "AutoCorrectie bewerken";
-    SlotName[ french ] = "Modifier AutoCorrection";
-    SlotName[ spanish ] = "Editar AutoCorrección";
-    SlotName[ italian ] = "Modifica correzione automatica";
-    SlotName[ danish ] = "Rediger AutoKorrektur";
-    SlotName[ swedish ] = "Redigera AutoKorrigering";
-    SlotName[ polish ] = "Edytuj autokorektê";
-    SlotName[ portuguese_brazilian ] = "ToolsAutoCorrect";
-    SlotName[ japanese ] = "µ°ÄºÚ¸Ä‚Ì•ÒW";
-    SlotName[ chinese_simplified ] = "±à¼­×Ô¶¯¸üÕı";
-    SlotName[ chinese_traditional ] = "½s¿è¦Û°Ê®Õ¥¿";
-    SlotName[ arabic ] = "ÊÍÑíÑ ÇáÊÕÍíÍ ÇáÊáŞÇÆí";
-    SlotName[ dutch ] = "AutoCorrectie bewerken";
-    SlotName[ chinese_simplified ] = "±à¼­×Ô¶¯¸üÕı";
-    SlotName[ greek ] = "Åğåîåñãáóßá ÁõôïÄéüñèùóç";
-    SlotName[ korean ] = "ÀÚµ¿°íÄ§ ÆíÁı";
-    SlotName[ turkish ] = "Otomatik düzelt dosyasını düzenle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Editar AutoCorrección";
-    SlotName[ finnish ] = "Muokkaa automaattista korjausta";
-};
 SfxSlotInfo FN_AUTOFORMAT_APPLY
 {
     SlotName = "AutoFormat-Optionen anwenden";
@@ -232,9 +204,9 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
 };
 SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
-    SlotName = "AutoFormat";
-    SlotName [ english ] =  "AutoFormat";
-    SlotName[ english_us ] = "AutoFormat";
+    SlotName = "AutoFormatBeiEingabe";
+    SlotName [ english ] =  "AutoFormatWhileTyping";
+    SlotName[ english_us ] = "AutoFormatWhileTyping";
     SlotName[ portuguese ] = "AutoFormato";
     SlotName[ russian ] = "Àâòîôîğìàò";
     SlotName[ dutch ] = "AutoOpmaak";
@@ -3423,9 +3395,9 @@ SfxSlotInfo FN_INSERT_ENDNOTE
 };
 SfxSlotInfo FN_INSERT_FIELD
 {
-    SlotName = "Feldbefehl einfügen";
-    SlotName [ english ] =  "Feldbefehl einfügen";
-    SlotName[ english_us ] = "Insert Fields";
+    SlotName = "Feldbefehldialog";
+    SlotName [ english ] =  "Insert fields dialog";
+    SlotName[ english_us ] = "Insert fields dialog";
     SlotName[ portuguese ] = "Inserir código de campo";
     SlotName[ russian ] = "Âñòàâèòü ïîëå";
     SlotName[ dutch ] = "Veldopdracht invoegen";
@@ -8449,9 +8421,9 @@ SfxSlotInfo FN_TOOL_ANKER
 };
 SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
-    SlotName = "Am Zeichen verankern";
-    SlotName [ english ] =  "Am Zeichen verankern";
-    SlotName[ english_us ] = "Anchor to Character";
+    SlotName = "Als Zeichen verankern";
+    SlotName [ english ] =  "Anchor as character";
+    SlotName[ english_us ] = "Anchor as character";
     SlotName[ portuguese ] = "Âncora no carácter";
     SlotName[ russian ] = "Ïğèâÿçàòü ê çíàêó";
     SlotName[ dutch ] = "Aan teken verankeren";
@@ -8643,34 +8615,6 @@ SfxSlotInfo FN_TOOL_HIERARCHIE
     SlotName[ catalan ] = "Cambiar posición";
     SlotName[ finnish ] = "Muuta sijainti";
 };
-SfxSlotInfo FN_TOOL_HMIRROR
-{
-    SlotName = "Horizontal spiegeln";
-    SlotName [ english ] =  "Horizontal spiegeln";
-    SlotName[ english_us ] = "Flip Horizontally";
-    SlotName[ portuguese ] = "Reflectir na horizontal";
-    SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
-    SlotName[ dutch ] = "Horizontaal spiegelen";
-    SlotName[ french ] = "Refléter horizontalement";
-    SlotName[ spanish ] = "Reflejar horizontalmente";
-    SlotName[ italian ] = "Rispecchia in orizzontale";
-    SlotName[ danish ] = "Spejlvend vandret";
-    SlotName[ swedish ] = "Spegelvänd horisontellt";
-    SlotName[ polish ] = "Odbij w poziomie";
-    SlotName[ portuguese_brazilian ] = "ObjectFlipHorizontal";
-    SlotName[ japanese ] = "ã‰º”½“]";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
-    SlotName[ chinese_traditional ] = "¤ô¥­Â½Âà";
-    SlotName[ arabic ] = "ÇäÚßÇÓ ÃİŞí";
-    SlotName[ dutch ] = "Horizontaal spiegelen";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
-    SlotName[ greek ] = "ÁíáóôñïöŞ ïñéæüíôéá";
-    SlotName[ korean ] = "¼öÆò ´ëÄª";
-    SlotName[ turkish ] = "Yatay yansıt";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Reflejar horizontalmente";
-    SlotName[ finnish ] = "Käännä vaakasuunta";
-};
 SfxSlotInfo FN_TOOL_UNGROUP
 {
     SlotName = "Gruppierung aufheben";
@@ -8698,34 +8642,6 @@ SfxSlotInfo FN_TOOL_UNGROUP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desagrupar";
     SlotName[ finnish ] = "Pura ryhmä";
-};
-SfxSlotInfo FN_TOOL_VMIRROR
-{
-    SlotName = "Vertikal spiegeln";
-    SlotName [ english ] =  "Vertikal spiegeln";
-    SlotName[ english_us ] = "Flip Vertically";
-    SlotName[ portuguese ] = "Reflectir na vertical";
-    SlotName[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
-    SlotName[ dutch ] = "Verticaal spiegelen";
-    SlotName[ french ] = "Refléter verticalement";
-    SlotName[ spanish ] = "Reflejar verticalmente";
-    SlotName[ italian ] = "Rispecchia in verticale";
-    SlotName[ danish ] = "Spejlvend lodret";
-    SlotName[ swedish ] = "Spegelvänd vertikalt";
-    SlotName[ polish ] = "Odbij w pionie";
-    SlotName[ portuguese_brazilian ] = "ObjectFlipVertical";
-    SlotName[ japanese ] = "¶‰E”½“]";
-    SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
-    SlotName[ chinese_traditional ] = "««ª½Â½Âà";
-    SlotName[ arabic ] = "ÇäÚßÇÓ ÑÃÓí";
-    SlotName[ dutch ] = "Verticaal spiegelen";
-    SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
-    SlotName[ greek ] = "ÁíáóôñïöŞ êáôáêüñõöá";
-    SlotName[ korean ] = "¼öÁ÷ ´ëÄª";
-    SlotName[ turkish ] = "Dikey yansıt";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Reflejar verticalmente";
-    SlotName[ finnish ] = "Käännä pystysuunta";
 };
 SfxSlotInfo FN_UNDERLINE_DOUBLE
 {

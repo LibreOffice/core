@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:17:53 $
+ *  last change: $Author: os $ $Date: 2001-08-01 10:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
     BOOL bDone = FALSE;
     switch ( nWhich )
     {
-        case FN_AUTO_CORRECT_DLG:
+        case SID_AUTO_CORRECT_DLG:
         {
             OfficeApplication *pOApp = OFF_APP();
 
@@ -758,8 +758,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SfxViewShell* pViewShell = GetView()
                                             ? (SfxViewShell*)GetView()
                                             : SfxViewShell::Current();
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, &aSwOptions, 0L);
+            SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pOApp->GetPool());
+            aAppReq.AppendItem(aSwOptions);
+            pOApp->ExecuteSlot(aAppReq);
 
             rACW.SetLockWordLstLocked( bOldLocked );
 

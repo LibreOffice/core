@@ -2,7 +2,7 @@
 
     $Workfile:   _docsh.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_docsh.sdi,v 1.1.1.1 2000-09-18 17:14:29 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_docsh.sdi,v 1.2 2001-08-01 10:32:50 os Exp $
 
     Beschreibung:   interface __Document enthaelt gemeinsame Slots fuer
                     SwDocShell und SwWebDocShell
@@ -22,7 +22,7 @@ interface BaseTextDocument : OfficeDocument
         StateMethod = GetState ;
     ]
 
-    FN_AUTO_CORRECT_DLG
+    SID_AUTO_CORRECT_DLG
     [
         ExecMethod = Execute ;
     ]
@@ -107,6 +107,9 @@ interface BaseTextDocument : OfficeDocument
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:29  hr
+    initial import
+
     Revision 1.17  2000/05/26 07:06:15  os
     old SW Basic API Slots removed
 

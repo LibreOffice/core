@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-06 10:03:06 $
+ *  last change: $Author: os $ $Date: 2001-08-01 10:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             BOOL bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue()
                               : !pACfg->IsAutoFmtByInput();
             if( bSet != pACfg->IsAutoFmtByInput() )
+            {
                 pACfg->SetAutoFmtByInput( bSet );
+                GetView().GetViewFrame()->GetBindings().Invalidate( nSlot );
+            }
         }
         break;
         case FN_AUTO_CORRECT:

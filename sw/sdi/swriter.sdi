@@ -1576,28 +1576,6 @@ SfxVoidItem JumpToFootnoteOrAnchor FN_FOOTNOTE_TO_ANCHOR
     GroupId = GID_NAVIGATOR;
 ]
 
-//--------------------------------------------------------------------------
-SfxVoidItem ObjectMirrorVertical FN_TOOL_VMIRROR
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
 
 //--------------------------------------------------------------------------
 SfxUInt16Item OptimizeTable FN_OPTIMIZE_TABLE
@@ -2162,28 +2140,6 @@ SfxVoidItem SetAnchorAtChar FN_TOOL_ANKER_AT_CHAR
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
-SfxVoidItem ObjectMirrorHorizontal FN_TOOL_HMIRROR
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
 
 //--------------------------------------------------------------------------
 SfxVoidItem FormatUngroup FN_TOOL_UNGROUP
@@ -5870,29 +5826,6 @@ SfxVoidItem EditHyperlink FN_EDIT_HYPERLINK
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem AutoCorrectDialog FN_AUTO_CORRECT_DLG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
 ]
 
 //--------------------------------------------------------------------------

@@ -100,14 +100,14 @@ interface TextDraw : TextDrawBase
         StateMethod = DisableState ;
     ]
 
-    FN_TOOL_HMIRROR
+    FN_FLIP_VERT_GRAFIC
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_TOOL_VMIRROR
+    FN_FLIP_HORZ_GRAFIC
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -257,6 +257,9 @@ shell SwDrawShell : SwDrawBaseShell
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:30  hr
+    initial import
+
     Revision 1.77  1999/05/07 12:57:58  JP
     Bug #66007#: LineEndStyle wieder mit einer Execute-Methode
 

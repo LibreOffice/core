@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 12:01:15 $
+ *  last change: $Author: os $ $Date: 2001-08-01 10:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,8 +398,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TOOL_ANKER_PAGE      (FN_INSERT + 50)    /* Draw-Objekt an Seite verankern */
 #define FN_TOOL_ANKER_PARAGRAPH (FN_INSERT + 51)    /* Draw-Objekt am Absatz verankern */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* Hierarchie aendern */
-#define FN_TOOL_VMIRROR         (FN_INSERT + 53)    /* Objekt in unteren Layer */
-#define FN_TOOL_HMIRROR         (FN_INSERT + 54)    /* Objekt in oberen Layer */
+//#define FN_TOOL_VMIRROR         (FN_INSERT + 53)    /* Objekt in unteren Layer */
+//#define FN_TOOL_HMIRROR         (FN_INSERT + 54)    /* Objekt in oberen Layer */
 
 //#define FN_QRY_OPEN_DB            (FN_INSERT + 55)    /* Datenbank oeffnen (Basic) */
 //#define FN_QRY_DEFINE_DB      (FN_INSERT + 56)    /* Neue Datenbankdefinition anlegen (Basic) */
@@ -764,7 +764,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 //#define FN_GET_GLOSSARY_GROUP_COUNT (FN_EXTRA + 42)     /* Anzahl der Bausteingruppen */
 
 #define FN_AUTO_CORRECT             (FN_EXTRA + 49 )  /* Autocorrect aus Basic */
-#define FN_AUTO_CORRECT_DLG         (FN_EXTRA + 50 )  /* Dialog Autocorrect */
+
 
 #define FN_UPDATE_TOX               (FN_EXTRA + 53)   /* alle Verzeichnisse aktualisieren */
 #define FN_UPDATE_CUR_TOX           (FN_EXTRA + 54)   /* aktuelles Verzeichnisse aktualisieren */
