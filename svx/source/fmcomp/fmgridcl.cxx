@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:50:53 $
+ *  last change: $Author: fs $ $Date: 2001-08-10 16:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1809,6 +1809,12 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
     vos::OGuard aGuard( Application::GetSolarMutex() );
         // need to lock the SolarMutex so that no paint call disturbs us ...
 
+    if ( !m_pSeekCursor )
+    {
+        DBG_ERROR( "FmGridControl::selectBookmarks: no seek cursor!" );
+        return sal_False;
+    }
+
     const Any* pBookmark = _rBookmarks.getConstArray();
     const Any* pBookmarkEnd = pBookmark + _rBookmarks.getLength();
 
@@ -1821,7 +1827,7 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
         {
             // move the seek cursor to the row given
             if (m_pSeekCursor->moveToBookmark(*pBookmark))
-                SelectRow( m_pSeekCursor->getRow() );
+                SelectRow( m_pSeekCursor->getRow() - 1);
             else
                 bAllSuccessfull = sal_False;
         }
