@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 16:44:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,6 +929,8 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                     pPageInfo->pPage = pSchMod->CreateTabPage( pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
                     if( !pGroupInfo->pOutItemSet )
                         pGroupInfo->pOutItemSet = new SfxItemSet(*pGroupInfo->pInItemSet->GetPool(), pGroupInfo->pInItemSet->GetRanges());
+                    if( !pGroupInfo->pShell )
+                        pGroupInfo->pShell = pSchMod;
                 }
             }
             else if(RID_SVXPAGE_COLOR != pPageInfo->nPageId)
@@ -1390,11 +1392,17 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         case SID_INET_DLG :
         case SID_FILTER_DLG:
             SFX_APP()->SetOptions( rSet );
+        break;
 
         case SID_SB_STARBASEOPTIONS:
             ::offapp::ConnectionPoolConfig::SetOptions( rSet );
             ::svx::DbRegisteredNamesConfig::SetOptions(rSet);
             break;
+
+        default:
+        {
+            DBG_ERROR( "Unhandled option in ApplyItemSet" );
+        }
         break;
     }
 
