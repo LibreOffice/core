@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:25:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -507,7 +506,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     ::rtl::OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
     SfxObjectShell* pSrc = GetDoc()->GetPersist();
 
-    p->GetEmbeddedObjectContainer().CopyEmbeddedObject( pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ), aNewName );
+    p->GetEmbeddedObjectContainer().CopyEmbeddedObject( pSrc->GetEmbeddedObjectContainer(), pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ), aNewName );
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName,
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
                                     (SwAttrSet*)GetpSwAttrSet() );
