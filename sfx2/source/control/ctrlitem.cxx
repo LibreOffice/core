@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-17 10:46:25 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "ctrlitem.hxx"
 #include "bindings.hxx"
