@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:31:20 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _SV_SCRBAR_HXX
+#include <vcl/scrbar.hxx>
+#endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -88,6 +91,7 @@
 #include <sfx2/tbxmgr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/miscopt.hxx>
 #include <toolkit/unohlp.hxx>
 
 #include <algorithm>
@@ -106,6 +110,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <drafts/com/sun/star/ui/ItemType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <drafts/com/sun/star/ui/ItemStyle.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
@@ -143,8 +150,11 @@
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
 
 #define PRTSTR(x) rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
@@ -177,6 +187,7 @@ static const char __FAR_DATA pMenuSeparatorStr[]    = " | ";
 
 using rtl::OUString;
 namespace dcss = drafts::com::sun::star;
+namespace css = com::sun::star;
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
 namespace lang = com::sun::star::lang;
@@ -199,12 +210,24 @@ void printPropertySet(
     for ( sal_Int32 i = 0; i < aPropDetails.getLength(); i++ )
     {
         OUString tmp;
+        sal_Int32 ival;
+
         uno::Any a = xPropSet->getPropertyValue( aPropDetails[i].Name );
 
         if ( ( a >>= tmp ) /* && tmp.getLength() != 0 */ )
         {
             OSL_TRACE("%s: Got property: %s = %s",
                 PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(tmp));
+        }
+        else if ( ( a >>= ival ) )
+        {
+            OSL_TRACE("%s: Got property: %s = %d",
+                PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(tmp));
+        }
+        else
+        {
+            OSL_TRACE("%s: Got property: %s of type %s",
+                PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(a.getValueTypeName()));
         }
     }
 }
@@ -248,6 +271,47 @@ stripHotKey( const OUString& str )
     {
         return str.replaceAt( index, 1, OUString() );
     }
+}
+
+OUString replaceSaveInName(
+    const OUString& rMessage,
+    const OUString& rSaveInName )
+{
+    OUString name;
+    OUString placeholder = OUString::createFromAscii( "%SAVE IN SELECTION%" );
+
+    sal_Int32 pos = rMessage.indexOf( placeholder );
+
+    if ( pos != -1 )
+    {
+        name = rMessage.replaceAt(
+            pos, placeholder.getLength(), rSaveInName );
+    }
+    else
+    {
+        // don't change the message
+    }
+
+    return name;
+}
+
+OUString
+replaceSixteen( const OUString& str, sal_Int32 nReplacement )
+{
+    OUString result( str );
+    OUString sixteen = OUString::valueOf( (sal_Int32)16 );
+    OUString expected = OUString::valueOf( nReplacement );
+
+    sal_Int32 len = sixteen.getLength();
+    sal_Int32 index = result.indexOf( sixteen );
+
+    while ( index != -1 )
+    {
+        result = result.replaceAt( index, len, expected );
+        index = result.indexOf( sixteen, index );
+    }
+
+    return result;
 }
 
 OUString
@@ -363,6 +427,49 @@ generateCustomMenuURL(
     return url;
 }
 
+static sal_Int16 theImageType =
+    dcss::ui::ImageType::COLOR_NORMAL |
+    dcss::ui::ImageType::SIZE_DEFAULT;
+
+void InitImageType()
+{
+    theImageType =
+        dcss::ui::ImageType::COLOR_NORMAL |
+        dcss::ui::ImageType::SIZE_DEFAULT;
+
+    sal_Int16 eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
+
+    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+    {
+        // Use system settings, we have to retrieve the toolbar icon size
+        // from the Application class
+        ULONG nStyleIconSize =
+            Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+
+        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+            eOptSymbolSet = SFX_SYMBOLS_LARGE;
+        else
+            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+    }
+
+    if ( eOptSymbolSet != SFX_SYMBOLS_SMALL )
+    {
+        theImageType |= dcss::ui::ImageType::SIZE_LARGE;
+    }
+
+    Window* topwin = Application::GetActiveTopWindow();
+    if ( topwin != NULL &&
+         topwin->GetDisplayBackground().GetColor().IsDark() )
+    {
+        theImageType |= dcss::ui::ImageType::COLOR_HIGHCONTRAST;
+    }
+}
+
+sal_Int16 GetImageType()
+{
+    return theImageType;
+}
+
 void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
 {
     SvxEntries::iterator iter = pEntries->begin();
@@ -458,14 +565,14 @@ bool GetMenuItemData(
                 }
             }
 
-            return sal_True;
+            return TRUE;
         }
     }
     catch ( ::com::sun::star::lang::IndexOutOfBoundsException& )
     {
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 bool GetToolbarItemData(
@@ -585,7 +692,7 @@ ConvertSvxConfigEntry(
                 }
             }
         }
-        catch ( container::NoSuchElementException& nsee )
+        catch ( container::NoSuchElementException& )
         {
             // isDefaultName is left as FALSE
         }
@@ -735,6 +842,8 @@ SvxConfigDialog::SvxConfigDialog(
 {
     FreeResource();
 
+    InitImageType();
+
     AddTabPage( RID_SVXPAGE_MENUS, CreateSvxMenuConfigPage, NULL );
     AddTabPage( RID_SVXPAGE_KEYBOARD, CreateKeyboardConfigPage, NULL );
     AddTabPage( RID_SVXPAGE_TOOLBARS, CreateSvxToolbarConfigPage, NULL );
@@ -778,9 +887,6 @@ void SvxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 
 void SvxConfigDialog::ActivateTabPage( USHORT nSlotId )
 {
-    switch ( nSlotId )
-    {
-    }
 }
 
 /******************************************************************************
@@ -848,37 +954,6 @@ SaveInData::SaveInData(
     {
         xDefaultImgMgr = &m_xImgMgr;
     }
-}
-
-sal_Int16 GetImageType()
-{
-    sal_Int16 nImageType( dcss::ui::ImageType::COLOR_NORMAL |
-                              dcss::ui::ImageType::SIZE_DEFAULT );
-
-    bool bBig =
-        ( Application::GetSettings().GetStyleSettings().GetToolbarIconSize()
-            == STYLE_TOOLBAR_ICONSIZE_LARGE );
-
-    bool bHiContrast = FALSE;
-    Window* topwin = Application::GetActiveTopWindow();
-
-    if ( topwin != NULL &&
-         topwin->GetDisplayBackground().GetColor().IsDark() )
-    {
-        bHiContrast = TRUE;
-    }
-
-    if ( bBig )
-    {
-        nImageType |= dcss::ui::ImageType::SIZE_LARGE;
-    }
-
-    if ( bHiContrast )
-    {
-        nImageType |= dcss::ui::ImageType::COLOR_HIGHCONTRAST;
-    }
-
-    return nImageType;
 }
 
 uno::Reference< graphic::XGraphic > GetGraphic(
@@ -1322,6 +1397,58 @@ MenuSaveInData::Reset()
     }
 }
 
+class PopupPainter : public SvLBoxString
+{
+public:
+    PopupPainter( SvLBoxEntry* pEntry, const String& rStr )
+        : SvLBoxString( pEntry, 0, rStr )
+    { }
+
+    ~PopupPainter() { }
+
+    void Paint( const Point& rPos, SvLBox& rOutDev,
+        USHORT nViewDataEntryFlags, SvLBoxEntry* pEntry )
+    {
+        SvLBoxString::Paint( rPos, rOutDev, nViewDataEntryFlags, pEntry );
+
+        Color aOldFillColor = rOutDev.GetFillColor();
+
+        SvTreeListBox* pTreeBox = static_cast< SvTreeListBox* >( &rOutDev );
+        long nX = pTreeBox->GetSizePixel().Width();
+
+        ScrollBar* pVScroll = pTreeBox->GetVScroll();
+        if ( pVScroll->IsVisible() )
+        {
+            nX -= pVScroll->GetSizePixel().Width();
+        }
+
+        SvViewDataItem* pItem = rOutDev.GetViewDataItem( pEntry, this );
+        nX -= pItem->aSize.Height();
+
+        long nSize = pItem->aSize.Height() / 2;
+        long nHalfSize = nSize / 2;
+        long nY = rPos.Y() + nHalfSize;
+
+        if ( aOldFillColor == COL_WHITE )
+        {
+            rOutDev.SetFillColor( Color( COL_BLACK ) );
+        }
+        else
+        {
+            rOutDev.SetFillColor( Color( COL_WHITE ) );
+        }
+
+        long n = 0;
+        while ( n <= nHalfSize )
+        {
+            rOutDev.DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
+            n++;
+        }
+
+        rOutDev.SetFillColor( aOldFillColor );
+    }
+};
+
 /******************************************************************************
  *
  * SvxMenuEntriesListBox is the listbox in which the menu items for a
@@ -1339,10 +1466,10 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(
     SetWindowBits(
         GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HIDESELECTION );
 
-    SetSpaceBetweenEntries( 0 );
+    SetSpaceBetweenEntries( 3 );
     SetEntryHeight( ENTRY_HEIGHT );
 
-    SetHighlightRange(); // SetHighlightRange( 1, 0xffff );
+    SetHighlightRange();
     SetSelectionMode(SINGLE_SELECTION);
 
     SetDragDropMode( SV_DRAGDROP_CTRL_MOVE  |
@@ -1693,9 +1820,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
     }
     else
     {
-        QueryBox qbox( this, ResId( QBX_CONFIRM_RESET, DIALOG_MGR() ) );
-
-        if ( qbox.Execute() == RET_YES )
+        if ( QueryReset() == RET_YES )
         {
             // Reset menu configuration for currently selected SaveInData
             GetSaveInData()->Reset();
@@ -1709,7 +1834,7 @@ BOOL SvxConfigPage::FillItemSet( SfxItemSet& )
 {
     bool result = FALSE;
 
-    for ( sal_Int32 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
     {
         SaveInData* pData =
             (SaveInData*) aSaveInListBox.GetEntryData( i );
@@ -1964,29 +2089,11 @@ SvLBoxEntry* SvxConfigPage::InsertEntry(
 }
 
 SvLBoxEntry* SvxConfigPage::InsertEntryIntoUI(
-    SvxConfigEntry* pNewEntryData, USHORT nPos )
+    SvxConfigEntry* pNewEntryData, ULONG nPos )
 {
     SvLBoxEntry* pNewEntry = NULL;
 
-    if (pNewEntryData->IsBinding())
-    {
-        Image aImage = GetSaveInData()->GetImage(
-            pNewEntryData->GetCommand());
-
-        if ( !!aImage )
-        {
-            pNewEntry = aContentsListBox->InsertEntry(
-                stripHotKey( pNewEntryData->GetName() ),
-                    aImage, aImage, 0, FALSE, nPos, pNewEntryData );
-        }
-        else
-        {
-            pNewEntry = aContentsListBox->InsertEntry(
-                stripHotKey( pNewEntryData->GetName() ),
-                    0, FALSE, nPos, pNewEntryData );
-        }
-    }
-    else if (pNewEntryData->IsSeparator())
+    if (pNewEntryData->IsSeparator())
     {
         pNewEntry = aContentsListBox->InsertEntry(
             String::CreateFromAscii( pSeparatorStr ),
@@ -1994,9 +2101,30 @@ SvLBoxEntry* SvxConfigPage::InsertEntryIntoUI(
     }
     else
     {
-        pNewEntry = aContentsListBox->InsertEntry(
-            stripHotKey( pNewEntryData->GetName() ),
-                0, FALSE, nPos, pNewEntryData );
+        OUString aName = stripHotKey( pNewEntryData->GetName() );
+
+        Image aImage = GetSaveInData()->GetImage(
+            pNewEntryData->GetCommand());
+
+        if ( !!aImage )
+        {
+            pNewEntry = aContentsListBox->InsertEntry(
+                aName, aImage, aImage, 0, FALSE, nPos, pNewEntryData );
+        }
+        else
+        {
+            pNewEntry = aContentsListBox->InsertEntry(
+                aName, 0, FALSE, nPos, pNewEntryData );
+        }
+
+        if ( pNewEntryData->IsPopup() ||
+             pNewEntryData->GetStyle() & dcss::ui::ItemStyle::DROP_DOWN )
+        {
+            // add new popup painter, it gets destructed by the entry
+            pNewEntry->ReplaceItem(
+                new PopupPainter( pNewEntry, aName ),
+                pNewEntry->ItemCount() - 1 );
+        }
     }
 
     return pNewEntry;
@@ -2165,7 +2293,7 @@ void SvxMenuConfigPage::Init()
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
 {
-    for ( sal_Int32 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
     {
         MenuSaveInData* pData =
             (MenuSaveInData*) aSaveInListBox.GetEntryData( i );
@@ -2284,6 +2412,21 @@ bool SvxMenuConfigPage::DeleteSelectedContent()
         return TRUE;
     }
     return FALSE;
+}
+
+short SvxMenuConfigPage::QueryReset()
+{
+    String msg =
+        String( ResId( RID_SVXSTR_CONFIRM_MENU_RESET, DIALOG_MGR() ) );
+
+    String saveInName = aSaveInListBox.GetEntry(
+        aSaveInListBox.GetSelectEntryPos() );
+
+    OUString label = replaceSaveInName( msg, saveInName );
+
+    QueryBox qbox( this, WB_YES_NO, label );
+
+    return qbox.Execute();
 }
 
 IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
@@ -2895,7 +3038,7 @@ SvxConfigEntry::GetProperties(
                 }
             }
         }
-        catch ( container::NoSuchElementException& nsee )
+        catch ( container::NoSuchElementException& )
         {
             // isDefaultName is left as FALSE
         }
@@ -2971,8 +3114,6 @@ SvxConfigEntry::SvxConfigEntry( USHORT nInitId, const String& rInitStr,
 {
     if ( SfxMacroConfig::IsMacroSlot( nId ) )
     {
-        OSL_TRACE("Creating SvxConfigEntry for macro slot");
-
         SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
         SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo( nId );
         if ( pInfo )
@@ -3072,7 +3213,6 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     aModifyTopLevelButton.SetText( ResId ( RID_SVXSTR_TOOLBAR, DIALOG_MGR() ) );
     aContentsSeparator.SetText( ResId ( RID_SVXSTR_TOOLBAR_CONTENT, DIALOG_MGR() ) );
     aContentsLabel.SetText( ResId ( RID_SVXSTR_COMMANDS, DIALOG_MGR() ) );
-    aModifyCommandButton.SetText( ResId ( RID_SVXSTR_COMMAND, DIALOG_MGR() ) );
 
     aTopLevelListBox.SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbar ) );
@@ -3125,7 +3265,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
 SvxToolbarConfigPage::~SvxToolbarConfigPage()
 {
-    for ( sal_Int32 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
     {
         ToolbarSaveInData* pData =
             (ToolbarSaveInData*) aSaveInListBox.GetEntryData( i );
@@ -3225,7 +3365,6 @@ IMPL_LINK( SvxToolbarConfigPage, MoveHdl, Button *, pButton )
 
 void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
 {
-    OSL_TRACE("SvxToolbarConfigPage::MoveEntry");
     SvxConfigPage::MoveEntry( bMoveUp );
 
     // Apply change to currently selected toolbar
@@ -3393,10 +3532,10 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
-            short nSelectionPos = 0;
+            USHORT nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( short i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); i++ )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3504,10 +3643,10 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
-            short nSelectionPos = 0;
+            USHORT nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( short i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); i++ )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3591,10 +3730,10 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
-            short nSelectionPos = 0;
+            USHORT nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( short i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); i++ )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3671,7 +3810,7 @@ void SvxToolbarConfigPage::Init()
     USHORT nPos = 0;
     if ( m_aURLToSelect.getLength() != 0 )
     {
-        for ( sal_Int32 i = 0 ; i < aTopLevelListBox.GetEntryCount(); i++ )
+        for ( USHORT i = 0 ; i < aTopLevelListBox.GetEntryCount(); i++ )
         {
             SvxConfigEntry* pData =
                 (SvxConfigEntry*) aTopLevelListBox.GetEntryData( i );
@@ -3682,7 +3821,10 @@ void SvxToolbarConfigPage::Init()
                 break;
             }
         }
-        m_aURLToSelect = OUString();
+
+        // in future select the default toolbar: Standard
+        m_aURLToSelect = OUString::createFromAscii( ITEM_TOOLBAR_URL );
+        m_aURLToSelect += OUString::createFromAscii( "standardbar" );
     }
 
     aTopLevelListBox.SelectEntryPos(nPos, TRUE);
@@ -4051,8 +4193,33 @@ bool ToolbarSaveInData::HasSettings()
 
 void ToolbarSaveInData::Reset()
 {
-    // reset functionality is provided at the individual toolbar
-    // or toolbar item level
+    SvxEntries::const_iterator iter = GetEntries()->begin();
+    SvxEntries::const_iterator end = GetEntries()->end();
+
+    // reset each toolbar by calling removeSettings for it's toolbar URL
+    for ( ; iter != end; iter++ )
+    {
+        SvxConfigEntry* pToolbar = *iter;
+
+        try
+        {
+            OUString url = pToolbar->GetCommand();
+            GetConfigManager()->removeSettings( url );
+        }
+        catch ( uno::Exception& )
+        {
+            // error occured removing the settings
+            // TODO - add error dialog in future?
+        }
+    }
+
+    // persist changes to toolbar storage
+    PersistChanges( GetConfigManager() );
+
+    // now delete the root SvxConfigEntry the next call to GetEntries()
+    // will cause it to be reinitialised
+    delete pRootEntry;
+    pRootEntry = NULL;
 }
 
 bool ToolbarSaveInData::Apply()
@@ -4379,6 +4546,7 @@ bool ToolbarSaveInData::LoadToolbar(
                     pEntry->SetCommand( aCommandURL );
                     pEntry->SetHelpURL( aHelpURL );
                     pEntry->SetVisible( bIsVisible );
+                    pEntry->SetStyle( nStyle );
                     pEntries->push_back( pEntry );
                 }
             }
@@ -4465,6 +4633,21 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     }
 }
 
+short SvxToolbarConfigPage::QueryReset()
+{
+    String msg =
+        String( ResId( RID_SVXSTR_CONFIRM_TOOLBAR_RESET, DIALOG_MGR() ) );
+
+    String saveInName = aSaveInListBox.GetEntry(
+        aSaveInListBox.GetSelectEntryPos() );
+
+    OUString label = replaceSaveInName( msg, saveInName );
+
+    QueryBox qbox( this, WB_YES_NO, label );
+
+    return qbox.Execute();
+}
+
 IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
 {
     aContentsListBox->Clear();
@@ -4548,7 +4731,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     SvxNewToolbarDialog* pNameDialog = new SvxNewToolbarDialog( 0, aNewName );
 
     USHORT nInsertPos;
-    for ( sal_Int32 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
     {
         SaveInData* pData =
             (SaveInData*) aSaveInListBox.GetEntryData( i );
@@ -4924,12 +5107,37 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 {
     FreeResource();
 
+    aTbSymbol.SetPageScroll( TRUE );
+
+    bool bLargeIcons = GetImageType() & dcss::ui::ImageType::SIZE_LARGE;
+    m_nExpectedSize = bLargeIcons ? 26 : 16;
+
+    if ( m_nExpectedSize != 16 )
+    {
+        aFtNote.SetText( replaceSixteen( aFtNote.GetText(), m_nExpectedSize ) );
+    }
+
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager =
+        ::comphelper::getProcessServiceFactory();
+
+    if ( xServiceManager.is() )
+    {
+        m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
+            xServiceManager->createInstance(
+                ::rtl::OUString::createFromAscii(
+                    "com.sun.star.graphic.GraphicProvider" ) ),
+            uno::UNO_QUERY );
+    }
+
+    if ( !m_xGraphProvider.is() )
+    {
+        aBtnImport.Enable( FALSE );
+    }
+
     uno::Sequence< OUString > names =
         m_xImageManager->getAllImageNames( GetImageType() );
 
     // large growth factor, expecting many entries
-    ImageList aImages( names.getLength(), 32 );
-
     USHORT nId = 1;
     uno::Sequence< OUString > name( 1 );
     for ( sal_Int32 i = 0; i < names.getLength(); ++i )
@@ -4937,7 +5145,6 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         name[ 0 ] = names[ i ];
 
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics;
-
         try
         {
             graphics = m_xImageManager->getImages( GetImageType(), name );
@@ -4951,20 +5158,37 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         if ( graphics.getLength() > 0 )
         {
             Image img = Image( graphics[ 0 ] );
-            aTbSymbol.InsertItem( nId, names[ i ] );
+            aTbSymbol.InsertItem( nId, img, names[ i ] );
+
+            graphics[ 0 ]->acquire();
+
             aTbSymbol.SetItemData(
                 nId, static_cast< void * > ( graphics[ 0 ].get() ) );
-            aImages.AddImage( nId, img );
 
             ++nId;
         }
     }
 
-    // Set imagelist to the toolbox
-    aTbSymbol.SetImageList( aImages );
-
     aTbSymbol.SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
     aBtnImport.SetClickHdl( LINK(this, SvxIconSelectorDialog, ImportHdl) );
+}
+
+SvxIconSelectorDialog::~SvxIconSelectorDialog()
+{
+    USHORT nCount = aTbSymbol.GetItemCount();
+
+    for (USHORT n = 0; n < nCount; n++ )
+    {
+        USHORT nId = aTbSymbol.GetItemId(n);
+
+        uno::XInterface* xi = static_cast< uno::XInterface* >(
+            aTbSymbol.GetItemData( aTbSymbol.GetItemId( n ) ) );
+
+        if ( xi != NULL )
+        {
+            xi->release();
+        }
+    }
 }
 
 uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
@@ -4977,7 +5201,9 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
         nId = aTbSymbol.GetItemId( n );
         if ( aTbSymbol.IsItemChecked( nId ) )
         {
-            result = GetGraphic(m_xImageManager, aTbSymbol.GetItemText( nId ));
+            result = uno::Reference< graphic::XGraphic >(
+                reinterpret_cast< graphic::XGraphic* >(
+                    aTbSymbol.GetItemData( nId ) ) );
         }
     }
 
@@ -5007,21 +5233,25 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
 IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
 {
     sfx2::FileDialogHelper aImportDialog(
-        sfx2::FILEOPEN_SIMPLE, SFXWB_MULTISELECTION | WB_OPEN );
-    static String* sLastVisited = NULL;
+        ::sfx2::FILEOPEN_LINK_PREVIEW, SFXWB_GRAPHIC | SFXWB_MULTISELECTION );
 
-    if ( sLastVisited != NULL && sLastVisited->Len() != 0 )
+    // disable the link checkbox in the dialog
+    uno::Reference< css::ui::dialogs::XFilePickerControlAccess >
+        xController( aImportDialog.GetFilePicker(), uno::UNO_QUERY);
+    if ( xController.is() )
     {
-        aImportDialog.SetDisplayDirectory( *sLastVisited );
+        xController->enableControl(
+            css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK,
+            sal_False);
     }
 
-    aImportDialog.AddFilter( String::CreateFromAscii( "PNG" ),
-                             String::CreateFromAscii( "*.png" ));
+    aImportDialog.SetCurrentFilter(
+        String::CreateFromAscii( "PNG - Portable Network Graphic" ) );
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {
-        // uno::Sequence< OUString > paths = aImportDialog.GetMPath();
-        // ImportGraphics ( paths );
+        uno::Sequence< OUString > paths = aImportDialog.GetMPath();
+        ImportGraphics ( paths );
     }
 
     return 0;
@@ -5030,51 +5260,109 @@ IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
 void SvxIconSelectorDialog::ImportGraphics(
     const uno::Sequence< OUString >& rPaths )
 {
-    for ( sal_Int32 i = 0; i < rPaths.getLength(); i++ )
+    uno::Sequence< OUString > rejected( rPaths.getLength() );
+    sal_Int32 rejectedCount = 0;
+
+    if ( rPaths.getLength() == 1 )
     {
-        ImportGraphic( rPaths[ i ] );
+        if ( ImportGraphic( rPaths[0] ) == FALSE )
+        {
+            rejected[0] = rPaths[0];
+            rejectedCount = 1;
+        }
+    }
+    else
+    {
+        for ( sal_Int32 i = 1; i < rPaths.getLength(); i++ )
+        {
+            bool result = ImportGraphic( rPaths[0] + OUString::createFromAscii("/") + rPaths[i] );
+            if ( result == FALSE )
+            {
+                rejected[ rejectedCount ] = rPaths[i];
+                rejectedCount++;
+            }
+        }
+    }
+
+    if ( rejectedCount != 0 )
+    {
+        OUString message( ResId( RID_SVXSTR_IMPORT_ICON_ERROR, DIALOG_MGR() ) );
+        if ( m_nExpectedSize != 16 )
+        {
+            message = replaceSixteen( message, m_nExpectedSize );
+        }
+
+        OUString newLine = OUString::createFromAscii("\n");
+        message += newLine;
+        message += newLine;
+
+        for ( sal_Int32 i = 0; i < rejectedCount; i++ )
+        {
+            message += rejected[i];
+            message += newLine;
+        }
+
+        InfoBox( this, message ).Execute();
     }
 }
 
-void SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
+bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 {
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager =
-        ::comphelper::getProcessServiceFactory();
+    bool result = FALSE;
 
-    if ( xServiceManager.is() )
+    USHORT nId = aTbSymbol.GetItemId(aTbSymbol.GetItemCount() -1);
+    nId++;
+
+    uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
+    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+
+    uno::Reference< graphic::XGraphic > xGraphic;
+    com::sun::star::awt::Size aSize;
+
+    aMediaProps[0].Value <<= aURL;
+
+    try
     {
-        try
+        uno::Reference< beans::XPropertySet > props =
+            m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
+
+        uno::Any a = props->getPropertyValue(
+            OUString::createFromAscii("SizePixel") );
+
+        if ( ( a >>= aSize ) && aSize.Width == m_nExpectedSize &&
+                aSize.Height == m_nExpectedSize )
         {
-            uno::Reference< graphic::XGraphicProvider > xGraphProvider(
-                xServiceManager->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.graphic.GraphicProvider" ) ),
-                    uno::UNO_QUERY );
+            xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
 
-            if ( xGraphProvider.is() )
+            if ( xGraphic.is() )
             {
-                uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                aMediaProps[0].Name = ::rtl::OUString::createFromAscii( "URL" );
-                aMediaProps[0].Value <<= aURL;
+                Image aImage( xGraphic );
 
-                uno::Reference< graphic::XGraphic > xGraphic =
-                    xGraphProvider->queryGraphic( aMediaProps );
-
-                if ( xGraphic.is() )
+                if ( !!aImage )
                 {
-                    Image aImage( xGraphic );
+                    aTbSymbol.InsertItem( nId, aImage, aURL );
 
-                    if ( !!aImage )
-                    {
-                        aTbSymbol.InsertItem( aTbSymbol.GetItemCount(),
-                            aImage, aURL );
-                    }
+                    xGraphic->acquire();
+
+                    aTbSymbol.SetItemData(
+                        nId, static_cast< void * > ( xGraphic.get() ) );
+
+                    result = TRUE;
+                }
+                else
+                {
+                    OSL_TRACE("could not create Image from XGraphic");
                 }
             }
-        }
-        catch( uno::Exception& )
-        {
-            OSL_TRACE("Some sort of exception importing graphic");
+            else
+            {
+                OSL_TRACE("could not get query XGraphic");
+            }
         }
     }
+    catch( uno::Exception& e )
+    {
+        OSL_TRACE("Caught exception importing XGraphic: %s", PRTSTR(e.Message));
+    }
+    return result;
 }
