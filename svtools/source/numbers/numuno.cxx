@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define _ZFORLIST_DECLARE_TABLE
 
 #include <vcl/svapp.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
