@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_share.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2003-03-28 10:17:41 $
+ *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,16 @@
  *
  ************************************************************************/
 
+#using <mscorlib.dll>
+#using "cli_ure.dll"
+#using "cli_udkapi.dll"
+
+#include <vcclr.h>
+
 #include "rtl/ustring.hxx"
 #include "uno/mapping.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-#using <mscorlib.dll>
-#using <cli_ure.dll>
-#using <cli_udkapi.dll>
-#include <vcclr.h>
 
 
 namespace uno

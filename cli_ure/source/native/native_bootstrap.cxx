@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_bootstrap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2003-03-28 10:17:40 $
+ *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,15 @@ namespace uno
 namespace util
 {
 
-//==============================================================================
-__sealed __gc class Bootstrap
+public __sealed __gc class Bootstrap
 {
     inline Bootstrap();
+
 public:
 
     /** Bootstraps the initial component context from a native UNO installation.
 
-        @see cppuhelper/defaultBootstrap_InitialComponentContext()
+        @see cppuhelper/bootstrap.hxx:defaultBootstrap_InitialComponentContext()
     */
     static ::unoidl::com::sun::star::uno::XComponentContext *
         defaultBootstrap_InitialComponentContext();
@@ -90,24 +90,18 @@ public:
     /** Bootstraps the initial component context from a native UNO installation.
 
         @param ini_file
-               ini_file (may be null: uno.rc besides cppuhelper lib)
+               ini_file (may be null: uno.ini/unorc besides cppuhelper lib)
         @param bootstrap_parameters
                bootstrap parameters (maybe null)
 
-        @see cppuhelper/defaultBootstrap_InitialComponentContext()
+        @see cppuhelper/bootstrap.hxx:defaultBootstrap_InitialComponentContext()
     */
     static ::unoidl::com::sun::star::uno::XComponentContext *
         defaultBootstrap_InitialComponentContext(
             ::System::String * ini_file,
-            ::System::Collections::IDictionaryEnumerator * bootstrap_parameters );
+            ::System::Collections::IDictionaryEnumerator *
+              bootstrap_parameters );
 };
-
-//______________________________________________________________________________
-::unoidl::com::sun::star::uno::XComponentContext *
-Bootstrap::defaultBootstrap_InitialComponentContext()
-{
-    return defaultBootstrap_InitialComponentContext( 0, 0 );
-}
 
 //______________________________________________________________________________
 ::unoidl::com::sun::star::uno::XComponentContext *
@@ -115,17 +109,20 @@ Bootstrap::defaultBootstrap_InitialComponentContext(
     ::System::String * ini_file,
     ::System::Collections::IDictionaryEnumerator * bootstrap_parameters )
 {
-    bootstrap_parameters->Reset();
-    while (bootstrap_parameters->MoveNext())
+    if (0 != bootstrap_parameters)
     {
-        OUString key(
-            String_to_ustring(
-                __try_cast< ::System::String * >( bootstrap_parameters->get_Key() ) ) );
-        OUString value(
-            String_to_ustring(
-                __try_cast< ::System::String * >( bootstrap_parameters->get_Value() ) ) );
-//         // xxx todo srx644 only
-//         ::rtl::Bootstrap::set( key, value );
+        bootstrap_parameters->Reset();
+        while (bootstrap_parameters->MoveNext())
+        {
+            OUString key(
+                String_to_ustring( __try_cast< ::System::String * >(
+                                       bootstrap_parameters->get_Key() ) ) );
+            OUString value(
+                String_to_ustring( __try_cast< ::System::String * >(
+                                       bootstrap_parameters->get_Value() ) ) );
+
+            ::rtl::Bootstrap::set( key, value );
+        }
     }
 
     // bootstrap native uno
@@ -142,6 +139,13 @@ Bootstrap::defaultBootstrap_InitialComponentContext(
 
     return __try_cast< ::unoidl::com::sun::star::uno::XComponentContext * >(
         to_cli( xContext ) );
+}
+
+//______________________________________________________________________________
+::unoidl::com::sun::star::uno::XComponentContext *
+Bootstrap::defaultBootstrap_InitialComponentContext()
+{
+    return defaultBootstrap_InitialComponentContext( 0, 0 );
 }
 
 }

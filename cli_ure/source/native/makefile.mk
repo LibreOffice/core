@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2003-03-28 10:17:40 $
+#   last change: $Author: dbo $ $Date: 2003-04-07 09:40:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME = cli_ure
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .IF "$(BUILD_FOR_CLI)" != ""
 
-TARGET = cppuhelper_cli
+TARGET = cli_cppuhelper
 NO_BSYMBOLIC = TRUE
 ENABLE_EXCEPTIONS = TRUE
 USE_DEFFILE = TRUE
@@ -91,7 +91,7 @@ SLOFILES = \
         $(SLO)$/native_ure.obj		\
         $(SLO)$/native_bootstrap.obj
 
-SHL1TARGET = $(TARGET)$(UDK_MAJOR)$(COMID)
+SHL1TARGET = $(TARGET)
 
 SHL1STDLIBS = \
     $(CPPUHELPERLIB)	\

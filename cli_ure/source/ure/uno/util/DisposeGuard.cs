@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DisposeGuard.cs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2003-03-28 10:17:44 $
+ *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ public struct DisposeGuard : IDisposable
     */
     public DisposeGuard( Object obj )
     {
-        m_xComponent = (XComponent) uno.Runtime.queryInterface_throw( typeof (XComponent), obj );
+        m_xComponent = (XComponent) uno.Runtime.queryInterface_throw(
+            typeof (XComponent), obj );
     }
     /** ctor.
 

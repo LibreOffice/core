@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WeakAdapter.cs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2003-03-28 10:17:46 $
+ *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,8 @@ public class WeakAdapter : XAdapter
     {
         lock (this)
         {
-            m_XReference_dispose -= new XReference_dispose( xReference.dispose );
+            m_XReference_dispose -=
+                new XReference_dispose( xReference.dispose );
         }
     }
     /** Called by clients to unregister listeners.
@@ -144,7 +145,8 @@ public class WeakAdapter : XAdapter
     {
         lock (this)
         {
-            m_XReference_dispose += new XReference_dispose( xReference.dispose );
+            m_XReference_dispose +=
+                new XReference_dispose( xReference.dispose );
         }
     }
 }

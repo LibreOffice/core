@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2003-03-28 10:17:37 $
+ *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace climaker
 
 bool g_verbose = false;
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static bool read_option(
     sal_Unicode copt, OUString const & opt, sal_uInt32 * pIndex )
 {
@@ -108,7 +108,8 @@ static bool read_option(
         ++(*pIndex);
         return true;
     }
-    if ('-' == arg[ 1 ] && 0 == rtl_ustr_compare( arg.pData->buffer + 2, opt.pData->buffer ))
+    if ('-' == arg[ 1 ] &&
+        0 == rtl_ustr_compare( arg.pData->buffer + 2, opt.pData->buffer ))
     {
         ++(*pIndex);
         return true;
@@ -116,9 +117,10 @@ static bool read_option(
     return false;
 }
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static bool read_argument(
-    OUString * pValue, sal_Unicode copt, OUString const & opt, sal_uInt32 * pIndex )
+    OUString * pValue, sal_Unicode copt, OUString const & opt,
+    sal_uInt32 * pIndex )
 {
     if (read_option( copt, opt, pIndex ))
     {
@@ -133,7 +135,7 @@ static bool read_argument(
     return false;
 }
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static OUString const & path_get_working_dir()
 {
     static OUString s_workingDir;
@@ -142,15 +144,17 @@ static OUString const & path_get_working_dir()
     return s_workingDir;
 }
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static OUString path_make_absolute_file_url( OUString const & path )
 {
     OUString file_url;
-    oslFileError rc = osl_getFileURLFromSystemPath( path.pData, &file_url.pData );
+    oslFileError rc = osl_getFileURLFromSystemPath(
+        path.pData, &file_url.pData );
     if (osl_File_E_None == rc)
     {
         OUString abs;
-        rc = osl_getAbsoluteFileURL( path_get_working_dir().pData, file_url.pData, &abs.pData );
+        rc = osl_getAbsoluteFileURL(
+            path_get_working_dir().pData, file_url.pData, &abs.pData );
         if (osl_File_E_None == rc)
         {
             return abs;
@@ -170,7 +174,7 @@ static OUString path_make_absolute_file_url( OUString const & path )
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 Reference< registry::XSimpleRegistry > open_registries(
     vector< OUString > const & registries,
     Reference< XComponentContext > xContext )
@@ -203,7 +207,8 @@ Reference< registry::XSimpleRegistry > open_registries(
                 xContext->getServiceManager()->createInstanceWithContext(
                     OUSTR("com.sun.star.registry.NestedRegistry"), xContext ),
                 UNO_QUERY_THROW );
-            Reference< lang::XInitialization > xInit( xNested, UNO_QUERY_THROW );
+            Reference< lang::XInitialization > xInit(
+                xNested, UNO_QUERY_THROW );
             Sequence< Any > args( 2 );
             args[ 0 ] <<= xReg;
             args[ 1 ] <<= xSimReg;
@@ -219,7 +224,7 @@ Reference< registry::XSimpleRegistry > open_registries(
     return xSimReg;
 }
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static char const s_usingText [] =
 "\n"
 "using: climaker <switches> [registry-file-1 registry-file-2 ...]\n\n"
@@ -245,7 +250,7 @@ static char const s_usingText [] =
 
 using namespace ::climaker;
 
-//##################################################################################################
+//##############################################################################
 extern "C" int SAL_CALL main( int argc, char const * argv [] )
 {
     sal_uInt32 nCount = osl_getCommandArgCount();
@@ -293,28 +298,35 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
                 sal_Int32 index = 0;
                 do
                 {
-                    explicit_types.push_back( cmd_arg.getToken( 0, ';', index ) );
+                    explicit_types.push_back(
+                        cmd_arg.getToken( 0, ';', index ) );
                 }
                 while (index >= 0);
             }
             else if (read_argument( &cmd_arg, 'X', str_empty, &nPos ))
             {
-                extra_registries.push_back( path_make_absolute_file_url( cmd_arg ) );
+                extra_registries.push_back(
+                    path_make_absolute_file_url( cmd_arg ) );
             }
             else if (read_argument( &cmd_arg, 'r', str_reference, &nPos ))
             {
-                extra_assemblies.push_back( path_make_absolute_file_url( cmd_arg ) );
+                extra_assemblies.push_back(
+                    path_make_absolute_file_url( cmd_arg ) );
             }
             else if (!read_argument( &version, '\0', str_version, &nPos ) &&
                      !read_argument( &product, '\0', str_product, &nPos ) &&
-                     !read_argument( &description, '\0', str_description, &nPos ) &&
+                     !read_argument(
+                         &description, '\0', str_description, &nPos ) &&
                      !read_argument( &output, 'O', str_empty, &nPos ))
             {
-                OSL_VERIFY( osl_Process_E_None == osl_getCommandArg( nPos, &cmd_arg.pData ) );
+                OSL_VERIFY(
+                    osl_Process_E_None == osl_getCommandArg(
+                        nPos, &cmd_arg.pData ) );
                 ++nPos;
                 if (cmd_arg.getLength() && '-' != cmd_arg[ 0 ]) // no option
                 {
-                    mandatory_registries.push_back( path_make_absolute_file_url( cmd_arg ) );
+                    mandatory_registries.push_back(
+                        path_make_absolute_file_url( cmd_arg ) );
                 }
                 else
                 {
@@ -330,7 +342,8 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             Reference< registry::XSimpleRegistry >() );
         Reference< container::XHierarchicalNameAccess > xTDmgr(
             xContext->getValueByName(
-                OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ),
+                OUSTR("/singletons/com.sun.star.reflection."
+                      "theTypeDescriptionManager") ),
             UNO_QUERY_THROW );
 
         // get rdb tdprovider factory
@@ -384,7 +397,8 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
                 output.copy( 0, slash ), sys_output_dir ))
         {
             throw RuntimeException(
-                OUSTR("cannot get system path from file url ") + output.copy( 0, slash ),
+                OUSTR("cannot get system path from file url ") +
+                output.copy( 0, slash ),
                 Reference< XInterface >() );
         }
         OUString filename( output.copy( slash +1 ) );
@@ -403,11 +417,13 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         assembly_name->set_Name( name );
         if (0 != version.getLength())
         {
-            assembly_name->set_Version( new ::System::Version( ustring_to_String( version ) ) );
+            assembly_name->set_Version(
+                new ::System::Version( ustring_to_String( version ) ) );
         }
 
         // app domain
-        ::System::AppDomain * current_appdomain = ::System::AppDomain::get_CurrentDomain();
+        ::System::AppDomain * current_appdomain =
+              ::System::AppDomain::get_CurrentDomain();
         // target assembly
         Emit::AssemblyBuilder * assembly_builder =
             current_appdomain->DefineDynamicAssembly(
@@ -420,7 +436,8 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             args[ 0 ] = ustring_to_String( product );
             assembly_builder->SetCustomAttribute(
                 new Emit::CustomAttributeBuilder(
-                    __typeof (AssemblyProductAttribute) ->GetConstructor( params ), args ) );
+                    __typeof (AssemblyProductAttribute) ->GetConstructor(
+                        params ), args ) );
         }
         if (0 != description.getLength())
         {
@@ -430,22 +447,26 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             args[ 0 ] = ustring_to_String( description );
             assembly_builder->SetCustomAttribute(
                 new Emit::CustomAttributeBuilder(
-                    __typeof (AssemblyDescriptionAttribute) ->GetConstructor( params ), args ) );
+                    __typeof (AssemblyDescriptionAttribute)
+                      ->GetConstructor( params ), args ) );
         }
 
         // load extra assemblies
-        Assembly * assemblies __gc [] = new Assembly * __gc [ extra_assemblies.size() ];
+        Assembly * assemblies __gc [] =
+            new Assembly * __gc [ extra_assemblies.size() ];
         for ( size_t pos = 0; pos < extra_assemblies.size(); ++pos )
         {
-            assemblies[ pos ] = Assembly::LoadFrom( ustring_to_String( extra_assemblies[ pos ] ) );
+            assemblies[ pos ] = Assembly::LoadFrom(
+                ustring_to_String( extra_assemblies[ pos ] ) );
         }
 
         // type emitter
-        TypeEmitter * type_emitter =
-            new TypeEmitter( assembly_builder->DefineDynamicModule( output_file ), assemblies );
+        TypeEmitter * type_emitter = new TypeEmitter(
+            assembly_builder->DefineDynamicModule( output_file ), assemblies );
         // add handler resolving assembly's types
         ::System::ResolveEventHandler * type_resolver =
-              new ::System::ResolveEventHandler( type_emitter, &TypeEmitter::type_resolve );
+              new ::System::ResolveEventHandler(
+                  type_emitter, &TypeEmitter::type_resolve );
         current_appdomain->add_TypeResolve( type_resolver );
 
         // and emit types to it
@@ -453,10 +474,11 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         {
             Reference< reflection::XTypeDescriptionEnumeration > xTD_enum(
                 Reference< reflection::XTypeDescriptionEnumerationAccess >(
-                    xTD_provider, UNO_QUERY_THROW )->createTypeDescriptionEnumeration(
-                        OUString() /* all IDL modules */,
-                        Sequence< TypeClass >() /* all classes of types */,
-                        reflection::TypeDescriptionSearchDepth_INFINITE ) );
+                    xTD_provider, UNO_QUERY_THROW )
+                  ->createTypeDescriptionEnumeration(
+                      OUString() /* all IDL modules */,
+                      Sequence< TypeClass >() /* all classes of types */,
+                      reflection::TypeDescriptionSearchDepth_INFINITE ) );
             while (xTD_enum->hasMoreElements())
             {
                 type_emitter->get_type( xTD_enum->nextTypeDescription() );
@@ -494,16 +516,21 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
     }
     catch (Exception & exc)
     {
-        OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "\n> error: %s\n> dying abnormally...\n", msg.getStr() );
+        OString msg(
+            OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        fprintf(
+            stderr, "\n> error: %s\n> dying abnormally...\n", msg.getStr() );
         ret = 1;
     }
     catch (::System::Exception * exc)
     {
-        OString msg(
-            OUStringToOString( String_to_ustring( exc->ToString() ), RTL_TEXTENCODING_ASCII_US ) );
+        OString msg( OUStringToOString(
+                         String_to_ustring( exc->ToString() ),
+                         RTL_TEXTENCODING_ASCII_US ) );
         fprintf(
-            stderr, "\n> error: .NET exception occured: %s\n> dying abnormally...", msg.getStr() );
+            stderr,
+            "\n> error: .NET exception occured: %s\n> dying abnormally...",
+            msg.getStr() );
         ret = 1;
     }
 
@@ -515,9 +542,12 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
     }
     catch (Exception & exc)
     {
-        OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OString msg(
+            OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         fprintf(
-            stderr, "\n> error disposing component context: %s\n> dying abnormally...\n",
+            stderr,
+            "\n> error disposing component context: %s\n"
+            "> dying abnormally...\n",
             msg.getStr() );
         ret = 1;
     }

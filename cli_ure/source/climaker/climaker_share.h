@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_share.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2003-03-28 10:17:38 $
+ *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,16 @@ namespace css = ::com::sun::star;
 namespace climaker
 {
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 extern bool g_verbose;
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 inline ::System::String * ustring_to_String( ::rtl::OUString const & ustr )
 {
     return new ::System::String( ustr.getStr(), 0, ustr.getLength() );
 }
-//--------------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 inline ::rtl::OUString String_to_ustring( ::System::String * str )
 {
     OSL_ASSERT( sizeof (wchar_t) == sizeof (sal_Unicode) );
@@ -93,7 +94,7 @@ inline ::rtl::OUString String_to_ustring( ::System::String * str )
     return ::rtl::OUString( chars, str->get_Length() );
 }
 
-//==================================================================================================
+//==============================================================================
 __gc class TypeEmitter : public ::System::IDisposable
 {
     const ::System::Reflection::MethodAttributes s_ctor_attr;
@@ -142,15 +143,20 @@ __gc class TypeEmitter : public ::System::IDisposable
     ::System::Type * get_type(
         ::System::String * cli_name, bool throw_exc );
     ::System::Type * get_type(
-        css::uno::Reference< css::reflection::XConstantTypeDescription > const & xType );
+        css::uno::Reference<
+        css::reflection::XConstantTypeDescription > const & xType );
     ::System::Type * get_type(
-        css::uno::Reference< css::reflection::XConstantsTypeDescription > const & xType );
+        css::uno::Reference<
+        css::reflection::XConstantsTypeDescription > const & xType );
     ::System::Type * get_type(
-        css::uno::Reference< css::reflection::XEnumTypeDescription > const & xType );
+        css::uno::Reference<
+        css::reflection::XEnumTypeDescription > const & xType );
     ::System::Type * get_type(
-        css::uno::Reference< css::reflection::XCompoundTypeDescription > const & xType );
+        css::uno::Reference<
+        css::reflection::XCompoundTypeDescription > const & xType );
     ::System::Type * get_type(
-        css::uno::Reference< css::reflection::XInterfaceTypeDescription > const & xType );
+        css::uno::Reference<
+        css::reflection::XInterfaceTypeDescription > const & xType );
 public:
     TypeEmitter(
         ::System::Reflection::Emit::ModuleBuilder * module_builder,
@@ -162,7 +168,8 @@ public:
         ::System::Object * sender, ::System::ResolveEventArgs * args );
 
     ::System::Type * get_type(
-        css::uno::Reference< css::reflection::XTypeDescription > const & xType );
+        css::uno::Reference<
+        css::reflection::XTypeDescription > const & xType );
 };
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WeakComponentBase.cs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2003-03-28 10:17:48 $
+ *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ public class WeakComponentBase : WeakBase, XComponent, IDisposable
             m_disposing += new t_disposing( xListener.disposing );
         }
     }
-    /** Revokes an event listener from being notified when this object is disposed.
+    /** Revokes an event listener from being notified when this object
+        is disposed.
         
         @param xListener event listener
     */

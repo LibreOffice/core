@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WeakBase.cs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $ $Date: 2003-03-28 10:17:48 $
+ *  last change: $ $Date: 2003-04-07 09:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,10 +190,10 @@ public class WeakBase : XWeak, XTypeProvider
     }
     
     // System.Object
-    //______________________________________________________________________________________________
     public override String ToString()
     {
-        System.Text.StringBuilder buf = new System.Text.StringBuilder( base.ToString(), 256 );
+        System.Text.StringBuilder buf =
+            new System.Text.StringBuilder( base.ToString(), 256 );
         buf.Append( "\nUNO Object Implementation:\n\tImplementationId: " );
         buf.Append( getImplementationId() );
         buf.Append( "\n\tInterfaces: " );
