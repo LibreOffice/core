@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:43:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,17 +133,17 @@ namespace dbaui
                     const Reference< XConnection >& _rxConnection,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XMultiServiceFactory >& _rxORB)
-        :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand, _rxConnection )
+                    :ODataAccessObjectTransferable( _rDatasource,::rtl::OUString(), _nCommandType, _rCommand, _rxConnection )
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
         osl_incrementInterlockedCount( &m_refCount );
         lcl_addListener(_rxConnection,this);
 
-        m_pHtml = new OHTMLImportExport( _rxORB, _rxFormatter);
+        m_pHtml = new OHTMLImportExport(getDescriptor(), _rxORB, _rxFormatter);
         m_aEventListeners.push_back(m_pHtml);
 
-        m_pRtf = new ORTFImportExport( _rxORB, _rxFormatter);
+        m_pRtf = new ORTFImportExport(getDescriptor(), _rxORB, _rxFormatter);
         m_aEventListeners.push_back(m_pRtf);
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -155,14 +155,14 @@ namespace dbaui
                     const ::rtl::OUString&  _rCommand,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XMultiServiceFactory >& _rxORB)
-        :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand)
+        :ODataAccessObjectTransferable( _rDatasource, ::rtl::OUString(),_nCommandType, _rCommand)
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
-        m_pHtml = new OHTMLImportExport(_rxORB, _rxFormatter);
+        m_pHtml = new OHTMLImportExport(getDescriptor(),_rxORB, _rxFormatter);
         m_aEventListeners.push_back(m_pHtml);
 
-        m_pRtf = new ORTFImportExport(_rxORB, _rxFormatter);
+        m_pRtf = new ORTFImportExport(getDescriptor(),_rxORB, _rxFormatter);
         m_aEventListeners.push_back(m_pRtf);
     }
 
@@ -195,7 +195,7 @@ namespace dbaui
         if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML || nUserObjectId == SOT_FORMATSTR_ID_HTML_SIMPLE)
         {
             ODatabaseImportExport* pExport = reinterpret_cast<ODatabaseImportExport*>(pUserObject);
-            if(pExport)
+            if ( pExport && rxOStm.Is() )
             {
                 pExport->setStream(&rxOStm);
                 return pExport->Write();
