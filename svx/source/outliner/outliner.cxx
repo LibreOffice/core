@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-20 09:08:06 $
+ *  last change: $Author: mt $ $Date: 2001-03-29 15:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,7 +980,7 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
 
-    DBG_ASSERT( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ), "ImpCalcBulletFont: Missing or BitmapBullet!" );
+    DBG_ASSERT( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ), "ImpCalcBulletFont: Missing or BitmapBullet!" );
 
     USHORT nScale = pEditEngine->IsFlatMode() ? DEFAULT_SCALE : pFmt->GetBulletRelSize();
     ULONG nScaledLineHeight = pEditEngine->GetStandardFont( nPara ).GetSize().Height();
@@ -1858,16 +1858,16 @@ void Outliner::ImplCalcBulletText( USHORT nPara, BOOL bRecalcLevel, BOOL bRecalc
         if( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) )
         {
             aBulletText += pFmt->GetPrefix();
-            if( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL )
+            if( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
+            {
+                aBulletText += pFmt->GetBulletChar();
+            }
+            else if( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE )
             {
                 if ( nRelPos == 0xFFFF )
                     pParaList->GetParent( pPara, nRelPos );
                 USHORT nNumber = nRelPos + pFmt->GetStart();
                 aBulletText += pFmt->GetNumStr( nNumber );
-            }
-            else
-            {
-                aBulletText += pFmt->GetBulletChar();
             }
             aBulletText += pFmt->GetSuffix();
         }
