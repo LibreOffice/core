@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 10:37:11 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1546,7 +1546,7 @@ namespace pcr
                 else
                     aListenerClassName= aListener;
 
-                if (aListenerClassName.len()>0)
+                if (aListenerClassName.getLength()>0)
                 {
                     // Methoden der Listener ausgeben
                     aMethSeq = getEventMethods( *pListeners );
@@ -1577,7 +1577,7 @@ namespace pcr
                                     SvxMacro* pMacro=NULL;
 
                                     const ScriptEventDescriptor& rTheEvDe = pEvDes[nI];
-                                    if (rTheEvDe.ScriptCode.len()>0 && rTheEvDe.ScriptType.len()>0)
+                                    if (rTheEvDe.ScriptCode.getLength()>0 && rTheEvDe.ScriptType.getLength()>0)
                                     {
                                         pMacro = new SvxMacro(rTheEvDe.ScriptCode,rTheEvDe.ScriptType);
                                         aTable.Insert(aNameArray.size(),pMacro);
@@ -2804,6 +2804,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/05/11 10:37:11  fs
+ *  replaced the SfxFileDialog/SvxImportGraphicsDialog
+ *
  *  Revision 1.18  2001/05/02 12:41:49  tbe
  *  added scrollbar properties
  *
