@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:03:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
-#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
@@ -189,6 +186,8 @@ void AccessibleDocumentViewBase::Init (void)
     // Register as window listener to stay up to date with its size and
     // position.
     mxWindow->addWindowListener (this);
+    // Register as focus listener to
+    mxWindow->addFocusListener (this);
 
     // Determine the list of shapes on the current page.
     uno::Reference<drawing::XShapes> xShapeList;
@@ -208,17 +207,6 @@ void AccessibleDocumentViewBase::Init (void)
         xSet->addPropertyChangeListener (
             OUString (RTL_CONSTASCII_USTRINGPARAM("")),
             static_cast<beans::XPropertyChangeListener*>(this));
-
-    // Register as top window listener at the top window.
-    uno::Reference<awt::XTopWindow> xTopWindow;
-    if (mxController.is())
-        if (mxController->getFrame().is())
-            xTopWindow = uno::Reference<awt::XTopWindow> (
-                mxController->getFrame()->getContainerWindow(),
-                uno::UNO_QUERY);
-    if (xTopWindow.is())
-        xTopWindow->addTopWindowListener (
-            static_cast<awt::XTopWindowListener*>(this));
 
     // Register at VCL Window to be informed of activated and deactivated
     // OLE objects.
@@ -503,7 +491,7 @@ uno::Any SAL_CALL
                 static_cast<awt::XWindowListener*>(this)),
             static_cast<beans::XPropertyChangeListener*>(this),
             static_cast<awt::XWindowListener*>(this),
-            static_cast<awt::XTopWindowListener*>(this)
+            static_cast<awt::XFocusListener*>(this)
             );
     return aReturn;
 }
@@ -573,8 +561,8 @@ void SAL_CALL
          ::getCppuType((const uno::Reference<beans::XPropertyChangeListener>*)0);
     const uno::Type aWindowListenerType =
          ::getCppuType((const uno::Reference<awt::XWindowListener>*)0);
-    const uno::Type aTopWindowListenerType =
-         ::getCppuType((const uno::Reference<awt::XTopWindowListener>*)0);
+    const uno::Type aFocusListenerType =
+         ::getCppuType((const uno::Reference<awt::XFocusListener>*)0);
     const uno::Type aEventBroadcaster =
          ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0);
 
@@ -591,7 +579,7 @@ void SAL_CALL
     aTypeList[nTypeCount + i++ ] = aLangEventListenerType;
     aTypeList[nTypeCount + i++] = aPropertyChangeListenerType;
     aTypeList[nTypeCount + i++] = aWindowListenerType;
-    aTypeList[nTypeCount + i++] = aTopWindowListenerType;
+    aTypeList[nTypeCount + i++] = aFocusListenerType;
     aTypeList[nTypeCount + i++] = aEventBroadcaster;
 
     return aTypeList;
@@ -717,44 +705,20 @@ void SAL_CALL
 
 
 
-//=====  XTopWindowListener  ==================================================
+//=====  XFocusListener  ==================================================
 
-void SAL_CALL AccessibleDocumentViewBase::windowOpened( const ::com::sun::star::lang::EventObject& e )
+void AccessibleDocumentViewBase::focusGained (const ::com::sun::star::awt::FocusEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
-{}
-
-void SAL_CALL AccessibleDocumentViewBase::windowClosing( const ::com::sun::star::lang::EventObject& e )
-    throw (::com::sun::star::uno::RuntimeException)
-{}
-
-void SAL_CALL AccessibleDocumentViewBase::windowClosed( const ::com::sun::star::lang::EventObject& e )
-    throw (::com::sun::star::uno::RuntimeException)
-{}
-
-void SAL_CALL AccessibleDocumentViewBase::windowMinimized( const ::com::sun::star::lang::EventObject& e )
-    throw (::com::sun::star::uno::RuntimeException)
-{}
-
-void SAL_CALL AccessibleDocumentViewBase::windowNormalized( const ::com::sun::star::lang::EventObject& e )
-        throw (::com::sun::star::uno::RuntimeException)
-{}
-
-void SAL_CALL AccessibleDocumentViewBase::windowActivated( const ::com::sun::star::lang::EventObject& e )
-        throw (::com::sun::star::uno::RuntimeException)
 {
-    if( IsDisposed() )
-        return;
-
-    Activated ();
+    if (e.Source == mxWindow)
+        Activated ();
 }
 
-void SAL_CALL AccessibleDocumentViewBase::windowDeactivated( const ::com::sun::star::lang::EventObject& e )
+void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if( IsDisposed() )
-        return;
-
-    Deactivated ();
+    if (e.Source == mxWindow)
+        Deactivated ();
 }
 
 
@@ -777,7 +741,10 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 
     // Unregister from window.
     if (mxWindow.is())
+    {
         mxWindow->removeWindowListener (this);
+        mxWindow->removeFocusListener (this);
+    }
 
     // Unregister form the model.
     if (mxModel.is())
@@ -790,19 +757,6 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
         xSet->removePropertyChangeListener (
             OUString (RTL_CONSTASCII_USTRINGPARAM("")),
             static_cast<beans::XPropertyChangeListener*>(this));
-
-    // Unregister from top window.
-    if (mxController.is())
-        if (mxController->getFrame().is())
-        {
-            uno::Reference<awt::XTopWindow> xTopWindow (
-                uno::Reference<awt::XTopWindow> (
-                    mxController->getFrame()->getContainerWindow(),
-                    uno::UNO_QUERY));
-            if (xTopWindow.is())
-                xTopWindow->removeTopWindowListener (
-                    static_cast<awt::XTopWindowListener*>(this));
-        }
 
     AccessibleContextBase::disposing ();
 }
