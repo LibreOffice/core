@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:34:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ SwNaviImageButton::SwNaviImageButton(Window* pParent) :
     FreeResource();
     SetStyle(GetStyle()|WB_NOPOINTERFOCUS);
     SetQuickHelpText(sQuickText);
-    SetImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
+    SetModeImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
 }
 /* -----------------------------2002/07/05 9:41-------------------------------
 
@@ -682,7 +682,7 @@ void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            SetImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
+            SetModeImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
 
     Window::DataChanged( rDCEvt );
 }
