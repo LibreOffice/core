@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,11 +1105,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             {
                 ((sOut += ' ') += sHTML_O_href) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
-                HTMLOutFuncs::Out_String( rWrt.Strm(),
-                            INetURLObject::AbsToRel( aMapURL,
-                                        INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS),
-                            rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                rHTMLWrt.OutHyperlinkHRefValue( aMapURL );
                 sOut = '\"';
             }
 
