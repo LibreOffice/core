@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 18:08:43 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 #endif
 #pragma hdrstop
 
-#ifndef _BASCTL_DLGED_HXX
-#include "dlged.hxx"
-#endif
-
 #ifndef _BASCTL_DLGEDFUNC_HXX
 #include "dlgedfunc.hxx"
+#endif
+
+#ifndef _BASCTL_DLGED_HXX
+#include "dlged.hxx"
 #endif
 
 #ifndef _BASCTL_DLGEDOBJ_HXX
@@ -142,7 +142,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 
 //----------------------------------------------------------------------------
 
-DlgEdFunc::DlgEdFunc( VCDlgEditor* pParent )
+DlgEdFunc::DlgEdFunc( DlgEditor* pParent )
 {
     DlgEdFunc::pParent = pParent;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
@@ -197,7 +197,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
 //----------------------------------------------------------------------------
 
-DlgEdFuncInsert::DlgEdFuncInsert( VCDlgEditor* pParent ) :
+DlgEdFuncInsert::DlgEdFuncInsert( DlgEditor* pParent ) :
     DlgEdFunc( pParent )
 {
     pParent->GetView()->SetCreateMode( TRUE );
@@ -214,7 +214,6 @@ DlgEdFuncInsert::~DlgEdFuncInsert()
 
 BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
-
     if( !rMEvt.IsLeft() )
         return TRUE;
 
@@ -233,50 +232,18 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 
     SdrHdl* pHdl = pView->HitHandle(aPos, *pWindow);
 
-    // Selektiertes Object getroffen ?
-    // Wenn ja, draggen
+    // if selected object was hit, drag object
     if ( pHdl!=NULL || pView->IsMarkedHit(aPos, nHitLog) )
         pView->BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
     else
     if ( pView->HasMarkedObj() )
         pView->UnmarkAll();
 
-    // Keine Aktion im Gange ?
-    // Dann Object erzeugen
+    // if no action, create object
     if ( rMEvt.IsLeft() && !pView->IsAction() )
         pView->BegCreateObj(aPos);
 
     return TRUE;
-
-    /*
-    if( !rMEvt.IsLeft() )
-        return TRUE;
-
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
-
-    //pView->MouseButtonDown( rMEvt, pWindow );
-
-    const Point aLogPt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-
-    // Focus anziehen fuer Key-Inputs
-    pWindow->GrabFocus();
-
-    pView->MouseButtonDown( rMEvt, pWindow );
-
-
-    SdrObject* pCreateObj = pView->GetCreateObj();
-
-    // Wir wollen das Inserten mitbekommen
-    //if ( pCreateObj && !pCreateObj->GetUserCall() )
-    //  pCreateObj->SetUserCall( pUserCall );
-
-    pWindow->SetPointer( pView->GetPreferedPointer( aLogPt, pWindow ) );
-
-    return TRUE; // delete this
-    */
-
 }
 
 //----------------------------------------------------------------------------
@@ -294,7 +261,7 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
     pWindow->ReleaseMouse();
 
-    // Object erzeugen aktiv ?
+    // object creation active?
     if ( pView->IsCreateObj() )
     {
         pView->EndCreateObj(SDRCREATE_FORCEEND);
@@ -331,33 +298,6 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
              pView->EndDragObj( rMEvt.IsMod1() );
         return TRUE;
     }
-
-
-    /*
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
-
-    //pView->MouseButtonUp( rMEvt, pWindow );
-
-
-    //if ( bSdrMode )
-    //{
-        if ( pView->IsInsObjPoint() )
-            pView->EndInsObjPoint( SDRCREATE_FORCEEND );
-        else
-            pView->MouseButtonUp( rMEvt, pWindow );
-
-        pWindow->ReleaseMouse();
-        pWindow->SetPointer( pView->GetPreferedPointer( pWindow->PixelToLogic( rMEvt.GetPosPixel() ), pWindow ) );
-    //}
-    //else
-    //  Control::MouseButtonUp( rMEvt );
-
-
-    return TRUE; // delete this
-    */
-
 }
 
 //----------------------------------------------------------------------------
@@ -380,51 +320,11 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     pWindow->SetPointer( pView->GetPreferedPointer( aPos, pWindow, nHitLog ) );
 
     return TRUE;
-
-    /*
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
-
-    //pView->MouseMove( rMEvt, pWindow );
-
-
-    const Point aLogPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-
-    //if ( bSdrMode )
-    //{
-        pView->MouseMove( rMEvt, pWindow );
-
-        //if( ( SID_BEZIER_INSERT == nPolyEdit ) &&
-        //  !pView->HitHandle( aLogPos, *this ) &&
-        //  !pView->IsInsObjPoint() )
-        //{
-        //  SetPointer( POINTER_CROSS );
-        //}
-        //else
-            pWindow->SetPointer( pView->GetPreferedPointer( aLogPos, pWindow ) );
-    //}
-    //else
-    //  Control::MouseButtonUp( rMEvt );
-
-    //if ( aMousePosLink.IsSet() )
-    //{
-    //  if ( Rectangle( Point(), aGraphSize ).IsInside( aLogPos ) )
-    //      aMousePos = aLogPos;
-    //  else
-    //      aMousePos = Point();
-
-    //  aMousePosLink.Call( this );
-    //}
-
-    return TRUE; // delete this
-    */
-
 }
 
 //----------------------------------------------------------------------------
 
-DlgEdFuncSelect::DlgEdFuncSelect( VCDlgEditor* pParent ) :
+DlgEdFuncSelect::DlgEdFuncSelect( DlgEditor* pParent ) :
     DlgEdFunc( pParent ),
     bMarkAction(FALSE)
 {
@@ -440,7 +340,7 @@ DlgEdFuncSelect::~DlgEdFuncSelect()
 
 BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // View vom Parent holen
+    // get view from parent
     SdrView* pView   = pParent->GetView();
     Window*  pWindow = pParent->GetWindow();
     pView->SetActualWin( pWindow );
@@ -458,48 +358,36 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         SdrObject* pObj;
         SdrPageView* pPV;
 
-        // Selektiertes Object getroffen ?
+        // hit selected object?
         if ( pHdl!=NULL || pView->IsMarkedHit(aMDPos, nHitLog) )
         {
             pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
         }
         else
         {
-            // Wenn nicht Multi-Select, dann alles deselektieren
+            // if not multi selection, unmark all
             if ( !rMEvt.IsShift() )
                 pView->UnmarkAll();
             else
             {
                 if( pView->PickObj( aMDPos, nHitLog, pObj, pPV ) )
                 {
-
                     if( pObj->ISA( DlgEdForm ) )
                         pView->UnmarkAll();
                     else
                         pParent->UnmarkDialog();
-
-                    /*
-                    if( pObj->IsA( TYPE( VCSbxDialogObject ) ) )
-                        pView->UnmarkAll();
-                    else
-                        pParent->UnmarkDialog();
-                    */
                 }
             }
 
             if ( pView->MarkObj(aMDPos, nHitLog) )
             {
-                /**********************************************************
-                * Objekt verschieben
-                **********************************************************/
+                // drag object
                 pHdl=pView->HitHandle(aMDPos, *pWindow);
                 pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             }
             else
             {
-                /**********************************************************
-                * Objekt selektieren
-                **********************************************************/
+                // select object
                 pView->BegMarkObj(aMDPos, (OutputDevice*) NULL);
                 bMarkAction = TRUE;
             }
@@ -515,7 +403,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
 
-    // View vom Parent holen
+    // get view from parent
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
     pView->SetActualWin( pWindow );
@@ -529,9 +417,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( pView->IsDragObj() )
         {
-            /******************************************************************
-            * Objekt wurde verschoben
-            ******************************************************************/
+            // object was dragged
             pView->EndDragObj( rMEvt.IsMod1() );
             pView->ForceMarkedToAnotherPage();
         }
@@ -558,7 +444,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 //              SdrMark* pMark = rMarkList.GetMark(0);
 //              SdrObject* pObj = pMark->GetObj();
 //
-//              // Hier koennen Objecte editiert werden
+//              // edit objects here
 //          }
 //      }
 //  }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedmod.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:45:50 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,17 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
 
-#include <svx/svdobj.hxx>
-#include <svx/svxids.hrc>
-
-#ifndef _BASCTL_DLGED_HXX
-#include "dlged.hxx"
+#ifndef _BASCTL_DLGEDMOD_HXX
+#include "dlgedmod.hxx"
 #endif
 
 #ifndef _BASCTL_DLGEDPAGE_HXX
 #include "dlgedpage.hxx"
 #endif
 
-#include <svx/xoutx.hxx>
-
-#ifndef _SVDORECT_HXX
-#include <svx/svdorect.hxx>
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 
@@ -151,7 +145,7 @@ FASTBOOL DlgEdModel::operator==(const DlgEdModel&) const
 SdrPage* DlgEdModel::AllocPage(FASTBOOL bMasterPage)
 {
     DBG_CHKTHIS(DlgEdModel, 0);
-    return new DlgPage(*this, NULL, bMasterPage);
+    return new DlgEdPage(*this, bMasterPage);
 }
 
 //----------------------------------------------------------------------------

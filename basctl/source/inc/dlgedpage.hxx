@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 11:08:34 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,78 +62,33 @@
 #ifndef _BASCTL_DLGEDPAGE_HXX
 #define _BASCTL_DLGEDPAGE_HXX
 
-#ifndef _LINK_HXX //autogen
-#include <tools/link.hxx>
-#endif
-#ifndef _SVDUNDO_HXX //autogen
-#include "svx/svdundo.hxx"
-#endif
-#ifndef _SVDPAGE_HXX //autogen
+#ifndef _SVDPAGE_HXX
 #include "svx/svdpage.hxx"
 #endif
-#ifndef _SVDOBJ_HXX //autogen
-#include "svx/svdobj.hxx"
-#endif
-#ifndef _TOOLS_SOALR_H
-#include <tools/solar.h>
-#endif
-
-class SfxPoolItem;
-
-
-//============================================================================
-// DlgPage
-//============================================================================
-
-class StarBASIC;
-class VCDlgEditor;
-class DlgEdModel;
-class HelpEvent;  // this probably doesn't work, need include file vcsbx.hxx
-
-class DlgPage : public SdrPage
-{
-
-protected:
-    StarBASIC*      pBasic;
-    String          aPageName;
-
-public:
-    TYPEINFO();
-
-    DlgPage( DlgEdModel& rModel, StarBASIC* pBasic, FASTBOOL bMasterPage=FALSE );
-    DlgPage( const DlgPage& );
-    ~DlgPage();
-
-    void            SetName(const String& rPageName);
-    const String&   GetName() const { return aPageName; }
-
-    void            SetBasic( StarBASIC* pBas );
-    StarBASIC*      GetBasic() const { return pBasic; }
-
-    BOOL            RequestHelp( Window* pWin, SdrView* pView, const HelpEvent& rEvt );
-    virtual void    RequestBasic();
-
-    virtual void    WriteData(SvStream& rOut) const;
-    virtual void    ReadData(const SdrIOHeader& rHead, SvStream& rIn);
-    virtual void    SetModel(SdrModel* pNewModel);
-
-    virtual SdrPage* Clone() const;
-};
 
 //============================================================================
 // DlgEdPage
 //============================================================================
 
-class DlgEdPage : public DlgPage
+class DlgEdModel;
+class DlgEdForm;
+
+class DlgEdPage : public SdrPage
 {
-protected:
-    VCDlgEditor*    pEditor;
+private:
+    DlgEdForm*      pDlgEdForm;
 
 public:
-    DlgEdPage( DlgEdModel& rModel, StarBASIC* pBasic, VCDlgEditor* pEd ) :
-    DlgPage( rModel, pBasic ) { pEditor=pEd; }
+    TYPEINFO();
 
-    VCDlgEditor*    GetDlgEd() const { return pEditor; }
+    DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage=FALSE );
+    DlgEdPage( const DlgEdPage& );
+    virtual ~DlgEdPage();
+
+    virtual SdrPage* Clone() const;
+
+    void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
+    DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 };
 
 #endif //_BASCTL_DLGEDPAGE_HXX

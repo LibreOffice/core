@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-06 14:50:13 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,8 @@
 #include <dlgedpage.hxx>
 #endif
 
-#ifndef _BASCTL_DLGEDMOD_HXX //autogen
+#ifndef _BASCTL_DLGEDMOD_HXX
 #include <dlgedmod.hxx>
-#endif
-
-#ifndef _BASCTL_DLGEDOBJ_HXX
-#include <dlgedobj.hxx>
 #endif
 
 #ifndef _CLIP_HXX //autogen
@@ -85,36 +81,33 @@
 enum VCDlgMode { VCDLGED_INSERT, VCDLGED_SELECT, VCDLGED_TEST, VCDLGED_BLOCK_PAINT };
 
 //============================================================================
-// VCDlgEditor
+// DlgEditor
 //============================================================================
 
-class DlgEdForm;
-class DlgEdFunc;
-class VCDlgEditFactory;
+class ScrollBar;
 class SdrModel;
 class SdrPage;
 class SdrView;
-class StarBASIC;
-//class VCDlgEditor;
-class ScrollBar;
+class DlgEdForm;
+class DlgEdFactory;
+class DlgEdFunc;
 class Printer;
 
-class VCDlgEditor /* : public LinkHdl */
+class DlgEditor
 {
-//#if __PRIVATE
-    DECL_LINK( ClipboardCleared, Clipboard * );
+private:
+    DECL_LINK( ClipboardCleared, Clipboard * ); // not working yet
     DECL_LINK( PaintTimeout, Timer * );
-//#endif
+
 protected:
     ScrollBar*          pHScroll;
     ScrollBar*          pVScroll;
-    StarBASIC*          pBasic;
     DlgEdModel*         pSdrModel;
     DlgEdPage*          pSdrPage;
     SdrView*            pSdrView;
     DlgEdForm*          pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xUnoControlDialogModel;
-    VCDlgEditFactory*   pObjFac;
+    DlgEdFactory*       pObjFac;
     Window*             pWindow;
     DlgEdFunc*          pFunc;
     VCDlgMode           eMode;
@@ -130,11 +123,9 @@ protected:
     Rectangle           aPaintRect;
     BOOL                bDialogModelChanged;
 
-    // Data for new library container mechanism
-
 public:
-    VCDlgEditor( StarBASIC* pBasic );
-    ~VCDlgEditor();
+    DlgEditor();
+    ~DlgEditor();
 
     void            SetWindow( Window* pWindow );
     Window*         GetWindow() const { return pWindow; }
@@ -151,8 +142,6 @@ public:
                         ::com::sun::star::container::XNameContainer > xUnoControlDialogModel );
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const
                         {return m_xUnoControlDialogModel;}
-
-    StarBASIC*      GetBasic() const;
 
     SdrModel*       GetModel()      const { return pSdrModel; }
     SdrView*        GetView()       const { return pSdrView; }
@@ -181,12 +170,12 @@ public:
     VCDlgMode       GetMode() const { return eMode; }
     BOOL            IsCreateOK() const { return bCreateOK; }
 
-    void            Cut();
-    void            Copy();
-    void            Paste();
+    void            Cut();      // not working yet
+    void            Copy();     // not working yet
+    void            Paste();    // not working yet
     void            Delete();
 
-    void            PrintData( Printer*, const String& rTitle );
+    void            PrintData( Printer*, const String& rTitle );    // not working yet
 };
 
 #endif //_BASCTL_DLGED_HXX

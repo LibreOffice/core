@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-20 14:37:42 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,24 +59,34 @@
  *
  ************************************************************************/
 
-#ifndef _SFXAPP_HXX
-#include <sfx2/app.hxx>
+#ifndef _BASCTL_DLGED_HXX
+#include "dlged.hxx"
 #endif
-#ifndef _SFX_CHILDWIN_HXX
-#include <sfx2/childwin.hxx>
+
+#ifndef _BASCTL_DLGEDFUNC_HXX
+#include "dlgedfunc.hxx"
 #endif
+
+#ifndef _BASCTL_DLGEDFAC_HXX
+#include "dlgedfac.hxx"
+#endif
+
+#ifndef _BASCTL_DLGEDVIEW_HXX
+#include "dlgedview.hxx"
+#endif
+
+#ifndef _BASCTL_DLGEDOBJ_HXX
+#include "dlgedobj.hxx"
+#endif
+
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
-#ifndef _SBXCLASS_HXX
-#include <svtools/sbx.hxx>
-#endif
+
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-#ifndef _SVDVIEW_HXX //autogen
-#include <svx/svdview.hxx>
-#endif
+
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
@@ -101,43 +111,12 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
 
-#pragma hdrstop
-
-#ifndef _SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
-#include <svx/svdlayer.hxx>
-
-#include "vcsbxdef.hxx"
-
-#ifndef _BASCTL_DLGED_HXX
-#include "dlged.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDFUNC_HXX
-#include "dlgedfunc.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDFAC_HXX
-#include "dlgedfac.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDVIEW_HXX
-#include "dlgedview.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDOBJ_HXX
-#include "dlgedobj.hxx"
-#endif
-
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <xmlscript/xmldlg_imexp.hxx>
+#include "vcsbxdef.hxx"
+
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -146,7 +125,7 @@ using namespace ::com::sun::star::uno;
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( VCDlgEditor, ClipboardCleared, Clipboard *, EMPTYARG )
+IMPL_LINK( DlgEditor, ClipboardCleared, Clipboard *, EMPTYARG ) // not working yet
 {
     if( !bClipPrivate )
         return 0;
@@ -165,7 +144,7 @@ IMPL_LINK( VCDlgEditor, ClipboardCleared, Clipboard *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::ShowDialog()
+void DlgEditor::ShowDialog()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
 
@@ -190,7 +169,7 @@ void VCDlgEditor::ShowDialog()
 
 //----------------------------------------------------------------------------
 
-BOOL VCDlgEditor::UnmarkDialog()
+BOOL DlgEditor::UnmarkDialog()
 {
     SdrObject*      pDlgObj = pSdrModel->GetPage(0)->GetObj(0);
     SdrPageView*    pPgView = pSdrView->GetPageViewPvNum(0);
@@ -205,7 +184,7 @@ BOOL VCDlgEditor::UnmarkDialog()
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::RemarkDialog()
+void DlgEditor::RemarkDialog()
 {
     SdrObject*      pDlgObj = pSdrModel->GetPage(0)->GetObj(0);
     SdrPageView*    pPgView = pSdrView->GetPageViewPvNum(0);
@@ -215,10 +194,9 @@ void VCDlgEditor::RemarkDialog()
 
 //----------------------------------------------------------------------------
 
-VCDlgEditor::VCDlgEditor( StarBASIC* pBas ) :
+DlgEditor::DlgEditor() :
     pHScroll(NULL),
     pVScroll(NULL),
-    pBasic( pBas ),
     eMode( VCDLGED_SELECT ), // eActObj( OBJ_DLG_PUSHBUTTON ),
     bFirstDraw(FALSE),
     bGridSnap(FALSE),
@@ -238,36 +216,26 @@ VCDlgEditor::VCDlgEditor( StarBASIC* pBas ) :
     rAdmin.NewStandardLayer();
     rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ) );
 
-    pSdrPage = new DlgEdPage( *pSdrModel, pBasic, this );
+    pSdrPage = new DlgEdPage( *pSdrModel );
     pSdrModel->InsertPage( pSdrPage );
 
-    pObjFac = new VCDlgEditFactory( this );
+    pObjFac = new DlgEdFactory();
 
-    //SdrObjFactory::InsertMakeObjectHdl( LINK( pObjFac, VCDlgEditFactory, MakeObject ) );
     pFunc = new DlgEdFuncSelect( this );
 
-    aClip.SetClearedHdl( LINK( this, VCDlgEditor, ClipboardCleared ) );
+    aClip.SetClearedHdl( LINK( this, DlgEditor, ClipboardCleared ) );
 
     aPaintTimer.SetTimeout( 1 );
-    aPaintTimer.SetTimeoutHdl( LINK( this, VCDlgEditor, PaintTimeout ) );
+    aPaintTimer.SetTimeoutHdl( LINK( this, DlgEditor, PaintTimeout ) );
 }
 
 //----------------------------------------------------------------------------
 
-VCDlgEditor::~VCDlgEditor()
+DlgEditor::~DlgEditor()
 {
     ClipboardCleared( NULL );
-    /*
-    if( pSbxForm.Is() )
-        pSbxForm->PrepareDelete();
 
-    pSdrPage->SetDeleteSbxObject( FALSE );
-    ((DlgPage*)pSdrPage)->SetSbxForm( (VCSbxDialog*)NULL );
-    */
-
-    SdrObjFactory::RemoveMakeObjectHdl( LINK( pObjFac, VCDlgEditFactory, MakeObject ) );
     delete pObjFac;
-
     delete pFunc;
     delete pSdrView;
     delete pSdrModel;
@@ -275,9 +243,9 @@ VCDlgEditor::~VCDlgEditor()
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::SetWindow( Window* pWindow )
+void DlgEditor::SetWindow( Window* pWindow )
 {
-    VCDlgEditor::pWindow = pWindow;
+    DlgEditor::pWindow = pWindow;
     pWindow->SetMapMode( MapMode( MAP_100TH_MM ) );
     pSdrPage->SetSize( pWindow->PixelToLogic( Size( 1280, 1024 ) ) );
 
@@ -286,7 +254,6 @@ void VCDlgEditor::SetWindow( Window* pWindow )
     pSdrView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
     pSdrView->SetMoveSnapOnlyTopLeft( TRUE );
 
-    //Size aGridSize( 60, 60 );  //Twips
     Size aGridSize( 100, 100 );  // 100TH_MM
     bGridSnap    = TRUE;
     bGridVisible = TRUE;
@@ -301,7 +268,7 @@ void VCDlgEditor::SetWindow( Window* pWindow )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
+void DlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
 {
     pHScroll = pHS;
     pVScroll = pVS;
@@ -325,7 +292,7 @@ void VCDlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::DoScroll( ScrollBar* pActScroll )
+void DlgEditor::DoScroll( ScrollBar* pActScroll )
 {
     if( !pHScroll || !pVScroll )
         return;
@@ -358,7 +325,7 @@ void VCDlgEditor::DoScroll( ScrollBar* pActScroll )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoControlDialogModel )
+void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoControlDialogModel )
 {
     /* FOR TEST
     // my dialog model  --  delete this later
@@ -443,14 +410,15 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
 
     // create dialog form
     pDlgEdForm = new DlgEdForm();
-    uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel, uno::UNO_QUERY );
+    uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel , uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
     pDlgEdForm->StartListening();
-    pDlgEdForm->SetDlgEditor( this );
     pDlgEdForm->SortByTabIndex();       // for backward compatibility
     pDlgEdForm->SetRectFromProps();
+    pDlgEdForm->SetDlgEditor( this );
+    ((DlgEdPage*)pSdrModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
     pSdrModel->GetPage(0)->InsertObject( pDlgEdForm );
-    pDlgEdForm->SendRepaintBroadcast(); //?
+    pDlgEdForm->SendRepaintBroadcast();
 
     // create controls
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
@@ -474,7 +442,7 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
             pCtrlObj->SetChanged();
             pSdrModel->GetPage(0)->InsertObject( pCtrlObj );
             pCtrlObj->UpdateStep();
-            pCtrlObj->SendRepaintBroadcast(); //?
+            pCtrlObj->SendRepaintBroadcast();
         }
     }
 
@@ -485,61 +453,7 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
 
 //----------------------------------------------------------------------------
 
-/*
-void VCDlgEditor::SetVCSbxForm( VCSbxDialogRef pForm )
-{
-
-    DBG_ASSERT( pForm.Is(), "Kein Dialog -> und tschuess..." );
-    pSbxForm = pForm;
-
-    ((DlgPage*)pSdrModel->GetPage(0))->SetName( pSbxForm->GetName() );
-    ((DlgPage*)pSdrModel->GetPage(0))->SetSbxForm( (VCSbxDialog*)pSbxForm );
-
-    // Drawobject draufklemmen und in Drawing einfuegen
-    VCSbxDialogObject* pObj = new VCSbxDialogObject( pSbxForm );
-    pSdrModel->GetPage(0)->InsertObject( pObj );
-
-    // Durch das folgende Update wird SVLook am Container richtig
-    // gesetzt
-    pSbxForm->UpdateItem( 0 );
-
-    pObj->SendRepaintBroadcast();
-
-    // Childs einfuegen
-    // und Zeichenobject draufklemmen
-    USHORT nCount = pSbxForm->GetObjects()->Count();
-    USHORT i;
-    for( i=0; i < nCount; i++ )
-    {
-        SbxVariable* pCtl = pSbxForm->GetObjects()->Get( i );
-        DBG_ASSERT( pCtl->IsA( TYPE( VCSbxControl ) ), "Is sich nix Control !!!" );
-        if( (pCtl->GetSbxId() >= SBXID_FIRSTCONTROL) &&
-            (pCtl->GetSbxId() <= SBXID_LASTCONTROL)      )
-        {
-            VCSbxDrawObject* pDrawObj = new VCSbxDrawObject( (VCSbxControl*)pCtl );
-            pSdrModel->GetPage(0)->InsertObject( pDrawObj );
-            pDrawObj->GetControl()->UpdateStep( pSbxForm->GetCurStep() );
-            pDrawObj->SendRepaintBroadcast();
-        }
-    }
-
-    bFirstDraw = TRUE;
-
-    pSdrModel->SetChanged( FALSE );
-
-}
-*/
-
-//----------------------------------------------------------------------------
-
-StarBASIC* VCDlgEditor::GetBasic() const
-{
-    return pBasic;
-}
-
-//----------------------------------------------------------------------------
-
-void VCDlgEditor::MouseButtonDown( const MouseEvent& rMEvt )
+void DlgEditor::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( pWindow )
         pWindow->GrabFocus();
@@ -548,7 +462,7 @@ void VCDlgEditor::MouseButtonDown( const MouseEvent& rMEvt )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
+void DlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
 {
     BOOL bRet = pFunc->MouseButtonUp( rMEvt );
 
@@ -558,21 +472,21 @@ void VCDlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::MouseMove( const MouseEvent& rMEvt )
+void DlgEditor::MouseMove( const MouseEvent& rMEvt )
 {
     pFunc->MouseMove( rMEvt );
 }
 
 //----------------------------------------------------------------------------
 
-BOOL VCDlgEditor::KeyInput( const KeyEvent& rKEvt )
+BOOL DlgEditor::KeyInput( const KeyEvent& rKEvt )
 {
     return pFunc->KeyInput( rKEvt );
 }
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::Paint( const Rectangle& rRect )
+void DlgEditor::Paint( const Rectangle& rRect )
 {
     aPaintRect = rRect;
     PaintTimeout( &aPaintTimer );
@@ -580,7 +494,7 @@ void VCDlgEditor::Paint( const Rectangle& rRect )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( VCDlgEditor, PaintTimeout, Timer *, EMPTYARG )
+IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 {
     static int nInPaint = FALSE;
     if( !pSdrView )
@@ -662,7 +576,7 @@ IMPL_LINK( VCDlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::SetMode( VCDlgMode eNewMode )
+void DlgEditor::SetMode( VCDlgMode eNewMode )
 {
     if( eMode != eNewMode )
     {
@@ -682,7 +596,7 @@ void VCDlgEditor::SetMode( VCDlgMode eNewMode )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::SetInsertObj( USHORT eObj )
+void DlgEditor::SetInsertObj( USHORT eObj )
 {
     eActObj = eObj;
 
@@ -692,14 +606,14 @@ void VCDlgEditor::SetInsertObj( USHORT eObj )
 
 //----------------------------------------------------------------------------
 
-USHORT VCDlgEditor::GetInsertObj() const
+USHORT DlgEditor::GetInsertObj() const
 {
     return eActObj;
 }
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::Cut()
+void DlgEditor::Cut()   // not working yet
 {
     if( !pSdrView->HasMarkedObj() )
         return;
@@ -725,7 +639,7 @@ void VCDlgEditor::Cut()
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::Copy()
+void DlgEditor::Copy()  // not working yet
 {
     if( !pSdrView->HasMarkedObj() )
         return;
@@ -749,7 +663,7 @@ void VCDlgEditor::Copy()
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::Paste()
+void DlgEditor::Paste() // not working yet
 {
     SdrModel** ppClipPrivate = (SdrModel**)GetAppData( SHL_VCED );
 
@@ -768,7 +682,7 @@ void VCDlgEditor::Paste()
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::Delete()
+void DlgEditor::Delete()
 {
     if( !pSdrView->HasMarkedObj() )
         return;
@@ -830,14 +744,14 @@ void VCDlgEditor::Delete()
 
 //----------------------------------------------------------------------------
 
-BOOL VCDlgEditor::IsModified() const
+BOOL DlgEditor::IsModified() const
 {
     return pSdrModel->IsChanged() || bDialogModelChanged;
 }
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::ClearModifyFlag()
+void DlgEditor::ClearModifyFlag()
 {
     pSdrModel->SetChanged( FALSE );
     bDialogModelChanged = FALSE;
@@ -853,7 +767,7 @@ void VCDlgEditor::ClearModifyFlag()
 
 //----------------------------------------------------------------------------
 
-void lcl_PrintHeader( Printer* pPrinter, const String& rTitle )
+void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working yet
 {
     short nLeftMargin   = LMARGPRN;
     Size aSz = pPrinter->GetOutputSize();
@@ -898,7 +812,7 @@ void lcl_PrintHeader( Printer* pPrinter, const String& rTitle )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::PrintData( Printer* pPrinter, const String& rTitle )
+void DlgEditor::PrintData( Printer* pPrinter, const String& rTitle )    // not working yet
 {
     if( pSdrView )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-12 11:31:19 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,25 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
 
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
+#ifndef _BASCTL_DLGEDFAC_HXX
+#include "dlgedfac.hxx"
+#endif
+
+#ifndef _BASCTL_DLGEDOBJ_HXX
+#include "dlgedobj.hxx"
+#endif
+
+#ifndef _BASCTL_PROPBRW_HXX
+#include "propbrw.hxx"
+#endif
+
+#ifndef __VC_VCSBXDEF_HXX
+#include "vcsbx.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
@@ -74,50 +89,27 @@
 #endif
 
 
-#define _SI_NOVCDRAWVIEW
-#define _SI_VCDRAWOBJ
-#include "vcsbx.hxx"
-#include "vcsbxdo.hxx"
-
-#ifndef _BASCTL_DLGED_HXX
-#include "dlged.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDOBJ_HXX
-#include "dlgedobj.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDFAC_HXX
-#include "dlgedfac.hxx"
-#endif
-
-#ifndef _BASCTL_PROPBRW_HXX
-#include "propbrw.hxx"
-#endif
-
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 //----------------------------------------------------------------------------
 
-VCDlgEditFactory::VCDlgEditFactory( VCDlgEditor* pDlgEd )
+DlgEdFactory::DlgEdFactory()
 {
-    pDlgEditor = pDlgEd;
+    SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 
-    SdrObjFactory::InsertMakeObjectHdl(LINK(this, VCDlgEditFactory, MakeObject));
-
-    // Registrieung von globalen fenstern
-    //FmFieldWinMgr::RegisterChildWindow();
     PropBrwMgr::RegisterChildWindow();
-    //FmExplorerWinMgr::RegisterChildWindow();
-    //FmFilterNavigatorWinMgr::RegisterChildWindow();
-
-    //ImplSmartRegisterUnoServices();
 }
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( VCDlgEditFactory, MakeObject, SdrObjFactory *, pObjFactory )
+DlgEdFactory::~DlgEdFactory()
+{
+    SdrObjFactory::RemoveMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
+}
+
+//----------------------------------------------------------------------------
+
+IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 {
     static sal_Bool bNeedsInit = sal_True;
     static uno::Reference< lang::XMultiServiceFactory > xDialogSFact;
@@ -135,7 +127,7 @@ IMPL_LINK( VCDlgEditFactory, MakeObject, SdrObjFactory *, pObjFactory )
     }
 
     if( (pObjFactory->nInventor == VCSbxInventor) &&
-        (pObjFactory->nIdentifier >=OBJ_DLG_CHECKBOX) &&
+        (pObjFactory->nIdentifier >= OBJ_DLG_CHECKBOX) &&
         (pObjFactory->nIdentifier <= OBJ_DLG_URLBUTTON)    )
     {
         switch( pObjFactory->nIdentifier )
@@ -182,16 +174,12 @@ IMPL_LINK( VCDlgEditFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel"), xDialogSFact);
                  break;
             case OBJ_DLG_SPINBUTTON:
-                 //pControl = new VCSbxSpinButton( TRUE );
                  break;
             case OBJ_DLG_HSCROLLBAR:
-                 //pControl = new VCSbxHScrollBar( TRUE );
                  break;
             case OBJ_DLG_VSCROLLBAR:
-                 //pControl = new VCSbxVScrollBar( TRUE );
                  break;
             case OBJ_DLG_URLBUTTON:
-                 //pControl = new VCSbxURLButton( TRUE );
                  break;
         }
 
@@ -201,9 +189,6 @@ IMPL_LINK( VCDlgEditFactory, MakeObject, SdrObjFactory *, pObjFactory )
             pDlgEdObj->StartListening();
         }
     }
-
-    if( aOldMakeObjLink.IsSet() )
-        aOldMakeObjLink.Call( pObjFactory );
 
     return 0;
 }

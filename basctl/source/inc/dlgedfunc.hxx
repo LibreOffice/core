@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:54:38 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <vcl/timer.hxx>
 #endif
 
-class VCDlgEditor;
+class DlgEditor;
 class Timer;
 class MouseEvent;
 class Point;
@@ -78,14 +78,14 @@ class Point;
 class DlgEdFunc /* : public LinkHdl */
 {
 protected:
-    VCDlgEditor* pParent;
+    DlgEditor* pParent;
     Timer        aScrollTimer;
 
     DECL_LINK( ScrollTimeout, Timer * );
     void    ForceScroll( const Point& rPos );
 
 public:
-    DlgEdFunc( VCDlgEditor* pParent );
+    DlgEdFunc( DlgEditor* pParent );
     virtual ~DlgEdFunc();
 
     virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
@@ -101,7 +101,7 @@ public:
 class DlgEdFuncInsert : public DlgEdFunc
 {
 public:
-    DlgEdFuncInsert( VCDlgEditor* pParent );
+    DlgEdFuncInsert( DlgEditor* pParent );
     ~DlgEdFuncInsert();
 
     virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
@@ -119,7 +119,7 @@ protected:
     BOOL    bMarkAction;
 
 public:
-    DlgEdFuncSelect( VCDlgEditor* pParent );
+    DlgEdFuncSelect( DlgEditor* pParent );
     ~DlgEdFuncSelect();
 
     virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );

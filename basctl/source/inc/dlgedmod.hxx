@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedmod.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:56:29 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,9 @@
  *
  ************************************************************************/
 
+
 #ifndef _BASCTL_DLGEDMOD_HXX
 #define _BASCTL_DLGEDMOD_HXX
-
-#ifndef _ERRCODE_HXX //autogen
-#include <tools/errcode.hxx>
-#endif
 
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
@@ -75,13 +72,13 @@
 // DlgEdModel
 //============================================================================
 
-class DlgPage;
+class DlgEdPage;
 class Window;
 class SfxObjectShell;
 
 class DlgEdModel : public SdrModel
 {
-    friend class DlgPage;
+    friend class DlgEdPage;
 
 private:
     SfxObjectShell* pObjectShell;
@@ -101,11 +98,6 @@ public:
                 FASTBOOL bUseExtColorTable );
     virtual ~DlgEdModel();
 
-    // ruft SetChanged auf!! Aufgabe: Der Writer kann nicht SetChanged
-    // ueberladen, da diese Funktion auch beim Umformatieren
-    // des Textes (veraendert im Writer-Sinne nicht das Model!)
-    // gerufen wird, und deshalb an sehr vielen Stellen abgeklemmt
-    // werden muesste.
     virtual void DlgEdModelChanged( FASTBOOL bChanged = TRUE );
 
     SfxObjectShell* GetObjectShell() const { return pObjectShell; }

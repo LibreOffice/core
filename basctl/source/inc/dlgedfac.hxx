@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:53:39 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,28 +59,24 @@
  *
  ************************************************************************/
 
+
 #ifndef _BASCTL_DLGEDFAC_HXX
 #define _BASCTL_DLGEDFAC_HXX
 
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
+
+
 //============================================================================
-// VCDlgEditFactory
+// DlgEdFactory
 //============================================================================
 
-class SdrObjFactory;
-class StarBASIC;
-class VCDlgEditor;
-
-class VCDlgEditFactory /* : public LinkHdl */
+class DlgEdFactory
 {
-protected:
-    Link            aOldMakeObjLink;
-    VCDlgEditor*    pDlgEditor;
-
 public:
-    VCDlgEditFactory( VCDlgEditor* pDlgEd );
-
-    void SetOldMakeObjHdl( const Link& rLink ) { aOldMakeObjLink = rLink; }
-    Link GetOldMakeObjHdl() const { return aOldMakeObjLink; }
+    DlgEdFactory();
+    ~DlgEdFactory();
 
     DECL_LINK( MakeObject, SdrObjFactory * );
 };
