@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:51:00 $
+ *  last change: $Author: cl $ $Date: 2000-11-16 15:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 
 #ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
+#endif
+
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
 #endif
 
 #include "svdmodel.hxx"
@@ -424,6 +428,11 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 
     pObj->SetUserCall( pUser );
 
+    if( aShapeName.getLength() )
+    {
+        pObj->SetName( aShapeName );
+        aShapeName = OUString();
+    }
 }
 
 //----------------------------------------------------------------------
@@ -576,6 +585,8 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type & rType ) throw(un
         aAny <<= Reference<XUnoTunnel>(this);
     else if( rType == ::getCppuType((const Reference< drawing::XGluePointsSupplier >*)0))
         aAny <<= Reference<drawing::XGluePointsSupplier>(this);
+    else if( rType == ::getCppuType((const Reference< container::XNamed >*)0))
+        aAny <<= Reference<container::XNamed>(this);
     else
         aAny <<= OWeakAggObject::queryAggregation( rType );
 
@@ -644,7 +655,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
         const uno::Sequence< uno::Type > aBaseTypes( SvxUnoText::getStaticTypes() );
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 6;      // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = 7;      // !DANGER! Keep this updated!
 
         maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -655,6 +666,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
         *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+        *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
 
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
@@ -871,6 +883,31 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
 }
 
 
+// XNamed
+OUString SAL_CALL SvxShape::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if( pObj )
+    {
+        return pObj->GetName();
+    }
+    else
+    {
+        return aShapeName;
+    }
+}
+
+void SAL_CALL SvxShape::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if( pObj )
+    {
+        pObj->SetName( aName );
+    }
+    else
+    {
+        aShapeName = aName;
+    }
+}
+
 // XShapeDescriptor
 
 //----------------------------------------------------------------------
@@ -1040,6 +1077,51 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                                 String aEmptyStr;
                                 SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
                                 SvInPlaceObjectRef aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor);
+
+                                SvPersist* pPersist = pModel->GetPersist();
+
+                                String aName = getName();
+
+                                sal_Bool bOk = sal_False;
+                                // if we already have a shape name check if its a unique
+                                // storage name
+                                if( aName.Len() && !pPersist->Find( aName ) )
+                                {
+                                    SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aName );
+                                    bOk = pPersist->Move( xSub, aName );
+                                }
+                                else
+                                {
+                                    // generate a unique name
+
+                                    aName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") );
+                                    String aStr;
+                                    sal_Int32 i = 1;
+                                    HACK(Wegen Storage Bug 46033)
+                                    // for-Schleife wegen Storage Bug 46033
+                                    for( sal_Int16 n = 0; n < 100; n++ )
+                                    {
+                                        do
+                                        {
+                                            aStr = aName;
+                                            aStr += String::CreateFromInt32( i );
+                                            i++;
+                                        } while ( pPersist->Find( aStr ) );
+
+                                        SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aStr );
+                                        if( pPersist->Move( xSub, aStr ) ) // Eigentuemer Uebergang
+                                        {
+                                            bOk = sal_True;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                DBG_ASSERT( bOk, "could not create move ole stream!" )
+
+                                if( bOk )
+                                    pObj->SetName( aName );
+
                                 ((SdrOle2Obj*)pObj)->SetObjRef(aIPObj);
 
                                 Rectangle aRect( ( (SdrOle2Obj*) pObj)->GetLogicRect() );
