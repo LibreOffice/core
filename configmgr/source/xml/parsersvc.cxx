@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:20:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,25 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 
-#include <drafts/com/sun/star/configuration/backend/XSchema.hpp>
-#include <drafts/com/sun/star/configuration/backend/XLayer.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMA_HPP_
+#include <com/sun/star/configuration/backend/XSchema.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
+#include <com/sun/star/configuration/backend/XLayer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MALFORMEDDATAEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/MalformedDataException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
 #endif
@@ -94,7 +108,7 @@ namespace configmgr
         namespace lang  = ::com::sun::star::lang;
         namespace io    = ::com::sun::star::io;
         namespace sax   = ::com::sun::star::xml::sax;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
 template <class BackendInterface>
@@ -207,8 +221,10 @@ uno::Reference< io::XInputStream > SAL_CALL
 
 template <class BackendInterface>
 void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandler > const & _xHandler)
-    throw (uno::Exception)
+//    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    OSL_PRECOND( _xHandler.is(), "ParserService: No SAX handler to parse to");
+
     typedef uno::Reference< sax::XParser > SaxParser;
 
     rtl::OUString const k_sSaxParserService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"));
@@ -242,11 +258,22 @@ void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandle
             sSAXMessage = sMsgBuf.makeStringAndClear();
         }
 
-        rtl::OUStringBuffer sMessage;
-        sMessage.appendAscii("Configuration Parser: a ").append( aWrapped.getValueTypeName() );
-        sMessage.appendAscii(" occurred while parsing: ");
-        sMessage.append(sSAXMessage);
-        throw lang::WrappedTargetRuntimeException(sMessage.makeStringAndClear(),*this,aWrapped);
+        static backenduno::MalformedDataException const * const forDataError = 0;
+        static lang::WrappedTargetException const * const forWrappedError = 0;
+        if (aWrapped.isExtractableTo(getCppuType(forDataError)) ||
+            aWrapped.isExtractableTo(getCppuType(forWrappedError)))
+        {
+            cppu::throwException(aWrapped);
+
+            OSL_ASSERT(!"not reached");
+        }
+
+        rtl::OUStringBuffer sMessageBuf;
+        sMessageBuf.appendAscii("Configuration Parser: a ").append( aWrapped.getValueTypeName() );
+        sMessageBuf.appendAscii(" occurred while parsing: ");
+        sMessageBuf.append(sSAXMessage);
+
+        throw lang::WrappedTargetException(sMessageBuf.makeStringAndClear(),*this,aWrapped);
     }
 }
 
@@ -310,13 +337,16 @@ public:
     }
 
     virtual void SAL_CALL readSchema( HandlerArg const & aHandler )
-        throw (uno::RuntimeException);
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+               lang::NullPointerException, uno::RuntimeException);
 
     virtual void SAL_CALL readComponent( HandlerArg const & aHandler )
-        throw (uno::RuntimeException);
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+               lang::NullPointerException, uno::RuntimeException);
 
     virtual void SAL_CALL readTemplates( HandlerArg const & aHandler )
-        throw (uno::RuntimeException);
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+               lang::NullPointerException, uno::RuntimeException);
 };
 // -----------------------------------------------------------------------------
 
@@ -333,7 +363,8 @@ public:
     }
 
     virtual void SAL_CALL readData( HandlerArg const & aHandler )
-        throw (uno::RuntimeException);
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+               lang::NullPointerException, uno::RuntimeException);
 };
 
 // -----------------------------------------------------------------------------
@@ -353,34 +384,53 @@ const ServiceRegistrationInfo* getLayerParserServiceInfo()
 { return getRegistrationInfo(& aLayerParserSI); }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL SchemaParserService::readSchema( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
-    throw (uno::RuntimeException)
+static OUString nullHandlerMessage(char const * where)
 {
-    // todo: check for NULL handler
+    OSL_ASSERT(where);
+    OUString msg = OUString::createFromAscii(where);
+    return msg.concat(OUString::createFromAscii(": Error - NULL handler passed."));
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL SchemaParserService::readSchema( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+           lang::NullPointerException, uno::RuntimeException)
+{
+    if (!aHandler.is())
+        throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readSchema"),*this);
+
     SaxHandler xHandler = new SchemaParser(this->getServiceFactory(),aHandler, SchemaParser::selectAll);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL SchemaParserService::readComponent( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
-    throw (uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+           lang::NullPointerException, uno::RuntimeException)
 {
-    // todo: check for NULL handler
+    if (!aHandler.is())
+        throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readComponent"),*this);
+
     SaxHandler xHandler = new SchemaParser(this->getServiceFactory(),aHandler, SchemaParser::selectComponent);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL SchemaParserService::readTemplates( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
-    throw (uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+           lang::NullPointerException, uno::RuntimeException)
 {
-    // todo: check for NULL handler
+    if (!aHandler.is())
+        throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readTemplates"),*this);
+
     SaxHandler xHandler = new SchemaParser(this->getServiceFactory(),aHandler, SchemaParser::selectTemplates);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL LayerParserService::readData( uno::Reference< backenduno::XLayerHandler > const & aHandler )
-    throw (uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+           lang::NullPointerException, uno::RuntimeException)
 {
-    // todo: check for NULL handler
+    if (!aHandler.is())
+        throw lang::NullPointerException(nullHandlerMessage("LayerParserService::readData"),*this);
+
     SaxHandler xHandler = new LayerParser(this->getServiceFactory(),aHandler);
     this->parse( xHandler );
 }
