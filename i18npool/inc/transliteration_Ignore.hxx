@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:04:03 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ typedef struct {
     sal_Unicode previousChar;
     sal_Unicode currentChar;
     sal_Unicode replaceChar;
+    sal_Bool two2one;
 } Mapping;
 
 namespace com { namespace sun { namespace star { namespace i18n {
