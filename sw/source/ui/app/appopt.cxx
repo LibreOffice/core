@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 12:06:24 $
+ *  last change: $Author: os $ $Date: 2001-05-07 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,16 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 {
     BOOL bTextDialog = nId == SID_SW_EDITOPTIONS;
     SwView* pAppView = GetView();
+    if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
+        pAppView = 0;
+    if(pAppView)
+    {
+        // the text dialog mustn't apply data to the web view and vice versa
+        BOOL bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+        if( (bWebView == bTextDialog))
+            pAppView = 0; //
+    }
+
     SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
     SwModuleOptions* pMCfg = GetModuleConfig();
 
@@ -609,6 +619,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/05/04 12:06:24  os
+    check whether the view is active
+
     Revision 1.9  2001/04/17 09:17:50  os
     #86002# second writer view tabpage: id added
 
