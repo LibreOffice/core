@@ -319,6 +319,9 @@ $(SHL1TARGETN) : \
 .IF "$(OS)"=="LINUX"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
+.IF "$(OS)"=="NETBSD"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
 .ENDIF
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
@@ -719,6 +722,9 @@ $(SHL2TARGETN) : \
         $(CC) -c -dynamic -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .IF "$(OS)"=="LINUX"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
+.IF "$(OS)"=="NETBSD"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .ENDIF
@@ -1123,6 +1129,9 @@ $(SHL3TARGETN) : \
 .IF "$(OS)"=="LINUX"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
+.IF "$(OS)"=="NETBSD"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
 .ENDIF
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
@@ -1523,6 +1532,9 @@ $(SHL4TARGETN) : \
         $(CC) -c -dynamic -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .IF "$(OS)"=="LINUX"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
+.IF "$(OS)"=="NETBSD"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .ENDIF
@@ -1927,6 +1939,9 @@ $(SHL5TARGETN) : \
 .IF "$(OS)"=="LINUX"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
+.IF "$(OS)"=="NETBSD"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
 .ENDIF
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
@@ -2327,6 +2342,9 @@ $(SHL6TARGETN) : \
         $(CC) -c -dynamic -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .IF "$(OS)"=="LINUX"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
+.IF "$(OS)"=="NETBSD"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .ENDIF
@@ -2731,6 +2749,9 @@ $(SHL7TARGETN) : \
 .IF "$(OS)"=="LINUX"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
+.IF "$(OS)"=="NETBSD"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
 .ENDIF
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
@@ -3131,6 +3152,9 @@ $(SHL8TARGETN) : \
         $(CC) -c -dynamic -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .IF "$(OS)"=="LINUX"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
+.IF "$(OS)"=="NETBSD"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .ENDIF
@@ -3535,6 +3559,9 @@ $(SHL9TARGETN) : \
 .IF "$(OS)"=="LINUX"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
+.IF "$(OS)"=="NETBSD"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
 .ENDIF
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
@@ -3935,6 +3962,9 @@ $(SHL10TARGETN) : \
         $(CC) -c -dynamic -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .IF "$(OS)"=="LINUX"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
+.IF "$(OS)"=="NETBSD"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .ENDIF
