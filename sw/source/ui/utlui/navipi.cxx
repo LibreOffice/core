@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:13:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,11 +941,11 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
 //  USHORT nWidth = 2 * (USHORT)aFirstRect.Left();
     //doppelte Separatoren sind nicht erlaubt, also muss
     //die passende Groesse anders ermittelt werden
-    Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_DROP_REGION);
-    Rectangle aSecondRect = aContentToolBox.GetItemRect(FN_ITEM_DOWN);
-    USHORT nWidth = USHORT(aSecondRect.Left() - aFirstRect.Left());
+    Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SELECT_FOOTNOTE);
+    Rectangle aSecondRect = aContentToolBox.GetItemRect(FN_SELECT_HEADER);
+    USHORT nWidth = USHORT(aFirstRect.Left() - aSecondRect.Left());
 
-    Size aItemWinSize( nWidth, aFirstRect.Bottom() - aFirstRect.Top() );
+    Size aItemWinSize( nWidth , aFirstRect.Bottom() - aFirstRect.Top() );
     pEdit->SetSizePixel(aItemWinSize);
     aContentToolBox.InsertWindow( FN_PAGENUMBER, pEdit, 0, 5);
     //aContentToolBox.InsertSeparator(4);
