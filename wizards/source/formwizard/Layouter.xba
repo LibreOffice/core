@@ -67,11 +67,12 @@ Public Const cGridControl	= 8
 Public Const cImageControl	= 9
 
 Public Styles(8, 50) as String
-Public FieldMetaValues(MaxFieldIndex,3)
+Public FieldMetaValues(MaxFieldIndex, 4)
 &apos; Description of this List:
 &apos; FieldMetaValues(0-MaxFieldIndex,0) (Datafieldtype)
 &apos; FieldMetaValues(0-MaxFieldIndex,1) (Datafieldlength)
 &apos; FieldMetaValues(0-MaxFieldIndex,2) (ControlType eg. cLabel, cTextbox usw.)
+&apos; FieldMetaValues(0-MaxFieldIndex,4) (CurFormatKey)
 
 Public FieldNames(MaxFieldIndex) as string
 Public oModelService(cControlCollectionCount) as String
@@ -122,7 +123,7 @@ Dim oViewSettings as Object
 	oViewSettings.ShowTableBoundaries = False
 	oViewSettings.ShowTextBoundaries = False
 	oViewSettings.ShowOnlineLayout = True
-	oViewSettings.ShowHoriRuler = True
+&apos;	oViewSettings.ShowHoriRuler = True
 	oDrawPage = oDocument.DrawPage
 	oPageStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)
 End Sub
@@ -140,8 +141,10 @@ Dim oLocControl as Object
 Dim oLocPeer as Object
 	oLabelModel =  CreateUnoService(&quot;com.sun.star.form.component.FixedText&quot;)
 	oTBModel =  CreateUnoService(&quot;com.sun.star.form.component.TextField&quot;)
+
 	Set oLabelShape = InsertControl(oDrawPage, oLabelModel, aPoint, aSize)
 	Set oTBShape = InsertControl(oDrawPage, oTBModel, aPoint, aSize)
+
 	oLocPeer = oController.GetControl(oLabelModel).Peer
 	XPixelFactor = 100000/oLocPeer.GetInfo.PixelPerMeterX
 	YPixelFactor = 100000/oLocPeer.GetInfo.PixelPerMeterY
@@ -149,7 +152,7 @@ Dim oLocPeer as Object
 	nTCHeight = (aLabelSize.Height+1) * YPixelFactor
 	aTBSize = GetPeerSize(oTBModel, oLocControl, &quot;The quick brown fox...&quot;)
 	nDBRefHeight = (aTBSize.Height+1) * YPixelFactor
-	LabelDiffHeight = Clng((nDBRefHeight - nTCHeight)/2)
+	BasicLabelDiffHeight = Clng((nDBRefHeight - nTCHeight)/2)
 	oDrawPage.Remove(oLabelShape)
 	oDrawPage.Remove(oTBShape)
 End Sub
@@ -178,6 +181,8 @@ Dim oModel as Object
 Dim i as Integer
 Dim oCurModel as Object
 Dim sLocText as String
+Dim oGroupShape as Object
+Dim s as Integer
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
@@ -186,24 +191,32 @@ Dim sLocText as String
 	SwitchBorderMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
 
-&apos; Todo: Auch unsichtbare Controls müssen eine neue Border bekommen
-&apos; Am besten wird hierbei das dynamische Array oDBShapeList() abgegriffen
 	If CurArrangement = cTabled Then
 		oGridModel.Border = CurBorderType
 	Else
 		If OldBorderType &lt;&gt; CurBorderType Then
 			For i = 0 To MaxIndex
-				oDBModelList(i).Border = CurBorderType
+				If oDBShapeList(i).SupportsService(&quot;com.sun.star.drawing.GroupShape&quot;) Then
+					oGroupShape = oDBShapeList(i)
+					For s = 0 To oGroupShape.Count-1
+						oGroupShape(s).Control.Border = CurBorderType
+					Next s
+				Else
+					If oDBModelList(i).PropertySetInfo.HasPropertyByName(&quot;Border&quot;) Then
+						oDBModelList(i).Border = CurBorderType
+					End If
+				End If
 			Next i
 		End If
 	End If
+	ToggleLayoutPage(True)
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then	
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:		
+		LOCERROR:
+		DlgFormDB.Dispose()	
 	End If
-	ToggleLayoutPage(True)
 End Sub
 
 
@@ -302,12 +315,16 @@ End Sub
 Sub ToggleLayoutPage(bDoEnable as Boolean, Optional FocusControlName as String)
 	oDialogModel.Enabled = bDoEnable
 	If bDoEnable Then
-		oDocument.UnlockControllers()
+		If Not bDebug Then
+			oDocument.UnlockControllers()
+		End If
 		ToggleOptionButtons(oDialogModel,(bWithBackGraphic = True))
 		ToggleAlignGroup(bDoEnable)
 		ToggleBorderGroup(bDoEnable)
 	Else
-		oDocument.LockControllers()	
+		If Not bDebug Then
+			oDocument.LockControllers()	
+		End If
 	End If
 	If Not IsMissing(FocusControlName) Then
 		DlgFormDB.GetControl(FocusControlName).SetFocus()

@@ -29,7 +29,7 @@ Dim oControl as Object
 	nWidth = aPeerSize.Width
 	&apos; We increase the preferred Width a bit so that the control does not become too small
 	&apos; when we change the border from &quot;3D&quot; to &quot;Flat&quot;
-	GetPreferredWidth = (nWidth + 5) * XPixelFactor	&apos; PixelTo100thmm(nWidth)
+	GetPreferredWidth = (nWidth + 10) * XPixelFactor	&apos; PixelTo100thmm(nWidth)
 End Function
 
 
@@ -146,7 +146,6 @@ Dim OldIndex as Integer
 	If CurIndex &lt;&gt; OldIndex Then	
 		ToggleLayoutPage(False)
 		SetImportStyle()
-		ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
 		ToggleLayoutPage(True, &quot;lstStyles&quot;)	
 	End If
 WIZARDERROR:
@@ -197,7 +196,10 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 		Case com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
 &apos;			oLocObject.MaxTextLen = CurFieldLength
 	End Select
-	
+	If oLocObject.PropertySetInfo.HasPropertybyName(&quot;FormatKey&quot;) Then
+		On Local Error Resume Next
+		oLocObject.FormatKey = CurFormatKey
+	End If
 End Function
 
 
@@ -215,8 +217,8 @@ Dim oShape as Object
 End Sub
 
 
-&apos; Note as Shapes cannot be removed from the DrawPage without destroying
-&apos; the object we have to park them somewhere in Nirwana
+&apos; Note: as Shapes cannot be removed from the DrawPage without destroying
+&apos; the object we have to park them somewhere beyond the visible area of the page
 Sub ShapesToNirwana()
 Dim n as Integer
 Dim oControl as Object
@@ -227,11 +229,11 @@ End Sub
 
 
 Function CalcUniqueContentName(BYVAL oContainer as Object, sBaseName as String) as String
+
 Dim nPostfix as Integer
 Dim sReturn as String
 	nPostfix = 2
 	sReturn = sBaseName
-
 	while (oContainer.hasByName(sReturn))
 		sReturn = sBaseName &amp; nPostfix
 		nPostfix = nPostfix + 1
@@ -268,18 +270,4 @@ Function GetDBHeight(oDBModel as Object)
 	End If
 	GetDBHeight() = nDBHeight
 End Function
-
-
-&apos;Sub ShowErrorMessage(bEndExecute as Boolean)
-&apos;	If Err &lt;&gt; 0 Then	
-&apos;		Msgbox(sMsgErrMsg, 16, GetProductName())
-&apos;		Resume LOCERROR
-&apos;		LOCERROR:		
-&apos;		On Local Error Goto 0
-&apos;		oDocument.UnlockControllers()
-&apos;		ToggleWindow(True)
-&apos;		If bEndExecute Then
-&apos;			DlgFormDB.EndExecute()	
-&apos;		End If
-&apos;	End If
-&apos;End Sub</script:module>
+</script:module>

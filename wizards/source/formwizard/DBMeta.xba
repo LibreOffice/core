@@ -136,11 +136,12 @@ Dim oField as Object
 		FieldMetaValues(n,1) = oField.Precision 		
 		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),1, WidthIndex)		
 		FieldMetaValues(n,3) = WidthList(WidthIndex,3)
+		FieldMetaValues(n,4) = oField.FormatKey
 	Next
 	ReDim oDBShapeList(MaxIndex) as Object
 	ReDim oTCShapeList(MaxIndex) as Object
 	ReDim oDBModelList(MaxIndex) as Object
-&apos;	ReDim oGroupShapeList(MaxIndex) as Object
+	ReDim oGroupShapeList(MaxIndex) as Object
 End Sub
 
 
@@ -174,7 +175,7 @@ Dim EmptyList()
 			Redim Preserve ImgFieldNames(s-1)
 			bEnableBinaryOptionGroup = True
 		Else
-			bEnableBinaryOptionGroup = False		
+			bEnableBinaryOptionGroup = False
 		End If
 		Redim Preserve ResultFieldNames(m-1)
 		Redim Preserve FieldNames(m-1)
@@ -264,5 +265,6 @@ Sub GetCurrentMetaValues(Index as Integer)
 	CurFieldLength = FieldMetaValues(Index,1)
 	CurControlType = FieldMetaValues(Index,2)
 	CurControlName = FieldMetaValues(Index,3)
+	CurFormatKey = FieldMetaValues(Index,4)
     CurFieldName = FieldNames(Index)
 End Sub</script:module>

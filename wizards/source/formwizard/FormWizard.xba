@@ -65,7 +65,7 @@ Dim i as Integer
 Dim SelCount as Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
-	bDebug = True
+	bDebug = False
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
@@ -214,7 +214,6 @@ NOFIELDS:
 End Sub
 
 
-
 Sub PreviousStep()
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
@@ -240,7 +239,6 @@ Sub NextStep()
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-
 	Select Case oDialogModel.Step
 		Case 1
 			bControlsAreCreated = Not (CBool(oDialogModel.lstSelFields.Tag))
@@ -261,7 +259,7 @@ Sub NextStep()
 	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
 	DlgFormDB.Title = WizardTitle(oDialogModel.Step)
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
+	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
 		LOCERROR:		
@@ -326,6 +324,7 @@ Dim sBaseBookmarkName as String
 			End If
 		Loop Until Not bLinkExists
 		bDisposeDoc = False
+		GroupShapesTogether()
 		DlgFormDB.EndExecute()
 		ToggleDesignMode(oDocument)
 		oDBForm.Reload()

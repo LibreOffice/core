@@ -9,6 +9,7 @@ Global Const RID_FORM	= 2200
 Public Const SBCANCEL = 2
 Public Const SBREPEAT = 4
 Public LabelDiffHeight as Long
+Public BasicLabelDiffHeight as Long
 
 Public WizardTitle(1 To 3) as String
 Public DlgFormDB as Object
@@ -26,10 +27,8 @@ Dim sMsgProgressText as String
 Dim sMsgCreatedForm as String
 Dim sMsgErrCouldNotOpenObject as String
 Dim sMsgErrNameToLong as String
-
 Dim sTimeAppendix as String
 Dim sDateAppendix as String
-
 Public sGoOn as String
 Public sReady as String
 Public sMsgNoConnection as String

@@ -6,7 +6,7 @@ Option Explicit
 Public oDBShapeList() as Object
 Public oTCShapeList() as Object
 Public oDBModelList() as Object
-&apos;Public oGroupShapeList() as Object
+Public oGroupShapeList() as Object
 
 Public oGridShape as Object
 Public a as Integer
@@ -21,6 +21,7 @@ Public CurFieldlength as Double
 Public CurFieldType as Integer
 Public CurFieldName as String
 Public CurControlName as String
+Public CurFormatKey as Long
 Dim iReduceWidth as Integer
 
 Function PositionControls(Maxindex as Integer)
@@ -39,9 +40,6 @@ Dim i as Integer
 	End If
 	For i = 0 To MaxIndex
 		GetCurrentMetaValues(i)
-&apos;		oGroupShapeList(i) = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
-&apos;		oGroupShapeList(i).AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
-&apos;		oDrawPage.Add(oGroupShapeList(i))
 		oTCModel = InsertTextControl(i)
 		If CurFieldType = com.sun.star.sdbc.DataType.TIMESTAMP Then
 			InsertTimeStampShape(i)			
@@ -50,6 +48,7 @@ Dim i as Integer
 			bIsVeryFirstRun = False
 			oDBModelList(i).LabelControl = oTCModel
 		End If
+		GetLabelDiffHeight(i+1)
 		ResetPosSizes(i)
 &apos;		oGroupShapeList(i).Position = GetPoint(nXTCPos, nYTCPos)
 &apos;		oGroupShapeList(i).Size = GetSize(nTCWidth + nDBWidth, nDBHeight)
@@ -80,7 +79,7 @@ Sub ResetPosSizes(LastIndex as Integer)
 			nYTCPos = nYDBPos + nDBHeight + cVertDistance
 			If nYTCPos &gt; cYOffset + nFormHeight Then
 				nXDBPos = nMaxColRightX + cHoriDistance
-				nXTCPos = nMaxColRightX + cHoriDistance
+				nXTCPos = nXDBPos
 				nYDBPos = cYOffset + nTCHeight + cVertDistance
 				nYTCPos = cYOffset
 				bIsFirstRun = True
@@ -96,6 +95,9 @@ Sub ResetPosSizes(LastIndex as Integer)
 				CheckJustifiedPosition()
 			Else
 				nXTCPos = nMaxColRightX + CHoriDistance
+				If CurArrangement = cLeftJustified Then
+					nYTCPos = nYDBPos + LabelDiffHeight
+				End If
 			End If
 			a = a + 1				
 	End Select
@@ -133,17 +135,19 @@ End Sub
 
 Sub InitializePosSizes()
 	nXTCPos = cXOffset
-	nYTCPos = cYOffset + LABELDIFFHEIGHT
 	nTCWidth = 2000
 	nDBWidth = 2000
 	nDBHeight = nDBRefHeight
 	iReduceWidth = 0
 	Select Case CurArrangement
 		Case cColumnarLeft, cLeftJustified
+			GetLabelDiffHeight(0)
+			nYTCPos = cYOffset + LABELDIFFHEIGHT
 			nXDBPos = cXOffset + 3050
 			nYDBPos = cYOffset
 		Case cColumnarTop, cTopJustified
 			nXDBPos = cXOffset
+			nYTCPos = cYOffset
 	End Select
 End Sub
 
@@ -284,6 +288,20 @@ Dim oGroupShape as Object
 End Function
 
 
+&apos; Note on all Controls except for the checkbox the Label has to be set
+&apos; a bit under the DBControl because its Height is also smaller 
+Sub GetLabelDiffHeight(Index as Integer)
+	If (CurArrangement = cLeftJustified) Or (CurArrangement = cColumnarLeft) Then
+		If Index &lt;= Ubound(FieldMetaValues()) Then
+			If FieldMetaValues(Index,2) = cCheckBox Then
+				LabelDiffHeight = 0
+			Else
+				LabelDiffHeight = BasicLabelDiffHeight
+			End If
+		End If
+	End If
+End Sub
+
 Sub CheckJustifiedPosition()
 Dim nLeftDist as Long
 Dim nRightDist as Long
@@ -364,9 +382,6 @@ Dim bAdjustPos as Boolean
 Dim iLocTCPosX as Long
 Dim iLocDBPosX as Long
 Dim ShapeCount as Integer
-&apos; Todo: Hier muss berücksichtigt werden, dass gewisse Widths z.B für numerische Controls nicht plötzlich zu klein werden
-&apos; Am besten werden nur TextControls gestaucht, so dass vorher geschaut werden muss, ob überhaupt TextControls vorhanden
-&apos; sind
 	If WidthFactor &gt; 0 Then
 		ShapeCount = EndIndex-StartIndex + 1
 	Else
@@ -441,7 +456,6 @@ Dim n as Integer
 Dim oColumn as Object
 Dim aPoint as New com.sun.star.awt.Point
 Dim aSize as New com.sun.star.awt.Size
-&apos;	oDocument.LockControllers()
 	If bControlsareCreated Then
 		ShapesToNirwana()
 	End If
@@ -465,7 +479,6 @@ Dim aSize as New com.sun.star.awt.Size
 		End If
 		oProgressbar.Value = n
 	next n
-&apos;	oDocument.UnlockControllers()	
 End Function
 
 
@@ -500,6 +513,19 @@ Dim iStandardColor as Long
 				End If
 			End If
 			oCurModel.TextColor = iStandardColor
+		Next i
+	End If
+End Sub
+
+
+Sub GroupShapesTogether()
+Dim i as Integer
+	If CurArrangement &lt;&gt; cTabled Then
+		For i = 0 To MaxIndex
+			oGroupShapeList(i) = CreateUnoService(&quot;com.sun.star.drawing.ShapeCollection&quot;)
+			oGroupShapeList(i).Add(oTCShapeList(i))
+			oGroupShapeList(i).Add(oDBShapeList(i))
+			oDrawPage.Group(oGroupShapeList(i))
 		Next i
 	End If
 End Sub</script:module>
