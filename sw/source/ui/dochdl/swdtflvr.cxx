@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:50:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1850,6 +1850,10 @@ PASTEOLE_SETREADSW3:
         case SOT_FORMATSTR_ID_STARWRITER_60:
         case SOT_FORMATSTR_ID_STARWRITERWEB_60:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
+            xStore->SetVersion( SOFFICE_FILEFORMAT_60 );
+        case SOT_FORMATSTR_ID_STARWRITER_8:
+        case SOT_FORMATSTR_ID_STARWRITERWEB_8:
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
             pRead = ReadXML;
             break;
         }
