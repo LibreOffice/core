@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:39:08 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,20 +98,25 @@ const sal_uInt16 EXC_ID_UNKNOWN             = 0xFFFF;
 const sal_uInt16 EXC_ID_CONT                = 0x003C;
 
 
-// Unicode strings ------------------------------------------------------------
+// String import/export -------------------------------------------------------
 
 /** Flags used to specify import/export mode of strings. */
 typedef sal_uInt16                          XclStrFlags;
 const XclStrFlags EXC_STR_DEFAULT           = 0x0000;   /// Default string settings.
-const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use 16-bit (Unicode) characters (default: automatic).
-const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length (default: 16-bit).
-const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always).
-const XclStrFlags EXC_STR_KEEPZEROCHARS     = 0x0008;   /// Keep zero characters unchanged (default: replace with '?').
+const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use UCS-2 characters (default: try to compress). BIFF8 only.
+const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length field (default: 16-bit).
+const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always). BIFF8 only.
 
 const sal_uInt8 EXC_STRF_16BIT              = 0x01;
 const sal_uInt8 EXC_STRF_FAREAST            = 0x04;
 const sal_uInt8 EXC_STRF_RICH               = 0x08;
 const sal_uInt8 EXC_STRF_UNKNOWN            = 0xF2;
+
+// Fixed-size characters
+const sal_uInt8 EXC_LF_C                    = '\x0A';       /// LF character (used for line break).
+const sal_uInt16 EXC_LF                     = EXC_LF_C;     /// LF character (unicode).
+const sal_uInt8 EXC_NUL_C                   = '\x00';       /// NUL chararcter.
+const sal_uInt16 EXC_NUL                    = EXC_NUL_C;    /// NUL chararcter (unicode).
 
 
 // Encoded URLs ---------------------------------------------------------------
@@ -164,12 +169,6 @@ const sal_uInt8 EXC_PATT_75_PERC            = 0x03;
 const sal_uInt8 EXC_PATT_25_PERC            = 0x04;
 const sal_uInt8 EXC_PATT_12_5_PERC          = 0x11;
 const sal_uInt8 EXC_PATT_6_25_PERC          = 0x12;
-
-
-// Miscellaneous ---------------------------------------------------------------
-
-const sal_Char      EXC_NEWLINE_CHAR        = 0x0A;
-const sal_Unicode   EXC_NEWLINE             = EXC_NEWLINE_CHAR;
 
 
 // Records (ordered by lowest record ID) ======================================
@@ -471,6 +470,7 @@ const sal_uInt16 EXC_ID_DV                  = 0x01BE;
 const sal_uInt32 EXC_DVAL_NOOBJ             = 0xFFFFFFFF;
 
 // data validation flags
+const sal_uInt32 EXC_DV_STRINGLIST          = 0x00000080;
 const sal_uInt32 EXC_DV_IGNOREBLANK         = 0x00000100;
 const sal_uInt32 EXC_DV_SUPPRESSDROPDOWN    = 0x00000200;
 const sal_uInt32 EXC_DV_SHOWPROMPT          = 0x00040000;
