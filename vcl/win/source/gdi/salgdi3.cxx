@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:33:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,7 +450,9 @@ static ImplFontData* ImplLogMetricToDevFontDataA( const ENUMLOGFONTEXA* pLogFont
 
     ImplFontData* pData = new ImplWinFontData(
         WinFont2DevFontAttributes(*pLogFont, *pMetric, nFontType),
-        pLogFont->elfLogFont.lfCharSet, nHeight );
+        nHeight,
+        pLogFont->elfLogFont.lfCharSet,
+        pMetric->tmPitchAndFamily );
 
     return pData;
 }
@@ -467,7 +469,9 @@ static ImplFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont
 
     ImplFontData* pData = new ImplWinFontData(
         WinFont2DevFontAttributes(*pLogFont, *pMetric, nFontType),
-        pLogFont->elfLogFont.lfCharSet, nHeight );
+        nHeight,
+        pLogFont->elfLogFont.lfCharSet,
+        pMetric->tmPitchAndFamily );
 
     return pData;
 }
@@ -553,17 +557,41 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 // =======================================================================
 
 ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
-    WIN_BYTE eWinCharSet, int nHeight )
+    int nHeight, WIN_BYTE eWinCharSet, WIN_BYTE nPitchAndFamily )
 :   ImplFontData( rDFS, 0 ),
     meWinCharSet( eWinCharSet ),
+    mnPitchAndFamily( nPitchAndFamily ),
     mpFontCharSets( NULL ),
     mpUnicodeMap( NULL ),
     mbGsubRead( false ),
     mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
-    mbHasCJKSupport( false )
+    mbHasCJKSupport( false ),
+    mbAliasSymbolsLow( false ),
+    mbAliasSymbolsHigh( false )
 {
     SetBitmapSize( 0, nHeight );
+
+    if( eWinCharSet == SYMBOL_CHARSET )
+    {
+        if( (nPitchAndFamily & TMPF_TRUETYPE) != 0 )
+        {
+            // truetype fonts need their symbols as U+F0xx
+            mbAliasSymbolsHigh = true;
+        }
+        else if( (nPitchAndFamily & (TMPF_VECTOR|TMPF_DEVICE))
+                                 == (TMPF_VECTOR|TMPF_DEVICE) )
+        {
+            // scalable device fonts (e.g. builtin printer fonts)
+            // need their symbols as U+00xx
+            mbAliasSymbolsLow  = true;
+        }
+        else if( (nPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) == 0 )
+        {
+            // bitmap fonts need their symbols as U+F0xx
+            mbAliasSymbolsHigh = true;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -838,7 +866,20 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
     }
 
     if( nRangeCount <= 0 )
-        mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
+    {
+        // even when no CMAP is available we know it for symbol fonts
+        if( meWinCharSet == SYMBOL_CHARSET )
+        {
+            nRangeCount = 2;
+            pCodePairs = new sal_uInt32[4];
+            pCodePairs[0] = 0x0020;    // aliased symbols
+            pCodePairs[1] = 0x0100;
+            pCodePairs[2] = 0xF020;    // original symbols
+            pCodePairs[3] = 0xF100;
+        }
+        else
+            mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
+    }
     else
     {
         // recode the code ranges to their unicode encoded ranges
@@ -1029,15 +1070,18 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     rLogFont.lfFaceName[nNameLen] = 0;
 
     if( !pFont->mpFontData )
+    {
         rLogFont.lfCharSet = pFont->IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
+        rLogFont.lfPitchAndFamily = ImplPitchToWin( pFont->mePitch )
+                                  | ImplFamilyToWin( pFont->meFamily );
+    }
     else
     {
-        ImplWinFontData* pSysData = reinterpret_cast<ImplWinFontData*>( pFont->mpFontData );
-        rLogFont.lfCharSet = pSysData->GetCharSet();
+        ImplWinFontData* pWinFontData = reinterpret_cast<ImplWinFontData*>( pFont->mpFontData );
+        rLogFont.lfCharSet        = pWinFontData->GetCharSet();
+        rLogFont.lfPitchAndFamily = pWinFontData->GetPitchAndFamily();
     }
 
-    rLogFont.lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch )
-                               | ImplFamilyToWin( pFont->meFamily );
     rLogFont.lfWeight          = ImplWeightToWin( pFont->meWeight );
     rLogFont.lfHeight          = (int)-pFont->mnHeight;
     rLogFont.lfWidth           = (int)pFont->mnWidth;
@@ -1100,15 +1144,18 @@ static void ImplGetLogFontFromFontSelect( HDC hDC,
         rLogFont.lfFaceName[nNameLen] = '\0';
 
     if( !pFont->mpFontData )
+    {
         rLogFont.lfCharSet = pFont->IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
+        rLogFont.lfPitchAndFamily = ImplPitchToWin( pFont->mePitch )
+                                  | ImplFamilyToWin( pFont->meFamily );
+    }
     else
     {
-        ImplWinFontData* pSysData = reinterpret_cast<ImplWinFontData*>( pFont->mpFontData );
-        rLogFont.lfCharSet = pSysData->GetCharSet();
+        ImplWinFontData* pWinFontData = reinterpret_cast<ImplWinFontData*>( pFont->mpFontData );
+        rLogFont.lfCharSet        = pWinFontData->GetCharSet();
+        rLogFont.lfPitchAndFamily = pWinFontData->GetPitchAndFamily();
     }
 
-    rLogFont.lfPitchAndFamily   = ImplPitchToWin( pFont->mePitch )
-                                | ImplFamilyToWin( pFont->meFamily );
     rLogFont.lfWeight           = ImplWeightToWin( pFont->meWeight );
     rLogFont.lfHeight           = (int)-pFont->mnHeight;
     rLogFont.lfWidth            = (int)pFont->mnWidth;
@@ -1934,7 +1981,8 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
         aDFS.maMapName = aFontName;
     */
 
-    ImplFontData* pFontData = new ImplWinFontData( aDFA, nPreferedCharSet );
+    ImplFontData* pFontData = new ImplWinFontData( aDFA, 0,
+        nPreferedCharSet, TMPF_VECTOR|TMPF_TRUETYPE );
     pFontList->Add( pFontData );
     return true;
 }
