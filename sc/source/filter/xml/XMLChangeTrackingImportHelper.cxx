@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-10-02 15:57:23 $
+ *  last change: $Author: er $ $Date: 2002-04-15 11:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,10 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
     aDateTime.SetDate( aDate.GetDate() );
     aDateTime.SetTime( aTime.GetTime() );
 
+    // #97286# old files didn't store 100th seconds, enable again
+    if ( aInfo.aDateTime.HundredthSeconds )
+        pTrack->SetTime100thSeconds( TRUE );
+
     StrData aStrData( aInfo.sUser );
     USHORT nPos;
     if ( pTrack->GetUserCollection().Search( &aStrData, nPos ) )
@@ -814,6 +818,8 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     if (pDoc)
     {
         pTrack = new ScChangeTrack(pDoc, aUsers);
+        // #97286# old files didn't store 100th seconds, disable until encountered
+        pTrack->SetTime100thSeconds( FALSE );
 
         ScMyActions::iterator aItr = aActions.begin();
         while (aItr != aActions.end())
