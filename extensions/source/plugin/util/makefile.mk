@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2000-12-01 06:22:49 $
+#   last change: $Author: pl $ $Date: 2000-12-07 19:29:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,9 +100,10 @@ SHL1LINKLIB = $(SLB)$/plos2.lib
 SHL1STDLIBS=\
     $(SHL1OWNLIB)		\
     $(SVTOOLLIB)		\
-    $(SVLLIB)		\
+    $(SVLLIB)			\
     $(VCLLIB)			\
     $(TOOLSLIB)			\
+    $(UCBHELPERLIB)		\
     $(TKLIB)			\
     $(VOSLIB)			\
     $(CPPUHELPERLIB)	\

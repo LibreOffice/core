@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2000-12-07 19:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ using namespace com::sun::star::uno;
 #define PROVIDING_NOW               1
 #define PROVIDING_MODEL_UPDATE      2
 
+// forwards
+namespace ucb { class Content; }
 class PluginStream;
 class PluginInputStream;
 class PluginOutputStream;
@@ -192,6 +194,7 @@ class XPlugin_Impl : public ::com::sun::star::plugin::XPlugin,
                      public ::com::sun::star::beans::XPropertyChangeListener
 {
 private:
+    ::osl::Mutex                m_aMutex;
     Reference< ::com::sun::star::lang::XMultiServiceFactory >       m_xSMgr;
     Reference< ::com::sun::star::plugin::XPluginContext >           m_rBrowserContext;
 
@@ -233,6 +236,8 @@ private:
 public:
     XPlugin_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr );
     virtual ~XPlugin_Impl();
+
+    ::osl::Mutex& getMutex() { return m_aMutex; }
 
     void destroyStreams();
 
@@ -396,6 +401,7 @@ class PluginInputStream :
                 >
 {
 private:
+    ::ucb::Content*             m_pContent;
     UINT32                      m_nMode;
     UINT32                      m_nWritePos;
 
@@ -419,6 +425,8 @@ public:
     void setMode( UINT32 nMode );
     UINT32 read( UINT32 offset, sal_Int8* buffer, UINT32 size );
     void setSource( const Reference< ::com::sun::star::io::XActiveDataSource >& xSource ) { m_xSource = xSource; }
+    // get contents ot url via ::ucb::Content
+    void load();
 
     // XOutputStream
     virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& );

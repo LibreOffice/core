@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 10:26:34 $
+ *  last change: $Author: pl $ $Date: 2000-12-07 19:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <tools/urlobj.hxx>
 
 #include <cppuhelper/implbase1.hxx>
+
+using namespace com::sun::star::io;
 
 namespace ext_plug {
 
@@ -160,23 +162,11 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( ::rtl::OUStringToOString( url, m_aEncoding ) );
 
-        Reference< ::com::sun::star::lang::XMultiServiceFactory >  xFact( m_xSMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.DataSourceFactory" ) ), UNO_QUERY );
-        if ( xFact.is() )
-        {
-            Sequence < Any > aArgs(1);
-            ::rtl::OUString aUURL( aURL.GetMainURL() );
-            aArgs.getArray()[0] <<= aUURL;
-            ::rtl::OUString aProt( INetURLObject::GetScheme( aURL.GetProtocol() ) );
-            Reference< ::com::sun::star::io::XActiveDataSource >  aSource( xFact->createInstanceWithArguments( aProt, aArgs ), UNO_QUERY );
-            if ( aSource.is() )
-            {
-                // the mimetype cannot be specified
-                plugin->provideNewStream( ::rtl::OUString(),
-                                          aSource,
-                                          aUURL,
-                                          0, 0, sal_False );
-            }
-        }
+        // the mimetype cannot be specified
+        plugin->provideNewStream( ::rtl::OUString(),
+                                  Reference< XActiveDataSource >(),
+                                  aURL.GetMainURL(),
+                                  0, 0, sal_False );
         return;
     }
 

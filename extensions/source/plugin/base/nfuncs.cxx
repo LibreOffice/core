@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 22:18:20 $
+ *  last change: $Author: pl $ $Date: 2000-12-07 19:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ extern "C" {
         pPlugin->enterPluginCallback();
         while( rangeList )
         {
-            if( pBytes && nBytes < rangeList->length )
+            if( pBytes && nBytes < (int)rangeList->length )
             {
                 delete pBytes;
             pBytes = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2000-12-07 19:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <string>   // workaround for SUNPRO workshop include conflicts
-
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -76,15 +74,17 @@
 
 #include <plugin/impl.hxx>
 #include <tools/fsys.hxx>
-
+#include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/timer.hxx>
 
-#if STLPORT_VERSION>=321
-#include <cstdarg>
+#ifdef DEBUG
+#include <stdio.h>
 #endif
+
+using namespace com::sun::star::io;
 
 class PluginDisposer : public ::vos::OTimer
 {
@@ -116,20 +116,6 @@ void PluginDisposer::onShot()
 }
 
 //==================================================================================================
-
-//==================================================================================================
-//  const Reference< ::com::sun::star::reflection::XIdlClass > & XPlugin_Impl::staticGetIdlClass()
-//  {
-//      static Reference< ::com::sun::star::reflection::XIdlClass >  aClass = createStandardClass( L"Plugin",
-//                                                        OWeakAggObject::getStaticIdlClass(), 6,
-//                                                        ::getCppuType((const ::com::sun::star::awt::XControl*)0),
-//                                                        ::getCppuType((const ::com::sun::star::awt::XControlModel*)0),
-//                                                        ::getCppuType((const ::com::sun::star::awt::XWindow*)0),
-//                                                        ::getCppuType((const ::com::sun::star::lang::XComponent*)0),
-//                                                        ::getCppuType((const ::com::sun::star::awt::XView*)0),
-//                                                        ::getCppuType((const ::com::sun::star::plugin::XPlugin*)0) );
-//      return aClass;
-//  }
 
 Any XPlugin_Impl::queryInterface( const Type& type )
 
@@ -178,6 +164,8 @@ XPlugin_Impl::XPlugin_Impl( const Reference< ::com::sun::star::lang::XMultiServi
 
 void XPlugin_Impl::destroyInstance()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     NPSavedData* pSavedData = NULL;
 
     destroyStreams();
@@ -216,6 +204,8 @@ void XPlugin_Impl::checkListeners( const char* normalizedURL )
     if( ! normalizedURL )
         return;
 
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     ::std::list<PluginEventListener*>::iterator iter;
     for( iter = m_aPEventListeners.begin();
          iter != m_aPEventListeners.end();
@@ -234,6 +224,8 @@ void XPlugin_Impl::checkListeners( const char* normalizedURL )
 
 IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, pThis )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     // may have become undisposable between PostUserEvent and here
     // or may have disposed and receive a second UserEvent
     ::std::list<XPlugin_Impl*>& rList = PluginManager::get().getPlugins();
@@ -276,6 +268,8 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, pThis )
 
 void XPlugin_Impl::dispose()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     if (m_bIsDisposed || !getPluginComm())
         return;
     m_bIsDisposed = sal_True;
@@ -294,6 +288,8 @@ void XPlugin_Impl::initInstance( const ::com::sun::star::plugin::PluginDescripti
                                  const Sequence< ::rtl::OUString >& argv,
                                  sal_Int16 mode )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     m_aDescription = rDescription;
 
     // #69333# special for pdf
@@ -319,6 +315,8 @@ void XPlugin_Impl::initInstance( const ::com::sun::star::plugin::PluginDescripti
 
 void XPlugin_Impl::modelChanged()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     m_nProvidingState = PROVIDING_MODEL_UPDATE;
 
     // empty description is only set when created by createPluginFromURL
@@ -354,32 +352,19 @@ void XPlugin_Impl::modelChanged()
 
     if( nDescr != -1 )
     {
-        INetURLObject aURL;
-        aURL.SetSmartProtocol( INET_PROT_FILE );
-        aURL.SetSmartURL( ::rtl::OUStringToOString( getCreationURL(), m_aEncoding ) );
-
-        Reference< ::com::sun::star::lang::XMultiServiceFactory >  xFact( m_xSMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.DataSourceFactory" ) ), UNO_QUERY );
-        if ( xFact.is() )
-        {
-            Sequence < Any > aArgs(1);
-            aArgs.getArray()[0] <<= ::rtl::OUString( aURL.GetMainURL() );
-            ::rtl::OUString aProt( INetURLObject::GetScheme( aURL.GetProtocol() ) );
-            Reference< ::com::sun::star::io::XActiveDataSource >  xSource( xFact->createInstanceWithArguments( aProt, aArgs ), UNO_QUERY );
-            if ( xSource.is() )
-            {
-                m_aDescription = pDescrs[ nDescr ];
-                provideNewStream( m_aDescription.Mimetype,
-                                xSource,
-                                  getRefererURL(),
-                                  0, 0, sal_False );
-            }
-        }
+        m_aDescription = pDescrs[ nDescr ];
+        provideNewStream( m_aDescription.Mimetype,
+                          Reference< XActiveDataSource >(),
+                          getCreationURL(),
+                          0, 0, sal_False );
     }
     m_nProvidingState = PROVIDING_NONE;
 }
 
 ::rtl::OUString XPlugin_Impl::getCreationURL()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     ::rtl::OUString aRet;
     Reference< ::com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     if( xPS.is() )
@@ -394,6 +379,8 @@ void XPlugin_Impl::modelChanged()
 sal_Bool XPlugin_Impl::setModel( const Reference< ::com::sun::star::awt::XControlModel > & Model )
     throw( RuntimeException )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     Reference< ::com::sun::star::beans::XPropertySet >  xPS( Model, UNO_QUERY );
     if( ! xPS.is() )
         return sal_False;
@@ -411,6 +398,8 @@ sal_Bool XPlugin_Impl::setModel( const Reference< ::com::sun::star::awt::XContro
 void XPlugin_Impl::createPeer( const Reference< ::com::sun::star::awt::XToolkit > & xToolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & Parent )
     throw( RuntimeException )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     if( ! _xPeer.is() )
     {
         if( ! Parent.is() )
@@ -421,6 +410,8 @@ void XPlugin_Impl::createPeer( const Reference< ::com::sun::star::awt::XToolkit 
 
 void XPlugin_Impl::loadPlugin()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     ::std::list<PluginComm*>::iterator iter;
     for( iter = PluginManager::get().getPluginComms().begin();
          iter != PluginManager::get().getPluginComms().end(); ++iter )
@@ -483,8 +474,8 @@ void XPlugin_Impl::loadPlugin()
     m_aNPWindow.clipRect.right      = 0;
     m_aNPWindow.type = NPWindowTypeWindow;
 
-    m_aNPWindow.x       = aPosSize.X;
-    m_aNPWindow.y       = aPosSize.Y;
+    m_aNPWindow.x       = 0; //aPosSize.X;
+    m_aNPWindow.y       = 0; //aPosSize.Y;
     m_aNPWindow.width   = aPosSize.Width ? aPosSize.Width : 600;
     m_aNPWindow.height  = aPosSize.Height ? aPosSize.Height : 600;
 
@@ -494,6 +485,8 @@ void XPlugin_Impl::loadPlugin()
 
 void XPlugin_Impl::destroyStreams()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     // streams remove themselves from this list when deleted
     while( m_aOutputStreams.size() )
         delete *m_aOutputStreams.begin();
@@ -507,6 +500,8 @@ void XPlugin_Impl::destroyStreams()
 
 PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     ::std::list<PluginInputStream*>::iterator iter;
     for( iter = m_aInputStreams.begin(); iter != m_aInputStreams.end(); ++iter )
         if( (*iter)->getStream() == stream )
@@ -526,6 +521,9 @@ sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
                                     sal_Int32 lastmodified, sal_Bool isfile)
 
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+    sal_Bool bRet = sal_False;
+
     if( m_nProvidingState == PROVIDING_NONE )
     {
         m_nProvidingState = PROVIDING_NOW;
@@ -568,7 +566,9 @@ sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
         // e.g. plugger.so does not like file:///
         if( ! aURL.compareTo( "file://", 7 ) )
         {
-            INetURLObject aPath( url );
+            INetURLObject aPath;
+            aPath.SetSmartProtocol( INET_PROT_FILE );
+            aPath.SetSmartURL( url );
             aURL = ::rtl::OUStringToOString( aPath.PathToFileName(), m_aEncoding );
         }
     }
@@ -608,48 +608,47 @@ sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
         fprintf( stderr, "Plugin wants it in Mode %s\n", pType );
 #endif
         if( isfile && stype == NP_ASFILEONLY )
-        {
             m_pPluginComm->
                 NPP_StreamAsFile( &m_aInstance,
                                   pStream->getStream(),
                                   pStream->getStream()->url );
-            m_nProvidingState = PROVIDING_NONE;
-            return sal_True;
-        }
-
-        if( ! stream.is() )
-        {
-            m_pPluginComm->
-                NPP_DestroyStream( &m_aInstance,
-                                   pStream->getStream(),
-                                   NPRES_NETWORK_ERR );
-            m_nProvidingState = PROVIDING_NONE;
-            throw RuntimeException();
-        }
-        pStream->setMode( stype );
-        Reference< ::com::sun::star::io::XConnectable > xConnectable( stream, UNO_QUERY );
-        pStream->setPredecessor( xConnectable );
-        if( xConnectable.is() )
-        {
-            xConnectable->setSuccessor( static_cast< ::com::sun::star::io::XConnectable* >(pStream) );
-            while( xConnectable->getPredecessor().is() )
-                xConnectable = xConnectable->getPredecessor();
-        }
-        stream->setOutputStream( xNewStream );
-        pStream->setSource( stream );
-        Reference< ::com::sun::star::io::XActiveDataControl > xController;
-        if( xConnectable.is() )
-            xController = Reference< ::com::sun::star::io::XActiveDataControl >( xConnectable, UNO_QUERY );
         else
-            xController = Reference< ::com::sun::star::io::XActiveDataControl >( stream, UNO_QUERY );
+        {
+            pStream->setMode( stype );
 
-        if( xController.is() )
-            xController->start();
+            if( ! stream.is() )
+            {
+                // stream has to be loaded by PluginStream itself via UCB
+                pStream->load();
+            }
+            else
+            {
+                Reference< ::com::sun::star::io::XConnectable > xConnectable( stream, UNO_QUERY );
+                pStream->setPredecessor( xConnectable );
+                if( xConnectable.is() )
+                {
+                    xConnectable->setSuccessor( static_cast< ::com::sun::star::io::XConnectable* >(pStream) );
+                    while( xConnectable->getPredecessor().is() )
+                        xConnectable = xConnectable->getPredecessor();
+                }
+                stream->setOutputStream( xNewStream );
+                pStream->setSource( stream );
+                Reference< ::com::sun::star::io::XActiveDataControl > xController;
+                if( xConnectable.is() )
+                    xController = Reference< ::com::sun::star::io::XActiveDataControl >( xConnectable, UNO_QUERY );
+                else
+                    xController = Reference< ::com::sun::star::io::XActiveDataControl >( stream, UNO_QUERY );
+
+                if( xController.is() )
+                    xController->start();
+            }
+        }
+        bRet = sal_True;
     }
 
     m_nProvidingState = PROVIDING_NONE;
 
-    return sal_False;
+    return bRet;
 }
 
 void XPlugin_Impl::disposing( const ::com::sun::star::lang::EventObject& rSource )
@@ -658,6 +657,8 @@ void XPlugin_Impl::disposing( const ::com::sun::star::lang::EventObject& rSource
 
 void XPlugin_Impl::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvent )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
     if( ! rEvent.PropertyName.compareToAscii( "URL" ) )
     {
         ::rtl::OUString aStr;
@@ -681,19 +682,20 @@ void XPlugin_Impl::setPluginContext( const Reference< ::com::sun::star::plugin::
 void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags )
         throw( RuntimeException )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
 #ifdef DEBUG
     fprintf( stderr, "XPlugin_Impl::setPosSize( %d, %d, %d, %d, %d )\n",
              nX_, nY_, nWidth_, nHeight_, nFlags );
 #endif
 
-    PluginControl_Impl::setPosSize(nX_, nY_, nWidth_, nHeight_, nFlags);
     m_aNPWindow.x       = nX_;
     m_aNPWindow.y       = nY_;
     m_aNPWindow.width   = nWidth_;
     m_aNPWindow.height  = nHeight_;
-
     if(getPluginComm())
         getPluginComm()->NPP_SetWindow( getNPPInstance(), &m_aNPWindow );
+    PluginControl_Impl::setPosSize(nX_, nY_, nWidth_, nHeight_, nFlags);
 }
 
 PluginStream::PluginStream( XPlugin_Impl* pPlugin,
@@ -708,6 +710,8 @@ PluginStream::PluginStream( XPlugin_Impl* pPlugin,
 
 PluginStream::~PluginStream()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     if( m_pPlugin && m_pPlugin->getPluginComm() )
     {
         m_pPlugin->getPluginComm()->NPP_DestroyStream( m_pPlugin->getNPPInstance(),
@@ -725,9 +729,12 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
                                       sal_uInt32 len,
                                       sal_uInt32 lastmod ) :
         PluginStream( pPlugin, url, len, lastmod ),
+        m_pContent( NULL ),
         m_nMode( NP_NORMAL ),
         m_nWritePos( 0 )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     m_pPlugin->getInputStreams().push_back( this );
     DirEntry aEntry;
     aEntry = aEntry.TempName();
@@ -748,6 +755,8 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
 
 PluginInputStream::~PluginInputStream()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     String aFile( m_aFileStream.GetFileName() );
     m_aFileStream.Close();
     if( m_pPlugin )
@@ -773,6 +782,8 @@ PluginInputStream::~PluginInputStream()
     }
     else
         DirEntry( m_aFileStream.GetFileName() ).Kill();
+    if( m_pContent )
+        delete m_pContent;
 }
 
 PluginStreamType PluginInputStream::getStreamType()
@@ -780,8 +791,35 @@ PluginStreamType PluginInputStream::getStreamType()
     return InputStream;
 }
 
+void PluginInputStream::load()
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
+    INetURLObject aUrl;
+    aUrl.SetSmartProtocol( INET_PROT_FILE );
+    aUrl.SetSmartURL(
+        String( getStream()->url,
+                strlen( getStream()->url ),
+                RTL_TEXTENCODING_MS_1252
+            ) );
+    m_pContent =
+        new ::ucb::Content(
+            aUrl.GetMainURL(),
+            Reference< ::com::sun::star::ucb::XCommandEnvironment >()
+            );
+    try
+    {
+        m_pContent->openStream( static_cast< XOutputStream* >( this ) );
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException )
+    {
+    }
+}
+
 void PluginInputStream::setMode( sal_uInt32 nMode )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     m_nMode = nMode;
 
     // invalidation by plugin
@@ -794,6 +832,8 @@ void PluginInputStream::setMode( sal_uInt32 nMode )
 
 void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     if( m_nMode == -1 )
         return;
 
@@ -841,18 +881,22 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer )
     }
 
     m_pPlugin->getPluginComm()->
-        NPP_SetWindow( m_pPlugin->getNPPInstance(),
-                       m_pPlugin->getNPWindow());
+          NPP_SetWindow( m_pPlugin->getNPPInstance(),
+                         m_pPlugin->getNPWindow());
 }
 
 void PluginInputStream::closeOutput()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     flush();
     m_xSource = Reference< ::com::sun::star::io::XActiveDataSource >();
 }
 
 sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     if( m_nMode != NP_SEEK )
         return 0;
 
@@ -873,11 +917,15 @@ PluginOutputStream::PluginOutputStream( XPlugin_Impl* pPlugin,
         PluginStream( pPlugin, url, len, lastmod ),
         m_xStream( pPlugin->getServiceManager()->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.DataOutputStream" ) ), UNO_QUERY )
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     m_pPlugin->getOutputStreams().push_back( this );
 }
 
 PluginOutputStream::~PluginOutputStream()
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
+
     m_pPlugin->getOutputStreams().remove( this );
 }
 
