@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:27:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,8 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 case SFX_HINT_DYING:
                 {
                     EndListening( rBC, TRUE /* Alle abmelden */ );
+                    if ( pObjectCatalog )
+                        pObjectCatalog->UpdateEntries();
                 }
                 break;
             }
