@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 15:59:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1697,12 +1697,30 @@ Resource RID_SW_ERRHDL
         TEXT[ arabic ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ catalan ] = "Aquests car�cters no es poden exportar amb la codificaci� de car�cters escollida: $(ARG1)";
         TEXT[ thai ] = "ไม่สามารถแสดงผลตัวอักขระนี้ในชุดตัวอักขระที่เลือกได้: $(ARG1)";
-        TEXT[ czech ] = "Ve zvolené znakové sadě nelze zobrazit následující znaky: $(ARG1)";
+        TEXT[ czech ] = "Ve zvolené znakové sadě nelze zobrazit následující znaky:\n$(ARG1)";
         TEXT[ hebrew ] = "Die folgenden Zeichen konnten nicht im gewählten Zeichsatz dargestellt werden: $(ARG1)";
         TEXT[ hindi ] = "चुने हुए अक्षर समूह में निम्नलिखित अक्षरों को नहीं दिखा सकते है: $(ARG1)";
-        TEXT[ slovak ] = "V zvolenej znakovej sade nemožno zobraziť nasledujúce znaky: $(ARG1)";
+        TEXT[ slovak ] = "V zvolenej znakovej sade nemožno zobraziť nasledujúce znaky:\n$(ARG1)";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
