@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:32:50 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,8 @@ public:
     void                ReadLbsData( XclImpStream& rStrm );
     /** Reads the contents of the ftSbs sub structure in an OBJ record. */
     void                ReadSbs( XclImpStream& rStrm );
+    /** Reads the contents of the ftGboData sub structure in an OBJ record. */
+    void                ReadGboData( XclImpStream& rStrm );
 
     /** Returns the complete component service name for this control. */
     ::rtl::OUString     GetServiceName() const;
@@ -340,7 +342,8 @@ private:
     sal_Int16           mnScrollMax;    /// Scrollbar: Maximum value.
     sal_Int16           mnScrollStep;   /// Scrollbar: Single step.
     sal_Int16           mnScrollPage;   /// Scrollbar: Page step.
-    bool                mb3DStyle;      /// true = 3D style.
+    bool                mbFlatButton;   /// False = 3D button style; True = Flat button style.
+    bool                mbFlatBorder;   /// False = 3D border style; True = Flat border style.
     bool                mbScrollHor;    /// Scrollbar: true = horizontal.
 };
 
