@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.12 $
+#*  $Revision: 1.13 $
 #*
-#*  last change: $Author: rt $ $Date: 2000-11-22 15:07:58 $
+#*  last change: $Author: mba $ $Date: 2000-12-13 11:43:59 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -142,7 +142,10 @@ LIB7FILES+= \
 
 LIB8TARGET= $(SLB)$/svl.lib
 #LIB8ARCHIV= $(LB)$/libsvl$(UPD)$(DLLPOSTFIX).a
-LIB8OBJFILES= $(SLO)$/svtdata.obj
+LIB8OBJFILES= \
+            $(SLO)$/svtdata.obj \
+            $(SLO)$/registerlight.obj
+
 LIB8FILES=	\
         $(SLB)$/config.lib	\
         $(SLB)$/filerec.lib \
@@ -221,19 +224,6 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =svt
 DEF1DES 	=SvTools
-
-.IF "$(GUI)"=="WNT"
-DEF1EXPORT1 = component_writeInfo
-DEF1EXPORT2 = component_getFactory
-.ELSE
-.IF "$(COM)"=="ICC"
-DEF1EXPORT1 = component_writeInfo
-DEF1EXPORT2 = component_getFactory
-.ELSE
-DEF1EXPORT1 = _component_writeInfo
-DEF1EXPORT2 = _component_getFactory
-.ENDIF
-.ENDIF
 
 # --- svtools lite --------------------------------------------------
 
