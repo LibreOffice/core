@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:41:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1782,7 +1782,7 @@ void Desktop::OpenClients()
 
     if ( !pArgs->IsServer() && !pArgs->IsNoRestore() && !aInternalOptions.IsRecoveryListEmpty() )
     {
-        // crash recovery
+        // crash recovery...
         sal_Bool bUserCancel = sal_False;
         ::rtl::OUString sName;
         ::rtl::OUString sFilter;
