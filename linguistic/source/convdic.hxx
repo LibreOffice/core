@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-22 12:53:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _LINGUISTIC_CONVDIC_HXX_
 #define _LINGUISTIC_CONVDIC_HXX_
 
@@ -128,7 +127,7 @@ struct StrEQ
     }
 };
 
-typedef std::hash_multimap< const rtl::OUString, const rtl::OUString,
+typedef std::hash_multimap< const rtl::OUString, rtl::OUString,
                        const rtl::OUStringHash, StrEQ > ConvMap;
 
 typedef std::set< rtl::OUString, StrLT > ConvMapKeySet;
