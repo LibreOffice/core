@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_dlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:49:27 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,17 @@
 #include "dbu_resource.hrc"
 #endif
 
+#define PAGE_X              281
+#define PAGE_Y              185
+#define CHECKBOX_HEIGHT      8
+#define FIXEDTEXT_HEIGHT     8
+#define RELATED_CONTROLS     4
+#define UNRELATED_CONTROLS   7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define BUTTON_WIDTH        50
+
+
 #define STR_ADABAS_HELP_SYSDEVSPACE         RID_STR_DLG_START
 #define STR_ADABAS_HELP_TRANSACT            RID_STR_DLG_START + 1
 #define STR_ADABAS_HELP_DATADEVSPACES       RID_STR_DLG_START + 2
@@ -77,7 +88,7 @@
 #define STR_DATASOURCE_DEFAULTNAME          RID_STR_DLG_START + 9
 #define STR_ERR_EMPTY_DSN_NAME              RID_STR_DLG_START + 10
 #define STR_QUERY_OBJECTS                   RID_STR_DLG_START + 11
-#define STR_DOCUMENT_OBJECTS                RID_STR_DLG_START + 12
+#define STR_ALREADYEXISTOVERWRITE           RID_STR_DLG_START + 12
 #define STR_QUERY_DROP_ALL                  RID_STR_DLG_START + 13
 #define STR_INDEX_NAME_ALREADY_USED         RID_STR_DLG_START + 14
 #define STR_ASK_FOR_DIRECTORY_CREATION      RID_STR_DLG_START + 15
@@ -92,18 +103,26 @@
 #define STR_CALCDOC_DOESNOTEXIST            RID_STR_DLG_START + 24
 #define STR_HINT_READONLY_CONNECTION        RID_STR_DLG_START + 25
 #define STR_HINT_CONNECTION_NOT_CAPABLE     RID_STR_DLG_START + 26
-#define STR_LINKEDDOC_DOESNOTEXIST          RID_STR_DLG_START + 27
+#define STR_USERADMIN_NOT_AVAILABLE         RID_STR_DLG_START + 27
 #define STR_TAB_INDEX_SORTORDER             RID_STR_DLG_START + 28
 #define STR_TAB_INDEX_FIELD                 RID_STR_DLG_START + 29
 #define STR_ORDER_ASCENDING                 RID_STR_DLG_START + 30
 #define STR_ORDER_DESCENDING                RID_STR_DLG_START + 31
 #define STR_CONFIRM_DROP_INDEX              RID_STR_DLG_START + 32
 #define STR_LOGICAL_INDEX_NAME              RID_STR_DLG_START + 33
+#define STR_CONNECTION_TEST                 RID_STR_DLG_START + 34
+#define STR_CONNECTION_SUCCESS              RID_STR_DLG_START + 35
+#define STR_JDBCDRIVER_TEST                 RID_STR_DLG_START + 36
+#define STR_JDBCDRIVER_SUCCESS              RID_STR_DLG_START + 37
+#define STR_JDBCDRIVER_NO_SUCCESS           RID_STR_DLG_START + 38
+#define STR_MSACCESS_FILTERNAME             RID_STR_DLG_START + 39
+#define STR_CONNECTION_NO_SUCCESS           RID_STR_DLG_START + 40
+
 
 // please adjust checking before insert new strings
 
-#if STR_LOGICAL_INDEX_NAME > RID_STR_DLG_END
-#error Resource-Id Ueberlauf in #file, #line
+#if STR_MSACCESS_FILTERNAME > RID_STR_DLG_END
+#error Resource-Id Overflow in #file, #line
 #endif
 
 #endif //_DBU_DLG_HRC_
