@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 16:23:44 $
+ *  last change: $Author: os $ $Date: 2001-07-30 11:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,6 @@
 #include <svtools/prnsetup.hxx>
 #endif
 #endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#endif
 #ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
 #endif
@@ -111,9 +106,6 @@
 #include "sfxresid.hxx"
 #include "request.hxx"
 #include "objsh.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "sfxtypes.hxx"
 #include "docinf.hxx"
 #include "event.hxx"
@@ -645,25 +637,16 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         //! ??? if( nPaperBin != USE_DEFAULT_PAPERBIN )
         //! ???     pPrn->SetPaperBin(nPaperBin);
 
-            // Drucker nicht vorhanden? (bei SID_PRINTDOC wurde schon gefragt)
         if ( SID_PRINTDOCDIRECT == nId )
         {
-            if ( !pPrinter->IsOriginal() && bWarn && !UseStandardPrinter_Impl( NULL, pPrinter ) )
+            //redirect slot to call the print dialog if the document's printer
+            //is available but not system default
+            if( pPrinter->IsOriginal() &&
+                pPrinter->GetName() != Printer::GetDefaultPrinterName() )
             {
-                rReq.SetReturnValue(SfxBoolItem(0,FALSE));
+                rReq.SetSlot(SID_PRINTDOC);
+                ExecPrint_Impl( rReq );
                 return;
-            }
-
-            if( pPrinter->GetName() != Printer::GetDefaultPrinterName() )
-            {
-                Printer* pDefPrinter = new Printer();
-                String aTmp( SfxResId( STR_PRINTER_NOTDEFAULT ) );
-                aTmp.SearchAndReplace( String::CreateFromAscii("$1"), pPrinter->GetName() );
-                aTmp.SearchAndReplace( String::CreateFromAscii("$2"), pDefPrinter->GetName() );
-                QueryBox aBox( GetWindow(), WB_YES_NO, aTmp );
-                if( RET_OK == aBox.Execute() )
-                    pPrinter->SetPrinterProps( pPrinter );
-                delete pDefPrinter;
             }
         }
 
@@ -676,12 +659,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         // unter Windows mu\s das so, weil sonst kein Querdruck funkt,
         // unter OS/2 sollte man das nutzen - Apps kommen aber nicht klar
         // WP: 07.12.95: SV macht das jetzt richtig
-#if SUPD<613//MUSTINI
-        SfxIniManager *pIniMgr = SFX_INIMANAGER();
-        String aPages( pIniMgr->Get(SFX_KEY_PAGEQUEUESIZE) );
-#else
         String aPages;
-#endif
         pPrinter->SetPageQueueSize( aPages.Len() ? (int) aPages.ToInt32() : 1 );
 
         SfxObjectShell *pObjSh = GetObjectShell();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:19:13 $
+ *  last change: $Author: os $ $Date: 2001-07-30 11:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,31 +145,6 @@ String STR_PRINTER_NOTAVAIL
     TEXT[ turkish ] = "Belge, $1 yazıcısı için formatlandı. Belirtilen yazıcı bulunamadı.\nStandart yazıcı $2 kullanılsın mı?";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Este documento se ha formateado para la impresora $1, pero esta no está disponible.\n¿Desea usar la impresora predeterminada $2?";
-};
-String STR_PRINTER_NOTDEFAULT
-{
-    TEXT = "Das Dokument wurde für den Drucker $1 formatiert, dieses ist aber nicht der Standardrucker.\nSoll der Standarddrucker $2 verwendet werden?" ;
-    TEXT [ ENGLISH ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?" ;
-    TEXT[ english_us ] = "This document was formatted for the printer $1, but that printer is not the default printer.\nDo you want to use the default printer $2 anyway?";
-    TEXT[ portuguese ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ russian ] = "İòîò äîêóìåíò îòôîğìàòèğîâàí äëÿ ïğèíòåğà $1. Íî äàííûé ïğèíòåğ íå ÿâëÿåòñÿ ïğèíòåğîì ïî óìîë÷àíèş.\nÈñïîëüçîâàòü ïğèíòåğ ïî óìîë÷àíèş $2?";
-    TEXT[ greek ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ dutch ] = "Het document werd geformatteerd voor printer $1. Deze printer is echter geen standaarprinter.\nGebruik standaardprinter $2?";
-    TEXT[ french ] = "Ce document a été formaté pour l'imprimante $1 qui n'est pas l'imprimante par défaut.\nUtiliser l'imprimante par défaut $2 ?";
-    TEXT[ spanish ] = "Este documento se ha formateado para la impresora $1, pero esta no está disponible.\n¿Desea usar la impresora predeterminada $2?";
-    TEXT[ finnish ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ italian ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ danish ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ swedish ] = "Dokumentet formaterades för skrivaren $1 men detta är inte standardskrivaren.\nSka standardskrivaren $2 användas?";
-    TEXT[ polish ] = "Dokument ten sformatowano do wydrukowania na drukarce $1, nie jest to jednak drukarka domyœlna.\nU¿yæ drukarki domyœlnej $2?";
-    TEXT[ portuguese_brazilian ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚ÍÌßØİÀ $1 —p‚É‘®İ’è‚³‚ê‚Ü‚µ‚½‚ªA‚±‚ÌÌßØİÀ‚Í•W€ÌßØİÀ‚Å‚Í‚ ‚è‚Ü‚¹‚ñB\n•W€ÌßØİÀ $2 ‚ğg—p‚µ‚Ü‚·‚©B";
-    TEXT[ korean ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ chinese_simplified ] = "Õâ¸öÎÄµµµÄ¸ñÊ½ÊÇÓÃÓÚ´òÓ¡»ú $1 ¡£µ«Õâ²»ÊÇÒ»¸ö±ê×¼´òÓ¡»ú¡£\nÄúÒªÊ¹ÓÃ±ê×¼´òÓ¡»ú $2 ?";
-    TEXT[ chinese_traditional ] = "³o­Ó¤å¥óªº®æ¦¡¬O¥Î©ó $1 ¡A¦ı¤£¬O¤@­Ó¼Ğ·Ç¦Lªí¾÷¡C\n­n¨Ï¥Î¼Ğ·Ç¦Lªí¾÷ $2 ?";
-    TEXT[ turkish ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ arabic ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ catalan ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
 };
 String STR_MENU_NEWMAIL
 {
