@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 13:17:39 $
+ *  last change: $Author: dbo $ $Date: 2001-12-17 12:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ inline void AccessControl::checkPermission(
     perm.m_permTarget = permTarget.pData;
     perm.m_permActions = permActions.pData;
     checkPermission(
-        *reinterpret_cast< ::com::sun::star::security::Permission const * >( &perm ) );
+        * reinterpret_cast< ::com::sun::star::security::Permission const * >( &perm ) );
 }
 //__________________________________________________________________________________________________
 inline void AccessControl::checkFilePermission(
@@ -195,8 +195,9 @@ inline ::com::sun::star::uno::Any AccessControl::doRestricted(
 {
     if (m_xController.is())
     {
-        m_xController->doRestricted( xAction, xRestriction );
+        return m_xController->doRestricted( xAction, xRestriction );
     }
+    return ::com::sun::star::uno::Any();
 }
 //__________________________________________________________________________________________________
 inline ::com::sun::star::uno::Any AccessControl::doPrivileged(
@@ -208,8 +209,9 @@ inline ::com::sun::star::uno::Any AccessControl::doPrivileged(
 {
     if (m_xController.is())
     {
-        m_xController->doPrivileged( xAction, xRestriction );
+        return m_xController->doPrivileged( xAction, xRestriction );
     }
+    return ::com::sun::star::uno::Any();
 }
 //__________________________________________________________________________________________________
 inline ::com::sun::star::uno::Reference<
