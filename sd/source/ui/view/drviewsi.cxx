@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-23 11:54:28 $
+ *  last change: $Author: ka $ $Date: 2001-12-19 12:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,7 @@ void SdDrawViewShell::UpdateEffectWindow()
                         aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
                 }
                 else
-                    aSet.Put(SfxVoidItem(0), ATTR_ANIMATION_TEXTEFFECT );
+                    aSet.DisableItem( ATTR_ANIMATION_TEXTEFFECT );
 
                 if (nSpeedSet == ATTR_SET)
                     aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_SPEED, eSpeed));
