@@ -334,7 +334,7 @@ public abstract class OfficeDocument
             // Need to read the manifest file and construct a list of objects
             NodeList nl = manifestDoc.getElementsByTagName(TAG_MANIFEST_FILE);
 
-            // Don't create the HashMap if there are no embedded objects
+            // Dont create the HashMap if there are no embedded objects
             int len = nl.getLength();
             for (int i = 0; i < len; i++) {
                 Node n = nl.item(i);
@@ -559,7 +559,59 @@ public abstract class OfficeDocument
     else{
         try{
         //System.out.println("\nParsing Input stream, validating?: "+builder.isValidating());
-        contentDoc=  builder.parse((InputStream)is);
+        //contentDoc=  builder.parse((InputStream)is);
+
+            org.w3c.dom.Document newDoc = builder.parse((InputStream)is);
+            Element rootElement=newDoc.getDocumentElement();
+
+            NodeList nodeList;
+            Node tmpNode;
+            Node rootNode = (Node)rootElement;
+                if (newDoc !=null){
+            /*content*/
+                   contentDoc = createDOM(TAG_OFFICE_DOCUMENT_CONTENT);
+                   rootElement=contentDoc.getDocumentElement();
+                   rootNode = (Node)rootElement;
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+                   if (nodeList.getLength()>0){
+                  tmpNode = contentDoc.importNode(nodeList.item(0),true);
+                  rootNode.appendChild(tmpNode);
+                   }
+                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_BODY);
+                   if (nodeList.getLength()>0){
+                  tmpNode = contentDoc.importNode(nodeList.item(0),true);
+                  rootNode.appendChild(tmpNode);
+                   }
+
+           /*Styles*/
+                   styleDoc = createDOM(TAG_OFFICE_DOCUMENT_STYLES);
+                   rootElement=styleDoc.getDocumentElement();
+                   rootNode = (Node)rootElement;
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_STYLES);
+                   if (nodeList.getLength()>0){
+                  tmpNode = styleDoc.importNode(nodeList.item(0),true);
+                  rootNode.appendChild(tmpNode);
+                   }
+
+           /*Settings*/
+                   settingsDoc = createDOM(TAG_OFFICE_DOCUMENT_SETTINGS);
+                   rootElement=settingsDoc.getDocumentElement();
+                   rootNode = (Node)rootElement;
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
+                   if (nodeList.getLength()>0){
+                  tmpNode = settingsDoc.importNode(nodeList.item(0),true);
+                  rootNode.appendChild(tmpNode);
+                   }
+           /*Meta*/
+                   metaDoc = createDOM(TAG_OFFICE_DOCUMENT_META);
+                   rootElement=metaDoc.getDocumentElement();
+                   rootNode = (Node)rootElement;
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_META);
+                   if (nodeList.getLength()>0){
+                  tmpNode = metaDoc.importNode(nodeList.item(0),true);
+                  rootNode.appendChild(tmpNode);
+                   }
+                }
         }
         catch (SAXException ex) {
         throw new OfficeDocumentException(ex);
@@ -689,13 +741,82 @@ public abstract class OfficeDocument
             write(os);
     }
     else{
-        byte contentBytes[] = docToBytes(contentDoc);
-        os.write(contentBytes);
-        if (styleDoc != null) {
+        try{
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder= builderFactory.newDocumentBuilder();
+        DOMImplementation domImpl = builder.getDOMImplementation();
+        DocumentType docType =domImpl.createDocumentType("office:document","-//OpenOffice.org//DTD OfficeDocument 1.0//EN",null);
+        org.w3c.dom.Document newDoc = domImpl.createDocument("http://openoffice.org/2000/office","office:document",null);
 
-        byte styleBytes[] = docToBytes(styleDoc);
-        os.write(styleBytes);
+
+        Element rootElement=newDoc.getDocumentElement();
+        rootElement.setAttribute("xmlns:office","http://openoffice.org/2000/office");
+        rootElement.setAttribute("xmlns:style","http://openoffice.org/2000/style" );
+        rootElement.setAttribute("xmlns:text","http://openoffice.org/2000/text");
+        rootElement.setAttribute("xmlns:table","http://openoffice.org/2000/table");
+
+        rootElement.setAttribute("xmlns:draw","http://openoffice.org/2000/drawing");
+        rootElement.setAttribute("xmlns:fo","http://www.w3.org/1999/XSL/Format" );
+        rootElement.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink" );
+        rootElement.setAttribute("xmlns:dc","http://purl.org/dc/elements/1.1/" );
+        rootElement.setAttribute("xmlns:meta","http://openoffice.org/2000/meta" );
+        rootElement.setAttribute("xmlns:number","http://openoffice.org/2000/datastyle" );
+        rootElement.setAttribute("xmlns:svg","http://www.w3.org/2000/svg" );
+        rootElement.setAttribute("xmlns:chart","http://openoffice.org/2000/chart" );
+        rootElement.setAttribute("xmlns:dr3d","http://openoffice.org/2000/dr3d" );
+        rootElement.setAttribute("xmlns:math","http://www.w3.org/1998/Math/MathML" );
+        rootElement.setAttribute("xmlns:form","http://openoffice.org/2000/form" );
+        rootElement.setAttribute("xmlns:script","http://openoffice.org/2000/script" );
+        rootElement.setAttribute("xmlns:config","http://openoffice.org/2001/config" );
+        //rootElement.setAttribute("office:class","spreadsheet" );
+        rootElement.setAttribute("office:version","1.0");
+
+
+        NodeList nodeList;
+        Node tmpNode;
+        Node rootNode = (Node)rootElement;
+        if (metaDoc !=null){
+            nodeList= metaDoc.getElementsByTagName(TAG_OFFICE_META);
+            if (nodeList.getLength()>0){
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
+            }
+        }if (styleDoc !=null){
+            nodeList= styleDoc.getElementsByTagName(TAG_OFFICE_STYLES);
+            if (nodeList.getLength()>0){
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
+                }
+
+        }if (settingsDoc !=null){
+            nodeList= settingsDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
+            if (nodeList.getLength()>0){
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
+            }
         }
+        if (contentDoc !=null){
+            nodeList= contentDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+            if (nodeList.getLength()>0){
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+                 rootNode.appendChild(tmpNode);
+            }
+
+            nodeList= contentDoc.getElementsByTagName(TAG_OFFICE_BODY);
+            if (nodeList.getLength()>0){
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
+            }
+        }
+
+        byte contentBytes[] = docToBytes(newDoc);
+        //System.out.println(new String(contentBytes));
+        os.write(contentBytes);
+            }
+            catch(Exception exc){
+        System.out.println("\nException in OfficeDocument.write():" +exc);
+            }
+        //byte contentBytes[] = docToBytes(contentDoc);
     }
     }
 

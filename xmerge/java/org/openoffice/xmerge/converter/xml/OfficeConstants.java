@@ -78,6 +78,12 @@ public interface OfficeConstants {
      */
     public final static String TAG_OFFICE_DOCUMENT_SETTINGS= "office:document-settings";
 
+     /**
+     *  Element tag for <i>office:document-meta</i>, this is the root
+     *  tag in content.xml.
+     */
+    public final static String TAG_OFFICE_DOCUMENT_META= "office:document-meta";
+
     /**
      *  Element tag for <i>office:document-styles</i>, this is the root tag
      *  in styles.xml.
@@ -92,6 +98,10 @@ public interface OfficeConstants {
 
     /** Element tag for <i>office:styles</i>. */
     public final static String TAG_OFFICE_STYLES = "office:styles";
+
+ /** Element tag for <i>office:meta</i>. */
+    public final static String TAG_OFFICE_META = "office:meta";
+
 
     /** Element tag for <i>office:automatic-styles</i>. */
     public final static String TAG_OFFICE_AUTOMATIC_STYLES = "office:automatic-styles";
@@ -276,15 +286,8 @@ public interface OfficeConstants {
     public final static String ATTRIBUTE_TABLE_VALUE_TYPE = "table:value-type";
 
     /**
-     *  Attribute tag for <i>table:default-cell-style-name</i>
-     *  of element <i>table:table-column</i>.
-     */
-    public final static String ATTRIBUTE_DEFAULT_CELL_STYLE =
-        "table:default-cell-style-name";
-
-    /**
      *  Attribute tag for <i>table:number-columns-repeated</i>
-     *  of element <i>table:table-column</i>.
+     *  of element <i>table:table-cell</i>.
      */
     public final static String ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED =
         "table:number-columns-repeated";
