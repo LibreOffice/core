@@ -9,5 +9,5 @@
         <prop oor:name="UIName">
             <value xml:lang="en-US">RAS - Sun Raster Image</value>
         </prop>
-        <prop oor:name="Flags"><value>EXPORT ALIEN</value></prop>
+        <prop oor:name="Flags"><value>EXPORT ALIEN SUPPORTSSELECTION</value></prop>
     </node>
