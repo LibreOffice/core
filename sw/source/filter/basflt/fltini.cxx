@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:44:45 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,9 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
 {
     Sequence<OUString> aNames( nCnt );
     OUString* pNames = aNames.getArray();
-    for( USHORT n = 0; n < nCnt; ++n )
+    USHORT n;
+
+    for( n = 0; n < nCnt; ++n )
         pNames[ n ] = OUString::createFromAscii( ppNames[ n ] );
     Sequence<Any> aValues = GetProperties( aNames );
 
