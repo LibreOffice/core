@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:21:45 $
+ *  last change: $Author: mtg $ $Date: 2001-07-05 13:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,6 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
-
 #ifndef _MySVXACORR_HXX
 #include "svxacorr.hxx"
 #endif
