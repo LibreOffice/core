@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-08 12:29:15 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 12:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5396,18 +5396,28 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rOrigStr,
             MetricVector aTmp;
             GetGlyphBoundRects( rStartPt, rOrigStr, nIndex, nLen, nIndex, aTmp );
 
-            nLen = aTmp.size();
-            MetricVector::const_iterator it = aTmp.begin();
-            while( nLen-- )
+            bool bInserted = false;
+            for( MetricVector::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it, nIndex++ )
             {
+                bool bAppend = false;
+
                 if( aClip.IsOver( *it ) )
+                    bAppend = true;
+                else if( rOrigStr.GetChar( nIndex ) == ' ' && bInserted )
+                {
+                    MetricVector::const_iterator next = it;
+                    ++next;
+                    if( next != aTmp.end() && aClip.IsOver( *next ) )
+                        bAppend = true;
+                }
+
+                if( bAppend )
                 {
                     pVector->push_back( *it );
                     if( pDisplayText )
                         pDisplayText->Append( rOrigStr.GetChar( nIndex ) );
-
+                    bInserted = true;
                 }
-                nIndex++;
             }
         }
         else
@@ -7006,13 +7016,6 @@ BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
     BOOL bRet = TRUE;
     if( nLen == STRING_LEN )
         nLen = rStr.Len() - nIndex;
-
-#ifdef DEBUG
-    fprintf( stderr, "GetGlyphBoundRects( (%d,%d), \"%s\", %d, %d, %d )\n",
-             rOrigin.X(), rOrigin.Y(),
-             OUStringToOString( rStr, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             nIndex, nLen, nBase );
-#endif
 
     for( int i = 0; i < nLen && bRet; i++ )
     {
