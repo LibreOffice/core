@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-06 12:36:59 $
+ *  last change: $Author: nn $ $Date: 2002-10-25 16:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,11 @@ BOOL __EXPORT ScAreaLink::Edit(Window* pParent)
     {
         aOptions = pDlg->GetOptions();
         bRet = Refresh( pDlg->GetURL(), pDlg->GetFilter(), pDlg->GetSource(), pDlg->GetRefresh() );
+
+        //  copy source data from members (set in Refresh) into link name for dialog
+        String aLinkName;
+        so3::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+        SetName( aLinkName );
     }
     delete pDlg;
 
@@ -206,13 +211,18 @@ void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String&
     aFilterName = rFlt;
     aOptions    = rOpt;
     aSourceArea = rArea;
+
+    //  also update link name for dialog
+    String aLinkName;
+    so3::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+    SetName( aLinkName );
 }
 
 BOOL ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
                             const String& rSource, const ScRange& rDest ) const
 {
     return aFileName == rFile && aFilterName == rFilter && aOptions == rOpt &&
-            aSourceArea == rSource && aDestArea == rDest;
+            aSourceArea == rSource && aDestArea.aStart == rDest.aStart;
 }
 
 // find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
