@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:28:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,10 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect )
 
 MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
 {
+    ScDocument* pDoc = pViewData->GetDocument();
+    USHORT nTab = pViewData->GetTabNo();
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+
     MapMode aDrawMode = pViewData->GetLogicMode();
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
@@ -313,8 +317,6 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
             pDrView->GetScale( aScaleX, aScaleY );
         else
         {
-            ScDocument* pDoc = pViewData->GetDocument();
-            USHORT nTab = pViewData->GetTabNo();
             USHORT nEndCol = 0;
             USHORT nEndRow = 0;
             pDoc->GetTableArea( nTab, nEndCol, nEndRow );
@@ -329,7 +331,13 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
         aDrawMode.SetScaleY(aScaleY);
     }
     aDrawMode.SetOrigin(Point());
-    aDrawMode.SetOrigin( PixelToLogic( pViewData->GetPixPos(eWhich), aDrawMode ) );
+    Point aStartPos = pViewData->GetPixPos(eWhich);
+    if ( bNegativePage )
+    {
+        //  RTL uses negative positions for drawing objects
+        aStartPos.X() = -aStartPos.X() + GetOutputSizePixel().Width() - 1;
+    }
+    aDrawMode.SetOrigin( PixelToLogic( aStartPos, aDrawMode ) );
 
     return aDrawMode;
 }
@@ -384,9 +392,10 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
         const ScViewOptions& rOpts = pViewData->GetOptions();
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
+            BOOL bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
             Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, TRUE );
             aPos = PixelToLogic(aPos);
-            rHdl.AddHdl(new SdrHdl(aPos ,HDL_ANCHOR));
+            rHdl.AddHdl(new SdrHdl(aPos, bNegativePage ? HDL_ANCHOR_TR : HDL_ANCHOR));
         }
     }
 }
