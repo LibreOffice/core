@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:26:36 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,13 +327,16 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 eNewState = PropertyState_DEFAULT_VALUE;
 
-                // #i30838# set default values for default properties
-                if(pMap->nWID == FN_UNO_NUM_LEVEL)
-                    *pAny <<= static_cast<sal_Int16>( 0 );
-                else if(pMap->nWID == FN_UNO_IS_NUMBER)
-                    *pAny <<= false;
-                else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
-                    *pAny <<= false;
+                if( pAny )
+                {
+                    // #i30838# set default values for default properties
+                    if(pMap->nWID == FN_UNO_NUM_LEVEL)
+                        *pAny <<= static_cast<sal_Int16>( 0 );
+                    else if(pMap->nWID == FN_UNO_IS_NUMBER)
+                        *pAny <<= false;
+                    else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                        *pAny <<= false;
+                }
             }
             //PROPERTY_MAYBEVOID!
         }
