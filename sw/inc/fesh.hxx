@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:40:25 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #ifndef _FLYENUM_HXX
 #include <flyenum.hxx>
 #endif
+
+#include <vector>
 
 class SwFlyFrm;
 class SvEmbeddedObject;
@@ -416,6 +418,7 @@ public:
     //In rRect wird das Rect des Flys geliefert (fuer Highlight desselben)
     int Chainable( SwRect &rRect, const SwFrmFmt &rSource, const Point &rPt ) const;
     int Chain( SwFrmFmt &rSource, const Point &rPt );
+    int Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
     void Unchain( SwFrmFmt &rFmt );
     void HideChainMarker();
     void SetChainMarker();
@@ -666,6 +669,13 @@ public:
     USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  // aktuelle aeussere Spalte
     // Die Breite des aktuellen Bereichs fuer Spaltendialog
     long GetSectionWidth( SwFmt& rFmt ) const;
+
+    void GetConnectableFrmFmts
+    (const SwFrmFmt & rFmt, const String & rReference, BOOL bSuccessors,
+     ::std::vector< String > & aPrevPageVec,
+     ::std::vector< String > & aThisPageVec,
+     ::std::vector< String > & aNextPageVec,
+     ::std::vector< String > & aRestVec);
 };
 
 #endif

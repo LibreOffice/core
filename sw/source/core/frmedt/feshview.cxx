@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 09:06:05 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2644,6 +2644,13 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
         pDView->SetHitTolerancePixel( nOld );
     }
     return SW_CHAIN_NOT_FOUND;
+}
+/* -----------------------------09.08.2002 07:40------------------------------
+
+ ---------------------------------------------------------------------------*/
+int SwFEShell::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
+{
+    return GetDoc()->Chain(rSource, rDest);
 }
 
 int SwFEShell::Chain( SwFrmFmt &rSource, const Point &rPt )

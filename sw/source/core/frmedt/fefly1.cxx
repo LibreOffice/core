@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:23:32 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@
 #endif
 #ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
+#endif
+#ifndef _FLYPOS_HXX
+#include <flypos.hxx>
 #endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
@@ -1919,4 +1922,88 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
     return bRet;
 }
 
+static USHORT SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
+{
+    ASSERT(pFmt != NULL, "invalid argument");
 
+    SwFlyFrm * pFrm = pFmt->GetFrm();
+
+    USHORT aResult;
+
+    if (pFrm != NULL)
+        aResult = pFrm->GetPhyPageNum();
+    else
+        aResult = pFmt->GetAnchor().GetPageNum();
+
+    return aResult;
+}
+
+void SwFEShell::GetConnectableFrmFmts
+(const SwFrmFmt & rFmt, const String & rReference, BOOL bSuccessors,
+ ::std::vector< String > & aPrevPageVec,
+ ::std::vector< String > & aThisPageVec,
+ ::std::vector< String > & aNextPageVec,
+ ::std::vector< String > & aRestVec)
+{
+    ::std::vector< String > aResult;
+
+    SwPosFlyFrms aAllFlys;
+    pDoc->GetAllFlyFmts(aAllFlys);
+    sal_uInt16 nCnt = aAllFlys.Count();
+
+    /* potential successors resp. predecessors */
+    ::std::vector< const SwFrmFmt * > aTmpSpzArray;
+
+    for (sal_uInt16 n = 0; n < nCnt; n++)
+    {
+        const SwFrmFmt & rFmt1 = aAllFlys[n]->GetFmt();
+
+        /*
+           pFmt is a potential successor of rFmt if it is chainable after
+           rFmt.
+
+           pFmt is a potential predecessor of rFmt if rFmt is chainable
+           after pFmt.
+        */
+
+        if ((bSuccessors && pDoc->Chainable(rFmt, rFmt1) == SW_CHAIN_OK) ||
+            (! bSuccessors && pDoc->Chainable(rFmt1, rFmt) == SW_CHAIN_OK))
+            aTmpSpzArray.push_back(&rFmt1);
+    }
+
+    if  (aTmpSpzArray.size() > 0)
+    {
+        aPrevPageVec.clear();
+        aThisPageVec.clear();
+        aNextPageVec.clear();
+        aRestVec.clear();
+
+        /* number of page rFmt resides on */
+        USHORT nPageNum = SwFmtGetPageNum((SwFlyFrmFmt *) &rFmt);
+
+        ::std::vector< const SwFrmFmt * >::const_iterator aIt;
+
+        for (aIt = aTmpSpzArray.begin(); aIt != aTmpSpzArray.end(); aIt++)
+        {
+            String  aString = (*aIt)->GetName();
+
+            /* rFmt is not a vaild successor or predecessor of
+               itself */
+            if (aString != rReference && aString != rFmt.GetName())
+            {
+                USHORT nNum1 =
+                    SwFmtGetPageNum((SwFlyFrmFmt *) *aIt);
+
+                if (nNum1 == nPageNum -1)
+                    aPrevPageVec.push_back(aString);
+                else if (nNum1 == nPageNum)
+                    aThisPageVec.push_back(aString);
+                else if (nNum1 == nPageNum + 1)
+                    aNextPageVec.push_back(aString);
+                else
+                    aRestVec.push_back(aString);
+            }
+        }
+
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 17:56:02 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,9 +289,9 @@ class SwFrmAddPage : public SfxTabPage
     FixedText   aAltNameFT;
     Edit        aAltNameED;
     FixedText   aPrevFT;
-    Edit        aPrevED;
+    ListBox     aPrevLB;
     FixedText   aNextFT;
-    Edit        aNextED;
+    ListBox     aNextLB;
     FixedLine   aNamesFL;
 
     CheckBox    aProtectContentCB;
@@ -314,6 +314,7 @@ class SwFrmAddPage : public SfxTabPage
     BOOL        bNew;
 
     DECL_LINK(EditModifyHdl, Edit*);
+    DECL_LINK(ChainModifyHdl, ListBox*);
 
     SwFrmAddPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmAddPage();

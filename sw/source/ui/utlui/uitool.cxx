@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:04:06 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,9 +790,9 @@ BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
 /*-----------------09.04.98 16:58-------------------
 
 --------------------------------------------------*/
-USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, BOOL bHasOffset )
+USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, USHORT nOffset )
 {
-    USHORT i = bHasOffset ? 1 : 0;
+    USHORT i = nOffset;
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
 
     for( ; i < rToFill.GetEntryCount(); i++ )

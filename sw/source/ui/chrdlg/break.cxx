@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 08:53:44 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,14 +241,14 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     for(USHORT i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
-        ::InsertStringSorted(rPageDesc.GetName(), aPageCollBox, TRUE );
+        ::InsertStringSorted(rPageDesc.GetName(), aPageCollBox, 1 );
     }
 
     String aFmtName;
     for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
         if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
-            ::InsertStringSorted(aFmtName, aPageCollBox, TRUE );
+            ::InsertStringSorted(aFmtName, aPageCollBox, 1 );
 
     CheckEnable();
     aPageNumEdit.SetText( aEmptyStr );

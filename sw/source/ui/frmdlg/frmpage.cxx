@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-06-26 10:31:06 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,34 @@ USHORT lcl_GetFrmMapCount(FrmMap* pMap)
     }
     return 0;
 }
+/* -----------------------------08.08.2002 14:45------------------------------
 
+ ---------------------------------------------------------------------------*/
+void lcl_InsertVectors(ListBox& rBox,
+    const ::std::vector< String >& rPrev, const ::std::vector< String >& rThis,
+    const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
+{
+    ::std::vector< const String >::iterator aIt;
+    for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
+        rBox.InsertEntry(*aIt);
+    for(aIt = rThis.begin(); aIt != rThis.end(); aIt++)
+        rBox.InsertEntry(*aIt);
+    for(aIt = rNext.begin(); aIt != rNext.end(); aIt++)
+        rBox.InsertEntry(*aIt);
+    rBox.SetEntryData(
+        rBox.InsertEntry(String::CreateFromAscii("-------------")), (void*)(ULONG)1);
+    //now insert all strings sorted
+    USHORT nStartPos = rBox.GetEntryCount();
+
+    for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
+        ::InsertStringSorted(*aIt, rBox, nStartPos );
+    for(aIt = rThis.begin(); aIt != rThis.end(); aIt++)
+        ::InsertStringSorted(*aIt, rBox, nStartPos );
+    for(aIt = rNext.begin(); aIt != rNext.end(); aIt++)
+        ::InsertStringSorted(*aIt, rBox, nStartPos );
+    for(aIt = rRemain.begin(); aIt != rRemain.end(); aIt++)
+        ::InsertStringSorted(*aIt, rBox, nStartPos );
+}
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -2673,9 +2700,9 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     aAltNameFT         (this, SW_RES(FT_ALT_NAME)),
     aAltNameED         (this, SW_RES(ED_ALT_NAME)),
     aPrevFT            (this, SW_RES(FT_PREV)),
-    aPrevED            (this, SW_RES(ED_PREV)),
+    aPrevLB            (this, SW_RES(LB_PREV)),
     aNextFT            (this, SW_RES(FT_NEXT)),
-    aNextED            (this, SW_RES(ED_NEXT)),
+    aNextLB            (this, SW_RES(LB_NEXT)),
     aNamesFL           (this, SW_RES(FL_NAME)),
     aTextFlowFT        (this, SW_RES(FT_TEXTFLOW)),
     aTextFlowLB        (this, SW_RES(LB_TEXTFLOW)),
@@ -2790,9 +2817,9 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         Window* aWindows[] =
         {
             &aPrevFT,
-            &aPrevED,
+            &aPrevLB,
             &aNextFT,
-            &aNextED,
+            &aNextLB,
             &aNamesFL,
             &aProtectContentCB,
             &aProtectFrameCB,
@@ -2826,32 +2853,54 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         {
             const SwFmtChain &rChain = pFmt->GetChain();
             const SwFlyFrmFmt* pFlyFmt;
-
+            String sNextChain, sPrevChain;
             if ((pFlyFmt = rChain.GetPrev()) != 0)
             {
-                aPrevED.SetText(pFlyFmt->GetName());
-                bNoPrev = FALSE;
+                sPrevChain = pFlyFmt->GetName();
             }
 
             if ((pFlyFmt = rChain.GetNext()) != 0)
             {
-                aNextED.SetText(pFlyFmt->GetName());
-                bNoNext = FALSE;
+                sNextChain = pFlyFmt->GetName();
             }
+            //determine chainable frames
+            ::std::vector< String > aPrevPageFrames;
+            ::std::vector< String > aThisPageFrames;
+            ::std::vector< String > aNextPageFrames;
+            ::std::vector< String > aRemainFrames;
+            pWrtSh->GetConnectableFrmFmts(*pFmt, sPrevChain, TRUE,
+                            aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
+            lcl_InsertVectors(aPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
+            if(sPrevChain.Len())
+            {
+                if(LISTBOX_ENTRY_NOTFOUND == aPrevLB.GetEntryPos(sPrevChain))
+                    aPrevLB.InsertEntry(sPrevChain, 1);
+                aPrevLB.SelectEntry(sPrevChain);
+            }
+            else
+                aPrevLB.SelectEntryPos(0);
+            aPrevPageFrames.erase(aPrevPageFrames.begin(), aPrevPageFrames.end());
+            aNextPageFrames.erase(aNextPageFrames.begin(), aNextPageFrames.end());
+            aThisPageFrames.erase(aThisPageFrames.begin(), aThisPageFrames.end());
+            aRemainFrames.erase(aRemainFrames.begin(), aRemainFrames.end());
+
+
+            pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, FALSE,
+                            aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
+            lcl_InsertVectors(aNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
+            if(sNextChain.Len())
+            {
+                if(LISTBOX_ENTRY_NOTFOUND == aNextLB.GetEntryPos(sNextChain))
+                    aNextLB.InsertEntry(sNextChain, 1);
+                aNextLB.SelectEntry(sNextChain);
+            }
+            else
+                aNextLB.SelectEntryPos(0);
+            Link aLink(LINK(this, SwFrmAddPage, ChainModifyHdl));
+            aPrevLB.SetSelectHdl(aLink);
+            aNextLB.SetSelectHdl(aLink);
         }
     }
-
-    if (bNoPrev)
-    {
-        aPrevFT.Disable();
-        aPrevED.Disable();
-    }
-    if (bNoNext)
-    {
-        aNextFT.Disable();
-        aNextED.Disable();
-    }
-
     // Pos Protected
     const SvxProtectItem& rProt = (const SvxProtectItem& )rSet.Get(RES_PROTECT);
     aProtectFrameCB.Check(rProt.IsPosProtected());
@@ -2929,7 +2978,30 @@ BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
                                     (SvxFrameDirection)nPos, RES_FRAMEDIR ));
         }
     }
+    if(pWrtSh)
+    {
+        const SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
+        if (pFmt)
+        {
+            String sCurrentPrevChain, sCurrentNextChain;
+            if(aPrevLB.GetSelectEntryPos())
+                sCurrentPrevChain = aPrevLB.GetSelectEntry();
+            if(aNextLB.GetSelectEntryPos())
+                sCurrentNextChain = aNextLB.GetSelectEntry();
+            const SwFmtChain &rChain = pFmt->GetChain();
+            const SwFlyFrmFmt* pFlyFmt;
+            String sNextChain, sPrevChain;
+            if ((pFlyFmt = rChain.GetPrev()) != 0)
+                sPrevChain = pFlyFmt->GetName();
 
+            if ((pFlyFmt = rChain.GetNext()) != 0)
+                sNextChain = pFlyFmt->GetName();
+            if(sPrevChain != sCurrentPrevChain)
+                bRet |= 0 != rSet.Put(SfxStringItem(FN_PARAM_CHAIN_PREVIOUS, sCurrentPrevChain));
+            if(sNextChain != sCurrentNextChain)
+                bRet |= 0 != rSet.Put(SfxStringItem(FN_PARAM_CHAIN_NEXT, sCurrentNextChain));
+        }
+    }
     return bRet;
 }
 
@@ -2965,9 +3037,9 @@ void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
         aAltNameFT.Show(FALSE);
         aAltNameED.Show(FALSE);
         aPrevFT.Show(FALSE);
-        aPrevED.Show(FALSE);
+        aPrevLB.Show(FALSE);
         aNextFT.Show(FALSE);
-        aNextED.Show(FALSE);
+        aNextLB.Show(FALSE);
         aNamesFL.Show(FALSE);
 
         sal_Int32 nDiff = aExtFL.GetPosPixel().Y() - aNamesFL.GetPosPixel().Y();
@@ -2988,6 +3060,48 @@ void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
         while(aWindows[nIdx])
             lcl_Move(*aWindows[nIdx++], nDiff);
     }
+}
+/* -----------------------------08.08.2002 16:24------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
+{
+    //prevent the selection of the separator
+    if(pBox->GetEntryData(pBox->GetSelectEntryPos()))
+        pBox->SelectEntryPos(0);
+    else
+    {
+        String sCurrentPrevChain, sCurrentNextChain;
+        if(aPrevLB.GetSelectEntryPos())
+            sCurrentPrevChain = aPrevLB.GetSelectEntry();
+        if(aNextLB.GetSelectEntryPos())
+            sCurrentNextChain = aNextLB.GetSelectEntry();
+        const SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
+        if (pFmt)
+        {
+            BOOL bNextBox = &aNextLB == pBox;
+            ListBox& rChangeLB = bNextBox ? aPrevLB : aNextLB;
+            for(USHORT nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
+                rChangeLB.RemoveEntry(nEntry - 1);
+            //determine chainable frames
+            ::std::vector< String > aPrevPageFrames;
+            ::std::vector< String > aThisPageFrames;
+            ::std::vector< String > aNextPageFrames;
+            ::std::vector< String > aRemainFrames;
+            pWrtSh->GetConnectableFrmFmts(*pFmt, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
+                            aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
+            lcl_InsertVectors(rChangeLB,
+                    aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
+            String sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
+            if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
+                rChangeLB.SelectEntry(sToSelect);
+            else
+                rChangeLB.SelectEntryPos(0);
+
+        }
+    }
+
+    return 0;
 }
 
 

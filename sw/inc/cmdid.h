@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 09:29:30 $
+ *  last change: $Author: os $ $Date: 2002-08-09 08:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,6 +1150,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_ANCHOR_POSITION              (FN_PARAM2+18) /* AnchorPosition property */
 #define FN_DROP_TEXT                    (FN_PARAM2+18) /* text set in drop caps tab page - for recording */
 #define FN_DROP_CHAR_STYLE_NAME         (FN_PARAM2+19) /* character style of drop caps - for recording */
+#define FN_PARAM_CHAIN_PREVIOUS         (FN_PARAM2+20) /* Name of frame to be added as chain successor */
+#define FN_PARAM_CHAIN_NEXT             (FN_PARAM2+21) /* Name of frame to be added as chain predecessor */
 /*--------------------------------------------------------------------
     Bereich: Druckoptionen
  --------------------------------------------------------------------*/
