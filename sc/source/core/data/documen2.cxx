@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-26 09:27:19 $
+ *  last change: $Author: sab $ $Date: 2001-11-28 09:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,6 +565,9 @@ ScDocument::~ScDocument()
 
     delete pDPCollection;
 
+    // delete the EditEngine before destroying the xPoolHelper
+    delete pCacheFieldEditEngine;
+
     if ( xPoolHelper.isValid() && !bIsClip )
         xPoolHelper->SourceDocumentGone();
     xPoolHelper.unbind();
@@ -573,7 +576,6 @@ ScDocument::~ScDocument()
     delete pScriptTypeData;
     delete pOtherObjects;
 
-    delete pCacheFieldEditEngine;
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
