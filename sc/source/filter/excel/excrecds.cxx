@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
+ *  last change: $Author: dr $ $Date: 2001-02-14 11:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1648,6 +1648,18 @@ ExcFormula::~ExcFormula()
 {
     if( pData )
         delete[] pData;
+}
+
+
+void ExcFormula::SetTableOp( USHORT nCol, USHORT nRow )
+{
+    if( pData )
+        delete[] pData;
+    nFormLen = 5;
+    pData = new sal_Char[ nFormLen ];
+    pData[ 0 ] = 0x02;
+    ShortToSVBT16( (UINT16) nRow, (BYTE*) &pData[ 1 ] );
+    ShortToSVBT16( (UINT16) nCol, (BYTE*) &pData[ 3 ] );
 }
 
 
@@ -4406,7 +4418,7 @@ UINT16 ExcMargin::GetLen() const
 
 //___________________________________________________________________
 
-ExcPageBreaks::ExcPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
+XclExpPageBreaks::XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
     nRecNum( (eOrient == pbHorizontal) ? 0x001B : 0x001A )
 {
     BYTE nFlags;
@@ -4430,30 +4442,285 @@ ExcPageBreaks::ExcPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientati
     }
 }
 
-ExcPageBreaks::~ExcPageBreaks()
+XclExpPageBreaks::~XclExpPageBreaks()
 {
 }
 
-void ExcPageBreaks::Save( SvStream& rStrm )
+void XclExpPageBreaks::Save( SvStream& rStrm )
 {
     if( aPageBreaks.Count() )
         ExcRecord::Save( rStrm );
 }
 
-void ExcPageBreaks::SaveCont( SvStream& rStrm )
+void XclExpPageBreaks::SaveCont( SvStream& rStrm )
 {
     rStrm << (UINT16) aPageBreaks.Count();
     for( UINT32 nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
         rStrm << aPageBreaks.Get( nIndex );
 }
 
-UINT16 ExcPageBreaks::GetNum() const
+UINT16 XclExpPageBreaks::GetNum() const
 {
     return nRecNum;
 }
 
-UINT16 ExcPageBreaks::GetLen() const
+UINT16 XclExpPageBreaks::GetLen() const
 {
     return (UINT16)(2 + aPageBreaks.Count() * 2);
+}
+
+
+//___________________________________________________________________
+
+XclExpTableOp::XclExpTableOp(
+        ExcFormula& rFormula,
+        const ScAddress& rColFirstPos,
+        const ScAddress& rRowFirstPos,
+        USHORT nNewMode ) :
+    nMode( nNewMode ),
+    nColInpCol( rColFirstPos.Col() ),
+    nColInpRow( rColFirstPos.Row() ),
+    nRowInpCol( rRowFirstPos.Col() ),
+    nRowInpRow( rRowFirstPos.Row() ),
+    bIsValid( FALSE )
+{
+    nFirstCol = nLastCol = nNextCol = rFormula.GetPosition().Col();
+    nFirstRow = nLastRow = rFormula.GetPosition().Row();
+    Append( &rFormula );
+}
+
+XclExpTableOp::~XclExpTableOp()
+{
+}
+
+BOOL XclExpTableOp::IsAppendable( const ScAddress& rPos )
+{
+    return  ((rPos.Col() == nLastCol + 1) && (rPos.Row() == nFirstRow)) ||
+            ((rPos.Col() == nNextCol) && (rPos.Row() == nLastRow + 1));
+}
+
+BOOL XclExpTableOp::CheckPosition(
+    const ScAddress& rPos,
+    const ScAddress& rFmlaPos,
+    const ScAddress& rColFirstPos, const ScAddress& rColRelPos,
+    const ScAddress& rRowFirstPos, const ScAddress& rRowRelPos,
+    BOOL bMode2 )
+{
+    BOOL bRet = FALSE;
+
+    if( ((nMode == 2) == bMode2) &&
+        (rPos.Tab() == rFmlaPos.Tab()) &&
+        (nColInpCol == rColFirstPos.Col()) &&
+        (nColInpRow == rColFirstPos.Row()) &&
+        (rPos.Tab() == rColFirstPos.Tab()) &&
+        (rPos.Tab() == rColRelPos.Tab()) )
+    {
+        if( nMode == 0 )
+        {
+            bRet =  (rPos.Col() == rFmlaPos.Col()) &&
+                    (nFirstRow == rFmlaPos.Row() + 1) &&
+                    (nFirstCol == rColRelPos.Col() + 1) &&
+                    (rPos.Row() == rColRelPos.Row());
+        }
+        else if( nMode == 1 )
+        {
+            bRet =  (nFirstCol == rFmlaPos.Col() + 1) &&
+                    (rPos.Row() == rFmlaPos.Row()) &&
+                    (rPos.Col() == rColRelPos.Col()) &&
+                    (nFirstRow == rColRelPos.Row() + 1);
+        }
+        else if( nMode == 2 )
+        {
+            bRet =  (nFirstCol == rFmlaPos.Col() + 1) &&
+                    (nFirstRow == rFmlaPos.Row() + 1) &&
+                    (nFirstCol == rColRelPos.Col() + 1) &&
+                    (rPos.Row() == rColRelPos.Row()) &&
+                    (nRowInpCol == rRowFirstPos.Col()) &&
+                    (nRowInpRow == rRowFirstPos.Row()) &&
+                    (rPos.Tab() == rRowFirstPos.Tab()) &&
+                    (rPos.Col() == rRowRelPos.Col()) &&
+                    (nFirstRow == rRowRelPos.Row() + 1) &&
+                    (rPos.Tab() == rRowRelPos.Tab());
+        }
+    }
+
+    return bRet;
+}
+
+BOOL XclExpTableOp::CheckFirstPosition(
+    const ScAddress& rPos,
+    const ScAddress& rFmlaPos,
+    const ScAddress& rColFirstPos, const ScAddress& rColRelPos,
+    const ScAddress& rRowFirstPos, const ScAddress& rRowRelPos,
+    BOOL bMode2, USHORT& rnMode )
+{
+    BOOL bRet = FALSE;
+
+    if( (rPos.Tab() == rFmlaPos.Tab()) &&
+        (rPos.Tab() == rColFirstPos.Tab()) &&
+        (rPos.Tab() == rColRelPos.Tab()) )
+    {
+        if( bMode2 )
+        {
+            rnMode = 2;
+            bRet =  (rPos.Col() == rFmlaPos.Col() + 1) &&
+                    (rPos.Row() == rFmlaPos.Row() + 1) &&
+                    (rPos.Col() == rColRelPos.Col() + 1) &&
+                    (rPos.Row() == rColRelPos.Row()) &&
+                    (rPos.Tab() == rRowFirstPos.Tab()) &&
+                    (rPos.Col() == rRowRelPos.Col()) &&
+                    (rPos.Row() == rRowRelPos.Row() + 1) &&
+                    (rPos.Tab() == rRowRelPos.Tab());
+        }
+        else if( (rPos.Col() == rFmlaPos.Col()) &&
+                (rPos.Row() == rFmlaPos.Row() + 1) &&
+                (rPos.Col() == rColRelPos.Col() + 1) &&
+                (rPos.Row() == rColRelPos.Row()) )
+        {
+            rnMode = 0;
+            bRet = TRUE;
+        }
+        else if( (rPos.Col() == rFmlaPos.Col() + 1) &&
+                (rPos.Row() == rFmlaPos.Row()) &&
+                (rPos.Col() == rColRelPos.Col()) &&
+                (rPos.Row() == rColRelPos.Row() + 1) )
+        {
+            rnMode = 1;
+            bRet = TRUE;
+        }
+    }
+
+    return bRet;
+}
+
+void XclExpTableOp::InsertCell( ExcFormula& rFormula )
+{
+    const ScAddress& rPos = rFormula.GetPosition();
+    if( (rPos.Col() == nLastCol + 1) && (rPos.Row() == nFirstRow) )     // next cell of first row
+    {
+        nLastCol++;
+        Append( &rFormula );
+    }
+    else if( (rPos.Col() == nNextCol) && (rPos.Row() == nLastRow + 1) ) // next cell of next row
+    {
+        nNextCol++;
+        Append( &rFormula );
+
+        if( nNextCol > nLastCol )   // next row is valid -> add to range
+        {
+            nLastRow++;
+            nNextCol = nFirstCol;
+        }
+    }
+}
+
+void XclExpTableOp::UpdateCells()
+{
+    if( nMode == 0 )
+        bIsValid =  (nColInpCol + 1 < nFirstCol) || (nColInpCol > nLastCol) ||
+                    (nColInpRow < nFirstRow) || (nColInpRow > nLastRow);
+    else if( nMode == 1 )
+        bIsValid =  (nColInpCol < nFirstCol) || (nColInpCol > nLastCol) ||
+                    (nColInpRow + 1 < nFirstRow) || (nColInpRow > nLastRow);
+    else if( nMode == 2 )
+        bIsValid =  ((nColInpCol + 1 < nFirstCol) || (nColInpCol > nLastCol) ||
+                    (nColInpRow + 1 < nFirstRow) || (nColInpRow > nLastRow)) &&
+                    ((nRowInpCol + 1 < nFirstCol) || (nRowInpCol > nLastCol) ||
+                    (nRowInpRow + 1 < nFirstRow) || (nRowInpRow > nLastRow));
+
+    if( !bIsValid ) return;
+
+    for( ExcFormula* pFmla = _First(); pFmla; pFmla = _Next() )
+    {
+        const ScAddress& rPos = pFmla->GetPosition();
+        if( (nFirstCol <= rPos.Col()) && (rPos.Col() <= nLastCol) &&
+            (nFirstRow <= rPos.Row()) && (rPos.Row() <= nLastRow) )
+            pFmla->SetTableOp( nFirstCol, nFirstRow );
+    }
+}
+
+void XclExpTableOp::SaveCont( SvStream& rStrm )
+{
+    rStrm   << (UINT16) nFirstRow << (UINT16) nLastRow
+            << (UINT8) nFirstCol << (UINT8) nLastCol;
+    if( nMode == 2 )
+        rStrm   << (UINT16) EXC_TABOP_BOTH
+                << (UINT16) nRowInpRow << (UINT16) nRowInpCol
+                << (UINT16) nColInpRow << (UINT16) nColInpCol;
+    else
+        rStrm   << (UINT16)((nMode == 1) ? EXC_TABOP_ROW : 0x0000)
+                << (UINT16) nColInpRow << (UINT16) nColInpCol       // ref to col AND row stored in nColInp***
+                << (UINT16) 0 << (UINT16) 0;
+}
+
+void XclExpTableOp::Save( SvStream& rStrm )
+{
+    if( bIsValid )
+        ExcRecord::Save( rStrm );
+}
+
+UINT16 XclExpTableOp::GetNum() const
+{
+    return 0x0236;
+}
+
+UINT16 XclExpTableOp::GetLen() const
+{
+    return 16;
+}
+
+
+
+// do not delete the records -> stored in and deleted by table record list
+XclExpTableOpManager::~XclExpTableOpManager()
+{
+}
+
+XclExpTableOp* XclExpTableOpManager::InsertCell( const ScTokenArray* pTokenArray, ExcFormula& rFormula )
+{
+    XclExpTableOp*  pTabOp = NULL;
+    ScAddress       aFmlaPos;
+    ScAddress       aColFirst;
+    ScAddress       aColRel;
+    ScAddress       aRowFirst;
+    ScAddress       aRowRel;
+    BOOL            bMode2;
+
+    if( pTokenArray && pTokenArray->GetTableOpRefs( aFmlaPos, aColFirst, aColRel, aRowFirst, aRowRel, bMode2 ) )
+    {
+        const ScAddress& rPos = rFormula.GetPosition();
+
+        pTabOp = _First();
+        BOOL bFound = FALSE;
+        while( pTabOp && !bFound )
+        {
+            bFound = pTabOp->IsAppendable( rPos );
+            if( !bFound )
+                pTabOp = _Next();
+        }
+
+        if( bFound )
+        {
+            if( pTabOp->CheckPosition( rPos, aFmlaPos, aColFirst, aColRel, aRowFirst, aRowRel, bMode2 ) )
+                pTabOp->InsertCell( rFormula );
+            pTabOp = NULL;
+        }
+        else
+        {
+            USHORT nMode;
+            if( XclExpTableOp::CheckFirstPosition( rPos, aFmlaPos, aColFirst, aColRel, aRowFirst, aRowRel, bMode2, nMode ) )
+            {
+                pTabOp = new XclExpTableOp( rFormula, aColFirst, aRowFirst, nMode );
+                List::Insert( pTabOp, (ULONG) 0 );
+            }
+        }
+    }
+    return pTabOp;
+}
+
+void XclExpTableOpManager::UpdateCells()
+{
+    for( XclExpTableOp* pTabOp = _First(); pTabOp; pTabOp = _Next() )
+        pTabOp->UpdateCells();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 13:07:38 $
+ *  last change: $Author: dr $ $Date: 2001-02-14 11:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,6 +771,10 @@ public:
 //                              const double &rCurVal,
                                 const ScTokenArray& rCode );
                             ~ExcFormula();
+
+    inline const ScAddress& GetPosition() const { return aPos; }    // from ExcCell
+
+    void                    SetTableOp( USHORT nCol, USHORT nRow ); // for TableOp export
 
     virtual UINT16          GetNum( void ) const;
     virtual UINT16          GetLen( void ) const;
@@ -1715,25 +1719,105 @@ public:
 //___________________________________________________________________
 // Page breaks
 
-class ExcPageBreaks : public ExcRecord
+class XclExpPageBreaks : public ExcRecord
 {
 private:
+    UINT16                  nRecNum;
+
     virtual void            SaveCont( SvStream& rStrm );
 
 protected:
     UINT16List              aPageBreaks;
-    UINT16                  nRecNum;
 
 public:
     enum ExcPBOrientation   { pbHorizontal, pbVertical };
 
-                            ExcPageBreaks( RootData& rRootData, UINT16 nScNum, ExcPBOrientation eOrient );
-    virtual                 ~ExcPageBreaks();
+                            XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
+    virtual                 ~XclExpPageBreaks();
 
     virtual void            Save( SvStream& rStrm );
     virtual UINT16          GetNum() const;
     virtual UINT16          GetLen() const;
 };
 
+
+//___________________________________________________________________
+// multiple operations aka table operations (record TABLE)
+
+// a multiple operations record
+// stores pointers to all affected formula records
+class XclExpTableOp : private List, public ExcRecord
+{
+private:
+    USHORT                  nFirstCol;
+    USHORT                  nLastCol;
+    USHORT                  nNextCol;           // next column of next row
+    USHORT                  nFirstRow;
+    USHORT                  nLastRow;
+    USHORT                  nMode;
+    USHORT                  nColInpCol;
+    USHORT                  nColInpRow;
+    USHORT                  nRowInpCol;
+    USHORT                  nRowInpRow;
+    BOOL                    bIsValid;
+
+    inline ExcFormula*      _First()    { return (ExcFormula*) List::First(); }
+    inline ExcFormula*      _Next()     { return (ExcFormula*) List::Next(); }
+
+    inline void             Append( ExcFormula* pFmla ) { List::Insert( pFmla, LIST_APPEND ); }
+
+    virtual void            SaveCont( SvStream& rStrm );
+
+public:
+                            XclExpTableOp(
+                                ExcFormula& rFormula,
+                                const ScAddress& rColFirstPos,
+                                const ScAddress& rRowFirstPos,
+                                USHORT nNewMode );
+    virtual                 ~XclExpTableOp();
+
+    BOOL                    IsAppendable( const ScAddress& rPos );
+
+    BOOL                    CheckPosition(
+                                const ScAddress& rPos,
+                                const ScAddress& rFmlaPos,
+                                const ScAddress& rColFirstPos, const ScAddress& rColRelPos,
+                                const ScAddress& rRowFirstPos, const ScAddress& rRowRelPos,
+                                BOOL bMode2 );
+
+    static BOOL             CheckFirstPosition(
+                                const ScAddress& rPos,
+                                const ScAddress& rFmlaPos,
+                                const ScAddress& rColFirstPos, const ScAddress& rColRelPos,
+                                const ScAddress& rRowFirstPos, const ScAddress& rRowRelPos,
+                                BOOL bMode2, USHORT& rnMode );
+
+                            // insert pointer to Formula rec and update range data
+    void                    InsertCell( ExcFormula& rFormula );
+                            // change #NA error values of formula recs to TableOp values if in table op range
+    void                    UpdateCells();
+
+    virtual void            Save( SvStream& rStrm );
+
+    virtual UINT16          GetNum() const;
+    virtual UINT16          GetLen() const;
+};
+
+// stores pointers to ExcTableOp records - insert cells to existing or new ExcTableOp
+class XclExpTableOpManager : private List
+{
+private:
+    inline XclExpTableOp*   _First()    { return (XclExpTableOp*) List::First(); }
+    inline XclExpTableOp*   _Next()     { return (XclExpTableOp*) List::Next(); }
+
+public:
+    inline                  XclExpTableOpManager() : List() {}
+    virtual                 ~XclExpTableOpManager();
+
+                            // create & return new TableOp record or insert to an existing
+    XclExpTableOp*          InsertCell( const ScTokenArray* pTokenArray, ExcFormula& rFormula );
+                            // change #NA error values of formula recs to TableOp values
+    void                    UpdateCells();
+};
 
 #endif

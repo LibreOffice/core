@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-25 18:07:16 $
+ *  last change: $Author: dr $ $Date: 2001-02-14 11:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,6 +522,10 @@ void ExcTable::FillAsTable( void )
     rR.pStyleSheetItemSet = pStyleSheetItemSet;
 
     ExcRecordList*          pHlinks = new ExcRecordList;
+    XclCellMergingList*     pCellMerging = new XclCellMergingList;
+    XclExpTableOpManager    aTableOpList;
+    XclExpTableOp*          pTableOpRec = NULL;
+
 
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
     DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
@@ -611,13 +615,13 @@ void ExcTable::FillAsTable( void )
     // HORIZONTALPAGEBREAKS & VERTICALPAGEBREAKS
     if( eDateiTyp < Biff8 )
     {
-        Add( new ExcPageBreaks( rR, nScTab, ExcPageBreaks::pbHorizontal ) );
-        Add( new ExcPageBreaks( rR, nScTab, ExcPageBreaks::pbVertical ) );
+        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
+        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbVertical ) );
     }
     else
     {
-        Add( new XclExpPageBreaks( rR, nScTab, ExcPageBreaks::pbHorizontal ) );
-        Add( new XclExpPageBreaks( rR, nScTab, ExcPageBreaks::pbVertical ) );
+        Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
+        Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbVertical ) );
     }
 
     const SvxLRSpaceItem&   rLRSpaceItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
@@ -685,9 +689,6 @@ void ExcTable::FillAsTable( void )
 
     // NOTE
     const ScPostIt*         pNote = NULL;
-
-    // merged cells
-    XclCellMergingList* pCellMerging = new XclCellMergingList;
 
     // rows & cols
     nFirstRow = nRow;
@@ -810,9 +811,12 @@ void ExcTable::FillAsTable( void )
                             nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND;
                             bForceAltNumForm = FALSE;
                         }
+
                     }
-                    pAktExcCell = new ExcFormula( &rR, aScPos, pPatt, nAltNumForm, bForceAltNumForm,
-                                                    *pFormCell->GetCode() );
+                    ExcFormula* pFmlaCell = new ExcFormula(
+                        &rR, aScPos, pPatt, nAltNumForm, bForceAltNumForm, *pFormCell->GetCode() );
+                    pAktExcCell = pFmlaCell;
+                    pTableOpRec = aTableOpList.InsertCell( pFormCell->GetCode(), *pFmlaCell );
                 }
                 break;
                 case CELLTYPE_EDIT:
@@ -873,6 +877,11 @@ void ExcTable::FillAsTable( void )
         {
             Add( pAktExcCell );
             pAktExcCell = NULL;
+        }
+        if( pTableOpRec )
+        {
+            Add( pTableOpRec );
+            pTableOpRec = NULL;
         }
 
         // notes
@@ -939,6 +948,8 @@ void ExcTable::FillAsTable( void )
     Add( pCellMerging );
     // update dimensions
     pDimensions->SetLimits( nFirstCol, nFirstRow, nLastCol, nLastRow );
+    // update formula cells for multiple operations
+    aTableOpList.UpdateCells();
 
     if( rR.eDateiTyp < Biff8 )
         Add( new ExcWindow2( nExcTab ) );
