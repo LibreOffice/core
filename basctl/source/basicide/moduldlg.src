@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-25 20:39:31 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 22:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,8 @@ TabPage RID_TP_LIBS
         Text[ swedish ] = "Tillδmpning/d~okument";
         Text[ polish ] = "Aplikacja/D~okument";
         Text[ portuguese_brazilian ] = "Application/D~ocument";
-        Text[ japanese ] = "ο½±οΎοΎοΎο½Ήο½°ο½Όο½®οΎγ¨οΎ„οΎο½·ο½­οΎ’οΎοΎ„";
-        Text[ korean ] = "Application/D~ocument";
+        Text[ japanese ] = "ο½±οΎοΎοΎο½Ήο½°ο½Όο½®οΎγ¨οΎ„οΎο½·ο½­οΎ’οΎοΎ„(~O)";
+        Text[ korean ] = "μ‘μ© ν”„λ΅κ·Έλ¨/λ¬Έμ„(~O)";
         Text[ chinese_simplified ] = "εΊ”η”¨η¨‹εΊ/ζ–‡ζ΅£(~O)";
         Text[ chinese_traditional ] = "ζ‡‰η”¨η¨‹εΌ/ζ–‡δ»¶(~O)";
         Text[ turkish ] = "Application/D~ocument";
@@ -652,7 +652,7 @@ TabPage RID_TP_LIBS
         Text[ chinese_traditional ] = "εªι™¤(~D)...";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "μ κ±°(~D)...";
+        Text[ korean ] = "μ‚­μ (~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Suprimeix...";
     };
@@ -722,7 +722,7 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_traditional ] = "ιΈι …";
         Text[ arabic ] = "ΞνΗΡΗΚ";
         Text[ greek ] = "Επιλογές";
-        Text[ korean ] = "μ‚¬μ©μ ν™κ²½ μ„¤μ •";
+        Text[ korean ] = "μµμ…";
         Text[ turkish ] = "Seηenekler";
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
@@ -778,7 +778,7 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_traditional ] = "ε¦ε­ζª”ζ΅";
         Text[ arabic ] = "ΝέΩ ίγαέ γδέΥα";
         Text[ greek ] = "Αποθήκευση ως ξεχωριστό αρχείο";
-        Text[ korean ] = "λ³„λ„ νμΌλ΅μ„  μ €μ¥";
+        Text[ korean ] = "κ°λ³„ νμΌλ΅ μ €μ¥";
         Text[ turkish ] = "Ayrύ dosya olarak kaydet";
         Text[ catalan ] = "Desa com a fitxer independent";
         Text[ finnish ] = "Tallenna erillisenδ tiedostona";
@@ -805,7 +805,7 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_traditional ] = "ζ›Ώδ»£ηΎε­η„η¨‹εΌεΊ«";
         Text[ arabic ] = "ΗΣΚΘΟΗα ΗαγίΚΘΗΚ ΗαγζΜζΟΙ";
         Text[ greek ] = "Αντικατάσταση υπάρχουσες βιβλιοθήκες";
-        Text[ korean ] = "κΈ°μ΅΄ λΌμ΄λΈλ¬λ¦¬ λ€μ²΄";
+        Text[ korean ] = "κΈ°μ΅΄ λΌμ΄λΈλ¬λ¦¬ λ°”κΎΈκΈ°";
         Text[ turkish ] = "Mevcut kitaplύπύ deπiώtir";
         Text[ catalan ] = "Reemplaηa les biblioteques existents";
         Text[ finnish ] = "Korvaa nykyiset kirjastot";
@@ -895,6 +895,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
