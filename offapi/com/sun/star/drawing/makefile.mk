@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 17:44:28 $
+#   last change: $Author: kz $ $Date: 2004-01-28 12:53:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,7 @@ IDLFILES=\
     FillStyle.idl\
     FlagSequence.idl\
     FlagSequenceSequence.idl\
+    GenericDrawingDocument.idl\
     GenericDrawPage.idl\
     GluePoint.idl\
     GluePoint2.idl\
