@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: cd $ $Date: 2000-11-06 09:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         {
             try
             {
+                CHECK_FOR_RVPSYNC_NORMAL();
                 mpGraphics->GetInterface()->SetFillColor( mpGraphics->maFillColor.GetColor() );
             }
             catch (...)
@@ -295,6 +296,7 @@ VirtualDevice::~VirtualDevice()
     if ( pRemoteVirdevCache && mpVirDev && mpGraphics )
     {
         virdevInterfacePair aPair( mpVirDev->GetInterface(), mpGraphics->GetInterface() );
+        CHECK_FOR_RVPSYNC_NORMAL();
         aPair.first->Create( 0, 0, 0, 0 );
         pRemoteVirdevCache->putInterface( aPair );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-10-19 11:09:04 $
+ *  last change: $Author: cd $ $Date: 2000-11-06 09:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,18 +357,21 @@ static void ImplInitPrnQueueList()
             RemotePrinterInfo* pPrinterInfo = pSVData->mpRemotePrinterList->GetPrinter( i );
             REF( NMSP_CLIENT::XRmPrinterEnvironment ) xPrinterEnv( pSVData->mpRemotePrinterList->GetPrinterEnv( pPrinterInfo->aServerName ) );
 
-            if ( xPrinterEnv.is() && xPrinterEnv->GetPrinterInfo(
-                pPrinterInfo->aPrinterName.GetBuffer(), aRmQInfo ) )
+            if ( xPrinterEnv.is() )
             {
-                PRINTERSEQ_GET( aRmQInfo, aQInfo );
-                pNewInfo->maPrinterName = pPrinterInfo->GetFullName();
-                pNewInfo->maDriver      = aQInfo.GetDriver();
-                pNewInfo->maLocation    = aQInfo.GetLocation();
-                pNewInfo->maComment     = aQInfo.GetComment();
-                pNewInfo->mnStatus      = aQInfo.GetStatus();
-                pNewInfo->mnJobs        = aQInfo.GetJobs();
-                pNewInfo->mpSysData     = NULL;
-                pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
+                CHECK_FOR_RVPSYNC_NORMAL()
+                if ( xPrinterEnv->GetPrinterInfo( pPrinterInfo->aPrinterName.GetBuffer(), aRmQInfo ) )
+                {
+                    PRINTERSEQ_GET( aRmQInfo, aQInfo );
+                    pNewInfo->maPrinterName = pPrinterInfo->GetFullName();
+                    pNewInfo->maDriver      = aQInfo.GetDriver();
+                    pNewInfo->maLocation    = aQInfo.GetLocation();
+                    pNewInfo->maComment     = aQInfo.GetComment();
+                    pNewInfo->mnStatus      = aQInfo.GetStatus();
+                    pNewInfo->mnJobs        = aQInfo.GetJobs();
+                    pNewInfo->mpSysData     = NULL;
+                    pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
+                }
             }
         }
     }
@@ -1681,27 +1684,32 @@ BOOL Printer::StartJob( const XubString& rJobName )
     if( xServerFactory.is() )
     {
         REF( NMSP_CLIENT::XRmSpoolLauncher ) xLauncher( xServerFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficeSpoolLauncher.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
-        if( xLauncher.is() &&
-            xLauncher->LaunchSpooler( pSVData->mpUserInfo->sName,
-                                      pSVData->mpUserInfo->sPassword ) )
+        if( xLauncher.is() )
         {
-            if( xBridgeFactory.is() ) // else this a the client connection
+            CHECK_FOR_RVPSYNC_NORMAL()
+            if ( xLauncher->LaunchSpooler( pSVData->mpUserInfo->sName,
+                                      pSVData->mpUserInfo->sPassword ) )
             {
-                // get objects from transferred sospool connection
-                xServerFactory = Reference< ::com::sun::star::lang::XMultiServiceFactory >();
-                Reference< ::com::sun::star::bridge::XBridge >
-                xBridge( xBridgeFactory->createBridge( ::rtl::OUString(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iiop" ) ), xConnection, Reference< ::com::sun::star::bridge::XInstanceProvider >() ) );
-                xServerFactory = Reference< ::com::sun::star::lang::XMultiServiceFactory >( xBridge->getInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpoolMultiServiceFactory.sprintd.daemons.stardiv.de" ) ) ), UNO_QUERY );
-            }
+                if( xBridgeFactory.is() ) // else this a the client connection
+                {
+                    // get objects from transferred sospool connection
+                    xServerFactory = Reference< ::com::sun::star::lang::XMultiServiceFactory >();
+                    Reference< ::com::sun::star::bridge::XBridge >
+                    xBridge( xBridgeFactory->createBridge( ::rtl::OUString(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iiop" ) ), xConnection, Reference< ::com::sun::star::bridge::XInstanceProvider >() ) );
+                    xServerFactory = Reference< ::com::sun::star::lang::XMultiServiceFactory >( xBridge->getInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpoolMultiServiceFactory.sprintd.daemons.stardiv.de" ) ) ), UNO_QUERY );
+                }
 
-            mpPrinter = new PrintSpooler();
-            mpPrinter->mxPrintSpooler = REF( NMSP_CLIENT::XRmPrintSpooler )( xServerFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficePrintSpooler.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
-            if( mpPrinter->mxPrintSpooler.is() )
-            {
-                NMSP_CLIENT::RmJobSetup aRmJobSetup;
-                PRNSEQ_SET( aRmJobSetup, maJobSetup );
-                mpPrinter->mxPrintSpooler->Create( aRmJobSetup );
-                bResult = mpPrinter->mxPrintSpooler->StartJob( mnCopyCount, mbCollateCopy, rJobName, maPrintFile, mbPrintFile );
+                mpPrinter = new PrintSpooler();
+                mpPrinter->mxPrintSpooler = REF( NMSP_CLIENT::XRmPrintSpooler )( xServerFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficePrintSpooler.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
+                if( mpPrinter->mxPrintSpooler.is() )
+                {
+                    NMSP_CLIENT::RmJobSetup aRmJobSetup;
+                    PRNSEQ_SET( aRmJobSetup, maJobSetup );
+                    CHECK_FOR_RVPSYNC_NORMAL()
+                    mpPrinter->mxPrintSpooler->Create( aRmJobSetup );
+                    CHECK_FOR_RVPSYNC_NORMAL()
+                    bResult = mpPrinter->mxPrintSpooler->StartJob( mnCopyCount, mbCollateCopy, rJobName, maPrintFile, mbPrintFile );
+                }
             }
         }
 
@@ -1771,6 +1779,7 @@ BOOL Printer::EndJob()
 #else
     if ( mpPrinter )
     {
+        CHECK_FOR_RVPSYNC_NORMAL()
         mpPrinter->mxPrintSpooler->EndJob( ::utl::getProcessServiceFactory() );
         mbPrinting = FALSE;
         mnCurPage = 0;
@@ -1837,6 +1846,7 @@ BOOL Printer::AbortJob()
 #else
     if ( mpPrinter )
     {
+        CHECK_FOR_RVPSYNC_NORMAL()
         mpPrinter->mxPrintSpooler->AbortJob();
         if ( mpQMtf )
         {
@@ -1967,6 +1977,7 @@ BOOL Printer::EndPage()
         PrinterPage                 aPage( mpQMtf, mbNewJobSetup, GetJobSetup() );
         NMSP_CLIENT::RmPrinterPage  aRmPage;
         PRINTERSEQ_SET( aPage, aRmPage, NMSP_CLIENT::RmPrinterPage );
+        CHECK_FOR_RVPSYNC_NORMAL()
         mpPrinter->mxPrintSpooler->SpoolPage( aRmPage );
         mpQMtf = NULL;
         mbNewJobSetup = FALSE;
