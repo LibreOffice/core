@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:26 $
+ *  last change: $Author: mt $ $Date: 2000-12-01 10:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,10 +350,10 @@ ULONG OutlinerView::ImpCheckMousePos(const Point& rPosPix,MouseTarget& reTarget)
         // Dann wird wahrscheinlich EditView::GetDocPosTopLeft ueberfluessig
         // Bullet?
         nPara = pOwner->pEditEngine->FindParagraph( aDocPos.Y() );
-        if ( ( nPara != EE_PARA_NOT_FOUND ) && pOwner->ImplHasBullet( nPara ) )
+        if ( ( nPara != EE_PARA_NOT_FOUND ) && pOwner->ImplHasBullet( (USHORT)nPara ) )
         {
-            Rectangle aBulArea = pOwner->ImpCalcBulletArea( nPara, TRUE );
-            Point aParaXY = pOwner->pEditEngine->GetDocPosTopLeft( nPara );
+            Rectangle aBulArea = pOwner->ImpCalcBulletArea( (USHORT)nPara, TRUE );
+            Point aParaXY = pOwner->pEditEngine->GetDocPosTopLeft( (USHORT)nPara );
             aBulArea.Top() += aParaXY.Y();
             aBulArea.Bottom() += aParaXY.Y();
             if ( aBulArea.IsInside( aDocPos ) )
@@ -942,6 +942,18 @@ BOOL OutlinerView::AdjustHeight( long nDY )
             for ( USHORT n = nChangesStart; n < nParas; n++ )
                 pOwner->ImplCalcBulletText( n, FALSE, FALSE );
         }
+
+        // ersten Absatz immer auf Ebene 0 stellen
+        if ( aSel.nStartPara == 0 )
+        {
+            Paragraph* pStartPara = pOwner->pParaList->GetParagraph( 0 );
+            if( pStartPara->GetDepth() != pOwner->GetMinDepth() )
+            {
+                pOwner->SetDepth( pStartPara, pOwner->GetMinDepth() );
+                if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
+                    pOwner->ImplSetLevelDependendStyleSheet( 0 );
+            }
+        }
     }
     else
     {
@@ -969,7 +981,11 @@ BOOL OutlinerView::AdjustHeight( long nDY )
         // ersten Absatz immer auf Ebene 0 stellen
         Paragraph* pStartPara = pOwner->pParaList->GetParagraph( 0 );
         if( pStartPara->GetDepth() != pOwner->GetMinDepth() )
+        {
             pOwner->SetDepth( pStartPara, pOwner->GetMinDepth() );
+            if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
+                pOwner->ImplSetLevelDependendStyleSheet( 0 );
+        }
     }
 
     pEditView->SetEditEngineUpdateMode( bUpdate );
