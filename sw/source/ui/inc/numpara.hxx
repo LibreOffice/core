@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -89,15 +86,15 @@
  ---------------------------------------------------------------------------*/
 class SwParagraphNumTabPage : public SfxTabPage
 {
-    GroupBox                aNumberStyleGB;
+    FixedText               aNumberStyleFT;
     ListBox                 aNumberStyleLB;
 
-    GroupBox                aNewStartGB;
+    FixedLine               aNewStartFL;
     TriStateBox             aNewStartCB;
     FixedText               aNewStartFT;
     NumericField            aNewStartNF;
 
-    GroupBox                aCountParaGB;
+    FixedLine               aCountParaFL;
     TriStateBox             aCountParaCB;
     TriStateBox             aRestartParaCountCB;
     FixedText               aRestartFT;

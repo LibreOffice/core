@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ class SwEnvPrtPage : public SfxTabPage
     FixedText    aDownText;
     MetricField  aDownField;
     FixedInfo    aPrinterInfo;
-    GroupBox     aNoNameGroup;
+    FixedLine    aNoNameFL;
+    FixedLine    aPrinterFL;
     PushButton   aPrtSetup;
 
     Printer* pPrt;

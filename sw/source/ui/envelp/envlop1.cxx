@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:33 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ void SwEnvPreview::Paint(const Rectangle &)
 
     float fx = (float) GetOutputSizePixel().Width () / nPageW,
           fy = (float) GetOutputSizePixel().Height() / nPageH,
-          f  = fx < fy ? fx : fy;
+          f  = 0.8 * ( fx < fy ? fx : fy );
 
     // Umschlag
     long   nW = (USHORT) (f * nPageW),
@@ -286,6 +286,7 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
     aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     aInsertBT      .SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
     aSenderBox     .SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
+    aPreview.SetBorderStyle( WINDOW_BORDER_MONO );
 
     SwDBData aData = pSh->GetDBData();
     sActDBName = aData.sDataSource;

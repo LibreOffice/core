@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:16:37 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ TabPage TP_ENV_ENV
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 124 , 77 ) ;
+        Size = MAP_APPFONT ( 124 , 66 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         HScroll = TRUE ;
@@ -294,7 +294,7 @@ TabPage TP_ENV_ENV
     };
     FixedText FT_DATABASE
     {
-        Pos = MAP_APPFONT ( 162 , 17 ) ;
+        Pos = MAP_APPFONT ( 162 , 6 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "~Datenbank" ;
         Text [ English ] = "Database" ;
@@ -324,14 +324,14 @@ TabPage TP_ENV_ENV
     ListBox LB_DATABASE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 28 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Pos = MAP_APPFONT ( 162 , 17 ) ;
+        Size = MAP_APPFONT ( 82 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_TABLE
     {
-        Pos = MAP_APPFONT ( 162 , 44 ) ;
+        Pos = MAP_APPFONT ( 162 , 33 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "~Tabelle" ;
         Text [ ENGLISH ] = "Table" ;
@@ -360,22 +360,21 @@ TabPage TP_ENV_ENV
     ListBox LB_TABLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 55 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Pos = MAP_APPFONT ( 162 , 44 ) ;
+        Size = MAP_APPFONT ( 82 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_INSERT
     {
-        Pos = MAP_APPFONT ( 137 , 82 ) ;
-        Size = MAP_APPFONT ( 18 , 12
-        ) ;
+        Pos = MAP_APPFONT ( 137 , 71 ) ;
+        Size = MAP_APPFONT ( 18 , 12 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
         TabStop = TRUE ;
     };
     FixedText FT_DBFIELD
     {
-        Pos = MAP_APPFONT ( 162 , 71 ) ;
+        Pos = MAP_APPFONT ( 162 , 60 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "Datenbank~feld" ;
         Text [ English ] = "Database field" ;
@@ -405,8 +404,8 @@ TabPage TP_ENV_ENV
     ListBox LB_DBFIELD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 82 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Pos = MAP_APPFONT ( 162 , 71 ) ;
+        Size = MAP_APPFONT ( 82 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -454,7 +453,7 @@ TabPage TP_ENV_ENV
     Window WIN_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 116 ) ;
+        Pos = MAP_APPFONT ( 160 , 116 ) ;
         Size = MAP_APPFONT ( 84 , 63 ) ;
     };
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,6 @@
 #include <vcl/field.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 class SwWrtShell;
 
 class SwBreakDlg: public SvxStandardDialog
@@ -97,7 +93,7 @@ class SwBreakDlg: public SvxStandardDialog
     ListBox         aPageCollBox;
     CheckBox        aPageNumBox;
     NumericField    aPageNumEdit;
-    GroupBox        aBreakFrm;
+    FixedLine       aBreakFL;
 
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;

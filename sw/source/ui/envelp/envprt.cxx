@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
     aDownText    (this, SW_RES(TXT_DOWN   )),
     aDownField   (this, SW_RES(FLD_DOWN   )),
     aPrinterInfo (this, SW_RES(TXT_PRINTER)),
-    aNoNameGroup (this, SW_RES(GRP_NONAME )),
+    aNoNameFL    (this, SW_RES(FL_NONAME )),
+    aPrinterFL   (this, SW_RES(FL_PRINTER )),
     aPrtSetup    (this, SW_RES(BTN_PRTSETUP))
 
 {
@@ -120,7 +121,7 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
     // ToolBox
     Size aSz = aAlignBox.CalcWindowSizePixel();
     aAlignBox.SetSizePixel(aSz);
-    aAlignBox.SetPosPixel(Point(aNoNameGroup.GetPosPixel().X() + (aNoNameGroup.GetSizePixel().Width() - aSz.Width()) / 2, aAlignBox.GetPosPixel().Y()));
+//    aAlignBox.SetPosPixel(Point(aNoNameFL.GetPosPixel().X() + (aNoNameFL.GetSizePixel().Width() - aSz.Width()) / 2, aAlignBox.GetPosPixel().Y()));
     aAlignBox.SetClickHdl(LINK(this, SwEnvPrtPage, AlignHdl));
 
 }
@@ -292,6 +293,9 @@ void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 // ----------------------------------------------------------------------------
 /*
 $Log: not supported by cvs2svn $
+Revision 1.1.1.1  2000/09/18 17:14:35  hr
+initial import
+
 Revision 1.43  2000/09/18 16:05:25  willem.vandorp
 OpenOffice header added.
 

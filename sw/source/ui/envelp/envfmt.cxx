@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-20 17:01:50 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_ENV_FMT), rSet),
 
-    aAddrGroup          (this, SW_RES( GRP_ADDRESSEE )),
+    aAddrFL             (this, SW_RES( FL_ADDRESSEE )),
     aAddrPosInfo        (this, SW_RES( TXT_ADDR_POS )),
     aAddrLeftText       (this, SW_RES( TXT_ADDR_LEFT )),
     aAddrLeftField      (this, SW_RES( FLD_ADDR_LEFT )),
@@ -164,7 +164,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aAddrTopField       (this, SW_RES( FLD_ADDR_TOP )),
     aAddrFormatInfo     (this, SW_RES( TXT_ADDR_FORMAT )),
     aAddrEditButton     (this, SW_RES( BTN_ADDR_EDIT )),
-    aSendGroup          (this, SW_RES( GRP_SENDER )),
+    aSendFL             (this, SW_RES( FL_SENDER )),
     aSendPosInfo        (this, SW_RES( TXT_SEND_POS )),
     aSendLeftText       (this, SW_RES( TXT_SEND_LEFT )),
     aSendLeftField      (this, SW_RES( FLD_SEND_LEFT )),
@@ -172,7 +172,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aSendTopField       (this, SW_RES( FLD_SEND_TOP )),
     aSendFormatInfo     (this, SW_RES( TXT_SEND_FORMAT )),
     aSendEditButton     (this, SW_RES( BTN_SEND_EDIT )),
-    aSizeGroup          (this, SW_RES( GRP_SIZE )),
+    aSizeFL             (this, SW_RES( FL_SIZE )),
     aSizeFormatText     (this, SW_RES( TXT_SIZE_FORMAT )),
     aSizeFormatBox      (this, SW_RES( BOX_SIZE_FORMAT )),
     aSizeWidthText      (this, SW_RES( TXT_SIZE_WIDTH )),
@@ -211,6 +211,8 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aLk = LINK(this, SwEnvFmtPage, EditHdl );
     aAddrEditButton.SetSelectHdl( aLk );
     aSendEditButton.SetSelectHdl( aLk );
+
+    aPreview.SetBorderStyle( WINDOW_BORDER_MONO );
 
     aSizeFormatBox     .SetSelectHdl(LINK(this, SwEnvFmtPage, FormatHdl));
 
@@ -682,6 +684,9 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 
 /*--------------------------------------------------------------------
 $Log: not supported by cvs2svn $
+Revision 1.3  2001/03/20 17:01:50  jp
+use stdarr
+
 Revision 1.2  2001/02/09 09:07:12  tl
 TabPages modification
 

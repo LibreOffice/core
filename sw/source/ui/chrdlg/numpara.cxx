@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:28 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,13 @@ static USHORT __FAR_DATA aPageRg[] = {
 SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                                                 const SfxItemSet& rAttr ) :
     SfxTabPage(pParent, SW_RES(TP_NUMPARA), rAttr),
-    aNumberStyleGB          ( this, ResId( GB_NUMBER_STYLE ) ),
+    aNumberStyleFT          ( this, ResId( FT_NUMBER_STYLE ) ),
     aNumberStyleLB          ( this, ResId( LB_NUMBER_STYLE ) ),
-    aNewStartGB             ( this, ResId( GB_NEW_START ) ),
+    aNewStartFL             ( this, ResId( FL_NEW_START ) ),
     aNewStartCB             ( this, ResId( CB_NEW_START ) ),
     aNewStartFT             ( this, ResId( FT_NEW_START ) ),
     aNewStartNF             ( this, ResId( NF_NEW_START ) ),
-    aCountParaGB            ( this, ResId( GB_COUNT_PARA        ) ),
+    aCountParaFL            ( this, ResId( FL_COUNT_PARA        ) ),
     aCountParaCB            ( this, ResId( CB_COUNT_PARA        ) ),
     aRestartParaCountCB     ( this, ResId( CB_RESTART_PARACOUNT ) ),
     aRestartFT              ( this, ResId( FT_RESTART_NO        ) ),
@@ -132,7 +132,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
         USHORT nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
         if(HTMLMODE_ON & nHtmlMode)
         {
-            aCountParaGB        .Hide();
+            aCountParaFL        .Hide();
             aCountParaCB        .Hide();
             aRestartParaCountCB .Hide();
             aRestartFT          .Hide();
@@ -285,7 +285,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 --------------------------------------------------*/
 void SwParagraphNumTabPage::EnableNewStart()
 {
-    aNewStartGB.Show();
+    aNewStartFL.Show();
     aNewStartCB.Show();
     aNewStartFT.Show();
     aNewStartNF.Show();
@@ -331,6 +331,9 @@ IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/02/23 12:45:28  os
+      Complete use of DefaultNumbering component
+
       Revision 1.1.1.1  2000/09/18 17:14:32  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,6 @@
 #include <vcl/edit.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -123,16 +119,15 @@ friend class SwDropCapsPict;
     NumericField    aLinesField;
     FixedText       aDistanceText;
     MetricField     aDistanceField;
-    GroupBox        aSettingsGroup;
+    FixedLine       aSettingsFL;
 
     FixedText       aTextText;
     Edit            aTextEdit;
     FixedText       aTemplateText;
     ListBox         aTemplateBox;
-    GroupBox        aContentBox;
+    FixedLine       aContentFL;
 
     SwDropCapsPict  *pPict;
-    GroupBox        aPictBox;
 
     BOOL            bModified;
     BOOL            bFormat;

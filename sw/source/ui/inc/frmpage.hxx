@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 10:02:32 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,12 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aFixedRatioCB;
     CheckBox        aAutoHeightCB;
     PushButton      aRealSizeBT;
-    GroupBox        aSizeGB;
+    FixedLine       aSizeFL;
     BOOL            bWidthLastChanged;
 
     // Anker
-    GroupBox        aTypeGB;
+    FixedLine       aTypeFL;
+    FixedLine       aTypeSepFL;
     RadioButton     aAnchorAtPageRB;
     RadioButton     aAnchorAtParaRB;
     RadioButton     aAnchorAtCharRB;
@@ -140,7 +141,7 @@ class SwFrmPage: public SfxTabPage
     MetricField     aAtVertPosED;
     FixedText       aVertRelationFT;
     ListBox         aVertRelationLB;
-    GroupBox        aPositionGB;
+    FixedLine       aPositionFL;
     BOOL            bAtHorzPosModified;
     BOOL            bAtVertPosModified;
 
@@ -254,7 +255,7 @@ public:
 class SwFrmURLPage : public SfxTabPage
 {
     //Hyperlink
-    GroupBox        aHyperLinkGB;
+    FixedLine       aHyperLinkFL;
     FixedText       aURLFT;
     Edit            aURLED;
     FixedText       aNameFT;
@@ -264,7 +265,7 @@ class SwFrmURLPage : public SfxTabPage
     PushButton      aSearchPB;
 
     //Image map
-    GroupBox        aImageGB;
+    FixedLine       aImageFL;
     CheckBox        aServerCB;
     CheckBox        aClientCB;
 
@@ -294,16 +295,16 @@ class SwFrmAddPage : public SfxTabPage
     Edit        aPrevED;
     FixedText   aNextFT;
     Edit        aNextED;
-    GroupBox    aNamesGB;
+    FixedLine   aNamesFL;
 
     CheckBox    aProtectContentCB;
     CheckBox    aProtectFrameCB;
     CheckBox    aProtectSizeCB;
-    GroupBox    aProtectGB;
+    FixedLine   aProtectFL;
 
     CheckBox    aEditInReadonlyCB;
     CheckBox    aPrintFrameCB;
-    GroupBox    aExtGB;
+    FixedLine   aExtFL;
 
     SwWrtShell* pWrtSh;
 

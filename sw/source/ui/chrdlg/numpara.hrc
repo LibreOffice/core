@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,12 @@
 // #define ******************************************************************
 
 #define LB_NUMBER_STYLE             1
-#define GB_NUMBER_STYLE             2
+#define FT_NUMBER_STYLE                         2
 #define CB_NEW_START                3
 #define FT_NEW_START                4
-#define GB_NEW_START                5
+#define FL_NEW_START                5
 #define NF_NEW_START                6
-#define GB_COUNT_PARA               7
+#define FL_COUNT_PARA               7
 #define CB_COUNT_PARA               8
 #define CB_RESTART_PARACOUNT        9
 #define FT_RESTART_NO              10

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:15:51 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ TabPage TP_DROPCAPS
     FixedText FT_DROPCAPS
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Anzahl der Ze~ichen" ;
         Text [ English ] = "Number of characters" ;
         Text [ english_us ] = "Number of ~characters:" ;
@@ -239,7 +239,7 @@ TabPage TP_DROPCAPS
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 60 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Zei~len" ;
         Text [ English ] = "~Lines" ;
         Text [ norwegian ] = "~Linjer" ;
@@ -282,8 +282,8 @@ TabPage TP_DROPCAPS
     FixedText TXT_DISTANCE
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "A~bstand zum Text" ;
         Text [ English ] = "D~istance" ;
         Text [ norwegian ] = "A~vstand" ;
@@ -318,7 +318,7 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Maximum = 200 ;
         Minimum = 0 ;
-        Pos = MAP_APPFONT ( 89 , 72 ) ;
+        Pos = MAP_APPFONT ( 89 , 74 ) ;
         Repeat = TRUE ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         Spin = TRUE ;
@@ -326,10 +326,10 @@ TabPage TP_DROPCAPS
         TabStop = TRUE ;
         Unit = FUNIT_CM ;
     };
-    GroupBox GRP_SETTINGS
+    FixedLine FL_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 125 , 84 ) ;
+        Size = MAP_APPFONT ( 125 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ English ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -358,41 +358,13 @@ TabPage TP_DROPCAPS
     Control CNT_PICT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 143 , 14 ) ;
-        Size = MAP_APPFONT ( 105 , 67 ) ;
-    };
-    GroupBox BOX_PICT
-    {
-        Pos = MAP_APPFONT ( 137 , 3 ) ;
-        Size = MAP_APPFONT ( 117 , 84 ) ;
-        Text = "Beispiel" ;
-        Text [ English ] = "Example" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ english_us ] = "Preview" ;
-        Text [ italian ] = "Esempio" ;
-        Text [ spanish ] = "Ejemplo" ;
-        Text [ french ] = "Exemple" ;
-        Text [ swedish ] = "Exempel" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ portuguese_brazilian ] = "Beispiel" ;
-        Text [ portuguese ] = "Exemplo" ;
-        Text[ chinese_simplified ] = "Ê¾Àý";
-        Text[ russian ] = "Ïðèìåð";
-        Text[ polish ] = "Przyk³ad";
-        Text[ japanese ] = "—á";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "äãæÐÌ";
-        Text[ greek ] = "ÐáñÜäåéãìá";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ejemplo";
-        Text[ finnish ] = "Esikatselu";
+        Pos = MAP_APPFONT ( 143 , 7 ) ;
+        Size = MAP_APPFONT ( 105 , 80 ) ;
     };
     FixedText TXT_TEXT
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Initialen~text" ;
         Text [ English ] = "~Text" ;
@@ -423,7 +395,7 @@ TabPage TP_DROPCAPS
     {
         Border = TRUE ;
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 143 , 101 ) ;
+        Pos = MAP_APPFONT ( 143 , 100 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
         MaxTextLength = 9 ;
@@ -431,8 +403,8 @@ TabPage TP_DROPCAPS
     FixedText TXT_TEMPLATE
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Zeichen~vorlage" ;
         Text [ English ] = "Character st~yle" ;
         Text [ norwegian ] = "M~al" ;
@@ -462,14 +434,14 @@ TabPage TP_DROPCAPS
     {
         Border = TRUE ;
         DropDown = TRUE ;
-        Pos = MAP_APPFONT ( 143 , 117 ) ;
+        Pos = MAP_APPFONT ( 143 , 116 ) ;
         Size = MAP_APPFONT ( 105 , 61 ) ;
         TabStop = TRUE ;
     };
-    GroupBox BOX_CONTENT
+    FixedLine FL_CONTENT
     {
-        Pos = MAP_APPFONT ( 6 , 90 ) ;
-        Size = MAP_APPFONT ( 248 , 42 ) ;
+        Pos = MAP_APPFONT ( 6 , 89 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Inhalt" ;
         Text [ English ] = "Content" ;
         Text [ english_us ] = "Contents" ;

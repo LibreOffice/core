@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 class SwEnvFmtPage : public SfxTabPage
 {
 
-    GroupBox     aAddrGroup;
+    FixedLine    aAddrFL;
     FixedInfo    aAddrPosInfo;
     FixedText    aAddrLeftText;
     MetricField  aAddrLeftField;
@@ -94,7 +94,7 @@ class SwEnvFmtPage : public SfxTabPage
     MetricField  aAddrTopField;
     FixedInfo    aAddrFormatInfo;
     MenuButton   aAddrEditButton;
-    GroupBox     aSendGroup;
+    FixedLine    aSendFL;
     FixedInfo    aSendPosInfo;
     FixedText    aSendLeftText;
     MetricField  aSendLeftField;
@@ -102,7 +102,7 @@ class SwEnvFmtPage : public SfxTabPage
     MetricField  aSendTopField;
     FixedInfo    aSendFormatInfo;
     MenuButton   aSendEditButton;
-    GroupBox     aSizeGroup;
+    FixedLine    aSizeFL;
     FixedText    aSizeFormatText;
     ListBox      aSizeFormatBox;
     FixedText    aSizeWidthText;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 // Lokale Resourcen *********************************************************
 
-#define GRP_ADDRESSEE       11
+#define FL_ADDRESSEE           11
 #define TXT_ADDR_POS        12
 #define TXT_ADDR_LEFT       13
 #define FLD_ADDR_LEFT       14
@@ -77,7 +77,7 @@
 #define TXT_ADDR_FORMAT     17
 #define BTN_ADDR_EDIT       18
 
-#define GRP_SENDER          21
+#define FL_SENDER                      21
 #define TXT_SEND_POS        22
 #define TXT_SEND_LEFT       23
 #define FLD_SEND_LEFT       24
@@ -86,7 +86,7 @@
 #define TXT_SEND_FORMAT     27
 #define BTN_SEND_EDIT       28
 
-#define GRP_SIZE            31
+#define FL_SIZE                        31
 #define TXT_SIZE_FORMAT     32
 #define BOX_SIZE_FORMAT     33
 #define TXT_SIZE_WIDTH      34

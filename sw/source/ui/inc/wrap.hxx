@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 #include <vcl/imagebtn.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -118,13 +114,14 @@ class SwWrapTabPage: public SfxTabPage
     ImageRadioButton    aWrapParallelRB;
     ImageRadioButton    aWrapThroughRB;
     ImageRadioButton    aIdealWrapRB;
-    GroupBox            aWrapBoxC;
+    FixedLine           aWrapFLC;
 
     CheckBox            aWrapAnchorOnlyCB;
     CheckBox            aWrapTransparentCB;
     CheckBox            aWrapOutlineCB;
     CheckBox            aWrapOutsideCB;
-    GroupBox            aOptionsGB;
+    FixedLine           aOptionsFL;
+    FixedLine           aOptionsSepFL;
 
     // MARGIN
     FixedText           aLeftMarginFT;
@@ -135,7 +132,7 @@ class SwWrapTabPage: public SfxTabPage
     MetricField         aTopMarginED;
     FixedText           aBottomMarginFT;
     MetricField         aBottomMarginED;
-    GroupBox            aMarginGB;
+    FixedLine           aMarginFL;
 
     ImageList           aWrapIL;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:53:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageCollBox(this, SW_RES(LB_COLL)),
     aPageNumBox(this, SW_RES(CB_PAGENUM)),
     aPageNumEdit(this, SW_RES(ED_PAGENUM)),
-    aBreakFrm(this,SW_RES(GB_BREAK)),
+    aBreakFL(this,SW_RES(FL_BREAK)),
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this,SW_RES(BT_HELP)),
@@ -304,6 +304,9 @@ SwBreakDlg::~SwBreakDlg() {}
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/04/27 17:53:08  jp
+    use Collator for international string compare
+
     Revision 1.1.1.1  2000/09/18 17:14:32  hr
     initial import
 
