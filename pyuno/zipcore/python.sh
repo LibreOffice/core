@@ -117,7 +117,7 @@ case $sd_platform in
     ;;
 esac
 
-export PYTHONPATH="$sd_prog":"$sd_prog/python-core/lib":"$PYTHONPATH"
+export PYTHONPATH="$sd_prog":"$sd_prog/python-core/lib":"$sd_prog/python-core/lib/lib-dynload":"$PYTHONPATH"
 export PYTHONHOME="$sd_prog"/python-core
 
 # set path so that other apps can be started from soffice just by name
