@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-20 11:00:45 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 17:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,6 +763,8 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         nRow = GetCurRow();
     SetDataPtr( nRow );
     OFieldDescription* pActFieldDescr = pActRow->GetActFieldDescr();
+
+    GetUndoManager()->EnterListAction(String::CreateFromAscii("TODO"), String());
     if (!pActFieldDescr)
     {
         pActRow->SetFieldType( GetView()->getController()->getTypeInfoByType(DataType::VARCHAR) );
@@ -779,6 +781,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
         SwitchType( GetView()->getController()->getTypeInfo(pTypeCell->GetSelectEntryPos()) );
     }
+    GetUndoManager()->LeaveListAction();
 
     SaveData(nRow,nColId);
     RowModified(nRow);
@@ -1652,7 +1655,10 @@ void OTableEditorCtrl::SwitchType( const OTypeInfo* _pType )
     pRow->SetFieldType( _pType );
     if(_pType)
     {
-        if(GetView()->getController()->getTypeInfo(pTypeCell->GetSelectEntryPos()) != _pType)
+        sal_uInt16 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
+        OTableController* pController = GetView()->getController();
+
+        if ((LISTBOX_ENTRY_NOTFOUND == nCurrentlySelected) || (pController->getTypeInfo(nCurrentlySelected) != _pType))
         {
             USHORT nEntryPos = 0;
             const OTypeInfoMap* pTypeInfo = GetView()->getController()->getTypeInfo();
@@ -1662,8 +1668,11 @@ void OTableEditorCtrl::SwitchType( const OTypeInfo* _pType )
                 if(aIter->second == _pType)
                     break;
             }
-            pTypeCell->SelectEntryPos( nEntryPos );
-            OSL_ENSURE(GetView()->getController()->getTypeInfo(pTypeCell->GetSelectEntryPos()) != _pType,"EntryPos wasn't correct!");
+            if (nEntryPos < pTypeCell->GetEntryCount())
+            {
+                pTypeCell->SelectEntryPos( nEntryPos );
+                OSL_ENSURE(pController->getTypeInfo(pTypeCell->GetSelectEntryPos()) != _pType,"EntryPos wasn't correct!");
+            }
         }
     }
 
