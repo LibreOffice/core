@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:13:47 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,14 +164,14 @@ INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL
     else
     {
         // check upper case file name
-        aURL.setName( aURL.getName().ToUpperAscii() );
+        aURL.setName( aURL.getName().toAsciiUpperCase() );
 
         if( FileExists( aURL ) )
             bExists = TRUE;
         else
         {
             // check lower case file name
-            aURL.setName( aURL.getName().ToLowerAscii() );
+            aURL.setName( aURL.getName().toAsciiLowerCase() );
 
             if( FileExists( aURL ) )
                 bExists = TRUE;
@@ -212,7 +212,7 @@ SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 
     rOut << ByteString( rEntry.aThemeName, RTL_TEXTENCODING_UTF8 ) <<
             ByteString( rEntry.aUIName, RTL_TEXTENCODING_UTF8 ) <<
-            ByteString( rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE ), RTL_TEXTENCODING_UTF8 ) <<
+            ByteString( String(rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8 ) <<
             ByteString( rEntry.aImportName, RTL_TEXTENCODING_UTF8 ) <<
             aDummy;
 
@@ -334,13 +334,12 @@ void Gallery::ReleaseGallery( Gallery* pGallery )
 
 void Gallery::ImplLoad( const String& rMultiPath )
 {
-    INetURLObject   aCurURL;
     const USHORT    nTokenCount = rMultiPath.GetTokenCount( ';' );
     sal_Bool        bIsReadOnlyDir;
 
     bMultiPath = ( nTokenCount > 0 );
 
-    aCurURL = SvtPathOptions().GetConfigPath();
+    INetURLObject aCurURL(SvtPathOptions().GetConfigPath());
     ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
 
     if( !bIsReadOnlyDir )
@@ -352,7 +351,7 @@ void Gallery::ImplLoad( const String& rMultiPath )
 
         for( USHORT i = 0UL; i < nTokenCount; i++ )
         {
-            aCurURL = rMultiPath.GetToken( i, ';' );
+            aCurURL = INetURLObject(rMultiPath.GetToken( i, ';' ));
 
             ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
 
@@ -427,7 +426,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                 {
                     INetURLObject aThmURL( xContentAccess->queryContentIdentifierString() );
 
-                    if( aThmURL.GetExtension().CompareIgnoreCaseToAscii( "thm" ) == COMPARE_EQUAL )
+                    if(aThmURL.GetExtension().equalsIgnoreAsciiCaseAscii("thm"))
                     {
                         INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( OUString::createFromAscii( "sdg" ) );
                         INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString::createFromAscii( "sdv" ) );
@@ -526,7 +525,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
                                 if( pEntry )
                                 {
-                                    const ULONG nFileNumber = (ULONG) aThmURL.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32();
+                                    const ULONG nFileNumber = (ULONG) String(aThmURL.GetBase()).Erase( 0, 2 ).Erase( 6 ).ToInt32();
 
                                     aThemeList.Insert( pEntry, LIST_APPEND );
 
@@ -602,7 +601,7 @@ void Gallery::ImplLoadImports()
                     aFile = INetURLObject( pImportEntry->aURL );
                     pThemeEntry = new GalleryThemeEntry( aFile,
                                                          pImportEntry->aUIName,
-                                                         aFile.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32(),
+                                                         String(aFile.GetBase()).Erase( 0, 2 ).Erase( 6 ).ToInt32(),
                                                          TRUE, TRUE, FALSE, 0, FALSE );
 
                     aThemeList.Insert( pThemeEntry, LIST_APPEND );
@@ -762,7 +761,7 @@ BOOL Gallery::CreateImportTheme( const INetURLObject& rURL, const String& rImpor
                 ByteString              aTmpStr;
                 String                  aThemeName; *pIStm >> aTmpStr; aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
                 GalleryThemeEntry*      pThemeEntry = new GalleryThemeEntry( aURL, rImportName,
-                                                                             aURL.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32(),
+                                                                             String(aURL.GetBase()).Erase( 0, 2 ).Erase( 6 ).ToInt32(),
                                                                              TRUE, TRUE, TRUE, 0, FALSE );
                 GalleryTheme*           pImportTheme = new GalleryTheme( this, pThemeEntry );
 
