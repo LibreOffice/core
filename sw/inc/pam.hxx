@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:37:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ public:
 
     // steht in etwas geschuetztem oder in die Selektion umspannt
     // etwas geschuetztes.
-    FASTBOOL HasReadonlySel() const;
+    FASTBOOL HasReadonlySel( bool bFormView ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
