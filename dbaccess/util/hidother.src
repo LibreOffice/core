@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 14:08:43 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,27 +61,74 @@
 
 #include "../inc/dbaccess_helpid.hrc"
 
+hidspecial HID_DLG_FILTERCRIT                           { HelpId = HID_DLG_FILTERCRIT; };
+hidspecial HID_DLG_ORDERCRIT                            { HelpId = HID_DLG_ORDERCRIT; };
+hidspecial HID_DATABROWSE_HEADER                        { HelpId = HID_DATABROWSE_HEADER; };
+hidspecial HID_CTL_TABBROWSER                           { HelpId = HID_CTL_TABBROWSER; };
+hidspecial UID_DATABROWSE_DATAWINDOW                    { HelpId = UID_DATABROWSE_DATAWINDOW; };
+hidspecial HID_CTL_TREEVIEW                             { HelpId = HID_CTL_TREEVIEW; };
+hidspecial UID_CTL_CONTENT                              { HelpId = UID_CTL_CONTENT; };
+hidspecial HID_TLB_TABBROWSER                           { HelpId = HID_TLB_TABBROWSER; };
+hidspecial HID_TLB_TREELISTBOX                          { HelpId = HID_TLB_TREELISTBOX; };
+
 hidspecial HID_DSADMIN_DATASOURCE_SELECTOR              { HelpId = HID_DSADMIN_DATASOURCE_SELECTOR; };
 hidspecial HID_DSADMIN_DATASOURCE_NEWDS                 { HelpId = HID_DSADMIN_DATASOURCE_NEWDS; };
 hidspecial HID_DSADMIN_DATASOURCE_DSLIST                { HelpId = HID_DSADMIN_DATASOURCE_DSLIST; };
-
 hidspecial HID_DSADMIN_USER_JDBC                        { HelpId = HID_DSADMIN_USER_JDBC; };
 hidspecial HID_DSADMIN_USER_ODBC                        { HelpId = HID_DSADMIN_USER_ODBC; };
 hidspecial HID_DSADMIN_USER_ADABAS                      { HelpId = HID_DSADMIN_USER_ADABAS
 hidspecial HID_DSADMIN_PWDREC_JDBC                      { HelpId = HID_DSADMIN_PWDREC_JDBC; };
 hidspecial HID_DSADMIN_PWDREC_ODBC                      { HelpId = HID_DSADMIN_PWDREC_ODBC; };
 hidspecial HID_DSADMIN_PWDREC_ADABAS                    { HelpId = HID_DSADMIN_PWDREC_ADABAS; };
-
 hidspecial HID_DSADMIN_CHARSET_JDBC                     { HelpId = HID_DSADMIN_CHARSET_JDBC; };
 hidspecial HID_DSADMIN_CHARSET_ODBC                     { HelpId = HID_DSADMIN_CHARSET_ODBC; };
 hidspecial HID_DSADMIN_CHARSET_DBASE                    { HelpId = HID_DSADMIN_CHARSET_DBASE; };
 hidspecial HID_DSADMIN_CHARSET_TEXT                     { HelpId = HID_DSADMIN_CHARSET_TEXT; };
 hidspecial HID_DSADMIN_CHARSET_ADABAS                   { HelpId = HID_DSADMIN_CHARSET_ADABAS; };
 hidspecial HID_DSADMIN_CONNURL_JDBCPAGE                 { HelpId = HID_DSADMIN_CONNURL_JDBCPAGE; };
+hidspecial HID_DSADMIN_DATASOURCE_SELECTOR_NEWDS        { HelpId = HID_DSADMIN_DATASOURCE_SELECTOR_NEWDS; };
+hidspecial HID_DSADMIN_DATASOURCE_SELECTOR_DSLIST       { HelpId = HID_DSADMIN_DATASOURCE_SELECTOR_DSLIST; };
+hidspecial HID_ADMINDLG_CONNECTERROR                    { HelpId = HID_ADMINDLG_CONNECTERROR; };
+hidspecial HID_DSADMIN_TABCONTROL                       { HelpId = HID_DSADMIN_TABCONTROL; };
+hidspecial HID_DSADMIN_PAGE_GENERAL                     { HelpId = HID_DSADMIN_PAGE_GENERAL; };
+hidspecial HID_DSADMIN_PAGE_DBASE                       { HelpId = HID_DSADMIN_PAGE_DBASE; };
+hidspecial HID_DSADMIN_PAGE_JDBC                        { HelpId = HID_DSADMIN_PAGE_JDBC; };
+hidspecial HID_DSADMIN_PAGE_ODBC                        { HelpId = HID_DSADMIN_PAGE_ODBC; };
+hidspecial HID_DSADMIN_PAGE_ADABAS                      { HelpId = HID_DSADMIN_PAGE_ADABAS; };
+hidspecial HID_DSADMIN_PAGE_TEXT                        { HelpId = HID_DSADMIN_PAGE_TEXT; };
+hidspecial HID_DSADMIN_TABLE_SUBSCRIPTION               { HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION; };
+hidspecial HID_DSADMIN_DSACTIONS_NEWDS                  { HelpId = HID_DSADMIN_DSACTIONS_NEWDS; };
+hidspecial HID_DSADMIN_DSACTIONS_DELETEDS               { HelpId = HID_DSADMIN_DSACTIONS_DELETEDS; };
+hidspecial HID_DSADMIN_DSACTIONS_RESTOREDS              { HelpId = HID_DSADMIN_DSACTIONS_RESTOREDS; };
+hidspecial HID_DSADMIN_DSNAME                           { HelpId = HID_DSADMIN_DSNAME; };
+hidspecial HID_DSADMIN_DSTYPE                           { HelpId = HID_DSADMIN_DSTYPE; };
+hidspecial HID_DSADMIN_URL_GENERAL                      { HelpId = HID_DSADMIN_URL_GENERAL; };
+hidspecial HID_DSADMIN_BROWSECONN                       { HelpId = HID_DSADMIN_BROWSECONN; };
+hidspecial HID_DSADMIN_LOGINTIMEOUT_NUMBER              { HelpId = HID_DSADMIN_LOGINTIMEOUT_NUMBER; };
+hidspecial HID_DSADMIN_LOGINTIMEOUT_UNIT                { HelpId = HID_DSADMIN_LOGINTIMEOUT_UNIT; };
+hidspecial HID_DSADMIN_SHOWDELETED                      { HelpId = HID_DSADMIN_SHOWDELETED; };
+hidspecial HID_DSADMIN_ALLOWLONG                        { HelpId = HID_DSADMIN_ALLOWLONG; };
+hidspecial HID_DSADMIN_DBASE_INDICIES                   { HelpId = HID_DSADMIN_DBASE_INDICIES; };
+hidspecial HID_DSADMIN_DRIVERCLASS                      { HelpId = HID_DSADMIN_DRIVERCLASS; };
+hidspecial HID_DSADMIN_ODBC_OPTIONS                     { HelpId = HID_DSADMIN_ODBC_OPTIONS; };
+hidspecial HID_DSADMIN_TEXT_HEADER                      { HelpId = HID_DSADMIN_TEXT_HEADER; };
+hidspecial HID_DSADMIN_FIELD_SEPARATOR                  { HelpId = HID_DSADMIN_FIELD_SEPARATOR; };
+hidspecial HID_DSADMIN_TEXT_SEPARATOR                   { HelpId = HID_DSADMIN_TEXT_SEPARATOR; };
+hidspecial HID_DSADMIN_DECIMAL_SEPARATOR                { HelpId = HID_DSADMIN_DECIMAL_SEPARATOR; };
+hidspecial HID_DSADMIN_THOUSANDS_SEPARATOR              { HelpId = HID_DSADMIN_THOUSANDS_SEPARATOR; };
+hidspecial HID_DSADMIN_EXTENSION                        { HelpId = HID_DSADMIN_EXTENSION; };
+hidspecial HID_DSADMIN_ALL_TABLES                       { HelpId = HID_DSADMIN_ALL_TABLES; };
+hidspecial HID_DSADMIN_NO_TABLES                        { HelpId = HID_DSADMIN_NO_TABLES; };
+hidspecial HID_DSADMIN_SELECT_TABLES                    { HelpId = HID_DSADMIN_SELECT_TABLES; };
+hidspecial HID_DSADMIN_TABLE_SELECTOR                   { HelpId = HID_DSADMIN_TABLE_SELECTOR; };
+hidspecial HID_DSADMIN_SUPPRESS_VERSIONCL               { HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/30 14:08:43  fs
+ *  typo
+ *
  *  Revision 1.1  2000/10/30 13:49:40  fs
  *  initial checkin hid list for the dbaccess project
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:08:42 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     TabControl 1
     {
         OutputSize = TRUE ;
+        HelpId = HID_DSADMIN_TABCONTROL;
     };
 
     Text = "Datenquellen verwalten" ;
@@ -362,6 +363,7 @@ TabPage PAGE_GENERAL
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
     Hide = TRUE;
+    HelpId = HID_DSADMIN_PAGE_GENERAL;
 
     FixedText FT_DATASOURCENAME
     {
@@ -391,6 +393,7 @@ TabPage PAGE_GENERAL
 
     Edit ET_DATASOURCENAME
     {
+        HelpId = HID_DSADMIN_DSNAME;
         Pos = MAP_APPFONT ( 90 , 6 ) ;
         Size = MAP_APPFONT ( 164 , 12 ) ;
         TabStop = TRUE ;
@@ -451,6 +454,7 @@ TabPage PAGE_GENERAL
     };
     ListBox LB_DATATYPE
     {
+        HelpId = HID_DSADMIN_DSTYPE;
         Pos = MAP_APPFONT ( 90, 33 ) ;
         Size = MAP_APPFONT ( 60, 60 ) ;
         Border = TRUE ;
@@ -459,6 +463,7 @@ TabPage PAGE_GENERAL
     };
     FixedText FT_CONNECTURL
     {
+        HelpId = HID_DSADMIN_URL_GENERAL;
         Pos = MAP_APPFONT ( 10 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "D~atenquelle URL:" ;
@@ -494,6 +499,7 @@ TabPage PAGE_GENERAL
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 236 , 51 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
+        HelpId = HID_DSADMIN_BROWSECONN;
         Text = "..." ;
         Text [ english ] = "..." ;
         Text [ english_us ] = "..." ;
@@ -544,6 +550,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 90 , 68 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
+        HelpId = HID_DSADMIN_LOGINTIMEOUT_NUMBER;
         TabStop = TRUE ;
         Border = TRUE ;
     };
@@ -551,6 +558,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 123 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        HelpId = HID_DSADMIN_LOGINTIMEOUT_UNIT;
         Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -664,6 +672,7 @@ TabPage PAGE_DBASE
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
+    HelpId = HID_DSADMIN_PAGE_DBASE;
 
     GroupBox GB_DBASE_MAIN
     {
@@ -676,6 +685,7 @@ TabPage PAGE_DBASE
         Pos = MAP_APPFONT ( 76 , 12 ) ;
         Size = MAP_APPFONT ( 127 , 10 ) ;
         TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SHOWDELETED;
         Text = "I~naktive Datensätze anzeigen" ;
         Text [ english ] = "Show deleted records" ;
         Text [ NORWEGIAN ] = "Show deleted records" ;
@@ -743,6 +753,7 @@ TabPage PAGE_DBASE
         Pos = MAP_APPFONT ( 199 , 115 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;
+        HelpId = HID_DSADMIN_DBASE_INDICIES;
         Text= "~Indizes...";
         Text [ english ] = "Indexes..." ;
         Text[ chinese_traditional ] = "¼Ð»x...";
@@ -774,6 +785,8 @@ TabPage PAGE_JDBC
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
     Hide = TRUE;
+    HelpId = HID_DSADMIN_PAGE_JDBC;
+
     FixedText FT_JDBCDRIVERCLASS
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
@@ -806,6 +819,7 @@ TabPage PAGE_JDBC
         Pos = MAP_APPFONT ( 90 , 6 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
+        HelpId = HID_DSADMIN_DRIVERCLASS;
     };
     FixedText FT_CONNECTURL
     {
@@ -883,10 +897,10 @@ TabPage PAGE_JDBC
     {
         Pos = MAP_APPFONT ( 90 , 51 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
+        HelpId = HID_DSADMIN_PWDREC_JDBC;
         Text = "Passwort erforderlich";
         Text [ english ] = "Password required";
         Text [ english_us ] = "Password required";
-        HelpId = HID_DSADMIN_PWDREC_JDBC;
         Text[ portuguese ] = "Necessário senha";
         Text[ russian ] = "Òðåáóåòñÿ ïàðîëü";
         Text[ greek ] = "Áðáéôåßôáé êùäéêüò ðñüóâáóçò";
@@ -957,6 +971,8 @@ TabPage PAGE_ODBC
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
     Hide = TRUE;
+    HelpId = HID_DSADMIN_PAGE_ODBC;
+
     FixedText FT_USERNAME
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
@@ -1000,7 +1016,7 @@ TabPage PAGE_ODBC
         Text = "Passwort erforderlich";
         Text [ english ] = "Password required";
         Text [ english_us ] = "Password required";
-        HelpId = HID_DSADMIN_PWDREC_JDBC;
+        HelpId = HID_DSADMIN_PWDREC_ODBC;
         Text[ portuguese ] = "Necessária senha";
         Text[ russian ] = "Òðåáóåòñÿ ïàðîëü";
         Text[ greek ] = "Áðáéôåßôáé êùäéêüò ðñüóâáóçò";
@@ -1058,6 +1074,7 @@ TabPage PAGE_ODBC
         Pos = MAP_APPFONT ( 91 , 39 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
+        HelpId = HID_DSADMIN_ODBC_OPTIONS;
     };
     FixedText FT_CHARSET
     {
@@ -1106,11 +1123,14 @@ TabPage PAGE_TEXT
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
+    HelpId = HID_DSADMIN_PAGE_TEXT;
+
     CheckBox CB_HEADER
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 125 , 6 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
+        HelpId = HID_DSADMIN_TEXT_HEADER;
         Text = "~Text beinhaltet Kopfzeile" ;
         Text [ ENGLISH ] = "Header record" ;
         Text [ NORWEGIAN ] = "Header record" ;
@@ -1170,6 +1190,7 @@ TabPage PAGE_TEXT
         Text = ";" ;
         TabStop = TRUE ;
         DropDown = TRUE ;
+        HelpId = HID_DSADMIN_FIELD_SEPARATOR;
     };
     FixedText FT_TEXTSEPARATOR
     {
@@ -1206,6 +1227,7 @@ TabPage PAGE_TEXT
         Text = "\"" ;
         TabStop = TRUE ;
         DropDown = TRUE ;
+        HelpId = HID_DSADMIN_TEXT_SEPARATOR;
     };
     FixedText FT_DECIMALSEPARATOR
     {
@@ -1250,6 +1272,7 @@ TabPage PAGE_TEXT
             ";" ;
             ":" ;
         };
+        HelpId = HID_DSADMIN_DECIMAL_SEPARATOR;
     };
     FixedText FT_THOUSANDSSEPARATOR
     {
@@ -1292,6 +1315,7 @@ TabPage PAGE_TEXT
             "," ;
             "." ;
         };
+        HelpId = HID_DSADMIN_THOUSANDS_SEPARATOR;
     };
     FixedLine FL_SEPARATOR1
     {
@@ -1338,6 +1362,7 @@ TabPage PAGE_TEXT
             "sdf" ;
             "txt" ;
         };
+        HelpId = HID_DSADMIN_EXTENSION;
     };
     FixedText FT_CHARSET
     {
@@ -1463,7 +1488,7 @@ TabPage PAGE_TEXT
         Text [ english_us ] = "Wildcards such as ?,* are not allowed in #1." ;
         Text [ portuguese ] = "Caracteres polivalentes como *,? não são admitidos emr #1." ;
         Text [ portuguese_brazilian ] = "Platzhalter wie *,? sind in der #1 nicht möglich." ;
-        Text [ swedish ] = "Jokertecken som *,? är inte tillåtna i #1." ;
+            Text [ swedish ] = "Jokertecken som *,? är inte tillåtna i #1." ;
         Text [ danish ] = "Jokertegn som *,? er ikke mulige i #1." ;
         Text [ italian ] = "Segnaposto quali *,? non sono possibili in #1." ;
         Text [ spanish ] = "Comodines como *,? no están permitidos en #1." ;
@@ -1488,6 +1513,8 @@ TabPage PAGE_TABLESUBSCRIPTION
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
+    HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION;
+
     GroupBox GB_TABLESUBSCRIPTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -1518,6 +1545,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Pos     = MAP_APPFONT ( 12 , 15 ) ;
         Size    = MAP_APPFONT ( 60 , 12 ) ;
         Group   = TRUE;
+        HelpId = HID_DSADMIN_ALL_TABLES;
         Text = "~Alle";
         Text [ english ] = "~All";
         Text [ english_us ] = "~All";
@@ -1543,6 +1571,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     {
         Pos     = MAP_APPFONT ( 12 , 30 ) ;
         Size    = MAP_APPFONT ( 60 , 12 ) ;
+        HelpId = HID_DSADMIN_NO_TABLES;
         Text = "~Keine";
         Text [ english ] = "~None";
         Text [ english_us ] = "~None";
@@ -1568,6 +1597,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     {
         Pos     = MAP_APPFONT ( 12 , 45 ) ;
         Size    = MAP_APPFONT ( 60 , 12 ) ;
+        HelpId = HID_DSADMIN_SELECT_TABLES;
         Text = "Aus~wahl";
         Text [ english ] = "~Selection";
         Text [ english_us ] = "~Selection";
@@ -1596,6 +1626,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Group   = TRUE;
         Border  = TRUE ;
         TabStop = TRUE ;
+        HelpId = HID_DSADMIN_TABLE_SELECTOR;
     };
     CheckBox CB_SUPPRESVERSIONCL
     {
@@ -1603,6 +1634,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Size    = MAP_APPFONT ( 200 , 12 ) ;
         Group   = TRUE ;
         TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;
         Text = "Versionsspalten unterdrücken";
         Text [ english ] = "Suppress version columns";
         Text [ english ] = "Suppress version columns";
@@ -1751,6 +1783,8 @@ Menu MENU_DATASOURCELIST_POPUP
         MenuItem
         {
             Identifier = MID_NEW_DATASOURCE;
+            HelpId = HID_DSADMIN_DSACTIONS_NEWDS;
+
             Text = "neue Datenquelle" ;
             Text [ english ] = "new data source" ;
             Text [ english_us ] = "New Data Source" ;
@@ -1775,6 +1809,7 @@ Menu MENU_DATASOURCELIST_POPUP
         MenuItem
         {
             Identifier = MID_DELETE_DATASOURCE;
+            HelpId = HID_DSADMIN_DSACTIONS_DELETEDS;
             Text = "Datenquelle löschen" ;
             Text [ english ] = "delete data source" ;
             Text [ english_us ] = "Delete Data Source" ;
@@ -1799,6 +1834,7 @@ Menu MENU_DATASOURCELIST_POPUP
         MenuItem
         {
             Identifier = MID_RESTORE_DATASOURCE;
+            HelpId = HID_DSADMIN_DSACTIONS_RESTOREDS;
             Text = "Datenquelle wiederherstellen" ;
             Text [ english ] = "restore data source" ;
             Text [ english_us ] = "Restore Data Source" ;
@@ -1826,6 +1862,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2000/12/01 08:08:42  kz
+ *  Merge SRC614: 01.12.00 - 09:07:46
+ *
  *  Revision 1.15  2000/11/22 15:44:40  oj
  *  #80269# remove property long names
  *

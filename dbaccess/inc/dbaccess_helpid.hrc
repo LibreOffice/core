@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 13:24:37 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,50 @@
 #define HID_DSADMIN_DATASOURCE_SELECTOR_NEWDS       (HID_DBACCESS_START + 24)
 #define HID_DSADMIN_DATASOURCE_SELECTOR_DSLIST      (HID_DBACCESS_START + 25)
 
+#define HID_ADMINDLG_CONNECTERROR                   (HID_DBACCESS_START + 26)
+
+#define HID_DSADMIN_TABCONTROL                      (HID_DBACCESS_START + 27)
+#define HID_DSADMIN_PAGE_GENERAL                    (HID_DBACCESS_START + 28)
+#define HID_DSADMIN_PAGE_DBASE                      (HID_DBACCESS_START + 29)
+#define HID_DSADMIN_PAGE_JDBC                       (HID_DBACCESS_START + 30)
+#define HID_DSADMIN_PAGE_ODBC                       (HID_DBACCESS_START + 31)
+#define HID_DSADMIN_PAGE_ADABAS                     (HID_DBACCESS_START + 32)
+#define HID_DSADMIN_PAGE_TEXT                       (HID_DBACCESS_START + 33)
+#define HID_DSADMIN_TABLE_SUBSCRIPTION              (HID_DBACCESS_START + 34)
+#define HID_DSADMIN_DSACTIONS_NEWDS                 (HID_DBACCESS_START + 35)
+#define HID_DSADMIN_DSACTIONS_DELETEDS              (HID_DBACCESS_START + 36)
+#define HID_DSADMIN_DSACTIONS_RESTOREDS             (HID_DBACCESS_START + 37)
+#define HID_DSADMIN_DSNAME                          (HID_DBACCESS_START + 38)
+#define HID_DSADMIN_DSTYPE                          (HID_DBACCESS_START + 39)
+#define HID_DSADMIN_URL_GENERAL                     (HID_DBACCESS_START + 40)
+#define HID_DSADMIN_BROWSECONN                      (HID_DBACCESS_START + 41)
+#define HID_DSADMIN_LOGINTIMEOUT_NUMBER             (HID_DBACCESS_START + 42)
+#define HID_DSADMIN_LOGINTIMEOUT_UNIT               (HID_DBACCESS_START + 43)
+#define HID_DSADMIN_SHOWDELETED                     (HID_DBACCESS_START + 44)
+#define HID_DSADMIN_ALLOWLONG                       (HID_DBACCESS_START + 45)
+#define HID_DSADMIN_DBASE_INDICIES                  (HID_DBACCESS_START + 46)
+#define HID_DSADMIN_DRIVERCLASS                     (HID_DBACCESS_START + 47)
+#define HID_DSADMIN_ODBC_OPTIONS                    (HID_DBACCESS_START + 48)
+#define HID_DSADMIN_TEXT_HEADER                     (HID_DBACCESS_START + 59)
+#define HID_DSADMIN_FIELD_SEPARATOR                 (HID_DBACCESS_START + 50)
+#define HID_DSADMIN_TEXT_SEPARATOR                  (HID_DBACCESS_START + 51)
+#define HID_DSADMIN_DECIMAL_SEPARATOR               (HID_DBACCESS_START + 52)
+#define HID_DSADMIN_THOUSANDS_SEPARATOR             (HID_DBACCESS_START + 53)
+#define HID_DSADMIN_EXTENSION                       (HID_DBACCESS_START + 54)
+#define HID_DSADMIN_ALL_TABLES                      (HID_DBACCESS_START + 55)
+#define HID_DSADMIN_NO_TABLES                       (HID_DBACCESS_START + 56)
+#define HID_DSADMIN_SELECT_TABLES                   (HID_DBACCESS_START + 57)
+#define HID_DSADMIN_TABLE_SELECTOR                  (HID_DBACCESS_START + 58)
+#define HID_DSADMIN_SUPPRESS_VERSIONCL              (HID_DBACCESS_START + 59)
 
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/01 13:24:37  oj
+ *  #81036# new helpids
+ *
  *  Revision 1.4  2000/12/01 11:48:33  oj
  *  #81036# some new help ids
  *
