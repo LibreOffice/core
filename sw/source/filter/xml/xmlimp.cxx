@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:28:07 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 16:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,7 +996,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         return;
 
     // #111955#
-    hash_set< const String, StringHashRef, StringEqRef > aSet;
+    hash_set< String, StringHashRef, StringEqRef > aSet;
     aSet.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("CharacterCompressionType", RTL_TEXTENCODING_ASCII_US));
