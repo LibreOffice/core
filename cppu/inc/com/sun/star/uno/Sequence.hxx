@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:51:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,10 @@ template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
     const Type & rType = ::getCppuType( this );
-    sal_Bool success = ::uno_type_sequence_construct(
+#if ! defined EXCEPTIONS_OFF
+    sal_Bool success =
+#endif
+    ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         const_cast< E * >( pElements ), len, (uno_AcquireFunc)cpp_acquire );
 #if ! defined EXCEPTIONS_OFF
@@ -140,7 +143,10 @@ template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
     const Type & rType = ::getCppuType( this );
-    sal_Bool success = ::uno_type_sequence_construct(
+#if ! defined EXCEPTIONS_OFF
+    sal_Bool success =
+#endif
+    ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         0, len, (uno_AcquireFunc)cpp_acquire );
 #if ! defined EXCEPTIONS_OFF
@@ -196,7 +202,10 @@ template< class E >
 inline E * Sequence< E >::getArray()
 {
     const Type & rType = ::getCppuType( this );
-    sal_Bool success = ::uno_type_sequence_reference2One(
+#if ! defined EXCEPTIONS_OFF
+    sal_Bool success =
+#endif
+    ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 #if ! defined EXCEPTIONS_OFF
@@ -232,11 +241,14 @@ template< class E >
 inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
     const Type & rType = ::getCppuType( this );
-    sal_Bool success = ::uno_type_sequence_realloc(
+#if !defined EXCEPTIONS_OFF
+    sal_Bool success =
+#endif
+    ::uno_type_sequence_realloc(
         &_pSequence, rType.getTypeLibType(), nSize,
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
-#if ! defined EXCEPTIONS_OFF
-    if (! success)
+#if !defined EXCEPTIONS_OFF
+    if (!success)
         throw ::std::bad_alloc();
 #endif
 }
