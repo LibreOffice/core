@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 10:51:43 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 13:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3312,6 +3312,31 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
             --nTmpPortion;
             TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
             if ( pPrevTextPortion->GetRightToLeft() )
+                nX -= pPrevTextPortion->GetSize().Width();
+            else
+                break;
+        }
+    }
+    else if ( bR2LPara && !pDestPortion->IsRightToLeft() )
+    {
+        // Portions behind must be ermoved, visual behind this portion
+        sal_uInt16 nTmpPortion = nTextPortion+1;
+        while ( nTmpPortion <= pLine->GetEndPortion() )
+        {
+            TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( !pNextTextPortion->IsRightToLeft() )
+                nX += pNextTextPortion->GetSize().Width();
+            else
+                break;
+            nTmpPortion++;
+        }
+        // Portions before must be added, visual before this portion
+        nTmpPortion = nTextPortion;
+        while ( nTmpPortion > pLine->GetStartPortion() )
+        {
+            --nTmpPortion;
+            TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( !pPrevTextPortion->IsRightToLeft() )
                 nX -= pPrevTextPortion->GetSize().Width();
             else
                 break;
