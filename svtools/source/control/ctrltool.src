@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-10 05:11:59 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 14:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ String STR_SVT_STYLE_NORMAL
     Text [ portuguese_brazilian ] = "Normal" ;
     Text [ portuguese ] = "Padr„o" ;
     Text[ russian ] = "—Ú‡Ì‰‡Ú";
-    Text[ polish ] = "Domyúlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "ïWèÄ";
     Text[ chinese_simplified ] = "±Í◊º";
     Text[ chinese_traditional ] = "º–∑«";
@@ -322,7 +322,7 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT [ English ] = "This is a printer font. The screen image may not exactly match." ;
     TEXT [ norwegian ] = "This is a printer font. The screen image may not exactly match." ;
     TEXT [ italian ] = "Il tipo di carattere visualizzato differisce da quello stampato." ;
-    TEXT [ portuguese_brazilian ] = "Esta È uma fonte de impressora. A imagem na tela pode n„o corresponder exatamente." ;
+    TEXT [ portuguese_brazilian ] = "Esta ? uma fonte de impressora. A imagem na tela pode n?o corresponder exatamente." ;
     TEXT [ portuguese ] = "Letra de impressora. A letra vista no ecr„ pode apresentar um pequeno desvio." ;
     TEXT [ finnish ] = "T‰m‰ on tulostinfontti. N‰yttˆkuva saattaa olla erilainen." ;
     TEXT [ danish ] = "Dette er en printerskrifttype. SkÊrmbilledet svarer muligvis ikke helt til printerskrifttypen." ;
@@ -349,7 +349,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT [ English ] = "This is a screen font. The printer image may not exactly match." ;
     TEXT [ norwegian ] = "This is a screen font. The printer image may not exactly match." ;
     TEXT [ italian ] = "Questo Ë un carattere per lo schermo. La stampa puÚ essere leggermente diversa." ;
-    TEXT [ portuguese_brazilian ] = "Esta È uma fonte de tela. A imagem impressa pode n„o corresponder exatamente." ;
+    TEXT [ portuguese_brazilian ] = "Esta ? uma fonte de tela. A imagem impressa pode n?o corresponder exatamente." ;
     TEXT [ portuguese ] = "Letra de ecr„. A letra impressa pode apresentar um pequeno desvio." ;
     TEXT [ finnish ] = "T‰m‰ on n‰yttˆfontti. Tulostinkuva saattaa olla erilainen." ;
     TEXT [ danish ] = "Dette er en skÊrmskrifttype. Udskriften kan muligvis afvige lidt." ;
