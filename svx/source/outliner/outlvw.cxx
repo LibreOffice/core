@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-01 10:39:21 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,12 +1747,24 @@ void OutlinerView::CompleteAutoCorrect()
 }
 
 
+EESpellState OutlinerView::StartSpeller( BOOL bMultiDoc )
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->StartSpeller( bMultiDoc );
+}
+
 EESpellState OutlinerView::StartSpeller( LanguageType eLang, BOOL bMultiDoc )
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartSpeller( eLang, bMultiDoc );
 }
 
+
+EESpellState OutlinerView::StartThesaurus()
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->StartThesaurus();
+}
 
 EESpellState OutlinerView::StartThesaurus( LanguageType eLang )
 {

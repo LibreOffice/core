@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:26 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,12 @@ EESpellState Outliner::HasSpellErrors( LanguageType eLang )
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->HasSpellErrors( eLang );
+}
+
+EESpellState Outliner::HasSpellErrors()
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->HasSpellErrors();
 }
 
 void Outliner::SetDefaultLanguage( LanguageType eLang )
