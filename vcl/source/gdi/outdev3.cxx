@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:16:20 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7499,9 +7499,9 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
     const sal_Unicode* pStr = rStr.GetBuffer();
     for( pStr += nIndex; nIndex < nEnd; ++pStr, ++nIndex )
         if( ! aFontCharMap.HasChar( *pStr ) )
-            break;
+            return nIndex;
 
-    return nIndex;
+    return STRING_LEN;
 }
 
 // -----------------------------------------------------------------------
