@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tv $ $Date: 2001-03-30 12:07:47 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ Text[ swedish ] = "Tidsrymd";
     Text[ russian ] = "Οεπθξδ";
     Text[ greek ] = "Χρονικό διάστημα";
     Text[ danish ] = "Tidsperiode";
-    Text[ polish ] = "Okres czasu";
+    Text[ polish ] = "Okres";
     Text[ portuguese_brazilian ] = "Time Frame";
     Text[ japanese ] = "ϊΤ";
     Text[ korean ] = "±β°£";
