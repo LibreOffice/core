@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:10:48 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 12:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,8 @@ void OTableContainer::disposing()
 //  m_aNameMap.clear();
     m_xMasterTables = NULL;
     m_xMetaData     = NULL;
+    m_xConnection   = NULL;
+    m_pWarningsContainer = NULL;
     m_bConstructed  = sal_False;
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:12:09 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 12:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,8 @@ void OViewContainer::disposing()
 
     m_xMasterViews = NULL;
     m_xMetaData     = NULL;
+    m_xConnection   = NULL;
+    m_pWarningsContainer = NULL;
     m_bConstructed  = sal_False;
 }
 // XServiceInfo
