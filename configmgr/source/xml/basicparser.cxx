@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:58:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,15 @@ void BasicParser::startProperty( ElementInfo const & aInfo, const uno::Reference
     if (isInProperty())
         raiseParseException( "Configuration XML Parser - Invalid Data: Properties may not nest" );
 
-    m_aValueType = getDataParser().getPropertyValueType(xAttribs);
+    try
+    {
+        m_aValueType = getDataParser().getPropertyValueType(xAttribs);
+    }
+    catch (ElementParser::BadValueType & error)
+    {
+        raiseParseException(error.message());
+    }
+
     m_bInProperty = true;
 
     m_aNodes.push(aInfo);
@@ -545,6 +553,18 @@ void BasicParser::raiseParseException( sal_Char const * _pMsg )
     if (_pMsg == 0) _pMsg = "Configuration XML Parser: Invalid XML";
 
     OUString const sMessage = OUString::createFromAscii(_pMsg);
+
+    getLogger().error(sMessage,"parse","configuration::xml::BasicParser");
+    throw sax::SAXException( sMessage, *this, uno::Any() );
+}
+// -----------------------------------------------------------------------------
+
+void BasicParser::raiseParseException( OUString const & sMessage )
+        CFG_THROW2 (sax::SAXException, uno::RuntimeException)
+{
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
+    if (sMessage.getLength() == 0) raiseParseException(NULL);
 
     getLogger().error(sMessage,"parse","configuration::xml::BasicParser");
     throw sax::SAXException( sMessage, *this, uno::Any() );
