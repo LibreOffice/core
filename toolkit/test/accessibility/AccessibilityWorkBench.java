@@ -39,9 +39,6 @@ public class AccessibilityWorkBench
     implements ActionListener,
         Print,
         MessageInterface,
-        XEventListener,
-        XFrameActionListener,
-        XPropertyChangeListener,
         XTerminateListener
 {
     public static final String msVersion = "v1.4";
@@ -399,8 +396,8 @@ public class AccessibilityWorkBench
         aShapesButton.setEnabled (true);
         aTextButton.setEnabled (true);
 
-        //        if (office != null && office.getDesktop() != null)
-        //  office.getDesktop().addTerminateListener (this);
+        if (office != null && office.getDesktop() != null)
+            office.getDesktop().addTerminateListener (this);
     }
 
 
@@ -533,125 +530,16 @@ public class AccessibilityWorkBench
 
 
 
-    /** Add various listeners to the model and other Office objects.
-    */
-    protected void addListeners (XModel xModel)
-    {
-
-        com.sun.star.document.XEventBroadcaster xBr =
-            (com.sun.star.document.XEventBroadcaster)UnoRuntime.queryInterface(
-                com.sun.star.document.XEventBroadcaster.class, xModel);
-        if( xBr != null )
-            xBr.addEventListener (this);
-
-        XController xController = xModel.getCurrentController();
-        if (xController != null)
-        {
-            XFrame xFrame = xController.getFrame();
-            if (xFrame != null)
-            {
-                xFrame.addFrameActionListener( this );
-                System.out.println("[DONE]");
-            }
-            connectListener( xController );
-        }
-    }
-
-
-
-    public boolean connectListener( XController xController )
-    {
-        System.out.println("connecting to controller...");
-
-        XServiceInfo oObj = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, xController);
-        String[] names = oObj.getSupportedServiceNames();
-        for (int i=0;i<names.length;i++)
-        {
-           System.out.println("Supported Service is "+names[i]);
-        }
-
-        System.out.print("add property listener             ");
-
-        XPropertySet xPropSet = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xController);
-
-        try
-        {
-
-            xPropSet.addPropertyChangeListener ("", this);
-
-            System.out.println("[DONE]");
-
-        }
-        catch (Exception exp)
-        {
-            System.out.println("[FAILED]");
-            System.exit(0);
-        }
-
-        System.out.print("add dispose listener             ");
-
-        XComponent xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, xController);
-        //      com.sun.star.lang.XEventListener xEventListener = (com.sun.star.lang.XEventListener)UnoRuntime.queryInterface(com.sun.star.lang.XEventListener.class, this);
-
-        xComponent.addEventListener (this);
-
-        System.out.println("[DONE]");
-
-        return true;
-    }
-
-    public void propertyChange( final PropertyChangeEvent evt ) throws RuntimeException
-    {
-        System.out.println("property " + evt.PropertyName + "(" + evt.PropertyHandle + ") changed!");
-
-        if( evt.PropertyHandle == 3 )
-        {
-            System.out.print("old value: ");
-            com.sun.star.awt.Rectangle aRect;
-            aRect = (com.sun.star.awt.Rectangle)evt.OldValue;
-            System.out.println( "old value: (" + aRect.X + "," + aRect.Y + "," + aRect.Width + "," + aRect.Height + ")" );
-
-            aRect = (com.sun.star.awt.Rectangle)evt.NewValue;
-            System.out.println( "new value: (" + aRect.X + "," + aRect.Y + "," + aRect.Width + "," + aRect.Height + ")" );
-        }
-    }
-
-    public void frameAction( final FrameActionEvent aEvent ) throws RuntimeException
-    {
-        System.out.println("frame action event " + aEvent.Action );
-
-        if( aEvent.Action == FrameAction.COMPONENT_REATTACHED )
-        {
-            System.out.println("FrameAction.COMPONENT_REATTACHED");
-            XController xController = aEvent.Frame.getController();
-            connectListener( xController );
-        }
-    }
-
-
     // XEventListener
     public void disposing( com.sun.star.lang.EventObject aSourceObj )
     {
         XFrame xFrame = (XFrame)UnoRuntime.queryInterface(XFrame.class, aSourceObj.Source);
 
         if( xFrame != null )
-        {
             System.out.println("frame disposed");
-            System.exit(0);
-        }
         else
-        {
             System.out.println("controller disposed");
-
-        }
     }
-
-    // XEventListener
-    public void notifyEvent (final com.sun.star.document.EventObject aEvent) throws RuntimeException
-    {
-        System.out.println ("Event : " + aEvent.EventName + " at " + aEvent.Source);
-    }
-
 
     // XTerminateListener
     public void queryTermination (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
