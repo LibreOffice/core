@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@
 #ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 const sal_Char* SwForm::aFormEntry      = "<E>";
 const sal_Char* SwForm::aFormTab        = "<T>";
@@ -639,7 +641,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc)
         SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( sTemplateName );
         if( !pColl )
         {
-            USHORT nId = rDoc.GetPoolId( sTemplateName, GET_POOLID_TXTCOLL );
+            USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sTemplateName, GET_POOLID_TXTCOLL );
             if( USHRT_MAX != nId )
                 pColl = rDoc.GetTxtCollFromPool( nId );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,9 @@
 #ifndef _NODE2LAY_HXX
 #include <node2lay.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 const sal_Unicode cNumRepl      = '@';
 const sal_Unicode cEndPageNum   = '~';
@@ -2140,7 +2142,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
         //search by name
         SwDoc* pDoc = pNd->GetDoc();
-        USHORT nPoolId = pDoc->GetPoolId( GetMainEntryCharStyle(), GET_POOLID_CHRFMT );
+        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), GET_POOLID_CHRFMT );
         SwCharFmt* pCharFmt = 0;
         if(USHRT_MAX != nPoolId)
             pCharFmt = pDoc->GetCharFmtFromPool(nPoolId);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 15:34:01 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,9 @@ SO2_DECL_REF(SvLinkName)
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -739,7 +741,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             if( SFX_ITEM_SET == aOtherSet.GetItemState( RES_PARATR_NUMRULE,
                                 FALSE, (const SfxPoolItem**)&pRule ) &&
                 !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
-                USHRT_MAX != (nPoolId = pDoc->GetPoolId( pRule->GetValue(),
+                USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
                                 GET_POOLID_NUMRULE )) )
                 pDoc->GetNumRuleFromPool( nPoolId );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 11:36:49 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,9 @@
 #endif
 #ifndef _SVTOOLS_UNOEVENT_HXX_
 #include <svtools/unoevent.hxx>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -907,7 +910,7 @@ BOOL SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 const SwPageDesc* pDesc = GetPageDesc();
                 if( pDesc )
                     rVal <<= OUString(
-                        SwXStyleFamilies::GetProgrammaticName(pDesc->GetName(), SFX_STYLE_FAMILY_PAGE));
+                        SwStyleNameMapper::GetProgName(pDesc->GetName(), GET_POOLID_PAGEDESC ));
                 else
                     rVal.clear();
             }

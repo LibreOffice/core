@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:23 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,9 @@
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
 #endif
-
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 #include "errhdl.hxx"
 #include "paratr.hxx"
 #include "charfmt.hxx"
@@ -268,8 +269,8 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             rtl::OUString sName;
             if(GetCharFmt())
-                sName = SwXStyleFamilies::GetProgrammaticName(
-                        GetCharFmt()->GetName(), SFX_STYLE_FAMILY_CHAR);
+                sName = SwStyleNameMapper::GetProgName(
+                        GetCharFmt()->GetName(), GET_POOLID_CHRFMT );
             rVal <<= sName;
         }
         break;
@@ -329,7 +330,7 @@ int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
  ---------------------------------------------------------------------------*/
 BOOL    SwNumRuleItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    rtl::OUString sRet = SwXStyleFamilies::GetProgrammaticName(GetValue(), SFX_STYLE_FAMILY_PSEUDO);
+    rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return TRUE;
 }
@@ -340,7 +341,7 @@ BOOL    SwNumRuleItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMem
 {
     rtl::OUString uName;
     rVal >>= uName;
-    SetValue(SwXStyleFamilies::GetUIName(uName, SFX_STYLE_FAMILY_PSEUDO));
+    SetValue(SwStyleNameMapper::GetUIName(uName, GET_POOLID_NUMRULE));
     return TRUE;
 }
 

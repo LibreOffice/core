@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
 #include <com/sun/star/text/SetVariableType.hpp>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1184,7 +1187,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
     else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_VALUE )))
         rAny <<= (sal_Int16)nSeqNo;
     else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_NAME )))
-        rAny <<= SwXFieldMaster::GetSetExpProgrammaticName(GetPar1());
+        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), GET_POOLID_TXTCOLL ) );
     else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
     {
         //I18N - if the formula contains only "TypeName+1"
@@ -1260,7 +1263,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
     {
         OUString uTmp;
         rAny >>= uTmp;
-        uTmp = SwXFieldMaster::GetSetExpUIName(uTmp);
+        uTmp = SwStyleNameMapper::GetUIName( uTmp, GET_POOLID_TXTCOLL );
         SetPar1( uTmp );
     }
     else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))

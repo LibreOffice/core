@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 13:26:00 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -186,7 +188,7 @@ BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     XubString sCharFmtName;
     if(GetCharFmt())
-        sCharFmtName = SwXStyleFamilies::GetProgrammaticName(GetCharFmt()->GetName(), SFX_STYLE_FAMILY_CHAR );
+        sCharFmtName = SwStyleNameMapper::GetProgName(GetCharFmt()->GetName(), GET_POOLID_CHRFMT );
     rVal <<= OUString( sCharFmtName );
     return TRUE;
 }
@@ -355,18 +357,16 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_URL_VISITED_FMT:
             sVal = aVisitedFmt;
             if( !sVal.Len() && nVisitedId != 0 )
-                SwDoc::GetPoolNm( nVisitedId, sVal );
+                SwStyleNameMapper::GetUIName( nVisitedId, sVal );
             if( sVal.Len() )
-                sVal = SwXStyleFamilies::GetProgrammaticName( sVal,
-                                                    SFX_STYLE_FAMILY_CHAR );
+                sVal = SwStyleNameMapper::GetProgName( sVal, GET_POOLID_CHRFMT );
         break;
         case MID_URL_UNVISITED_FMT:
             sVal = aINetFmt;
             if( !sVal.Len() && nINetId != 0 )
-                SwDoc::GetPoolNm( nINetId, sVal );
+                SwStyleNameMapper::GetUIName( nINetId, sVal );
             if( sVal.Len() )
-                SwXStyleFamilies::GetProgrammaticName( sVal,
-                                                    SFX_STYLE_FAMILY_CHAR );
+                SwStyleNameMapper::GetProgName( sVal, GET_POOLID_CHRFMT );
         break;
         case MID_URL_HYPERLINKEVENTS:
         {
@@ -431,17 +431,17 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
                 break;
             case MID_URL_VISITED_FMT:
             {
-                aVisitedFmt = SwXStyleFamilies::GetUIName(
-                    sVal, SFX_STYLE_FAMILY_CHAR );
-                nVisitedId = SwDoc::GetPoolId( aVisitedFmt,
+                aVisitedFmt = SwStyleNameMapper::GetUIName(
+                    sVal, GET_POOLID_CHRFMT );
+                nVisitedId = SwStyleNameMapper::GetPoolIdFromUIName( aVisitedFmt,
                                                GET_POOLID_CHRFMT );
             }
             break;
             case MID_URL_UNVISITED_FMT:
             {
-                aINetFmt = SwXStyleFamilies::GetUIName(
-                    sVal, SFX_STYLE_FAMILY_CHAR );
-                nINetId = SwDoc::GetPoolId( aINetFmt,   GET_POOLID_CHRFMT );
+                aINetFmt = SwStyleNameMapper::GetUIName(
+                    sVal, GET_POOLID_CHRFMT );
+                nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, GET_POOLID_CHRFMT );
             }
             break;
             default:
@@ -514,7 +514,7 @@ BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
         case MID_RUBY_TEXT: rVal <<= (OUString)sRubyTxt;                    break;
          case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
         case MID_RUBY_CHARSTYLE:
-                rVal <<= (OUString)SwXStyleFamilies::GetProgrammaticName(sCharFmtName, SFX_STYLE_FAMILY_CHAR );
+                rVal <<= (OUString)SwStyleNameMapper::GetProgName(sCharFmtName, GET_POOLID_CHRFMT );
         break;
         case MID_RUBY_ABOVE:
         {
@@ -562,7 +562,7 @@ BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
         case MID_RUBY_CHARSTYLE:
             DBG_ERROR("char style name must be handled outside")
 //          bRet = rVal >>= sTmp;
-//          sCharFmtName <<= SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR );
+//          sCharFmtName <<= SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT );
         //no break;
         default:
             bRet = FALSE;

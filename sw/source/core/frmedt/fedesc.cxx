@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fedesc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,9 @@
 #ifndef _EDIMP_HXX
 #include <edimp.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 /*************************************************************************
 |*
 |*  SwFEShell::GetPageDescCnt()
@@ -232,7 +234,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
     SwPageDesc* pDesc = GetDoc()->FindPageDescByName( rName, pPos );
     if( !pDesc && bGetFromPool )
     {
-        USHORT nPoolId = GetDoc()->GetPoolId( rName, GET_POOLID_PAGEDESC );
+        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId &&
             0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
             && pPos )

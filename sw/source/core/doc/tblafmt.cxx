@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-30 20:15:40 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,9 @@
 #ifndef _CELLATR_HXX
 #include <cellatr.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 // bis SO5PF
 const USHORT AUTOFORMAT_ID_X        = 9501;
@@ -822,7 +824,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
 {
     String sNm;
     SwTableAutoFmt* pNew = new SwTableAutoFmt(
-                            SwDoc::GetPoolNm( RES_POOLCOLL_STANDARD, sNm ) );
+                            SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm ) );
 
     SwBoxAutoFmt aNew;
 

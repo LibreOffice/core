@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -245,7 +248,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 if( pAny )
                 {
-                    String sVal = SwXStyleFamilies::GetProgrammaticName(pFmt->GetName(), SFX_STYLE_FAMILY_PARA);
+                    String sVal = SwStyleNameMapper::GetProgName(pFmt->GetName(), GET_POOLID_TXTCOLL );
                     *pAny <<= OUString(sVal);
                 }
             }
@@ -641,8 +644,7 @@ String GetCurPageStyle(SwPaM& rPaM)
     const SwPageFrm* pPage = rPaM.GetCntntNode()->GetFrm()->FindPageFrm();
     if(pPage)
     {
-        sRet = SwXStyleFamilies::GetProgrammaticName(
-                    pPage->GetPageDesc()->GetName(), SFX_STYLE_FAMILY_PAGE);
+        sRet = SwStyleNameMapper::GetProgName( pPage->GetPageDesc()->GetName(), GET_POOLID_PAGEDESC );
     }
     return sRet;
 }

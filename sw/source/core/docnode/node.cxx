@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-25 16:05:38 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,9 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 using namespace ::com::sun::star::i18n;
 
 TYPEINIT2( SwCntntNode, SwModify, SwIndexReg )
@@ -1068,7 +1070,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             SwNumRule* pRule = GetDoc()->FindNumRulePtr( sNumRule );
             if( !pRule )
             {
-                USHORT nPoolId = GetDoc()->GetPoolId( sNumRule, GET_POOLID_NUMRULE );
+                USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, GET_POOLID_NUMRULE );
                 if( USHRT_MAX != nPoolId )
                     pRule = GetDoc()->GetNumRuleFromPool( nPoolId );
             }

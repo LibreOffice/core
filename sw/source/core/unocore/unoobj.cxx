@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 12:37:06 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,9 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -537,7 +540,7 @@ void lcl_setCharStyle(SwDoc* pDoc, const uno::Any aValue, SfxItemSet& rSet)
     {
         OUString uStyle;
         aValue >>= uStyle;
-        String sStyle(SwXStyleFamilies::GetUIName(uStyle, SFX_STYLE_FAMILY_CHAR));
+        String sStyle(SwStyleNameMapper::GetUIName(uStyle, GET_POOLID_CHRFMT ));
         SwDocStyleSheet* pStyle =
             (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
         if(pStyle)
@@ -564,7 +567,7 @@ void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)
         return;
     OUString uStyle;
     rAny >>= uStyle;
-    String sStyle(SwXStyleFamilies::GetUIName(uStyle, SFX_STYLE_FAMILY_PARA));
+    String sStyle(SwStyleNameMapper::GetUIName(uStyle, GET_POOLID_TXTCOLL ));
     SwDocStyleSheet* pStyle =
                     (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_PARA);
     if(pStyle)
@@ -600,7 +603,7 @@ void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)
         pNewDesc = new SwFmtPageDesc();
     OUString uDescName;
     aValue >>= uDescName;
-    String sDescName(SwXStyleFamilies::GetUIName(uDescName, SFX_STYLE_FAMILY_PAGE));
+    String sDescName(SwStyleNameMapper::GetUIName(uDescName, GET_POOLID_PAGEDESC ));
     if(!pNewDesc->GetPageDesc() || pNewDesc->GetPageDesc()->GetName() != sDescName)
     {
         sal_uInt16 nCount = pDoc->GetPageDescCnt();
@@ -769,7 +772,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                             pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
                         if(!pDrop)
                             pDrop = new SwFmtDrop();
-                        String sStyle(SwXStyleFamilies::GetUIName(uStyle, SFX_STYLE_FAMILY_CHAR));
+                        String sStyle(SwStyleNameMapper::GetUIName(uStyle, GET_POOLID_CHRFMT ));
                         SwDocStyleSheet* pStyle =
                             (SwDocStyleSheet*)rPam.GetDoc()->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
                         if(pStyle)
@@ -799,12 +802,12 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                             pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
                         if(!pRuby)
                             pRuby = new SwFmtRuby(aEmptyStr);
-                        String sStyle(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
+                        String sStyle(SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT ));
                          pRuby->SetCharFmtName( sStyle );
                         pRuby->SetCharFmtId( 0 );
                         if(sStyle.Len() > 0)
                         {
-                            sal_uInt16 nId = SwDoc::GetPoolId( sStyle, GET_POOLID_CHRFMT );
+                            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sStyle, GET_POOLID_CHRFMT );
                             pRuby->SetCharFmtId(nId);
                         }
                         rItemSet.Put(*pRuby);
