@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.33 2001-06-12 17:46:19 dvo Exp $
+	$Id: text.mod,v 1.34 2001-06-20 06:08:35 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -226,13 +226,13 @@
 <!ATTLIST text:list-level-style-bullet style:num-prefix %string; #IMPLIED>
 <!ATTLIST text:list-level-style-bullet style:num-suffix %string; #IMPLIED>
 
-<!ELEMENT text:list-level-style-image (style:properties?)>
+<!ELEMENT text:list-level-style-image (style:properties?,office:binary-data?)>
 
 <!ATTLIST text:list-level-style-image text:level %positiveInteger; #REQUIRED>
-<!ATTLIST text:list-level-style-image xlink:type (simple) #FIXED "simple">
-<!ATTLIST text:list-level-style-image xlink:href %uriReference; #REQUIRED>
-<!ATTLIST text:list-level-style-image xlink:actuate (onLoad) "onLoad">
-<!ATTLIST text:list-level-style-image xlink:show (embed) "embed">
+<!ATTLIST text:list-level-style-image xlink:type (simple) #IMPLIED>
+<!ATTLIST text:list-level-style-image xlink:href %uriReference; #IMPLIED>
+<!ATTLIST text:list-level-style-image xlink:actuate (onLoad) #IMPLIED>
+<!ATTLIST text:list-level-style-image xlink:show (embed) #IMPLIED>
 
 
 <!-- list properties -->

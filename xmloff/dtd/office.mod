@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.41 2001-06-12 17:44:15 dvo Exp $
+	$Id: office.mod,v 1.42 2001-06-20 06:08:35 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -258,3 +258,5 @@
 <!ELEMENT office:change-info (text:p)*>
 <!ATTLIST office:change-info office:chg-author %string; #REQUIRED>
 <!ATTLIST office:change-info office:chg-date-time %timeInstance; #REQUIRED>
+
+<!ELEMENT office:binary-data (#PCDATA)>

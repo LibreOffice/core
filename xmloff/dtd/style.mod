@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.38 2001-05-28 13:19:14 cl Exp $
+	$Id: style.mod,v 1.39 2001-06-20 06:08:35 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -277,7 +277,7 @@
 <!ATTLIST style:properties fo:break-after (auto|column|page) #IMPLIED>
 <!ATTLIST style:properties fo:background-color %transparentOrColor; #IMPLIED>
 
-<!ELEMENT style:background-image EMPTY>
+<!ELEMENT style:background-image (office:binary-data?)>
 <!ATTLIST style:background-image xlink:type (simple) #IMPLIED>
 <!ATTLIST style:background-image xlink:href %uriReference; #IMPLIED>
 <!ATTLIST style:background-image xlink:show (embed) #IMPLIED>

@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.61 2001-06-15 11:30:58 cl Exp $
+	$Id: drawing.mod,v 1.62 2001-06-20 06:08:34 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -563,13 +563,13 @@
 <!ATTLIST draw:text-box draw:layer %layerName; #IMPLIED>
 
 <!-- image -->
-<!ELEMENT draw:image (office:events?,draw:image-map?,svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:image (office:binary-data?,office:events?,draw:image-map?,svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:image %draw-style-name;>
 <!ATTLIST draw:image draw:name %string; #IMPLIED>
-<!ATTLIST draw:image xlink:href %uriReference; #REQUIRED>
-<!ATTLIST draw:image xlink:type (simple) #FIXED "simple">
-<!ATTLIST draw:image xlink:show (embed) "embed">
-<!ATTLIST draw:image xlink:actuate (onLoad) "onLoad">
+<!ATTLIST draw:image xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:image xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:image xlink:show (embed) #IMPLIED>
+<!ATTLIST draw:image xlink:actuate (onLoad) #IMPLIED>
 <!ATTLIST draw:image draw:filter-name %string; #IMPLIED>
 <!ATTLIST draw:image %text-anchor;>
 <!ATTLIST draw:image %draw-position;>
@@ -608,8 +608,7 @@
 <!ATTLIST draw:object draw:id %shapeId;>
 <!ATTLIST draw:object draw:layer %layerName; #IMPLIED>
 
-<!-- one of the elements is allowed only, but this cannot be expressed by DTDs -->
-<!ELEMENT draw:object-ole (#PCDATA|office:events|draw:image-map|svg:desc|draw:contour-polygon|draw:contour-path|draw:thumbnail)*>
+<!ELEMENT draw:object-ole (office:binary-data?|office:events?|draw:image-map?|svg:desc?|draw:contour-polygon?|draw:contour-path?|draw:thumbnail?)>
 <!ATTLIST draw:object-ole draw:class-id CDATA #IMPLIED>
 <!ATTLIST draw:object-ole %draw-style-name;>
 <!ATTLIST draw:object-ole draw:name %string; #IMPLIED>
