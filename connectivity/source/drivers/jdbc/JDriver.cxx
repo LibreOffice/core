@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:17 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 08:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,8 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
 {
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
-    return (!url.compareTo(::rtl::OUString::createFromAscii("jdbc:"),5) && url.getLength() > 5);
+    static const ::rtl::OUString s_sJdbcPrefix = ::rtl::OUString::createFromAscii("jdbc:");
+    return 0 == url.compareTo(s_sJdbcPrefix, 5);
 }
 // -------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url,
