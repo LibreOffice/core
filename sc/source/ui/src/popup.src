@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:56:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ String RID_POPUP_CELLS
     Text[ hebrew ] = "Popup-Menü für Zellen";
     Text[ hindi ] = "कोष्ठ का पोप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu bunky";
+    Text[ hungarian ] = "Cellákhoz tartozó előugró menü";
+    Text[ slovenian ] = "Pojavni meni celice";
 };
 
 Menu RID_POPUP_CELLS
@@ -135,6 +137,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "‮ברירת מחדל‬";
             Text[ hindi ] = "~अनुपस्थिति";
             Text[ slovak ] = "Výcho~dzie";
+            Text[ hungarian ] = "~Alapértelmezett";
+            Text[ slovenian ] = "~Privzeto";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -150,7 +154,7 @@ Menu RID_POPUP_CELLS
             Text [ portuguese_brazilian ] = "Formatar ~C�lulas..." ;
             Text [ portuguese ] = "Formatar ~c�lulas..." ;
             Text [ finnish ] = "~Muotoile solut..." ;
-            Text [ danish ] = "Formater celler..." ;
+            Text [ danish ] = "~Formater celler..." ;
             Text [ french ] = "~Formater les cellules..." ;
             Text [ swedish ] = "~Formatera celler..." ;
             Text [ dutch ] = "Cellen ~opmaken..." ;
@@ -172,6 +176,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "~Zellen formatieren...";
             Text[ hindi ] = "कोष्ठों को ~रचना करो...";
             Text[ slovak ] = "~Formát buniek...";
+            Text[ hungarian ] = "Cellák ~formázása...";
+            Text[ slovenian ] = "~Oblikuj celice...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -187,7 +193,7 @@ Menu RID_POPUP_CELLS
             Text [ portuguese_brazilian ] = "~Inserir C�lulas..." ;
             Text [ portuguese ] = "~Inserir c�lulas..." ;
             Text [ finnish ] = "~Lis�� solut..." ;
-            Text [ danish ] = "Inds�t celler..." ;
+            Text [ danish ] = "~Inds�t celler..." ;
             Text [ french ] = "~Ins�rer des cellules..." ;
             Text [ swedish ] = "~Infoga celler..." ;
             Text [ dutch ] = "Cellen in~voegen..." ;
@@ -209,6 +215,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "Zellen ~einfügen...";
             Text[ hindi ] = "को~ष्ठों को जोड़ो...";
             Text[ slovak ] = "V~ložiť bunky...";
+            Text[ hungarian ] = "~Cellák beszúrása...";
+            Text[ slovenian ] = "Vstavi c~elice...";
         };
         MenuItem
         {
@@ -243,6 +251,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "Zellen ~löschen...";
             Text[ hindi ] = "को~ष्ठों को मिटाओ...";
             Text[ slovak ] = "Z~mazať bunky...";
+            Text[ hungarian ] = "Ce~llák törlése...";
+            Text[ slovenian ] = "Iz~briši celice...";
         };
         MenuItem
         {
@@ -255,7 +265,7 @@ Menu RID_POPUP_CELLS
             Text [ portuguese_brazilian ] = "Excluir C~onte�do..." ;
             Text [ portuguese ] = "Eliminar co~nte�dos..." ;
             Text [ finnish ] = "~Poista sis�lt�..." ;
-            Text [ danish ] = "Slet indhold..." ;
+            Text [ danish ] = "Slet in~dhold..." ;
             Text [ french ] = "Supprimer du ~contenu..." ;
             Text [ swedish ] = "Ra~dera inneh�ll..." ;
             Text [ dutch ] = "In~houd wissen..." ;
@@ -277,6 +287,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "Inhalte lö~schen...";
             Text[ hindi ] = "वि~षयों को मिटाओ...";
             Text[ slovak ] = "Zmazať ~obsah...";
+            Text[ hungarian ] = "~Tartalom törlése...";
+            Text[ slovenian ] = "Izbriši vsebin~o...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -315,6 +327,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "‮גזירה‬";
             Text[ hindi ] = "का~टो";
             Text[ slovak ] = "Vys~trihnúť";
+            Text[ hungarian ] = "Kivá~gás";
+            Text[ slovenian ] = "I~zreži";
         };
         MenuItem
         {
@@ -349,6 +363,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "‮העתקה‬";
             Text[ hindi ] = "~प्रतिलिपि";
             Text[ slovak ] = "~Kopírovať";
+            Text[ hungarian ] = "~Másolás";
+            Text[ slovenian ] = "Kopir~aj";
         };
 
         MenuItem
@@ -384,6 +400,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "‮הדבקה‬";
             Text[ hindi ] = "~छिपकाओ";
             Text[ slovak ] = "~Vložiť";
+            Text[ hungarian ] = "~Beillesztés";
+            Text[ slovenian ] = "P~rilepi";
         };
 
         MenuItem
@@ -397,7 +415,7 @@ Menu RID_POPUP_CELLS
             Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
             Text [ portuguese ] = "Colar e~special..." ;
             Text [ finnish ] = "Liit� ~m��r�ten..." ;
-            Text [ danish ] = "Inds�t ind~hold..." ;
+            Text [ danish ] = "Inds�t spe~ciel..." ;
             Text [ french ] = "Collage sp�cial..." ;
             Text [ swedish ] = "Klistra in inneh�ll..." ;
             Text [ dutch ] = "~Plakken speciaal..." ;
@@ -419,6 +437,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "‮הדבקה מיוחדת...‬";
             Text[ hindi ] = "वि~शेष को छिपकाओ...";
             Text[ slovak ] = "Vložiť in~ak...";
+            Text[ hungarian ] = "~Irányított beillesztés...";
+            Text[ slovenian ] = "P~osebno lepljenje...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -455,6 +475,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "~Notiz anzeigen";
             Text[ hindi ] = "टिप्पणी दि~खाओ";
             Text[ slovak ] = "Zobraziť ~poznámku";
+            Text[ hungarian ] = "~Jegyzet megjelenítése";
+            Text[ slovenian ] = "Po~kaži opombo";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -471,7 +493,7 @@ Menu RID_POPUP_CELLS
             Text [ french ] = "~Liste de s�lection..." ;
             Text [ dutch ] = "~Keuzelijst..." ;
             Text [ swedish ] = "~Urvalslista..." ;
-            Text [ danish ] = "Udvalgsliste..." ;
+            Text [ danish ] = "~Udvalgsliste..." ;
             Text [ portuguese_brazilian ] = "~Lista de Sele��o..." ;
             Text [ portuguese ] = "~Lista de selec��o..." ;
             Text[ chinese_simplified ] = "选择列单(~S)...";
@@ -491,6 +513,8 @@ Menu RID_POPUP_CELLS
             Text[ hebrew ] = "Aus~wahlliste...";
             Text[ hindi ] = "~चुनाव सूची...";
             Text[ slovak ] = "~Zoznam výberu...";
+            Text[ hungarian ] = "~Kijelölési lista...";
+            Text[ slovenian ] = "Seznam i~zborov...";
         };
     };
 };
@@ -504,7 +528,7 @@ String RID_POPUP_TAB
     Text [ portuguese_brazilian ] = "Menu pop-up da barra de planilha" ;
     Text [ portuguese ] = "Menu instant�neo para barra de tabelas" ;
     Text [ finnish ] = "Taulukkorivin ponnahdusvalikko" ;
-    Text [ danish ] = "Popup-menu for regnearkslinjen" ;
+    Text [ danish ] = "Popup-menu for arklinjen" ;
     Text [ french ] = "Menu Pop-up pour la barre des feuilles" ;
     Text [ swedish ] = "Popupmeny f�r tabellist" ;
     Text [ dutch ] = "PopUp-menu voor werkbladenlijst" ;
@@ -526,6 +550,8 @@ String RID_POPUP_TAB
     Text[ hebrew ] = "Popup-Menü für Tabellenleiste";
     Text[ hindi ] = "शीट् पट्टी का पोप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu panelu listu";
+    Text[ hungarian ] = "Előugró menü munkalap eszköztárnál";
+    Text[ slovenian ] = "Pojavni meni vrstice za list";
 };
 
 Menu RID_POPUP_TAB
@@ -543,7 +569,7 @@ Menu RID_POPUP_TAB
             Text [ portuguese_brazilian ] = "~Inserir..." ;
             Text [ portuguese ] = "~Inserir..." ;
             Text [ finnish ] = "~Lis��..." ;
-            Text [ danish ] = "~Inds�t..." ;
+            Text [ danish ] = "~Inds�t ark..." ;
             Text [ french ] = "~Ins�rer une feuille..." ;
             Text [ swedish ] = "~Infoga tabell..." ;
             Text [ dutch ] = "~Invoegen..." ;
@@ -555,7 +581,7 @@ Menu RID_POPUP_TAB
             Text[ japanese ] = "表の挿入(~I)...";
             Text[ chinese_traditional ] = "插入工作表(~I)...";
             Text[ arabic ] = "�����...";
-            Text[ greek ] = "~��������...";
+            Text[ greek ] = "~�������� ������...";
             Text[ korean ] = "시트 삽입(~I)...";
             Text[ turkish ] = "Hesap ~Ekle...";
             Text[ language_user1 ] = " ";
@@ -565,6 +591,8 @@ Menu RID_POPUP_TAB
             Text[ hebrew ] = "Tabelle ~einfügen...";
             Text[ hindi ] = "~जोड़ो...";
             Text[ slovak ] = "Vlož~iť...";
+            Text[ hungarian ] = "~Munkalap beszúrása...";
+            Text[ slovenian ] = "~Vstavi list...";
         };
         MenuItem
         {
@@ -577,7 +605,7 @@ Menu RID_POPUP_TAB
             Text [ portuguese_brazilian ] = "~Excluir..." ;
             Text [ portuguese ] = "E~liminar..." ;
             Text [ finnish ] = "~Poista..." ;
-            Text [ danish ] = "Slet..." ;
+            Text [ danish ] = "~Slet ark..." ;
             Text [ french ] = "~Supprimer la feuille..." ;
             Text [ swedish ] = "~Radera tabell..." ;
             Text [ dutch ] = "~Wissen..." ;
@@ -589,7 +617,7 @@ Menu RID_POPUP_TAB
             Text[ japanese ] = "表の削除(~D)...";
             Text[ chinese_traditional ] = "刪除工作表(~D)...";
             Text[ arabic ] = "���...";
-            Text[ greek ] = "������~��...";
+            Text[ greek ] = "������~�� ������...";
             Text[ korean ] = "시트 삭제(~D)...";
             Text[ turkish ] = "�ablonu ~Sil...";
             Text[ language_user1 ] = " ";
@@ -599,6 +627,8 @@ Menu RID_POPUP_TAB
             Text[ hebrew ] = "Tabelle ~löschen...";
             Text[ hindi ] = "~मिटाओ...";
             Text[ slovak ] = "~Zmazať...";
+            Text[ hungarian ] = "Munkalap ~törlése...";
+            Text[ slovenian ] = "~Izbriši list...";
         };
         MenuItem
         {
@@ -611,7 +641,7 @@ Menu RID_POPUP_TAB
             Text [ portuguese_brazilian ] = "~Renomear..." ;
             Text [ portuguese ] = "~Mudar nome..." ;
             Text [ finnish ] = "~Nime� uudelleen..." ;
-            Text [ danish ] = "Omd�b..." ;
+            Text [ danish ] = "~Omd�b ark..." ;
             Text [ french ] = "Ren~ommer la feuille..." ;
             Text [ swedish ] = "~Byt namn p� tabell..." ;
             Text [ dutch ] = "~Naam wijzigen..." ;
@@ -623,7 +653,7 @@ Menu RID_POPUP_TAB
             Text[ japanese ] = "表の名前の変更(~R)...";
             Text[ chinese_traditional ] = "重新命名工作表(~R)...";
             Text[ arabic ] = "����� �����...";
-            Text[ greek ] = "�����������...";
+            Text[ greek ] = "����������� ������...";
             Text[ korean ] = "시트 이름 바꾸기(~R)...";
             Text[ turkish ] = "~Yapra�� De�i�tir....";
             Text[ language_user1 ] = " ";
@@ -633,6 +663,8 @@ Menu RID_POPUP_TAB
             Text[ hebrew ] = "Tabelle ~umbenennen...";
             Text[ hindi ] = "~पुनः नाम दो...";
             Text[ slovak ] = "P~remenovať...";
+            Text[ hungarian ] = "Munkalap át~nevezése...";
+            Text[ slovenian ] = "P~reimenuj list...";
         };
         MenuItem
         {
@@ -645,7 +677,7 @@ Menu RID_POPUP_TAB
             Text [ portuguese_brazilian ] = "~Mover/Copiar..." ;
             Text [ portuguese ] = "~Mover/Copiar..." ;
             Text [ finnish ] = "~Siirr�/kopioi..." ;
-            Text [ danish ] = "Flyt/kopier..." ;
+            Text [ danish ] = "~Flyt/kopier ark..." ;
             Text [ french ] = "~D�placer/copier la feuille..." ;
             Text [ swedish ] = "~Flytta/kopiera tabell..." ;
             Text [ dutch ] = "~Verplaatsen/kopi�ren..." ;
@@ -667,6 +699,8 @@ Menu RID_POPUP_TAB
             Text[ hebrew ] = "Tabelle ~verschieben/kopieren...";
             Text[ hindi ] = "~स्थान परिवर्तन/प्रतिलिपि...";
             Text[ slovak ] = "Presu~núť/Kopírovať";
+            Text[ hungarian ] = "Munkalap át~helyezése/másolása...";
+            Text[ slovenian ] = "Pre~makni/Kopiraj list...";
         };
         MenuItem
         {
@@ -701,6 +735,8 @@ Menu RID_POPUP_TAB
             Text[ hebrew ] = "Alle ~Tabellen auswählen";
             Text[ hindi ] = "सब शी~टों को चुनो";
             Text[ slovak ] = "Vy~brať všetky listy";
+            Text[ hungarian ] = "~Összes munkalap kijelölése";
+            Text[ slovenian ] = "Izberi vse lis~te";
         };
     };
 };
@@ -736,6 +772,8 @@ String RID_POPUP_PIVOT
     Text[ hebrew ] = "Popup-Menü für den Datenpilot";
     Text[ hindi ] = "ड़ॉटा पैलट् का पोप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu sprievodcu dátami";
+    Text[ hungarian ] = "Előugró menü adattündérnél";
+    Text[ slovenian ] = "Pojavni meni programa DataPilot";
 };
 
 Menu RID_POPUP_PIVOT
@@ -755,7 +793,7 @@ Menu RID_POPUP_PIVOT
             Text [ french ] = "~Activer..." ;
             Text [ dutch ] = "~Oproepen..." ;
             Text [ spanish ] = "~Activar..." ;
-            Text [ danish ] = "Aktiver..." ;
+            Text [ danish ] = "~Start..." ;
             Text [ swedish ] = "~K�r..." ;
             Text [ finnish ] = "~Aloita..." ;
             Text [ english_us ] = "~Start..." ;
@@ -775,6 +813,8 @@ Menu RID_POPUP_PIVOT
             Text[ hebrew ] = "~Aufrufen...";
             Text[ hindi ] = "~प्रारंभ...";
             Text[ slovak ] = "Štart ~sprievodcu...";
+            Text[ hungarian ] = "~Indítás...";
+            Text[ slovenian ] = "~Zaženi...";
         };
         MenuItem
         {
@@ -787,7 +827,7 @@ Menu RID_POPUP_PIVOT
             Text [ portuguese_brazilian ] = "~Atualizar" ;
             Text [ portuguese ] = "A~ctualizar" ;
             Text [ finnish ] = "~P�ivit�" ;
-            Text [ danish ] = "Opdater" ;
+            Text [ danish ] = "Opda~ter" ;
             Text [ french ] = "A~ctualiser" ;
             Text [ swedish ] = "~Uppdatera" ;
             Text [ dutch ] = "~Bijwerken" ;
@@ -809,6 +849,8 @@ Menu RID_POPUP_PIVOT
             Text[ hebrew ] = "‮רענון‬";
             Text[ hindi ] = "~नवीकरण";
             Text[ slovak ] = "~Obnoviť";
+            Text[ hungarian ] = "~Frissítés";
+            Text[ slovenian ] = "O~sveži";
         };
         MenuItem
         {
@@ -841,6 +883,8 @@ Menu RID_POPUP_PIVOT
             Text[ thai ] = "~Filter...";
             Text[ hindi ] = "~Filter...";
             Text[ slovak ] = "~Filter...";
+            Text[ hungarian ] = "~Szűrő...";
+            Text[ slovenian ] = "~Filtriraj...";
         };
         MenuItem
         {
@@ -853,7 +897,7 @@ Menu RID_POPUP_PIVOT
             Text [ portuguese_brazilian ] = "~Excluir" ;
             Text [ portuguese ] = "E~liminar" ;
             Text [ finnish ] = "~Poista" ;
-            Text [ danish ] = "Slet" ;
+            Text [ danish ] = "~Slet" ;
             Text [ french ] = "~Supprimer" ;
             Text [ swedish ] = "~Radera" ;
             Text [ dutch ] = "~Wissen" ;
@@ -875,6 +919,8 @@ Menu RID_POPUP_PIVOT
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
             Text[ slovak ] = "~Zmazať";
+            Text[ hungarian ] = "~Törlés";
+            Text[ slovenian ] = "~Izbriši";
         };
     };
 };
@@ -888,7 +934,7 @@ String RID_POPUP_PREVIEW
     Text [ portuguese_brazilian ] = "Menu pop-up da Visualiza��o de P�gina" ;
     Text [ portuguese ] = "Menu instant�neo para visualizar p�gina" ;
     Text [ finnish ] = "Esikatselun ponnahdusvalikko" ;
-    Text [ danish ] = "Popup-menu for sidevisning" ;
+    Text [ danish ] = "Vis side Popup-menu" ;
     Text [ french ] = "Menu Pop-up pour l'aper�u de page" ;
     Text [ swedish ] = "Popupmeny f�r sidf�rhandsvisning" ;
     Text [ dutch ] = "PopUp-menu voor paginavoorbeeld" ;
@@ -910,6 +956,8 @@ String RID_POPUP_PREVIEW
     Text[ hebrew ] = "Popup-Menü für Seitenvorschau";
     Text[ hindi ] = "पृष्ठ पूर्वदृश्य का पोप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu náhľadu stránky";
+    Text[ hungarian ] = "Előugró menü oldal előnézeténél";
+    Text[ slovenian ] = "Pojavni meni predogleda strani";
 };
 
 Menu RID_POPUP_PREVIEW
@@ -927,7 +975,7 @@ Menu RID_POPUP_PREVIEW
             Text [ portuguese_brazilian ] = "P�gina ~Anterior" ;
             Text [ portuguese ] = "P�gina ~anterior" ;
             Text [ finnish ] = "~Edellinen sivu" ;
-            Text [ danish ] = "Forrige side" ;
+            Text [ danish ] = "~Forrige side" ;
             Text [ french ] = "~Page pr�c�dente" ;
             Text [ swedish ] = "~F�reg�ende sida" ;
             Text [ dutch ] = "Vo~rige pagina" ;
@@ -949,6 +997,8 @@ Menu RID_POPUP_PREVIEW
             Text[ hebrew ] = "‮הדף הקודם‬";
             Text[ hindi ] = "~पिछला पृष्ठ";
             Text[ slovak ] = "~Predchádzajúca strana";
+            Text[ hungarian ] = "~Előző oldal";
+            Text[ slovenian ] = "~Prejšnja stran";
         };
         MenuItem
         {
@@ -961,7 +1011,7 @@ Menu RID_POPUP_PREVIEW
             Text [ portuguese_brazilian ] = "Pr�~xima P�gina" ;
             Text [ portuguese ] = "P�gina ~seguinte" ;
             Text [ finnish ] = "~Seuraava sivu" ;
-            Text [ danish ] = "N�ste side" ;
+            Text [ danish ] = "~N�ste side" ;
             Text [ french ] = "Page ~suivante" ;
             Text [ swedish ] = "~N�sta sida" ;
             Text [ dutch ] = "Vo~lgende pagina" ;
@@ -983,6 +1033,8 @@ Menu RID_POPUP_PREVIEW
             Text[ hebrew ] = "‮הדף הבא‬";
             Text[ hindi ] = "~अगला पृष्ठ";
             Text[ slovak ] = "Ďalšia stra~na";
+            Text[ hungarian ] = "~Következő oldal";
+            Text[ slovenian ] = "~Naslednja stran";
         };
         MenuItem
         {
@@ -995,7 +1047,7 @@ Menu RID_POPUP_PREVIEW
             Text [ portuguese_brazilian ] = "La~yout da P�gina..." ;
             Text [ portuguese ] = "Configurar ~p�gina..." ;
             Text [ finnish ] = "~Sivun taitto..." ;
-            Text [ danish ] = "Sidelayout..." ;
+            Text [ danish ] = "Side~layout..." ;
             Text [ french ] = "~Mise en page..." ;
             Text [ swedish ] = "Sid~layout..." ;
             Text [ dutch ] = "~Paginalay-out..." ;
@@ -1017,6 +1069,8 @@ Menu RID_POPUP_PREVIEW
             Text[ hebrew ] = "Seiten~layout...";
             Text[ hindi ] = "पृ~ष्ठ अभिन्यास...";
             Text[ slovak ] = "Rozlože~nie stránky";
+            Text[ hungarian ] = "~Oldalelrendezés...";
+            Text[ slovenian ] = "Postavitev st~rani...";
         };
         MenuItem
         {
@@ -1051,6 +1105,8 @@ Menu RID_POPUP_PREVIEW
             Text[ hebrew ] = "‮סגירה‬";
             Text[ hindi ] = "~बन्द करो";
             Text[ slovak ] = "~Zavrieť";
+            Text[ hungarian ] = "~Bezárás";
+            Text[ slovenian ] = "~Zapri";
         };
         MenuItem { Separator = TRUE; };
         MenuItem
@@ -1068,7 +1124,7 @@ Menu RID_POPUP_PREVIEW
             Text[ spanish ] = "Cerrar ~previsualizaci�n";
             Text[ finnish ] = "Close Pre~view";
             Text[ italian ] = "Chiudi anteprima";
-            Text[ danish ] = "Close Pre~view";
+            Text[ danish ] = "Luk eksempel";
             Text[ swedish ] = "St�ng f�rh~andsvisning";
             Text[ polish ] = "Close Pre~view";
             Text[ portuguese_brazilian ] = "Fechar visualiza��o";
@@ -1084,6 +1140,8 @@ Menu RID_POPUP_PREVIEW
             Text[ hebrew ] = "Seiten~ansicht schließen";
             Text[ hindi ] = "Close Pre~view";
             Text[ slovak ] = "~Zatvoriť náhľad";
+            Text[ hungarian ] = "Elő~nézet bezárása";
+            Text[ slovenian ] = "Zapri predo~gled";
         };
     };
 };
@@ -1099,7 +1157,7 @@ String RID_POPUP_EDIT
     Text [ french ] = "Menu Pop-up pour la saisie de texte" ;
     Text [ dutch ] = "PopUp-menu voor tekstinvoer" ;
     Text [ swedish ] = "Popupmeny f�r textinmatning" ;
-    Text [ danish ] = "Popup-menu for tekstinput" ;
+    Text [ danish ] = "Tekstinput popup-menu" ;
     Text [ portuguese ] = "Menu instant�neo para inser��o de texto" ;
     Text [ portuguese_brazilian ] = "Menu pop-up para Entrada de Texto" ;
     Text[ chinese_simplified ] = "字段输入栏弹出式菜单";
@@ -1119,6 +1177,8 @@ String RID_POPUP_EDIT
     Text[ hebrew ] = "Popup-Menü für Texteingabe";
     Text[ hindi ] = "टेक्स्ट् इनपुट् का पोप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu pre zadávanie textu";
+    Text[ hungarian ] = "Előugró menü szövegbevitelnél";
+    Text[ slovenian ] = "Pojavni meni za vnos besedila";
 };
 
 Menu RID_POPUP_EDIT
@@ -1157,6 +1217,8 @@ Menu RID_POPUP_EDIT
             Text[ hebrew ] = "‮ברירת מחדל‬";
             Text[ hindi ] = "~अनुपस्थिति";
             Text[ slovak ] = "Výcho~dzie";
+            Text[ hungarian ] = "~Alapértelmezett";
+            Text[ slovenian ] = "~Privzeto";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1241,6 +1303,8 @@ Menu RID_POPUP_EDIT
                         Text[ hebrew ] = "Do~ppelt unterstreichen";
                         Text[ hindi ] = "द्वि~गुणित रेखांकित";
                         Text[ slovak ] = "Dvojito podčiarkn~uť";
+                        Text[ hungarian ] = "~Kettős aláhúzás";
+                        Text[ slovenian ] = "D~vojno podčrtano";
                     };
                     MenuItem
                     {
@@ -1269,7 +1333,7 @@ Menu RID_POPUP_EDIT
                         Text [ portuguese_brazilian ] = "So~brescrito" ;
                         Text [ portuguese ] = "~Superior � linha" ;
                         Text [ finnish ] = "~Yl�indeksi" ;
-                        Text [ danish ] = "H�vet" ;
+                        Text [ danish ] = "~H�vet skrift" ;
                         Text [ french ] = "E~xposant" ;
                         Text [ swedish ] = "~Upph�jt" ;
                         Text [ dutch ] = "S~uperscript" ;
@@ -1291,6 +1355,8 @@ Menu RID_POPUP_EDIT
                         Text[ hebrew ] = "~Hochstellen";
                         Text[ hindi ] = "सू~परस्क्रिप्ट्";
                         Text[ slovak ] = "~Horný index";
+                        Text[ hungarian ] = "~Felső index";
+                        Text[ slovenian ] = "N~adpisano";
                     };
                     MenuItem
                     {
@@ -1303,7 +1369,7 @@ Menu RID_POPUP_EDIT
                         Text [ portuguese_brazilian ] = "Sub~scrito" ;
                         Text [ portuguese ] = "~Inferior � linha" ;
                         Text [ finnish ] = "~Alaindeksi" ;
-                        Text [ danish ] = "S�nket" ;
+                        Text [ danish ] = "S�~nket skrift" ;
                         Text [ french ] = "I~ndice" ;
                         Text [ swedish ] = "~Neds�nkt" ;
                         Text [ dutch ] = "Su~bscript" ;
@@ -1325,13 +1391,15 @@ Menu RID_POPUP_EDIT
                         Text[ hebrew ] = "~Tiefstellen";
                         Text[ hindi ] = "सब~स्क्रिप्ट्";
                         Text[ slovak ] = "~Dolný index";
+                        Text[ hungarian ] = "Al~só index";
+                        Text[ slovenian ] = "Po~dpisano";
                     };
                 };
             };
                     Text[ italian ] = "Stile";
             Text[ portuguese_brazilian ] = "Es~tilo";
             Text[ portuguese ] = "E~stilo";
-            Text[ danish ] = "Typografi";
+            Text[ danish ] = "Typograf~i";
             Text[ french ] = "St~yle";
             Text[ swedish ] = "Sti~l";
             Text[ dutch ] = "T~ype";
@@ -1354,6 +1422,8 @@ Menu RID_POPUP_EDIT
             Text[ hebrew ] = "Sti~l";
             Text[ hindi ] = "शै~ली";
             Text[ slovak ] = "Š~týl";
+            Text[ hungarian ] = "~Stílus";
+            Text[ slovenian ] = "Slo~g";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1382,7 +1452,7 @@ String RID_POPUP_AUDIT
     Text [ french ] = "Menu Pop-up du mode Remplissage d'audit" ;
     Text [ dutch ] = "Popup-menu voor detective opvulmodus" ;
     Text [ swedish ] = "Popupmeny f�r detektiv-fyllningsl�ge" ;
-    Text [ danish ] = "Popup-menu for detektiv fyldmodus" ;
+    Text [ danish ] = "Popup-menu for detektiv udfyldningstilstand" ;
     Text [ portuguese_brazilian ] = "Menu pop-up para o Modo Preenchimento do Auditor" ;
     Text [ portuguese ] = "Menu instant�neo para o modo preenchimento de auditoria" ;
     Text[ chinese_simplified ] = "侦探-充填-弹出式菜单";
@@ -1402,6 +1472,8 @@ String RID_POPUP_AUDIT
     Text[ hebrew ] = "Popup-Menü für Detektiv-Füll-Modus";
     Text[ hindi ] = "जासूस भरने का प्रकार का पोप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu módu detektívneho vyplňovania";
+    Text[ hungarian ] = "Detektív kitöltő módjánál előugró menü";
+    Text[ slovenian ] = "Pojavni meni za polnitev z zaznavanjem";
 };
 
 Menu RID_POPUP_AUDIT
@@ -1441,6 +1513,8 @@ Menu RID_POPUP_AUDIT
             Text[ hebrew ] = "Spur zum ~Vorgänger";
             Text[ hindi ] = "~पूर्व अवलम्बी को जाचँ करो";
             Text[ slovak ] = "~Následník";
+            Text[ hungarian ] = "~Előzmények felderítése";
+            Text[ slovenian ] = "Sledi ~predhodniku";
         };
         MenuItem
         {
@@ -1453,7 +1527,7 @@ Menu RID_POPUP_AUDIT
             Text [ portuguese_brazilian ] = "~Remover Precedente" ;
             Text [ portuguese ] = "Remover pr~ecedentes" ;
             Text [ finnish ] = "~Poista edelt�j�nuoli" ;
-            Text [ danish ] = "Fjern overordnede pile" ;
+            Text [ danish ] = "~Fjern overordnede spor" ;
             Text [ french ] = "~Supprimer le rep�rage des ant�c�dents" ;
             Text [ swedish ] = "Ta bort sp�r till �v~erordnade" ;
             Text [ dutch ] = "Spoor naar voorganger v~erwijderen" ;
@@ -1475,6 +1549,8 @@ Menu RID_POPUP_AUDIT
             Text[ hebrew ] = "Spur zum Vorgänger ~entfernen";
             Text[ hindi ] = "पूर्व अवलम्बी को ~हटाओ";
             Text[ slovak ] = "Odst~rániť následníka";
+            Text[ hungarian ] = "Elő~zmények eltávolítása";
+            Text[ slovenian ] = "Odst~rani predhodnika";
         };
         MenuItem
         {
@@ -1487,7 +1563,7 @@ Menu RID_POPUP_AUDIT
             Text [ portuguese_brazilian ] = "Rastrear ~Dependente" ;
             Text [ portuguese ] = "Analisar ~dependentes" ;
             Text [ finnish ] = "~J�ljit� seuraaja" ;
-            Text [ danish ] = "Spor underordnede" ;
+            Text [ danish ] = "~Spor underordnede" ;
             Text [ french ] = "R~ep�rer les d�pendants" ;
             Text [ swedish ] = "Sp�r till u~nderordnade" ;
             Text [ dutch ] = "Spoor naar ~opvolger" ;
@@ -1509,6 +1585,8 @@ Menu RID_POPUP_AUDIT
             Text[ hebrew ] = "Spur zum ~Nachfolger";
             Text[ hindi ] = "~अवलम्बी को जाचँ करो";
             Text[ slovak ] = "Predcho~dca";
+            Text[ hungarian ] = "~Függőségek felderítése";
+            Text[ slovenian ] = "Sledi ~odvisniku";
         };
         MenuItem
         {
@@ -1521,7 +1599,7 @@ Menu RID_POPUP_AUDIT
             Text [ portuguese_brazilian ] = "Remover Dependente" ;
             Text [ portuguese ] = "Remover depe~ndentes" ;
             Text [ finnish ] = "Poista seuraajanuoli" ;
-            Text [ danish ] = "Fjern underordnede pile" ;
+            Text [ danish ] = "Fjern underordnet spor" ;
             Text [ french ] = "S~upprimer le rep�rage des d�pendants" ;
             Text [ swedish ] = "Ta bort sp�r till un~derordnade" ;
             Text [ dutch ] = "Spoor naar opvolger ve~rwijderen" ;
@@ -1543,6 +1621,8 @@ Menu RID_POPUP_AUDIT
             Text[ hebrew ] = "Spur zum Nachfolger ent~fernen";
             Text[ hindi ] = "अवलम्बी को हटाओ";
             Text[ slovak ] = "Odstrániť predchodcu";
+            Text[ hungarian ] = "Függőségek eltávolítása";
+            Text[ slovenian ] = "Odstrani odvisnika";
         };
         MenuItem
         {
@@ -1555,7 +1635,7 @@ Menu RID_POPUP_AUDIT
             Text [ portuguese_brazilian ] = "Remover T~odas as Setas" ;
             Text [ portuguese ] = "Remover ~todas as setas" ;
             Text [ finnish ] = "Poista ~kaikki nuolet" ;
-            Text [ danish ] = "Fjern alle pile" ;
+            Text [ danish ] = "Fjern alle spor" ;
             Text [ french ] = "Su~pprimer tous les rep�res" ;
             Text [ swedish ] = "Ta bort ~alla sp�r" ;
             Text [ dutch ] = "~Alle sporen verwijderen" ;
@@ -1577,6 +1657,8 @@ Menu RID_POPUP_AUDIT
             Text[ hebrew ] = "~Alle Spuren entfernen";
             Text[ hindi ] = "~सब अवलम्बी को ~हटाओ";
             Text[ slovak ] = "Odstrániť vš~etko";
+            Text[ hungarian ] = "~Minden felderítés eltávolítása";
+            Text[ slovenian ] = "Odstrani ~vse sledi";
         };
         MenuItem
         {
@@ -1590,7 +1672,7 @@ Menu RID_POPUP_AUDIT
             Text [ french ] = "Quitter le mode ~Remplissage" ;
             Text [ dutch ] = "Opvulmodus ~be�indigen" ;
             Text [ swedish ] = "~Avsluta fyllningsl�ge" ;
-            Text [ danish ] = "Afslut fyldmodus" ;
+            Text [ danish ] = "Afslut udfyldningstilstand" ;
             Text [ portuguese_brazilian ] = "Sair do Modo de Preenchimento" ;
             Text [ portuguese ] = "~Sair do modo de preenchimento" ;
             Text[ chinese_simplified ] = "结束充填模式";
@@ -1610,6 +1692,8 @@ Menu RID_POPUP_AUDIT
             Text[ hebrew ] = "Füll-Modus ~beenden";
             Text[ hindi ] = "भरने का प्रकार से निर्गम";
             Text[ slovak ] = "Opustiť vyplňovací­ režim";
+            Text[ hungarian ] = "Kilépés a kitöltő módból";
+            Text[ slovenian ] = "Izhod iz polnilnega načina";
         };
     };
 };
@@ -1622,7 +1706,7 @@ String RID_POPUP_PAGEBREAK
     Text [ english_us ] = "Page Break Preview pop-up menu" ;
     Text [ portuguese_brazilian ] = "Menu pop-up para Visualizar Quebras de P�gina" ;
     Text [ swedish ] = "Popupmeny f�r f�rhandsvisning av sidbrytning" ;
-    Text [ danish ] = "Popup-menu for sideskiftsvisning" ;
+    Text [ danish ] = "Sideskiftsvisnings pop-up menu" ;
     Text [ italian ] = "Menu a comparsa per l'anteprima dell'impaginazione" ;
     Text [ spanish ] = "Men� emergente para la previsualizaci�n de los saltos de p�gina" ;
     Text [ french ] = "Menu Pop-up pour l'aper�u des sauts de page" ;
@@ -1644,6 +1728,8 @@ String RID_POPUP_PAGEBREAK
     Text[ hebrew ] = "Popup-Menü für Seitenumbruch-Vorschau";
     Text[ hindi ] = "पृष्ठ खण्डन पूर्वदृश्य का पोप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu náhľadu zalomenia stránky";
+    Text[ hungarian ] = "Előugró menü oldaltörések előnézeténél";
+    Text[ slovenian ] = "Pojavni meni predogleda preloma strani";
 };
 
 Menu RID_POPUP_PAGEBREAK
@@ -1682,6 +1768,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "‮ברירת מחדל‬";
             Text[ hindi ] = "~अनुपस्थिति";
             Text[ slovak ] = "Výcho~dzie";
+            Text[ hungarian ] = "~Alapértelmezett";
+            Text[ slovenian ] = "~Privzeto";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1697,7 +1785,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ portuguese_brazilian ] = "Formatar ~C�lulas..." ;
             Text [ portuguese ] = "Formatar ~c�lulas..." ;
             Text [ finnish ] = "~Muotoile solut..." ;
-            Text [ danish ] = "Formater celler..." ;
+            Text [ danish ] = "~Formater celler..." ;
             Text [ french ] = "~Formater les cellules..." ;
             Text [ swedish ] = "~Formatera celler..." ;
             Text [ dutch ] = "~Cellen opmaken..." ;
@@ -1719,6 +1807,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "~Zellen formatieren...";
             Text[ hindi ] = "कोष्ठों का ~रचना करो...";
             Text[ slovak ] = "~Formát buniek...";
+            Text[ hungarian ] = "Cellák ~formázása...";
+            Text[ slovenian ] = "~Oblikuj celice...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1732,7 +1822,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ english_us ] = "Insert ~Row Break" ;
             Text [ portuguese_brazilian ] = "Inserir Quebra de ~Linha" ;
             Text [ swedish ] = "Infoga ~radbrytning" ;
-            Text [ danish ] = "Inds�t linjeskift" ;
+            Text [ danish ] = "Inds�t ~r�kkeskift" ;
             Text [ italian ] = "Inserisci interruzione riga" ;
             Text [ spanish ] = "Insertar salto de ~fila" ;
             Text [ french ] = "I~ns�rer un retour � la ligne" ;
@@ -1755,6 +1845,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "Z~eilenumbruch einfügen";
             Text[ hindi ] = "~पंक्ति खण्डन जोड़ो";
             Text[ slovak ] = "Vložiť zalomenie ~riadka";
+            Text[ hungarian ] = "So~rtörés beszúrása";
+            Text[ slovenian ] = "Vstavi prelom v~rstice";
         };
         MenuItem
         {
@@ -1765,7 +1857,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ english_us ] = "Insert ~Column Break" ;
             Text [ portuguese_brazilian ] = "Inserir Quebra de ~Coluna" ;
             Text [ swedish ] = "Infoga ~kolumnbrytning" ;
-            Text [ danish ] = "Inds�t spalteskift" ;
+            Text [ danish ] = "Inds�t ~kolonneskift" ;
             Text [ italian ] = "Inserisci interruzione colonna" ;
             Text [ spanish ] = "Insertar salto de ~columna" ;
             Text [ french ] = "Ins�rer un saut de c~olonne" ;
@@ -1788,6 +1880,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "S~paltenumbruch einfügen";
             Text[ hindi ] = "~स्तंभ खण्डन जोड़ो";
             Text[ slovak ] = "Vložiť zalomenie stĺp~ca";
+            Text[ hungarian ] = "~Oszloptörés beszúrása";
+            Text[ slovenian ] = "Vstavi prelom ~stolpca";
         };
         MenuItem
         {
@@ -1821,6 +1915,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "Alle ~manuellen Umbrüche löschen";
             Text[ hindi ] = "सब मानुवल खण्डन को मिटाओ";
             Text[ slovak ] = "Odstrániť všetky ručné zalomenia";
+            Text[ hungarian ] = "Töréspontok törlése";
+            Text[ slovenian ] = "Izbriši vse ročne prelome";
         };
         MenuItem
         {
@@ -1831,7 +1927,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ english_us ] = "Reset Scale" ;
             Text [ portuguese_brazilian ] = "Reinicializar Escala" ;
             Text [ swedish ] = "Upph�v s~kalning" ;
-            Text [ danish ] = "Oph�v skalering" ;
+            Text [ danish ] = "Nulstil skalering" ;
             Text [ italian ] = "Elimina scala" ;
             Text [ spanish ] = "Restablecer ~escala" ;
             Text [ french ] = "Supprimer l'~�chelle" ;
@@ -1854,6 +1950,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "S~kalierung aufheben";
             Text[ hindi ] = "स्केल रिसेट्ट करो";
             Text[ slovak ] = "Obnoviť mierku";
+            Text[ hungarian ] = "Méretezés alaphelyzetbe állítása";
+            Text[ slovenian ] = "Ponastavi merilo";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1890,6 +1988,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "Druckbereich ~festlegen";
             Text[ hindi ] = "छपाई फैलाव को परिभाषा दो ";
             Text[ slovak ] = "Definovať oblasť tlače";
+            Text[ hungarian ] = "Nyomtatási tartomány megadása";
+            Text[ slovenian ] = "Določi obseg tiskanja";
         };
         MenuItem
         {
@@ -1923,6 +2023,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "Druckbereich ~hinzufügen";
             Text[ hindi ] = "छपाई फैलाव जोड़ो";
             Text[ slovak ] = "Pridať oblasť tlače";
+            Text[ hungarian ] = "Nyomtatási tartomány hozzáadása";
+            Text[ slovenian ] = "Dodaj obseg tiskanja";
         };
         MenuItem
         {
@@ -1956,6 +2058,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "Druckbereich ~aufheben";
             Text[ hindi ] = "छपाई फैलाव का अनावृत्ति";
             Text[ slovak ] = "Späť výber oblasti pre tlač";
+            Text[ hungarian ] = "Nyomtatási tartomány visszavonása";
+            Text[ slovenian ] = "Razveljavi obseg tiskanja";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1992,6 +2096,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "~Seitenformat...";
             Text[ hindi ] = "पृष्ठ रचना...";
             Text[ slovak ] = "Formát stránky...";
+            Text[ hungarian ] = "Oldal formátuma...";
+            Text[ slovenian ] = "Oblika strani...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -2028,6 +2134,8 @@ Menu RID_POPUP_PAGEBREAK
             Text[ hebrew ] = "~Notiz anzeigen";
             Text[ hindi ] = "टिप्पणी दिखा~ओ";
             Text[ slovak ] = "Zobraziť ~poznámku";
+            Text[ hungarian ] = "~Jegyzet megjelenítése";
+            Text[ slovenian ] = "Po~kaži opombo";
         };
     };
 };
