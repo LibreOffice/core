@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2003-03-31 16:23:54 $
+#   last change: $Date: 2004-07-23 13:40:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ TARGET = runner_basicrunner
 
 # --- Files --------------------------------------------------------
 
-JARFILES       = sandbox.jar ridl.jar jurt.jar unoil.jar
+JARFILES       = ridl.jar jurt.jar unoil.jar
 JAVAFILES      = BasicException.java BasicIfcTest.java BasicHandler.java BasicTestCase.java BasicHandlerProvider.java
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 #SUBDIRS        = basichelper
