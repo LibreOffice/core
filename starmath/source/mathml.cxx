@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-12 10:34:19 $
+ *  last change: $Author: tl $ $Date: 2002-11-20 08:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,8 +669,7 @@ void SmXMLImport::endDocument(void)
                     aText.Erase(aText.Len()-1,1);
                 }
             }
-            String aDummy;
-            pDocShell->SetText(aDummy);
+            pDocShell->SetText( String() );
 
             // Convert symbol names
             SmParser &rParser = pDocShell->GetParser();
@@ -681,7 +680,7 @@ void SmXMLImport::endDocument(void)
             delete pTree;
             rParser.SetImportSymbolNames( bVal );
 
-            pDocShell->SetText(aText);
+            pDocShell->SetText( aText );
         }
         DBG_ASSERT(pModel,"So there *was* a uno problem after all");
 

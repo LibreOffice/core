@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-24 10:49:14 $
+ *  last change: $Author: tl $ $Date: 2002-11-20 08:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,10 +356,16 @@ void SmDocShell::SetText(const String& rBuffer)
 
         aText = rBuffer;
         Parse();
-        Resize();
+        //Resize();
         SmViewShell *pViewSh = SmGetActiveView();
         if( pViewSh )
+        {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
+            if (GetProtocol().IsInPlaceActive())
+                Resize();
+            else
+                pViewSh->GetGraphicWindow().Invalidate();
+        }
 
         if ( bIsEnabled )
             EnableSetModified( bIsEnabled );
@@ -665,7 +671,7 @@ SmPrinterAccess::~SmPrinterAccess()
 Printer *SmDocShell::GetPrt()
 {
     if ( GetProtocol().IsInPlaceActive() ||
-         SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+          SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
         //Normalerweise wird der Printer vom Server besorgt. Wenn dieser aber
         //keinen liefert (weil etwa noch keine connection da ist), kann es

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-02 10:58:02 $
+ *  last change: $Author: tl $ $Date: 2002-11-20 08:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,38 +463,15 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 String sFontName = aText;
                 if(!sFontName.Len())
                     throw IllegalArgumentException();
+
                 if(aFormat.GetFont((*ppEntries)->mnMemberId).GetName() != sFontName)
                 {
-                    OutputDevice *pDev = pDocSh->GetPrinter();
-                    if (!pDev || pDev->GetDevFontCount() == 0)
-                        pDev = (OutputDevice *) GetpApp()->GetDefaultDevice();
+                    const SmFace rOld = aFormat.GetFont((*ppEntries)->mnMemberId);
 
-                    FontList aFontList(pDev);
-
-                    sal_uInt16  nCount = aFontList.GetFontNameCount();
-                    sal_Bool bSet = sal_False;
-                    for (sal_uInt16 i = 0;  i < nCount;  i++)
-                    {
-                        const FontInfo& rInfo = aFontList.GetFontName( i );
-                        if(rInfo.GetName() == sFontName)
-                        {
-                            SmFace aSet(rInfo);
-                            const SmFace rOld = aFormat.GetFont((*ppEntries)->mnMemberId);
-                            aSet.SetBorderWidth(rOld.GetBorderWidth());
-                            aSet.SetSize(rOld.GetSize());
-                            aSet.SetAlign(ALIGN_BASELINE);
-                            aFormat.SetFont((*ppEntries)->mnMemberId, aSet);
-                            bSet = sal_True;
-                            break;
-                        }
-                    }
-                    if(!bSet)
-                    {
-                        SmFace aSet(sFontName, aFormat.GetBaseSize());
-                        aSet.SetAlign(ALIGN_BASELINE);
-                        aFormat.SetFont((*ppEntries)->mnMemberId, aSet);
-                        //throw IllegalArgumentException();
-                    }
+                    SmFace aSet( sFontName, rOld.GetSize() );
+                    aSet.SetBorderWidth( rOld.GetBorderWidth() );
+                    aSet.SetAlign( ALIGN_BASELINE );
+                    aFormat.SetFont( (*ppEntries)->mnMemberId, aSet );
                 }
             }
             break;
