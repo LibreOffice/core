@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ void ScImportAsciiDlg::SetupSeparatorCtrls()
     aCkbComma.Enable( bEnable );
     aCkbSpace.Enable( bEnable );
     aCkbOther.Enable( bEnable );
-    aEdOther.Enable( bEnable && aCkbOther.IsChecked() );
+    aEdOther.Enable( bEnable );
     aCkbAsOnce.Enable( bEnable );
     aFtTextSep.Enable( bEnable );
     aCbTextSep.Enable( bEnable );
@@ -905,9 +905,10 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     DBG_ASSERT( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
     DBG_ASSERT( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
-    aEdOther.Enable( aCkbOther.IsChecked() );
-    if( (pCtrl == static_cast< Control* >( &aCkbOther )) && aEdOther.IsEnabled() )
+    if( (pCtrl == &aCkbOther) && aCkbOther.IsChecked() )
         aEdOther.GrabFocus();
+    else if( pCtrl == &aEdOther )
+        aCkbOther.Check( aEdOther.GetText().Len() > 0 );
     maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
     return 0;
 }
