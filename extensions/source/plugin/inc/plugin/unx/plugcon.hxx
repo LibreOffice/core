@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:38:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ public:
     char*                       pMimeType;
     void*                       pShell;
     void*                       pWidget;
+    void*                       pForm;
 
     int nArg;
     char** argn;
@@ -146,9 +147,6 @@ DECLARE_LIST( PluginConnectorList, PluginConnector* );
 
 class PluginConnector : public Mediator
 {
-    friend NPError NPN_DestroyStream( NPP, NPStream*, NPError );
-    friend NPError NPN_NewStream( NPP, NPMIMEType, const char*,
-                                  NPStream** );
 protected:
     NAMESPACE_VOS(OMutex)               m_aUserEventMutex;
 
@@ -171,8 +169,13 @@ public:
     void                Respond( ULONG nID, char*, ULONG, ... );
     ULONG               Send( UINT32, ... );
 
+    static const UINT32 UnknownStreamID = 0xffffffff;
+    static const UINT32 UnknownNPPID = 0xffffffff;
+
     UINT32  GetStreamID( NPStream* pStream );
     UINT32  GetNPPID( NPP );
+
+    NPStreamList& getStreamList() { return m_aNPWrapStreams; }
 
     NPError GetNPError( MediatorMessage* pMes )
     {
@@ -205,6 +208,7 @@ enum CommandAtoms
 
         eNPP_DestroyStream,
         eNPP_Destroy,
+        eNPP_DestroyPhase2,
         eNPP_NewStream,
         eNPP_New,
         eNPP_SetWindow,
