@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-26 13:56:38 $
+ *  last change: $Author: er $ $Date: 2001-02-28 20:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,12 +677,19 @@ void ScDocument::UpdateChartListenerCollection()
 
                             BOOL bIsChart = FALSE;
                             SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                            if ( aIPObj.Is() && SchModuleDummy::HasID( *aIPObj->GetSvFactory() ) )
+                            USHORT nId;
+                            if ( aIPObj.Is() &&
+                                 ((nId = SchModuleDummy::HasID( *aIPObj->GetSvFactory() )) != 0) )
                             {
+                                BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
                                 SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
-                                // #84359# No SomeData1 => manually inserted
-                                // OLE object => no listener at ScAddress(0,0,0)
-                                if ( pChartData && pChartData->SomeData1().Len() )
+                                // #84359# manually inserted OLE object
+                                // => no listener at ScAddress(0,0,0)
+                                // >=SO6: if no series set
+                                // < SO6: if no SomeData set
+                                if ( pChartData &&
+                                    ((!bSO6 && pChartData->SomeData1().Len()) ||
+                                    (bSO6 && pChartData->GetSeriesAddresses().getLength())) )
                                 {
                                     bIsChart = TRUE;
 
@@ -703,7 +710,7 @@ void ScDocument::UpdateChartListenerCollection()
 
                                         //  #81525# re-create series ranges from old extra string
                                         //  if not set (after loading)
-                                        if ( pChartData->GetSeriesAddresses().getLength() == 0 )
+                                        if ( !bSO6 )
                                             aArray.SetExtraStrings( *pChartData );
                                     }
 
