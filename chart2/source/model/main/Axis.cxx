@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 16:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -129,6 +132,7 @@ enum
     PROP_AXIS_TEXT_STACKED,
     PROP_AXIS_TEXT_ARRANGE_ORDER,
     PROP_AXIS_NUMBER_FORMAT,
+    PROP_AXIS_REFERENCE_DIAGRAM_SIZE,
 
     // for Testing only!
     PROP_AXIS_MAJOR_TICKMARKS,
@@ -188,6 +192,13 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
+    rOutProperties.push_back(
+        Property( C2U( "ReferenceDiagramSize" ),
+                  PROP_AXIS_REFERENCE_DIAGRAM_SIZE,
+                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
     // for Testing only!
     rOutProperties.push_back(
         Property( C2U( "MajorTickmarks" ),
@@ -232,6 +243,11 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_NUMBER_FORMAT ));
     rOutMap[ PROP_AXIS_NUMBER_FORMAT ] =
         uno::makeAny( aFormat );
+
+    // todo: default is just for testing. should be void
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_REFERENCE_DIAGRAM_SIZE ));
+    rOutMap[ PROP_AXIS_REFERENCE_DIAGRAM_SIZE ] =
+        uno::makeAny( awt::Size( 20000, 15000 ) );
 
     // for Testing only!
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_MAJOR_TICKMARKS ));
