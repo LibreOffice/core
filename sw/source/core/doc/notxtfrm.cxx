@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( TRUE );
 
-    if ( (!pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER) &&
+    if ( (!pOut->GetConnectMetaFile() || ! pSh->GetWin() ) &&
          FindFlyFrm()->GetContour( aPoly ) )
     {
         pOut->SetClipRegion( aPoly );
@@ -976,7 +976,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                         ::RepaintPagePreview( pSh, aRect );
                 }
                 else if ( pSh->VisArea().IsOver( aRect ) &&
-                     OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
+                   OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
                 {
                     // OD 27.11.2002 #105519# - invalidate instead of painting
                     pSh->GetWin()->Invalidate( aRect.SVRect() );
@@ -1084,7 +1084,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     else
                         pVout = 0;
 
-                    ASSERT( OUTDEV_VIRDEV != pOut->GetOutDevType(),
+                    ASSERT( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
+                            pShell->GetViewOptions()->IsPDFExport(),
                             "pOut sollte kein virtuelles Device sein" );
                     rGrfObj.StartAnimation( pOut, aAlignedGrfArea.Pos(),
                                         aAlignedGrfArea.SSize(), long(this),
