@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 07:22:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 09:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ModalDialog DLG_PRESLT
         Text [ swedish ] = "Välj en ~sidformatmall" ;
         Text [ danish ] = "Vælg en sidetypografi" ;
         Text [ portuguese ] = "Escolha um estilo de ~página" ;
-        Text [ portuguese_brazilian ] = "Wählen Sie eine ~Seitenvorlage" ;
+        Text [ portuguese_brazilian ] = "W?hlen Sie eine ~Seitenvorlage" ;
         Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÒ³ÃæÑùÊ½(~S)";
         Text[ russian ] = "Âûáåğèòå äèçàéí ñëàéäà";
         Text[ polish ] = "Wybierz uk³ad slajdu";
