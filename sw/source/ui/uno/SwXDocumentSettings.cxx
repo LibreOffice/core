@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 21:44:35 $
+ *  last change: $Author: mtg $ $Date: 2001-07-24 22:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             SfxPrinter *pPrinter = mpDoc->GetPrt ( sal_False );
             rValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
-
         }
         break;
         case HANDLE_PRINTER_SETUP:
@@ -471,6 +470,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                 Sequence < sal_Int8 > aSequence( nSize );
                 aStream.Read ( aSequence.getArray(), nSize );
+                rValue <<= aSequence;
+            }
+            else
+            {
+                Sequence < sal_Int8 > aSequence ( 0 );
                 rValue <<= aSequence;
             }
         }
