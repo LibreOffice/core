@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-09 15:02:08 $
+#   last change: $Author: kz $ $Date: 2005-01-14 12:01:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ SLOFILES =	\
         $(SLO)$/xeformula.obj				\
         $(SLO)$/xehelper.obj				\
         $(SLO)$/xelink.obj					\
+        $(SLO)$/xename.obj					\
         $(SLO)$/xepage.obj					\
         $(SLO)$/xepivot.obj					\
         $(SLO)$/xerecord.obj				\
@@ -120,6 +121,7 @@ SLOFILES =	\
         $(SLO)$/xiescher.obj				\
         $(SLO)$/xihelper.obj				\
         $(SLO)$/xilink.obj					\
+        $(SLO)$/xiname.obj					\
         $(SLO)$/xipage.obj					\
         $(SLO)$/xipivot.obj					\
         $(SLO)$/xiroot.obj					\
