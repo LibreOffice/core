@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 07:46:42 $
+ *  last change: $Author: os $ $Date: 2001-06-20 13:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ enum SwTextPortionType
     PORTION_RUBY_START,
     PORTION_RUBY_END
 };
-
+class SwXRubyPortion;
 class SwXTextPortion : public cppu::WeakImplHelper7
 <
     ::com::sun::star::beans::XMultiPropertySet,
@@ -140,6 +140,7 @@ class SwXTextPortion : public cppu::WeakImplHelper7
 >,
     public SwClient
 {
+    friend class SwXRubyPortion;
     SwEventListenerContainer    aLstnrCntnr;
     SfxItemPropertySet          aPropSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >                   xParentText;
@@ -147,6 +148,11 @@ class SwXTextPortion : public cppu::WeakImplHelper7
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xTOXMark;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xBookmark;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xFootnote;
+    ::com::sun::star::uno::Any* pRubyText;
+    ::com::sun::star::uno::Any* pRubyStyle;
+    ::com::sun::star::uno::Any* pRubyAdjust;
+    ::com::sun::star::uno::Any* pRubyIsAbove;
+
     const SwFmtFld*             pFmtFld;
     SwDepend                    aFrameDepend;
     SwFrmFmt*                   pFrameFmt;
@@ -248,18 +254,11 @@ public:
  ---------------------------------------------------------------------------*/
 class SwXRubyPortion : public SwXTextPortion
 {
-    ::com::sun::star::uno::Any aRubyText;
-    ::com::sun::star::uno::Any aRubyStyle;
-    ::com::sun::star::uno::Any aRubyAdjust;
 public:
     SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby& rAttr,
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
                     sal_Bool bEnd   );
     ~SwXRubyPortion();
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-
 };
 #endif
