@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:03:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ ModalDialog DLG_INSERT_PASTE
         Text [ ENGLISH ] = "~behind" ;
         Text [ norwegian ] = "~bak" ;
         Text [ italian ] = "Dietro" ;
-        Text [ portuguese_brazilian ] = "~atr?s" ;
+        Text [ portuguese_brazilian ] = "~atr�s" ;
         Text [ portuguese ] = "~atr�s" ;
         Text [ finnish ] = "~J�lkeen" ;
         Text [ danish ] = "efter" ;
@@ -213,11 +213,12 @@ ModalDialog DLG_INSERT_PASTE
     Text[ czech ] = "Vložit snímky";
     Text[ hebrew ] = "Dias einfügen";
     Text[ catalan ] = "Insert Slides";
-    Text[ portuguese_brazilian ] = "Insert Slides";
+    Text[ portuguese_brazilian ] = "Inserir slides";
     Text[ thai ] = "Insert Slides";
     Text[ hindi ] = "Insert Slides";
     Text[ slovak ] = "Vložiť snímky";
 };
+
 
 
 
