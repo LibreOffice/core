@@ -142,18 +142,9 @@ bool showFallbackMsg( OUString const & sFallbackMsg,
 
     sMsg.appendAscii("\n").append( sFallbackMsg );
 
-    if ( Application::IsRemoteServer() )
-    {
-        rtl::OString aTmpStr = rtl::OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US );
-        fprintf( stderr, aTmpStr.getStr() );
-        return true;
-    }
-    else
-    {
-        WarningBox aMsgBox( NULL, WB_OK_CANCEL | WB_DEF_OK, sMsg.makeStringAndClear() );
-        setMsgBoxTitle( aMsgBox );
-        return (aMsgBox.Execute() == RET_OK);
-    }
+    WarningBox aMsgBox( NULL, WB_OK_CANCEL | WB_DEF_OK, sMsg.makeStringAndClear() );
+    setMsgBoxTitle( aMsgBox );
+    return (aMsgBox.Execute() == RET_OK);
 }
 // ----------------------------------------------------------------------------
 
