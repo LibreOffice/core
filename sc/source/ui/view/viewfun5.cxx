@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-26 18:16:21 $
+ *  last change: $Author: dr $ $Date: 2001-11-07 12:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,19 +462,21 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     aSource = ScRange(
                         pTabOpt->aDim.aStart.Col(), pTabOpt->aDim.aStart.Row(), nSrcTab,
                         pTabOpt->aDim.aEnd.Col()-1, pTabOpt->aDim.aEnd.Row()-1, nSrcTab );
-                    //  selection can be bigger than the used area
-                    if ( pTabOpt->bValidSel )
-                    {
-                        if ( pTabOpt->aLastSel.aStart.Col() < aSource.aStart.Col() )
-                            aSource.aStart.SetCol( pTabOpt->aLastSel.aStart.Col() );
-                        if ( pTabOpt->aLastSel.aStart.Row() < aSource.aStart.Row() )
-                            aSource.aStart.SetRow( pTabOpt->aLastSel.aStart.Row() );
-                        //  "end" in selection is really the end
-                        if ( pTabOpt->aLastSel.aEnd.Col() > aSource.aEnd.Col() )
-                            aSource.aEnd.SetCol( pTabOpt->aLastSel.aEnd.Col() );
-                        if ( pTabOpt->aLastSel.aEnd.Row() > aSource.aEnd.Row() )
-                            aSource.aEnd.SetRow( pTabOpt->aLastSel.aEnd.Row() );
-                    }
+// #92240# don't use selection area: if cursor is moved in Excel after Copy, selection
+// represents the new cursor position and not the copied area
+//                    //  selection can be bigger than the used area
+//                    if ( pTabOpt->bValidSel )
+//                    {
+//                        if ( pTabOpt->aLastSel.aStart.Col() < aSource.aStart.Col() )
+//                            aSource.aStart.SetCol( pTabOpt->aLastSel.aStart.Col() );
+//                        if ( pTabOpt->aLastSel.aStart.Row() < aSource.aStart.Row() )
+//                            aSource.aStart.SetRow( pTabOpt->aLastSel.aStart.Row() );
+//                        //  "end" in selection is really the end
+//                        if ( pTabOpt->aLastSel.aEnd.Col() > aSource.aEnd.Col() )
+//                            aSource.aEnd.SetCol( pTabOpt->aLastSel.aEnd.Col() );
+//                        if ( pTabOpt->aLastSel.aEnd.Row() > aSource.aEnd.Row() )
+//                            aSource.aEnd.SetRow( pTabOpt->aLastSel.aEnd.Row() );
+//                    }
                 }
                 else
                 {
