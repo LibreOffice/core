@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-01 18:04:49 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 06:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1685,8 +1685,7 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
 #endif //USE_BUILTIN_RASTERIZER
 
 #ifdef USE_PSPRINT
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    const ::std::list< ::psp::KernPair >& rPairs( rMgr.getKernPairs( maGraphicsData.m_pPrinterGfx->GetFontID() ) );
+    const ::std::list< ::psp::KernPair >& rPairs( maGraphicsData.m_pPrinterGfx->getKernPairs() );
     ULONG nHavePairs = rPairs.size();
     if( pKernPairs && nPairs )
     {
