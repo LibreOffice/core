@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:46:42 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ ItemList [ language_user1 ] =
         < "Europa Oriental (DOS/OS2-852)"                           ; RTL_TEXTENCODING_IBM_852          ; > ;
         < "Cirílico (DOS/OS2-855)"                      ; RTL_TEXTENCODING_IBM_855          ; > ;
         < "Turco (DOS/OS2-857)"                         ; RTL_TEXTENCODING_IBM_857          ; > ;
-        < "Cirílico (DOS/OS2-866/Russisch)"             ; RTL_TEXTENCODING_IBM_866          ; > ;
+        < "Cirílico (DOS/OS2-866/Russo)"                ; RTL_TEXTENCODING_IBM_866          ; > ;
         < "Grego (DOS/OS2-869/Moderno)"                 ; RTL_TEXTENCODING_IBM_869          ; > ;
         < "Europa Oriental (Windows-1250/WinLatin 2)"               ; RTL_TEXTENCODING_MS_1250          ; > ;
         < "Cirílico (Windows-1251)"                     ; RTL_TEXTENCODING_MS_1251          ; > ;
@@ -1589,6 +1589,7 @@ ItemList [ language_user1 ] =
     };
     };
  // ********************************************************************** EOF
+
 
 
 
