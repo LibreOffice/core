@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:42:24 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 //#include <string.h>
 
@@ -2491,7 +2494,7 @@ BOOL ExcelToSc::SetCurVal( ScFormulaCell &rCell, double &rfCurVal )
     BYTE    nVal;
     BOOL    bString = FALSE;
 
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     // Code fuer alle anstaendigen Prozessoren
     nType = *( ( ( BYTE * ) &rfCurVal ) + 7 );
     nVal = *( ( ( BYTE * ) &rfCurVal ) + 5 );
