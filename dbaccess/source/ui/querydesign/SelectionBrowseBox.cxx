@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:47:50 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                    ,m_bGroupByUnRelated(sal_True)
                    ,m_bStopTimer(sal_False)
                    ,m_bWasEditing(sal_False)
+                   ,m_bDisableErrorBox(sal_False)
 {
     DBG_CTOR(OSelectionBrowseBox,NULL);
     SetHelpId(HID_CTL_QRYDGNCRIT);
@@ -1198,17 +1199,23 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             }
                             else
                             {
-                                String sTitle(ModuleRes(STR_STAT_WARNING));
-                                OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
-                                aDlg.Execute();
+                                if ( !m_bDisableErrorBox )
+                                {
+                                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                                    OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
+                                    aDlg.Execute();
+                                }
                                 bError = sal_True;
                             }
                         }
                         else
                         {
-                            String sTitle(ModuleRes(STR_STAT_WARNING));
-                            OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
-                            aDlg.Execute();
+                            if ( !m_bDisableErrorBox )
+                            {
+                                String sTitle(ModuleRes(STR_STAT_WARNING));
+                                OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
+                                aDlg.Execute();
+                            }
                             bError = sal_True;
                         }
                     }
@@ -1446,7 +1453,9 @@ sal_Int8 OSelectionBrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         if ( IsEditing() )
         {
             // #100271# OJ allow the asterix again
+            m_bDisableErrorBox = sal_True;
             SaveModified();
+            m_bDisableErrorBox = sal_False;
             DeactivateCell();
         }
         // check if the format is already supported, if not deactivate the current cell and try again
