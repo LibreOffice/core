@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSchema.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 18:24:52 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,10 @@ published interface XSchema : ::com::sun::star::uno::XInterface
       @throws com::sun::star::lang::NullPointerException
               if a <NULL/> handler is passed.
       @throws com::sun::star::lang::WrappedTargetException
-              if an error occurs in the access to or processing of the data.
+              if an error occurs in the access to or processing of the data or
+              if a subsequent call to any of the <type>XSchema</type>methods is made.
+              The elements of a component schema are only parsed once,a repeat call
+              leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
               <type>XSchemaHandler</type>.
@@ -132,7 +135,10 @@ published interface XSchema : ::com::sun::star::uno::XInterface
       @throws com::sun::star::lang::NullPointerException
               if a <NULL/> handler is passed.
       @throws com::sun::star::lang::WrappedTargetException
-              if an error occurs in the access to or processing of the data.
+              if an error occurs in the access to or processing of the data or
+              if a subsequent call to any of the <type>XSchema</type>methods is made.
+              The elements of a component schema are only parsed once,a repeat call
+              leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
               <type>XSchemaHandler</type>.
@@ -154,7 +160,10 @@ published interface XSchema : ::com::sun::star::uno::XInterface
       @throws com::sun::star::lang::NullPointerException
               if a <NULL/> handler is passed.
       @throws com::sun::star::lang::WrappedTargetException
-              if an error occurs in the access to or processing of the data.
+              if an error occurs in the access to or processing of the data or
+              if a subsequent call to any of the <type>XSchema</type>methods is made.
+              The elements of a component schema are only parsed once,a repeat call
+              leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
               <type>XSchemaHandler</type>.
