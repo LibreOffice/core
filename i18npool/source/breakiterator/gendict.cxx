@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gendict.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sal/main.h>
 #include <sal/types.h>
 #include <tools/string.hxx>
 #include <rtl/strbuf.hxx>
@@ -70,7 +71,8 @@ using namespace ::rtl;
 
 /* Main Procedure */
 
-int SAL_CALL main(int argc, char* argv[]) {
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
     FILE *sfp, *cfp;
 
     if (argc < 3) exit(-1);
