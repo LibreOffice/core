@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-07 11:07:24 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 07:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #include <salgdi.hxx>
 #endif
 #endif
+
+#include <unohelp.hxx>
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -563,7 +565,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             // FIXME: drag and drop for remote case
 
 #else
-            Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
             if ( xFactory.is() )
             {
                 /*

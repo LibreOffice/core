@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-07 10:35:52 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 07:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _SV_SALPRN_HXX
 #include <salprn.hxx>
 #endif
+
+#include <unohelp.hxx>
+
 
 #else
 
@@ -1827,7 +1830,7 @@ BOOL Printer::EndJob()
     if ( mpPrinter )
     {
         CHECK_FOR_RVPSYNC_NORMAL()
-        mpPrinter->mxPrintSpooler->EndJob( ::comphelper::getProcessServiceFactory() );
+        mpPrinter->mxPrintSpooler->EndJob( vcl::unohelper::GetMultiServiceFactory() );
         mbPrinting = FALSE;
         mnCurPage = 0;
         mnCurPrintPage = 0;
