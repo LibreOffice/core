@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:14:43 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,7 @@ SwDoc::SwDoc() :
         : PrinterIndependentLayout::HIGH_RESOLUTION;
     SetUseVirtualDevice( nUseVirtualDev );
     SetParaSpaceMax( aOptions.IsAddSpacing(), aOptions.IsAddSpacingAtPages() );
+    SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() );
     SetUseFormerLineSpacing( aOptions.IsUseLineSpacing() );
 
     ResetModified();
