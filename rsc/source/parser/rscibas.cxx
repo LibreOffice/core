@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
+ *  last change: $Author: ssa $ $Date: 2002-10-25 11:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     SETCONST( pFieldUnits, "FUNIT_FOOT", FUNIT_FOOT );
     SETCONST( pFieldUnits, "FUNIT_MILE", FUNIT_MILE );
     SETCONST( pFieldUnits, "FUNIT_CUSTOM", FUNIT_CUSTOM );
+    SETCONST( pFieldUnits, "FUNIT_PERCENT", FUNIT_PERCENT );
 
     return pFieldUnits;
 }
