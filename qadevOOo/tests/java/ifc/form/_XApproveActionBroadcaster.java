@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XApproveActionBroadcaster.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:04 $
+ *  last change:$Date: 2003-09-08 10:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.form;
 
-import com.sun.star.form.XApproveActionBroadcaster;
-import com.sun.star.form.XApproveActionListener;
-import com.sun.star.lang.EventObject;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.form.XApproveActionBroadcaster;
+import com.sun.star.form.XApproveActionListener;
+import com.sun.star.lang.EventObject;
 
 /**
 * Testing <code>com.sun.star.form.XApproveActionBroadcaster</code>
