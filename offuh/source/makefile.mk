@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-18 11:41:16 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 10:15:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,6 @@ TARGET=		offuh
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
-
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCROUT=	$(OUT)$/inc
 
 $(MISC)$/$(TARGET).don : $(UNOUCRRDB)
     @+-$(RM) $@ >& $(NULLDEV)
