@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:08:02 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
                                  Window *pParent) :
     SfxFloatingWindow(pBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
     aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1)),
+    aToolBoxCat_Delim(this, ResId( FL_TOOLBOX_CAT_DELIM )),
     bAdjustPosition(TRUE)
 {
     // allow for cursor travelling between toolbox and sub-categories
@@ -124,7 +125,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
         vToolBoxCategories[i] = pBox;
         pBox->SetSelectHdl(LINK(this, SmToolBoxWindow, CmdSelectHdl));
     }
-    pToolBoxCmd = vToolBoxCategories [0];
+    pToolBoxCmd = vToolBoxCategories[0];
 
     // get ImageList
     for (i = 0;  i < NUM_TBX_CATEGORIES;  i++)
@@ -194,24 +195,36 @@ void SmToolBoxWindow::AdjustPosition(const Point &rPoint)
     Size        CatSize (31 * 5, 31 * 2);
     Size        CmdSize (31 * 5, 31 * 5);
     Size        WndSize (31 * 5, CatSize.Height() + 10 + CmdSize.Height());
-    Point       aPoint;
 
-    aToolBoxCat.SetPosSizePixel(aPoint, CatSize);
-
-    aPoint.Y() = 66;
-    for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
-        vToolBoxCategories [i]->SetPosSizePixel(aPoint, CmdSize);
-
+    // basic window settings
     SetOutputSizePixel(WndSize);
-    SetPosPixel( rPoint );
+    SetPosPixel(rPoint);
+    // catalog settings
+    aToolBoxCat.SetPosSizePixel(Point(0, 3), CatSize);
+    // settings for catalog / category delimiter
+    Point aP( aToolBoxCat_Delim.GetPosPixel() );
+    aP.X() += 5;
+    aToolBoxCat_Delim.SetPosPixel( aP );
+    Size  aS( CatSize.Width() - 10, 10 );
+    aToolBoxCat_Delim.SetSizePixel( aS );
+    // category settings
+    for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
+        vToolBoxCategories[i]->SetSizePixel(CmdSize);
 
     Point aPt;
     const Rectangle aRect( aPt, GetParent()->GetOutputSizePixel() );
     const Rectangle aSelf( rPoint, WndSize );
     if ( !rPoint.X() || !rPoint.Y() || !aRect.IsInside( aSelf ) )
     {
-        Point aTopLeft( Point( aRect.Right() - WndSize.Width(), aRect.Top() ) );
-        Point aPos( GetParent()->OutputToScreenPixel( aTopLeft ) );
+        SmViewShell *pView = SmGetActiveView();
+        DBG_ASSERT( pView, "view shell missing" );
+        Point aPos( 50, 75 );
+        if (pView)
+        {
+            SmGraphicWindow &rWin = pView->GetGraphicWindow();
+            aPos = Point( rWin.OutputToScreenPixel(
+                            Point( rWin.GetSizePixel().Width() - WndSize.Width(), 0) ) );
+        }
         if (aPos.X() < 0)
             aPos.X() = 0;
         if (aPos.Y() < 0)
@@ -266,14 +279,12 @@ void SmToolBoxWindow::SetCategory(USHORT nCategory)
 
         pToolBoxCmd->Hide();
 
-        pToolBoxCmd = vToolBoxCategories [nWhatBox];
+        pToolBoxCmd = vToolBoxCategories[nWhatBox];
 
+        // calculate actual size of window to use
         Size  CatSize (31 * 5, 31 * 2);
         Size  CmdSize (31 * 5, 31 * nLines);
-        Size  WndSize (31 * 5, CatSize.Height() + 10 + CmdSize.Height());
-
-        aToolBoxCat.SetPosSizePixel(Point(0, 3), CatSize);
-        vToolBoxCategories [nWhatBox]->SetPosSizePixel(Point(0, 70), CmdSize);
+        Size  WndSize (31 * 5, CatSize.Height() + 2*10 + CmdSize.Height());
         SetOutputSizePixel(WndSize);
 
         if (nActiveCategory)
