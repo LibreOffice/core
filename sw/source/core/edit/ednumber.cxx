@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:01:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,11 +649,14 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
-            GetDoc()->SetNumRule( aRangeArr.SetPam( n, aPam ), rRule );
+            /* #109308# adapt to new signature of SetNumRule */
+            GetDoc()->SetNumRule( aRangeArr.SetPam( n, aPam ), rRule,
+                                  sal_False, sal_True );
         GetDoc()->EndUndo( UNDO_END );
     }
     else
-        GetDoc()->SetNumRule( *pCrsr, rRule );
+        /* #109308# adapt to new signature of SetNumRule */
+        GetDoc()->SetNumRule( *pCrsr, rRule, sal_False, sal_True );
 
     EndAllAction();
 }
