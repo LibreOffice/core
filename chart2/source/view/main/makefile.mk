@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: iha $ $Date: 2003-11-12 17:56:44 $
+#   last change: $Author: iha $ $Date: 2003-11-13 09:51:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ SLOFILES =  \
             $(SLO)$/PropertyMapper.obj \
             $(SLO)$/Stripe.obj \
             $(SLO)$/DatapointGeometry.obj	\
-            $(SLO)$/ShapeAppearance.obj	\
+            $(SLO)$/VLineProperties.obj \
             $(SLO)$/ShapeFactory.obj \
             $(SLO)$/DataPointSymbolSupplier.obj \
             $(SLO)$/Linear3DTransformation.obj \
