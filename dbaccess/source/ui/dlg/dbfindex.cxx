@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 06:44:52 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 15:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,10 +384,11 @@ void ODbaseIndexDialog::Init()
         aFile = ::ucb::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         bFolder = aFile.isFolder();
     }
-    catch(ContentCreationException&)
+    catch(Exception&)
     {
         return;
     }
+
     ///////////////////////////////////////////////////////////////////////////
     // first assume for all indexes they're free
 
@@ -598,6 +599,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/29 06:44:52  fs
+ *  #87037# Init: don't cut the extension from the index URLs
+ *
  *  Revision 1.7  2001/05/16 10:02:38  fs
  *  #87037# Config requires system notation / correct loop ranges / Init: RemoveFreeIndex after doing the complete loop
  *
