@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:28:48 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,18 +67,17 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 
 namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsss ::drafts::com::sun::star::script
 
 class MasterScriptProviderFactory :
     public ::cppu::WeakImplHelper2 <
-        dcsss::provider::XScriptProviderFactory,
+        css::script::provider::XScriptProviderFactory,
         css::lang::XServiceInfo >
 {
 private:
@@ -103,7 +102,7 @@ public:
             throw ( css::uno::RuntimeException );
 
     // XScriptProviderFactory
-    virtual css::uno::Reference< dcsss::provider::XScriptProvider >
+    virtual css::uno::Reference< css::script::provider::XScriptProvider >
         SAL_CALL createScriptProvider( const css::uno::Any& context )
             throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException);
 };

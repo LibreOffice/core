@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:28:34 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 
 namespace func_provider
 {
@@ -122,7 +122,7 @@ mspf_getSupportedServiceNames( )
     SAL_THROW( () )
 {
     ::rtl::OUString str_name = ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.provider.MasterScriptProviderFactory");
+        "com.sun.star.script.provider.MasterScriptProviderFactory");
 
     return Sequence< ::rtl::OUString >( &str_name, 1 );
 }
@@ -132,7 +132,7 @@ mspf_getImplementationName( )
     SAL_THROW( () )
 {
     return ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.provider.MasterScriptProviderFactory");
+        "com.sun.star.script.provider.MasterScriptProviderFactory");
 }
 
 Reference< XInterface > SAL_CALL
