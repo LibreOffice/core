@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:29 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-25 05:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,94 +67,210 @@
 
 // =======================================================================
 
+static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
+{
+    BOOL  bVirtualDeviceGWorldInited = FALSE;
+
+    if (    ( rSalVirDevData             != NULL )
+         && ( rSalVirDevData->mpGraphics != NULL )
+       )
+    {
+        Rect         aBoundsRect;
+        short        nRectLeft   = 0;
+        short        nRectTop    = 0;
+        short        nRectRight  = rSalVirDevData->mnWidth;
+        short        nRectBottom = rSalVirDevData->mnHeight;
+        short        nPixelDepth = rSalVirDevData->mnBitCount;
+        GWorldPtr    pGWorld     = NULL;
+        CTabHandle   hCTable     = NULL;
+        GDHandle     hGDevice    = NULL;
+        GWorldFlags  nFlags      = noErr;
+        OSStatus     nOSStatus   = noErr;
+
+        // Set the dimensions of the GWorldPtr
+
+        MacSetRect( &aBoundsRect, nRectLeft, nRectTop, nRectRight, nRectBottom );
+
+        // Create the offscreen graphics context
+
+        nOSStatus = NewGWorld( &pGWorld,
+                                nPixelDepth,
+                               &aBoundsRect,
+                                hCTable,
+                                hGDevice,
+                                nFlags
+                             );
+
+        if (    ( nOSStatus == noErr )
+             && ( pGWorld   != NULL  )
+           )
+        {
+            RGBColor aBlackColor;
+
+            aBlackColor.red   = 0x0000;
+            aBlackColor.green = 0x0000;
+            aBlackColor.blue  = 0x0000;
+
+            // Lock the virtual GWorld's port bits
+
+            rSalVirDevData->mpGraphics->maGraphicsData.mnOSStatus
+                = LockPortBits( pGWorld );
+
+            if ( rSalVirDevData->mpGraphics->maGraphicsData.mnOSStatus == noErr )
+            {
+                // Initialize the virtual graph port
+
+                rSalVirDevData->mpGraphics->maGraphicsData.mpCGrafPort
+                    = pGWorld;
+
+                rSalVirDevData->mpGraphics->maGraphicsData.mpGWorld
+                    = pGWorld;
+
+                // Initialize virtual port's GWorld attributes
+
+                rSalVirDevData->mpGraphics->maGraphicsData.mhGWorldPixMap
+                    = GetGWorldPixMap( pGWorld );
+
+                // Unlock virtual GWorld's port bits
+
+                UnlockPortBits( pGWorld );
+            } // if
+
+            // Initialize virtual port's GWorld attributes
+
+            rSalVirDevData->mpGraphics->maGraphicsData.mbGWorldPixelsLocked = FALSE;
+            rSalVirDevData->mpGraphics->maGraphicsData.mnGWorldFlags        = noErr;
+
+            // Initialize the virtual port's brush attributes
+
+            rSalVirDevData->mpGraphics->maGraphicsData.mbBrushTransparent = FALSE;
+            rSalVirDevData->mpGraphics->maGraphicsData.maBrushColor       = aBlackColor;
+
+            // Initialize the virtual port's font attributes
+
+            rSalVirDevData->mpGraphics->maGraphicsData.maFontColor = aBlackColor;
+            rSalVirDevData->mpGraphics->maGraphicsData.mnFontID    = kFontIDGeneva;
+            rSalVirDevData->mpGraphics->maGraphicsData.mnFontSize  = 10;
+            rSalVirDevData->mpGraphics->maGraphicsData.mnFontStyle = normal;
+
+            // Initialize virtual port's clip regions
+
+            rSalVirDevData->mpGraphics->maGraphicsData.mhClipRgn        = NULL;
+            rSalVirDevData->mpGraphics->maGraphicsData.mbClipRgnChanged = FALSE;
+
+            // Initilaize virtual port's status flags
+
+            rSalVirDevData->mpGraphics->maGraphicsData.mbPrinter = FALSE;
+            rSalVirDevData->mpGraphics->maGraphicsData.mbVirDev  = TRUE;
+            rSalVirDevData->mpGraphics->maGraphicsData.mbWindow  = FALSE;
+            rSalVirDevData->mpGraphics->maGraphicsData.mbScreen  = TRUE;
+
+            bVirtualDeviceGWorldInited = TRUE;
+        } // if
+    } // if
+
+    return bVirtualDeviceGWorldInited;
+} //InitVirtualDeviceGWorld
+
+// =======================================================================
+
+// =======================================================================
+
 SalVirtualDevice::SalVirtualDevice()
 {
     maVirDevData.mpGraphics = NULL;
     maVirDevData.mnBitCount = 0;
-    maVirDevData.mnWidth = 0;
-    maVirDevData.mnHeight = 0;
+    maVirDevData.mnWidth    = 0;
+    maVirDevData.mnHeight   = 0;
     maVirDevData.mbGraphics = FALSE;
-}
+} // Constructor
 
 // -----------------------------------------------------------------------
 
 SalVirtualDevice::~SalVirtualDevice()
 {
-    if ( maVirDevData.mpGraphics )
+    if ( maVirDevData.mpGraphics != NULL )
+    {
+        // Delete exisiting clip regions, offscreen graphic world,
+        // and its associated colour graph port
+
+        if ( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn != NULL )
+        {
+            DisposeRgn( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn );
+
+            maVirDevData.mpGraphics->maGraphicsData.mhClipRgn = NULL;
+        } // if
+
+        if ( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort != NULL )
+        {
+            DisposePort( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
+
+            maVirDevData.mpGraphics->maGraphicsData.mpGWorld    = NULL;
+            maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = NULL;
+        } // if
+
         delete maVirDevData.mpGraphics;
-}
+    } // if
+} // Destructor
 
 // -----------------------------------------------------------------------
 
 SalGraphics* SalVirtualDevice::GetGraphics()
 {
     if ( maVirDevData.mbGraphics )
+    {
         return NULL;
+    } // if
 
     if ( !maVirDevData.mpGraphics )
     {
         maVirDevData.mpGraphics = new SalGraphics;
-        GWorldPtr pGWorld = NULL;
-        Rect aRect;
-        OSStatus aQDStatus = noErr;
 
-        // Set the dimensions of the GWorldPtr
-        MacSetRect( &aRect, 0, 0, maVirDevData.mnWidth, maVirDevData.mnHeight );
-
-        // Create the offscreen graphics context
-        aQDStatus = NewGWorld( &pGWorld, maVirDevData.mnBitCount, &aRect, NULL,
-            NULL, 0);
-
-        if ( aQDStatus == noErr );
-        {
-            maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = (CGrafPtr)pGWorld;
-            maVirDevData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
-            maVirDevData.mpGraphics->maGraphicsData.mbVirDev  = TRUE;
-            maVirDevData.mpGraphics->maGraphicsData.mbWindow  = FALSE;
-            maVirDevData.mpGraphics->maGraphicsData.mbScreen  = TRUE;
-        }
-    }
-
-    maVirDevData.mbGraphics = TRUE;
+        maVirDevData.mbGraphics = InitVirtualDeviceGWorld( &maVirDevData );
+    } // if
 
     return maVirDevData.mpGraphics;
-}
+} // SalVirtualDevice::GetGraphics
 
 // -----------------------------------------------------------------------
 
 void SalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
 {
     maVirDevData.mbGraphics = FALSE;
-}
+} // SalVirtualDevice::ReleaseGraphics
 
 // -----------------------------------------------------------------------
 
 BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
 {
-    GWorldPtr pGWorld = NULL;
-    Rect aRect;
-    OSStatus aQDStatus = noErr;
+    BOOL bSizeSet = FALSE;
 
-    maVirDevData.mnWidth = nDX;
-    maVirDevData.mnHeight = nDY;
+    // If we have already created a graphics context, dispose of it,
+    // by deleting exisiting clip regions, offscreen graphic worlds,
+    // and its associated colour graph port
 
-    // Set the dimensions of the GWorldPtr
-    MacSetRect( &aRect, 0, 0, maVirDevData.mnWidth, maVirDevData.mnHeight );
-
-    // If we have already created a graphics context, dispose of it
-    if ( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort )
+    if ( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn != NULL )
     {
-        DisposeGWorld( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
+        DisposeRgn( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn );
+    } // if
+
+    if ( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort != NULL )
+    {
+        DisposePort( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
+
+        maVirDevData.mpGraphics->maGraphicsData.mpGWorld    = NULL;
         maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = NULL;
-    }
+    } // if
 
     // Create the offscreen graphics context
-    aQDStatus = NewGWorld( &pGWorld, maVirDevData.mnBitCount, &aRect, NULL,
-        NULL, 0);
-    if ( aQDStatus == noErr )
-        maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = (CGrafPtr)pGWorld;
-    else
-        return FALSE;
 
-    return TRUE;
-}
+    maVirDevData.mnWidth  = nDX;
+    maVirDevData.mnHeight = nDY;
+
+    bSizeSet = InitVirtualDeviceGWorld( &maVirDevData );
+
+    return bSizeSet;
+} // SalVirtualDevice::SetSize
+
+// =======================================================================
+
