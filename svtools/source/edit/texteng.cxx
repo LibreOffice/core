@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:32:29 $
+ *  last change: $Author: tl $ $Date: 2001-03-28 10:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
@@ -1565,7 +1569,7 @@ void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TextPortion* pPorti
         nMaxBreakPos = pNode->GetText().Len() - 1;
 
     uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
-    i18n::LineBreakHyphenationOptions aHyphOptions( NULL, 1 );
+    i18n::LineBreakHyphenationOptions aHyphOptions( NULL, uno::Sequence< beans::PropertyValue >(), 1 );
     i18n::LineBreakUserOptions aUserOptions;
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, GetLocale(), pLine->GetStart(), aHyphOptions, aUserOptions );
     USHORT nBreakPos = aLBR.breakIndex;
