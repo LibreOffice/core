@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:00:55 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                         sCondition += xSheetCondition->getFormula1();
                                                     }
                                                     rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
-                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
+                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                     OUString sOUBaseAddress;
                                                     ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
                                                         xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
