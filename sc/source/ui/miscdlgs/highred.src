@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:22:04 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ turkish ] = "~Tablodaki deðiþiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones en la hoja";
+        Text[ finnish ] = "~Näytä muutokset laskentataulukossa";
     };
     GroupBox GB_REDLINING
     {
@@ -132,6 +133,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ turkish ] = "~Kabul edilen deðiþiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones aceptadas";
+        Text[ finnish ] = "~Näytä hyväksytyt muutokset";
     };
     CheckBox CB_HIGHLIGHT_REJECT
     {
@@ -160,6 +162,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ turkish ] = "~Reddedilen deðiþiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones rechazadas";
+        Text[ finnish ] = "~Näytä hylätyt muutokset";
     };
     GroupBox GB_TO_HIGHLIGHT
     {
@@ -214,6 +217,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ turkish ] = "Aralýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área";
+        Text[ finnish ] = "Alue";
     };
     Edit ED_ASSIGN
     {
@@ -252,6 +256,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern/Vergrößern";
         QuickHelpText[ catalan ] = "Reducir/Aumentar";
+        QuickHelpText[ finnish ] = "Pienennä/Suurenna!";
     };
     Text [ english_us ] = "Show Changes" ;
     Text [ portuguese_brazilian ] = "Änderungen anzeigen" ;
@@ -273,4 +278,5 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ turkish ] = "Deðiþiklikleri görüntüle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar modificaciones";
+    Text[ finnish ] = "Näytä muutokset";
 };
