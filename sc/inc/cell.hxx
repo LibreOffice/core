@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:40:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
-#ifndef _SFXLSTNER_HXX //autogen
-#include <svtools/lstner.hxx>
+#ifndef _SVT_LISTENER_HXX
+#include <svtools/listener.hxx>
 #endif
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -100,8 +100,7 @@
 class ScDocument;
 class EditTextObject;
 class ScMatrix;
-class SfxBroadcaster;
-class ScBroadcasterList;
+class SvtBroadcaster;
 class ScCodeArray;
 class ScTokenArray;
 class ScProgress;
@@ -113,7 +112,7 @@ class ScBaseCell
 {
 protected:
     ScPostIt*       pNote;
-    ScBroadcasterList*  pBroadcaster;
+    SvtBroadcaster* pBroadcaster;
     USHORT          nTextWidth;
     BYTE            eCellType;      // enum CellType - BYTE spart Speicher
     BYTE            nScriptType;
@@ -141,8 +140,8 @@ public:
     const ScPostIt* GetNotePtr() const;
     inline void     DeleteNote();
 
-    inline ScBroadcasterList*   GetBroadcaster() const;
-    void            SetBroadcaster(ScBroadcasterList* pNew);
+    inline SvtBroadcaster*  GetBroadcaster() const;
+    void            SetBroadcaster(SvtBroadcaster* pNew);
     inline void     ForgetBroadcaster();
     inline void     SwapBroadcaster(ScBaseCell& rOther);    // zum Sortieren
 
@@ -273,7 +272,7 @@ enum ScMatrixMode {
 
 class ScIndexMap;
 
-class ScFormulaCell : public ScBaseCell, public SfxListener
+class ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
     static INT8     nIterMode;              // Markiert cirk. Iteration
@@ -287,8 +286,8 @@ private:
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
     ULONG           nFormatIndex;       // durch Berechnung gesetztes Format
-    USHORT          nMatCols;           // wenn MM_FORMULA Matrixzelle
-    USHORT          nMatRows;           // belegte Area
+    SCCOL           nMatCols;           // wenn MM_FORMULA Matrixzelle
+    SCROW           nMatRows;           // belegte Area
     short           nFormatType;
     BOOL            bIsValue    : 1;    // Ergebnis ist numerisches
     BOOL            bDirty      : 1;    // muss berechnet werden
@@ -354,21 +353,21 @@ public:
 
     void            UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
-                                    short nDx, short nDy, short nDz,
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc = NULL );
 
     void            TransposeReference();
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                         ScDocument* pUndoDoc );
 
-    void            UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY );
+    void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void            UpdateInsertTab(USHORT nTable);
-    void            UpdateInsertTabAbs(USHORT nTable);
-    BOOL            UpdateDeleteTab(USHORT nTable, BOOL bIsMove = FALSE);
-    void            UpdateMoveTab(USHORT nOldPos, USHORT nNewPos, USHORT nTabNo);
-    void            UpdateRenameTab(USHORT nTable, const String& rName);
-    BOOL            TestTabRefAbs(USHORT nTable);
+    void            UpdateInsertTab(SCTAB nTable);
+    void            UpdateInsertTabAbs(SCTAB nTable);
+    BOOL            UpdateDeleteTab(SCTAB nTable, BOOL bIsMove = FALSE);
+    void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
+    void            UpdateRenameTab(SCTAB nTable, const String& rName);
+    BOOL            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( BOOL bForceIfNameInUse = FALSE );
     BOOL            IsRangeNameInUse(USHORT nIndex) const;
     void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
@@ -381,7 +380,7 @@ public:
     void            GetString( String& rString );
     const ScMatrix* GetMatrix();
     BOOL            GetMatrixOrigin( ScAddress& rPos ) const;
-    void            GetResultDimensions( USHORT& rCols, USHORT& rRows );
+    void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
     USHORT          GetMatrixEdge( ScAddress& rOrgPos );
     USHORT          GetErrCode();
     short           GetFormatType() const                   { return nFormatType; }
@@ -406,13 +405,12 @@ public:
     void            SetPreviousTrack( ScFormulaCell* pF )   { pPreviousTrack = pF; }
     void            SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
     void            SetCompile( BOOL bVal ) { bCompile = bVal; }
     ScDocument*     GetDocument() const     { return pDocument; }
-    void            SetMatColsRows( USHORT nCols, USHORT nRows )
+    void            SetMatColsRows( SCCOL nCols, SCROW nRows )
                                     { nMatCols = nCols; nMatRows = nRows; }
-    void            GetMatColsRows( USHORT& nCols, USHORT& nRows ) const
+    void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const
                                     { nCols = nMatCols; nRows = nMatRows; }
 
                     // ob Zelle im ChangeTrack und nicht im echten Dokument ist
@@ -439,7 +437,7 @@ private:
     ScAddress aPos;
 public:
                 ScDetectiveRefIter( ScFormulaCell* pCell );
-    BOOL        GetNextRef( ScTripel& rStart, ScTripel& rEnd );
+    BOOL        GetNextRef( ScRange& rRange );
 };
 
 class ScNoteCell : public ScBaseCell
@@ -499,7 +497,7 @@ inline void ScBaseCell::DeleteNote()
     pNote = NULL;
 }
 
-inline ScBroadcasterList* ScBaseCell::GetBroadcaster() const
+inline SvtBroadcaster* ScBaseCell::GetBroadcaster() const
 {
     return pBroadcaster;
 }
@@ -511,7 +509,7 @@ inline void ScBaseCell::ForgetBroadcaster()
 
 inline void ScBaseCell::SwapBroadcaster(ScBaseCell& rOther)
 {
-    ScBroadcasterList*  pTemp = pBroadcaster;
+    SvtBroadcaster* pTemp = pBroadcaster;
     pBroadcaster = rOther.pBroadcaster;
     rOther.pBroadcaster = pTemp;
 }
