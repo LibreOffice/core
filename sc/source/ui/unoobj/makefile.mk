@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nn $ $Date: 2000-10-12 10:20:42 $
+#   last change: $Author: nn $ $Date: 2000-11-13 19:26:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ CXXFILES = \
         funcuno.cxx \
         nameuno.cxx \
         viewuno.cxx \
+        dispuno.cxx \
         datauno.cxx \
         dapiuno.cxx \
         chartuno.cxx \
@@ -124,6 +125,7 @@ SLOFILES =  \
         $(SLO)$/funcuno.obj \
         $(SLO)$/nameuno.obj \
         $(SLO)$/viewuno.obj \
+        $(SLO)$/dispuno.obj \
         $(SLO)$/datauno.obj \
         $(SLO)$/dapiuno.obj \
         $(SLO)$/chartuno.obj \
