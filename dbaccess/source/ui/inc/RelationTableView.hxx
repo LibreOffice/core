@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-23 09:09:24 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,11 @@
 namespace dbaui
 {
     class ORelationDesignView;
+    class ORelationTableConnectionData;
     class ORelationTableView : public OJoinTableView
     {
+        OTableConnection*               m_pExistingConnection; // is set when a connection was draged on an existing connection
+        ORelationTableConnectionData*   m_pCurrentlyTabConnData; // set when we creating a connection with more than one keycolumn
     protected:
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         virtual void KeyInput( const KeyEvent& rEvt );
@@ -90,6 +93,8 @@ namespace dbaui
             // reisst den Dialog fuer eine voellig neue Relation hoch
         // wird vom AddTabDlg benutzt, um festzustellen, ob noch Tabellen hinzugefuegt werden duerfen
         virtual BOOL IsAddAllowed();
+
+        virtual void lookForUiActivities();
     };
 }
 #endif // DBAUI_RELATION_TABLEVIEW_HXX

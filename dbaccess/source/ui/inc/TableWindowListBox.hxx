@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:05:53 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,22 +82,18 @@ namespace dbaui
     class OTableWindowListBox
             :public SvTreeListBox
             ,public IDragTransferableListener
-#if SUPD<627
-            ,public DragSourceHelper
-            ,public DropTargetHelper
-#endif
     {
         DECL_LINK( DoubleClickHdl, SvTreeListBox* );
         DECL_LINK( ScrollUpHdl, SvTreeListBox* );
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );
 
-        Timer           m_aScrollTimer;
-        Point           m_aMousePos;
+        Timer                       m_aScrollTimer;
+        Point                       m_aMousePos;
 
-        OTableWindow*   m_pTabWin;
+        OTableWindow*               m_pTabWin;
 
-        BOOL            m_bReallyScrolled : 1;
-        BOOL            m_bDragSource : 1;
+        BOOL                        m_bReallyScrolled : 1;
+        BOOL                        m_bDragSource : 1;
 
     protected:
         virtual void LoseFocus();
@@ -107,7 +103,8 @@ namespace dbaui
 
         virtual long PreNotify(NotifyEvent& rNEvt);
 
-        virtual void        dragFinished( );
+        virtual void dragFinished( );
+
 
     public:
         OTableWindowListBox(OTableWindow* pParent, const String& rDatabaseName, const String& rTableName);

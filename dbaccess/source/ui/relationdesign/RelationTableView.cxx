@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:24:04 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 06:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,8 @@ DBG_NAME(ORelationTableView);
 //------------------------------------------------------------------------
 ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
     : OJoinTableView( pParent, pView )
+    ,m_pExistingConnection(NULL)
+    ,m_pCurrentlyTabConnData(NULL)
 {
     DBG_CTOR(ORelationTableView,NULL);
     SetHelpId(HID_CTL_RELATIONTAB);
@@ -268,9 +270,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         if((pFirst->GetSourceWin() == pSourceWin && pFirst->GetDestWin() == pDestWin) ||
            (pFirst->GetSourceWin() == pDestWin  && pFirst->GetDestWin() == pSourceWin))
         {
-            OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),String(),WB_YES_NO|WB_DEF_YES);
-            if(aDlg.Execute() == RET_YES)
-                ConnDoubleClicked(pFirst);
+            m_pExistingConnection = pFirst;
             return;
         }
     }
@@ -280,8 +280,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OSL_ENSURE(xTablesSup.is(),"ORelationTableView::AddConnection no TablesSupplier");
     if(xTablesSup.is())
         pTabConnData = new ORelationTableConnectionData(xTablesSup->getTables(),
-                                                        jxdSource.pListBox->GetTabWin()->GetWinName(),
-                                                        jxdDest.pListBox->GetTabWin()->GetWinName());
+                                                        jxdSource.pListBox->GetTabWin()->GetComposedName(),
+                                                        jxdDest.pListBox->GetTabWin()->GetComposedName());
 
     // die Namen der betroffenen Felder
     String aSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
@@ -309,40 +309,38 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     }
 
     if(nSourceKeys>1)
-    {
-        ORelationDialog aRelDlg( this, pTabConnData );
-        if (aRelDlg.Execute() == RET_OK)
-        {
-            //////////////////////////////////////////////////////////////////
-            // Koennen die neuen Daten eine neue Relation erzeugen?
-//          if (pTabConnData->Update())
-            // already updated by the dialog
-            getDesignView()->getController()->getTableConnectionData()->push_back( pTabConnData);
-            ORelationTableConnection* pTabConn = new ORelationTableConnection( this, pTabConnData );
-            GetTabConnList()->push_back( pTabConn);
-            Invalidate();
-        }
-        else
-            delete pTabConnData;
-    }
+        m_pCurrentlyTabConnData = pTabConnData;
     else
     {
         pTabConnData->ResetConnLines();
         pTabConnData->SetConnLine( 0, aSourceFieldName, aDestFieldName );
 
-        //////////////////////////////////////////////////////////////////////
-        // Daten der Datenbank uebergeben
-        if( pTabConnData->Update() )
+        try
         {
             //////////////////////////////////////////////////////////////////////
-            // UI-Object in ConnListe eintragen
-            getDesignView()->getController()->getTableConnectionData()->push_back( pTabConnData );
-            ORelationTableConnection* pTabConn = new ORelationTableConnection( this, pTabConnData );
-            GetTabConnList()->push_back( pTabConn);
-            Invalidate();
+            // Daten der Datenbank uebergeben
+            if( pTabConnData->Update() )
+            {
+                //////////////////////////////////////////////////////////////////////
+                // UI-Object in ConnListe eintragen
+                getDesignView()->getController()->getTableConnectionData()->push_back( pTabConnData );
+                ORelationTableConnection* pTabConn = new ORelationTableConnection( this, pTabConnData );
+                GetTabConnList()->push_back( pTabConn);
+                Invalidate();
+            }
+            else
+                delete pTabConnData;
         }
-        else
+        catch(const SQLException&)
+        {
             delete pTabConnData;
+            throw;
+        }
+        catch(const Exception&)
+        {
+            delete pTabConnData;
+            OSL_ENSURE(0,"ORelationTableView::AddConnection: Exception oocured!");
+        }
     }
 }
 
@@ -485,8 +483,37 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
 // -----------------------------------------------------------------------------
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    OJoinTableView::RemoveTabWin( pTabWin );
-    m_pView->getController()->InvalidateFeature(ID_REALTION_ADD_RELATION);
+    OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_DELETE_WINDOW),String(),WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
+    if(aDlg.Execute() == RET_YES)
+    {
+        OJoinTableView::RemoveTabWin( pTabWin );
+        m_pView->getController()->InvalidateFeature(ID_REALTION_ADD_RELATION);
+    }
 }
 // -----------------------------------------------------------------------------
-
+void ORelationTableView::lookForUiActivities()
+{
+    if(m_pExistingConnection)
+    {
+        OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),String(),WB_YES_NO|WB_DEF_YES);
+        if(aDlg.Execute() == RET_YES)
+            ConnDoubleClicked(m_pExistingConnection);
+        m_pExistingConnection = NULL;
+    }
+    else if(m_pCurrentlyTabConnData)
+    {
+        ORelationDialog aRelDlg( this, m_pCurrentlyTabConnData );
+        if (aRelDlg.Execute() == RET_OK)
+        {
+            // already updated by the dialog
+            getDesignView()->getController()->getTableConnectionData()->push_back( m_pCurrentlyTabConnData);
+            ORelationTableConnection* pTabConn = new ORelationTableConnection( this, m_pCurrentlyTabConnData );
+            GetTabConnList()->push_back( pTabConn);
+            Invalidate(INVALIDATE_NOCHILDREN);
+        }
+        else
+            delete m_pCurrentlyTabConnData;
+        m_pCurrentlyTabConnData = NULL;
+    }
+}
+// -----------------------------------------------------------------------------

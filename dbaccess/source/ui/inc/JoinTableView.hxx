@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 09:55:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,12 @@ namespace dbaui
         virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
         virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
+        /**
+            can be used in derevied classes to make some special ui handling
+            after d&d
+        */
+        virtual void lookForUiActivities();
+
     protected:
         virtual void MouseButtonUp( const MouseEvent& rEvt );
         virtual void MouseButtonDown( const MouseEvent& rEvt );
@@ -259,7 +265,6 @@ namespace dbaui
 
         virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
                                              const ::rtl::OUString& _rWinName);
-
     private:
         void    InitColors();
         BOOL    ScrollWhileDragging();

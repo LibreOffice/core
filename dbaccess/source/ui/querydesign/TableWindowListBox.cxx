@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 09:55:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent, const String& r
 void OTableWindowListBox::dragFinished( )
 {
     m_bDragSource = sal_False;
+    // first show the error msg when existing
+    m_pTabWin->getDesignView()->getController()->showError(m_pTabWin->getDesignView()->getController()->clearOccuredError());
+    // second look for ui activities which should happen after d&d
+    m_pTabWin->getTableView()->lookForUiActivities();
 }
 
 //------------------------------------------------------------------------------
@@ -358,10 +362,17 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
     // source window description
     OJoinExchangeData jxdSource = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
-
     // create the connection
-    OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-    pCont->AddConnection(jxdSource, jxdDest);
+    try
+    {
+        OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
+        pCont->AddConnection(jxdSource, jxdDest);
+    }
+    catch(const SQLException& e)
+    {
+        // remember the exception so that we can show them later when d&d is finished
+        m_pTabWin->getDesignView()->getController()->setErrorOccured(::dbtools::SQLExceptionInfo(e));
+    }
 
     return DND_ACTION_LINK;
 }

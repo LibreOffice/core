@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 11:25:44 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,6 +1510,10 @@ void OJoinTableView::dragFinished( )
 {
 }
 //------------------------------------------------------------------------------
+void OJoinTableView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+}
+// -----------------------------------------------------------------------------
 void OJoinTableView::clearLayoutInformation()
 {
     //////////////////////////////////////////////////////////////////////
@@ -1527,10 +1531,9 @@ void OJoinTableView::clearLayoutInformation()
     GetTabConnList()->clear();
 }
 // -----------------------------------------------------------------------------
-void OJoinTableView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void OJoinTableView::lookForUiActivities()
 {
 }
 // -----------------------------------------------------------------------------
-
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace dbaui
         ::std::vector<OTableWindowData*>        m_vTableData;
 
         Fraction                                m_aZoom;
+        ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDataSource;
@@ -157,6 +158,23 @@ namespace dbaui
         virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
         virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
 
+        /**
+            only defines a method to save a SQLException in d&d methods to show the error at a later state
+            set the internal member m_aExceptionInfo to _rInfo
+        */
+        void setErrorOccured(const ::dbtools::SQLExceptionInfo& _rInfo)
+        {
+            m_aExceptionInfo = _rInfo;
+        }
+        /**
+            just returns the internal member and clears it
+        */
+        ::dbtools::SQLExceptionInfo clearOccuredError()
+        {
+            ::dbtools::SQLExceptionInfo aInfo = m_aExceptionInfo;
+            m_aExceptionInfo = ::dbtools::SQLExceptionInfo();
+            return aInfo;
+        }
     protected:
         virtual OTableWindowData* createTableWindowData() = 0;
         virtual void AddSupportedFeatures();
