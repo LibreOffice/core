@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:14:27 $
+ *  last change: $Author: os $ $Date: 2001-01-23 10:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,7 +1360,7 @@ TabPage TP_LAYOUT_OPT
         Minimum = 50 ;
         Maximum = 9999 ;
         First = 50 ;
-        Last = 2000 ;
+        Last = 9999 ;
     };
 };
 /**************************************************************************/
