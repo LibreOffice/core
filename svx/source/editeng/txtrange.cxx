@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-16 16:05:57 $
+ *  last change: $Author: ama $ $Date: 2000-11-17 09:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,24 @@ TextRanger::~TextRanger()
     delete pRangeArr;
     delete pPoly;
     delete pLine;
+}
+
+/*-----------------17.11.00 09:49-------------------
+ * TextRanger::SetVertical(..)
+ * If there's is a change in the writing direction,
+ * the cache has to be cleared.
+ * --------------------------------------------------*/
+
+void TextRanger::SetVertical( BOOL bNew )
+{
+    if( IsVertical() != bNew )
+    {
+        bVertical = bNew;
+        for( USHORT i = 0; i < nCacheSize; ++i )
+            delete pCache[i];
+        memset( pRangeArr, 0, nCacheSize * sizeof( Range ) );
+        memset( pCache, 0, nCacheSize * sizeof( SvLongsPtr ) );
+    }
 }
 
 /*************************************************************************
@@ -415,8 +433,9 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
                 {
                     if( bMultiple || !nAct )
                     {
-                        nMin = A(rNull) - nStart;
-                        nMax = B(rNull) + nEnd;
+                        nMin = A(rNull);
+                        nMax = nMin + nEnd;
+                        nMin -= nStart;
                     }
                     else
                         NotePoint( A(rNull) );
