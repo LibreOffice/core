@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2001-05-04 10:21:42 $
+ *  last change: $Author: mba $ $Date: 2001-05-04 17:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_15                (   Frame                                                                   ,
+DEFINE_XINTERFACE_16                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
@@ -225,6 +225,7 @@ DEFINE_XINTERFACE_15                (   Frame                                   
                                         DIRECT_INTERFACE(css::lang::XComponent                                  ),
                                         DIRECT_INTERFACE(css::task::XStatusIndicatorFactory                     ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProvider                          ),
+                                        DIRECT_INTERFACE(css::frame::XDispatchInformationProvider               ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProviderInterception              ),
                                         DIRECT_INTERFACE(css::beans::XMultiPropertySet                          ),
                                         DIRECT_INTERFACE(css::beans::XFastPropertySet                           ),
@@ -235,7 +236,7 @@ DEFINE_XINTERFACE_15                (   Frame                                   
                                         DERIVED_INTERFACE(css::lang::XEventListener, css::awt::XWindowListener  )
                                     )
 
-DEFINE_XTYPEPROVIDER_15             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_16             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
                                         css::frame::XFramesSupplier                                             ,
@@ -246,6 +247,7 @@ DEFINE_XTYPEPROVIDER_15             (   Frame                                   
                                         css::beans::XFastPropertySet                                            ,
                                         css::beans::XPropertySet                                                ,
                                         css::frame::XDispatchProvider                                           ,
+                                        css::frame::XDispatchInformationProvider                                ,
                                         css::frame::XDispatchProviderInterception                               ,
                                         css::awt::XWindowListener                                               ,
                                         css::awt::XTopWindowListener                                            ,
@@ -1431,6 +1433,29 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
         }
     }
     return xIndicator;
+}
+
+::rtl::OUString SAL_CALL Frame::queryDescription( const ::rtl::OUString& rURL ) throw( css::uno::RuntimeException )
+{
+    css::uno::Reference < css::frame::XDispatchInformationProvider > xDIP ( m_xController, css::uno::UNO_QUERY );
+    if ( xDIP.is() )
+        return xDIP->queryDescription( rURL );
+    return ::rtl::OUString();
+}
+
+void SAL_CALL Frame::queryDescriptions ( const css::uno::Sequence < ::rtl::OUString >& rURLs, css::uno::Sequence < ::rtl::OUString >& rDescriptions ) throw( css::uno::RuntimeException )
+{
+    css::uno::Reference < css::frame::XDispatchInformationProvider > xDIP ( m_xController, css::uno::UNO_QUERY );
+    if ( xDIP.is() )
+        xDIP->queryDescriptions( rURLs, rDescriptions );
+}
+
+css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL Frame::getConfigurableDispatchInformation() throw( css::uno::RuntimeException )
+{
+    css::uno::Reference < css::frame::XDispatchInformationProvider > xDIP ( m_xController, css::uno::UNO_QUERY );
+    if ( xDIP.is() )
+        return xDIP->getConfigurableDispatchInformation();
+    return css::uno::Sequence < css::frame::DispatchInformation >();
 }
 
 /*-****************************************************************************************************//**
