@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:30:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #include "matchlocale.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/SchemaAttribute.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_SCHEMAATTRIBUTE_HPP_
+#include <com/sun/star/configuration/backend/SchemaAttribute.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -136,7 +138,7 @@ MergedComponentData const & SchemaBuilder::result() const
 // XSchemaHandler
 
 void SAL_CALL SchemaBuilder::startSchema(  )
-        throw (MalformedDataException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!this->isDone())
         m_aContext.raiseMalformedDataException("Schema builder: Unexpected Restart of Schema");
@@ -149,7 +151,7 @@ void SAL_CALL SchemaBuilder::startSchema(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endSchema(  )
-        throw (MalformedDataException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!this->isDone())
         m_aContext.raiseMalformedDataException("Schema builder: Unexpected End of Schema");
@@ -159,7 +161,7 @@ void SAL_CALL SchemaBuilder::endSchema(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::importComponent( const OUString& aName )
-    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //OSL_TRACE("WARNING: Configuration schema parser: Cross-component references are not yet supported\n");
     // OSL_ENSURE(false, "Cross-component references are not yet supported");
@@ -168,7 +170,7 @@ void SAL_CALL SchemaBuilder::importComponent( const OUString& aName )
 
 
 void SAL_CALL SchemaBuilder::startComponent( const OUString& aName )
-        throw (MalformedDataException, container::ElementExistException, lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (m_aData.hasSchema())
         m_aContext.raiseElementExistException("Schema builder: The component schema is already loaded", OUString());
@@ -185,7 +187,7 @@ void SAL_CALL SchemaBuilder::startComponent( const OUString& aName )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endComponent( )
-        throw (MalformedDataException, lang::NoSupportException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
@@ -205,7 +207,7 @@ bool SchemaBuilder::isExtensible(sal_Int16 aSchemaAttributes)
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-        throw (MalformedDataException, container::ElementExistException, lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (aTemplate.Component.getLength() == 0)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
@@ -228,7 +230,7 @@ void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemp
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes, const TemplateIdentifier& aItemType )
-        throw (MalformedDataException, container::ElementExistException, container::NoSuchElementException, lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (aTemplate.Component.getLength() == 0)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
@@ -252,7 +254,7 @@ void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTempla
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endTemplate( )
-        throw (MalformedDataException, lang::NoSupportException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
@@ -261,7 +263,7 @@ void SAL_CALL SchemaBuilder::endTemplate( )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::startGroup( const OUString& aName, sal_Int16 aAttributes )
-        throw (MalformedDataException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bExtensible = isExtensible(aAttributes);
 
@@ -274,7 +276,7 @@ void SAL_CALL SchemaBuilder::startGroup( const OUString& aName, sal_Int16 aAttri
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::startSet( const OUString& aName, sal_Int16 aAttributes, const TemplateIdentifier& aItemType )
-        throw (MalformedDataException, container::ElementExistException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     TemplateIdentifier aFullType = m_aContext.completeComponent(aItemType);
     bool bExtensible = isExtensible(aAttributes);
@@ -288,7 +290,7 @@ void SAL_CALL SchemaBuilder::startSet( const OUString& aName, sal_Int16 aAttribu
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endNode( )
-        throw (MalformedDataException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
@@ -315,7 +317,7 @@ node::Attributes SchemaBuilder::makePropertyAttributes(sal_Int16 aSchemaAttribut
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // TODO: add type validation
     node::Attributes aValueAttributes = makePropertyAttributes(aAttributes);
@@ -338,7 +340,7 @@ void SAL_CALL SchemaBuilder::addProperty( const OUString& aName, sal_Int16 aAttr
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::addPropertyWithDefault( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aDefaultValue )
-        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // TODO: add parameter validation
     node::Attributes aValueAttributes = makePropertyAttributes(aAttributes);
@@ -367,7 +369,7 @@ void SAL_CALL SchemaBuilder::addPropertyWithDefault( const OUString& aName, sal_
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::addInstance( const OUString& aName, const TemplateIdentifier& aTemplate )
-        throw (MalformedDataException, container::ElementExistException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     TemplateIdentifier aFullType = m_aContext.completeComponent(aTemplate);
 
@@ -379,7 +381,7 @@ void SAL_CALL SchemaBuilder::addInstance( const OUString& aName, const TemplateI
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::addItemType( const TemplateIdentifier& aItemType )
-        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if ( m_aContext.getCurrentParent().getElementTemplateName() != aItemType.Name ||
          m_aContext.getCurrentParent().getElementTemplateModule() != m_aContext.getTemplateComponent(aItemType) )
