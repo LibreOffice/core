@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleScrollBar.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:28 $
+ *  last change:$Date: 2003-03-25 14:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
+import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import drafts.com.sun.star.accessibility.AccessibleRole;
@@ -116,7 +116,7 @@ import util.SOfficeFactory;
 public class AccessibleScrollBar extends TestCase {
 
     XDesktop the_Desk;
-    XTextDocument xTextDoc;
+    XComponent xDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
@@ -133,8 +133,8 @@ public class AccessibleScrollBar extends TestCase {
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
 
-        if (xTextDoc != null) {
-            xTextDoc.dispose();
+        if (xDoc != null) {
+            xDoc.dispose();
         }
     }
 
@@ -162,14 +162,14 @@ public class AccessibleScrollBar extends TestCase {
 
         log.println( "creating a test environment" );
 
-        if (xTextDoc != null) xTextDoc.dispose();
+        if (xDoc != null) xDoc.dispose();
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
+            xDoc = SOF.createDrawDoc(null);
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -177,7 +177,7 @@ public class AccessibleScrollBar extends TestCase {
         }
 
         XModel aModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+                    UnoRuntime.queryInterface(XModel.class, xDoc);
 
         XController xController = aModel.getCurrentController();
 
