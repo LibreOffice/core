@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:16:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #include "viewsh.hxx"
 #include "swcss1.hxx"
 #include "swhtml.hxx"
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
 
 #define CONTEXT_FLAGS_MULTICOL (HTML_CNTXT_STRIP_PARA |  \
                                 HTML_CNTXT_KEEP_NUMRULE | \
@@ -359,11 +362,11 @@ void SwHTMLParser::NewDivision( int nToken )
             }
             if( STRING_NOTFOUND == nPos )
             {
-                aURL = INetURLObject::RelToAbs( aHRef );
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef);
             }
             else
             {
-                aURL = INetURLObject::RelToAbs( aHRef.Copy( 0, nPos ) );
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.Copy( 0, nPos ) );
                 aURL += sfx2::cTokenSeperator;
                 if( STRING_NOTFOUND == nPos2 )
                 {
