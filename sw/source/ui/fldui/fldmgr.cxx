@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 14:47:06 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,15 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
+#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
+#include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -234,6 +243,8 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::text;
+using namespace com::sun::star::style;
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 /*--------------------------------------------------------------------
@@ -836,6 +847,28 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
             case FMT_SETVAR_BEGIN:  return VF_COUNT;
             case FMT_USERVAR_BEGIN: return VF_USR_COUNT;
             case FMT_DBFLD_BEGIN:   return VF_DB_COUNT;
+            case FMT_NUM_BEGIN:
+            {
+                USHORT nCount = (USHORT)(nEnd - nStart);
+                GetNumberingInfo();
+                if(xNumberingInfo.is())
+                {
+                    Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
+                    const sal_Int16* pTypes = aTypes.getConstArray();
+                    for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+                    {
+                        sal_Int16 nCurrent = pTypes[nType];
+                        //skip all values below or equal to CHARS_LOWER_LETTER_N
+                        if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+                        {
+                            nCount += aTypes.getLength() - nType;
+                            break;
+                        }
+                    }
+                }
+                return nCount;
+            }
+
         }
         return (USHORT)(nEnd - nStart);
     }
@@ -864,7 +897,27 @@ String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
     if (nTypeId == TYP_FILENAMEFLD)
         nFormatId &= ~FF_FIXED;     // Fixed-Flag ausmaskieren
 
-    aRet = SW_RESSTR((USHORT)(nStart + nFormatId));
+    if((nStart + nFormatId) < aSwFlds[nPos].nFmtEnd)
+        aRet = SW_RESSTR((USHORT)(nStart + nFormatId));
+    else if( FMT_NUM_BEGIN == nStart)
+    {
+        if(xNumberingInfo.is())
+        {
+            Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
+            const sal_Int16* pTypes = aTypes.getConstArray();
+            for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+            {
+                sal_Int16 nCurrent = pTypes[nType];
+                if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+                {
+                    sal_Int32 nOffset = nFormatId - (aSwFlds[nPos].nFmtEnd - nStart);
+                    if(aTypes.getLength() > (nOffset + nType))
+                        aRet = xNumberingInfo->getNumberingIdentifier( pTypes[nOffset + nType] );
+                    break;
+                }
+            }
+        }
+    }
 
     return aRet;
 }
@@ -895,20 +948,45 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
     case TYP_DBSETNUMBERFLD:
     case TYP_SEQFLD:
     case TYP_GETREFPAGEFLD:
-        switch( aSwFlds[ GetPos( nTypeId ) ].nFmtBegin + nFormatId )
+    {
+        USHORT nPos = GetPos( nTypeId );
+        ULONG nBegin = aSwFlds[ nPos ].nFmtBegin;
+        ULONG nEnd = aSwFlds[nPos].nFmtEnd;
+        if((nBegin + nFormatId) < nEnd)
         {
-        case FMT_NUM_ABC:               nId = SVX_NUM_CHARS_UPPER_LETTER;   break;
-        case FMT_NUM_SABC:              nId = SVX_NUM_CHARS_LOWER_LETTER;   break;
-        case FMT_NUM_ROMAN:             nId = SVX_NUM_ROMAN_UPPER;          break;
-        case FMT_NUM_SROMAN:            nId = SVX_NUM_ROMAN_LOWER;          break;
-        case FMT_NUM_ARABIC:            nId = SVX_NUM_ARABIC;               break;
-        case FMT_NUM_PAGEDESC:          nId = SVX_NUM_PAGEDESC;             break;
-        case FMT_NUM_PAGESPECIAL:       nId = SVX_NUM_CHAR_SPECIAL;         break;
-        case FMT_NUM_ABC_N:             nId = SVX_NUM_CHARS_UPPER_LETTER_N; break;
-        case FMT_NUM_SABC_N:            nId = SVX_NUM_CHARS_LOWER_LETTER_N; break;
+            switch( nBegin + nFormatId )
+            {
+            case FMT_NUM_ABC:               nId = SVX_NUM_CHARS_UPPER_LETTER;   break;
+            case FMT_NUM_SABC:              nId = SVX_NUM_CHARS_LOWER_LETTER;   break;
+            case FMT_NUM_ROMAN:             nId = SVX_NUM_ROMAN_UPPER;          break;
+            case FMT_NUM_SROMAN:            nId = SVX_NUM_ROMAN_LOWER;          break;
+            case FMT_NUM_ARABIC:            nId = SVX_NUM_ARABIC;               break;
+            case FMT_NUM_PAGEDESC:          nId = SVX_NUM_PAGEDESC;             break;
+            case FMT_NUM_PAGESPECIAL:       nId = SVX_NUM_CHAR_SPECIAL;         break;
+            case FMT_NUM_ABC_N:             nId = SVX_NUM_CHARS_UPPER_LETTER_N; break;
+            case FMT_NUM_SABC_N:            nId = SVX_NUM_CHARS_LOWER_LETTER_N; break;
+            }
         }
-        break;
-
+        else if(xNumberingInfo.is())
+        {
+            Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
+            const sal_Int16* pTypes = aTypes.getConstArray();
+            for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+            {
+                sal_Int16 nCurrent = pTypes[nType];
+                //skip all values below or equal to CHARS_LOWER_LETTER_N
+                if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+                {
+                    sal_Int32 nOffset = nFormatId + nBegin - aSwFlds[nPos].nFmtEnd;
+                    if((nOffset + nType) < aTypes.getLength())
+                    {
+                        nId = pTypes[nOffset + nType];
+                    }
+                }
+            }
+        }
+    }
+    break;
     case TYP_DDEFLD:
         switch ( aSwFlds[ GetPos( nTypeId ) ].nFmtBegin + nFormatId )
         {
@@ -2044,5 +2122,19 @@ Reference<XNameAccess> SwFldMgr::GetDBContext()
     }
     return xDBContext;
 }
+/* -----------------------------01.03.01 16:46--------------------------------
 
-
+ ---------------------------------------------------------------------------*/
+Reference<XNumberingTypeInfo> SwFldMgr::GetNumberingInfo() const
+{
+    if(!xNumberingInfo.is())
+    {
+        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        Reference < XInterface > xI = xMSF->createInstance(
+            ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
+        Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
+        DBG_ASSERT(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+        ((SwFldMgr*)this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
+    }
+    return xNumberingInfo;
+}

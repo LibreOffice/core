@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+/*#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
 #include <com/sun/star/style/NumberingType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
@@ -175,13 +175,13 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::style;
 using namespace rtl;
+*/
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
-
 /* -----------------------------31.01.01 10:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
+/*Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 {
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference < XInterface > xI = xMSF->createInstance(
@@ -190,7 +190,7 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
     DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
 
     return xRet;
-}
+} */
 
 DBG_NAME(outlinehdl);
 
@@ -544,7 +544,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aCollLbl(this, SW_RES(FT_COLL)),
     aCollBox(this, SW_RES(LB_COLL)),
     aNumberLbl(this, SW_RES(FT_NUMBER)),
-    aNumberBox(this, SW_RES(LB_NUMBER)),
+    aNumberBox(this, SW_RES(LB_NUMBER), INSERT_NUM_TYPE_NO_NUMBERING),
     aCharFmtFT(this, SW_RES(FT_CHARFMT)),
     aCharFmtLB(this, SW_RES(LB_CHARFMT)),
     aAllLevelFT(    this, ResId(FT_ALL_LEVEL)),
@@ -576,7 +576,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aStartEdit.SetModifyHdl(LINK(this,  SwOutlineSettingsTabPage, StartModified));
     aCharFmtLB.SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, CharFmtHdl));
 
-    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+/*  Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
     if(xInfo.is())
     {
@@ -605,7 +605,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
                 }
             }
         }
-    }
+    }*/
 
 }
 /* -----------------07.07.98 14:19-------------------
@@ -649,8 +649,9 @@ void    SwOutlineSettingsTabPage::Update()
         if(bSameType)
         {
             long nData = aNumFmtArr[0]->GetNumberingType();
-            USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
-            aNumberBox.SelectEntryPos( nPos );
+            aNumberBox.SelectNumberingType(nData);
+//          USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
+//          aNumberBox.SelectEntryPos( nPos );
         }
         else
             aNumberBox.SetNoSelection();
@@ -700,8 +701,9 @@ void    SwOutlineSettingsTabPage::Update()
         const SwNumFmt &rFmt = pNumRule->Get(nTmpLevel);
 
         ULONG nData = rFmt.GetNumberingType();
-        USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
-        aNumberBox.SelectEntryPos( nPos );
+        aNumberBox.SelectNumberingType(nData);
+//      USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
+//      aNumberBox.SelectEntryPos( nPos );
         aPrefixED.SetText(rFmt.GetPrefix());
         aSuffixED.SetText(rFmt.GetSuffix());
         const SwCharFmt* pFmt = rFmt.GetCharFmt();
@@ -830,12 +832,12 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelectGetFocus, ListBox *, pBox )
 /* -----------------07.07.98 14:19-------------------
  *
  * --------------------------------------------------*/
-IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, ListBox *, pBox )
+IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBox )
 {
     USHORT nStart = 0;
     USHORT nEnd = MAXLEVEL;
     USHORT nMask = 1;
-    sal_Int16 nNumberType = (sal_Int16)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
+    sal_Int16 nNumberType = pBox->GetSelectedNumberingType();//(sal_Int16)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
         if(nActLevel & nMask)
@@ -994,8 +996,9 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     }
 
     long nData = rNumFmt.GetNumberingType();
-    USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
-    aNumberBox.SelectEntryPos( nPos );
+    aNumberBox.SelectNumberingType(nData);
+//  USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
+//  aNumberBox.SelectEntryPos( nPos );
     USHORT nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
     USHORT nTmp = 0;
     if(nOutlinePos != USHRT_MAX)
@@ -1271,182 +1274,4 @@ NumberingPreview::~NumberingPreview()
 {
 }
 
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/02/09 08:01:42  os
-    TabPage size changed
-
-    Revision 1.4  2000/12/07 18:35:30  csaba
-    79541 Branding/Configuration Change
-
-    Revision 1.3  2000/11/09 10:10:34  obo
-    Without string include
-
-    Revision 1.2  2000/11/07 12:25:18  hjs
-    use min/max from stl
-
-    Revision 1.1.1.1  2000/09/18 17:14:45  hr
-    initial import
-
-    Revision 1.105  2000/09/18 16:05:58  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.104  2000/07/26 12:03:33  jp
-    OkHdl: don't use invalid PoolIds
-
-    Revision 1.103  2000/07/25 10:40:29  jp
-    Bug #76772#,#76774#: don't remove all selected templates from the preview, LoadNameRules must set the outline type
-
-    Revision 1.102  2000/07/03 08:54:11  jp
-    must changes for VCL
-
-    Revision 1.101  2000/06/13 14:11:58  os
-    #74049# save outline numbering form to the first empty position
-
-    Revision 1.100  2000/05/23 19:22:39  jp
-    Bugfixes for Unicode
-
-    Revision 1.99  2000/04/26 14:55:46  os
-    GetName() returns const String&
-
-    Revision 1.98  2000/04/18 15:08:17  os
-    UNICODE
-
-    Revision 1.97  2000/03/14 09:32:31  os
-    #74039# outline assignment corrected
-
-    Revision 1.96  2000/03/03 15:17:02  os
-    StarView remainders removed
-
-    Revision 1.95  2000/02/11 14:56:40  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.94  1999/01/06 14:04:56  OS
-    #58643# Positionsbeispiel berichtigt
-
-
-      Rev 1.93   06 Jan 1999 15:04:56   OS
-   #58643# Positionsbeispiel berichtigt
-
-      Rev 1.92   18 Nov 1998 08:35:04   OS
-   #58263# Numerierung in den Svx - Reste
-
-      Rev 1.91   17 Nov 1998 10:57:52   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.90   10 Nov 1998 16:03:34   OS
-   #58201# HelpId fuer Form-Button
-
-      Rev 1.89   09 Nov 1998 14:03:04   AWO
-   Inlcudes hinzugefuegt
-
-      Rev 1.88   06 Nov 1998 14:10:00   OS
-   #45264# Outline-Ebenen nicht fuer index-ebenen
-
-      Rev 1.87   21 Sep 1998 15:31:30   OS
-   #56738# Zeichenvorlage fuer Kapitelnumerierung einstellbar
-
-      Rev 1.86   06 Aug 1998 21:42:08   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.85   18 Jul 1998 14:50:52   OS
-   richtige Ebenenanzahl fuer vollst. Numerierung #53233#
-
-      Rev 1.84   09 Jul 1998 14:03:06   OS
-   Kapitelnumerierung jetzt TabDialog
-
-      Rev 1.83   01 Apr 1998 15:15:22   OS
-   Beispielhintergrund zuruecksetzen #49133#
-
-      Rev 1.82   26 Feb 1998 17:07:34   OS
-   keins->keine #47632#
-
-      Rev 1.81   24 Feb 1998 15:44:48   OS
-   Ausrichtung berichtigt #47417#
-
-      Rev 1.80   08 Dec 1997 11:53:30   OS
-   benannte Numerierungen entfernt
-
-      Rev 1.79   05 Dec 1997 16:50:56   OS
-   Numerierungsumbau
-
-      Rev 1.78   05 Dec 1997 10:42:50   OS
-   Numerierungsumbau
-
-      Rev 1.77   04 Dec 1997 16:57:20   OS
-   Numerierungsumbau
-
-      Rev 1.76   24 Nov 1997 16:47:44   MA
-   includes
-
-      Rev 1.75   17 Nov 1997 10:20:58   JP
-   Umstellung Numerierung
-
-      Rev 1.74   03 Nov 1997 13:22:42   MA
-   precomp entfernt
-
-      Rev 1.73   09 Oct 1997 08:48:32   OS
-   Beispieltexte nur noch setzen, wenn sie sich veraendert wurden #44493#
-
-      Rev 1.72   08 Aug 1997 17:28:08   OM
-   Headerfile-Umstellung
-
-      Rev 1.71   31 Jul 1997 15:22:06   MH
-   chg: header
-
-      Rev 1.70   08 Jul 1997 14:09:44   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.69   01 Jul 1997 09:49:52   OS
-   Erweiterung auf neun Formen
-
-      Rev 1.68   09 Jan 1997 18:49:44   OS
-   gfs. aktuelle Ebene selektieren
-
-      Rev 1.67   11 Dec 1996 10:27:02   MA
-   Warnings
-
-      Rev 1.66   11 Nov 1996 11:05:44   MA
-   ResMgr
-
-      Rev 1.65   02 Oct 1996 18:29:00   MA
-   Umstellung Enable/Disable
-
-      Rev 1.64   28 Aug 1996 14:12:18   OS
-   includes
-
-      Rev 1.63   20 Aug 1996 16:22:50   OS
-   Handler zusammengefasst, timeouthdl vor Levelumschaltung rufen
-
-      Rev 1.62   22 Jul 1996 20:54:02   JP
-   Anpassung an die neuen SwUiNumRules
-
-      Rev 1.61   19 Jul 1996 15:32:32   JP
-   Umstellung Numerierung
-
-      Rev 1.60   21 Mar 1996 10:46:00   MA
-   Umstellung SV311
-
-      Rev 1.59   19 Feb 1996 12:33:28   JP
-   MakeNumString kann den Post-/Prefix-String per Flag selbst zufuegen
-
-      Rev 1.58   06 Feb 1996 15:21:12   JP
-   Link Umstellung 305
-
-      Rev 1.57   01 Feb 1996 11:45:58   mk
-   SINIX
-
-      Rev 1.56   03 Jan 1996 11:07:56   OS
-   Format fuer Kapitelnumerierung kann jetzt gespeichert werden
-
-      Rev 1.55   24 Nov 1995 16:58:48   OM
-   PCH->PRECOMPILED
-
-      Rev 1.54   13 Nov 1995 10:51:34   OM
-   static entfernt
-
-------------------------------------------------------------------------*/
 

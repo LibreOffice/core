@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
+#endif
+#ifndef _NUMBERINGTYPELISTBOX_HXX
+#include <numberingtypelistbox.hxx>
 #endif
 
 class SwWrtShell;
@@ -350,7 +353,7 @@ class SwSectionFtnEndTabPage : public SfxTabPage
     CheckBox        aFtnNtNumFmtCB;
     FixedText       aFtnPrefixFT;
     Edit            aFtnPrefixED;
-    ListBox         aFtnNumViewBox;
+    SwNumberingTypeListBox   aFtnNumViewBox;
     FixedText       aFtnSuffixFT;
     Edit            aFtnSuffixED;
 
@@ -364,7 +367,7 @@ class SwSectionFtnEndTabPage : public SfxTabPage
     CheckBox        aEndNtNumFmtCB;
     FixedText       aEndPrefixFT;
     Edit            aEndPrefixED;
-    ListBox         aEndNumViewBox;
+    SwNumberingTypeListBox   aEndNumViewBox;
     FixedText       aEndSuffixFT;
     Edit            aEndSuffixED;
 

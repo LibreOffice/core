@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 15:05:32 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2020,7 +2020,7 @@ SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( Window *pParent,
     aFtnNtAtTextEndCB   ( this, SW_RES( CB_FTN_AT_TXTEND ) ),
     aFtnNtNumCB         ( this, SW_RES( CB_FTN_NUM ) ),
     aFtnNtNumFmtCB      ( this, SW_RES( CB_FTN_NUM_FMT ) ),
-    aFtnNumViewBox      ( this, SW_RES( LB_FTN_NUMVIEW  )),
+    aFtnNumViewBox      ( this, SW_RES( LB_FTN_NUMVIEW  ), INSERT_NUM_EXTENDED_TYPES),
     aFtnOffsetLbl       ( this, SW_RES( FT_FTN_OFFSET   )),
     aFtnOffsetFld       ( this, SW_RES( FLD_FTN_OFFSET   )),
     aFtnPrefixFT        ( this, SW_RES( FT_FTN_PREFIX   )),
@@ -2077,7 +2077,7 @@ BOOL SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     switch( aFtn.GetValue() )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
-        aFtn.SetNumType( GetNumType( aFtnNumViewBox.GetSelectEntryPos() ));
+        aFtn.SetNumType( aFtnNumViewBox.GetSelectedNumberingType() );
         aFtn.SetPrefix( aFtnPrefixED.GetText() );
         aFtn.SetSuffix( aFtnSuffixED.GetText() );
         // no break;
@@ -2120,7 +2120,7 @@ void SwSectionFtnEndTabPage::ResetState( BOOL bFtn,
     CheckBox *pNtAtTextEndCB, *pNtNumCB, *pNtNumFmtCB;
     FixedText*pPrefixFT, *pSuffixFT;
     Edit *pPrefixED, *pSuffixED;
-    ListBox *pNumViewBox;
+    SwNumberingTypeListBox *pNumViewBox;
     FixedText* pOffsetTxt;
     NumericField *pOffsetFld;
 
@@ -2168,7 +2168,7 @@ void SwSectionFtnEndTabPage::ResetState( BOOL bFtn,
         // no break;
     }
 
-    pNumViewBox->SelectEntryPos( GetNumPos( rAttr.GetNumType() ));
+    pNumViewBox->SelectNumberingType( rAttr.GetNumType() );
     pOffsetFld->SetValue( rAttr.GetOffset() + 1 );
     pPrefixED->SetText( rAttr.GetPrefix() );
     pSuffixED->SetText( rAttr.GetSuffix() );
@@ -2216,7 +2216,7 @@ IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
                     &aFtnNtNumFmtCB == pBox ;
 
     CheckBox *pNumBox, *pNumFmtBox, *pEndBox;
-    ListBox* pNumViewBox;
+    SwNumberingTypeListBox* pNumViewBox;
     FixedText* pOffsetTxt;
     NumericField *pOffsetFld;
     FixedText*pPrefixFT, *pSuffixFT;
@@ -2308,6 +2308,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/02/23 15:05:32  os
+    Issue #413#: use unquoted URLs
+
     Revision 1.3  2001/02/16 09:31:07  mtg
     Added XML support for Section Lists
 

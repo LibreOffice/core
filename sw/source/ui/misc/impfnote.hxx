@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impfnote.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,16 @@
 #ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
+#ifndef _NUMBERINGTYPELISTBOX_HXX
+#include <numberingtypelistbox.hxx>
+#endif
 
 class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
     FixedText       aNumTypeFT;
-    ListBox         aNumViewBox;
+    SwNumberingTypeListBox   aNumViewBox;
     FixedText       aOffsetLbl;
     NumericField    aOffsetFld;
     FixedText       aNumCountFT;

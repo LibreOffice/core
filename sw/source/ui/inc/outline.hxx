@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _NUMPREVW_HXX
 #include <numprevw.hxx>
 #endif
+#ifndef _NUMBERINGTYPELISTBOX_HXX
+#include <numberingtypelistbox.hxx>
+#endif
 
 class SwWrtShell;
 class SwTxtFmtColl;
@@ -156,7 +159,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     FixedText       aCollLbl;
     ListBox         aCollBox;
     FixedText       aNumberLbl;
-    ListBox         aNumberBox;
+    SwNumberingTypeListBox  aNumberBox;
     FixedText       aCharFmtFT;
     ListBox         aCharFmtLB;
     FixedText       aAllLevelFT;
@@ -183,7 +186,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     DECL_LINK( ToggleComplete, NumericField * );
     DECL_LINK( CollSelect, ListBox * );
     DECL_LINK( CollSelectGetFocus, ListBox * );
-    DECL_LINK( NumberSelect, ListBox * );
+    DECL_LINK( NumberSelect, SwNumberingTypeListBox * );
     DECL_LINK( DelimModify, Edit * );
     DECL_LINK( StartModified, NumericField * );
     DECL_LINK( CharFmtHdl, ListBox * );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,26 +129,6 @@
 #endif
 
 
-// Numerierungsformat Umsetzung:
-// ListBox  - Format            - Enum-Wert
-// 0        - A, B, C, ...      - 0
-// 1        - a, b, c, ...      - 1
-// 2        - I, II, III, ...   - 2
-// 3        - i, ii, iii, ...   - 3
-// 4        - 1, 2, 3, ...      - 4
-// 5        - A, .., AA, ..,    - 9
-// 6        - a, .., aa, ..,    - 10
-
-inline USHORT GetNumPos( USHORT n )
-{
-    return SVX_NUM_ARABIC < n ? n - 4 : n;
-}
-
-inline SvxExtNumType GetNumType( USHORT n )
-{
-    return (SvxExtNumType)(4 < n ? n + 4 : n );
-}
-
 SwFootNoteOptionDlg::SwFootNoteOptionDlg( Window *pParent, SwWrtShell &rS ) :
     SfxTabDialog( pParent, SW_RES(DLG_DOC_FOOTNOTE) ),
     rSh( rS )
@@ -193,7 +173,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
                                           const SfxItemSet &rSet ) :
     SfxTabPage( pParent, SW_RES(bEN ? TP_ENDNOTEOPTION : TP_FOOTNOTEOPTION), rSet ),
     aNumTypeFT      (this, ResId( FT_NUMTYPE    )),
-    aNumViewBox     (this, ResId( LB_NUMVIEW    )),
+    aNumViewBox     (this, ResId( LB_NUMVIEW    ), INSERT_NUM_EXTENDED_TYPES),
     aOffsetLbl      (this, ResId( FT_OFFSET )),
     aOffsetFld      (this, ResId( FLD_OFFSET   )),
     aNumCountFT     (this, ResId( FT_NUMCOUNT   )),
@@ -294,7 +274,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
         // Numerierung
         // Art
-    aNumViewBox.SelectEntryPos( GetNumPos( pInf->aFmt.GetNumberingType() ));
+    aNumViewBox.SelectNumberingType( pInf->aFmt.GetNumberingType());
     aOffsetFld.SetValue(pInf->nFtnOffset + 1);
     aPrefixED.SetText(pInf->GetPrefix());
     aSuffixED.SetText(pInf->GetSuffix());
@@ -493,7 +473,7 @@ BOOL SwEndNoteOptionPage::FillItemSet( SfxItemSet &rSet )
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo() : new SwFtnInfo();
 
     pInf->nFtnOffset = aOffsetFld.GetValue() -1;
-    pInf->aFmt.SetNumberingType(GetNumType( aNumViewBox.GetSelectEntryPos() ));
+    pInf->aFmt.SetNumberingType(aNumViewBox.GetSelectedNumberingType() );
     pInf->SetPrefix(aPrefixED.GetText());
     pInf->SetSuffix(aSuffixED.GetText());
 
@@ -554,6 +534,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/02/23 12:45:29  os
+    Complete use of DefaultNumbering component
+
     Revision 1.2  2001/02/09 08:01:42  os
     TabPage size changed
 

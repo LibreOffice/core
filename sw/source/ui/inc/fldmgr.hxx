@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:36 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,14 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-namespace com{namespace sun{namespace star{namespace container{
-    class XNameAccess;
-}}}}
+namespace com{namespace sun{namespace star{
+    namespace container{
+        class XNameAccess;
+    }
+    namespace text{
+        class XNumberingTypeInfo;
+    }
+}}}
 
 class SwWrtShell;
 class SwField;
@@ -140,9 +145,9 @@ private:
     USHORT          GetCurrLanguage() const;
 
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
-
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> GetDBContext();
-
+    com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> xNumberingInfo;
+    com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
 public:
     SwFldMgr(SwWrtShell* pSh = 0);
     ~SwFldMgr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,9 @@
 #define STR_NUMRULE_UNKNOWN         (RC_MISC_BEGIN + 60)
 #define MN_REDLINE_POPUP            (RC_MISC_BEGIN + 61)
 #define STR_REMOVE_WARNING          (RC_MISC_BEGIN + 62)
+#define STRRES_NUMTYPES             (RC_MISC_BEGIN + 63)
 
-#define MISC_ACT_END                STR_REMOVE_WARNING
+#define MISC_ACT_END                STRRES_NUMTYPES
 
 #if MISC_ACT_END > RC_MISC_END
 #error Resource-Id Ueberlauf in #file, #line

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
+ *  last change: $Author: os $ $Date: 2001-03-02 14:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@
 #include <charfmt.hxx>
 #endif
 
-#ifndef _FLDMGR_HXX //autogen
-#include <fldmgr.hxx>
-#endif
+//#ifndef _FLDMGR_HXX //autogen
+//#include <fldmgr.hxx>
+//#endif
 
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
@@ -164,7 +164,7 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     aCharStyleFT        ( this, SW_RES( FT_CHAR_STYLE )),
     aCharStyleLB        ( this, SW_RES( LB_CHAR_STYLE )),
     aFormatFT           ( this, SW_RES( FT_FORMAT )),
-    aFormatLB           ( this, SW_RES( LB_FORMAT )),
+    aFormatLB           ( this, SW_RES( LB_FORMAT ), INSERT_NUM_EXTENDED_TYPES),
     aPosFT              ( this, SW_RES( FT_POS )),
     aPosLB              ( this, SW_RES( LB_POS )),
     aOffsetFT           ( this, SW_RES( FT_OFFSET )),
@@ -232,21 +232,22 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet& rSet )
     }
 
     // Format
-    SwFldMgr aMgr( pSh );
+//  SwFldMgr aMgr( pSh );
     USHORT nSelFmt = rInf.GetNumType().GetNumberingType();
-    USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
+//  USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
 
-    for( USHORT i = 0; i < nCnt; i++)
-    {
-        aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
-        USHORT nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
-        aFormatLB.SetEntryData( i, (void*)nFmtId );
-        if( nFmtId == nSelFmt )
-            aFormatLB.SelectEntryPos( i );
-    }
+//  for( USHORT i = 0; i < nCnt; i++)
+//  {
+//      aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
+//      USHORT nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
+//      aFormatLB.SetEntryData( i, (void*)nFmtId );
+//      if( nFmtId == nSelFmt )
+//          aFormatLB.SelectEntryPos( i );
+//  }
+    aFormatLB.SelectNumberingType(nSelFmt);
 
-    if ( !aFormatLB.GetSelectEntryCount() )
-        aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
+//  if ( !aFormatLB.GetSelectEntryCount() )
+//      aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
 
     // Position
     aPosLB.SelectEntryPos((USHORT)rInf.GetPos());
@@ -356,8 +357,7 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& rSet )
 
     // Format
     SvxNumberType aType;
-    aType.SetNumberingType((sal_Int16)(ULONG)aFormatLB.GetEntryData(
-                                    aFormatLB.GetSelectEntryPos() ));
+    aType.SetNumberingType(aFormatLB.GetSelectedNumberingType());
     aInf.SetNumType(aType);
 
     // Position
@@ -390,6 +390,9 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& rSet )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/23 12:45:29  os
+    Complete use of DefaultNumbering component
+
     Revision 1.1.1.1  2000/09/18 17:14:45  hr
     initial import
 
