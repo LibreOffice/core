@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-22 09:53:21 $
+ *  last change: $Author: cl $ $Date: 2002-05-30 12:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,18 +350,16 @@ Window FLT_NAVIGATOR
         };                 \
         IdCount = { 9 ; };
 
-    #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
-
     ImageList IL_NAVIGATR
     {
         ImageBitmap = Bitmap { File = "nv_imagelist.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_STDCOLOR ;
         NAVIGATR_IDLIST
     };
     ImageList ILH_NAVIGATR
     {
         ImageBitmap = Bitmap { File = "nvh_imagelist.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_STDCOLOR_HC ;
         NAVIGATR_IDLIST
     };
 };
