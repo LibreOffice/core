@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:04:04 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,26 +95,6 @@
 #include <services/mediatypedetectionhelper.hxx>
 #endif
 
-#ifndef __FRAMEWORK_SERVICES_FRAMELOADERFACTORY_HXX_
-#include <services/frameloaderfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
-#include <services/filterfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
-#include <services/typedetection.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
-#include <services/contenthandlerfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_DETECTORFACTORY_HXX_
-#include <services/detectorfactory.hxx>
-#endif
-
 #ifndef __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
 #include <services/substitutepathvars.hxx>
 #endif
@@ -126,21 +106,11 @@
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
-                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
-                        COMPONENTINFO( ::framework::FilterFactory               )
-                        COMPONENTINFO( ::framework::DetectorFactory             )
-                        COMPONENTINFO( ::framework::TypeDetection               )
-                        COMPONENTINFO( ::framework::ContentHandlerFactory       )
                         COMPONENTINFO( ::framework::SubstitutePathVariables     )
                         COMPONENTINFO( ::framework::PathSettings                )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
-                        IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::DetectorFactory                 )   else
-                        IFFACTORY( ::framework::TypeDetection                   )   else
-                        IFFACTORY( ::framework::ContentHandlerFactory           )   else
                         IFFACTORY( ::framework::SubstitutePathVariables         )   else
                         IFFACTORY( ::framework::PathSettings                    )
                     )
