@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:30:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1854,42 +1854,61 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ slovenian ] = "Vnesite Å¡tevilko faksa.";
 };
 
+ModalDialog RID_RTS_PWDIALOG
+{
+    Text = "Authentifizierungsanfrage";
+    Text [ english ] = "Authentication request";
 
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 150 , 90 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    FixedText RID_RTS_PWDIALOG_TXT
+    {
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 140, 20 );
+        WordBreak = TRUE;
+        Text = "Bitte geben Sie die Authentifizierungsdaten für den Server %s ein";
+        Text [ english ] = "Please enter your authentication data for server %s";
+    };
+    FixedText RID_RTS_PWDIALOG_USER_TXT
+    {
+        Pos = MAP_APPFONT( 5, 30 );
+        Size = MAP_APPFONT( 60, 10 );
+        Text = "~Benutzer";
+        Text [ english ] = "~User";
+    };
+    Edit RID_RTS_PWDIALOG_USER_EDT
+    {
+        Pos = MAP_APPFONT( 70, 29 );
+        Size = MAP_APPFONT( 75, 12 );
+        Border = TRUE;
+    };
+    FixedText RID_RTS_PWDIALOG_PASS_TXT
+    {
+        Pos = MAP_APPFONT( 5, 45 );
+        Size = MAP_APPFONT( 60, 10 );
+        Text = "~Passwort";
+        Text [ english ] = "~Password";
+    };
+    Edit RID_RTS_PWDIALOG_PASS_EDT
+    {
+        Pos = MAP_APPFONT( 70, 44 );
+        Size = MAP_APPFONT( 75, 12 );
+        Border = TRUE;
+        Password = TRUE;
+    };
+    CancelButton RID_RTS_PWDIALOG_CANCEL_BTN
+    {
+        Pos = MAP_APPFONT( 95, 70 );
+        Size = MAP_APPFONT( 50, 15 );
+    };
+    OKButton RID_RTS_PWDIALOG_OK_BTN
+    {
+        Pos = MAP_APPFONT( 5, 70 );
+        Size = MAP_APPFONT( 50, 15 );
+        DefButton = TRUE;
+    };
+};
