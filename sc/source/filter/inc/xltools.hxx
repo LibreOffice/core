@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:43:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,11 +180,6 @@ public:
         @param bErrorOrBool  false = nError is a Boolean value; true = is an error value.
         @param nValue  The error code or Boolean value. */
     static XclBoolError         ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue );
-
-    /** Calculates an X position in Calc twips from Excel anchor position. */
-    static sal_Int32            CalcX( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nCol, sal_uInt16 nColOffset, double fScale );
-    /** Calculates an Y position in Calc twips from Excel anchor position. */
-    static sal_Int32            CalcY( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nRow, sal_uInt16 nRowOffset, double fScale );
 
     /** Returns the length in twips calculated from a length in inches. */
     static sal_uInt16           GetTwipsFromInch( double fInches );
