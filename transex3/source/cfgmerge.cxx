@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-20 13:49:48 $
+ *  last change: $Author: nf $ $Date: 2000-11-20 14:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 // local includes
 #include "export.hxx"
-#include "xmlmerge.hxx"
+#include "cfgmerge.hxx"
 #include "tokens.h"
 #include "utf8conv.hxx"
 
@@ -90,8 +90,6 @@ ByteString sInputFileName;
 ByteString sActFileName;
 ByteString sOutputFile;
 ByteString sMergeSrc;
-
-BOOL bText = FALSE;
 
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
@@ -235,35 +233,6 @@ int WorkOnTokenSet( int nTyp, char *pTokenText )
     fprintf( stdout, pTokenText );
 
     return 1;
-
-    if ( bText && nTyp != CFG_TEXTCHAR ) {
-        fprintf( stdout, "\n" );
-        bText = FALSE;
-    }
-
-    switch ( nTyp ) {
-        case CFG_TAG:
-            fprintf( stdout, "TAG:        %s\n", pTokenText );
-        break;
-        case CFG_TEXT_START:
-            fprintf( stdout, "TEXT_START: %s\n    ", pTokenText );
-            bText = TRUE;
-        break;
-        case CFG_TEXT_END:
-            fprintf( stdout, "\nTEXT_END:   %s\n", pTokenText );
-        break;
-        case CFG_TEXTCHAR:
-            fprintf( stdout, "%s", pTokenText );
-        break;
-        case CFG_UNKNOWNTAG:
-            fprintf( stdout, "UNKNOWNTAG: %s\n", pTokenText );
-        break;
-        case CFG_CLOSETAG:
-            fprintf( stdout, "CLOSETAG:   %s\n", pTokenText );
-        break;
-    }
-
-    return 1;
 }
 
 
@@ -282,3 +251,31 @@ int GetError()
 }
 }
 
+//
+// class CfgStack
+//
+
+/*****************************************************************************/
+CfgStack::~CfgStack()
+/*****************************************************************************/
+{
+    for ( ULONG i = 0; i < Count(); i++ )
+        delete GetObject( i );
+}
+
+/*****************************************************************************/
+ByteString CfgStack::GetAccessPath( ULONG nPos )
+/*****************************************************************************/
+{
+    if ( nPos == LIST_APPEND )
+        nPos = Count() - 1;
+
+    ByteString sReturn;
+    for ( ULONG i = 0; i <= nPos; i++ ) {
+        if ( i )
+            sReturn += ".";
+        sReturn += GetStackData( i )->GetIdentifier();
+    }
+
+    return sReturn;
+}
