@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 12:53:12 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,8 @@
 #define STR_QUERY_DROP_ALL                  RID_STRING_START + 194
 #define STR_COLUMN_UNKNOWN                  RID_STRING_START + 195
 #define STR_ERR_LIKE_COLUMN                 RID_STRING_START + 196
+#define STR_DATASOURCE_GRIDCONTROL_NAME     RID_STRING_START + 197
+#define STR_DATASOURCE_GRIDCONTROL_DESC     RID_STRING_START + 198
 
 
 //========================================================================
@@ -481,10 +483,20 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+<<<<<<< dbu_resource.hrc
+ *  Revision 1.68  2002/03/21 12:53:12  oj
+ *  #96780# new strings for error messages
+ *
  *  Revision 1.67  2002/03/21 07:16:02  oj
  *  #95144# enable create button again when on firstpage
  *
  *  Revision 1.66  2002/02/06 07:23:39  oj
+=======
+ *  Revision 1.64.8.2  2002/04/23 07:48:49  oj
+ *  #98286# new member methods implemented
+ *
+ *  Revision 1.64.8.1  2002/02/06 07:37:14  oj
+>>>>>>> 1.64.8.2
  *  #96957# new handling inserted for context menu and accessibility
  *
  *  Revision 1.65  2002/01/24 17:38:31  fs

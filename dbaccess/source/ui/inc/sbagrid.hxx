@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 12:55:08 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,16 @@ namespace dbaui
             // m_xComposer has to be initialized depending on the data source
 
         HeaderBar* GetHeaderBar() const { return FmGridControl::GetHeaderBar(); }
+
+        /** return the description of the specified object.
+            @param  eObjType
+                The type to ask for
+            @param  _nPosition
+                The position of a tablecell (index position), header bar  colum/row cell
+            @return
+                The description of the specified object.
+        */
+        virtual ::rtl::OUString GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
     protected:
         // DragSourceHelper overridables
