@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:49:57 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,14 +935,14 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner )
 
     const StyleSettings &rSet = GetEditWin().GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();
-    if( pVScrollbar->IsVisible(TRUE) )
+    if( pVScrollbar->IsVisible(FALSE) )
     {
         if(bRightVRuler)
             rToFill.Left() = nTmp;
         else
             rToFill.Right()  = nTmp;
     }
-    if ( pHScrollbar->IsVisible(TRUE) )
+    if ( pHScrollbar->IsVisible(FALSE) && !pWrtShell->IsBrowseMode() )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
