@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 11:21:00 $
+#   last change: $Author: kz $ $Date: 2005-03-18 18:09:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,12 +101,8 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/CustomAnimationPreset.obj\
            $(SLO)$/CustomAnimationEffect.obj\
            $(SLO)$/TransitionPreset.obj\
-           $(SLO)$/undoanim.obj
-
-EXCEPTIONSFILES= \
-           $(SLO)$/drawdoc3.obj \
-           $(SLO)$/drawdoc2.obj \
-           $(SLO)$/drawdoc.obj
+           $(SLO)$/undoanim.obj\
+           $(SLO)$/EffectMigration.obj
 
 # --- Tagets -------------------------------------------------------
 
