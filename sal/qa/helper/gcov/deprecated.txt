@@ -1,0 +1,7 @@
+# contain all functions, which are mark as deprecated
+# this function will removed from the allexportlist
+# Format of a line MUST be / (.*);/
+
+        rtl_ustr_trim;
+        rtl_str_trim;
+
