@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 10:57:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
         <prop oor:name="ooXMLFileFormatVersion">
             <value >${FILEFORMATVERSION}</value>
         </prop>
+        <prop oor:name="ooXMLFileFormatName">
+            <value >${FILEFORMATNAME}</value>
+        </prop>
     </node>
     <node oor:name="Office">
         <prop oor:name="ooSetupInstCompleted">
@@ -94,7 +97,7 @@
                     <value >private:factory/scalc</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value ></value>
+                    <value>,,,;4;</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
                     <value >4</value>
@@ -126,7 +129,7 @@
                     <value >private:factory/sdraw</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value ></value>
+                    <value>,,,;4;</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
                     <value >6</value>
@@ -158,7 +161,7 @@
                     <value >private:factory/simpress?slot=6686</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value ></value>
+                    <value>,,,;4;</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
                     <value >8</value>
