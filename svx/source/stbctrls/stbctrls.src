@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:13:04 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String RID_SVXSTR_INSERT_TEXT
     Text[ korean ] = "»ðÀÔ";
     Text[ turkish ] = "EKLE";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "INSERT";
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
@@ -122,6 +123,7 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text[ korean ] = "ÃÊ°ú";
     Text[ turkish ] = "ÜZR";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "SOBRE";
 };
 String RID_SVXSTR_SELMODE_STD
 {
@@ -149,6 +151,7 @@ String RID_SVXSTR_SELMODE_STD
     Text[ korean ] = "Ç¥ÁØ";
     Text[ turkish ] = "STD";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "STD";
 };
 String RID_SVXSTR_SELMODE_ER
 {
@@ -178,6 +181,7 @@ String RID_SVXSTR_SELMODE_ER
     TEXT[ korean ] = "È®Àå";
     TEXT[ turkish ] = "UZN";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "EXT";
 };
 String RID_SVXSTR_SELMODE_ERG
 {
@@ -207,6 +211,7 @@ String RID_SVXSTR_SELMODE_ERG
     TEXT[ korean ] = "º¸Ãæ";
     TEXT[ turkish ] = "TAML";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "AGR";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
@@ -270,6 +275,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ korean ] = "ÃÖÀû";
             Text[ turkish ] = "Optimum";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Óptimo";
         };
         MenuItem
         {
@@ -300,6 +306,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ korean ] = "ÂÊ ³Êºñ";
             Text[ turkish ] = "Sayfa geniþliði";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ancho de página";
         };
         MenuItem
         {
@@ -330,6 +337,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ korean ] = "ÂÊ ÀüÃ¼";
             Text[ turkish ] = "Tüm sayfa";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Toda la página";
         };
     };
 };
@@ -365,6 +373,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ korean ] = "Áß°£°ª";
             Text[ turkish ] = "Ortalama";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Promedio";
         };
         MenuItem
         {
@@ -393,6 +402,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ korean ] = "¼ö2";
             Text[ turkish ] = "Sayý2";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Cantidad2";
         };
         MenuItem
         {
@@ -421,6 +431,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ korean ] = "¼ö";
             Text[ turkish ] = "Sayý";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Cantidad";
         };
         MenuItem
         {
@@ -449,6 +460,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ korean ] = "ÃÖ´ë";
             Text[ turkish ] = "Azami";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Máximo";
         };
         MenuItem
         {
@@ -477,6 +489,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ korean ] = "ÃÖ¼Ò";
             Text[ turkish ] = "Asgari";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Mínimo";
         };
         MenuItem
         {
@@ -505,6 +518,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ korean ] = "ÇÕ°è";
             Text[ turkish ] = "Toplam";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Suma";
         };
         MenuItem
         {
@@ -533,6 +547,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ korean ] = "¾øÀ½";
             Text[ turkish ] = "Yok";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ninguno";
         };
     };
 };
