@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:16:39 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,3 +461,11 @@
 #define SID_RENAMEPAGE_QUICK                (SID_SD_START+405)
 
 #define SID_SWITCH_SHELL                    (SID_SD_START+406)
+
+#define SID_HEADER_AND_FOOTER               (SID_SD_START+407)
+#define SID_MASTER_LAYOUTS_SLIDE            (SID_SD_START+408)
+#define SID_MASTER_LAYOUTS_NOTES            (SID_SD_START+409)
+#define SID_MASTER_LAYOUTS_HANDOUTS         (SID_SD_START+410)
+#define SID_INSERT_PAGE_NUMBER              (SID_SD_START+411)
+#define SID_INSERT_DATE_TIME                (SID_SD_START+412)
+
