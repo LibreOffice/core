@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 10:54:57 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ public:
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
     // <--
 
+    virtual String GetDescription() const;
+
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
 };
 
@@ -244,6 +246,9 @@ class SwDrawFrmFmt: public SwFrmFmt
 {
     friend class SwDoc;
 
+    mutable const SdrObject * pSdrObjCached;
+    mutable String sSdrObjCachedComment;
+
     //Beide nicht vorhanden.
     SwDrawFrmFmt( const SwDrawFrmFmt &rCpy );
     SwDrawFrmFmt &operator=( const SwDrawFrmFmt &rCpy );
@@ -262,8 +267,9 @@ protected:
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
           // --> OD 2004-08-06 #i28749#
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor )
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
           // <--
+          pSdrObjCached(NULL)
     {}
     SwDrawFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
@@ -272,8 +278,9 @@ protected:
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
           // --> OD 2004-08-06 #i28749#
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor )
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
           // <--
+          pSdrObjCached(NULL)
     {}
 
 public:
@@ -299,6 +306,7 @@ public:
     virtual sal_Int16 GetPositionLayoutDir() const;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
     // <--
+    virtual String GetDescription() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
 };
