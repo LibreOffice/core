@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,8 +1259,19 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 break;
 
-                case META_TEXT_ACTION:
                 case META_TEXTRECT_ACTION:
+                {
+                    const MetaTextRectAction * pA = (const MetaTextRectAction*)pMA;
+                    String aTemp( pA->GetText() );
+                    SetAllAttr();
+
+                    Point aPos( pA->GetRect().TopLeft() );
+                    if ( !WMFRecord_Escape_Unicode( aPos, aTemp, NULL ) )
+                        WMFRecord_TextOut( aPos, aTemp );
+                }
+                break;
+
+                case META_TEXT_ACTION:
                 {
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
