@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-04 15:09:08 $
+ *  last change: $Author: mt $ $Date: 2001-12-04 19:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,7 +1399,7 @@ void EditEngine::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemovePa
     DBG_CHKTHIS( EditEngine, 0 );
 
     pImpEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
-    EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
+    EditSelection aSel( pImpEditEngine->ConvertSelection( rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos ) );
     pImpEditEngine->RemoveCharAttribs( aSel, bRemoveParaAttribs, nWhich  );
     pImpEditEngine->UndoActionEnd( EDITUNDO_RESETATTRIBS );
     pImpEditEngine->FormatAndUpdate();
