@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:04:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,16 +114,16 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
@@ -156,7 +156,7 @@ namespace framework
     class ModuleUIConfigurationManagerSupplier : public com::sun::star::lang::XTypeProvider ,
                                                  public com::sun::star::lang::XServiceInfo  ,
                                                  public com::sun::star::lang::XComponent    ,
-                                                 public drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier      ,
+                                                 public ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier      ,
                                                  private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                                  public ::cppu::OWeakObject
     {
@@ -178,11 +178,11 @@ namespace framework
                 throw (::com::sun::star::uno::RuntimeException);
 
             // XModuleUIConfigurationManagerSupplier
-            virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const ::rtl::OUString& ModuleIdentifier )
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const ::rtl::OUString& ModuleIdentifier )
                 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef ::std::hash_map< rtl::OUString, com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
+            typedef ::std::hash_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 
@@ -195,7 +195,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >                   m_xDefaultCfgRootStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >                   m_xUserCfgRootStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >          m_xUserRootCommit;
-            com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager >   m_xModuleMgr;
+            com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >   m_xModuleMgr;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >        m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
    };
