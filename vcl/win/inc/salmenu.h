@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmenu.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:58:23 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 13:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,29 +68,50 @@
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
 #endif
+#ifndef _SV_SALMENU_HXX
+#include <salmenu.hxx>
+#endif
 
-class SalMenu;
-class SalMenuItem;
 
-class SalMenuData
+class WinSalMenu : public SalMenu
 {
 public:
+    WinSalMenu();
+    virtual ~WinSalMenu();
+    virtual BOOL VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
+                            // otherwise only menu messages are processed (eg, OLE on Windows)
+
+    virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
+    virtual void RemoveItem( unsigned nPos );
+    virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
+    virtual void SetFrame( const SalFrame* pFrame );
+    virtual void CheckItem( unsigned nPos, BOOL bCheck );
+    virtual void EnableItem( unsigned nPos, BOOL bEnable );
+    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText );
+    virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage );
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
+    virtual void GetSystemMenuData( SystemMenuData* pData );
+
     HMENU mhMenu;           // the menu handle
     BOOL  mbMenuBar;        // true for menu bars
     HWND  mhWnd;            // the window handle where the menubar is attached, may be NULL
-    SalMenu *mpParentMenu;  // the parent menu
+    WinSalMenu *mpParentMenu;  // the parent menu
 };
 
-class SalMenuItemData
+class WinSalMenuItem : public SalMenuItem
 {
 public:
+    WinSalMenuItem();
+    virtual ~WinSalMenuItem();
+
+
     MENUITEMINFOW mInfo;
     void*     mpMenu;       // pointer to corresponding VCL menu
     XubString mText;        // the item text
     XubString mAccelText;   // the accelerator string
     Bitmap    maBitmap;     // item image
     int       mnId;         // item id
-    SalMenu*  mpSalMenu;    // the menu where this item is inserted
+    WinSalMenu*  mpSalMenu;    // the menu where this item is inserted
 };
 
 #endif // _SV_SALMENU_H

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 14:58:37 $
+#   last change: $Author: kz $ $Date: 2003-11-20 13:03:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ SLOFILES=	$(SLO)$/salframe.obj	\
 
 .IF "$(UPDATER)"=="YES"
 OBJFILES=	$(OBJ)$/salframe.obj	\
-            $(OBJ)$/salmenu.obj     \ 
+            $(OBJ)$/salmenu.obj     \
             $(OBJ)$/salobj.obj
 .ENDIF
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:57:20 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 13:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2735,7 +2735,7 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
     // depending on the native implementation or the displayable flag
     // the menubar windows is supressed (ie, height=0)
     if( !((MenuBar*) pMenu)->IsDisplayable() ||
-        ( pMenu->ImplGetSalMenu() && SalMenu::VisibleMenuBar() ) )
+        ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
         nHeight = 0;
 
     pWindow->SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
@@ -2759,7 +2759,7 @@ BOOL MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu )
 
     // No keyboard processing when system handles the menu or our menubar is invisible
     if( !IsDisplayable() ||
-        ( ImplGetSalMenu() && SalMenu::VisibleMenuBar() ) )
+        ( ImplGetSalMenu() && ImplGetSalMenu()->VisibleMenuBar() ) )
         return bDone;
 
     // Enabled-Abfragen, falls diese Methode von einem anderen Fenster gerufen wurde...
@@ -4370,7 +4370,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     // show and connect native menubar
     if( pMenu && pMenu->ImplGetSalMenu() )
     {
-        if( SalMenu::VisibleMenuBar() )
+        if( pMenu->ImplGetSalMenu()->VisibleMenuBar() )
             ImplGetFrame()->SetMenu( pMenu->ImplGetSalMenu() );
 
         pMenu->ImplGetSalMenu()->SetFrame( ImplGetFrame() );
@@ -4814,7 +4814,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
 void MenuBarWindow::Paint( const Rectangle& rRect )
 {
     // no VCL paint if native menus
-    if( pMenu->ImplGetSalMenu() && SalMenu::VisibleMenuBar() )
+    if( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() )
     {
         ImplGetFrame()->DrawMenuBar();
         return;
@@ -4952,7 +4952,7 @@ void MenuBarWindow::ImplLayoutChanged()
     // depending on the native implementation or the displayable flag
     // the menubar windows is supressed (ie, height=0)
     if( !((MenuBar*) pMenu)->IsDisplayable() ||
-        ( pMenu->ImplGetSalMenu() && SalMenu::VisibleMenuBar() ) )
+        ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
         nHeight = 0;
 
     SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );

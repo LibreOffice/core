@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:04:04 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 13:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,14 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
-#ifndef _SV_SALMENU_HXX
-#include <salmenu.hxx>
+#ifndef _SV_SALMENU_H
+#include <salmenu.h>
 #endif
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
@@ -86,8 +86,8 @@
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
-#ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#ifndef _SV_SALFRAME_H
+#include <salframe.h>
 #endif
 #ifndef _SV_IMPBMP_HXX
 #include <impbmp.hxx>
@@ -106,14 +106,14 @@ static DWORD myerr=0;
 
 SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar )
 {
-    SalMenu *pSalMenu = new SalMenu();
+    WinSalMenu *pSalMenu = new WinSalMenu();
 
-    pSalMenu->maData.mbMenuBar = bMenuBar;
-    pSalMenu->maData.mhWnd     = NULL;
+    pSalMenu->mbMenuBar = bMenuBar;
+    pSalMenu->mhWnd     = NULL;
     if( bMenuBar )
-        pSalMenu->maData.mhMenu = ::CreateMenu();
+        pSalMenu->mhMenu = ::CreateMenu();
     else
-        pSalMenu->maData.mhMenu = ::CreatePopupMenu();
+        pSalMenu->mhMenu = ::CreatePopupMenu();
 
     return pSalMenu;
 }
@@ -129,39 +129,39 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
     if( !pItemData )
         return NULL;
 
-    SalMenuItem *pSalMenuItem = new SalMenuItem();
-    memset( &pSalMenuItem->maData.mInfo, 0, sizeof( MENUITEMINFOW ) );
-    pSalMenuItem->maData.mInfo.cbSize = sizeof( MENUITEMINFOW );
+    WinSalMenuItem *pSalMenuItem = new WinSalMenuItem();
+    memset( &pSalMenuItem->mInfo, 0, sizeof( MENUITEMINFOW ) );
+    pSalMenuItem->mInfo.cbSize = sizeof( MENUITEMINFOW );
 
     if( pItemData->eType == MENUITEM_SEPARATOR )
     {
         // separator
-        pSalMenuItem->maData.mInfo.fMask = MIIM_TYPE;
-        pSalMenuItem->maData.mInfo.fType = MFT_SEPARATOR;
+        pSalMenuItem->mInfo.fMask = MIIM_TYPE;
+        pSalMenuItem->mInfo.fType = MFT_SEPARATOR;
     }
     else
     {
         // item
-        pSalMenuItem->maData.mText   = pItemData->aText;
-        pSalMenuItem->maData.mpMenu  = pItemData->pMenu;
-        pSalMenuItem->maData.maBitmap= !!pItemData->aImage ? pItemData->aImage.GetBitmap() : Bitmap();
-        pSalMenuItem->maData.mnId    = pItemData->nId;
+        pSalMenuItem->mText   = pItemData->aText;
+        pSalMenuItem->mpMenu  = pItemData->pMenu;
+        pSalMenuItem->maBitmap= !!pItemData->aImage ? pItemData->aImage.GetBitmap() : Bitmap();
+        pSalMenuItem->mnId    = pItemData->nId;
 
         // 'translate' mnemonics
-        pSalMenuItem->maData.mText.SearchAndReplace( '~', '&' );
+        pSalMenuItem->mText.SearchAndReplace( '~', '&' );
 
-        pSalMenuItem->maData.mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
-        pSalMenuItem->maData.mInfo.fType = MFT_STRING;
+        pSalMenuItem->mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
+        pSalMenuItem->mInfo.fType = MFT_STRING;
 #ifdef OWNERDRAW
         if( pItemData->pMenu && !pItemData->pMenu->IsMenuBar() )
-            pSalMenuItem->maData.mInfo.fType |= MFT_OWNERDRAW;
-        pSalMenuItem->maData.mInfo.fState = MFS_ENABLED;
+            pSalMenuItem->mInfo.fType |= MFT_OWNERDRAW;
+        pSalMenuItem->mInfo.fState = MFS_ENABLED;
 #endif
-        pSalMenuItem->maData.mInfo.dwTypeData = (LPWSTR) pSalMenuItem->maData.mText.GetBuffer();
-        pSalMenuItem->maData.mInfo.cch = pSalMenuItem->maData.mText.Len();
+        pSalMenuItem->mInfo.dwTypeData = (LPWSTR) pSalMenuItem->mText.GetBuffer();
+        pSalMenuItem->mInfo.cch = pSalMenuItem->mText.Len();
 
-        pSalMenuItem->maData.mInfo.wID = pItemData->nId;
-        pSalMenuItem->maData.mInfo.dwItemData = (ULONG_PTR) pSalMenuItem; // user data
+        pSalMenuItem->mInfo.wID = pItemData->nId;
+        pSalMenuItem->mInfo.dwItemData = (ULONG_PTR) pSalMenuItem; // user data
     }
 
     return pSalMenuItem;
@@ -177,10 +177,10 @@ void WinSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 
 static SalMenu* ImplFindMenuBar( SalMenu *pMenu )
 {
-    SalMenu *pMenuBar = pMenu;
-    while( pMenuBar->maData.mpParentMenu )
-        pMenuBar = pMenuBar->maData.mpParentMenu;
-    if( pMenuBar->maData.mbMenuBar )
+    WinSalMenu *pMenuBar = static_cast<WinSalMenu*>(pMenu);
+    while( pMenuBar->mpParentMenu )
+        pMenuBar = pMenuBar->mpParentMenu;
+    if( pMenuBar->mbMenuBar )
         return pMenuBar;
     else
         return NULL;
@@ -188,13 +188,13 @@ static SalMenu* ImplFindMenuBar( SalMenu *pMenu )
 
 static void ImplDrawMenuBar( SalMenu *pMenu )
 {
-    if( SalMenu::VisibleMenuBar() )
+    if( pMenu->VisibleMenuBar() )
     {
         // redrawing the menubar all the time actually seems to be unnecessary (it just flickers)
         /*
-        SalMenu *pMenuBar = ImplFindMenuBar( pMenu );
-        if( pMenuBar && pMenuBar->maData.mhWnd )
-            ::DrawMenuBar( pMenuBar->maData.mhWnd );
+        WinSalMenu *pMenuBar = ImplFindMenuBar( pMenu );
+        if( pMenuBar && pMenuBar->mhWnd )
+            ::DrawMenuBar( pMenuBar->mhWnd );
             */
     }
 }
@@ -203,21 +203,24 @@ static void ImplDrawMenuBar( SalMenu *pMenu )
 
 
 /*
- * SalMenu
+ * WinSalMenu
  */
 
-SalMenu::SalMenu()
+WinSalMenu::WinSalMenu()
 {
-    memset( &maData, 0, sizeof(maData) );
+    mhMenu       = NULL;
+    mbMenuBar    = FALSE;
+    mhWnd        = NULL;
+    mpParentMenu = NULL;
 }
 
-SalMenu::~SalMenu()
+WinSalMenu::~WinSalMenu()
 {
     // only required if not associated to a window...
-    ::DestroyMenu( maData.mhMenu );
+    ::DestroyMenu( mhMenu );
 }
 
-BOOL SalMenu::VisibleMenuBar()
+BOOL WinSalMenu::VisibleMenuBar()
 {
     // The Win32 implementation never shows a native
     // menubar. Thus, native menues are only visible
@@ -232,198 +235,204 @@ BOOL SalMenu::VisibleMenuBar()
     return FALSE;
 }
 
-void SalMenu::SetFrame( const SalFrame *pFrame )
+void WinSalMenu::SetFrame( const SalFrame *pFrame )
 {
     if( pFrame )
-        maData.mhWnd = pFrame->maFrameData.mhWnd;
+        mhWnd = static_cast<const WinSalFrame*>(pFrame)->mhWnd;
     else
-        maData.mhWnd = NULL;
+        mhWnd = NULL;
 }
 
-void SalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
+void WinSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
     if( pSalMenuItem )
     {
+    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         if( nPos == MENU_APPEND )
         {
-            nPos = ::GetMenuItemCount( maData.mhMenu );
+            nPos = ::GetMenuItemCount( mhMenu );
             if( nPos == -1 )
                 return;
         }
 
-        if(!::InsertMenuItemW( maData.mhMenu, nPos, TRUE, &pSalMenuItem->maData.mInfo ))
+        if(!::InsertMenuItemW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
         else
         {
-            pSalMenuItem->maData.mpSalMenu = this;
+            pWItem->mpSalMenu = this;
             ImplDrawMenuBar( this );
         }
     }
 }
 
-void SalMenu::RemoveItem( unsigned nPos )
+void WinSalMenu::RemoveItem( unsigned nPos )
 {
-    int num = ::GetMenuItemCount( maData.mhMenu );
+    int num = ::GetMenuItemCount( mhMenu );
     if( num != -1 && nPos < (unsigned)num )
     {
-        SalMenuItem *pSalMenuItem = NULL;
+        WinSalMenuItem *pSalMenuItem = NULL;
 
         MENUITEMINFOW mi;
         memset( &mi, 0, sizeof(mi) );
         mi.cbSize = sizeof( mi );
         mi.fMask = MIIM_DATA;
-        if( !GetMenuItemInfoW( maData.mhMenu, nPos, TRUE, &mi) )
+        if( !GetMenuItemInfoW( mhMenu, nPos, TRUE, &mi) )
             myerr = GetLastError();
         else
-            pSalMenuItem = (SalMenuItem *) mi.dwItemData;
+            pSalMenuItem = (WinSalMenuItem *) mi.dwItemData;
 
-        if( !::RemoveMenu( maData.mhMenu, nPos, MF_BYPOSITION ) )
+        if( !::RemoveMenu( mhMenu, nPos, MF_BYPOSITION ) )
             myerr = GetLastError();
         else
         {
             if( pSalMenuItem )
-                pSalMenuItem->maData.mpSalMenu = NULL;
+                pSalMenuItem->mpSalMenu = NULL;
             ImplDrawMenuBar( this );
         }
     }
 }
 
-void ImplRemoveItemById( SalMenu *pSalMenu, unsigned nItemId )
+void ImplRemoveItemById( WinSalMenu *pSalMenu, unsigned nItemId )
 {
     if( !pSalMenu )
         return;
 
-    SalMenuItem *pSalMenuItem = NULL;
+    WinSalMenuItem *pSalMenuItem = NULL;
 
     MENUITEMINFOW mi;
     memset( &mi, 0, sizeof(mi) );
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
-    if( !GetMenuItemInfoW( pSalMenu->maData.mhMenu, nItemId, FALSE, &mi) )
+    if( !GetMenuItemInfoW( pSalMenu->mhMenu, nItemId, FALSE, &mi) )
         myerr = GetLastError();
     else
-        pSalMenuItem = (SalMenuItem *) mi.dwItemData;
+        pSalMenuItem = (WinSalMenuItem *) mi.dwItemData;
 
-    if( !::RemoveMenu( pSalMenu->maData.mhMenu, nItemId, MF_BYCOMMAND ) )
+    if( !::RemoveMenu( pSalMenu->mhMenu, nItemId, MF_BYCOMMAND ) )
         myerr = GetLastError();
     else
     {
         if( pSalMenuItem )
-            pSalMenuItem->maData.mpSalMenu = NULL;
+            pSalMenuItem->mpSalMenu = NULL;
         ImplDrawMenuBar( pSalMenu );
     }
 }
 
-void SalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
+void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
 {
     if( pSalMenuItem )
     {
-        if( pSalMenuItem->maData.mInfo.hSubMenu )
-            ::DestroyMenu( pSalMenuItem->maData.mInfo.hSubMenu );
+    WinSalMenuItem* pWMenuItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+    WinSalMenu* pWSubMenu = static_cast<WinSalMenu*>(pSubMenu);
+        if( pWMenuItem->mInfo.hSubMenu )
+            ::DestroyMenu( pWMenuItem->mInfo.hSubMenu );
 
-        pSalMenuItem->maData.mInfo.fMask |= MIIM_SUBMENU;
+        pWMenuItem->mInfo.fMask |= MIIM_SUBMENU;
         if( !pSubMenu )
-            pSalMenuItem->maData.mInfo.hSubMenu = NULL;
+            pWMenuItem->mInfo.hSubMenu = NULL;
         else
         {
-            pSalMenuItem->maData.mInfo.hSubMenu = pSubMenu->maData.mhMenu;
-            pSubMenu->maData.mpParentMenu = this;
+            pWMenuItem->mInfo.hSubMenu = pWSubMenu->mhMenu;
+            pWSubMenu->mpParentMenu = this;
         }
 
-        int num = ::GetMenuItemCount( maData.mhMenu );
-        if(!::SetMenuItemInfoW( maData.mhMenu, nPos, TRUE, &pSalMenuItem->maData.mInfo ) )
+        int num = ::GetMenuItemCount( mhMenu );
+        if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWMenuItem->mInfo ) )
             myerr = GetLastError();
         else
             ImplDrawMenuBar( this );
     }
 }
 
-void SalMenu::CheckItem( unsigned nPos, BOOL bCheck )
+void WinSalMenu::CheckItem( unsigned nPos, BOOL bCheck )
 {
-    if( -1 != ::CheckMenuItem( maData.mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
+    if( -1 != ::CheckMenuItem( mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
         ImplDrawMenuBar( this );
 }
 
-void SalMenu::EnableItem( unsigned nPos, BOOL bEnable )
+void WinSalMenu::EnableItem( unsigned nPos, BOOL bEnable )
 {
-    if( -1 != ::EnableMenuItem( maData.mhMenu, nPos, MF_BYPOSITION|(bEnable ? MF_ENABLED : (MF_DISABLED|MF_GRAYED) ) ) )
+    if( -1 != ::EnableMenuItem( mhMenu, nPos, MF_BYPOSITION|(bEnable ? MF_ENABLED : (MF_DISABLED|MF_GRAYED) ) ) )
         ImplDrawMenuBar( this );
 }
 
-void SalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage )
+void WinSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage )
 {
     if( pSalMenuItem )
     {
+    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         if( !!rImage )
-            pSalMenuItem->maData.maBitmap = rImage.GetBitmap();
+            pWItem->maBitmap = rImage.GetBitmap();
         else
-            pSalMenuItem->maData.maBitmap = Bitmap();
+            pWItem->maBitmap = Bitmap();
     }
 }
 
-void SalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
+void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
 {
     if( pSalMenuItem )
     {
-        pSalMenuItem->maData.mText = rText;
+    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+        pWItem->mText = rText;
         // 'translate' mnemonics
-        pSalMenuItem->maData.mText.SearchAndReplace( '~', '&' );
-        pSalMenuItem->maData.mInfo.fMask = MIIM_TYPE | MIIM_DATA;
-        pSalMenuItem->maData.mInfo.fType = MFT_STRING;
+        pWItem->mText.SearchAndReplace( '~', '&' );
+        pWItem->mInfo.fMask = MIIM_TYPE | MIIM_DATA;
+        pWItem->mInfo.fType = MFT_STRING;
 #ifdef OWNERDRAW
-        if( pSalMenuItem->maData.mpMenu && !((Menu*) pSalMenuItem->maData.mpMenu)->IsMenuBar() )
-            pSalMenuItem->maData.mInfo.fType |= MFT_OWNERDRAW;
+        if( pWItem->mpMenu && !((Menu*) pWItem->mpMenu)->IsMenuBar() )
+            pWItem->mInfo.fType |= MFT_OWNERDRAW;
 #endif
 
         // combine text and accelerator text
-        XubString aStr( pSalMenuItem->maData.mText );
-        if( pSalMenuItem->maData.mAccelText.Len() )
+        XubString aStr( pWItem->mText );
+        if( pWItem->mAccelText.Len() )
         {
             aStr.AppendAscii("\t");
-            aStr.Append( pSalMenuItem->maData.mAccelText );
+            aStr.Append( pWItem->mAccelText );
         }
-        pSalMenuItem->maData.mInfo.dwTypeData = (LPWSTR) aStr.GetBuffer();
-        pSalMenuItem->maData.mInfo.cch = aStr.Len();
+        pWItem->mInfo.dwTypeData = (LPWSTR) aStr.GetBuffer();
+        pWItem->mInfo.cch = aStr.Len();
 
-        if(!::SetMenuItemInfoW( maData.mhMenu, nPos, TRUE, &pSalMenuItem->maData.mInfo ))
+        if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
         else
             ImplDrawMenuBar( this );
     }
 }
 
-void SalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
+void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
 {
     if( pSalMenuItem )
     {
-        pSalMenuItem->maData.mAccelText = rKeyName;
-        pSalMenuItem->maData.mInfo.fMask = MIIM_TYPE | MIIM_DATA;
-        pSalMenuItem->maData.mInfo.fType = MFT_STRING;
+    WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+        pWItem->mAccelText = rKeyName;
+        pWItem->mInfo.fMask = MIIM_TYPE | MIIM_DATA;
+        pWItem->mInfo.fType = MFT_STRING;
 #ifdef OWNERDRAW
-        if( pSalMenuItem->maData.mpMenu && !((Menu*)pSalMenuItem->maData.mpMenu)->IsMenuBar() )
-            pSalMenuItem->maData.mInfo.fType |= MFT_OWNERDRAW;
+        if( pWItem->mpMenu && !((Menu*)pWItem->mpMenu)->IsMenuBar() )
+            pWItem->mInfo.fType |= MFT_OWNERDRAW;
 #endif
         // combine text and accelerator text
-        XubString aStr( pSalMenuItem->maData.mText );
-        if( pSalMenuItem->maData.mAccelText.Len() )
+        XubString aStr( pWItem->mText );
+        if( pWItem->mAccelText.Len() )
         {
             aStr.AppendAscii("\t");
-            aStr.Append( pSalMenuItem->maData.mAccelText );
+            aStr.Append( pWItem->mAccelText );
         }
-        pSalMenuItem->maData.mInfo.dwTypeData = (LPWSTR) aStr.GetBuffer();
-        pSalMenuItem->maData.mInfo.cch = aStr.Len();
+        pWItem->mInfo.dwTypeData = (LPWSTR) aStr.GetBuffer();
+        pWItem->mInfo.cch = aStr.Len();
 
-        if(!::SetMenuItemInfoW( maData.mhMenu, nPos, TRUE, &pSalMenuItem->maData.mInfo ))
+        if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
         else
             ImplDrawMenuBar( this );
     }
 }
 
-void SalMenu::GetSystemMenuData( SystemMenuData* pData )
+void WinSalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
     if( pData )
-        pData->hMenu = maData.mhMenu;
+        pData->hMenu = mhMenu;
 }
 
 // =======================================================================
@@ -433,18 +442,18 @@ void SalMenu::GetSystemMenuData( SystemMenuData* pData )
  */
 
 
-SalMenuItem::SalMenuItem()
+WinSalMenuItem::WinSalMenuItem()
 {
-    memset( &maData.mInfo, 0, sizeof( MENUITEMINFOW ) );
-    maData.mpMenu = NULL;
-    maData.mnId  = 0xFFFF;
-    maData.mpSalMenu = NULL;
+    memset( &mInfo, 0, sizeof( MENUITEMINFOW ) );
+    mpMenu = NULL;
+    mnId  = 0xFFFF;
+    mpSalMenu = NULL;
 }
 
-SalMenuItem::~SalMenuItem()
+WinSalMenuItem::~WinSalMenuItem()
 {
-    if( maData.mpSalMenu )
-        ImplRemoveItemById( maData.mpSalMenu, maData.mnId );
+    if( mpSalMenu )
+        ImplRemoveItemById( mpSalMenu, mnId );
 }
 
 // -------------------------------------------------------------------

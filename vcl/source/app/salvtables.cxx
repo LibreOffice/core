@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvtables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:31:25 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 13:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <salsys.hxx>
 #include <salbmp.hxx>
 #include <salobj.hxx>
+#include <salmenu.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is
@@ -119,5 +120,13 @@ SalVirtualDevice::~SalVirtualDevice()
 }
 
 SalObject::~SalObject()
+{
+}
+
+SalMenu::~SalMenu()
+{
+}
+
+SalMenuItem::~SalMenuItem()
 {
 }

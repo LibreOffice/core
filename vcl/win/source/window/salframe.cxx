@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:03:52 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 13:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 #ifndef _SV_SALVD_H
 #include <salvd.h>
 #endif
-#ifndef _SV_SALMENU_HXX
-#include <salmenu.hxx>
+#ifndef _SV_SALMENU_H
+#include <salmenu.h>
 #endif
 #ifndef _SV_IMPBMP_HXX
 #include <impbmp.hxx>
@@ -933,41 +933,41 @@ WinSalFrame::WinSalFrame()
 {
     SalData* pSalData = GetSalData();
 
-    maFrameData.mhWnd               = 0;
-    maFrameData.mhCursor            = LoadCursor( 0, IDC_ARROW );
-    maFrameData.mhDefIMEContext     = 0;
-    maFrameData.mpGraphics          = NULL;
-    maFrameData.mpGraphics2         = NULL;
-    maFrameData.mnShowState         = SW_SHOWNORMAL;
-    maFrameData.mnWidth             = 0;
-    maFrameData.mnHeight            = 0;
-    maFrameData.mnMinWidth          = 0;
-    maFrameData.mnMinHeight         = 0;
-    maFrameData.mnInputLang         = 0;
-    maFrameData.mnInputCodePage     = 0;
-    maFrameData.mbGraphics          = FALSE;
-    maFrameData.mbCaption           = FALSE;
-    maFrameData.mbBorder            = FALSE;
-    maFrameData.mbFixBorder         = FALSE;
-    maFrameData.mbSizeBorder        = FALSE;
-    maFrameData.mbFullScreen        = FALSE;
-    maFrameData.mbPresentation      = FALSE;
-    maFrameData.mbInShow            = FALSE;
-    maFrameData.mbRestoreMaximize   = FALSE;
-    maFrameData.mbInMoveMsg         = FALSE;
-    maFrameData.mbInSizeMsg         = FALSE;
-    maFrameData.mbFullScreenToolWin = FALSE;
-    maFrameData.mbDefPos            = TRUE;
-    maFrameData.mbOverwriteState    = TRUE;
-    maFrameData.mbIME               = FALSE;
-    maFrameData.mbHandleIME         = FALSE;
-    maFrameData.mbSpezIME           = FALSE;
-    maFrameData.mbAtCursorIME       = FALSE;
-    maFrameData.mbCandidateMode     = FALSE;
-    maFrameData.mbFloatWin          = FALSE;
-    maFrameData.mbNoIcon            = FALSE;
-    maFrameData.mSelectedhMenu      = 0;
-    maFrameData.mLastActivatedhMenu = 0;
+    mhWnd               = 0;
+    mhCursor            = LoadCursor( 0, IDC_ARROW );
+    mhDefIMEContext     = 0;
+    mpGraphics          = NULL;
+    mpGraphics2         = NULL;
+    mnShowState         = SW_SHOWNORMAL;
+    mnWidth             = 0;
+    mnHeight            = 0;
+    mnMinWidth          = 0;
+    mnMinHeight         = 0;
+    mnInputLang         = 0;
+    mnInputCodePage     = 0;
+    mbGraphics          = FALSE;
+    mbCaption           = FALSE;
+    mbBorder            = FALSE;
+    mbFixBorder         = FALSE;
+    mbSizeBorder        = FALSE;
+    mbFullScreen        = FALSE;
+    mbPresentation      = FALSE;
+    mbInShow            = FALSE;
+    mbRestoreMaximize   = FALSE;
+    mbInMoveMsg         = FALSE;
+    mbInSizeMsg         = FALSE;
+    mbFullScreenToolWin = FALSE;
+    mbDefPos            = TRUE;
+    mbOverwriteState    = TRUE;
+    mbIME               = FALSE;
+    mbHandleIME         = FALSE;
+    mbSpezIME           = FALSE;
+    mbAtCursorIME       = FALSE;
+    mbCandidateMode     = FALSE;
+    mbFloatWin          = FALSE;
+    mbNoIcon            = FALSE;
+    mSelectedhMenu      = 0;
+    mLastActivatedhMenu = 0;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
     maSysData.nSize     = sizeof( SystemEnvData );
@@ -1188,13 +1188,14 @@ void WinSalFrame::SetIcon( USHORT nIcon )
 
 void WinSalFrame::SetMenu( SalMenu* pSalMenu )
 {
-    if( pSalMenu && pSalMenu->maData.mbMenuBar )
-        ::SetMenu( maFrameData.mhWnd, pSalMenu->maData.mhMenu );
+    WinSalMenu* pWMenu = static_cast<WinSalMenu*>(pSalMenu);
+    if( pSalMenu && pWMenu->mbMenuBar )
+        ::SetMenu( mhWnd, pWMenu->mhMenu );
 }
 
 void WinSalFrame::DrawMenuBar()
 {
-    ::DrawMenuBar( maFrameData.mhWnd );
+    ::DrawMenuBar( mhWnd );
 }
 
 // -----------------------------------------------------------------------
@@ -1420,7 +1421,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
                 nX = (aParentRect.right - aParentRect.left) - nWidth-1 - nX;
 
             //#110386#, do not transform coordinates for system child windows
-            if( !(GetWindowStyle( maFrameData.mhWnd ) & WS_CHILD) )
+            if( !(GetWindowStyle( mhWnd ) & WS_CHILD) )
             {
                 POINT aPt;
                 aPt.x = nX;
@@ -4405,7 +4406,7 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
 // the pointer is stored in every item, so if no position
 // is specified we just use the first item (ie, pos=0)
 // if bByPosition is FALSE then nPos denotes a menu id instead of a position
-static SalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, BOOL bByPosition=TRUE )
+static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, BOOL bByPosition=TRUE )
 {
     DWORD err=0;
 
@@ -4416,7 +4417,7 @@ static SalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, BOOL bByPosition
     if( !GetMenuItemInfoW( hMenu, nPos, bByPosition, &mi) )
         err = GetLastError();
 
-    return (SalMenuItem *) mi.dwItemData;
+    return (WinSalMenuItem *) mi.dwItemData;
 }
 
 // returns the index of the currently selected item if any or -1
@@ -4462,10 +4463,10 @@ static int ImplMenuChar( HWND hWnd, WPARAM wParam, LPARAM lParam )
     int idx = idxSelected != -1 ? idxSelected+1 : 0;    // if duplicate mnemonics cycle through menu
     for( int i=0; i< nItemCount; i++, idx++ )
     {
-        SalMenuItem* pSalMenuItem = ImplGetSalMenuItem( hMenu, idx % nItemCount );
+        WinSalMenuItem* pSalMenuItem = ImplGetSalMenuItem( hMenu, idx % nItemCount );
         if( !pSalMenuItem )
             continue;
-        String aStr = pSalMenuItem->maData.mText;
+        String aStr = pSalMenuItem->mText;
         aStr.ToLowerAscii();
         if( aStr.Search( aMnemonic ) != STRING_NOTFOUND)
         {
@@ -4495,7 +4496,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         if( pMI->CtlType != ODT_MENU )
             return 0;
 
-        SalMenuItem *pSalMenuItem = (SalMenuItem *) pMI->itemData;
+        WinSalMenuItem *pSalMenuItem = (WinSalMenuItem *) pMI->itemData;
         if( !pSalMenuItem )
             return 0;
 
@@ -4513,19 +4514,19 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         HFONT hfntOld = (HFONT) SelectObject(hdc, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
         // menu text and accelerator
-        String aStr(pSalMenuItem->maData.mText.GetBuffer() );
-        if( pSalMenuItem->maData.mAccelText.Len() )
+        String aStr(pSalMenuItem->mText.GetBuffer() );
+        if( pSalMenuItem->mAccelText.Len() )
         {
             aStr.AppendAscii(" ");
-            aStr.Append( pSalMenuItem->maData.mAccelText );
+            aStr.Append( pSalMenuItem->mAccelText );
         }
         GetTextExtentPoint32W( hdc, (LPWSTR) aStr.GetBuffer(),
                                 aStr.Len(), &strSize );
 
         // image
         Size bmpSize( 16, 16 );
-        //if( !!pSalMenuItem->maData.maBitmap )
-        //    bmpSize = pSalMenuItem->maData.maBitmap.GetSizePixel();
+        //if( !!pSalMenuItem->maBitmap )
+        //    bmpSize = pSalMenuItem->maBitmap.GetSizePixel();
 
         // checkmark
         Size checkSize( GetSystemMetrics( SM_CXMENUCHECK ), GetSystemMetrics( SM_CYMENUCHECK ) );
@@ -4553,7 +4554,7 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
         if( pDI->CtlType != ODT_MENU )
             return 0;
 
-        SalMenuItem *pSalMenuItem = (SalMenuItem *) pDI->itemData;
+        WinSalMenuItem *pSalMenuItem = (WinSalMenuItem *) pDI->itemData;
         if( !pSalMenuItem )
             return 0;
 
@@ -4612,9 +4613,9 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
 
         //Size bmpSize = aBitmap.GetSizePixel();
         Size bmpSize(16, 16);
-        if( !!pSalMenuItem->maData.maBitmap )
+        if( !!pSalMenuItem->maBitmap )
         {
-            Bitmap aBitmap( pSalMenuItem->maData.maBitmap );
+            Bitmap aBitmap( pSalMenuItem->maBitmap );
 
             // set transparent pixels to background color
             if( fDisabled )
@@ -4622,7 +4623,7 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
             aBitmap.Replace( Color( COL_LIGHTMAGENTA ),
                 Color( GetRValue(colBackground),GetGValue(colBackground),GetBValue(colBackground) ), 0);
 
-            SalBitmap* pSalBmp = aBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
+            WinSalBitmap* pSalBmp = static_cast<WinSalBitmap*>(aBitmap.ImplGetImpBitmap()->ImplGetSalBitmap());
             HGLOBAL hDrawDIB = pSalBmp->ImplGethDIB();
 
             if( hDrawDIB )
@@ -4660,7 +4661,7 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
         hfntOld = (HFONT) SelectObject(pDI->hDC, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
         SIZE strSize;
-        String aStr( pSalMenuItem->maData.mText.GetBuffer() );
+        String aStr( pSalMenuItem->mText.GetBuffer() );
         GetTextExtentPoint32W( pDI->hDC, (LPWSTR) aStr.GetBuffer(),
                                 aStr.Len(), &strSize );
 
@@ -4670,10 +4671,10 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
             DST_PREFIXTEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
             err = GetLastError();
 
-        if( pSalMenuItem->maData.mAccelText.Len() )
+        if( pSalMenuItem->mAccelText.Len() )
         {
             SIZE strSizeA;
-            aStr = pSalMenuItem->maData.mAccelText;
+            aStr = pSalMenuItem->mAccelText;
             GetTextExtentPoint32W( pDI->hDC, (LPWSTR) aStr.GetBuffer(),
                                     aStr.Len(), &strSizeA );
             TEXTMETRIC tm;
@@ -4700,7 +4701,7 @@ static int ImplDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam )
 static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
     // Menu activation
-    SalFrame* pFrame = GetWindowPtr( hWnd );
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
         return 0;
 
@@ -4711,19 +4712,17 @@ static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM lParam )
     // Send activate and deactivate together, so we have not keep track of opened menues
     // this will be enough to have the menues updated correctly
     SalMenuEvent aMenuEvt;
-    SalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, 0 );
+    WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, 0 );
     if( pSalMenuItem )
-        aMenuEvt.mpMenu = pSalMenuItem->maData.mpMenu;
+        aMenuEvt.mpMenu = pSalMenuItem->mpMenu;
     else
         aMenuEvt.mpMenu = NULL;
 
-    long nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                            SALEVENT_MENUACTIVATE, &aMenuEvt );
+    long nRet = pFrame->CallCallback( SALEVENT_MENUACTIVATE, &aMenuEvt );
     if( nRet )
-        nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                            SALEVENT_MENUDEACTIVATE, &aMenuEvt );
+        nRet = pFrame->CallCallback( SALEVENT_MENUDEACTIVATE, &aMenuEvt );
     if( nRet )
-        pFrame->maFrameData.mLastActivatedhMenu = hMenu;
+        pFrame->mLastActivatedhMenu = hMenu;
 
     return (nRet!=0);
 }
@@ -4731,7 +4730,7 @@ static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM lParam )
 static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
     // Menu selection
-    SalFrame* pFrame = GetWindowPtr( hWnd );
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
         return 0;
 
@@ -4743,30 +4742,28 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
         bByPosition = TRUE;
 
     long nRet = 0;
-    if ( hMenu && !pFrame->maFrameData.mLastActivatedhMenu )
+    if ( hMenu && !pFrame->mLastActivatedhMenu )
     {
         // we never activated a menu (ie, no WM_INITMENUPOPUP has occured yet)
         // which means this must be the menubar -> send activation/deactivation
         SalMenuEvent aMenuEvt;
-        SalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, nId, bByPosition );
+        WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, nId, bByPosition );
         if( pSalMenuItem )
-            aMenuEvt.mpMenu = pSalMenuItem->maData.mpMenu;
+            aMenuEvt.mpMenu = pSalMenuItem->mpMenu;
         else
             aMenuEvt.mpMenu = NULL;
 
-        nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                                SALEVENT_MENUACTIVATE, &aMenuEvt );
+        nRet = pFrame->CallCallback( SALEVENT_MENUACTIVATE, &aMenuEvt );
         if( nRet )
-            nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                               SALEVENT_MENUDEACTIVATE, &aMenuEvt );
+            nRet = pFrame->CallCallback( SALEVENT_MENUDEACTIVATE, &aMenuEvt );
         if( nRet )
-            pFrame->maFrameData.mLastActivatedhMenu = hMenu;
+            pFrame->mLastActivatedhMenu = hMenu;
     }
 
     if( !hMenu && nFlags == 0xFFFF )
     {
         // all menus are closed, reset activation logic
-        pFrame->maFrameData.mLastActivatedhMenu = NULL;
+        pFrame->mLastActivatedhMenu = NULL;
     }
 
     if( hMenu )
@@ -4774,7 +4771,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
         // hMenu must be saved, as it is not passed in WM_COMMAND which always occurs after a selection
         // if a menu is closed due to a command selection then hMenu is NULL, but WM_COMMAND comes later
         // so we must not overwrite it in this case
-        pFrame->maFrameData.mSelectedhMenu = hMenu;
+        pFrame->mSelectedhMenu = hMenu;
 
         // send highlight event
         if( nFlags & MF_POPUP )
@@ -4791,14 +4788,13 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
         SalMenuEvent aMenuEvt;
         aMenuEvt.mnId   = nId;
-        SalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, nId, FALSE );
+        WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, nId, FALSE );
         if( pSalMenuItem )
-            aMenuEvt.mpMenu = pSalMenuItem->maData.mpMenu;
+            aMenuEvt.mpMenu = pSalMenuItem->mpMenu;
         else
             aMenuEvt.mpMenu = NULL;
 
-        nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                        SALEVENT_MENUHIGHLIGHT, &aMenuEvt );
+        nRet = pFrame->CallCallback( SALEVENT_MENUHIGHLIGHT, &aMenuEvt );
     }
 
     return (nRet != 0);
@@ -4806,7 +4802,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 static int ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
-    SalFrame* pFrame = GetWindowPtr( hWnd );
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
         return 0;
 
@@ -4820,14 +4816,13 @@ static int ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
         {
             SalMenuEvent aMenuEvt;
             aMenuEvt.mnId   = nId;
-            SalMenuItem *pSalMenuItem = ImplGetSalMenuItem( pFrame->maFrameData.mSelectedhMenu, nId, FALSE );
+            WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( pFrame->mSelectedhMenu, nId, FALSE );
             if( pSalMenuItem )
-                aMenuEvt.mpMenu = pSalMenuItem->maData.mpMenu;
+                aMenuEvt.mpMenu = pSalMenuItem->mpMenu;
             else
                 aMenuEvt.mpMenu = NULL;
 
-            nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                                SALEVENT_MENUCOMMAND, &aMenuEvt );
+            nRet = pFrame->CallCallback( SALEVENT_MENUCOMMAND, &aMenuEvt );
         }
     }
     return (nRet != 0);

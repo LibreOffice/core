@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:02:17 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 13:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
-#ifndef _SV_SALMENU_HXX
-#include <salmenu.hxx>
+#ifndef _SV_SALMENU_H
+#include <salmenu.h>
 #endif
 
 
@@ -103,59 +103,56 @@ void X11SalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 
 
 /*
- * SalMenu
+ * X11SalMenu
  */
 
-SalMenu::SalMenu()
+
+X11SalMenu::~X11SalMenu()
 {
 }
 
-SalMenu::~SalMenu()
-{
-}
-
-BOOL SalMenu::VisibleMenuBar()
+BOOL X11SalMenu::VisibleMenuBar()
 {
     return FALSE;
 }
 
-void SalMenu::SetFrame( const SalFrame *pFrame )
+void X11SalMenu::SetFrame( const SalFrame *pFrame )
 {
 }
 
-void SalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
+void X11SalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
 }
 
-void SalMenu::RemoveItem( unsigned nPos )
+void X11SalMenu::RemoveItem( unsigned nPos )
 {
 }
 
-void SalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
+void X11SalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
 {
 }
 
-void SalMenu::CheckItem( unsigned nPos, BOOL bCheck )
+void X11SalMenu::CheckItem( unsigned nPos, BOOL bCheck )
 {
 }
 
-void SalMenu::EnableItem( unsigned nPos, BOOL bEnable )
+void X11SalMenu::EnableItem( unsigned nPos, BOOL bEnable )
 {
 }
 
-void SalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage )
+void X11SalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage )
 {
 }
 
-void SalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
+void X11SalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
 {
 }
 
-void SalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
+void X11SalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
 {
 }
 
-void SalMenu::GetSystemMenuData( SystemMenuData* pData )
+void X11SalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
 }
 
@@ -166,11 +163,7 @@ void SalMenu::GetSystemMenuData( SystemMenuData* pData )
  */
 
 
-SalMenuItem::SalMenuItem()
-{
-}
-
-SalMenuItem::~SalMenuItem()
+X11SalMenuItem::~X11SalMenuItem()
 {
 }
 
