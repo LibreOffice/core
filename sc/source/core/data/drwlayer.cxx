@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,13 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
                             aNote.SetRectangle(aRect);
                             pDoc->SetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote);
                         }
+                    }
+                    else // new note in creation
+                    {
+                        Rectangle aRect = aNote.DefaultRectangle(ScAddress(pData->aStt.Col(), pData->aStt.Row(), nTab));
+                        if(lcl_MirrorCheckRect( aRect, bNegativePage ))
+                            MirrorRectRTL( aRect );
+                        pCaptObj->SetLogicRect( aRect );
                     }
                     if (bRecording)
                         AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
