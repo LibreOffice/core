@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 11:26:56 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 11:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2349,24 +2349,25 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
             Reference< XPropertySet > xColProps;
             xIndexCols->getByIndex(i) >>= xColProps;
 
-            ::rtl::OUString sDefault;
+            //  ::rtl::OUString sDefault;
 //          xColProps->getPropertyValue(PROPERTY_DEFAULT_VALUE) >>= sDefault;
             // TODO: the rowset needs columns which have a default value ....
 
-            if (!::cppu::any2bool(xColProps->getPropertyValue(PROPERTY_ISREADONLY)))
-            {
-                try
-                {
-                    Reference< XColumnUpdate > xColUpdate(xColProps, UNO_QUERY);
-                    if (sDefault.getLength())
-                        xColUpdate->updateString(sDefault);
-                    else
-                        xColUpdate->updateNull();
-                }
-                catch(Exception&)
-                {
-                }
-            }
+            // OJ: it isn't valid to set everything to null see #88888#
+//          if (!::cppu::any2bool(xColProps->getPropertyValue(PROPERTY_ISREADONLY)))
+//          {
+//              try
+//              {
+//                  Reference< XColumnUpdate > xColUpdate(xColProps, UNO_QUERY);
+//                  if (sDefault.getLength())
+//                      xColUpdate->updateString(sDefault);
+//                  else
+//                      xColUpdate->updateNull();
+//              }
+//              catch(Exception&)
+//              {
+//              }
+//          }
         }
 
         if (m_bSubForm)
