@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
+ *  last change: $Author: os $ $Date: 2002-03-01 08:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,25 +501,6 @@ sal_Bool SwXFootnote::hasElements(  ) throw(RuntimeException)
 {
     return sal_True;
 }
-/*-----------------20.03.98 16:23-------------------
-
---------------------------------------------------*/
-const SwFmtFtn*     SwXFootnote::FindFmt() const
-{
-    if(!GetDoc())
-        return 0;
-    const SwFtnIdxs& rIdxs = GetDoc()->GetFtnIdxs();
-    sal_uInt16 n, nFtnCnt = rIdxs.Count();
-    const SwTxtFtn* pTxtFtn;
-    for( n = 0; n < nFtnCnt; ++n )
-    {
-        pTxtFtn = rIdxs[ n ];
-        const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-        if( &rFtn == pFmtFtn )
-                return pFmtFtn;
-    }
-    return 0;
-}
 /* -----------------------------07.01.00 12:39--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -633,73 +614,5 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.13  2001/11/20 14:42:32  vg
-    #65293#
-
-    Revision 1.12  2001/11/06 08:34:24  jp
-    Bug #93914#: optimize the modify calls
-
-    Revision 1.11  2001/06/20 08:59:51  os
-    #88484# optimization
-
-    Revision 1.10  2001/06/13 12:03:44  jp
-    Task #88180#: code optimization
-
-    Revision 1.9  2001/06/12 07:25:32  mib
-    #86004#: performance: check cursor position using start node
-
-    Revision 1.8  2001/04/05 13:33:54  os
-    #85785# property map corrected
-
-    Revision 1.7  2001/03/08 09:48:45  os
-    getAnco corrected
-
-    Revision 1.6  2001/01/15 11:26:06  mib
-    #81708#: new frame size properties and XML attributes
-
-    Revision 1.5  2001/01/12 16:12:45  os
-    new: Redline container
-
-    Revision 1.4  2000/10/23 08:45:59  os
-    syntax: ')'
-
-    Revision 1.3  2000/10/20 15:55:57  os
-    #78714# set reference number directly if document is in reading
-
-    Revision 1.2  2000/09/27 14:22:03  os
-    #78714# force creation of seqence id
-
-    Revision 1.1.1.1  2000/09/19 00:08:28  hr
-    initial import
-
-    Revision 1.8  2000/09/18 16:04:32  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.7  2000/09/12 11:42:58  os
-    #78682# support of service TextContent
-
-    Revision 1.6  2000/09/11 12:05:29  os
-    #78606# references to footnotes
-
-    Revision 1.5  2000/09/11 10:16:22  os
-    #78603# support of service com.sun.star.Endnote
-
-    Revision 1.4  2000/09/11 09:57:06  os
-    TYPEINFO
-
-    Revision 1.3  2000/08/24 11:17:29  os
-    #78051# getTypes corrected
-
-    Revision 1.2  2000/06/13 12:38:17  os
-    #76188##76191# XElementAccess and XEnumerationAccess at SwXFootnote now available
-
-    Revision 1.1  2000/05/04 15:14:01  os
-    reduce size of unoobj.cxx
-
-
-------------------------------------------------------------------------*/
 
 

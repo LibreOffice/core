@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-13 12:21:31 $
+ *  last change: $Author: os $ $Date: 2002-03-01 08:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,7 +1034,7 @@ public:
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    const SwFmtFtn* FindFmt() const;
+    const SwFmtFtn* FindFmt() const {return GetDoc() ? pFmtFtn : 0;}
     void            Invalidate();
 };
 
