@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@ class PE_File : public UnoIDL_PE,
                                                 i_rToken );
     virtual void        Process_MetaType(
                             const TokMetaType & i_rToken );
+    virtual void        Process_Stereotype(
+                            const TokStereotype &
+                                                i_rToken );
     virtual void        Process_Default();
 
   private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,19 @@ PE_File::Process_MetaType( const TokMetaType &  i_rToken )
         default:
                 Process_Default();
     }   // end switch
+}
+
+void
+PE_File::Process_Stereotype( const TokStereotype & i_rToken )
+{
+    if (i_rToken.Id() == TokStereotype::ste_published)
+    {
+        SetResult(done, stay);
+    }
+    else
+    {
+        Process_Default();
+    }
 }
 
 void
