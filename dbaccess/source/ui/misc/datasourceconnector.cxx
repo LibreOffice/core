@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:08:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,15 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
+#ifndef SVTOOLS_FILENOTATION_HXX
+#include <svtools/filenotation.hxx>
+#endif
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -115,6 +124,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
+    using ::svt::OFileNotation;
 
     //=====================================================================
     //= ODatasourceConnector
@@ -168,16 +178,15 @@ namespace dbaui
             return xConnection;
 
         // get the data source
-        Reference< XDataSource > xDatasource;
-        try
-        {
-            m_xDatabaseContext->getByName(_rDataSourceName) >>= xDatasource;
-        }
-        catch(Exception&)
-        {
-        }
-        return connect(xDatasource,_bShowError);
+        Reference< XDataSource > xDatasource(
+            getDataSourceByName_displayError( m_xDatabaseContext, _rDataSourceName, m_pErrorMessageParent, m_xORB, _bShowError ),
+            UNO_QUERY
+        );
+        if ( xDatasource.is() )
+            xConnection = connect( xDatasource, _bShowError );
+        return xConnection;
     }
+
     //---------------------------------------------------------------------
     Reference< XConnection > ODatasourceConnector::connect(const Reference< XDataSource>& _xDataSource, sal_Bool _bShowError) const
     {
