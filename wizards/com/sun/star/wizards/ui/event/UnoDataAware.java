@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDataAware.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:10:17 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,14 +181,13 @@ public class UnoDataAware extends DataAware {
 
 
     public static UnoDataAware attachDateControl(Object data, String prop, Object unoControl, Listener listener, boolean field) {
-        return attachTextControl(data, prop, unoControl, listener, "Date",field, null);
+        return attachTextControl(data, prop, unoControl, listener, "Date",field, new Integer(0));
     }
 
 
     public static UnoDataAware attachTimeControl(Object data, String prop, Object unoControl, Listener listener, boolean field) {
-        return attachTextControl(data, prop, unoControl, listener, "Time", field, null);
+        return attachTextControl(data, prop, unoControl, listener, "Time", field, new Integer(0));
     }
-
 
     public static UnoDataAware attachNumericControl(Object data, String prop, Object unoControl, Listener listener, boolean field) {
         return attachTextControl(data, prop, unoControl, listener, "Value",field, new Double(0));
@@ -215,6 +214,13 @@ public class UnoDataAware extends DataAware {
             public void disposing(EventObject eo) {
             }
         };
+    }
+
+    public static UnoDataAware attachLabel(Object data, String prop, Object label, final Listener listener, boolean field) {
+        return new UnoDataAware(data,
+           field ? DataAwareFields.getFieldValueFor(data,prop,"")
+                    : new DataAware.PropertyValue(prop,data),
+                label , "Label");
     }
 
     public static UnoDataAware attachListBox(Object data, String prop, Object listBox, final Listener listener, boolean field) {
