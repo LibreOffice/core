@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:30:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,7 +1036,8 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
 
     SvxBrushItem aBrushItem;
 
-    if( IsTransparent() )
+    // #108935# do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
+    if( mnPattern == EXC_PATT_NONE )
         aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
     else
     {
