@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:08:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 15:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,31 +405,32 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
             {
                 switch( rPropExp.getPropertySetMapper()->
                         GetEntryContextId( aProperty->mnIndex ) )
-            {
-            case CTF_NUMBERINGSTYLENAME:
                 {
-                    OUString sStyleName;
-                    aProperty->maValue >>= sStyleName;
-                    if( sStyleName.getLength() )
+                case CTF_NUMBERINGSTYLENAME:
                     {
-                        OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
-                        if( sTmp.getLength() )
-                            sStyleName = sTmp;
-                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                              sListStyleName,
-                              GetExport().EncodeStyleName( sStyleName ) );
-                    }
-                }
-                break;
-            case CTF_PAGEDESCNAME:
-                {
-                    OUString sStyleName;
-                    aProperty->maValue >>= sStyleName;
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                  sMasterPageName,
+                        OUString sStyleName;
+                        aProperty->maValue >>= sStyleName;
+                        if( sStyleName.getLength() )
+                        {
+                            OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
+                            if( sTmp.getLength() )
+                                sStyleName = sTmp;
+                            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                  sListStyleName,
                                   GetExport().EncodeStyleName( sStyleName ) );
+                        }
+                    }
+                    break;
+                case CTF_PAGEDESCNAME:
+                    {
+                        OUString sStyleName;
+                        aProperty->maValue >>= sStyleName;
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                      sMasterPageName,
+                                      GetExport().EncodeStyleName( sStyleName ) );
+                    }
+                    break;
                 }
-                break;
             }
         }
     }
