@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:49:27 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,8 +681,10 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
             if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
+            {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
-            pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
+                pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
+            }
 
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
             SfxItemState eState = rSet.GetItemState( nWhich, TRUE );
