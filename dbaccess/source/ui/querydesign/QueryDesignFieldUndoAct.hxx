@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignFieldUndoAct.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:20:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@ namespace dbaui
         sal_Int32   m_nCellIndex;
 
     public:
-        OTabFieldCellModifiedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_MODIFY_CELL) { }
+        OTabFieldCellModifiedUndoAct(OSelectionBrowseBox* pSelBrwBox)
+            : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_MODIFY_CELL)
+            ,m_nCellIndex(-1){ }
 
         void SetCellContents(const String& str) { m_strNextCellContents = str; }
         void SetCellIndex(sal_Int32 nIndex) { m_nCellIndex = nIndex; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,10 @@ void OJoinController::Execute(sal_uInt16 _nId)
             if(!m_pAddTabDlg)
                 m_pAddTabDlg = static_cast<OJoinDesignView*>(m_pView)->getAddTableDialog();
             if(m_pAddTabDlg->IsVisible())
+            {
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
+                m_pView->GrabFocus();
+            }
             else if(static_cast<OJoinDesignView*>(m_pView)->getTableView()->IsAddAllowed())
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
             break;

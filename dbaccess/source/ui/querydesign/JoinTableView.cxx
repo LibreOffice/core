@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:45:02 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,7 +1490,7 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                 if (pSource->GetParent() == this)
                     // it may be one of the tab wins
                     pSearchFor = pSource;
-                else if (pSource->GetParent() && (pSource->GetParent() == this))
+                else if (pSource->GetParent() && (pSource->GetParent()->GetParent() == this))
                     // it may be one of th list boxes of one of the tab wins
                     pSearchFor = pSource->GetParent();
 
@@ -1513,20 +1513,20 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
 
     if (!bHandled)
         return Window::PreNotify(rNEvt);
-    return 0;
+    return 1L;
 }
 
 //------------------------------------------------------------------------------
 void OJoinTableView::GrabTabWinFocus()
 {
-    if (m_pLastFocusTabWin)
+    if (m_pLastFocusTabWin && m_pLastFocusTabWin->IsVisible())
     {
         if (m_pLastFocusTabWin->GetListBox())
             m_pLastFocusTabWin->GetListBox()->GrabFocus();
         else
             m_pLastFocusTabWin->GrabFocus();
     }
-    else if (m_aTableMap.size() && m_aTableMap.begin()->second)
+    else if (m_aTableMap.size() && m_aTableMap.begin()->second && m_aTableMap.begin()->second->IsVisible())
     {
         OTableWindow* pFirstWin = m_aTableMap.begin()->second;
         if (pFirstWin->GetListBox())

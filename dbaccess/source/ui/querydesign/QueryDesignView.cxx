@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,11 +423,23 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
             }
         }
         break;
+        case EVENT_GETFOCUS:
+        {
+            // set focus if noone has the focus
+            if (m_pTableView && !m_pTableView->HasChildPathFocus() &&
+                m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus())
+            {
+                m_pTableView->GrabTabWinFocus();
+                bHandled = TRUE;
+            }
+
+        }
+        break;
     }
 
     if (!bHandled)
         return OQueryView::PreNotify(rNEvt);
-    return 0;
+    return 1L;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::HasFields()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-07 09:47:29 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 
     if (!bHandled)
         return SvTreeListBox::PreNotify(rNEvt);
-    return 0;
+    return 1L;
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:08:00 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ namespace dbaui
         /// late construction
         virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
         virtual void initialize();
+
+
+        virtual long PreNotify( NotifyEvent& rNEvt );
     };
 }
 #endif // DBAUI_RELATIONDESIGNVIEW_HXX

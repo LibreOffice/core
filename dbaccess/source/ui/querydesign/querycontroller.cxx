@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ void OQueryController::disposing()
 FeatureState OQueryController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
+    aReturn.bEnabled = sal_True;
         // (disabled automatically)
 //  aReturn.bEnabled = m_xConnection.is();
 //  if(!m_xConnection.is()) // so what should otherwise happen
@@ -320,7 +321,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bDesign);
             break;
         case ID_BROWSER_CLEAR_QUERY:
-            aReturn.bEnabled = m_bEditable && m_sStatement.getLength();
+            aReturn.bEnabled = m_bEditable && (m_sStatement.getLength() || m_vTableData.size());
             break;
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
