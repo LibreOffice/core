@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 15:02:39 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
         < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Punkt" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
         < "Grafik lδnkad" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "Ingen" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
@@ -672,7 +672,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
         < "±Ϋ ΈΣΈ® ±βΘ£" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "±Χ·΅ΗΘ" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "±Χ·΅ΗΘ Ώ¬°α" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+        < "ΈµΕ©µΘ ±Χ·΅ΗΘ" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "Ύψΐ½" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
     StringList [ chinese_simplified ] =
@@ -2064,7 +2064,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ japanese ] = "”Τ†‚ΖΓ·½Δ‚ΜΕ¬Τu";
         Text[ chinese_traditional ] = "½sΈΉ©M¤Ί¤ε¤§¶΅ªΊ³Μ¤Φ¶΅Ήj";
         Text[ arabic ] = "Γήα γΣΗέΙ Θνδ ΗαΡήγ <-> ΗαδΥ";
-        Text[ greek ] = "Ελάχιστη απόσταση αριθ~μού <-> Κείμενο";
+        Text[ greek ] = "Ελάχιστη απόσταση Αριθ~μός <-> Κείμενο";
         Text[ korean ] = "ΓΦΌÒ°£°έ,  ΉψΘ£ <-> ΕΨ½ΊΖ®";
         Text[ turkish ] = "Asgari aralύk: Numara <-> Metin";
         Text[ language_user1 ] = " ";
