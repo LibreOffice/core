@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: ama $ $Date: 2002-05-22 09:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,8 @@ SwLayNotify::~SwLayNotify()
                     else
                         bLow = FALSE;
                 }
+                else if( pLay->IsFooterFrm() && !pLay->HasFixSize() )
+                    bLow = pLay->Prt().Width() != aPrt.Width();
                 else
                     bLow = TRUE;
                 bInvaPercent = bLow;
