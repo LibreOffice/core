@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 09:17:11 $
+ *  last change: $Author: mib $ $Date: 2000-12-01 10:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,8 +388,6 @@ sal_Bool CommandThread_Impl::DoIt()
     Any aResult;
     bool bException = false;
     bool bAborted = false;
-
-    m_pContent = new ::ucb::Content( m_xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
 
     try
     {
