@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sj $ $Date: 2002-03-07 17:54:35 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:41:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..$/..$/..
 PRJNAME=filter
 TARGET=PptImporter
 
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
@@ -99,7 +98,7 @@ UNOTYPES=	com.sun.star.uno.XWeak						\
 CXXFILES=	pptimporter.cxx								\
             pptimporteruno.cxx							\
             ppttoxml.cxx
-            
+
 
 SLOFILES=	$(SLO)$/pptimporter.obj						\
             $(SLO)$/pptimporteruno.obj					\
