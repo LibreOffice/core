@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:43:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ private:
         @param rRanges  The cell range list to fill.
         @param xLabelRangesRef  The core range list with all ranges.
         @param nScTab  The current Calc sheet index. */
-    void                        FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, USHORT nScTab );
+    void                        FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, SCTAB nScTab );
 
     /** Writes the body of the LABELRANGES record. */
     virtual void                WriteBody( XclExpStream& rStrm );
