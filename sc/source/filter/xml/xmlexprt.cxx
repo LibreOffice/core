@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 13:10:46 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 16:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                     }
                 }
             }
-            if (nColsRepeated > 1 || bIsFirst)
+            //if (nColsRepeated > 1 || bIsFirst)
                 WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (!bIsClosed)
                 CloseHeaderColumn();
@@ -1389,8 +1389,8 @@ void ScXMLExport::_ExportAutoStyles()
                                     nColumns++;
                                     aColumnStyles.AddNewTable(nTable, aCellAddress.EndColumn);
                                 }
-                                else if (nColumns < MAXCOL)
-                                    aColumnStyles.AddNewTable(nTable, ++nColumns);
+//                              else if (nColumns < MAXCOL)
+//                                  aColumnStyles.AddNewTable(nTable, ++nColumns);
                                 else
                                     aColumnStyles.AddNewTable(nTable, nColumns);
                                 sal_Int32 nColumn = 0;
@@ -1446,8 +1446,8 @@ void ScXMLExport::_ExportAutoStyles()
                                     nRows++;
                                     aRowStyles.AddNewTable(nTable, aCellAddress.EndRow);
                                 }
-                                else if (nRows < MAXROW)
-                                    aRowStyles.AddNewTable(nTable, ++nRows);
+//                              else if (nRows < MAXROW)
+//                                  aRowStyles.AddNewTable(nTable, ++nRows);
                                 else
                                     aRowStyles.AddNewTable(nTable, nRows);
                                 sal_Int32 nRow = 0;
