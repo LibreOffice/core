@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:43:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,12 +115,14 @@ using namespace com::sun::star;
 // -----------------------------------------------------------------------
 
 // static
-void ScTransferObj::GetAreaSize( ScDocument* pDoc, USHORT nTab1, USHORT nTab2, USHORT& nRow, USHORT& nCol )
+void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
-    USHORT nMaxCol = 0, nMaxRow = 0;
-    for( USHORT nTab = nTab1; nTab <= nTab2; nTab++ )
+    SCCOL nMaxCol = 0;
+    SCROW nMaxRow = 0;
+    for( SCTAB nTab = nTab1; nTab <= nTab2; nTab++ )
     {
-        USHORT nLastCol = 0, nLastRow = 0;
+        SCCOL nLastCol = 0;
+        SCROW nLastRow = 0;
         // GetPrintArea instead of GetCellArea - include drawing objects
         if( pDoc->GetPrintArea( nTab, nLastCol, nLastRow ) )
         {
@@ -171,23 +173,23 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     // get aBlock from clipboard doc
     //
 
-    USHORT nCol1;
-    USHORT nRow1;
-    USHORT nCol2;
-    USHORT nRow2;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCCOL nCol2;
+    SCROW nRow2;
     pDoc->GetClipStart( nCol1, nRow1 );
     pDoc->GetClipArea( nCol2, nRow2, TRUE );    // real source area - include filtered rows
     nCol2 += nCol1;
     nRow2 += nRow1;
 
-    USHORT nDummy;
+    SCCOL nDummy;
     pDoc->GetClipArea( nDummy, nNonFiltered, FALSE );
     ++nNonFiltered;     // to get count instead of diff
 
-    USHORT nTab1=0;
-    USHORT nTab2=0;
+    SCTAB nTab1=0;
+    SCTAB nTab2=0;
     BOOL bFirst = TRUE;
-    for (USHORT i=0; i<=MAXTAB; i++)
+    for (SCTAB i=0; i<=MAXTAB; i++)
         if (pDoc->HasTable(i))
         {
             if (bFirst)
@@ -201,7 +203,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     //  (so empty cell areas can be copied)
     if ( nCol2>=MAXCOL && nRow2>=MAXROW )
     {
-        USHORT nMaxRow, nMaxCol;
+        SCROW nMaxRow;
+        SCCOL nMaxCol;
         GetAreaSize( pDoc, nTab1, nTab2, nMaxRow, nMaxCol );
         if( nMaxRow < nRow2 )
             nRow2 = nMaxRow;
@@ -298,9 +301,9 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         {
             //  RTF from a single cell is handled by EditEngine
 
-            USHORT nCol = aBlock.aStart.Col();
-            USHORT nRow = aBlock.aStart.Row();
-            USHORT nTab = aBlock.aStart.Tab();
+            SCCOL nCol = aBlock.aStart.Col();
+            SCROW nRow = aBlock.aStart.Row();
+            SCTAB nTab = aBlock.aStart.Tab();
 
             const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
             ScTabEditEngine aEngine( *pPattern, pDoc->GetEditPool() );
@@ -510,13 +513,13 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
     TransferableHelper::DragFinished( nDropAction );
 }
 
-void ScTransferObj::SetDragHandlePos( USHORT nX, USHORT nY )
+void ScTransferObj::SetDragHandlePos( SCCOL nX, SCROW nY )
 {
     nDragHandleX = nX;
     nDragHandleY = nY;
 }
 
-void ScTransferObj::SetVisibleTab( USHORT nNew )
+void ScTransferObj::SetVisibleTab( SCTAB nNew )
 {
     nVisibleTab = nNew;
 }
@@ -595,17 +598,17 @@ void ScTransferObj::InitDocShell()
 
         pDestDoc->CopyStdStylesFrom( pDoc );
 
-        USHORT nStartX = aBlock.aStart.Col();
-        USHORT nStartY = aBlock.aStart.Row();
-        USHORT nEndX = aBlock.aEnd.Col();
-        USHORT nEndY = aBlock.aEnd.Row();
+        SCCOL nStartX = aBlock.aStart.Col();
+        SCROW nStartY = aBlock.aStart.Row();
+        SCCOL nEndX = aBlock.aEnd.Col();
+        SCROW nEndY = aBlock.aEnd.Row();
 
         //  widths / heights
         //  (must be copied before CopyFromClip, for drawing objects)
 
-        USHORT nCol;
-        USHORT nRow;
-        USHORT nSrcTab = aBlock.aStart.Tab();
+        SCCOL nCol;
+        SCROW nRow;
+        SCTAB nSrcTab = aBlock.aStart.Tab();
         for (nCol=nStartX; nCol<=nEndX; nCol++)
             if ( pDoc->GetColFlags( nCol, nSrcTab ) & CR_HIDDEN )
                 pDestDoc->ShowCol( nCol, 0, FALSE );
@@ -742,8 +745,8 @@ SvPersist* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
 
 //  static
 void ScTransferObj::StripRefs( ScDocument* pDoc,
-                    USHORT nStartX, USHORT nStartY, USHORT nEndX, USHORT nEndY,
-                    ScDocument* pDestDoc, USHORT nSubX, USHORT nSubY )
+                    SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
+                    ScDocument* pDestDoc, SCCOL nSubX, SCROW nSubY )
 {
     if (!pDestDoc)
     {
@@ -753,10 +756,10 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
     //  In a clipboard doc the data don't have to be on the first sheet
 
-    USHORT nSrcTab = 0;
+    SCTAB nSrcTab = 0;
     while (nSrcTab<MAXTAB && !pDoc->HasTable(nSrcTab))
         ++nSrcTab;
-    USHORT nDestTab = 0;
+    SCTAB nDestTab = 0;
     while (nDestTab<MAXTAB && !pDestDoc->HasTable(nDestTab))
         ++nDestTab;
 
@@ -767,7 +770,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
     }
 
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-    ScTripel aStart, aEnd;
+    ScRange aRef;
 
     ScCellIterator aIter( pDoc, nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab );
     ScBaseCell* pCell = aIter.GetFirst();
@@ -778,17 +781,17 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
             BOOL bOut = FALSE;
             ScDetectiveRefIter aRefIter( pFCell );
-            while ( !bOut && aRefIter.GetNextRef( aStart, aEnd ) )
+            while ( !bOut && aRefIter.GetNextRef( aRef ) )
             {
-                if ( aStart.GetTab() != nSrcTab || aEnd.GetTab() != nSrcTab ||
-                        aStart.GetCol() < nStartX || aEnd.GetCol() > nEndX ||
-                        aStart.GetRow() < nStartY || aEnd.GetRow() > nEndY )
+                if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||
+                        aRef.aStart.Col() < nStartX || aRef.aEnd.Col() > nEndX ||
+                        aRef.aStart.Row() < nStartY || aRef.aEnd.Row() > nEndY )
                     bOut = TRUE;
             }
             if (bOut)
             {
-                USHORT nCol = aIter.GetCol() - nSubX;
-                USHORT nRow = aIter.GetRow() - nSubY;
+                SCCOL nCol = aIter.GetCol() - nSubX;
+                SCROW nRow = aIter.GetRow() - nSubY;
 
                 ScBaseCell* pNew = 0;
                 USHORT nErrCode = pFCell->GetErrCode();
