@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:26:00 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ public:
 
     void        InsertText( const String& rStr );
     String      GetSelected() const;
+    String      GetSelected( LineEnd aSeparator ) const;
 
     void        SetSelection( const Selection& rSelection );
     Selection   GetSelection() const;
@@ -183,7 +184,9 @@ public:
 
     void        SetText( const String& rStr );
     String      GetText() const;
+    String      GetText( LineEnd aSeparator ) const;
     String      GetTextLines() const;
+    String      GetTextLines( LineEnd aSeparator ) const;
 
     void        Resize();
     void        GetFocus();
@@ -456,6 +459,11 @@ String ImpSvMEdit::GetSelected() const
     return mpTextWindow->GetTextView()->GetSelected();
 }
 
+String ImpSvMEdit::GetSelected( LineEnd aSeparator ) const
+{
+    return mpTextWindow->GetTextView()->GetSelected( aSeparator );
+}
+
 void ImpSvMEdit::Resize()
 {
     Size aSz = pSvMultiLineEdit->GetOutputSizePixel();
@@ -530,9 +538,19 @@ String ImpSvMEdit::GetText() const
     return mpTextWindow->GetTextEngine()->GetText();
 }
 
+String ImpSvMEdit::GetText( LineEnd aSeparator ) const
+{
+    return mpTextWindow->GetTextEngine()->GetText( aSeparator );
+}
+
 String ImpSvMEdit::GetTextLines() const
 {
     return mpTextWindow->GetTextEngine()->GetTextLines();
+}
+
+String ImpSvMEdit::GetTextLines( LineEnd aSeparator ) const
+{
+    return mpTextWindow->GetTextEngine()->GetTextLines( aSeparator );
 }
 
 void ImpSvMEdit::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1077,7 +1095,7 @@ void MultiLineEdit::SetModifyFlag()
 
 void MultiLineEdit::ClearModifyFlag()
 {
-    pImpSvMEdit->SetModified( TRUE );
+    pImpSvMEdit->SetModified( FALSE );
 }
 
 BOOL MultiLineEdit::IsModified() const
@@ -1144,6 +1162,11 @@ String MultiLineEdit::GetSelected() const
     return pImpSvMEdit->GetSelected();
 }
 
+String MultiLineEdit::GetSelected( LineEnd aSeparator ) const
+{
+    return pImpSvMEdit->GetSelected( aSeparator );
+}
+
 void MultiLineEdit::Cut()
 {
     pImpSvMEdit->Cut();
@@ -1169,9 +1192,19 @@ String MultiLineEdit::GetText() const
     return pImpSvMEdit->GetText();
 }
 
+String MultiLineEdit::GetText( LineEnd aSeparator ) const
+{
+    return pImpSvMEdit->GetText( aSeparator );
+}
+
 String MultiLineEdit::GetTextLines() const
 {
     return pImpSvMEdit->GetTextLines();
+}
+
+String MultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
+{
+    return pImpSvMEdit->GetTextLines( aSeparator );
 }
 
 void MultiLineEdit::Resize()
