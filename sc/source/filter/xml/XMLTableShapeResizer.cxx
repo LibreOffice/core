@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-16 13:57:18 $
+ *  last change: $Author: sab $ $Date: 2001-11-23 12:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,10 +227,10 @@ void ScMyShapeResizer::ResizeShapes()
                                         awt::Size aSize(aOldSize);
                                         aPoint.X += aRefPoint.X;
                                         if (aPoint.X > aRec.Right())
-                                            aPoint.X = aRec.Right() - 1;
+                                            aPoint.X = aRec.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
                                         aPoint.Y += aRefPoint.Y;
                                         if (aPoint.Y > aRec.Bottom())
-                                            aPoint.Y = aRec.Bottom() - 1;
+                                            aPoint.Y = aRec.Bottom() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
                                         aSize.Width = aItr->nEndX - aPoint.X;
                                         aSize.Height = aItr->nEndY - aPoint.Y;
                                         aItr->xShape->setPosition(aPoint);
