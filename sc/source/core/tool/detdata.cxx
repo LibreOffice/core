@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-04 15:46:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,18 +89,18 @@ ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
 }
 
 void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz )
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
     {
         ScAddress aPos = (*this)[i]->GetPos();
-        USHORT nCol1 = aPos.Col();
-        USHORT nRow1 = aPos.Row();
-        USHORT nTab1 = aPos.Tab();
-        USHORT nCol2 = nCol1;
-        USHORT nRow2 = nRow1;
-        USHORT nTab2 = nTab1;
+        SCCOL nCol1 = aPos.Col();
+        SCROW nRow1 = aPos.Row();
+        SCTAB nTab1 = aPos.Tab();
+        SCCOL nCol2 = nCol1;
+        SCROW nRow2 = nRow1;
+        SCTAB nTab2 = nTab1;
 
         ScRefUpdateRes eRes =
             ScRefUpdate::Update( pDoc, eUpdateRefMode,
@@ -137,6 +137,8 @@ BOOL ScDetOpList::operator==( const ScDetOpList& r ) const
 void ScDetOpList::Load( SvStream& rStream )
 {
     ScMultipleReadHeader aHdr( rStream );
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
 
     USHORT nNewCount;
     rStream >> nNewCount;
@@ -157,11 +159,14 @@ void ScDetOpList::Load( SvStream& rStream )
 
         aHdr.EndEntry();
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScDetOpList::Store( SvStream& rStream ) const
 {
     ScMultipleWriteHeader aHdr( rStream );
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
 
     USHORT nCount = Count();
     rStream << nCount;
@@ -179,6 +184,7 @@ void ScDetOpList::Store( SvStream& rStream ) const
 
         aHdr.EndEntry();
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 
