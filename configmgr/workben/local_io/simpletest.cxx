@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpletest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
+ *  last change: $Author: lla $ $Date: 2001-07-26 07:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include <memory>
 #include <vector>
 #include <stack>
+#include <map>
+#include <hash_map>
 
 #ifndef _OSL_FILE_HXX_
 #include<osl/file.hxx>
@@ -165,7 +167,7 @@
 
 #include "xmltreebuilder.hxx"
 
-#include "dataimport.hxx"
+// #include "dataimport.hxx"
 
 #include "createpropertyvalue.hxx"
 
@@ -194,7 +196,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace rtl;
 using namespace osl;
-
+using namespace std;
 // -----------------------------------------------------------------------------
 // ---------------------------------- defines ----------------------------------
 // -----------------------------------------------------------------------------
@@ -296,6 +298,7 @@ namespace configmgr
 #define ASCII_STRING(rtlOUString)   rtl::OUStringToOString(rtlOUString, RTL_TEXTENCODING_ASCII_US).getStr()
     static ::rtl::OUString  sRegistry = ::rtl::OUString::createFromAscii("applicat.rdb");
 
+/*
     void simpleTest()
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF;
@@ -380,7 +383,7 @@ namespace configmgr
             nRet = 5;
         }
     }
-
+*/
 
 #include <osl/time.h>
 #include <rtl/string.hxx>
@@ -820,6 +823,12 @@ void oslTest()
     {
         OSL_ENSURE(false, "FileB ist neuer als FileA");
     }
+
+
+    OUString aDirectory3(FileHelper::convertFilenameToFileURL(ASCII("F:/Täst/StarOffice6.0/share/config")));
+
+    OUString aDirectory4(ASCII("file:///F:/T%EF%BF%A4st/StarOffice6.0/share/config"));
+    osl::FileBase::RC eError = osl::Directory::create(aDirectory4);
 
 
 /*

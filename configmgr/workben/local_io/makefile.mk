@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
+#   last change: $Author: lla $ $Date: 2001-07-26 07:10:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ APP1OBJS=	\
     $(SLO)$/simpletest.obj \
     $(SLO)$/strimpl.obj \
     $(SLO)$/confname.obj \
+    $(SLO)$/trivialbufferedfile.obj \
 
 #	$(SLO)$/xmlexport.obj \
 #	$(SLO)$/xmlimport.obj \
