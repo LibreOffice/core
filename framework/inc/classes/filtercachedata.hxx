@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2002-03-20 12:41:46 $
+ *  last change: $Author: as $ $Date: 2002-04-03 10:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ namespace framework{
 #define SUBKEY_GENERICLOADER                        DECLARE_ASCII("FrameLoader"                                     )
 #define SUBKEY_DATA                                 DECLARE_ASCII("Data"                                            )
 #define SUBKEY_PROTOCOLS                            DECLARE_ASCII("Protocols"                                       )
+#define SUBKEY_UICOMPONENT                          DECLARE_ASCII("UIComponent"                                     )
 
 //*****************************************************************************************************************
 // These defines declare all supported property names for our name container interface.
@@ -232,56 +233,8 @@ namespace framework{
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
 #define PROPERTY_ORDER                              DECLARE_ASCII("Order"                                           )
 #define PROPERTY_PROTOCOLS                          DECLARE_ASCII("Protocols"                                       )
+#define PROPERTY_UICOMPONENT                        DECLARE_ASCII("UIComponent"                                     )
 
-//*****************************************************************************************************************
-// These values specify count of supported properties at our NameContainer interface!
-// Attention: It's not the count of properties of a type, filter ... written in configuration.
-//            That value is named as SUBKEYCOUNT_...! See there for further informations.
-//*****************************************************************************************************************
-/*
-#define PROPCOUNT_TYPE                              8
-#define PROPCOUNT_FILTER                            10
-#define PROPCOUNT_DETECTOR                          1
-#define PROPCOUNT_LOADER                            3
-#define PROPCOUNT_CONTENTHANDLER                    1
-#define PROPCOUNT_PROTOCOLHANDLER                   1
-*/
-//*****************************************************************************************************************
-// These values specify count of properties of every configuration item.
-// We support different versions and so we must handle different counts of type- and filter-properties.
-// Attention: Look for different values on PROPCOUNT_... and SUBKEYCOUNT_...!
-//*****************************************************************************************************************
-/*
-#define SUBKEYCOUNT_TYPE_VERSION_1                  7
-#define SUBKEYCOUNT_TYPE_VERSION_2                  SUBKEYCOUNT_TYPE_VERSION_1
-#define SUBKEYCOUNT_TYPE_VERSION_3                  2
-#define SUBKEYCOUNT_TYPE_VERSION_4                  SUBKEYCOUNT_TYPE_VERSION_3
-#define SUBKEYCOUNT_TYPE_VERSION_5                  SUBKEYCOUNT_TYPE_VERSION_3
-#define SUBKEYCOUNT_TYPE_VERSION_6                  SUBKEYCOUNT_TYPE_VERSION_3
-#define SUBKEYCOUNT_TYPE_VERSION_7                  SUBKEYCOUNT_TYPE_VERSION_3
-#define SUBKEYCOUNT_FILTER_VERSION_1                9
-#define SUBKEYCOUNT_FILTER_VERSION_2                10
-#define SUBKEYCOUNT_FILTER_VERSION_3                3
-#define SUBKEYCOUNT_FILTER_VERSION_4                SUBKEYCOUNT_FILTER_VERSION_3
-#define SUBKEYCOUNT_FILTER_VERSION_5                SUBKEYCOUNT_FILTER_VERSION_3
-#define SUBKEYCOUNT_FILTER_VERSION_6                SUBKEYCOUNT_FILTER_VERSION_3
-#define SUBKEYCOUNT_FILTER_VERSION_7                SUBKEYCOUNT_FILTER_VERSION_3
-#define SUBKEYCOUNT_DETECTOR                        1
-#define SUBKEYCOUNT_LOADER                          2
-#define SUBKEYCOUNT_CONTENTHANDLER                  1
-#define SUBKEYCOUNT_PROTOCOLHANDLER                 1
-*/
-/*
-#define CFGPROPERTY_NODEPATH                        DECLARE_ASCII("nodepath"                                        )   // describe path of cfg entry
-#define CFGPROPERTY_LAZYWRITE                       DECLARE_ASCII("lazywrite"                                       )   // true->async. update; false->sync. update
-#define CFGPROPERTY_DEPTH                           DECLARE_ASCII("depth"                                           )   // depth of view
-#define CFGPROPERTY_NOCACHE                         DECLARE_ASCII("nocache"                                         )   // use cache or not
-#define CFGPROPERTY_USER                            DECLARE_ASCII("user"                                            )   // specify user
-#define CFGPROPERTY_LOCALE                          DECLARE_ASCII("locale"                                          )   // set locale of cfg entry
-#define CFGPROPERTY_SERVERTYPE                      DECLARE_ASCII("servertype"                                      )   // specify type of used configuration (fatoffice, network, webtop)
-#define CFGPROPERTY_SOURCEPATH                      DECLARE_ASCII("sourcepath"                                      )   // specify path to "share/config/registry" files
-#define CFGPROPERTY_UPDATEPATH                      DECLARE_ASCII("updatepath"                                      )   // specify path to "user/config/registry" files
-*/
 //_________________________________________________________________________________________________________________
 //  exported definitions
 //_________________________________________________________________________________________________________________
@@ -434,6 +387,7 @@ struct Filter
             sType               = ::rtl::OUString();
             sDocumentService    = ::rtl::OUString();
             sFilterService      = ::rtl::OUString();
+            sUIComponent        = ::rtl::OUString();
             nFlags              = 0                ;
             nFileFormatVersion  = 0                ;
             sTemplateName       = ::rtl::OUString();
@@ -449,6 +403,7 @@ struct Filter
             lUINames            = rCopy.lUINames            ;
             sDocumentService    = rCopy.sDocumentService    ;
             sFilterService      = rCopy.sFilterService      ;
+            sUIComponent        = rCopy.sUIComponent        ;
             nFlags              = rCopy.nFlags              ;
             nFileFormatVersion  = rCopy.nFileFormatVersion  ;
             sTemplateName       = rCopy.sTemplateName       ;
@@ -467,6 +422,7 @@ struct Filter
         StringHash          lUINames            ;
         ::rtl::OUString     sDocumentService    ;
         ::rtl::OUString     sFilterService      ;
+        ::rtl::OUString     sUIComponent        ;
         sal_Int32           nFlags              ;
         StringList          lUserData           ;
         sal_Int32           nFileFormatVersion  ;
