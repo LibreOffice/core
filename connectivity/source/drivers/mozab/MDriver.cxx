@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 13:15:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,8 +287,9 @@ void MozabDriver::registerClient()
             // first, we need to announce our service factory to the lib
             // see the documentation of setMozabServiceFactory for more details
             const ::rtl::OUString sSetFactoryFuncName( RTL_CONSTASCII_USTRINGPARAM( "setMozabServiceFactory" ) );
+            //  reinterpret_cast< OSetMozabServiceFactory >>> removed GNU C
             OSetMozabServiceFactory pSetFactoryFunc =
-                reinterpret_cast< OSetMozabServiceFactory >( osl_getSymbol( s_hModule, sSetFactoryFuncName.pData ) );
+                ( OSetMozabServiceFactory )( osl_getSymbol( s_hModule, sSetFactoryFuncName.pData ) );
 
             OSL_ENSURE( pSetFactoryFunc, "MozabDriver::registerClient: missing an entry point!" );
             if ( pSetFactoryFunc && m_xMSFactory.is() )
@@ -301,7 +302,8 @@ void MozabDriver::registerClient()
 
             // get the symbol for the method creating the factory
             const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("OMozabConnection_CreateInstance");
-            s_pCreationFunc = reinterpret_cast<OMozabConnection_CreateInstanceFunction>(osl_getSymbol(s_hModule, sFactoryCreationFunc.pData));
+            // reinterpret_cast<OMozabConnection_CreateInstanceFunction> removed GNU C
+            s_pCreationFunc = (OMozabConnection_CreateInstanceFunction)(osl_getSymbol(s_hModule, sFactoryCreationFunc.pData));
 
             if (NULL == s_pCreationFunc)
             {   // did not find the symbol
