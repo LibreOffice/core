@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:11:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     pStrm->CopyToStream( aMemStrm, nFmlSize );
     XclImpStream aFmlaStrm( aMemStrm, *pExcRoot->pIR );
     aFmlaStrm.StartNextRecord();
-    XclImpChTrFmlConverter aFmlConv( pExcRoot, aFmlaStrm, *this );
+    XclImpChTrFmlConverter aFmlConv( aFmlaStrm, *this );
 
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
