@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:23:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,25 +627,25 @@ void ToolBox::UserDraw( const UserDrawEvent& rUDEvt )
 
 void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
 {
-    USHORT                  nObjMask;
+    ULONG                   nObjMask;
     BOOL                    bImage = FALSE;     // Wurde Image gesetzt
 
     // Item anlegen
     ImplToolItem aItem;
 
     GetRes( rResId.SetRT( RSC_TOOLBOXITEM ) );
-    nObjMask            = ReadShortRes();
+    nObjMask            = ReadLongRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_ID )
-        aItem.mnId = ReadShortRes();
+        aItem.mnId = ReadLongRes();
     else
         aItem.mnId = 1;
 
     if ( nObjMask & RSC_TOOLBOXITEM_TYPE )
-        aItem.meType = (ToolBoxItemType)ReadShortRes();
+        aItem.meType = (ToolBoxItemType)ReadLongRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_STATUS )
-        aItem.mnBits = (ToolBoxItemBits)ReadShortRes();
+        aItem.mnBits = (ToolBoxItemBits)ReadLongRes();
 
     if( nObjMask & RSC_TOOLBOXITEM_HELPID )
         aItem.mnHelpId = ReadLongRes();
@@ -675,7 +675,7 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
         aItem.mbEnabled = !(BOOL)ReadShortRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_STATE )
-        aItem.meState   = (TriState)ReadShortRes();
+        aItem.meState   = (TriState)ReadLongRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_HIDE )
         aItem.mbVisible = !((BOOL)ReadShortRes());
