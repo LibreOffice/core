@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:41:18 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 15:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@
 #include "hints.hxx"
 #include "dpobject.hxx"
 #include "indexmap.hxx"
+#include "scrdata.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -363,7 +364,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pEnginePool( NULL ),
         pEditEngine( NULL ),
         eLinkMode(LM_UNKNOWN),
-        pDPCollection( NULL )
+        pDPCollection( NULL ),
+        pScriptTypeData( NULL )
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;
@@ -577,6 +579,7 @@ ScDocument::~ScDocument()
 
 //  delete pColorTable;
     DeleteColorTable();
+    delete pScriptTypeData;
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )

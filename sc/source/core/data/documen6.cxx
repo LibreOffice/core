@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:23:25 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 15:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "document.hxx"
 #include "cell.hxx"
 #include "cellform.hxx"
+#include "scrdata.hxx"
 
 using namespace com::sun::star;
 
@@ -96,6 +97,15 @@ BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
     if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
         return nStored;                             // use stored value
 
+    if ( !pScriptTypeData )
+    {
+        pScriptTypeData = new ScScriptTypeData;
+        uno::Reference<uno::XInterface> xInterface = xServiceManager->createInstance(
+                            rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
+        pScriptTypeData->xBreakIter = uno::Reference<i18n::XBreakIterator>( xInterface, uno::UNO_QUERY );
+        DBG_ASSERT( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
+    }
+
     BYTE nRet = 0;
 
     String aStr;
@@ -104,11 +114,7 @@ BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
 
     if (aStr.Len())
     {
-        //! keep the BreakIterator as member
-
-        uno::Reference<uno::XInterface> xInterface = xServiceManager->createInstance(
-                            rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
-        uno::Reference<i18n::XBreakIterator> xBreakIter( xInterface, uno::UNO_QUERY );
+        uno::Reference<i18n::XBreakIterator> xBreakIter = pScriptTypeData->xBreakIter;
         if ( xBreakIter.is() )
         {
             rtl::OUString aText = aStr;
