@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:20:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2989,10 +2989,8 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
     for( ScToken* t = pArr->GetNextReference(); t;
                   t = pArr->GetNextReference() )
     {
-        SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-            SingleDoubleRefModifier( t->GetSingleRef() ) :
-            SingleDoubleRefModifier( t->GetDoubleRef() ));
-        ComplRefData& rRef = rMod.Ref();
+        SingleDoubleRefModifier aMod( *t );
+        ComplRefData& rRef = aMod.Ref();
         if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                 (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
             ( t->GetType() == svSingleRef ||
@@ -3029,10 +3027,8 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
                 // Absolute references have been already adjusted in the named
                 // shared formula itself prior to breaking the shared formula
                 // and calling this function. Don't readjust them again.
-                SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-                    SingleDoubleRefModifier( t->GetSingleRef() ) :
-                    SingleDoubleRefModifier( t->GetDoubleRef() ));
-                ComplRefData& rRef = rMod.Ref();
+                SingleDoubleRefModifier aMod( *t );
+                ComplRefData& rRef = aMod.Ref();
                 ComplRefData aBkp = rRef;
                 ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
                                             r, nDx, nDy, nDz, rRef );
