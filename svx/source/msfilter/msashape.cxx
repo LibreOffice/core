@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-12 16:10:45 $
+ *  last change: $Author: sj $ $Date: 2001-01-19 19:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,10 @@ static const sal_Int32 mso_sptDefault1400[] =
 static const sal_Int32 mso_sptDefault1800[] =
 {
     1, 1800
+};
+static const sal_Int32 mso_sptDefault2500[] =
+{
+    1, 2500
 };
 static const sal_Int32 mso_sptDefault2700[] =
 {
@@ -3463,6 +3467,431 @@ static const mso_AutoShape msoStar =
     0x80000000, 0x80000000
 };
 
+static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
+    { 0x2081, 0x400, 10800, 3150 },             // 0x01 ( textframe )
+    { 0x2082, 0x400, 10800, 3150 },             // 0x02
+    { 0x2081, 0x400, 10800, 1350 },             // 0x03
+    { 0x2082, 0x400, 10800, 1350 },             // 0x04
+    { 0x0081, 0,     10800, 0 },
+    { 0x0082, 0,     10800, 0 },
+    { 0x2081, 0x400, 10800, 75 },
+    { 0x2082, 0x400, 10800, 75 },
+    { 0x0081, 0,     10800, 150 },
+    { 0x0082, 0,     10800, 150 },
+    { 0x2081, 0x400, 10800, 225 },
+    { 0x2082, 0x400, 10800, 225 },
+    { 0x0081, 0,     10800, 300 },
+    { 0x0082, 0,     10800, 300 },
+    { 0x2081, 0x400, 10800, 375 },
+    { 0x2082, 0x400, 10800, 375 },
+    { 0x0081, 0,     10800, 450 },
+    { 0x0082, 0,     10800, 450 },
+    { 0x2081, 0x400, 10800, 525 },
+    { 0x2082, 0x400, 10800, 525 },
+    { 0x0081, 0,     10800, 600 },
+    { 0x0082, 0,     10800, 600 },
+    { 0x2081, 0x400, 10800, 675 },
+    { 0x2082, 0x400, 10800, 675 },
+    { 0x0081, 0,     10800, 750 },
+    { 0x0082, 0,     10800, 750 },
+    { 0x2081, 0x400, 10800, 825 },
+    { 0x2082, 0x400, 10800, 825 },
+    { 0x0081, 0,     10800, 900 },
+    { 0x0082, 0,     10800, 900 },
+    { 0x2081, 0x400, 10800, 975 },
+    { 0x2082, 0x400, 10800, 975 },
+    { 0x0081, 0,     10800, 1050 },
+    { 0x0082, 0,     10800, 1050 },
+    { 0x2081, 0x400, 10800, 1125 },
+    { 0x2082, 0x400, 10800, 1125 },
+    { 0x0081, 0,     10800, 1200 },
+    { 0x0082, 0,     10800, 1200 },
+    { 0x2081, 0x400, 10800, 1275 },
+    { 0x2082, 0x400, 10800, 1275 },
+    { 0x0081, 0,     10800, 1350 },
+    { 0x0082, 0,     10800, 1350 },
+    { 0x2081, 0x400, 10800, 1425 },
+    { 0x2082, 0x400, 10800, 1425 },
+    { 0x0081, 0,     10800, 1500 },
+    { 0x0082, 0,     10800, 1500 },
+    { 0x2081, 0x400, 10800, 1575 },
+    { 0x2082, 0x400, 10800, 1575 },
+    { 0x0081, 0,     10800, 1650 },
+    { 0x0082, 0,     10800, 1650 },
+    { 0x2081, 0x400, 10800, 1725 },
+    { 0x2082, 0x400, 10800, 1725 },
+    { 0x0081, 0,     10800, 1800 },
+    { 0x0082, 0,     10800, 1800 },
+    { 0x2081, 0x400, 10800, 1875 },
+    { 0x2082, 0x400, 10800, 1875 },
+    { 0x0081, 0,     10800, 1950 },
+    { 0x0082, 0,     10800, 1950 },
+    { 0x2081, 0x400, 10800, 2025 },
+    { 0x2082, 0x400, 10800, 2025 },
+    { 0x0081, 0,     10800, 2100 },
+    { 0x0082, 0,     10800, 2100 },
+    { 0x2081, 0x400, 10800, 2175 },
+    { 0x2082, 0x400, 10800, 2175 },
+    { 0x0081, 0,     10800, 2250 },
+    { 0x0082, 0,     10800, 2250 },
+    { 0x2081, 0x400, 10800, 2325 },
+    { 0x2082, 0x400, 10800, 2325 },
+    { 0x0081, 0,     10800, 2400 },
+    { 0x0082, 0,     10800, 2400 },
+    { 0x2081, 0x400, 10800, 2475 },
+    { 0x2082, 0x400, 10800, 2475 },
+    { 0x0081, 0,     10800, 2550 },
+    { 0x0082, 0,     10800, 2550 },
+    { 0x2081, 0x400, 10800, 2625 },
+    { 0x2082, 0x400, 10800, 2625 },
+    { 0x0081, 0,     10800, 2700 },
+    { 0x0082, 0,     10800, 2700 },
+    { 0x2081, 0x400, 10800, 2775 },
+    { 0x2082, 0x400, 10800, 2775 },
+    { 0x0081, 0,     10800, 2850 },
+    { 0x0082, 0,     10800, 2850 },
+    { 0x2081, 0x400, 10800, 2925 },
+    { 0x2082, 0x400, 10800, 2925 },
+    { 0x0081, 0,     10800, 3000 },
+    { 0x0082, 0,     10800, 3000 },
+    { 0x2081, 0x400, 10800, 3075 },
+    { 0x2082, 0x400, 10800, 3075 },
+    { 0x0081, 0,     10800, 3150 },
+    { 0x0082, 0,     10800, 3150 },
+    { 0x2081, 0x400, 10800, 3225 },
+    { 0x2082, 0x400, 10800, 3225 },
+    { 0x0081, 0,     10800, 3300 },
+    { 0x0082, 0,     10800, 3300 },
+    { 0x2081, 0x400, 10800, 3375 },
+    { 0x2082, 0x400, 10800, 3375 },
+    { 0x0081, 0,     10800, 3450 },
+    { 0x0082, 0,     10800, 3450 },
+    { 0x2081, 0x400, 10800, 3525 },
+    { 0x2082, 0x400, 10800, 3525 }
+};
+static const sal_Int32 mso_sptSeal8Vert[] =     // adj value 0 -> 10800
+{
+    5 MSO_I, 6 MSO_I,
+    11 MSO_I, 12 MSO_I,
+    17 MSO_I, 18 MSO_I,
+    23 MSO_I, 24 MSO_I,
+    29 MSO_I, 30 MSO_I,
+    35 MSO_I, 36 MSO_I,
+    41 MSO_I, 42 MSO_I,
+    47 MSO_I, 48 MSO_I,
+    53 MSO_I, 54 MSO_I,
+    59 MSO_I, 60 MSO_I,
+    65 MSO_I, 66 MSO_I,
+    71 MSO_I, 72 MSO_I,
+    77 MSO_I, 78 MSO_I,
+    83 MSO_I, 84 MSO_I,
+    89 MSO_I, 90 MSO_I,
+    95 MSO_I, 96 MSO_I,
+    5 MSO_I, 6 MSO_I
+};
+static const sal_Int32 mso_sptSealTextRect[] =
+{
+    1, 1 MSO_I, 2 MSO_I, 3 MSO_I, 4 MSO_I
+};
+static const mso_AutoShape msoSeal8 =
+{
+    (sal_Int32*)mso_sptSeal8Vert, sizeof( mso_sptSeal8Vert ) >> 3,
+    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptSeal24Calc, sizeof( mso_sptSeal24Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault2500,
+    (sal_Int32*)mso_sptSealTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+static const sal_Int32 mso_sptSeal16Vert[] =        // adj value 0 -> 10800
+{
+    0x05 MSO_I, 0x06 MSO_I, 0x07 MSO_I, 0x08 MSO_I, 0x09 MSO_I, 0x0a MSO_I, 0x0b MSO_I, 0x0c MSO_I,
+    0x0d MSO_I, 0x0e MSO_I, 0x0f MSO_I, 0x10 MSO_I, 0x11 MSO_I, 0x12 MSO_I, 0x13 MSO_I, 0x14 MSO_I,
+    0x15 MSO_I, 0x16 MSO_I, 0x17 MSO_I, 0x18 MSO_I, 0x19 MSO_I, 0x1a MSO_I, 0x1b MSO_I, 0x1c MSO_I,
+    0x1d MSO_I, 0x1e MSO_I, 0x1f MSO_I, 0x20 MSO_I, 0x21 MSO_I, 0x22 MSO_I, 0x23 MSO_I, 0x24 MSO_I,
+    0x25 MSO_I, 0x26 MSO_I, 0x27 MSO_I, 0x28 MSO_I, 0x29 MSO_I, 0x2a MSO_I, 0x2b MSO_I, 0x2c MSO_I,
+    0x2d MSO_I, 0x2e MSO_I, 0x2f MSO_I, 0x30 MSO_I, 0x31 MSO_I, 0x32 MSO_I, 0x33 MSO_I, 0x34 MSO_I,
+    0x35 MSO_I, 0x36 MSO_I, 0x37 MSO_I, 0x38 MSO_I, 0x39 MSO_I, 0x3a MSO_I, 0x3b MSO_I, 0x3c MSO_I,
+    0x3d MSO_I, 0x3e MSO_I, 0x3f MSO_I, 0x40 MSO_I, 0x41 MSO_I, 0x42 MSO_I, 0x43 MSO_I, 0x44 MSO_I,
+    0x05 MSO_I, 0x06 MSO_I
+};
+static const SvxMSDffCalculationData mso_sptSeal16Calc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
+    { 0x2081, 0x400, 10800, 3150 },             // 0x01 ( textframe )
+    { 0x2082, 0x400, 10800, 3150 },             // 0x02
+    { 0x2081, 0x400, 10800, 1350 },             // 0x03
+    { 0x2082, 0x400, 10800, 1350 },             // 0x04
+    { 0x0081, 0,     10800, 0 },
+    { 0x0082, 0,     10800, 0 },
+    { 0x2081, 0x400, 10800, 113 },
+    { 0x2082, 0x400, 10800, 113 },
+    { 0x0081, 0,     10800, 225 },
+    { 0x0082, 0,     10800, 225 },
+    { 0x2081, 0x400, 10800, 338 },
+    { 0x2082, 0x400, 10800, 338 },
+    { 0x0081, 0,     10800, 450 },
+    { 0x0082, 0,     10800, 450 },
+    { 0x2081, 0x400, 10800, 563 },
+    { 0x2082, 0x400, 10800, 563 },
+    { 0x0081, 0,     10800, 675 },
+    { 0x0082, 0,     10800, 675 },
+    { 0x2081, 0x400, 10800, 788 },
+    { 0x2082, 0x400, 10800, 788 },
+    { 0x0081, 0,     10800, 900 },
+    { 0x0082, 0,     10800, 900 },
+    { 0x2081, 0x400, 10800, 1013 },
+    { 0x2082, 0x400, 10800, 1013 },
+    { 0x0081, 0,     10800, 1125 },
+    { 0x0082, 0,     10800, 1125 },
+    { 0x2081, 0x400, 10800, 1238 },
+    { 0x2082, 0x400, 10800, 1238 },
+    { 0x0081, 0,     10800, 1350 },
+    { 0x0082, 0,     10800, 1350 },
+    { 0x2081, 0x400, 10800, 1463 },
+    { 0x2082, 0x400, 10800, 1463 },
+    { 0x0081, 0,     10800, 1575 },
+    { 0x0082, 0,     10800, 1575 },
+    { 0x2081, 0x400, 10800, 1688 },
+    { 0x2082, 0x400, 10800, 1688 },
+    { 0x0081, 0,     10800, 1800 },
+    { 0x0082, 0,     10800, 1800 },
+    { 0x2081, 0x400, 10800, 1913 },
+    { 0x2082, 0x400, 10800, 1913 },
+    { 0x0081, 0,     10800, 2025 },
+    { 0x0082, 0,     10800, 2025 },
+    { 0x2081, 0x400, 10800, 2138 },
+    { 0x2082, 0x400, 10800, 2138 },
+    { 0x0081, 0,     10800, 2250 },
+    { 0x0082, 0,     10800, 2250 },
+    { 0x2081, 0x400, 10800, 2363 },
+    { 0x2082, 0x400, 10800, 2363 },
+    { 0x0081, 0,     10800, 2475 },
+    { 0x0082, 0,     10800, 2475 },
+    { 0x2081, 0x400, 10800, 2588 },
+    { 0x2082, 0x400, 10800, 2588 },
+    { 0x0081, 0,     10800, 2700 },
+    { 0x0082, 0,     10800, 2700 },
+    { 0x2081, 0x400, 10800, 2813 },
+    { 0x2082, 0x400, 10800, 2813 },
+    { 0x0081, 0,     10800, 2925 },
+    { 0x0082, 0,     10800, 2925 },
+    { 0x2081, 0x400, 10800, 3038 },
+    { 0x2082, 0x400, 10800, 3038 },
+    { 0x0081, 0,     10800, 3150 },
+    { 0x0082, 0,     10800, 3150 },
+    { 0x2081, 0x400, 10800, 3263 },
+    { 0x2082, 0x400, 10800, 3263 },
+    { 0x0081, 0,     10800, 3375 },
+    { 0x0082, 0,     10800, 3375 },
+    { 0x2081, 0x400, 10800, 3488 },
+    { 0x2082, 0x400, 10800, 3488 }
+};
+static const mso_AutoShape msoSeal16 =
+{
+    (sal_Int32*)mso_sptSeal16Vert, sizeof( mso_sptSeal16Vert ) >> 3,
+    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptSeal16Calc, sizeof( mso_sptSeal16Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault2500,
+    (sal_Int32*)mso_sptSealTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+static const sal_Int32 mso_sptSeal24Vert[] =
+{
+    0x05 MSO_I, 0x06 MSO_I, 0x07 MSO_I, 0x08 MSO_I, 0x09 MSO_I, 0x0a MSO_I, 0x0b MSO_I, 0x0c MSO_I,
+    0x0d MSO_I, 0x0e MSO_I, 0x0f MSO_I, 0x10 MSO_I, 0x11 MSO_I, 0x12 MSO_I, 0x13 MSO_I, 0x14 MSO_I,
+    0x15 MSO_I, 0x16 MSO_I, 0x17 MSO_I, 0x18 MSO_I, 0x19 MSO_I, 0x1a MSO_I, 0x1b MSO_I, 0x1c MSO_I,
+    0x1d MSO_I, 0x1e MSO_I, 0x1f MSO_I, 0x20 MSO_I, 0x21 MSO_I, 0x22 MSO_I, 0x23 MSO_I, 0x24 MSO_I,
+    0x25 MSO_I, 0x26 MSO_I, 0x27 MSO_I, 0x28 MSO_I, 0x29 MSO_I, 0x2a MSO_I, 0x2b MSO_I, 0x2c MSO_I,
+    0x2d MSO_I, 0x2e MSO_I, 0x2f MSO_I, 0x30 MSO_I, 0x31 MSO_I, 0x32 MSO_I, 0x33 MSO_I, 0x34 MSO_I,
+    0x35 MSO_I, 0x36 MSO_I, 0x37 MSO_I, 0x38 MSO_I, 0x39 MSO_I, 0x3a MSO_I, 0x3b MSO_I, 0x3c MSO_I,
+    0x3d MSO_I, 0x3e MSO_I, 0x3f MSO_I, 0x40 MSO_I, 0x41 MSO_I, 0x42 MSO_I, 0x43 MSO_I, 0x44 MSO_I,
+    0x45 MSO_I, 0x46 MSO_I, 0x47 MSO_I, 0x48 MSO_I, 0x49 MSO_I, 0x4a MSO_I, 0x4b MSO_I, 0x4c MSO_I,
+    0x4d MSO_I, 0x4e MSO_I, 0x4f MSO_I, 0x50 MSO_I, 0x51 MSO_I, 0x52 MSO_I, 0x53 MSO_I, 0x54 MSO_I,
+    0x55 MSO_I, 0x56 MSO_I, 0x57 MSO_I, 0x58 MSO_I, 0x59 MSO_I, 0x5a MSO_I, 0x5b MSO_I, 0x5c MSO_I,
+    0x5d MSO_I, 0x5e MSO_I, 0x5f MSO_I, 0x60 MSO_I, 0x61 MSO_I, 0x62 MSO_I, 0x63 MSO_I, 0x64 MSO_I,
+    0x05 MSO_I, 0x06 MSO_I
+};
+static const mso_AutoShape msoSeal24 =
+{
+    (sal_Int32*)mso_sptSeal24Vert, sizeof( mso_sptSeal24Vert ) >> 3,
+    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptSeal24Calc, sizeof( mso_sptSeal24Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault2500,
+    (sal_Int32*)mso_sptSealTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
+    { 0x2081, 0x400, 10800, 3150 },             // 0x01 ( textframe )
+    { 0x2082, 0x400, 10800, 3150 },             // 0x02
+    { 0x2081, 0x400, 10800, 1350 },             // 0x03
+    { 0x2082, 0x400, 10800, 1350 },             // 0x04
+    { 0x0081, 0,     10800, 0 },
+    { 0x0082, 0,     10800, 0 },
+    { 0x2081, 0x400, 10800, 56 },
+    { 0x2082, 0x400, 10800, 56 },
+    { 0x0081, 0,     10800, 113 },
+    { 0x0082, 0,     10800, 113 },
+    { 0x2081, 0x400, 10800, 169 },
+    { 0x2082, 0x400, 10800, 169 },
+    { 0x0081, 0,     10800, 225 },
+    { 0x0082, 0,     10800, 225 },
+    { 0x2081, 0x400, 10800, 281 },
+    { 0x2082, 0x400, 10800, 281 },
+    { 0x0081, 0,     10800, 338 },
+    { 0x0082, 0,     10800, 338 },
+    { 0x2081, 0x400, 10800, 394 },
+    { 0x2082, 0x400, 10800, 394 },
+    { 0x0081, 0,     10800, 450 },
+    { 0x0082, 0,     10800, 450 },
+    { 0x2081, 0x400, 10800, 506 },
+    { 0x2082, 0x400, 10800, 506 },
+    { 0x0081, 0,     10800, 563 },
+    { 0x0082, 0,     10800, 563 },
+    { 0x2081, 0x400, 10800, 619 },
+    { 0x2082, 0x400, 10800, 619 },
+    { 0x0081, 0,     10800, 675 },
+    { 0x0082, 0,     10800, 675 },
+    { 0x2081, 0x400, 10800, 731 },
+    { 0x2082, 0x400, 10800, 731 },
+    { 0x0081, 0,     10800, 788 },
+    { 0x0082, 0,     10800, 788 },
+    { 0x2081, 0x400, 10800, 843 },
+    { 0x2082, 0x400, 10800, 843 },
+    { 0x0081, 0,     10800, 900 },
+    { 0x0082, 0,     10800, 900 },
+    { 0x2081, 0x400, 10800, 956 },
+    { 0x2082, 0x400, 10800, 956 },
+    { 0x0081, 0,     10800, 1013 },
+    { 0x0082, 0,     10800, 1013 },
+    { 0x2081, 0x400, 10800, 1069 },
+    { 0x2082, 0x400, 10800, 1069 },
+    { 0x0081, 0,     10800, 1125 },
+    { 0x0082, 0,     10800, 1125 },
+    { 0x2081, 0x400, 10800, 1181 },
+    { 0x2082, 0x400, 10800, 1181 },
+    { 0x0081, 0,     10800, 1238 },
+    { 0x0082, 0,     10800, 1238 },
+    { 0x2081, 0x400, 10800, 1294 },
+    { 0x2082, 0x400, 10800, 1294 },
+    { 0x0081, 0,     10800, 1350 },
+    { 0x0082, 0,     10800, 1350 },
+    { 0x2081, 0x400, 10800, 1406 },
+    { 0x2082, 0x400, 10800, 1406 },
+    { 0x0081, 0,     10800, 1462 },
+    { 0x0082, 0,     10800, 1462 },
+    { 0x2081, 0x400, 10800, 1519 },
+    { 0x2082, 0x400, 10800, 1519 },
+    { 0x0081, 0,     10800, 1575 },
+    { 0x0082, 0,     10800, 1575 },
+    { 0x2081, 0x400, 10800, 1631 },
+    { 0x2082, 0x400, 10800, 1631 },
+    { 0x0081, 0,     10800, 1688 },
+    { 0x0082, 0,     10800, 1688 },
+    { 0x2081, 0x400, 10800, 1744 },
+    { 0x2082, 0x400, 10800, 1744 },
+    { 0x0081, 0,     10800, 1800 },
+    { 0x0082, 0,     10800, 1800 },
+    { 0x2081, 0x400, 10800, 1856 },
+    { 0x2082, 0x400, 10800, 1856 },
+    { 0x0081, 0,     10800, 1913 },
+    { 0x0082, 0,     10800, 1913 },
+    { 0x2081, 0x400, 10800, 1969 },
+    { 0x2082, 0x400, 10800, 1969 },
+    { 0x0081, 0,     10800, 2025 },
+    { 0x0082, 0,     10800, 2025 },
+    { 0x2081, 0x400, 10800, 2081 },
+    { 0x2082, 0x400, 10800, 2081 },
+    { 0x0081, 0,     10800, 2138 },
+    { 0x0082, 0,     10800, 2138 },
+    { 0x2081, 0x400, 10800, 2194 },
+    { 0x2082, 0x400, 10800, 2194 },
+    { 0x0081, 0,     10800, 2250 },
+    { 0x0082, 0,     10800, 2250 },
+    { 0x2081, 0x400, 10800, 2306 },
+    { 0x2082, 0x400, 10800, 2306 },
+    { 0x0081, 0,     10800, 2362 },
+    { 0x0082, 0,     10800, 2362 },
+    { 0x2081, 0x400, 10800, 2418 },
+    { 0x2082, 0x400, 10800, 2418 },
+    { 0x0081, 0,     10800, 2475 },
+    { 0x0082, 0,     10800, 2475 },
+    { 0x2081, 0x400, 10800, 2531 },
+    { 0x2082, 0x400, 10800, 2531 },
+    { 0x0081, 0,     10800, 2587 },
+    { 0x0082, 0,     10800, 2587 },
+    { 0x2081, 0x400, 10800, 2643 },
+    { 0x2082, 0x400, 10800, 2643 },
+    { 0x0081, 0,     10800, 2700 },
+    { 0x0082, 0,     10800, 2700 },
+    { 0x2081, 0x400, 10800, 2756 },
+    { 0x2082, 0x400, 10800, 2756 },
+    { 0x0081, 0,     10800, 2812 },
+    { 0x0082, 0,     10800, 2812 },
+    { 0x2081, 0x400, 10800, 2868 },
+    { 0x2082, 0x400, 10800, 2868 },
+    { 0x0081, 0,     10800, 2925 },
+    { 0x0082, 0,     10800, 2925 },
+    { 0x2081, 0x400, 10800, 2981 },
+    { 0x2082, 0x400, 10800, 2981 },
+    { 0x0081, 0,     10800, 3037 },
+    { 0x0082, 0,     10800, 3037 },
+    { 0x2081, 0x400, 10800, 3093 },
+    { 0x2082, 0x400, 10800, 3093 },
+    { 0x0081, 0,     10800, 3150 },
+    { 0x0082, 0,     10800, 3150 },
+    { 0x2081, 0x400, 10800, 3206 },
+    { 0x2082, 0x400, 10800, 3206 },
+    { 0x0081, 0,     10800, 3262 },
+    { 0x0082, 0,     10800, 3262 },
+    { 0x2081, 0x400, 10800, 3318 },
+    { 0x2082, 0x400, 10800, 3318 },
+    { 0x0081, 0,     10800, 3375 },
+    { 0x0082, 0,     10800, 3375 },
+    { 0x2081, 0x400, 10800, 3431 },
+    { 0x2082, 0x400, 10800, 3431 },
+    { 0x0081, 0,     10800, 3487 },
+    { 0x0082, 0,     10800, 3487 },
+    { 0x2081, 0x400, 10800, 3543 },
+    { 0x2082, 0x400, 10800, 3543 }
+};
+static const sal_Int32 mso_sptSeal32Vert[] =
+{
+    0x05 MSO_I, 0x06 MSO_I, 0x07 MSO_I, 0x08 MSO_I, 0x09 MSO_I, 0x0a MSO_I, 0x0b MSO_I, 0x0c MSO_I,
+    0x0d MSO_I, 0x0e MSO_I, 0x0f MSO_I, 0x10 MSO_I, 0x11 MSO_I, 0x12 MSO_I, 0x13 MSO_I, 0x14 MSO_I,
+    0x15 MSO_I, 0x16 MSO_I, 0x17 MSO_I, 0x18 MSO_I, 0x19 MSO_I, 0x1a MSO_I, 0x1b MSO_I, 0x1c MSO_I,
+    0x1d MSO_I, 0x1e MSO_I, 0x1f MSO_I, 0x20 MSO_I, 0x21 MSO_I, 0x22 MSO_I, 0x23 MSO_I, 0x24 MSO_I,
+    0x25 MSO_I, 0x26 MSO_I, 0x27 MSO_I, 0x28 MSO_I, 0x29 MSO_I, 0x2a MSO_I, 0x2b MSO_I, 0x2c MSO_I,
+    0x2d MSO_I, 0x2e MSO_I, 0x2f MSO_I, 0x30 MSO_I, 0x31 MSO_I, 0x32 MSO_I, 0x33 MSO_I, 0x34 MSO_I,
+    0x35 MSO_I, 0x36 MSO_I, 0x37 MSO_I, 0x38 MSO_I, 0x39 MSO_I, 0x3a MSO_I, 0x3b MSO_I, 0x3c MSO_I,
+    0x3d MSO_I, 0x3e MSO_I, 0x3f MSO_I, 0x40 MSO_I, 0x41 MSO_I, 0x42 MSO_I, 0x43 MSO_I, 0x44 MSO_I,
+    0x45 MSO_I, 0x46 MSO_I, 0x47 MSO_I, 0x48 MSO_I, 0x49 MSO_I, 0x4a MSO_I, 0x4b MSO_I, 0x4c MSO_I,
+    0x4d MSO_I, 0x4e MSO_I, 0x4f MSO_I, 0x50 MSO_I, 0x51 MSO_I, 0x52 MSO_I, 0x53 MSO_I, 0x54 MSO_I,
+    0x55 MSO_I, 0x56 MSO_I, 0x57 MSO_I, 0x58 MSO_I, 0x59 MSO_I, 0x5a MSO_I, 0x5b MSO_I, 0x5c MSO_I,
+    0x5d MSO_I, 0x5e MSO_I, 0x5f MSO_I, 0x60 MSO_I, 0x61 MSO_I, 0x62 MSO_I, 0x63 MSO_I, 0x64 MSO_I,
+    0x65 MSO_I, 0x66 MSO_I, 0x67 MSO_I, 0x68 MSO_I, 0x69 MSO_I, 0x6a MSO_I, 0x6b MSO_I, 0x6c MSO_I,
+    0x6d MSO_I, 0x6e MSO_I, 0x6f MSO_I, 0x70 MSO_I, 0x71 MSO_I, 0x72 MSO_I, 0x73 MSO_I, 0x74 MSO_I,
+    0x75 MSO_I, 0x76 MSO_I, 0x77 MSO_I, 0x78 MSO_I, 0x79 MSO_I, 0x7a MSO_I, 0x7b MSO_I, 0x7c MSO_I,
+    0x7d MSO_I, 0x7e MSO_I, 0x7f MSO_I, 0x80 MSO_I, 0x81 MSO_I, 0x82 MSO_I, 0x83 MSO_I, 0x84 MSO_I,
+    0x05 MSO_I, 0x06 MSO_I
+};
+static const mso_AutoShape msoSeal32 =
+{
+    (sal_Int32*)mso_sptSeal32Vert, sizeof( mso_sptSeal32Vert ) >> 3,
+    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptSeal32Calc, sizeof( mso_sptSeal32Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault2500,
+    (sal_Int32*)mso_sptSealTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
 class SvxMSDffAdjustmentHandle
 {
     sal_Int32   nAdjustValue;
@@ -3680,10 +4109,10 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptIrregularSeal2 :        pDefAutoShape = &msoIrregularSeal2; break;
         case mso_sptSeal4 :                 pDefAutoShape = &msoSeal4; break;
         case mso_sptStar :                  pDefAutoShape = &msoStar; break;
-//      case mso_sptSeal8 :
-//      case mso_sptSeal16 :
-//      case mso_sptSeal24 :
-//      case mso_sptSeal32 :
+        case mso_sptSeal8 :                 pDefAutoShape = &msoSeal8; break;
+        case mso_sptSeal16 :                pDefAutoShape = &msoSeal16; break;
+        case mso_sptSeal24 :                pDefAutoShape = &msoSeal24; break;
+        case mso_sptSeal32 :                pDefAutoShape = &msoSeal32; break;
 //      case mso_sptRibbon2 :
 //      case mso_sptRibbon :
 //      case mso_sptEllipseRibbon2 :
