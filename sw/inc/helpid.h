@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 12:42:34 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,6 +903,7 @@
 
 #define HID_INSERT_IDX_MRK_PHONETIC_READING         (HID_BASE + 2175 )
 #define HID_COLUMN_VALUESET                         (HID_BASE + 2176 )
+#define HID_PVIEW_ZOOM_LB                           (HID_BASE + 2177 )
 
 
 
