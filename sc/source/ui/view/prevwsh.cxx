@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-04-16 17:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,9 @@ void ScPreviewShell::UpdateScrollBars()
     Size aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
     aPageSize.Width()  = (long) (aPageSize.Width()  * HMM_PER_TWIPS );
     aPageSize.Height() = (long) (aPageSize.Height() * HMM_PER_TWIPS );
+
+    //  for centering, page size without the shadow is used
+
     Size aWindowSize = pPreview->GetOutputSize();
 
     Point aOfs = pPreview->GetOffset();
@@ -337,9 +340,21 @@ void ScPreviewShell::UpdateScrollBars()
     pHorScroll->SetPageSize( aWindowSize.Width() );
     pHorScroll->SetVisibleSize( aWindowSize.Width() );
     nMaxPos = aPageSize.Width() - aWindowSize.Width();
-    if (nMaxPos<0) nMaxPos = 0;
-    if (aOfs.X() > nMaxPos)
+    if (nMaxPos<0)
     {
+        //  page smaller than window -> center (but put scrollbar to 0)
+        aOfs.X() = 0;
+        pPreview->SetXOffset( nMaxPos / 2 );
+    }
+    else if (aOfs.X() < 0)
+    {
+        //  page larger than window -> never use negative offset
+        aOfs.X() = 0;
+        pPreview->SetXOffset( 0 );
+    }
+    else if (aOfs.X() > nMaxPos)
+    {
+        //  limit offset to align with right edge of window
         aOfs.X() = nMaxPos;
         pPreview->SetXOffset(nMaxPos);
     }
@@ -350,9 +365,21 @@ void ScPreviewShell::UpdateScrollBars()
     pVerScroll->SetPageSize( aWindowSize.Height() );
     pVerScroll->SetVisibleSize( aWindowSize.Height() );
     nMaxPos = aPageSize.Height() - aWindowSize.Height();
-    if (nMaxPos<0) nMaxPos = 0;
-    if (aOfs.Y() > nMaxPos)
+    if (nMaxPos<0)
     {
+        //  page smaller than window -> center (but put scrollbar to 0)
+        aOfs.Y() = 0;
+        pPreview->SetYOffset( nMaxPos / 2 );
+    }
+    else if (aOfs.Y() < 0)
+    {
+        //  page larger than window -> never use negative offset
+        aOfs.Y() = 0;
+        pPreview->SetYOffset( 0 );
+    }
+    else if (aOfs.Y() > nMaxPos)
+    {
+        //  limit offset to align with window bottom
         aOfs.Y() = nMaxPos;
         pPreview->SetYOffset(nMaxPos);
     }
