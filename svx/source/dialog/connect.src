@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:11:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Anfang h~orizontal" ;
         Text [ ENGLISH ] = "Start h~orizontal" ;
         Text [ english_us ] = "~Begin horizontal" ;
-        Text [ portuguese_brazilian ] = "Inicio h~orizontal" ;
+        Text [ portuguese_brazilian ] = "In�cio h~orizontal" ;
         Text [ swedish ] = "Start h~orisontellt" ;
         Text [ danish ] = "Start vandret" ;
         Text [ italian ] = "Inizio ~orizzontale" ;
@@ -442,7 +442,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text = "Anfang ~vertikal" ;
         Text [ ENGLISH ] = "Start ~vertical" ;
         Text [ english_us ] = "Begin ~vertical" ;
-        Text [ portuguese_brazilian ] = "Inicio ~vertical" ;
+        Text [ portuguese_brazilian ] = "In�cio ~vertical" ;
         Text [ swedish ] = "Start ~vertikalt" ;
         Text [ danish ] = "Start lodret" ;
         Text [ italian ] = "Inizio ~verticale" ;
@@ -553,7 +553,7 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ danish ] = "Preview";
         QuickHelpText[ swedish ] = "F�rhandsvisning";
         QuickHelpText[ polish ] = "Podgl�d";
-        QuickHelpText[ portuguese_brazilian ] = "Preview";
+        QuickHelpText[ portuguese_brazilian ] = "Visualizar";
         QuickHelpText[ japanese ] = "プレビュー";
         QuickHelpText[ korean ] = "미리 보기";
         QuickHelpText[ chinese_simplified ] = "预视";
@@ -586,6 +586,7 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ slovak ] = "Spojnica";
 };
  // ******************************************************************* EOF
+
 
 
 
