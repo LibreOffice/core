@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-09 13:01:31 $
+ *  last change: $Author: dl $ $Date: 2001-02-26 10:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,7 +1271,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
             RemoveUnnessesaryMasterPages( NULL, TRUE, FALSE );
 
-        for ( ULONG i = 0; i < GetPageCount(); i++ )
+        for ( USHORT i = 0; i < GetPageCount(); i++ )
         {
             // Check for correct layout names
             SdPage* pPage = (SdPage*) GetPage( i );
@@ -1287,7 +1287,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         // previous version may moved other shapes behind the background
         // shape. For performance reason this has to be fixed because
         // the background shape should always have position 0
-        for ( ULONG nPage = 0; nPage < GetMasterSdPageCount( PK_STANDARD ); nPage++)
+        for ( USHORT nPage = 0; nPage < GetMasterSdPageCount( PK_STANDARD ); nPage++)
         {
             SdPage* pPage = GetMasterSdPage( nPage, PK_STANDARD );
             SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;

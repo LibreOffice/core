@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 16:26:16 $
+ *  last change: $Author: dl $ $Date: 2001-02-26 10:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         SfxPrinter* pPrinter = ( (SdDrawDocShell*) pViewSh->GetViewFrame()->GetObjectShell() )->GetPrinter(TRUE);
 
         // paperbin
-        USHORT nPaperBin = (USHORT) pPage->GetPaperBin();
-        SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, nPaperBin );
+        SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, pPage->GetPaperBin() );
         aNewAttr.Put( aPaperBinItem );
 
         // Raender, Umrandung und das andere Zeug

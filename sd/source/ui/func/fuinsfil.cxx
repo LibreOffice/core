@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-21 13:14:54 $
+ *  last change: $Author: dl $ $Date: 2001-02-26 10:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
