@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 11:31:21 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 13:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2222,6 +2222,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     ,m_aSplitter( this )
     ,m_eChildFocus(NONE)
     ,m_bInKeyEvent(sal_False)
+    ,m_bInSplitHandler( sal_False )
 {
     try
     {
@@ -2253,11 +2254,13 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
 {
     if (!getController()->isReadOnly())
     {
+        m_bInSplitHandler = sal_True;
         long nTest = m_aSplitter.GetPosPixel().Y();
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
         static_cast<OQueryController*>(getController())->setSplitPos(m_aSplitter.GetSplitPosPixel());
         static_cast<OQueryController*>(getController())->setModified();
         Resize();
+        m_bInSplitHandler = sal_True;
     }
     return 0L;
 }
@@ -2287,10 +2290,41 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
 
     // calc the split pos, and forward it to the controller
     sal_Int32 nSplitPos = static_cast<OQueryController*>(getController())->getSplitPos();
-    if( nSplitPos == -1 || nSplitPos >= aPlaygroundSize.Height())
+    if ( 0 != aPlaygroundSize.Height() )
     {
-        nSplitPos = sal_Int32(aPlaygroundSize.Height()*0.6);
-        static_cast<OQueryController*>(getController())->setSplitPos(nSplitPos);
+        if  (   ( -1 == nSplitPos )
+            ||  ( nSplitPos >= aPlaygroundSize.Height() )
+            )
+        {
+            // let the selection browse box determine an optimal size
+            Size aSelectionBoxSize = m_pSelectionBox->CalcOptimalSize( aPlaygroundSize );
+            nSplitPos = aPlaygroundSize.Height() - aSelectionBoxSize.Height() - m_aSplitter.GetSizePixel().Height();
+            // still an invalid size?
+            if ( nSplitPos == -1 || nSplitPos >= aPlaygroundSize.Height() )
+                nSplitPos = sal_Int32(aPlaygroundSize.Height()*0.6);
+
+            static_cast<OQueryController*>(getController())->setSplitPos(nSplitPos);
+        }
+
+        if ( !m_bInSplitHandler )
+        {   // the resize is triggered by something else than the split handler
+            // our main focus is to try to preserve the size of the selectionbrowse box
+            Size aSelBoxSize = m_pSelectionBox->GetSizePixel();
+            if ( aSelBoxSize.Height() )
+            {
+                // keep the size of the sel box constant
+                nSplitPos = aPlaygroundSize.Height() - m_aSplitter.GetSizePixel().Height() - aSelBoxSize.Height();
+
+                // and if the box is smaller than the optimal size, try to do something about it
+                Size aSelBoxOptSize = m_pSelectionBox->CalcOptimalSize( aPlaygroundSize );
+                if ( aSelBoxOptSize.Height() > aSelBoxSize.Height() )
+                {
+                    nSplitPos = aPlaygroundSize.Height() - m_aSplitter.GetSizePixel().Height() - aSelBoxOptSize.Height();
+                }
+
+                static_cast< OQueryController* >(getController())->setSplitPos( nSplitPos );
+            }
+        }
     }
 
     // normalize the split pos
