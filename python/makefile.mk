@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:26:21 $
+#   last change: $Author: kz $ $Date: 2004-09-08 12:25:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,9 @@ BUILD_ACTION_SEP=^
 DSP_DIR=PCbuild
 .IF "$(GUI)" == "UNX"
 CONFIGURE_ACTION= ./configure --prefix=../python-inst
+.IF "$(OS)$(CPU)" == "SOLARISI"
+CONFIGURE_ACTION += --disable-ipv6
+.ENDIF
 .IF "$(OS)" == "IRIX"
 BUILD_ACTION=$(ENV_BUILD) gmake ; gmake install
 .ELSE
