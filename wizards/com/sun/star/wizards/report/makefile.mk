@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tv $ $Date: 2002-05-31 09:36:49 $
+#   last change: $Author: bc $ $Date: 2002-06-27 09:41:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ JAVAFILES=						\
     ReportWizard.java		\
     CallReportWizard.java	\
     tools.java			\
+    Dataimport.java        \
     UNODialogs.java
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)

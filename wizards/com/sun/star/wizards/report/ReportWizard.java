@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-16 13:18:01 $
+ *  last change: $Author: bc $ $Date: 2002-06-27 09:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,10 @@ import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XFixedText;
-import com.sun.star.awt.XActionListener;
-import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.ActionEvent;
+import com.sun.star.awt.XActionListener;
+import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XMouseListener;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.MouseEvent;
@@ -145,20 +145,12 @@ import java.util.*;
  * @version
  */
 public class ReportWizard {
-    static long iStart;
     static XMultiServiceFactory xGlobalMSF;
-    static Object xListBoxModel;
-    static Object oDialogModel;
-    static XNameAccess xDlgNameAccess;
-    static Hashtable ControlList;
-    static XNameContainer xDlgNames;
-    static XStatement xStatement;
     static XDatabaseMetaData xDBMetaData;
-    static XResultSet xResultSet;
-    static XTextTable xTextTable;
-    static XDialog xDialog;
     static DBMetaData.CommandMetaData CurDBMetaData;
-    static boolean[] bModify = new boolean[] {true, true, true, true, true};
+    static UNODialogs.UNODialog CurUNODialog;
+    static UNODialogs.UNODialog CurProgressDialog;
+
     static final int SOCMDCANCEL = 1;
     static final int SOCMDHELP = 2;
     static final int SOCMDBACK = 3;
@@ -245,27 +237,27 @@ public class ReportWizard {
     static XNameAccess xQueryNames;
     static String TableName;
     static Object oDBTable;
-    static Object objectDialog;
     static int[] iCommandTypes;
     static int[][] WidthList;
     static boolean bEnableBinaryOptionGroup;
+    static boolean bcreateTemplate;
+    static boolean buseTemplate;
+
     static String[] OriginalList = new String[]{""};
     static XNameAccess xColumns;
-    static XMultiServiceFactory  xMSFDialogModel;
-    static XControlContainer xDialogContainer;
-    static XControl xControl;
     static XDesktop xDesktop;
     static ReportDocument.RepWizardDocument CurReportDocument;
     static java.util.Vector GroupFieldVector;
-    static String CurGroupName;
     static String TemplatePath;
-    static boolean bGroupByIsSupported;
+
     static String sMsgWizardName;
     static String scmdReady;
     static String scmdCancel;
     static String scmdBack;
     static String scmdHelp;
     static String scmdGoOn;
+    static String sMsgNoConnection;
+
     static String slblDatabases;
     static String slblTables;
     static String slblFields;
@@ -284,33 +276,21 @@ public class ReportWizard {
     static String sUseTemplate;
     static String sEditTemplate;
     static String sCreateLink;
+    static String sCreateLinkAutomatically;
     static String sGroupings;
     static String[] WizardHeaderText = new String[5];
     static String[] WizardTitle = new String[5];
     static String sWriterFilterName;
     static String StorePath = "";
+    static String sMsgErrorOccured;
+    static String sMsgNoDatabaseAvailable;
+    static String sMsgCommandCouldNotbeOpened;
+    static String sMsgSavingImpossible;
+    static String sMsgNoTableInDatabase;
 
     static boolean bCloseDocument;
 
     public ReportWizard() {
-    }
-
-    private static int getControlKey(Object EventObject){
-    int iKey;
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, EventObject);
-        XControlModel xControlModel = xControl.getModel();
-        XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
-        try{
-            String sName = (String) xPSet.getPropertyValue("Name");
-            Integer KeyObject = (Integer) ControlList.get(sName);
-            iKey = KeyObject.intValue();
-        }
-        catch( Exception exception )
-        {
-          exception.printStackTrace(System.out);
-              iKey = 2000;
-        }
-        return iKey;
     }
 
 
@@ -320,15 +300,22 @@ public class ReportWizard {
         try{
             short DBIndex = xDBListBox.getSelectedItemPos();
             String sDBName = sDatabaseList[DBIndex];
-            if (DBMetaData.getConnection(xMSF, CurDBMetaData, CurReportDocument, sDBName) == true){
+        boolean bGetConnection = DBMetaData.getConnection(xMSF, CurDBMetaData, CurReportDocument, sDBName, sMsgNoConnection);
+            if (bGetConnection == true){
         CurDBMetaData.DataSourceName = sDBName;
-                if (DBMetaData.getDBMetaData(CurReportDocument) == true){
-                    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lstTables", "Enabled", new Boolean(true));
-                    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lblTables", "Enabled", new Boolean(true));
+        String[] ContentList = DBMetaData.getDBMetaData(CurReportDocument);
+                UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstTables", "StringItemList", ContentList);
+                if (ContentList != null){
                     iCommandTypes = DBMetaData.createCommandTypeList();
-                    UNODialogs.emptyFieldsListBoxes(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
                 }
             }
+        else{
+                UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstDatabases", "SelectedItems", new Short[]{});
+        }
+            UNODialogs.emptyFieldsListBoxes(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
+            UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstTables", "Enabled", new Boolean(bGetConnection));
+            UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblTables", "Enabled", new Boolean(bGetConnection));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(bGetConnection));
         }
         catch(Exception exception)
         {
@@ -359,12 +346,12 @@ public class ReportWizard {
            XColumnsSupplier xTableCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oDBTable);
            xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xTableCols.getColumns());
            if (DBMetaData.getSpecificFieldNames(CurDBMetaData) > 0)
-               UNODialogs.toggleListboxControls(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, new Boolean(true));
+               UNODialogs.toggleListboxControls(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, new Boolean(true));
            else
-               UNODialogs.emptyFieldsListBoxes(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
+               UNODialogs.emptyFieldsListBoxes(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
         }
         else
-            UNODialogs.emptyFieldsListBoxes(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
+            UNODialogs.emptyFieldsListBoxes(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
         }
         catch(Exception exception){
             exception.printStackTrace(System.out);
@@ -377,14 +364,14 @@ public class ReportWizard {
     public void textChanged(com.sun.star.awt.TextEvent EventObject){
     int iPos;
     try{
-            int iKey  =  getControlKey(EventObject.Source);
+            int iKey  =  UNODialogs.getControlKey(EventObject.Source, CurUNODialog.ControlList);
             switch (iKey) {
-//      case SOTXTFIRSTSAVEPATH:
-//          UNODialogs.toggleGoOnButton(xSaveTextBox[0], xDlgNameAccess, CurReportDocument.xSimpleFileAccess, "cmdGoOn");
-//          break;
-//      case SOTXTSECSAVEPATH:
-//          UNODialogs.toggleGoOnButton(xSaveTextBox[1], xDlgNameAccess, CurReportDocument.xSimpleFileAccess, "cmdGoOn");
-//          break;
+        case SOTXTFIRSTSAVEPATH:
+                UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(xSaveTextBox[0].getText().length() > 3));
+            break;
+        case SOTXTSECSAVEPATH:
+                UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(xSaveTextBox[1].getText().length() > 3));
+            break;
         case SOTXTTITLE:
             String TitleName = xTitleTextBox.getText();
             ReportDocument.updateReportTitle(CurReportDocument, xTitleTextBox);
@@ -405,7 +392,7 @@ public class ReportWizard {
        public void itemStateChanged(ItemEvent EventObject ){
        int iPos;
     try{
-            int iKey  =  getControlKey(EventObject.Source);
+            int iKey  =  UNODialogs.getControlKey(EventObject.Source, CurUNODialog.ControlList);
             switch (iKey) {
         case SODBLST:
             getSelectedDBMetaData(xGlobalMSF);
@@ -416,11 +403,11 @@ public class ReportWizard {
             break;
 
         case SOFLDSLST:
-            UNODialogs.FormSetMoveRights(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
+            UNODialogs.FormSetMoveRights(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
             break;
 
         case SOSELFLDSLST:
-            UNODialogs.FormSetMoveRights(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
+            UNODialogs.FormSetMoveRights(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, (short)-1, (short)-1);
             break;
 
         case SOFIRSTSORTLST:
@@ -440,7 +427,7 @@ public class ReportWizard {
 
         case SOGROUPLST:
             boolean bDoEnable = ((xGroupListBox.getSelectedItems().length > 0) && (GroupFieldVector.size() < 4));
-            UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGroupOut", "Enabled", new Boolean(bDoEnable));
+            UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGroupOut", "Enabled", new Boolean(bDoEnable));
             break;
 
         case SOSELGROUPLST:
@@ -453,7 +440,7 @@ public class ReportWizard {
             ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, ContentFiles[0][iPos]);
             ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, ContentFiles[0][iPos], "LoadTextStyles");
             CurReportDocument.ReportTextDocument.unlockControllers();
-            ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
+            ReportDocument.selectFirstPage(CurReportDocument);
             break;
 
         case SOLAYOUTLST:
@@ -461,9 +448,9 @@ public class ReportWizard {
             iPos = xLayoutListBox.getSelectedItemPos();
             boolean bOldIsCurLandscape = ((Boolean) tools.getUNOPropertyValue(CurReportDocument.ReportPageStyle, "IsLandscape")).booleanValue();
             ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, LayoutFiles[0][iPos], "LoadPageStyles");
-            ReportDocument.changePageOrientation(xGlobalMSF, xDlgNameAccess, CurReportDocument, bOldIsCurLandscape);
+            ReportDocument.changePageOrientation(xGlobalMSF, CurUNODialog.xDlgNameAccess, CurReportDocument, bOldIsCurLandscape);
             CurReportDocument.ReportTextDocument.unlockControllers();
-            ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
+            ReportDocument.selectFirstPage(CurReportDocument);
             break;
         default:
             break;
@@ -485,30 +472,30 @@ public class ReportWizard {
         }
         public void actionPerformed(ActionEvent actionEvent) {
             try{
-                int iKey  =  getControlKey(actionEvent.Source);
+                int iKey  =  UNODialogs.getControlKey(actionEvent.Source, CurUNODialog.ControlList);
                 switch (iKey) {
                     case SOFLDSLST:
-                       UNODialogs.MoveSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox); //, CurDBMetaData.AllFieldNames,  false);
+                       UNODialogs.MoveSelectedListBox(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox); //, CurDBMetaData.AllFieldNames,  false);
                        break;
 
             case SOSELFLDSLST:
-                        UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, false);
+                        UNODialogs.MoveOrderedSelectedListBox(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, false);
                         break;
 
                     case SOCMDMOVESEL:
-                        UNODialogs.MoveSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
+                        UNODialogs.MoveSelectedListBox(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox);
                         break;
 
                     case SOCMDMOVEALL:
-                        UNODialogs.FormMoveAll(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames);
+                        UNODialogs.FormMoveAll(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames);
                         break;
 
                     case SOCMDREMOVESEL:
-                        UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, false);
+                        UNODialogs.MoveOrderedSelectedListBox(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, false);
                         break;
 
                     case SOCMDREMOVEALL:
-                        UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, true);
+                        UNODialogs.MoveOrderedSelectedListBox(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, true);
                         break;
 
                     case SOCMDGOON:
@@ -520,27 +507,27 @@ public class ReportWizard {
                         break;
 
                     case SOGROUPLST:
-                       addGroupNametoDocument();
+                       ReportDocument.addGroupNametoDocument(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
                        break;
 
                     case SOSELGROUPLST:
-                       removeGroupName();
+                       ReportDocument.removeGroupName(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
                        break;
 
                     case SOCMDGROUPOUT:
-                       addGroupNametoDocument();
+                       ReportDocument.addGroupNametoDocument(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
                        break;
 
                     case SOCMDGROUPIN:
-            removeGroupName();
+            ReportDocument.removeGroupName(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
                        break;
 
                     case SOOPTLANDSCAPE:
-                        ReportDocument.changePageOrientation(xGlobalMSF, xDlgNameAccess, CurReportDocument, true);
+                        ReportDocument.changePageOrientation(xGlobalMSF, CurUNODialog.xDlgNameAccess, CurReportDocument, true);
                         break;
 
                     case SOOPTPORTRAIT:
-                        ReportDocument.changePageOrientation(xGlobalMSF, xDlgNameAccess, CurReportDocument, false);
+                        ReportDocument.changePageOrientation(xGlobalMSF, CurUNODialog.xDlgNameAccess, CurReportDocument, false);
                         break;
 
             case SOOPTSAVEASTEMPLATE:
@@ -573,9 +560,10 @@ public class ReportWizard {
 
     public static void gotoNextStep(XMultiServiceFactory xMSF){
     try{
+    XWindow xWindow;
     boolean bSetTitle = true;
         int PageCount = 5;
-        int iPage = ((Integer) tools.getUNOPropertyValue(oDialogModel, "Step")).intValue();
+        int iPage = ((Integer) tools.getUNOPropertyValue(CurUNODialog.DialogModel, "Step")).intValue();
         switch (iPage){
             case 1:
                 updateSecondStep();
@@ -589,42 +577,50 @@ public class ReportWizard {
         CurDBMetaData.RecordFieldNames = DBMetaData.setRecordFieldNames(CurDBMetaData);
                 CurDBMetaData.ResultSet = DBMetaData.combineSelectStatement(CurDBMetaData.DBConnection, xDBMetaData, TableName, CurDBMetaData);
         ReportDocument.setupRecordSection(CurReportDocument, CurReportDocument.ReportFolderName + "/cnt-default.stw", CurDBMetaData);
+        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xContentListBox);
+        xWindow.setFocus();
         //TODO: A message box should pop up when a single sorting criteria has been selected more than once
         break;
         case 4:
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(false));
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Label", scmdReady);
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(false));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Label", scmdReady);
+        Object oFocusButton = CurUNODialog.xDlgContainer.getControl("optCreateReportTemplate");
+        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oFocusButton);
+        xWindow.setFocus();
+
         break;
         case 5:
-        boolean bCreateTemplate = ((Short)  UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optCreateReportTemplate", "State")).shortValue() == (short) 1;
+        bcreateTemplate = ((Short)  UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optCreateReportTemplate", "State")).shortValue() == (short) 1;
+        boolean bDocisStored;
         StorePath = getStorePath();
-        if (bCreateTemplate == true){
+        if (bcreateTemplate == true){
             ReportDocument.createDBForm(xMSF, CurReportDocument, CurDBMetaData);
-            ReportDocument.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");     //"service:com.sun.star.wizards.report.CallReportWizard?fill"
-            boolean bUseTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optUseTemplate", "State")).shortValue() == (short) 1;
-            tools.storeDocument(xMSF, (XComponent) CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template", bUseTemplate);
+            tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
+            buseTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optUseTemplate", "State")).shortValue() == (short) 1;
+            bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template", buseTemplate, sMsgSavingImpossible);
+            if (bDocisStored == false)
+            return;
             DBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
-            if (bUseTemplate == true)
-            ReportDocument.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
         }
         else{
-            boolean bcreateLink = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "chkcreateLink", "State")).shortValue() == (short) 1;
-            ReportDocument.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
-            tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: StarOffice XML (Writer)", false);
+            boolean bcreateLink = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "chkcreateLink", "State")).shortValue() == (short) 1;
+            bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)", false, sMsgSavingImpossible);
+            if (bDocisStored == false)
+            return;
             if (bcreateLink == true)
             DBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
         }
         bSetTitle = false;
         bCloseDocument = false;
-        xDialog.endExecute();
-
+        CurUNODialog.xDialog.endExecute();
+        break;
         default:
                 break;
         }
     if (bSetTitle == true){
         if (iPage < PageCount){
-        tools.setUNOPropertyValues(oDialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage + 1), WizardTitle[iPage]});
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lblDialogHeader", "Label", WizardHeaderText[iPage]);
+        tools.setUNOPropertyValues(CurUNODialog.DialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage + 1), WizardTitle[iPage]});
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblDialogHeader", "Label", WizardHeaderText[iPage]);
         }
     }
     }
@@ -635,7 +631,7 @@ public class ReportWizard {
 
     public static void gotoPrevStep(){
     try{
-        int iPage = ((Integer) tools.getUNOPropertyValue(oDialogModel, "Step")).intValue();
+        int iPage = ((Integer) tools.getUNOPropertyValue(CurUNODialog.DialogModel, "Step")).intValue();
         switch (iPage){
             case 2:
         CurDBMetaData.OldGroupFieldNames = CurDBMetaData.GroupFieldNames;
@@ -648,77 +644,32 @@ public class ReportWizard {
         ReportDocument.removeTextTablebyName(CurReportDocument, "Tbl_RecordSection");
         break;
         case 5:
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Label", scmdGoOn);
-                UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(true));
-
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Label", scmdGoOn);
+                UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(true));
                 break;
             default:
                 break;
         }
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdBack", "Enabled", new Boolean(iPage > 2));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdBack", "Enabled", new Boolean(iPage > 2));
 
         if (iPage > 1)
-            tools.setUNOPropertyValues(oDialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage - 1), WizardTitle[iPage-2]});
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lblDialogHeader", "Label", WizardHeaderText[iPage-2]);
+            tools.setUNOPropertyValues(CurUNODialog.DialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage - 1), WizardTitle[iPage-2]});
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblDialogHeader", "Label", WizardHeaderText[iPage-2]);
     }
       catch( Exception exception ){
            exception.printStackTrace(System.out);
     }}
 
 
-    public static void addGroupNametoDocument(){
-    try{
-    CurReportDocument.ReportTextDocument.lockControllers();
-    CurGroupName = xGroupListBox.getSelectedItem();
-    short iSelPos = xGroupListBox.getSelectedItemPos();
-    UNODialogs.removeSelectedItems(xGroupListBox);
-    GroupFieldVector.addElement(CurGroupName);
-    int GroupCount = GroupFieldVector.size();
-    ReportDocument.insertTextSection(CurReportDocument, "GroupField" + GroupCount, CurReportDocument.ReportFolderName + "/cnt-default.stw");
-    ReportDocument.replaceFieldValueInGroupTable(CurReportDocument, "Tbl_GroupField" + GroupCount, CurGroupName, GroupCount-1);
-    xSelGroupListBox.addItem(CurGroupName, xSelGroupListBox.getItemCount());
-    UNODialogs.selectListBoxItem(xGroupListBox, iSelPos);
-    boolean bDoEnable = ((GroupCount < 4) && (xGroupListBox.getSelectedItems().length > 0));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGroupOut", "Enabled", new Boolean(bDoEnable));
-    }
-    catch( Exception exception ){
-         exception.printStackTrace(System.out);
-    }
-    CurReportDocument.ReportTextDocument.unlockControllers();
-    }
-
-
    public static void toggleRemoveGroupButton(){
    try{
     boolean bDoEnable = xSelGroupListBox.getSelectedItems().length > 0;
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGroupIn", "Enabled", new Boolean(true));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGroupIn", "Enabled", new Boolean(true));
     }
       catch( Exception exception ){
          exception.printStackTrace(System.out);
     }}
 
-
-    public static void removeGroupName(){
-    try{
-    CurReportDocument.ReportTextDocument.lockControllers();
-    short iSelPos = xSelGroupListBox.getSelectedItemPos();
-    CurGroupName = xSelGroupListBox.getItem(iSelPos);
-    GroupFieldVector.removeElement(CurGroupName);
-    xGroupListBox.addItem(CurGroupName, (short) xGroupListBox.getItemCount());
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGroupOut", "Enabled", new Boolean(xGroupListBox.getSelectedItems().length > 0));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGroupIn", "Enabled", new Boolean(GroupFieldVector.isEmpty() == false));
-    ReportDocument.removeLastTextSection(CurReportDocument);
-    ReportDocument.removeLastTextTable(CurReportDocument);
-    xSelGroupListBox.removeItems( iSelPos,(short)1);
-    if (iSelPos != xSelGroupListBox.getItemCount())
-        ReportDocument.updateTextSections(CurReportDocument, xSelGroupListBox, GroupFieldVector.size());
-    UNODialogs.selectListBoxItem(xSelGroupListBox, iSelPos);
-    }
-      catch( Exception exception ){
-         exception.printStackTrace(System.out);
-    }
-    CurReportDocument.ReportTextDocument.unlockControllers();
-    }
 
 
     public static void setUpSortList(){
@@ -734,7 +685,7 @@ public class ReportWizard {
         CurDBMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
         for (int i=0;i<=MaxSortIndex;i++){
             CurDBMetaData.SortFieldNames[i][0] = xSortListBox[i].getSelectedItem();
-        iCurState = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optAscend" + new Integer(i+1).toString(), "State")).shortValue();
+        iCurState = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optAscend" + new Integer(i+1).toString(), "State")).shortValue();
         if (iCurState == 1)
         CurDBMetaData.SortFieldNames[i][1] = "ASC";
         else
@@ -776,49 +727,50 @@ public class ReportWizard {
      }}
 
 
-     public static void toggleSortListBox(int CurIndex, boolean bDoEnable){
-     try{
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lblSort" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lstSort" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "optAscend" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "optDescend" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
+    public static void toggleSortListBox(int CurIndex, boolean bDoEnable){
+    try{
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblSort" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstSort" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optAscend" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optDescend" + new Integer(CurIndex+1).toString(), "Enabled", new Boolean(bDoEnable));
     if (bDoEnable == false)
-            xSortListBox[CurIndex].selectItemPos((short)0,true);
-     }
-     catch( Exception exception ){
+           xSortListBox[CurIndex].selectItemPos((short)0,true);
+    }
+    catch( Exception exception ){
         exception.printStackTrace(System.out);
-      }}
+    }}
 
 
     public static String getStorePath(){
-    String sStorePath = "";
+    String StorePath = "";
     try{
-    boolean bStoreAsTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optCreateReportTemplate", "State")).shortValue() == (short) 1;
+    boolean bStoreAsTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optCreateReportTemplate", "State")).shortValue() == (short) 1;
     if (bStoreAsTemplate == true)
-        sStorePath = (String) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "txtSavePath_1", "Text");
+        StorePath = (String) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_1", "Text");
     else
-        sStorePath = (String) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "txtSavePath_2", "Text");
+        StorePath = (String) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_2", "Text");
+    StorePath = tools.converttoURLNotation(StorePath);
     }
     catch( Exception exception ){
        exception.printStackTrace(System.out);
     }
-    return sStorePath;
+    return StorePath;
     }
 
 
     public static void insertStorePathToTextBox(XMultiServiceFactory xMSF){
     try{
     String sStorePath = "";
-    boolean bStoreAsTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optCreateReportTemplate", "State")).shortValue() == (short) 1;
+    boolean bStoreAsTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optCreateReportTemplate", "State")).shortValue() == (short) 1;
     if (bStoreAsTemplate == true){
         sStorePath = tools.callStoreDialog(xMSF, tools.getOfficePath(xMSF, "Template","user"), "Report_" + CurDBMetaData.DataSourceName + ".stw", "writer_StarOffice_XML_Writer_Template");
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "txtSavePath_1", "Text", sStorePath);
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_1", "Text", sStorePath);
     }
     else{
         sStorePath = tools.callStoreDialog(xMSF, tools.getOfficePath(xMSF, "Work",""),"Report_" + CurDBMetaData.DataSourceName + ".sxw",  "writer_StarOffice_XML_Writer");
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "txtSavePath_2", "Text", sStorePath);
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_2", "Text", sStorePath);
     }
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(sStorePath != ""));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(sStorePath != ""));
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -828,17 +780,17 @@ public class ReportWizard {
     public static void insertSaveControls(int YPos, int Index, boolean bDoEnable, int TabIndex, int BaseHelpID){
     try{
     String HIDString;
-    InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblSaveAs_" + Integer.toString(Index+1),
+    UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblSaveAs_" + Integer.toString(Index+1),
                             new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                             new Object[] {new Boolean(bDoEnable), new Integer(8), new Integer(16), new Integer(YPos), new Integer(5), new Integer(130), sSaveAs});
 
     HIDString = "HID:" + Integer.toString(BaseHelpID);
-    xSaveTextBox[Index] = InsertTextField(xMSFDialogModel, xDlgNames, xDialogContainer, "txtSavePath_" + Integer.toString(Index+1), SOTXTSAVEPATH[Index],
+    xSaveTextBox[Index] = UNODialogs.insertTextField(CurUNODialog, "txtSavePath_" + Integer.toString(Index+1), SOTXTSAVEPATH[Index], new TextListenerImpl(),
                             new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {new Boolean(bDoEnable), new Integer(12), HIDString, new Integer(16), new Integer(YPos + 10), new Integer(5), new Short((short)TabIndex), new Integer(222)});
 
     HIDString = "HID:" + Integer.toString(BaseHelpID+1);
-    InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdSelectPath_" + Integer.toString(Index+1), SOCMDSELECTPATH[Index],
+    UNODialogs.insertButton(CurUNODialog, "cmdSelectPath_" + Integer.toString(Index+1), SOCMDSELECTPATH[Index], new ActionListenerImpl(),
                             new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step",  "TabIndex", "Width", "Label"},
                             new Object[] {new Boolean(bDoEnable), new Integer(14), HIDString, new Integer(248), new Integer(YPos + 9), new Integer(5), new Short((short) (TabIndex + 1)), new Integer(16), "..."});
     }
@@ -850,26 +802,26 @@ public class ReportWizard {
     public static void toggleSaveControls(){
     try{
     String sStorePath = "";
-    Short iState = (Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optCreateReportTemplate", "State");
+    Short iState = (Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optCreateReportTemplate", "State");
     boolean bDoTemplateEnable = iState.shortValue() == 1;
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "optEditTemplate", "Enabled", new Boolean (bDoTemplateEnable));
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "optUseTemplate", "Enabled", new Boolean (bDoTemplateEnable));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optEditTemplate", "Enabled", new Boolean (bDoTemplateEnable));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optUseTemplate", "Enabled", new Boolean (bDoTemplateEnable));
 
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lblSaveAs_1", "Enabled", new Boolean (bDoTemplateEnable));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "txtSavePath_1", "Enabled", new Boolean (bDoTemplateEnable));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdSelectPath_1", "Enabled", new Boolean (bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblSaveAs_1", "Enabled", new Boolean (bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_1", "Enabled", new Boolean (bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdSelectPath_1", "Enabled", new Boolean (bDoTemplateEnable));
 
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lblSaveAs_2", "Enabled", new Boolean (!bDoTemplateEnable));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "txtSavePath_2", "Enabled", new Boolean(!bDoTemplateEnable));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdSelectPath_2", "Enabled", new Boolean(!bDoTemplateEnable));
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "chkcreateLink", "Enabled", new Boolean(!bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblSaveAs_2", "Enabled", new Boolean (!bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_2", "Enabled", new Boolean(!bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdSelectPath_2", "Enabled", new Boolean(!bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "chkcreateLink", "Enabled", new Boolean(!bDoTemplateEnable));
 
     if (bDoTemplateEnable == true)
-        sStorePath = (String) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "txtSavePath_1", "Text");
+        sStorePath = (String) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_1", "Text");
     else
-        sStorePath = (String) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "txtSavePath_2", "Text");
+        sStorePath = (String) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_2", "Text");
     boolean bDoEnable = sStorePath.compareTo("") != 0;
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(bDoEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdGoOn", "Enabled", new Boolean(bDoEnable));
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -879,29 +831,34 @@ public class ReportWizard {
 
     public static void fillFifthStep(){
     try{
-    InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optCreateReportTemplate", SOOPTSAVEASTEMPLATE,
+    UNODialogs.insertRadioButton(CurUNODialog, "optCreateReportTemplate", SOOPTSAVEASTEMPLATE, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(8), "HID:34370", sSaveAsTemplate, new Integer(6), new Integer(41), new Short((short) 1), new Integer(5), new Short((short) 40), new Integer(250)});
 
-    InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optCreateDocument", SOOPTSAVEASDOCUMENT,
+    UNODialogs.insertRadioButton(CurUNODialog, "optCreateDocument", SOOPTSAVEASDOCUMENT, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(10), "HID:34371", sSaveAsDocument, new Integer(6), new Integer(117), new Short((short) 0), new Integer(5), new Short((short) 41), new Integer(138)});
+                            new Object[] {new Integer(10), "HID:34371", sSaveAsDocument, new Integer(6), new Integer(125), new Short((short) 0), new Integer(5), new Short((short) 41), new Integer(138)});
 
     insertSaveControls(55, 0, true, 42, 34372);
 
-    InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optEditTemplate", SOOPTEDITTEMPLATE,
+
+    UNODialogs.insertRadioButton(CurUNODialog, "optEditTemplate", SOOPTEDITTEMPLATE, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(10), "HID:34374", sEditTemplate, new Integer(16), new Integer(84), new Short((short) 1), new Integer(5), new Short((short) 44), new Integer(138)});
 
-    InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optUseTemplate", SOOPTUSEDOCUMENT,
+    UNODialogs.insertRadioButton(CurUNODialog, "optUseTemplate", SOOPTUSEDOCUMENT, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(10), "HID:34375", sUseTemplate, new Integer(16), new Integer(95), new Integer(5), new Short((short) 45), new Integer(138)});
 
-    insertSaveControls(132, 1, false, 46, 34376);
+    UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblAutomaticLink",
+                new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
+                new Object[] {new Integer(8), new Integer(16), new Integer(108), new Integer(5), new Integer(125), sCreateLinkAutomatically});
 
-    chkTemplate = InsertControlModel("com.sun.star.awt.UnoControlCheckBoxModel", xMSFDialogModel, xDlgNames, "chkcreateLink",
+    insertSaveControls(140, 1, false, 46, 34376);
+
+    chkTemplate = UNODialogs.insertControlModel("com.sun.star.awt.UnoControlCheckBoxModel", CurUNODialog, "chkcreateLink",
                 new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                new Object[] {new Boolean(false), new Integer(8), new Integer(16), new Integer(161), new Integer(5), new Short((short) 48), new Integer(130), sCreateLink});
+                new Object[] {new Boolean(false), new Integer(8), new Integer(16), new Integer(170), new Integer(5), new Short((short) 48), new Integer(130), sCreateLink});
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -910,54 +867,53 @@ public class ReportWizard {
 
     public static void fillFourthStep(XMultiServiceFactory xMSF){
     try{
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblTitle",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblTitle",
                             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                             new Object[] {new Integer(8), new Integer(6), new Integer(40), new Integer(4), new Integer(200), sReportTitle});
 
-        xTitleTextBox = InsertTextField(xMSFDialogModel, xDlgNames, xDialogContainer, "txtTitle", SOTXTTITLE,
+        xTitleTextBox = UNODialogs.insertTextField(CurUNODialog, "txtTitle", SOTXTTITLE, new TextListenerImpl(),
                             new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(12), "HID:34362", new Integer(6), new Integer(50), new Integer(4), new Short((short)31), new Integer(258)});
 
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblContent",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblContent",
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                 new Object[] {new Integer(8), new Integer(6), new Integer(70), new Integer(4), new Integer(125), slblDataStructure});
 
         ContentFiles = tools.getFolderTitles(xMSF, "cnt", CurReportDocument.ReportFolderName);
-        xContentListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstContent", SOCONTENTLST,
-                    new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
-                            new Object[] {new Integer(58), "HID:34363", new Integer(6), new Integer(80), new Integer(4), ContentFiles[1], new Short((short)32), new Integer(125)});
         short iSelPos = (short) tools.FieldInList(ContentFiles[0], CurReportDocument.ReportFolderName + "/cnt-default.stw");
+        xContentListBox = UNODialogs.insertListBox(CurUNODialog, "lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
+                    new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
+                new Object[] {new Integer(58), "HID:34363", new Integer(6), new Integer(80), new short[] {iSelPos},  new Integer(4), ContentFiles[1], new Short((short)32), new Integer(125)});
         xContentListBox.selectItemPos(iSelPos, true);
 
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblLayout",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblLayout",
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                 new Object[] {new Integer(8), new Integer(140), new Integer(70), new Integer(4), new Integer(125), slblPageLayout});
 
         LayoutFiles = tools.getFolderTitles(xMSF,"stl", CurReportDocument.ReportFolderName);
-        xLayoutListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstLayout", SOLAYOUTLST,
-                    new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
-                            new Object[] {new Integer(58), "HID:34364", new Integer(140), new Integer(80), new Integer(4), LayoutFiles[1], new Short((short)33), new Integer(125)});
         short iSelLayoutPos = (short) tools.FieldInList(LayoutFiles[0], CurReportDocument.ReportFolderName + "/stl-default.stw");
-        xLayoutListBox.selectItemPos(iSelLayoutPos, true);
+        xLayoutListBox = UNODialogs.insertListBox(CurUNODialog, "lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
+                    new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
+                new Object[] {new Integer(58), "HID:34364", new Integer(140), new Integer(80), new short[] {iSelLayoutPos}, new Integer(4), LayoutFiles[1], new Short((short)33), new Integer(125)});
 
-        InsertControlModel("com.sun.star.awt.UnoControlFixedLineModel", xMSFDialogModel, xDlgNames, "hlnOrientation",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", CurUNODialog, "hlnOrientation",
                 new String[] {"Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
                 new Object[] {new Integer(2), "", new Integer(0), new Integer(6), new Integer(144), new Integer(4), new Integer(258)});
 
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblOrientation",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblOrientation",
                             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                             new Object[] {new Integer(8), new Integer(6), new Integer(149), new Integer(4), new Integer(74), sOrientationHeader});
 
-        InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optLandscape", SOOPTLANDSCAPE,
+        UNODialogs.insertRadioButton(CurUNODialog, "optLandscape", SOOPTLANDSCAPE, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(10), "HID:34365", sOrientHorizontal, new Integer(12), new Integer(160), new Short((short) 1), new Integer(4), new Short((short)34), new Integer(100)});
 
-        InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optPortrait", SOOPTPORTRAIT,
+        UNODialogs.insertRadioButton(CurUNODialog, "optPortrait", SOOPTPORTRAIT, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(10), "HID:34366", sOrientVertical, new Integer(12), new Integer(173), new Integer(4), new Short((short)35), new Integer(100)});
         String sTemplatePath = tools.getOfficePath(xMSF, "Template","share") + "/wizard/bitmap/landscape.gif";
 
-            InsertControlModel("com.sun.star.awt.UnoControlImageControlModel", xMSFDialogModel, xDlgNames, "imgOrientation",
+            UNODialogs.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", CurUNODialog, "imgOrientation",
                             new String[] {"Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"},
                             new Object[] {new Short("0"), new Integer(23), sTemplatePath, new Integer(80), new Integer(158), new Boolean(false), new Integer(4), new Integer(30)});
     }
@@ -978,6 +934,8 @@ public class ReportWizard {
 
     public static void updateThirdStep(){
     try{
+    XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xSortListBox[0]);
+    xWindow.setFocus();
     if (checkIfToupdateStep() == true){
         CurDBMetaData.OldGroupFieldNames = CurDBMetaData.GroupFieldNames;
         String[] GroupFieldNames = new String[GroupFieldVector.size()];
@@ -997,7 +955,7 @@ public class ReportWizard {
         }
         }
         for (int i = 0; i<4; i++){
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lstSort" + new Integer(i+1).toString(), "StringItemList", SortFieldNames);
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstSort" + new Integer(i+1).toString(), "StringItemList", SortFieldNames);
         }
     }
     }
@@ -1014,22 +972,22 @@ public class ReportWizard {
     int BaseHelpID = 34321;
     for (int i = 0; i<4; i++){
         bDoEnable = (i == 0);
-        InsertControlModel("com.sun.star.awt.UnoControlFixedLineModel", xMSFDialogModel, xDlgNames, "lblSort" + new Integer(i+1),
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel",CurUNODialog, "lblSort" + new Integer(i+1),
                 new String[] {"Enabled", "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
                 new Object[] {new Boolean(bDoEnable), new Integer(8), sSortHeader[i], new Integer(0), new Integer(12), new Integer(YPos), new Integer(3), new Integer(252)});
 
         HIDString = "HID:" + Integer.toString(BaseHelpID);
-        xSortListBox[i] = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstSort" + new Integer(i+1).toString(), SOSORTLST[i],
+        xSortListBox[i] = UNODialogs.insertListBox(CurUNODialog, "lstSort" + new Integer(i+1).toString(), SOSORTLST[i], new ActionListenerImpl(), new ItemListenerImpl(),
                 new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount", "Name"},
                 new Object[] {new Boolean(bDoEnable), new Integer(12), HIDString,  new Integer(12), new Integer(YPos + 14), new Integer(3), new Short((short) (17+i*4)), new Integer(154), new Boolean(true), new Short("7"), "lstSort" + new Integer(i+1)});
 
         HIDString = "HID:" + Integer.toString(BaseHelpID+1);
-        InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optAscend" + Integer.toString(i+1), SOSORTASCENDOPT[i],
+        UNODialogs.insertRadioButton(CurUNODialog, "optAscend" + Integer.toString(i+1), SOSORTASCENDOPT[i], new ActionListenerImpl(),
                 new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
                 new Object[] {new Boolean(bDoEnable), new Integer(10), HIDString,  sSortAscend[i], new Integer(186), new Integer(YPos+10), new Short((short) 1), new Integer(3), new Short((short) (18+i*4)), new String("ASC"), new Integer(65)});
 
         HIDString = "HID:" + Integer.toString(BaseHelpID+2);
-        InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optDescend" + Integer.toString(i+1), SOSORTDESCENDOPT[i],
+        UNODialogs.insertRadioButton(CurUNODialog, "optDescend" + Integer.toString(i+1), SOSORTDESCENDOPT[i], new ActionListenerImpl(),
                            new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
                            new Object[] {new Boolean(bDoEnable), new Integer(10), HIDString, sSortDescend[i], new Integer(186), new Integer(YPos+24), new Short((short) 0), new Integer(3), new Short((short) (19+i*4)), new String("DESC"), new Integer(65)});
         YPos = YPos + 36;
@@ -1043,14 +1001,17 @@ public class ReportWizard {
 
     public static void updateSecondStep(){
     try{
-    UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdBack", "Enabled", new Boolean(true));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdBack", "Enabled", new Boolean(true));
         CurDBMetaData.FieldNames = xSelFieldsListBox.getItems();
+    XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xGroupListBox);
+    xWindow.setFocus();
+
     if (checkIfToupdateStep() == true){
         ReportDocument.removeAllTextSections(CurReportDocument.TextSectionsSupplier, CurReportDocument.ReportTextDocument.getText());
         ReportDocument.removeAllTextTables(CurReportDocument.TextTablesSupplier, CurReportDocument.ReportTextDocument.getText());
         CurDBMetaData.OldFieldNames = CurDBMetaData.FieldNames;
         // Todo: Nur ausführen, when FieldNames anders als vorher-> dann muss auch Selektionslistbox leer gemacht werden.
-        UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lstGroup", "StringItemList", CurDBMetaData.FieldNames);
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstGroup", "StringItemList", CurDBMetaData.FieldNames);
         xSelGroupListBox.removeItems((short) 0, xSelGroupListBox.getItemCount());
         GroupFieldVector = new java.util.Vector(CurDBMetaData.FieldNames.length);
     }
@@ -1062,24 +1023,23 @@ public class ReportWizard {
 
     public static void fillSecondStep(){
     try{
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblGroups",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblGroups",
             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
             new Object[] {new Integer(8), new Integer(6), new Integer(38), new Integer(2), new Integer(100), sOrganizeFields});
 
-        xGroupListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstGroup", SOGROUPLST,
+        xGroupListBox = UNODialogs.insertListBox(CurUNODialog, "lstGroup", SOGROUPLST, new ActionListenerImpl(), new ItemListenerImpl(),
                 new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
                         new Object[] {new Integer(125), "HID:34340", new Integer(6), new Integer(49), new Integer(2), new Short((short) 11), new Integer(110), new Boolean(false)});
-
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblSelGroups",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblSelGroups",
             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
             new Object[] {new Integer(8), new Integer(154), new Integer(38), new Integer(2), new Integer(100), sGroupings});
-        xSelGroupListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstSelGroup", SOSELGROUPLST,
+        xSelGroupListBox = UNODialogs.insertListBox(CurUNODialog, "lstSelGroup", SOSELGROUPLST, new ActionListenerImpl(), new ItemListenerImpl(),
                 new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
                         new Object[] {new Integer(125), "HID:34343", new Integer(154), new Integer(49), new Integer(2), new Short((short) 12), new Integer(110), new Boolean(true)});
-        InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdGroupOut", SOCMDGROUPOUT,
+        UNODialogs.insertButton(CurUNODialog, "cmdGroupOut", SOCMDGROUPOUT, new ActionListenerImpl(),
             new String[] {"Enabled", "HelpURL", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
             new Object[] {new Boolean(false), "HID:34341", new Integer(14), new Integer(122), new Integer(93), new Integer(2), new Short((short) 13), new Integer(25),"->"});
-        InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdGroupIn", SOCMDGROUPIN,
+        UNODialogs.insertButton(CurUNODialog, "cmdGroupIn", SOCMDGROUPIN, new ActionListenerImpl(),
             new String[] {"Enabled", "HelpURL", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
             new Object[] {new Boolean(false), "HID:34342", new Integer(14), new Integer(122), new Integer(115), new Integer(2), new Short((short) 14), new Integer(25), "<-"});
     }
@@ -1088,11 +1048,95 @@ public class ReportWizard {
     }}
 
 
+    public static void fillFirstStep(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument, String[] DatabaseNames){
+    try{
+    com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();
+    oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
+    Object oHeaderLabel =UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblDialogHeader",
+                            new String[] {"BackgroundColor", "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
+                            new Object[] {new Integer(16777215), oFontDesc, new Integer(30), WizardHeaderText[0], new Boolean(true), new Integer(50), new Integer(0), new Integer(0), new Integer(220)});
+    UNODialogs.insertButton(CurUNODialog, "cmdCancel", SOCMDCANCEL, new ActionListenerImpl(),
+                            new String[] {"Height", "HelpURL", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Integer(14), "HID:34321", new Integer(6), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value), new Integer(0), new Short((short) 60), new Integer(53), scmdCancel});
+
+    UNODialogs.insertButton(CurUNODialog, "cmdHelp", SOCMDHELP, new ActionListenerImpl(),
+                            new String[] {"Height", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Integer(14), new Integer(63), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.HELP_value), new Integer(0), new Short((short) 61), new Integer(53), scmdHelp});
+
+        UNODialogs.insertButton(CurUNODialog, "cmdBack", SOCMDBACK, new ActionListenerImpl(),
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34322", new Integer(155), new Integer(190), new Integer(0), new Short((short) 62), new Integer(53), scmdBack});
+
+        UNODialogs.insertButton(CurUNODialog, "cmdGoOn", SOCMDGOON, new ActionListenerImpl(),
+                            new String[] {"DefaultButton", "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(true), new Boolean(false), new Integer(14), "HID:34323", new Integer(211), new Integer(190), new Integer(0), new Short((short) 63), new Integer(53), scmdGoOn});
+
+    UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", CurUNODialog, "hlnCommandButtons",
+                new String[] {"Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
+                new Object[] {new Integer(2), "", new Integer(0), new Integer(6), new Integer(184), new Integer(0), new Integer(258)});
+
+    UNODialogs.insertButton(CurUNODialog, "cmdMoveSelected", SOCMDMOVESEL, new ActionListenerImpl(),
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34334", new Integer(122), new Integer(84), new Integer(1), new Short((short) 4), new Integer(25), "->"});
+
+        UNODialogs.insertButton(CurUNODialog, "cmdMoveAll", SOCMDMOVEALL, new ActionListenerImpl(),
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34335", new Integer(122), new Integer(108), new Integer(1), new Short((short) 5), new Integer(25), "=>>"});
+
+    UNODialogs.insertButton(CurUNODialog, "cmdRemoveSelected", SOCMDREMOVESEL, new ActionListenerImpl(),
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34336", new Integer(122), new Integer(131), new Integer(1), new Short((short) 6), new Integer(25), "<-"});
+
+        UNODialogs.insertButton(CurUNODialog, "cmdRemoveAll", SOCMDREMOVEALL, new ActionListenerImpl(),
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34337", new Integer(122), new Integer(157), new Integer(1), new Short((short) 7), new Integer(25), "<<="});
+
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblDatabases",
+                            new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
+                            new Object[] {new Integer(8), new Integer(6), new Integer(39), new Integer(1), new Integer(74), slblDatabases});
+
+    UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblTables",
+                            new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "Width"},
+                            new Object[] {new Boolean(false), new Integer(8), slblTables, new Integer(122), new Integer(39), new Integer(1), new Integer(72)});
+
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblFields",
+                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(8), new Integer(6), new Integer(69), new Integer(1), new Integer(109), slblFields});
+
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblSelFields",
+                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(8), new Integer(154), new Integer(69), new Integer(1), new Integer(110), slblSelFields});
+
+    String sTemplatePath = tools.getOfficePath(xMSF, "Template","share") + "/wizard/bitmap/report.bmp";
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", CurUNODialog, "imgTheme",
+                            new String[] {"BackgroundColor", "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"},
+                            new Object[] {new Integer(16777215), new Short("0"), new Integer(30), sTemplatePath, new Integer(0), new Integer(0), new Boolean(false), new Integer(0), new Integer(50)});
+
+        xDBListBox = UNODialogs.insertListBox(CurUNODialog, "lstDatabases", SODBLST, new ActionListenerImpl(), new ItemListenerImpl(),
+                            new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width", "Dropdown","LineCount", "Name"},
+                            new Object[] {new Integer(12), "HID:34330", new Integer(6), new Integer(49), new Integer(1), DatabaseNames, new Short((short) 1), new Integer(110), new Boolean(true), new Short("7"), "lstDatabases"});
+    XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xDBListBox);
+    xWindow.setFocus();
+    xTableListBox = UNODialogs.insertListBox(CurUNODialog, "lstTables", SOTBLLST, new ActionListenerImpl(), new ItemListenerImpl(),
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount"},
+                            new Object[] {new Boolean(false), new Integer(12), "HID:34331", new Integer(122), new Integer(49), new Integer(1), new Short((short) 2), new Integer(110), new Boolean(true), new Short("7")});
+    xFieldsListBox = UNODialogs.insertListBox(CurUNODialog, "lstFields", SOFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
+                new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
+                            new Object[] {new Boolean(false), new Integer(96), "HID:34332", new Integer(6), new Integer(79), new Integer(1), new Short((short) 3), new Integer(110), new Boolean(true)});
+    xSelFieldsListBox = UNODialogs.insertListBox(CurUNODialog, "lstSelFields", SOSELFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
+                            new Object[] {new Boolean(false), new Integer(96), "HID:34333", new Integer(154), new Integer(79), new Integer(1), new Short((short) 8), new Integer(110), new Boolean(true)});
+        }
+        catch(Exception exception){
+        exception.printStackTrace(System.out);
+        }}
+
+
 
     public static void main (String args[]) {
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
     try {
-            xGlobalMSF = connect(ConnectStr);
+            xGlobalMSF = tools.connect(ConnectStr);
         if(xGlobalMSF != null)  System.out.println("Connected to "+ ConnectStr);
         startReportWizard(xGlobalMSF);
     }
@@ -1113,267 +1157,67 @@ public class ReportWizard {
     CurDBMetaData = new DBMetaData.CommandMetaData();
     CurReportDocument.ReportTextDocument =  (XTextDocument) tools.createNewDocument(xDesktop, CurReportDocument.Component, "swriter");
     ReportDocument.initializeReportDocument(xMSF, CurReportDocument);
-    ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportDocument.ReportFolderName + "/stl-default.stw", "LoadPageStyles");
-        initializeDialog(xMSF, CurReportDocument);
-    CurReportDocument.ProgressBar.setValue(16);
-    fillFirstStep(xMSF, CurReportDocument);
-    CurReportDocument.ProgressBar.setValue(32);
-    fillSecondStep();
-    CurReportDocument.ProgressBar.setValue(48);
-    fillThirdStep();
-    CurReportDocument.ProgressBar.setValue(64);
-    fillFourthStep(xMSF);
-    CurReportDocument.ProgressBar.setValue(80);
-    fillFifthStep();
-    CurReportDocument.ProgressBar.setValue(100);
-    bCloseDocument = true;
-    executeDialog(xMSF, CurReportDocument);
+    String[] DatabaseNames = DBMetaData.getDatabaseNames(CurReportDocument);
+    if (DatabaseNames.length > 0){
+        ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportDocument.ReportFolderName + "/stl-default.stw", "LoadPageStyles");
+        DBMetaData.InitializeWidthList();
+        CurUNODialog = UNODialogs.initializeDialog(xMSF, new String[] {"Height", "PositionX", "PositionY", "Step", "Title", "Width"},
+                                 new Object[] {new Integer(210), new Integer(200), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)});
+        CurReportDocument.ProgressBar.setValue(16);
+        fillFirstStep(xMSF, CurReportDocument, DatabaseNames);
+        CurReportDocument.ProgressBar.setValue(32);
+        fillSecondStep();
+        CurReportDocument.ProgressBar.setValue(48);
+        fillThirdStep();
+        CurReportDocument.ProgressBar.setValue(64);
+        fillFourthStep(xMSF);
+        CurReportDocument.ProgressBar.setValue(80);
+        fillFifthStep();
+        CurReportDocument.ProgressBar.setValue(100);
+        bCloseDocument = true;
+        CurReportDocument.ProgressBar.end();
+        short RetValue = UNODialogs.executeDialog(xMSF, CurUNODialog);
+        handleReturnValue(xMSF, RetValue, CurUNODialog, CurReportDocument);
+    }
+    else{
+        int iMsg = UNODialogs.showMessageBox(xMSF, CurReportDocument.Frame, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgNoDatabaseAvailable);
+        CurReportDocument.Component.dispose();
+    }
     }
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
     }}
 
 
-    public static void initializeDialog(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument){
+    public static void handleReturnValue(XMultiServiceFactory xMSF, short RetValue, UNODialogs.UNODialog CurUNODialog, ReportDocument.RepWizardDocument CurReportDocument){
     try{
-    DBMetaData.InitializeWidthList();
-        ControlList = new Hashtable();
-    oDialogModel = xMSF.createInstance("com.sun.star.awt.UnoControlDialogModel");
-    XMultiPropertySet xMultiPSetDlg = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oDialogModel);
-        xMultiPSetDlg.setPropertyValues(new String[] {"Height", "PositionX", "PositionY", "Step", "Title", "Width"},
-                                        new Object[] {new Integer(210), new Integer(200), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)});
-    // get service manager from dialog model
-    xMSFDialogModel = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oDialogModel);
-
-        // create dialog control
-    objectDialog = xMSF.createInstance("com.sun.star.awt.UnoControlDialog");
-        xControl = ( XControl ) UnoRuntime.queryInterface( XControl.class, objectDialog );
-        XControlModel xControlModel = ( XControlModel ) UnoRuntime.queryInterface( XControlModel.class, oDialogModel );
-        xControl.setModel( xControlModel );
-
-        xDialogContainer = ( XControlContainer ) UnoRuntime.queryInterface( XControlContainer.class, objectDialog );
-        xDlgNames = (XNameContainer) UnoRuntime.queryInterface( XNameContainer.class, oDialogModel );
-        xDlgNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDialogModel);
-    }
-    catch(Exception exception)
-    {
-        exception.printStackTrace(System.out);
-    }}
-
-
-
-    public static void executeDialog(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument){
-    try{
-    XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, objectDialog);
-        xWindow.setVisible(false);
-        xDialog = (XDialog) UnoRuntime.queryInterface( XDialog.class, objectDialog );
-    Object objectToolkit = xMSF.createInstance("com.sun.star.awt.ExtToolkit");
-        XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface( XToolkit.class, objectToolkit );
-        xControl.createPeer(xToolkit, null);
-    CurReportDocument.ProgressBar.end();
-    short retvalue = xDialog.execute();
-        switch (retvalue){
-        case 0:     // Cancel
-        XNameContainer xNamedForms = ReportDocument.getDocumentForms(CurReportDocument.ReportTextDocument);
-        XNameAccess xName = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNamedForms);
-        if (xName.hasByName("ReportSource") == false){
-            if (bCloseDocument == true){
-            XComponent xComponent = ( XComponent ) UnoRuntime.queryInterface(XComponent.class, objectDialog);
-            xComponent.dispose();
+        switch (RetValue){
+        case 0:     // via Cancelbutton or via sourceCode with "endExecute"
+        if (bCloseDocument == true){
+            CurUNODialog.xComponent.dispose();
             CurReportDocument.Component.dispose();
-            }
             return;
         }
-        break;
+        if ((buseTemplate == true) || (bcreateTemplate == false)){
+            if (ReportDocument.checkReportLayoutMode(CurReportDocument.TextSectionsSupplier, CurDBMetaData.GroupFieldNames) == true){
+            CurProgressDialog = Dataimport.showProgressDisplay(xMSF);
+            Dataimport.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
+            CurProgressDialog.xComponent.dispose();
+            }
+            if (bcreateTemplate == false){
+            boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)", false, sMsgSavingImpossible);
+            }
+        }
+        return;
             case 1:
                 break;
         }
-        XComponent xComponent = ( XComponent ) UnoRuntime.queryInterface(XComponent.class, objectDialog);
-    xComponent.dispose();
+    CurUNODialog.xComponent.dispose();
     }
     catch(Exception exception)
     {
         exception.printStackTrace(System.out);
     }}
-
-
-    public static void fillFirstStep(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument){
-    try{
-    com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();
-    oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
-    Object oHeaderLabel =InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblDialogHeader",
-                            new String[] {"BackgroundColor", "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
-                            new Object[] {new Integer(16777215), oFontDesc, new Integer(30), WizardHeaderText[0], new Boolean(true), new Integer(50), new Integer(0), new Integer(0), new Integer(220)});
-    InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdCancel", SOCMDCANCEL,
-                            new String[] {"Height", "HelpURL", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Integer(14), "HID:34321", new Integer(6), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value), new Integer(0), new Short((short) 60), new Integer(53), scmdCancel});
-
-    InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdHelp", SOCMDHELP,
-                            new String[] {"Height", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Integer(14), new Integer(63), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.HELP_value), new Integer(0), new Short((short) 61), new Integer(53), scmdHelp});
-
-        InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdBack", SOCMDBACK,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34322", new Integer(155), new Integer(190), new Integer(0), new Short((short) 62), new Integer(53), scmdBack});
-
-        InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdGoOn", SOCMDGOON,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34323", new Integer(211), new Integer(190), new Integer(0), new Short((short) 63), new Integer(53), scmdGoOn});
-
-    InsertControlModel("com.sun.star.awt.UnoControlFixedLineModel", xMSFDialogModel, xDlgNames, "hlnCommandButtons",
-                new String[] {"Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
-                new Object[] {new Integer(2), "", new Integer(0), new Integer(6), new Integer(184), new Integer(0), new Integer(258)});
-
-    InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdMoveSelected", SOCMDMOVESEL,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34334", new Integer(122), new Integer(84), new Integer(1), new Short((short) 4), new Integer(25), "->"});
-
-        InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdMoveAll", SOCMDMOVEALL,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34335", new Integer(122), new Integer(108), new Integer(1), new Short((short) 5), new Integer(25), "=>>"});
-
-    InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdRemoveSelected", SOCMDREMOVESEL,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34336", new Integer(122), new Integer(131), new Integer(1), new Short((short) 6), new Integer(25), "<-"});
-
-        InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdRemoveAll", SOCMDREMOVEALL,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34337", new Integer(122), new Integer(157), new Integer(1), new Short((short) 7), new Integer(25), "<<="});
-
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblDatabases",
-                            new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
-                            new Object[] {new Integer(8), new Integer(6), new Integer(39), new Integer(1), new Integer(74), slblDatabases});
-
-    InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblTables",
-                            new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-                            new Object[] {new Boolean(false), new Integer(8), slblTables, new Integer(122), new Integer(39), new Integer(1), new Integer(72)});
-
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblFields",
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(8), new Integer(6), new Integer(69), new Integer(1), new Integer(109), slblFields});
-
-        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblSelFields",
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(8), new Integer(154), new Integer(69), new Integer(1), new Integer(110), slblSelFields});
-
-    String sTemplatePath = tools.getOfficePath(xMSF, "Template","share") + "/wizard/bitmap/report.bmp";
-        InsertControlModel("com.sun.star.awt.UnoControlImageControlModel", xMSFDialogModel, xDlgNames, "imgTheme",
-                            new String[] {"BackgroundColor", "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"},
-                            new Object[] {new Integer(16777215), new Short("0"), new Integer(30), sTemplatePath, new Integer(0), new Integer(0), new Boolean(false), new Integer(0), new Integer(50)});
-
-        xDBListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstDatabases", SODBLST,
-                            new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width", "Dropdown","LineCount", "Name"},
-                            new Object[] {new Integer(12), "HID:34330", new Integer(6), new Integer(49), new Integer(1), DBMetaData.getDatabaseNames(CurReportDocument), new Short((short) 1), new Integer(110), new Boolean(true), new Short("7"), "lstDatabases"});
-    xTableListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstTables", SOTBLLST,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount"},
-                            new Object[] {new Boolean(false), new Integer(12), "HID:34331", new Integer(122), new Integer(49), new Integer(1), new Short((short) 2), new Integer(110), new Boolean(true), new Short("7")});
-    xFieldsListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstFields", SOFLDSLST,
-                new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                            new Object[] {new Boolean(false), new Integer(96), "HID:34332", new Integer(6), new Integer(79), new Integer(1), new Short((short) 3), new Integer(110), new Boolean(true)});
-    xSelFieldsListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstSelFields", SOSELFLDSLST,
-                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                            new Object[] {new Boolean(false), new Integer(96), "HID:34333", new Integer(154), new Integer(79), new Integer(1), new Short((short) 8), new Integer(110), new Boolean(true)});
-        }
-        catch(Exception exception){
-        exception.printStackTrace(System.out);
-        }}
-
-
-        public static void InsertButton(XMultiServiceFactory xMSFDialogModel, XNameContainer xDlgNames, XControlContainer xDialogContainer, String sName,
-                                        int iControlKey, String[] sProperties, Object[] sValues)
-        throws com.sun.star.uno.Exception{
-           Object oButtonModel = InsertControlModel("com.sun.star.awt.UnoControlButtonModel", xMSFDialogModel, xDlgNames, sName, sProperties, sValues);
-           XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oButtonModel);
-           xPSet.setPropertyValue("Name", sName);
-           Object objectButton = xDialogContainer.getControl( new String(sName));
-
-           XButton xButton = ( XButton ) UnoRuntime.queryInterface( XButton.class, objectButton );
-           xButton.addActionListener( new ActionListenerImpl() );
-           Integer ControlKey = new Integer(iControlKey);
-           ControlList.put(sName, ControlKey);
-        }
-
-
-        public static XTextComponent InsertTextField(XMultiServiceFactory xMSFDialogModel, XNameContainer xDlgNames, XControlContainer xDialogContainer, String sName,
-                                        int iControlKey, String[] sProperties, Object[] sValues)
-        throws com.sun.star.uno.Exception{
-           Object oButtonModel = InsertControlModel("com.sun.star.awt.UnoControlEditModel", xMSFDialogModel, xDlgNames, sName, sProperties, sValues);
-           XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oButtonModel);
-           xPSet.setPropertyValue("Name", sName);
-           Object oTextField = xDialogContainer.getControl( new String(sName));
-           XTextComponent xTextBox = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, oTextField);
-       xTextBox.addTextListener( new TextListenerImpl());
-           Integer ControlKey = new Integer(iControlKey);
-           ControlList.put(sName, ControlKey);
-       return xTextBox;
-        }
-
-
-        static public XListBox InsertListbox(XMultiServiceFactory xMSFDialogModel, XNameContainer xDlgNames, XControlContainer xDialogContainer, String sName,
-                                           int iControlKey, String[] sProperties, Object[] sValues)
-        throws com.sun.star.uno.Exception{
-            Object xListBoxModel = InsertControlModel("com.sun.star.awt.UnoControlListBoxModel", xMSFDialogModel, xDlgNames, sName, sProperties, sValues);
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xListBoxModel);
-            xPSet.setPropertyValue("Name", sName);
-            Object oListBox = xDialogContainer.getControl( new String(sName));
-            com.sun.star.awt.XListBox xListBox = (com.sun.star.awt.XListBox) UnoRuntime.queryInterface(com.sun.star.awt.XListBox.class, oListBox);
-            xListBox.addItemListener( new ItemListenerImpl());
-            xListBox.addActionListener( new ActionListenerImpl() );
-            Integer ControlKey = new Integer(iControlKey);
-            ControlList.put(sName, ControlKey);
-            return xListBox;
-       }
-
-
-       static public XButton InsertRadioButton(XMultiServiceFactory xMSFDialogModel, XNameContainer xDlgNames, XControlContainer xDialogContainer, String sName,
-                                           int iControlKey, String[] sProperties, Object[] sValues)
-        throws com.sun.star.uno.Exception{
-            Object oRadioButtonModel = InsertControlModel("com.sun.star.awt.UnoControlRadioButtonModel", xMSFDialogModel, xDlgNames, sName, sProperties, sValues);
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRadioButtonModel);
-            xPSet.setPropertyValue("Name", sName);
-            Object oRadioButton = xDialogContainer.getControl( new String(sName));
-            com.sun.star.awt.XButton xRadioButton = (com.sun.star.awt.XButton) UnoRuntime.queryInterface(com.sun.star.awt.XButton.class, oRadioButton);
-            xRadioButton.addActionListener(new ActionListenerImpl());
-            Integer ControlKey = new Integer(iControlKey);
-            ControlList.put(sName, ControlKey);
-            return xRadioButton;
-       }
-
-
-        public static Object InsertControlModel(String ServiceName, XMultiServiceFactory xMSFDialogModel, XNameContainer xDlgNames, String sName,
-                                                String[] sProperties, Object[] sValues)
-        throws com.sun.star.uno.Exception{
-           Object objectControlModel = xMSFDialogModel.createInstance(ServiceName);
-           tools.setUNOPropertyValues(objectControlModel, sProperties, sValues);
-//           XMultiPropertySet xMultiPSetLst = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, objectControlModel);
-//           xMultiPSetLst.setPropertyValues(sProperties, sValues);
-       xDlgNames.insertByName(sName, objectControlModel);
-       return objectControlModel;
-        }
-
-
-    public static XMultiServiceFactory connect( String connectStr )
-    throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException, Exception {
-        XComponentContext xcomponentcontext = null;
-    XMultiComponentFactory xMultiComponentFactory = tools.getMultiComponentFactory();
-        // create a connector, so that it can contact the office
-        Object  xUrlResolver  = xMultiComponentFactory.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface( XUnoUrlResolver.class, xUrlResolver );
-
-        Object rInitialObject = urlResolver.resolve( connectStr );
-    xMultiComponentFactory = tools.getMultiComponentFactory();
-
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(XNamingService.class, rInitialObject );
-
-        XMultiServiceFactory xMSF = null;
-        if( rName != null ) {
-            System.err.println( "got the remote naming service !" );
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
-            xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
-    }
-        return ( xMSF );
-    }
-
 
 
     public static void getReportResources(XMultiServiceFactory xMSF){
@@ -1387,7 +1231,15 @@ public class ReportWizard {
         scmdCancel = tools.getResText(xResInvoke, RID_COMMON + 1);
         scmdBack = tools.getResText(xResInvoke, RID_COMMON + 2);
     scmdGoOn = tools.getResText(xResInvoke, RID_COMMON + 3);
+
+    sMsgErrorOccured = tools.getResText(xResInvoke, RID_COMMON + 6);
+    sMsgNoTableInDatabase = tools.getResText(xResInvoke, RID_COMMON + 9);
+    sMsgCommandCouldNotbeOpened = tools.getResText(xResInvoke, RID_COMMON + 13);
+    sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
+    sMsgSavingImpossible = "Document could not be saved";
         scmdHelp = tools.getResText(xResInvoke, RID_COMMON + 20);
+    sMsgNoDatabaseAvailable = tools.getResText(xResInvoke, RID_REPORT + 2);
+
 
         slblTables = tools.getResText(xResInvoke, RID_FORM + 6);
     slblDatabases = tools.getResText(xResInvoke, RID_FORM + 11);
@@ -1434,7 +1286,11 @@ public class ReportWizard {
     sSaveAs = tools.getResText(xResInvoke, RID_REPORT + 44);
         sCreateLink = tools.getResText(xResInvoke, RID_REPORT + 45);
     sGroupings = tools.getResText(xResInvoke, RID_REPORT + 50);
-
+    sCreateLinkAutomatically = " A Database link will be created automatically";
     sWriterFilterName = tools.getResText(xResInvoke, RID_FORM + 70);
+
+/* Todo:  String sMsgNoDataimport;
+*/
+
     }
 }   
