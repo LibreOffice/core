@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:32:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,11 @@ public:
 class ScChangeActionMove : public ScChangeAction
 {
     friend class ScChangeTrack;
+#ifdef IRIX
+    friend class ScChangeActionDel;
+#else
     friend void ScChangeActionDel::UndoCutOffMoves();
+#endif
 
             ScBigRange          aFromRange;
             ScChangeTrack*      pTrack;
@@ -1009,7 +1013,11 @@ class Stack;
 class ScChangeActionReject : public ScChangeAction
 {
     friend class ScChangeTrack;
+#ifdef IRIX
+    friend class ScChangeActionContent;
+#else
     friend BOOL ScChangeActionContent::Select( ScDocument*, ScChangeTrack*, BOOL, Stack* );
+#endif
 
                                 ScChangeActionReject( ULONG nReject )
                                     : ScChangeAction( SC_CAT_REJECT, ScRange() )
