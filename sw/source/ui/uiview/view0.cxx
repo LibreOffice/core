@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:42:00 $
+ *  last change: $Author: os $ $Date: 2001-07-24 07:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,6 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
     SFX_CHILDWINDOW_REGISTRATION(FN_REDLINE_ACCEPT);
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SID_RUBY_DIALOG);
 
 
         SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS, 1);
@@ -184,6 +183,9 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/06/14 11:42:00  mba
+    #86150#: enable office without writer: webfactory always present, others are optional
+
     Revision 1.6  2001/01/10 16:10:12  os
     Ruby dialog
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 09:59:40 $
+ *  last change: $Author: os $ $Date: 2001-07-24 07:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,7 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_IDX_ENTRY_DLG);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_AUTH_ENTRY_DLG);
+    SFX_CHILDWINDOW_REGISTRATION(SID_RUBY_DIALOG);
 }
 
 
@@ -1028,6 +1029,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/05/15 09:59:40  os
+    #86986# SfxFileDialog/SvxImportGraphicDialog removed
+
     Revision 1.6  2001/02/27 14:38:37  jp
     move transliteration menu into SVX
 
