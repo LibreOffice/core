@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:29:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ XclEscher::~XclEscher()
 void XclEscher::AddSdrPage( RootData& rRootData )
 {
     if( ScDrawLayer* pDrawLayer = rRootData.pDoc->GetDrawLayer() )
-        if( SdrPage* pPage = pDrawLayer->GetPage( rRootData.pER->GetScTab() ) )
+        if( SdrPage* pPage = pDrawLayer->GetPage( rRootData.pER->GetCurrScTab() ) )
             pEx->AddSdrPage( *pPage );
     // #106213# the first dummy object may still be open
     DBG_ASSERT( pEx->GetGroupLevel() <= 1, "XclEscher::AddSdrPage - still groups open?" );
@@ -418,14 +418,14 @@ void XclEscher::AddSdrPage( RootData& rRootData )
 
 XclExpEscherAnchor::XclExpEscherAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags ) :
     XclExpRoot( rRoot ),
-    maAnchor( rRoot.GetScTab() ),
+    maAnchor( rRoot.GetCurrScTab() ),
     mnFlags( nFlags )
 {
 }
 
 XclExpEscherAnchor::XclExpEscherAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj ) :
     XclExpRoot( rRoot ),
-    maAnchor( rRoot.GetScTab() )
+    maAnchor( rRoot.GetCurrScTab() )
 {
     SetFlags( rSdrObj );
     maAnchor.SetRect( GetDoc(), rSdrObj.GetCurrentBoundRect(), MAP_100TH_MM );
