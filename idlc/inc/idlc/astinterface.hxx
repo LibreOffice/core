@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:04:57 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ public:
         AstInterface const * ifc, bool optional) const;
 
     void addInheritedInterface(
-        AstType const * ifc, bool optional,
+        AstInterface const * ifc, bool optional,
         rtl::OUString const & documentation);
 
     DoubleMemberDeclarations checkMemberClashes(
