@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitlesComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:06:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): _____________________________________
  *
  */
-
 package com.sun.star.wizards.ui;
 
 import com.sun.star.wizards.common.Properties;
@@ -154,9 +153,9 @@ public class TitlesComponent extends ControlScroller{
         String sLongestFieldName = JavaTools.getlongestArrayItem(fieldnames);
         Size aSize = CurUnoDialog.getpreferredLabelSize(getColumnName(0), sLongestFieldName);
         double dblMAPConversion = CurUnoDialog.getMAPConversionFactor(getColumnName(0));
-        int iFieldNameWidth = getFieldNameWidth(aSize.Width, dblMAPConversion);
+        int iFieldNameWidth = getFieldNameWidth(aSize.Width, dblMAPConversion) + 10;
         Integer FieldNameWidth = new Integer(iFieldNameWidth);
-        Integer TitlePosX = new Integer(iLabelPosX + iFieldNameWidth + 1);
+        Integer TitlePosX = new Integer(iLabelPosX + iFieldNameWidth + 2);
         Integer TitleWidth = new Integer(iCompPosX + iCompWidth - TitlePosX.intValue() - iScrollBarWidth - 6);
         for (short i = 0; i <= ncurfieldcount; i++) {
             CurUnoDialog.setControlProperty(getColumnName(i), "Width", FieldNameWidth);
@@ -174,6 +173,7 @@ public class TitlesComponent extends ControlScroller{
         initializeScrollFields();
         super.initialize(fieldnames.length);
         adjustPosSizes();
+        setComponentMouseTransparent();
     }
 
 
