@@ -212,14 +212,14 @@ public class XmlUpdater extends Thread {
             }
         }
         else if (opSys.indexOf("Linux")!=-1){
-            if (!zd.extractEntry("linux/regsingleton",progpath, statusLabel))
+            if (!zd.extractEntry("linux_x86/regsingleton",progpath, statusLabel))
             {
                 onInstallComplete();
                 return;
             }
         }
         else if (opSys.indexOf("SunOS")!=-1){
-            if (!zd.extractEntry("solaris/regsingleton",progpath, statusLabel))
+            if (!zd.extractEntry("solaris_sparc/regsingleton",progpath, statusLabel))
             {
                 onInstallComplete();
                 return;
