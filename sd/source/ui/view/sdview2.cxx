@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:01:24 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _SVDETC_HXX //autogen
 #include <svx/svdetc.hxx>
 #endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
 #endif
@@ -137,6 +134,9 @@
 #ifndef _E3D_SCENE3D_HXX
 #include <svx/scene3d.hxx>
 #endif
+
+#include <sfx2/objsh.hxx>
+#include <svtools/embedtransfer.hxx>
 
 #include "navigatr.hxx"
 #include "anminfo.hxx"
@@ -236,12 +236,12 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
-        if( pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().Is() )
+        if( pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().is() )
             pSdrOleObj = (SdrOle2Obj*) pObj;
     }
 
     if( pSdrOleObj )
-        pSdrOleObj->GetObjRef()->FillTransferableObjectDescriptor( aObjDesc );
+        SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pSdrOleObj->GetObjRef() );
     else
         pTransferable->GetWorkDocument()->GetDocSh()->FillTransferableObjectDescriptor( aObjDesc );
 
@@ -274,7 +274,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {
         SdrObject* pObj = GetMarkedObjectByIndex( 0 );
 
-        if( pObj && pObj->ISA( SdrOle2Obj ) && ( (SdrOle2Obj*) pObj )->GetObjRef().Is() )
+        if( pObj && pObj->ISA( SdrOle2Obj ) && ( (SdrOle2Obj*) pObj )->GetObjRef().is() )
             pSdrOleObj = (SdrOle2Obj*) pObj;
     }
 
@@ -282,7 +282,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
         aDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
 
     if( pSdrOleObj )
-        pSdrOleObj->GetObjRef()->FillTransferableObjectDescriptor( aObjDesc );
+        SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pSdrOleObj->GetObjRef() );
     else
         pDocSh->FillTransferableObjectDescriptor( aObjDesc );
 
