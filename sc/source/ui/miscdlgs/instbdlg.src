@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-07 11:18:29 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 12:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ ENGLISH ] = "Position" ;
         Text [ english_us ] = "Position" ;
         Text [ portuguese_brazilian ] = "Position" ;
-        Text [ swedish ] = "Position" ;
+        Text [ swedish ] = "Placering" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Posizione" ;
         Text [ spanish ] = "Posición" ;
@@ -199,7 +199,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 206 , 8 ) ;
         Text = "Tabelle" ;
         Text [ ENGLISH ] = "Table" ;
-        Text [ english_us ] = "Create" ;
+        Text [ english_us ] = "Table" ;
         Text [ portuguese_brazilian ] = "Tabelle" ;
         Text [ swedish ] = "Tabell" ;
         Text [ danish ] = "Ark" ;
@@ -211,7 +211,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_simplified ] = "¹¤×÷±í";
         Text[ russian ] = "Ëèñò";
         Text[ polish ] = "Arkusz";
-        Text[ japanese ] = "•\\‚Ìì¬";
+        Text[ japanese ] = "•\\";
         Text[ chinese_traditional ] = "¤u§@ªí";
         Text[ arabic ] = "ÌÏæá";
         Text[ greek ] = "Ğßíáêáò";
@@ -229,8 +229,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ ENGLISH ] = "~Create new" ;
         Text [ DANISH ] = "Opret nyt" ;
         Text [ ENGLISH_US ] = "~New sheet" ;
-        Text [ SPANISH ] = "~Crear una nueva" ;
-        Text [ FRENCH ] = "Créer une nouvelle feuille" ;
+        Text [ SPANISH ] = "~Crear nueva" ;
+        Text [ FRENCH ] = "C~réer" ;
         Text [ ITALIAN ] = "Crea nuovo" ;
         Text [ DUTCH ] = "~Nieuw" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Neu erstellen" ;
@@ -239,8 +239,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_simplified ] = "ĞÂ½¨¹¤×÷±í(~N)";
         Text[ russian ] = "Íîâûé ëèñò";
         Text[ polish ] = "Utwórz ponownie";
-        Text[ japanese ] = "V‚µ‚­ì¬(~N)";
-        Text[ chinese_traditional ] = "·s«Ø¤u§@ªí(~N)";
+        Text[ japanese ] = "V‚µ‚­ì¬";
+        Text[ chinese_traditional ] = "·s¼W¤u§@ªí(~N)";
         Text[ arabic ] = "ÅäÔÇÁ ãä ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
         Text[ korean ] = "»õ·Î¡¡¸¸µé±â(~N)";
@@ -266,7 +266,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ dutch ] = "Aan~tal" ;
         Text[ chinese_simplified ] = "ÊıÄ¿(~O)";
         Text[ russian ] = "×èñëî ëèñòîâ";
-        Text[ polish ] = "Ilo?æ";
+        Text[ polish ] = "Iloœæ";
         Text[ japanese ] = "•\\‚Ì”(~O)";
         Text[ chinese_traditional ] = "¼Æ¥Ø(~O)";
         Text[ arabic ] = "ÇáÚÏÏ";
@@ -335,15 +335,15 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ ITALIAN ] = "Creare da file" ;
         Text [ DUTCH ] = "~Uit bestand vervaardigen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Aus Datei erstellen" ;
-        Text [ SWEDISH ] = "Skapa från f~il" ;
+        Text [ SWEDISH ] = "Sk~apa från fil" ;
         Text [ PORTUGUESE ] = "~Criar a partir do ficheiro" ;
         Text[ chinese_simplified ] = "´ÓÎÄ¼ş´´½¨(~F)";
         Text[ russian ] = "Ñîçäàòü èç ôàéëà";
         Text[ polish ] = "Utwórz z pliku";
         Text[ japanese ] = "Ì§²Ù‚©‚çì¬(~F)";
-        Text[ chinese_traditional ] = "±qÀÉ®×«Ø«Ø¥ß(~F)";
+        Text[ chinese_traditional ] = "±qÀÉ®×·s¼W(~F)";
         Text[ arabic ] = "ÅäÔÇÁ ãä Çáãáİ";
-        Text[ greek ] = "Äçìéïõñãßá áğü áñ÷åßï";
+        Text[ greek ] = "Äçìéïõñãß~á áğü áñ÷åßï";
         Text[ korean ] = "£®£®ÆÄÀÏ·ÎºÎÅÍ¡¡¸¸µé±â(~F)";
         Text[ turkish ] = "~Dosyadan oluştur";
         Text[ language_user1 ] = " ";
@@ -393,7 +393,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text = "Ver~knüpfen" ;
         Text [ ENGLISH ] = "Lin~k" ;
         Text [ DANISH ] = "Kæd" ;
-        Text [ ENGLISH_US ] = "Lin~k " ;
+        Text [ ENGLISH_US ] = "Lin~k" ;
         Text [ SPANISH ] = "~Vincular" ;
         Text [ FRENCH ] = "~Lier" ;
         Text [ ITALIAN ] = "~Collega" ;
@@ -420,3 +420,4 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 192 , 8 ) ;
     };
 };
+
