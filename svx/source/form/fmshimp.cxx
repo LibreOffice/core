@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-19 15:10:35 $
+ *  last change: $Author: oj $ $Date: 2002-03-27 15:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2676,21 +2676,24 @@ void FmXFormShell::startListening()
                 // und dem Parser die Query-/Filter-/Sort-Einstellungen der aktiven Form
                 if (m_xParser.is())
                 {
-                    ::rtl::OUString aStatement  = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_ACTIVECOMMAND));
-                    ::rtl::OUString aFilter     = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
-                    ::rtl::OUString aSort       = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_SORT));
-
-                    try
+                    Reference< XLoadable> xLoad(m_xActiveForm,UNO_QUERY);
+                    if ( xLoad.is() && xLoad->isLoaded() )
                     {
-                        m_xParser->setQuery(aStatement);
-                        m_xParser->setFilter(aFilter);
-                        m_xParser->setOrder(aSort);
-                    }
-                    catch(Exception&)
-                    {
-                        DBG_ERROR("FmXFormShell::startListening: Exception occured!");
-                    }
+                        ::rtl::OUString aStatement  = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_ACTIVECOMMAND));
+                        ::rtl::OUString aFilter     = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
+                        ::rtl::OUString aSort       = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_SORT));
 
+                        try
+                        {
+                            m_xParser->setQuery(aStatement);
+                            m_xParser->setFilter(aFilter);
+                            m_xParser->setOrder(aSort);
+                        }
+                        catch(Exception&)
+                        {
+                            DBG_ERROR("FmXFormShell::startListening: Exception occured!");
+                        }
+                    }
 
                     // nothing to do, change the parser on a reload
                     xActiveFormSet->addPropertyChangeListener(FM_PROP_ACTIVECOMMAND,this);
