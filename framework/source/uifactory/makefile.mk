@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 17:02:56 $
+#   last change: $Author: obo $ $Date: 2004-09-09 17:12:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ SLOFILES=			\
                     $(SLO)$/menubarfactory.obj              \
                     $(SLO)$/toolboxfactory.obj              \
                     $(SLO)$/addonstoolboxfactory.obj        \
-                    $(SLO)$/toolbarcontrollerfactory.obj
+                    $(SLO)$/toolbarcontrollerfactory.obj    \
+                    $(SLO)$/statusbarfactory.obj
 
 # --- Targets ------------------------------------------------------
 
