@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 10:49:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,7 @@ USHORT lcl_BitToLevel(USHORT nActLevel)
 /* -----------------07.07.98 14:13-------------------
  *
  * --------------------------------------------------*/
+USHORT SwOutlineTabDialog::nNumLevel = 1;
 SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &rSh) :
@@ -298,7 +299,6 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
         aFormMenu(SW_RES(MN_FORM)),
         bModified(rWrtSh.IsModified()),
         aNullStr(C2S("____")),
-        nNumLevel(1),
         pChapterNumRules(SW_MOD()->GetChapterNumRules()),
         rWrtSh(rSh)
 {
@@ -959,7 +959,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
  * --------------------------------------------------*/
 void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    nActLevel = ((SwOutlineTabDialog*)GetTabDialog())->GetActNumLevel();
+    nActLevel = SwOutlineTabDialog::GetActNumLevel();
     if(nActLevel != USHRT_MAX)
         aLevelLB.SelectEntryPos(lcl_BitToLevel(nActLevel));
     else
@@ -971,7 +971,7 @@ void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& rSet)
  * --------------------------------------------------*/
 int     SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet *pSet)
 {
-    ((SwOutlineTabDialog*)GetTabDialog())->SetActNumLevel(nActLevel);
+    SwOutlineTabDialog::SetActNumLevel(nActLevel);
     return LEAVE_PAGE;
 }
 /* -----------------07.07.98 14:19-------------------
@@ -1085,13 +1085,13 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             nWidthRelation = 30; // Kapiteldialog
 
         //Hoehe pro Ebene
-        USHORT nXStep = aSize.Width() / (3 * MAXLEVEL);
+        USHORT nXStep = USHORT(aSize.Width() / (3 * MAXLEVEL));
         if(MAXLEVEL < 10)
             nXStep /= 2;
         USHORT nYStart = 4;
-        USHORT nYStep = (aSize.Height() - 6)/ MAXLEVEL;
+        USHORT nYStep = USHORT((aSize.Height() - 6)/ MAXLEVEL);
         aStdFont = OutputDevice::GetDefaultFont(
-                                    DEFAULTFONT_UI_SANS, GetAppLanguage(),
+                                    DEFAULTFONT_UI_SANS, (LanguageType)GetAppLanguage(),
                                     DEFAULTFONT_FLAGS_ONLYONE, this );
         // #101524# OJ
         aStdFont.SetColor( SwViewOption::GetFontColor() );
