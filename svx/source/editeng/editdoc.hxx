@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2001-01-30 16:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,9 @@ private:
     BOOL            bOwnerOfPool;
     BOOL            bModified;
 
+protected:
+    void            ImplDestroyContents();
+
 public:
                     EditDoc( SfxItemPool* pItemPool );
                     ~EditDoc();
@@ -716,7 +719,6 @@ public:
     void            SetVertical( BOOL bVertical )   { bIsVertical = bVertical; }
     BOOL            IsVertical() const              { return bIsVertical; }
 
-    void            DestroyContents();
     EditPaM         Clear();
     EditPaM         RemoveText();
     EditPaM         RemoveChars( EditPaM aPaM, USHORT nChars );

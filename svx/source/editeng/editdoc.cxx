@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-04 13:05:30 $
+ *  last change: $Author: mt $ $Date: 2001-01-30 16:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,12 +1168,12 @@ EditDoc::EditDoc( SfxItemPool* pPool )
 
 EditDoc::~EditDoc()
 {
-    DestroyContents();
+    ImplDestroyContents();
     if ( bOwnerOfPool )
         delete pItemPool;
 }
 
-void EditDoc::DestroyContents()
+void EditDoc::ImplDestroyContents()
 {
     for ( USHORT nNode = Count(); nNode; )
         RemoveItemsFromPool( GetObject( --nNode ) );
@@ -1420,7 +1420,7 @@ ULONG EditDoc::GetTextLen() const
 
 EditPaM EditDoc::Clear()
 {
-    DestroyContents();
+    ImplDestroyContents();
 
     ContentNode* pNode = new ContentNode( GetItemPool() );
     Insert( pNode, 0 );
@@ -1441,7 +1441,7 @@ EditPaM EditDoc::RemoveText()
     SfxItemSet aPrevSet( pPrevFirstNode->GetContentAttribs().GetItems() );
     Font aPrevFont( pPrevFirstNode->GetCharAttribs().GetDefFont() );
 
-    DestroyContents();
+    ImplDestroyContents();
 
     ContentNode* pNode = new ContentNode( GetItemPool() );
     Insert( pNode, 0 );
