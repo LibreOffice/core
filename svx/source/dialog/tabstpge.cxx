@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:51:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     aDezChar        ( this, ResId( ED_TABTYPE_DECCHAR ) ),
     aDezCharLabel   ( this, ResId( FT_TABTYPE_DECCHAR ) ),
     aTabTypeLabel   ( this, ResId( FL_TABTYPE ) ),
-    aTabTypeLabelVert ( this, ResId( FL_TABTYPE_VERT ) ),
     aNoFillChar     ( this, ResId( BTN_FILLCHAR_NO ) ),
     aFillPoints     ( this, ResId( BTN_FILLCHAR_POINTS ) ),
     aFillDashLine   ( this, ResId( BTN_FILLCHAR_DASHLINE ) ),
