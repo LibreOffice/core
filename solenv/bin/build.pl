@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2001-05-08 14:04:20 $
+#   last change: $Author: vg $ $Date: 2001-06-08 13:44:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.17 $ ';
+$id_str = ' $Revision: 1.18 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -91,6 +91,7 @@ $QuantityToBuild = 0;
 %PathHash = ();
 %PlatformHash = ();
 %DeadDependencies = ();
+%AliveDependencies = ();
 %ParentDepsHash = ();
 @UnresolvedParents = ();
 %DeadParents = ();
@@ -115,13 +116,11 @@ if ($#TotenEltern != -1) {
 };
 $ENV{mk_tmp} = "";
 
-
 #########################
 #                       #
 #      Procedures       #
 #                       #
 #########################
-
 
 #
 # Get dependencies hash of the current and all parent projects
@@ -287,6 +286,7 @@ sub BuildPrj {
     close PrjBuildFile;
     %DepsArchive = %LocalDepsHash;
     foreach $Dir (keys %DeadDependencies) {
+        next if defined $AliveDependencies{$Dir};
         if (!IsHashNative($Dir)) {
             RemoveFromDependencies($Dir, \%LocalDepsHash);
             delete $DeadDependencies{$Dir};
@@ -528,6 +528,12 @@ sub GetDependenciesArray {
         $DepString =~ /(\S+)(\s+)/;
         $ParentPrj = $1;
         $DepString = $';
+        if ($ParentPrj =~ /\.(\w)$/) {
+            $ParentPrj = $`;
+            if (&CheckPlatform($1)) {
+                $AliveDependencies{$ParentPrj} = 1;
+            };
+        };
         if ($ParentPrj =~ /(\S+)(\.)(\w)/) {
             $ParentPrj = $1;
             if (CheckPlatform($3)) {
