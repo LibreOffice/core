@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfldui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
+ *  last change: $Author: os $ $Date: 2001-09-27 10:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,8 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
             try
             {
                 Any aTable = xTbls->getByName(rTblQryName);
-                Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aTable.getValue();
+                Reference<XPropertySet> xPropSet;
+                aTable >>= xPropSet;
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
             }
             catch(Exception&){}
@@ -176,7 +177,8 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
             try
             {
                 Any aQuery = xQueries->getByName(rTblQryName);
-                Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aQuery.getValue();
+                Reference<XPropertySet> xPropSet;
+                aQuery >>= xPropSet;
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
             }
             catch(Exception&){}
@@ -197,7 +199,8 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         if(xCols.is() && xCols->hasByName(rFldName))
         {
             Any aCol = xCols->getByName(rFldName);
-            Reference <XPropertySet> xCol = *(Reference <XPropertySet>*)aCol.getValue();
+            Reference <XPropertySet> xCol;
+            aCol >>= xCol;
             Any aType = xCol->getPropertyValue( UniString::CreateFromAscii("Type"));
             sal_Int32 eDataType;
             aType >>= eDataType;
