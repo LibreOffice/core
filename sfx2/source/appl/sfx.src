@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:34:18 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT [ dutch ] = "Eigen opmaakprofielen" ;
     TEXT [ spanish ] = "Estilos del usuario" ;
     TEXT [ english_us ] = "Custom Styles" ;
-    TEXT[ chinese_simplified ] = "ÓÃ»§ÑùÊ½";
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃÕßÑùÊ½";
     TEXT[ russian ] = "Ñòèëè ïîëüçîâàòåëÿ";
     TEXT[ polish ] = "Style indywidualne";
     TEXT[ japanese ] = "Õ°»Ş°’è‹`‚Ì½À²Ù";
@@ -549,6 +549,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ turkish ] = "Tüm değişiklikleri iptal et?";
     Message[ catalan ] = "¿Cancelar todos los cambios?";
 };
+
 
 
 
