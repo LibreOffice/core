@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:55:37 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,7 @@ const static char __FAR_DATA sFontSize[]        = "font-size: ";
 
 DBG_NAME(ODatabaseImportExport);
 //======================================================================
-ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aDataDescriptor,
-                                             const Reference< XMultiServiceFactory >& _rM,
+ODatabaseImportExport::ODatabaseImportExport(const Reference< XMultiServiceFactory >& _rM,
                                              const Reference< XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
     :m_pReader(NULL)
@@ -190,28 +189,6 @@ ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aData
 {
 
     DBG_CTOR(ODatabaseImportExport,NULL);
-    osl_incrementInterlockedCount( &m_refCount );
-    // get the information we need
-    _aDataDescriptor[daDataSource]  >>= m_sDataSourceName;
-    _aDataDescriptor[daCommandType] >>= m_nCommandType;
-    _aDataDescriptor[daCommand]     >>= m_sName;
-    // some additonal information
-    if(_aDataDescriptor.has(daConnection))
-        _aDataDescriptor[daConnection]  >>= m_xConnection;
-    if(_aDataDescriptor.has(daSelection))
-        _aDataDescriptor[daSelection]   >>= m_aSelection;
-
-    sal_Bool bBookmarkSelection = sal_True; // the default if not present
-    if ( _aDataDescriptor.has( daBookmarkSelection ) )
-    {
-        _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
-        DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
-    }
-
-
-    if(_aDataDescriptor.has(daCursor))
-        _aDataDescriptor[daCursor]  >>= m_xResultSet;
-
     xub_StrLen nCount = rExchange.GetTokenCount(char(11));
     if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
     {
@@ -219,8 +196,6 @@ ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aData
         for(xub_StrLen i=SBA_FORMAT_SELECTION_COUNT;i<nCount;++i)
             m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.GetToken(i,char(11)).ToInt32();
     }
-
-    osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 // import data
@@ -283,6 +258,32 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
             initialize();
         m_bDisposeConnection = m_xConnection.is();
     }
+}
+// -----------------------------------------------------------------------------
+void ODatabaseImportExport::initialize(const ODataAccessDescriptor& _aDataDescriptor)
+{
+    // get the information we need
+    _aDataDescriptor[daDataSource]  >>= m_sDataSourceName;
+    _aDataDescriptor[daCommandType] >>= m_nCommandType;
+    _aDataDescriptor[daCommand]     >>= m_sName;
+    // some additonal information
+    if ( _aDataDescriptor.has(daConnection) )
+        _aDataDescriptor[daConnection]  >>= m_xConnection;
+    if ( _aDataDescriptor.has(daSelection) )
+        _aDataDescriptor[daSelection]   >>= m_aSelection;
+
+    sal_Bool bBookmarkSelection = sal_True; // the default if not present
+    if ( _aDataDescriptor.has( daBookmarkSelection ) )
+    {
+        _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
+        DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
+    }
+
+
+    if ( _aDataDescriptor.has(daCursor) )
+        _aDataDescriptor[daCursor]  >>= m_xResultSet;
+
+    initialize();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize()
@@ -667,11 +668,10 @@ const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t
 #define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << ODatabaseImportExport::sNewLine)
 
 //-------------------------------------------------------------------
-OHTMLImportExport::OHTMLImportExport(const ODataAccessDescriptor& _aDataDescriptor,
-                                     const Reference< XMultiServiceFactory >& _rM,
+OHTMLImportExport::OHTMLImportExport(const Reference< XMultiServiceFactory >& _rM,
                                      const Reference< XNumberFormatter >& _rxNumberF,
                                      const String& rExchange)
-        : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
+        : ODatabaseImportExport(_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
 #if DBG_UTIL
     ,m_bCheckFont(FALSE)
