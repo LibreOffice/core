@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 05:55:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ catalan ] = "Preview";
+        Text[ finnish ] = "Vorschau";
     };
     CheckBox CB_PREVIEW_TIFF
     {
@@ -216,6 +217,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¹öÀü";
         Text[ turkish ] = "Sürüm";
         Text[ catalan ] = "Version";
+        Text[ finnish ] = "Version";
     };
     RadioButton RB_LEVEL1
     {
@@ -305,6 +307,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "»ö ¼­½Ä";
         Text[ turkish ] = "Renk formatý";
         Text[ catalan ] = "Color format";
+        Text[ finnish ] = "Farb Format";
     };
     RadioButton RB_COLOR
     {
@@ -354,7 +357,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ english_us ] = "~Grayscale";
         Text[ chinese_simplified ] = "»Ò¶È(~G)";
         Text[ russian ] = "Îòòåíêè ñåðîãî";
-        Text[ polish ] = "Odcienie szaroœci";
+        Text[ polish ] = "Odcienie szaro?ci";
         Text[ japanese ] = "¸ÞÚ°½¹°Ù(~G)";
         Text[ chinese_traditional ] = "¦Ç¶¥(~G)";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
@@ -394,6 +397,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¾ÐÃà";
         Text[ turkish ] = "Sýkýþtýrma";
         Text[ catalan ] = "Compression";
+        Text[ finnish ] = "Kompression";
     };
     RadioButton RB_COMPRESSION_LZW
     {
@@ -467,7 +471,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ russian ] = "Íàñòðîéêè òåêñòà";
         Text[ greek ] = "TextMode";
         Text[ dutch ] = "Tekstinstellingen";
-        Text[ french ] = "TextMode";
+        Text[ french ] = "Paramètres de texte";
         Text[ spanish ] = "Configuración de texto";
         Text[ italian ] = "TextMode";
         Text[ danish ] = "TextMode";
@@ -481,6 +485,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ turkish ] = "TextMode";
         Text[ arabic ] = "TextMode";
         Text[ catalan ] = "TextMode";
+        Text[ finnish ] = "Text Einstellungen";
     };
     ListBox LB_TEXT_MODE
     {
@@ -531,8 +536,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ french ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Toujours exporter les contours glyphes" ; > ;
+        < "Ne jamais exporter les contours glyphes" ; > ;
     };
     StringList [ spanish ] =
     {
@@ -551,8 +556,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ swedish ] =
     {
-            < "Exportera alltid Glyph Outlines" ; > ;
-        < "Exportera aldrig Glyph Outlines" ; > ;
+            < "Exportera alltid glyfkonturer (glyph outlines)" ; > ;
+        < "Exportera aldrig glyfkonturer (glyph outlines)" ; > ;
     };
     StringList [ polish ] =
     {
@@ -598,6 +603,11 @@ ModalDialog DLG_EXPORT_EPS
     {
             < "Glyph Outlines immer exportieren" ; > ;
         < "Glyph Outlines niemals exportieren" ; > ;
+    };
+    StringList [ finnish ] =
+    {
+             < "Glyph Outlines immer exportieren" ; > ; ;
+        < "Glyph Outlines niemals exportieren" ; > ; ;
     };
     };
 

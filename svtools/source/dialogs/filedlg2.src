@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 05:46:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ String STR_FILEDLG_SELECT
     Text [ ENGLISH ] = "Select" ;
     Text [ portuguese ] = "Seleccionar directório" ;
     Text [ english_us ] = "Select Directory" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis auswählen" ;
+    Text [ portuguese_brazilian ] = "Verzeichnis ausw?hlen" ;
     Text [ swedish ] = "Välj katalog" ;
     Text [ danish ] = "Vælg bibliotek" ;
     Text [ italian ] = "Scelta cartella" ;
@@ -118,7 +118,7 @@ String STR_FILEDLG_OPEN
     Text [ ENGLISH ] = "Open" ;
     Text [ portuguese ] = "Abrir" ;
     Text [ english_us ] = "Open" ;
-    Text [ portuguese_brazilian ] = "Öffnen" ;
+    Text [ portuguese_brazilian ] = "?ffnen" ;
     Text [ swedish ] = "Öppna" ;
     Text [ danish ] = "Åbn" ;
     Text [ italian ] = "Apri" ;
@@ -222,7 +222,7 @@ String STR_FILEDLG_CANTOPENFILE
     Text [ English ] = "Can't open file" ;
     Text [ portuguese ] = "Impossível abrir ficheiro" ;
     Text [ english_us ] = "Can't open file" ;
-    Text [ portuguese_brazilian ] = "Kann Datei nicht öffnen" ;
+    Text [ portuguese_brazilian ] = "Kann Datei nicht ?fnen" ;
     Text [ swedish ] = "Kan inte öppna fil" ;
     Text [ danish ] = "Kan ikke åbne fil" ;
     Text [ italian ] = "Impossibile aprire il file" ;
@@ -248,7 +248,7 @@ String STR_FILEDLG_CANTOPENDIR
     Text [ English ] = "Can't open directory" ;
     Text [ portuguese ] = "Impossível abrir directório" ;
     Text [ english_us ] = "Can't open directory" ;
-    Text [ portuguese_brazilian ] = "Kann Verzeichnis nicht öffnen" ;
+    Text [ portuguese_brazilian ] = "Kann Verzeichnis nicht ?fnen" ;
     Text [ swedish ] = "Kan inte öppna katalog" ;
     Text [ danish ] = "Kan ikke åbne bibliotek" ;
     Text [ italian ] = "Imposibile aprire la cartella" ;
@@ -274,7 +274,7 @@ String STR_FILEDLG_OVERWRITE
     Text [ English ] = "File exists. \nOverwrite file?" ;
     Text [ portuguese ] = "O ficheiro já existe.\nSobregravar?" ;
     Text [ english_us ] = "This file already exists. \nOverwrite ?" ;
-    Text [ portuguese_brazilian ] = "Datei existiert. \nDatei überschreiben?" ;
+    Text [ portuguese_brazilian ] = "Datei existiert. \nDatei ?erschreiben?" ;
     Text [ swedish ] = "Filen finns redan. \nSkriva över filen?" ;
     Text [ danish ] = "Filen eksisterer allerede.\nSkal den overskrives?" ;
     Text [ italian ] = "Il file esistet. \nSovrascriverlo?" ;
@@ -300,7 +300,7 @@ String STR_FILEDLG_GOUP
     Text [ English ] = "Go up" ;
     Text [ portuguese ] = "Um nível acima" ;
     Text [ english_us ] = "Up One Level" ;
-    Text [ portuguese_brazilian ] = "Eine Ebene höher" ;
+    Text [ portuguese_brazilian ] = "Eine Ebene h?er" ;
     Text [ swedish ] = "En nivå högre" ;
     Text [ danish ] = "Et niveau op" ;
     Text [ italian ] = "Un livello più alto" ;
