@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:05:42 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,20 @@ namespace connectivity
     {
         friend class OSubComponent<java_sql_Connection, java_sql_Connection_BASE>;
 
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
         OWeakRefArray       m_aStatements;  //  vector containing a list
                                             //  of all the Statement objects
                                             //  for this Connection
         java_sql_Driver*    m_pDriver;
+        sal_Bool            m_bParameterSubstitution;
+
+        /** transform named parameter into unnamed one.
+            @param  _sSQL
+                The SQL statement to transform.
+            @return
+                The new statement witgh unnamed parameters.
+        */
+        ::rtl::OUString transFormPreparedStatement(const ::rtl::OUString& _sSQL);
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
@@ -118,7 +127,12 @@ namespace connectivity
 
         DECLARE_SERVICE_INFO();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Connection( JNIEnv * pEnv, jobject myObj,java_sql_Driver* _pDriver,const ::rtl::OUString& _sGeneredStmt,sal_Bool _bGenEnabled );
+        java_sql_Connection(    JNIEnv * pEnv
+                                , jobject myObj
+                                ,java_sql_Driver* _pDriver
+                                ,const ::rtl::OUString& _sGeneredStmt
+                                ,sal_Bool _bGenEnabled
+                                ,sal_Bool _bParameterSubstitution);
 
         // OComponentHelper
         virtual void SAL_CALL disposing(void);

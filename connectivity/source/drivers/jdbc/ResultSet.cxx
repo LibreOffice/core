@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-01 10:58:36 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1739,23 +1739,29 @@ void java_sql_ResultSet::getFastPropertyValue(
                                 sal_Int32 nHandle
                                      ) const
 {
-    switch(nHandle)
+    try
     {
-        case PROPERTY_ID_CURSORNAME:
-            rValue <<= getCursorName();
-            break;
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            rValue <<= getResultSetConcurrency();
-            break;
-        case PROPERTY_ID_RESULTSETTYPE:
-            rValue <<= getResultSetType();
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            rValue <<= getFetchDirection();
-            break;
-        case PROPERTY_ID_FETCHSIZE:
-            rValue <<= getFetchSize();
-            break;
+        switch(nHandle)
+        {
+            case PROPERTY_ID_CURSORNAME:
+                rValue <<= getCursorName();
+                break;
+            case PROPERTY_ID_RESULTSETCONCURRENCY:
+                rValue <<= getResultSetConcurrency();
+                break;
+            case PROPERTY_ID_RESULTSETTYPE:
+                rValue <<= getResultSetType();
+                break;
+            case PROPERTY_ID_FETCHDIRECTION:
+                rValue <<= getFetchDirection();
+                break;
+            case PROPERTY_ID_FETCHSIZE:
+                rValue <<= getFetchSize();
+                break;
+        }
+    }
+    catch(Exception&)
+    {
     }
 }
 // -----------------------------------------------------------------------------

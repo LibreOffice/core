@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:15:15 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ void java_sql_Driver::saveClassRef( jclass pClass )
     theClass = pClass;
 }
 // -----------------------------------------------------------------------------
-void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled)
+void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution)
 {
     // first try if the jdbc driver is alraedy registered at the driver manager
     SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
@@ -219,6 +219,10 @@ void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& 
                 {
                     pBegin->Value >>= _rsGeneratedValueStatement;
                 }
+                else if(!pBegin->Name.compareToAscii("ParameterNameSubstitution"))
+                {
+                    pBegin->Value >>= _bParameterSubstitution;
+                }
             }
         }
     }
@@ -252,8 +256,9 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
 
 
     ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
-    loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled);
+    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
+    sal_Bool            bParameterSubstitution = sal_False; // set to <TRUE/> when we should subsitute named paramteres
+    loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution);
     jobject out(0);
 
     if( t.pEnv )
@@ -309,7 +314,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     Reference< XConnection > xOut;
-    return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this,sGeneratedValueStatement,bAutoRetrievingEnabled );
+    return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution );
     //  return xOut;
 }
 // -------------------------------------------------------------------------
@@ -334,7 +339,8 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
         // driver was not loaded so far, load it by name
         ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
         sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
-        loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled);
+        sal_Bool            bParameterSubstitution = sal_False; // set to <TRUE/> when we should subsitute named paramteres
+        loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution);
     }
 
     if(!object)
