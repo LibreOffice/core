@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:21 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage TP_FLD_FUNC
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
         Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
@@ -90,7 +90,7 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Text[ chinese_simplified ] = "Â≠óÊÆµÁ±ªÂûã(~T)";
         Text[ russian ] = "“ËÔ ÔÓÎˇ";
-        Text[ polish ] = "Typ pola";
+        Text[ polish ] = "~Typ pola";
         Text[ japanese ] = "„Éï„Ç£„Éº„É´„Éâ„Çø„Ç§„Éó(~T)";
         Text[ chinese_traditional ] = "Ê¨Ñ‰ΩçÈ°ûÂûã(~T)";
         Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
@@ -100,6 +100,9 @@ TabPage TP_FLD_FUNC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~‡∏ä‡∏ô‡∏¥‡∏î";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‚ÄÆ◊°◊ï◊í‚Ä¨";
+        Text[ hindi ] = "~‡§µ‡§∞‡•ç‡§ó";
     };
     ListBox LB_FUNCTYPE
     {
@@ -118,7 +121,7 @@ TabPage TP_FLD_FUNC
         Text [ ENGLISH ] = "Selection" ;
         Text [ norwegian ] = "Selection" ;
         Text [ italian ] = "~Selezione" ;
-        Text [ portuguese_brazilian ] = "Sele??o" ;
+        Text [ portuguese_brazilian ] = "~Selecionar" ;
         Text [ portuguese ] = "~SelecÁ„o" ;
         Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
@@ -131,7 +134,7 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÈÄâÊã©(~E)";
         Text[ russian ] = "¬˚·Ó";
-        Text[ polish ] = "WybÛr";
+        Text[ polish ] = "~WybÛr";
         Text[ japanese ] = "ÈÅ∏Êäû(~E)";
         Text[ chinese_traditional ] = "ÈÅ∏Êìá(~E)";
         Text[ arabic ] = "«· ÕœÌœ";
@@ -141,6 +144,9 @@ TabPage TP_FLD_FUNC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~elecciona";
         Text[ thai ] = "‡πÄ‡∏•‡∏∑~‡∏≠‡∏Å";
+        Text[ czech ] = "Vybrat";
+        Text[ hebrew ] = "~Auswahl";
+        Text[ hindi ] = "‡§ö‡•Å~‡§®‡•ã";
     };
     ListBox LB_FUNCSELECTION
     {
@@ -160,7 +166,7 @@ TabPage TP_FLD_FUNC
         Text [ ENGLISH ] = "Format" ;
         Left = TRUE ;
         Text [ english_us ] = "F~ormat" ;
-        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "F~ormato" ;
         Text [ swedish ] = "F~ormat" ;
         Text [ danish ] = "Format" ;
         Text [ italian ] = "F~ormato" ;
@@ -170,7 +176,7 @@ TabPage TP_FLD_FUNC
         Text [ portuguese ] = "F~ormato" ;
         Text[ chinese_simplified ] = "Ê†ºÂºè(~O)";
         Text[ russian ] = "‘ÓÏ‡Ú";
-        Text[ polish ] = "Format";
+        Text[ polish ] = "~Format";
         Text[ japanese ] = "Êõ∏Âºè(~O)";
         Text[ chinese_traditional ] = "Ê†ºÂºè(~O)";
         Text[ arabic ] = "«· ‰”Ìﬁ";
@@ -181,6 +187,9 @@ TabPage TP_FLD_FUNC
         Text[ catalan ] = "F~ormata";
         Text[ finnish ] = "M~uotoilu";
         Text[ thai ] = "‡∏£‡∏π~‡∏õ‡πÅ‡∏ö‡∏ö";
+        Text[ czech ] = "Form√°t";
+        Text[ hebrew ] = "F~ormat";
+        Text[ hindi ] = "‡§∞~‡§ö‡§®‡§æ";
     };
     ListBox LB_FUNCFORMAT
     {
@@ -197,7 +206,7 @@ TabPage TP_FLD_FUNC
         TEXT [ English ] = "Na~me" ;
         Left = TRUE ;
         Text [ english_us ] = "Na~me" ;
-        Text [ portuguese_brazilian ] = "Na~me" ;
+        Text [ portuguese_brazilian ] = "No~me" ;
         Text [ swedish ] = "Na~mn" ;
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "No~me" ;
@@ -207,7 +216,7 @@ TabPage TP_FLD_FUNC
         Text [ portuguese ] = "No~me" ;
         Text[ chinese_simplified ] = "ÂêçÁß∞(~M)";
         Text[ russian ] = "»Ïˇ";
-        Text[ polish ] = "Nazwa";
+        Text[ polish ] = "~Nazwa";
         Text[ japanese ] = "ÂêçÂâç(~M)";
         Text[ chinese_traditional ] = "ÂêçÁ®±(~M)";
         Text[ arabic ] = "«·«”„";
@@ -218,6 +227,9 @@ TabPage TP_FLD_FUNC
         Text[ catalan ] = "No~m";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "‡∏ä‡∏∑‡πà~‡∏≠";
+        Text[ czech ] = "N√°zev";
+        Text[ hebrew ] = "Na~me";
+        Text[ hindi ] = "~‡§®‡§æ‡§Æ";
     };
     Edit ED_FUNCNAME
     {
@@ -235,7 +247,7 @@ TabPage TP_FLD_FUNC
         Text [ ENGLISH ] = "Value" ;
         Text [ norwegian ] = "Verdi" ;
         Text [ italian ] = "~Valore" ;
-        Text [ portuguese_brazilian ] = "Valor" ;
+        Text [ portuguese_brazilian ] = "~Valor" ;
         Text [ portuguese ] = "Valor" ;
         Text [ finnish ] = "~Arvo" ;
         Text [ danish ] = "VÊrdi" ;
@@ -247,7 +259,7 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Text[ chinese_simplified ] = "Êï∞ÂÄº(~V)";
         Text[ russian ] = "«Ì‡˜ÂÌËÂ";
-        Text[ polish ] = "WartoúÊ";
+        Text[ polish ] = "W~artoúÊ";
         Text[ japanese ] = "ÂÄ§(~V)";
         Text[ chinese_traditional ] = "Êï∏ÂÄº(~V)";
         Text[ arabic ] = "«·ﬁÌ„…";
@@ -257,6 +269,9 @@ TabPage TP_FLD_FUNC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor";
         Text[ thai ] = "~‡∏Ñ‡πà‡∏≤";
+        Text[ czech ] = "Hodnota";
+        Text[ hebrew ] = "~Wert";
+        Text[ hindi ] = "~‡§Æ‡•Ç‡§≤‡•ç‡§Ø";
     };
     Edit ED_FUNCVALUE
     {
@@ -275,7 +290,7 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Hide = TRUE ;
         Text [ english_us ] = "Then" ;
-        Text [ portuguese_brazilian ] = "Dann" ;
+        Text [ portuguese_brazilian ] = "Ent„o" ;
         Text [ swedish ] = "~SÂ" ;
         Text [ danish ] = "SÂ" ;
         Text [ italian ] = "Poi" ;
@@ -291,11 +306,14 @@ TabPage TP_FLD_FUNC
         Text[ arabic ] = "›Ì Â–Â «·Õ«·…";
         Text[ greek ] = "‘¸ÙÂ";
         Text[ korean ] = "Ï°∞Í±¥ÏùÑ Ï∂©Ï°±Ìï† Í≤ΩÏö∞";
-        Text[ turkish ] = "O halde";
+        Text[ turkish ] = "Sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aleshores";
         Text[ finnish ] = "Sitten";
         Text[ thai ] = "‡∏à‡∏≤‡∏Å‡∏ô‡∏±‡πâ‡∏ô";
+        Text[ czech ] = "Potom";
+        Text[ hebrew ] = "~Dann";
+        Text[ hindi ] = "Then";
     };
     Edit ED_FUNCCOND1
     {
@@ -315,7 +333,7 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Hide = TRUE ;
         Text [ english_us ] = "Else" ;
-        Text [ portuguese_brazilian ] = "Sonst" ;
+        Text [ portuguese_brazilian ] = "Sen„o" ;
         Text [ swedish ] = "A~nnars" ;
         Text [ danish ] = "Ellers" ;
         Text [ italian ] = "Altrimenti" ;
@@ -325,17 +343,20 @@ TabPage TP_FLD_FUNC
         Text [ portuguese ] = "~Sen„o" ;
         Text[ chinese_simplified ] = "ÂÖ∂ÂÆÉ";
         Text[ russian ] = "»Ì‡˜Â";
-        Text[ polish ] = "W przeciwnym wypadku";
+        Text[ polish ] = "W przeciwnym przypadku";
         Text[ japanese ] = "Êù°‰ª∂„ÇíÊ∫Ä„Åü„Åï„Å™„ÅÑ„Å®„Åç";
         Text[ chinese_traditional ] = "Âê¶Ââá";
         Text[ arabic ] = "›Ì„« ⁄œ« –·ﬂ";
         Text[ greek ] = "¡ÎÎÈ˛Ú";
         Text[ korean ] = "Í∏∞ÌÉÄ";
-        Text[ turkish ] = "Yoksa";
+        Text[ turkish ] = "Deilse";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "SinÛ";
         Text[ finnish ] = "Muutoin";
         Text[ thai ] = "‡∏≠‡∏¢‡πà‡∏≤‡∏á‡∏≠‡∏∑‡πà‡∏ô";
+        Text[ czech ] = "Jinak";
+        Text[ hebrew ] = "So~nst";
+        Text[ hindi ] = "Else";
     };
     Edit ED_FUNCCOND2
     {
@@ -354,7 +375,7 @@ TabPage TP_FLD_FUNC
         Text [ English ] = "M~acro..." ;
         Text [ norwegian ] = "Macro..." ;
         Text [ italian ] = "~Macro..." ;
-        Text [ portuguese_brazilian ] = "Macro..." ;
+        Text [ portuguese_brazilian ] = "~Macro..." ;
         Text [ portuguese ] = "Macro..." ;
         Text [ french ] = "~Macro..." ;
         Text [ dutch ] = "~Macro..." ;
@@ -367,7 +388,7 @@ TabPage TP_FLD_FUNC
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÂÆè(~M)...";
         Text[ russian ] = "Ã‡ÍÓÒ...";
-        Text[ polish ] = "Makro...";
+        Text[ polish ] = "Ma~kro...";
         Text[ japanese ] = "„Éû„ÇØ„É≠(~M)...";
         Text[ chinese_traditional ] = "Â∑®ÈõÜ(~M)...";
         Text[ arabic ] = "„«ﬂ—Ê...";
@@ -377,9 +398,12 @@ TabPage TP_FLD_FUNC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Macro...";
         Text[ thai ] = "~‡∏°‡∏≤‡πÇ‡∏Ñ‡∏£...";
+        Text[ czech ] = "Makro...";
+        Text[ hebrew ] = "‚ÄÆ◊î◊§◊¢◊ú◊™ ◊û◊ê◊ß◊®◊ï...‚Ä¨";
+        Text[ hindi ] = "~‡§Æ‡•â‡§ï‡•ç‡§∞‡•ã...";
     };
     Text [ english_us ] = "Functions" ;
-    Text [ portuguese_brazilian ] = "Funktionen" ;
+    Text [ portuguese_brazilian ] = "FunÁıes" ;
     Text [ swedish ] = "Funktioner" ;
     Text [ danish ] = "Funktioner" ;
     Text [ italian ] = "Funzioni" ;
@@ -400,7 +424,19 @@ TabPage TP_FLD_FUNC
     Text[ catalan ] = "Funcions";
     Text[ finnish ] = "Toiminnot";
     Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
+    Text[ czech ] = "Funkce";
+    Text[ hebrew ] = "Funktionen";
+    Text[ hindi ] = "‡§´‡§Ç‡§ï‡•ç‡§∂‡§®‡•ç‡§∏";
 };
+
+
+
+
+
+
+
+
+
 
 
 
