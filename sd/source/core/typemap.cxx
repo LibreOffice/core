@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:27 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,9 @@
 #include <svtools/slstitm.hxx>
 #endif
 
+#include <svtools/lckbitem.hxx>
+
+
 #define CharSetItem                 SfxUInt16Item
 #define FontFamilyItem              SfxUInt16Item
 #define FontPitchItem               SfxUInt16Item
@@ -257,7 +260,7 @@
 #define SvxCellVerJustifyEnumItem   SfxUInt16Item
 #define SvxCellOrientationEnumItem  SfxUInt16Item
 #define SvxLanguage                 SfxUInt16Item
-#define SfxLockBytesItem            SfxPoolItem
+//#define SfxLockBytesItem            SfxPoolItem
 #define OfaStringListItem           SfxStringListItem
 
 #ifndef _SFX_TPLPITEM_HXX //autogen
@@ -269,6 +272,8 @@
 #ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
 #endif
+
+#include <sfx2/frame.hxx>
 
 #define SFX_TYPEMAP
 #include "sdslots.hxx"
