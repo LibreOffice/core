@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMailMerge.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-07-23 10:49:07 $
+ *  last change:$Date: 2004-11-02 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,10 @@ import lib.TestParameters;
 import util.utils;
 
 import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDataSource;
@@ -226,7 +228,6 @@ public class SwXMailMerge extends TestCase {
     vXJobArg0[5] = new NamedValue("OutputURL", cOutputURL);
     vXJobArg0[6] = new NamedValue("FileNamePrefix", "Identifier");
     vXJobArg0[7] = new NamedValue("FileNameFromColumn", new Boolean(true));
-//  vXJobArg0[8] = new NamedValue("Selection", sel);
 
         //second Arguments
            vXJobArg1[0] = new NamedValue("DataSourceName", cDataSourceName);
@@ -238,7 +239,6 @@ public class SwXMailMerge extends TestCase {
     vXJobArg1[4] = new NamedValue("DocumentURL", cTestDoc);
     vXJobArg1[5] = new NamedValue("FileNamePrefix", "Author");
     vXJobArg1[6] = new NamedValue("FileNameFromColumn", new Boolean(true));
-//  vXJobArg1[7] = new NamedValue("Selection", sel);
 
         // third Arguments
            vXJobArg2[0] = new NamedValue("ActiveConnection", getLocalXConnection(Param));
@@ -253,7 +253,6 @@ public class SwXMailMerge extends TestCase {
     vXJobArg2[7] = new NamedValue("FileNamePrefix", "Identifier");
     vXJobArg2[8] = new NamedValue("FileNameFromColumn", new Boolean(true));
     vXJobArg2[9] = new NamedValue("Selection", myBookMarks);
-//      vXJobArg2[9] = new NamedValue("Selection", sel);
 
         vXJobArgs[0] = vXJobArg0;
         vXJobArgs[1] = vXJobArg1;
@@ -351,7 +350,6 @@ public class SwXMailMerge extends TestCase {
 
     private XConnection getRemoteXConnection(TestParameters Param){
         int uniqueSuffix = 0 ;
-        XNamingService xDBContextNameServ = null ;
         String databaseName = null ;
         XDataSource oXDataSource = null;
         Object oInterface = null;
@@ -360,9 +358,6 @@ public class SwXMailMerge extends TestCase {
         try {
             xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
-
-            xDBContextNameServ = (XNamingService)
-                UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
 
             // retrieving temp directory for database
             String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
@@ -380,39 +375,17 @@ public class SwXMailMerge extends TestCase {
 
             databaseName = "NewDatabaseSource" + uniqueSuffix ;
 
-            // make sure that the DatabaseContext isn't already registered
-            try {
-                xDBContextNameServ.revokeObject(databaseName) ;
-            } catch (com.sun.star.uno.Exception e) {
-                log.println("Nothing to be removed - OK");
-            }
-
+            util.DBTools dbt = new util.DBTools(((XMultiServiceFactory) Param.getMSF()));
             // registering source in DatabaseContext
-            xDBContextNameServ.registerObject(databaseName, newSource) ;
+            dbt.reRegisterDB(databaseName, newSource) ;
 
-            oInterface = newSource ;
+            return dbt.connectToSource(newSource);
         }
         catch( com.sun.star.uno.Exception e ) {
-            log.println("Service not available" );
-            throw new StatusException("Service not available", e) ;
+            log.println("could not register new database" );
+            e.printStackTrace();
+            throw new StatusException("could not register new database", e) ;
         }
-
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException("Service wasn't created",
-                new NullPointerException()) ;
-        }
-
-        oXDataSource = (XDataSource)
-                UnoRuntime.queryInterface(XDataSource.class, oInterface) ;
-
-        try{
-            return oXDataSource.getConnection("","");
-        } catch (com.sun.star.sdbc.SQLException e){
-            throw new StatusException("could not get connection",e);
-        }
-
-
     }
 
     private XConnection getLocalXConnection(TestParameters Param){
@@ -428,9 +401,14 @@ public class SwXMailMerge extends TestCase {
 
         String[] dataNames = xNADataCont.getElementNames();
 
+        String dataName="";
+        for (int i = 0; i < dataNames.length; i++){
+            if (dataNames[i].startsWith("Biblio")) dataName=dataNames[i];
+        }
+
         try{
 
-            Object oDataBase = xNADataCont.getByName(dataNames[0]);
+            Object oDataBase = xNADataCont.getByName(dataName);
             XDataSource xDataSource = (XDataSource)
                 UnoRuntime.queryInterface(XDataSource.class, oDataBase);
 
