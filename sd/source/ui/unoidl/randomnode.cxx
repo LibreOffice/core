@@ -150,6 +150,8 @@ private:
     double mfAcceleration, mfDecelerate;
     sal_Bool mbAutoReverse;
     Sequence< NamedValue > maUserData;
+
+    Reference< XAnimate > mxFirstNode;
 };
 
 // --------------------------------------------------------------------
@@ -570,6 +572,16 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
 {
     Guard< Mutex > aGuard( maMutex );
 
+    if( !maTarget.hasValue() && mxFirstNode.is() )
+    {
+        Any aTarget( mxFirstNode->getTarget() );
+        if( aTarget.hasValue() )
+        {
+            maTarget = aTarget;
+            mxFirstNode.clear();
+        }
+    }
+
     Reference< XEnumeration > xEnum;
 
     Reference< XEnumerationAccess > aEnumAccess( CustomAnimationPresets::getCustomAnimationPresets().getRandomPreset( mnPresetClass ), UNO_QUERY );
@@ -656,6 +668,10 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Ref
         if( aTarget.hasValue() )
             maTarget = aTarget;
     }
+
+    if( !maTarget.hasValue() && !mxFirstNode.is() )
+        mxFirstNode = xAnimate;
+
     return newChild;
 }
 
