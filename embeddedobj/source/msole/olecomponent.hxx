@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-12 12:50:52 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 11:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,8 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
-#include <platform.h>
-
 #include <vector>
 
-typedef ::std::vector< FORMATETC* > FormatEtcList;
 
 namespace com { namespace sun { namespace star {
 }}}
@@ -119,6 +116,10 @@ namespace cppu {
 class OleWrapperClientSite;
 class OleWrapperAdviseSink;
 class OleEmbeddedObject;
+class OleRelatedData_Impl;
+struct FORMATETC;
+struct STGMEDIUM;
+
 class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCloseable,
                                                      ::com::sun::star::datatransfer::XTransferable >
 {
@@ -127,16 +128,13 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
 
     sal_Bool m_bDisposed;
 
-    CComPtr< IUnknown > m_pObj;
-    CComPtr< IOleObject > m_pOleObject;
-    CComPtr< IViewObject2 > m_pViewObject2;
+    OleRelatedData_Impl* m_pData;
 
     OleEmbeddedObject* m_pUnoOleObject;
     OleWrapperClientSite* m_pOleWrapClientSite;
     OleWrapperAdviseSink* m_pImplAdviseSink;
 
     ::rtl::OUString m_aTempURL;
-    CComPtr< IStorage > m_pIStorage;
 
     sal_Int32 m_nOLEMiscFlags;
     sal_Int32 m_nAdvConn;
@@ -149,15 +147,13 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    FormatEtcList m_aFormatsList;
-
     sal_Bool m_bOleInitialized;
 
     sal_Bool InitializeObject_Impl();
 
-    CComPtr< IStorage > CreateIStorageOnXInputStream_Impl(
+    void CreateIStorageOnXInputStream_Impl(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
-    CComPtr< IStorage > CreateNewIStorage_Impl();
+    void CreateNewIStorage_Impl();
 
     void RetrieveObjectDataFlavors_Impl();
 
@@ -165,7 +161,7 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
 
     void AddSupportedFormat( const FORMATETC& aFormatEtc );
 
-    FORMATETC* GetSupportedFormatForAspect( DWORD nRequestedAspect );
+    FORMATETC* GetSupportedFormatForAspect( sal_uInt32 nRequestedAspect );
 
     sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium,
                                     const ::com::sun::star::datatransfer::DataFlavor& aFlavor,
@@ -225,7 +221,7 @@ public:
 
     sal_Bool SaveObject_Impl();
     sal_Bool OnShowWindow_Impl( sal_Bool bShow );
-    void OnViewChange_Impl( DWORD dwAspect );
+    void OnViewChange_Impl( sal_uInt32 dwAspect );
 
     sal_Bool GetGraphicalCache_Impl( const ::com::sun::star::datatransfer::DataFlavor& aFlavor,
                                      ::com::sun::star::uno::Any& aResult );

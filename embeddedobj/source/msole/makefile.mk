@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mav $ $Date: 2003-12-02 14:33:41 $
+#   last change: $Author: mav $ $Date: 2003-12-15 11:44:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,31 +81,38 @@ SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
 
 SLOFILES =  \
-        $(SLO)$/graphconvert.obj\
         $(SLO)$/closepreventer.obj\
         $(SLO)$/oleregister.obj\
         $(SLO)$/xolefactory.obj\
-        $(SLO)$/olecomponent.obj\
         $(SLO)$/olepersist.obj\
         $(SLO)$/oleembed.obj\
         $(SLO)$/olevisual.obj\
-        $(SLO)$/olemisc.obj\
-        $(SLO)$/olewrapclient.obj\
-        $(SLO)$/advisesink.obj
-
+        $(SLO)$/olemisc.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/graphconvert.obj\
         $(SLO)$/closepreventer.obj\
         $(SLO)$/oleregister.obj\
         $(SLO)$/xolefactory.obj\
-        $(SLO)$/olecomponent.obj\
         $(SLO)$/olepersist.obj\
         $(SLO)$/oleembed.obj\
         $(SLO)$/olevisual.obj\
-        $(SLO)$/olemisc.obj\
+        $(SLO)$/olemisc.obj
+
+.IF "$(GUI)"=="WNT"
+
+SLOFILES += \
+        $(SLO)$/graphconvert.obj\
+        $(SLO)$/olecomponent.obj\
         $(SLO)$/olewrapclient.obj\
         $(SLO)$/advisesink.obj
+
+EXCEPTIONSFILES += \
+        $(SLO)$/graphconvert.obj\
+        $(SLO)$/olecomponent.obj\
+        $(SLO)$/olewrapclient.obj\
+        $(SLO)$/advisesink.obj
+
+.ENDIF
 
 SHL1OBJS= $(SLOFILES)
 
@@ -114,17 +121,25 @@ SHL1STDLIBS=\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
     $(TOOLSLIB)\
-    $(SVTOOLLIB)\
+    $(SVTOOLLIB)
+
+.IF "$(GUI)"=="WNT"
+
+SHL1STDLIBS+=\
     $(VCLLIB)\
     ole32.lib\
     gdi32.lib\
     uuid.lib\
     oleaut32.lib
 
+DEF1EXPORTFILE=	exports.dxp
+
+.ENDIF
+
+
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Targets -------------------------------------------------------
