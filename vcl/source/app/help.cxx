@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-14 11:10:00 $
+ *  last change: $Author: ssa $ $Date: 2001-11-15 13:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,6 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
     }
     else
     {
-          Hide();
           ImplDestroyHelpWindow();
     }
 
@@ -554,6 +553,9 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
                          const XubString& rHelpText, const XubString& rStatusText,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
 {
+    if( !rHelpText.Len() )
+        return;
+
     ImplSVData* pSVData = ImplGetSVData();
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
     USHORT nDelayMode = HELPDELAY_NORMAL;
@@ -561,12 +563,15 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
     {
         DBG_ASSERT( pHelpWin != pParent, "HelpInHelp ?!" );
 
-        if ( ! rHelpText.Len() || pHelpWin->GetWinStyle() != nHelpWinStyle )
+            if ( (( pHelpWin->GetHelpText() != rHelpText ) ||
+                 ( pHelpWin->GetWinStyle() != nHelpWinStyle ) ||
+                 ( pHelpArea && ( pHelpWin->GetHelpArea() != *pHelpArea ) ) )
+                 && pSVData->maHelpData.mbRequestingHelp )
         {
-            // Fenster wegnehmen wenn kein HelpText oder anderer HelpText oder
-            // anderer Modus.
+            // remove help window if no HelpText or other HelpText or
+            // other help mode. but keep it if we are scrolling, ie not requesting help
             if ( pHelpWin->IsVisible() )
-                nDelayMode = HELPDELAY_SHORT;   // Wenn schon vorher Quick-Hilfe, dann jetzt auch schnell
+                nDelayMode = HELPDELAY_SHORT; // display it quickly if we were already in quick help mode
             pHelpWin = NULL;
             ImplDestroyHelpWindow();
         }
@@ -577,10 +582,11 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
             {
                 Window * pWindow = pHelpWin->GetParent();
                 Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
-                pWindow->Invalidate( aInvRect );
+                if( pHelpWin->IsVisible() )
+                    pWindow->Invalidate( aInvRect );
 
                 pHelpWin->SetHelpText( rHelpText );
-                // Dann die Position der Maus annaehern...
+                // approach mouse position
                 ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
                 if( pHelpWin->IsVisible() )
                     pHelpWin->Invalidate();
@@ -597,11 +603,11 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         if ( pHelpArea )
             pHelpWin->SetHelpArea( *pHelpArea );
 
-//      Positionieren...
+        //  positioning
         Size aSz = pHelpWin->CalcOutSize();
         pHelpWin->SetOutputSizePixel( aSz );
         ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
-        // Wenn nicht aus Window::RequestHelp, dann ohne Delay...
+        // if not called from Window::RequestHelp, then without delay...
         if ( !pSVData->maHelpData.mbRequestingHelp )
             nDelayMode = HELPDELAY_NONE;
         pHelpWin->ShowHelp( nDelayMode );
@@ -617,17 +623,12 @@ void ImplDestroyHelpWindow( BOOL bUpdate )
     if ( pHelpWin )
     {
         Window * pWindow = pHelpWin->GetParent();
+        // find out screen area covered by system help window
         Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
-        pWindow->Invalidate( aInvRect );
+        if( pHelpWin->IsVisible() )
+            pWindow->Invalidate( aInvRect );
         pSVData->maHelpData.mpHelpWin = NULL;
         pHelpWin->Hide();
-        if ( bUpdate )
-           {
-            // Update ausloesen, damit ein Paint sofort ausgeloest wird, da
-            // wir den Hintergrund nicht sichern
-            Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
-            pFrameWindow->ImplUpdateAll();
-        }
         delete pHelpWin;
     }
 }
