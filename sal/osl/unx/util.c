@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-05-02 15:03:13 $
+ *  last change: $Author: obr $ $Date: 2001-12-17 12:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
         return sal_False;
     }
 
+    close(so);
 
     /*
      *  For each of the interfaces in the interface list,
@@ -149,7 +150,6 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
         }
     }
 
-    close(so);
     return sal_False;
 }
 
@@ -191,6 +191,7 @@ extern sal_Bool osl_getEtherAddr(sal_Char* pszAddr, sal_uInt16 BufferSize)
         return sal_False;
     }
 
+    close(so);
 
     /*
      *  For each of the interfaces in the interface list,
@@ -209,7 +210,6 @@ extern sal_Bool osl_getEtherAddr(sal_Char* pszAddr, sal_uInt16 BufferSize)
         }
     }
 
-    close(so);
     return sal_False;
 }
 
@@ -235,6 +235,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     if ( ret < 0 )
     {
 /*      fprintf(stderr, "SIOCGIFFLAGS: %s\n", strerror(errno)); */
+        close(so);
         return ret;
     }
 
@@ -246,6 +247,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     if (ifr.ifr_flags & IFF_LOOPBACK)
     {
 /*      fprintf(stderr, "SIOCGIFFLAGS : is LOOPBACK : %s\n", strerror(errno));*/
+        close(so);
         return 0;
     }
 
@@ -263,8 +265,11 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     if (ret < 0) {
 /*      fprintf(stderr, "SIOCGIFADDR: %s\n", strerror(errno));*/
         memset(hard_addr, 0, 32);
+        close(so);
         return ret;
     }
+
+    close(so);
 
 #ifdef LINUX
     memcpy(hard_addr,ifr.ifr_hwaddr.sa_data,8);
