@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:12:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #endif
 #ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
@@ -236,7 +233,7 @@ void OJoinController::disposing()
 void OJoinController::setModified(sal_Bool _bModified)
 {
     OJoinController_BASE::setModified(_bModified);
-    InvalidateFeature(ID_RELATION_ADD_RELATION);
+    InvalidateFeature(SID_RELATION_ADD_RELATION);
 }
 // -----------------------------------------------------------------------------
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
@@ -280,7 +277,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void OJoinController::Execute(sal_uInt16 _nId)
+void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
     {
@@ -326,7 +323,7 @@ void OJoinController::Execute(sal_uInt16 _nId)
             }
             break;
         default:
-            OJoinController_BASE::Execute(_nId);
+            OJoinController_BASE::Execute(_nId,aArgs);
     }
     InvalidateFeature(_nId);
 }
@@ -354,10 +351,12 @@ void OJoinController::removeConnectionData(OTableConnectionData* _pData)
 // -----------------------------------------------------------------------------
 void OJoinController::AddSupportedFeatures()
 {
+    OJoinController_BASE::AddSupportedFeatures();
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]        = ID_BROWSER_REDO;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]        = ID_BROWSER_SAVEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]        = ID_BROWSER_UNDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddTable")] = ID_BROWSER_ADDTABLE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:AddTable")]    = ID_BROWSER_ADDTABLE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:EditDoc")]     = ID_BROWSER_EDITDOC;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
