@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:29:43 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 15:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,9 @@ namespace dbaui
         sal_Bool checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException);      // check if we have double column names
         String createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const String& _rDefault);
         void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,sal_Bool _bKeyColumns=sal_False);
-        void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup);
+        void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup);
         void alterColumns();
-        void dropKey();
+        void dropPrimaryKey();
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _rName);
         void setTitle(const ::rtl::OUString & _rTitle);
