@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:40:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
-#ifndef SC_XLLINK_HXX
-#include "xllink.hxx"
+#ifndef SC_XLNAME_HXX
+#include "xlname.hxx"
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
@@ -496,53 +496,43 @@ static const sal_Char* const ppcDefNames[] =
     "_FilterDatabase"
 };
 
-String XclTools::GetXclBuiltInDefName( sal_Unicode nBuiltInIndex )
+String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
     DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN, \
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
     String aDefName;
-    if( nBuiltInIndex < STATIC_TABLE_SIZE( ppcDefNames ) )
-        aDefName.AssignAscii( ppcDefNames[ nBuiltInIndex ] );
+    if( cBuiltIn < STATIC_TABLE_SIZE( ppcDefNames ) )
+        aDefName.AssignAscii( ppcDefNames[ cBuiltIn ] );
     else
-        aDefName = String::CreateFromInt32( nBuiltInIndex );
+        aDefName = String::CreateFromInt32( cBuiltIn );
     return aDefName;
 }
 
-String XclTools::GetBuiltInDefName( sal_Unicode nBuiltInIndex )
+String XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    return GetXclBuiltInDefName( nBuiltInIndex ).Insert( maDefNamePrefix, 0 );
+    return String( maDefNamePrefix ).Append( GetXclBuiltInDefName( cBuiltIn ) );
 }
 
-bool XclTools::IsBuiltInDefName( sal_uInt16& rnXclTab, const String& rName, sal_Unicode nIndex )
-{
-    String aTestName( GetBuiltInDefName( nIndex ).Append( '_' ) );
-    if( !rName.EqualsIgnoreCaseAscii( aTestName, 0, aTestName.Len() ) )
-        return false;
-    sal_Int32 nTab = rName.Copy( aTestName.Len() ).ToInt32();
-    if( (nTab < 1) || (nTab > static_cast< sal_Int32 >( MAXTAB + 1 )) )
-        return false;
-    if( String::CreateFromInt32( nTab ).Len() != (rName.Len() - aTestName.Len()) )
-        return false;
-    rnXclTab = static_cast< sal_uInt16 >( nTab );
-    return true;
-}
-
-bool XclTools::IsBuiltInDefName( const String& rDefName, sal_Unicode* pnBuiltInIndex )
+sal_Unicode XclTools::GetBuiltInDefNameIndex( const String& rDefName )
 {
     xub_StrLen nPrefixLen = maDefNamePrefix.Len();
     if( rDefName.EqualsIgnoreCaseAscii( maDefNamePrefix, 0, nPrefixLen ) )
     {
-        for( sal_Unicode nIndex = 0; nIndex < EXC_BUILTIN_UNKNOWN; ++nIndex )
+        for( sal_Unicode cBuiltIn = 0; cBuiltIn < EXC_BUILTIN_UNKNOWN; ++cBuiltIn )
         {
-            String aXclName( GetXclBuiltInDefName( nIndex ) );
-            if( rDefName.EqualsIgnoreCaseAscii( aXclName, nPrefixLen, aXclName.Len() ) )
+            String aBuiltInName( GetXclBuiltInDefName( cBuiltIn ) );
+            xub_StrLen nBuiltInLen = aBuiltInName.Len();
+            if( rDefName.EqualsIgnoreCaseAscii( aBuiltInName, nPrefixLen, nBuiltInLen ) )
             {
-                if( pnBuiltInIndex ) *pnBuiltInIndex = nIndex;
-                return true;
+                // name can be followed by underline or space character
+                xub_StrLen nNextCharPos = nPrefixLen + nBuiltInLen;
+                sal_Unicode cNextChar = (rDefName.Len() > nNextCharPos) ? rDefName.GetChar( nNextCharPos ) : '\0';
+                if( (cNextChar == '\0') || (cNextChar == ' ') || (cNextChar == '_') )
+                    return cBuiltIn;
             }
         }
     }
-    return false;
+    return EXC_BUILTIN_UNKNOWN;
 }
 
 // built-in style names -------------------------------------------------------
