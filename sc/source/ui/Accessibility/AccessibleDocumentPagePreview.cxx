@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:15:59 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ sal_Int32 ScNotesChilds::AddNotes(const ScPreviewLocationData& rData, const Rect
                 }
                 else
                 {
-                    ScPostIt aPostIt;
+                    ScPostIt aPostIt(pDoc);
                     pDoc->GetNote(aNote.maNoteCell.Col(), aNote.maNoteCell.Row(), aNote.maNoteCell.Tab(), aPostIt);
                     aNote.maNoteText = aPostIt.GetText();
                     aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
@@ -459,7 +459,7 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                 }
                 else
                 {
-                    ScPostIt aPostIt;
+                    ScPostIt aPostIt(pDoc);
                     pDoc->GetNote(aNote.maNoteCell.Col(), aNote.maNoteCell.Row(), aNote.maNoteCell.Tab(), aPostIt);
                     aNote.maNoteText = aPostIt.GetText();
                 }
