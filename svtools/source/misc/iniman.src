@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iniman.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:33:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,36 +64,9 @@
 ErrorBox ERRBOX_CHECK_PLZ
 {
     BUTTONS = WB_OK ;
-    Message = "Die eingegebene Postleitzahl ist ungültig.\nSie muss mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
-    Message [ English ] = "Die eingegebene Postleitzahl ist ungültig.\nSie muß mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
-    Message[ italian ] = "Il C.A.P. specificato non è valido.\nDeve iniziare con un numero o con una lettera e\npuò contenere soltanto numeri, lettere, spazi vuoti e trattini.";
-    Message[ portuguese_brazilian ] = "O código postal (CEP) especificado está incorreto.\nEle deve começar por um algarismo ou uma letra e só pode conter algarismos, letras, espaços em branco e hífens.";
-    Message[ portuguese ] = "O código postal especificado está incorrecto.\nEste tem que começar por um algarismo ou uma letra e só pode conter algarismos, letras, espaços em branco e hífens.";
-    Message[ danish ] = "Det angivne postnummer er ugyldigt.\nDet skal begynde med et tal (eller i nogle tilfælde et bogstav) og\nmå kun indeholde tal, bogstaver, mellemrum og bindestreger.";
-    Message[ french ] = "Le code postal indiqué est incorrect.\nIl doit commencer par un chiffre ou une lettre et\ncontenir uniquement des chiffres, lettres, espaces ou tirets.";
-    Message[ swedish ] = "Det angivna postnumret är ogiltigt.\nDet måste börja med en siffra eller en bokstav och\nfår bara innehålla siffror, bokstäver, mellanslag och bindestreck.";
-    Message[ dutch ] = "Deze postcode is ongeldig.\nDe code moet beginnen met een cijfer of een letter en\nmag alleen cijfers, letters, spaties en verbindingsstreepjes bevatten.";
-    Message[ spanish ] = "El código postal indicado no es válido.\nDebe comenzar con un número o una letra y\nsólo puede contener números, letras, espacios o guiones.";
-    Message[ english_us ] = "The ZIP code specified is invalid.\nA ZIP code should begin with a number (or in some cases a letter) and\ncan only contain numbers, letters, spaces and dashes.";
-    Message[ chinese_simplified ] = "æ‚¨è¾“å…¥çš„é‚®æ”¿ç¼–ç æ— æ•ˆã€‚\né‚®æ”¿ç¼–ç å¿…é¡»ç”±ä¸€ä¸ªæ•°å­—æˆ–ä¸€ä¸ªå­—æ¯å¼€å¤´ï¼Œ\nä¸”åªèƒ½å¤ŸåŒ…å«æ•°å­—ï¼Œå­—æ¯ï¼Œç©ºæ ¼ç¬¦å’Œè¿å­—ç¬¦ã€‚";
-    Message[ russian ] = "Ââåäåí íåïğàâèëüíûé ïî÷òîâûé èíäåêñ.\nÎí äîëæåí íà÷èíàòüñÿ ñ öèôğû (à â íåêîòîğûõ ñëó÷àÿõ ñ áóêâû)\nè ìîæåò ñîäåğæàòü òîëüêî öèôğû, áóêâû, ïğîáåëû è øòğèõè.";
-    Message[ polish ] = "Wpisany kod pocztowy jest nieprawid³owy.\nMusi siê zaczynaæ cyfr¹ (lub niekiedy liter¹) i \nmo¿e zawieraæ tylko cyfry, litery, spacje i kreski.";
-    Message[ japanese ] = "å…¥åŠ›ã—ãŸéƒµä¾¿ç•ªå·ã¯ä¸é©åˆ‡ã§ã™ã€‚\næ•°å­—ã¾ãŸã¯æ–‡å­—ã§å§‹ã‚ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“\næ•°å­—ã¨æ–‡å­—ã¨ã‚¹ãƒšãƒ¼ã‚¹ãŠã‚ˆã³ãƒ€ãƒƒã‚·ãƒ¥ã®ã¿ä½¿ç”¨ã§ãã¾ã™ã€‚";
-    Message[ arabic ] = "ÇáÑãÒ ÇáÈÑíÏí ¡ÇáĞí ŞãÊ ÈÅÏÎÇáå¡ ÛíÑ ÕÇáÍ.\níÌÈ Ãä íÈÏÃ ÈÑŞã Ãæ ÈÍÑİ¡\næíÌÈ Ãä íÍÊæí İŞØ Úáì ÃÑŞÇã¡ ÃÍÑİ¡ ÃÍÑİ ãÓÇİÉ¡ æÔÑØ İÇÕáÉ.";
-    Message[ chinese_traditional ] = "æ‚¨è¼¸å…¥çš„éƒµéå€è™Ÿç„¡æ•ˆã€‚\néƒµéå€è™Ÿå¿…é ˆç”±ä¸€å€‹æ•¸å­—æˆ–ä¸€å€‹å­—æ¯é–‹å§‹ï¼Œ\nè€Œä¸”åªèƒ½æ˜¯æ•¸å­—ï¼Œå­—æ¯ï¼Œç©ºæ ¼å’Œé€£å­—ç¬¦ã€‚";
-    Message[ greek ] = "Ï ôá÷õäñïìéêüò êşäéêáò ğïõ êáèïñßóáôå äåí åßíáé İãêõñïò.\nĞñİğåé íá áñ÷ßæåé ìå áñéèìü (Ş óå ìåñéêİò ğåñéğôşóåéò ìå ãñÜììá) êáé\nìğïñåß íá ğåñéëáìâÜíåé ìüíï áñéèìïıò, ãñÜììáôá, êåíÜ äéáóôŞìáôá êáé ğáıëåò.";
-    Message[ korean ] = "ì…ë ¥í•œ ìš°í¸ë²ˆí˜¸ëŠ” ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.\nìš°í¸ë²ˆí˜¸ëŠ” ìˆ«ìë‚˜ ë¬¸ìë¡œ ì‹œì‘í•´ì•¼ í•˜ë©° \nìˆ«ì, ë¬¸ì, ê³µë°±ê³¼ ëŒ€ì‹œë¡œë§Œ ì…ë ¥í•´ì•¼ í•©ë‹ˆë‹¤.";
-    Message[ turkish ] = "Girilen posta kodu geçerli değil.\nPosta kodu bir rakam ya da harf ile başlamalı ve yalnızca\nrakam, harf, boşluk ve ayırma çizgileri içermeli.";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El codi postal indicat no és vàlid.\nHa de començar amb un número o una lletra i\nnomés pot contenir números, lletres, espais i guions.";
-    Message[ finnish ] = "Määritetty postinumero on virheellinen.\nPostinumeron ensimmäinen merkki voi olla vain numero tai kirjain ja\npostinumero voi sisältää vain numeroita, kirjaimia, välilyöntejä ja viivoja.";
-    Message[ thai ] = "à¸£à¸°à¸šà¸¸à¸£à¸«à¸±à¸ªà¹„à¸›à¸£à¸©à¸“à¸µà¸¢à¹Œà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡\nà¸£à¸«à¸±à¸ªà¹„à¸›à¸£à¸©à¸“à¸µà¸¢à¹Œà¸„à¸§à¸£à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸”à¹‰à¸§à¸¢à¸•à¸±à¸§à¹€à¸¥à¸‚ (à¸«à¸£à¸·à¸­à¸šà¸²à¸‡à¸à¸£à¸“à¸µà¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£) à¹à¸¥à¸°\nà¸ªà¸²à¸¡à¸²à¸£à¸–à¸¡à¸µà¸•à¸±à¸§à¹€à¸¥à¸‚ à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£ à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¹à¸¥à¸°à¹€à¸ªà¹‰à¸™à¸›à¸£à¸°à¸¢à¸²à¸§à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
-    Message[ czech ] = "ZadanÃ½ PSÄŒ kÃ³d je neplatnÃ½.\nPSÄŒ kÃ³d by mÄ›l zaÄÃ­nat ÄÃ­slicÃ­ (nebo pÃ­smenem)\na mÅ¯Å¾e obsahovat pouze pÃ­smena, ÄÃ­slice, mezery\npomlÄky.";
-    Message[ hebrew ] = "â€®×”××™×§×•×“ ××™× ×• ×—×•×§×™.\n××™×§×•×“ ×—×•×§×™ ×—×™×™×‘ ×œ×”×ª×—×™×œ ×¢× ××¡×¤×¨ (××• ×‘××•×ª ×‘××§×¨×™× ××¡×•×™×™××™×)\n×•×™×›×•×œ ×œ×›×œ×•×œ ×¨×§ ××¡×¤×¨×™×, ××•×ª×™×•×ª, ×¨×•×•×—×™× ×•××§×¤×™×.â€¬";
-    Message[ hindi ] = "à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¥€ à¤¹à¥à¤¯à¥€ ZIP à¤•à¥‹à¤¡ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤\nZIP à¤•à¥‹à¤¡ à¤à¤• à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¸à¥‡ à¤¶à¥à¤°à¥ à¤¹à¥‹à¤¨à¤¾ à¤šà¤¾à¤¹à¤¿à¤ (à¤•à¥à¤› à¤•à¥‡à¤¸ à¤®à¥‡à¤‚ à¤à¤• à¤…à¤•à¥à¤·à¤°) à¤”à¤°\n à¤¸à¤‚à¤–à¥à¤¯à¤¾, à¤…à¤•à¥à¤·à¤°, à¤…à¤‚à¤¤à¤° à¤”à¤° à¤¡à¥‰à¤¶ à¤•à¥‹ à¤¹à¥€ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤° à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    Message[ slovak ] = "ZadanÃ½ PSÄŒ kÃ³d je neplatnÃ½.\nPSÄŒ kÃ³d by mal zaÄÃ­naÅ¥ ÄÃ­slicou (alebo pÃ­smenom)\na mÃ´Å¾e obsahovaÅ¥ iba pÃ­smenÃ¡, ÄÃ­slice, medzery\npomlÄky.";
-    Message[ hungarian ] = "A megadott irÃ¡nyÃ­tÃ³szÃ¡m helytelen. \nAz irÃ¡nyÃ­tÃ³szÃ¡mot szÃ¡mmal kell kezdeni (vagy nÃ©ha betÅ±vel) \nÃ©s csak szÃ¡mot, betÅ±t, szÃ³kÃ¶zt Ã©s kÃ¶tÅ‘jelet tartalmazhat.";
-    Message[ slovenian ] = "VneÅ¡ena poÅ¡tna Å¡tevilka ni veljavna.\nPoÅ¡tna Å¡tevilka se mora zaÄeti s Å¡tevilko (ali v nekaterih primerih s Ärko) in\nlahko vsebuje samo Å¡tevilke, Ärke, presledke in Ärtice.";
+    Message [ de ] = "Die eingegebene Postleitzahl ist ungültig.\nSie muss mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
+    Message [ en-US ] = "The ZIP code specified is invalid.\nA ZIP code should begin with a number (or in some cases a letter) and\ncan only contain numbers, letters, spaces and dashes.";
+    Message [ x-comment ] = " ";
 };
 
 
