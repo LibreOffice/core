@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
+ *  last change: $Author: dvo $ $Date: 2002-02-27 17:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,16 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+#ifndef _CRSTATE_HXX
+#include <crstate.hxx>
+#endif
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
+#endif
+#ifndef _CRSRSH_HXX
+#include <crsrsh.hxx>
+#endif
+
 
 #pragma hdrstop
 
@@ -82,6 +92,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -516,12 +529,43 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes( sal_Int32
     return aSeq;
 }
 
-com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds( sal_Int32 nIndex )
+com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
+    sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // HACK: dummy implementation
-    com::sun::star::awt::Rectangle aRect;
-    return aRect;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+
+    if( (nIndex < 0) || (nIndex >= GetString().getLength()) )
+        throw IndexOutOfBoundsException();
+
+    // get model position & prepare GetCharRect() arguments
+    SwCrsrMoveState aMoveState;
+    aMoveState.bRealHeight = TRUE;
+    aMoveState.bRealWidth = TRUE;
+    SwSpecialPos aSpecialPos;
+    USHORT nPos = GetPortionData().FillSpecialPos(
+        nIndex, aSpecialPos, aMoveState.pSpecialPos );
+
+    // call GetCharRect
+    SwRect aCoreRect;
+    SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
+    SwIndex aIndex( pNode, nPos );
+    SwPosition aPosition( *pNode, aIndex );
+    GetFrm()->GetCharRect( aCoreRect, aPosition, &aMoveState );
+
+    // translate core coordinates into accessibility coordinates
+    Window *pWin = GetWindow();
+    CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
+    aCoreRect -= GetBounds().TopLeft();
+    MapMode aMapMode = pWin->GetMapMode();
+    aMapMode.SetOrigin( Point() );
+    Rectangle aScreenRect( pWin->LogicToPixel( aCoreRect.SVRect(), aMapMode ));
+
+    // convert into AWT Rectangle
+    return com::sun::star::awt::Rectangle(
+        aScreenRect.Left(), aScreenRect.Top(),
+        aScreenRect.GetWidth(), aScreenRect.GetHeight() );
 }
 
 sal_Int32 SwAccessibleParagraph::getCharacterCount()
@@ -542,22 +586,34 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
 OUString SwAccessibleParagraph::getSelectedText()
     throw (RuntimeException)
 {
-    // HACK: dummy implementation
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("Peter"));
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+
+    sal_Int32 nStart, nEnd;
+    sal_Bool bSelected = GetSelection( nStart, nEnd );
+    return bSelected ? GetString().copy( nStart, nEnd - nStart ) : OUString();
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectionStart()
     throw (RuntimeException)
 {
-    // HACK: dummy implementation
-    return 0;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+
+    sal_Int32 nStart, nEnd;
+    GetSelection( nStart, nEnd );
+    return nStart;
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectionEnd()
     throw (RuntimeException)
 {
-    // HACK: dummy implementation
-    return 0;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
+
+    sal_Int32 nStart, nEnd;
+    GetSelection( nStart, nEnd );
+    return nEnd;
 }
 
 sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
@@ -735,3 +791,57 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
     return replaceText(0, GetString().getLength(), sText);
 }
 
+
+
+
+sal_Bool SwAccessibleParagraph::GetSelection(
+    sal_Int32& nStart, sal_Int32& nEnd)
+{
+    sal_Bool bRet = sal_False;
+    nStart = -1;
+    nEnd = -1;
+
+    // first, get the view shell
+    DBG_ASSERT( GetMap() != NULL, "no map?" );
+    ViewShell* pViewShell = GetMap()->GetShell();
+    DBG_ASSERT( pViewShell != NULL,
+                "No view shell? Then what are you looking at?" );
+
+    // get the cursor shell; if we don't have any, we don't have a
+    // selection either
+    if( pViewShell->ISA( SwCrsrShell ) )
+    {
+        SwCrsrShell* pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
+
+        // get the selection, and test whether it affects our text node
+        SwPaM* pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
+        if( pCrsr != NULL )
+        {
+            const SwTxtNode* pNode = GetTxtNode();
+
+            // get SwPosition for my node
+            ULONG nHere = pNode->GetIndex();
+
+            // check whether nHere is 'inside' pCrsr
+            SwPosition* pStart = pCrsr->Start();
+            SwPosition* pEnd = pCrsr->End();
+            if( ( nHere >= pStart->nNode.GetIndex() ) &&
+                ( nHere <= pEnd->nNode.GetIndex() )      )
+            {
+                // Yup, we are selected!
+                bRet = sal_True;
+                nStart = static_cast<sal_Int32>(
+                    ( nHere > pStart->nNode.GetIndex() ) ? 0
+                                   : pStart->nContent.GetIndex() );
+                nEnd = static_cast<sal_Int32>(
+                    ( nHere < pEnd->nNode.GetIndex() ) ? pNode->Len()
+                                   : pEnd->nContent.GetIndex() );
+            }
+            // else: this paragraph isn't selected
+        }
+        // else: nocursor -> no selection
+    }
+    // else: no cursor shell -> no selection
+
+    return bRet;
+}

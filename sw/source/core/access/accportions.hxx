@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-21 14:55:31 $
+ *  last change: $Author: dvo $ $Date: 2002-02-27 17:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 
 class String;
 class SwTxtNode;
+struct SwSpecialPos;
 namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
 } } }
@@ -107,9 +108,15 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t* pWords;        /// positions of word breaks
     Positions_t* pSentences;    /// positions of sentence breaks
 
+    size_t nBeforePortions;     /// # of portions before first model character
+    sal_Bool bLastIsSpecial;    /// set if last portion was 'Special()'
+
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
     size_t FindBreak( const Positions_t& rPositions, sal_Int32 nValue );
+
+    /// like FindBreak, but finds the last equal or larger position
+    size_t FindLastBreak( const Positions_t& rPositions, sal_Int32 nValue );
 
     /// fill the boundary with the values from rPositions[nPos]
     void FillBoundary(com::sun::star::i18n::Boundary& rBound,
@@ -128,11 +135,34 @@ public:
     virtual void Finish();
 
 
+
     // access to the portion data
+
+    /// get the text string, as presented by the layout
     const rtl::OUString& GetAccesibleString();
+
+    /// get the start & end positions of the sentence
     void GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
                           sal_Int32 nPos );
+
+    /// get the position in the model string for a given
+    /// (accessibility) position
     USHORT GetModelPosition( sal_Int32 nPos );
+
+    /// get the position in the accessibility string for a given model position
+    sal_Int32 GetAccessiblePosition( USHORT nPos );
+
+    /// get the line number for a given (accessibility) position
+    sal_Int32 GetLineNumber( sal_Int32 nPos );
+
+    /// fill a SwSpecialPos structure, suitable for calling
+    /// SwTxtFrm->GetCharRect
+    /// Returns the core position, and fills thr rpPos either with NULL or
+    /// with the &rPos, after putting the appropriate data into it.
+    USHORT FillSpecialPos( sal_Int32 nPos,
+                           SwSpecialPos& rPos,
+                           SwSpecialPos*& rpPos );
+
 
     // get boundaries of words/sentences. The data structures are
     // created on-demand.  The SwTxtNode is needed to get the language
