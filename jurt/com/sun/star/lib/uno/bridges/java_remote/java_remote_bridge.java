@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:35:52 $
+ *  last change: $Author: kr $ $Date: 2001-05-09 11:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.21 $ $ $Date: 2001-05-08 09:35:52 $
+ * @version     $Revision: 1.22 $ $ $Date: 2001-05-09 11:31:39 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -146,55 +146,6 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
      * possible to set a hook for the <code>MessageDispatcher</code> thread.
      */
     static public IInvokeHook __MessageDispatcher_run_hook;
-
-    /**
-     * The name of the service.
-     * <p>
-     * @deprecated as of UDK 1.0
-     */
-    static protected final String __serviceName = "com.sun.star.bridge.Bridge";
-
-    /**
-     * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @deprecated as of UDK 1.0
-     * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
-     * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be uses if needed
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                            XMultiServiceFactory multiFactory,
-                                                            XRegistryKey regKey)
-    {
-        XSingleServiceFactory xSingleServiceFactory = null;
-
-        if (implName.equals(java_remote_bridge.class.getName()) )
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(java_remote_bridge.class,
-                                                                    __serviceName,
-                                                                    multiFactory,
-                                                                    regKey);
-
-        return xSingleServiceFactory;
-    }
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @deprecated as of UDK 1.0
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(java_remote_bridge.class.getName(), __serviceName, regKey);
-    }
-
 
 
     public class MessageDispatcher extends Thread implements IInvokable {
