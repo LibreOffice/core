@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modules.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:29:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@ module packages {};
 
 /// image manupulation interfaces.
 module image {};
+
+/// interfaces for XForms (XML-based forms) implementation
+module xforms {};
 
 }; }; };
 
