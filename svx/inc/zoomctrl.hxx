@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:38:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,13 @@
 #include <sfx2/stbitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxZoomToolBoxControl -------------------------------------------
 
-class SvxZoomStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxZoomStatusBarControl : public SfxStatusBarControl
 {
 private:
     USHORT  nZoom;
