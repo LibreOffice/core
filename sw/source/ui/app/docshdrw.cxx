@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshdrw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-26 14:16:04 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 15:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ void  SwDocShell::InitDraw()
         PutItem( SvxLineEndListItem( pDrDoc->GetLineEndList() ) );
 
         Outliner& rOutliner = pDrDoc->GetDrawOutliner();
-        rOutliner.SetHyphenator( ::GetHyphenator() );
+        com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
+        rOutliner.SetHyphenator( xHyphenator );
     }
     else
         PutItem( SvxColorTableItem( OFF_APP()->GetStdColorTable() ));
@@ -130,6 +131,9 @@ void  SwDocShell::InitDraw()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/06/26 14:16:04  jp
+    Bug #87795#: remove old code
+
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
 
