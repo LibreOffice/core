@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:45:54 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
@@ -428,6 +425,7 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_nBorder(1)
     ,m_aTableCopyHelper(this)
     ,m_nAsyncDrop(0)
+    ,m_bOwnConnection(sal_True)
 {
     DBG_CTOR(SbaTableQueryBrowser,NULL);
 }
@@ -1160,7 +1158,8 @@ String SbaTableQueryBrowser::getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntr
 // -------------------------------------------------------------------------
 SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
         SvLBoxEntry** _ppDataSourceEntry, SvLBoxEntry** _ppContainerEntry,
-        sal_Bool _bExpandAncestors)
+        sal_Bool _bExpandAncestors
+        ,const Reference<XConnection>& _rxConnection)
 {
     if (_ppDataSourceEntry)
         *_ppDataSourceEntry = NULL;
@@ -1186,7 +1185,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                 // add new entries to the list box model
                 Image a, b, c;  // not interested in  reusing them
                 String e, f;
-                implAddDatasource( _rDataSource, a, e, b, f, c );
+                implAddDatasource( _rDataSource, a, e, b, f, c ,_rxConnection);
                 pDataSource = m_pTreeView->getListBox()->GetEntryPosByName( sDisplayName, NULL, &aFilter );
                 DBG_ASSERT( pDataSource, "SbaTableQueryBrowser::getObjectEntry: hmm - did not find it again!" );
             }
@@ -2000,7 +1999,8 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
 }
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDbImage,
-        String& _rQueryName, Image& _rQueryImage, String& _rTableName, Image& _rTableImage)
+        String& _rQueryName, Image& _rQueryImage, String& _rTableName, Image& _rTableImage
+        ,const Reference<XConnection>& _rxConnection)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     // initialize the names/images if necessary
@@ -2027,6 +2027,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
     DBTreeListModel::DBTreeListUserData* pDSData = new DBTreeListModel::DBTreeListUserData;
     pDSData->eType = etDatasource;
     pDSData->sAccessor = sDataSourceId;
+    pDSData->xObject = _rxConnection;
     pDatasourceEntry->SetUserData(pDSData);
 
     // the child for the queries container
@@ -2059,7 +2060,7 @@ void SbaTableQueryBrowser::initializeTreeModel()
         const ::rtl::OUString* pBegin   = aDatasources.getConstArray();
         const ::rtl::OUString* pEnd     = pBegin + aDatasources.getLength();
         for (; pBegin != pEnd; ++pBegin)
-            implAddDatasource(*pBegin, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage);
+            implAddDatasource(*pBegin, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage,NULL);
     }
 }
 // -------------------------------------------------------------------------
@@ -2367,7 +2368,7 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
     {
         SvLBoxEntry* pDataSource = NULL;
         SvLBoxEntry* pCommandType = NULL;
-        SvLBoxEntry* pCommand = getObjectEntry(_rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True);
+        SvLBoxEntry* pCommand = getObjectEntry(_rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True,_rxConnection);
 
         //  if (pDataSource) // OJ change for the new app
         {
@@ -2694,7 +2695,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         // add new entries to the list box model
         Image a, b, c;  // not interested in  reusing them
         String e, f;
-        implAddDatasource(sNewDS, a, e, b, f, c);
+        implAddDatasource(sNewDS, a, e, b, f, c,NULL);
     }
     else
         SbaXDataBrowserController::elementInserted(_rEvent);
@@ -3052,7 +3053,10 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
         else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMAND))
             aValue.Value >>= sInitialCommand;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
-            ::cppu::extractInterface(xConnection,aValue.Value);
+        {
+            xConnection.set(aValue.Value,UNO_QUERY);
+            m_bOwnConnection = !xConnection.is();
+        }
         else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_CATALOGNAME))
             aValue.Value >>= aCatalogName;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_SCHEMANAME))
@@ -3160,6 +3164,8 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
         }
     }
 
+    if ( xConnection.is() )
+        startConnectionListening(xConnection);
     Reference<XChild> xChild(xConnection,UNO_QUERY);
     if ( !sInitialDataSourceName.getLength() && xChild.is() )
     {
@@ -3169,7 +3175,7 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
             Image aDBImage, aQueriesImage, aTablesImage;
             String sQueriesName, sTablesName;
 
-            implAddDatasource(sInitialDataSourceName, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage);
+            implAddDatasource(sInitialDataSourceName, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage,xConnection);
             m_pTreeView->getListBox()->Expand(m_pTreeView->getListBox()->First());
         }
     }
@@ -3273,6 +3279,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
 
             // connect
             _xConnection = connect( getDataSourceAcessor( _pDSEntry ), sConnectingContext, rtl::OUString(), sal_True);
+            m_bOwnConnection = _xConnection.is();
 
             // remember the connection
             static_cast< DBTreeListModel::DBTreeListUserData* >( pData )->xObject = _xConnection;
