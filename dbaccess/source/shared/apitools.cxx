@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:21:40 $
+ *  last change: $Author: oj $ $Date: 2000-10-27 07:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -74,75 +74,13 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sdbc;
 using namespace cppu;
 using namespace osl;
 using namespace dbaccess;
 
-//============================================================
-//= FunctionSequenceException
-//============================================================
-FunctionSequenceException::FunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)
-        :SQLException(ERRORMSG_SEQUENCE,
-                      _Context,
-                      SQLSTATE_SEQUENCE, 0,
-                      _Next){};
-
 //==================================================================================
 //= various helper functions
 //==================================================================================
-//--------------------------------------------------------------------------
-void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
-                        const ::rtl::OUString& _rCatalog,
-                        const ::rtl::OUString& _rSchema,
-                        const ::rtl::OUString& _rName,
-                        ::rtl::OUString& _rComposedName,
-                        sal_Bool _bQuote)
-{
-    OSL_ENSHURE(_rxMetaData.is(), "composeTableName : invalid meta data !");
-    OSL_ENSHURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
-
-    ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
-#define QUOTE(s) if (_bQuote) s += sQuoteString
-
-    static ::rtl::OUString sEmpty;
-    static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
-    _rComposedName = sEmpty;
-
-    if (_rCatalog.getLength() && _rxMetaData->isCatalogAtStart() && !_rxMetaData->usesLocalFiles())
-    {
-        QUOTE(_rComposedName);
-        _rComposedName += _rCatalog;
-        QUOTE(_rComposedName);
-        _rComposedName += _rxMetaData->getCatalogSeparator();
-    }
-
-    if (_rSchema.getLength())
-    {
-        QUOTE(_rComposedName);
-        _rComposedName += _rSchema;
-        QUOTE(_rComposedName);
-        _rComposedName += sSeparator;
-        QUOTE(_rComposedName);
-        _rComposedName += _rName;
-        QUOTE(_rComposedName);
-    }
-    else
-    {
-        QUOTE(_rComposedName);
-        _rComposedName += _rName;
-        QUOTE(_rComposedName);
-    }
-
-    if (_rCatalog.getLength() && !_rxMetaData->isCatalogAtStart() && !_rxMetaData->usesLocalFiles())
-    {
-        _rComposedName += _rxMetaData->getCatalogSeparator();
-        QUOTE(_rComposedName);
-        _rComposedName += _rCatalog;
-        QUOTE(_rComposedName);
-    }
-}
-
 //============================================================
 //= OSubComponent
 //============================================================
