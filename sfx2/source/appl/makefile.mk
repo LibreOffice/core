@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:27:40 $
+#   last change: $Author: vg $ $Date: 2003-05-28 13:24:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,6 +130,7 @@ SLOFILES =  \
 
 EXCEPTIONSFILES=\
     $(SLO)$/imagemgr.obj		\
+    $(SLO)$/appopen.obj \
     $(SLO)$/appmain.obj			\
     $(SLO)$/appmisc.obj			\
     $(SLO)$/frstinit.obj		\
