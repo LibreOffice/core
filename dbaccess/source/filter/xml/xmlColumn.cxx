@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlColumn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:18:40 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
@@ -121,6 +124,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
 
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     sal_Bool bAutoEnabled = sal_False;
+    ::rtl::OUString sType;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
         OUString sLocalName;
@@ -141,6 +145,14 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 break;
             case XML_TOK_COLUMN_VISIBILITY:
                 m_bHidden = !sValue.equalsAscii("visible");
+                break;
+            case XML_TOK_COLUMN_TYPE_NAME:
+                sType = sValue;
+                OSL_ENSURE(sType.getLength(),"No type name set");
+                break;
+            case XML_TOK_COLUMN_DEFAULT_VALUE:
+                if ( sValue.getLength() && sType.getLength() )
+                    SvXMLUnitConverter::convertAny(m_aDefaultValue,sType,sValue);
                 break;
         }
     }
@@ -164,6 +176,9 @@ void OXMLColumn::EndElement()
             xProp->setPropertyValue(PROPERTY_HIDDEN,makeAny(m_bHidden));
             if ( m_sHelpMessage.getLength() )
                 xProp->setPropertyValue(PROPERTY_HELPTEXT,makeAny(m_sHelpMessage));
+
+            if ( m_aDefaultValue.hasValue() )
+                xProp->setPropertyValue(PROPERTY_CONTROLDEFAULT,m_aDefaultValue);
 
             if ( m_sStyleName.getLength() )
             {
