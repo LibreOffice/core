@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 17:00:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,22 +193,15 @@
 //#define MN_SUB_TRANSLITERATE        (RC_APP_BEGIN + 63)
 //#define MN_SUB_MACRO                (RC_APP_BEGIN + 64)
 
-#define RC_INTRO_BEGIN              (RC_APP_BEGIN + 90)
-#define RC_INTRO_END                (RC_APP_BEGIN + 96)
-
-#define STR_WRITER_DOCUMENT_FULLTYPE_31     (RC_APP_BEGIN + 97)
-#define STR_WRITER_DOCUMENT_FULLTYPE_40     (RC_APP_BEGIN + 98)
-#define STR_WRITER_DOCUMENT_FULLTYPE_50 (RC_APP_BEGIN + 101)
 #define STR_WRITER_DOCUMENT_FULLTYPE    (RC_APP_BEGIN + 100)
+#define STR_ABSTRACT_TITLE              (RC_APP_BEGIN + 102)
+#define STR_DONT_ASK_AGAIN              (RC_APP_BEGIN + 103)
 
-#define STR_ABSTRACT_TITLE          (RC_APP_BEGIN +102)
-#define STR_DONT_ASK_AGAIN          (RC_APP_BEGIN +103)
-
-
-#define APP_ACT_END                 STR_DONT_ASK_AGAIN
+#define APP_ACT_END                     STR_DONT_ASK_AGAIN
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
 #endif
+
