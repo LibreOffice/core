@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-14 10:39:25 $
+ *  last change: $Author: jp $ $Date: 2002-02-18 10:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,10 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                 eStyle = POINTER_REFHAND;
         }
 
+        // which kind of text pointer have we to show - horz / vert - ?
+        if( POINTER_TEXT == eStyle && rSh.IsInVerticalText( &rLPt ))
+            eStyle = POINTER_TEXT_VERTICAL;
+
         SetPointer( eStyle );
     }
 }
@@ -983,8 +987,28 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     BOOL bChkInsBlank = pQuickHlpData->bChkInsBlank;
     pQuickHlpData->bChkInsBlank = FALSE;
 
-    const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
-    sal_Unicode aCh = rKEvt.GetCharCode();
+    KeyEvent aKeyEvent( rKEvt );
+    // look for vertical mappings
+    {
+        USHORT nKey;
+        switch( rKEvt.GetKeyCode().GetCode() )
+        {
+        case KEY_UP:    nKey = KEY_LEFT;    break;
+        case KEY_DOWN:  nKey = KEY_RIGHT;   break;
+        case KEY_LEFT:  nKey = KEY_DOWN;    break;
+        case KEY_RIGHT: nKey = KEY_UP;      break;
+        default:        nKey = 0;
+        }
+        if( nKey && rSh.IsInVerticalText() )
+        {
+            aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
+                            KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
+                            rKEvt.GetRepeat() );
+        }
+    }
+
+    const KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
+    sal_Unicode aCh = aKeyEvent.GetCharCode();
 
     const SwFrmFmt* pFlyFmt = rSh.GetFlyFrmFmt();
     if( pFlyFmt )
@@ -1046,7 +1070,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_CellLeftSmall, KS_CellRightSmall,
                     KS_CellTopBig, KS_CellBottomBig,
                     KS_CellTopSmall, KS_CellBottomSmall,
-//-----
+
                     KS_InsDel_ColLeftBig, KS_InsDel_ColRightBig,
                     KS_InsDel_ColLeftSmall, KS_InsDel_ColRightSmall,
                     KS_InsDel_ColTopBig, KS_InsDel_ColBottomBig,
@@ -1056,7 +1080,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_InsDel_CellTopBig, KS_InsDel_CellBottomBig,
                     KS_InsDel_CellTopSmall, KS_InsDel_CellBottomSmall,
                     KS_TblColCellInsDel,
-//-----
+
                     KS_Fly_Change,
                     KS_AppendNodeInSection,
                     KS_Ende };
@@ -1494,7 +1518,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if( aInBuffer.Len() && ( !bNormalChar || bIsDocReadOnly ))
                     FlushInBuffer( &rSh );
 
-                if( rView.KeyInput( rKEvt ) )
+                if( rView.KeyInput( aKeyEvent ) )
                     bFlushBuffer = TRUE, bNormalChar = FALSE;
                 else
                 {
@@ -1510,7 +1534,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     else
                     {
                         bNormalChar = FALSE;
-                        Window::KeyInput( rKEvt );
+                        Window::KeyInput( aKeyEvent );
                     }
                 }
             }
@@ -1520,7 +1544,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             if( rView.ISA( SwWebView ))     //Kein Tabulator fuer Web!
             {
                 // Bug 56196 - dann sollte der weiter gereicht werden.
-                Window::KeyInput( rKEvt );
+                Window::KeyInput( aKeyEvent );
                 eKeyState = KS_Ende;
                 break;
             }
@@ -1541,7 +1565,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
 
 
-            if( !rKEvt.GetRepeat() && pACorr &&
+            if( !aKeyEvent.GetRepeat() && pACorr &&
                 (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
                     ( '*' == aCh || '_' == aCh ) ) ||
                  ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
@@ -1552,7 +1576,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
                     rSh.UpdateAttr();
             }
-            else if( !rKEvt.GetRepeat() && pACorr &&
+            else if( !aKeyEvent.GetRepeat() && pACorr &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgFractionSymbol | ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
@@ -1566,7 +1590,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                aInBuffer.Expand( aInBuffer.Len() + rKEvt.GetRepeat() + 1,aCh );
+                aInBuffer.Expand( aInBuffer.Len() + aKeyEvent.GetRepeat() + 1,aCh );
                 bFlushCharBuffer = Application::AnyInput( INPUT_KEYBOARD );
                 bFlushBuffer = !bFlushCharBuffer;
                 if( bFlushCharBuffer )
@@ -1577,7 +1601,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         else
         {
             InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-// ???          Window::KeyInput( rKEvt );
+// ???          Window::KeyInput( aKeyEvent );
             eKeyState = KS_Ende;
         }
         break;
