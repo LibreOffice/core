@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFlushable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module util {
 
 /** is supported by objects with data that can be flushed to a data source.
  */
-interface XFlushable: com::sun::star::uno::XInterface
+published interface XFlushable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** flushes the data of the object to the connected data source.
