@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-14 15:05:57 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ JP 20.07.95:
 #define ITEMID_VERJUSTIFY   0
 #define ITEMID_ORIENTATION  0
 #define ITEMID_MARGIN       0
+#ifndef ITEMID_LINE
+#define ITEMID_LINE         0
+#endif
 
 #ifndef _SVX_ALGITEM_HXX //autogen
 #include <svx/algitem.hxx>
@@ -135,6 +138,9 @@ JP 20.07.95:
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
+#ifndef _SVX_BOLNITEM_HXX
+#include <svx/bolnitem.hxx>
+#endif
 
 struct SwAfVersions;
 
@@ -165,6 +171,8 @@ class SwBoxAutoFmt
     SvxShadowedItem     aShadowed;
     SvxColorItem        aColor;
     SvxBoxItem          aBox;
+    SvxLineItem         aTLBR;
+    SvxLineItem         aBLTR;
     SvxBrushItem        aBackground;
 
     // Writer specific
@@ -173,7 +181,7 @@ class SwBoxAutoFmt
     // Calc specific
     SvxHorJustifyItem   aHorJustify;
     SvxVerJustifyItem   aVerJustify;
-    SvxOrientationItem  aOrientation;
+    SfxBoolItem         aStacked;
     SvxMarginItem       aMargin;
     SfxBoolItem         aLinebreak;
     SfxInt32Item        aRotateAngle;
@@ -211,6 +219,8 @@ public:
     const SvxColorItem      &GetColor() const       { return aColor; }
     const SvxAdjustItem     &GetAdjust() const      { return aAdjust; }
     const SvxBoxItem        &GetBox() const         { return aBox; }
+    const SvxLineItem       &GetTLBR() const        { return aTLBR; }
+    const SvxLineItem       &GetBLTR() const        { return aBLTR; }
     const SvxBrushItem      &GetBackground() const  { return aBackground; }
     void GetValueFormat( String& rFmt, LanguageType& rLng, LanguageType& rSys ) const
         { rFmt = sNumFmtString; rLng = eNumFmtLanguage; rSys = eSysLanguage; }
@@ -240,6 +250,8 @@ public:
             aAdjust.SetLastBlock( rNew.GetLastBlock() );
         }
     void SetBox( const SvxBoxItem& rNew )               { aBox = rNew; }
+    void SetTLBR( const SvxLineItem& rNew )             { aTLBR = rNew; }
+    void SetBLTR( const SvxLineItem& rNew )             { aBLTR = rNew; }
     void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
     void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
