@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-16 16:16:00 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 16:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_ALIASPROGRAMMATICPAIR_HPP_
+#include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
@@ -102,58 +102,9 @@ namespace svt
 // .......................................................................
 
     // ===================================================================
-    // = AddressBookAssignment
-    // ===================================================================
-    class AddressBookAssignment : public ::utl::ConfigItem
-    {
-    protected:
-        DECLARE_STL_STDKEY_SET( ::rtl::OUString, UStringBag );
-        UStringBag      m_aStoredFields;
-
-    protected:
-        ::com::sun::star::uno::Any
-                getProperty(const ::rtl::OUString& _rLocalName);
-        ::com::sun::star::uno::Any
-                        getProperty(const sal_Char* _pLocalName);
-
-        ::rtl::OUString getStringProperty(const sal_Char* _pLocalName);
-        sal_Int32       getInt32Property(const sal_Char* _pLocalName);
-
-        ::rtl::OUString getStringProperty(const ::rtl::OUString& _rLocalName);
-
-        void            setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue);
-
-    public:
-        AddressBookAssignment();
-        ~AddressBookAssignment();
-
-        /// the data source to use for the address book
-        ::rtl::OUString getDatasourceName();
-        /// the command to use for the address book
-        ::rtl::OUString getCommand();
-        /** the command type to use for the address book
-            @return
-                a <type scope="com.sun.star.sdb">CommandType</type> value
-        */
-        sal_Int32       getCommandType();
-
-        /// checks whether or not there is an assignment for a given logical field
-        sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
-        /// retrieves the assignment for a given logical field
-        ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName);
-
-        /// set the assignment for a given logical field
-        void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
-        /// clear the assignment for a given logical field
-        void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
-
-        void    setDatasourceName(const ::rtl::OUString& _rName);
-        void    setCommand(const ::rtl::OUString& _rCommand);
-    };
-
-    // ===================================================================
     // = AddressBookSourceDialog
     // ===================================================================
+    struct AddressBookSourceDialogData;
     class AddressBookSourceDialog : public ModalDialog
     {
     protected:
@@ -167,8 +118,6 @@ namespace svt
 
         FixedText       m_aFieldsTitle;
         Window          m_aFieldsFrame;
-        FixedText*      m_pFieldLabels[5 * 2];
-        ListBox*        m_pFields[5 * 2];
 
         ScrollBar       m_aFieldScroller;
         OKButton        m_aOK;
@@ -178,20 +127,8 @@ namespace svt
         // string to display for "no selection"
         const String    m_sNoFieldSelection;
 
-        /// current scroll pos in the field list
-        sal_Int32   m_nFieldScrollPos;
-        /// the index within m_pFields of the last visible list box. This is redundant, it could be extracted from other members
-        sal_Int32   m_nLastVisibleListIndex;
-        /// indicates that we've an odd field number. This member is for efficiency only, it's redundant.
-        sal_Bool    m_bOddFieldNumber : 1;
-
-        DECLARE_STL_VECTOR( String, StringArray );
-        /// the strings to use as labels for the field selection listboxes
-        StringArray     m_aFieldLabels;
-        // the current field assignment
-        StringArray     m_aFieldAssignments;
-        /// the logical field names
-        StringArray     m_aLogicalFieldNames;
+        AddressBookSourceDialogData*
+                        m_pImpl;
 
         /// the DatabaseContext for selecting data sources
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
@@ -202,16 +139,31 @@ namespace svt
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         m_xCurrentDatasourceTables;
 
-        AddressBookAssignment
-                        m_aConfigData;
-
     public:
         AddressBookSourceDialog( Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
 
+        // if you use this ctor, the dialog
+        // * will not store it's data in the configuration (nor initially retrieve it from there)
+        // * will not allow to change the data source name
+        // * will not allow to change the table name
+        // * will not allow to call the data source administration dialog
+        AddressBookSourceDialog( Window* _pParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::rtl::OUString& _rDS,
+            const ::rtl::OUString& _rTable,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::util::AliasProgrammaticPair >& _rMapping
+        );
+
         ~AddressBookSourceDialog();
 
+        // to be used if the object was constructed for editing a field mapping only
+        void        getFieldMapping(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::util::AliasProgrammaticPair >& _rMapping) const;
+
     protected:
+        void    implConstruct();
+
         // Window overridables
         virtual long        PreNotify( NotifyEvent& _rNEvt );
 

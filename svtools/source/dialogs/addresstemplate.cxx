@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-19 12:54:12 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 16:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
@@ -134,6 +137,9 @@
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include "localresaccess.hxx"
+#endif
 
 // .......................................................................
 namespace svt
@@ -144,6 +150,7 @@ namespace svt
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::ui::dialogs;
+    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -152,11 +159,219 @@ namespace svt
     using namespace ::comphelper;
     using namespace ::utl;
 
+    DECLARE_STL_VECTOR( String, StringArray );
+    DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringBag );
+    DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, MapString2String );
     // ===================================================================
-    // = AddressBookAssignment
+    // = IAssigmentData
     // ===================================================================
+    class IAssigmentData
+    {
+    public:
+        virtual ~IAssigmentData();
+
+        /// the data source to use for the address book
+        virtual ::rtl::OUString getDatasourceName() const = 0;
+
+        /// the command to use for the address book
+        virtual ::rtl::OUString getCommand() const = 0;
+
+        /** the command type to use for the address book
+            @return
+                a <type scope="com.sun.star.sdb">CommandType</type> value
+        */
+        virtual sal_Int32       getCommandType() const = 0;
+
+        /// checks whether or not there is an assignment for a given logical field
+        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+        /// retrieves the assignment for a given logical field
+        virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+
+        /// set the assignment for a given logical field
+        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment) = 0;
+        /// clear the assignment for a given logical field
+        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+
+        virtual void    setDatasourceName(const ::rtl::OUString& _rName) = 0;
+        virtual void    setCommand(const ::rtl::OUString& _rCommand) = 0;
+    };
+
     // -------------------------------------------------------------------
-    AddressBookAssignment::AddressBookAssignment()
+    IAssigmentData::~IAssigmentData()
+    {
+    }
+
+    // ===================================================================
+    // = AssigmentTransientData
+    // ===================================================================
+    class AssigmentTransientData : public IAssigmentData
+    {
+    protected:
+        ::rtl::OUString         m_sDSName;
+        ::rtl::OUString         m_sTableName;
+        MapString2String        m_aAliases;
+
+    public:
+        AssigmentTransientData(
+            const ::rtl::OUString& _rDSName,
+            const ::rtl::OUString& _rTableName,
+            const Sequence< AliasProgrammaticPair >& _rFields
+        );
+
+        // IAssigmentData overridables
+        virtual ::rtl::OUString getDatasourceName() const;
+        virtual ::rtl::OUString getCommand() const;
+        virtual sal_Int32       getCommandType() const;
+
+        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
+        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
+
+        virtual void    setDatasourceName(const ::rtl::OUString& _rName);
+        virtual void    setCommand(const ::rtl::OUString& _rCommand);
+    };
+
+    // -------------------------------------------------------------------
+    AssigmentTransientData::AssigmentTransientData( const ::rtl::OUString& _rDSName,
+            const ::rtl::OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
+        :m_sDSName(_rDSName)
+        ,m_sTableName(_rTableName)
+    {
+        // fill our aliaes structure
+        // first collect all known programmatic names
+        StringBag aKnownNames;
+
+        String sLogicalFieldNames( ResId( STR_LOCAGICAL_FIELD_NAMES ) );
+        sal_Int32 nTokenCount = sLogicalFieldNames.GetTokenCount(';');
+        for (sal_Int32 i = 0; i<nTokenCount; ++i)
+            aKnownNames.insert(sLogicalFieldNames.GetToken((sal_uInt16)i, ';'));
+
+        // loop throuzh the given names
+        const AliasProgrammaticPair* pFields = _rFields.getConstArray();
+        const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
+        for (;pFields != pFields; ++pFields)
+        {
+            StringBagIterator aKnownPos = aKnownNames.find( pFields->ProgrammaticName );
+            if ( aKnownNames.end() != aKnownPos )
+            {
+                m_aAliases[ pFields->ProgrammaticName ] = pFields->Alias;
+            }
+            else
+                DBG_ERROR   (   (   ::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
+                                +=  ::rtl::OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
+                                +=  ::rtl::OString(")!")
+                                ).getStr()
+                            );
+        }
+    }
+
+    // -------------------------------------------------------------------
+    ::rtl::OUString AssigmentTransientData::getDatasourceName() const
+    {
+        return m_sDSName;
+    }
+
+    // -------------------------------------------------------------------
+    ::rtl::OUString AssigmentTransientData::getCommand() const
+    {
+        return m_sTableName;
+    }
+
+    // -------------------------------------------------------------------
+    sal_Int32 AssigmentTransientData::getCommandType() const
+    {
+        return CommandType::TABLE;
+    }
+
+    // -------------------------------------------------------------------
+    sal_Bool AssigmentTransientData::hasFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    {
+        ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
+        return  ( m_aAliases.end() != aPos )
+            &&  ( aPos->second.getLength() );
+    }
+
+    // -------------------------------------------------------------------
+    ::rtl::OUString AssigmentTransientData::getFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    {
+        ::rtl::OUString sReturn;
+        ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
+        if ( m_aAliases.end() != aPos )
+            sReturn = aPos->second;
+
+        return sReturn;
+    }
+
+    // -------------------------------------------------------------------
+    void AssigmentTransientData::setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment)
+    {
+        m_aAliases[ _rLogicalName ] = _rAssignment;
+    }
+
+    // -------------------------------------------------------------------
+    void AssigmentTransientData::clearFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    {
+        MapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
+        if ( m_aAliases.end() != aPos )
+            m_aAliases.erase( aPos );
+    }
+
+    // -------------------------------------------------------------------
+    void AssigmentTransientData::setDatasourceName(const ::rtl::OUString& _rName)
+    {
+        m_sDSName = _rName;
+    }
+
+    // -------------------------------------------------------------------
+    void AssigmentTransientData::setCommand(const ::rtl::OUString& _rCommand)
+    {
+        m_sTableName = _rCommand;
+    }
+
+    // ===================================================================
+    // = AssignmentPersistentData
+    // ===================================================================
+    class AssignmentPersistentData
+            :public ::utl::ConfigItem
+            ,public IAssigmentData
+    {
+    protected:
+        StringBag       m_aStoredFields;
+
+    protected:
+        ::com::sun::star::uno::Any
+                        getProperty(const ::rtl::OUString& _rLocalName) const;
+        ::com::sun::star::uno::Any
+                        getProperty(const sal_Char* _pLocalName) const;
+
+        ::rtl::OUString getStringProperty(const sal_Char* _pLocalName) const;
+        sal_Int32       getInt32Property(const sal_Char* _pLocalName) const;
+
+        ::rtl::OUString getStringProperty(const ::rtl::OUString& _rLocalName) const;
+
+        void            setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue);
+
+    public:
+        AssignmentPersistentData();
+        ~AssignmentPersistentData();
+
+        // IAssigmentData overridables
+        virtual ::rtl::OUString getDatasourceName() const;
+        virtual ::rtl::OUString getCommand() const;
+        virtual sal_Int32       getCommandType() const;
+
+        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
+        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
+
+        virtual void    setDatasourceName(const ::rtl::OUString& _rName);
+        virtual void    setCommand(const ::rtl::OUString& _rCommand);
+    };
+
+    // -------------------------------------------------------------------
+    AssignmentPersistentData::AssignmentPersistentData()
         :ConfigItem( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.DataAccess/AddressBook" )))
     {
         Sequence< ::rtl::OUString > aStoredNames = GetNodeNames(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields")));
@@ -166,18 +381,18 @@ namespace svt
     }
 
     // -------------------------------------------------------------------
-    AddressBookAssignment::~AddressBookAssignment()
+    AssignmentPersistentData::~AssignmentPersistentData()
     {
     }
 
     // -------------------------------------------------------------------
-    sal_Bool AddressBookAssignment::hasFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    sal_Bool AssignmentPersistentData::hasFieldAssignment(const ::rtl::OUString& _rLogicalName)
     {
         return (m_aStoredFields.end() != m_aStoredFields.find(_rLogicalName));
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AddressBookAssignment::getFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    ::rtl::OUString AssignmentPersistentData::getFieldAssignment(const ::rtl::OUString& _rLogicalName)
     {
         ::rtl::OUString sAssignment;
         if (hasFieldAssignment(_rLogicalName))
@@ -191,22 +406,22 @@ namespace svt
     }
 
     // -------------------------------------------------------------------
-    Any AddressBookAssignment::getProperty(const sal_Char* _pLocalName)
+    Any AssignmentPersistentData::getProperty(const sal_Char* _pLocalName) const
     {
         return getProperty(::rtl::OUString::createFromAscii(_pLocalName));
     }
 
     // -------------------------------------------------------------------
-    Any AddressBookAssignment::getProperty(const ::rtl::OUString& _rLocalName)
+    Any AssignmentPersistentData::getProperty(const ::rtl::OUString& _rLocalName) const
     {
         Sequence< ::rtl::OUString > aProperties(&_rLocalName, 1);
-        Sequence< Any > aValues = GetProperties(aProperties);
-        DBG_ASSERT(aValues.getLength() == 1, "AddressBookAssignment::getProperty: invalid sequence length!");
+        Sequence< Any > aValues = const_cast<AssignmentPersistentData*>(this)->GetProperties(aProperties);
+        DBG_ASSERT(aValues.getLength() == 1, "AssignmentPersistentData::getProperty: invalid sequence length!");
         return aValues[0];
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AddressBookAssignment::getStringProperty(const ::rtl::OUString& _rLocalName)
+    ::rtl::OUString AssignmentPersistentData::getStringProperty(const ::rtl::OUString& _rLocalName) const
     {
         ::rtl::OUString sReturn;
         getProperty( _rLocalName ) >>= sReturn;
@@ -214,7 +429,7 @@ namespace svt
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AddressBookAssignment::getStringProperty(const sal_Char* _pLocalName)
+    ::rtl::OUString AssignmentPersistentData::getStringProperty(const sal_Char* _pLocalName) const
     {
         ::rtl::OUString sReturn;
         getProperty( _pLocalName ) >>= sReturn;
@@ -222,7 +437,7 @@ namespace svt
     }
 
     // -------------------------------------------------------------------
-    sal_Int32 AddressBookAssignment::getInt32Property(const sal_Char* _pLocalName)
+    sal_Int32 AssignmentPersistentData::getInt32Property(const sal_Char* _pLocalName) const
     {
         sal_Int32 nReturn;
         getProperty( _pLocalName ) >>= nReturn;
@@ -230,7 +445,7 @@ namespace svt
     }
 
     // -------------------------------------------------------------------
-    void AddressBookAssignment::setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue)
+    void AssignmentPersistentData::setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue)
     {
         Sequence< ::rtl::OUString > aNames(1);
         Sequence< Any > aValues(1);
@@ -240,7 +455,7 @@ namespace svt
     }
 
     // -------------------------------------------------------------------
-    void AddressBookAssignment::setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment)
+    void AssignmentPersistentData::setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment)
     {
         if (!_rAssignment.getLength())
         {
@@ -273,11 +488,11 @@ namespace svt
         sal_Bool bSuccess =
 #endif
         SetSetProperties(sDescriptionNodePath, aNewFieldDescription);
-        DBG_ASSERT(bSuccess, "AddressBookAssignment::setFieldAssignment: could not commit the changes a field!");
+        DBG_ASSERT(bSuccess, "AssignmentPersistentData::setFieldAssignment: could not commit the changes a field!");
     }
 
     // -------------------------------------------------------------------
-    void AddressBookAssignment::clearFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    void AssignmentPersistentData::clearFieldAssignment(const ::rtl::OUString& _rLogicalName)
     {
         if (!hasFieldAssignment(_rLogicalName))
             // nothing to do
@@ -289,84 +504,150 @@ namespace svt
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AddressBookAssignment::getDatasourceName()
+    ::rtl::OUString AssignmentPersistentData::getDatasourceName() const
     {
         return getStringProperty( "DataSourceName" );
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AddressBookAssignment::getCommand()
+    ::rtl::OUString AssignmentPersistentData::getCommand() const
     {
         return getStringProperty( "Command" );
     }
 
     // -------------------------------------------------------------------
-    void AddressBookAssignment::setDatasourceName(const ::rtl::OUString& _rName)
+    void AssignmentPersistentData::setDatasourceName(const ::rtl::OUString& _rName)
     {
         setStringProperty( "DataSourceName", _rName );
     }
 
     // -------------------------------------------------------------------
-    void AddressBookAssignment::setCommand(const ::rtl::OUString& _rCommand)
+    void AssignmentPersistentData::setCommand(const ::rtl::OUString& _rCommand)
     {
         setStringProperty( "Command", _rCommand );
     }
 
     // -------------------------------------------------------------------
-    sal_Int32 AddressBookAssignment::getCommandType()
+    sal_Int32 AssignmentPersistentData::getCommandType() const
     {
         return getInt32Property( "CommandType" );
     }
 
     // ===================================================================
+    // = AddressBookSourceDialogData
+    // ===================================================================
+    struct AddressBookSourceDialogData
+    {
+        FixedText*      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
+        ListBox*        pFields[FIELD_PAIRS_VISIBLE * 2];
+
+        /// current scroll pos in the field list
+        sal_Int32       nFieldScrollPos;
+        /// the index within m_pFields of the last visible list box. This is redundant, it could be extracted from other members
+        sal_Int32       nLastVisibleListIndex;
+        /// indicates that we've an odd field number. This member is for efficiency only, it's redundant.
+        sal_Bool        bOddFieldNumber : 1;
+        /// indicates that we're working with the real persistent configuration
+        sal_Bool        bWorkingPersistent : 1;
+
+        /// the strings to use as labels for the field selection listboxes
+        StringArray     aFieldLabels;
+        // the current field assignment
+        StringArray     aFieldAssignments;
+        /// the logical field names
+        StringArray     aLogicalFieldNames;
+
+        IAssigmentData* pConfigData;
+
+        // ................................................................
+        AddressBookSourceDialogData( )
+            :nFieldScrollPos(0)
+            ,bOddFieldNumber(sal_False)
+            ,nLastVisibleListIndex(0)
+            ,pConfigData( new AssignmentPersistentData )
+            ,bWorkingPersistent( sal_True )
+        {
+        }
+
+        // ................................................................
+        AddressBookSourceDialogData( const ::rtl::OUString& _rDSName, const ::rtl::OUString& _rTableName,
+            const Sequence< AliasProgrammaticPair >& _rFields )
+            :nFieldScrollPos(0)
+            ,bOddFieldNumber(sal_False)
+            ,nLastVisibleListIndex(0)
+            ,pConfigData( new AssigmentTransientData( _rDSName, _rTableName, _rFields ) )
+            ,bWorkingPersistent( sal_False )
+        {
+        }
+
+        ~AddressBookSourceDialogData()
+        {
+            delete pConfigData;
+        }
+
+    };
+
+    // ===================================================================
     // = AddressBookSourceDialog
     // ===================================================================
+#define INIT_FIELDS()   \
+         ModalDialog(_pParent, SvtResId( DLG_ADDRESSBOOKSOURCE ))\
+        ,m_aDatasourceFrame         (this, ResId(FL_DATASOURCEFRAME))\
+        ,m_aDatasourceLabel         (this, ResId(FT_DATASOURCE))\
+        ,m_aDatasource              (this, ResId(CB_DATASOURCE))\
+        ,m_aAdministrateDatasources (this, ResId(PB_ADMINISTATE_DATASOURCES))\
+        ,m_aTableLabel              (this, ResId(FT_TABLE))\
+        ,m_aTable                   (this, ResId(CB_TABLE))\
+        ,m_aFieldsTitle             (this, ResId(FT_FIELDS))\
+        ,m_aFieldsFrame             (this, ResId(CT_BORDER))\
+        ,m_aFieldScroller           (&m_aFieldsFrame, ResId(SB_FIELDSCROLLER))\
+        ,m_aOK                      (this, ResId(PB_OK))\
+        ,m_aCancel                  (this, ResId(PB_CANCEL))\
+        ,m_aHelp                    (this, ResId(PB_HELP))\
+        ,m_sNoFieldSelection(ResId(STR_NO_FIELD_SELECTION))\
+        ,m_xORB(_rxORB)
+
     // -------------------------------------------------------------------
     AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,
             const Reference< XMultiServiceFactory >& _rxORB )
-        :ModalDialog(_pParent, SvtResId( DLG_ADDRESSBOOKSOURCE ))
-        ,m_aDatasourceFrame         (this, ResId(FL_DATASOURCEFRAME))
-        ,m_aDatasourceLabel         (this, ResId(FT_DATASOURCE))
-        ,m_aDatasource              (this, ResId(CB_DATASOURCE))
-        ,m_aAdministrateDatasources (this, ResId(PB_ADMINISTATE_DATASOURCES))
-        ,m_aTableLabel              (this, ResId(FT_TABLE))
-        ,m_aTable                   (this, ResId(CB_TABLE))
-        ,m_aFieldsTitle             (this, ResId(FT_FIELDS))
-        ,m_aFieldsFrame             (this, ResId(CT_BORDER))
-        ,m_nFieldScrollPos(0)
-        ,m_aFieldScroller           (&m_aFieldsFrame, ResId(SB_FIELDSCROLLER))
-        ,m_aOK                      (this, ResId(PB_OK))
-        ,m_aCancel                  (this, ResId(PB_CANCEL))
-        ,m_aHelp                    (this, ResId(PB_HELP))
-        ,m_sNoFieldSelection(ResId(STR_NO_FIELD_SELECTION))
-        ,m_xORB(_rxORB)
-        ,m_bOddFieldNumber(sal_False)
-        ,m_nLastVisibleListIndex(0)
+        :INIT_FIELDS()
+        ,m_pImpl( new AddressBookSourceDialogData )
     {
-        DBG_ASSERT(sizeof(m_pFieldLabels)/sizeof(m_pFieldLabels[0]) == FIELD_CONTROLS_VISIBLE,
-            "AddressBookSourceDialog::AddressBookSourceDialog: invalid member count!");
-            // we export our header, and FIELD_PAIRS_VISIBLE is defined in the .hrc, which is not
-            // exported, so we have to hard-code the value of FIELD_PAIRS_VISIBLE in our header ...
+        implConstruct();
+    }
 
+    // -------------------------------------------------------------------
+    AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB,
+        const ::rtl::OUString& _rDS, const ::rtl::OUString& _rTable,
+        const Sequence< AliasProgrammaticPair >& _rMapping )
+        :INIT_FIELDS()
+        ,m_pImpl( new AddressBookSourceDialogData( _rDS, _rTable, _rMapping ) )
+    {
+        implConstruct();
+    }
+
+    // -------------------------------------------------------------------
+    void AddressBookSourceDialog::implConstruct()
+    {
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {
             for (sal_Int32 column=0; column<2; ++column)
             {
                 // the label
-                m_pFieldLabels[row * 2 + column] = new FixedText(&m_aFieldsFrame, ResId((USHORT)(FT_FIELD_BASE + row * 2 + column)));
+                m_pImpl->pFieldLabels[row * 2 + column] = new FixedText(&m_aFieldsFrame, ResId((USHORT)(FT_FIELD_BASE + row * 2 + column)));
                 // the listbox
-                m_pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, ResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
-                m_pFields[row * 2 + column]->SetDropDownLineCount(8);
-                m_pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
+                m_pImpl->pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, ResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
+                m_pImpl->pFields[row * 2 + column]->SetDropDownLineCount(8);
+                m_pImpl->pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
 
-                m_pFields[row * 2 + column]->SetHelpId(HID_ADDRTEMPL_FIELD_ASSIGNMENT);
+                m_pImpl->pFields[row * 2 + column]->SetHelpId(HID_ADDRTEMPL_FIELD_ASSIGNMENT);
             }
         }
 
         m_aFieldsFrame.SetStyle((m_aFieldsFrame.GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL) & ~WB_NODIALOGCONTROL);
 
         // correct the z-order
-        m_aFieldScroller.SetZOrder(m_pFields[FIELD_CONTROLS_VISIBLE - 1], WINDOW_ZORDER_BEHIND);
+        m_aFieldScroller.SetZOrder(m_pImpl->pFields[FIELD_CONTROLS_VISIBLE - 1], WINDOW_ZORDER_BEHIND);
         m_aOK.SetZOrder(&m_aFieldsFrame, WINDOW_ZORDER_BEHIND);
         m_aCancel.SetZOrder(&m_aOK, WINDOW_ZORDER_BEHIND);
 
@@ -380,51 +661,51 @@ namespace svt
         // should be adjustable with a rather small effort.)
 
         // initialize the strings for the field labels
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_FIRSTNAME )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_LASTNAME )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_COMPANY)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_DEPARTMENT )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_STREET )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_ZIPCODE )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_CITY )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_STATE)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_COUNTRY )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_HOMETEL )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_WORKTEL )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_OFFICETEL)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_MOBILE)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_TELOTHER)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_PAGER)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_FAX )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_EMAIL )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_URL )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_TITLE )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_POSITION )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_INITIALS )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_ADDRFORM )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_SALUTATION )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_ID)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_CALENDAR)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_INVITE)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_NOTE)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER1)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER2)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER3)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER4)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_FIRSTNAME )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_LASTNAME )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_COMPANY)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_DEPARTMENT )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_STREET )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_ZIPCODE )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_CITY )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_STATE)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_COUNTRY )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_HOMETEL )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_WORKTEL )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_OFFICETEL)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_MOBILE)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_TELOTHER)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_PAGER)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_FAX )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_EMAIL )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_URL )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_TITLE )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_POSITION )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_INITIALS )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_ADDRFORM )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_SALUTATION )) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_ID)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_CALENDAR)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_INVITE)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_NOTE)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER1)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER2)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER3)) );
+        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER4)) );
 
         // force a even number of known fields
-        m_bOddFieldNumber = (m_aFieldLabels.size() % 2) != 0;
-        if (m_bOddFieldNumber)
-            m_aFieldLabels.push_back( String() );
+        m_pImpl->bOddFieldNumber = (m_pImpl->aFieldLabels.size() % 2) != 0;
+        if (m_pImpl->bOddFieldNumber)
+            m_pImpl->aFieldLabels.push_back( String() );
 
         // limit the scrollbar range accordingly
-        sal_Int32 nOverallFieldPairs = m_aFieldLabels.size() / 2;
+        sal_Int32 nOverallFieldPairs = m_pImpl->aFieldLabels.size() / 2;
         m_aFieldScroller.SetRange( Range(0, nOverallFieldPairs - FIELD_PAIRS_VISIBLE) );
         m_aFieldScroller.SetLineSize(1);
         m_aFieldScroller.SetPageSize(FIELD_PAIRS_VISIBLE);
 
         // reset the current field assignments
-        m_aFieldAssignments.resize(m_aFieldLabels.size());
+        m_pImpl->aFieldAssignments.resize(m_pImpl->aFieldLabels.size());
             // (empty strings mean "no assignment")
 
         // some knittings
@@ -445,43 +726,84 @@ namespace svt
         // initialize the field controls
         resetFields();
         m_aFieldScroller.SetThumbPos(0);
-        m_nFieldScrollPos = -1;
+        m_pImpl->nFieldScrollPos = -1;
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
         String sLogicalFieldNames(ResId(STR_LOCAGICAL_FIELD_NAMES));
-        sal_Int32 nAdjustedTokenCount = sLogicalFieldNames.GetTokenCount(';') + (m_bOddFieldNumber ? 1 : 0);
-        DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_aFieldLabels.size(),
+        sal_Int32 nAdjustedTokenCount = sLogicalFieldNames.GetTokenCount(';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
+        DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
-        m_aLogicalFieldNames.reserve(nAdjustedTokenCount);
+        m_pImpl->aLogicalFieldNames.reserve(nAdjustedTokenCount);
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
-            m_aLogicalFieldNames.push_back(sLogicalFieldNames.GetToken((sal_uInt16)i, ';'));
+            m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.GetToken((sal_uInt16)i, ';'));
 
         PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize));
             // so the dialog will at least show up before we do the loading of the
             // configuration data and the (maybe time consuming) analysis of the data source/table to select
 
         FreeResource();
+
+        if ( !m_pImpl->bWorkingPersistent )
+        {
+            StyleSettings aSystemStyle = GetSettings().GetStyleSettings();
+            const Color& rNewColor = aSystemStyle.GetDialogColor();
+
+            m_aDatasource.SetReadOnly( sal_True );
+            m_aDatasource.SetBackground( Wallpaper( rNewColor ) );
+            m_aDatasource.SetControlBackground( rNewColor );
+
+            m_aTable.SetReadOnly( sal_True );
+            m_aTable.SetBackground( Wallpaper( rNewColor ) );
+            m_aTable.SetControlBackground( rNewColor );
+
+            m_aAdministrateDatasources.Hide( );
+        }
+    }
+
+    // -------------------------------------------------------------------
+    void AddressBookSourceDialog::getFieldMapping(Sequence< AliasProgrammaticPair >& _rMapping) const
+    {
+        _rMapping.realloc( m_pImpl->aLogicalFieldNames.size() );
+        AliasProgrammaticPair* pPair = _rMapping.getArray();
+
+        ::rtl::OUString sCurrent;
+        for (   ConstStringArrayIterator aProgrammatic = m_pImpl->aLogicalFieldNames.begin();
+                aProgrammatic != m_pImpl->aLogicalFieldNames.end();
+                ++aProgrammatic
+            )
+        {
+            sCurrent = *aProgrammatic;
+            if ( m_pImpl->pConfigData->hasFieldAssignment( sCurrent ) )
+            {
+                // the user gave us an assignment for this field
+                pPair->ProgrammaticName = *aProgrammatic;
+                pPair->Alias = m_pImpl->pConfigData->getFieldAssignment( *aProgrammatic );
+                ++pPair;
+            }
+        }
+
+        _rMapping.realloc( pPair - _rMapping.getArray() );
     }
 
     // -------------------------------------------------------------------
     void AddressBookSourceDialog::loadConfiguration()
     {
-        m_aDatasource.SetText(m_aConfigData.getDatasourceName());
-        m_aTable.SetText(m_aConfigData.getCommand());
+        m_aDatasource.SetText(m_pImpl->pConfigData->getDatasourceName());
+        m_aTable.SetText(m_pImpl->pConfigData->getCommand());
         // we ignore the CommandType: only tables are supported
 
         // the logical names for the fields
-        DBG_ASSERT(m_aLogicalFieldNames.size() == m_aFieldAssignments.size(),
+        DBG_ASSERT(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size(),
             "AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!");
 
-        ConstStringArrayIterator aLogical = m_aLogicalFieldNames.begin();
-        StringArrayIterator aAssignment = m_aFieldAssignments.begin();
+        ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
+        StringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
         for (   ;
-                aLogical < m_aLogicalFieldNames.end();
+                aLogical < m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment
             )
-            *aAssignment = m_aConfigData.getFieldAssignment(*aLogical);
+            *aAssignment = m_pImpl->pConfigData->getFieldAssignment(*aLogical);
     }
 
     // -------------------------------------------------------------------
@@ -490,9 +812,11 @@ namespace svt
         sal_Int32 i;
         for (i=0; i<FIELD_CONTROLS_VISIBLE; ++i)
         {
-            delete m_pFieldLabels[i];
-            delete m_pFields[i];
+            delete m_pImpl->pFieldLabels[i];
+            delete m_pImpl->pFields[i];
         }
+
+        delete m_pImpl;
     }
 
     // -------------------------------------------------------------------
@@ -676,9 +1000,9 @@ namespace svt
         for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
             aColumnNameSet.insert(*pColumnNames);
 
-        const String* pInitialSelection = m_aFieldAssignments.begin() + m_nFieldScrollPos;
+        const String* pInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
 
-        ListBox** pListbox = m_pFields;
+        ListBox** pListbox = m_pImpl->pFields;
         String sSaveSelection;
         for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++pListbox, ++pInitialSelection)
         {
@@ -708,9 +1032,9 @@ namespace svt
                     (*pListbox)->SelectEntryPos(0);
         }
 
-        // adjust m_aFieldAssignments
-        for (   StringArrayIterator aAdjust = m_aFieldAssignments.begin();
-                aAdjust != m_aFieldAssignments.end();
+        // adjust m_pImpl->aFieldAssignments
+        for (   StringArrayIterator aAdjust = m_pImpl->aFieldAssignments.begin();
+                aAdjust != m_pImpl->aFieldAssignments.end();
                 ++aAdjust
             )
             if (aAdjust->Len())
@@ -729,10 +1053,10 @@ namespace svt
         // update the array where we remember the field selections
         if (0 == _pListbox->GetSelectEntryPos())
             // it's the "no field selection" entry
-            m_aFieldAssignments[m_nFieldScrollPos * 2 + nListBoxIndex] = String();
+            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = String();
         else
             // it's a regular field entry
-            m_aFieldAssignments[m_nFieldScrollPos * 2 + nListBoxIndex] = _pListbox->GetSelectEntry();
+            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = _pListbox->GetSelectEntry();
 
         return 0L;
     }
@@ -740,19 +1064,19 @@ namespace svt
     // -------------------------------------------------------------------
     void AddressBookSourceDialog::implScrollFields(sal_Int32 _nPos, sal_Bool _bAdjustFocus, sal_Bool _bAdjustScrollbar)
     {
-        if (_nPos == m_nFieldScrollPos)
+        if (_nPos == m_pImpl->nFieldScrollPos)
             // nothing to do
             return;
 
         // loop through our field control rows and do some adjustments
         // for the new texts
-        FixedText** pLeftLabelControl = m_pFieldLabels;
+        FixedText** pLeftLabelControl = m_pImpl->pFieldLabels;
         FixedText** pRightLabelControl = pLeftLabelControl + 1;
-        ConstStringArrayIterator pLeftColumnLabel = m_aFieldLabels.begin() + 2 * _nPos;
+        ConstStringArrayIterator pLeftColumnLabel = m_pImpl->aFieldLabels.begin() + 2 * _nPos;
         ConstStringArrayIterator pRightColumnLabel = pLeftColumnLabel + 1;
 
         // for the focus movement and the selection scroll
-        ListBox** pLeftListControl = m_pFields;
+        ListBox** pLeftListControl = m_pImpl->pFields;
         ListBox** pRightListControl = pLeftListControl + 1;
 
         // for the focus movement
@@ -760,10 +1084,10 @@ namespace svt
         sal_Int32 nOldFocusColumn = 0;
 
         // for the selection scroll
-        ConstStringArrayIterator pLeftAssignment = m_aFieldAssignments.begin() + 2 * _nPos;
+        ConstStringArrayIterator pLeftAssignment = m_pImpl->aFieldAssignments.begin() + 2 * _nPos;
         ConstStringArrayIterator pRightAssignment = pLeftAssignment + 1;
 
-        m_nLastVisibleListIndex = -1;
+        m_pImpl->nLastVisibleListIndex = -1;
         // loop
         for (sal_Int32 i=0; i<FIELD_PAIRS_VISIBLE; ++i)
         {
@@ -796,9 +1120,9 @@ namespace svt
             implSelectField(*pRightListControl, *pRightAssignment);
 
             // the index of the last visible list box
-            ++m_nLastVisibleListIndex;  // the left hand side box is always visible
+            ++m_pImpl->nLastVisibleListIndex;   // the left hand side box is always visible
             if (!bHideRightColumn)
-                ++m_nLastVisibleListIndex;
+                ++m_pImpl->nLastVisibleListIndex;
 
             // increment ...
             ++ ++ pLeftLabelControl;
@@ -814,20 +1138,20 @@ namespace svt
 
         if (_bAdjustFocus && (nOldFocusRow >= 0))
         {   // we have to adjust the focus and one of the list boxes has the focus
-            sal_Int32 nDelta = m_nFieldScrollPos - _nPos;
+            sal_Int32 nDelta = m_pImpl->nFieldScrollPos - _nPos;
             // the new row for the focus
             sal_Int32 nNewFocusRow = nOldFocusRow + nDelta;
             // normalize
             nNewFocusRow = min(nNewFocusRow, (sal_Int32)(FIELD_PAIRS_VISIBLE - 1), ::std::less< sal_Int32 >());
             nNewFocusRow = max(nNewFocusRow, (sal_Int32)0, ::std::less< sal_Int32 >());
             // set the new focus (in the same column)
-            m_pFields[nNewFocusRow * 2 + nOldFocusColumn]->GrabFocus();
+            m_pImpl->pFields[nNewFocusRow * 2 + nOldFocusColumn]->GrabFocus();
         }
 
-        m_nFieldScrollPos = _nPos;
+        m_pImpl->nFieldScrollPos = _nPos;
 
         if (_bAdjustScrollbar)
-            m_aFieldScroller.SetThumbPos(m_nFieldScrollPos);
+            m_aFieldScroller.SetThumbPos(m_pImpl->nFieldScrollPos);
     }
 
     // -------------------------------------------------------------------
@@ -848,6 +1172,10 @@ namespace svt
         loadConfiguration();
         resetTables();
             // will reset the tables/fields implicitly
+
+        if ( !m_pImpl->bWorkingPersistent )
+            if ( m_pImpl->pFields[0] )
+                m_pImpl->pFields[0]->GrabFocus();
 
         return 0L;
     }
@@ -885,17 +1213,17 @@ namespace svt
     // -------------------------------------------------------------------
     IMPL_LINK(AddressBookSourceDialog, OnOkClicked, Button*, _pButton)
     {
-        m_aConfigData.setDatasourceName(m_aDatasource.GetText());
-        m_aConfigData.setCommand(m_aTable.GetText());
+        m_pImpl->pConfigData->setDatasourceName(m_aDatasource.GetText());
+        m_pImpl->pConfigData->setCommand(m_aTable.GetText());
 
         // set the field assignments
-        ConstStringArrayIterator aLogical = m_aLogicalFieldNames.begin();
-        ConstStringArrayIterator aAssignment = m_aFieldAssignments.begin();
+        ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
+        ConstStringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
         for (   ;
-                aLogical < m_aLogicalFieldNames.end();
+                aLogical < m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment
             )
-            m_aConfigData.setFieldAssignment(*aLogical, *aAssignment);
+            m_pImpl->pConfigData->setFieldAssignment(*aLogical, *aAssignment);
 
 
         EndDialog(RET_OK);
@@ -961,29 +1289,29 @@ namespace svt
                 {   // somebody pressed the tab key
                     if (!bAlt && !bCtrl && !bShift)
                     {   // it's really the only the key (no modifiers)
-                        if (m_pFields[m_nLastVisibleListIndex]->HasChildPathFocus())
+                        if (m_pImpl->pFields[m_pImpl->nLastVisibleListIndex]->HasChildPathFocus())
                             // the last of our visible list boxes has the focus
-                            if (m_nFieldScrollPos < m_aFieldScroller.GetRangeMax())
+                            if (m_pImpl->nFieldScrollPos < m_aFieldScroller.GetRangeMax())
                             {   // we can still scroll down
-                                sal_Int32 nNextFocusList = m_nLastVisibleListIndex + 1 - 2;
+                                sal_Int32 nNextFocusList = m_pImpl->nLastVisibleListIndex + 1 - 2;
                                 // -> scroll down
-                                implScrollFields(m_nFieldScrollPos + 1, sal_False, sal_True);
+                                implScrollFields(m_pImpl->nFieldScrollPos + 1, sal_False, sal_True);
                                 // give the left control in the "next" line the focus
-                                m_pFields[nNextFocusList]->GrabFocus();
+                                m_pImpl->pFields[nNextFocusList]->GrabFocus();
                                 // return saying "have handled this"
                                 return 1;
                             }
                     }
                     else if (!bAlt && !bCtrl && bShift)
                     {   // it's shift-tab
-                        if (m_pFields[0]->HasChildPathFocus())
+                        if (m_pImpl->pFields[0]->HasChildPathFocus())
                             // our first list box has the focus
-                            if (m_nFieldScrollPos > 0)
+                            if (m_pImpl->nFieldScrollPos > 0)
                             {   // we can still scroll up
                                 // -> scroll up
-                                implScrollFields(m_nFieldScrollPos - 1, sal_False, sal_True);
+                                implScrollFields(m_pImpl->nFieldScrollPos - 1, sal_False, sal_True);
                                 // give the right control in the "prebious" line the focus
-                                m_pFields[0 - 1 + 2]->GrabFocus();
+                                m_pImpl->pFields[0 - 1 + 2]->GrabFocus();
                                 // return saying "have handled this"
                                 return 1;
                             }
