@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,8 @@
 #ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -145,7 +139,9 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -1809,27 +1805,6 @@ sal_Bool OQueryDesignView::isSlotEnabled(sal_Int32 _nSlotId)
     return m_pSelectionBox->IsRowVisible(nRow);
 }
 // -----------------------------------------------------------------------------
-void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTable,
-                                    ::rtl::OUString& _rComposedName,
-                                    sal_Bool _bQuote)
-{
-    OSL_ENSURE(_rxTable.is(),"Table can not be null!");
-    if(_rxTable.is())
-    {
-        Reference< XPropertySetInfo > xInfo = _rxTable->getPropertySetInfo();
-        if(xInfo->hasPropertyByName(PROPERTY_CATALOGNAME) && xInfo->hasPropertyByName(PROPERTY_SCHEMANAME) && xInfo->hasPropertyByName(PROPERTY_NAME))
-        {
-            ::rtl::OUString aCatalog,aSchema,aTable;
-            _rxTable->getPropertyValue(PROPERTY_CATALOGNAME)>>= aCatalog;
-            _rxTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
-            _rxTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
-
-            ::dbtools::composeTableName(_rxMetaData,aCatalog,aSchema,aTable,_rComposedName,_bQuote);
-        }
-    }
-}
-// -----------------------------------------------------------------------------
 void OQueryDesignView::InitFromParseNode()
 {
     m_pSelectionBox->ClearAll();
@@ -1865,7 +1840,7 @@ void OQueryDesignView::InitFromParseNode()
                 for(;aIter != aMap.end();++aIter)
                 {
                     OSQLTable xTable = aIter->second;
-                    composeTableName(xMetaData,Reference<XPropertySet>(xTable,UNO_QUERY),aComposedName,sal_False);
+                    ::dbaui::composeTableName(xMetaData,Reference<XPropertySet>(xTable,UNO_QUERY),aComposedName,sal_False);
 
                     OQueryTableWindow* pExistentWin = m_pTableView->FindTable(aIter->first);
                     if (!pExistentWin)

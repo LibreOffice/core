@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ OQueryTableWindow::~OQueryTableWindow()
 sal_Bool OQueryTableWindow::Init()
 {
     sal_Bool bSuccess = OTableWindow::Init();
+    if(!bSuccess)
+        return bSuccess;
 
     OQueryTableView* pContainer = static_cast<OQueryTableView*>(getTableView());
 

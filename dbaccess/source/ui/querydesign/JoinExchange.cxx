@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 09:31:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,20 +77,12 @@ String OJoinExchObj::m_sJoinFormat;
 // class OJoinExchObj
 //==================================================================
 
-TYPEINIT1(OJoinExchObj, ODataExchange);
 
 //------------------------------------------------------------------------
 OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource)
     :m_jxdSourceDescription(jxdSource)
 {
     // Verfuegbare Typen in Liste einfuegen
-    if(!aDataExchangeFormat.Len())
-        aDataExchangeFormat = Exchange::GetFormatName(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
-    if(!m_sJoinFormat.Len())
-        m_sJoinFormat = String::CreateFromAscii(SBA_JOIN_EXCHANGE_FORMAT);
-
-    SvData* pData = new SvData(Exchange::RegisterFormatName(m_sJoinFormat), MEDIUM_MEMORY);
-    Append(pData);
 }
 
 //------------------------------------------------------------------------

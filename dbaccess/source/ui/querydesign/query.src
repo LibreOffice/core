@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:12 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1366,7 +1366,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
 
 QueryBox QUERY_DESIGN_SAVEMODIFIED
 {
-    Buttons = WB_YES_NO ;
+    Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
     Message = "Die Abfrage wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ English ] = "The query has been modified.\nDo you want to save your changes?" ;
@@ -1569,7 +1569,18 @@ String STR_SVT_SQL_SYNTAX_INT_NO_VALID
     Text[ arabic ] = "áÇ íãßä ãÞÇÑäÉ ÇáÍÞá ÈÚÏÏ ÕÍíÍ!";
     Text[ turkish ] = "Alan, bir tamsayý ile karþýlaþtýrýlamaz!";
 };
-
+String STR_SVT_SQL_SYNTAX_TABLE
+{
+    Text = "Die Tabelle \"#\" ist in der Datenbank unbekannt!";
+    Text [ ENGLISH ] = "The table \"#\" is unknown in the database!";
+    Text[ english_us ] = "The table \"#\" is unknown in the database!";
+};
+String STR_SVT_SQL_SYNTAX_COLUMN
+{
+    Text = "Die Spalte \"#\" ist in der Tabelle \"#\" unbekannt!";
+    Text [ ENGLISH ] = "The column \"#\" is unknown in the table \"#\"!";
+    Text[ english_us ] = "The column \"#\" is unknown in the table \"#\"!";
+};
 String STR_SVT_SQL_SYNTAX_REAL_NO_VALID
 {
     Text = "Das Feld kann nicht mit einer Fließkommazahl verglichen werden!";

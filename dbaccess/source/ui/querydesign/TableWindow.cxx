@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 
@@ -301,9 +304,21 @@ BOOL OTableWindow::Init()
     if(!xTables->hasByName(aName))
         return FALSE;
 
-    ::cppu::extractInterface(m_xTable,xTables->getByName(aName));
-    Reference<XColumnsSupplier> xColumnsSups(m_xTable,UNO_QUERY);
-    m_xColumns = xColumnsSups->getColumns();
+    try
+    {
+        ::cppu::extractInterface(m_xTable,xTables->getByName(aName));
+        Reference<XColumnsSupplier> xColumnsSups(m_xTable,UNO_QUERY);
+        m_xColumns = xColumnsSups->getColumns();
+    }
+    catch(SQLException& e)
+    {
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),pParent,pParent->getController()->getORB());
+        return FALSE;
+    }
+    catch(Exception&)
+    {
+        return FALSE;
+    }
 
 
     // ListBox anlegen, wenn notwendig

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:03:51 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #include "QTableWindow.hxx"
 #endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
 
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
@@ -254,19 +257,6 @@ OQueryController::~OQueryController()
 // -----------------------------------------------------------------------------
 void OQueryController::dispose()
 {
-    if(isModified())
-    {
-        QueryBox aQry(getView(), ModuleRes(QUERY_DESIGN_SAVEMODIFIED));
-        switch (aQry.Execute())
-        {
-            case RET_YES:
-                Execute(ID_BROWSER_SAVEDOC);
-                break;
-            default:
-                break;
-        }
-    }
-
     OGenericUnoController::dispose();
     m_pAddTabDlg = NULL;
     delete m_pView;
@@ -323,13 +313,8 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
     FeatureState aReturn;
         // (disabled automatically)
     aReturn.bEnabled = m_xConnection.is();
-    if(!m_xConnection.is()) // so what should otherwise
+    if(!m_xConnection.is()) // so what should otherwise happen
     {
-        String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-
-        ODataView * aWindow=getView();
-        InfoBox(aWindow, aMessage).Execute();
-
         aReturn.aState = ::cppu::bool2any(sal_False);
         return aReturn;
     }
@@ -562,22 +547,29 @@ void OQueryController::Execute(sal_uInt16 _nId)
                             delete m_pSqlIterator->getParseTree();
                             m_pSqlIterator->setParseTree(pNode);
                             m_pSqlIterator->traverseAll();
-                            if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT && m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT_COUNT)
-                            {
-                                ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
-                                aBox.Execute();
-                            }
+                            SQLWarning aWarning = m_pSqlIterator->getWarning();
+                            if(aWarning.Message.getLength())
+                                showError(SQLExceptionInfo(aWarning));
                             else
                             {
-                                // change the view of the data
-                                m_bDesign = !m_bDesign;
-                                m_sStatement = ::rtl::OUString();
-                                pNode->parseNodeToStr(  m_sStatement,
-                                                        m_xConnection->getMetaData(),
-                                                        &getParser()->getContext(),
-                                                        sal_True,sal_True);
-                                static_cast<OQueryViewSwitch*>(m_pView)->SaveUIConfig();
-                                m_pWindow->switchView();
+                                const OSQLTables& xTabs = m_pSqlIterator->getTables();
+                                if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT && m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT_COUNT || xTabs.begin() != xTabs.end())
+                                {
+                                    ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
+                                    aBox.Execute();
+                                }
+                                else
+                                {
+                                    // change the view of the data
+                                    m_bDesign = !m_bDesign;
+                                    m_sStatement = ::rtl::OUString();
+                                    pNode->parseNodeToStr(  m_sStatement,
+                                                            m_xConnection->getMetaData(),
+                                                            &getParser()->getContext(),
+                                                            sal_True,sal_True);
+                                    static_cast<OQueryViewSwitch*>(m_pView)->SaveUIConfig();
+                                    m_pWindow->switchView();
+                                }
                             }
                         }
                         else
@@ -783,6 +775,9 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
             createNewConnection(sal_False);
         }
+        if (!m_xConnection.is())    // we have no connection so what else should we do
+            m_bDesign = sal_False;
+
 
         // get command from the query if a query name was supplied
         if(m_sName.getLength())
@@ -827,6 +822,19 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                         delete m_pSqlIterator->getParseTree();
                         m_pSqlIterator->setParseTree(pNode);
                         m_pSqlIterator->traverseAll();
+                        SQLWarning aWarning = m_pSqlIterator->getWarning();
+                        if(aWarning.Message.getLength())
+                        {
+                            showError(SQLExceptionInfo(aWarning));
+                            m_bDesign = sal_False;
+                        }
+                    }
+                    else
+                    {
+                        String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
+                        OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
+                        aDlg.Execute();
+                        m_bDesign = sal_False; // the statement can't be parsed so we show the text view
                     }
                 }
             }
@@ -850,8 +858,8 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
                     }
                 }
+                OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
             }
-            OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
         getView()->initialize();
         getUndoMgr()->Clear();
@@ -887,7 +895,7 @@ void OQueryController::setQueryComposer()
             }
             OSL_ENSURE(m_xComposer.is(),"No querycomposer available!");
             Reference<XTablesSupplier> xTablesSup(m_xConnection, UNO_QUERY);
-            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator(xTablesSup->getTables(),m_xConnection->getMetaData(),NULL);
+            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator(xTablesSup->getTables(),m_xConnection->getMetaData(),NULL,m_pSqlParser);
         }
     }
 }
@@ -929,6 +937,20 @@ void SAL_CALL OQueryController::elementReplaced(const ::com::sun::star::containe
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    if(m_xConnection.is() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size())))
+    {
+        QueryBox aQry(getView(), ModuleRes(QUERY_DESIGN_SAVEMODIFIED));
+        switch (aQry.Execute())
+        {
+            case RET_YES:
+                Execute(ID_BROWSER_SAVEDOC);
+                break;
+            case RET_CANCEL:
+                return sal_False;
+            default:
+                break;
+        }
+    }
     return sal_True;
 }
 // -----------------------------------------------------------------------------

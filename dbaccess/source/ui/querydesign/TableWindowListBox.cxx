@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 09:31:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ void OTableWindowListBox::Command(const CommandEvent& rEvt)
             if (!pCont->getDesignView()->getController()->isReadOnly())
             {
                 EndSelection();
-
+/*
                 Pointer aMovePtr( POINTER_COPYDATA ),
                         aCopyPtr( POINTER_COPYDATA ),
                         aLinkPtr( POINTER_LINKDATA );
@@ -347,6 +347,7 @@ void OTableWindowListBox::Command(const CommandEvent& rEvt)
                 m_bDragSource = TRUE;
                 pJoin->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_MOVEABLE );
                 m_bDragSource = FALSE;
+*/
             }
         }   break;
         default:

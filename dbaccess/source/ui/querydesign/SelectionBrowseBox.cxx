@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ DbCellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColI
 void OSelectionBrowseBox::InitController(DbCellControllerRef& rController, long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OSL_ENSURE(getDesignView()->getController()->getTableFieldDesc()->size() > (nColId-1),"ColID is to great!");
+    OSL_ENSURE(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(nColId-1),"ColID is to great!");
     OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId-1];
     DBG_ASSERT(pEntry, "OSelectionBrowseBox::InitController : keine FieldDescription !");
     long nCellIndex = GetRealRow(nRow);
@@ -558,7 +558,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     OTableFieldDesc* pEntry = NULL;
-    if(getDesignView()->getController()->getTableFieldDesc()->size() > GetCurColumnId() - 1)
+    if(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(GetCurColumnId() - 1))
         pEntry = (*getDesignView()->getController()->getTableFieldDesc())[GetCurColumnId() - 1];
 
     sal_Bool bWasEmpty = pEntry ? pEntry->IsEmpty() : sal_False;
@@ -996,7 +996,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
     rDev.SetClipRegion( rRect );
     OTableFieldDesc* pEntry = NULL;
 
-    if(getDesignView()->getController()->getTableFieldDesc()->size() > nColumnId - 1)
+    if(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(nColumnId - 1))
         pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColumnId - 1];
 
     if (!pEntry)
@@ -1020,9 +1020,9 @@ void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& r
     String  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
 
     // ab BROW_CRIT2_ROW werden alle Zeilen mit "oder" angegeben
-    xub_StrLen nToken = (sal_uInt16) (m_nSeekRow >= GetBrowseRow(BROW_CRIT2_ROW))
+    xub_StrLen nToken = (xub_StrLen) (m_nSeekRow >= GetBrowseRow(BROW_CRIT2_ROW))
                                 ?
-            BROW_CRIT2_ROW : GetRealRow(m_nSeekRow);
+            xub_StrLen(BROW_CRIT2_ROW) : xub_StrLen(GetRealRow(m_nSeekRow));
     rDev.DrawText(aPos, aLabel.GetToken(nToken));
 }
 
@@ -1037,7 +1037,7 @@ sal_Bool OSelectionBrowseBox::QueryDrop(const BrowserDropEvent& rEvt)
 void OSelectionBrowseBox::RemoveColumn(sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(getDesignView()->getController()->getTableFieldDesc()->size() == ColCount() - 1, "OSelectionBrowseBox::RemoveColumn : inkonsistent state !");
+    DBG_ASSERT(getDesignView()->getController()->getTableFieldDesc()->size() == sal_uInt16(ColCount() - 1), "OSelectionBrowseBox::RemoveColumn : inkonsistent state !");
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
     DBG_ASSERT((nColId == 0) || (nColId <= getDesignView()->getController()->getTableFieldDesc()->size()), "OSelectionBrowseBox::RemoveColumn : invalid parameter nColId");
         // ColId ist bei mir gleichbedeutend mit Position, und da sollte die Bedingung natuerlich zutreffen
@@ -1082,7 +1082,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 nColId)
 void OSelectionBrowseBox::RemoveField(sal_uInt16 nId, sal_Bool bActivate)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OSL_ENSURE(getDesignView()->getController()->getTableFieldDesc()->size() > (nId-1),"ID is to great!");
+    OSL_ENSURE(getDesignView()->getController()->getTableFieldDesc()->size() > sal_uInt16(nId-1),"ID is to great!");
 
     OTableFieldDesc* pDesc = (*getDesignView()->getController()->getTableFieldDesc())[(sal_uInt32)(nId - 1)] ;
     pDesc->SetColWidth( (sal_uInt16)GetColumnWidth(nId) );  // hat er sich vorher leider nicht gemerkt
@@ -1171,10 +1171,11 @@ sal_Bool OSelectionBrowseBox::Drop( const BrowserDropEvent& rEvt )
     if (DragServer::HasFormat(0,REGISTERID()))
     {
         // Einfuegen des Feldes an der gewuenschten Position
-        SvDataObjectRef xDataObj = SvDataObject::PasteDragServer(rEvt);
+/*      SvDataObjectRef xDataObj = SvDataObject::PasteDragServer(rEvt);
         OJoinExchObj* xJoinExchObj = (OJoinExchObj*)&xDataObj;
         OJoinExchangeData jxdSource = xJoinExchObj->GetSourceDescription();
         InsertField(jxdSource);
+*/
     }
     return sal_False;
 }
@@ -1257,7 +1258,7 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
     // der FieldDescription Bescheid sagen
     OTableFieldDesc* pEntry = (*getDesignView()->getController()->getTableFieldDesc())[nColId - 1];
     if (pEntry)
-        pEntry->SetColWidth(GetColumnWidth(nColId));
+        pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
 
     if (bWasEditing)
         ActivateCell(GetCurRow(), GetCurColumnId());
@@ -1283,9 +1284,9 @@ Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 void OSelectionBrowseBox::InsertColumn(OTableFieldDesc* pEntry, long& nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(getDesignView()->getController()->getTableFieldDesc()->size() == ColCount() - 1, "OSelectionBrowseBox::InsertColumn : inkonsistent state !");
+    DBG_ASSERT(getDesignView()->getController()->getTableFieldDesc()->size() == sal_uInt16(ColCount() - 1), "OSelectionBrowseBox::InsertColumn : inkonsistent state !");
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
-    DBG_ASSERT((nColId == -1) || (nColId <= getDesignView()->getController()->getTableFieldDesc()->size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
+    DBG_ASSERT(sal_uInt16(nColId == -1) || (nColId <= getDesignView()->getController()->getTableFieldDesc()->size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
         // -1 heisst ganz hinten, Count heisst ganz hinten, der Rest bezeichnet eine richtige Position
 
     sal_uInt16 nCurCol = GetCurColumnId();
@@ -1295,7 +1296,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDesc* pEntry, long& nColId)
 
     // Gueltigkeit von nColId pruefen (ColId von 1 bis ...)
     // Wenn zu klein oder zu gross, auf Ende der Liste setzen
-    if ((nColId == -1) || (nColId >= getDesignView()->getController()->getTableFieldDesc()->size()))     // Anhaengen des Feldes
+    if ((nColId == -1) || (sal_uInt16(nColId) >= getDesignView()->getController()->getTableFieldDesc()->size()))     // Anhaengen des Feldes
     {
         if (FindFirstFreeCol(nColId) == NULL)   // keine freie Column mehr
         {
@@ -1764,7 +1765,7 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     long nErg=0,i;
-    for(i=0;i < m_bVisibleRow.size(); i++)
+    for(i=0;i < (long)m_bVisibleRow.size(); i++)
     {
         if(m_bVisibleRow[i])
         {
@@ -1772,7 +1773,7 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
                 break;
         }
     }
-    DBG_ASSERT(nErg <= m_bVisibleRow.size(),"nErg kann nicht groesser als BROW_ROW_CNT sein!");
+    DBG_ASSERT(nErg <= long(m_bVisibleRow.size()),"nErg kann nicht groesser als BROW_ROW_CNT sein!");
     return i;
 }
 static long nVisibleRowMask[] =
@@ -2012,7 +2013,7 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
         pUndo->SetColId(nColId);
         pUndo->SetOriginalWidth(pEntry->GetColWidth());
         getDesignView()->getController()->getUndoMgr()->AddUndoAction(pUndo);
-        pEntry->SetColWidth(GetColumnWidth(nColId));
+        pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
     }
 }
 
