@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:53:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -881,7 +880,7 @@ void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference<
 
     setNode( xNode );
 
-    mxAudio = xAudio;
+    setAudio( xAudio );
     setNodeType( nNodeType );
     setTarget( aTarget );
     setDuration( fDuration );
@@ -1557,32 +1556,41 @@ static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >&
 
 void CustomAnimationEffect::removeAudio()
 {
-    Reference< XAnimationNode > xChild;
+    try
+    {
+        Reference< XAnimationNode > xChild;
 
-    if( mxAudio.is() )
-    {
-        xChild.set( mxAudio, UNO_QUERY );
-        mxAudio.clear();
+        if( mxAudio.is() )
+        {
+            xChild.set( mxAudio, UNO_QUERY );
+            mxAudio.clear();
+        }
+        else if( mnCommand == EffectCommands::STOPAUDIO )
+        {
+            xChild.set( findCommandNode( mxNode ), UNO_QUERY );
+            mnCommand = 0;
+        }
+
+        if( xChild.is() )
+        {
+            Reference< XTimeContainer > xContainer( mxNode, UNO_QUERY );
+            if( xContainer.is() )
+                xContainer->removeChild( xChild );
+        }
     }
-    else if( mnCommand == EffectCommands::STOPAUDIO )
+    catch( Exception& e )
     {
-        xChild.set( findCommandNode( mxNode ), UNO_QUERY );
-        mnCommand = 0;
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::removeAudio(), exception caught!" );
     }
 
-    if( xChild.is() )
-    {
-        Reference< XTimeContainer > xContainer( mxNode, UNO_QUERY );
-        if( xContainer.is() )
-            xContainer->removeChild( xChild );
-    }
 }
 
 // --------------------------------------------------------------------
 
 void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animations::XAudio >& xAudio )
 {
-    if( mxAudio != xAudio )
+    if( mxAudio != xAudio ) try
     {
         removeAudio();
         mxAudio = xAudio;
@@ -1590,6 +1598,11 @@ void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animati
         Reference< XAnimationNode > xChild( mxAudio, UNO_QUERY );
         if( xContainer.is() && xChild.is() )
             xContainer->appendChild( xChild );
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::setAudio(), exception caught!" );
     }
 }
 
