@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-30 14:24:15 $
+ *  last change: $Author: pb $ $Date: 2001-12-17 11:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ friend class SfxHelpIndexWindow_Impl;
     long                nIndexSize;
     long                nTextSize;
     sal_Bool            bIndex;
-
+    Point               aWinPos;
     String              sTitle;
     String              sKeyword;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-07 12:28:11 $
+ *  last change: $Author: pb $ $Date: 2001-12-17 11:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2223,24 +2223,28 @@ void SfxHelpWindow_Impl::Split()
 
 void SfxHelpWindow_Impl::MakeLayout()
 {
-    if ( nHeight > 0 )
+    if ( nHeight > 0 && xWindow.is() )
     {
-        if ( !bIndex )
+           Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
+           pScreenWin->Hide();
+
+        ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
+        sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
+        sal_Int32 nWidth = bIndex ? nExpandWidth : nCollapseWidth;
+        xWindow->setPosSize( aRect.X, aRect.Y, nWidth, nHeight, ::com::sun::star::awt::PosSize::SIZE );
+
+        if ( aRect.Width > 0 && aRect.Height > 0 )
         {
-            Size aSize = pTextWin->GetOutputSizePixel();
-            if ( xWindow.is() )
-            {
-                ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
-                xWindow->setPosSize( aRect.X, aRect.Y, nCollapseWidth, nHeight,
-                                     ::com::sun::star::awt::PosSize::SIZE );
-            }
+            Rectangle aScreenRect = pScreenWin->GetWindowExtentsRelative( NULL );
+            Point aNewPos = aScreenRect.TopLeft();
+            sal_Int32 nDiffWidth = nOldWidth - nWidth;
+            aNewPos.X() += nDiffWidth;
+            pScreenWin->SetPosPixel( aNewPos );
         }
-        else if ( xWindow.is() )
-        {
-            ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
-            xWindow->setPosSize( aRect.X, aRect.Y, nExpandWidth, nHeight,
-                                 ::com::sun::star::awt::PosSize::SIZE );
-        }
+        else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )
+            pScreenWin->SetPosPixel( aWinPos );
+
+           pScreenWin->Show();
     }
 
     Clear();
@@ -2296,12 +2300,14 @@ void SfxHelpWindow_Impl::LoadConfig()
         if ( aUserItem >>= aTemp )
         {
             aUserData = String( aTemp );
-            DBG_ASSERT( aUserData.GetTokenCount() == 4, "invalid user data" );
+            DBG_ASSERT( aUserData.GetTokenCount() == 6, "invalid user data" );
             USHORT nIdx = 0;
             nIndexSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
             nTextSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
             sal_Int32 nWidth = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
             nHeight = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+            aWinPos.X() = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+            aWinPos.Y() = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
             if ( bIndex )
             {
                 nExpandWidth = nWidth;
@@ -2340,6 +2346,14 @@ void SfxHelpWindow_Impl::SaveConfig()
     aUserData += String::CreateFromInt32( nW );
     aUserData += ';';
     aUserData += String::CreateFromInt32( nH );
+
+       Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
+    aWinPos = pScreenWin->GetWindowExtentsRelative( NULL ).TopLeft();
+    aUserData += ';';
+    aUserData += String::CreateFromInt32( aWinPos.X() );
+    aUserData += ';';
+    aUserData += String::CreateFromInt32( aWinPos.Y() );
+
     aViewOpt.SetUserItem( USERITEM_NAME, makeAny( rtl::OUString( aUserData ) ) );
 }
 
@@ -2519,6 +2533,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     nIndexSize      ( 40 ),
     nTextSize       ( 60 ),
     bIndex          ( sal_True ),
+    aWinPos         ( 0, 0 ),
     sTitle          ( pParent->GetText() )
 
 {
