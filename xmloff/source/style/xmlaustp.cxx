@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-09-13 14:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         if (!bFooterEndIndex)
             nFooterEndIndex = nIndex;
 
-        uno::Reference< xml::sax::XAttributeList > xEmptyList;
+        uno::Reference< xml::sax::XAttributeList > xEmptyList = new SvXMLAttributeList();
 
         OUString sNameHeader( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_HEADER_STYLE) ) );
 
