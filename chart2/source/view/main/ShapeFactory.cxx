@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:46 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1873,14 +1873,14 @@ uno::Reference< drawing::XShape >
     if( xTextRange.is() )
         xTextRange->setString( rText );
 
-    //set properties
-    PropertyMapper::setMultiProperties( rPropNames, rPropValues, xShape );
-
-    //set position matrix
-    //the matrix needs to be set at the end behind autogrow and such position influencing properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     if( xProp.is() )
     {
+        //set properties
+        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
+
+        //set position matrix
+        //the matrix needs to be set at the end behind autogrow and such position influencing properties
         try
         {
             xProp->setPropertyValue( C2U( "Transformation" ), rATransformation );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-14 15:35:16 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ void VTitle::createShapes( const awt::Point& rPos )
             tNameSequence aPropNames;
             tAnySequence aPropValues;
             PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-            PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShape );
+            PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
         }
 
         sal_Bool bStackCharacters(sal_False);

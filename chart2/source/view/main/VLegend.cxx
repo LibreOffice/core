@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 12:39:01 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,8 @@ void lcl_getLegendEntries(
 
                 // set character properties
                 ::chart::PropertyMapper::setMultiProperties(
-                    rProperties.first, rProperties.second, xEntry );
+                    rProperties.first, rProperties.second,
+                    uno::Reference< beans::XPropertySet >( xEntry,uno::UNO_QUERY ) );
 
                 // adapt min-/max-extent
                 awt::Size aEntrySize( xEntry->getSize() );
@@ -577,7 +578,8 @@ void VLegend::createShapes(
 
                 // apply legend properties
                 PropertyMapper::setMultiProperties(
-                    aLineFillProperties.first, aLineFillProperties.second, xBorder );
+                    aLineFillProperties.first, aLineFillProperties.second,
+                    uno::Reference< beans::XPropertySet >( xBorder, uno::UNO_QUERY ));
             }
 
             // create entries

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:44 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ public:
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues
                 , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >& xTarget );
+                    ::com::sun::star::beans::XPropertySet >& xTarget );
 
     static const tMakePropertyNameMap& getPropertyNameMapForCharacterProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForParagraphProperties();

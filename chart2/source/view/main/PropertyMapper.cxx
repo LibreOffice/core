@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:45 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,11 +367,12 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
     return m_aShapePropertyMapForFilledSeriesProperties;
 }
 
-//static
+// static
 void PropertyMapper::setMultiProperties(
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues
-                , const uno::Reference< drawing::XShape >& xTarget )
+                , const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::beans::XPropertySet >& xTarget )
 {
     try
     {
@@ -382,6 +383,7 @@ void PropertyMapper::setMultiProperties(
         }
         else
         {
+            OSL_ENSURE( false, "Object does not support XMultiPropertySet" );
             //@todo: if no multipropertyset is available try the unperformant normal XPropertySet
         }
     }

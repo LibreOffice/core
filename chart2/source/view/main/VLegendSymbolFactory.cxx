@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegendSymbolFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-10 11:41:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@ void lcl_setPropetiesToShape(
     static ::chart::tPropertyNameMap aFilledNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
     static ::chart::tPropertyNameMap aLineNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
 
-    if( xProp.is() && xShape.is() )
+    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+    if( xProp.is() && xShapeProp.is() )
     {
         ::chart::tPropertyNameValueMap aValueMap;
         if( bFilledSeries )
@@ -96,7 +97,7 @@ void lcl_setPropetiesToShape(
         ::chart::tNameSequence aPropNames;
         ::chart::tAnySequence aPropValues;
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-        ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShape );
+        ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
     }
 }
 
