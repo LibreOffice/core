@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Process.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:12:54 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
 package com.sun.star.wizards.web;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -287,36 +288,37 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
     private boolean cleanup(Task task) {
 
         task.setSubtaskName(TASK_FINISH);
-         boolean b = cleanup(tempDir);
+        boolean b = fileAccess.delete(tempDir);
          if (!b)
              error(null,null,ERROR_CLEANUP,ErrorHandler.ERROR_WARNING);
         task.advance(b);
         return b;
     }
 
-    /**
-     * deletes the given directory
-     * @param dir the directory to delete
-     * @return true if should continue
-     */
-    private boolean cleanup(String dir) {
+//  /**
+//   * deletes the given directory
+//   * @param dir the directory to delete
+//   * @return true if should continue
+//   */
+//  private boolean cleanup(String dir) {
+//
+//      boolean success = true;
+//
+//      if (dir != null && fileAccess.exists(dir,false)) {
+//
+//          String[] files = fileAccess.listFiles(dir,true);
+//
+//          for (int i = 0; i < files.length; i++) {
+//              if (fileAccess.isDirectory(files[i]))
+//                  success = success && cleanup(files[i]);
+//              else
+//                  success = success && fileAccess.delete(files[i]);
+//
+//          }
+//      }
+//      return success && fileAccess.delete(dir);
+//  }
 
-        boolean success = true;
-
-        if (dir != null && fileAccess.exists(dir,false)) {
-
-            String[] files = fileAccess.listFiles(dir,true);
-
-            for (int i = 0; i < files.length; i++) {
-                if (fileAccess.isDirectory(files[i]))
-                    success = success && cleanup(files[i]);
-                else
-                    success = success && fileAccess.delete(files[i]);
-
-            }
-        }
-        return success && fileAccess.delete(dir);
-    }
 
     /**
      * This method is used to copy style files to a target
@@ -539,7 +541,6 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
             Transformer transformer = ((Templates)templates.get(key)).newTransformer();
 
             doc.normalize();
-
             task.advance(true);
 
             /*
@@ -548,14 +549,16 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
              */
             String fn = fileAccess.getPath( targetPath, key.substring(0,key.length()-4));
             File f = new File(fn);
-
-            transformer.transform( new DOMSource(doc), new StreamResult(f) );
-
+            FileOutputStream oStream = new FileOutputStream(f);
+            // Due to a problem occuring when using Xalan-Java 2.6.0 and
+            // Java 1.5.0, wrap f in a FileOutputStream here (otherwise, the
+            // StreamResult's getSystemId would return a "file:/..." URL while
+            // the Xalan code expects a "file:///..." URL):
+            transformer.transform(
+                new DOMSource(doc), new StreamResult(oStream) );
+            oStream.close();
             task.advance(true);
         }
-
-
-
     }
 
 
