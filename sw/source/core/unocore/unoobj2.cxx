@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-28 14:36:57 $
+ *  last change: $Author: os $ $Date: 2001-03-01 16:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,7 +1496,10 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
                 if(pSttNode == pTxtFtn->GetStartNode()->GetNode().
                                     FindSttNodeByType(SwFootnoteStartNode))
                 {
-                    aRet = new SwXFootnote(pDoc, rFtn);
+                    xParentText = ((SwUnoCallBack*)pDoc->GetUnoCallBack())->
+                                                            GetFootnote(rFtn);
+                    if(!xParentText.is())
+                        xParentText = new SwXFootnote(pDoc, rFtn);
                     break;
                 }
             }
