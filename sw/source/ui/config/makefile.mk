@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:55:17 $
+#   last change: $Author: kz $ $Date: 2003-10-15 10:00:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ SRS1NAME=$(TARGET)
 SRC1FILES =	\
         optdlg.src \
         optload.src \
+        optcomp.src \
         redlopt.src
 
 SLOFILES =	\
@@ -87,6 +88,7 @@ SLOFILES =	\
         $(SLO)$/fontcfg.obj \
         $(SLO)$/modcfg.obj \
         $(SLO)$/optload.obj \
+        $(SLO)$/optcomp.obj \
         $(SLO)$/optpage.obj \
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
