@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:29:31 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,6 @@ typedef struct _osl_TFile
     int     m_Handle;
     sal_Char*   m_pReadPtr;
     sal_Char    m_ReadBuf[512];
-/*      sal_Char*   m_pWritePtr; */
-/*      sal_Char    m_WriteBuf[512]; */
     sal_Char*   m_pWriteBuf;
     sal_uInt32  m_nWriteBufLen;
     sal_uInt32  m_nWriteBufFree;
@@ -204,22 +202,12 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile);
 static sal_Bool storeProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile, sal_Bool bCleanup);
 static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable);
 static sal_Bool releaseProfile(osl_TProfileImpl* pProfile);
-static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, sal_Char *pPath);
 
 static sal_Bool writeProfileImpl (osl_TFile* pFile);
 static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl*);
 static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
 static void osl_ProfileGenerateExtension(sal_Char* pszFileName, sal_Char* pszExtension, sal_Char* pszTmpName);
-
-extern sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
-extern sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **ustrDirectory);
-extern oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
-oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags);
-sal_Bool SAL_CALL osl_psz_getProfileName(const sal_Char* pszPath, const sal_Char* pszName,
-                                         sal_Char* pszBuffer, sal_uInt32 MaxLen);
-sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
-oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max);
-
+static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags);
 
 /* implemented in file.c */
 extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
@@ -238,7 +226,7 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOpti
 }
 
 
-oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags)
+static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags)
 {
     osl_TFile*        pFile;
     osl_TProfileImpl* pProfile;
@@ -250,13 +238,6 @@ oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfi
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile\n");
 #endif
-
-    if (pszProfileName == NULL)
-    {
-        OSL_VERIFY(osl_psz_getProfileName(NULL, NULL, Filename, sizeof(Filename)));
-        pszProfileName = Filename;
-    }
-
 
 #ifdef DEBUG_OSL_PROFILE
     Flags=osl_Profile_FLUSHWRITE;
@@ -278,10 +259,6 @@ oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfi
     {
         OSL_TRACE("with osl_Profile_WRITELOCK\n");
     }
-/*      if ( Flags & osl_Profile_READWRITE ) */
-/*      { */
-/*          OSL_TRACE("with osl_Profile_READWRITE\n"); */
-/*      } */
     if ( Flags & osl_Profile_FLUSHWRITE )
     {
         OSL_TRACE("with osl_Profile_FLUSHWRITE\n");
@@ -319,9 +296,6 @@ oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfi
     bRet=loadProfile(pFile, pProfile);
     OSL_ASSERT(bRet);
 
-/*
-    OSL_VERIFY(osl_getFullPath(pszProfileName, pProfile->m_FileName, sizeof(pProfile->m_FileName)));
-*/
     /* #109261# using osl profiles is deprecated */
     /* OSL_VERIFY(NULL != realpath(pszProfileName, pProfile->m_FileName)); */
     realpath(pszProfileName, pProfile->m_FileName);
@@ -366,17 +340,12 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 
     pProfile->m_bIsValid=sal_False;
 
-/*      if (! (pProfile->m_Flags & osl_Profile_SYSTEM)) */
-/*      { */
     if ( ! ( pProfile->m_Flags & osl_Profile_READLOCK ) && ( pProfile->m_Flags & FLG_MODIFIED ) )
     {
         pProfile = acquireProfile(Profile,sal_True);
 
         if ( pProfile != 0 )
         {
-/*      if (pProfile->m_pFile == NULL) */
-/*          pProfile->m_pFile = openFileImpl(pProfile->m_FileName, pProfile->m_Flags); */
-
             bRet=storeProfile(pProfile->m_pFile, pProfile, sal_True);
             OSL_ASSERT(bRet);
         }
@@ -398,7 +367,6 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 
     if (pProfile->m_pFile != NULL)
         closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
-/*      } */
 
     pProfile->m_pFile = NULL;
     pProfile->m_FileName[0] = '\0';
@@ -524,11 +492,6 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
         return sal_False;
     }
 
-#ifdef DEBUG_OSL_PROFILE
-/*    OSL_TRACE("File Buffer in writeProfileImpl '%s' size == '%i' '%i'(%i)\n",
-      pFile->m_pWriteBuf,pFile->m_nWriteBufLen,strlen(pFile->m_pWriteBuf),pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);*/
-#endif
-
 #if OSL_DEBUG_LEVEL > 1
     nLen=strlen(pFile->m_pWriteBuf);
     OSL_ASSERT(nLen == (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree));
@@ -539,7 +502,6 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
     if ( BytesWritten <= 0 )
     {
         OSL_TRACE("write failed '%s'\n",strerror(errno));
-/*        OSL_TRACE("Out osl_writeProfileImpl() [write '%s']\n",strerror(errno));*/
         return (sal_False);
     }
 
@@ -1192,217 +1154,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     return (n);
 }
 
-sal_Bool SAL_CALL osl_getProfileName(rtl_uString* ustrPath, rtl_uString* ustrName, rtl_uString** pustrProfileName)
-{
-    sal_Bool bRet=sal_False;
-    sal_Char buffer[PATH_MAX] = "";
-    rtl_uString* ustrTmp = NULL;
-
-    char path[PATH_MAX] = "";
-    char name[PATH_MAX] = "";
-
-    if ( ustrPath != 0 && ustrPath->buffer[0] != 0 )
-    {
-        FileURLToPath( path, PATH_MAX, ustrPath );
-    }
-
-    if ( ustrName != 0 && ustrName->buffer[0] != 0 )
-    {
-        FileURLToPath( name, PATH_MAX, ustrName );
-    }
-
-    bRet = osl_psz_getProfileName( path, name, buffer, PATH_MAX );
-
-    if( bRet )
-    {
-        rtl_string2UString( &ustrTmp, buffer, strlen( buffer ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-        OSL_ASSERT(ustrTmp != NULL);
-        osl_getFileURLFromSystemPath( ustrTmp, pustrProfileName );
-        rtl_uString_release( ustrTmp );
-    }
-
-    return bRet;
-}
-
-
-sal_Bool SAL_CALL osl_psz_getProfileName(const sal_Char* pszPath, const sal_Char* pszName,
-                           sal_Char* pszBuffer, sal_uInt32 MaxLen)
-{
-    sal_Char *pChr=0;
-    const sal_Char *pStr=0;
-    sal_Char  Home[PATH_MAX];
-    sal_Char  Config[PATH_MAX];
-    sal_Char  Path[PATH_MAX];
-    sal_Char  File[PATH_MAX];
-    sal_Bool  bFailed;
-    sal_Bool  bHidden = sal_False;
-    oslSecurity security;
-
-    Home[0] = '\0';
-    Config[0] = '\0';
-    Path[0] = '\0';
-    File[0] = '\0';
-
-#ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_getProfileName\n");
-#endif
-
-    security = osl_getCurrentSecurity();
-    bFailed = ! (osl_psz_getHomeDir(security, Home, sizeof(Home)) &&
-                 osl_psz_getConfigDir(security, Config, sizeof(Config)));
-    osl_freeSecurityHandle(security);
-
-    if (bFailed)
-    {
-#ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_getProfileName [get directory]\n");
-#endif
-        return (sal_False);
-    }
-
-
-    if (Home[strlen(Home) - 1] != '/')
-    {
-        strcat(Home, "/");
-    }
-
-    if (Config[strlen(Config) - 1] != '/')
-    {
-        strcat(Config, "/");
-    }
-
-
-    /* build file name */
-    if (pszName == NULL)
-    {
-        if (osl_psz_getExecutableFile(Path, sizeof(Path)) != osl_Process_E_None)
-        {
-#ifdef TRACE_OSL_PROFILE
-            OSL_TRACE("Out osl_getProfileName [get exe file name]\n");
-#endif
-            return (sal_False);
-        }
-
-
-        /* remove path from filename */
-        if ((pStr = strrchr(Path, '/')) == NULL)
-            pStr = Path;
-        else
-            pStr++;
-
-        if (((pChr = strrchr(pStr, '.')) != NULL) && (pChr != pStr))
-            *pChr = '\0';
-    }
-    else
-    {
-        /* FIXME: mfe: assignment of 'const char' to 'char' */
-        pStr = pszName;
-    }
-
-    strcpy(File, pStr);
-
-    /* add default extensiom */
-    if (strchr(File + 1, '.') == NULL)
-        strcat(File, STR_INI_EXTENSION);
-
-    /* build directory path */
-    if (pszPath)
-    {
-        sal_Char  Dir[PATH_MAX];
-        sal_Char  Loc[PATH_MAX];
-
-        Dir[0] = '\0';
-        Loc[0] = '\0';
-
-        if ((strncmp(pszPath, STR_INI_METAHOME, sizeof(STR_INI_METAHOME) - 1) == 0) &&
-            ((pszPath[sizeof(STR_INI_METAHOME) - 1] == '\0') ||
-             (pszPath[sizeof(STR_INI_METAHOME) - 1] == '/')))
-        {
-            strcpy(Dir, Home);
-            if (pszPath[sizeof(STR_INI_METAHOME) - 1] == '/')
-                strcat(Dir, pszPath + sizeof(STR_INI_METAHOME));
-            pszPath = Dir;
-        }
-        else if ((strncmp(pszPath, STR_INI_METACFG, sizeof(STR_INI_METACFG) - 1) == 0) &&
-                 ((pszPath[sizeof(STR_INI_METACFG) - 1] == '\0') ||
-                 (pszPath[sizeof(STR_INI_METACFG) - 1] == '/')))
-        {
-            strcpy(Dir, Config);
-            if (pszPath[sizeof(STR_INI_METACFG) - 1] == '/')
-                strcat(Dir, pszPath + sizeof(STR_INI_METACFG));
-            pszPath = Dir;
-        }
-        else if ((strncmp(pszPath, STR_INI_METASYS, sizeof(STR_INI_METASYS) - 1) == 0) &&
-                 ((pszPath[sizeof(STR_INI_METASYS) - 1] == '\0') ||
-                 (pszPath[sizeof(STR_INI_METASYS) - 1] == '/')))
-        {
-            strcpy(Dir, "/etc/");
-            if (pszPath[sizeof(STR_INI_METASYS) - 1] == '/')
-                strcat(Dir, pszPath + sizeof(STR_INI_METASYS));
-            pszPath = Dir;
-        }
-        else if ((strncmp(pszPath, STR_INI_METAINS, sizeof(STR_INI_METAINS) - 1) == 0) &&
-                 ((pszPath[sizeof(STR_INI_METAINS) - 1] == '\0') ||
-                  (pszPath[sizeof(STR_INI_METAINS) - 1] == '/') ||
-                  (pszPath[sizeof(STR_INI_METAINS) - 1] == '"')))
-        {
-            if (! lookupProfile(pszPath + sizeof(STR_INI_METAINS) - 1, File, Dir))
-            {
-#ifdef TRACE_OSL_PROFILE
-                OSL_TRACE("Out osl_getProfileName [lookup profile]\n");
-#endif
-                return (sal_False);
-            }
-
-            pszPath = Dir;
-        }
-
-/*
-        OSL_VERIFY(osl_getFullPath(Home, Loc, sizeof(Loc)));
-*/
-        OSL_VERIFY(NULL != realpath(Home, Loc));
-
-        /* when file is in the home directory it should be hidden */
-/*
-        if (osl_getFullPath(pszPath, Path, sizeof(Path)))
-*/
-        if( NULL != realpath(pszPath, Path) )
-        {
-            if (Path[strlen(Path) - 1] != '/') strcat(Path, "/");
-
-            if (strcmp(Loc, Path) == 0)
-                bHidden = sal_True;
-        }
-
-        OSL_ASSERT(strlen(pszPath) <= sizeof(Path));
-        strcpy(Path, pszPath);
-        if (Path[strlen(Path) - 1] != '/') strcat(Path, "/");
-    }
-    else
-    {
-        /* config files should be hidden if in the home directory */
-        if (strcmp(Home, Config) == 0)
-            bHidden = sal_True;
-
-        strcpy(Path, Config);
-    }
-
-    if (bHidden && (Path[0] != '.'))
-        strcat(Path, ".");
-
-    strcat(Path, File);
-
-    /* copy filename */
-    strncpy(pszBuffer, Path, MaxLen);
-    pszBuffer[MaxLen - 1] = '\0';
-
-#ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_getProfileName [ok]\n");
-#endif
-
-    return (strlen(File) < MaxLen);
-}
-
 /*****************************************************************************/
 /* Static Module Functions */
 /*****************************************************************************/
@@ -1507,7 +1258,6 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
     osl_TFile* pFile = (osl_TFile*) calloc(1, sizeof(osl_TFile));
     sal_Bool bWriteable = sal_False;
 
-/*    if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE | osl_Profile_READWRITE ) )*/
     if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ) )
     {
 #ifdef DEBUG_OSL_PROFILE
@@ -1561,10 +1311,6 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
         OslProfile_lockFile(pFile, bWriteable ? write_lock : read_lock);
     }
 
-    /* mfe: new WriteBuf obsolete */
-/*  pFile->m_pWritePtr = pFile->m_WriteBuf;*/
-/*  pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);*/
-
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("Out openFileImpl [ok]\n");
 #endif
@@ -1589,12 +1335,6 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
 
     if ( pFile->m_Handle >= 0 )
     {
-        /* mfe: new WriteBuf obsolete */
-        /* we just closing the file here, DO NOT write, it has to be handled in higher levels */
-/*          if (pFile->m_pWritePtr > pFile->m_WriteBuf)  */
-/*              write(pFile->m_Handle, pFile->m_WriteBuf,  */
-/*                    pFile->m_pWritePtr - pFile->m_WriteBuf); */
-
         stamp = OslProfile_getFileStamp(pFile);
 
         if ( Flags & (osl_Profile_WRITELOCK | osl_Profile_WRITELOCK ) )
@@ -1629,16 +1369,6 @@ static sal_Bool OslProfile_rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 
     if (pFile->m_Handle >= 0)
     {
-        /* mfe: new WriteBuf obsolete */
-        /* we just closing the file here, DO NOT write, it has to be handled in higher levels */
-/*          if (pFile->m_pWritePtr > pFile->m_WriteBuf)  */
-/*          { */
-/*              write(pFile->m_Handle, pFile->m_WriteBuf,  */
-/*                    pFile->m_pWritePtr - pFile->m_WriteBuf); */
-
-/*              pFile->m_pWritePtr = pFile->m_WriteBuf; */
-/*          } */
-
         pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);
 
 #ifdef DEBUG_OSL_PROFILE
@@ -1748,10 +1478,6 @@ static sal_Char* OslProfile_getLine(osl_TFile* pFile)
     }
     while (Max > 0);
 
-#ifdef DEBUG_OSL_PROFILE
-/*  OSL_TRACE( "read line: \"%s\" (%d bytes)\n", pLine ? pLine : "<nil>", nLineBytes );*/
-#endif
-
     return pLine;
 }
 
@@ -1802,11 +1528,6 @@ static sal_Bool OslProfile_putLine(osl_TFile* pFile, const sal_Char *pszLine)
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len + 1]='\0';
 
     pFile->m_nWriteBufFree-=Len+1;
-
-#ifdef DEBUG_OSL_PROFILE
-/*    OSL_TRACE("File Buffer in _putLine '%s' size == '%i' '%i'(%i)\n",
-      pFile->m_pBuf,pFile->m_BufLen,strlen(pFile->m_pBuf),pFile->m_BufLen - pFile->m_BufFree);*/
-#endif
 
     return sal_True;
 }
@@ -2138,7 +1859,6 @@ static  sal_uInt32    Sect = 0;
         osl_TProfileSection* pSec=0;
 
     Len = strlen(Section);
-/*    Section = (sal_Char *)stripBlanks(Section, &Len);*/
 
     n = Sect;
 
@@ -2158,7 +1878,6 @@ static  sal_uInt32    Sect = 0;
     if (i < pProfile->m_NoSections)
     {
         Len = strlen(Entry);
-/*        Entry = stripBlanks(Entry, &Len);*/
 
         *pNoEntry = pSec->m_NoEntries;
 
@@ -2237,7 +1956,6 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
             {
                 OSL_ASSERT(0);
                 continue;
-/*                return (sal_False);*/
             }
 
         }
@@ -2249,7 +1967,6 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
             {
                 OSL_ASSERT(0);
                 continue;
-/*                return (sal_False);*/
             }
 
         }
@@ -2421,7 +2138,6 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
     if ( bWriteable )
     {
-/*          PFlags = osl_Profile_DEFAULT | osl_Profile_READWRITE; */
         PFlags = osl_Profile_DEFAULT | osl_Profile_WRITELOCK;
     }
     else
@@ -2533,286 +2249,3 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
 #endif
     return (sal_True);
 }
-
-static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, sal_Char *pPath)
-{
-    sal_Char *pChr, *pStr;
-    sal_Char Path[PATH_MAX];
-    sal_Char Product[132];
-    sal_Char Buffer[4096];
-
-    Path[0] = '\0';
-    Product[0] = '\0';
-    Buffer[0] = '\0';
-
-    if (*pszPath == '"')
-    {
-        int i = 0;
-
-        pszPath++;
-
-        while ((*pszPath != '"') && (*pszPath != '\0'))
-            Product[i++] = *pszPath++;
-
-        Product[i] = '\0';
-
-        if (*pszPath == '"')
-            pszPath++;
-
-        if ( *pszPath == '/' )
-        {
-            pszPath++;
-        }
-    }
-    else
-    {
-        /* if we have no product identification, do a special handling for soffice.ini */
-        if (strcasecmp(SVERSION_PROFILE, pszFile) == 0)
-        {
-            sal_Char   Profile[PATH_MAX];
-            sal_Char   Dir[PATH_MAX];
-            oslProfile hProfile;
-
-            Profile[0] = '\0';
-            Dir[0] = '\0';
-
-            /* open sversionrc in the system directory, and try to locate the entry
-               with the highest version for StarOffice */
-            if ((osl_psz_getProfileName(SVERSION_FALLBACK, SVERSION_NAME, Profile, sizeof(Profile))) &&
-                (hProfile = osl_psz_openProfile(Profile, osl_Profile_READLOCK)))
-            {
-                  osl_getProfileSectionEntries(hProfile, SVERSION_SECTION,
-                                                Buffer, sizeof(Buffer));
-
-                for (pChr = Buffer; *pChr != '\0'; pChr += strlen(pChr) + 1)
-                {
-                    if ((strncasecmp(pChr, SVERSION_SOFFICE, sizeof(SVERSION_SOFFICE) - 1) == 0) &&
-                        (strcasecmp(Product, pChr) < 0))
-                    {
-                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr,
-                                              Dir, sizeof(Dir), "");
-
-                        /* check for existence of path */
-                        if (access(Dir, 0) >= 0)
-                            strcpy(Product, pChr);
-                    }
-                }
-
-                osl_closeProfile(hProfile);
-            }
-
-            /* open sversionrc in the users directory, and try to locate the entry
-               with the highest version for StarOffice */
-            if ((strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0) &&
-                (osl_psz_getProfileName(SVERSION_LOCATION, SVERSION_NAME, Profile, sizeof(Profile))) &&
-                (hProfile = osl_psz_openProfile(Profile, osl_Profile_READLOCK)))
-            {
-                  osl_getProfileSectionEntries(hProfile, SVERSION_SECTION,
-                                                Buffer, sizeof(Buffer));
-
-                for (pChr = Buffer; *pChr != '\0'; pChr += strlen(pChr) + 1)
-                {
-                    if ((strncasecmp(pChr, SVERSION_SOFFICE, sizeof(SVERSION_SOFFICE) - 1) == 0) &&
-                        (strcasecmp(Product, pChr) < 0))
-                    {
-                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr,
-                                              Dir, sizeof(Dir), "");
-
-                        /* check for existence of path */
-                        if (access(Dir, 0) >= 0)
-                            strcpy(Product, pChr);
-                    }
-                }
-
-                osl_closeProfile(hProfile);
-            }
-
-            /* remove any trailing build number */
-            if ((pChr = strrchr(Product, '/')) != NULL)
-                *pChr = '\0';
-        }
-    }
-
-
-    /* if we have an userid option eg. "-userid:rh[/usr/home/rh/staroffice]",
-       this will supercede all other locations */
-    if (osl_getCommandArgs(Buffer, sizeof(Buffer)) == osl_Process_E_None)
-    {
-        sal_Char *pStart, *pEnd;
-
-        for (pChr = Buffer; *pChr != '\0'; pChr += strlen(pChr) + 1)
-            if (((*pChr == '-') || (*pChr == '+')) &&
-                (strncasecmp(pChr + 1, SVERSION_OPTION, sizeof(SVERSION_OPTION) - 1) == 0))
-            {
-                if (((pStart = strchr(pChr + sizeof(SVERSION_OPTION), '[')) != NULL) &&
-                    ((pEnd = strchr(pStart + 1, ']')) != NULL))
-                {
-                    strncpy(Path, pStart + 1, pEnd - (pStart + 1));
-                    Path[pEnd - (pStart + 1)] = '\0';
-
-                    /* build full path */
-                    if (Path[strlen(Path) - 1] != '/')
-                    {
-                        strcat(Path, "/");
-                    }
-
-                    pChr = &Path[strlen(Path)];
-                    if ( strlen(pszPath) <= 0 )
-                    {
-                        strcat(Path,SVERSION_USER);
-
-                        if ( access ( Path, 0 ) < 0 )
-                        {
-                            *pChr='\0';
-                        }
-                    }
-                    else
-                    {
-                        strcat(Path, pszPath);
-                    }
-
-                    break;
-                }
-            }
-    }
-
-    if (strlen(Path) <= 0)
-    {
-        /* try to find the file in the directory of the executbale */
-        if (osl_psz_getExecutableFile(Path, sizeof(Path)) != osl_Process_E_None)
-            return (sal_False);
-
-        /* seperate path from filename */
-        if ((pChr = strrchr(Path, '/')) == NULL)
-            if ((pChr = strrchr(Path, ':')) == NULL)
-                return (sal_False);
-            else
-                *pChr = '\0';
-        else
-            *pChr = '\0';
-
-        /* if we have no product identification use the executable file name */
-        if (strlen(Product) <= 0)
-        {
-            strcpy(Product, pChr + 1);
-
-            /* remove extension */
-            if ((pChr = strrchr(Product, '.')) != NULL)
-                *pChr = '\0';
-        }
-
-        /* remember last subdir */
-        pStr = strrchr(Path, '/');
-
-        strcat(Path, "/");
-
-        if (strlen(pszPath) <= 0 )
-        {
-            strcat(Path,SVERSION_USER);
-        }
-        else
-        {
-            strcat(Path, pszPath);
-        }
-
-        /* if the directory given as a parameter does not exist, remove any specified subdirectories
-           like "bin" or "program" */
-        if (((access(Path, 0) < 0) && (pStr != NULL)) || (strlen(pszPath) <= 0))
-        {
-            static sal_Char *SubDirs[] = SVERSION_DIRS;
-
-            unsigned int i = 0;
-
-            for (i = 0; i < (sizeof(SubDirs) / sizeof(SubDirs[0])); i++)
-                if (strncasecmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
-                {
-                    if ( strlen(pszPath) <= 0 )
-                    {
-                        strcpy(pStr + 1, SVERSION_USER);
-                        if ( access(Path, 0) < 0 )
-                        {
-                            *(pStr+1)='\0';
-                        }
-                    }
-                    else
-                    {
-                        strcpy(pStr + 1, pszPath);
-                    }
-
-                    break;
-                }
-        }
-
-        pChr = &Path[strlen(Path)];
-        if (Path[strlen(Path) - 1] != '/')
-            strcat(Path, "/");
-        strcat(Path, pszFile);
-
-        if ((access(Path, 0) < 0) && (strlen(Product) > 0))
-        {
-            sal_Char   Profile[PATH_MAX];
-            oslProfile hProfile;
-
-            Profile[0] = '\0';
-
-            /* remove appended filename */
-            *pChr = '\0';
-
-            /* open sversion.ini in the system directory, and try to locate the entry
-               with the highest version for StarOffice */
-            if ((osl_psz_getProfileName(SVERSION_LOCATION, SVERSION_NAME, Profile, sizeof(Profile))) &&
-                (hProfile = osl_psz_openProfile(Profile, osl_Profile_READLOCK)))
-            {
-                osl_readProfileString(hProfile, SVERSION_SECTION, Product, Buffer, sizeof(Buffer), "");
-                osl_closeProfile(hProfile);
-
-                /* if not found, try the fallback */
-                if ((strlen(Buffer) <= 0) && (strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0))
-                {
-                    if ((osl_psz_getProfileName(SVERSION_FALLBACK, SVERSION_NAME, Profile, sizeof(Profile))) &&
-                        (hProfile = osl_psz_openProfile(Profile, osl_Profile_READLOCK)))
-                    {
-                        osl_readProfileString(hProfile, SVERSION_SECTION, Product, Buffer, sizeof(Buffer), "");
-                    }
-
-                    osl_closeProfile(hProfile);
-                }
-
-                if (strlen(Buffer) > 0)
-                {
-                    strcpy(Path, Buffer);
-
-                    /* build full path */
-                    if (Path[strlen(Path) - 1] != '/')
-                    {
-
-                        strcat(Path, "/");
-                    }
-                    pChr=&Path[strlen(Path)];
-                    if (strlen(pszPath) > 0 )
-                    {
-                        strcat(Path, pszPath);
-                    }
-                    else
-                    {
-                        strcat(Path,SVERSION_USER);
-                        if ( access (Path,0) < 0 )
-                        {
-                            *pChr='\0';
-                        }
-                    }
-                }
-            }
-        }
-        else
-            /* remove appended filename */
-            *pChr = '\0';
-    }
-
-    strcpy(pPath, Path);
-
-    return (sal_True);
-}
-
-
-
