@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-11 14:55:06 $
+ *  last change: $Author: os $ $Date: 2001-12-12 09:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,12 +974,32 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SfxItemSet aCoreSet( GetPool(),
                                     RES_BOX, RES_BOX,
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-            SvxBoxInfoItem aBoxInfo;
-            aCoreSet.Put( aBoxInfo );
-            rSh.GetFlyFrmAttr( aCoreSet );
-            const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
-            nLDist = rBox.GetDistance(BOX_LINE_LEFT);
-            nRDist = rBox.GetDistance(BOX_LINE_RIGHT);
+
+            sal_Bool bFirstColumn = sal_True;
+            sal_Bool bLastColumn = sal_True;
+            if(nFrmType & FRMTYPE_COLUMN)
+            {
+                USHORT nCurFrameCol = rSh.GetCurColNum() - 1;
+                bFirstColumn = !nCurFrameCol;
+                const SwFrmFmt* pFmt =  rSh.GetFlyFrmFmt();
+                const SwFmtCol* pCols = &pFmt->GetCol();
+                const SwColumns& rCols = pCols->GetColumns();
+                USHORT nColumnCount = rCols.Count();
+                bLastColumn = nColumnCount == nCurFrameCol + 1;
+            }
+
+            if(bFirstColumn || bLastColumn)
+            {
+                SvxBoxInfoItem aBoxInfo;
+                aCoreSet.Put( aBoxInfo );
+                rSh.GetFlyFrmAttr( aCoreSet );
+                const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+
+                if(bFirstColumn)
+                    nLDist = rBox.GetDistance(BOX_LINE_LEFT);
+                if(bLastColumn)
+                    nRDist = rBox.GetDistance(BOX_LINE_RIGHT);
+            }
         }
         else if ( IsTabColFromDoc() ||
             ( rSh.GetTableFmt() && !bFrmSelection &&
