@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:06:04 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut):
     SdrCreateView(pModel1,pOut),
     bNoExtendedMouseDispatcher(FALSE),
     bNoExtendedKeyDispatcher(FALSE),
-    bNoExtendedCommandDispatcher(FALSE)
+    bNoExtendedCommandDispatcher(FALSE),
+    mbMasterPagePaintCaching(sal_False)
 {
     bTextEditOnObjectsWithoutTextIfTextTool=FALSE;
 
@@ -160,7 +161,8 @@ SdrView::SdrView(SdrModel* pModel1, ExtOutputDevice* pXOut):
     SdrCreateView(pModel1,pXOut),
     bNoExtendedMouseDispatcher(FALSE),
     bNoExtendedKeyDispatcher(FALSE),
-    bNoExtendedCommandDispatcher(FALSE)
+    bNoExtendedCommandDispatcher(FALSE),
+    mbMasterPagePaintCaching(sal_False)
 {
     bTextEditOnObjectsWithoutTextIfTextTool=FALSE;
 
@@ -173,7 +175,8 @@ SdrView::SdrView(SdrModel* pModel1):
     SdrCreateView(pModel1,(OutputDevice*)NULL),
     bNoExtendedMouseDispatcher(FALSE),
     bNoExtendedKeyDispatcher(FALSE),
-    bNoExtendedCommandDispatcher(FALSE)
+    bNoExtendedCommandDispatcher(FALSE),
+    mbMasterPagePaintCaching(sal_False)
 {
     bTextEditOnObjectsWithoutTextIfTextTool=FALSE;
 
@@ -1449,3 +1452,32 @@ void SdrView::onAccessibilityOptionsChanged()
 {
 }
 
+void SdrView::SetMasterPagePaintCaching(sal_Bool bOn)
+{
+    if(mbMasterPagePaintCaching != bOn)
+    {
+        mbMasterPagePaintCaching = bOn;
+
+        // reset at all SdrPageViewWindow's
+        for(sal_uInt16 a(0); a < GetPageViewCount(); a++)
+        {
+            SdrPageView* pPageView = GetPageViewPvNum(a);
+            DBG_ASSERT(pPageView, "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageView list (!)");
+
+            for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+            {
+                SdrPageViewWindow* pPageViewWindow = pPageView->GetWindow(a);
+                DBG_ASSERT(pPageViewWindow, "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageViewWindow list (!)");
+
+                // force deletion of ObjectContact, so at re-display all VOCs
+                // will be re-created with updated flag setting
+                pPageViewWindow->ResetObjectContact();
+            }
+
+            // force redraw of this view
+            pPageView->InvalidateAllWin();
+        }
+    }
+}
+
+// eof
