@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:41:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,11 +231,20 @@ USHORT SwNumRule::GetBullIndent( BYTE nLvl )
     return aDefNumIndents[ nLvl ];
 }
 
+#ifndef PRODUCT
+long SwNodeNum::nSerial = 0;
+#endif
+
 SwNodeNum::SwNodeNum( BYTE nLevel, USHORT nSetVal )
     : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( FALSE ),
       bContNum(FALSE)
 {
     memset( nLevelVal, 0, sizeof( nLevelVal ) );
+
+#ifndef PRODUCT
+    nMySerial = nSerial;
+    nSerial++;
+#endif
 }
 
 SwNodeNum& SwNodeNum::operator=( const SwNodeNum& rCpy )
