@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:45:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,25 +409,25 @@
     </node>
     <node oor:name="he" oor:op="replace">
      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
      </prop>
       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
+        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
       </prop>
      <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
     </node>
     <node oor:name="th" oor:op="replace">
