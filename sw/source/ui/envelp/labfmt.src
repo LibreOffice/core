@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:54:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "Distanza ~orizzont." ;
         Text [ portuguese_brazilian ] = "Distância horizontal" ;
         Text [ portuguese ] = "Espaçamento ~horiz." ;
-        Text [ finnish ] = "Vaakaetäisyys" ;
+        Text [ finnish ] = "~Vaakaetäisyys" ;
         Text [ danish ] = "Vandret afstand" ;
         Text [ french ] = "Écart ~horizontal" ;
         Text [ swedish ] = "~Horis. avstånd" ;
@@ -139,7 +139,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "Distanza verticale" ;
         Text [ portuguese_brazilian ] = "Distância vertical" ;
         Text [ portuguese ] = "Espaçamento vertical" ;
-        Text [ finnish ] = "Pystyetäisyys" ;
+        Text [ finnish ] = "~Pystyetäisyys" ;
         Text [ danish ] = "Lodret afstand" ;
         Text [ french ] = "Écart ~vertical" ;
         Text [ swedish ] = "~Vert. avstånd" ;
@@ -182,7 +182,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "~Largh." ;
         Text [ portuguese_brazilian ] = "Largura" ;
         Text [ portuguese ] = "~Largura" ;
-        Text [ finnish ] = "Leveys" ;
+        Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "Bredde" ;
         Text [ french ] = "~Largeur" ;
         Text [ swedish ] = "~Bredd" ;
@@ -225,7 +225,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "Altezza" ;
         Text [ portuguese_brazilian ] = "Altura" ;
         Text [ portuguese ] = "Altura" ;
-        Text [ finnish ] = "Korkeus" ;
+        Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "Højde" ;
         Text [ french ] = "~Hauteur" ;
         Text [ swedish ] = "Höj~d" ;
@@ -268,7 +268,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "Margine sinistro" ;
         Text [ portuguese_brazilian ] = "Margem esquerda" ;
         Text [ portuguese ] = "Margem esquerda" ;
-        Text [ finnish ] = "Vasen reunus" ;
+        Text [ finnish ] = "~Vasen marginaali" ;
         Text [ danish ] = "Margen venstre" ;
         Text [ french ] = "~Marge gauche" ;
         Text [ swedish ] = "Vänster margina~l" ;
@@ -313,7 +313,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "Margine superiore" ;
         Text [ portuguese_brazilian ] = "Margem superior" ;
         Text [ portuguese ] = "Margem superior" ;
-        Text [ finnish ] = "Oikea reunus" ;
+        Text [ finnish ] = "~Ylämarginaali" ;
         Text [ danish ] = "Margen foroven" ;
         Text [ french ] = "Marge ~supérieure" ;
         Text [ swedish ] = "~Övre marginal" ;
@@ -358,7 +358,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "~Colonne" ;
         Text [ portuguese_brazilian ] = "Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
-        Text [ finnish ] = "Sarakkeet" ;
+        Text [ finnish ] = "~Sarakkeet" ;
         Text [ danish ] = "Kolonner" ;
         Text [ french ] = "~Colonnes" ;
         Text [ swedish ] = "Kolumner" ;
@@ -400,7 +400,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "Righe" ;
         Text [ portuguese_brazilian ] = "Fileiras" ;
         Text [ portuguese ] = "Linhas" ;
-        Text [ finnish ] = "~Rivejä" ;
+        Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "Rækker" ;
         Text [ french ] = "~Lignes" ;
         Text [ swedish ] = "~Rader" ;
@@ -457,6 +457,7 @@ TabPage TP_LAB_FMT
         Text[ turkish ] = "Save...";
         Text[ arabic ] = "ÍÝÙ...";
         Text[ catalan ] = "~Guardar...";
+        Text[ finnish ] = "~Speichern...";
     };
 };
  // String *******************************************************************
@@ -468,7 +469,7 @@ String STR_HDIST
     Text [ italian ] = "Distanza orizzontale" ;
     Text [ portuguese_brazilian ] = "Distância h." ;
     Text [ portuguese ] = "Espaço H." ;
-    Text [ finnish ] = "Vaakaetäi." ;
+    Text [ finnish ] = "V.etäisyys" ;
     Text [ danish ] = "V. afstand" ;
     Text [ french ] = "Écart H." ;
     Text [ swedish ] = "H. avstånd" ;
@@ -495,7 +496,7 @@ String STR_VDIST
     Text [ italian ] = "Distanza verticale" ;
     Text [ portuguese_brazilian ] = "Distância v." ;
     Text [ portuguese ] = "Espaço V." ;
-    Text [ finnish ] = "Pystyetäis." ;
+    Text [ finnish ] = "P.etäisyys" ;
     Text [ danish ] = "L. afstand" ;
     Text [ french ] = "Écart V." ;
     Text [ swedish ] = "V. avstånd" ;
@@ -576,7 +577,7 @@ String STR_LEFT
     Text [ italian ] = "Margine sinistro" ;
     Text [ portuguese_brazilian ] = "Margem esquerda" ;
     Text [ portuguese ] = "Margem esquerda" ;
-    Text [ finnish ] = "Vasen reunus" ;
+    Text [ finnish ] = "Vasen marginaali" ;
     Text [ danish ] = "Margen venstre" ;
     Text [ french ] = "Marge gauche" ;
     Text [ swedish ] = "Vänster marginal" ;
@@ -603,7 +604,7 @@ String STR_UPPER
     Text [ italian ] = "Margine superiore" ;
     Text [ portuguese_brazilian ] = "Margem superior" ;
     Text [ portuguese ] = "Margem superior" ;
-    Text [ finnish ] = "Oikea reunus" ;
+    Text [ finnish ] = "Ylämarginaali" ;
     Text [ danish ] = "Margen foroven" ;
     Text [ french ] = "Marge supérieure" ;
     Text [ swedish ] = "Övre marginal" ;
@@ -657,7 +658,7 @@ String STR_ROWS
     Text [ italian ] = "Righe" ;
     Text [ portuguese_brazilian ] = "Fileiras" ;
     Text [ portuguese ] = "Linhas" ;
-    Text [ finnish ] = "~Rivejä" ;
+    Text [ finnish ] = "Rivit" ;
     Text [ danish ] = "Rækker" ;
     Text [ french ] = "Lignes" ;
     Text [ swedish ] = "Rader" ;
@@ -693,7 +694,7 @@ ModalDialog DLG_SAVE_LABEL
         Text [ italian ] = "Marca" ;
         Text [ portuguese_brazilian ] = "Fazer" ;
         Text [ portuguese ] = "~Marca" ;
-        Text [ finnish ] = "Merkki" ;
+        Text [ finnish ] = "~Marke" ;
         Text [ danish ] = "Mærke" ;
         Text [ french ] = "~Marque" ;
         Text [ swedish ] = "~Märke" ;
@@ -730,7 +731,7 @@ ModalDialog DLG_SAVE_LABEL
         Text [ italian ] = "~Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "~Tipo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Typ" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "~Type" ;
         Text [ swedish ] = "~Typ" ;
@@ -781,6 +782,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ turkish ] = "Options";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Optionen";
     };
     OKButton PB_OK
     {
@@ -829,6 +831,7 @@ ModalDialog DLG_SAVE_LABEL
         Message[ turkish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
         Message[ arabic ] = "ÈØÇÞÉ ÇáÚäæäÉ \"%1 / %2\" ãæÌæÏÉ ÈÇáÝÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ ÝæÞ ÇáÈíÇäÇÊ¿";
         Message[ catalan ] = "La etiqueta \"%1 / %2\" existe ya.\n¿Desea sobrescribila?";
+        Message[ finnish ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?";
     };
     Text[ english_us ] = "Save Label Format";
     Text[ portuguese ] = "Guardar formato de etiqueta";
@@ -849,4 +852,5 @@ ModalDialog DLG_SAVE_LABEL
     Text[ turkish ] = "Save label format";
     Text[ arabic ] = "ÍÝÙ ÊäÓíÞ ÈØÇÞÇÊ ÇáÚäæäÉ";
     Text[ catalan ] = "Guardar formato de etiqueta";
+    Text[ finnish ] = "Etikettenformat speichern";
 };
