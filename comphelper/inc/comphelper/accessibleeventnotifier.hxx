@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:20:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 #include <map>
 #include <list>
@@ -90,7 +93,7 @@ namespace comphelper
     //=====================================================================
     //= AccessibleEventNotifier
     //=====================================================================
-    class AccessibleEventNotifier
+    class COMPHELPER_DLLPUBLIC AccessibleEventNotifier
     {
     // typedefs
     public:
@@ -107,8 +110,8 @@ namespace comphelper
         ~AccessibleEventNotifier( );    // never implemented
 
     private:
-        AccessibleEventNotifier( const AccessibleEventNotifier& );              // never implemented!
-        AccessibleEventNotifier& operator=( const AccessibleEventNotifier& );   // never implemented!
+        COMPHELPER_DLLPRIVATE AccessibleEventNotifier( const AccessibleEventNotifier& );                // never implemented!
+        COMPHELPER_DLLPRIVATE AccessibleEventNotifier& operator=( const AccessibleEventNotifier& ); // never implemented!
 
     public:
         /** registers a client of this class, means a broadcaster of AccessibleEvents
@@ -189,7 +192,7 @@ namespace comphelper
 
     private:
         /// generates a new client id
-        static  TClientId   generateId();
+        COMPHELPER_DLLPRIVATE static    TClientId   generateId();
 
         /** looks up a client in our client map, asserts if it cannot find it or no event thread is present
 
@@ -205,7 +208,7 @@ namespace comphelper
                 <TRUE/> if and only if the client could be found and <arg>_rPos</arg> has been filled with
                 it's position
         */
-        static  sal_Bool    implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos );
+        COMPHELPER_DLLPRIVATE static    sal_Bool    implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos );
     };
 
 //.........................................................................
