@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:10:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,7 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
 
                 GetPoint()->nNode = nSttEndTbl;
                 const SwNode* pNd = GetNode();
+
                 if( pNd->IsSectionNode() || ( pNd->IsEndNode() &&
                     pNd->FindStartNode()->IsSectionNode() ) )
                 {
@@ -526,6 +527,10 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
                     pNd = bSelTop
                         ? rNds.GoPrevSection( &GetPoint()->nNode,TRUE,FALSE )
                         : rNds.GoNextSection( &GetPoint()->nNode,TRUE,FALSE );
+
+                    /* #i12312# Handle failure of Go{Prev|Next}Section */
+                    if ( 0 == pNd)
+                        break;
 
                     if( 0 != ( pPtNd = pNd->FindTableNode() ))
                         continue;
@@ -1476,17 +1481,21 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
             !IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS );
 }
 
-
 FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                             Point* pPt, long nUpDownX )
 {
     SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
+    sal_Bool bAdjustTableCrsr = sal_False;
 
     // vom Tabellen Crsr Point/Mark in der gleichen Box ??
     // dann stelle den Point an den Anfang der Box
     if( pTblCrsr && GetNode( TRUE )->FindStartNode() ==
-            GetNode( FALSE )->FindStartNode() && End() != GetPoint() )
-        Exchange();
+                    GetNode( FALSE )->FindStartNode() )
+    {
+        if ( End() != GetPoint() )
+            Exchange();
+        bAdjustTableCrsr = sal_True;
+    }
 
     FASTBOOL bRet = FALSE;
     Point aPt;
@@ -1503,13 +1512,9 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
             SwRect aTmpRect;
             pFrm->GetCharRect( aTmpRect, *GetPoint() );
             aPt = aTmpRect.Pos();
-#ifdef VERTICAL_LAYOUT
             nUpDownX = pFrm->IsVertical() ?
                        aPt.Y() - pFrm->Frm().Top() :
                        aPt.X() - pFrm->Frm().Left();
-#else
-            nUpDownX = aPt.X() - pFrm->Frm().Left();
-#endif
         }
 
         // Bei Fussnoten ist auch die Bewegung in eine andere Fussnote erlaubt.
@@ -1519,12 +1524,30 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
         const SwPosition aOldPos( *GetPoint() );
         BOOL bInReadOnly = IsReadOnlyAvailable();
 
-        while( nCnt &&
-            (bUp ? pFrm->UnitUp( this, nUpDownX, bInReadOnly )
-                 : pFrm->UnitDown( this, nUpDownX, bInReadOnly ) ) &&
-            CheckNodesRange( aOldPos.nNode, GetPoint()->nNode, bChkRange ))
+        if ( bAdjustTableCrsr && !bUp )
         {
-            pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+            // Special case: We have a table cursor but the start box
+            // has more than one paragraph. If we want to go down, we have to
+            // set the point to the last frame in the table box. This is
+            // only necessary if we do not already have a table selection
+            const SwStartNode* pTblNd = GetNode( TRUE )->FindTableBoxStartNode();
+            ASSERT( pTblNd, "pTblCrsr without SwTableNode?" )
+
+            if ( pTblNd ) // safety first
+            {
+                const SwNode* pEndNd = pTblNd->EndOfSectionNode();
+                GetPoint()->nNode = *pEndNd;
+                pTblCrsr->Move( fnMoveBackward, fnGoNode );
+                   pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+            }
+        }
+
+        while( nCnt &&
+               (bUp ? pFrm->UnitUp( this, nUpDownX, bInReadOnly )
+                    : pFrm->UnitDown( this, nUpDownX, bInReadOnly ) ) &&
+                CheckNodesRange( aOldPos.nNode, GetPoint()->nNode, bChkRange ))
+        {
+               pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
             --nCnt;
         }
 
