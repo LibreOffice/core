@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:11:24 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ERRORFILE
 #include <tools/debug.hxx>
+#endif
+#ifndef _SDASITM_HXX
+#include <svx/sdasitm.hxx>
 #endif
 
 #include <sot/exchange.hxx>
@@ -207,6 +210,22 @@ void XclEscherEx::ReplaceCurrentOffsetInMap( ULONG nPos )
     aOffsetMap.Replace( (void*) GetStreamPos(), nPos );
 }
 
+sal_Bool ImplXclEscherExIsFontwork( const SdrObject* pObj )
+{
+    const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+
+    sal_Bool bIsFontwork = sal_False;
+    if ( pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
+    {
+        SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
+            pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+
+        com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+        if ( pAny )
+            *pAny >>= bIsFontwork;
+    }
+    return bIsFontwork;
+}
 
 EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Reference<
                                                 com::sun::star::drawing::XShape >& rShape )
@@ -287,12 +306,15 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                         pAnchor->SetFlags( *pObj );
                         pCurrAppData->SetClientAnchor( pAnchor );
                     }
-                    // do not write additional text for callout objects
-                    if( pObj->GetObjIdentifier() != OBJ_CAPTION )
-                        if( const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj ) )
-                            if( const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject() )
-                                pCurrAppData->SetClientTextbox(
-                                    new XclEscherClientTextbox( rRootData, *pTextObj, pCurrXclObj ) );
+                    const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
+                    if ( pTextObj && !ImplXclEscherExIsFontwork( pTextObj ) && ( pObj->GetObjIdentifier() != OBJ_CAPTION ) )
+                    {
+                        const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                        if( pParaObj )
+                            pCurrAppData->SetClientTextbox(
+                                new XclEscherClientTextbox(
+                                rRootData, *pTextObj, pCurrXclObj ) );
+                    }
                 }
                 else
                 {
