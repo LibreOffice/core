@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void AstDeclaration::setName(const ::rtl::OString& name)
     m_fullName = convertName(m_scopedName);
 }
 
-sal_Bool AstDeclaration::isType()
+sal_Bool AstDeclaration::isType() const
 {
     sal_Bool bIsType = sal_False;
 
@@ -194,15 +194,15 @@ sal_Bool AstDeclaration::hasAncestor(AstDeclaration* pDecl)
     return scopeAsDecl(m_pScope)->hasAncestor(pDecl);
 }
 
-sal_Bool AstDeclaration::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstDeclaration::dump(RegistryKey& rKey)
 {
     AstScope* pScope = declAsScope(this);
     sal_Bool bRet = sal_True;
 
     if ( pScope )
     {
-        DeclList::iterator iter = pScope->getIteratorBegin();
-        DeclList::iterator end = pScope->getIteratorEnd();
+        DeclList::const_iterator iter = pScope->getIteratorBegin();
+        DeclList::const_iterator end = pScope->getIteratorEnd();
         AstDeclaration* pDecl = NULL;
         while ( iter != end && bRet)
         {
@@ -221,7 +221,7 @@ sal_Bool AstDeclaration::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoad
                     case NT_typedef:
                     case NT_service:
                     case NT_singleton:
-                        bRet = pDecl->dump(rKey, pLoader);
+                        bRet = pDecl->dump(rKey);
                 }
             }
             ++iter;
