@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:50:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,9 +554,12 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             // TODO/MBA: seems that here a physical copy is done - not as in drawing layer! Testing!
             comphelper::EmbeddedObjectContainer aCnt;
             ::rtl::OUString aName;
-            com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > aNew =
-                aCnt.CopyEmbeddedObject( rSwOLE.GetOleRef(), aName );
-            rDoc.Insert( *rUndoIter.pAktPam, aNew );
+            if ( aCnt.CopyEmbeddedObject( rSwOLE.GetOleRef(), aName ) )
+            {
+                com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
+                rDoc.Insert( *rUndoIter.pAktPam, aNew );
+            }
+
             break;
         }
     }
