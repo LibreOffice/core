@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JarInputStream.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,6 @@ import java.util.Hashtable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import sun.tools.jar.JarVerifierStream;
-import sun.tools.jar.JarException;
 
 class JarInputStream {
 //    JarVerifierStream jvs = null;

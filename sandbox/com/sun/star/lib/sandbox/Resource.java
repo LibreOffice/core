@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Resource.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@ import java.io.InputStream;
 import java.io.IOException;
 
 import java.net.URL;
-import sun.applet.AppletAudioClip;
 
 public interface Resource {
     public ProtectionDomain getProtectionDomain();
