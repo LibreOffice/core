@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2002-04-22 13:48:24 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ namespace framework{
 #define SERVICENAME_JOBEXECUTOR                             DECLARE_ASCII("com.sun.star.task.JobExecutor"                       )
 #define SERVICENAME_DISPATCHRECORDERSUPPLIER                DECLARE_ASCII("com.sun.star.frame.DispatchRecorderSupplier"         )
 #define SERVICENAME_DISPATCHRECORDER                        DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
+#define SERVICENAME_SYSTEMSHELLEXECUTE                      DECLARE_ASCII("com.sun.star.system.SystemShellExecute"              )
+#define SERVICENAME_PROTOCOLHANDLER                         DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -135,6 +137,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_JOBEXECUTOR                      DECLARE_ASCII("com.sun.star.comp.framework.JobExecutor"             )
 #define IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER         DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorderSupplier")
 #define IMPLEMENTATIONNAME_DISPATCHRECORDER                 DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorder"        )
+#define IMPLEMENTATIONNAME_MAILTODISPATCHER                 DECLARE_ASCII("com.sun.star.comp.framework.MailToDispatcher"        )
+#define IMPLEMENTATIONNAME_SERVICEHANDLER                   DECLARE_ASCII("com.sun.star.comp.framework.ServiceHandler"          )
 
 }       //  namespace framework
 
