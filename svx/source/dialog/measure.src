@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:15:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ japanese ] = "η·γ®ι–“ι”(~D)";
         Text[ chinese_traditional ] = "η·ζΆι–“ι”(~D)";
         Text[ arabic ] = "ΘυΪΟ ΗαΞΨ";
-        Text[ greek ] = "Απόσταση μεταξύ γραμμών";
+        Text[ greek ] = "Απόστ. μεταξύ γραμμών";
         Text[ korean ] = "μ„  κ°„κ²©(~D)";
         Text[ turkish ] = "Nesneye uzaklύk";
         Text[ language_user1 ] = " ";
@@ -185,7 +185,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ japanese ] = "θ£ε©η·γ®εΌµγ‚ε‡Ίγ—(~O)";
         Text[ chinese_traditional ] = "θΌ”ε©η·ε»¶ι•·(~O)";
         Text[ arabic ] = "ΗαÒνΗΟΙ έν ΞΨζΨ ΗαγΣΗΪΟΙ";
-        Text[ greek ] = "Προε~ξοχή βοηθητικής γραμμής";
+        Text[ greek ] = "Προε~ξοχή βοηθ.γραμμής";
         Text[ korean ] = "μ•λ‚΄μ„  λμ¶(~O)";
         Text[ turkish ] = "Kύlavuz ηizgi taώmasύ";
         Text[ language_user1 ] = " ";
@@ -234,7 +234,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ japanese ] = "θ£ε©η·γ®θ·ι›Ά(~G)";
         Text[ chinese_traditional ] = "θΌ”ε©η·ι–“ι”(~G)";
         Text[ arabic ] = "ΘυΪΟ ΞΨζΨ ΗαγΣΗΪΟΙ";
-        Text[ greek ] = "Απόσταση βοηθητικών γραμμών";
+        Text[ greek ] = "Απόστ. βοηθ. γραμμών";
         Text[ korean ] = "μ•λ‚΄μ„  κ±°λ¦¬(~G)";
         Text[ turkish ] = "Kύlavuz ηizgi uzaklύπύ";
         Text[ language_user1 ] = " ";
@@ -283,7 +283,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ japanese ] = "ε·¦γ®θ£ε©η·(~L)";
         Text[ chinese_traditional ] = "ε·¦θΌ”ε©η·(~L)";
         Text[ arabic ] = "ΗαΞΨ ΗαγΣΗΪΟ ΗαΓνΣΡ";
-        Text[ greek ] = "Αριστερή βοηθητική γραμμή";
+        Text[ greek ] = "Αριστ~ερή βοηθ. γραμμή";
         Text[ korean ] = "μ™Όμª½ μ•λ‚΄μ„ (~L)";
         Text[ turkish ] = "Sol kύlavuz ηizgi";
         Text[ language_user1 ] = " ";
@@ -370,7 +370,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ english_us ] = "Measure ~below object";
         Text[ portuguese ] = "Linha de medida abaixo do objecto";
         Text[ russian ] = "Πΰημεπ οξδ ξαϊεκςξμ";
-        Text[ greek ] = "Εμφάνιση κάτω από";
+        Text[ greek ] = "Αντικείμενο ~μέτρησης από κάτω";
         Text[ dutch ] = "~Meetlat onder het object";
         Text[ french ] = "Ligne de cote ~sous l'objet";
         Text[ spanish ] = "Lνnea de tamaρo debajo del objeto";
@@ -455,7 +455,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ english_us ] = "Legend";
         Text[ portuguese ] = "Legenda";
         Text[ russian ] = "Λεγενδΰ";
-        Text[ greek ] = "Επιγραφή";
+        Text[ greek ] = "Υπόμνημα";
         Text[ dutch ] = "Titel";
         Text[ french ] = "Ιtiquette";
         Text[ spanish ] = "Etiqueta";
@@ -499,7 +499,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ®δ½η½®(~T)";
         Text[ chinese_traditional ] = "ζ–‡ε­—δ½η½®(~T)";
         Text[ arabic ] = "γζΦΪ ΗαδΥ";
-        Text[ greek ] = "Θέση κειμένου";
+        Text[ greek ] = "~Θέση κειμένου";
         Text[ korean ] = "ν…μ¤νΈ μ„μΉ(~T)";
         Text[ turkish ] = "~Metin konumu";
         Text[ language_user1 ] = " ";
@@ -529,7 +529,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ english_us ] = "~AutoVertical" ;
         Text[ portuguese ] = "~Vertical autom.";
         Text[ russian ] = "~Βεπςθκΰλόνξ (ΰβςξ)";
-        Text[ greek ] = "Αυτομάτως κατακόρυφα";
+        Text[ greek ] = "Αυτομάτως κατακόρυ~φα";
         Text[ dutch ] = "~Automatisch verticaal";
         Text[ french ] = "Automatiquement ~vertical";
         Text[ spanish ] = "~Vertical automαticamente";
@@ -563,7 +563,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ english_us ] = "A~utoHorizontal" ;
         Text[ portuguese ] = "~Horizontal autom.";
         Text[ russian ] = "Γξπθηξνςΰλόνξ (ΰβςξ)";
-        Text[ greek ] = "Αυτομάτως οριζόντια";
+        Text[ greek ] = "Αυτομάτως ορι~ζόντια";
         Text[ dutch ] = "~Automatisch horizontaal";
         Text[ french ] = "Automatiquement ~horizontal";
         Text[ spanish ] = "~Horizontal automαticamente";
@@ -609,7 +609,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ japanese ] = "εδ½γ‚’θ΅¨η¤Ί(~M)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίε®ι‡ε–®δ½(~M)";
         Text[ arabic ] = "ΕΩεΗΡ ζΝΟΗΚ ΗαήνΗΣ";
-        Text[ greek ] = "Εμφάνιση μονάδων μέτρησης";
+        Text[ greek ] = "Εμφάν. μονά~δ. μέτρ.";
         Text[ korean ] = "λ‹¨μ„ ν‘μ‹(~M)";
         Text[ turkish ] = "Φlηόm birimlerini ~gφster";
         Text[ language_user1 ] = " ";
@@ -640,7 +640,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ english_us ] = "~Parallel to line";
         Text[ portuguese ] = "~Paralelo ΰ linha";
         Text[ russian ] = "Οΰπΰλλελόνξ λθνθθ";
-        Text[ greek ] = "Παράλληλη προβολή";
+        Text[ greek ] = "Παράλληλα στη ~γραμμή";
         Text[ dutch ] = "~Parallel met hulplijn";
         Text[ french ] = "~Parallθle au repθre";
         Text[ spanish ] = "Paralela a lνnea auxiliar";
@@ -720,6 +720,7 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ slovak ] = "Zmena rozmerov";
 };
  // ********************************************************************** EOF
+
 
 
 
