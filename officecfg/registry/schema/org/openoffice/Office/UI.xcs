@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-16 10:07:42 $
+ *  last change: $Author: tl $ $Date: 2002-07-16 12:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,17 @@
           <value xsi:nil="true"/>
           <info>
             <desc xml:lang="en-US">The color used for the background of notes.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DrawGuides">
+        <info>
+          <desc xml:lang="en-US">Deprecated.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+          <info>
+            <desc xml:lang="en-US">Deprecated.</desc>
           </info>
         </prop>
       </group>
