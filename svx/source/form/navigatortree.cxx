@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 06:13:41 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,91 @@ namespace svxform
     using namespace ::com::sun::star::datatransfer;
     using namespace ::com::sun::star::datatransfer::clipboard;
     using namespace ::com::sun::star::sdb;
+
+    //========================================================================
+    // helper
+    //========================================================================
+
+    typedef ::std::map< Reference< XInterface >, SdrObject*, ::comphelper::OInterfaceCompare< XInterface > >
+            MapModelToShape;
+    typedef MapModelToShape::value_type ModelShapePair;
+
+    //------------------------------------------------------------------------
+    void    collectShapeModelMapping( SdrPage* _pPage, MapModelToShape& _rMapping )
+    {
+        OSL_ENSURE( _pPage, "collectShapeModelMapping: invalid arg!" );
+
+        _rMapping.clear();
+
+        SdrObjListIter aIter( *_pPage );
+        while ( aIter.IsMore() )
+        {
+            // get the shape
+            SdrObject* pShape = aIter.Next();
+
+            // is it a UNO control shape?
+            if ( pShape->IsUnoObj() )
+            {
+                Reference< XInterface > xNormalizedModel;
+                xNormalizedModel = xNormalizedModel.query( ( static_cast< SdrUnoObj* >( pShape )->GetUnoControlModel() ) );
+                    // note that this is normalized (i.e. queried for XInterface explicitly)
+
+#ifdef DBG_UTIL
+                ::std::pair< MapModelToShape::iterator, bool > aPos =
+#endif
+                _rMapping.insert( ModelShapePair( xNormalizedModel, pShape ) );
+                DBG_ASSERT( aPos.second, "collectShapeModelMapping: model was already existent!" );
+                    // if this asserts, this would mean we have 2 shapes pointing to the same model
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
+    sal_Bool isModelShapeMarked( FmEntryData* _pEntry, const MapModelToShape& _rModelMap, SdrMarkView* _pView )
+    {
+        DBG_ASSERT( _pEntry && _pView, "isModelShapeMarked: invalid arguments!" );
+        if ( !_pEntry || !_pView )
+            return sal_False;
+
+        DBG_ASSERT( _pEntry->GetElement().get() == Reference< XInterface >( _pEntry->GetElement(), UNO_QUERY ).get(),
+            "isModelShapeMarked: element of the FmEntryData is not normalized!" );
+            // normalization of the XInterface is a prerequisite for properly finding it in the map
+
+        sal_Bool bIsMarked = sal_False;
+
+        MapModelToShape::const_iterator aPos = _rModelMap.find( _pEntry->GetElement() );
+        if ( _rModelMap.end() != aPos )
+        {   // there is a shape for this model ....
+            bIsMarked = _pView->IsObjMarked( aPos->second );
+            if ( !bIsMarked )
+            {
+                // IsObjMarked does not step down grouped objects, so the sal_False we
+                // have is not really reliable (while a sal_True would have been)
+                // Okay, travel the mark list, and see if there is a group marked, and our shape
+                // is a part of this group
+                sal_uInt32 nMarked = _pView->GetMarkList().GetMarkCount();
+                for ( sal_uInt32 i = 0; (i<nMarked ) && !bIsMarked; ++i )
+                {
+                    SdrMark* pMark = _pView->GetMarkList().GetMark( i );
+                    SdrObject* pObj = pMark ? pMark->GetObj() : NULL;
+                    if ( pObj && pObj->IsGroupObject() )
+                    {   // the i-th marked shape is a group shape
+                        SdrObjListIter aIter( *pObj );
+                        while ( aIter.IsMore() )
+                        {
+                            if ( aIter.Next() == aPos->second )
+                            {
+                                bIsMarked = sal_True;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return bIsMarked;
+    }
 
     //========================================================================
     // class NavigatorTree
@@ -1069,7 +1154,7 @@ namespace svxform
                 // neues Control anlegen
                 rtl::OUString fControlName = FM_COMPONENT_HIDDEN;
                 FmControlData* pNewControlData = NewControl( fControlName, _pTargetEntry, sal_False);
-                Reference< XPropertySet >  xNewPropSet(pNewControlData->GetElement(), UNO_QUERY);
+                Reference< XPropertySet >  xNewPropSet( pNewControlData->GetPropertySet() );
 
                 // und die Properties des alten in das neue kopieren
                 Reference< XPropertySet >  xCurrent(pControls[i], UNO_QUERY);
@@ -1148,7 +1233,7 @@ namespace svxform
 
             FmEntryData* pCurrentUserData = (FmEntryData*)pCurrent->GetUserData();
 
-            Reference< XChild >  xCurrentChild(pCurrentUserData->GetElement(), UNO_QUERY);
+            Reference< XChild >  xCurrentChild(pCurrentUserData->GetChildIFace(), UNO_QUERY);
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
 
@@ -1702,7 +1787,7 @@ namespace svxform
                     for (int i=0; i<m_nFormsSelected; i++)
                     {
                         FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject(i)->GetUserData();
-                        pPropSets[i] = Reference< XPropertySet > (pFormData->GetElement(), UNO_QUERY);
+                        pPropSets[i] = pFormData->GetPropertySet();
                     }
                     // dann diese in ein MultiSet packen
                     FmXMultiSet* pSelectionSet = new FmXMultiSet( seqForms );
@@ -1718,7 +1803,7 @@ namespace svxform
                         for (int i=0; i<m_nHiddenControls; i++)
                         {
                             FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject(i)->GetUserData();
-                            pPropSets[i] = Reference< XPropertySet > (pEntryData->GetElement(), UNO_QUERY);
+                            pPropSets[i] = pEntryData->GetPropertySet();
 
                             if (pParentData && pParentData != pEntryData->GetParent())
                                 pParentData = NULL;
@@ -1815,6 +1900,16 @@ namespace svxform
         }
     */
 
+        // see below for why we need this mapping from models to shapes
+        FmFormView*     pFormView       = pFormShell->GetFormView();
+        SdrPageView*    pPageView       = pFormView ? pFormView->GetPageViewPvNum(0) : NULL;
+        SdrPage*        pPage           = pPageView ? pPageView->GetPage() : NULL;
+        DBG_ASSERT( pPage, "NavigatorTree::DeleteSelection: invalid form page!" );
+
+        MapModelToShape aModelShapes;
+        if ( pPage )
+            collectShapeModelMapping( pPage, aModelShapes );
+
         // jetzt muss ich noch die DeleteList etwas absichern : wenn man ein Formular und ein abhaengiges
         // Element loescht - und zwar in dieser Reihenfolge - dann ist der SvLBoxEntryPtr des abhaengigen Elementes
         // natuerlich schon ungueltig, wenn es geloescht werden soll ... diesen GPF, den es dann mit Sicherheit gibt,
@@ -1842,13 +1937,26 @@ namespace svxform
             if (bIsForm)
                 MarkViewObj((FmFormData*)pCurrent, sal_True, sal_True);     // das zweite sal_True heisst "deep"
 
-
             // ein hidden control ?
             sal_Bool bIsHidden = IsHiddenControl(pCurrent);
 
             // Forms und hidden Controls muss ich behalten, alles andere nicht
             if (!bIsForm && !bIsHidden)
-                m_arrCurrentSelection.Remove((sal_uInt16)i, 1);
+            {
+                // well, not form and no hidden control -> we can remove it from m_arrCurrentSelection, as it will
+                // be deleted automatically. This is because for every model (except forms and hidden control models)
+                // there exist a shape, which is marked _if_and_only_if_ the model is selected in our tree.
+                // This is the theory.
+                // Now the practice. There may be models which do not have a shape at all. This may be because of
+                // explicit API programming (in this case it was intentional by the user, or a failuer, but this
+                // does not matter), or by bugs :). One of these bugs is 103597.
+                // Because of this "dead" models (means not connected to a shape), we have to do an extra test
+                // 103597 - 2002-09-25 - fs@openoffice.org
+
+                if ( isModelShapeMarked( pCurrent, aModelShapes, pFormView ) )
+                    // there indeed is a _marked_ shape for this model
+                    m_arrCurrentSelection.Remove( (sal_uInt16)i, 1 );
+            }
         }
         pFormShell->GetImpl()->EnableTrackProperties(sal_True);
 
@@ -1870,9 +1978,9 @@ namespace svxform
             // kennt, dann muss ich ihr das natuerlich ausreden
             if (pCurrent->ISA(FmFormData))
             {
-                Reference< XForm >  xCurrentForm(pCurrent->GetElement(), UNO_QUERY);
+                Reference< XForm >  xCurrentForm( static_cast< FmFormData* >( pCurrent )->GetFormIface() );
                 if (pFormShell->GetImpl()->getCurForm() == xCurrentForm)    // die Shell kennt die zu loeschende Form ?
-                    pFormShell->GetImpl()->setCurForm(Reference< XForm > ());          // -> wegnehmen ...
+                    pFormShell->GetImpl()->setCurForm( NULL );              // -> wegnehmen ...
             }
             GetNavModel()->Remove(pCurrent, sal_True);
         }
@@ -2086,8 +2194,10 @@ namespace svxform
         // aber der Mechanismus greift zum Beispiel nicht, wenn die Form leer ist)
         if ((m_arrCurrentSelection.Count() == 1) && (m_nFormsSelected == 1))
         {
-            FmEntryData* pSingleSelectionData = (FmEntryData*)(FirstSelected()->GetUserData());
-            pFormShell->GetImpl()->setCurForm(Reference< XForm > (pSingleSelectionData->GetElement(), UNO_QUERY));
+            FmFormData* pSingleSelectionData = PTR_CAST( FmFormData, static_cast< FmEntryData* >( FirstSelected()->GetUserData() ) );
+            DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
+            if ( pSingleSelectionData )
+                pFormShell->GetImpl()->setCurForm( pSingleSelectionData->GetFormIface() );
         }
     }
 
@@ -2096,7 +2206,7 @@ namespace svxform
     {
         if (pEntryData == NULL) return sal_False;
 
-        Reference< XPropertySet >  xProperties(pEntryData->GetElement(), UNO_QUERY);
+        Reference< XPropertySet > xProperties( pEntryData->GetPropertySet() );
         if (::comphelper::hasProperty(FM_PROP_CLASSID, xProperties))
         {
             Any aClassID = xProperties->getPropertyValue( FM_PROP_CLASSID );
@@ -2203,6 +2313,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/06/21 06:13:41  oj
+ *  #100258# set window flag for treelistbox
+ *
  *  Revision 1.6  2002/05/29 13:35:56  fs
  *  #99674# correctly set the collapsed/expanded images for both bitmap modes
  *
