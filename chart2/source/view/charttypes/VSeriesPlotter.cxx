@@ -478,7 +478,7 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter( const rtl::OUString& rChart
     else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.AreaChart")) )
         pRet = new AreaChart(nDimension,true,false,false);
     else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.LineChart")) )
-        pRet = new AreaChart(nDimension,false,true,false);
+        pRet = new AreaChart(nDimension,false,true,true);
     else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.PieChart")) )
         pRet = new PieChart(nDimension);
     else

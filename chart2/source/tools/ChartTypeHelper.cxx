@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 19:32:18 $
+ *  last change: $Author: iha $ $Date: 2003-11-12 18:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XCha
             rtl::OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.match(C2U("com.sun.star.chart2.LineChart")) )
                 return sal_False;
-            //@todo add the more complicated line charts
+            //@todo ? add the more complicated line charts
         }
     }
     return sal_True;
@@ -176,7 +176,7 @@ sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XCha
 
 sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XChartType >& xChartType )
 {
-    //only special 2D symbol charts do support symbols
+    //2D line charts, 2D scatter charts and 2D net charts do support symbols
 
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
@@ -191,8 +191,11 @@ sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XC
             return sal_False;
 
         rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.indexOf(C2U("symbol"))!=-1 )
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.LineChart")) )
             return sal_True;
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
+            return sal_True;
+        //@todo ? add the more complicated line charts or scatter
     }
     return sal_False;
 }
