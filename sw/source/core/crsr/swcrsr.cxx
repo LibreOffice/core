@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:41:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1710,7 +1710,7 @@ FASTBOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
 {
     Point aPt;
     SwCntntFrm * pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
-    FASTBOOL bRet;
+    FASTBOOL bRet(FALSE);
 
     // calculate cursor bidi level
     if ( pFrm )
