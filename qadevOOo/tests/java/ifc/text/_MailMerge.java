@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _MailMerge.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:28:57 $
+ *  last change:$Date: 2003-09-08 11:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.text;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import lib.MultiPropertyTest;
+
+import com.sun.star.lang.XMultiServiceFactory;
 
 public class _MailMerge extends MultiPropertyTest {
 
