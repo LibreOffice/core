@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-10 08:13:02 $
+ *  last change: $Author: aw $ $Date: 2002-10-01 17:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2204,6 +2204,9 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
 {
     SdrTextObj::NbcMirror(rRefPnt1,rRefPnt2);
     MirrorXPoly(aPathPolygon,rRefPnt1,rRefPnt2);
+
+    // #97538# Do Joe's special handling for lines when mirroring, too
+    ImpForceKind();
 }
 
 void SdrPathObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
