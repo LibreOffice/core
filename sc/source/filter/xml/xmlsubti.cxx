@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
+ *  last change: $Author: sab $ $Date: 2001-05-22 12:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,10 @@ void ScMyTables::DeleteTable()
         aTableVec[nTableCount - 1] = NULL;
         nTableCount--;
     }
+    if (nTableCount == 0) // only set the styles if all subtables are importet and the table is finished
+        rImport.GetStylesImportHelper()->SetStylesToRanges(rImport);
+    UpdateRowHeights();
+    aResizeShapes.ResizeShapes(xCurrentSheet);
     if (bProtection)
     {
         uno::Sequence<sal_Int8> aPass;
@@ -683,10 +687,6 @@ void ScMyTables::DeleteTable()
             xProtectable->protect(sKey);
         }*/
     }
-    if (nTableCount == 0) // only set the styles if all subtables are importet and the table is finished
-        rImport.GetStylesImportHelper()->SetStylesToRanges(rImport);
-    UpdateRowHeights();
-    aResizeShapes.ResizeShapes(xCurrentSheet);
 }
 
 table::CellAddress ScMyTables::GetRealCellPos()
