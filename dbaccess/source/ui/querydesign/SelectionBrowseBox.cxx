@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 08:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,16 +577,10 @@ void OSelectionBrowseBox::InitController(CellControllerRef& rController, long nR
             if (!m_pTextCell->HasFocus())
                 m_pTextCell->GrabFocus();
 
-            if(pEntry->GetFunctionType() == FKT_CONDITION)
-            {
-                m_pTextCell->Disable();
-                m_pTextCell->EnableInput(sal_False);
-            }
-            else
-            {
-                m_pTextCell->Enable();
-                m_pTextCell->EnableInput(sal_True);
-            }
+            BOOL bDisable = pEntry->GetFunctionType() == FKT_CONDITION;
+            m_pTextCell->Enable(bDisable);
+            m_pTextCell->EnableInput(!bDisable);
+
             if (m_pTextCell->GetHelpId() != HID_QRYDGN_ROW_CRIT)
                 // da TextCell in verschiedenen Kontexten verwendet wird, muss ich den gecachten HelpText loeschen
                 m_pTextCell->SetHelpText(String());
@@ -2227,10 +2221,13 @@ void OSelectionBrowseBox::cut()
     {
         case BROW_FIELD_ROW:
             m_pFieldCell->Cut();
+            m_pFieldCell->SetModifyFlag();
             break;
         default:
             m_pTextCell->Cut();
+            m_pTextCell->SetModifyFlag();
     }
+    SaveModified();
     RowModified(GetBrowseRow(nRow), GetCurColumnId());
 
     OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 08:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,10 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
             }
 
             if( m_pTableView && m_pTableView->HasChildPathFocus() )
+            {
+                m_pSelectionBox->DeactivateCell();
                 m_eChildFocus = TABLEVIEW;
+            }
             else
                 m_eChildFocus = SELECTION;
 

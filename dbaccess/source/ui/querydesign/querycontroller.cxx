@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 11:12:18 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 08:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                     }
                     else
                     {
-                        ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
+                        ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,m_bDesign);
                         //  m_pParseNode = pNode;
                         if(pNode)
                         {
@@ -487,6 +487,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
             m_bDistinct = !m_bDistinct;
+            setModified(sal_True);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
             {
@@ -653,7 +654,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                     }
                     setQueryComposer();
                     ::rtl::OUString aErrorMsg;
-                    ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
+                    ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,m_bDesign);
                     //  m_pParseNode = pNode;
                     if(pNode)
                     {
@@ -945,33 +946,8 @@ void OQueryController::executeQuery()
 {
     // we don't need to check the connection here because we already check the composer
     // which can't live without his connection
-    m_sStatement = m_pWindow->getView()->getStatement();
-    ::rtl::OUString sTranslatedStmt;
-    if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
-    {
-        try
-        {
-            ::rtl::OUString aErrorMsg;
-            ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
-            //  m_pParseNode = pNode;
-            if(pNode)
-            {
-                pNode->parseNodeToStr(  sTranslatedStmt,
-                                        m_xConnection->getMetaData());
-                delete pNode;
-            }
-            m_xComposer->setQuery(sTranslatedStmt);
-            sTranslatedStmt = m_xComposer->getComposedQuery();
-        }
-        catch(SQLException& e)
-        {
-            ::dbtools::SQLExceptionInfo aInfo(e);
-            showError(aInfo);
-            return;
-        }
-    }
-    else
-        sTranslatedStmt = m_sStatement;
+    ::rtl::OUString sTranslatedStmt = translateStatement();
+
     if(m_sDataSourceName.getLength() && sTranslatedStmt.getLength())
     {
         try
@@ -1052,16 +1028,16 @@ void OQueryController::executeQuery()
             OSL_ENSURE(0,"Couldn't create a beamer window!");
         }
     }
-    else
-    {
-        sal_Bool bAllEmpty = sal_True;
-        ::std::vector< OTableFieldDesc*>::const_iterator aIter = m_vTableFieldDesc.begin();
-        for(;bAllEmpty && aIter != m_vTableFieldDesc.end();++aIter)
-            bAllEmpty = (*aIter)->IsEmpty();
-
-        ErrorBox aBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT));
-        aBox.Execute();
-    }
+//  else
+//  {
+//      sal_Bool bAllEmpty = sal_True;
+//      ::std::vector< OTableFieldDesc*>::const_iterator aIter = m_vTableFieldDesc.begin();
+//      for(;bAllEmpty && aIter != m_vTableFieldDesc.end();++aIter)
+//          bAllEmpty = (*aIter)->IsEmpty();
+//
+//      ErrorBox aBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT));
+//      aBox.Execute();
+//  }
 }
 // -----------------------------------------------------------------------------
 String OQueryController::getMenu() const
@@ -1321,7 +1297,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         try
         {
             ::rtl::OUString aErrorMsg;
-            ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
+            ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_False);
             //  m_pParseNode = pNode;
             if(pNode)
             {
