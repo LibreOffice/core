@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 12:34:55 $
+ *  last change: $Author: jp $ $Date: 2001-08-06 18:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,9 +651,8 @@ void SwDBTreeList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
             aCopyData   += sColumnName;
 
             // Datenbankfeld draggen
-            pContainer->CopyAnyData( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE,
-                                (sal_Char*)aCopyData.GetBuffer(),
-                                (aCopyData.Len() + 1) * sizeof( sal_Unicode ));
+            pContainer->CopyString( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE,
+                                        aCopyData );
         }
 
         sDBName += '.';
@@ -664,8 +663,7 @@ void SwDBTreeList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
             sDBName += sColumnName;
         }
 
-        pContainer->CopyAnyData( FORMAT_STRING, (sal_Char*)sDBName.GetBuffer(),
-                                (sDBName.Len() + 1) * sizeof( sal_Unicode ));
+        pContainer->CopyString( FORMAT_STRING, sDBName );
 
         pContainer->StartDrag( this, DND_ACTION_COPY | DND_ACTION_LINK,
                                 Link() );
