@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.5 2002-10-11 13:42:48 waratah Exp $
+/* RCS  $Id: runargv.c,v 1.6 2003-01-04 13:02:44 waratah Exp $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -24,11 +24,13 @@
 */
 
 #include <signal.h>
-#include <wait.h>
+#ifdef HAVE_WAIT_H
+#    include <wait.h>
+#endif
 
 #include "extern.h"
 
-/*  temporarily comment out spwan code as it does not actually work yet */
+/*  temporarily comment out spawn code as it does not actually work yet */
 #undef HAVE_SPAWN_H
 #if HAVE_SPAWN_H
 #  include <spawn.h>
