@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-02 13:58:02 $
+ *  last change: $Author: svesik $ $Date: 2000-11-22 23:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
-#include <stl/vector>
+#include <vector>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
