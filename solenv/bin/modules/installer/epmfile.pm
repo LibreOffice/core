@@ -715,7 +715,6 @@ sub set_maxinst_in_pkginfo
 #####################################################################
 # Adding a new line for topdir into specfile, removing old
 # topdir if set.
-# Also adding the new line: "AutoReqProv: no"
 #####################################################################
 
 sub set_topdir_in_specfile
@@ -740,12 +739,11 @@ sub set_topdir_in_specfile
         }
     }
 
-    # Adding "topdir" and "autoreqprov" behind the line beginning with: Prefix:
+    # Adding "topdir" behind the line beginning with: Prefix:
 
     my $inserted_line = 0;
 
     my $topdirline = "\%define _topdir $newepmdir\n";
-    my $autoreqprovline = "AutoReqProv\: no\n";
 
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {
@@ -756,15 +754,6 @@ sub set_topdir_in_specfile
             $topdirline =~ s/\s*$//;
             my $infoline = "Success: Added line $topdirline into file $filename!\n";
             push( @installer::globals::logfileinfo, $infoline);
-
-            # also including the line "AutoReqProv\: no\n"
-
-            splice(@{$changefile},$i+1,0,$autoreqprovline);
-            $autoreqprovline =~ s/\s*$//;
-            $infoline = "Success: Added line $autoreqprovline into file $filename!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-
-            last;
         }
     }
 
@@ -819,6 +808,40 @@ sub set_packager_in_specfile
             ${$changefile}[$i] =~ s/\Q$oldstring\E/$packager/;
             my $infoline = "Info: Changed Packager in spec file from $oldstring to $packager!\n";
             push( @installer::globals::logfileinfo, $infoline);
+            last;
+        }
+    }
+}
+
+#####################################################################
+# Setting the Auto[Req]Prov line and __find_requires
+#####################################################################
+
+sub set_autoprovreq_in_specfile
+{
+    my ($changefile, $findrequires, $bindir) = @_;
+
+    my $autoreqprovline;
+
+    if ( $findrequires )
+    {
+        $autoreqprovline = "AutoProv\: no\n%define __find_requires $bindir/$findrequires\n";
+    }
+    else
+    {
+        $autoreqprovline = "AutoReqProv\: no\n";
+    }
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        # Adding "autoreqprov" behind the line beginning with: Prefix:
+        if ( ${$changefile}[$i] =~ /^\s*Prefix\:\s*/ )
+        {
+            splice(@{$changefile},$i+1,0,$autoreqprovline);
+            $autoreqprovline =~ s/\s*$//;
+            $infoline = "Success: Added line $autoreqprovline into file $changefile!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
             last;
         }
     }
@@ -984,6 +1007,7 @@ sub prepare_packages
     {
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
         set_releaseversion_in_specfile($changefile, $variableshashref);
+        set_autoprovreq_in_specfile($changefile, $onepackage->{'findrequires'}, "$installer::globals::unpackpath" . "/bin");
         set_packager_in_specfile($changefile);
         set_license_in_specfile($changefile, $variableshashref);
         installer::files::save_file($completefilename, $changefile);
@@ -1545,13 +1569,11 @@ sub put_systemintegration_into_installset
         if ($installer::globals::product =~ /OpenOffice/i )
         {
             push(@systemfiles, "openofficeorg-desktop-integratn.tar.gz");
-            push(@systemfiles, "openofficeorg-cde.tar.gz");
         }
         else
         {
             my $productname = $variables->{'UNIXPRODUCTNAME'};
             push(@systemfiles, "SUNW$productname-desktop-integratn.tar.gz");
-            push(@systemfiles, "SUNW$productname-cde.tar.gz");
         }
     }
 
@@ -1563,6 +1585,8 @@ sub put_systemintegration_into_installset
         {
             push(@systemfiles, "openofficeorg-redhat-menus-$productversion-1.noarch.rpm");
             push(@systemfiles, "openofficeorg-suse-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openofficeorg-mandrakelinux-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openofficeorg-freedesktop-menus-$productversion-1.noarch.rpm");
         }
         else
         {
