@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:45:34 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 
 class XclImpStream;
 class XclImpString;
+
+typedef ScfRef< XclImpString > XclImpStringRef;
 
 // Global data ================================================================
 
