@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2000-11-28 12:58:03 $
+ *  last change: $Author: dv $ $Date: 2000-11-30 16:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #include <tools/urlobj.hxx>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include <ucbhelper/content.hxx>
 
 #include <com/sun/star/uno/Reference.h>
@@ -98,12 +102,29 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HDL_
+#include <com/sun/star/beans/PropertyValue.hdl>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
+
+#ifdef TF_FILTER
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+#else
+#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADERQUERY_HPP_
+#include <com/sun/star/frame/XFrameLoaderQuery.hpp>
+#endif
+#endif
+
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -115,6 +136,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFO_HPP_
 #include <com/sun/star/ucb/ContentInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XSTANDALONEDOCUMENTINFO_HPP_
+#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -138,8 +162,9 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
 
-
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -177,6 +202,7 @@ const char              cDefWildcard =      '*';
 #define TEMPLATE_DIR_NAME       "templates"
 #define TITLE                   "Title"
 #define IS_FOLDER               "IsFolder"
+#define PROPERTY_TYPE           "TypeDecription"
 #define TARGET_URL              "TargetURL"
 #define TYPE_FOLDER             "application/vnd.sun.star.hier-folder"
 #define TYPE_LINK               "application/vnd.sun.star.hier-link"
@@ -187,6 +213,12 @@ const char              cDefWildcard =      '*';
 #define REAL_NAME               "RealName"
 #define COMMAND_DELETE          "delete"
 #define COMMAND_TRANSFER        "transfer"
+
+#define SERVICENAME_TYPEDETECTION       "com.sun.star.document.TypeDetection"
+#define TYPEDETECTION_PARAMETER         "FileName"
+#define SERVICENAME_OLD_TYPEDETECTION   "com.sun.star.frame.FrameLoaderFactory"
+#define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
+#define SERVICENAME_DOCINFO             "com.sun.star.document.StandaloneDocumentInfo"
 
 #define C_DELIM                 ';'
 
@@ -211,6 +243,7 @@ public:
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
     int                 Compare( const OUString& rTitle ) const;
+    void                SetType( const OUString& rType );
 };
 
 DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
@@ -223,7 +256,6 @@ class RegionData_Impl
     OUString            maTitle;
     OUString            maRealTitle;
     OUString            maOwnURL;
-    OUString            maParentURL;
     OUString            maTargetURL;
     Content             maTargetContent;
     Content             maHierarchyContent;
@@ -250,13 +282,12 @@ public:
     void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
     void                SetRealTitle( const OUString& rTitle ) { maRealTitle = rTitle; }
     void                SetTargetURL( const OUString& rTargetURL );
-    void                SetParentURL( const OUString& rParentURL );
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
     void                SetTargetContent( const Content& rTarget ) { maTargetContent = rTarget; }
     void                SetHierarchyContent( const Content& rContent ) { maHierarchyContent = rContent; }
 
-    void                AddEntry( Content& rParentFolder,
+    EntryData_Impl*     AddEntry( Content& rParentFolder,
                                   const OUString& rTitle,
                                   const OUString& rTargetURL );
     void                DeleteEntry( ULONG nIndex );
@@ -273,6 +304,7 @@ DECLARE_LIST( RegionList_Impl, RegionData_Impl* );
 // ------------------------------------------------------------------------
 class SfxDocTemplate_Impl
 {
+    Reference< XMultiServiceFactory >   mxFactory;
     ::osl::Mutex        maMutex;
     String              maDirs;
     RegionList_Impl     maRegions;
@@ -289,7 +321,6 @@ public:
     void                Construct( const String& rDirURLs );
     sal_Bool            Rescan();
     void                CreateFromHierarchy( Content &rTemplRoot );
-    void                CreateFromDirs();
 
     void                AddRegion( const OUString& rTitle,
                                    const OUString& rRealTitle,
@@ -322,6 +353,8 @@ public:
     sal_Bool            InsertNewRegionToFolder(
                                         Content &rRoot,
                                         const OUString &rTitle );
+    OUString            GetTypeFromURL( const OUString& rURL );
+    OUString            GetTitleFromURL( const OUString& rURL );
 };
 
 SfxDocTemplate_Impl *gpTemplateData = 0;
@@ -1040,7 +1073,13 @@ void SfxDocumentTemplates::NewTemplate
     OUString aFullFileName = aURLObj.getExternalURL();
 */
     Content aContent;
-    pRegion->AddEntry( aContent, rLongName, rFileName );
+
+    pEntry = pRegion->AddEntry( aContent, rLongName, rFileName );
+    if ( pEntry )
+    {
+        OUString aType = pImp->GetTypeFromURL( rFileName );
+        pEntry->SetType( aType );
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1389,7 +1428,14 @@ BOOL SfxDocumentTemplates::CopyFrom
     { return FALSE; }
 
     // update data structures ...
-    pTargetRgn->AddEntry( aTarget, aTitle, rName );
+    EntryData_Impl *pEntry;
+    pEntry = pTargetRgn->AddEntry( aTarget, aTitle, rName );
+
+    if ( pEntry )
+    {
+        OUString aType = pImp->GetTypeFromURL( rName );
+        pEntry->SetType( aType );
+    }
 
     return TRUE;
 }
@@ -1604,9 +1650,7 @@ BOOL SfxDocumentTemplates::SetName
     OUString aTitle( rName );
     OUString aRealTitle( rName );
     OUString aFolderURL = pRegion->GetTargetURL();
-    OUString aHierURL( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
-    aHierURL += OUString( '/' );
-    aHierURL += pRegion->GetTitle();
+    OUString aHierURL = pRegion->GetHierarchyURL();
 
     sal_Bool bSetRealTitle( sal_False );
 
@@ -2148,6 +2192,50 @@ int EntryData_Impl::Compare( const OUString& rTitle ) const
 }
 
 // -----------------------------------------------------------------------
+void EntryData_Impl::SetType( const OUString& rType )
+{
+    Content aContent;
+    try
+    {
+        Reference< XCommandEnvironment > aCmdEnv;
+        aContent = Content( maOwnURL, aCmdEnv );
+
+        Reference< XPropertySetInfo > xPropSet = aContent.getProperties();
+        if ( xPropSet.is() )
+        {
+            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_TYPE ) );
+            Sequence< OUString > aPropNames( &aPropName, 1 );
+
+            if ( ! xPropSet->hasPropertyByName( aPropName ) )
+            {
+                Reference< XPropertyContainer > xProperties( aContent.get(), UNO_QUERY );
+                if ( xProperties.is() )
+                {
+                    try
+                    {
+                        xProperties->addProperty( aPropName, PropertyAttribute::MAYBEVOID,
+                                                  makeAny( rType ) );
+                    }
+                    catch( PropertyExistException& ) {}
+                    catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
+                    catch( IllegalArgumentException& ) { DBG_ERRORFILE( "IllegalArgumentException" ); }
+                }
+            }
+
+            Sequence< Any > aPropValues(1);
+            Any* pPropValues = aPropValues.getArray();
+
+            pPropValues[0] = makeAny( rType );
+
+            aContent.setPropertyValues( aPropNames, aPropValues );
+        }
+    }
+    catch ( ... )
+    {
+    }
+}
+
+// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
@@ -2197,12 +2285,6 @@ void RegionData_Impl::SetTargetURL( const OUString& rTargetURL )
 }
 
 // -----------------------------------------------------------------------
-void RegionData_Impl::SetParentURL( const OUString& rParentURL )
-{
-    maParentURL = rParentURL;
-}
-
-// -----------------------------------------------------------------------
 long RegionData_Impl::GetEntryPos( const OUString& rTitle,
                                    sal_Bool& rFound ) const
 {
@@ -2245,9 +2327,9 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
 }
 
 // -----------------------------------------------------------------------
-void RegionData_Impl::AddEntry( Content& rParentFolder,
-                                const OUString& rTitle,
-                                const OUString& rTargetURL )
+EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
+                                           const OUString& rTitle,
+                                           const OUString& rTargetURL )
 {
     Content aLink;
     Reference< XCommandEnvironment > aCmdEnv;
@@ -2282,12 +2364,12 @@ void RegionData_Impl::AddEntry( Content& rParentFolder,
             }
             catch( ContentCreationException& )
             {
-                return;
+                return NULL;
             }
             catch( ... )
             {
                 DBG_ERRORFILE( "Any other exception" );
-                return;
+                return NULL;
             }
         }
 
@@ -2298,10 +2380,12 @@ void RegionData_Impl::AddEntry( Content& rParentFolder,
         catch( CommandAbortedException& )
         {
             DBG_ERRORFILE( "CommandAbortedException" );
+            return NULL;
         }
         catch( ... )
         {
             DBG_ERRORFILE( "Any other exception" );
+            return NULL;
         }
     }
 
@@ -2314,6 +2398,13 @@ void RegionData_Impl::AddEntry( Content& rParentFolder,
 
     if ( !bFound )
         maEntries.Insert( pEntry, nPos );
+    else
+    {
+        delete pEntry;
+        pEntry = maEntries.GetObject( nPos );
+    }
+
+    return pEntry;
 }
 
 // -----------------------------------------------------------------------
@@ -2571,6 +2662,8 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
+    mxFactory = ::comphelper::getProcessServiceFactory();
+
     if ( mbConstructed )
         return;
     else
@@ -2820,7 +2913,6 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
 
                 RegionData_Impl *pRegion = new RegionData_Impl( aURLTitle, aTitle );
                 pRegion->SetTargetURL( aId );
-                pRegion->SetParentURL( aFolderURL );
                 pRegion->SetHierarchyURL( aNewFolderURL );
 
                 bWasInList = InsertOrMarkRegion( pRegion );
@@ -2883,8 +2975,19 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
             {
                 OUString aTitle( xRow->getString(1) );
                 OUString aId = xContentAccess->queryContentIdentifierString();
+                OUString aFullTitle = GetTitleFromURL( aId );
 
-                pRegion->AddEntry( rParentFolder, aTitle, aId );
+                if ( aFullTitle.len() )
+                    aTitle = aFullTitle;
+
+                EntryData_Impl* pEntry;
+                pEntry = pRegion->AddEntry( rParentFolder, aTitle, aId );
+
+                if ( pEntry )
+                {
+                    OUString aType = GetTypeFromURL( aId );
+                    pEntry->SetType( aType );
+                }
             }
         }
         catch( CommandAbortedException& )
@@ -3085,7 +3188,6 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
     {
         RegionData_Impl *pRegion = new RegionData_Impl( aURLTitle, rTitle );
         pRegion->SetTargetURL( rTargetURL );
-        pRegion->SetParentURL( aFolderURL );
         pRegion->SetHierarchyURL( aNewFolderURL );
 
         bExists = InsertOrMarkRegion( pRegion );
@@ -3140,4 +3242,79 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToFolder(
     }
 
     return bExists;
+}
+
+// -----------------------------------------------------------------------
+
+OUString SfxDocTemplate_Impl::GetTypeFromURL( const OUString& rURL )
+{
+#ifdef TF_FILTER
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_TYPEDETECTION ) );
+    Reference< XTypeDetection > xTypeDetection( mxFactory->createInstance( aService ), UNO_QUERY );
+    OUString                    aTypeName;
+
+    if( xTypeDetection.is() == sal_True )
+    {
+        // Build a new media descriptor.
+        // He will "walking" during all member of our type detection and loading process as an InOut-parameter!
+        // Every "user" can add or remove information about given document.
+
+        Sequence< PropertyValue > aValues(1);
+        PropertyValue* pValues = aValues.getArray();
+
+        pValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPEDETECTION_PARAMETER ) );
+        pValues->Value = makeAny( rURL );
+
+        // Try to get right type name for given descriptor.
+        // (Allow a deep detection by calling with "sal_True" - If no input stream already exist - every member of our detection process cann add him to the descriptor!)
+        aTypeName = xTypeDetection->queryTypeByDescriptor( aValues, sal_True );
+    }
+    return aTypeName;
+#else
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_OLD_TYPEDETECTION ) );
+    Reference< XFrameLoaderQuery >  xTypeDetection( mxFactory->createInstance( aService ), UNO_QUERY );
+    OUString                        aTypeName;
+
+    if( xTypeDetection.is() == sal_True )
+    {
+        Sequence< PropertyValue > aValues(1);
+        PropertyValue* pValues = aValues.getArray();
+
+        pValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( PARAMETER_OLD_TYPEDETECTION ) );
+        pValues->Value = makeAny( sal_Bool( sal_True ) );
+
+        aTypeName = xTypeDetection->searchFilter( rURL, aValues );
+    }
+    return aTypeName;
+#endif
+}
+
+// -----------------------------------------------------------------------
+
+OUString SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL )
+{
+    OUString aTitle;
+
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
+    Reference< XStandaloneDocumentInfo > xInfo( mxFactory->createInstance( aService ), UNO_QUERY );
+
+    if ( xInfo.is() )
+    {
+        try
+        {
+            xInfo->loadFromURL( rURL );
+
+            Reference< XPropertySet > aPropSet( xInfo, UNO_QUERY );
+            if ( aPropSet.is() )
+            {
+                OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+                Any aValue = aPropSet->getPropertyValue( aPropName );
+                aValue >>= aTitle;
+            }
+        }
+        catch ( IOException& ) {}
+        catch ( UnknownPropertyException& ) {}
+    }
+
+    return aTitle;
 }
