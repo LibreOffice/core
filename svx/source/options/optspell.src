@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:31:40 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ portuguese_brazilian ] = "~Editar..." ;
         Text [ portuguese ] = "~Editar..." ;
         Text [ finnish ] = "~Muokkaa..." ;
-        Text [ danish ] = "Rediger..." ;
+        Text [ danish ] = "~Rediger..." ;
         Text [ french ] = "�diter..." ;
         Text [ swedish ] = "~Redigera..." ;
         Text [ dutch ] = "Be~werken..." ;
@@ -117,6 +117,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
         Text[ slovak ] = "~Upraviť...";
+        Text[ hungarian ] = "~Szerkesztés...";
+        Text[ slovenian ] = "~Uredi...";
     };
     MultiListBox LB_BOOK
     {
@@ -161,6 +163,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ hebrew ] = "‮מילונים‬";
         Text[ hindi ] = "शब्दकोश";
         Text[ slovak ] = "Slovníky";
+        Text[ hungarian ] = "Szótárak";
+        Text[ slovenian ] = "Slovarji";
     };
     CheckBox BTN_CAPS
     {
@@ -175,7 +179,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ portuguese_brazilian ] = "~Palavras em mai�sculas" ;
         Text [ portuguese ] = "~Palavras mai�sculas" ;
         Text [ finnish ] = "~Isolla kirjoitettavat sanat" ;
-        Text [ danish ] = "Ord med store bogstaver" ;
+        Text [ danish ] = "~Ord med store bogstaver" ;
         Text [ french ] = "les mots �crits en ~majuscules" ;
         Text [ swedish ] = "Or~d med stora bokst�ver" ;
         Text [ dutch ] = "~Woorden met hoofdletters" ;
@@ -198,6 +202,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ hebrew ] = "‮מילים בעלות ראשיות גדולות‬";
         Text[ hindi ] = "~केपिटल शब्द";
         Text[ slovak ] = "Slová ~veľkými písmenami";
+        Text[ hungarian ] = "~Nagybetűs szavak";
+        Text[ slovenian ] = "~Besede z veliko začetnico";
     };
     CheckBox BTN_NUMS
     {
@@ -212,7 +218,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ portuguese_brazilian ] = "Palavras com ~n�meros " ;
         Text [ portuguese ] = "~Palavras com n�meros " ;
         Text [ finnish ] = "~Numeroita sis�lt�v�t sanat " ;
-        Text [ danish ] = "Ord med tal " ;
+        Text [ danish ] = "~Ord med tal " ;
         Text [ french ] = "les mots comportant des ~chiffres  " ;
         Text [ swedish ] = "Ord med s~iffror  " ;
         Text [ dutch ] = "~Woorden met cijfers" ;
@@ -235,6 +241,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ hebrew ] = "‮מילים עם מספרים‬";
         Text[ hindi ] = "संख्या सहित ~शब्द ";
         Text[ slovak ] = "Slová s číslica~mi ";
+        Text[ hungarian ] = "~Számozott szavak";
+        Text[ slovenian ] = "~Besede s številkami";
     };
     CheckBox BTN_UPLOW
     {
@@ -249,7 +257,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ portuguese_brazilian ] = "Diferenciar ~mai�sculas/min�sculas" ;
         Text [ portuguese ] = "~Mai�sculas & Min�sculas " ;
         Text [ finnish ] = "~Kirjainkoon erottelu " ;
-        Text [ danish ] = "Store og sm� bogstaver " ;
+        Text [ danish ] = "~STORE og sm� bogstaver" ;
         Text [ french ] = "la ~casse  " ;
         Text [ swedish ] = "Versal~k�nslig " ;
         Text [ dutch ] = "~Hoofdletters/kleine letters " ;
@@ -272,6 +280,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ hebrew ] = "‮רגישות לאותיות גדולות\\קטנות‬";
         Text[ hindi ] = "~केस सचेतन ";
         Text[ slovak ] = "~Rozlišovať veľké/malé ";
+        Text[ hungarian ] = "Kis/nagybetű ~különbözik";
+        Text[ slovenian ] = "Raz~likuj velike in male črke";
     };
     FixedLine GB_AUDIT
     {
@@ -308,6 +318,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ hebrew ] = "‮בדיקה‬";
         Text[ hindi ] = "जाँच";
         Text[ slovak ] = "Kontrola";
+        Text[ hungarian ] = "Ellenőrzés";
+        Text[ slovenian ] = "Preveri";
     };
     Text[ chinese_simplified ] = "拼写检查";
     Text[ russian ] = "�������� ����������";
@@ -325,8 +337,11 @@ TabPage RID_SFXPAGE_SPELL
     Text[ hebrew ] = "‮בדיקת איות‬";
     Text[ hindi ] = "अक्षर की जाँच";
     Text[ slovak ] = "Kontrola pravopisu";
+    Text[ hungarian ] = "Helyesírás-ellenőrzés";
+    Text[ slovenian ] = "Preverjanje črkovanja";
 };
  // ********************************************************************** EOF
+
 
 
 
