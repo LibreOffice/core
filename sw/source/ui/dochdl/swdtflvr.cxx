@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:50:54 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 16:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #endif
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
-#endif
-#ifndef _CLIP_HXX
-#include <vcl/clip.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>

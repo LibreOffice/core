@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 09:04:37 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 16:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _CLIP_HXX
-#include <vcl/clip.hxx>
 #endif
 #ifndef _HELP_HXX
 #include <vcl/help.hxx>
@@ -3117,6 +3114,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/05/07 09:04:37  jp
+    chg: Drag&Drop interface changed to TransferData & Helper classes
+
     Revision 1.5  2001/02/23 12:45:30  os
     Complete use of DefaultNumbering component
 
