@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:25:50 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ const char *ExeTable[][5] = {
     { "xcu", "cfgex", "-UTF8 -e", "negative", "iso" },
     { "xcs", "cfgex", "-UTF8 -e -f", "negative", "iso" },
     { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
+    { "xhp", "helpex", " -e", "negative", "noiso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 
@@ -102,7 +103,7 @@ const char *NegativeList[] = {
 };
 
 const char *PositiveList[] = {
-"svx/inc/globlmn_tmpl.hrc",
+    "svx/inc/globlmn_tmpl.hrc",
     "sw/source/ui/inc/swmn_tmpl.hrc",
     "sw/source/ui/inc/swacc_tmpl.hrc",
     "sw/source/ui/inc/toolbox_tmpl.hrc",
@@ -274,8 +275,6 @@ void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rParameter, const ByteString &rIso )
 /*****************************************************************************/
 {
-
-//if (( rIso.Equals("noiso") ) || sIsoCode99.Len()) {
         String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
         DirEntry aEntry( sFull );
         ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
@@ -286,7 +285,10 @@ void SourceTreeLocalizer::WorkOnFile(
         aPath.SetCWD();
 
         ByteString sPrj( GetProjectName());
-        if ( sPrj.Len()) {
+        //printf ("prj = %s , exe = %s\n", sPrj.GetBuffer() , rExecutable.GetBuffer() );
+        if ( sPrj.Len()
+               // && !( rExecutable.EqualsIgnoreCaseAscii( "helpex" ) &&  !sPrj.EqualsIgnoreCaseAscii( "help2" ) ) // You don't see that!
+             ) {
             ByteString sRoot( GetProjectRootRel());
 
             // get temp file
@@ -334,7 +336,7 @@ void SourceTreeLocalizer::WorkOnFile(
 
             SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
             ByteString sLine;
-            while ( !aSDFIn.IsEof()) {
+            while ( aSDFIn.IsOpen() && !aSDFIn.IsEof()) {
                 aSDFIn.ReadLine( sLine );
                 if ( sLine.Len()) {
 
@@ -358,13 +360,10 @@ void SourceTreeLocalizer::WorkOnFile(
             aSDFIn.Close();
 
             aTemp.Kill();
+
         }
         // reset current working directory
         aOldCWD.SetCWD();
-//  }
-//  else {
-//      fprintf( stdout, "ERROR: Iso code required for file %s\n", rFileName.GetBuffer());
-//  }
 }
 
 /*****************************************************************************/
@@ -461,6 +460,7 @@ void SourceTreeLocalizer::WorkOnFileType(
 void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
 /*****************************************************************************/
 {
+    //printf("Working on Directory %s\n",rDirectory.GetBuffer());
     ULONG nIndex = 0;
     ByteString sExtension( ExeTable[ nIndex ][ 0 ] );
     ByteString sExecutable( ExeTable[ nIndex ][ 1 ] );
@@ -526,7 +526,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 )
 /*****************************************************************************/
 {
-//  printf("MergeSingleFile(%s,%s,%s)",rPrj.GetBuffer(),rFile.GetBuffer(),rSDFFile.GetBuffer());
+    //printf("MergeSingleFile(%s,%s,%s)",rPrj.GetBuffer(),rFile.GetBuffer(),rSDFFile.GetBuffer());
     if ( !rFile.Len())
         return TRUE;
 
@@ -607,7 +607,6 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         DirEntry aOldCWD;
         aPath.SetCWD();
 
-        //printf("DBF: %s\n",sCommand.GetBuffer());
         system( sCommand.GetBuffer());
         nFileCnt++;
         printf(".");
@@ -672,28 +671,124 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
 {
     DirEntry aEntry( Export::GetTempFile());
     BOOL bReturn = TRUE;
+    bool bMerged = false;
 
     ByteString sFileName;
+    ByteString sCurFile;
     ByteString sLine;
+    ByteString sFileKey;
 
     SvFileStream aFile;
 
+    ByteString sOutputFileName = sOutputFile;
+    ByteString sInpath(".");
+    sInpath += GetEnv("INPATH");
+    ByteString sBlank("");
+
+    sOutputFileName.SearchAndReplaceAll( sInpath , sBlank );
+
+    String sDel = DirEntry::GetAccessDelimiter();
+
+    if( bLocal ){
+        int nPos = sOutputFileName.SearchBackward( sDel.GetChar(0) );
+        if( nPos >= 0 )
+            sOutputFileName = sOutputFileName.Copy( nPos+1 , sOutputFileName.Len()-nPos-1 );
+    }
+    ByteStringBoolHashMap aFileHM;
+    // Read all possible files
     while ( !aSDF.IsEof()) {
         aSDF.ReadLine( sLine );
-        ByteString sOldFileName( sFileName );
         sFileName = sLine.GetToken( 0, '\t' );
         sFileName += "#";
         sFileName += sLine.GetToken( 1, '\t' );
-        if ( sFileName.Len() && ( !sOldFileName.Equals(sFileName) )) {
-            if ( aFile.IsOpen()) {
-                aFile.Close();
+        aFileHM[sFileName]=true;
+    }
+
+    // RECODE THIS !!!!!!!!!!!!!!!!!!!!!
+    for( ByteStringBoolHashMap::iterator iter = aFileHM.begin(); iter != aFileHM.end(); ++iter ){
+        sFileKey = iter->first;
+        aSDF.Seek( 0 );
+        aFile.Open( aEntry.GetFull(), STREAM_STD_WRITE |STREAM_TRUNC );
+
+        while ( !aSDF.IsEof()) {
+            aSDF.ReadLine( sLine );
+            sFileName = sLine.GetToken( 0, '\t' );
+            sFileName += "#";
+            sFileName += sLine.GetToken( 1, '\t' );
+            if( sFileName.Len() && ( sFileName.CompareTo(sFileKey) == COMPARE_EQUAL ) ){
+                if ( aFile.IsOpen() && sLine.Len())
+                    aFile.WriteLine( sLine );
+            }
+        }
+        if ( aFile.IsOpen())
+            aFile.Close();
+
+        ByteString sPrj( sFileKey.GetToken( 0, '#' ));
+        ByteString sFile( sFileKey.GetToken( 1, '#' ));
+        ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
+
+        if( bLocal ){
+            int nPos = sFile.SearchBackward( '\\' );
+            ByteString sTmp = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
+            //printf("'%s'='%s'\n",sTmp.GetBuffer(), sOutputFileName.GetBuffer());
+            if( sTmp.CompareTo(sOutputFileName) == COMPARE_EQUAL ){
+                //int nPos = sFile.SearchBackward( '\\' );
+                //ByteString sCurFile = sFileKey.Copy( nPos+1 , sFile.Len()-nPos-1 );
+                //printf("MergeSingleFile('%s','%s','%s')\n",sPrj.GetBuffer(),sFileKey.GetBuffer(),sSDFFile.GetBuffer());
+                //if( sCurFile.EqualsIgnoreCaseAscii(sOutputFileName) ){
+                    bMerged = true;
+                    //printf("Found\n");
+                    if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+                        bReturn = FALSE;
+                //}
+            }/*else{
+                bMerged = true;
+                printf("d\n");
+                printf("MergeSingleFile('%s','%s','%s')\n",sPrj.GetBuffer(),sFile.GetBuffer(),sSDFFile.GetBuffer());
+                if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+                    bReturn = FALSE;
+            }*/
+        }
+    }
+    //}
+    aEntry.Kill();
+    // If Outputfile not included in the SDF file copy it without merge
+
+    if( bLocal && !bMerged ){
+        DirEntry aSourceFile( sOutputFileName.GetBuffer() );
+        FSysError aErr = aSourceFile.CopyTo( DirEntry ( sOutputFile.GetBuffer() ) , FSYS_ACTION_COPYFILE );
+        if( aErr != FSYS_ERR_OK ){
+            printf("ERROR: Can't copy file '%s' to '%s' %d\n",sOutputFileName.GetBuffer(),sOutputFile.GetBuffer(),aErr);
+        }
+    }
+    return bReturn;
+
+
+            //printf("DBG: sFilename = %s , sOldFileName = %s ", sFileName.GetBuffer() , sOldFileName.GetBuffer() );
+            /*if ( sFileName.Len() && ( !sOldFileName.Equals(sFileName) ) ){
+                if ( aFile.IsOpen()) {
+                    aFile.Close();
 
                 ByteString sPrj( sOldFileName.GetToken( 0, '#' ));
                 ByteString sFile( sOldFileName.GetToken( 1, '#' ));
                 ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
+                if( bLocal ){
+                    int nPos = sFile.SearchBackward( '\\' );
+                    sCurFile = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
+                    //printf("'%s'\n'%s'",sCurFile.GetBuffer(),sOutputFileName.GetBuffer());
+                    if( sCurFile.EqualsIgnoreCaseAscii(sOutputFileName) ){
+                        bMerged = true;
+                        printf("a\n");
+                        if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+                            bReturn = FALSE;
+                    }
+                }else {
+                    bMerged = true;
+                    printf("b\n");
+                    if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+                        bReturn = FALSE;
+                }
 
-                if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                    bReturn = FALSE;
             }
             aFile.Open( aEntry.GetFull(),
                 STREAM_STD_WRITE |STREAM_TRUNC );
@@ -707,15 +802,36 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
         ByteString sPrj( sLine.GetToken( 0, '\t' ));
         ByteString sFile( sLine.GetToken( 1, '\t' ));
         ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
-
-        if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-            bReturn = FALSE;
+        if( bLocal ){
+            int nPos = sFile.SearchBackward( '\\' );
+            sCurFile = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
+            //printf("'%s'\n'%s'",sCurFile.GetBuffer(),sOutputFileName.GetBuffer());
+            if( sCurFile.EqualsIgnoreCaseAscii(sOutputFileName) ){
+                bMerged = true;
+                printf("c\n");
+                if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+                    bReturn = FALSE;
+            }
+        }else{
+            bMerged = true;
+            printf("d\n");
+            if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+                bReturn = FALSE;
+        }
     }
-
-    aEntry.Kill();
-
-    return bReturn;
-
+    */
+/*  aEntry.Kill();
+    if( bLocal && !bMerged ){
+        //printf("File not merged sOutFile: '%s' , sCurFile = '%s' , sOutFilename: '%s' \n", sOutputFile.GetBuffer() ,
+        //  sCurFile.GetBuffer() , sOutputFileName.GetBuffer() );
+        DirEntry aSourceFile( sOutputFileName.GetBuffer() );
+        FSysError aErr = aSourceFile.CopyTo( DirEntry ( sOutputFile.GetBuffer() ) , FSYS_ACTION_COPYFILE );
+        //printf("Error = %d\n",aErr);
+        if( aErr != FSYS_ERR_OK ){
+            printf("ERROR: Can't copy file '%s' to '%s' %d\n",sOutputFileName.GetBuffer(),sOutputFile.GetBuffer(),aErr);
+        }
+    }
+    return bReturn; */
 }
 
 /*****************************************************************************/
@@ -1009,7 +1125,6 @@ int _cdecl main( int argc, char *argv[] )
             return FALSE;
 
         aIter.Merge( sFileName , sOutput );
-
     }
 
     return 0;
