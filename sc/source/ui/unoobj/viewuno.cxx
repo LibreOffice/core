@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <rtl/uuid.h>
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
 
 #include "viewuno.hxx"
 #include "cellsuno.hxx"
@@ -129,6 +132,7 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_SHOWSOLID),    0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(OLD_UNO_VALUEHIGH),   0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(OLD_UNO_VERTSCROLL),  0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(SC_UNO_VISAREA),      0,  &getCppuType((awt::Rectangle*)0),   0},
         {0,0,0,0}
     };
     return aViewOptPropertyMap_Impl;
@@ -139,6 +143,7 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
 SV_IMPL_PTRARR( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr );
 SV_IMPL_PTRARR( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr );
 SV_IMPL_PTRARR( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr );
+SV_IMPL_PTRARR( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr );
 
 #define SCTABVIEWOBJ_SERVICE        "com.sun.star.sheet.SpreadsheetView"
 #define SCVIEWSETTINGS_SERVICE      "com.sun.star.sheet.SpreadsheetViewSettings"
@@ -373,6 +378,21 @@ uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
         throw container::NoSuchElementException();      // no control found
 
     return xRet;
+}
+
+awt::Rectangle ScViewPaneBase::GetVisArea() const
+{
+    awt::Rectangle aVisArea;
+    if (pViewShell)
+    {
+        ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
+                                pViewShell->GetViewData()->GetActivePart() :
+                                (ScSplitPos) nPane;
+        Window* pWindow = pViewShell->GetWindowByPos(eWhich);
+        if (pWindow)
+            aVisArea = AWTRectangle(Rectangle(pViewShell->GetViewData()->GetPixPos(eWhich), pWindow->GetSizePixel()));
+    }
+    return aVisArea;
 }
 
 //------------------------------------------------------------------------
@@ -1355,12 +1375,66 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
         else if ( aString.EqualsAscii( SC_UNO_SHOWDRAW ) )   aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
         else if ( aString.EqualsAscii( SC_UNO_GRIDCOLOR ) )  aRet <<= (sal_Int32)( rOpt.GetGridColor().GetColor() );
         else if ( aString.EqualsAscii( SC_UNO_HIDESPELL ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsHideAutoSpell() );
+        else if ( aString.EqualsAscii( SC_UNO_VISAREA ) ) aRet <<= GetVisArea();
     }
 
     return aRet;
 }
 
-SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTabViewObj )
+void SAL_CALL ScTabViewObj::addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const uno::Reference<beans::XPropertyChangeListener >& xListener )
+                                throw(beans::UnknownPropertyException,
+                                    lang::WrappedTargetException,
+                                    uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference<beans::XPropertyChangeListener>* pObj =
+            new uno::Reference<beans::XPropertyChangeListener>( xListener );
+    aPropertyChgListeners.Insert( pObj, aPropertyChgListeners.Count() );
+}
+
+void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const uno::Reference<beans::XPropertyChangeListener >& xListener )
+                                throw(beans::UnknownPropertyException,
+                                    lang::WrappedTargetException,
+                                    uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    USHORT nCount = aPropertyChgListeners.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<beans::XPropertyChangeListener> *pObj = aPropertyChgListeners[n];
+        if ( *pObj == xListener )       //! wozu der Mumpitz mit queryInterface?
+        {
+            aPropertyChgListeners.DeleteAndDestroy( n );
+            break;
+        }
+    }
+}
+
+void SAL_CALL ScTabViewObj::addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const uno::Reference<beans::XVetoableChangeListener >& aListener )
+                                throw(beans::UnknownPropertyException,
+                                    lang::WrappedTargetException,
+                                    uno::RuntimeException)
+{
+}
+
+void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const uno::Reference<beans::XVetoableChangeListener >& aListener )
+                                throw(beans::UnknownPropertyException,
+                                    lang::WrappedTargetException,
+                                    uno::RuntimeException)
+{
+}
+
+void ScTabViewObj::VisAreaChanged()
+{
+    beans::PropertyChangeEvent aEvent;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    for ( USHORT n=0; n<aPropertyChgListeners.Count(); n++ )
+        (*aPropertyChgListeners[n])->propertyChange( aEvent );
+}
 
 // XRangeSelection
 
