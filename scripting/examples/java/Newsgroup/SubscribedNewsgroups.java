@@ -43,28 +43,28 @@ public class SubscribedNewsgroups {
         if( windows )
         {
             mozillaHome = System.getProperty( "user.home" ) + System.getProperty( "file.separator" ) + "Application Data" + System.getProperty( "file.separator" ) + "Mozilla" + System.getProperty( "file.separator" ) + "Profiles";
-            System.out.println( "Windows mozilla path: " + mozillaHome );
+            //System.out.println( "Windows mozilla path: " + mozillaHome );
         }
         else
         {
             mozillaHome = System.getProperty( "user.home" ) + System.getProperty( "file.separator" ) + ".mozilla";
-            System.out.println( "Unix/Linux mozilla path: " + mozillaHome );
+            //System.out.println( "Unix/Linux mozilla path: " + mozillaHome );
         }
         if( !new File( mozillaHome ).isDirectory() )
         {
-            System.out.println("Could not find .mozilla directory");
+            //System.out.println("Could not find .mozilla directory");
             return null;
         }
-        System.out.println(".mozilla directory found");
+        //System.out.println(".mozilla directory found");
 
         // Get all the profiles belonging to the user
         File profiles[] = findProfiles( new File ( mozillaHome ) );
         if( profiles.length < 1 )
         {
-            System.out.println("Could not find Profiles");
+            //System.out.println("Could not find Profiles");
             return null;
         }
-        System.out.println("Profiles found");
+        //System.out.println("Profiles found");
 
         // Get the News directory for each profile
         File allNewsDirs[] = new File[ profiles.length ];
@@ -84,19 +84,19 @@ public class SubscribedNewsgroups {
         }
         if( !newsFound )
         {
-            System.out.println("Could not find News directory");
+            //System.out.println("Could not find News directory");
             return null;
         }
-        System.out.println("News directory found");
+        //System.out.println("News directory found");
 
         // Get all the mailrc files for each News directory
         File allMailrcs[] = findMailrcFiles( allNewsDirs );
         if( allMailrcs == null )
         {
-            System.out.println("Could not find mailrc files");
+            //System.out.println("Could not find mailrc files");
             return null;
         }
-        System.out.println("mailrc files found");
+        //System.out.println("mailrc files found");
 
         Vector subscribed = new Vector();
         // Get the newsgroups in each mailrc file
@@ -121,10 +121,10 @@ public class SubscribedNewsgroups {
         // Test that at least one subscribed newsgroup has been found
         if( allSubscribed.length < 1 )
         {
-            System.out.println("Could not find Subscribed newsgroups ");
+            //System.out.println("Could not find Subscribed newsgroups ");
             return null;
         }
-        System.out.println("Subscribed newsgroups found");
+        //System.out.println("Subscribed newsgroups found");
 
         return allSubscribed;
     }
@@ -216,14 +216,14 @@ public class SubscribedNewsgroups {
 
         for( int i=0; i < newsDirs.length; i++ )
         {
-            System.out.println( "Finding mailrc for: " + newsDirs[i] );
+            //System.out.println( "Finding mailrc for: " + newsDirs[i] );
             if( newsDirs[i] != null )
             {
             File mailrcFiles[] = newsDirs[i].listFiles( new VersionFilter() );
-            System.out.println( "Number found: " + mailrcFiles.length );
+            //System.out.println( "Number found: " + mailrcFiles.length );
             for( int j=0; j < mailrcFiles.length; j++ )
             {
-                System.out.println( "This mailrc was found: " + mailrcFiles[j] );
+                //System.out.println( "This mailrc was found: " + mailrcFiles[j] );
                 allFiles.addElement( mailrcFiles[j] );
             }
             }
@@ -231,14 +231,14 @@ public class SubscribedNewsgroups {
         File allMailrcFiles[] = new File[ allFiles.size() ];
         allFiles.copyInto(allMailrcFiles);
 
-        System.out.println( "number of mailrcs in total: " + allMailrcFiles.length );
+        //System.out.println( "number of mailrcs in total: " + allMailrcFiles.length );
 
         if( allMailrcFiles.length == 0 ) {
-            System.out.println( "Returning null");
+            //System.out.println( "Returning null");
             return null;
         }
 
-        System.out.println( "Returning an File array containing mailrcs");
+        //System.out.println( "Returning an File array containing mailrcs");
         return allMailrcFiles;
     }
 
