@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 12:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,10 @@ void SwTxtPortion::BreakLine( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     if ( !rInf.GetLast() )
         rInf.SetLast( rInf.GetRoot() );
 
-    bFirstPor = bFirstPor && !rInf.IsDropInit();
+    // During multi-portion formatting the bFirstPor-flag is set only
+    // if the multi-portion is the first portion in the line.
+    bFirstPor = bFirstPor && !rInf.IsDropInit() &&
+                ( !rInf.IsMulti() || rInf.IsFirstMulti() );
 
     if( ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ) &&
         ( !rInf.GetLast()->IsBlankPortion() ||  ((SwBlankPortion*)
