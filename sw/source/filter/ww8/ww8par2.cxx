@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:27:14 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     if (!bTestAllowed)
         return pSprm29;
 
-    rbStartApo = bNowApo && !InEqualApo(nCellLevel); // APO-start
+    rbStartApo = bNowApo && !InAnyApo();                     // APO-start
     rbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  // APO-end
 
     //If it happens that we are in a table, then if its not the first cell
@@ -3610,7 +3610,8 @@ void WW8RStyle::Import1Style( USHORT nNr )
         if (pSI->pFmt && pj->pFmt && pSI->bColl == pj->bColl)
         {
             pSI->pFmt->SetDerivedFrom( pj->pFmt );  // ok, Based on eintragen
-            pSI->eFontSrcCharSet = pj->eFontSrcCharSet; // CharSet als Default
+            pSI->eLTRFontSrcCharSet = pj->eLTRFontSrcCharSet;
+            pSI->eRTLFontSrcCharSet = pj->eRTLFontSrcCharSet;
             pSI->nLeftParaMgn = pj->nLeftParaMgn;
             pSI->nTxtFirstLineOfst = pj->nTxtFirstLineOfst;
             pSI->n81Flags = pj->n81Flags;
@@ -3845,6 +3846,12 @@ void WW8RStyle::Import()
     pIo->pAktColl = 0;
 }
 
+CharSet SwWW8StyInf::GetCharSet() const
+{
+    if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+        return eRTLFontSrcCharSet;
+    return eLTRFontSrcCharSet;
+}
 
 //-----------------------------------------
 //      Document Info
