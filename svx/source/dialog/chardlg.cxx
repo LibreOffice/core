@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: os $ $Date: 2001-07-26 10:55:00 $
+ *  last change: $Author: pb $ $Date: 2001-08-10 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,6 +1309,7 @@ void SvxCharNamePage::EnableRelativeMode()
 {
     DBG_ASSERT( GetItemSet().GetParent(), "RelativeMode, but no ParentSet!" );
     m_pWestFontSizeLB->EnableRelativeMode( 0, 999 ); // min 0%, max 999%, step 5
+    m_pEastFontSizeLB->EnableRelativeMode( 0, 999 ); // min 0%, max 999%, step 5
 
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
     const SvxFontHeightItem& rWestItem = (SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
