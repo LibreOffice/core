@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:37:16 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,10 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ swedish ] = "~URL för extern datakälla";
         Text[ polish ] = "Adres URL zewnêtrznego Ÿród³a danych";
         Text[ portuguese_brazilian ] = "External Data Source Location";
-        Text[ japanese ] = "ŠO•”ÃŞ°À¿°½‚Ì URL(~E)";
-        Text[ korean ] = "¿ÜºÎ µ¥ÀÌÅÍ ¼Ò½ºÀÇ URL(~E)";
-        Text[ chinese_simplified ] = "Íâ²¿Êı¾İÔ´µÄ URL(~E)";
-        Text[ chinese_traditional ] = "¥~³¡¸ê®Æ·½ªº URL(~E)";
+        Text[ japanese ] = "å¤–éƒ¨ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã® URL(~E)";
+        Text[ korean ] = "ì™¸ë¶€ ë°ì´í„° ì†ŒìŠ¤ì˜ URL(~E)";
+        Text[ chinese_simplified ] = "å¤–éƒ¨æ•°æ®æºçš„ URL(~E)";
+        Text[ chinese_traditional ] = "å¤–éƒ¨è³‡æ–™æºçš„ URL(~E)";
         Text[ turkish ] = "External Data Source Location";
         Text[ arabic ] = "External Data Source Location";
         Text[ catalan ] = "External Data Source Location";
@@ -145,10 +145,10 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ swedish ] = "(Källdokumentets URL i det lokala filsystemet eller på Internet)";
         Text[ polish ] = "(Adres URL dokumentu Ÿród³owego w lokalnym systemie plików lub w Internecie)";
         Text[ portuguese_brazilian ] = "(Insert a local file location or an URL from a web site here)";
-        Text[ japanese ] = "(Û°¶Ù‚ÌÌ§²Ù¼½ÃÑA‚ ‚é‚¢‚Í²İÀ°È¯Ä‚É‚ ‚é¿°½ÄŞ·­ÒİÄ‚Ì URL)";
-        Text[ korean ] = "(·ÎÄÃ ÆÄÀÏ ½Ã½ºÅÛ ¶Ç´Â À¥»çÀÌÆ® ³» ¼Ò½º ¹®¼­ÀÇ URL)";
-        Text[ chinese_simplified ] = "(¾Ö²¿ÎÄ¼şÏµÍ³»ò¹ú¼Ê»¥ÁªÍøÖ®ÖĞÔ´ÎÄ±¾µÄ URL)";
-        Text[ chinese_traditional ] = "(§½³¡ÀÉ®×¨t²Î©Î internet ¤§¤¤·½¤å¥óªº URL)";
+        Text[ japanese ] = "(ï¾›ï½°ï½¶ï¾™ã®ï¾Œï½§ï½²ï¾™ï½¼ï½½ï¾ƒï¾‘ã€ã‚ã‚‹ã„ã¯ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„ã«ã‚ã‚‹ï½¿ï½°ï½½ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã® URL)";
+        Text[ korean ] = "(ë¡œì»¬ íŒŒì¼ ì‹œìŠ¤í…œ ë˜ëŠ” ì›¹ì‚¬ì´íŠ¸ ë‚´ ì†ŒìŠ¤ ë¬¸ì„œì˜ URL)";
+        Text[ chinese_simplified ] = "(å±€éƒ¨æ–‡ä»¶ç³»ç»Ÿæˆ–å›½é™…äº’è”ç½‘ä¹‹ä¸­æºæ–‡æœ¬çš„ URL)";
+        Text[ chinese_traditional ] = "(å±€éƒ¨æª”æ¡ˆç³»çµ±æˆ– internet ä¹‹ä¸­æºæ–‡ä»¶çš„ URL)";
         Text[ turkish ] = "(Insert a local file location or an URL from a web site here)";
         Text[ arabic ] = "(Insert a local file location or an URL from a web site here)";
         Text[ catalan ] = "(Insert a local file location or an URL from a web site here)";
@@ -172,10 +172,10 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ swedish ] = "T~illgängliga tabeller/områden";
         Text[ polish ] = "Dostêpne tabele/obszary";
         Text[ portuguese_brazilian ] = "Available Tables/Ranges";
-        Text[ japanese ] = "g—p‚Å‚«‚é•\\‚Æ”ÍˆÍ(~A)";
-        Text[ korean ] = "»ç¿ë °¡´ÉÇÑ Ç¥/¹üÀ§(~A)";
-        Text[ chinese_simplified ] = "ÏÖÓĞµÄ±í¸ñ/ÇøÓò(~A)";
-        Text[ chinese_traditional ] = "²{¦³ªºªí®æ©Î°Ï°ì(~A)";
+        Text[ japanese ] = "ä½¿ç”¨ã§ãã‚‹è¡¨ã¨ç¯„å›²(~A)";
+        Text[ korean ] = "ì‚¬ìš© ê°€ëŠ¥í•œ í‘œ/ë²”ìœ„(~A)";
+        Text[ chinese_simplified ] = "ç°æœ‰çš„è¡¨æ ¼/åŒºåŸŸ(~A)";
+        Text[ chinese_traditional ] = "ç¾æœ‰çš„è¡¨æ ¼æˆ–å€åŸŸ(~A)";
         Text[ turkish ] = "Available Tables/Ranges";
         Text[ arabic ] = "Available Tables/Ranges";
         Text[ catalan ] = "Available Tables/Ranges";
@@ -208,10 +208,10 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ swedish ] = "Uppd~atering var";
         Text[ polish ] = "Aktualizuj co";
         Text[ portuguese_brazilian ] = "Auto reload data every";
-        Text[ japanese ] = "XV(~U)";
-        Text[ korean ] = "¸ğµÎ ¾÷µ¥ÀÌÆ®(~U)";
-        Text[ chinese_simplified ] = "¸üĞÂÊ±¼ä¼ä¸ôÎªÃ¿(~U)";
-        Text[ chinese_traditional ] = "§ó·s®É¶¡¶¡¹j¬°¨C(~U)";
+        Text[ japanese ] = "æ›´æ–°(~U)";
+        Text[ korean ] = "ëª¨ë‘ ì—…ë°ì´íŠ¸(~U)";
+        Text[ chinese_simplified ] = "æ›´æ–°æ—¶é—´é—´éš”ä¸ºæ¯(~U)";
+        Text[ chinese_traditional ] = "æ›´æ–°æ™‚é–“é–“éš”ç‚ºæ¯(~U)";
         Text[ turkish ] = "Auto reload data every";
         Text[ arabic ] = "Auto reload data every";
         Text[ catalan ] = "Auto reload data every";
@@ -246,10 +246,10 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ swedish ] = "sekund";
         Text[ polish ] = "sekundy";
         Text[ portuguese_brazilian ] = "seconds";
-        Text[ japanese ] = "•b–ˆ";
-        Text[ korean ] = "ÃÊ";
-        Text[ chinese_simplified ] = "Ãë";
-        Text[ chinese_traditional ] = "¬í";
+        Text[ japanese ] = "ç§’æ¯";
+        Text[ korean ] = "ì´ˆ";
+        Text[ chinese_simplified ] = "ç§’";
+        Text[ chinese_traditional ] = "ç§’";
         Text[ turkish ] = "seconds";
         Text[ arabic ] = "seconds";
         Text[ catalan ] = "seconds";
@@ -267,15 +267,16 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ swedish ] = "Externa data";
     Text[ polish ] = "Zewnêtrzne dane";
     Text[ portuguese_brazilian ] = "External Data Source";
-    Text[ japanese ] = "ŠO•”ÃŞ°À";
-    Text[ korean ] = "¿ÜºÎ µ¥ÀÌÅÍ ¼Ò½º";
-    Text[ chinese_simplified ] = "Íâ²¿µÄÊı¾İ";
-    Text[ chinese_traditional ] = "¥~³¡ªº¸ê®Æ";
+    Text[ japanese ] = "å¤–éƒ¨ï¾ƒï¾ï½°ï¾€";
+    Text[ korean ] = "ì™¸ë¶€ ë°ì´í„° ì†ŒìŠ¤";
+    Text[ chinese_simplified ] = "å¤–éƒ¨çš„æ•°æ®";
+    Text[ chinese_traditional ] = "å¤–éƒ¨çš„è³‡æ–™";
     Text[ turkish ] = "External Data Source";
     Text[ arabic ] = "External Data Source";
     Text[ catalan ] = "External Data Source";
     Text[ finnish ] = "Ulkoinen lähde";
 };
+
 
 
 
