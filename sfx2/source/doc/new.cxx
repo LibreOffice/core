@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-06 13:42:19 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
             pSet->Put( SfxBoolItem( SID_TEMPLATE, TRUE ) );
             pSet->Put( SfxBoolItem( SID_PREVIEW, TRUE ) );
-            if( lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, String(), TRUE, pSet ) )
+            if( lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, TRUE, pSet ) )
                 ErrorHandler::HandleError(lErr);
             Application::SetDefDialogParent( pParent );
             if ( !xDocShell.Is() )

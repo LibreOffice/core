@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:28:36 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,10 +415,8 @@ ULONG CheckPasswd_Impl
 //--------------------------------------------------------------------
 
 
-ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFileName,
-    const String &rLongName, BOOL bCopy, SfxItemSet* pSet )
+ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFileName, BOOL bCopy, SfxItemSet* pSet )
 {
-    BOOL bWithInfo = ( rLongName.Len() != 0 );
     const SfxFilter* pFilter = NULL;
     SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ), FALSE );
 
@@ -492,15 +490,12 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
             return aTmpStor->GetErrorCode();
         }
 
-        if ( bWithInfo )
-            SetTemplate_Impl( aTmpStor, rFileName, rLongName, xDoc );
+        SetTemplate_Impl( aTmpStor, rFileName, String(), xDoc );
     }
-    else if ( bWithInfo )
-        SetTemplate_Impl( xDoc->GetStorage(), rFileName, rLongName, xDoc );
+    else
+        SetTemplate_Impl( xDoc->GetStorage(), rFileName, String(), xDoc );
 
-    if ( bWithInfo )
-        xDoc->Broadcast( SfxDocumentInfoHint( &xDoc->GetDocInfo() ) );
-
+    xDoc->Broadcast( SfxDocumentInfoHint( &xDoc->GetDocInfo() ) );
     xDoc->SetNoName();
     xDoc->InvalidateName();
     xDoc->SetModified(FALSE);
