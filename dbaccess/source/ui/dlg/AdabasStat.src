@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:26:13 $
+ *  last change: $Author: rt $ $Date: 2001-07-24 20:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,13 +550,13 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text [ English ] = "Could no display the information. No access rights for system tables." ;
     Text[ english_us ] = "No information could be displayed because no access rights exist for the required system tables.";
     Text[ portuguese ] = "É impossível mostrar informações. Os direitos de acesso às tabelas do sistema necessárias não existem.";
-    Text[ russian ] = "Could no display the information. No access rights for system tables.";
+    Text[ russian ] = "Èç-çà îòñóòñòâóşùèõ ïğàâ äîñòóïà ê íåîáõîäèìûì ñèñòåìíûì òàáëèöàì îòîáğàçèòü èíôîğìàöèş íåâîçìîæíî.";
     Text[ greek ] = "Could no display the information. No access rights for system tables.";
     Text[ dutch ] = "Er konden geen gegevens worden weergegeven, daar er geen toegangsrecht bestaat voor de benodigde systeemtabellen.";
     Text[ french ] = "Impossible d'afficher les informations : aucun droit d'accès aux tables de système requises.";
     Text[ spanish ] = "No se puede mostrar ninguna información porque no existe el derecho de acceso a las tablas de sistema necesarias.";
     Text[ finnish ] = "Could no display the information. No access rights for system tables.";
-    Text[ italian ] = "Could no display the information. No access rights for system tables.";
+    Text[ italian ] = "Impossibile visualizzare le informazioni poiché manca l'autorizzazione alle tabelle di sistema richieste";
     Text[ danish ] = "Could no display the information. No access rights for system tables.";
     Text[ swedish ] = "Det går inte att visa någon information eftersom det saknas åtkomstbehörighet till de nödvändiga systemtabellerna.";
     Text[ polish ] = "Z powodu braku praw dostêpu do wymaganych tabeli systemu wyœwietlenie informacji nie jest mo¿liwe.";
@@ -569,6 +569,7 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ arabic ] = "Could no display the information. No access rights for system tables.";
     Text[ catalan ] = "Could no display the information. No access rights for system tables.";
 };
+
 
 
 
