@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-07 17:45:07 $
+ *  last change: $Author: sj $ $Date: 2001-02-07 18:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,7 +495,7 @@ void SoundEntry::Write( SvStream& rSt, sal_uInt32 nId )
         for ( i = 0; i < nIdLen; i++ )
             rSt << aId.GetChar( i );
 
-        rSt << (sal_uInt32)( EPP_SoundData ) << (sal_uInt32)( nFileSize );
+        rSt << (sal_uInt32)( EPP_SoundData << 16 ) << (sal_uInt32)( nFileSize );
         sal_uInt32 nBytesLeft = nFileSize;
         SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( aSoundURL, STREAM_READ );
         if ( pSourceFile )
