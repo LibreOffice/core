@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:11:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,9 @@
 #include "tabview.hxx"
 #endif
 
-#ifndef _SVSTDARR_USHORTS
+#ifndef _SVSTDARR_SHORTS
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_SHORTS
 #include <svtools/svstdarr.hxx>
 
 #endif
@@ -79,8 +79,6 @@
 #include <svtools/svstdarr.hxx>
 
 #endif
-
-#define TABLEID_DOC     0xFFFF
 
 class ScPatternAttr;
 class ScAutoFormatData;
@@ -129,10 +127,10 @@ public:
     BOOL            GetAutoSumArea(ScRangeList& rRangeList);
     void            EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal);
 
-    void            EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String& rString,
+    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                                 BOOL bRecord = TRUE );
-    void            EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const double& rValue );
-    void            EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const EditTextObject* pData,
+    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
+    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
                                 BOOL bRecord = TRUE, BOOL bTestSimple = FALSE );
 
     void            EnterMatrix( const String& rString );
@@ -166,7 +164,7 @@ public:
     BOOL            PasteDataFormat( ULONG nFormatId,
                                         const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-                                        USHORT nPosX, USHORT nPosY, Point* pLogicPos = NULL,
+                                        SCCOL nPosX, SCROW nPosY, Point* pLogicPos = NULL,
                                         BOOL bLink = FALSE, BOOL bAllowDialogs = FALSE );
 
     BOOL            PasteFile( const Point&, const String&, BOOL bLink=FALSE );
@@ -178,14 +176,14 @@ public:
     BOOL            PasteBookmark( ULONG nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-                                USHORT nPosX, USHORT nPosY );
+                                SCCOL nPosX, SCROW nPosY );
     BOOL            PasteDDE( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     BOOL            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
 
     void            InsertBookmark( const String& rDescription, const String& rURL,
-                                    USHORT nPosX, USHORT nPosY, const String* pTarget = NULL,
+                                    SCCOL nPosX, SCROW nPosY, const String* pTarget = NULL,
                                     BOOL bTryReplace = FALSE );
     BOOL            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
@@ -228,8 +226,8 @@ public:
 
     void            ChangeIndent( BOOL bIncrement );
 
-    void            Protect( USHORT nTab, const String& rPassword );
-    BOOL            Unprotect( USHORT nTab, const String& rPassword );
+    void            Protect( SCTAB nTab, const String& rPassword );
+    BOOL            Unprotect( SCTAB nTab, const String& rPassword );
 
     void            DeleteCells( DelCellCmd eCmd, BOOL bRecord = TRUE );
     BOOL            InsertCells( InsCellCmd eCmd, BOOL bRecord = TRUE, BOOL bPartOfPaste = FALSE );
@@ -237,7 +235,7 @@ public:
 
     void            DeleteContents( USHORT nFlags, BOOL bRecord = TRUE );
 
-    void            SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges,
+    void            SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                         ScSizeMode eMode, USHORT nSizeTwips,
                                         BOOL bRecord = TRUE, BOOL bPaint = TRUE,
                                         ScMarkData* pMarkData = NULL );
@@ -247,7 +245,7 @@ public:
     void            ShowMarkedRows( BOOL bShow, BOOL bRecord = TRUE );
 
     BOOL            AdjustBlockHeight( BOOL bPaint = TRUE, ScMarkData* pMarkData = NULL );
-    BOOL            AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, BOOL bPaint = TRUE );
+    BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, BOOL bPaint = TRUE );
 
     void            ModifyCellSize( ScDirection eDir, BOOL bOptimal );
 
@@ -272,8 +270,8 @@ public:
     void            FillSimple( FillDir eDir, BOOL bRecord = TRUE );
     void            FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                                 double fStart, double fStep, double fMax, BOOL bRecord = TRUE );
-    void            FillAuto( FillDir eDir, USHORT nStartCol, USHORT nStartRow,
-                                USHORT nEndCol, USHORT nEndRow, USHORT nCount, BOOL bRecord = TRUE );
+    void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow, ULONG nCount, BOOL bRecord = TRUE );
 
     void            TransliterateText( sal_Int32 nType );
 
@@ -286,20 +284,20 @@ public:
     void            Solve( const ScSolveParam& rParam );
     void            TabOp( const ScTabOpParam& rParam,  BOOL bRecord = TRUE );
 
-    BOOL            InsertTable( const String& rName, USHORT nTabNr, BOOL bRecord = TRUE );
-    BOOL            InsertTables(SvStrings *pNames, USHORT nTab, USHORT nCount, BOOL bRecord = TRUE);
+    BOOL            InsertTable( const String& rName, SCTAB nTabNr, BOOL bRecord = TRUE );
+    BOOL            InsertTables(SvStrings *pNames, SCTAB nTab, SCTAB nCount, BOOL bRecord = TRUE);
 
 
     BOOL            AppendTable( const String& rName, BOOL bRecord = TRUE );
 
-    BOOL            DeleteTable( USHORT nTabNr, BOOL bRecord = TRUE );
-    BOOL            DeleteTables(const SvUShorts &TheTabs, BOOL bRecord = TRUE );
+    BOOL            DeleteTable( SCTAB nTabNr, BOOL bRecord = TRUE );
+    BOOL            DeleteTables(const SvShorts &TheTabs, BOOL bRecord = TRUE );
 
-    BOOL            RenameTable( const String& rName, USHORT nTabNr );
-    void            MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy );
+    BOOL            RenameTable( const String& rName, SCTAB nTabNr );
+    void            MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy );
     void            ImportTables( ScDocShell* pSrcShell,
-                                    USHORT nCount, const USHORT* pSrcTabs,
-                                    BOOL bLink,USHORT nTab);
+                                    SCTAB nCount, const SCTAB* pSrcTabs,
+                                    BOOL bLink,SCTAB nTab);
 
     void            InsertTableLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,
@@ -309,7 +307,7 @@ public:
                                         const String& rSource, ULONG nRefresh );
 
     void            ShowTable( const String& rName );
-    void            HideTable( USHORT nTabNr );
+    void            HideTable( SCTAB nTabNr );
 
     void            MakeScenario( const String& rName, const String& rComment,
                                     const Color& rColor, USHORT nFlags );
@@ -326,7 +324,7 @@ public:
     void            SetSelectionFrameLines( const SvxBorderLine* pLine,
                                             BOOL bColorOnly );
 
-    void            SetNote( USHORT nCol, USHORT nRow, USHORT nTab, const ScPostIt& rNote );
+    void            SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote );
     void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
     void            DoThesaurus( BOOL bRecord = TRUE );
@@ -363,18 +361,18 @@ protected:
                                      const SvxBorderLine* pSrcLine,
                                      BOOL                 bColor );
 
-    void            PaintWidthHeight( BOOL bColumns, USHORT nStart, USHORT nEnd );
+    void            PaintWidthHeight( BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd );
 
 
 private:
-    void            PasteRTF( USHORT nCol, USHORT nStartRow,
+    void            PasteRTF( SCCOL nCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
-    USHORT          GetOptimalColWidth( USHORT nCol, USHORT nTab, BOOL bFormula );
+    USHORT          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, BOOL bFormula );
 
     void            StartFormatArea();
-    BOOL            TestFormatArea( USHORT nCol, USHORT nRow, USHORT nTab, BOOL bAttrChanged );
-    void            DoAutoAttributes( USHORT nCol, USHORT nRow, USHORT nTab,
+    BOOL            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bAttrChanged );
+    void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                         BOOL bAttrChanged, BOOL bAddUndo );
 };
 
