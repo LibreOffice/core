@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 22:09:13 $
+ *  last change: $Author: sab $ $Date: 2002-06-13 12:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,11 @@
 #include "scmod.hxx"
 #include "drwlayer.hxx"
 #include "docsh.hxx"
+#include "viewuno.hxx"
 
 #include "sc.hrc"
+
+using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
@@ -582,7 +585,8 @@ void __EXPORT ScDrawView::MarkListHasChanged()
 
     //  Verben anpassen
 
-    BOOL bOle = pViewSh->GetViewFrame()->ISA(SfxInPlaceFrame);
+    SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
+    BOOL bOle = pViewFrame && pViewFrame->ISA(SfxInPlaceFrame);
     if ( pOle2Obj && !bOle )
     {
         SvInPlaceObject* pIPObj = pOle2Obj->GetObjRef();
@@ -613,6 +617,24 @@ void __EXPORT ScDrawView::MarkListHasChanged()
         OutputDevice* pDev = GetWin(i);
         if (pDev->GetOutDevType() == OUTDEV_WINDOW)
             ((Window*)pDev)->Update();
+    }
+
+    //  uno object for view returns drawing objects as selection,
+    //  so it must notify its SelectionChangeListeners
+
+    if (pViewFrame)
+    {
+        SfxFrame* pFrame = pViewFrame->GetFrame();
+        if (pFrame)
+        {
+            uno::Reference<frame::XController> xController = pFrame->GetController();
+            if (xController.is())
+            {
+                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                if (pImp)
+                    pImp->SelectionChanged();
+            }
+        }
     }
 
     //  update selection transfer object
