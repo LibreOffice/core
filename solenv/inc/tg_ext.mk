@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 18:32:19 $
+#   last change: $Author: vg $ $Date: 2004-12-23 09:43:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 .IF "$(L10N_framework)"==""
 
 .EXPORT : CC CXX
@@ -226,6 +225,19 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .ENDIF # "$(GUI)"=="WNT"
     +$(TOUCH) $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .ENDIF          # "$(T_ADDITIONAL_FILES)"!=""
+
+.IF "$(CONVERTFILES)"!=""
+$(MISC)$/convert_unx_flag :  $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+    +$(CONVERT) unix $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$i) && $(TOUCH) $(MISC)$/convert_unx_flag
+
+$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/convert_unx_flag
+
+$(MISC)$/convert_dos_flag : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    +$(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$i) && $(TOUCH) $(MISC)$/convert_dos_flag
+
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/convert_dos_flag
+
+.ENDIF          # "$(CONVERTFILES)"!=""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     @+-$(RM) $@ >& $(NULLDEV)
