@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 18:05:46 $
+ *  last change: $Author: thb $ $Date: 2001-04-27 10:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,13 +267,8 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
-<<<<<<< xmlimp.cxx
-    pImageMapImportHelper( NULL ),
     mnImportFlags( IMPORT_ALL ),
     mbIsFormsSupported( sal_True )
-=======
-    mnImportFlags( IMPORT_ALL )
->>>>>>> 1.34
 {
     _InitCtor();
 }
