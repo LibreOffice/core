@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeTreeInfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:21:36 $
+ *  last change: $Author: af $ $Date: 2002-04-11 12:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,27 +63,26 @@
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
+using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
 AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (
-    const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleComponent>& rxDocumentWindow,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>& rxControllerProperties,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XEventBroadcaster>& rxControllerBroadcaster)
+    const Reference<XAccessibleComponent>& rxDocumentWindow,
+    const Reference<document::XEventBroadcaster>& rxControllerBroadcaster)
     : mxDocumentWindow (rxDocumentWindow),
-      mxControllerProperties (rxControllerProperties),
-      mxControllerBroadcaster (rxControllerBroadcaster)
+      mxControllerBroadcaster (rxControllerBroadcaster),
+      mpView (NULL),
+      mpWindow (NULL)
 {
-    CalcCSChangeTransformation ();
 }
 
 
 
 
 AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (void)
+    : mpView (NULL),
+      mpWindow (NULL)
 {
     //empty
 }
@@ -99,14 +98,11 @@ AccessibleShapeTreeInfo::~AccessibleShapeTreeInfo (void)
 
 
 
-void AccessibleShapeTreeInfo::SetDocumentWindow (const ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessibleComponent>& rxDocumentWindow)
+void AccessibleShapeTreeInfo::SetDocumentWindow (
+    const Reference<XAccessibleComponent>& rxDocumentWindow)
 {
     if (mxDocumentWindow != rxDocumentWindow)
-    {
         mxDocumentWindow = rxDocumentWindow;
-        CalcCSChangeTransformation ();
-    }
 }
 
 
@@ -116,28 +112,6 @@ uno::Reference<XAccessibleComponent>
     AccessibleShapeTreeInfo::GetDocumentWindow (void) const
 {
     return mxDocumentWindow;
-}
-
-
-
-
-void AccessibleShapeTreeInfo::SetControllerProperties (
-    const uno::Reference<beans::XPropertySet>& rxControllerProperties)
-{
-    if (mxControllerProperties != rxControllerProperties)
-    {
-        mxControllerProperties = rxControllerProperties;
-        CalcCSChangeTransformation ();
-    }
-}
-
-
-
-
-uno::Reference<beans::XPropertySet>
-    AccessibleShapeTreeInfo::GetControllerProperties (void) const
-{
-    return mxControllerProperties;
 }
 
 
@@ -161,52 +135,48 @@ uno::Reference<document::XEventBroadcaster>
 
 
 
-awt::Point AccessibleShapeTreeInfo::PointToPixel (const awt::Point& aInternalPoint) const
+void AccessibleShapeTreeInfo::SetSdrView (SdrView* pView)
 {
-    return awt::Point (
-        aInternalPoint.X * mnXScale + mnXOffset,
-        aInternalPoint.Y * mnYScale + mnYOffset);
+    mpView = pView;
 }
 
 
 
 
-awt::Size AccessibleShapeTreeInfo::SizeToPixel (const awt::Size& aInternalSize) const
+SdrView* AccessibleShapeTreeInfo::GetSdrView (void) const
 {
-    return awt::Size (
-        aInternalSize.Width * mnXScale,
-        aInternalSize.Height * mnYScale);
+    return mpView;
+}
+
+
+
+void AccessibleShapeTreeInfo::SetWindow (Window* pWindow)
+{
+    mpWindow = pWindow;
 }
 
 
 
 
-void AccessibleShapeTreeInfo::CalcCSChangeTransformation (void)
+const Window* AccessibleShapeTreeInfo::GetWindow (void) const
 {
-    try
-    {
-        // Get pixel bbox of document view window.
-        awt::Rectangle aPixelBBox = mxDocumentWindow->getBounds();
+    return mpWindow;
+}
 
-        // Get bbox in internal coordinates.
-        uno::Any aVisibleArea = mxControllerProperties->getPropertyValue (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("VisibleArea")));
-        awt::Rectangle aInternalBBox;
-        aVisibleArea >>= aInternalBBox;
 
-        // Transform internal coordinates into pixel.
-        mnXScale = aPixelBBox.Width * 1.0 / aInternalBBox.Width;
-        mnXOffset = aPixelBBox.X - aInternalBBox.X * mnXScale;
-        mnYScale = aPixelBBox.Height * 1.0 / aInternalBBox.Height;
-        mnYOffset = aPixelBBox.Y - aInternalBBox.Y * mnYScale;
-    }
-    catch (beans::UnknownPropertyException)
-    {
-        mnXOffset = 0;
-        mnYOffset = 0;
-        mnXScale = 1;
-        mnYScale = 1;
-    }
+
+
+void AccessibleShapeTreeInfo::SetViewForwarder (const IAccessibleViewForwarder* pViewForwarder)
+{
+    mpViewForwarder = pViewForwarder;
+}
+
+
+
+
+const IAccessibleViewForwarder* AccessibleShapeTreeInfo::GetViewForwarder (void) const
+{
+    return mpViewForwarder;
 }
 
 
