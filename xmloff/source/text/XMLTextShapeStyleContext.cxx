@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 17:05:03 $
+ *  last change: $Author: dvo $ $Date: 2001-01-30 13:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
-#include <com/sun/star/document/XEventSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -274,8 +274,8 @@ void XMLTextShapeStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     if( xEventContext.Is() )
     {
         // set event suppplier and release reference to context
-        Reference<XEventSupplier> xEventSupplier(xStyle, UNO_QUERY);
-        ((XMLEventsImportContext *)&xEventContext)->SetEvents(xEventSupplier);
+        Reference<XEventsSupplier> xEventsSupplier(xStyle, UNO_QUERY);
+        ((XMLEventsImportContext *)&xEventContext)->SetEvents(xEventsSupplier);
         xEventContext = 0;
     }
 }

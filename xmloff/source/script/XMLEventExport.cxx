@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-20 15:34:03 $
+ *  last change: $Author: dvo $ $Date: 2001-01-30 13:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
-#include <com/sun/star/document/XEventSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP
@@ -101,7 +101,7 @@ using namespace ::com::sun::star::uno;
 using std::map;
 using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::document::XEventSupplier;
+using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::container::XNameAccess;
 
@@ -158,7 +158,7 @@ void XMLEventExport::AddTranslationTable(
     // else? ignore!
 }
 
-void XMLEventExport::Export( Reference<XEventSupplier> & rSupplier,
+void XMLEventExport::Export( Reference<XEventsSupplier> & rSupplier,
                              sal_Bool bWhitespace)
 {
     if (rSupplier.is())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 11:18:11 $
+ *  last change: $Author: dvo $ $Date: 2001-01-30 13:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
-#include <com/sun/star/document/XEventSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
@@ -136,7 +136,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
-using ::com::sun::star::document::XEventSupplier;
+using ::com::sun::star::document::XEventsSupplier;
 
 class XMLTextFrameDescContext_Impl : public SvXMLImportContext
 {
@@ -765,12 +765,12 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         if (xPropSet.is())
         {
             // is it an event supplier?
-            Reference<XEventSupplier> xEventSupplier(xPropSet, UNO_QUERY);
-            if (xEventSupplier.is())
+            Reference<XEventsSupplier> xEventsSupplier(xPropSet, UNO_QUERY);
+            if (xEventsSupplier.is())
             {
                 // OK, we have the events, so create the context
                 pContext = new XMLEventsImportContext(GetImport(), nPrefix,
-                                                   rLocalName, xEventSupplier);
+                                                  rLocalName, xEventsSupplier);
             }
             // else: no events, no event import
         }

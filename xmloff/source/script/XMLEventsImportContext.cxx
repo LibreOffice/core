@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventsImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-20 15:34:04 $
+ *  last change: $Author: dvo $ $Date: 2001-01-30 13:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "XMLEventImportHelper.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
-#include <com/sun/star/document/XEventSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -97,7 +97,7 @@ using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XNameReplace;
-using ::com::sun::star::document::XEventSupplier;
+using ::com::sun::star::document::XEventsSupplier;
 
 
 TYPEINIT1(XMLEventsImportContext,  SvXMLImportContext);
@@ -116,9 +116,9 @@ XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const Reference<XEventSupplier> & xEventSupplier) :
+    const Reference<XEventsSupplier> & xEventsSupplier) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
-        xEvents(xEventSupplier->getEvents())
+        xEvents(xEventsSupplier->getEvents())
 {
 }
 
@@ -205,11 +205,11 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
 }
 
 void XMLEventsImportContext::SetEvents(
-    const Reference<XEventSupplier> & xEventSupplier)
+    const Reference<XEventsSupplier> & xEventsSupplier)
 {
-    if (xEventSupplier.is())
+    if (xEventsSupplier.is())
     {
-        SetEvents(xEventSupplier->getEvents());
+        SetEvents(xEventsSupplier->getEvents());
     }
 }
 
