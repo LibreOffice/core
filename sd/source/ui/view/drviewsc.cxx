@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-05 11:34:49 $
+ *  last change: $Author: dl $ $Date: 2001-02-12 16:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ USHORT SlotArray[ ARRAY_COUNT ] =
 {
     SID_OBJECT_CHOOSE_MODE, SID_OBJECT_ROTATE,
     SID_OBJECT_ALIGN,       SID_OBJECT_ALIGN_LEFT,
-    SID_ZOOM_TOOLBOX,       SID_ZOOM_TOOLBOX,
+    SID_ZOOM_TOOLBOX,       SID_SIZE_PAGE,
     SID_DRAWTBX_TEXT,       SID_ATTR_CHAR,
     SID_DRAWTBX_RECTANGLES, SID_DRAW_RECT,
     SID_DRAWTBX_ELLIPSES,   SID_DRAW_ELLIPSE,
