@@ -16873,3 +16873,4 @@ _real@8@3ffd820c49ba5e354000
 ?createItem@SvxUnoBitmapTable@@UBEPAVNameOrIndex@@XZ
 ?createItem@SvxUnoTransGradientTable@@UBEPAVNameOrIndex@@XZ
 ?createItem@SvxUnoDashTable@@UBEPAVNameOrIndex@@XZ
+?_M_insert_overflow@?$vector@GV?$allocator@G@_STL@@@_STL@@IAEXPAGABGI@Z
