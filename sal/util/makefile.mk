@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: mhu $ $Date: 2002-07-23 12:47:43 $
+#   last change: $Author: hro $ $Date: 2002-08-14 14:39:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,9 +94,6 @@ CHECKFORPIC=
 .IF "$(header)" == ""
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=$(SLB)$/cpposl.lib $(SLB)$/oslall.lib $(SLB)$/cpprtl.lib
-.IF "$(GUI)"=="WNT"
-LIB1FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/tools32.lib $(LB)$/comdlg9x.lib $(LB)$/mpr9x.lib
-.ENDIF
 
 .IF "$(GUI)"!="WIN"
 LIB1FILES+=$(SLB)$/textenc.lib
@@ -105,9 +102,6 @@ LIB1FILES+=$(SLB)$/textenc.lib
 LIB3TARGET=$(LB)$/a$(TARGET).lib
 LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 LIB3FILES=$(LB)$/cpposl.lib $(LB)$/oslall.lib $(LB)$/cpprtl.lib
-.IF "$(GUI)"=="WNT"
-LIB3FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/comdlg9x.lib $(LB)$/tools32.lib $(LB)$/mpr9x.lib
-.ENDIF
 
 .IF "$(UPDATER)"!=""
 .IF "$(GUI)"!="WIN"
@@ -123,6 +117,8 @@ SHL1VERSIONMAP=	$(TARGET).map
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"!="GCC"
 SHL1STDLIBS=	\
+                uwinapi.lib\
+                unicows.lib\
                 advapi32.lib\
                 wsock32.lib\
                 mpr.lib\
@@ -131,7 +127,7 @@ SHL1STDLIBS=	\
                 user32.lib\
                 ole32.lib
 .ELSE
-SHL1STDLIBS= -ladvapi32 -lwsock32 -lmpr -lole32
+SHL1STDLIBS= -luwinapi.lib -lunicows.lib -ladvapi32 -lwsock32 -lmpr -lole32
 .ENDIF
 .ENDIF
 
@@ -165,10 +161,7 @@ SHL1STDLIBS=n:\toolkit4\lib\so32dll.lib\
 
 .ENDIF
 
-SHL1LIBS=   $(SLB)$/$(TARGET).lib
-.IF "$(GUI)"=="WNT"
-#-->SHL1LIBS+= $(LB)$/iadvapi9x.lib $(LB)$/ishell9x.lib $(LB)$/ikernel9x.lib $(LB)$/iuser9x.lib
-.ENDIF
+SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
 .IF "$(linkinc)" != ""
 SHL11FILE=$(MISC)$/sal.slo
