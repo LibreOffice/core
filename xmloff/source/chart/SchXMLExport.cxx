@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-20 16:33:43 $
+ *  last change: $Author: bm $ $Date: 2001-06-21 11:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,7 +1913,7 @@ void SchXMLExportHelper::exportText( const ::rtl::OUString& rText )
 // ========================================
 
 SchXMLExport::SchXMLExport( sal_uInt16 nExportFlags ) :
-        SvXMLExport( MAP_CM, sXML_chart, nExportFlags ),
+        SvXMLExport( MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
         maAutoStylePool( *this ),
         maExportHelper( *this, maAutoStylePool )
 {
