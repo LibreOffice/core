@@ -8,11 +8,13 @@ import lotus.domino.NotesFactory;
 
 // OpenOffice.org API
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XSpreadsheet;
@@ -56,7 +58,8 @@ public class NotesAccess implements Runnable {
       "<Office path>/program/classes/sandbox.jar;" +
       "<Office path>/program/classes/unoil.jar;" +
       "<Office path>/program/classes/juh.jar " +
-      "DocumentSaver \"<Connection>\" \"<Domino Host>\" \"<User>\" \"<Password>\" \"<Database>\"" );
+      "DocumentSaver \"<Connection>\" \"<Domino Host>\" \"<User>\" " +
+      "\"<Password>\" \"<Database>\"" );
       System.out.println( "\ne.g.:" );
       System.out.println(
       "java -classpath .;d:/office60/program/classes/jurt.jar;" +
@@ -64,7 +67,8 @@ public class NotesAccess implements Runnable {
       "d:/office60/program/classes/sandbox.jar;" +
       "d:/office60/program/classes/unoil.jar; " +
       "d:/office60/program/classes/juh.jar " +
-      "DocumentSaver \"socket,host=localhost,port=8100;urp\"" +
+      "DocumentSaver \"uno:socket,host=localhost,port=8100;urp;" +
+      "StarOffice.ServiceManager\"" +
       " \"\" \"\" \"\" " +
       "\"F:\\odk3.0.0\\examples\\java\\NotesAccess\\Stocks.nsf\"" );
       System.exit( 1 );
@@ -109,28 +113,44 @@ public class NotesAccess implements Runnable {
    */
   public void run() {
     try {
-      /* Bootstraps a servicemanager with the jurt base components
-         registered */
-      XMultiServiceFactory xmultiservicefactory =
-      com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
+      /* Bootstraps a component context with the jurt base components
+         registered. Component context to be granted to a component for running.
+         Arbitrary values can be retrieved from the context. */
+      XComponentContext xcomponentcontext =
+      com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
+
+      /* Gets the service manager instance to be used (or null). This method has
+         been added for convenience, because the service manager is a often used
+         object. */
+      XMultiComponentFactory xmulticomponentfactory =
+      xcomponentcontext.getServiceManager();
 
       // NOTE: This is special code, that is only necessary, when connecting to
       //       a Sun ONE Webtop !
       // Connection: "portal,host=<portalhost>,port=<port>,service=soffice,user=<username>,password=<passwd>"
-      if ( stringOfficeConnection.regionMatches( 0, "portal", 0, 6 ) ) {
+      if ( stringOfficeConnection.regionMatches( 4, "portal", 0, 6 ) ) {
         com.sun.star.loader.XImplementationLoader ximplementationloader =
         ( com.sun.star.loader.XImplementationLoader ) UnoRuntime.queryInterface(
         com.sun.star.loader.XImplementationLoader.class,
-        xmultiservicefactory.createInstance( "com.sun.star.loader.Java" ) );
+        xmulticomponentfactory.createInstanceWithContext(
+        "com.sun.star.loader.Java", xcomponentcontext ) );
         com.sun.star.container.XSet xset = (com.sun.star.container.XSet)
         UnoRuntime.queryInterface( com.sun.star.container.XSet.class,
-        xmultiservicefactory );
+        xmulticomponentfactory );
+
+        com.sun.star.lang.XSingleServiceFactory xsingleservicefactory =
+        ( com.sun.star.lang.XSingleServiceFactory ) UnoRuntime.queryInterface(
+        com.sun.star.lang.XSingleServiceFactory.class,
+        ximplementationloader.activate(
+        "com.sun.star.comp.portal_connect.Connector", null, null, null ) );
+        xset.insert( xsingleservicefactory );
       }
 
       /* Creates an instance of the component UnoUrlResolver which
          supports the services specified by the factory. */
-      Object objectUrlResolver = xmultiservicefactory.createInstance(
-      "com.sun.star.bridge.UnoUrlResolver" );
+      Object objectUrlResolver =
+      xmulticomponentfactory.createInstanceWithContext(
+      "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
 
       // Create a new url resolver
       XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
@@ -139,13 +159,23 @@ public class NotesAccess implements Runnable {
 
       // Resolves an object that is specified as follow:
       // uno:<connection description>;<protocol description>;<initial object name>
-      Object objectInitial = xurlresolver.resolve(
-      "uno:"+ stringOfficeConnection + ";StarOffice.ServiceManager" );
+      Object objectInitial = xurlresolver.resolve( stringOfficeConnection );
 
       // Create a service manager from the initial object
-      xmultiservicefactory = ( XMultiServiceFactory )
-      UnoRuntime.queryInterface( XMultiServiceFactory.class,
-      objectInitial );
+      xmulticomponentfactory = ( XMultiComponentFactory )
+      UnoRuntime.queryInterface( XMultiComponentFactory.class, objectInitial );
+
+      // Query for the XPropertySet interface.
+      XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
+      UnoRuntime.queryInterface( XPropertySet.class, xmulticomponentfactory );
+
+      // Get the default context from the office server.
+      Object objectDefaultContext =
+      xpropertysetMultiComponentFactory.getPropertyValue( "DefaultContext" );
+
+      // Query for the interface XComponentContext.
+      xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
+      XComponentContext.class, objectDefaultContext );
 
       /* A desktop environment contains tasks with one or more
          frames in which components can be loaded. Desktop is the
@@ -153,8 +183,8 @@ public class NotesAccess implements Runnable {
          frames. */
       XComponentLoader xcomponentloader = ( XComponentLoader )
       UnoRuntime.queryInterface( XComponentLoader.class,
-      xmultiservicefactory.createInstance(
-      "com.sun.star.frame.Desktop" ) );
+      xmulticomponentfactory.createInstanceWithContext(
+      "com.sun.star.frame.Desktop", xcomponentcontext ) );
 
       // Load a Writer document, which will be automaticly displayed
       XComponent xcomponent = xcomponentloader.loadComponentFromURL(
@@ -244,6 +274,8 @@ public class NotesAccess implements Runnable {
       + String.valueOf( intRowToStart + 1 ) + ":D"
       + String.valueOf( intRow ),
       xspreadsheet, "" );
+
+      xcomponentcontext = null;
 
       // Leaving the program.
       System.exit(0);
