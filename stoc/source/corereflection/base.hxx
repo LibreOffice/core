@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:36:45 $
+ *  last change: $Author: dbo $ $Date: 2001-06-26 13:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,36 +508,33 @@ inline sal_Bool coerce_assign(
     void * pDest, typelib_TypeDescription * pTD, const Any & rSource,
     IdlReflectionServiceImpl * pRefl )
 {
-    if (rSource.hasValue())
+    if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
     {
-        if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
+        Reference< XInterface > xVal;
+        if (extract( rSource, (typelib_InterfaceTypeDescription *)pTD, xVal, pRefl ))
         {
-            Reference< XInterface > xVal;
-            if (extract( rSource, (typelib_InterfaceTypeDescription *)pTD, xVal, pRefl ))
-            {
-                if (*(XInterface **)pDest)
-                    (*(XInterface **)pDest)->release();
-                if (*(XInterface **)pDest = xVal.get())
-                    (*(XInterface **)pDest)->acquire();
-                return sal_True;
-            }
+            if (*(XInterface **)pDest)
+                (*(XInterface **)pDest)->release();
+            if (*(XInterface **)pDest = xVal.get())
+                (*(XInterface **)pDest)->acquire();
+            return sal_True;
         }
-        else if (pTD->eTypeClass == typelib_TypeClass_ANY)
-        {
-            return uno_assignData(
-                pDest, pTD,
-                (void *)&rSource, pTD,
-                cpp_queryInterface, cpp_acquire, cpp_release );
-        }
-        else
-        {
-            return uno_type_assignData(
-                pDest, pTD->pWeakRef,
-                (void *)rSource.getValue(), rSource.getValueTypeRef(),
-                cpp_queryInterface, cpp_acquire, cpp_release );
-        }
+        return sal_False;
     }
-    return sal_False;
+    else if (pTD->eTypeClass == typelib_TypeClass_ANY)
+    {
+        return uno_assignData(
+            pDest, pTD,
+            (void *)&rSource, pTD,
+            cpp_queryInterface, cpp_acquire, cpp_release );
+    }
+    else
+    {
+        return uno_type_assignData(
+            pDest, pTD->pWeakRef,
+            (void *)rSource.getValue(), rSource.getValueTypeRef(),
+            cpp_queryInterface, cpp_acquire, cpp_release );
+    }
 }
 
 //__________________________________________________________________________________________________
