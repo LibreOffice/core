@@ -2,10 +2,6 @@
  *
  *  $RCSfile: KeyHandler.java,v $
  *
- *  $Revision: 1.4 $
- *
- *  last change: $Author: hr $ $Date: 2003-03-18 15:48:14 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -74,30 +70,23 @@ import javax.accessibility.*;
 public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEventDispatcher {
     EventQueue eventQueue;
 
-    public class VCLKeyEvent extends KeyEvent {
-        com.sun.star.awt.KeyEvent data;
-        XKeyHandler xKeyHandler;
+    public class VCLKeyEvent extends KeyEvent implements Runnable {
+        boolean consumed = true;
 
-        public VCLKeyEvent(Component c, int id, XKeyHandler handler, com.sun.star.awt.KeyEvent event) {
-            super(c, id, System.currentTimeMillis(), AccessibleKeyBinding.convertModifiers(event.Modifiers),
-                id == KeyEvent.KEY_TYPED ? KeyEvent.VK_UNDEFINED : AccessibleKeyBinding.convertKeyCode(event.KeyCode),
-                event.KeyChar != 0 ? event.KeyChar : KeyEvent.CHAR_UNDEFINED
-            );
-
-            data = event;
-            xKeyHandler = handler;
+        public VCLKeyEvent(Component c, int id, int modifiers, int keyCode, char keyChar) {
+            super(c, id, System.currentTimeMillis(), modifiers, keyCode, keyChar);
         }
 
-        public void setData(com.sun.star.awt.KeyEvent event) {
-            data = event;
+        public void run() {
+            // This is a no-op ..
         }
 
-        public com.sun.star.awt.KeyEvent getData() {
-            return data;
+        public void setConsumed(boolean b) {
+            consumed = b;
         }
 
-        public XKeyHandler getKeyHandler() {
-            return xKeyHandler;
+        public boolean isConsumed() {
+            return consumed;
         }
     }
 
@@ -110,65 +99,62 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
     * dispatch the specified event on its behalf
     */
     public boolean dispatchKeyEvent(java.awt.event.KeyEvent e) {
-        if (Build.DEBUG) {
-            System.err.println("in dispatchKeyEvent()");
-        }
-
-        if ((e.getID() != KeyEvent.KEY_TYPED) && (e instanceof VCLKeyEvent)) {
+        if (e instanceof VCLKeyEvent) {
             VCLKeyEvent event = (VCLKeyEvent) e;
-            com.sun.star.awt.KeyEvent unoKeyEvent = event.getData();
-            XKeyHandler xHandler = event.getKeyHandler();
-
-            // Return unhandled key events to VCL
-            if (e.getID() == KeyEvent.KEY_PRESSED) {
-                xHandler.keyPressed(unoKeyEvent);
-            } else if (e.getID() == KeyEvent.KEY_RELEASED) {
-                xHandler.keyReleased(unoKeyEvent);
-            } else if (Build.DEBUG) {
-                System.err.println("*** WARNING ***: KeyEvent has unexspected id");
-            }
+            event.setConsumed(false);
+            return true;
         }
         return false;
     }
 
     /** Handler for KeyPressed events */
     public boolean keyPressed(com.sun.star.awt.KeyEvent event) {
-        if (event.Source != null) {
-            XKeyHandler xHandler = (XKeyHandler) UnoRuntime.queryInterface(XKeyHandler.class, event.Source);
-            if (xHandler != null) {
-                eventQueue.postEvent(new VCLKeyEvent(this, KeyEvent.KEY_PRESSED, xHandler, event));
+//      try {
+            VCLKeyEvent vke = new VCLKeyEvent(this, KeyEvent.KEY_PRESSED,
+                AccessibleKeyBinding.convertModifiers(event.Modifiers),
+                AccessibleKeyBinding.convertKeyCode(event.KeyCode),
+                event.KeyChar != 0 ? event.KeyChar : KeyEvent.CHAR_UNDEFINED);
 
-                // Synthesize KEY_PRESSED event to emulate Java behavior
-                if (event.KeyChar != 0) {
-                    eventQueue.postEvent(new VCLKeyEvent(this, KeyEvent.KEY_TYPED, xHandler, event));
-                }
+            eventQueue.postEvent(vke);
 
-//              return true;
-                return false;
-            } else if (Build.DEBUG) {
-//              System.err.println("*** ERROR *** KeyEvent source does not implement XKeyHandler");
+            // Synthesize KEY_TYPED event to emulate Java behavior
+            if (event.KeyChar != 0) {
+                eventQueue.postEvent(new VCLKeyEvent(this,
+                    KeyEvent.KEY_TYPED,
+                    AccessibleKeyBinding.convertModifiers(event.Modifiers),
+                    KeyEvent.VK_UNDEFINED,
+                    event.KeyChar));
             }
-        } else if (Build.DEBUG) {
-//          System.err.println("*** ERROR *** KeyEvent source not valid");
-        }
-        return false;
+
+            // Wait until the key event is processed
+            return false;
+//          eventQueue.invokeAndWait(vke);
+//          return vke.isConsumed();
+//      } catch(java.lang.InterruptedException e) {
+//          return false;
+//      } catch(java.lang.reflect.InvocationTargetException e) {
+//          return false;
+//      }
     }
 
     /** Handler for KeyReleased events */
     public boolean keyReleased(com.sun.star.awt.KeyEvent event) {
-        if (event.Source != null) {
-            XKeyHandler xHandler = (XKeyHandler) UnoRuntime.queryInterface(XKeyHandler.class, event.Source);
-            if (xHandler != null) {
-                eventQueue.postEvent(new VCLKeyEvent(this, KeyEvent.KEY_RELEASED, xHandler, event));
-//              return true;
-                return false;
-            } else if (Build.DEBUG) {
-                System.err.println("*** ERROR *** KeyEvent source does not implement XKeyHandler");
-            }
-        } else if (Build.DEBUG) {
-            System.err.println("*** ERROR *** KeyEvent source not valid");
-        }
-        return false;
+//      try {
+            VCLKeyEvent vke = new VCLKeyEvent(this, KeyEvent.KEY_RELEASED,
+                AccessibleKeyBinding.convertModifiers(event.Modifiers),
+                AccessibleKeyBinding.convertKeyCode(event.KeyCode),
+                event.KeyChar != 0 ? event.KeyChar : KeyEvent.CHAR_UNDEFINED);
+            eventQueue.postEvent(vke);
+
+            // Wait until the key event is processed
+            return false;
+//          eventQueue.invokeAndWait(vke);
+//          return vke.isConsumed();
+//      } catch(java.lang.InterruptedException e) {
+//          return false;
+//      } catch(java.lang.reflect.InvocationTargetException e) {
+//          return false;
+//      }
     }
 
     public void disposing(com.sun.star.lang.EventObject event) {
