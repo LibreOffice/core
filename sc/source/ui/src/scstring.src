@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:23:10 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,10 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ finnish ] = "%PRODUCTNAME 6.0 -laskentataulukko";
     Text[ language_user1 ] = " ";
     Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME 6.0 ";
-    Text[ czech ] = "Sešit %PRODUCTNAME 6.0";
+    Text[ czech ] = "Sešit %PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME 6.0 Tabelle";
     Text[ hindi ] = "%PRODUCTNAME 6.0 स्प्रेडशीट्";
-    Text[ slovak ] = "Zošit %PRODUCTNAME 6.0";
+    Text[ slovak ] = "Zošit %PRODUCTNAME %PRODUCTVERSION";
 };
 String SCSTR_50_LONG_DOCNAME
 {
@@ -4372,6 +4372,10 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text[ hindi ] = "Lists the fields that you can drag to one of the other three areas.";
     Text[ slovak ] = "Zobrazí polia, ktoré môžete presunúť do jednej z troch ďalších oblastí.";
 };
+
+
+
+
 
 
 
