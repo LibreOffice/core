@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:02:17 $
+ *  last change: $Author: os $ $Date: 2001-06-26 14:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     SwDBData aData;
     aData.nCommandType = CommandType::TABLE;
     Reference<XResultSet>  xResSet;
-    Sequence<sal_Int32> aSelection;
+    Sequence<Any> aSelection;
     Reference< XConnection> xConnection;
     const PropertyValue* pValues = rProperties.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
@@ -409,7 +409,16 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     {
         return FALSE;
     }
-    pMergeData = new SwDSParam(aData, xResSet, aSelection);
+    Sequence<sal_Int32> aDlgSelection(aSelection.getLength());
+    if(aSelection.getLength())
+    {
+        sal_Int32* pDlgSelection = aDlgSelection.getArray();
+        const Any* pGridSelection = aSelection.getConstArray();
+        for(sal_Int32 nSel = 0; nSel < aSelection.getLength(); nSel++)
+            pGridSelection[nSel] >>= pDlgSelection[nSel];
+
+    }
+    pMergeData = new SwDSParam(aData, xResSet, aDlgSelection);
     SwDSParam*  pTemp = FindDSData(aData, FALSE);
     if(pTemp)
         *pTemp = *pMergeData;
