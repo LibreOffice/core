@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:13:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef DBAUI_QUERYVIEWSWITCH_HXX
 #include "QueryViewSwitch.hxx"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBAUI_SQLEDIT_HXX
 #include "sqledit.hxx"
