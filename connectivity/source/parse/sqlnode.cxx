@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:16:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,4 +1201,3 @@ sal_Int16 OSQLParser::buildDate(const ::rtl::OUString& _sValue,sal_Int32 _nType,
     return nErg;
 }
 // -----------------------------------------------------------------------------
-
