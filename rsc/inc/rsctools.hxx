@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,9 @@ public:
 class RscMem
 {
 public:
-    static void *   Malloc( USHORT nSize );
-    static void *   Realloc( void * pMem, USHORT nSize );
-    static char *   Realloc( char * pMem, USHORT nSize ){
+    static void *   Malloc( unsigned int nSize );
+    static void *   Realloc( void * pMem, unsigned int nSize );
+    static char *   Realloc( char * pMem, unsigned int nSize ){
                         return (char *)Realloc( (void *)pMem, nSize );
                     }
     static void     Free( void * pMem );
@@ -138,7 +138,8 @@ public:
                     ~RscPtrPtr();
     void            Reset();
     USHORT  Append( void * );
-    USHORT  Append( char * pStr ){
+    USHORT  Append( char * pStr ){  printf( "\n" );
+
                         return( Append( (void *)pStr ) );
                     };
     USHORT  GetCount(){ return( nCount ); };
@@ -149,15 +150,15 @@ public:
 /****************** R s c W r i t e R c **********************************/
 class RscWriteRc
 {
-    USHORT              nLen;
+    unsigned int        nLen;
     BOOL                bSwap;
     RSCBYTEORDER_TYPE   nByteOrder;
     char *              pMem;
-    char *              GetPointer( USHORT nSize );
+    char *              GetPointer( unsigned int nSize );
 public:
                 RscWriteRc( RSCBYTEORDER_TYPE nOrder = RSC_SYSTEMENDIAN );
                 ~RscWriteRc();
-    USHORT      IncSize( USHORT nSize );// gibt die vorherige Groesse
+    unsigned int        IncSize( unsigned int nSize );// gibt die vorherige Groesse
     void *      GetBuffer()
                 {
                     return GetPointer( 0 );
@@ -173,7 +174,7 @@ public:
 
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
-    USHORT      Size(){ return( nLen ); };
+    unsigned int    Size(){ return( nLen ); };
     //void        Put( void * pData, USHORT nSize );
     void        Put( INT32 lVal )
                 {
