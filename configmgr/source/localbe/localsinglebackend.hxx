@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:43:14 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,15 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif // _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif // _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
 #endif // _CPPUHELPER_COMPBASE3_HXX_
 
-namespace configmgr {
+namespace configmgr { namespace localbe {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
@@ -101,12 +101,12 @@ typedef cppu::WeakComponentImplHelper3<backend::XSingleBackend,
 class LocalSingleBackend : public SingleBackendBase {
     public :
         /**
-          Service constructor from a component context.
+          Service constructor from a service factory.
 
-          @param xContext   component context
+          @param xFactory   service factory
           */
         LocalSingleBackend(
-                const uno::Reference<uno::XComponentContext>& xContext) ;
+                const uno::Reference<lang::XMultiServiceFactory>& xFactory) ;
         /** Destructor */
         ~LocalSingleBackend(void) ;
 
@@ -187,8 +187,8 @@ class LocalSingleBackend : public SingleBackendBase {
 
     protected :
     private :
-        /** Component context */
-        const uno::Reference<uno::XComponentContext>& mContext ;
+        /** Service factory */
+        const uno::Reference<lang::XMultiServiceFactory>& mFactory ;
         /** Mutex for resources protection */
         osl::Mutex mMutex ;
         /** Identifier of the user of the backend */
@@ -199,6 +199,6 @@ class LocalSingleBackend : public SingleBackendBase {
         rtl::OUString mUserDataUrl ;
 } ;
 
-} // configmgr
+} } // configmgr.localbe
 
 #endif // CONFIGMGR_LOCALBE_LOCALSINGLEBACKEND_HXX_

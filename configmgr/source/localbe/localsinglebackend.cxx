@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-13 16:47:31 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,14 @@
 #include "oslstream.hxx"
 #endif // _CONFIGMGR_OSLSTREAM_HXX_
 
+#ifndef CONFIGMGR_API_FACTORY_HXX_
+#include "confapifactory.hxx"
+#endif // CONFIGMGR_API_FACTORY_HXX_
+
+#ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
+#include "serviceinfohelper.hxx"
+#endif // CONFIGMGR_SERVICEINFOHELPER_HXX_
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
@@ -79,20 +87,23 @@
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #endif // _COM_SUN_STAR_UNO_XCURRENTCONTEXT_HPP_
 
-namespace configmgr {
+namespace configmgr { namespace localbe {
 
 //==============================================================================
 
 //------------------------------------------------------------------------------
 
 LocalSingleBackend::LocalSingleBackend(
-        const uno::Reference<uno::XComponentContext>& aContext)
-: SingleBackendBase(mMutex), mContext(aContext) {
+        const uno::Reference<lang::XMultiServiceFactory>& aFactory)
+: SingleBackendBase(mMutex), mFactory(aFactory) {
 }
 //------------------------------------------------------------------------------
 
+LocalSingleBackend::~LocalSingleBackend(void) {}
+//------------------------------------------------------------------------------
+
 static const rtl::OUString kMetaConfPrefix(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.bootstrap")) ;
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.bootstrap.")) ;
 static const rtl::OUString kSharedDataUrl(kMetaConfPrefix +
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SharedDataUrl"))) ;
 static const rtl::OUString kUserDataUrl(kMetaConfPrefix +
@@ -208,7 +219,7 @@ uno::Reference<backend::XLayer> SAL_CALL LocalSingleBackend::getLayer(
             uno::RuntimeException)
 {
     if (!isMoreRecent(aLayerId, aTimestamp)) { return NULL ; }
-    return new LocalFileLayer(mContext, aLayerId) ;
+    return new LocalFileLayer(mFactory, aLayerId) ;
 }
 //------------------------------------------------------------------------------
 
@@ -256,7 +267,7 @@ LocalSingleBackend::getUpdatableLayer(const rtl::OUString& aLayerId)
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    return new LocalFileLayer(mContext, aLayerId) ;
+    return new LocalFileLayer(mFactory, aLayerId) ;
 }
 //------------------------------------------------------------------------------
 
@@ -265,7 +276,7 @@ LocalSingleBackend::getWriteHandler(const rtl::OUString& aLayerId)
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    LocalFileLayer layer(mContext, aLayerId) ;
+    LocalFileLayer layer(mFactory, aLayerId) ;
 
     return layer.getLayerWriter() ;
 }
@@ -298,15 +309,38 @@ uno::Reference<backend::XSchema> SAL_CALL LocalSingleBackend::getSchema(
                             new OSLInputStreamWrapper(schemaFile, sal_True) ;
 
     arguments [0] <<= stream ;
-    return uno::Reference<backend::XSchema>::query(
-        mContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            kXMLSchemaParser, arguments, mContext)) ;
+    uno::Reference<backend::XSchema> schema(
+            mFactory->createInstanceWithArguments(kXMLSchemaParser, arguments),
+            uno::UNO_QUERY) ;
+
+    if (!schema.is()) {
+        throw uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Cannot instantiate Schema")),
+                *this) ;
+    }
+    return schema ;
+}
+//------------------------------------------------------------------------------
+
+static const sal_Char *kImplementation =
+                "com.sun.star.comp.configuration.backend.LocalSingleBackend" ;
+static const sal_Char *kService =
+                "com.sun.star.configuration.backend.SingleBackend" ;
+
+static AsciiServiceName kServiceNames [] = { kService, 0 } ;
+static const ServiceInfo kServiceInfo = { kImplementation, kServiceNames } ;
+
+const ServiceInfo *getLocalBackendServiceInfo(void) { return &kServiceInfo ; }
+
+uno::Reference<uno::XInterface> SAL_CALL
+instantiateLocalBackend(const CreationContext& aServiceManager) {
+    return *new LocalSingleBackend(aServiceManager) ;
 }
 //------------------------------------------------------------------------------
 
 static const rtl::OUString kImplementationName(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.backend.LocalSingleBackend")) ;
+                            RTL_CONSTASCII_USTRINGPARAM(kImplementation)) ;
 
 rtl::OUString SAL_CALL LocalSingleBackend::getName(void) {
     return kImplementationName ;
@@ -321,8 +355,7 @@ rtl::OUString SAL_CALL LocalSingleBackend::getImplementationName(void)
 //------------------------------------------------------------------------------
 
 static const rtl::OUString kSingleBackendServiceName(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.backend.SingleBackend")) ;
+                            RTL_CONSTASCII_USTRINGPARAM(kService)) ;
 
 sal_Bool SAL_CALL LocalSingleBackend::supportsService(
                                         const rtl::OUString& aServiceName)
@@ -345,4 +378,4 @@ SAL_CALL LocalSingleBackend::getSupportedServiceNames(void)
 }
 //------------------------------------------------------------------------------
 
-} // configmgr
+} } // configmgr.localbe
