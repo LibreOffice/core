@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 07:57:19 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ CheckBox CB_READ_ONLY
     Text[ chinese_traditional ] = "°ßÅª(~R)";
     Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
     Text[ greek ] = "Ìüíï ãéá áíÜãíùóç";
-    Text[ korean ] = "ÀĞ±â¸¸(~R)";
+    Text[ korean ] = "ÀĞ±â Àü¿ë";
     Text[ turkish ] = "Salt okunur";
     Text[ language_user1 ] = " ";
 };
