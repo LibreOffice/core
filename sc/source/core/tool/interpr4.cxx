@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-03-21 12:10:11 $
+ *  last change: $Author: er $ $Date: 2001-04-27 23:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,8 +1223,11 @@ void ScInterpreter::PushDouble(double nVal)
 #if !SOMA_FPSIGNAL_JUMP
     if (!SOMA_FINITE(nVal))
     {
+        if ( SolarMath::IsNAN( nVal ) )
+            SetError(errNoValue);
+        else
+            SetError(errIllegalFPOperation);
         nVal = 0.0;
-        SetError(errIllegalFPOperation);
     }
 #endif
     PushTempToken( new ScDoubleToken( nVal ) );
@@ -3558,8 +3561,11 @@ StackVar ScInterpreter::Interpret()
 #if !SOMA_FPSIGNAL_JUMP
     if (!SOMA_FINITE(nResult))
     {
+        if ( SolarMath::IsNAN( nResult ) )
+            SetError(errNoValue);
+        else
+            SetError(errIllegalFPOperation);
         nResult = 0.0;
-        SetError(errIllegalFPOperation);
     }
 #else
     delete [] pJumpBuf;
