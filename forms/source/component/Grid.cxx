@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 16:47:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1156,7 +1156,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeLong(getINT32(m_aTextColor));
 
     // neu ab Version 6
-    _rxOutStream << m_aHelpText;
+    _rxOutStream << m_sHelpText;
 
     if (nAnyMask & FONTDESCRIPTOR)
         _rxOutStream << m_aFont;
@@ -1299,7 +1299,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
     // neu ab Version 6
     if (nVersion > 5)
-        _rxInStream >> m_aHelpText;
+        _rxInStream >> m_sHelpText;
 
     if (nAnyMask & FONTDESCRIPTOR)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-08 08:15:57 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ class OGridControlModel :public OControlModel
     ::com::sun::star::awt::FontDescriptor   m_aFont;
     ::com::sun::star::awt::FontDescriptor   m_aOldFont;
     ::rtl::OUString                         m_aDefaultControl;
+    ::rtl::OUString                         m_sHelpText;
 // [properties]
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xSelection;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,13 +141,12 @@ void OFixedTextModel::fillProperties(
         Sequence< starbeans::Property >& _rProps,
         Sequence< starbeans::Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(4)
+    FRM_BEGIN_PROP_HELPER(3)
         RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
 
         DECL_PROP1(NAME,    rtl::OUString,  BOUND);
         DECL_PROP2(CLASSID, sal_Int16,  READONLY, TRANSIENT);
         DECL_PROP1(TAG,     rtl::OUString,  BOUND);
-        DECL_PROP1(HELPTEXT,rtl::OUString,  BOUND);
     FRM_END_PROP_HELPER();
 }
 
@@ -165,7 +164,7 @@ void SAL_CALL OFixedTextModel::write(const Reference<XObjectOutputStream>& _rxOu
 
     // Version
     _rxOutStream->writeShort(0x0002);
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
 }
 
 //------------------------------------------------------------------------------
@@ -176,7 +175,7 @@ void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInSt
     // Version
     sal_Int16 nVersion = _rxInStream->readShort();
     if (nVersion > 1)
-        _rxInStream >> m_aHelpText;
+        readHelpTextCompatibly(_rxInStream);
 }
 
 //.........................................................................

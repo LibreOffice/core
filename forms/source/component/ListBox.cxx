@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 08:08:36 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ void OListBoxModel::fillProperties(
                 Sequence< Property >& _rProps,
                 Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(14)
+    FRM_BEGIN_PROP_HELPER(13)
         // die SelectSequence-Property soll transient sein ....
                 ModifyPropertyAttributes(_rAggregateProps, PROPERTY_SELECT_SEQ, PropertyAttribute::TRANSIENT, 0);
 
@@ -426,7 +426,6 @@ void OListBoxModel::fillProperties(
         DECL_PROP3(VALUE_SEQ,           StringSequence,                 BOUND, READONLY, TRANSIENT);
         DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,    BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,                BOUND);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,                BOUND);
         DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,                READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,                BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
@@ -470,7 +469,7 @@ void SAL_CALL OListBoxModel::write(const Reference<stario::XObjectOutputStream>&
         m_aBoundColumn >>= nBoundColumn;
         _rxOutStream << nBoundColumn;
     }
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
 
     // from version 0x0004 : common properties
     writeCommonProperties(_rxOutStream);
@@ -548,7 +547,7 @@ void SAL_CALL OListBoxModel::read(const Reference<stario::XObjectInputStream>& _
     }
 
     if (nVersion > 2)
-        _rxInStream >> m_aHelpText;
+        readHelpTextCompatibly(_rxInStream);
 
     // Stringliste muﬂ gelehrt werden, wenn nicht ueber WerteListe gefuellt wird
     // dieses kann der Fall sein wenn im alive modus gespeichert wird

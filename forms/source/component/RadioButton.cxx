@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:44:22 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ void ORadioButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(11)
+    FRM_BEGIN_PROP_HELPER(10)
         // the "State" property is transient, so change this
         //  ModifyPropertyAttributes(_rAggregateProps, PROPERTY_STATE, PropertyAttribute::TRANSIENT, 0);
 
@@ -364,7 +364,6 @@ void ORadioButtonModel::fillProperties(
         DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
         DECL_PROP1(CONTROLSOURCE,       rtl::OUString,              BOUND);
-        DECL_PROP1(HELPTEXT,            rtl::OUString,              BOUND);
         DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
@@ -389,7 +388,7 @@ void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rx
     // Properties
     _rxOutStream << m_sReferenceValue;
     _rxOutStream << (sal_Int16)m_nDefaultChecked;
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
 
     // from version 0x0003 : common properties
     writeCommonProperties(_rxOutStream);
@@ -410,12 +409,12 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
         case 0x0002 :
             _rxInStream >> m_sReferenceValue;
             _rxInStream >> (sal_Int16)m_nDefaultChecked;
-            _rxInStream >> m_aHelpText;
+            readHelpTextCompatibly(_rxInStream);
             break;
         case 0x0003 :
             _rxInStream >> m_sReferenceValue;
             _rxInStream >> (sal_Int16)m_nDefaultChecked;
-            _rxInStream >> m_aHelpText;
+            readHelpTextCompatibly(_rxInStream);
             readCommonProperties(_rxInStream);
             break;
         default :

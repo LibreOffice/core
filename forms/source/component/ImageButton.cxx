@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ void OImageButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(8)
+    FRM_BEGIN_PROP_HELPER(7)
         DECL_PROP2(CLASSID,         sal_Int16,                  READONLY, TRANSIENT);
         DECL_PROP1(BUTTONTYPE,      FormButtonType, BOUND);
         DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
@@ -147,7 +147,6 @@ void OImageButtonModel::fillProperties(
         DECL_PROP1(NAME,            ::rtl::OUString,            BOUND);
         DECL_PROP1(TAG,             ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,                  BOUND);
-        DECL_PROP1(HELPTEXT,        ::rtl::OUString,            BOUND);
     FRM_END_PROP_HELPER();
 }
 
@@ -175,7 +174,7 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     ::rtl::OUString sTmp(INetURLObject::decode(INetURLObject::AbsToRel(m_sTargetURL), '%', INetURLObject::DECODE_UNAMBIGUOUS));
     _rxOutStream << sTmp;
     _rxOutStream << m_sTargetFrame;
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
 }
 
 //------------------------------------------------------------------------------
@@ -209,7 +208,7 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
             _rxInStream >> sTmp;
             m_sTargetURL = INetURLObject::RelToAbs( sTmp );
             _rxInStream >> m_sTargetFrame;
-            _rxInStream >> m_aHelpText;
+            readHelpTextCompatibly(_rxInStream);
         }
         break;
 

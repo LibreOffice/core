@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-13 10:34:43 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,6 @@
 #include "services.hxx"
 #endif
 
-using namespace dbtools;
-
 //... namespace frm .......................................................
 namespace frm
 {
@@ -123,6 +121,9 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::dbtools;
+using namespace ::comphelper;
+
 //=========================================================================
 //= base class for form layer controls
 //=========================================================================
@@ -455,6 +456,38 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
     return aReturn;
 }
 
+//------------------------------------------------------------------------------
+void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XObjectInputStream >& _rxInStream)
+{
+    ::rtl::OUString sHelpText;
+    _rxInStream >> sHelpText;
+    try
+    {
+        if (m_xAggregateSet.is())
+            m_xAggregateSet->setPropertyValue(PROPERTY_HELPTEXT, makeAny(sHelpText));
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
+    }
+}
+
+//------------------------------------------------------------------------------
+void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XObjectOutputStream >& _rxOutStream)
+{
+    ::rtl::OUString sHelpText;
+    try
+    {
+        if (m_xAggregateSet.is())
+            m_xAggregateSet->getPropertyValue(PROPERTY_HELPTEXT) >>= sHelpText;
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
+    }
+    _rxOutStream << sHelpText;
+}
+
 //------------------------------------------------------------------
 OControlModel::OControlModel(
                         const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
@@ -669,7 +702,7 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
 
     // we had a version where we wrote the help text
     if (nVersion == 0x0004)
-        InStream >> m_aHelpText;
+        readHelpTextCompatibly(InStream);
 
     DBG_ASSERT(nVersion < 5, "OControlModel::read : suspicious version number !");
     // 4 was the version where we wrote the help text
@@ -693,9 +726,6 @@ void OControlModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         case PROPERTY_ID_TABINDEX:
             rValue <<= m_nTabIndex;
             break;
-        case PROPERTY_ID_HELPTEXT:
-            rValue <<= m_aHelpText;
-            break;
         default:
             OPropertySetAggregationHelper::getFastPropertyValue(rValue, nHandle);
     }
@@ -714,9 +744,6 @@ sal_Bool OControlModel::convertFastPropertyValue(
             break;
         case PROPERTY_ID_TAG:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aTag);
-            break;
-        case PROPERTY_ID_HELPTEXT:
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aHelpText);
             break;
         case PROPERTY_ID_TABINDEX:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_nTabIndex);
@@ -745,11 +772,6 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             DBG_ASSERT(_rValue.getValueType() == getCppuType((const sal_Int16*)NULL),
                 "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
             _rValue >>= m_nTabIndex;
-            break;
-        case PROPERTY_ID_HELPTEXT:
-            DBG_ASSERT(_rValue.getValueType() == getCppuType((const ::rtl::OUString*)NULL),
-                "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
-            _rValue >>= m_aHelpText;
             break;
     }
 }

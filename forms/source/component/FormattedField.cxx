@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 11:10:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,14 +518,13 @@ void OFormattedModel::fillProperties(
                 Sequence< com::sun::star::beans::Property >& _rProps,
                 Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(11)
+    FRM_BEGIN_PROP_HELPER(10)
         DECL_PROP1(NAME,                ::rtl::OUString,        BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,              READONLY, TRANSIENT);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
         DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,        BOUND);
         DECL_IFACE_PROP2(BOUNDFIELD,    com::sun::star::beans::XPropertySet,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
         DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,BOUND, MAYBEVOID);

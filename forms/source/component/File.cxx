@@ -2,9 +2,9 @@
  *
  *  $RCSfile: File.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,13 +223,12 @@ void OFileControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(6)
+    FRM_BEGIN_PROP_HELPER(5)
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(DEFAULT_TEXT,    ::rtl::OUString,    BOUND);
         DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
         DECL_PROP1(TAG,             ::rtl::OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
-        DECL_PROP1(HELPTEXT,        ::rtl::OUString,    BOUND);
 
         // in den agregierten Properties muss ich noch PROPERTY_ID_TEXT auf transient setzen ...
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
@@ -259,7 +258,7 @@ void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxO
     _rxOutStream->writeShort(0x0002);
     // Default-Wert
     _rxOutStream << m_sDefaultValue;
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
 }
 
 //------------------------------------------------------------------------------
@@ -277,7 +276,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
             _rxInStream >> m_sDefaultValue; break;
         case 2:
             _rxInStream >> m_sDefaultValue;
-            _rxInStream >> m_aHelpText;
+            readHelpTextCompatibly(_rxInStream);
             break;
         default:
             DBG_ERROR("OFileControlModel::read : unknown version !");

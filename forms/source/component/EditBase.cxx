@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         _rxOutStream->writeDouble(getDouble(m_aDefault));
 
     // since version 5 we write the help text
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
     // (that's potentially bad : at the time I added the above line we had two derived classes : OEditModel and
     // OFormattedModel. The first one does not have an own version handling, so it can't write the help text itself,
     // the second one does it's own writing (reading) after calling our method, so normally we shouldn't write any
@@ -211,7 +211,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream)
     }
 
     if (nVersion > 4)
-        _rxInStream >> m_aHelpText;
+        readHelpTextCompatibly(_rxInStream);
 
     if (bHandleCommonProps)
         readCommonEditProperties(_rxInStream);

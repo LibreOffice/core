@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-27 17:03:58 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ void OComboBoxModel::fillProperties(
                 Sequence< Property >& _rProps,
                 Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(13)
+    FRM_BEGIN_PROP_HELPER(12)
         // Text auf transient setzen
                 ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
 
@@ -357,9 +357,8 @@ void OComboBoxModel::fillProperties(
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                              BOUND);
         DECL_PROP1(DEFAULT_TEXT,        ::rtl::OUString,            BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,            BOUND);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,            BOUND);
-                DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,        READONLY, TRANSIENT);
-                DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,        BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,        READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,        BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -402,7 +401,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
 
     _rxOutStream << (sal_Bool)m_bEmptyIsNull;
     _rxOutStream << m_aDefaultText;
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
 
     // from version 0x0006 : common properties
     writeCommonProperties(_rxOutStream);
@@ -481,7 +480,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     }
 
     if (nVersion > 0x0004)
-        _rxInStream >> m_aHelpText;
+        readHelpTextCompatibly(_rxInStream);
 
     if (nVersion > 0x0005)
         readCommonProperties(_rxInStream);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupBox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,14 +142,13 @@ void OGroupBoxModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(4)
+    FRM_BEGIN_PROP_HELPER(3)
         // don't want to have the TabStop property
         RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
 
         DECL_PROP2(CLASSID,     sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(NAME,        ::rtl::OUString,    BOUND);
         DECL_PROP1(TAG,         ::rtl::OUString,    BOUND);
-        DECL_PROP1(HELPTEXT,    ::rtl::OUString,    BOUND);
     FRM_END_PROP_HELPER();
 }
 
@@ -167,7 +166,7 @@ void SAL_CALL OGroupBoxModel::write(const Reference<stario::XObjectOutputStream>
 
     // Version
     _rxOutStream->writeShort(0x0002);
-    _rxOutStream << m_aHelpText;
+    writeHelpTextCompatibly(_rxOutStream);
 }
 
 //------------------------------------------------------------------------------
@@ -181,7 +180,7 @@ void SAL_CALL OGroupBoxModel::read(const Reference<stario::XObjectInputStream>& 
         // ups, ist das Englisch richtig ? ;)
 
     if (nVersion == 2)
-        _rxInStream >> m_aHelpText;
+        readHelpTextCompatibly(_rxInStream);
 
     if (nVersion > 0x0002)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 16:48:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ void OEditModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(12)
+    FRM_BEGIN_PROP_HELPER(11)
         // Text auf transient setzen
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
 
@@ -436,7 +436,6 @@ void OEditModel::fillProperties(
         DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,        BOUND);
         DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,BOUND, MAYBEVOID);

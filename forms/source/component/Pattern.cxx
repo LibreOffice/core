@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ void OPatternModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(12)
+    FRM_BEGIN_PROP_HELPER(11)
         // Text auf transient setzen
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
         DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
@@ -184,7 +184,6 @@ void OPatternModel::fillProperties(
         DECL_PROP1(TAG,             ::rtl::OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP1(CONTROLSOURCE,   ::rtl::OUString,    BOUND);
-        DECL_PROP1(HELPTEXT,        ::rtl::OUString,    BOUND);
         DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
         DECL_PROP2(FILTERPROPOSAL,  sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
