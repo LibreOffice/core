@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-16 15:17:53 $
+ *  last change: $Author: nn $ $Date: 2002-09-03 13:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1545,7 +1545,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     pScMod->ActivateInputWindow( NULL );
                 }
-                rReq.Done();
+                rReq.Ignore();      // only SID_ENTER_STRING is recorded
             }
             break;
 

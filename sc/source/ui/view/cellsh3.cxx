@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
+ *  last change: $Author: nn $ $Date: 2002-09-03 13:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include "autofmt.hxx"
 #include "cellsh.hxx"
 #include "attrdlg.hrc"      // TP_ALIGNMENT
+#include "inputhdl.hxx"
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
@@ -221,6 +222,16 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                GetViewData()->GetCurY(),
                                                GetViewData()->GetTabNo(),
                                                aStr );
+
+                    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
+                    if ( !pHdl || !pHdl->IsInEnterHandler() )
+                    {
+                        //  #101061# UpdateInputHandler is needed after the cell content
+                        //  has changed, but if called from EnterHandler, UpdateInputHandler
+                        //  will be called later when moving the cursor.
+
+                        pTabViewShell->UpdateInputHandler();
+                    }
 
                     rReq.Done();
 

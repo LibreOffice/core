@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-16 17:37:51 $
+ *  last change: $Author: nn $ $Date: 2002-09-03 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,8 @@ public:
     BOOL            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }
     void            SetInputWindow( ScInputWindow* pNew )   { pInputWin = pNew; }
+
+    BOOL            IsInEnterHandler() const                { return bInEnterHandler; }
 
     BOOL            IsModalMode( SfxObjectShell* pDocSh );
 
