@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:01:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,8 +293,10 @@ namespace pcr
             Reference< XPropertySet > xDetailFormProps( m_xDetailForm, UNO_QUERY );
             if ( xDetailFormProps.is() )
             {
-                xDetailFormProps->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< ::rtl::OUString >( aDetailFields.begin(), aDetailFields.size() ) ) );
-                xDetailFormProps->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< ::rtl::OUString >( aMasterFields.begin(), aMasterFields.size() ) ) );
+            ::rtl::OUString *pFields = aDetailFields.empty() ? 0 : &aDetailFields[0];
+                xDetailFormProps->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< ::rtl::OUString >( pFields, aDetailFields.size() ) ) );
+            pFields = aMasterFields.empty() ? 0 : &aMasterFields[0];
+                xDetailFormProps->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< ::rtl::OUString >( pFields, aMasterFields.size() ) ) );
             }
         }
         catch( const Exception& )
