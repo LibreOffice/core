@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:37:44 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,6 @@ SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TAB_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TABLE_TOOLBOX));
-    SFX_OBJECTMENU_REGISTRATION(SID_OBJECTMENU0, SW_RES(MN_OBJECTMENU_TABLE));
 }
 
 
@@ -1230,6 +1229,27 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         }
         break;
+        case FN_TABLE_HEADLINE_REPEAT:
+            if(0 != rSh.GetRowsToRepeat())
+                rSh.SetRowsToRepeat( 0 );
+            else
+                rSh.SetRowsToRepeat(rSh.GetRowSelectionFromTop());
+        break;
+        case FN_TABLE_SELECT_CELL   :
+            rSh.SelectTableCell();
+        break;
+        case FN_TABLE_DELETE_TABLE  :
+        {
+            rSh.StartAction();
+            rSh.StartUndo();
+            rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
+            rSh.DeleteRow();
+            rSh.EndUndo();
+            rSh.EndAction();
+        }
+        //'this' is already destroyed
+        return;
+        //break;
         default:
             bMore = TRUE;
     }
@@ -1505,6 +1525,18 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     delete pSplit;
                 }
             }
+            break;
+            case FN_TABLE_HEADLINE_REPEAT:
+                if(0 != rSh.GetRowsToRepeat())
+                    rSet.Put(SfxBoolItem(nSlot, sal_True));
+                else if(!rSh.GetRowSelectionFromTop())
+                    rSet.DisableItem( nSlot );
+                else
+                    rSet.Put(SfxBoolItem(nSlot, sal_False));
+            break;
+            case FN_TABLE_SELECT_CELL   :
+                if(rSh.HasBoxSelection())
+                    rSet.DisableItem( nSlot );
             break;
         }
     nSlot = aIter.NextWhich();
