@@ -6,7 +6,7 @@
 -o svtools.AccessibleIconChoiceCtrl
 -o svtools.AccessibleIconChoiceCtrlEntry
 -o svtools.AccessibleTabBar
--o svtools.AccessibleTabBarPage
--o svtools.AccessibleTabBarPageList
+#-o svtools.AccessibleTabBarPage
+#-o svtools.AccessibleTabBarPageList
 -o svtools.AccessibleTreeListBox
 -o svtools.AccessibleTreeListBoxEntry
