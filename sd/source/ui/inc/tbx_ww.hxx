@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:44:31 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 
 //------------------------------------------------------------------------
 
+/*
 class SdPopupWindowTbx : public SfxPopupWindow
 {
 private:
@@ -101,13 +102,13 @@ public:
     void         Update();
 
 private:
-    /** Adapt the toolbox to whether CTL is active or not.  If CTL is not
-        active then all toolbox items that describe CTL specific shapes are
-        deleted from it and its size is re-calculated.
-    */
+
+    // Adapt the toolbox to whether CTL is active or not.  If CTL is not
+    //    active then all toolbox items that describe CTL specific shapes are
+    //    deleted from it and its size is re-calculated.
     void AdaptToCTL (void);
 };
-
+*/
 //------------------------------------------------------------------------
 
 class SdTbxControl : public SfxToolBoxControl
@@ -118,7 +119,7 @@ private:
 public:
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxControl(USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+            SdTbxControl(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SdTbxControl() {}
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
