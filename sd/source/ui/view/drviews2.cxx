@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:24:26 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@
 #include "fuscale.hxx"
 #endif
 #include "sdresid.hxx"
-#include "new_foil.hxx"
+//CHINA001 #include "new_foil.hxx"
 #ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
 #endif
@@ -196,7 +196,8 @@
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
 #endif
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "new_foil.hrc" //CHINA001
 namespace sd {
 
 /*************************************************************************
@@ -530,8 +531,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT, aOldAutoLayout ) );
 
-                    SdNewFoilDlg* pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), TRUE);
-
+                    //CHINA001 SdNewFoilDlg* pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), TRUE);
+                    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+                    AbstractSdNewFoilDlg* pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), pWindow, aAttrSet, ePageKind, GetDocSh(), TRUE );
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     if (pDlg->Execute() == RET_OK)
                     {
                         pDlg->GetAttr( aAttrSet );
@@ -1263,11 +1267,16 @@ void DrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
             aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT,
                                                   eAutoLayout ) );
 
-            SdNewFoilDlg* pDlg = NULL;
+            AbstractSdNewFoilDlg* pDlg = NULL; //CHINA001 SdNewFoilDlg* pDlg = NULL;
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
 
             if (nSId == SID_INSERTPAGE && !this->ISA(GraphicViewShell))
-                pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), FALSE);
-
+            { //add by CHINA001
+                //CHINA001 pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), FALSE);
+                pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), pWindow, aAttrSet, ePageKind, GetDocSh(), FALSE );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            }
             if (pDlg && pDlg->Execute () != RET_OK)
             {
                 Cancel();
