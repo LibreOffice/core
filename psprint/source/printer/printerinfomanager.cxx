@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-31 17:14:45 $
+ *  last change: $Author: pl $ $Date: 2002-11-05 14:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,6 +610,12 @@ bool PrinterInfoManager::writePrinterConfig()
                     else
                     {
                         rofiles[ it->second.m_aFile ] = 1;
+                        // update alternate file list
+                        // the remove operation ensures singularity of each alternate
+                        it->second.m_aAlternateFiles.remove( it->second.m_aFile );
+                        it->second.m_aAlternateFiles.remove( files.begin()->first );
+                        it->second.m_aAlternateFiles.push_front( it->second.m_aFile );
+                        // update file
                         it->second.m_aFile = files.begin()->first;
                     }
                 }
