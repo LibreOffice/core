@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:09:35 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,21 +70,25 @@
 #include <sysdata.hxx>
 #endif
 
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
+
+class WinSalGraphics;
+
 // ----------------
 // - SalFrameData -
 // ----------------
 
-class SalFrameData
+class WinSalFrame : public SalFrame
 {
 public:
     HWND                    mhWnd;                  // Window handle
     HCURSOR                 mhCursor;               // cursor handle
     HIMC                    mhDefIMEContext;        // default IME-Context
-    SalGraphics*            mpGraphics;             // current frame graphics
-    SalGraphics*            mpGraphics2;            // current frame graphics for other threads
-    SalFrame*               mpNextFrame;            // pointer to next frame
-    void*                   mpInst;                 // instance handle for callback
-    SALFRAMEPROC            mpProc;                 // callback proc
+    WinSalGraphics*         mpGraphics;             // current frame graphics
+    WinSalGraphics*         mpGraphics2;            // current frame graphics for other threads
+    WinSalFrame*            mpNextFrame;            // pointer to next frame
     SystemEnvData           maSysData;              // system data
     SalFrameState           maState;                // frame state
     int                     mnShowState;            // show state
@@ -118,7 +122,49 @@ public:
     BOOL                    mbSpezIME;              // TRUE: Spez IME
     BOOL                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
-    BOOL                    mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
+    static BOOL             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
+
+public:
+    WinSalFrame();
+    virtual ~WinSalFrame();
+
+    virtual SalGraphics*        GetGraphics();
+    virtual void                ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL                PostEvent( void* pData );
+    virtual void                SetTitle( const XubString& rTitle );
+    virtual void                SetIcon( USHORT nIcon );
+    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
+    virtual void                Enable( BOOL bEnable );
+    virtual void              SetMinClientSize( long nWidth, long nHeight );
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void                GetClientSize( long& rWidth, long& rHeight );
+    virtual void                GetWorkArea( Rectangle& rRect );
+    virtual SalFrame*           GetParent() const;
+    virtual void                SetWindowState( const SalFrameState* pState );
+    virtual BOOL                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( BOOL bFullScreen );
+    virtual void                StartPresentation( BOOL bStart );
+    virtual void                SetAlwaysOnTop( BOOL bOnTop );
+    virtual void                ToTop( USHORT nFlags );
+    virtual void                SetPointer( PointerStyle ePointerStyle );
+    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                SetPointerPos( long nX, long nY );
+    virtual void                Flush();
+    virtual void                Sync();
+    virtual void                SetInputContext( SalInputContext* pContext );
+    virtual void                EndExtTextInput( USHORT nFlags );
+    virtual String              GetKeyName( USHORT nKeyCode );
+    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
+    virtual LanguageType        GetInputLanguage();
+    virtual SalBitmap*          SnapShot();
+    virtual void                UpdateSettings( AllSettings& rSettings );
+    virtual void                Beep( SoundType eSoundType );
+    virtual const SystemEnvData*    GetSystemData() const;
+    virtual ULONG               GetCurrentModButtons();
+    virtual void                SetParent( SalFrame* pNewParent );
+    virtual bool                SetPluginParent( SystemParentData* pNewParent );
 };
+
+void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 
 #endif // _SV_SALFRAME_H
