@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:07:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ String RID_POPUP_CELLS
     Text[ chinese_simplified ] = "µ¥ΤªΈρµ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ ÿχεεκ";
     Text[ polish ] = "Menu podrκczne dla komσrek";
-    Text[ japanese ] = "Ξί―Μί±―Μί ÒΖ­° ΎΩ—p";
+    Text[ japanese ] = "ΎΩ‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "ΐx¦s®ζ¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ ααΞαΗνΗ";
     Text[ greek ] = "Αναδυόμενο μενού για κελιά";
@@ -470,10 +470,10 @@ String RID_POPUP_TAB
     Text [ dutch ] = "PopUp-menu voor werkbladenbalk" ;
     Text [ spanish ] = "Menϊ emergente para la barra de hojas" ;
     Text [ english_us ] = "Sheet bar pop-up menu" ;
-    Text[ chinese_simplified ] = "Ή¤Χχ±νΏςµΔµ―³φΚ½²Λµ¥";
+    Text[ chinese_simplified ] = "Ή¤Χχ±ν·ΦÒ³µΔµ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ οΰνελθ λθρςΰ";
     Text[ polish ] = "Menu podrκczne dla paska arkusza";
-    Text[ japanese ] = "Ξί―Μί±―ΜίÒΖ­° Ό°ΔΚή°—p";
+    Text[ japanese ] = "•\\‚Μ©o‚µ‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "¤u§@ªν¤u¨γ¦CªΊ¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αΤΡνΨ ΜΟζα";
     Text[ greek ] = "Αναδυόμενο μενού για γραμμή πίνακα";
@@ -657,7 +657,7 @@ String RID_POPUP_PIVOT
     Text[ chinese_simplified ] = "ΚύΎέΦϊΐνµ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ ρβξδνξι ςΰαλθφϋ";
     Text[ polish ] = "Menu podrκczne dla Pilota danych";
-    Text[ japanese ] = "Ξί―Μί±―ΜίÒΖ­° Γή°ΐ Κί²Ϋ―Δ—p";
+    Text[ japanese ] = "Γή°ΐΚί²Ϋ―Δ‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "Έκ®Ζ§U²z§ΦΕγ¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ ααγΡΤΟ ΗαΒαν ααΘνΗδΗΚ";
     Text[ greek ] = "Αναδυόμενο μενού για τον πιλότο δεδομένων";
@@ -784,7 +784,7 @@ String RID_POPUP_PREVIEW
     Text[ chinese_simplified ] = "Ò³ΓζΤ¤ΚΣµ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ οπεδβΰπθςελόνξγξ οπξρμξςπΰ ρςπΰνθφϋ";
     Text[ polish ] = "Menu podrκczne dla podglΉdu stron";
-    Text[ japanese ] = "Ξί―Μί±―ΜÒΖ­°  Νί°ΌήΜίΪΛή­°";
+    Text[ japanese ] = "Νί°ΌήΜίΪΛή­°‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "­¶­±ΐΛµψ¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αγΪΗνδΙ ΗαΥέΝΙ";
     Text[ greek ] = "Αναδυόμενο μενού προεπισκόπησης σελίδας";
@@ -818,7 +818,7 @@ Menu RID_POPUP_PREVIEW
             Text[ chinese_simplified ] = "ΙΟÒ»Ò³(~P)";
             Text[ russian ] = "Οπεδϋδσωΰÿ ρςπΰνθφΰ";
             Text[ polish ] = "Poprzednia strona";
-            Text[ japanese ] = "‘O‚ΜΝί°Όή(~P)";
+            Text[ japanese ] = "‘OΝί°Όή(~P)";
             Text[ chinese_traditional ] = "¤W¤@­¶(~P)";
             Text[ arabic ] = "ΗαΥέΝΙ ΗαΣΗΘήΙ";
             Text[ greek ] = "Π~ροηγούμενη σελίδα";
@@ -848,7 +848,7 @@ Menu RID_POPUP_PREVIEW
             Text[ chinese_simplified ] = "ΟΒÒ»Ò³(~N)";
             Text[ russian ] = "Ρλεδσώωΰÿ ρςπΰνθφΰ";
             Text[ polish ] = "Nastκpna strona";
-            Text[ japanese ] = "‚ΜΝί°Όή(~N)";
+            Text[ japanese ] = "Νί°Όή(~N)";
             Text[ chinese_traditional ] = "¤U¤@­¶(~N)";
             Text[ arabic ] = "ΗαΥέΝΙ ΗαΚΗανΙ";
             Text[ greek ] = "Επόμε~νη σελίδα";
@@ -879,7 +879,7 @@ Menu RID_POPUP_PREVIEW
             Text[ chinese_simplified ] = "Ò³Γζ°ζΚ½(~G)...";
             Text[ russian ] = "Πΰημεςκΰ ρςπΰνθφϋ...";
             Text[ polish ] = "Uk³ad strony...";
-            Text[ japanese ] = "Νί°Όή Ϊ²±³Δ(~G)...";
+            Text[ japanese ] = "Νί°ΌήΪ²±³Δ(~G)...";
             Text[ chinese_traditional ] = "­¶­±ª©¦΅(~G)...";
             Text[ arabic ] = "ΚΞΨνΨ ΗαΥέΝΙ...";
             Text[ greek ] = "Διάτ~αξη σελίδας...";
@@ -935,10 +935,10 @@ String RID_POPUP_EDIT
     Text [ danish ] = "Popup-menu for tekstinput" ;
     Text [ portuguese ] = "Menu instantβneo para inserηγo de texto" ;
     Text [ portuguese_brazilian ] = "Popup-Menό fόr Texteingabe" ;
-    Text[ chinese_simplified ] = "ΧΦ¶ΞΗψµ―³φΚ½²Λµ¥";
+    Text[ chinese_simplified ] = "ΧΦ¶ΞΚδΘλΐΈµ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ ββξδΰ ςεκρςΰ";
     Text[ polish ] = "Menu podrκczne dla wprowadzenia tekstu";
-    Text[ japanese ] = "Ξί―Μί±―ΜίÒΖ­° Γ·½Δ“ό—Ν—p";
+    Text[ japanese ] = "Γ·½Δ“ό—Ν‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "Δζ¦μ°Ο¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αΕΟΞΗα ΗαδΥ";
     Text[ greek ] = "Αναδυόμενο μενού για την εισαγωγή κειμένου";
@@ -1178,7 +1178,7 @@ String RID_POPUP_AUDIT
     Text[ chinese_simplified ] = "ΥμΜ½-³δΜξ-µ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ πεζθμΰ ηΰλθβκθ ηΰβθρθμξρςθ";
     Text[ polish ] = "Menu podrκczne dla trybu wype³niania detektywa";
-    Text[ japanese ] = "’T’m —sΣ°Δή—pΞί―Μί±―ΜίÒΖ­°";
+    Text[ japanese ] = "ΔΪ°½QΖ³ΎΩ–ξσ•\\¦Σ°Δή‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "°»±΄-¥R¶ρ-¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αζΦΪ ΚΪΘΖΙ ΗαγΞΘΡ";
     Text[ greek ] = "Αναδυόμενο μενού για την κατάσταση γεμίσματος του ανιχνευτή";
@@ -1309,7 +1309,7 @@ Menu RID_POPUP_AUDIT
             Text[ chinese_simplified ] = "ΙΎ³ύΟςΊσµΔΧ·ΧΩΌύΝ·";
             Text[ russian ] = "Σδΰλθςό ηΰβθρθμϋε ÿχεικθ";
             Text[ polish ] = "Usuρ strza³ki zaleΏnoci";
-            Text[ japanese ] = "QΖζ‚Μ‰π";
+            Text[ japanese ] = "QΖζΔΪ°½‚Μν";
             Text[ chinese_traditional ] = "§R°£ΐx¦s®ζ±qΔέ°Ρ·Σ";
             Text[ arabic ] = "ΕÒΗαΙ ΗαΚζΗΘΪ";
             Text[ greek ] = "Διαγρα~φή ίχνους προς το επόμενο";
@@ -1337,7 +1337,7 @@ Menu RID_POPUP_AUDIT
             Text[ chinese_simplified ] = "ΙΎ³ύΘ«²ΏµΔΧ·ΧΩΌύΝ·(~A)";
             Text[ russian ] = "Σαπΰςό βρε ρςπελκθ";
             Text[ polish ] = "Usuρ wszystkie strza³ki";
-            Text[ japanese ] = "‚·‚Χ‚Δ‚ΜΔΪ°½‚π‰π(~A)";
+            Text[ japanese ] = "‚·‚Χ‚Δ‚ΜΔΪ°½‚Μν(~A)";
             Text[ chinese_traditional ] = "§R°£¥ώ³΅ªΊ°lΒά½bΈΉ(~A)";
             Text[ arabic ] = "γΝζ ία ΗαΒΛΗΡ";
             Text[ greek ] = "Δι~αγραφή όλων των ιχνών";
@@ -1367,7 +1367,7 @@ Menu RID_POPUP_AUDIT
             Text[ chinese_simplified ] = "½αΚψ³δΜξΔ£Κ½(~F)";
             Text[ russian ] = "Ηΰκξνχθςό πεζθμ ηΰλθβκθ";
             Text[ polish ] = "Zakoρcz tryb wype³niania";
-            Text[ japanese ] = "ΐsΣ°Δή‚ΜI—Ή";
+            Text[ japanese ] = "ΔΪ°½QΖ³ΎΩ–ξσ•\\¦Σ°Δή‚ΜI—Ή";
             Text[ chinese_traditional ] = "µ²§τ¥R¶ρΌÒ¦΅(~F)";
             Text[ arabic ] = "ΕδεΗΑ ζΦΪ ΗαΚΪΘΖΙ";
             Text[ greek ] = "~Τερματισμός κατάστασης γεμίσματος";
@@ -1392,10 +1392,10 @@ String RID_POPUP_PAGEBREAK
     Text [ spanish ] = "Menϊ emergente para previsualizaciσn de saltos de pαgina" ;
     Text [ french ] = "Menu Pop-up pour l'aperηu des sauts de page" ;
     Text [ dutch ] = "Popup-menu voor voorbeeld van paginaeinde" ;
-    Text[ chinese_simplified ] = "Ò³ΓζΤ¤ΚΣµΔµ―³φΚ½²Λµ¥";
+    Text[ chinese_simplified ] = "»»Ò³Τ¤ΐΐµΔµ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ οπεδβΰπθςελόνξγξ οπξρμξςπΰ πΰηπϋβΰ ρςπΰνθφ";
     Text[ polish ] = "Menu podrκczne dla podglΉdu ³amania strony";
-    Text[ japanese ] = "Ξί―Μί±―ΜίÒΖ­° ‰όΝί°ΌήΜίΪΛή­°—p";
+    Text[ japanese ] = "‰όΝί°ΌήΜίΪΛή­°‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "­¶­±ΐΛµψ¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αγΪΗνδΙ έζΗΥα ΗαΥέΝΗΚ";
     Text[ greek ] = "Αναδυόμενο μενού για προεπισκόπηση αλλαγής σελίδας";
@@ -1541,7 +1541,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_simplified ] = "ΙΎ³ύΘ«²ΏµΔΚΦΉ¤·ΦΈτ·ϋ(~R)";
             Text[ russian ] = "Σαπΰςό βρε πΰηπϋβϋ";
             Text[ polish ] = "Usuρ wszystkie rκczne podzia³y";
-            Text[ japanese ] = "‚·‚Χ‚Δ‚Μθ“®‹ζΨ‚θ‚Μ‰π";
+            Text[ japanese ] = "‚·‚Χ‚Δ‚Μ‰όΝί°Όή‚Μν";
             Text[ chinese_traditional ] = "§R°£¥ώ³΅ªΊ¤β¤u¤ΐΉj²Ε(~R)";
             Text[ arabic ] = "ΕÒΗαΙ ία ΗαέζΗΥα ΗανΟζνΙ";
             Text[ greek ] = "Διαγραφή όλων των ~χειροκίνητων αλλαγών";
