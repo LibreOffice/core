@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-11 15:10:57 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,8 @@ uno::Reference< uno::XInterface >UnoControlDialogModel::createInstance( const ::
         pNewModel = new OGeometryControlModel< UnoControlCurrencyFieldModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlPatternFieldModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlProgressBarModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >;
 
     uno::Reference< uno::XInterface > xNewModel = (::cppu::OWeakObject*)pNewModel;
     return xNewModel;
@@ -302,7 +304,7 @@ uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames
     static uno::Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new uno::Sequence< ::rtl::OUString >( 16 );
+        pNamesSeq = new uno::Sequence< ::rtl::OUString >( 17 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -320,6 +322,7 @@ uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames
         pNames[13] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel );
         pNames[14] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel );
         pNames[15] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
+        pNames[16] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
     }
     return *pNamesSeq;
 }
@@ -3927,4 +3930,130 @@ sal_Bool UnoPatternFieldControl::isStrictFormat() throw(uno::RuntimeException)
 }
 
 
+//  ----------------------------------------------------
+//  class UnoControlProgressBarModel
+//  ----------------------------------------------------
+UnoControlProgressBarModel::UnoControlProgressBarModel()
+{
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_FILLCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE );
+    ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MAX );
+    ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MIN );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+}
 
+::rtl::OUString UnoControlProgressBarModel::getServiceName() const
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBarModel );
+}
+
+uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBar );
+        return aAny;
+    }
+
+    return UnoControlModel::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoControlProgressBarModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+
+//  ----------------------------------------------------
+//  class UnoProgressBarControl
+//  ----------------------------------------------------
+UnoProgressBarControl::UnoProgressBarControl()
+{
+}
+
+::rtl::OUString UnoProgressBarControl::GetComponentServiceName()
+{
+    return ::rtl::OUString::createFromAscii( "ProgressBar" );
+}
+
+// uno::XInterface
+uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XProgressBar*, this ) );
+    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
+}
+
+// lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( UnoProgressBarControl )
+    getCppuType( ( uno::Reference< awt::XProgressBar>* ) NULL ),
+    UnoControlBase::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// ::com::sun::star::awt::XProgressBar
+void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= nColor;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), aAny, sal_True );
+}
+
+void UnoProgressBarControl::setBackgroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= nColor;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), aAny, sal_True );
+}
+
+void UnoProgressBarControl::setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= nValue;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), aAny, sal_True );
+}
+
+void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException )
+{
+    uno::Any aMin;
+    uno::Any aMax;
+
+    if ( nMin < nMax )
+    {
+        // take correct min and max
+        aMin <<= nMin;
+        aMax <<= nMax;
+    }
+    else
+    {
+        // change min and max
+        aMin <<= nMax;
+        aMax <<= nMin;
+    }
+
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE_MIN ), aMin, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE_MAX ), aMax, sal_True );
+}
+
+sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::RuntimeException)
+{
+    return ImplGetPropertyValue_INT32( BASEPROPERTY_PROGRESSVALUE );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:53:45 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@
 #include <calendar.hxx>
 #endif
 
+#ifndef _PRGSBAR_HXX
+#include <prgsbar.hxx>
+#endif
+
 //  ----------------------------------------------------
 //  help function for the toolkit...
 //  ----------------------------------------------------
@@ -169,6 +173,19 @@ Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::Windo
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( TRUE );
         *ppNewComp = new VCLXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
+    }
+    else if ( aServiceName.EqualsIgnoreCaseAscii( "ProgressBar" ) )
+    {
+        if ( pParent )
+        {
+            pWindow = new ProgressBar( pParent, nWinBits );
+            *ppNewComp = new VCLXProgressBar;
+        }
+        else
+        {
+            *ppNewComp = NULL;
+            return NULL;
+        }
     }
     return pWindow;
 }
@@ -1727,4 +1744,244 @@ void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
     }
     return SVTXFormattedField::getProperty(PropertyName);
 }
+
+
+//  ----------------------------------------------------
+//  class VCLXProgressBar
+//  ----------------------------------------------------
+
+VCLXProgressBar::VCLXProgressBar()
+            :m_nValue(0)
+            ,m_nValueMin(0)
+            ,m_nValueMax(100)
+{
+}
+
+VCLXProgressBar::~VCLXProgressBar()
+{
+}
+
+void VCLXProgressBar::ImplUpdateValue()
+{
+    ProgressBar* pProgressBar = (ProgressBar*) GetWindow();
+    if ( pProgressBar )
+    {
+        sal_Int32 nVal;
+        sal_Int32 nValMin;
+        sal_Int32 nValMax;
+
+        // check min and max
+        if (m_nValueMin < m_nValueMax)
+        {
+            nValMin = m_nValueMin;
+            nValMax = m_nValueMax;
+        }
+        else
+        {
+            nValMin = m_nValueMax;
+            nValMax = m_nValueMin;
+        }
+
+        // check value
+        if (m_nValue < nValMin)
+        {
+            nVal = nValMin;
+        }
+        else if (m_nValue > nValMax)
+        {
+            nVal = nValMax;
+        }
+        else
+        {
+            nVal = m_nValue;
+        }
+
+        // calculate percent
+        sal_Int32 nPercent;
+        if (nValMin != nValMax)
+        {
+            nPercent = 100 * (nVal - nValMin) / (nValMax - nValMin);
+        }
+        else
+        {
+            nPercent = 0;
+        }
+
+        // set progressbar value
+        pProgressBar->SetValue( (USHORT) nPercent );
+    }
+}
+
+// ::com::sun::star::uno::XInterface
+::com::sun::star::uno::Any VCLXProgressBar::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XProgressBar*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
+    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXProgressBar )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar>* ) NULL ),
+    VCLXWindow::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// ::com::sun::star::awt::XProgressBar
+void VCLXProgressBar::setForegroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        Color aColor( nColor );
+        pWindow->SetControlForeground( aColor );
+    }
+}
+
+void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        Color aColor( nColor );
+        pWindow->SetBackground( aColor );
+        pWindow->SetControlBackground( aColor );
+        pWindow->Invalidate();
+    }
+}
+
+void VCLXProgressBar::setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    m_nValue = nValue;
+    ImplUpdateValue();
+}
+
+void VCLXProgressBar::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException )
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    if ( nMin < nMax )
+    {
+        // take correct min and max
+        m_nValueMin = nMin;
+        m_nValueMax = nMax;
+    }
+    else
+    {
+        // change min and max
+        m_nValueMin = nMax;
+        m_nValueMax = nMin;
+    }
+
+    ImplUpdateValue();
+}
+
+sal_Int32 VCLXProgressBar::getValue() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    return m_nValue;
+}
+
+// ::com::sun::star::awt::VclWindowPeer
+void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ProgressBar* pProgressBar = (ProgressBar*)GetWindow();
+    if ( pProgressBar )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_PROGRESSVALUE:
+            {
+                if ( Value >>= m_nValue )
+                    ImplUpdateValue();
+            }
+            break;
+            case BASEPROPERTY_PROGRESSVALUE_MIN:
+            {
+                if ( Value >>= m_nValueMin )
+                    ImplUpdateValue();
+            }
+            break;
+            case BASEPROPERTY_PROGRESSVALUE_MAX:
+            {
+                if ( Value >>= m_nValueMax )
+                    ImplUpdateValue();
+            }
+            break;
+            case BASEPROPERTY_FILLCOLOR:
+            {
+                Window* pWindow = GetWindow();
+                if ( pWindow )
+                {
+                    sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+
+                    if ( bVoid )
+                    {
+                        pWindow->SetControlForeground();
+                    }
+                    else
+                    {
+                        sal_Int32 nColor;
+                        if ( Value >>= nColor )
+                        {
+                            Color aColor( nColor );
+                            pWindow->SetControlForeground( aColor );
+                        }
+                    }
+                }
+            }
+            break;
+            default:
+            {
+                VCLXWindow::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+::com::sun::star::uno::Any VCLXProgressBar::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Any aProp;
+    ProgressBar* pProgressBar = (ProgressBar*)GetWindow();
+    if ( pProgressBar )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_PROGRESSVALUE:
+            {
+                 aProp <<= m_nValue;
+            }
+            break;
+            case BASEPROPERTY_PROGRESSVALUE_MIN:
+            {
+                 aProp <<= m_nValueMin;
+            }
+            break;
+            case BASEPROPERTY_PROGRESSVALUE_MAX:
+            {
+                 aProp <<= m_nValueMax;
+            }
+            break;
+            default:
+            {
+                aProp <<= VCLXWindow::getProperty( PropertyName );
+            }
+        }
+    }
+    return aProp;
+}
+
 

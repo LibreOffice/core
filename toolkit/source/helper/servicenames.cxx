@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicenames.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:54:18 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,5 +116,5 @@ const sal_Char __FAR_DATA szServiceName_UnoControlFormattedFieldModel[] = "stard
 const sal_Char __FAR_DATA szServiceName_MVCIntrospection[] = "stardiv.vcl.MVCIntrospection", szServiceName2_MVCIntrospection[] = "com.sun.star.awt.MVCIntrospection";
 const sal_Char __FAR_DATA szServiceName_ImageProducer[] = "stardiv.vcl.ImageProducer", szServiceName2_ImageProducer[] = "com.sun.star.awt.ImageProducer";
 const sal_Char __FAR_DATA szServiceName_PrinterServer[] = "stardiv.vcl.PrinterServer", szServiceName2_PrinterServer[] = "com.sun.star.awt.PrinterServer";
-
-
+const sal_Char __FAR_DATA szServiceName_UnoControlProgressBar[] = "stardiv.vcl.control.ProgressBar", szServiceName2_UnoControlProgressBar[] = "com.sun.star.awt.UnoControlProgressBar";
+const sal_Char __FAR_DATA szServiceName_UnoControlProgressBarModel[] = "stardiv.vcl.controlmodel.ProgressBar", szServiceName2_UnoControlProgressBarModel[] = "com.sun.star.awt.UnoControlProgressBarModel";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-23 13:31:49 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "MultiSelection" ),     BASEPROPERTY_MULTISELECTION,    ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "PrependCurrencySymbol" ),  BASEPROPERTY_CURSYM_POSITION,   ::getBooleanCppuType(),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Printable" ),          BASEPROPERTY_PRINTABLE,         ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ProgressValue" ),      BASEPROPERTY_PROGRESSVALUE,     ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID, sal_True ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ProgressValueMax" ),   BASEPROPERTY_PROGRESSVALUE_MAX, ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ProgressValueMin" ),   BASEPROPERTY_PROGRESSVALUE_MIN, ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ReadOnly" ),           BASEPROPERTY_READONLY,          ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "SelectedItems" ),      BASEPROPERTY_SELECTEDITEMS,     ::getCppuType((::com::sun::star::uno::Sequence<sal_Int16>*)0),      ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ShowThousandsSeparator" ), BASEPROPERTY_NUMSHOWTHOUSANDSEP,::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:20:54 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ IMPL_CREATEINSTANCE( UnoControlNumericFieldModel )
 IMPL_CREATEINSTANCE( UnoControlPatternFieldModel )
 IMPL_CREATEINSTANCE( UnoControlRadioButtonModel )
 IMPL_CREATEINSTANCE( UnoControlTimeFieldModel )
+IMPL_CREATEINSTANCE( UnoControlProgressBarModel )
 IMPL_CREATEINSTANCE( UnoCurrencyFieldControl )
 IMPL_CREATEINSTANCE( UnoDateFieldControl )
 IMPL_CREATEINSTANCE( UnoDialogControl )
@@ -167,6 +168,7 @@ IMPL_CREATEINSTANCE( UnoNumericFieldControl )
 IMPL_CREATEINSTANCE( UnoPatternFieldControl )
 IMPL_CREATEINSTANCE( UnoRadioButtonControl )
 IMPL_CREATEINSTANCE( UnoTimeFieldControl )
+IMPL_CREATEINSTANCE( UnoProgressBarControl )
 IMPL_CREATEINSTANCE( VCLXMenuBar )
 IMPL_CREATEINSTANCE( VCLXPointer )
 IMPL_CREATEINSTANCE( VCLXPopupMenu )
@@ -232,6 +234,8 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         REGISTER_SERVICES( UnoControlFixedTextModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedTextModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel ) );
         REGISTER_SERVICES( UnoGroupBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBox ) );
         REGISTER_SERVICES( UnoControlGroupBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel ) );
+        REGISTER_SERVICES( UnoProgressBarControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBar ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBar ) );
+        REGISTER_SERVICES( UnoControlProgressBarModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBarModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel ) );
         REGISTER_SERVICES( VCLXPrinterServer, ::rtl::OUString::createFromAscii( szServiceName_PrinterServer ), ::rtl::OUString::createFromAscii( szServiceName2_PrinterServer ) );
         return sal_True;
     }
@@ -290,6 +294,8 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
         else CHECKANDCREATEFACTORY( UnoControlFixedTextModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedTextModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel ) )
         else CHECKANDCREATEFACTORY( UnoGroupBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBox ) )
         else CHECKANDCREATEFACTORY( UnoControlGroupBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel ) )
+        else CHECKANDCREATEFACTORY( UnoProgressBarControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBar ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBar ) )
+        else CHECKANDCREATEFACTORY( UnoControlProgressBarModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBarModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel ) )
         else CHECKANDCREATEFACTORY( VCLXPrinterServer, ::rtl::OUString::createFromAscii( szServiceName_PrinterServer ), ::rtl::OUString::createFromAscii( szServiceName2_PrinterServer ) )
     }
     return pRet;

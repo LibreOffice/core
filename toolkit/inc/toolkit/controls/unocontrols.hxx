@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-11 15:10:03 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XPATTERNFIELD_HPP_
 #include <com/sun/star/awt/XPatternField.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XPROGRESSBAR_HPP_
+#include <com/sun/star/awt/XProgressBar.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -1435,6 +1438,59 @@ public:
 
 };
 
+//  ----------------------------------------------------
+//  class UnoControlProgressBarModel
+//  ----------------------------------------------------
+class UnoControlProgressBarModel :  public UnoControlModel
+{
+protected:
+    ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
+
+public:
+                        UnoControlProgressBarModel();
+                        UnoControlProgressBarModel( const UnoControlProgressBarModel& rModel ) : UnoControlModel( rModel ) {;}
+
+    UnoControlModel*    Clone() const { return new UnoControlProgressBarModel( *this ); }
+
+    ::rtl::OUString     getServiceName() const;
+
+    // ::com::sun::star::beans::XMultiPropertySet
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    DECLIMPL_SERVICEINFO( UnoControlProgressBarModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel ) )
+};
+
+//  ----------------------------------------------------
+//  class UnoProgressBarControl
+//  ----------------------------------------------------
+class UnoProgressBarControl :   public UnoControlBase,
+                                public ::com::sun::star::awt::XProgressBar
+{
+public:
+                                UnoProgressBarControl();
+    ::rtl::OUString             GetComponentServiceName();
+
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::release(); }
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XProgressBar
+    void SAL_CALL setForegroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setBackgroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException );
+    sal_Int32 SAL_CALL getValue() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO( UnoProgressBarControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBar ) )
+};
 
 
 #endif // _TOOLKIT_HELPER_UNOCONTROLS_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 09:37:26 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,26 +298,30 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_DATESHOWCENTURY:
             case BASEPROPERTY_TIME:
             case BASEPROPERTY_VALUE_DOUBLE:
-            case BASEPROPERTY_BACKGROUNDCOLOR:  break;
+            case BASEPROPERTY_PROGRESSVALUE:
+            case BASEPROPERTY_BACKGROUNDCOLOR:
+            case BASEPROPERTY_FILLCOLOR:            break;
 
             case BASEPROPERTY_MAXTEXTLEN:
             case BASEPROPERTY_STATE:
             case BASEPROPERTY_EXTDATEFORMAT:
             case BASEPROPERTY_EXTTIMEFORMAT:
-            case BASEPROPERTY_ECHOCHAR:         aDefault <<= (sal_Int16) 0; break;
-            case BASEPROPERTY_BORDER:           aDefault <<= (sal_Int16) 1; break;
-            case BASEPROPERTY_DECIMALACCURACY:  aDefault <<= (sal_Int16) 2; break;
-            case BASEPROPERTY_LINECOUNT:        aDefault <<= (sal_Int16) 5; break;
-            case BASEPROPERTY_ALIGN:            aDefault <<= (sal_Int16) PROPERTY_ALIGN_LEFT; break;
+            case BASEPROPERTY_ECHOCHAR:             aDefault <<= (sal_Int16) 0; break;
+            case BASEPROPERTY_BORDER:               aDefault <<= (sal_Int16) 1; break;
+            case BASEPROPERTY_DECIMALACCURACY:      aDefault <<= (sal_Int16) 2; break;
+            case BASEPROPERTY_LINECOUNT:            aDefault <<= (sal_Int16) 5; break;
+            case BASEPROPERTY_ALIGN:                aDefault <<= (sal_Int16) PROPERTY_ALIGN_LEFT; break;
 
-            case BASEPROPERTY_DATEMAX:          aDefault <<= (sal_Int32) Date( 31, 12, 2200 ).GetDate();    break;
-            case BASEPROPERTY_DATEMIN:          aDefault <<= (sal_Int32) Date( 1, 1, 1900 ).GetDate();  break;
-            case BASEPROPERTY_TIMEMAX:          aDefault <<= (sal_Int32) Time( 23, 59 ).GetTime();  break;
-            case BASEPROPERTY_TIMEMIN:          aDefault <<= (sal_Int32) 0;     break;
-            case BASEPROPERTY_VALUEMAX_DOUBLE:  aDefault <<= (double) 1000000;  break;
-            case BASEPROPERTY_VALUEMIN_DOUBLE:  aDefault <<= (double) -1000000; break;
-            case BASEPROPERTY_VALUESTEP_DOUBLE: aDefault <<= (double ) 1;       break;
-            case BASEPROPERTY_DEFAULTCONTROL:   aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
+            case BASEPROPERTY_DATEMAX:              aDefault <<= (sal_Int32) Date( 31, 12, 2200 ).GetDate();    break;
+            case BASEPROPERTY_DATEMIN:              aDefault <<= (sal_Int32) Date( 1, 1, 1900 ).GetDate();  break;
+            case BASEPROPERTY_TIMEMAX:              aDefault <<= (sal_Int32) Time( 23, 59 ).GetTime();  break;
+            case BASEPROPERTY_TIMEMIN:              aDefault <<= (sal_Int32) 0;     break;
+            case BASEPROPERTY_VALUEMAX_DOUBLE:      aDefault <<= (double) 1000000;  break;
+            case BASEPROPERTY_VALUEMIN_DOUBLE:      aDefault <<= (double) -1000000; break;
+            case BASEPROPERTY_VALUESTEP_DOUBLE:     aDefault <<= (double ) 1;       break;
+            case BASEPROPERTY_PROGRESSVALUE_MAX:    aDefault <<= (sal_Int32) 100;     break;
+            case BASEPROPERTY_PROGRESSVALUE_MIN:    aDefault <<= (sal_Int32)   0;     break;
+            case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
 
             case BASEPROPERTY_MOVEABLE:
             case BASEPROPERTY_CLOSEABLE:
@@ -333,11 +337,11 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_VSCROLL:
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             case BASEPROPERTY_STRICTFORMAT:
-            case BASEPROPERTY_HARDLINEBREAKS:   aDefault <<= (sal_Bool) sal_False; break;
+            case BASEPROPERTY_HARDLINEBREAKS:       aDefault <<= (sal_Bool) sal_False; break;
 
             case BASEPROPERTY_AUTOCOMPLETE:
             case BASEPROPERTY_ENABLED:
-            case BASEPROPERTY_PRINTABLE:        aDefault <<= (sal_Bool) sal_True;   break;
+            case BASEPROPERTY_PRINTABLE:            aDefault <<= (sal_Bool) sal_True;   break;
 
             case BASEPROPERTY_HELPTEXT:
             case BASEPROPERTY_HELPURL:
@@ -346,7 +350,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_LITERALMASK:
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
-            case BASEPROPERTY_TEXT:             aDefault <<= ::rtl::OUString(); break;
+            case BASEPROPERTY_TEXT:                 aDefault <<= ::rtl::OUString(); break;
 
             case BASEPROPERTY_STRINGITEMLIST:
             {
