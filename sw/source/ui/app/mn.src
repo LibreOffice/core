@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:23:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ String MN_FRM_POPUPMENU
     Text[ chinese_simplified ] = "Ώς";
     Text[ russian ] = "Πΰμκΰ";
     Text[ polish ] = "ramka";
-    Text[ japanese ] = "Γ·½Δ Ξή―Έ½";
+    Text[ japanese ] = "Γ·½ΔΞή―Έ½";
     Text[ chinese_traditional ] = "¤ε¥»¤θ¶τ";
     Text[ arabic ] = "ίΗΟΡ";
     Text[ greek ] = "Περίγραμμα";
@@ -468,7 +468,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσ ΞΔΧΦ";
     Text[ russian ] = "Òεκρς γπΰτθχερκξγξ ξαϊεκςΰ";
     Text[ polish ] = "Tekst w obiekcie rysunkowym";
-    Text[ japanese ] = "}`µΜήΌήªΈΔ Γ·½Δ";
+    Text[ japanese ] = "}`µΜήΌήªΈΔΓ·½Δ";
     Text[ chinese_traditional ] = "ΓΈΉΟª«¥σ ¤ε¦r";
     Text[ arabic ] = "δΥ ίΗΖδ ΡΣζγν";
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
