@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-01 14:08:06 $
+ *  last change: $Author: rt $ $Date: 2001-02-07 16:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,9 +218,13 @@ final void DestroySalInstance( SalInstance *pInst )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final SalInstance::SalInstance()
 {
-    maInstData.mpFilterCallback = NULL;
-    maInstData.mpFilterInst     = NULL;
-    maInstData.mpSalYieldMutex  = new SalYieldMutex;
+    maInstData.mpFilterCallback     = NULL;
+    maInstData.mpFilterInst         = NULL;
+    maInstData.mpEventInst          = NULL;
+    maInstData.mpEventCallback      = NULL;
+    maInstData.mpErrorEventInst     = NULL;
+    maInstData.mpErrorEventCallback = NULL;
+    maInstData.mpSalYieldMutex      = new SalYieldMutex;
     maInstData.mpSalYieldMutex->acquire();
 }
 
