@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfileview.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:26:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
     Maxable                 = TRUE ;
     Moveable                = TRUE ;
     Closeable               = TRUE ;
-    Text                    = "XML-Filter Ausgabe" ;
-    Text [ english_us ]     = "XML Filter output" ;
+    Text [ de ] = "XML-Filter Ausgabe" ;
+    Text [ en-US ]      = "XML Filter output" ;
 
     PushButton PB_VALIDATE
     {
@@ -85,61 +85,9 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
         Size                = MAP_APPFONT ( 60 , 14 ) ;
         TabStop             = TRUE ;
         HelpId              = HID_XML_SOURCE_FILE_VALIDATE;
-        Text                = "~Validieren";
-        Text[ english_us ]  = "~Validate";
-        Text[ french ] = "Valider";
-        Text[ spanish ] = "~Confirmar";
-        Text[ italian ] = "~Conferma";
-        Text[ swedish ] = "~Validera";
-        Text[ japanese ] = "検証(~V)";
-        Text[ korean ] = "검증(~V)";
-        Text[ chinese_simplified ] = "验证(~V)";
-        Text[ chinese_traditional ] = "驗證(~V)";
-        Text[ slovak ] = "Pot~vrdiť";
-        Text[ portuguese_brazilian ] = "~Validar";
-        Text[ greek ] = "~Validate";
-        Text[ dutch ] = "~Valideren";
-        Text[ finnish ] = "~Validate";
-        Text[ czech ] = "Validovat";
-        Text[ danish ] = "~Valider";
-        Text[ arabic ] = "~Validate";
-        Text[ hebrew ] = "~Validate";
-        Text[ catalan ] = "~Validate";
-        Text[ hindi ] = "~Validate";
-        Text[ portuguese ] = "~Validate";
-        Text[ russian ] = "~Validate";
-        Text[ polish ] = "~Validate";
-        Text[ turkish ] = "~Validate";
-        Text[ thai ] = "~Validate";
-        Text[ hungarian ] = "Ér~vényesítés";
-        Text[ slovenian ] = "~Oceni";
+        Text [ de ] = "~Validieren";
+        Text [ en-US ]  = "~Validate";
     };
-    Text[ french ] = "Sortie filtre XML";
-    Text[ spanish ] = "Salida filtro XML";
-    Text[ italian ] = "Uscita filtro XML";
-    Text[ swedish ] = "XML-filterutdata";
-    Text[ japanese ] = "XML フィルタのアウトプット";
-    Text[ korean ] = "XML 필터 출력";
-    Text[ chinese_simplified ] = "XML 筛选器输出";
-    Text[ chinese_traditional ] = "XML 篩選器匯出";
-    Text[ slovak ] = "XML Filter výstup";
-    Text[ portuguese_brazilian ] = "Sa�da do filtro XML";
-    Text[ greek ] = "������ ������� XML";
-    Text[ dutch ] = "XML-filter output";
-    Text[ finnish ] = "XML Filter output";
-    Text[ czech ] = "Výstup XML filtru";
-    Text[ danish ] = "XML-filter udtr�k";
-    Text[ arabic ] = "XML Filter output";
-    Text[ hebrew ] = "XML Filter output";
-    Text[ catalan ] = "XML Filter output";
-    Text[ hindi ] = "XML Filter output";
-    Text[ portuguese ] = "XML Filter output";
-    Text[ russian ] = "XML Filter output";
-    Text[ polish ] = "XML Filter output";
-    Text[ turkish ] = "XML Filter output";
-    Text[ thai ] = "XML Filter output";
-    Text[ hungarian ] = "XML-szűrő kimenete";
-    Text[ slovenian ] = "Izhod XML filtra";
 };
 
 
