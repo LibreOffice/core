@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 21:03:13 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1844,7 +1844,7 @@ String STR_DRAWMODE
     Text[ swedish ] = "Grafikläge:  ";
     Text[ polish ] = "Tryb grafiki: ";
     Text[ portuguese_brazilian ] = "Graphics mode: ";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ: ";
+    Text[ japanese ] = "}Ó°ÄŞ: ";
     Text[ korean ] = "±×·¡ÇÈ ¸ğµå: ";
     Text[ chinese_simplified ] = "Í¼ĞÎÄ£Ê½£º ";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡¡G ";
