@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-21 14:43:03 $
+ *  last change: $Author: aw $ $Date: 2001-06-27 14:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,14 @@
 #include "svdpagv.hxx"
 #include "svdpage.hxx"
 #include "svdetc.hxx"
+
+#ifndef _E3D_SCENE3D_HXX
+#include "scene3d.hxx"
+#endif
+
+#ifndef _E3D_VIEW3D_HXX
+#include "view3d.hxx"
+#endif
 
 #define XOR_CREATE_PEN          PEN_SOLID
 
@@ -731,7 +739,33 @@ BOOL SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 SdrLayerID nLayer=rAd.GetLayerID(aAktLayer,TRUE);
                 if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
                 pObjMerk->SetLayer(nLayer);
-                InsertObject(pObjMerk,*pPVMerk);
+
+                // #83403# recognize creation of a new 3D object inside a 3D scene
+                BOOL bSceneIntoScene(FALSE);
+
+                if(pObjMerk
+                    && pObjMerk->ISA(E3dScene)
+                    && pPVMerk
+                    && pPVMerk->GetAktGroup()
+                    && pPVMerk->GetAktGroup()->ISA(E3dScene))
+                {
+                    BOOL bDidInsert = ((E3dView*)this)->ImpCloneAll3DObjectsToDestScene(
+                        (E3dScene*)pObjMerk, (E3dScene*)pPVMerk->GetAktGroup());
+                    if(bDidInsert)
+                    {
+                        // delete object, it's content is cloned and inserted
+                        delete pAktCreate;
+                        bRet = FALSE;
+                        bSceneIntoScene = TRUE;
+                    }
+                }
+
+                if(!bSceneIntoScene)
+                {
+                    // do the same as before
+                    InsertObject(pObjMerk,*pPVMerk);
+                }
+
                 bRet=TRUE;
             } else {
                 delete pAktCreate;

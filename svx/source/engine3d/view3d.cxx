@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-19 11:04:56 $
+ *  last change: $Author: aw $ $Date: 2001-06-27 14:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,154 +520,40 @@ SdrModel* E3dView::GetMarkedObjModel() const
 |*
 \************************************************************************/
 
-BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos,
-    SdrObjList* pLst, UINT32 nOptions)
+BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     BOOL bRetval = FALSE;
 
     // Liste holen
     Point aPos(rPos);
-    SdrObjList* pDestList = pLst;
-    ImpGetPasteObjList(aPos,pDestList);
-    if(pDestList==NULL)
+    SdrObjList* pDstList = pLst;
+    ImpGetPasteObjList(aPos, pDstList);
+
+    if(!pDstList)
         return FALSE;
 
     // Owner der Liste holen
-    SdrObject* pOwner = pDestList->GetOwnerObj();
+    SdrObject* pOwner = pDstList->GetOwnerObj();
     if(pOwner && pOwner->ISA(E3dScene))
     {
-        E3dScene* pDestScene = (E3dScene*)pOwner;
-        B3dCamera& rCameraSetDst = pDestScene->GetCameraSet();
-        BOOL bDstInserted = FALSE;
+        E3dScene* pDstScene = (E3dScene*)pOwner;
+        BOOL bDstInserted(FALSE);
         BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXCHANGE_PASTE));
 
         // Alle Objekte aus E3dScenes kopieren und direkt einfuegen
-        for(UINT16 nPg=0; nPg < rMod.GetPageCount(); nPg++)
+        for(sal_uInt16 nPg(0); nPg < rMod.GetPageCount(); nPg++)
         {
             const SdrPage* pSrcPg=rMod.GetPage(nPg);
-            UINT32 nObAnz=pSrcPg->GetObjCount();
+            sal_uInt32 nObAnz(pSrcPg->GetObjCount());
 
             // Unterobjekte von Szenen einfuegen
-            for(UINT32 nOb=0; nOb<nObAnz; nOb++)
+            for(sal_uInt32 nOb(0); nOb < nObAnz; nOb++)
             {
-                const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
+                const SdrObject* pSrcOb = pSrcPg->GetObj(nOb);
                 if(pSrcOb->ISA(E3dScene))
                 {
                     E3dScene* pSrcScene = (E3dScene*)pSrcOb;
-                    B3dCamera& rCameraSetSrc = pSrcScene->GetCameraSet();
-
-                    for(UINT32 i = 0;i < pSrcScene->GetSubList()->GetObjCount(); i++)
-                    {
-                        SdrObject* pObj = pSrcScene->GetSubList()->GetObj(i);
-                        if(pObj && pObj->ISA(E3dCompoundObject))
-                        {
-                            // Kopieren
-                            E3dObject* pNew = (E3dObject*)pObj->Clone(
-                                pDestScene->GetPage(), pDestScene->GetModel());
-                            if(pNew)
-                            {
-                                // Neues Objekt in Szene einfuegen
-                                pNew->NbcSetLayer(pObj->GetLayer());
-                                pNew->NbcSetStyleSheet(pObj->GetStyleSheet(), TRUE);
-                                pDestScene->Insert3DObj(pNew);
-                                bDstInserted = TRUE;
-
-                                // Transformation ObjectToEye Src
-                                Matrix4D aMatSrc;
-                                aMatSrc = ((E3dCompoundObject*)pObj)->GetFullTransform();
-                                aMatSrc *= rCameraSetSrc.GetOrientation();
-
-                                // Tanslation und scale von source
-                                B3dVolume aDevVolSrc = rCameraSetSrc.GetDeviceVolume();
-
-                                // auf Augkoordinaten umstellen
-                                double fTemp = aDevVolSrc.MinVec().Z();
-                                aDevVolSrc.MinVec().Z() = -aDevVolSrc.MaxVec().Z();
-                                aDevVolSrc.MaxVec().Z() = -fTemp;
-
-                                Vector3D aProjScaleSrc(
-                                    2.0 / aDevVolSrc.GetWidth(),
-                                    2.0 / aDevVolSrc.GetHeight(),
-                                    2.0 / aDevVolSrc.GetDepth());
-                                Vector3D aProjTransSrc(
-                                    -1.0 * ((aDevVolSrc.MaxVec().X() + aDevVolSrc.MinVec().X()) / aDevVolSrc.GetWidth()),
-                                    -1.0 * ((aDevVolSrc.MaxVec().Y() + aDevVolSrc.MinVec().Y()) / aDevVolSrc.GetHeight()),
-                                    -1.0 * ((aDevVolSrc.MaxVec().Z() + aDevVolSrc.MinVec().Z()) / aDevVolSrc.GetDepth()));
-                                Vector3D aViewScaleSrc(rCameraSetSrc.GetScale());
-                                aViewScaleSrc.Z() = 1.0;
-
-                                // Tanslation und scale von dest
-                                B3dVolume aDevVolDst = rCameraSetDst.GetDeviceVolume();
-
-                                // auf Augkoordinaten umstellen
-                                fTemp = aDevVolDst.MinVec().Z();
-                                aDevVolDst.MinVec().Z() = -aDevVolDst.MaxVec().Z();
-                                aDevVolDst.MaxVec().Z() = -fTemp;
-
-                                Vector3D aProjScaleDst(
-                                    2.0 / aDevVolDst.GetWidth(),
-                                    2.0 / aDevVolDst.GetHeight(),
-                                    2.0 / aDevVolDst.GetDepth());
-                                Vector3D aProjTransDst(
-                                    -1.0 * ((aDevVolDst.MaxVec().X() + aDevVolDst.MinVec().X()) / aDevVolDst.GetWidth()),
-                                    -1.0 * ((aDevVolDst.MaxVec().Y() + aDevVolDst.MinVec().Y()) / aDevVolDst.GetHeight()),
-                                    -1.0 * ((aDevVolDst.MaxVec().Z() + aDevVolDst.MinVec().Z()) / aDevVolDst.GetDepth()));
-                                Vector3D aViewScaleDst(rCameraSetDst.GetScale());
-                                aViewScaleDst.Z() = 1.0;
-
-                                // Groesse des Objektes in Augkoordinaten Src
-                                Volume3D aObjVolSrc;
-                                aObjVolSrc.Union(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatSrc));
-
-                                // Vorlaeufige Groesse in Augkoordinaten Dst
-                                Matrix4D aMatZwi = aMatSrc;
-                                aMatZwi.Scale(aProjScaleSrc);
-                                aMatZwi.Translate(aProjTransSrc);
-                                aMatZwi.Scale(aViewScaleSrc);
-
-                                Matrix4D aMatDst;
-                                aMatDst.Scale(aProjScaleDst);
-                                aMatDst.Translate(aProjTransDst);
-                                aMatDst.Scale(aViewScaleDst);
-                                aMatDst.Invert();
-
-                                aMatZwi *= aMatDst;
-
-                                Volume3D aObjVolDst;
-                                aObjVolDst.Union(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatZwi));
-
-                                // Beide verhaeltnistiefen berechnen und mitteln
-                                double fDepthOne = (aObjVolSrc.GetDepth() * aObjVolDst.GetWidth()) / aObjVolSrc.GetWidth();
-                                double fDepthTwo = (aObjVolSrc.GetDepth() * aObjVolDst.GetHeight()) / aObjVolSrc.GetHeight();
-                                double fWantedDepth = (fDepthOne + fDepthTwo) / 2.0;
-
-                                // Faktor zum Tiefe anpassen bilden
-                                double fFactor = fWantedDepth / aObjVolDst.GetDepth();
-                                Vector3D aDepthScale(1.0, 1.0, fFactor);
-
-                                // Endgueltige Transformation bilden
-                                aMatSrc.Scale(aProjScaleSrc);
-                                aMatSrc.Translate(aProjTransSrc);
-                                aMatSrc.Scale(aViewScaleSrc);
-                                aMatSrc.Scale(aDepthScale);
-
-                                aMatDst = pDestScene->GetFullTransform();
-                                aMatDst *= rCameraSetDst.GetOrientation();
-                                aMatDst.Scale(aProjScaleDst);
-                                aMatDst.Translate(aProjTransDst);
-                                aMatDst.Scale(aViewScaleDst);
-                                aMatDst.Invert();
-
-                                aMatSrc *= aMatDst;
-
-                                // Neue Objekttransformation setzen
-                                pNew->NbcSetTransform(aMatSrc);
-
-                                // Undo anlegen
-                                AddUndo(new SdrUndoNewObj(*pNew));
-                            }
-                        }
-                    }
+                    bDstInserted = ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene);
                 }
             }
         }
@@ -676,8 +562,8 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos,
         // DestScene anpassen
         if(bDstInserted)
         {
-            pDestScene->SetRectsDirty();
-            pDestScene->CorrectSceneDimensions();
+            pDstScene->SetRectsDirty();
+            pDstScene->CorrectSceneDimensions();
             bRetval = TRUE;
         }
     }
@@ -688,6 +574,132 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos,
     }
 
     // und Rueckgabewert liefern
+    return bRetval;
+}
+
+// #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
+BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene)
+{
+    BOOL bRetval(FALSE);
+
+    if(pSrcScene && pDstScene)
+    {
+        B3dCamera& rCameraSetDst = pDstScene->GetCameraSet();
+        B3dCamera& rCameraSetSrc = pSrcScene->GetCameraSet();
+
+        for(sal_uInt32 i(0); i < pSrcScene->GetSubList()->GetObjCount(); i++)
+        {
+            SdrObject* pObj = pSrcScene->GetSubList()->GetObj(i);
+            if(pObj && pObj->ISA(E3dCompoundObject))
+            {
+                // Kopieren
+                E3dObject* pNew = (E3dObject*)pObj->Clone(pDstScene->GetPage(), pDstScene->GetModel());
+                if(pNew)
+                {
+                    // Neues Objekt in Szene einfuegen
+                    pNew->NbcSetLayer(pObj->GetLayer());
+                    pNew->NbcSetStyleSheet(pObj->GetStyleSheet(), TRUE);
+                    pDstScene->Insert3DObj(pNew);
+                    bRetval = TRUE;
+
+                    // Transformation ObjectToEye Src
+                    Matrix4D aMatSrc;
+                    aMatSrc = ((E3dCompoundObject*)pObj)->GetFullTransform();
+                    aMatSrc *= rCameraSetSrc.GetOrientation();
+
+                    // Tanslation und scale von source
+                    B3dVolume aDevVolSrc = rCameraSetSrc.GetDeviceVolume();
+
+                    // auf Augkoordinaten umstellen
+                    double fTemp = aDevVolSrc.MinVec().Z();
+                    aDevVolSrc.MinVec().Z() = -aDevVolSrc.MaxVec().Z();
+                    aDevVolSrc.MaxVec().Z() = -fTemp;
+
+                    Vector3D aProjScaleSrc(
+                        2.0 / aDevVolSrc.GetWidth(),
+                        2.0 / aDevVolSrc.GetHeight(),
+                        2.0 / aDevVolSrc.GetDepth());
+                    Vector3D aProjTransSrc(
+                        -1.0 * ((aDevVolSrc.MaxVec().X() + aDevVolSrc.MinVec().X()) / aDevVolSrc.GetWidth()),
+                        -1.0 * ((aDevVolSrc.MaxVec().Y() + aDevVolSrc.MinVec().Y()) / aDevVolSrc.GetHeight()),
+                        -1.0 * ((aDevVolSrc.MaxVec().Z() + aDevVolSrc.MinVec().Z()) / aDevVolSrc.GetDepth()));
+                    Vector3D aViewScaleSrc(rCameraSetSrc.GetScale());
+                    aViewScaleSrc.Z() = 1.0;
+
+                    // Tanslation und scale von dest
+                    B3dVolume aDevVolDst = rCameraSetDst.GetDeviceVolume();
+
+                    // auf Augkoordinaten umstellen
+                    fTemp = aDevVolDst.MinVec().Z();
+                    aDevVolDst.MinVec().Z() = -aDevVolDst.MaxVec().Z();
+                    aDevVolDst.MaxVec().Z() = -fTemp;
+
+                    Vector3D aProjScaleDst(
+                        2.0 / aDevVolDst.GetWidth(),
+                        2.0 / aDevVolDst.GetHeight(),
+                        2.0 / aDevVolDst.GetDepth());
+                    Vector3D aProjTransDst(
+                        -1.0 * ((aDevVolDst.MaxVec().X() + aDevVolDst.MinVec().X()) / aDevVolDst.GetWidth()),
+                        -1.0 * ((aDevVolDst.MaxVec().Y() + aDevVolDst.MinVec().Y()) / aDevVolDst.GetHeight()),
+                        -1.0 * ((aDevVolDst.MaxVec().Z() + aDevVolDst.MinVec().Z()) / aDevVolDst.GetDepth()));
+                    Vector3D aViewScaleDst(rCameraSetDst.GetScale());
+                    aViewScaleDst.Z() = 1.0;
+
+                    // Groesse des Objektes in Augkoordinaten Src
+                    Volume3D aObjVolSrc;
+                    aObjVolSrc.Union(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatSrc));
+
+                    // Vorlaeufige Groesse in Augkoordinaten Dst
+                    Matrix4D aMatZwi = aMatSrc;
+                    aMatZwi.Scale(aProjScaleSrc);
+                    aMatZwi.Translate(aProjTransSrc);
+                    aMatZwi.Scale(aViewScaleSrc);
+
+                    Matrix4D aMatDst;
+                    aMatDst.Scale(aProjScaleDst);
+                    aMatDst.Translate(aProjTransDst);
+                    aMatDst.Scale(aViewScaleDst);
+                    aMatDst.Invert();
+
+                    aMatZwi *= aMatDst;
+
+                    Volume3D aObjVolDst;
+                    aObjVolDst.Union(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatZwi));
+
+                    // Beide verhaeltnistiefen berechnen und mitteln
+                    double fDepthOne = (aObjVolSrc.GetDepth() * aObjVolDst.GetWidth()) / aObjVolSrc.GetWidth();
+                    double fDepthTwo = (aObjVolSrc.GetDepth() * aObjVolDst.GetHeight()) / aObjVolSrc.GetHeight();
+                    double fWantedDepth = (fDepthOne + fDepthTwo) / 2.0;
+
+                    // Faktor zum Tiefe anpassen bilden
+                    double fFactor = fWantedDepth / aObjVolDst.GetDepth();
+                    Vector3D aDepthScale(1.0, 1.0, fFactor);
+
+                    // Endgueltige Transformation bilden
+                    aMatSrc.Scale(aProjScaleSrc);
+                    aMatSrc.Translate(aProjTransSrc);
+                    aMatSrc.Scale(aViewScaleSrc);
+                    aMatSrc.Scale(aDepthScale);
+
+                    aMatDst = pDstScene->GetFullTransform();
+                    aMatDst *= rCameraSetDst.GetOrientation();
+                    aMatDst.Scale(aProjScaleDst);
+                    aMatDst.Translate(aProjTransDst);
+                    aMatDst.Scale(aViewScaleDst);
+                    aMatDst.Invert();
+
+                    aMatSrc *= aMatDst;
+
+                    // Neue Objekttransformation setzen
+                    pNew->NbcSetTransform(aMatSrc);
+
+                    // Undo anlegen
+                    AddUndo(new SdrUndoNewObj(*pNew));
+                }
+            }
+        }
+    }
+
     return bRetval;
 }
 
