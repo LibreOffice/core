@@ -168,7 +168,7 @@ main( int argc, char* argv[])
     }
 
 	if ( !pOutput ) {
-		fprintf( stdout, "Syntax: XRMEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...][-ISO99 IsoCode]\n" );
+		fprintf( stdout, "Syntax: XRMEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
@@ -178,12 +178,12 @@ main( int argc, char* argv[])
 		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
 		fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
-		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
+		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US,es...)\n" );
 		fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
-		fprintf( stdout, "     f1, f2,... are also elements of (01,33,46,49...)\n" );
-		fprintf( stdout, "     Example: -L 01,99=35\n" );
-		fprintf( stdout, "              Restriction to 01 and 99, 35 will be fallback for 99\n" );
-		fprintf( stdout, " -ISO99: IsoCode is the full qualified ISO language code for language 99" );
+		fprintf( stdout, "     f1, f2,... are also elements of (de,en-US,es...)\n" );
+		fprintf( stdout, "     Example: -L en-US,es=de\n" );
+		fprintf( stdout, "              Restriction to es and en-US, de will be fallback for 99\n" );
+//		fprintf( stdout, " -ISO99: IsoCode is the full qualified ISO language code for language 99" );
 		return 1;
 	}
 
