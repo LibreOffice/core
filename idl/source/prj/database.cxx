@@ -2,9 +2,9 @@
  *
  *  $RCSfile: database.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,9 +883,9 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 
         // Fehlerposition
         aErrorText += "> at ( ";
-        aErrorText += aError.nLine;
+        aErrorText += ByteString::CreateFromInt64(aError.nLine);
         aErrorText += ", ";
-        aErrorText += aError.nColumn;
+        aErrorText += ByteString::CreateFromInt64(aError.nColumn);
         aErrorText += " )";
 
         // Fehler zuruecksetzen
@@ -1024,7 +1024,9 @@ BOOL SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
         while( pEntry )
         {
             rOutStm << "#define " << pEntry->GetName().GetBuffer()
-                    << '\t' << ByteString( pEntry->GetValue() ).GetBuffer()
+                    << '\t'
+                    << ByteString::CreateFromInt64(
+                        pEntry->GetValue() ).GetBuffer()
                     << endl;
             pEntry = aList.Next();
         }
