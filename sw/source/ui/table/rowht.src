@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:00:48 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,9 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû(~F)";
         Text[ russian ] = "Ïîäáîğ ğàçìåğà";
         Text[ polish ] = "Dostosuj dynamicznie";
-        Text[ japanese ] = "©“®’²®(~F)";
+        Text[ japanese ] = "‘‰Á‚ğ”F‚ß‚é(~F)";
         Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã(~F)";
-        Text[ arabic ] = "ÊÎÕíÕ ÏíäÇãíßí";
+        Text[ arabic ] = "ãáÇÁãÉ ÊáŞÇÆíÉ ááÍÌã";
         Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ";
         Text[ korean ] = "Å©±â¿¡ ¸ÂÃã";
         Text[ turkish ] = "i~çerik boyuna uydur";
