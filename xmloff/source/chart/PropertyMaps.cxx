@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-04 09:34:10 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,8 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 break;
         }
     }
+
+    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
 }
 
 void XMLChartExportPropertyMapper::handleElementItem(
