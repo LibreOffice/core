@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:03:22 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,5 +186,6 @@
 #define HID_PROP_BOUND_CELL                     (HID_FORMS_START +  132)
 #define HID_PROP_LIST_CELL_RANGE                (HID_FORMS_START +  133)
 #define HID_PROP_CELL_EXCHANGE_TYPE             (HID_FORMS_START +  134)
+#define HID_PROP_SELECTEDITEMS                  (HID_FORMS_START +  135)
 
 #endif
