@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 09:54:14 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 11:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,8 @@ long SAL_CALL
     /// Return the specified child or NULL if index is invalid.
 uno::Reference<XAccessible> SAL_CALL
     ScAccessibleDocument::getAccessibleChild (long nIndex)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException,
+        lang::IndexOutOfBoundsException)
 {
     uno::Reference<XAccessible> xAccessible = GetChild(nIndex);
     if (!xAccessible.is())
@@ -157,7 +158,12 @@ uno::Reference<XAccessible> SAL_CALL
         if (nIndex == 0)
             xAccessible = new ScAccessibleSpreadsheet(this, mxSheetView);
         else
-            DBG_ERROR("should return other childs here");
+        {
+            //DBG_ERROR("should return other childs here");
+            // there is no child with this index at the moment
+            throw lang::IndexOutOfBoundsException();
+        }
+
         SetChild(nIndex, xAccessible);
     }
     return xAccessible;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 09:54:14 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 11:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,11 +336,11 @@ long SAL_CALL
 
 uno::Reference< XAccessible > SAL_CALL
     ScAccessibleTableBase::getAccessibleChild (long nIndex)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException,
+        lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
-    uno::Reference< XAccessible > xAccessible;
-    return xAccessible;
+    return SvAccessibleContextBase::getAccessibleChild(nIndex);
 }
 
 ::rtl::OUString SAL_CALL
