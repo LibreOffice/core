@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:41:23 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:51:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,20 +65,12 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=unocore
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 #ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	$(PRJ)$/inc$/sw.mk
-
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:512
-.ENDIF
-
-
 
 # --- Files --------------------------------------------------------
 EXCEPTIONSFILES=	\
