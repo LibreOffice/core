@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgaction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-04 11:00:06 $
+ *  last change: $Author: ka $ $Date: 2002-07-26 07:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <vcl/metric.hxx>
 
 #undef _SVG_USE_NATIVE_TEXTDECORATION
+#undef _SVG_USE_TSPANS
 
 // -----------
 // - statics -
@@ -899,6 +900,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
 
         // write text element
+#ifdef _SVG_USE_TSPANS
         if( pDXArray )
         {
             SvXMLElementExport          aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
@@ -924,6 +926,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             }
         }
         else
+#endif
         {
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aPt.X(), mbDoublePoints ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y(), mbDoublePoints ) );
