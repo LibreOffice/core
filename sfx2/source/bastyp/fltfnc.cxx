@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:04:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,10 +891,15 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxF
         return 0;
     }
 
+    // Use extension without dot!
+    String sExt( rExt );
+    if ( sExt.Len() && ( sExt.GetChar(0) == (sal_Unicode)'.' ))
+        sExt.Erase(0,1);
+
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
     aSeq[0].Name = ::rtl::OUString::createFromAscii("Extensions");
     ::com::sun::star::uno::Sequence < ::rtl::OUString > aExts(1);
-    aExts[0] = rExt;
+    aExts[0] = sExt;
     aSeq[0].Value <<= aExts;
     return GetFilterForProps( aSeq, nMust, nDont );
 }
