@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:36:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-08 11:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,8 @@ void XMLFilterTestDialog::updateCurrentDocumentButtonState( Reference< XComponen
             {
                 if( xStorable->hasLocation() )
                 {
-                    aTitle = getFileNameFromURL( xStorable->getLocation() );
+                    OUString aURL( xStorable->getLocation() );
+                    aTitle = getFileNameFromURL( aURL );
                 }
             }
         }

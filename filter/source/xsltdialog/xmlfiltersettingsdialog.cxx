@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:34:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-08 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1297,27 +1297,31 @@ std::vector< application_info_impl* >& getApplicationInfos()
 
     if( aInfos.empty() )
     {
+        ResId aResId1( STR_APPL_NAME_WRITER, getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
-            ResId( STR_APPL_NAME_WRITER, getXSLTDialogResMgr() ),
+            aResId1,
             "com.sun.star.comp.Writer.XMLImporter",
             "com.sun.star.comp.Writer.XMLExporter" ) );
 
+        ResId aResId2( STR_APPL_NAME_CALC, getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.sheet.SpreadsheetDocument",
-            ResId( STR_APPL_NAME_CALC, getXSLTDialogResMgr() ),
+            aResId2,
             "com.sun.star.comp.Calc.XMLImporter",
             "com.sun.star.comp.Calc.XMLExporter" ) );
 
+        ResId aResId3( STR_APPL_NAME_IMPRESS, getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "sun.star.presentation.PresentationDocument",
-            ResId( STR_APPL_NAME_IMPRESS, getXSLTDialogResMgr() ),
+            aResId3,
             "com.sun.star.comp.Impress.XMLImporter",
             "com.sun.star.comp.Impress.XMLExporter" ) );
 
+        ResId aResId4( STR_APPL_NAME_DRAW, getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.drawing.DrawingDocument",
-            ResId( STR_APPL_NAME_DRAW, getXSLTDialogResMgr() ),
+            aResId4,
             "com.sun.star.comp.Draw.XMLImporter",
             "com.sun.star.comp.Draw.XMLExporter" ) );
     }
@@ -1353,7 +1357,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
     }
     else
     {
-        OUString aRet( String( RESID( STR_UNKNOWN_APPLICATION ) ) );
+        OUString aRet = String( RESID( STR_UNKNOWN_APPLICATION ) );
         if( rServiceName.getLength() )
         {
             aRet += OUString::createFromAscii(" (");
