@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:50:57 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ void SvxLineEndWindow::GetFocus (void)
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
 
