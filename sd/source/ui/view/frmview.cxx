@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:11:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,10 +264,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bClickChangeRotation = pFrameView->IsClickChangeRotation();
         nSlidesPerRow = pFrameView->GetSlidesPerRow();
         nDrawMode = pFrameView->GetDrawMode();
-        nPreviewDrawMode = pFrameView->GetPreviewDrawMode();
-        bShowPreviewInPageMode = pFrameView->IsShowPreviewInPageMode() != 0;
-        bShowPreviewInMasterPageMode = pFrameView->IsShowPreviewInMasterPageMode() != 0;
-        bShowPreviewInOutlineMode = pFrameView->IsShowPreviewInOutlineMode() != 0;
         nTabCtrlPercent = pFrameView->GetTabCtrlPercent();
         SetPreviousViewShellType (pFrameView->GetPreviousViewShellType());
     }
@@ -297,10 +293,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             bool bUseContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
             nDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
         }
-        nPreviewDrawMode = nDrawMode;
-        bShowPreviewInPageMode = FALSE;
-        bShowPreviewInMasterPageMode = FALSE;
-        bShowPreviewInOutlineMode = FALSE;
         nTabCtrlPercent = 0.0;
         SetPreviousViewShellType (ViewShell::ST_NONE);
 
@@ -659,7 +651,6 @@ void FrameView::Update(SdOptions* pOptions)
         SetBigHandles( pOptions->IsBigHandles() );
         SetDoubleClickTextEdit( pOptions->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pOptions->IsClickChangeRotation() );
-        SetPreviewDrawMode( pOptions->GetPreviewQuality() );
     }
 }
 
@@ -838,9 +829,6 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_DrawMode, makeAny( (sal_Int32)GetDrawMode() ) );
     aUserData.addValue( sUNO_View_PreviewDrawMode, makeAny( (sal_Int32)GetPreviewDrawMode() ) );
 */
-    aUserData.addValue( sUNO_View_IsShowPreviewInPageMode, makeAny( (sal_Bool)IsShowPreviewInPageMode() ) );
-    aUserData.addValue( sUNO_View_IsShowPreviewInMasterPageMode, makeAny( (sal_Bool)IsShowPreviewInMasterPageMode() ) );
-    aUserData.addValue( sUNO_View_SetShowPreviewInOutlineMode, makeAny( (sal_Bool)IsShowPreviewInOutlineMode() ) );
     aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PK_STANDARD ) ) );
     aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PK_NOTES ) ) );
     aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PK_HANDOUT ) ) );
@@ -1088,27 +1076,6 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 }
             }
 */
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsShowPreviewInPageMode ) ) )
-            {
-                if( pValue->Value >>= bBool )
-                {
-                    SetShowPreviewInPageMode( bBool );
-                }
-            }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsShowPreviewInMasterPageMode ) ) )
-            {
-                if( pValue->Value >>= bBool )
-                {
-                    SetShowPreviewInMasterPageMode( bBool );
-                }
-            }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SetShowPreviewInOutlineMode ) ) )
-            {
-                if( pValue->Value >>= bBool )
-                {
-                    SetShowPreviewInOutlineMode( bBool );
-                }
-            }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EditModeStandard ) ) )
             {
                 if( pValue->Value >>= nInt32 )
