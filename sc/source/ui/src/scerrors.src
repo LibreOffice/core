@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:14:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Filen kunde inte öppnas." ;
         Text [ danish ] = "Det var ikke muligt at åbne filen." ;
         Text [ portuguese ] = "Impossível abrir o ficheiro." ;
-        Text [ portuguese_brazilian ] = "Die Datei konnte nicht geöffnet werden." ;
+        Text [ portuguese_brazilian ] = "Die Datei konnte nicht ge?fnet werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£";
         Text[ russian ] = "Íå óäàåòñÿ îòêğûòü ôàéë.";
         Text[ polish ] = "Nie mo¿na by³o otworzyæ pliku.";
@@ -267,7 +267,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Inget filter är implementerat för denna filtyp." ;
         Text [ danish ] = "Der er ikke implementeret et filter til denne filtype." ;
         Text [ portuguese ] = "Não há filtro implementado para este tipo de ficheiro." ;
-        Text [ portuguese_brazilian ] = "Für diesen Dateityp ist kein Filter implementiert." ;
+        Text [ portuguese_brazilian ] = "F? diesen Dateityp ist kein Filter implementiert." ;
         Text[ chinese_simplified ] = "Ä¿Ç°»¹²»ÄÜÎªÕâ¸öÎÄ¼şÀàĞÍÌá¹©É¸Ñ¡¹¦ÄÜ¡£";
         Text[ language_user1 ] = " ";
         Text[ russian ] = "Äëÿ ıòîãî òèïà ôàéëà íå èìååòñÿ ôèëüòğà.";
@@ -294,7 +294,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Ej understött eller obekant Excel-filformat." ;
         Text [ danish ] = "Et ikke understøttet eller ukendt Excel-filformat." ;
         Text [ portuguese ] = "Formato de ficheiro Excel sem suporte ou desconhecido." ;
-        Text [ portuguese_brazilian ] = "Nicht unterstütztes oder unbekanntes Excel-Dateiformat." ;
+        Text [ portuguese_brazilian ] = "Nicht unterst?ztes oder unbekanntes Excel-Dateiformat." ;
         Text[ chinese_simplified ] = "²»ÊÜÖ§³ÖµÄ»ò²»Ã÷µÄ Excel ÎÄ¼ş¸ñÊ½¡£";
         Text[ russian ] = "Íåèçâåñòíûé èëè íåïîääåğæèâàåìûé ôîğìàò ôàéëà Excel.";
         Text[ polish ] = "Nie obs³ugiwany lub nieznany format pliku Excel.";
@@ -347,7 +347,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Filen är skyddad med ett lösenord." ;
         Text [ danish ] = "Filen er beskyttet med en adgangskode." ;
         Text [ portuguese ] = "O ficheiro está protegido por senha." ;
-        Text [ portuguese_brazilian ] = "Die Datei ist durch ein Kennwort geschützt." ;
+        Text [ portuguese_brazilian ] = "Die Datei ist durch ein Kennwort gesch?zt." ;
         Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÊÜµ½ÃÜÂë±£»¤¡£";
         Text[ russian ] = "Ôàéë çàùèùåí ïàğîëåì.";
         Text[ polish ] = "Plik jest zabezpieczony has³em.";
@@ -394,7 +394,7 @@ Resource RID_ERRHDLSC
         Text [ ENGLISH ] = "The file contains data below row 8192 and cannot be read." ;
         Text [ portuguese ] = "O ficheiro contém dados abaixo da linha 8192 e não pode ser lido." ;
         Text [ english_us ] = "The file contains data after row 8192 and therefore can not be read." ;
-        Text [ portuguese_brazilian ] = "Die Datei enthält Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden." ;
+        Text [ portuguese_brazilian ] = "Die Datei enth?lt Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden." ;
         Text [ swedish ] = "Filen innehåller data under rad 8192 och kan därför inte läsas." ;
         Text [ danish ] = "Filen indeholder data nedenfor række 8192 og kan derfor ikke læses." ;
         Text [ italian ] = "Impossibile leggere il file in quanto contiene dei dati al di sotto della riga 8192." ;
@@ -535,7 +535,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Det maximala antalet rader överskreds. Överblivna rader importerades inte!" ;
         Text [ danish ] = "Det maksimale antal rækker blev overskredet. De overtallige rækker blev ikke importeret!" ;
         Text [ portuguese ] = "O número máximo de linhas foi ultrapassado! As linhas em excesso não foram importadas!" ;
-        Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde ?erschritten. ?erz?hlige Zeilen wurden nicht mitimportiert!" ;
         Text[ chinese_simplified ] = "³¬¹ıĞĞÊı×î¸ßÏŞ¶È¡£³¬¹ıµÄĞĞ²»»á±»ÊäÈë£¡";
         Text[ russian ] = "Ìàêñèìàëüíîå ÷èñëî ñòğîê ïğåâûøåíî.Ñòğîêè, ïğåâûøàşùèå çàäàííîå ÷èñëî, èìïîğòèğîâàíû íå áóäóò!";
         Text[ polish ] = "Maksymalna liczba wierszy zosta³a przekroczona. Pozosta³e wiersze nie bêd¹ importowane!";
@@ -562,7 +562,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Tillhörande FM3-fil kunde inte öppnas." ;
         Text [ danish ] = "Det var ikke muligt at åbne tilhørende FM3-fil." ;
         Text [ portuguese ] = "Foi impossível abrir o ficheiro FM3 correspondente." ;
-        Text [ portuguese_brazilian ] = "Zugehörige FM3-Datei konnte nicht geöffnet werden." ;
+        Text [ portuguese_brazilian ] = "Zugeh?ige FM3-Datei konnte nicht ge?fnet werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨¿ªÆô´ÓÊôµÄ FM3-ÎÄ¼ş¡£";
         Text[ russian ] = "Îòêğûòü ôàéë, îòíîñÿùèéñÿ ê FM3 íå óäàåòñÿ.";
         Text[ polish ] = "Plik pokrewny FM3 nie móg³ zostaæ otworzony.";
@@ -589,7 +589,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Fel i den tillhörande FM3-filens filstruktur." ;
         Text [ danish ] = "Fejl i den tilhørende FM3-fils filstruktur." ;
         Text [ portuguese ] = "Erro na estrutura do ficheiro FM3 correspondente." ;
-        Text [ portuguese_brazilian ] = "Fehler in Dateistruktur der zugehörigen FM3-Datei." ;
+        Text [ portuguese_brazilian ] = "Fehler in Dateistruktur der zugeh?igen FM3-Datei." ;
         Text[ chinese_simplified ] = "´ÓÊôµÄ FM3-ÎÄ¼şµÄÎÄ¼ş½á¹¹º¬ÓĞ´íÎó¡£";
         Text[ russian ] = "Îøèáêà â ñòğóêòóğå ôàéëà, îòíîñÿùåãîñÿ ê FM3.";
         Text[ polish ] = "B³¹d w strukturze pliku pokrewnego FM3.";
@@ -616,7 +616,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Dokumentet är för komplext för en automatisk beräkning. Ny beräkning med F9." ;
         Text [ danish ] = "Dokumentet er for komplekst til automatisk beregning. Genberegning med F9." ;
         Text [ portuguese ] = "O documento é demasiado complexo para o cálculo automático. Calcular de novo com F9." ;
-        Text [ portuguese_brazilian ] = "Dokument zu komplex für automatische Berechnung. Neuberechnung mit F9." ;
+        Text [ portuguese_brazilian ] = "Dokument zu komplex f? automatische Berechnung. Neuberechnung mit F9." ;
         Text[ chinese_simplified ] = "ÎÄµµ¹ıÓÚ¸´ºÏ£¬ÎŞ·¨Ö´ĞĞ×Ô¶¯ÔËËã¹¦ÄÜ¡£Çë°´»÷ F9£¬ ÖØĞÂÔËËã¡£";
         Text[ russian ] = "Äîêóìåíò ñëèøêîì ñëîæíûé äëÿ àâòîìàòè÷åñêèõ âû÷èñëåíèé. Äëÿ ïîâòîğíîãî âû÷èñëåíèÿ íàæìèòå F9.";
         Text[ polish ] = "Dokument jest zbyt z³o¿ony dla automatycznego obliczenia. Oblicz ponownie, przyciskaj¹c F9.";
@@ -637,7 +637,7 @@ Resource RID_ERRHDLSC
         Text [ ENGLISH ] = "The document contains more rows than supported in the selected format.\nThe additional rows were not saved." ;
         Text [ portuguese ] = "O documento contém mais linhas do que as previstas para o formato correspondente.\nAs linhas em excesso não foram guardadas." ;
         Text [ english_us ] = "The document contains more rows than supported in the selected format.\nAdditional rows were not saved." ;
-        Text [ portuguese_brazilian ] = "Das Dokument enthält mehr Zeilen, als das Ausgabeformat unterstützt.\nÜberzählige Zeilen wurden nicht gespeichert." ;
+        Text [ portuguese_brazilian ] = "Das Dokument enth?lt mehr Zeilen, als das Ausgabeformat unterst?zt.\n?berz?hlige Zeilen wurden nicht gespeichert." ;
         Text [ swedish ] = "Dokumentet innehåller mer rader än vad som understöds av utmatningsformatet.\nÖvertaliga rader sparades inte." ;
         Text [ danish ] = "Dokumentet indeholder flere rækker end output-formatet understøtter.\nDe overtallige rækker blev ikke gemt." ;
         Text [ italian ] = "Il documento contiene più righe di quelle supportate dal formato di uscita.\nLe righe in eccesso non sono state salvate." ;
@@ -646,7 +646,7 @@ Resource RID_ERRHDLSC
         Text [ dutch ] = "Het document bevat teveel regels voor dit formaat.\nDit teveel werd niet opgeslagen." ;
         Text[ chinese_simplified ] = "Õû¸öÎÄµµº¬ÓĞµÄĞĞÊı³¬¹ı´òÓ¡¸ñÊ½Ö§³ÖµÄ·¶Î§¡£\n³¬¹ıµÄĞĞ²»»á±»´æÅÌ¡£";
         Text[ russian ] = "Äîêóìåíò ñîäåğæèò áîëüøå ñòğîê, ÷åì ïîääåğæèâàåòñÿ ôîğìàòîì âûâîäà.\nÑòğîêè, ïğåâûøàşùèå çàäàííîå ÷èñëî, ñîõğàíåíû íå áóäóò.";
-        Text[ polish ] = "Dokument zawiera wiêcej wierszy ni¿ jest obs³ugiwane przez format wyjœciowy. \nDodatkowe wiersze nie bêd¹ obs³ugiwane.";
+        Text[ polish ] = "Dokument zawiera wiêcej wierszy ni¿ jest obs³ugiwane przez format wyj?ciowy. \nDodatkowe wiersze nie bêd¹ obs³ugiwane.";
         Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÍA±³ÄÌß¯Ä‚·‚éˆóü‘®‚Åx‰‡‚Å‚«‚és”‚ğ‰z‚¦‚Ä‚¢‚Ü‚·B\n‰ßè‚Ìs‚Í•Û‘¶‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ chinese_traditional ] = "³o­Ó¤å¥ó§t¦³ªº¦C¼Æ¶W¹L¦C¦L®æ¦¡¤ä«ùªº½d³ò¡C\n¶W¹Lªº¦C¤£·|³QÀx¦s¡C";
         Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ Úáì ÚÏÏ ãä ÇáÕİæİ íİæŞ ÇáÚÏÏ ÇáĞí íãßä ááÊäÓíŞ ÇáãÍÏÏ ÏÚãå.\náã íÊã ÍİÙ ÇáÕİæİ ÇáÒÇÆÏÉ.";
@@ -664,7 +664,7 @@ Resource RID_ERRHDLSC
         Text [ ENGLISH ] = "The document contains informations which are not recognized by this program version.\nSaving this document will destroy these informations!" ;
         Text [ portuguese ] = "O documento contém informações desconhecidas para esta versão do programa.\nAo guardar novamente perderá estas informações!" ;
         Text [ english_us ] = "The document contains information not recognized by this program version.\nResaving the document will delete this information!" ;
-        Text [ portuguese_brazilian ] = "Das Dokument enthält Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren!" ;
+        Text [ portuguese_brazilian ] = "Das Dokument enth?lt Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren!" ;
         Text [ swedish ] = "Dokumentet innehåller information som denna programversion inte känner igen.\nOm Du sparar igen går den här informationen förlorad!" ;
         Text [ danish ] = "Dokumentet indeholder informationer, som denne programversion ikke kan genkende.\nHvis du gemmer dokumentet igen, vil disse informationer gå tabt." ;
         Text [ italian ] = "Il documento contiene informazioni sconosciute alla versione corrente del programma.\nCon un nuovo salvataggio le informazioni andranno perse!" ;
@@ -677,7 +677,7 @@ Resource RID_ERRHDLSC
         Text[ japanese ] = "ÄŞ·­ÒİÄ‚É‚Í‚±‚ÌÌßÛ¸Ş×Ñ‚ÌÊŞ°¼Ş®İ‚Å‚Í”F’m‚Å‚«‚È‚¢î•ñ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B\n•Û‘¶‚µ‚È‚¨‚·‚ÆA‚±‚Ìî•ñ‚Í¸‚í‚ê‚Ü‚·B";
         Text[ chinese_traditional ] = "³o­Óµ{§ÇµLªk³B²z³o­Ó¤å¥ó¤¤¤£©úªº¸ê°T¡C\n¦b­«·sÀx¦s®É³o¨Ç¸ê°T·|¬y¥¢¡I";
         Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ Úáì ãÚáæãÇÊ ÛÑíÈÉ Úáì ÅÕÏÇÑ ÇáÈÑäÇãÌ åĞÇ.\nåĞå ÇáÈíÇäÇÊ Óæİ ÊÖíÚ ÚäÏ ÅÚÇÏÉ ÍİÙ ÇáãÓÊäÏ!";
-        Text[ greek ] = "Ôï İããñáöï ğåñéİ÷åé ğëçñïöïñßåò ïé ïğïßåò åßíáé Üãíùóôåò ãéá áõôŞ ôç İêäïóç ôïõ \nğñïãñÜììáôïò. Ïé ğëçñïöïñßåò áõôİò èá ÷áèïıí áí åğáíáëáìâÜíåôå ôçí áğïèŞêåõóç ôïõò!";
+        Text[ greek ] = "Ôï İããñáöï ğåñéİ÷åé ğëçñïöïñßåò ïé ïğïßåò åßíáé Üãíùóôåò ãéá áõôŞ ôç İêäïóç ôïõ \nğñïãñÜììáôïò. Ïé ğëçñïöïñßåò áõôİò èá ÷áèïıí áí åğáíáëáìâ";
         Text[ korean ] = "¹®¼­¿¡´Â ÀÌ ÇÁ·Î±×·¥ÀÇ ¹öÀü¿¡ ÀÇÇØ¼­´Â ÀÎ½ÄµÉ ¼ö ¾ø´Â Á¤º¸°¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù.\n´Ù½Ã ÀúÀå½Ã¿¡ ÀÌ Á¤º¸´Â »ó½ÇµË´Ï´Ù!";
         Text[ turkish ] = "Belgede, bu program sürümünde bilinmeyen bilgiler mevcut.\nBu bilgiler, yeniden kayıtta kaybolacak!";
         Text[ language_user1 ] = " ";
@@ -699,7 +699,7 @@ Resource RID_ERRHDLSC
         Text [ dutch ] = "Niet van elke cel kon de inhoud in het aangegeven formaat worden opgeslagen." ;
         Text[ chinese_simplified ] = "ÎŞ·¨ÓÃÖ¸¶¨µÄ¸ñÊ½´æÅÌÈ«²¿µÄµ¥Ôª¸ñÄÚÈİ¡£";
         Text[ russian ] = "Ñîõğàíèòü âñå ñîäåğæèìîå ÿ÷åéêè â çàäàííîì ôîğìàòå íåâîçìîæíî.";
-        Text[ polish ] = "Nie wszystkie zawartoœci komórek mog³y zostaæ zapisane w wybranym formacie.";
+        Text[ polish ] = "Nie wszystkie zawarto?ci komórek mog³y zostaæ zapisane w wybranym formacie.";
         Text[ japanese ] = "w’è‚µ‚½‘®‚ÅA‚·‚×‚Ä‚Ì¾Ù‚Ì“à—e‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk¥Î«ü©wªº®æ¦¡Àx¦s¥ş³¡ªºÀx¦s®æ¤º®e¡C";
         Text[ arabic ] = "ÊÚĞÑ ÍİÙ ßá ãÍÊæíÇÊ ÇáÎáÇíÇ İí ÇáÊäÓíŞ ÇáãÍÏÏ.";
