@@ -79,6 +79,8 @@ sal_Int32 GetFormatId_Impl( SvGlobalName aName )
         return SOT_FORMATSTR_ID_STARCHART_60;
     if ( aName == SvGlobalName( SO3_SM_CLASSID_60 ) )
         return SOT_FORMATSTR_ID_STARMATH_60;
+    if ( aName == SvGlobalName( SO3_OUT_CLASSID ) )
+        return 0;
     else
     {
         DBG_ERROR( "Unknown UCB storage format!" );
@@ -865,17 +867,20 @@ void UCBStorage_Impl::Init()
         {
             m_aContentType = m_aOriginalContentType = aTmp;
 
-            // get the clipboard format using the content type
-            ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
-            aDataFlavor.MimeType = m_aContentType;
-            m_nFormat = SotExchange::GetFormat( aDataFlavor );
+            if ( m_aContentType.Len() )
+            {
+                // get the clipboard format using the content type
+                ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+                aDataFlavor.MimeType = m_aContentType;
+                m_nFormat = SotExchange::GetFormat( aDataFlavor );
 
-            // get the ClassId using the clipboard format ( internal table )
-            m_aClassId = GetClassId_Impl( m_nFormat );
+                // get the ClassId using the clipboard format ( internal table )
+                m_aClassId = GetClassId_Impl( m_nFormat );
 
-            // get human presentable name using the clipboard format
-            SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
-            m_aUserTypeName = aDataFlavor.HumanPresentableName;
+                // get human presentable name using the clipboard format
+                SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
+                m_aUserTypeName = aDataFlavor.HumanPresentableName;
+            }
         }
 
         // create cursor for access to children
@@ -1255,10 +1260,13 @@ void UCBStorage::SetClassId( const ClsId& rClsId )
     // kept up to date, and also the other type information that is hold only at runtime because it can be reconstructed from
     // the content type
     pImp->m_nFormat = GetFormatId_Impl( pImp->m_aClassId );
-    ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
-    SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
-    pImp->m_aUserTypeName = aDataFlavor.HumanPresentableName;
-    pImp->m_aContentType = aDataFlavor.MimeType;
+    if ( pImp->m_nFormat )
+    {
+        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+        SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
+        pImp->m_aUserTypeName = aDataFlavor.HumanPresentableName;
+        pImp->m_aContentType = aDataFlavor.MimeType;
+    }
 }
 
 const ClsId& UCBStorage::GetClassId() const
