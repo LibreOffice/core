@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:11:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,27 @@
  *
  ************************************************************************/
 
-#include <string.h>
+#include "SwXFilterOptions.hxx"
 
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _UNO_LBNAMES_H_
+#include <uno/lbnames.h>
+#endif
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include <cppuhelper/factory.hxx>
+#endif
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-
-#include <cppuhelper/factory.hxx>
-#include <uno/lbnames.h>
-#ifndef _SWXFILTEROPTIONS_HXX
-#include <SwXFilterOptions.hxx>
+#ifndef INCLUDED_STRING_H
+#include <string.h>
+#define INCLUDED_STRING_H
 #endif
 
 using namespace rtl;
@@ -171,14 +178,14 @@ extern "C"
 {
 #endif
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName,
         uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void SAL_CALL lcl_uno_writeInfo(
+static void lcl_uno_writeInfo(
         registry::XRegistryKey * pRegistryKey,
         const OUString& rImplementationName,
         const uno::Sequence< OUString >& rServices )
@@ -191,7 +198,7 @@ void SAL_CALL lcl_uno_writeInfo(
         xNewKey->createKey( rServices.getConstArray()[i]);
 }
 
-sal_Bool SAL_CALL component_writeInfo(
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
         void * pServiceManager,
         void * pRegistryKey )
 {
@@ -265,9 +272,10 @@ sal_Bool SAL_CALL component_writeInfo(
     return sal_True;
 }
 
-void * SAL_CALL component_getFactory( const sal_Char * pImplName,
-                                      void * pServiceManager,
-                                      void * pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    const sal_Char * pImplName,
+    void * pServiceManager,
+    void * pRegistryKey )
 {
     void * pRet = 0;
     if( pServiceManager )
