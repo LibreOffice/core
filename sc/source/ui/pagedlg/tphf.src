@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:19:08 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ PushButton RID_SCBTN_HFEDIT
     Text[ hindi ] = "~संपादन...";
     Text[ slovak ] = "~Upraviť...";
 };
+
+
 
 
 
