@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2002-04-30 13:27:16 $
+ *  last change: $Author: obr $ $Date: 2002-04-30 15:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     if( nListeners == 0 ) {
         OSL_TRACE( "rejecting drop due to missing listeners." );
         dtde.Context->rejectDrop();
+        dtde.Context->dropComplete(sal_False);
     }
 
     // this is a drop -> no further drag overs
