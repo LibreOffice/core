@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:40:02 $
+ *  last change: $Author: kz $ $Date: 2004-04-23 09:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3285,7 +3285,7 @@ SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttr
 
 SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow );
 
-SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
+SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *_pCell,
                                   const SwBorderAttrs *pAttrs = 0 )
 {
     SWRECTFN( _pCell )
@@ -3321,12 +3321,12 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
     if ( _pCell->Lower() )
     {
         if ( pAttrs )
-            nHeight += lcl_CalcTopAndBottomMargin( *pCell, *pAttrs );
+            nHeight += lcl_CalcTopAndBottomMargin( *_pCell, *pAttrs );
         else
         {
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), _pCell );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
-            nHeight += lcl_CalcTopAndBottomMargin( *pCell, rAttrs );
+            nHeight += lcl_CalcTopAndBottomMargin( *_pCell, rAttrs );
         }
     }
     return nHeight;
