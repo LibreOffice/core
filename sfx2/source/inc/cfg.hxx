@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:03:45 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,14 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
@@ -140,7 +140,6 @@ class SfxMacroInfo;
 #define SFX_CFGGROUP_STYLES  10
 
 #define css ::com::sun::star
-#define dcss ::drafts::com::sun::star
 
 struct SfxStyleInfo_Impl
 {
@@ -398,8 +397,8 @@ private:
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
 
-    ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager > m_xDocCfgMgr;
-    ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager > m_xModuleCfgMgr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xDocCfgMgr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xModuleCfgMgr;
     ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
     ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame > m_xFrame;
     ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > m_xMenuBarSettings;
@@ -541,9 +540,9 @@ private:
     sal_Bool                        m_bStylesInfoInitialized;
 
     css::uno::Reference< css::lang::XMultiServiceFactory >     m_xSMGR;
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xGlobal;
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xModule;
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xAct;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobal;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModule;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAct;
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
 
@@ -566,7 +565,7 @@ private:
     String                      GetFunctionName( KeyFuncType eType ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
 
-    void                        Init(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& pAccMgr);
+    void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
 
     void                        CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
@@ -579,9 +578,9 @@ public:
     virtual void                Reset( const SfxItemSet& );
 
     void                        SelectMacro(const SfxMacroInfoItem*);
-    void                        Apply(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& pAccMgr);
-    void                        CopySource2Target(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xSourceAccMgr,
-                                                  const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xTargetAccMgr);
+    void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
+    void                        CopySource2Target(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xSourceAccMgr,
+                                                  const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xTargetAccMgr);
 };
 /*
 class SfxConfigDialog : public SfxTabDialog
@@ -668,7 +667,7 @@ public:
 */
 
 #undef css
-#undef dcss
+#undef css
 
 #endif
 
