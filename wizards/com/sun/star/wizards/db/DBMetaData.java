@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:35:05 $
+*  last change: $Author: vg $ $Date: 2005-03-10 17:20:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -81,6 +81,9 @@ import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdbc.DataType;
+import com.sun.star.sdb.XOfficeDatabaseDocument;
+import com.sun.star.sdb.XDocumentDataSource;
+import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
 
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -96,7 +99,6 @@ import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
-import com.sun.star.sdb.XBookmarksSupplier;
 import com.sun.star.sdb.XReportDocumentsSupplier;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.SQLException;
@@ -119,8 +121,8 @@ public class DBMetaData {
     private XNameAccess xNameAccess;
     private XInterface xDatabaseContext;
     public XDatabaseMetaData xDBMetaData;
-    private XBookmarksSupplier xBookmarksSuppl;
     public XDataSource xDataSource;
+    public XOfficeDatabaseDocument xModel;
     private XCompletedConnection xCompleted;
     public XPropertySet xDataSourcePropertySet;
     private int[] nDataTypes = null;
@@ -419,7 +421,6 @@ public class DBMetaData {
 
     private void getDataSourceObjects() throws Exception{
     try {
-        xBookmarksSuppl = (XBookmarksSupplier) UnoRuntime.queryInterface(XBookmarksSupplier.class, this.xDataSource);
         xDBMetaData = DBConnection.getMetaData();
         XChild xChild = (XChild) UnoRuntime.queryInterface(XChild.class, DBConnection);
         Object oDataSource = xChild.getParent();
@@ -462,6 +463,9 @@ public class DBMetaData {
             Object oDataSource = xNameAccess.getByName(DataSourceName);
             xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, oDataSource);
             getDataSourceInterfaces();
+            XDocumentDataSource xDocu = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class,this.xDataSource);
+            if ( xDocu != null )
+                xModel = xDocu.getDatabaseDocument();
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -486,7 +490,11 @@ public class DBMetaData {
             {
                 bdisposeConnection = true;
                 com.sun.star.container.XChild child = (com.sun.star.container.XChild)UnoRuntime.queryInterface(com.sun.star.container.XChild.class, xConnection);
+
                 xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, child.getParent());
+                XDocumentDataSource xDocu = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class,this.xDataSource);
+                if ( xDocu != null )
+                    xModel = xDocu.getDatabaseDocument();
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
                 if ( xPSet != null )
                     DataSourceName = AnyConverter.toString(xPSet.getPropertyValue("Name"));
@@ -499,6 +507,9 @@ public class DBMetaData {
         }
         else if (Properties.hasPropertyValue(curproperties, "DataSource")){
             xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, Properties.getPropertyValue(curproperties, "DataSource"));
+            XDocumentDataSource xDocu = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class,this.xDataSource);
+            if ( xDocu != null )
+                xModel = xDocu.getDatabaseDocument();
             return getConnection(xDataSource);
         }
         if (Properties.hasPropertyValue(curproperties, "DatabaseLocation")){
@@ -628,20 +639,6 @@ public class DBMetaData {
     }
 
 
-    public void createDBLink(String StorePath) {
-        try {
-            String BookmarkName = JavaTools.getFileDescription(StorePath);
-            XNameAccess xBookmarks = xBookmarksSuppl.getBookmarks();
-            BookmarkName = Desktop.getUniqueName(xBookmarks, BookmarkName);
-            XNameContainer xNameCont = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xBookmarks);
-            xNameCont.insertByName(BookmarkName, StorePath);
-            XFlushable xFlush = (XFlushable) UnoRuntime.queryInterface(XFlushable.class, xBookmarks);
-            xFlush.flush();
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
-        }
-    }
-
     /**
      * inserts a Query to a datasource; There is no validation if the queryname is already existing in the datasource
      * @param oQuery
@@ -676,7 +673,7 @@ public class DBMetaData {
     }
 
     public XHierarchicalNameAccess getReportDocuments(){
-        XReportDocumentsSupplier xReportDocumentSuppl = (XReportDocumentsSupplier) UnoRuntime.queryInterface(XReportDocumentsSupplier.class, this.xDataSource);
+        XReportDocumentsSupplier xReportDocumentSuppl = (XReportDocumentsSupplier) UnoRuntime.queryInterface(XReportDocumentsSupplier.class, this.xModel);
         xReportDocumentSuppl.getReportDocuments();
         XHierarchicalNameAccess xReportHier = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, xReportDocumentSuppl.getReportDocuments());
         return xReportHier;
@@ -684,7 +681,7 @@ public class DBMetaData {
 
 
     public XHierarchicalNameAccess getFormDocuments(){
-        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, this.xDataSource);
+        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, xModel);
         XHierarchicalNameAccess xFormHier = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, xFormDocumentSuppl.getFormDocuments());
         return xFormHier;
     }
