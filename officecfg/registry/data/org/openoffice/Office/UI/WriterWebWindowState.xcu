@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:10:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,21 +426,6 @@
                     <value>true</value>
                 </prop>
             </node>
-            <node oor:name="private:resource/toolbar/sourceviewtoolbar" oor:op="replace">
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">HTML Source View</value>
-                    <value xml:lang="de">HTML Code Ansicht</value>
-                </prop>
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DockingArea" oor:type="xs:int">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-            </node>
             <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
                 <prop oor:name="DockingArea" oor:type="xs:int">
                     <value>0</value>
@@ -502,6 +487,9 @@
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/arrowshapes" oor:op="replace">
