@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:28:54 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:00:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ SLOFILES =	\
         $(SLO)$/docfile.obj \
         $(SLO)$/objuno.obj \
         $(SLO)$/frmdescr.obj \
-        $(SLO)$/fsetobsh.obj \
         $(SLO)$/docinf.obj \
         $(SLO)$/interno.obj \
         $(SLO)$/objxtor.obj \
