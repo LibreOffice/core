@@ -1,0 +1,242 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XIntroTest.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XIntroTest_idl__
+#define __com_sun_star_beans_XIntroTest_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_Property_idl__
+#include <com/sun/star/beans/Property.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_uno_TypeClass_idl__
+#include <com/sun/star/uno/TypeClass.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module beans {
+
+interface XPropertyChangeListener;
+interface XPropertiesChangeListener;
+
+//=============================================================================
+/** This is a test interface for introspection.
+
+    <p>IMPORTANT: FOR TEST ONLY!
+
+    <p>The following interface is just for testing purposes. It will not
+    stay in the product. It is only used as an exportable test class,
+    i.e. for BASIC integration.
+
+    @deprecated
+*/
+[ uik(E227A4AB-33D6-11D1-AABE00A0-249D5590), ident( "XIntroTest", 1.0 ) ]
+interface XIntroTest: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** contains the ID-String of the implementation.
+     */
+    [attribute] string  ObjectName;
+
+    //-------------------------------------------------------------------------
+    /** contains the first name of a person.
+     */
+    [readonly, attribute] string    FirstName;
+
+    //-------------------------------------------------------------------------
+    /** contains the last name of a person.
+     */
+    [readonly, attribute] string    LastName;
+
+    //-------------------------------------------------------------------------
+    /** contains the age of a person.
+     */
+    [readonly, attribute] short     Age;
+
+    //-------------------------------------------------------------------------
+    /** contains the number of children person has.
+     */
+    [attribute] short               ChildrenCount;
+
+    //-------------------------------------------------------------------------
+    /** contains a struct of type Property.
+     */
+    [attribute] com::sun::star::beans::Property         FirstStruct;
+
+    //-------------------------------------------------------------------------
+    /** contains a struct of type PropertyValue.
+     */
+    [attribute] com::sun::star::beans::PropertyValue    SecondStruct;
+
+    //-------------------------------------------------------------------------
+    /** output method.
+    */
+    void writeln( [in] string Text );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    long getDroenk();
+
+    //-------------------------------------------------------------------------
+    /** gets another object with this interface.
+    */
+    com::sun::star::beans::XIntroTest getIntroTest();
+
+    //-------------------------------------------------------------------------
+    /** !!! No property, because parameter exists
+    */
+    long getUps( [in] long l );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    void setDroenk( [in] long l );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    short getBla();
+
+    //-------------------------------------------------------------------------
+    /** !!! Not the set method for property Bla, because param type != return type.
+    */
+    void setBla( [in] long n );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    short getBlub();
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    void setBlub( [in] short n );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    short getGulp();
+
+    //-------------------------------------------------------------------------
+    /** !!! Not the set method for property Gulp, because return type != void.
+    */
+    short setGulp( [in] short n );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    com::sun::star::uno::TypeClass getTypeClass( [in] short n );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    void setTypeClass( [in] com::sun::star::uno::TypeClass t,
+             [in] double d1,
+             [in] double d2 );
+
+    //-------------------------------------------------------------------------
+    sequence<string> getStrings();
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    void setStrings( [in] sequence<string> Strings );
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    void setStringsPerMethod( [in] sequence<string> Strings,
+             [in] short n );
+
+    //-------------------------------------------------------------------------
+    sequence< sequence< sequence< short > > > getMultiSequence();
+
+    //-------------------------------------------------------------------------
+    /** ...
+    */
+    void setMultiSequence( [in] sequence< sequence< sequence< short > > > Seq );
+
+    //-------------------------------------------------------------------------
+    /**Add a PropertiesChangeListener
+    */
+    [oneway] void addPropertiesChangeListener( [in] sequence< string > PropertyNames,
+             [in] XPropertiesChangeListener Listener );
+
+    //-------------------------------------------------------------------------
+    /**Remove a PropertiesChangeListener
+    */
+    [oneway] void removePropertiesChangeListener( [in] XPropertiesChangeListener Listener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

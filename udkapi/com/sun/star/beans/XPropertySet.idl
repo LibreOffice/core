@@ -1,0 +1,287 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XPropertySet.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#define __com_sun_star_beans_XPropertySet_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySetInfo_idl__
+#include <com/sun/star/beans/XPropertySetInfo.idl>
+#endif
+
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyVetoException_idl__
+#include <com/sun/star/beans/PropertyVetoException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
+#include <com/sun/star/beans/XPropertyChangeListener.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XVetoableChangeListener_idl__
+#include <com/sun/star/beans/XVetoableChangeListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::beans::XPropertySet
+/** provides information about and access to the
+    properties from an implementation.
+
+
+
+    <p>There are three types of properties:
+    </p>
+    <ul>
+    <li>bound properties
+    </li>
+    <li>constrained properties
+    </li>
+    <li>free properties
+    </li>
+    </ul>
+
+
+    <p>You can listen to changes of bound properties with the
+    <type>XPropertyChangeListener</type> and you can veto changes
+    of constrained properties with the <type>XVetoableChangeListener</type>.
+
+    </p>
+    <p>To implement inaccurate name access, you must support the
+    interface <type>XExactName</type>. </p>@see com::sun::star::beans::XExactName
+ */
+[ uik(E227A3A8-33D6-11D1-AABE00A0-249D5590), ident( "XPropertySet", 1.0 ) ]
+interface XPropertySet: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XPropertySet::getPropertySetInfo
+    /** @returns
+                the <type>XPropertySetInfo</type> interface, which
+                describes all properties of the object which supplies this
+                interface.
+
+                @returns
+                <const>NULL</const> if the implementation cannot or will
+                not provide information about the properties; otherwise the
+                interface <type>XPropertySetInfo</type> is returned.
+     */
+    [const] com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XPropertySet::setPropertyValue
+    /** sets the value of the property with the specified name.
+
+
+
+        <p>If it is a bound property the value will be changed before
+        the change event is fired.  If it is a constrained property
+        a vetoable event is fired before the property value can be
+        changed.
+
+        </p>
+     */
+    void setPropertyValue( [in] string aPropertyName,
+             [in] any aValue )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::beans::PropertyVetoException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XPropertySet::getPropertyValue
+    /** @returns
+                the value of the property with the specified name.
+
+                @param PropertyName
+                This parameter specifies the name of the property.
+
+                @throws UnknownPropertyException
+                if the property does not exist.
+
+                @throws com::sun::star::lang::WrappedTargetException
+                if the implementation has an internal reason for the exception.
+                In this case the original exception is wrapped into that
+                <type scope="com::sun::star::lang">WrappedTargetException</type>.
+     */
+    [const] any getPropertyValue( [in] string PropertyName )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XPropertySet::addPropertyChangeListener
+    /** adds an <type>XPropertyChangeListener</type> to the
+        specified property.
+
+
+
+        <p>An empty name ("") registers the listener to all bound
+        properties. If the property is not bound, the behavior is
+        not specified.
+
+        </p>@see removePropertyChangeListener
+     */
+    void addPropertyChangeListener( [in] string aPropertyName,
+             [in] com::sun::star::beans::XPropertyChangeListener xListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XPropertySet::removePropertyChangeListener
+    /** removes an <type>XPropertyChangeListener</type> from
+        the listener list.
+
+
+
+        <p>It is a "noop" if the listener is not registered.
+
+        </p>@see addPropertyChangeListener
+     */
+    void removePropertyChangeListener( [in] string aPropertyName,
+             [in] com::sun::star::beans::XPropertyChangeListener aListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XPropertySet::addVetoableChangeListener
+    /** adds an <type>XVetoableChangeListener</type> to the specified
+        property with the name PropertyName.
+
+
+
+        <p>An empty name ("") registers the listener to all
+        constrained properties. If the property is not constrained,
+        the behavior is not specified.
+
+        </p>@see removeVetoableChangeListener
+     */
+    void addVetoableChangeListener( [in] string PropertyName,
+             [in] com::sun::star::beans::XVetoableChangeListener aListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XPropertySet::removeVetoableChangeListener
+    /** removes an <type>XVetoableChangeListener</type> from the
+        listener list.
+
+
+
+        <p>It is a "noop" if the listener is not registered.
+
+        </p>@see addVetoableChangeListener
+     */
+    void removeVetoableChangeListener( [in] string PropertyName,
+             [in] com::sun::star::beans::XVetoableChangeListener aListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 14:51:23  mi
+    moved from api module
+
+    Revision 1.2  2000/10/09 14:24:53  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:12  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

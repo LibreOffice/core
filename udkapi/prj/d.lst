@@ -1,0 +1,37 @@
+mkdir: %_DEST%\idl%_EXT%\com
+mkdir: %_DEST%\idl%_EXT%\com\sun
+mkdir: %_DEST%\idl%_EXT%\com\sun\star
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\beans
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\bridge
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\connection
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\container
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\io
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\lang
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\reflection
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\registry
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\loader
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\script
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\test
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\test\performance
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\test\bridge
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\uno
+
+..\%__SRC%\ucr\api.db %_DEST%\bin%_EXT%\applicat.rdb
+..\%__SRC%\ucrdoc\api_doc.db %_DEST%\bin%_EXT%\applicat_doc.rdb
+
+..\com\sun\star\beans\*.idl %_DEST%\idl%_EXT%\com\sun\star\beans\*.idl
+..\com\sun\star\bridge\*.idl %_DEST%\idl%_EXT%\com\sun\star\bridge\*.idl
+..\com\sun\star\connection\*.idl %_DEST%\idl%_EXT%\com\sun\star\connection\*.idl
+..\com\sun\star\container\*.idl %_DEST%\idl%_EXT%\com\sun\star\container\*.idl
+..\com\sun\star\io\*.idl %_DEST%\idl%_EXT%\com\sun\star\io\*.idl
+..\com\sun\star\lang\*.idl %_DEST%\idl%_EXT%\com\sun\star\lang\*.idl
+..\com\sun\star\reflection\*.idl %_DEST%\idl%_EXT%\com\sun\star\reflection\*.idl
+..\com\sun\star\registry\*.idl %_DEST%\idl%_EXT%\com\sun\star\registry\*.idl
+..\com\sun\star\loader\*.idl %_DEST%\idl%_EXT%\com\sun\star\loader\*.idl
+..\com\sun\star\script\*.idl %_DEST%\idl%_EXT%\com\sun\star\script\*.idl
+..\com\sun\star\test\*.idl %_DEST%\idl%_EXT%\com\sun\star\test\*.idl
+..\com\sun\star\test\performance\*.idl %_DEST%\idl%_EXT%\com\sun\star\test\performance\*.idl
+..\com\sun\star\test\bridge\*.idl %_DEST%\idl%_EXT%\com\sun\star\test\bridge\*.idl
+..\com\sun\star\text\*.idl %_DEST%\idl%_EXT%\com\sun\star\text\*.idl
+..\com\sun\star\uno\*.idl %_DEST%\idl%_EXT%\com\sun\star\uno\*.idl
+

@@ -1,0 +1,377 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XIntrospectionAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XIntrospectionAccess_idl__
+#define __com_sun_star_beans_XIntrospectionAccess_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_Property_idl__
+#include <com/sun/star/beans/Property.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_XIdlMethod_idl__
+#include <com/sun/star/reflection/XIdlMethod.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSuchMethodException_idl__
+#include <com/sun/star/lang/NoSuchMethodException.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_XIdlClass_idl__
+#include <com/sun/star/reflection/XIdlClass.idl>
+#endif
+
+#ifndef __com_sun_star_beans_IllegalTypeException_idl__
+#include <com/sun/star/beans/IllegalTypeException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::beans::XIntrospectionAccess
+/** gives access to the result of an interface / object
+    introspection done by the inspect-method of XIntrospection.
+
+
+
+    <p>It supports some of the methods that are also defined in
+    <type>XPropertySet</type>, but not the methods for listener registration,
+    since this would not be appropriate for an introspection result.
+
+    </p>
+    <p>The results of the <code>get..()</code> and <code>has..()</code>
+    methods depends on the concepts given in the parameter
+    <var>nConcepts</var>.  The minimum supported concepts should be
+    for the <type>MethodConcept</type>:
+    </p>
+    <ul>
+    <li>
+    <const>MethodConcept::PROPERTY</const>,
+    </li>
+    <li>
+    <const>MethodConcept::LISTENER</const>,
+    </li>
+    <li>
+    <const>MethodConcept::ENUMERATION</const>,
+    </li>
+    <li>
+    <const>MethodConcept::NAMECONTAINER</const> and
+    </li>
+    <li>
+    <const>MethodConcept::INDEXCONTAINER</const>;
+    </li>
+    </ul>
+    and for the <type>PropertyConcept</type>:
+    <ul>
+    <li>
+    <const>PropertyConcept::PROPERTYSET</const>,
+    </li>
+    <li>
+    <const>PropertyConcept::ATTRIBUTES</const> and
+    </li>
+    <li>
+    <const>PropertyConcept::METHODS</const>.
+    </li>
+    </ul>
+    Both groups get combined by an arithmetical or-operation.
+
+    <p>The <type>XExactName</type> interface has to be supported in order to
+    implement inaccurate name access for all objects which implement the
+    <type scope="com::sun::star::container">XNameAccess</type> interface or <type>XPropertySet</type>.
+    </p>@see            XPropertySet
+        @see com::sun::star::beans::XExactName
+ */
+[ uik(E227A4A9-33D6-11D1-AABE00A0-249D5590), ident( "XIntrospectionAccess", 1.0 ) ]
+interface XIntrospectionAccess: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getSuppliedMethodConcepts
+    /** @returns
+                    zero or more constants of the <type>MethodConcept</type>
+                    constants group.
+     */
+    [const] long getSuppliedMethodConcepts();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getSuppliedPropertyConcepts
+    /** @returns
+                    zero or more constants of the <type>PropertyConcept</type>
+                    constants group.
+     */
+    [const] long getSuppliedPropertyConcepts();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getProperty
+    /** @returns
+                    <TRUE/> if the method exists and fits the
+                    given MethodConcepts; otherwise <FALSE/> is returned.
+
+                @param aName
+                    the name of the <type>Property</type>.
+
+                @param nPropertyConcepts
+                    zero or more constants of the <type>PropertyConcept</type>
+                    constants group.
+
+                @throws NoSuchElementException
+                    when an element under Name does not exist.
+     */
+    [const] com::sun::star::beans::Property getProperty( [in] string aName,
+             [in] long nPropertyConcepts )
+            raises( com::sun::star::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::hasProperty
+    /** @returns
+                    <TRUE/> if the method exists and fits
+                    the given <type>PropertyConcept</type>s;
+                    otherwise <FALSE/> is returned.
+
+                @param aName
+                    the name of the <type>Property</type>.
+
+                @param nPropertyConcepts
+                    zero or more constants of the <type>PropertyConcept</type>
+                    constants group.
+     */
+    [const] boolean hasProperty( [in] string aName,
+             [in] long nPropertyConcepts );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getProperties
+    /** @returns
+                    all properties of the introspected object which accord to the
+                    given <type>PropertyConcept</type>s.
+     */
+    [const] sequence<com::sun::star::beans::Property> getProperties(
+                [in] long nPropertyConcepts );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getMethod
+    /** @returns
+                    the method with the given name if it exists and fits the
+                    specified <type>MethodConcept</type>s.
+
+                @param aName
+                    the name of the method.
+
+                @param nMethodConcepts
+                    zero or more constants of the MethodConcept group.
+
+                @throws NoSuchElementException
+                    if no element with the name <var>Name</var> exists.
+     */
+    [const] com::sun::star::reflection::XIdlMethod getMethod( [in] string aName,
+             [in] long nMethodConcepts )
+            raises( com::sun::star::lang::NoSuchMethodException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::hasMethod
+    /** @returns
+                    <TRUE/> if the method exists and fits the
+                    given <type>MethodConcepts</type>s; otherwise <FALSE/>
+                    is returned.
+
+                @param aName
+                    the name of the method.
+
+                @param nMethodConcepts
+                    zero or more constants of the <type>MethodConcept</type>
+                    constants group.
+     */
+    [const] boolean hasMethod( [in] string aName,
+             [in] long nMethodConcepts );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getMethods
+    /** @returns
+                    all methods of the introspected object which accord to the
+                    given <type>MethodConcept</type>s.
+     */
+    [const] sequence<com::sun::star::reflection::XIdlMethod> getMethods(
+            [in] long nMethodConcepts );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getSupportedListeners
+    /** @returns
+                    a sequence of the types of listener interfaces which are
+                    supported by the introspected object.
+     */
+    [const] sequence<TYPE_XIDLCLASS> getSupportedListeners();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XIntrospectionAccess::queryAdapter
+    /** creates an adapter that implements an interface
+        with the specified type.
+
+
+
+        <p>The supplied concepts (see the methods
+
+
+
+
+
+        )
+        and the
+
+
+
+
+        method
+        determine the interfaces returned by this method.
+
+        </p>
+        <p>To access properties, query for the <type>XPropertySet</type>
+        interface. If the <type>XPropertySet</type> can be queried,
+        the <type>XFastPropertySet</type> interface must be
+        supported too.
+
+        </p>
+        <p>If the introspected object implements a name container, the
+        introspection should return the <type scope="com::sun::star::container">XNameAccess</type> and
+        <type scope="com::sun::star::container">XNameContainer</type> interfaces.
+
+        </p>
+        <p>If the introspected object implements an index container, the
+        introspection should return the <type scope="com::sun::star::container">XIndexAccess</type> and
+        <type scope="com::sun::star::container">XIndexContainer</type> interfaces.
+
+        </p>
+        <p>If the introspected object implements an enumeration container,
+        the introspection should return the <type scope="com::sun::star::container">XEnumerationAccess</type>
+        interface.
+
+        </p>
+        <p>If the introspected object implements the <type scope="com::sun::star::reflection">XIdlArray</type>
+        interface, the introspection should return this.
+
+        </p>
+        <p>To implement inaccurate name access, at all objects, which
+        implement the <type scope="com::sun::star::container">XNameAccess</type> or <type>XPropertySet</type>
+        interface, the <type>XExactName</type> interface has to be supported.
+        </p>@see com::sun::star::beans::XExactName
+     */
+    [const] com::sun::star::uno::XInterface queryAdapter( [in] TYPE_XIDLCLASS aInterfaceType )
+            raises( com::sun::star::beans::IllegalTypeException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 14:51:22  mi
+    moved from api module
+
+    Revision 1.2  2000/10/09 14:24:53  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:52:11  mi
+    documentation merged from XML
+
+    Revision 1.6  2000/02/23 12:43:24  mi
+    missing documentations
+
+    Revision 1.5  2000/02/17 09:30:05  mi
+    proofreading in layouted version
+
+    Revision 1.4  2000/02/07 11:24:18  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.3  2000/01/14 11:05:18  jsc
+    #71616# Typumstellung
+
+    Revision 1.2  1999/11/24 17:48:16  mi
+    documentation welformed
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

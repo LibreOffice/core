@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSimpleTest.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_test_XSimpleTest_idl__
+#define __com_sun_star_test_XSimpleTest_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module test {
+
+//=============================================================================
+/**
+    A simple interface to test a service or interface implementation.
+*/
+[ uik(E227A3FB-33D6-11D1-AABE00A0-249D5590), ident( "XSimpleTest", 1.0 ) ]
+interface XSimpleTest: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+        Test the object TestObject against the test specified with TestName. This test
+        does not change the semantic state of the object, so it can be called on a existing
+        component that will used further on.
+        Note : This can be a strong test limitation. There are some components, that cannot
+        perform their full test scenario.
+        @param TestName     the name of the test. Must be an interface, service or implementation name.
+        Note : The name is only used by the test component to distinguish
+        between test scenarios.
+        @param  TestObject  The instance to be tested.
+
+        @exception IllegalArgumentException  if the test does not support TestName or
+        TestObject is null.
+    */
+    void testInvariant( [in] string TestName,
+             [in] com::sun::star::uno::XInterface TestObject )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /**
+        Test the object TestObject against the test specified with TestName. This test
+        changes the state of the object. The object may be useless afterwards.
+        (e.g. a closed XOutputStream). The method in general may be called multipe times with a new
+        test object instance.
+        Note : These tests should include the testInvariant test.
+        Note : Each test scenario should be independent of each other, so even if a scenario
+        didn't pass the test, the other test can still be performed. The error messages
+        are cumulative.
+
+        @param TestName     The name of the test. Must be an interface, service or implementation name.
+        Note : The name is only used by the test component to distinguish
+        between test scenarios.
+        @param  TestObject  The instance to be tested.
+        @param   hTestHandle Internal test handle. Handle for first test is always 0.
+        Handle of next test is  returned by the method.
+        @return  Handle of the next test. -1 if this was the last test.
+
+        @exception IllegalArgumentException  if the test does not support TestName or
+        TestObject is null.
+    */
+    long test( [in] string TestName,
+             [in] com::sun::star::uno::XInterface TestObject,
+             [in] long hTestHandle )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /**States if one of the last test has failed. This is cumulative.
+        @return true if all test have been passed succesfully. false if an error has occured.
+
+    */
+    boolean testPassed();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION MISSING FOR XSimpleTest::getErrors
+    sequence<string> getErrors();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION MISSING FOR XSimpleTest::getErrorExceptions
+    sequence<any> getErrorExceptions();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION MISSING FOR XSimpleTest::getWarnings
+    sequence<string> getWarnings();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

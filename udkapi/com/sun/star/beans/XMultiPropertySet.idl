@@ -1,0 +1,213 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XMultiPropertySet.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
+#define __com_sun_star_beans_XMultiPropertySet_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySetInfo_idl__
+#include <com/sun/star/beans/XPropertySetInfo.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyVetoException_idl__
+#include <com/sun/star/beans/PropertyVetoException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertiesChangeListener_idl__
+#include <com/sun/star/beans/XPropertiesChangeListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::beans::XMultiPropertySet
+/** provides access to multiple properties.
+ */
+[ uik(E227A45C-33D6-11D1-AABE00A0-249D5590), ident( "XMultiPropertySet", 1.0 ) ]
+interface XMultiPropertySet: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XMultiPropertySet::getPropertySetInfo
+    /** @returns
+                the <type>XPropertySetInfo</type> interface, which describes
+                all properties of the object to which this interface belongs.
+                <const>NULL</const> is returned if the object cannot or will
+                not provide information about the properties.
+
+                @see XPropertySet::getPropertySetInfo()
+     */
+    [const] com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::setPropertyValues
+    /** sets the values to the properties with the specified names.
+
+
+
+        <p>The values of the properties must change before the bound
+        events are fired. The values of the constrained properties
+        should change after the vetoable events are fired and after if no
+        exception occur Unknown properties are ignored.
+
+        </p>
+     */
+    void setPropertyValues( [in] sequence<string> PropertyNames,
+             [in] sequence<any> Values )
+            raises( com::sun::star::beans::PropertyVetoException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::beans::XMultiPropertySet::getPropertyValues
+    /** @returns
+                    a sequence of all values of the properties which are specified
+                    by their names.
+
+                <p>The order of the values in the returned sequence will be the same
+                as the order of the names in the argument.
+     */
+    [const] sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::addPropertiesChangeListener
+    /** adds an <type>XPropertiesChangeListener</type> to the
+        specified property with the specified names.
+
+        The implementation can ignore the names of the properties
+        and fire the event on all properties.@see removePropertiesChangeListener
+     */
+    [oneway] void addPropertiesChangeListener( [in] sequence<string> aPropertyNames,
+             [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::removePropertiesChangeListener
+    /** removes an <type>XPropertiesChangeListener</type> from the
+        listener list.
+
+
+
+        <p>It is a "noop" if the listener is not registered.
+
+        </p>@see addPropertiesChangeListener
+     */
+    [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener Listener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::firePropertiesChangeEvent
+    /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified
+        listener.
+     */
+    [oneway] void firePropertiesChangeEvent( [in] sequence<string> aPropertyNames,
+             [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 14:51:22  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:11  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/02/23 12:43:24  mi
+    missing documentations
+
+    Revision 1.3  2000/02/17 09:30:05  mi
+    proofreading in layouted version
+
+    Revision 1.2  2000/02/07 11:24:18  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

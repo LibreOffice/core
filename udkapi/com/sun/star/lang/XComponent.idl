@@ -1,0 +1,249 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XComponent.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_lang_XComponent_idl__
+#define __com_sun_star_lang_XComponent_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module lang {
+
+interface XEventListener;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::lang::XComponent
+/** controls the lifetime of components.
+
+
+
+    <p>Actually the real lifetime of an UNO object is controlled by
+    references kept on interfaces of this object. But there are two
+    distinct meanings in keeping a reference to an interface:
+    1st to own the object and 2nd to know the object. Especially in case
+    of cyclic references, the objects would never get destroyed.
+
+    </p>
+    <p>You are only allowed to keep references of interfaces
+    to UNO objects if you are by definition the owner of that object or
+    your reference is very temporary or you have registered an
+    EventListener at that object and cleared the reference when
+    "disposing" is called.</p>
+ */
+[ uik(E227A39F-33D6-11D1-AABE00A0-249D5590), ident( "XComponent", 1.0 ) ]
+interface XComponent: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::lang::XComponent::dispose
+    /** The owner of a component calls this method to get rid of it.
+
+
+
+        <p>Only the owner of this object calls the dispose method if
+        the object should be destroyed. All objects and components
+        must release the references to the objects. If the object is a
+        broadcaster, then all listeners are removed and the method
+
+
+
+
+
+        is called on all
+        listeners.
+
+        </p>
+        <p>Due to the importance of the concept of the method
+
+
+
+
+
+        , we provide a figurative
+        example:
+
+        </p>
+        <blockquote>
+        Imagine there was a hole in the floor and some people
+        around it are holding a <em>box</em> (our component).
+        Everyone who holds the box for a longer time than just
+        temporaryly (i.e. to put something in or get something
+        out) has to watch a light bulb which is attached to
+        the box (listening to the
+
+
+
+
+
+        event).
+        Now, when the owner of the box switches the light on
+        (calling
+
+
+
+
+        ),
+        everybody holding the box has to take his hands off
+        (clear the interface handles). If and only if everyone
+        does that, then the box falls (getting deleted).
+        But only the owner is allowed to switch the light on!
+        </blockquote>
+
+        <p>After this method is called the instance has to throw the
+        <type>DisposedException</type> for
+        all calls not non-event-methods; event-methods have to be ignored.
+
+        </p>
+
+
+
+
+
+        @example <listing>
+        void dispose()
+        {
+        // make a copy
+        Listener [] aTmpListeners = MyListeners.clone();
+
+        // clear all listeners (against recursion)
+        MyListeners.clear();
+
+        // call all listeners
+        EventObject aEvt = new EventObject();
+        aEvt.xSource = this;
+        for( i = 0; i &amp;lt;aTmpListeners.length; i++ )
+        aTmpListeners[i].disposing( aEvt );
+        }
+        </listing>
+     */
+    void dispose();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::lang::XComponent::addEventListener
+    /** adds an event listener to the object.
+
+
+
+        <p>The broadcaster fires the disposing method of this listener
+        if the
+
+
+
+
+        method is called.
+
+        </p>@see removeEventListener()
+     */
+    void addEventListener( [in] XEventListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::lang::XComponent::removeEventListener
+    /** removes an event listener from the listener list.
+
+
+
+        <p>It is a "noop" if the specified listener is not registered.
+
+        </p>@see addEventListener()
+     */
+    void removeEventListener( [in] XEventListener aListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:09  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:25  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:33  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/02/23 11:41:16  mi
+    results from proofreading in layouted version
+
+    Revision 1.3  2000/02/07 11:24:39  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  1999/11/18 11:49:57  mi
+    XComponent now in module lang
+
+    Revision 1.1  1999/11/18 10:34:02  mi
+    XComponent now in module lang
+
+    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
+    new
+
+
+=============================================================================*/
+#endif

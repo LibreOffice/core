@@ -1,0 +1,166 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Converter.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_Converter_idl__
+#define __com_sun_star_script_Converter_idl__
+
+#ifndef __com_sun_star_script_XTypeConverter_idl__
+#include <com/sun/star/script/XTypeConverter.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::script::Converter
+/** This service provide a widening converter. This means it can convert
+    from one type to another if possible.
+
+    What is possible?<br>
+    byte: byte, (short *1), (long *1), (hyper *1), (float *1), (double *1), (enum *2), (any *3),
+    boolean, (char *4), (string *5)<br>
+    short: byte, short, (long *1), (hyper *1), (float *7), (double *7), (enum *2), (any *3),
+    boolean, char, (string *5)<br>
+    long: byte, short, long, (hyper *1), (float *7), (double *7), enum, (any *3),
+    boolean, char, (string *5)<br>
+    hyper: byte, short, long, hyper, (float *7), (double *7), enum, (any *3),
+    boolean, char, (string *5)<br>
+    float: byte, short, long, hyper, float, (double *7), (enum *8), (any *3),
+    boolean, char, (string *5)<br>
+    double: byte, short, long, hyper, float, double, enum, (any *3),
+    boolean, char, (string *5)<br>
+    enum: (byte *9), (short *9), (long *9), (hyper *9), (float *9), (double *9), (enum *10), (any *3),
+    (string *11)<br>
+    void: ok for all types.
+    any: ok for all types.
+    boolean: byte, short, long, hyper, float, double, (any *3),
+    boolean, char, (string *12). 0 -&amp;gt; false, != 0 -&amp;gt; true<br>
+    char: byte, short, (long *1), (hyper *1), (float *7), (double *7), enum, (any *3),
+    boolean, char, (string *13)<br>
+    string: byte, short, long, hyper, float, double, enum, (any *3),
+    boolean, char, string<br>
+    struct: (any *3), (struct *14)
+    interface: (any *3), (struct *14)
+    exception: (any *3), (exception *14)
+    union: (any *3), (union *14)
+    sequence: (any *3), (sequence *15)
+
+
+    short: byte, short, (long *1), (hyper *1), (float *1), (double *1), (enum *2), (any *3),
+    boolean, (char *4), (string *5), (interface *6)<br>
+
+    1: only convert if the value is in the range of the target type.<br>
+    2: only convert if the value, not the position, of the enum is in the range of the target type.<br>
+    3: get value until it is not an any. Than convert it with the other rules.<br>
+    4: only convert if the value of the character is between 0 - 255.<br>
+    5: only convert if the represents an dezimal, hexadezimal (0x...) or an floating point number.
+    Examples: 10, 0x10, 10.045, 10,555, +10, +10.6e10, -10.6e-10, .16.
+    6: only convert if the interface supply the
+    7: only convert if the value is in the range of the target type.
+    The value is roundet to an integer.<br>
+    8: only converted if the float can converted back to the same enum value.
+    9: only converted if the number is one of the enumeration type values. Normally you need
+    core reflection information of the enum type.
+    10: only converted if it is the same enumeration type.
+    11: only converted if the string contains the name of an enumeration type value. Normally you need
+    core reflection information of the enum type.
+    12: only converted if the value of the string is "1", "true" or "0", "false". The comparision
+    is case insensitiv.
+    13: only converted if the length of the string is 1 or 0.
+    14: only converted if the types are equal or the source type is derived from the destination
+    type.
+    15: only converted if each element of the source sequence can converted to an element
+    of the destination sequence.
+ */
+service Converter
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::script::XTypeConverter;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:34  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:52:38  mi
+    documentation merged from XML
+
+    Revision 1.2  2000/01/03 12:03:22  mi
+    reference manual
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,201 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAggregation.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:22:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_uno_XAggregation_idl__
+#define __com_sun_star_uno_XAggregation_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_uno_Uik_idl__
+#include <com/sun/star/uno/Uik.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module uno {
+
+//=============================================================================
+/** Objects which implement this interface can become aggregates of
+    a delegator.
+
+    <p>That means if an object "A" aggregates "B", "A" can provide all
+    or some of the interfaces of "B". Whenever the method
+    <method>XInterface::queryInterface()</method>
+    is called on either of the objects, the call will be forwarded
+    to object "A". Object "A" now can determine whether to use the
+    interfaces of "A" or "B" or neither. Actually, any number of
+    aggregates can be used, even nested ones (aggregated objects which are
+    delegators by themselves).
+
+    <p>The following rules are to be observed:
+    <ol>
+    <li>All calls to <method>XInterface::acquire()</method>
+    which are made before the delegator was set (using the method
+    <method>XAggregation::setDelegator()</method>) must not be taken back
+    (using the method <method>XInterface::release()</method>)
+    before the delegation is removed by calling
+    <code>xAggregation-&gt;setDelegator(NULL)</code>.
+
+    <li>The constructor of a delegator has to increment its
+    own reference count by calling its method
+    <method>XInterface::acquire()</method>
+    before it sets itself to any aggregate using the method
+    <method>XAggregation::setDelegator()</method>. After that
+    call it has to reset its own reference count without the
+    destructor getting called.
+
+    <li>The destructor of a delegator has to reset the delegator in
+    its aggregated objects by calling their method
+    <method>XAggregation::setDelegator()</method> with
+    <const>NULL</const> before it releases its reference to
+    its aggregated objects.
+    </ol>
+*/
+[ uik(E227A3CE-33D6-11D1-AABE00A0-249D5590), ident( "XAggregation", 1.0 ) ]
+interface XAggregation: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** sets the object to which all calls to the method
+        <method>XInterface::queryInterface()</method>
+        have to be forwarded. @
+
+        @param xDelegator
+        specifies the object which handles the calls to
+        <method>XInterface::queryInterface()</method>.
+        If <var>xDelegator</var> is <const>NULL</const>, the delegator is
+        removed and thus the object becomes its own delegator and has
+        to handle calls to the method
+        <method>XInterface::queryInterface()</method>
+        itself.
+
+        @example:Java
+
+        <listing>
+
+        void setDelegator( com.sun.star.uno.XInterface aDelegator )
+        {
+        pDelegator =aDelegator;
+        }
+
+
+        com.sun.star.uno.XInterface queryInterface( com.sun.star.uno.Uik aUik )
+        {
+        com.sun.star.uno.XInterface pRet = null;
+
+        // pDelegator may be already set
+        if( pDelegator == null )
+        pRet = queryAggregation( aIFace );
+        else
+        pRet = pDelegator->queryInterface( aIFace );
+        return pRet;
+        }
+
+        </listing>
+
+        @see #queryAggregation(Class)
+    */
+    void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
+
+    //-------------------------------------------------------------------------
+    /** is similar to <method>XInterface::queryInterface()</method>,
+        but it is to be processed directly without being forwarded to the
+        delegator. @
+
+        <p>This method is only called from within an implementation of
+        <method>XInterface::queryInterface()</method>
+        or <method>XAggregation::queryAggregation()</method>. This method
+        is to be called by the delegator if it does not implement the
+        interface itself. An object which got aggregated cannot depend
+        on getting its own interface when it calls the method
+        <method>XInterface::queryInterface()</method>.
+
+        @example:Java
+
+        <listing>
+
+        Class queryAggregation( Class aIFace )
+        {
+        // The Uno-System provides information about their own interfaces
+        Class pRet = Uno.getInterface( this, aIFace );
+
+        if( pRet == null )
+        // not an own interface, thus forward to the aggregated object
+        pRet = aMyAggObj->queryAggregation( aIface );
+        return pRet;
+        }
+
+        </listing>
+
+        @see #setDelegator(UnoAggregation)
+    */
+    any queryAggregation( [in] type aType );
+//  boolean queryAggregation( [in] com::sun::star::uno::Uik aUik,
+//           [out] any ifc );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

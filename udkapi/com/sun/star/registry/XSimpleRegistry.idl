@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSimpleRegistry.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_registry_XSimpleRegistry_idl__
+#define __com_sun_star_registry_XSimpleRegistry_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_registry_InvalidRegistryException_idl__
+#include <com/sun/star/registry/InvalidRegistryException.idl>
+#endif
+
+#ifndef __com_sun_star_registry_XRegistryKey_idl__
+#include <com/sun/star/registry/XRegistryKey.idl>
+#endif
+
+#ifndef __com_sun_star_registry_MergeConflictException_idl__
+#include <com/sun/star/registry/MergeConflictException.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module registry {
+
+//=============================================================================
+/**
+*/
+[ uik(E227A531-33D6-11D1-AABE00A0-249D5590), ident( "XSimpleRegistry", 1.0 ) ]
+interface XSimpleRegistry: com::sun::star::uno::XInterface
+{
+    //---------------------------------------------------------------------
+    /** contains the URL of the data source of the registry.
+     */
+    [readonly, attribute] string    URL;
+
+    //-------------------------------------------------------------------------
+    /** connects the registry to a persistent data source represented by
+        an URL.
+
+        <p>If a local registry is already open, this function
+        will close the currently open registry.
+
+        @param aURL
+        specifies the complete URL to access the data source.
+
+        @param bReadOnly
+        specifies if the data source should be opened for
+        read only.
+
+        @param bCreate<
+        specifies if the data source should be created if it
+        does not already exist.
+
+        @throws InvalidRegistryException
+        if the registry does not exist.
+    */
+    void open( [in] string rURL,
+             [in] boolean bReadOnly,
+             [in] boolean bCreate )
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** checks if the registry points to a valid data-source.
+    */
+    boolean isValid();
+
+    //-------------------------------------------------------------------------
+    /** disconnects the registry from the data-source.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+    */
+    void close()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** destroys the registry and the data source.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+    */
+    void destroy()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** @returns
+        the root key of the registry.
+
+        @throws InvalidRegistryException
+        if no registry is open
+    */
+    com::sun::star::registry::XRegistryKey getRootKey()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** checks if the registry is readonly.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+    */
+    boolean isReadOnly()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** merges a registry under the specified key.
+
+        <p>If the key does not exist it will be created. Existing
+        keys will be overridden from keys of registry specified by
+        <var>aUrl</var>.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+
+        @throws MergeConflictException
+        if any differences occur during merging
+    */
+    void mergeKey( [in] string aKeyName,
+             [in] string aUrl )
+            raises( com::sun::star::registry::InvalidRegistryException,
+                    com::sun::star::registry::MergeConflictException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

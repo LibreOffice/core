@@ -1,0 +1,263 @@
+/*************************************************************************
+ *
+ *  $RCSfile: giop.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <com/sun/star/corba/iop/iop.idl>
+
+module com { module sun { module star { module corba { module giop
+{
+    struct Version
+    {
+        byte major;
+        byte minor;
+    };
+// GIOP 1.1
+    enum MsgType_1_1
+    {
+        Request, Reply, CancelRequest,
+        LocateRequest, LocateReply,
+        CloseConnection, MessageError,
+        Fragment // GIOP 1.1 addition
+    };
+
+
+// GIOP 1.0
+    struct MessageHeader_1_0
+    {// Renamed from MessageHeader
+        byte magic_1;
+        byte magic_2;
+        byte magic_3;
+        byte magic_4;
+        Version GIOP_version;
+        boolean byte_order;
+        byte message_type;
+        unsigned long message_size;
+    };
+
+// GIOP 1.1
+    struct MessageHeader_1_1
+    {
+        byte magic_1;
+        byte magic_2;
+        byte magic_3;
+        byte magic_4;
+        Version GIOP_version;
+        byte flags; // GIOP 1.1 change
+        byte message_type;
+        unsigned long message_size;
+    };
+
+// GIOP 1.2
+    typedef MessageHeader_1_1 MessageHeader_1_2;
+// GIOP 1.0
+    struct RequestHeader_1_0
+    {
+        iop::ServiceContextList service_context;
+        unsigned long request_id;
+        boolean response_expected;
+        sequence < byte > object_key;
+        CorbaString8 operation;
+        sequence < byte > requesting_principal;
+    };
+
+// GIOP 1.1
+    struct RequestHeader_1_1
+    {
+        iop::ServiceContextList service_context;
+        unsigned long request_id;
+        boolean response_expected;
+        byte reserved_1;
+        byte reserved_2;
+        byte reserved_3; // Added in GIOP 1.1
+        sequence <byte> object_key;
+        CorbaString8 operation;
+        sequence <byte> requesting_principal; // binary compatible
+    };
+
+// GIOP 1.2
+
+    struct IORAddressingInfo
+    {
+        unsigned long selected_profile_index;
+        iop::IOR ior;
+    };
+
+    constants TargetAddressGroup
+        {
+            const short KeyAddr = 0;
+            const short ProfileAddr = 1;
+            const short ReferenceAddr = 2;
+        };
+
+    struct TargetAddress : CorbaUnion
+    {
+        short nDiscriminator;
+        sequence < byte > object_key;  // KeyAddr
+        iop::TaggedProfile profile;    // ProfileAddr
+        IORAddressingInfo ior;         // ReferenceAddr
+    };
+
+
+    struct RequestHeader_1_2
+    {
+        unsigned long request_id;
+        byte response_flags;
+        byte reserved_1;
+        byte reserved_2;
+        byte reserved_3;
+        TargetAddress target;
+        CorbaString8 operation;
+// Principal not in GIOP 1.2
+        iop::ServiceContextList service_context; // 1.2 change
+    };
+
+
+// GIOP 1.0 and 1.1
+/*  enum ReplyStatusType_1_0
+    {// Renamed from ReplyStatusType
+        NO_EXCEPTION,
+        USER_EXCEPTION,
+        SYSTEM_EXCEPTION,
+        LOCATION_FORWARD
+        };
+// GIOP 1.0
+
+    struct ReplyHeader_1_0
+    {// Renamed from ReplyHeader
+        iop::ServiceContextList service_context;
+        unsigned long request_id;
+        ReplyStatusType reply_status;
+    };
+*/
+// GIOP 1.1
+//  typedef ReplyHeader_1_0 ReplyHeader_1_1;
+
+    enum ReplyStatusType_1_2
+    {
+        NO_EXCEPTION,
+        USER_EXCEPTION,
+        SYSTEM_EXCEPTION,
+        LOCATION_FORWARD,
+        LOCATION_FORWARD_PERM, // new value for 1.2
+        NEEDS_ADDRESSING_MODE // new value for 1.2
+    };
+
+
+    struct ReplyHeader_1_2
+    {
+        unsigned long request_id;
+        ReplyStatusType_1_2 reply_status;
+        iop::ServiceContextList service_context; // 1.2 change
+    };
+
+    struct SystemExceptionReplyBody
+    {
+        CorbaString8 exception_id;
+        unsigned long minor_code_value;
+        unsigned long completion_status;
+    };
+
+    struct CancelRequestHeader
+    {
+        unsigned long request_id;
+    };
+
+// GIOP 1.0
+    struct LocateRequestHeader_1_0
+    {
+// Renamed LocationRequestHeader
+        unsigned long request_id;
+        sequence <byte> object_key;
+    };
+
+// GIOP 1.1
+    typedef LocateRequestHeader_1_0 LocateRequestHeader_1_1;
+// Same Header contents for 1.0 and 1.1
+// GIOP 1.2
+/*  struct LocateRequestHeader_1_2
+    {
+        unsigned long request_id;
+        TargetAddress target;
+    };
+*/
+// GIOP 1.2
+    enum LocateStatusType_1_2 {
+        UNKNOWN_OBJECT,
+        OBJECT_HERE,
+        OBJECT_FORWARD,
+        OBJECT_FORWARD_PERM, // new value for GIOP 1.2
+        LOC_SYSTEM_EXCEPTION, // new value for GIOP 1.2
+        LOC_NEEDS_ADDRESSING_MODE // new value for GIOP 1.2
+    };
+
+    struct LocateReplyHeader_1_2
+    {
+        unsigned long request_id;
+        LocateStatusType_1_2 locate_status;
+    };
+
+// GIOP 1.2
+    struct FragmentHeader_1_2
+    {
+        unsigned long request_id;
+    };
+
+
+}; }; }; }; };
+

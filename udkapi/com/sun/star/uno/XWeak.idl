@@ -1,0 +1,172 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XWeak.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:22:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_uno_XWeak_idl__
+#define __com_sun_star_uno_XWeak_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_uno_XAdapter_idl__
+#include <com/sun/star/uno/XAdapter.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module uno {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::uno::XWeak
+/** the server-side interface to a weak object.
+
+
+
+    <p>This interface is proxy to the adapted object.
+    In order to make it possible to have weak references to objects,
+    the <type>XAdapter</type> interface must be implemented to provide
+    a weak adapter for the clients.
+
+    <h4>Concept of weak referencing:</h4>
+
+    </p>
+    <p>This module specifies the interfaces for implementing and using
+    weak references.</p>
+    <p>
+
+    </p>
+    <p>The sense of weak references is to hold a reference to an object
+    without affecting the lifetime of the object. That means that a weak
+    reference may become invalid at any time if the referenced object dies.
+
+    </p>
+    <p>The following interfaces describe one way to handle weak references
+    by providing a weak adapter. The weak object has to provide this
+    adapter if anyone wants to hold a weak reference. To separate their
+    lifetimes, the adapter and the original object must not share the same
+    reference counter.  The weak reference is in fact only a hard reference
+    to the adapter, which knows - but does not hold - the original object.
+    That means that the implementation and synchronization of weak
+    referencing is the responsibility of the object.  The following
+    interfaces are involved in the concept of weak referencing:
+
+    <dl>
+    <dt>
+    <type>XWeak</type>
+    </dt>
+    <dd>is the server-side interface of the referred object. This
+    referred object must support the <type>XAdapter</type> interface.
+
+    </dd>
+    <dt>
+    <type>XReference</type>
+    </dt>
+    <dd>is a client-side interface which must be implemented by
+    the holder of any weak reference. It is used for notification
+    when the adapted object dies.
+
+    </dd>
+    </dl>
+    </p>
+ */
+[ uik(E227A546-33D6-11D1-AABE00A0-249D5590), ident( "XWeak", 1.0 ) ]
+interface XWeak: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::uno::XWeak::queryAdapter
+    /** queries the weak adapter.
+
+
+
+        <p>It is important that the adapter must know, but not hold
+        the adapted object. If the adapted object dies, all references
+        to the adapter have to be notified to release the adapter.
+
+        </p>
+     */
+    com::sun::star::uno::XAdapter queryAdapter();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:48  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:36:18  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:53:04  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,192 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XConnectionPointContainer.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_lang_XConnectionPointContainer_idl__
+#define __com_sun_star_lang_XConnectionPointContainer_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_XIdlClass_idl__
+#include <com/sun/star/reflection/XIdlClass.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module lang {
+
+interface XConnectionPoint;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::lang::XConnectionPointContainer
+/** makes it possible to locate a specific connection point
+    for a specified UIK and manages a sequence of connections points.
+
+
+
+    <p>An implementation of this interface <strong>must</strong>
+    support the <type scope="com::sun::star::uno">XWeak</type> interface. Look at the language
+    binding for a superclass or something else.
+
+    </p>@see       XConnectionPoint
+        @see       com::sun::star::uno::XWeak
+ */
+[ uik(E227A3D4-33D6-11D1-AABE00A0-249D5590), ident( "XConnectionPointContainer", 1.0 ) ]
+interface XConnectionPointContainer: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::getConnectionPointTypes
+    /** @returns
+                    a sequence of all outgoing type spefifies which are supported
+                    by this connectable object.
+     */
+    [const] sequence<TYPE_XIDLCLASS> getConnectionPointTypes();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::queryConnectionPoint
+    /** @returns
+                an <type>XConnectionPoint</type> interface of a
+                connection point for a specified type if that type
+                describes a supported outgoing interface. It is
+                <const>NULL</const> on failure of the call.
+
+                @param aType
+                specifies the connection point's type.
+     */
+    XConnectionPoint queryConnectionPoint( [in] TYPE_XIDLCLASS aType );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::lang::XConnectionPointContainer::advise
+    /** creates a connection between this object and a
+        client's sink, where the sink implements the outgoing
+        interface specified with ID.
+
+
+
+        <p>The interface is advised under the connection point you
+        get with <code>queryConnectionPoint( id )</code>.
+
+        </p>
+        <p>Use this method instead of the advise method at the
+        connection point only if you know that the broadcaster supports
+        the outgoing interface or if it does not matter that the
+        outgoing interface is not supported.
+
+        </p>@see XConnectionPoint::advise
+     */
+    [oneway] void advise( [in] TYPE_XIDLCLASS aType,
+             [in] com::sun::star::uno::XInterface xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::lang::XConnectionPointContainer::unadvise
+    /** terminates a notification previously set up with
+        advise at the container or at the suitable connection point.@see XConnectionPoint::unadvise
+     */
+    [oneway] void unadvise( [in] TYPE_XIDLCLASS aType,
+             [in] com::sun::star::uno::XInterface xListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:09  mi
+    moved from api module
+
+    Revision 1.2  2000/10/09 14:24:57  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:35:25  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:52:33  mi
+    documentation merged from XML
+
+    Revision 1.6  2000/03/09 12:36:15  mi
+    #70728# missing documentation
+
+    Revision 1.5  2000/02/23 11:41:16  mi
+    results from proofreading in layouted version
+
+    Revision 1.4  2000/02/07 11:24:39  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.3  2000/01/14 10:57:01  jsc
+    #71616# Typumstellung
+
+    Revision 1.2  1999/11/24 17:48:18  mi
+    documentation welformed
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

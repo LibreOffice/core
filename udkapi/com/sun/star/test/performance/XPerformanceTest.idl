@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XPerformanceTest.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:22:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_test_performance_XPerformanceTest_idl__
+#define __com_sun_star_test_performance_XPerformanceTest_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module com
+{
+module sun
+{
+module star
+{
+module test
+{
+module performance
+{
+
+/**
+ * struct of simple types to be carried.
+ */
+struct SimpleTypes
+{
+    boolean                    Bool;
+    char                       Char;
+    byte                       Byte;
+    short                      Short;
+    unsigned short             UShort;
+    long                       Long;
+    unsigned long              ULong;
+    hyper                      Hyper;
+    unsigned hyper             UHyper;
+    float                      Float;
+    double                     Double;
+};
+/**
+ * struct ComplexTypes adding Sequence, String, Interface, Any to SimpleTypes.
+ */
+struct ComplexTypes : SimpleTypes
+{
+    sequence< long >           Sequence;
+    string                     String;
+    com::sun::star::uno::XInterface Interface;
+    any                        Any;
+};
+
+/**
+ * A performance test object has to be implemented in a special way, that:<BR>
+ * <li>queryInterface() execution times remain (nearly) static</li>
+ * <li>functions kept simple, thus there is (nearly) no execution time of the function itself</li>
+ * <li>no dynamic data is ever returned except of createObject(), so return 0, empty strings etc.</li>
+ *
+ * The interface is divided into three sections:<BR>
+ * <li>measuring asynchron/ synchron calls</li>
+ * <li>complex data calls with/out return value; in/out parameters</li>
+ * <li>single data types like long, float, string etc.</li>
+ * <li>method calls versa attribute calls</li>
+ * <li>raising RuntimeException</li>
+ *<BR>
+ */
+[ uik(F3EA02B8-F114-42b0-A4E5214C-E96F7852), ident("XPerformanceTest", 1.0) ]
+interface XPerformanceTest : com::sun::star::uno::XInterface
+{
+    [oneway] void async();
+    void sync();
+
+    ComplexTypes complex_in( [in] ComplexTypes aVal );
+    ComplexTypes complex_inout( [inout] ComplexTypes aVal );
+
+    [oneway] void complex_oneway( [in] ComplexTypes aVal );
+    void complex_noreturn( [in] ComplexTypes aVal );
+
+    XPerformanceTest createObject();
+
+    [attribute] long                     Long_attr;
+    [attribute] hyper                    Hyper_attr;
+    [attribute] float                    Float_attr;
+    [attribute] double                   Double_attr;
+    [attribute] string                   String_attr;
+    [attribute] com::sun::star::uno::XInterface Interface_attr;
+    [attribute] any                      Any_attr;
+    [attribute] sequence< com::sun::star::uno::XInterface > Sequence_attr;
+    [attribute] ComplexTypes             Struct_attr;
+
+    long                getLong();
+    void                setLong( [in] long n );
+    hyper               getHyper();
+    void                setHyper( [in] hyper n );
+    float               getFloat();
+    void                setFloat( [in] float f );
+    double              getDouble();
+    void                setDouble( [in] double f );
+    string              getString();
+    void                setString( [in] string s );
+    com::sun::star::uno::XInterface getInterface();
+    void                setInterface( [in] com::sun::star::uno::XInterface x );
+    any                 getAny();
+    void                setAny( [in] any a );
+    sequence< com::sun::star::uno::XInterface > getSequence();
+    void                setSequence( [in] sequence< com::sun::star::uno::XInterface > seq );
+    ComplexTypes        getStruct();
+    void                setStruct( [in] ComplexTypes c );
+
+    void raiseRuntimeException();
+};
+
+//=============================================================================
+
+};
+};
+};
+};
+};
+
+#endif

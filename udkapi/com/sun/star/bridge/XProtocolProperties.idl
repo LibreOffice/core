@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XProtocolProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _COM_SUN_STAR_BRIDGE_XPROTOCOLPROPERTIES_IDL_
+#define _COM_SUN_STAR_BRIDGE_XPROTOCOLPROPERTIES_IDL_
+#include <com/sun/star/bridge/ProtocolProperty.idl>
+#include <com/sun/star/bridge/InvalidProtocolChangeException.idl>
+
+module com { module sun { module star { module bridge {
+
+
+/******
+ * INTERNAL INTERFACE, DO NOT USE IT ELSEWHERE
+ * Bridge internal interface, that allows to change protocol settings of the remote
+ * counter part. In general, this interface is implemented by the bridge itself. It must not
+ * be called from outside the bridge.
+ *****/
+[ uik(A7EF98B1-8D82-11d4-9F1B0050-04D7755D), ident( "XProtocolProperties", 1.0 ) ]
+interface XProtocolProperties : com::sun::star::uno::XInterface
+{
+    /***
+     * Called to get a list of bridge internal properties. Which properties can be retrieved, is
+     * protocol dependend.
+     * The properties MUST NOT change between a requestChange and a commit change call.
+     ***/
+    sequence< ProtocolProperty > getProperties( );
+
+    /****
+     * Called to initiate a protocol change. This method should always be called in the scope
+     * of the local bridge setting object, because the remote counter part may do such a call
+     * at the same time (typically at startup time).
+     *
+     * @param nRandomNumber In case both processes call requestChange at the same time,
+     *                      the caller with the higher nRandomNumber is allowed to call
+     *                      commitChange.
+     * @returns 1, if the caller may ( and MUST !!!) call commitChange.
+     *          0, if the caller is not allowed to call commitChange. This can only happen,
+     *             if the other bridge has called requestChange at the same time and
+     *             nRandomNumber is smaller than the other bridge's nRandomNumber.
+     *             The remote counterpart is supposed to call commitChange within a small
+     *             time span. Please call requestChange() after the remote counterpart has
+     *             called commitChange().
+     *          -1 if the nRandomNumber is of the same value as the previously
+     *             sent requestChange (sent by the remote counterpart). This is a draw :o).
+     *             Generate a new random number and try again.
+     ****/
+    long requestChange( [in] long nRandomNumber );
+
+    /****
+     * Called to commit a protocol change. It is only allowed to call commitChange, if
+     * requestChange has been called previously and the return value was true.
+     * The new properties are valid after the reply of commitChange has been received.
+     * Note, that this is difficult for the callee, because it must marshal the reply
+     * with the old settings.
+     * All properties not mentioned in the list are unchanged.
+     * Note that the bridge must be blocked for other threads,
+     * before commitChange is sent and unblocked
+     * after the reply has been received. This blocks the bridge.
+     *
+     * @raises InvalidProtocolChangeException
+     *                                  when the remote counterpart could not change
+     *                                  at least one of the properties. No property
+     *                                  has been changed. requestChange must be called
+     *                                  again to initiate a new change of the protocol.
+     ****/
+    void commitChange( [in] sequence< ProtocolProperty > newValues )
+        raises ( com::sun::star::bridge::InvalidProtocolChangeException );
+};
+
+};};};};
+#endif

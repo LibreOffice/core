@@ -1,0 +1,227 @@
+/*************************************************************************
+ *
+ *  $RCSfile: RegistryServiceManager.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_lang_RegistryServiceManager_idl__
+#define __com_sun_star_lang_RegistryServiceManager_idl__
+
+#ifndef __com_sun_star_lang_ServiceManager_idl__
+#include <com/sun/star/lang/ServiceManager.idl>
+#endif
+
+#ifndef __com_sun_star_lang_MultiServiceFactory_idl__
+#include <com/sun/star/lang/MultiServiceFactory.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_registry_XSimpleRegistry_idl__
+#include <com/sun/star/registry/XSimpleRegistry.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module lang {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::lang::RegistryServiceManager
+/** provides a collection of and a registry for implementations for services.
+
+
+
+    <p>The factories are accessed with a service name. It is possible to
+    access the factories with their implementation name, but that should be
+    avoided.
+
+    </p>
+    <p>The first argument of the
+
+
+
+
+
+    method may be a
+    reference to a simple registry (<type scope="com::sun::star::registry">XSimpleRegistry</type>).
+    If it is not initialized with a registry, then the default registry
+    "com::sun::star::registry::DefaultRegistry" is used. If this registry is not
+    found, then the manager works without a registry.
+
+    </p>
+    <p>You can get the current registry with
+
+
+
+
+
+    .
+
+    </p>
+    <p>The interfaces added through the <type scope="com::sun::star::container">XSet</type> interfaces
+    should support the following interfaces:
+
+    <dl>
+    <dt>
+    <type>XServiceInfo</type>
+
+    </dt>
+    <dd>is used to support access through the implementation with
+    service names.
+
+    </dd>
+    <dt>
+    <type>XSingleServiceFactory</type>
+    </dt>
+    <dd>is used to instanciate components from the implementation.
+
+    </dd>
+    <dt>
+    <type scope="com::sun::star::beans">XPropertySet</type> (optional)
+    </dt>
+    <dd>provides additional information on the implementation.
+
+    </dd>
+    <dt>
+    <type>XComponent</type> (optional)
+
+    </dt>
+    <dd>The service manager calls dispose on the registered
+    factories. The service manager adds a listener to this
+    factory. The factory is automatically revoked if the
+    disposing listener is notified.
+
+    </dd>
+    </dl>
+
+    </p>
+ */
+service RegistryServiceManager
+{
+    // DocMerge: empty anyway
+    service com::sun::star::lang::ServiceManager;
+
+    // DocMerge: empty anyway
+    service com::sun::star::lang::MultiServiceFactory;
+
+
+    // DocMerge from xml: service com::sun::star::lang::RegistryServiceManager: interface com::sun::star::lang::XInitialization
+    /** The first argument of the intitialization method of this
+                interface may be a reference to a simple registry
+                (<type scope="com::sun::star::registry">XSimpleRegistry</type>).
+     */
+    interface com::sun::star::lang::XInitialization;
+
+
+    // DocMerge from xml: service com::sun::star::lang::RegistryServiceManager: interface com::sun::star::beans::XPropertySet
+    /** The method <method>getPropertyValue</method> must be implemented
+                to get the readonly property <member>Registry</member>. All
+                other methods are optional.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::lang::RegistryServiceManager::Registry
+    /** specifies the current registry.
+
+
+
+        <p>This property will be initialized by
+        <type>XInitialization</type> or the default registry.
+        </p>
+     */
+    [readonly, property] com::sun::star::registry::XSimpleRegistry Registry;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:09  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:24  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:33  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/02/07 11:24:38  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  1999/12/13 14:58:15  mi
+    #70786# new XLocalizable for AddIns
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

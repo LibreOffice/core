@@ -1,0 +1,170 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Property.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_Property_idl__
+#define __com_sun_star_beans_Property_idl__
+
+#ifndef __com_sun_star_reflection_XIdlClass_idl__
+#include <com/sun/star/reflection/XIdlClass.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+// DocMerge from xml: struct com::sun::star::beans::Property
+/** This structure describes a property.
+
+
+
+    <p>There are three types of properties:
+    <dl>
+    <dt>bound properties
+    </dt>
+    <dt>constrained properties
+    </dt>
+    <dt>free properties
+    <dl>
+    </dl>
+    </dt>
+    </dl>
+    </p>
+ */
+struct Property
+{
+    // DocMerge from xml: field com::sun::star::beans::Property::Name
+    /** specifies the name of the property.
+
+
+
+        <p>The name is unique within an <type>XPropertySet</type>.</p>
+     */
+    string Name;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::beans::Property::Handle
+    /** contains an implementation-specific handle for the property.
+
+
+
+        <p>It may be -1 if the implementation has no handle. You can use
+        this handle to get values from the <type>XFastPropertySet</type>.</p>
+     */
+    long Handle;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::beans::Property::Type
+    /** contains an object that identifies the declared type for
+        the property.
+
+
+
+        <p>If the property has multiple types or the type is not
+        known, <strong>but not <atom>any</atom></strong>, then
+        <const>void</const> must be returned.</p>
+     */
+    TYPE_XIDLCLASS Type;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::beans::Property::Attributes
+    /** This field may contain zero or more constants of the
+        <type>PropertyAttribute</type> constants group.
+     */
+    short Attributes;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 14:51:22  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:34:55  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:10  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/02/23 12:43:23  mi
+    missing documentations
+
+    Revision 1.3  2000/02/07 11:24:18  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  2000/01/14 11:05:18  jsc
+    #71616# Typumstellung
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,254 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDebugging.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_XDebugging_idl__
+#define __com_sun_star_script_XDebugging_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_script_ContextInformation_idl__
+#include <com/sun/star/script/ContextInformation.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::script::XDebugging
+/** makes it possible to set breakpoints in an interpreter.
+ */
+[ uik(E227A3C3-33D6-11D1-AABE00A0-249D5590), ident( "XDebugging", 1.0 ) ]
+interface XDebugging: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::script::XDebugging::setBreakPoint
+    /** @returns
+                the source code line where the breakpoint was set.
+
+                <p>The value can differ from the parameter
+                <var>nSourceCodeLine</var> when this is not a valid line to
+                place it.  -1 indicates that the breakpoint cannot be set at
+                this position.
+     */
+    long setBreakPoint( [in] string aModuleName,
+             [in] long nSourceCodeLine,
+             [in] boolean bOn );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::clearAllBreakPoints
+    /** clears all breakpoints in the module set by "setBreakPoint".
+     */
+    void clearAllBreakPoints( [in] string aModuleName );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XDebugging::eval
+
+    // DocMerge from idl: method com::sun::star::script::XDebugging::eval
+    /** *
+             * @param CallStackPos  Position in the call stack for that the expression
+             *                      should be evaluated. 0 is the top/actual position in the call
+             *                      in the call stack, 1 the next and so on.
+     */
+    string eval( [in] string aSourceCode,
+             [in] short nCallStackPos );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XDebugging::getStackTrace
+
+    // DocMerge from idl: method com::sun::star::script::XDebugging::getStackTrace
+    /** * Return the engine's stack trace of the current execute position. Line break is the delemiter.
+     */
+    sequence<string> getStackTrace();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::script::XDebugging::getContextInformation
+    /** @returns
+                more detailed information about a specified stack frame.
+
+                @param nCallStackPos
+                specifies the position in the call stack for the
+                variables that should be delivered.
+     */
+    com::sun::star::script::ContextInformation getContextInformation( [in] short nCallStackPos );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XDebugging::dumpVariable
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::dumpVariable
+    /** returns the value of the variable at the given stack position.
+     */
+    string dumpVariable( [in] string aVariableName,
+             [in] short nCallStackPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::setVariable
+    /** sets the value of the specified variable within the specified
+        stack frame.
+     */
+    void setVariable( [in] string aVariableName,
+             [in] string aValue,
+             [in] short nCallStackPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::script::XDebugging::isVariable
+    /** @returns
+                whether the given variable exists within the specified stack frame.
+     */
+    boolean isVariable( [in] string aVariableName,
+             [in] short nCallStackPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::stop
+    /** stops the execution of the interpreter.
+
+
+
+        <p>To continue with the execution, call
+
+
+
+
+
+        .</p>
+     */
+    void stop();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::stepOver
+    /** executes the next and only the next statement.
+
+
+
+        <p>If the next statement is a function call, the function is
+        executed completely.</p>
+     */
+    void stepOver();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::stepIn
+    /** executes the next and only the next statement.
+
+
+
+        <p>If the next statement is a function call, only the function
+        entered.</p>
+     */
+    void stepIn();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::stepOut
+    /** executes the program until the next return from this stack frame.
+     */
+    void stepOut();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::script::XDebugging::doContinue
+    /** continues the program execution.
+     */
+    void doContinue();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:34  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:38  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/04/20 14:14:36  mm
+    #74031# better documentation
+
+    Revision 1.3  2000/02/23 11:41:17  mi
+    results from proofreading in layouted version
+
+    Revision 1.2  2000/02/07 11:24:51  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

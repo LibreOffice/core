@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDataOutputStream.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_io_XDataOutputStream_idl__
+#define __com_sun_star_io_XDataOutputStream_idl__
+
+#ifndef __com_sun_star_io_XOutputStream_idl__
+#include <com/sun/star/io/XOutputStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module io {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::io::XDataOutputStream
+/** makes it possible to write machine-independent simple data types to a
+    stream.
+ */
+[ uik(E227A3CB-33D6-11D1-AABE00A0-249D5590), ident( "XDataOutputStream", 1.0 ) ]
+interface XDataOutputStream: com::sun::star::io::XOutputStream
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeBoolean
+    /** writes a boolean. It is an 8-bit value. 0 means FALSE; all other
+        values mean TRUE.
+     */
+    void writeBoolean( [in] boolean Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeByte
+    /** writes an 8-bit byte.
+     */
+    void writeByte( [in] byte Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeChar
+    /** writes a 16-bit character.
+     */
+    void writeChar( [in] char Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeShort
+    /** writes a 16-bit big endian integer.
+     */
+    void writeShort( [in] short Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeLong
+    /** writes a 32-bit big endian integer.
+     */
+    void writeLong( [in] long Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeHyper
+    /** writes a 64-bit big endian integer.
+     */
+    void writeHyper( [in] hyper Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeFloat
+    /** writes a 32-bit IEEE float.
+     */
+    void writeFloat( [in] float Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeDouble
+    /** writes a 64-bit IEEE double.
+     */
+    void writeDouble( [in] double Value )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeUTF
+    /** writes a string in UTF format.
+     */
+    void writeUTF( [in] string Value )
+            raises( com::sun::star::io::IOException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:06:57  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:23  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:31  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

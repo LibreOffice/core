@@ -1,0 +1,324 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XIdlClass.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_XIdlClass_idl__
+#define __com_sun_star_reflection_XIdlClass_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_uno_TypeClass_idl__
+#include <com/sun/star/uno/TypeClass.idl>
+#endif
+
+#ifndef __com_sun_star_uno_Uik_idl__
+#include <com/sun/star/uno/Uik.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+interface XIdlField;
+interface XIdlMethod;
+interface XIdlArray;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::reflection::XIdlClass
+/** provides information about a type or module in an UNO environment.
+
+
+    Every array also belongs to a type that is reflected as an
+    <type>XIdlClass</type> object that is shared by all arrays with the
+    same element type and number of dimensions. Finally, any of the
+    primitive IDL types are also represented as <type>XIdlClass</type>
+    objects. This includes "void, any, boolean, char, float, double, octet,
+    short, long, hypher, unsigned octet, unsigned short, unsigned long" and
+    "unsigned hypher".
+ */
+[ uik(E227A3A0-33D6-11D1-AABE00A0-249D5590), ident( "XIdlClass", 1.0 ) ]
+interface XIdlClass: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getClasses
+    /** @returns
+                    all types and modules which are declared in this class.
+     */
+    sequence<XIdlClass> getClasses();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getClass
+    /** @returns
+                a type or module with the given name that is declared in this
+                class.
+     */
+    XIdlClass getClass( [in] string aName );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::equals
+    /** @returns
+                <TRUE/> if the instances describe the same type,
+                otherwise <FALSE/>.
+     */
+    boolean equals( [in] XIdlClass Type );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::reflection::XIdlClass::isAssignableFrom
+    /** tests if the parameter <var>xType</var> is a subclass of this
+        class.
+     */
+    boolean isAssignableFrom( [in] XIdlClass xType );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getTypeClass
+    /** @returns
+                the type that this instance represents.
+     */
+    com::sun::star::uno::TypeClass getTypeClass();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getName
+    /** @returns
+                    the fully-qualified name of the type of object
+                    (class, interface, array, sequence, struct, union, enum or
+                    primitive) represented by this <type>XIdlClass</type>.
+     */
+    string getName();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getUik
+    /** @returns
+                the UIK from this type. If the type has no UIK, then the
+                returned UIK is zero.
+     */
+    [const] com::sun::star::uno::Uik getUik();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XIdlClass::getSuperclasses
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getSuperclasses
+    /** * If this object represents an interface or a class,
+             * then the objects that represents the superclasses or superinterfaces
+             * of that class are returned.
+             * <p>
+             * If this object is the one that represents the topmost class
+             * or interface, an empty sequence is returned.
+             *
+             * @return  the superclass or interface of the type represented by this object.
+     */
+    sequence<XIdlClass> getSuperclasses();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XIdlClass::getInterfaces
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getInterfaces
+    /** * Determines the interfaces implemented by the class or interface
+             * represented by this object.
+             * <p>
+             * If the class or interface implements no interfaces, the method
+             * returns a sequence of length 0.
+             *
+             * @return  a sequence of interfaces implemented by this class.
+     */
+    sequence<XIdlClass> getInterfaces();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::reflection::XIdlClass::getComponentType
+    /** If this class represents an array or sequence type, this method
+        returns the <type>XIdlClass</type> object representing the
+        component type of the array or sequence; otherwise it returns
+        <null></null>.
+     */
+    XIdlClass getComponentType();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getField
+    /** @returns
+                an <type>XIdlField</type> that reflects the specified member
+                field of the class, interface, struct, union, enum or
+                exception represented by this <type>XIdlClass</type> object.
+                If a field with the specified name is not found, 0 is returned.
+
+                <p>The field to be reflected is located by searching all the
+                member fields of the class, interface, struct, union, enum or
+                exception represented by this <type>XIdlClass</type> object
+                for a field with the specified name or for NULL, if a field
+                with the specified name is not found.
+
+                @param aName
+                specifies the simple name of the desired field.
+     */
+    XIdlField getField( [in] string aName );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XIdlClass::getFields
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getFields
+    /** * Returns a sequence containing Field objects reflecting all the
+             * accessible fields of the class, interface, struct, union or enum represented
+             * by this XIdlClass object. Returns a sequence of length 0 if the
+             * class or interface has no accessible fields, or if it
+             * represents an array, a sequence or a primitive type.
+             *
+             * <p>Specifically, if this XIdlClass object represents a class,
+             * returns the fields of this class and of all its
+             * superclasses. If this XIdlClass object represents an interface,
+             * returns the fields of this interface and of all its
+             * superinterfaces. If this XIdlClass object represents an array,
+             * sequence or primitive type, returns a sequence of length 0.
+     */
+    sequence<XIdlField> getFields();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getMethod
+    /** @returns
+                an <type>XIdlMethod</type> that reflects the specified
+                member method of the interface represented by this
+                <type>XIdlClass</type> object. If a method with the specified
+                name is not found, "0" is returned.
+
+                <p>The method to be reflected is located by searching all the
+                member methods of the interface represented by this
+                <type>XIdlClass</type> object for a method with the specified
+                name.
+
+                @param aName
+                specifies the simple name of the desired method.
+     */
+    XIdlMethod getMethod( [in] string aName );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XIdlClass::getMethods
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getMethods
+    /** * Returns a sequence containing XIdlMethod objects reflecting all the
+             * <em>member</em> methods of the class or interface
+             * represented by this XIdlClass object, including those declared by
+             * the class or interface and and those inherited from
+             * superclasses and superinterfaces. Returns a sequence of length 0
+             * if the class or interface has no member methods.
+             *
+     */
+    sequence<XIdlMethod> getMethods();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getArray
+    /** @returns
+                the <type>XIdlArray</type> interface to get and set the
+                elements by index if the represented type is an array or
+                sequence.
+     */
+    XIdlArray getArray();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::reflection::XIdlClass::createObject
+    /** creates an instance of the type represented by this
+        <type>XIdlClass</type> object if the represented type is a
+        basic type, struct, enum, or sequence.
+     */
+    void createObject( [out] any obj );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:21  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:32  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:36  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/04/20 14:09:39  mm
+    #74031# better documentation
+
+    Revision 1.3  2000/02/17 18:30:24  mi
+    proofreading in layouted version
+
+    Revision 1.2  2000/02/07 11:24:44  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

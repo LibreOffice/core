@@ -1,0 +1,169 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XMultiPropertyStates.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XMultiPropertyState_idl__
+#define __com_sun_star_beans_XMultiPropertyState_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyState_idl__
+#include <com/sun/star/beans/PropertyState.idl>
+#endif
+
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyStateChangeListener_idl__
+#include <com/sun/star/beans/XPropertyStateChangeListener.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module beans {
+
+//=============================================================================
+/** makes it possible to query information about the state of
+    one or more properties.
+
+    <p>The state contains the information if a value is available or void and
+    if the value is stored in the object itself, or if a default value
+    is to be used and if the value cannot be determined, due to ambiguity
+    (multi selection with multipe values).
+*/
+[ uik(0CF62671-69DF-11d4-9FE50010-5AEF84A7), ident( "XMultiPropertyStates", 1.0 ) ]
+interface XMultiPropertyStates: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** @returns
+            a sequence of the states of the properties which are specified
+            by their names.
+
+        <p>The order of the states is correlating to the order of the
+        given property names.
+    */
+    sequence<com::sun::star::beans::PropertyState> getPropertyStates(
+            [in] sequence<string> aPropertyName )
+        raises( com::sun::star::beans::UnknownPropertyException );
+
+    //-------------------------------------------------------------------------
+    /** sets all properties to their default values.
+
+        <p>Each value depends on the implementation of this interface.
+        If it is a bound property, you must change the value before
+        the change events are fired.  If it is a constrained property, you
+        must fire the vetoable event before you change the property value.
+    */
+    void setAllPropertiesToDefault();
+
+    //-------------------------------------------------------------------------
+    /** sets the specified properties to their default values.
+
+        <p>Each value depends on the implementation of this interface.
+        If it is a bound property, you must change the value before
+        the change events are fired.  If it is a constrained property, you
+        must fire the vetoable event before you change the property value.
+
+        @param aPropertyNames
+            specifies the names of the properties.
+
+        @throws UnknownPropertyException
+            if one of the properties does not exist.
+    */
+    void setPropertiesToDefault( [in] sequence<string> aPropertyNames )
+            raises( com::sun::star::beans::UnknownPropertyException );
+
+    //-------------------------------------------------------------------------
+    /** @returns
+            the default values of the propertes with the specified names.
+
+        <p>If no default exists, is not known or is void,
+        then the return type at the corresponding position in the
+        sequence returned is <type>void</type>.
+
+        @param aPropertyNames
+            specifies the names of the properties.
+
+        @throws UnknownPropertyException
+            if one of the propertes does not exist.
+
+        @throws  com::sun::star::lang::WrappedTargetException
+            if the implementation has an internal reason for the exception.
+            In this case the original exception is wrapped into that
+            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+    */
+    [const] sequence<any> getPropertyDefaults(
+                [in] sequence<string> aPropertyNames )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

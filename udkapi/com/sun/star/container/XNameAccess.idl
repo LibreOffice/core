@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XNameAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#define __com_sun_star_container_XNameAccess_idl__
+
+#ifndef __com_sun_star_container_XElementAccess_idl__
+#include <com/sun/star/container/XElementAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module container {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::container::XNameAccess
+/** is used to access named objects within a container.
+
+
+
+    <p>To implement inaccurate name access, support the <type scope="com::sun::star::beans">XExactName</type>
+    interface.  </p>@see com::sun::star::beans::XExactName
+ */
+[ uik(E227A417-33D6-11D1-AABE00A0-249D5590), ident( "XNameAccess", 1.0 ) ]
+interface XNameAccess: com::sun::star::container::XElementAccess
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::container::XNameAccess::getByName
+    /** @returns
+                the object with the specified name.
+
+                @param aName
+                the name of the object.
+
+                @throws NoSuchElementException
+                if an element under Name does not exist.
+
+                @throws  com::sun::star::lang::WrappedTargetException
+                If the implementation has internal reasons for exceptions,
+                then wrap these in a <type>WrappedTargetException</type>
+                exception.
+     */
+    [const] any getByName( [in] string aName )
+            raises( com::sun::star::container::NoSuchElementException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::container::XNameAccess::getElementNames
+    /** @returns
+                    a sequence of all element names in this container.
+
+                <p>The order of the names is not specified.
+     */
+    [const] sequence<string> getElementNames();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::container::XNameAccess::hasByName
+    /** @returns
+                <TRUE/> if an element with this name is in
+                the container, <FALSE/> otherwise.
+
+                In many cases the next call is <method>XNameAccess::getByName</method>.
+                You should optimize this case.
+
+                @param iaName
+                the name of the object.
+     */
+    [const] boolean hasByName( [in] string aName );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:06:46  mi
+    moved from api module
+
+    Revision 1.2  2000/10/09 14:24:54  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:35:04  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:17  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/02/23 14:49:55  mi
+    missing documentations
+
+    Revision 1.3  2000/02/07 11:24:23  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  2000/01/03 12:03:20  mi
+    reference manual
+
+    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,242 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XIdlMethod.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_XIdlMethod_idl__
+#define __com_sun_star_reflection_XIdlMethod_idl__
+
+#ifndef __com_sun_star_reflection_XIdlMember_idl__
+#include <com/sun/star/reflection/XIdlMember.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_ParamInfo_idl__
+#include <com/sun/star/reflection/ParamInfo.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_MethodMode_idl__
+#include <com/sun/star/reflection/MethodMode.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_InvocationTargetException_idl__
+#include <com/sun/star/reflection/InvocationTargetException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+interface XIdlClass;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::reflection::XIdlMethod
+/** makes it possible to access the specification of a method dynamically.
+ */
+[ uik(E227A3A3-33D6-11D1-AABE00A0-249D5590), ident( "XIdlMethod", 1.0 ) ]
+interface XIdlMethod: com::sun::star::reflection::XIdlMember
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getReturnType
+    /** @returns
+                an <type>XIdlClass</type> object that represents the formal
+                return type of the method represented by this method object.
+     */
+    XIdlClass getReturnType();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XIdlMethod::getParameterTypes
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getParameterTypes
+    /** * Returns a sequence of XIdlClass objects that represent the formal
+             * parameter types, in declaration order, of the method
+             * represented by this Method object.  Returns a sequence of length
+             * 0 if the underlying method takes no parameters.
+     */
+    sequence<XIdlClass> getParameterTypes();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XIdlMethod::getParameterInfos
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getParameterInfos
+    /** * Returns a sequence of ParamInfo objects that represent all informations
+             * about the formal parameter types, in declaration order, of the method
+             * represented by this Method object.  Returns a sequence of length
+             * 0 if the underlying method takes no parameters.
+     */
+    sequence<ParamInfo> getParameterInfos();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XIdlMethod::getExceptionTypes
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getExceptionTypes
+    /** * Returns a sequence of XIdlClass objects that represent the types of
+             * the checked exceptions thrown by the underlying method
+             * represented by this Method object.  Returns a sequence of length
+             * 0 if the method throws no checked exceptions.
+     */
+    sequence<com::sun::star::reflection::XIdlClass> getExceptionTypes();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getMode
+    /** @returns
+                an enumeration value which denotes whether the method is one-way or two-way.
+     */
+    com::sun::star::reflection::MethodMode getMode();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::reflection::XIdlMethod::invoke
+    /** Invokes the underlying method represented by this method object on
+        the specified object with the specified parameters. Individual
+        parameters are subject to widening conversions as necessary.
+
+
+
+        <p>Method invocation proceeds in the following order of steps:
+
+        </p>
+        <p>If the specified object argument is NULL, the invocation
+        throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>. Otherwise,
+        if the specified object argument is not an instance of the
+        class or interface declaring the underlying method, the
+        invocation throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+
+        </p>
+        <p>If the number of actual parameters supplied via <var>args</var> is
+        different from the number of formal parameters required by
+        the underlying method, the invocation throws an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+
+        </p>
+        <p>For each actual parameter in the supplied <var>args</var> array:
+
+        <dl>
+        <dd>If the parameter value cannot be converted to the
+        corresponding formal parameter type by an
+        identity or widening conversion, the
+        invocation throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+        </dd>
+        </dl>
+
+        </p>
+        <p>When the control transfers to the underlying method and
+        the method stops abruptly by throwing an exception, the exception
+        is placed in an <type>InvocationTargetException</type> and thrown
+        in turn to the caller of
+
+
+
+
+        .
+
+        </p>
+        <p>If the method completes normally, the value it returns
+        is returned to the caller of
+
+
+
+
+        .
+        If the underlying method return type is void, the invocation
+        returns <void></void>.
+
+        </p>
+     */
+    any invoke( [in] any obj,
+             [inout] sequence<any> args )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::reflection::InvocationTargetException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:21  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:32  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:36  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/04/20 14:09:39  mm
+    #74031# better documentation
+
+    Revision 1.2  2000/02/07 11:24:45  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

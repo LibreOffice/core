@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ *  $RCSfile: iop.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <com/sun/star/corba/corba.idl>
+
+module com { module sun { module star { module corba { module iop
+{ // IDL
+
+// Standard Protocol Profile tag values
+    typedef unsigned long ProfileId;
+    constants ProfileIdGroup
+        {
+            const ProfileId TAG_INTERNET_IOP = 0;
+            const ProfileId TAG_MULTIPLE_COMPONENTS = 1;
+        };
+
+    struct TaggedProfile
+    {
+        ProfileId tag;
+        sequence <byte> profile_data;
+    };
+    // an Interoperable Object Reference is a sequence of
+    // object-specific protocol profiles, plus a type ID.
+
+    struct IOR
+    {
+        CorbaString8 type_id;
+        sequence <TaggedProfile> profiles;
+    };
+
+    // Standard way of representing multicomponent profiles.
+    // This would be encapsulated in a TaggedProfile.
+    typedef unsigned long ComponentId;
+    struct TaggedComponent
+    {
+        ComponentId tag;
+        sequence <byte> component_data;
+    };
+    typedef sequence <TaggedComponent> MultipleComponentProfile;
+
+    typedef unsigned long ServiceId;
+    struct ServiceContext
+    {
+        ServiceId context_id;
+        sequence < byte > context_data;
+    };
+
+    typedef sequence <ServiceContext> ServiceContextList;
+
+    constants ServiceIdGroup
+        {
+            const ServiceId TransactionService = 0;
+            const ServiceId CodeSets = 1;
+            const ServiceId ChainBypassCheck = 2;
+            const ServiceId ChainBypassInfo = 3;
+            const ServiceId LogicalThreadId = 4;
+            const ServiceId BI_DIR_IIOP = 5;
+            const ServiceId SendingContextRunTime = 6;
+            const ServiceId INVOCATION_POLICIES = 7;
+            const ServiceId FORWARDED_IDENTITY = 8;
+            const ServiceId UnknownExceptionInfo = 9;
+        };
+
+/*
+ const ComponentId TAG_ORB_TYPE = 0;
+    const ComponentId TAG_CODE_SETS = 1;
+    const ComponentId TAG_POLICIES = 2;
+    const ComponentId TAG_ALTERNATE_IIOP_ADDRESS = 3;
+    const ComponentId TAG_ASSOCIATION_OPTIONS = 13;
+    const ComponentId TAG_SEC_NAME = 14;
+    const ComponentId TAG_SPKM_1_SEC_MECH = 15;
+    const ComponentId TAG_SPKM_2_SEC_MECH = 16;
+    const ComponentId TAG_KerberosV5_SEC_MECH = 17;
+    const ComponentId TAG_CSI_ECMA_Secret_SEC_MECH = 18;
+    const ComponentId TAG_CSI_ECMA_Hybrid_SEC_MECH = 19;
+    const ComponentId TAG_SSL_SEC_TRANS = 20;
+    const ComponentId TAG_CSI_ECMA_Public_SEC_MECH = 21;
+    const ComponentId TAG_GENERIC_SEC_MECH = 22;
+    const ComponentId TAG_JAVA_CODEBASE = 25;
+    const ComponentId TAG_COMPLETE_OBJECT_KEY = 5;
+    const ComponentId TAG_ENDPOINT_ID_POSITION = 6;
+    const ComponentId TAG_LOCATION_POLICY = 12;
+    const ComponentId TAG_DCE_STRING_BINDING = 100;
+    const ComponentId TAG_DCE_BINDING_NAME = 101;
+    const ComponentId TAG_DCE_NO_PIPES = 102;
+    const ComponentId TAG_DCE_SEC_MECH = 103; // Security Service
+*/
+}; }; }; }; };
+

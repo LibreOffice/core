@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XIdlField.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_XIdlField_idl__
+#define __com_sun_star_reflection_XIdlField_idl__
+
+#ifndef __com_sun_star_reflection_XIdlMember_idl__
+#include <com/sun/star/reflection/XIdlMember.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_XIdlClass_idl__
+#include <com/sun/star/reflection/XIdlClass.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_FieldAccessMode_idl__
+#include <com/sun/star/reflection/FieldAccessMode.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalAccessException_idl__
+#include <com/sun/star/lang/IllegalAccessException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+// DocMerge: empty anyway
+[ uik(E227A3A2-33D6-11D1-AABE00A0-249D5590), ident( "XIdlField", 1.0 ) ]
+interface XIdlField: com::sun::star::reflection::XIdlMember
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlField::getType
+    /** @returns
+                an <type>XIdlClass</type> object that identifies the declared
+                type for the field represented by this <type>XIdlField</type>.
+     */
+    com::sun::star::reflection::XIdlClass getType();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlField::getAccessMode
+    /** @returns
+                an enumeration value which denotes whether the field is
+                "const", "readonly", "writeonly" or "readwrite".
+     */
+    com::sun::star::reflection::FieldAccessMode getAccessMode();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::reflection::XIdlField::get
+    /** @returns
+                the value of the field represented by this field on the specified object.
+
+                <p>The underlying field's value is obtained as follows:
+
+                <ul>
+                <li>If the underlying field is a constant, the
+                object argument is ignored; it may be NULL.
+
+                <li>Otherwise, the underlying field is an instance
+                field. If the specified object argument is
+                NULL, the method throws an
+                "IllegalArgumentException". If the specified
+                object is not an instance of the class,
+                interface, struct, union or enum declaring
+                the underlying field, the method throws an
+                "IllegalArgumentException".
+
+                <li>Otherwise, the value is retrieved from the
+                underlying instance or constant.
+                </ul>
+
+                @throws IllegalArgumentException
+                if the specified object is <NULL/> and if the
+                specified object is not an instance of the class or
+                interface declaring the underlying field.
+     */
+    any get( [in] any obj )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::reflection::XIdlField::set
+    /** sets the field represented by this <type>XIdlField</type> on the
+        specified object argument to the specified new value.
+
+
+
+        <p>The operation proceeds as follows:
+
+        </p>
+        <ul>
+        <li>If the specified object argument is NULL, the method
+        throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>. If
+        the specified object argument is not an instance of
+        the class or interface declaring the underlying field,
+        then the method throws an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+
+        </li>
+        <li>If the underlying field is constant, the method throws an
+        <type scope="com::sun::star::lang">IllegalAccessException</type>.
+
+        <p>If the new value cannot be converted to the type
+        of underlying field by an identity or widening
+        conversion, the method throws an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+        </p>
+        </li>
+        </ul>
+
+        <p>The field is set to the possibly widened new value.
+
+        </p>
+     */
+    void set( [in] any obj,
+             [in] any value )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::IllegalAccessException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 15:07:21  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:35:32  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:52:36  mi
+    documentation merged from XML
+
+    Revision 1.2  2000/02/07 11:24:45  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

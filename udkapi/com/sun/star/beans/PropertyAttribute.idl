@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ *  $RCSfile: PropertyAttribute.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_PropertyAttribute_idl__
+#define __com_sun_star_beans_PropertyAttribute_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::beans::PropertyAttribute
+/** These values are used to specify the behaviour of a <type>Property</type>.
+ */
+constants PropertyAttribute
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::MAYBEVOID
+    /** indicates that a property value can be void.
+
+                <p>It does not mean that the type of the property is void!
+     */
+    const short MAYBEVOID = 1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::BOUND
+    /** indicates that a <type>PropertyChangeEvent</type> will be fired
+                to all registered <type>XPropertyChangeListener</type>s
+                whenever the value of this property changes.
+     */
+    const short BOUND = 2;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::CONSTRAINED
+    /** indicates that a <type>PropertyChangeEvent</type> will be fired
+                to all registered <type>XVetoableChangeListener</type>s
+                whenever the value of this property changes.
+
+                <p>This always implies that the property is <em>bound</em>, too.
+     */
+    const short CONSTRAINED = 4;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::TRANSIENT
+    /** indicates that the value of the property is not persistent.
+     */
+    const short TRANSIENT = 8;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::READONLY
+    /** indicates that the value of the property is read-only.
+     */
+    const short READONLY = 16;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::MAYBEAMBIGUOUS
+    /** indicates that the value of the property can be ambiguous.
+     */
+    const short MAYBEAMBIGUOUS = 32;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT
+    /** indicates that the property can be set to default.
+     */
+    const short MAYBEDEFAULT = 64;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::REMOVEABLE
+    /** indicates that the property can be removed (i.e. by calling
+                <method>XPropertyContainer::removeProperty</method>).
+     */
+    const short REMOVEABLE = 128;
+
+    // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::REMOVABLE
+    /** same as <const>PropertyAttribute::REMOVEABLE</const>.
+     */
+    const short REMOVABLE = 128;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/03 14:51:22  mi
+    moved from api module
+
+    Revision 1.1.1.1  2000/09/18 23:34:55  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:10  mi
+    documentation merged from XML
+
+    Revision 1.5  2000/04/20 13:57:25  mi
+    documentation
+
+    Revision 1.4  2000/03/09 10:24:39  mi
+    #70728# missing documentation
+
+    Revision 1.3  2000/02/17 09:30:04  mi
+    proofreading in layouted version
+
+    Revision 1.2  1999/12/20 12:12:15  kso
+    #68274# - Added attribute REMOVEABLE.
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif
