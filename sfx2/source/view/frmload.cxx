@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-07 11:54:57 $
+ *  last change: $Author: mba $ $Date: 2001-02-08 14:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aTypeName = sTemp;
-            aFilterName = SfxFilterContainer::ConvertToOldFilterName( sTemp );
+            aFilterName = SfxFilterContainer::ConvertToOldFilterName( aTypeName );
         }
         if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
         {
@@ -630,10 +630,10 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         // Convert old to new filter name.
         aFilterName = aTypeName;
     }
-    else if ( !aFilterName.Len() && !aPreselectedFilterName.Len() )
+    else if ( !aFilterName.Len() && !aPreselectedFilterName.Len() && aTypeName.getLength() )
     {
         // generic detector will not be called for new types except when this type does not support deep detection
-        // in this case it is correct to use the result of the shallow detection ( that may be empty also! )
+        // in this case it is correct to use the result of the shallow detection ( if there is any )
         return aTypeName;
     }
     else
@@ -684,8 +684,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
             if ( !pFilter )
             {
-                if( !aFilterName.Len() )
-                    // preselected filter was bullshit, but the before detected type is a new type that can't be
+                if( !aFilterName.Len() && aTypeName.getLength() )
+                    // preselected filter was not set or was bullshit, but the before detected type is a new type that can't be
                     // detected with this service
                     return aTypeName;
 
