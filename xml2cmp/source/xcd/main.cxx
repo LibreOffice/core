@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
+ *  last change: $Author: np $ $Date: 2001-07-10 13:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,13 +133,12 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
     {
         Create_AccessMethod( i_rCommandLine.FuncFile(),
                              aParser.PureText() );
+
+        cout << "File "
+             << i_rCommandLine.FuncFile()
+             << " with component_getDescriptionFunc() is created now."
+             << endl;
     }
-
-    cout << "File "
-         << i_rCommandLine.FuncFile()
-         << " with component_getDescriptionFunc() is created now."
-         << endl;
-
 
     // Parse
     aParser.Parse();
