@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 14:43:14 $
+ *  last change: $Author: tra $ $Date: 2001-03-14 16:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,14 @@ void SAL_CALL CWinClipbImpl::setContents( const Reference< XTransferable >& xTra
     m_rCurrentClipbContent = xTransferable;
     m_rCurrentClipbOwner   = xClipboardOwner;
 
-    IDataObjectPtr pIDataObj( objFactory.createDataObjFromTransferable(
-        m_pWinClipboard->m_SrvMgr , m_rCurrentClipbContent ) );
+    IDataObjectPtr pIDataObj;
+
+    if ( xTransferable.is( ) )
+        pIDataObj = objFactory.createDataObjFromTransferable(
+            m_pWinClipboard->m_SrvMgr , m_rCurrentClipbContent );
+    else
+        // we don't even need to save a potential clip-owner
+        m_rCurrentClipbOwner = Reference< XClipboardOwner >( );
 
     // used to differentiate in ClipboardContentChanged handler
     m_bSelfTriggered = sal_True;
