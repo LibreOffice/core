@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:46:11 $
+ *  last change: $Author: lla $ $Date: 2003-01-20 11:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,25 @@ rtl::OUString convertPath( rtl::OUString const& _suSysPath )
 {
     // PRE: String should contain a filename, relativ or absolut
     rtl::OUString fURL;
+    bool bRelativ = false;
+#ifdef WNT
+    sal_Char cFileSep[] = "\\";
+#endif
+#ifdef UNX
+    sal_Char cFileSep[] = "/";
+#endif
+
     if ( _suSysPath.indexOf(rtl::OUString::createFromAscii("..")) != -1 )
+    {
+        bRelativ = true;
+    }
+    else if ( _suSysPath.indexOf(rtl::OUString::createFromAscii(cFileSep)) == -1 )
+    {
+        // no fileseparator found, must be relative
+        bRelativ = true;
+    }
+
+    if (bRelativ)
     {
         // filepath contains '..' so it's a relative path make it absolut.
         rtl::OUString curDirPth;
