@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:03:45 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_XCUSTOMSHAPEENGINE_HPP_
-#include <drafts/com/sun/star/drawing/XCustomShapeEngine.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_XCUSTOMSHAPEENGINE_HPP_
+#include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #endif
 
 // -----------------------------------------------------------------------------
@@ -129,7 +129,7 @@ class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
 <
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo,
-    drafts::com::sun::star::drawing::XCustomShapeEngine
+    com::sun::star::drawing::XCustomShapeEngine
 >
 {
     REF( NMSP_LANG::XMultiServiceFactory )      mxFact;
@@ -162,7 +162,7 @@ public:
         throw ( NMSP_UNO::RuntimeException );
     virtual com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL getLineGeometry()
         throw ( NMSP_UNO::RuntimeException );
-    virtual SEQ( REF( drafts::com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL getInteraction()
+    virtual SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL getInteraction()
         throw ( NMSP_UNO::RuntimeException );
 };
 
