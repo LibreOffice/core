@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:57:27 $
+#   last change: $Author: csaba $ $Date: 2000-10-16 15:10:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,7 +143,9 @@ $(MISC)$/$(SHL1TARGET).flt:
 
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
+.IF "$(BUILD_SOSL)"==""
     +mhids hidother.src ..\$(INPATH)$/srs starmath hidother
+.ENDIF
 .ELSE
     @echo nix
 .ENDIF

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2000-10-11 17:05:52 $
+#   last change: $Author: csaba $ $Date: 2000-10-16 15:13:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -449,12 +449,14 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
 
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)" =="WNT"
+.IF "$(BUILD_SOSL)"==""
     @+echo
     @+echo 	NO HIDS!
     @+echo
     +copy ..\inc\helpid.h .
     +mhids hidother.src ..$/$(INPATH)$/srs sw hidother
     +del helpid.h
+.ENDIF
 .ELSE
     @echo wnt only
 .ENDIF
