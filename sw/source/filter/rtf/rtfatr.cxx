@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:09:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2170,10 +2170,24 @@ static Writer& OutRTF_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
         ( rRTFWrt.GetEndPosLst() &&
         rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
     {
-        rRTFWrt.bOutFmtAttr = TRUE;
-        const sal_Char* pCmd = rRTFWrt.IsAssociatedFlag() ? sRTF_AF : sRTF_F;
+        rRTFWrt.bOutFmtAttr = true;
+        const SvxFontItem&rFont = (const SvxFontItem&)rHt;
+        bool bAssoc = rRTFWrt.IsAssociatedFlag();
+        /*
+         #109522#
+         Word is a bit of a silly bugger of a program when its comes to symbol
+         font useage. If a symbol font is actually being used, i.e.  exported
+         here with bTxtAttr true then both AF and F must be set to the same
+         value
+        */
+        if (rRTFWrt.bTxtAttr && (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL))
+        {
+            const sal_Char* pCmd = !bAssoc ? sRTF_AF : sRTF_F;
+            rWrt.Strm() << pCmd;
+        }
+        const sal_Char* pCmd = bAssoc ? sRTF_AF : sRTF_F;
         rWrt.Strm() << pCmd;
-        rWrt.OutULong( rRTFWrt.GetId( (const SvxFontItem&)rHt ) );
+        rWrt.OutULong(rRTFWrt.GetId(rFont));
     }
     return rWrt;
 }
