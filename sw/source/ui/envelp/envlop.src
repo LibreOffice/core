@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-30 09:17:30 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ TabDialog DLG_ENV
                 Text[ chinese_traditional ] = "格式";
                 Text[ turkish ] = "Renk format�";
                 Text[ arabic ] = "�������";
-                Text[ catalan ] = "Formato";
+                Text[ catalan ] = "Formata";
                 Text[ finnish ] = "Muoto";
                 Text[ thai ] = "รูปแบบ";
             };
@@ -172,7 +172,7 @@ TabDialog DLG_ENV
                 Text[ korean ] = "프린터";
                 Text[ turkish ] = "Yaz�c�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Impresora";
+                Text[ catalan ] = "Impressora";
                 Text[ thai ] = "เครื่องพิมพ์";
             };
         };
@@ -204,7 +204,7 @@ TabDialog DLG_ENV
         Text[ korean ] = "삽입(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "I~nsertar";
+        Text[ catalan ] = "~Insereix";
         Text[ thai ] = "แ~ทรก";
     };
     String ST_CHANGE
@@ -234,7 +234,7 @@ TabDialog DLG_ENV
         Text[ korean ] = "수정(~M)";
         Text[ turkish ] = "D~e�i�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar";
+        Text[ catalan ] = "~Modifica";
         Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     Text[ chinese_simplified ] = "信封";
@@ -285,7 +285,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "받는 사람(~E)";
         Text[ turkish ] = "Al�c�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Destinatario";
+        Text[ catalan ] = "Destinat~ari";
         Text[ thai ] = "ผู้รั~บจดหมาย";
     };
     MultiLineEdit EDT_ADDR
@@ -326,7 +326,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "데이터베이스";
         Text[ turkish ] = "Veritaban�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Base de datos";
+        Text[ catalan ] = "Base de dades";
         Text[ thai ] = "ฐานข้อมูล";
     };
     ListBox LB_DATABASE
@@ -362,7 +362,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "시트";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tabla";
+        Text[ catalan ] = "Taula";
         Text[ finnish ] = "Taulukko";
         Text[ thai ] = "ตาราง";
     };
@@ -408,7 +408,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "데이터베이스 필드(~D)";
         Text[ turkish ] = "Veritaban� alan�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Campo base de datos";
+        Text[ catalan ] = "Camp de la ~base de dades";
         Text[ thai ] = "เขตข้อมูลของ~ฐานข้อมูล";
     };
     ListBox LB_DBFIELD
@@ -447,7 +447,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "보낸 사람(~S)";
         Text[ turkish ] = "G�nderen";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "R~emitente";
+        Text[ catalan ] = "~Remitent";
         Text[ thai ] = "~ผู้ส่ง";
     };
     MultiLineEdit EDT_SEND
