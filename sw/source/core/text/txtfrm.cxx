@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:10:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2079,6 +2079,13 @@ SwTxtFrm *SwTxtFrm::GetFormatted()
 
 KSHORT SwTxtFrm::CalcFitToContent()
 {
+    // --> FME 2004-07-16 #i31490#
+    // If we are currently locked, we better return with a
+    // fairly reasonable value:
+    if ( IsLocked() )
+        return Prt().Width();
+    // <--
+
     SwParaPortion* pOldPara = GetPara();
     SwParaPortion *pDummy = new SwParaPortion();
     SetPara( pDummy, false );
@@ -2092,6 +2099,10 @@ KSHORT SwTxtFrm::CalcFitToContent()
 
     Frm().Width( nPageWidth );
     Prt().Width( nPageWidth );
+
+    // --> FME 2004-07-16 #i31490#
+    SwTxtFrmLocker aLock( this );
+    // <--
 
     SwTxtFormatInfo aInf( this );
     aInf.SetIgnoreFly( sal_True );
