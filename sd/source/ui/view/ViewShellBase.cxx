@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-19 12:16:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 09:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,9 +261,6 @@ ViewShellBase::ViewShellBase (
     // Setting the window later will create that shell.
     mpPaneManager->RequestMainViewShellChange (
         eDefaultSubShell);
-
-    if (GetFrame()->IsVisible())
-        toolpanel::controls::MasterPageContainer::Register();
 }
 
 
@@ -274,9 +271,6 @@ ViewShellBase::ViewShellBase (
 */
 ViewShellBase::~ViewShellBase (void)
 {
-    if (GetFrame()->IsVisible())
-        toolpanel::controls::MasterPageContainer::Unregister();
-
     // We have to hide the main window to prevent SFX complaining after a
     // reload about it being already visible.
     ViewShell* pShell = GetMainViewShell();
@@ -525,11 +519,6 @@ void ViewShellBase::ResizePixel (
         Rectangle aModelRectangle (GetWindow()->PixelToLogic(
             Rectangle(rOrigin, rSize)));
         SetWindow (pMainViewShell->GetActiveWindow());
-        /*        if (bOuterResize)
-            SfxViewShell::OuterResizePixel (rOrigin, rSize);
-        else
-            SfxViewShell::InnerResizePixel (rOrigin, rSize);
-        */
         if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
             mpViewTabBar->SetPosSizePixel (rOrigin, rSize);
         SvBorder aBorder (pMainViewShell->GetBorder(bOuterResize));
@@ -547,6 +536,21 @@ void ViewShellBase::ResizePixel (
         // We have to set a border at all times so when the main view shell
         // is not yet ready we simply set an empty border.
         SetBorderPixel (SvBorder());
+}
+
+
+
+
+void ViewShellBase::Rearrange (void)
+{
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+    {
+        ResizePixel (
+            pWindow->GetPosPixel(),
+            pWindow->GetOutputSizePixel(),
+            GetDocShell()->IsInPlaceActive());
+    }
 }
 
 
@@ -867,6 +871,39 @@ void ViewShellBase::SetBusyState (bool bBusy)
 {
     if (GetDocShell() != NULL)
         GetDocShell()->SetWaitCursor (bBusy);
+}
+
+
+
+
+void ViewShellBase::UpdateBorder (void)
+{
+    ViewShell* pMainViewShell = GetMainViewShell();
+    if (pMainViewShell != NULL)
+    {
+        bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
+        SvBorder aBorder (pMainViewShell->GetBorder(bOuterResize));
+        aBorder += GetBorder(bOuterResize);
+        SetBorderPixel (aBorder);
+        InvalidateBorder();
+    }
+}
+
+
+
+
+void ViewShellBase::ShowUIControls (bool bVisible)
+{
+    if (mpViewTabBar.get() != NULL)
+        mpViewTabBar->Show (bVisible);
+
+    ViewShell* pMainViewShell = GetMainViewShell();
+    if (pMainViewShell != NULL)
+        pMainViewShell->ShowUIControls (bVisible);
+
+    UpdateBorder();
+    if (bVisible)
+        Rearrange();
 }
 
 
