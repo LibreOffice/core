@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:23:19 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ dutch ] = "In het extract verschijnt het geselecteerde aantal alinea΄s van de erbij betrokken overzichtsniveaus.";
         Text[ chinese_simplified ] = "΄Σ°όΐ¨µΔΥΒ½ΪΌ¶ΦΠΡ΅³φµΔÒ»¶¨ΚύΔΏµΔ¶ΞΒδΟΤΚΎΤΪΥªÒªΦΠ΅£";
         Text[ greek ] = "Στο Abstract εμφανίζεται το επιλεγμένο πλήθος παραγράφων από τα συμπεριλαμβανόμενα επίπεδα κεφαλαίων.";
-        Text[ korean ] = "Γί»σΏ΅Ό­΄Β Ώ¬°όµΘ ΐε ΌφΑΨΏ΅Ό­ Ό±ΕΓΗΡ ΄ά¶τΐΗ Όφ°΅ ³ªΕΈ³³΄Ο΄Ω.";
+        Text[ korean ] = "Γί»σΏ΅Ό­΄Β °ό·ΓµΘ ΐε ΌφΑΨΏ΅Ό­ Ό±ΕΓΗΡ ΄ά¶τΐΗ Όφ°΅ ³ªΕΈ³³΄Ο΄Ω.";
         Text[ turkish ] = "Φzet iηinde, dahil edilen bφlόm dόzeylerinden seηilen paragraflar bulunuyor.";
         Text[ catalan ] = "En el extracto aparece la cantidad deseada de pαrrafos de los niveles de los capνtulos incluidos.";
         Text[ finnish ] = "Tiivistelmδssδ on valittu mδδrδ kappaleita sisδllytetyistδ jδsennystasoista.";
