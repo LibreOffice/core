@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:39:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,11 @@ public:
 
 class SW_DLLPUBLIC SwNodeNum
 {
+#ifndef PRODUCT
+    static long nSerial;
+    long nMySerial;
+#endif
+
     USHORT nLevelVal[ MAXLEVEL ];       // Nummern aller Levels
     USHORT nSetValue;                   // vorgegeben Nummer
     BYTE nMyLevel;                      // akt. Level
