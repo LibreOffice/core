@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 11:45:00 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 14:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
@@ -110,6 +113,52 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
 using namespace rtl;
+
+//=========================================================================
+rtl::OUString makeHierarchalNameSegment( const rtl::OUString & rIn  )
+{
+#if SUPD<638
+    return rtl::OUString( rIn );
+#else
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.appendAscii( "['" );
+
+    sal_Int32 nCount = rIn.getLength();
+    for ( sal_Int32 n = 0; n < nCount; ++n )
+    {
+        const sal_Unicode c = rIn.getStr()[ n ];
+        switch ( c )
+        {
+            case '&':
+                aBuffer.appendAscii( "&amp;" );
+                break;
+
+            case '"':
+                aBuffer.appendAscii( "&quot;" );
+                break;
+
+            case '\'':
+                aBuffer.appendAscii( "&apos;" );
+                break;
+
+            case '<':
+                aBuffer.appendAscii( "&lt;" );
+                break;
+
+            case '>':
+                aBuffer.appendAscii( "&gt;" );
+                break;
+
+            default:
+                aBuffer.append( c );
+                break;
+        }
+    }
+
+    aBuffer.appendAscii( "']" );
+    return rtl::OUString( aBuffer.makeStringAndClear() );
+#endif
+}
 
 //=========================================================================
 
@@ -1084,15 +1133,9 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
                 try
                 {
-#if SUPD<638
-                    OUString aOldValuesKey( aOldKey );
+                    rtl::OUString aOldValuesKey
+                        = makeHierarchalNameSegment( rOldKey );
                     aOldValuesKey += OUString::createFromAscii( "/Values" );
-#else
-                    rtl::OUString aOldValuesKey(
-                                    RTL_CONSTASCII_USTRINGPARAM( "['" ) );
-                    aOldValuesKey += rOldKey;
-                    aOldValuesKey += OUString::createFromAscii( "']/Values" );
-#endif
 
                     Reference< XNameAccess > xOldNameAccess;
                     xRootHierNameAccess->getByHierarchicalName(
@@ -1112,17 +1155,9 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     sal_Int32 nCount = aElems.getLength();
                     if ( nCount )
                     {
-#if SUPD<638
-                        OUString aNewValuesKey( aNewKey );
-                        aNewValuesKey
-                                += OUString::createFromAscii( "/Values" );
-#else
-                        rtl::OUString aNewValuesKey(
-                                RTL_CONSTASCII_USTRINGPARAM( "['" ) );
-                        aNewValuesKey += rNewKey;
-                        aNewValuesKey
-                                += OUString::createFromAscii( "']/Values" );
-#endif
+                        rtl::OUString aNewValuesKey
+                            = makeHierarchalNameSegment( rNewKey );
+                        aNewValuesKey += OUString::createFromAscii( "/Values" );
 
                         Reference< XSingleServiceFactory > xNewFac;
                         xRootHierNameAccess->getByHierarchicalName(
@@ -1177,49 +1212,44 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
                             // Set Values
                             OUString aKey = aOldValuesKey;
-#if SUPD<638
-                            aKey += rPropName;
-#else
-                            aKey += rtl::OUString::createFromAscii( "['" );
-                            aKey += rPropName;
-                            aKey += rtl::OUString::createFromAscii( "']" );
-#endif
+                            aKey += makeHierarchalNameSegment( rPropName );
+
                             // ... handle
-                            OUString aNewKey = aKey;
-                            aNewKey += aHandleKey;
+                            OUString aNewKey1 = aKey;
+                            aNewKey1 += aHandleKey;
                             Any aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
-                                    aNewKey );
+                                    aNewKey1 );
                             xNewPropNameReplace->replaceByName(
                                 OUString::createFromAscii( "Handle" ),
                                 aAny );
 
                             // ... value
-                            aNewKey = aKey;
-                            aNewKey += aValueKey;
+                            aNewKey1 = aKey;
+                            aNewKey1 += aValueKey;
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
-                                    aNewKey );
+                                    aNewKey1 );
                             xNewPropNameReplace->replaceByName(
                                 OUString::createFromAscii( "Value" ),
                                 aAny );
 
                             // ... state
-                            aNewKey = aKey;
-                            aNewKey += aStateKey;
+                            aNewKey1 = aKey;
+                            aNewKey1 += aStateKey;
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
-                                    aNewKey );
+                                    aNewKey1 );
                             xNewPropNameReplace->replaceByName(
                                 OUString::createFromAscii( "State" ),
                                 aAny );
 
                             // ... attributes
-                            aNewKey = aKey;
-                            aNewKey += aAttrKey;
+                            aNewKey1 = aKey;
+                            aNewKey1 += aAttrKey;
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
-                                    aNewKey );
+                                    aNewKey1 );
                             xNewPropNameReplace->replaceByName(
                                 OUString::createFromAscii( "Attributes" ),
                                 aAny );
@@ -1298,7 +1328,6 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 #else
                     xContainer->removeByName( rOldKey );
 #endif
-
                     // Commit changes.
                     xBatch->commitChanges();
 
@@ -1773,14 +1802,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
     if ( xRootHierNameAccess.is() )
     {
         OUString aFullPropName( getFullKey( xRootHierNameAccess ) );
-#if SUPD<638
         aFullPropName += OUString::createFromAscii( "/" );
-        aFullPropName += aPropertyName;
-#else
-        aFullPropName += OUString::createFromAscii( "/['" );
-        aFullPropName += aPropertyName;
-        aFullPropName += OUString::createFromAscii( "']" );
-#endif
+        aFullPropName += makeHierarchalNameSegment( aPropertyName );
+
         // Does property exist?
         if ( xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
         {
@@ -1883,15 +1907,9 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
     if ( xNameAccess.is() )
     {
         OUString aFullPropName( getFullKey( xNameAccess ) );
-#if SUPD<638
         aFullPropName += OUString::createFromAscii( "/" );
-        aFullPropName += PropertyName;
+        aFullPropName += makeHierarchalNameSegment( PropertyName );
         aFullPropName += OUString::createFromAscii( "/Value" );
-#else
-        aFullPropName += OUString::createFromAscii( "/['" );
-        aFullPropName += PropertyName;
-        aFullPropName += OUString::createFromAscii( "']/Value" );
-#endif
         try
         {
             return xNameAccess->getByHierarchicalName( aFullPropName );
@@ -2050,14 +2068,9 @@ void SAL_CALL PersistentPropertySet::addProperty(
     {
         aFullValuesName = getFullKey( xRootHierNameAccess );
         OUString aFullPropName = aFullValuesName;
-#if SUPD<638
         aFullPropName += OUString::createFromAscii( "/" );
-        aFullPropName += Name;
-#else
-        aFullPropName += OUString::createFromAscii( "/['" );
-        aFullPropName += Name;
-        aFullPropName += OUString::createFromAscii( "']" );
-#endif
+        aFullPropName += makeHierarchalNameSegment( Name );
+
         if ( xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
         {
             // Already in set.
@@ -2209,14 +2222,9 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
     {
         aFullValuesName = getFullKey( xRootHierNameAccess );
         aFullPropName   = aFullValuesName;
-#if SUPD<638
-        aFullPropName += OUString::createFromAscii( "/" );
-        aFullPropName += Name;
-#else
-        aFullPropName += OUString::createFromAscii( "/['" );
-        aFullPropName += Name;
-        aFullPropName += OUString::createFromAscii( "']" );
-#endif
+        aFullPropName   += OUString::createFromAscii( "/" );
+        aFullPropName   += makeHierarchalNameSegment( Name );
+
         // Property in set?
         if ( !xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
             throw UnknownPropertyException();
@@ -2419,27 +2427,19 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                     {
                         Sequence< PropertyValue > aValues( nCount );
 
-#if SUPD<638
                         const OUString aHandleName
                                     = OUString::createFromAscii( "/Handle" );
                         const OUString aValueName
                                     = OUString::createFromAscii( "/Value" );
                         const OUString aStateName
                                     = OUString::createFromAscii( "/State" );
-#else
-                        const rtl::OUString aNamePrefix(
-                                RTL_CONSTASCII_USTRINGPARAM( "['" ) );
-                        const rtl::OUString aNamePostfixHandle(
-                                RTL_CONSTASCII_USTRINGPARAM( "']/Handle" ) );
-                        const rtl::OUString aNamePostfixValue(
-                                RTL_CONSTASCII_USTRINGPARAM( "']/Value" ) );
-                        const rtl::OUString aNamePostfixState(
-                                RTL_CONSTASCII_USTRINGPARAM( "']/State" ) );
-#endif
+
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
                             PropertyValue& rValue = aValues[ n ];
-                            OUString       rName  = aElems[ n ];
+                            OUString rName    = aElems[ n ];
+                            OUString aXMLName
+                                        = makeHierarchalNameSegment( rName );
 
                             // Set property name.
 
@@ -2448,14 +2448,8 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property handle
-#if SUPD<638
-                                OUString aHierName = rName;
+                                OUString aHierName = aXMLName;
                                 aHierName += aHandleName;
-#else
-                                rtl::OUString aHierName = aNamePrefix;
-                                aHierName += rName;
-                                aHierName += aNamePostfixHandle;
-#endif
                                 Any aKeyValue
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -2477,14 +2471,8 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property value
-#if SUPD<638
-                                OUString aHierName = rName;
+                                OUString aHierName = aXMLName;
                                 aHierName += aValueName;
-#else
-                                rtl::OUString aHierName = aNamePrefix;
-                                aHierName += rName;
-                                aHierName += aNamePostfixValue;
-#endif
                                 rValue.Value
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -2505,14 +2493,8 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property state
-#if SUPD<638
-                                OUString aHierName = rName;
+                                OUString aHierName = aXMLName;
                                 aHierName += aStateName;
-#else
-                                rtl::OUString aHierName = aNamePrefix;
-                                aHierName += rName;
-                                aHierName += aNamePostfixState;
-#endif
                                 Any aKeyValue
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -2575,28 +2557,17 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
         Events aEvents;
 
         OUString aFullPropNamePrefix( getFullKey( xRootHierNameAccess ) );
-#if SUPD<638
         aFullPropNamePrefix += OUString::createFromAscii( "/" );
-#else
-        aFullPropNamePrefix += OUString::createFromAscii( "/['" );
 
-        const rtl::OUString aFullPropNamePostfix(
-                                    RTL_CONSTASCII_USTRINGPARAM( "']" ) );
-#endif
         // Iterate over given property value sequence.
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const PropertyValue& rNewValue = pNewValues[ n ];
             const OUString& rName = rNewValue.Name;
 
-#if SUPD<638
             OUString aFullPropName = aFullPropNamePrefix;
-            aFullPropName += rName;
-#else
-            OUString aFullPropName = aFullPropNamePrefix;
-            aFullPropName += rName;
-            aFullPropName += aFullPropNamePostfix;
-#endif
+            aFullPropName += makeHierarchalNameSegment( rName );
+
             // Does property exist?
             if ( xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
             {
@@ -2780,15 +2751,12 @@ const OUString& PersistentPropertySet::getFullKey(
             }
             else
                 m_pImpl->m_aFullKey = m_pImpl->m_aKey;
-
-            m_pImpl->m_aFullKey += OUString::createFromAscii( "/Values" );
 #else
             m_pImpl->m_aFullKey
-                = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "['" ) );
-            m_pImpl->m_aFullKey = m_pImpl->m_aKey;
-            m_pImpl->m_aFullKey
-                += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "']/Values" ) );
+                = makeHierarchalNameSegment( m_pImpl->m_aKey );
 #endif
+            m_pImpl->m_aFullKey
+                += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Values" ) );
         }
     }
 
@@ -2892,29 +2860,21 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
 
                         if ( xHierNameAccess.is() )
                         {
-#if SUPD<638
                             const OUString aHandleName
                                 = OUString::createFromAscii( "/Handle" );
                             const OUString aValueName
                                 = OUString::createFromAscii( "/Value" );
                             const OUString aAttrName
                                 = OUString::createFromAscii( "/Attributes" );
-#else
-                            const rtl::OUString aNamePrefix(
-                                RTL_CONSTASCII_USTRINGPARAM( "['" ) );
-                            const rtl::OUString aNamePostfixHandle(
-                                RTL_CONSTASCII_USTRINGPARAM( "']/Handle" ) );
-                            const rtl::OUString aNamePostfixValue(
-                                RTL_CONSTASCII_USTRINGPARAM( "']/Value" ) );
-                            const rtl::OUString aNamePostfixAttr(
-                                RTL_CONSTASCII_USTRINGPARAM( "']/Attributes" ) );
-#endif
+
                             Property* pProps = pPropSeq->getArray();
 
                             for ( sal_uInt32 n = 0; n < nCount; ++n )
                             {
                                 Property& rProp = pProps[ n ];
                                 OUString  rName = aElems[ n ];
+                                OUString aXMLName
+                                    = makeHierarchalNameSegment( rName );
 
                                 // Set property name.
 
@@ -2923,14 +2883,8 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property handle
-#if SUPD<638
-                                    OUString aHierName = rName;
+                                    rtl::OUString aHierName = aXMLName;
                                     aHierName += aHandleName;
-#else
-                                    rtl::OUString aHierName = aNamePrefix;
-                                    aHierName += rName;
-                                    aHierName += aNamePostfixHandle;
-#endif
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -2952,14 +2906,8 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property type
-#if SUPD<638
-                                    OUString aHierName = rName;
+                                    rtl::OUString aHierName = aXMLName;
                                     aHierName += aValueName;
-#else
-                                    rtl::OUString aHierName = aNamePrefix;
-                                    aHierName += rName;
-                                    aHierName += aNamePostfixValue;
-#endif
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -2982,14 +2930,8 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property attributes
-#if SUPD<638
-                                    OUString aHierName = rName;
+                                    rtl::OUString aHierName = aXMLName;
                                     aHierName += aAttrName;
-#else
-                                    rtl::OUString aHierName = aNamePrefix;
-                                    aHierName += rName;
-                                    aHierName += aNamePostfixAttr;
-#endif
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -3045,14 +2987,9 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
     if ( xRootHierNameAccess.is() )
     {
         OUString aFullPropName( m_pOwner->getFullKey( xRootHierNameAccess ) );
-#if SUPD<638
         aFullPropName += OUString::createFromAscii( "/" );
-        aFullPropName += aName;
-#else
-        aFullPropName += OUString::createFromAscii( "/['" );
-        aFullPropName += aName;
-        aFullPropName += OUString::createFromAscii( "']" );
-#endif
+        aFullPropName += makeHierarchalNameSegment( aName );
+
         // Does property exist?
         if ( !xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
             throw UnknownPropertyException();
@@ -3138,14 +3075,8 @@ sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
     if ( xRootHierNameAccess.is() )
     {
         OUString aFullPropName( m_pOwner->getFullKey( xRootHierNameAccess ) );
-#if SUPD<638
         aFullPropName += OUString::createFromAscii( "/" );
-        aFullPropName += Name;
-#else
-        aFullPropName += OUString::createFromAscii( "/['" );
-        aFullPropName += Name;
-        aFullPropName += OUString::createFromAscii( "']" );
-#endif
+        aFullPropName += makeHierarchalNameSegment( Name );
 
         return xRootHierNameAccess->hasByHierarchicalName( aFullPropName );
     }

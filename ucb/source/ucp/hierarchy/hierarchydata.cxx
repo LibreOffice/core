@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 11:01:39 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 15:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ using namespace hierarchy_ucp;
 namespace hierarchy_ucp
 {
 
+//=========================================================================
 struct HierarchyEntry::iterator_Impl
 {
     HierarchyEntryData                   entry;
@@ -135,6 +136,42 @@ struct HierarchyEntry::iterator_Impl
 
     iterator_Impl() : pos( -1 /* before first */ ) {};
 };
+
+//=========================================================================
+void makeXMLName( const rtl::OUString & rIn, rtl::OUStringBuffer & rBuffer  )
+{
+    sal_Int32 nCount = rIn.getLength();
+    for ( sal_Int32 n = 0; n < nCount; ++n )
+    {
+        const sal_Unicode c = rIn.getStr()[ n ];
+        switch ( c )
+        {
+            case '&':
+                rBuffer.appendAscii( "&amp;" );
+                break;
+
+            case '"':
+                rBuffer.appendAscii( "&quot;" );
+                break;
+
+            case '\'':
+                rBuffer.appendAscii( "&apos;" );
+                break;
+
+            case '<':
+                rBuffer.appendAscii( "&lt;" );
+                break;
+
+            case '>':
+                rBuffer.appendAscii( "&gt;" );
+                break;
+
+            default:
+                rBuffer.append( c );
+                break;
+        }
+    }
+}
 
 } // hierarchy_ucp
 
@@ -1079,7 +1116,8 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const HierarchyUri& rURI )
             if ( nEnd == -1 )
                 nEnd = nLen;
 
-            aNewPath.append( aPath.copy( nStart, nEnd - nStart ) );
+            OUString aToken = aPath.copy( nStart, nEnd - nStart );
+            makeXMLName( aToken, aNewPath );
 
             if ( nEnd != nLen )
             {
@@ -1220,7 +1258,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 #else
             rtl::OUStringBuffer aKey;
             aKey.appendAscii( "['" );
-            aKey.append( m_pImpl->names.getConstArray()[ m_pImpl->pos ] );
+            makeXMLName( m_pImpl->names.getConstArray()[ m_pImpl->pos ], aKey );
             aKey.appendAscii( "']" );
 
             rtl::OUString aTitle     = aKey.makeStringAndClear();
