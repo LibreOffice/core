@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:09:11 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,6 +1099,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
                     SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0, LIST_APPEND, 0xFFFF);
                     pE1->SetUserData(pU1);
+                    pE1->EnableChildsOnDemand( FALSE );
                 }
                 pIt = aEntriesBox.Next(pIt);
             }
@@ -1107,12 +1108,23 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     else
     {
         // goto selected "key" entry of the key box
-        SvLBoxEntry* pE2 = aKeyBox.FirstSelected();
-        TAccInfo*    pU2 = (TAccInfo*)pE2->GetUserData();
-        USHORT       nP2 = MapKeyCodeToPos(pU2->m_aKey);
-        SvLBoxEntry* pE3 = aEntriesBox.GetEntry( 0, nP2 );
-        aEntriesBox.Select( pE3 );
-        aEntriesBox.MakeVisible( pE3 );
+        SvLBoxEntry* pE2 = 0;
+        TAccInfo*    pU2 = 0;
+        USHORT       nP2 = LISTBOX_ENTRY_NOTFOUND;
+        SvLBoxEntry* pE3 = 0;
+
+        pE2 = aKeyBox.FirstSelected();
+        if (pE2)
+            pU2 = (TAccInfo*)pE2->GetUserData();
+        if (pU2)
+            nP2 = MapKeyCodeToPos(pU2->m_aKey);
+        if (nP2 != LISTBOX_ENTRY_NOTFOUND)
+            pE3 = aEntriesBox.GetEntry( 0, nP2 );
+        if (pE3)
+        {
+            aEntriesBox.Select( pE3 );
+            aEntriesBox.MakeVisible( pE3 );
+        }
     }
 
     return 0;
@@ -1336,26 +1348,34 @@ USHORT SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 //-----------------------------------------------
 String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
 {
-    String sUIName;
     try
     {
+        // check global command configuration first
         css::uno::Reference< css::container::XNameAccess > xModuleConf;
         m_xUICmdDescription->getByName(m_sModuleLongName) >>= xModuleConf;
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            sUIName = String(lProps.getUnpackedValueOrDefault(CMDPROP_UINAME, ::rtl::OUString()));
+            String sLabel = String(lProps.getUnpackedValueOrDefault(CMDPROP_UINAME, ::rtl::OUString()));
+            if (sLabel.Len())
+                return sLabel;
         }
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
-    catch(css::uno::Exception&)
-        { sUIName = String(); }
+    catch(const css::uno::Exception&)
+        {}
 
-    if (!sUIName.Len())
-        sUIName = sCommand;
+    // may be it's a style URL .. they must be handled special
+    SfxStyleInfo_Impl aStyle;
+    aStyle.sCommand = sCommand;
+    if (m_aStylesInfo.parseStyleCommand(aStyle))
+    {
+        m_aStylesInfo.getLabel4Style(aStyle);
+        return aStyle.sLabel;
+    }
 
-    return sUIName;
+    return sCommand;
 }
 
 //-----------------------------------------------
