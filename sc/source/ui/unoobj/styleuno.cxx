@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:14:19 $
+ *  last change: $Author: nn $ $Date: 2000-11-30 19:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,9 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &::getCppuType((const table::CellOrientation*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &::getCppuType((const sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
+        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,   &::getBooleanCppuType(),                    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&::getBooleanCppuType(),                   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),  ATTR_HANGPUNCTUATION,&::getBooleanCppuType(),                   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
