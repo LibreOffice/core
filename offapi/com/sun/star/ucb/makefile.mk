@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kso $ $Date: 2001-05-29 09:32:08 $
+#   last change: $Author: kso $ $Date: 2001-06-11 10:47:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,7 +117,6 @@ IDLFILES=\
     DuplicateProviderException.idl\
     DynamicResultSet.idl\
     Error.idl\
-        ExistsNotSupportedException.idl\
     ExportStreamInfo.idl\
     FetchError.idl\
     FetchResult.idl\
@@ -161,6 +160,7 @@ IDLFILES=\
         MissingInputStreamException.idl\
         MissingPropertiesException.idl\
     NameClash.idl\
+        NameClashException.idl\
         NameClashResolveRequest.idl\
     NumberedSortingInfo.idl\
     OpenCommandArgument.idl\
