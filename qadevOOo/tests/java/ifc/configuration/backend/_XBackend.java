@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XBackend.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:20:42 $
+ *  last change:$Date: 2004-03-30 14:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@ import com.sun.star.configuration.backend.XBackend;
 import com.sun.star.configuration.backend.XLayer;
 import com.sun.star.configuration.backend.XUpdateHandler;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XStringSubstitution;
 
 import lib.MultiMethodTest;
 
@@ -75,6 +77,15 @@ public class _XBackend extends MultiMethodTest {
 
     public void _getOwnUpdateHandler() {
         boolean res = true;
+
+        String noUpdate = (String) tEnv.getObjRelation("noUpdate");
+
+        if (noUpdate != null) {
+            log.println(noUpdate);
+            tRes.tested("getOwnUpdateHandler()", res);
+
+            return;
+        }
 
         try {
             XUpdateHandler aHandler = oObj.getOwnUpdateHandler(
@@ -101,6 +112,15 @@ public class _XBackend extends MultiMethodTest {
     public void _getUpdateHandler() {
         boolean res = true;
 
+        String noUpdate = (String) tEnv.getObjRelation("noUpdate");
+
+        if (noUpdate != null) {
+            log.println(noUpdate);
+            tRes.tested("getUpdateHandler()", res);
+
+            return;
+        }
+
         try {
             XUpdateHandler aHandler = oObj.getUpdateHandler(
                                               "org.openoffice.Office.TypeDetection",
@@ -118,9 +138,10 @@ public class _XBackend extends MultiMethodTest {
         }
 
         try {
-            String ent = util.utils.getOfficeURL(
-                                 (XMultiServiceFactory) tParam.getMSF()) +
-                         "/../share/registry";
+            XStringSubstitution sts = createStringSubstitution(
+                                              (XMultiServiceFactory) tParam.getMSF());
+            String ent = sts.getSubstituteVariableValue("$(inst)") +
+                         "/share/registry";
             XUpdateHandler aHandler = oObj.getUpdateHandler(
                                               "org.openoffice.Office.Jobs",
                                               ent);
@@ -137,6 +158,9 @@ public class _XBackend extends MultiMethodTest {
         } catch (com.sun.star.lang.NoSupportException e) {
             log.println("unexpected Exception " + e + " -- OK");
             res = false;
+        } catch (com.sun.star.container.NoSuchElementException e) {
+            log.println("unexpected Exception " + e + " -- FAILED");
+            res = false;
         }
 
         tRes.tested("getUpdateHandler()", res);
@@ -146,9 +170,10 @@ public class _XBackend extends MultiMethodTest {
         boolean res = true;
 
         try {
-            String ent = util.utils.getOfficeURL(
-                                 (XMultiServiceFactory) tParam.getMSF()) +
-                         "/../share/registry";
+            XStringSubstitution sts = createStringSubstitution(
+                                              (XMultiServiceFactory) tParam.getMSF());
+            String ent = sts.getSubstituteVariableValue("$(inst)") +
+                         "/share/registry";
             XLayer[] Layers = oObj.listLayers(
                                       "org.openoffice.Office.Linguistic", ent);
 
@@ -160,6 +185,9 @@ public class _XBackend extends MultiMethodTest {
             log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         } catch (com.sun.star.lang.IllegalArgumentException e) {
+            log.println("unexpected Exception " + e + " -- FAILED");
+            res = false;
+        } catch (com.sun.star.container.NoSuchElementException e) {
             log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         }
@@ -177,6 +205,10 @@ public class _XBackend extends MultiMethodTest {
             for (int i = 0; i < Layers.length; i++) {
                 log.println("Checking Layer " + i);
                 res &= checkLayer(Layers[i]);
+            }
+            if (Layers.length==0) {
+                System.out.println("No Layers found -- FAILED");
+                res &= false;
             }
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("unexpected Exception " + e + " -- FAILED");
@@ -245,5 +277,23 @@ public class _XBackend extends MultiMethodTest {
         }
 
         return res;
+    }
+
+    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) {
+        Object xPathSubst = null;
+
+        try {
+            xPathSubst = xMSF.createInstance(
+                                 "com.sun.star.util.PathSubstitution");
+        } catch (com.sun.star.uno.Exception e) {
+            e.printStackTrace();
+        }
+
+        if (xPathSubst != null) {
+            return (XStringSubstitution) UnoRuntime.queryInterface(
+                           XStringSubstitution.class, xPathSubst);
+        } else {
+            return null;
+        }
     }
 }
