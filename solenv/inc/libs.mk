@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2001-07-20 16:54:33 $
+#   last change: $Author: obo $ $Date: 2001-07-25 12:59:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COM)
 REGLIB=-lreg
 .INCLUDE .IGNORE : vos$/version.mk
 VOSLIB=-lvos$(VOS_MAJOR)$(COM)
-XMLOFFLIB=-lxo$(UPD)$(DLLPOSTFIX)
+XMLOFFLIB=-lxol
 STORELIB=-lstore
 SALLIB=-lsal
 .INCLUDE .IGNORE : connectivity$/version.mk
@@ -251,7 +251,7 @@ VOSLIB=$(LIBPRE) ivos.lib
 UNOLIB=$(LIBPRE) iuno.lib
 UNOTOOLSLIB=$(LIBPRE) iutl.lib
 RMCXTLIB=$(LIBPRE) irmcxt.lib
-XMLOFFLIB=$(LIBPRE) ixo.lib
+XMLOFFLIB=$(LIBPRE) xol.lib
 STORELIB=$(LIBPRE) istore.lib
 IOTXLIB=$(LIBPRE) iotx.lib
 OTXLIB=$(LIBPRE) otx_ind.lib
