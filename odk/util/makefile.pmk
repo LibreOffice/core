@@ -1,18 +1,11 @@
 #ODKNAME=odk$(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO)
 
-.IF "$(ODK_RELEASE)"==""
+ODK_RELEASE=1.0
 
-.IF "$(BUILD_SOSL)"==""
-# for SUN build without minor
-ODKNAME=odk$(UPD)
-.ELSE
-# for OpenOffice build with minor 
+PRODUCT_NAME=OpenOffice.org$(ODK_RELEASE)
+
 ODKNAME=odk$(UPD)$(LAST_MINOR)
-.ENDIF
-
-.ELSE
-ODKNAME=odk$(ODK_RELEASE)
-.ENDIF
+ODKDOCNAME=$(ODKNAME)_doc
 
 DESTDIR=$(OUT)$/bin$/$(ODKNAME)
 DESTDIRIDL=$(DESTDIR)$/idl

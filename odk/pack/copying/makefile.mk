@@ -7,8 +7,7 @@ TARGET=copying
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
 
-TITLE="OpenOffice.org 1.0"
-PRODUCTNAME="OpenOffice.org"
+CONVERTTAGFLAG = $(MISC)$/converttags_html_files.flag
 
 IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
 
@@ -348,21 +347,14 @@ all : 	\
     $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIRCLASSES)$/officebean.jar \
-    converttags
+    $(CONVERTTAGFLAG)
 #	$(DESTDIRCLASSES)$/unoil.jar \
 #	$(DESTDIR)$/odk_overview.html \
 
-.IF "$(BUILD_SOSL)"!=""
-converttags : 
-    +$(PERL) $(CONVERTSCRIPT) $(DESTDIREXAMPLES) odk_ examples
-.ELSE
-converttags : 
-    @echo no conversion necessary!!
-.ENDIF
 
 #.IF "$(BUILD_SOSL)"!=""
 #convert_links : 
-#    +$(PERL) $(CONVERTTAGSCRIPT) $(TITLE) $(PRODUCTNAME) $(DOCUHTMLFILES)
+#    +$(PERL) $(CONVERTSCRIPT) $(DESTDIREXAMPLES) odk_ examples
 #.ELSE
 #convert_links : 
 #    +echo no conversion necessary!!
@@ -433,7 +425,9 @@ $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DL
 
 $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/util$/dk.mk $(MY_TEXTCOPY_TARGETPRE) $@
+    echo #$(ODKNAME) dependent settings > $@
+    echo DKNAME=${ODKNAME} >> $@
+    echo DKREGISTRYNAME=applicat.rdb >> $@
 
 .IF "$(BUILD_SOSL)"==""
 $(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview.html
@@ -451,3 +445,14 @@ $(DESTDIRIDL)$/% : $(IDLOUT)$/%
 
 remove_dk : 
     +-$(RM)  $(DESTDIRBIN)$/udkapi.rdb >& $(NULLDEV)
+
+.IF "$(BUILD_SOSL)"!=""  
+$(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
+    +$(PERL) $(CONVERTTAGSCRIPT) $(PRODUCT_NAME) $(PRODUCT_NAME) $(DOCUHTMLFILES)
+    touch $@
+.ELSE
+$(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
+    +echo no conversion necessary!!
+    touch $@    
+.ENDIF    
+        
