@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-23 09:40:43 $
+ *  last change: $Author: dvo $ $Date: 2001-08-27 17:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ protected:
             ::com::sun::star::beans::XPropertySet > & rSection);
 
     /// export one template for the specific index type
-    void ExportIndexTemplate(
+    sal_Bool ExportIndexTemplate(
         SectionTypeEnum eType,                /// index type
         sal_Int32 nLevel,                     /// outline level (if applicable)
         const ::com::sun::star::uno::Reference<

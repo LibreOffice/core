@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-23 09:40:43 $
+ *  last change: $Author: dvo $ $Date: 2001-08-27 17:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,8 +1031,11 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny = xLevelTemplates->getByIndex(i);
         aAny >>= aTemplateSequence;
 
-        // export the sequence
-        ExportIndexTemplate(eType, i, rPropertySet, aTemplateSequence);
+        // export the sequence (abort export if an error occured; #91214#)
+        sal_Bool bResult =
+            ExportIndexTemplate(eType, i, rPropertySet, aTemplateSequence);
+        if ( !bResult )
+            break;
     }
 
     // only TOC and user index:
@@ -1185,7 +1188,7 @@ static const sal_Char* aTypeElementNameMap[] =
 };
 
 
-void XMLSectionExport::ExportIndexTemplate(
+sal_Bool XMLSectionExport::ExportIndexTemplate(
     SectionTypeEnum eType,
     sal_Int32 nOutlineLevel,
     const Reference<XPropertySet> & rPropertySet,
@@ -1205,8 +1208,19 @@ void XMLSectionExport::ExportIndexTemplate(
         const sal_Char* pLevelName =
             aTypeLevelNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel];
 
-        // output level name
+        // #92124#: some old documents may be broken, then they have
+        // too many template levels; we need to recognize this and
+        // export only as many as is legal for the respective index
+        // type. To do this, we simply return an error flag, which
+        // will then abort further template level exports.
         DBG_ASSERT(NULL != pLevelName, "can't find level name");
+        if ( NULL == pLevelName )
+        {
+            // output level not found? Then end of templates! #91214#
+            return sal_False;
+        }
+
+        // output level name
         if ((NULL != pLevelName) && (NULL != pLevelAttrName))
         {
             GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
@@ -1247,6 +1261,8 @@ void XMLSectionExport::ExportIndexTemplate(
                 rValues[nTemplateNo]);
         }
     }
+
+    return sal_True;
 }
 
 
