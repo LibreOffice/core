@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:37:17 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "¶€∞ §Â¶r§j§p";
                 Text[ arabic ] = "ÕÃ„ ‰’  ·ﬁ«∆Ì";
                 Text[ greek ] = "¡ıÙ¸Ï·ÙÔ Ï›„ÂËÔÚ ÍÂÈÏ›ÌÔı";
-                Text[ korean ] = "¿⁄µø≈ÿΩ∫∆Æ°°≈©±‚  ";
+                Text[ korean ] = "¿⁄µø≈ÿΩ∫∆Æ°°≈©±‚";
                 Text[ turkish ] = "Otomatik metin boyu";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "TamaÒo autom·tico de texto";
@@ -822,7 +822,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "∂°πj X";
         QuickHelpText[ arabic ] = "«·„”«›… ”";
         CustomUnitText[ greek ] = "ÏÔﬂÒÂÚ";
-        CustomUnitText[ korean ] = "µµ";
+        CustomUnitText[ korean ] = " µµ";
         QuickHelpText[ greek ] = "Distance X";
         QuickHelpText[ korean ] = "∞£∞› X!";
         CustomUnitText[ turkish ] = "Derece";
@@ -1409,4 +1409,5 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ finnish ] = "Luo fonttityˆobjekti";
 };
  // ********************************************************************** EOF
+
 
