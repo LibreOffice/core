@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:17:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,14 +132,22 @@ SwExtTextInput::~SwExtTextInput()
             SwDoc* pDoc = GetDoc();
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
+                // --> FME 2005-02-11 #i41974# Only set language attribute
+                // for CJK/CTL scripts.
+                bool bLang = true;
+                // <--
                 USHORT nWhich = RES_CHRATR_LANGUAGE;
                 switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {
                     case  ::com::sun::star::i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
                     case  ::com::sun::star::i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+                    default: bLang = false;
                 }
-                SvxLanguageItem aLangItem( eInputLanguage, nWhich );
-                pDoc->Insert(*this, aLangItem, 0 );
+                if ( bLang )
+                {
+                    SvxLanguageItem aLangItem( eInputLanguage, nWhich );
+                    pDoc->Insert(*this, aLangItem, 0 );
+                }
             }
             rIdx = nSttCnt;
             String sTxt( pTNd->GetTxt().Copy( nSttCnt, nEndCnt - nSttCnt ));
