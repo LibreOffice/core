@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:19:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,13 +399,8 @@ void FmXPageViewWinRec::setController(const ::com::sun::star::uno::Reference< ::
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  xTabOrder(xForm, ::com::sun::star::uno::UNO_QUERY);
 
-    FmFormPage* pCurrentPage = PTR_CAST(FmFormPage, m_pViewImpl->getView()->GetPageViewPvNum(0)->GetPage());
-    DBG_ASSERT(pCurrentPage, "FmXPageViewWinRec::setController: could not retrieve my page !");
-    String sPageId = pCurrentPage ? pCurrentPage->GetImpl()->GetPageId() : String::CreateFromAscii("no page");
-        // this "no page" should result in a empty ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  provided by the controller's external dispatcher
-
     // Anlegen des Tabcontrollers
-    FmXFormController* pController = new FmXFormController(m_xORB,m_pViewImpl->getView(), m_pWindow, sPageId);
+    FmXFormController* pController = new FmXFormController( m_xORB,m_pViewImpl->getView(), m_pWindow );
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(pController);
 
     pController->setModel(xTabOrder);
