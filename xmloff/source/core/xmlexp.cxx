@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:58:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
+#endif
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
 #endif
 
 #pragma hdrstop
@@ -311,12 +314,19 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& rEve
 
 //==============================================================================
 
+class SvXMLExport_Impl
+{
+public:
+    ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
+};
+
+//==============================================================================
+
 void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandler > &rHandler )
 {
     xHandler = rHandler;
     xExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( xHandler, UNO_QUERY );
 }
-
 
 void SvXMLExport::_InitCtor()
 {
@@ -397,7 +407,7 @@ void SvXMLExport::_InitCtor()
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
-:   pImpl( 0 ),
+:   pImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     meClass( eClass ),
@@ -429,7 +439,7 @@ SvXMLExport::SvXMLExport(
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     MapUnit eDfltUnit   )
-:   pImpl( 0 ),
+:   pImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     meClass( XML_TOKEN_INVALID ),
@@ -468,7 +478,7 @@ SvXMLExport::SvXMLExport(
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
     sal_Int16 eDfltUnit )
-:   pImpl( 0 ),
+:   pImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     meClass( XML_TOKEN_INVALID ),
@@ -510,7 +520,7 @@ SvXMLExport::SvXMLExport(
     const Reference< XModel >& rModel,
     const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
     sal_Int16 eDfltUnit )
-:   pImpl( 0 ),
+:   pImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     meClass( XML_TOKEN_INVALID ),
@@ -600,6 +610,8 @@ SvXMLExport::~SvXMLExport()
 
     if (mxEventListener.is() && xModel.is())
         xModel->removeEventListener(mxEventListener);
+
+    delete pImpl;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -2131,6 +2143,11 @@ void SvXMLExport::DisposingModel()
 {
     // #110680#
     return mxServiceFactory;
+}
+
+::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLExport::getInterfaceToIdentifierMapper()
+{
+    return pImpl->maInterfaceToIdentifierMapper;
 }
 
 //=============================================================================
