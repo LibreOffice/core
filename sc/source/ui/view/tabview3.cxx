@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-16 12:39:23 $
+ *  last change: $Author: nn $ $Date: 2002-10-16 16:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1835,6 +1835,10 @@ void ScTabView::UpdateFormulas()
         UpdatePageBreakData();              //! asynchron
 
     UpdateHeaderWidth();
+
+    //  if in edit mode, adjust edit view area because widths/heights may have changed
+    if ( aViewData.HasEditView( aViewData.GetActivePart() ) )
+        UpdateEditView();
 }
 
 //  PaintCell - einzelne Zelle neu zeichnen
