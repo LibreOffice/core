@@ -43,6 +43,12 @@
             <menu:menuitem menu:id=".uno:Bib/DeleteRecord" menu:helpid="34840" menu:label="" />
         </menu:menupopup>
     </menu:menu>
+    <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
+            <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
     <menu:menu menu:id=".uno:InsertMenu" menu:label="" >
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:Bib/InsertRecord" menu:helpid="34841" menu:label="" />
@@ -57,11 +63,14 @@
             <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:MacroRecorder" menu:helpid="6669" menu:label="" />
-                    <menu:menuitem menu:id=".uno:MacroDialog" menu:helpid="5959" menu:label="" />
+                    <menu:menuitem menu:id=".uno:RunMacro" menu:helpid="40011" menu:label="" />
+                    <menu:menu menu:id=".uno:ScriptOrganizer" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:helpid="40013" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
+            <menu:menuitem menu:id=".uno:ConfigureDialog" menu:helpid="5904" menu:label="" />
             <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
         </menu:menupopup>
     </menu:menu>
