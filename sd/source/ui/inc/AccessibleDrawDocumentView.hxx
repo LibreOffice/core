@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 16:13:13 $
+ *  last change: $Author: af $ $Date: 2002-06-07 08:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,11 +181,22 @@ protected:
         CreateAccessibleName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Create an accessible description that contains the current
-    /// view mode.
+    /** Create an accessible description that contains the current
+        view mode.
+    */
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
+
+    /** Make sure that the currently focused shape sends a FOCUSED state
+        change event indicating that it has (regained) the focus.
+    */
+    virtual void Activated (void);
+
+    /** Make sure that the currently focused shape sends a FOCUSED state
+        change event indicating that it has lost the focus.
+    */
+    virtual void Deactivated (void);
 };
 
 } // end of namespace accessibility

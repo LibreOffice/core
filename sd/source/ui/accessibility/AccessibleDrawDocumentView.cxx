@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-05-30 15:59:12 $
+ *  last change: $Author: af $ $Date: 2002-06-07 08:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,8 @@ void SAL_CALL
     {
         if (mpChildrenManager != NULL)
         {
+            // Clear the list of children to avoid unnecessary events and
+            // update the children manager.
             mpChildrenManager->ClearAccessibleShapeList ();
             mpChildrenManager->SetInfo (maShapeTreeInfo);
             mpChildrenManager->ViewForwarderChanged (
@@ -580,5 +582,39 @@ void
         }
     }
 }
+
+
+
+
+void AccessibleDrawDocumentView::Activated (void)
+{
+    if (mpChildrenManager != NULL)
+        mpChildrenManager->UpdateSelection();
+}
+
+
+
+
+void AccessibleDrawDocumentView::Deactivated (void)
+{
+    // Because this method may be called directly before the window is
+    // deactivated the focused state has to be removed from the currently
+    // focused shape by hand.
+    // At the (a) next incompatible build the following implementation
+    // should be moved to the children manager.
+
+    // If we could be sure to track any change of the FOCUSED state we could
+    // use the selection to directly find the currently focused shape.
+    // But, alas, we can not. Therefore iterate over all children and remove
+    // the FOCUSED state.
+    for (sal_Int32 i=0, nCount=getAccessibleChildCount(); i < nCount; ++i)
+    {
+        AccessibleShape* pAccessibleShape = AccessibleShape::getImplementation(
+            getAccessibleChild(i));
+        if (pAccessibleShape != NULL)
+            pAccessibleShape->ResetState (AccessibleStateType::FOCUSED);
+    }
+}
+
 
 } // end of namespace accessibility
