@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: os $ $Date: 2001-11-14 13:17:42 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:55:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,25 +76,7 @@ USE_DEFFILE=TRUE
 CDEFS+=-DCOMPMOD_NAMESPACE=preload
 CDEFS+=-DCOMPMOD_RESPREFIX=preload
 
-# --- UNO header ---------------------------------------------------
-
-#Create UNO Header files
-#UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
-#INCPRE+=$(UNOUCROUT)
-
-#UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
-
-#UNOTYPES=\
-    com.sun.star.lang.XMultiServiceFactory
-
-
 # --- Files --------------------------------------------------------
-
-CXXFILES=           services.cxx \
-                    modulepreload.cxx \
-                    preloadservices.cxx \
-                    oemwiz.cxx
 
 SLOFILES=           $(SLO)$/services.obj\
                     $(SLO)$/modulepreload.obj\
@@ -106,28 +88,20 @@ SRCFILES=           preload.src
 RESLIB1NAME=preload
 RESLIB1SRSFILES= $(SRS)/preload.srs
 
-#IMGLST_SRS=$(SRS)$/preload.srs
-
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
 
 SHL1STDLIBS= \
-        $(COMPHELPERLIB)     \
-        $(CPPULIB)   \
-        $(CPPUHELPERLIB) 	 \
-        $(VOSLIB) 	 \
-        $(TOOLSLIB)  \
-        $(SO2LIB)	\
-        $(VCLLIB)    \
-        $(SVTOOLLIB)\
-        $(SVLLIB)	\
-        $(OSLLIB)	 \
-        $(SALLIB)	\
-        $(SOTLIB)   \
+        $(SVXLIB)	\
         $(SFXLIB)   \
-        $(UNOTOOLSLIB)  \
-        $(UCBHELPERLIB) \
-        $(SVXLIB)
+        $(SVTOOLLIB)\
+        $(VCLLIB)    \
+        $(SVLLIB)	\
+        $(TOOLSLIB)  \
+        $(COMPHELPERLIB)     \
+        $(CPPUHELPERLIB) 	 \
+        $(CPPULIB)   \
+        $(SALLIB)
 
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
@@ -136,7 +110,6 @@ SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
