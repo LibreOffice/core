@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UserDefinedAttributeSupplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 12:40:51 $
+ *  last change:$Date: 2003-09-08 11:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,9 @@
 
 package ifc.xml;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.xml.AttributeData;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.xml.AttributeData;
 
 public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
 
