@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 11:18:00 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <string>
+#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
@@ -1531,7 +1534,7 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
 //                      aMark.SetAlternativeText(lcl_AnyToString(aValue));
 //                  break;
                 case WID_LEVEL:
-                    aMark.SetLevel(min(MAXLEVEL, (sal_Int8)lcl_AnyToInt16(aValue)));
+                    aMark.SetLevel(std::min((sal_Int8) MAXLEVEL, (sal_Int8)lcl_AnyToInt16(aValue)));
                 break;
                 case WID_PRIMARY_KEY  :
                     aMark.SetPrimaryKey(lcl_AnyToString(aValue));
