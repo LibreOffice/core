@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:15:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1750,12 +1750,12 @@ Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispat
 #include <cppuhelper/implbase2.hxx>
 #endif
 
-#include <drafts/com/sun/star/awt/XKeyHandler.hdl>
-#include <drafts/com/sun/star/awt/XMouseClickHandler.hdl>
+#include <com/sun/star/awt/XKeyHandler.hdl>
+#include <com/sun/star/awt/XMouseClickHandler.hdl>
 
 class TestKeyHandler: public ::cppu::WeakImplHelper2
 <
-    drafts::com::sun::star::awt::XKeyHandler,
+    com::sun::star::awt::XKeyHandler,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -1771,7 +1771,7 @@ public:
 
 class TestMouseClickHandler: public ::cppu::WeakImplHelper2
 <
-    drafts::com::sun::star::awt::XMouseClickHandler,
+    com::sun::star::awt::XMouseClickHandler,
     com::sun::star::lang::XServiceInfo
 >
 {
