@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: htajima $ $Date: 2000-12-11 23:20:15 $
+ *  last change: $Author: svesik $ $Date: 2000-12-19 00:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,7 +986,7 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
             sscanf( pProperties, "%li", &nProperties_ );
         else
         {
-#if defined DBG_UTIL || defined SUN || defined LINUX
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
             nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
             // Server Bugs & Properties
@@ -1015,7 +1015,7 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 #ifdef ARM32 // ??? Server! nicht Client ???
                 nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
 #endif
-#ifdef LINUX
+#if defined LINUX || defined FREEBSD
                 // otherwm and olwm are a kind of default, which are not detected
                 // carefully. if we are running linux (i.e. not netbsd) on an xfree
                 // display, fvwm is most probable the wm to choose, confusing with mwm
