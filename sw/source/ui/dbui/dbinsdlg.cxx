@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:18:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,7 +875,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 
         //Ersteinmal die einfachen Attribute besorgen.
         pTblSet->Put( SfxStringItem( FN_PARAM_TABLE_NAME, rSh.GetUniqueTblName() ));
-        pTblSet->Put( SfxBoolItem( FN_PARAM_TABLE_HEADLINE, TRUE ) );
+        pTblSet->Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, 1 ) );
 
         pTblSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                     rSh.GetViewOptions()->GetTblDest() ));
@@ -1251,9 +1251,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
         BOOL bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
-        rSh.InsertTable( nRows, nCols, HORI_FULL,
-                         pModOpt->GetInsTblFlags(bHTML),
-                        (pSelection ? pTAutoFmt : 0));
+        rSh.InsertTable(
+            pModOpt->GetInsTblFlags(bHTML),
+            nRows, nCols, HORI_FULL, (pSelection ? pTAutoFmt : 0) );
+
         rSh.MoveTable( fnTablePrev, fnTableStart );
 
         if( pSelection && pTblSet )
@@ -1275,7 +1276,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             }
         }
         else
-            rSh.SetHeadlineRepeat( FALSE );
+            rSh.SetRowsToRepeat( 0 );
 
         for( sal_Int32 i = 0 ; ; ++i )
         {
