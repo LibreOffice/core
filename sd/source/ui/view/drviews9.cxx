@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:46:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,12 +250,12 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                 BOOL bInsertNewObject = TRUE;
 
-                if ( pDrView->HasMarkedObj() )
+                if ( pDrView->AreObjectsMarked() )
                 {
                     /******************************************************
                     * Ist ein leeres Graphik-Objekt vorhanden?
                     ******************************************************/
-                    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
                     {
@@ -279,7 +279,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                                 pNewGrafObj->SetOutlinerParaObject(NULL);
                                 pNewGrafObj->SetGraphic(aGraphic);
 
-                                String aStr(pDrView->GetMarkDescription());
+                                String aStr(pDrView->GetDescriptionOfMarkedObjects());
                                 aStr += sal_Unicode(' ');
                                 aStr += String(SdResId(STR_UNDO_REPLACE));
                                 pDrView->BegUndo(aStr);
