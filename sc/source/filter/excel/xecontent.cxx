@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:00:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,12 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-// ============================================================================
-
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
 #endif
+
+#include <list>
+#include <algorithm>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -151,91 +146,87 @@ using ::com::sun::star::sheet::XAreaLink;
 #include "excupn.hxx"
 #include "excrecds.hxx"
 
-
 // Shared string table ========================================================
 
 // 1 = SST hash table statistics prompt
 #define EXC_INCL_SST_STATISTICS 0
-
 
 // ----------------------------------------------------------------------------
 
 /** A single string entry in the hash table. */
 struct XclExpHashEntry
 {
-    const XclExpString*         mpString;       /// Pointer to the string (no ownership).
-    sal_uInt32                  mnSstIndex;     /// The SST index of this string.
-    inline explicit             XclExpHashEntry( const XclExpString* pString = 0, sal_uInt32 nSstIndex = 0 ) :
-                                    mpString( pString ), mnSstIndex( nSstIndex ) {}
+    const XclExpString* mpString;       /// Pointer to the string (no ownership).
+    sal_uInt32          mnSstIndex;     /// The SST index of this string.
+    inline explicit     XclExpHashEntry( const XclExpString* pString = 0, sal_uInt32 nSstIndex = 0 ) :
+                            mpString( pString ), mnSstIndex( nSstIndex ) {}
 };
 
 /** Function object for strict weak ordering. */
 struct XclExpHashEntrySWO
 {
-    inline bool                 operator()( const XclExpHashEntry& rLeft, const XclExpHashEntry& rRight ) const
-                                    { return *rLeft.mpString < *rRight.mpString; }
+    inline bool         operator()( const XclExpHashEntry& rLeft, const XclExpHashEntry& rRight ) const
+                            { return *rLeft.mpString < *rRight.mpString; }
 };
-
 
 // ----------------------------------------------------------------------------
 
 /** Implementation of the SST export.
     @descr  Stores all passed strings in a hash table and prevents repeated
     insertion of equal strings. */
-class XclExpSst_Impl
+class XclExpSstImpl
 {
 public:
-    explicit                    XclExpSst_Impl();
+    explicit            XclExpSstImpl();
 
     /** Inserts the passed string, if not already inserted, and returns the unique SST index. */
-    sal_uInt32                  Insert( XclExpStringPtr pString );
+    sal_uInt32          Insert( XclExpStringRef xString );
 
     /** Writes the complete SST and EXTSST records. */
-    void                        Save( XclExpStream& rStrm );
+    void                Save( XclExpStream& rStrm );
 
 private:
-    typedef ::std::list< XclExpStringPtr >      XclExpStringList;
+    typedef ::std::list< XclExpStringRef >      XclExpStringList;
     typedef ::std::vector< XclExpHashEntry >    XclExpHashVec;
     typedef ::std::vector< XclExpHashVec >      XclExpHashTab;
 
-    XclExpStringList            maStringList;   /// List of unique strings (in SST ID order).
-    XclExpHashTab               maHashTab;      /// Hashed table that manages string pointers.
-    sal_uInt32                  mnTotal;        /// Total count of strings (including doubles).
-    sal_uInt32                  mnSize;         /// Size of the SST (count of unique strings).
+    XclExpStringList    maStringList;   /// List of unique strings (in SST ID order).
+    XclExpHashTab       maHashTab;      /// Hashed table that manages string pointers.
+    sal_uInt32          mnTotal;        /// Total count of strings (including doubles).
+    sal_uInt32          mnSize;         /// Size of the SST (count of unique strings).
 };
-
 
 // ----------------------------------------------------------------------------
 
 const sal_uInt32 EXC_SST_HASHTABLE_SIZE = 2048;
 
-XclExpSst_Impl::XclExpSst_Impl() :
+XclExpSstImpl::XclExpSstImpl() :
     maHashTab( EXC_SST_HASHTABLE_SIZE ),
     mnTotal( 0 ),
     mnSize( 0 )
 {
 }
 
-sal_uInt32 XclExpSst_Impl::Insert( XclExpStringPtr pString )
+sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 {
-    DBG_ASSERT( pString.get(), "XclExpSst_Impl::Insert - empty pointer not allowed" );
-    if( !pString.get() )
-        pString.reset( new XclExpString );
+    DBG_ASSERT( xString.get(), "XclExpSstImpl::Insert - empty pointer not allowed" );
+    if( !xString.get() )
+        xString.reset( new XclExpString );
 
     ++mnTotal;
     sal_uInt32 nSstIndex = 0;
 
     // calculate hash value in range [0,EXC_SST_HASHTABLE_SIZE)
-    sal_uInt16 nHash = pString->GetHash();
+    sal_uInt16 nHash = xString->GetHash();
     (nHash ^= (nHash / EXC_SST_HASHTABLE_SIZE)) %= EXC_SST_HASHTABLE_SIZE;
 
     XclExpHashVec& rVec = maHashTab[ nHash ];
-    XclExpHashEntry aEntry( pString.get(), mnSize );
+    XclExpHashEntry aEntry( xString.get(), mnSize );
     XclExpHashVec::iterator aIt = ::std::lower_bound( rVec.begin(), rVec.end(), aEntry, XclExpHashEntrySWO() );
-    if( (aIt == rVec.end()) || (*aIt->mpString != *pString) )
+    if( (aIt == rVec.end()) || (*aIt->mpString != *xString) )
     {
         nSstIndex = mnSize;
-        maStringList.push_back( pString );
+        maStringList.push_back( xString );
         rVec.insert( aIt, aEntry );
         ++mnSize;
     }
@@ -247,7 +238,7 @@ sal_uInt32 XclExpSst_Impl::Insert( XclExpStringPtr pString )
     return nSstIndex;
 }
 
-void XclExpSst_Impl::Save( XclExpStream& rStrm )
+void XclExpSstImpl::Save( XclExpStream& rStrm )
 {
     if( maStringList.empty() )
         return;
@@ -256,10 +247,10 @@ void XclExpSst_Impl::Save( XclExpStream& rStrm )
     { // own scope for the statistics
 #define APPENDINT( value ) Append( ByteString::CreateFromInt32( value ) )
         ScfUInt32Vec aVec;
-        sal_uInt32 nPerBucket = mnSize / EXC_SST_HASHTABLE_SIZE + 1, nEff = 0;
+        size_t nPerBucket = mnSize / EXC_SST_HASHTABLE_SIZE + 1, nEff = 0;
         for( XclExpHashTab::const_iterator aTIt = maHashTab.begin(), aTEnd = maHashTab.end(); aTIt != aTEnd; ++aTIt )
         {
-            sal_uInt32 nSize = aTIt->size();
+            size_t nSize = aTIt->size();
             if( nSize >= aVec.size() ) aVec.resize( nSize + 1, 0 );
             ++aVec[ nSize ];
             if( nSize > nPerBucket ) nEff += nSize - nPerBucket;
@@ -271,11 +262,11 @@ void XclExpSst_Impl::Save( XclExpStream& rStrm )
         aStr.Append( "Effectivity:\t\t" ).APPENDINT( 100 - 100 * nEff / mnSize );
         aStr.Append( "% (best: " ).APPENDINT( nPerBucket ).Append( " strings per bucket)\n" );
         aStr.Append( "\t\tCount of buckets\nBucket size\ttotal\tmax\tTotal strings\n" );
-        for( sal_uInt32 nIx = 0, nSize = aVec.size(), nInc = 1; nIx < nSize; nIx += nInc )
+        for( size_t nIx = 0, nSize = aVec.size(), nInc = 1; nIx < nSize; nIx += nInc )
         {
             if( (nIx == 10) || (nIx == 100) || (nIx == 1000) ) nInc = nIx;
-            sal_uInt32 nMaxIx = ::std::min( nIx + nInc, nSize ), nCount = 0, nMaxCount = 0, nStrings = 0;
-            for( sal_uInt32 nSubIx = nIx; nSubIx < nMaxIx; ++nSubIx )
+            size_t nMaxIx = ::std::min( nIx + nInc, nSize ), nCount = 0, nMaxCount = 0, nStrings = 0;
+            for( size_t nSubIx = nIx; nSubIx < nMaxIx; ++nSubIx )
             {
                 nCount += aVec[ nSubIx ];
                 if( aVec[ nSubIx ] > nMaxCount ) nMaxCount = aVec[ nSubIx ];
@@ -300,7 +291,7 @@ void XclExpSst_Impl::Save( XclExpStream& rStrm )
     while( nBucket > 0x0100 )
         nBucket /= 2;
 
-    sal_uInt16 nPerBucket = static_cast< sal_uInt16 >( ::std::max( 8UL, nBucket ) );
+    sal_uInt16 nPerBucket = llimit_cast< sal_uInt16 >( nBucket, 8 );
     sal_uInt16 nBucketIndex = 0;
 
     // *** write the SST record ***
@@ -340,11 +331,10 @@ void XclExpSst_Impl::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclExpSst::XclExpSst() :
-    mpImpl( new XclExpSst_Impl )
+    mxImpl( new XclExpSstImpl )
 {
 }
 
@@ -352,22 +342,68 @@ XclExpSst::~XclExpSst()
 {
 }
 
-sal_uInt32 XclExpSst::Insert( XclExpStringPtr pString )
+sal_uInt32 XclExpSst::Insert( XclExpStringRef xString )
 {
-    return mpImpl->Insert( pString );
+    return mxImpl->Insert( xString );
 }
 
 void XclExpSst::Save( XclExpStream& rStrm )
 {
-    mpImpl->Save( rStrm );
+    mxImpl->Save( rStrm );
 }
 
+// Merged cells ===============================================================
+
+XclExpMergedcells::XclExpMergedcells( const XclExpRoot& rRoot ) :
+    XclExpRecord( EXC_ID_MERGEDCELLS ),
+    XclExpRoot( rRoot )
+{
+}
+
+void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId )
+{
+    if( GetBiff() >= xlBiff8 )
+    {
+        maMergedRanges.Append( rRange );
+        maBaseXFIds.push_back( nBaseXFId );
+    }
+}
+
+sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
+{
+    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.Count(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
+    ScfUInt32Vec::const_iterator aIt = maBaseXFIds.begin();
+    ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
+    for( const ScRange* pScRange = rNCRanges.First(); pScRange; pScRange = rNCRanges.Next(), ++aIt )
+        if( pScRange->In( rPos ) )
+            return *aIt;
+    return EXC_XFID_NOTFOUND;
+}
+
+void XclExpMergedcells::Save( XclExpStream& rStrm )
+{
+    if( GetBiff() >= xlBiff8 )
+    {
+        CheckCellRangeList( maMergedRanges );
+        if( maMergedRanges.Count() )
+        {
+            SetRecSize( 2 + 8 * maMergedRanges.Count() );
+            XclExpRecord::Save( rStrm );
+        }
+    }
+}
+
+void XclExpMergedcells::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << maMergedRanges;
+}
 
 // Hyperlinks =================================================================
 
-XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rUrlField ) :
+XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rUrlField, const ScAddress& rScPos ) :
     XclExpRecord( EXC_ID_HLINK ),
-    mpVarData( new SvMemoryStream ),
+    maScPos( rScPos ),
+    mxVarData( new SvMemoryStream ),
     mnFlags( 0 )
 {
     const String& rUrl = rUrlField.GetURL();
@@ -375,8 +411,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     INetURLObject aUrlObj( rUrl );
     const INetProtocol eProtocol = aUrlObj.GetProtocol();
     bool bWithRepr = rRepr.Len() > 0;
-    XclExpStream aXclStrm( *mpVarData, rRoot );         // using in raw write mode.
-    XclExpStringPtr pTextMark;
+    XclExpStream aXclStrm( *mxVarData, rRoot );         // using in raw write mode.
+    XclExpStringRef xTextMark;
 
     // description
     if( bWithRepr )
@@ -387,7 +423,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aXclStrm << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_DESCR;
-        mpRepr.reset( new String( rRepr ) );
+        mxRepr.reset( new String( rRepr ) );
     }
 
     // file link or URL
@@ -415,8 +451,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
                     << sal_uInt16( 0x0003 );
         aLink.WriteBuffer( aXclStrm );                          // NO flags
 
-        if( !mpRepr.get() )
-            mpRepr.reset( new String( aFileName ) );
+        if( !mxRepr.get() )
+            mxRepr.reset( new String( aFileName ) );
     }
     else if( eProtocol != INET_PROT_NOT_VALID )
     {
@@ -427,30 +463,30 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aXclStrm    << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_BODY | EXC_HLINK_ABS;
-        if( !mpRepr.get() )
-            mpRepr.reset( new String( rUrl ) );
+        if( !mxRepr.get() )
+            mxRepr.reset( new String( rUrl ) );
     }
     else if( rUrl.GetChar( 0 ) == '#' )     // hack for #89066#
     {
         String aTextMark( rUrl.Copy( 1 ) );
         aTextMark.SearchAndReplace( '.', '!' );
-        pTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
+        xTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
     }
 
     // text mark
-    if( !pTextMark.get() && aUrlObj.HasMark() )
-        pTextMark.reset( new XclExpString( aUrlObj.GetMark(), EXC_STR_FORCEUNICODE, 255 ) );
+    if( !xTextMark.get() && aUrlObj.HasMark() )
+        xTextMark.reset( new XclExpString( aUrlObj.GetMark(), EXC_STR_FORCEUNICODE, 255 ) );
 
-    if( pTextMark.get() )
+    if( xTextMark.get() )
     {
-        aXclStrm    << sal_uInt32( pTextMark->Len() + 1 );  // string length + 1 trailing zero word
-        pTextMark->WriteBuffer( aXclStrm );                 // NO flags
+        aXclStrm    << sal_uInt32( xTextMark->Len() + 1 );  // string length + 1 trailing zero word
+        xTextMark->WriteBuffer( aXclStrm );                 // NO flags
         aXclStrm    << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_MARK;
     }
 
-    SetRecSize( 32 + mpVarData->Tell() );
+    SetRecSize( 32 + mxVarData->Tell() );
 }
 
 XclExpHyperlink::~XclExpHyperlink()
@@ -492,17 +528,16 @@ String XclExpHyperlink::BuildFileName(
 
 void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
 {
-    sal_uInt16 nCol = static_cast< sal_uInt16 >( maPos.Col() );
-    sal_uInt16 nRow = static_cast< sal_uInt16 >( maPos.Row() );
-    mpVarData->Seek( STREAM_SEEK_TO_BEGIN );
+    sal_uInt16 nXclCol = static_cast< sal_uInt16 >( maScPos.Col() );
+    sal_uInt16 nXclRow = static_cast< sal_uInt16 >( maScPos.Row() );
+    mxVarData->Seek( STREAM_SEEK_TO_BEGIN );
 
-    rStrm   << nRow << nRow << nCol << nCol
+    rStrm   << nXclRow << nXclRow << nXclCol << nXclCol
             << XclTools::maGuidStdLink
             << sal_uInt32( 2 )
             << mnFlags;
-    rStrm.CopyFromStream( *mpVarData );
+    rStrm.CopyFromStream( *mxVarData );
 }
-
 
 // Label ranges ===============================================================
 
@@ -547,42 +582,48 @@ void XclExpLabelranges::WriteBody( XclExpStream& rStrm )
     rStrm << maRowRanges << maColRanges;
 }
 
-
 // Conditional formatting  ====================================================
 
 /** Represents a CF record that contains one condition of a conditional format. */
-class XclExpCF_Impl : protected XclExpRoot
+class XclExpCFImpl : protected XclExpRoot
 {
 public:
-    explicit                    XclExpCF_Impl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry );
+    explicit            XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry );
 
     /** Writes the body of the CF record. */
-    void                        WriteBody( XclExpStream& rStrm );
+    void                WriteBody( XclExpStream& rStrm );
 
 private:
-    const ScCondFormatEntry&    mrFormatEntry;  /// Calc conditional format entry.
-    XclFontData                 maFontData;     /// Font formatting attributes.
-    XclExpCellBorder            maBorder;       /// Border formatting attributes.
-    XclExpCellArea              maArea;         /// Pattern formatting attributes.
-    sal_uInt32                  mnFontColorId;  /// Font color ID.
-    bool                        mbHeightUsed;   /// true = Font height used.
-    bool                        mbWeightUsed;   /// true = Font weight used.
-    bool                        mbColorUsed;    /// true = Font color used.
-    bool                        mbUnderlUsed;   /// true = Font underline type used.
-    bool                        mbItalicUsed;   /// true = Font posture used.
-    bool                        mbStrikeUsed;   /// true = Font strikeout used.
-    bool                        mbFontUsed;     /// true = Any font attribute used.
-    bool                        mbBorderUsed;   /// true = Border attribute used.
-    bool                        mbPattUsed;     /// true = Pattern attribute used.
-};
+    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
 
+    const ScCondFormatEntry& mrFormatEntry; /// Calc conditional format entry.
+    XclFontData         maFontData;         /// Font formatting attributes.
+    XclExpCellBorder    maBorder;           /// Border formatting attributes.
+    XclExpCellArea      maArea;             /// Pattern formatting attributes.
+    XclExpTokArrPtr     mxTokArr1;          /// Formula for first condition.
+    XclExpTokArrPtr     mxTokArr2;          /// Formula for second condition.
+    sal_uInt32          mnFontColorId;      /// Font color ID.
+    sal_uInt8           mnType;             /// Type of the condition (cell/formula).
+    sal_uInt8           mnOperator;         /// Comparison operator for cell type.
+    bool                mbHeightUsed;       /// true = Font height used.
+    bool                mbWeightUsed;       /// true = Font weight used.
+    bool                mbColorUsed;        /// true = Font color used.
+    bool                mbUnderlUsed;       /// true = Font underline type used.
+    bool                mbItalicUsed;       /// true = Font posture used.
+    bool                mbStrikeUsed;       /// true = Font strikeout used.
+    bool                mbFontUsed;         /// true = Any font attribute used.
+    bool                mbBorderUsed;       /// true = Border attribute used.
+    bool                mbPattUsed;         /// true = Pattern attribute used.
+};
 
 // ----------------------------------------------------------------------------
 
-XclExpCF_Impl::XclExpCF_Impl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry ) :
+XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry ) :
     XclExpRoot( rRoot ),
     mrFormatEntry( rFormatEntry ),
     mnFontColorId( 0 ),
+    mnType( EXC_CF_TYPE_CELL ),
+    mnOperator( EXC_CF_CMP_NONE ),
     mbFontUsed( false ),
     mbHeightUsed( false ),
     mbWeightUsed( false ),
@@ -626,50 +667,49 @@ XclExpCF_Impl::XclExpCF_Impl( const XclExpRoot& rRoot, const ScCondFormatEntry& 
         if( mbPattUsed )
             maArea.FillFromItemSet( rItemSet, GetPalette(), GetBiff() );
     }
-}
 
-void XclExpCF_Impl::WriteBody( XclExpStream& rStrm )
-{
     // *** mode and comparison operator ***
 
-    sal_uInt8 nType = EXC_CF_TYPE_CELL;
-    sal_uInt8 nOperator = EXC_CF_CMP_NONE;
     bool bFmla2 = false;
-
-    switch( mrFormatEntry.GetOperation() )
+    switch( rFormatEntry.GetOperation() )
     {
-        case SC_COND_NONE:          nType = EXC_CF_TYPE_NONE;                               break;
-        case SC_COND_BETWEEN:       nOperator = EXC_CF_CMP_BETWEEN;         bFmla2 = true;  break;
-        case SC_COND_NOTBETWEEN:    nOperator = EXC_CF_CMP_NOT_BETWEEN;     bFmla2 = true;  break;
-        case SC_COND_EQUAL:         nOperator = EXC_CF_CMP_EQUAL;                           break;
-        case SC_COND_NOTEQUAL:      nOperator = EXC_CF_CMP_NOT_EQUAL;                       break;
-        case SC_COND_GREATER:       nOperator = EXC_CF_CMP_GREATER;                         break;
-        case SC_COND_LESS:          nOperator = EXC_CF_CMP_LESS;                            break;
-        case SC_COND_EQGREATER:     nOperator = EXC_CF_CMP_GREATER_EQUAL;                   break;
-        case SC_COND_EQLESS:        nOperator = EXC_CF_CMP_LESS_EQUAL;                      break;
-        case SC_COND_DIRECT:        nType = EXC_CF_TYPE_FMLA;                               break;
-        default:                    nType = EXC_CF_TYPE_NONE;
+        case SC_COND_NONE:          mnType = EXC_CF_TYPE_NONE;                              break;
+        case SC_COND_BETWEEN:       mnOperator = EXC_CF_CMP_BETWEEN;        bFmla2 = true;  break;
+        case SC_COND_NOTBETWEEN:    mnOperator = EXC_CF_CMP_NOT_BETWEEN;    bFmla2 = true;  break;
+        case SC_COND_EQUAL:         mnOperator = EXC_CF_CMP_EQUAL;                          break;
+        case SC_COND_NOTEQUAL:      mnOperator = EXC_CF_CMP_NOT_EQUAL;                      break;
+        case SC_COND_GREATER:       mnOperator = EXC_CF_CMP_GREATER;                        break;
+        case SC_COND_LESS:          mnOperator = EXC_CF_CMP_LESS;                           break;
+        case SC_COND_EQGREATER:     mnOperator = EXC_CF_CMP_GREATER_EQUAL;                  break;
+        case SC_COND_EQLESS:        mnOperator = EXC_CF_CMP_LESS_EQUAL;                     break;
+        case SC_COND_DIRECT:        mnType = EXC_CF_TYPE_FMLA;                              break;
+        default:                    mnType = EXC_CF_TYPE_NONE;
             DBG_ERRORFILE( "XclExpCF::WriteBody - unknown condition type" );
     }
 
-    rStrm << nType << nOperator;
-
     // *** formulas ***
 
-    ::std::auto_ptr< ScTokenArray > pScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
+    ::std::auto_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
     EC_Codetype eDummy;
-    ::std::auto_ptr< ExcUPN > pXclTokArr1( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, TRUE ) );
-    sal_uInt16 nFmlaSize1 = pXclTokArr1->GetLen();
+    mxTokArr1.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, TRUE ) );
 
-    ::std::auto_ptr< ExcUPN > pXclTokArr2;
-    sal_uInt16 nFmlaSize2 = 0;
     if( bFmla2 )
     {
-        pScTokArr.reset( mrFormatEntry.CreateTokenArry( 1 ) );
-        pXclTokArr2.reset( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, TRUE ) );
-        nFmlaSize2 = pXclTokArr2->GetLen();
+        xScTokArr.reset( mrFormatEntry.CreateTokenArry( 1 ) );
+        mxTokArr2.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, TRUE ) );
     }
+}
 
+void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
+{
+    // *** mode and comparison operator ***
+
+    rStrm << mnType << mnOperator;
+
+    // *** formula sizes ***
+
+    sal_uInt16 nFmlaSize1 = mxTokArr1.get() ? mxTokArr1->GetLen() : 0;
+    sal_uInt16 nFmlaSize2 = mxTokArr2.get() ? mxTokArr2->GetLen() : 0;
     rStrm << nFmlaSize1 << nFmlaSize2;
 
     // *** formatting blocks ***
@@ -746,19 +786,18 @@ void XclExpCF_Impl::WriteBody( XclExpStream& rStrm )
 
     // *** formulas ***
 
-    if( pXclTokArr1.get() )
-        rStrm.Write( pXclTokArr1->GetData(), pXclTokArr1->GetLen() );
-    if( pXclTokArr2.get() )
-        rStrm.Write( pXclTokArr2->GetData(), pXclTokArr2->GetLen() );
+    if( mxTokArr1.get() )
+        rStrm.Write( mxTokArr1->GetData(), mxTokArr1->GetLen() );
+    if( mxTokArr2.get() )
+        rStrm.Write( mxTokArr2->GetData(), mxTokArr2->GetLen() );
 }
-
 
 // ----------------------------------------------------------------------------
 
 XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry ) :
     XclExpRecord( EXC_ID_CF ),
     XclExpRoot( rRoot ),
-    mpImpl( new XclExpCF_Impl( rRoot, rFormatEntry ) )
+    mxImpl( new XclExpCFImpl( rRoot, rFormatEntry ) )
 {
 }
 
@@ -768,9 +807,8 @@ XclExpCF::~XclExpCF()
 
 void XclExpCF::WriteBody( XclExpStream& rStrm )
 {
-    mpImpl->WriteBody( rStrm );
+    mxImpl->WriteBody( rStrm );
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -784,7 +822,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     if( maRanges.Count() )
         for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
-                maCFList.Append( new XclExpCF( GetRoot(), *pEntry ) );
+                maCFList.AppendRecord( XclExpCFList::RecordRefType( new XclExpCF( GetRoot(), *pEntry ) ) );
 }
 
 XclExpCondfmt::~XclExpCondfmt()
@@ -825,7 +863,7 @@ void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
             aMaxPos.SetRow( pRange->aEnd.Row() );
     }
 
-    rStrm   << static_cast< sal_uInt16 >( maCFList.Count() )
+    rStrm   << static_cast< sal_uInt16 >( maCFList.Size() )
             << sal_uInt16( 1 )
             << static_cast< sal_uInt16 >( aMinPos.Row() )
             << static_cast< sal_uInt16 >( aMaxPos.Row() )
@@ -847,9 +885,9 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot )
             {
                 if( *ppCondFmt )
                 {
-                    ::std::auto_ptr< XclExpCondfmt > pCondfmtRec( new XclExpCondfmt( rRoot, **ppCondFmt ) );
-                    if( pCondfmtRec->IsValid() )
-                        maCondfmtList.Append( pCondfmtRec.release() );
+                    ::std::auto_ptr< XclExpCondfmt > xCondfmtRec( new XclExpCondfmt( rRoot, **ppCondFmt ) );
+                    if( xCondfmtRec->IsValid() )
+                        maCondfmtList.AppendRecord( XclExpCondfmtList::RecordRefType( xCondfmtRec.release() ) );
                 }
             }
         }
@@ -861,21 +899,22 @@ void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
     maCondfmtList.Save( rStrm );
 }
 
-
 // Validation =================================================================
 
+namespace {
+
 /** Writes a formula for the DV record. */
-void lcl_xecontent_WriteDvFormula( XclExpStream& rStrm, const ExcUPN* pXclTokArr )
+void lclWriteDvFormula( XclExpStream& rStrm, const ExcUPN* pXclTokArr )
 {
     sal_uInt16 nSize = pXclTokArr ? pXclTokArr->GetLen() : 0;
-    const sal_Char* pData = pXclTokArr ? pXclTokArr->GetData() : NULL;
+    const sal_Char* pData = pXclTokArr ? pXclTokArr->GetData() : 0;
 
     rStrm << nSize << sal_uInt16( 0 );
     rStrm.Write( pData, nSize );
 }
 
 /** Writes a formula for the DV record, based on a single string. */
-void lcl_xecontent_WriteDvFormula( XclExpStream& rStrm, const XclExpString& rString )
+void lclWriteDvFormula( XclExpStream& rStrm, const XclExpString& rString )
 {
     // fake a formula with a single tStr token
     rStrm   << static_cast< sal_uInt16 >( rString.GetSize() + 1 )
@@ -884,15 +923,158 @@ void lcl_xecontent_WriteDvFormula( XclExpStream& rStrm, const XclExpString& rStr
             << rString;
 }
 
+} // namespace
 
 // ----------------------------------------------------------------------------
 
-XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nHandle ) :
+XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
     XclExpRecord( EXC_ID_DV ),
     XclExpRoot( rRoot ),
-    mpValData( rRoot.GetDoc().GetValidationEntry( nHandle ) ),
-    mnHandle( nHandle )
+    mnFlags( 0 ),
+    mnScHandle( nScHandle )
 {
+    if( const ScValidationData* pValData = GetDoc().GetValidationEntry( mnScHandle ) )
+    {
+        // prompt box - empty string represented by single NUL character
+        String aTitle, aText;
+        bool bShowPrompt = (pValData->GetInput( aTitle, aText ) == TRUE);
+        if( aTitle.Len() )
+            maPromptTitle.Assign( aTitle );
+        else
+            maPromptTitle.Assign( '\0' );
+        if( aText.Len() )
+            maPromptText.Assign( aText );
+        else
+            maPromptText.Assign( '\0' );
+
+        // error box - empty string represented by single NUL character
+        ScValidErrorStyle eScErrorStyle;
+        bool bShowError = (pValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == TRUE);
+        if( aTitle.Len() )
+            maErrorTitle.Assign( aTitle );
+        else
+            maErrorTitle.Assign( '\0' );
+        if( aText.Len() )
+            maErrorText.Assign( aText );
+        else
+            maErrorText.Assign( '\0' );
+
+        // flags
+        switch( pValData->GetDataMode() )
+        {
+            case SC_VALID_ANY:      mnFlags |= EXC_DV_MODE_ANY;         break;
+            case SC_VALID_WHOLE:    mnFlags |= EXC_DV_MODE_WHOLE;       break;
+            case SC_VALID_DECIMAL:  mnFlags |= EXC_DV_MODE_DECIMAL;     break;
+            case SC_VALID_LIST:     mnFlags |= EXC_DV_MODE_LIST;        break;
+            case SC_VALID_DATE:     mnFlags |= EXC_DV_MODE_DATE;        break;
+            case SC_VALID_TIME:     mnFlags |= EXC_DV_MODE_TIME;        break;
+            case SC_VALID_TEXTLEN:  mnFlags |= EXC_DV_MODE_TEXTLEN;     break;
+            case SC_VALID_CUSTOM:   mnFlags |= EXC_DV_MODE_CUSTOM;      break;
+            default:                DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown mode" );
+        }
+
+        switch( pValData->GetOperation() )
+        {
+            case SC_COND_NONE:
+            case SC_COND_EQUAL:         mnFlags |= EXC_DV_COND_EQUAL;       break;
+            case SC_COND_LESS:          mnFlags |= EXC_DV_COND_LESS;        break;
+            case SC_COND_GREATER:       mnFlags |= EXC_DV_COND_GREATER;     break;
+            case SC_COND_EQLESS:        mnFlags |= EXC_DV_COND_EQLESS;      break;
+            case SC_COND_EQGREATER:     mnFlags |= EXC_DV_COND_EQGREATER;   break;
+            case SC_COND_NOTEQUAL:      mnFlags |= EXC_DV_COND_NOTEQUAL;    break;
+            case SC_COND_BETWEEN:       mnFlags |= EXC_DV_COND_BETWEEN;     break;
+            case SC_COND_NOTBETWEEN:    mnFlags |= EXC_DV_COND_NOTBETWEEN;  break;
+            default:                    DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown condition" );
+        }
+        switch( eScErrorStyle )
+        {
+            case SC_VALERR_STOP:        mnFlags |= EXC_DV_ERROR_STOP;       break;
+            case SC_VALERR_WARNING:     mnFlags |= EXC_DV_ERROR_WARNING;    break;
+            case SC_VALERR_INFO:        mnFlags |= EXC_DV_ERROR_INFO;       break;
+            case SC_VALERR_MACRO:
+                // #111781# set INFO for validity with macro call, delete title
+                mnFlags |= EXC_DV_ERROR_INFO;
+                maErrorTitle.Assign( '\0' );    // contains macro name
+            break;
+            default:                    DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown error style" );
+        }
+        ::set_flag( mnFlags, EXC_DV_IGNOREBLANK, pValData->IsIgnoreBlank() );
+        ::set_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN, pValData->GetListType() == ValidListType::INVISIBLE );
+        ::set_flag( mnFlags, EXC_DV_SHOWPROMPT, bShowPrompt );
+        ::set_flag( mnFlags, EXC_DV_SHOWERROR, bShowError );
+
+        // formulas
+        ::std::auto_ptr< ScTokenArray > xScTokArr;
+        EC_Codetype eDummy;
+
+        // first formula
+        xScTokArr.reset( pValData->CreateTokenArry( 0 ) );
+        if( xScTokArr.get() )
+        {
+            String aString;
+            if( (pValData->GetDataMode() == SC_VALID_LIST) &&
+                XclTokenArrayHelper::GetStringList( aString, *xScTokArr, '\n' ) )
+            {
+                /*  Formula is a list of string tokens -> build the Excel string.
+                    Data validity is BIFF8 only (important for the XclExpString object).
+                    Excel uses the NUL character as string list separator. */
+                mxString1.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
+                xub_StrLen nTokenCnt = aString.GetTokenCount( '\n' );
+                xub_StrLen nStringIx = 0;
+                for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+                {
+                    String aToken( aString.GetToken( 0, '\n', nStringIx ) );
+                    if( nToken > 0 )
+                        mxString1->Append( '\0' );
+                    mxString1->Append( aToken );
+                }
+                ::set_flag( mnFlags, EXC_DV_STRINGLIST );
+            }
+            else
+            {
+                // no list validation -> convert the formula
+                mxTokArr1.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, true ) );
+            }
+
+            /*  All formulas are stored like conditional formatting formulas (with
+                tRefN/tAreaN tokens as value or array class). But NOT the cell references
+                and defined names in list validation - they are stored as reference class
+                tokens... Example:
+                1) Cell must be equal to A1 -> formula is =A1 -> writes tRefNV token
+                2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
+
+                Following a VERY dirty hack that looks into the Excel token array. If there
+                is a leading tRefN*, tAreaN*, or tName* token, it is converted to reference
+                class. This is because the formula compiler is already too obscure, so
+                adding this special case will surely break anything else there.
+                TODO: Remove this mess when the formula compiler is cleaned up! */
+            if( (pValData->GetDataMode() == SC_VALID_LIST) && mxTokArr1.get() )
+            {
+                sal_Char* pData = const_cast< sal_Char* >( mxTokArr1->GetData() );
+                if( pData && mxTokArr1->GetLen() )
+                {
+                    if( (*pData == 0x43) || (*pData == 0x63) ||     // tNameV, tNameA
+                        (*pData == 0x4C) || (*pData == 0x6C) ||     // tRefNV, tRefNA
+                        (*pData == 0x4D) || (*pData == 0x6D) )      // tAreaNV, tAreaNA
+                        // remove any token class and add reference token class
+                        (*pData &= 0x1F) |= 0x20;
+                }
+            }
+        }
+
+        // second formula
+        xScTokArr.reset( pValData->CreateTokenArry( 1 ) );
+        if( xScTokArr.get() )
+        {
+            EC_Codetype eDummy;
+            mxTokArr2.reset( new ExcUPN( mpRD, *xScTokArr, eDummy, 0, true ) );
+        }
+    }
+    else
+    {
+        DBG_ERRORFILE( "XclExpDV::XclExpDV - missing core data" );
+        mnScHandle = ULONG_MAX;
+    }
 }
 
 void XclExpDV::InsertCellRange( const ScRange& rRange )
@@ -903,230 +1085,50 @@ void XclExpDV::InsertCellRange( const ScRange& rRange )
 bool XclExpDV::CheckWriteRecord()
 {
     CheckCellRangeList( maRanges );
-    return mpValData && maRanges.Count();
+    return (mnScHandle != ULONG_MAX) && maRanges.Count();
 }
 
 void XclExpDV::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mpValData, "XclExpDV::WriteBody - missing core data" );
-    if( !mpValData ) return;
-
-    // prompt box - empty string represented by single NUL character
-    String aTitle, aText;
-    bool bShowPrompt = (mpValData->GetInput( aTitle, aText ) == TRUE);
-    XclExpString aPromptTitle( aTitle );
-    if( !aTitle.Len() )
-        aPromptTitle.Assign( '\0' );
-    XclExpString aPromptText( aText );
-    if( !aText.Len() )
-        aPromptText.Assign( '\0' );
-
-    // error box - empty string represented by single NUL character
-    ScValidErrorStyle eScErrorStyle;
-    bool bShowError = (mpValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == TRUE);
-    XclExpString aErrorTitle( aTitle );
-    if( !aTitle.Len() )
-        aErrorTitle.Assign( '\0' );
-    XclExpString aErrorText( aText );
-    if( !aText.Len() )
-        aErrorText.Assign( '\0' );
-
-    // flags
-    sal_uInt32 nFlags = 0;
-    switch( mpValData->GetDataMode() )
-    {
-        case SC_VALID_ANY:      nFlags |= EXC_DV_MODE_ANY;      break;
-        case SC_VALID_WHOLE:    nFlags |= EXC_DV_MODE_WHOLE;    break;
-        case SC_VALID_DECIMAL:  nFlags |= EXC_DV_MODE_DECIMAL;  break;
-        case SC_VALID_LIST:     nFlags |= EXC_DV_MODE_LIST;     break;
-        case SC_VALID_DATE:     nFlags |= EXC_DV_MODE_DATE;     break;
-        case SC_VALID_TIME:     nFlags |= EXC_DV_MODE_TIME;     break;
-        case SC_VALID_TEXTLEN:  nFlags |= EXC_DV_MODE_TEXTLEN;  break;
-        case SC_VALID_CUSTOM:   nFlags |= EXC_DV_MODE_CUSTOM;   break;
-        default:                DBG_ERRORFILE( "XclExpDV::SaveCont - unknown mode" );
-    }
-    switch( mpValData->GetOperation() )
-    {
-        case SC_COND_NONE:
-        case SC_COND_EQUAL:     nFlags |= EXC_DV_COND_EQUAL;        break;
-        case SC_COND_LESS:      nFlags |= EXC_DV_COND_LESS;         break;
-        case SC_COND_GREATER:   nFlags |= EXC_DV_COND_GREATER;      break;
-        case SC_COND_EQLESS:    nFlags |= EXC_DV_COND_EQLESS;       break;
-        case SC_COND_EQGREATER: nFlags |= EXC_DV_COND_EQGREATER;    break;
-        case SC_COND_NOTEQUAL:  nFlags |= EXC_DV_COND_NOTEQUAL;     break;
-        case SC_COND_BETWEEN:   nFlags |= EXC_DV_COND_BETWEEN;      break;
-        case SC_COND_NOTBETWEEN:nFlags |= EXC_DV_COND_NOTBETWEEN;   break;
-        default:                DBG_ERRORFILE( "XclExpDV::SaveCont - unknown condition" );
-    }
-    switch( eScErrorStyle )
-    {
-        case SC_VALERR_STOP:    nFlags |= EXC_DV_ERROR_STOP;    break;
-        case SC_VALERR_WARNING: nFlags |= EXC_DV_ERROR_WARNING; break;
-        case SC_VALERR_INFO:    nFlags |= EXC_DV_ERROR_INFO;    break;
-        case SC_VALERR_MACRO:
-            // #111781# set INFO for validity with macro call, delete title
-            nFlags |= EXC_DV_ERROR_INFO;
-            aErrorTitle.Assign( '\0' );     // contains macro name
-        break;
-        default:                DBG_ERRORFILE( "XclExpDV::SaveCont - unknown error style" );
-    }
-    if( mpValData->IsIgnoreBlank() )
-        nFlags |= EXC_DV_IGNOREBLANK;
-    if( mpValData->GetListType() == ValidListType::INVISIBLE )
-        nFlags |= EXC_DV_SUPPRESSDROPDOWN;
-    if( bShowPrompt )
-        nFlags |= EXC_DV_SHOWPROMPT;
-    if( bShowError )
-        nFlags |= EXC_DV_SHOWERROR;
-
-    // formulas
-    ::std::auto_ptr< ScTokenArray > pScTokArr;
-    EC_Codetype eDummy;
-
-    // first formula
-    ::std::auto_ptr< ExcUPN > pXclTokArr1;
-    XclExpStringPtr pXclString;
-    pScTokArr.reset( mpValData->CreateTokenArry( 0 ) );
-    if( pScTokArr.get() )
-    {
-        String aString;
-        if( (mpValData->GetDataMode() == SC_VALID_LIST) &&
-            XclTokenArrayHelper::GetStringList( aString, *pScTokArr, '\n' ) )
-        {
-            /*  Formula is a list of string tokens -> build the Excel string.
-                Data validity is BIFF8 only (important for the XclExpString object).
-                Excel uses the NUL character as string list separator. */
-            pXclString.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
-            xub_StrLen nTokenCnt = aString.GetTokenCount( '\n' );
-            xub_StrLen nStringIx = 0;
-            for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
-            {
-                String aToken( aString.GetToken( 0, '\n', nStringIx ) );
-                if( nToken > 0 )
-                    pXclString->Append( '\0' );
-                pXclString->Append( aToken );
-            }
-            nFlags |= EXC_DV_STRINGLIST;
-        }
-        else
-        {
-            // no list validation -> convert the formula
-            pXclTokArr1.reset( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, true ) );
-        }
-
-        /*  All formulas are stored like conditional formatting formulas (with
-            tRefN/tAreaN tokens as value or array class). But NOT the cell references
-            and defined names in list validation - they are stored as reference class
-            tokens... Example:
-            1) Cell must be equal to A1 -> formula is =A1 -> writes tRefNV token
-            2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
-
-            Following a VERY dirty hack that looks into the Excel token array. If there
-            is a leading tRefN*, tAreaN*, or tName* token, it is converted to reference
-            class. This is because the formula compiler is already too obscure, so
-            adding this special case will surely break anything else there.
-            TODO: Remove this mess when the formula compiler is cleaned up! */
-        if( (mpValData->GetDataMode() == SC_VALID_LIST) && pXclTokArr1.get() )
-        {
-            sal_Char* pData = const_cast< sal_Char* >( pXclTokArr1->GetData() );
-            if( pData && pXclTokArr1->GetLen() )
-            {
-                if( (*pData == 0x43) || (*pData == 0x63) ||     // tNameV, tNameA
-                    (*pData == 0x4C) || (*pData == 0x6C) ||     // tRefNV, tRefNA
-                    (*pData == 0x4D) || (*pData == 0x6D) )      // tAreaNV, tAreaNA
-                    // remove any token class and add reference token class
-                    (*pData &= 0x1F) |= 0x20;
-            }
-        }
-    }
-
-    // second formula
-    ::std::auto_ptr< ExcUPN > pXclTokArr2;
-    pScTokArr.reset( mpValData->CreateTokenArry( 1 ) );
-    if( pScTokArr.get() )
-    {
-        EC_Codetype eDummy;
-        pXclTokArr2.reset( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, true ) );
-    }
-
-    // export the record
-    rStrm << nFlags << aPromptTitle << aErrorTitle << aPromptText << aErrorText;
-
-    if( pXclString.get() )
-        lcl_xecontent_WriteDvFormula( rStrm, *pXclString );
+    // flags and strings
+    rStrm << mnFlags << maPromptTitle << maErrorTitle << maPromptText << maErrorText;
+    // condition formulas
+    if( mxString1.get() )
+        lclWriteDvFormula( rStrm, *mxString1 );
     else
-        lcl_xecontent_WriteDvFormula( rStrm, pXclTokArr1.get() );
-    lcl_xecontent_WriteDvFormula( rStrm, pXclTokArr2.get() );
-
+        lclWriteDvFormula( rStrm, mxTokArr1.get() );
+    lclWriteDvFormula( rStrm, mxTokArr2.get() );
+    // cell ranges
     rStrm << maRanges;
 }
-
 
 // ----------------------------------------------------------------------------
 
 XclExpDval::XclExpDval( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_DVAL, 18 ),
-    XclExpRoot( rRoot ),
-    mpLastFoundDV( NULL )
+    XclExpRoot( rRoot )
 {
 }
 
-XclExpDV& XclExpDval::SearchOrCreateDv( sal_uInt32 nHandle )
+void XclExpDval::InsertCellRange( const ScRange& rRange, ULONG nScHandle )
 {
-    // test last found record
-    if( mpLastFoundDV && (mpLastFoundDV->GetHandle() == nHandle) )
-        return *mpLastFoundDV;
-
-    // binary search
-    sal_uInt32 nCurrIndex = 0;
-    if( !maDVList.Empty() )
+    if( GetBiff() >= xlBiff8 )
     {
-        sal_uInt32 nFirst = 0;
-        sal_uInt32 nLast = maDVList.Count() - 1;
-        bool bLoop = true;
-        sal_uInt32 nCurrHandle;
-        while( (nFirst <= nLast) && bLoop )
-        {
-            nCurrIndex = (nFirst + nLast) / 2;
-            mpLastFoundDV = maDVList.GetObject( nCurrIndex );
-            nCurrHandle = mpLastFoundDV->GetHandle();
-            if( nCurrHandle == nHandle )
-                bLoop = false;
-            else if( nCurrHandle < nHandle )
-                nFirst = nCurrIndex + 1;
-            else if( nCurrIndex )
-                nLast = nCurrIndex - 1;
-            else    // special case for nLast = -1
-                bLoop = false;
-        }
-        if( nCurrHandle == nHandle )
-            return *mpLastFoundDV;
-        else if( nCurrHandle < nHandle )
-            ++nCurrIndex;
+        XclExpDV& rDVRec = SearchOrCreateDv( nScHandle );
+        rDVRec.InsertCellRange( rRange );
     }
-
-    // create new DV record
-    mpLastFoundDV = new XclExpDV( *this, nHandle );
-    maDVList.Insert( mpLastFoundDV, nCurrIndex );
-    return *mpLastFoundDV;
-}
-
-void XclExpDval::InsertCellRange( const ScRange& rRange, sal_uInt32 nHandle )
-{
-    XclExpDV& rDVRec = SearchOrCreateDv( nHandle );
-    rDVRec.InsertCellRange( rRange );
 }
 
 void XclExpDval::Save( XclExpStream& rStrm )
 {
     // check all records
-    sal_uInt32 nIndex = maDVList.Count();
-    while( nIndex )
+    size_t nPos = maDVList.Size();
+    while( nPos )
     {
-        --nIndex;   // backwards to keep nIndex valid
-        XclExpDV* pDVRec = maDVList.GetObject( nIndex );
-        if( !pDVRec->CheckWriteRecord() )
-            maDVList.Delete( nIndex );
+        --nPos;     // backwards to keep nPos valid
+        XclExpDVRef xDVRec = maDVList.GetRecord( nPos );
+        if( !xDVRec->CheckWriteRecord() )
+            maDVList.RemoveRecord( nPos );
     }
 
     // write the DVAL and the DV's
@@ -1137,12 +1139,51 @@ void XclExpDval::Save( XclExpStream& rStrm )
     }
 }
 
+XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
+{
+    // test last found record
+    if( mxLastFoundDV.get() && (mxLastFoundDV->GetScHandle() == nScHandle) )
+        return *mxLastFoundDV;
+
+    // binary search
+    size_t nCurrPos = 0;
+    if( !maDVList.Empty() )
+    {
+        size_t nFirstPos = 0;
+        size_t nLastPos = maDVList.Size() - 1;
+        bool bLoop = true;
+        ULONG nCurrScHandle;
+        while( (nFirstPos <= nLastPos) && bLoop )
+        {
+            nCurrPos = (nFirstPos + nLastPos) / 2;
+            mxLastFoundDV = maDVList.GetRecord( nCurrPos );
+            nCurrScHandle = mxLastFoundDV->GetScHandle();
+            if( nCurrScHandle == nScHandle )
+                bLoop = false;
+            else if( nCurrScHandle < nScHandle )
+                nFirstPos = nCurrPos + 1;
+            else if( nCurrPos )
+                nLastPos = nCurrPos - 1;
+            else    // special case for nLastPos = -1
+                bLoop = false;
+        }
+        if( nCurrScHandle == nScHandle )
+            return *mxLastFoundDV;
+        else if( nCurrScHandle < nScHandle )
+            ++nCurrPos;
+    }
+
+    // create new DV record
+    mxLastFoundDV.reset( new XclExpDV( *this, nScHandle ) );
+    maDVList.InsertRecord( mxLastFoundDV, nCurrPos );
+    return *mxLastFoundDV;
+}
+
 void XclExpDval::WriteBody( XclExpStream& rStrm )
 {
     rStrm.WriteZeroBytes( 10 );
-    rStrm << EXC_DVAL_NOOBJ << maDVList.Count();
+    rStrm << EXC_DVAL_NOOBJ << static_cast< sal_uInt32 >( maDVList.Size() );
 }
-
 
 // Web Queries ================================================================
 
@@ -1154,7 +1195,7 @@ XclExpWebQuery::XclExpWebQuery(
     maDestRange( rRangeName ),
     maUrl( rUrl ),
     // refresh delay time: seconds -> minutes
-    mnRefresh( static_cast< sal_Int16 >( ::std::min( (nRefrSecs + 59L) / 60L, 0x7FFFL ) ) ),
+    mnRefresh( ulimit_cast< sal_Int16 >( (nRefrSecs + 59L) / 60L ) ),
     mbEntireDoc( false )
 {
     // comma separated list of HTML table names or indexes
@@ -1174,7 +1215,7 @@ XclExpWebQuery::XclExpWebQuery(
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found
     {
         if( aNewTables.Len() )
-            mpQryTables.reset( new XclExpString( aNewTables ) );
+            mxQryTables.reset( new XclExpString( aNewTables ) );
         else
             mbEntireDoc = true;
     }
@@ -1186,7 +1227,7 @@ XclExpWebQuery::~XclExpWebQuery()
 
 void XclExpWebQuery::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !mbEntireDoc || !mpQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
+    DBG_ASSERT( !mbEntireDoc || !mxQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
     sal_uInt16 nFlags;
 
     // QSI record
@@ -1223,7 +1264,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // WEBQRYSETTINGS record
-    nFlags = mpQryTables.get() ? EXC_WQSETT_SPECTABLES : EXC_WQSETT_ALL;
+    nFlags = mxQryTables.get() ? EXC_WQSETT_SPECTABLES : EXC_WQSETT_ALL;
     rStrm.StartRecord( EXC_ID_WQSETT, 28 );
     rStrm   << EXC_ID_WQSETT            // repeated record id ?!?
             << sal_uInt16( 0x0000 )
@@ -1238,16 +1279,15 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // WEBQRYTABLES record
-    if( mpQryTables.get() )
+    if( mxQryTables.get() )
     {
-        rStrm.StartRecord( EXC_ID_WQTABLES, 4 + mpQryTables->GetSize() );
+        rStrm.StartRecord( EXC_ID_WQTABLES, 4 + mxQryTables->GetSize() );
         rStrm   << EXC_ID_WQTABLES          // repeated record id ?!?
                 << sal_uInt16( 0x0000 )
-                << *mpQryTables;            // comma separated list of source tables
+                << *mxQryTables;            // comma separated list of source tables
         rStrm.EndRecord();
     }
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -1312,13 +1352,13 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     }
 
                     // create and store the web query record
-                    Append( new XclExpWebQuery( aRangeName, aWebQueryUrl, xAreaLink->getSourceArea(), nRefresh ) );
+                    AppendRecord( RecordRefType(
+                        new XclExpWebQuery( aRangeName, aWebQueryUrl, xAreaLink->getSourceArea(), nRefresh ) ) );
                 }
             }
         }
     }
 }
-
 
 // ============================================================================
 
