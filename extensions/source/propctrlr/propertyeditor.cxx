@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:51:27 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 09:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,8 @@ namespace pcr
         m_aTabControl.Show();
         m_aTabControl.SetDeactivatePageHdl(LINK(this, OPropertyEditor, OnPageDeactivate));
         m_aTabControl.SetActivatePageHdl(LINK(this, OPropertyEditor, OnPageActivate));
-#ifdef TRANSPARENT_BACKGROUND_WORKS
         m_aTabControl.SetBackground(GetBackground());
         m_aTabControl.SetPaintTransparent(sal_True);
-#endif
     }
 
     //------------------------------------------------------------------
