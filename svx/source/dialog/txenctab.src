@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sb $ $Date: 2002-02-26 12:52:52 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 15:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ ItemList [ language_user1 ] =
         < "Chinese traditional (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Chinese simplified (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
         < "Chinese traditional (Big5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "Chinese traditional (Big5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "Chinese traditional (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "Japanese (EUC-JP)"                               ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "Chinese simplified (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
         < "Chinese traditional (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
@@ -1269,20 +1269,20 @@ ItemList [ language_user1 ] =
         < "중국어 번체 (GBT-12345)"                ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "중국어 간체 (GBK/GB-2312-80)"           ; RTL_TEXTENCODING_GBK              ; > ;
         < "중국어 번체 (BIG5)"                 ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "중국어 번체 (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "일본어 (EUC-JP)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "중국어 간체 (EUC-CN)"                   ; RTL_TEXTENCODING_EUC_CN           ; > ;
         < "중국어 번체 (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
         < "일본어 (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
         < "중국어 간체 (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
         < "키릴어 (KOI8-R)"                              ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "유니코드 (UTF-7)"                                    ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "유니 코드 (UTF-8)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "동유럽 (ISO-8859-10) "                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "동유럽 (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "유니 코드 (UTF-7)"                                   ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "유니코드 (UTF-8) "                                   ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "동유럽 (ISO-8859-10)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "동유럽(ISO-8859-13)"                          ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
         < "한국어 (EUC-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "한국어 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "한국어 (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
-        < "유니코드"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
