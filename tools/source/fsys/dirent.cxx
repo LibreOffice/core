@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.8 $
- *  last change: $Author: hro $ $Date: 2001-05-21 16:13:53 $
+ *  $Revision: 1.9 $
+ *  last change: $Author: hro $ $Date: 2001-06-07 11:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1909,7 +1909,10 @@ BOOL DirEntry::Find( const String& rPfad, char cDelim )
 #endif
         for ( USHORT nToken = 0; nToken < nTokenCount; ++nToken )
         {
-                ByteString aPath = ByteString(rPfad, osl_getThreadTextEncoding()).GetToken( 0, cDelim, nIndex );
+            ByteString aPath = ByteString(rPfad, osl_getThreadTextEncoding()).GetToken( 0, cDelim, nIndex );
+
+            if ( aPath.Len() )
+            {
 #ifdef MAC
                 if (aPath[aPath.Len()-1] == ':')
                         aPath.Cut(aPath.Len()-1);
@@ -1925,6 +1928,7 @@ BOOL DirEntry::Find( const String& rPfad, char cDelim )
                         (*this) = aEntry;
                         return TRUE;
                 }
+            }
         }
         return FALSE;
 }
