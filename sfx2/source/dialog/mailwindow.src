@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:09:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ Window RID_MAIL_WINDOW
         Text[ dutch ] = "~Zenden";
         Text[ french ] = "Envo~yer";
         Text[ spanish ] = "Enviar";
-        Text[ italian ] = "Send";
+        Text[ italian ] = "In~via";
         Text[ danish ] = "Send";
         Text[ swedish ] = "~Skicka";
         Text[ polish ] = "Wyœlij";
@@ -111,7 +111,7 @@ Window RID_MAIL_WINDOW
         Text[ dutch ] = "S~luiten";
         Text[ french ] = "~Fermer";
         Text[ spanish ] = "Cerrar";
-        Text[ italian ] = "Close";
+        Text[ italian ] = "Chiudi";
         Text[ danish ] = "Luk";
         Text[ swedish ] = "S~täng";
         Text[ polish ] = "Zamknij";
@@ -192,9 +192,9 @@ Window RID_MAIL_WINDOW
         };
         StringList [ italian ] =
         {
-            < "An" ; 1 ; > ;
-            < "Kopie" ; 2 ; > ;
-            < "Blindkopie" ; 3 ; > ;
+            < "A" ; 1 ; > ;
+            < "Copia" ; 2 ; > ;
+            < "BCC" ; 3 ; > ;
         };
         StringList [ danish ] =
         {
@@ -285,7 +285,7 @@ Window RID_MAIL_WINDOW
         Text[ dutch ] = "~Onderwerp:";
         Text[ french ] = "O~bjet :";
         Text[ spanish ] = "Asunto:";
-        Text[ italian ] = "Subject:";
+        Text[ italian ] = "~Oggetto:";
         Text[ danish ] = "Emne:";
         Text[ swedish ] = "~Angående:";
         Text[ polish ] = "Dotyczy:";
@@ -317,7 +317,7 @@ Window RID_MAIL_WINDOW
         Text[ dutch ] = "~Van:";
         Text[ french ] = "~De :";
         Text[ spanish ] = "De:";
-        Text[ italian ] = "From:";
+        Text[ italian ] = "Da:";
         Text[ danish ] = "Fra:";
         Text[ swedish ] = "~Från:";
         Text[ polish ] = "Od:";
@@ -350,7 +350,7 @@ Window RID_MAIL_WINDOW
         Text[ dutch ] = "~Prioriteit:";
         Text[ french ] = "~Priorité :";
         Text[ spanish ] = "Prioridad:";
-        Text[ italian ] = "Priority:";
+        Text[ italian ] = "Priorità:";
         Text[ danish ] = "Prioritet:";
         Text[ swedish ] = "~Prioritet:";
         Text[ polish ] = "Priorytet:";
@@ -451,11 +451,11 @@ Window RID_MAIL_WINDOW
         };
         StringList [ italian ] =
         {
-            < "Sehr hoch" ; 1 ; > ;
-            < "Hoch" ; 2 ; > ;
-            < "Normal" ; 3 ; > ;
-            < "Niedrig" ; 4 ; > ;
-            < "Sehr niedrig" ; 5 ; > ;
+            < "Molto alta" ; 1 ; > ;
+            < "Alta" ; 2 ; > ;
+            < "Normale" ; 3 ; > ;
+            < "Bassa" ; 4 ; > ;
+            < "Molto bassa" ; 5 ; > ;
         };
         StringList [ danish ] =
         {
