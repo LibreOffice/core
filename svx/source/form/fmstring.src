@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 15:19:00 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 20:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,11 +666,47 @@ String RID_STR_CURSORSOURCE
 {
     Text = "Inhalt" ;
     Text [ English ] = "Content" ;
+    Text[ english_us ] = "Data source";
+    Text[ portuguese ] = "Fonte de dados";
+    Text[ russian ] = "Èñòî÷íèê äàííûõ";
+    Text[ greek ] = "Ğåñéå÷üìåíá";
+    Text[ dutch ] = "Gegevensbron";
+    Text[ french ] = "Source de données";
+    Text[ spanish ] = "Fuente de datos";
+    Text[ italian ] = "Sorgente dati";
+    Text[ danish ] = "Datakilde";
+    Text[ swedish ] = "Innehåll";
+    Text[ polish ] = "ród³o danych";
+    Text[ portuguese_brazilian ] = "Datenquelle";
+    Text[ japanese ] = "“à—e";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
+    Text[ chinese_simplified ] = "Êı¾İÔ´";
+    Text[ chinese_traditional ] = "¸ê®Æ·½";
+    Text[ turkish ] = "Veri kaynağı";
+    Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
 };
 String RID_STR_CURSORSOURCETYPE
 {
     Text = "Art des Inhaltes" ;
     Text [ English ] = "Type of Content" ;
+    Text[ english_us ] = "Type of data source";
+    Text[ portuguese ] = "Tipo da fonte de dados";
+    Text[ russian ] = "Òèï èñòî÷íèêà äàííûõ";
+    Text[ greek ] = "Ôığïò ğåñéå÷ïìİíùí";
+    Text[ dutch ] = "Type gegevensbron";
+    Text[ french ] = "Type de la source de données";
+    Text[ spanish ] = "Tipo de fuente de datos";
+    Text[ italian ] = "Tipo della sorgente dati";
+    Text[ danish ] = "Datakildetype";
+    Text[ swedish ] = "Typ av innehåll";
+    Text[ polish ] = "Typ Ÿród³a danych";
+    Text[ portuguese_brazilian ] = "Typ der Datenquelle";
+    Text[ japanese ] = "“à—e‚Ìí—Ş";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½ºÀÇ À¯Çü";
+    Text[ chinese_simplified ] = "Êı¾İÔ´µÄÀàĞÍ";
+    Text[ chinese_traditional ] = "¸ê®Æ·½Ãş«¬";
+    Text[ turkish ] = "Veri kaynağı türü";
+    Text[ arabic ] = "äæÚ ãÕÏÑ ÇáÈíÇäÇÊ";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -772,6 +808,24 @@ String RID_STR_DATASOURCE
 {
     Text = "Datenquelle" ;
     Text [ English ] = "Data Source" ;
+    Text[ english_us ] = "Database";
+    Text[ portuguese ] = "Base de dados";
+    Text[ russian ] = "Áàçà äàííûõ";
+    Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
+    Text[ dutch ] = "Database";
+    Text[ french ] = "Base de données";
+    Text[ spanish ] = "Base de datos";
+    Text[ italian ] = "Database";
+    Text[ danish ] = "Database";
+    Text[ swedish ] = "Datakälla";
+    Text[ polish ] = "Baza danych";
+    Text[ portuguese_brazilian ] = "Datenbank";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
+    Text[ chinese_simplified ] = "Êı¾İ¿â";
+    Text[ chinese_traditional ] = "¸ê®Æ®w";
+    Text[ turkish ] = "Veritabanı";
+    Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ";
 };
 String RID_STR_LOCKED
 {
@@ -2772,8 +2826,8 @@ String RID_STR_COLUMN
     Text [ swedish ] = "Kolumn" ;
     Text [ danish ] = "Kolonne" ;
     Text [ italian ] = "Colonna" ;
-    Text [ spanish ] = "Col" ;
-    Text [ french ] = "Colonne" ;
+    Text [ spanish ] = "Columna" ;
+    Text [ french ] = "Col" ;
     Text [ dutch ] = "Kol" ;
     Text[ chinese_simplified ] = "ÁĞ";
     Text[ russian ] = "Êîëîíêà";
@@ -4050,7 +4104,7 @@ String RID_STR_ECHO_CHAR
     Text [ spanish ] = "Caracteres para contraseñas" ;
     Text [ french ] = "Caractères de mots de passe" ;
     Text [ dutch ] = "Teken voor wachtwoorden" ;
-    Text[ chinese_simplified ] = "¿ÚÁî×Ö·û";
+    Text[ chinese_simplified ] = "ÃÜÂë×Ö·û";
     Text[ russian ] = "Çíàêè äëÿ ïàğîëÿ";
     Text[ polish ] = "Znaki dla hase³";
     Text[ japanese ] = "Êß½Ü°ÄŞ—p‚Ì•¶š";
@@ -5360,7 +5414,7 @@ String RID_STR_PROPTITLE_CHECKBOX
     Text[ polish ] = "Pole wyboru";
     Text[ japanese ] = "Áª¯¸ÎŞ¯¸½";
     Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô";
-    Text[ greek ] = "Ğåäßï óŞìáíóçò";
+    Text[ greek ] = "Ğëáßóéï åëİã÷ïõ";
     Text[ korean ] = "È®ÀÎ¶õ";
     Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
     Text[ turkish ] = "Seçme kutusu";
