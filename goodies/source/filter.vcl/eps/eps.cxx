@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-01 14:14:22 $
+ *  last change: $Author: sj $ $Date: 2002-11-12 18:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,8 @@ private:
     UINT32              mnLatestPush;       // offset auf streamposition, an der zuletzt gepusht wurde
 
     long                mnLevel;            // dialog options
-    BOOL                mbGrayScale;
-    BOOL                mbCompression;
+    sal_Bool            mbGrayScale;
+    sal_Bool            mbCompression;
     sal_Int32           mnPreview;
     sal_Int32           mnTextMode;
 
@@ -203,6 +203,8 @@ private:
     BYTE                nChrSet;
     ChrSet*             pChrSetList;        // Liste der Character-Sets
     BYTE                nNextChrSetId;      // die erste unbenutzte ChrSet-Id
+
+    PolyPolygon         aGradientPath;
 
     PSLZWCTreeNode*     pTable;             // LZW compression data
     PSLZWCTreeNode*     pPrefix;            // the compression is as same as the TIFF compression
@@ -259,6 +261,7 @@ private:
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
     void                ImplRect( const Rectangle & rRectangle );
     void                ImplRectFill ( const Rectangle & rRectangle );
+    void                ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, sal_Bool bTextOutline = sal_False );
     void                ImplPolyLine( const Polygon & rPolygon );
 
@@ -889,12 +892,15 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
             case META_GRADIENT_ACTION :
             {
-                VirtualDevice   aVDev;
-                GDIMetaFile     aTmpMtf;
+                PolyPolygon aPolyPoly( ( (const MetaGradientAction*)pMA)->GetRect() );
+                ImplWriteGradient( aPolyPoly, ( (const MetaGradientAction*) pMA )->GetGradient() );
+            }
+            break;
 
-                aVDev.SetMapMode( aMapMode );
-                aVDev.AddGradientActions( ( (const MetaGradientAction*)pMA)->GetRect(), ( (const MetaGradientAction*) pMA )->GetGradient(), aTmpMtf );
-                ImplWriteActions( aTmpMtf );
+            case META_GRADIENTEX_ACTION :
+            {
+                PolyPolygon aPolyPoly( ( (const MetaGradientExAction*)pMA)->GetPolyPolygon() );
+                ImplWriteGradient( aPolyPoly, ( (const MetaGradientExAction*) pMA )->GetGradient() );
             }
             break;
 
@@ -1242,93 +1248,123 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             case META_COMMENT_ACTION:
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pMA;
-                const BYTE* pData = pA->GetData();
-                if ( pData )
+                if ( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
                 {
-                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
-                    sal_Bool        bSkipSequence = sal_False;
-                    ByteString      sSeqEnd;
-
-                    if( pA->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
+                    const MetaGradientExAction* pGradAction = NULL;
+                    while( ++nCurAction < nCount )
                     {
-                        sSeqEnd = ByteString( "XPATHSTROKE_SEQ_END" );
-                        SvtGraphicStroke aStroke;
-                        aMemStm >> aStroke;
-
-                        Polygon aPath;
-                        aStroke.getPath( aPath );
-
-                        PolyPolygon aStartArrow;
-                        PolyPolygon aEndArrow;
-                        double fTransparency( aStroke.getTransparency() );
-                        double fStrokeWidth( aStroke.getStrokeWidth() );
-                        SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
-                        SvtGraphicStroke::DashArray aDashArray;
-
-                        aStroke.getStartArrow( aStartArrow );
-                        aStroke.getEndArrow( aEndArrow );
-                        aStroke.getDashArray( aDashArray );
-
-                        bSkipSequence = sal_True;
-                        if ( aDashArray.size() > 11 )   // ps dasharray limit is 11
-                            bSkipSequence = sal_False;
-                        if ( aStartArrow.Count() || aEndArrow.Count() )
-                            bSkipSequence = sal_False;
-                        if ( (sal_uInt32)eJT > 2 )
-                            bSkipSequence = sal_False;
-
-                        if ( bSkipSequence )
+                        MetaAction* pAction = rMtf.GetAction( nCurAction );
+                        if( pAction->GetType() == META_GRADIENTEX_ACTION )
+                            pGradAction = (const MetaGradientExAction*) pAction;
+                        else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                                 ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) == COMPARE_EQUAL ) )
                         {
-                            fStrokeWidth *= fXScaling > fYScaling ? fXScaling : fYScaling;
-                            sal_uInt32 j, i = aDashArray.size();
-                            for ( j = 0; j < i; j++ )
-                                aDashArray[ j ] *= fXScaling > fYScaling ? fXScaling : fYScaling;
-                            ImplWriteLineInfo( fStrokeWidth, aStroke.getMiterLimit(),
-                                                aStroke.getCapType(), eJT, aDashArray );
-                            ImplPolyLine( aPath );
+                            break;
                         }
                     }
-                    else if( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                    if( pGradAction )
+                        ImplWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
+                }
+                else
+                {
+                    const BYTE* pData = pA->GetData();
+                    if ( pData )
                     {
-                        sSeqEnd = ByteString( "XPATHFILL_SEQ_END" );
-                        SvtGraphicFill aFill;
-                        aMemStm >> aFill;
-                        if ( aFill.getFillType() == SvtGraphicFill::fillSolid )
+                        SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                        sal_Bool        bSkipSequence = sal_False;
+                        ByteString      sSeqEnd;
+
+                        if( pA->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
                         {
+                            sSeqEnd = ByteString( "XPATHSTROKE_SEQ_END" );
+                            SvtGraphicStroke aStroke;
+                            aMemStm >> aStroke;
+
+                            Polygon aPath;
+                            aStroke.getPath( aPath );
+
+                            PolyPolygon aStartArrow;
+                            PolyPolygon aEndArrow;
+                            double fTransparency( aStroke.getTransparency() );
+                            double fStrokeWidth( aStroke.getStrokeWidth() );
+                            SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
+                            SvtGraphicStroke::DashArray aDashArray;
+
+                            aStroke.getStartArrow( aStartArrow );
+                            aStroke.getEndArrow( aEndArrow );
+                            aStroke.getDashArray( aDashArray );
+
                             bSkipSequence = sal_True;
-                            PolyPolygon aPolyPoly;
-                            aFill.getPath( aPolyPoly );
-                            sal_uInt16 i, nPolyCount = aPolyPoly.Count();
-                            if ( nPolyCount )
+                            if ( aDashArray.size() > 11 )   // ps dasharray limit is 11
+                                bSkipSequence = sal_False;
+                            if ( aStartArrow.Count() || aEndArrow.Count() )
+                                bSkipSequence = sal_False;
+                            if ( (sal_uInt32)eJT > 2 )
+                                bSkipSequence = sal_False;
+
+                            if ( bSkipSequence )
                             {
-                                aFillColor = aFill.getFillColor();
-                                ImplWriteFillColor( PS_SPACE );
-                                for ( i = 0; i < nPolyCount; )
+                                fStrokeWidth *= fXScaling > fYScaling ? fXScaling : fYScaling;
+                                sal_uInt32 j, i = aDashArray.size();
+                                for ( j = 0; j < i; j++ )
+                                    aDashArray[ j ] *= fXScaling > fYScaling ? fXScaling : fYScaling;
+                                ImplWriteLineInfo( fStrokeWidth, aStroke.getMiterLimit(),
+                                                    aStroke.getCapType(), eJT, aDashArray );
+                                ImplPolyLine( aPath );
+                            }
+                        }
+                        else if( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                        {
+                            sSeqEnd = ByteString( "XPATHFILL_SEQ_END" );
+                            SvtGraphicFill aFill;
+                            aMemStm >> aFill;
+                            switch( aFill.getFillType() )
+                            {
+                                case SvtGraphicFill::fillSolid :
                                 {
-                                    ImplAddPath( aPolyPoly.GetObject( i ) );
-                                    if ( ++i < nPolyCount )
+                                    bSkipSequence = sal_True;
+                                    PolyPolygon aPolyPoly;
+                                    aFill.getPath( aPolyPoly );
+                                    sal_uInt16 i, nPolyCount = aPolyPoly.Count();
+                                    if ( nPolyCount )
                                     {
-                                        *mpPS << "p";
-                                        mnCursorPos += 2;
+                                        aFillColor = aFill.getFillColor();
+                                        ImplWriteFillColor( PS_SPACE );
+                                        for ( i = 0; i < nPolyCount; )
+                                        {
+                                            ImplAddPath( aPolyPoly.GetObject( i ) );
+                                            if ( ++i < nPolyCount )
+                                            {
+                                                *mpPS << "p";
+                                                mnCursorPos += 2;
+                                                ImplExecMode( PS_RET );
+                                            }
+                                        }
+                                        *mpPS << "p ef";
+                                        mnCursorPos += 4;
                                         ImplExecMode( PS_RET );
                                     }
                                 }
-                                *mpPS << "p ef";
-                                mnCursorPos += 4;
-                                ImplExecMode( PS_RET );
+                                break;
+
+                                case SvtGraphicFill::fillGradient :
+                                {
+                                    aFill.getPath( aGradientPath );
+                                }
+                                break;
                             }
                         }
-                    }
-                    if ( bSkipSequence )
-                    {
-                        while( ++nCurAction < nCount )
+                        if ( bSkipSequence )
                         {
-                            pMA = rMtf.GetAction( nCurAction );
-                            if ( pMA->GetType() == META_COMMENT_ACTION )
+                            while( ++nCurAction < nCount )
                             {
-                                ByteString sComment( ((MetaCommentAction*)pMA)->GetComment() );
-                                if ( sComment.Equals( sSeqEnd ) )
-                                    break;
+                                pMA = rMtf.GetAction( nCurAction );
+                                if ( pMA->GetType() == META_COMMENT_ACTION )
+                                {
+                                    ByteString sComment( ((MetaCommentAction*)pMA)->GetComment() );
+                                    if ( sComment.Equals( sSeqEnd ) )
+                                        break;
+                                }
                             }
                         }
                     }
@@ -1470,6 +1506,38 @@ void PSWriter::ImplAddPath( const Polygon & rPolygon )
                 ImplLineTo( rPolygon.GetPoint( i++ ), PS_SPACE | PS_WRAP );
         }
     }
+}
+
+//---------------------------------------------------------------------------------
+
+void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
+{
+    sal_uInt16 i, nPolyCount = aGradientPath.Count();
+    if ( nPolyCount )
+    {
+        ImplWriteLine( "gs" );
+        for ( i = 0; i < nPolyCount; )
+        {
+            ImplAddPath( aGradientPath.GetObject( i ) );
+            if ( ++i < nPolyCount )
+            {
+                *mpPS << "p";
+                mnCursorPos += 2;
+                ImplExecMode( PS_RET );
+            }
+        }
+        ImplWriteLine( "eoclip newpath" );
+        aGradientPath = PolyPolygon();
+    }
+
+    VirtualDevice   aVDev;
+    GDIMetaFile     aTmpMtf;
+    aVDev.SetMapMode( aMapMode );
+    aVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
+    ImplWriteActions( aTmpMtf );
+
+    if ( nPolyCount )
+        ImplWriteLine( "gr" );
 }
 
 //---------------------------------------------------------------------------------
