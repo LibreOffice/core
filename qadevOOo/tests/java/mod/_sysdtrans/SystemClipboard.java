@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemClipboard.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:59 $
+ *  last change:$Date: 2003-05-27 13:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ public class SystemClipboard extends TestCase {
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
 
         try {
             XInterface xInt = (XInterface)xMSF.createInstance(
