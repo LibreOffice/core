@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNDConstants.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-07-02 07:42:59 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 15:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** These values represent the type of action(s) to be performed by a
+/** These values represent the type of action or actions to be performed by a
     Drag and Drop operation.
 */
 
