@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:56:25 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 16:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 #ifndef _FM_IMPLEMENTATION_IDS_HXX_
@@ -357,20 +360,7 @@ FmXGridControl::~FmXGridControl()
 //------------------------------------------------------------------
 ::com::sun::star::uno::Any  SAL_CALL FmXGridControl::queryAggregation(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aReturn = ::cppu::queryInterface(_rType,
-        static_cast< ::com::sun::star::form::XBoundComponent*>(this),
-        static_cast< ::com::sun::star::form::XUpdateBroadcaster*>(this),
-        static_cast< ::com::sun::star::form::XGrid*>(this),
-        static_cast< ::com::sun::star::util::XModifyBroadcaster*>(this),
-        static_cast< ::com::sun::star::form::XGridFieldDataSupplier*>(this),
-        static_cast< ::com::sun::star::container::XIndexAccess*>(this),
-        static_cast< ::com::sun::star::container::XElementAccess*>(static_cast< ::com::sun::star::container::XIndexAccess*>(this)),
-        static_cast< ::com::sun::star::container::XEnumerationAccess*>(this),
-        static_cast< ::com::sun::star::util::XModeSelector*>(this),
-        static_cast< ::com::sun::star::container::XContainer*>(this),
-        static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
-        static_cast< ::com::sun::star::frame::XDispatchProviderInterception*>(this)
-    );
+    ::com::sun::star::uno::Any aReturn = FmXGridControl_BASE::queryInterface(_rType);
 
     if (!aReturn.hasValue())
         aReturn = UnoControl::queryAggregation( _rType );
@@ -380,23 +370,7 @@ FmXGridControl::~FmXGridControl()
 //------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL FmXGridControl::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes = UnoControl::getTypes();
-
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 10);
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XGrid>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridFieldDataSupplier>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeSelector>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>*>(NULL));
-    DBG_ASSERT(nLen == aTypes.getLength(), "FmXGridControl::getTypes : forgot to adjust realloc ?");
-
-    return aTypes;
+    return comphelper::concatSequences(UnoControl::getTypes(),FmXGridControl_BASE::getTypes());
 }
 
 //------------------------------------------------------------------
@@ -891,32 +865,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) thro
 //------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL FmXGridPeer::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes = VCLXWindow::getTypes();
-
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 19);
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridPeer>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XGrid>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetSupplier>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadListener>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridFieldDataSupplier>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeSelector>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>*>(NULL));
-    DBG_ASSERT(nLen == aTypes.getLength(), "FmXGridPeer::getTypes : forgot to adjust realloc ?");
-
-    return aTypes;
+    return comphelper::concatSequences(VCLXWindow::getTypes(),FmXGridPeer_BASE1::getTypes(),FmXGridPeer_BASE2::getTypes());
 }
 
 //------------------------------------------------------------------
@@ -928,32 +877,10 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) thro
 //------------------------------------------------------------------
 ::com::sun::star::uno::Any  SAL_CALL FmXGridPeer::queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aReturn = ::cppu::queryInterface(_rType,
-        static_cast< ::com::sun::star::form::XGrid*>(this),
-        static_cast< ::com::sun::star::util::XModifyBroadcaster*>(this),
-        static_cast< ::com::sun::star::container::XContainerListener*>(this),
-        static_cast< ::com::sun::star::form::XLoadListener*>(this),
-        static_cast< ::com::sun::star::form::XBoundComponent*>(this),
-        static_cast< ::com::sun::star::form::XUpdateBroadcaster*>(this),
-        static_cast< ::com::sun::star::beans::XPropertyChangeListener*>(this),
-        static_cast< ::com::sun::star::lang::XEventListener*>(static_cast< ::com::sun::star::beans::XPropertyChangeListener*>(this)),
-        static_cast< ::com::sun::star::sdb::XRowSetSupplier*>(this),
-        static_cast< ::com::sun::star::sdbc::XRowSetListener*>(this),
-        static_cast< ::com::sun::star::view::XSelectionChangeListener*>(this),
-        static_cast< ::com::sun::star::form::XGridFieldDataSupplier*>(this)
-    );
+    ::com::sun::star::uno::Any aReturn = FmXGridPeer_BASE1::queryInterface(_rType);
 
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType,
-        static_cast< ::com::sun::star::container::XElementAccess*>(static_cast< ::com::sun::star::container::XIndexAccess*>(this)),
-        static_cast< ::com::sun::star::container::XIndexAccess*>(this),
-        static_cast< ::com::sun::star::container::XEnumerationAccess*>(this),
-        static_cast< ::com::sun::star::util::XModeSelector*>(this),
-        static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
-        static_cast< ::com::sun::star::frame::XDispatchProviderInterception*>(this),
-        static_cast< ::com::sun::star::form::XResetListener*>(this),
-        static_cast< ::com::sun::star::form::XGridPeer*>(this)
-    );
+        aReturn = FmXGridPeer_BASE2::queryInterface(_rType);
 
     if (!aReturn.hasValue())
         aReturn = VCLXWindow::queryInterface( _rType );

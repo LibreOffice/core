@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 16:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,15 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE12_HXX_
+#include <cppuhelper/implbase12.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
+#endif
 
 class DbGridColumn;
 
@@ -220,18 +229,20 @@ public:
 //==================================================================
 // FmXGridControl
 //==================================================================
+typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
+                                ::com::sun::star::form::XGrid           ,
+                                ::com::sun::star::util::XModifyBroadcaster            ,
+                                ::com::sun::star::form::XGridFieldDataSupplier        ,
+                                ::com::sun::star::container::XIndexAccess             ,
+                                ::com::sun::star::container::XEnumerationAccess       ,
+                                ::com::sun::star::util::XModeSelector                 ,
+                                ::com::sun::star::container::XContainer               ,
+                                ::com::sun::star::frame::XDispatchProvider            ,
+                                ::com::sun::star::frame::XDispatchProviderInterception > FmXGridControl_BASE;
+
 class FmXGridPeer;
 class FmXGridControl    :public UnoControl
-                        ,public ::com::sun::star::form::XBoundComponent
-                        ,public ::com::sun::star::form::XGrid
-                        ,public ::com::sun::star::util::XModifyBroadcaster
-                        ,public ::com::sun::star::form::XGridFieldDataSupplier
-                        ,public ::com::sun::star::container::XIndexAccess
-                        ,public ::com::sun::star::container::XEnumerationAccess
-                        ,public ::com::sun::star::util::XModeSelector
-                        ,public ::com::sun::star::container::XContainer
-                        ,public ::com::sun::star::frame::XDispatchProvider
-                        ,public ::com::sun::star::frame::XDispatchProviderInterception
+                        ,public FmXGridControl_BASE
 {
     FmXModifyMultiplexer    m_aModifyListeners;
     FmXUpdateMultiplexer    m_aUpdateListeners;
@@ -329,27 +340,30 @@ protected:
 //==================================================================
 // FmXGridPeer -> Peer fuers Gridcontrol
 //==================================================================
+typedef ::cppu::ImplHelper12<   ::com::sun::star::form::XGridPeer,
+                                ::com::sun::star::form::XBoundComponent,
+                                ::com::sun::star::form::XGrid,
+                                ::com::sun::star::sdb::XRowSetSupplier,
+                                ::com::sun::star::util::XModifyBroadcaster,
+                                ::com::sun::star::beans::XPropertyChangeListener,
+                                ::com::sun::star::container::XContainerListener,
+                                ::com::sun::star::sdbc::XRowSetListener,
+                                ::com::sun::star::form::XLoadListener,
+                                ::com::sun::star::view::XSelectionChangeListener,
+                                ::com::sun::star::form::XGridFieldDataSupplier,
+                                ::com::sun::star::container::XIndexAccess > FmXGridPeer_BASE1;
+
+typedef ::cppu::ImplHelper7<    ::com::sun::star::container::XEnumerationAccess,
+                                ::com::sun::star::util::XModeSelector,
+                                ::com::sun::star::container::XContainer,
+                                ::com::sun::star::frame::XStatusListener,
+                                ::com::sun::star::frame::XDispatchProvider,
+                                ::com::sun::star::frame::XDispatchProviderInterception,
+                                ::com::sun::star::form::XResetListener > FmXGridPeer_BASE2;
 class FmGridControl;
 class FmXGridPeer   :public VCLXWindow
-                    ,public ::com::sun::star::form::XGridPeer
-                    ,public ::com::sun::star::form::XBoundComponent
-                    ,public ::com::sun::star::form::XGrid
-                    ,public ::com::sun::star::sdb::XRowSetSupplier
-                    ,public ::com::sun::star::util::XModifyBroadcaster
-                    ,public ::com::sun::star::beans::XPropertyChangeListener
-                    ,public ::com::sun::star::container::XContainerListener
-                    ,public ::com::sun::star::sdbc::XRowSetListener
-                    ,public ::com::sun::star::form::XLoadListener
-                    ,public ::com::sun::star::view::XSelectionChangeListener
-                    ,public ::com::sun::star::form::XGridFieldDataSupplier
-                    ,public ::com::sun::star::container::XIndexAccess
-                    ,public ::com::sun::star::container::XEnumerationAccess
-                    ,public ::com::sun::star::util::XModeSelector
-                    ,public ::com::sun::star::container::XContainer
-                    ,public ::com::sun::star::frame::XStatusListener
-                    ,public ::com::sun::star::frame::XDispatchProvider
-                    ,public ::com::sun::star::frame::XDispatchProviderInterception
-                    ,public ::com::sun::star::form::XResetListener
+                    ,public FmXGridPeer_BASE1
+                    ,public FmXGridPeer_BASE2
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xColumns;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                 m_xCursor;
