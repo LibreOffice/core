@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleSpreadsheet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 13:00:04 $
+ *  last change:$Date: 2003-09-08 12:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,31 @@
 
 package mod._sc;
 
-import lib.Status;
-import com.sun.star.lang.XMultiServiceFactory;
-import lib.TestCase;
-import lib.TestParameters;
 import java.io.PrintWriter;
+
 import lib.StatusException;
-import util.SOfficeFactory;
-import util.AccessibilityTools;
+import lib.TestCase;
 import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.SOfficeFactory;
 import util.utils;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.frame.XModel;
-import com.sun.star.awt.XWindow;
-import com.sun.star.accessibility.XAccessible;
+
 import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.table.XCell;
-import com.sun.star.container.XIndexAccess;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for accessible object of spreadsheet document.<p>
@@ -157,7 +158,7 @@ public class ScAccessibleSpreadsheet extends TestCase {
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE  );
 
-        oObj = at.SearchedContext;
+        oObj = AccessibilityTools.SearchedContext;
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
