@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 07:43:59 $
+ *  last change: $Author: os $ $Date: 2001-06-12 08:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,8 +480,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             return sal_True;
         }
 
-        SwXCell* pCell = (SwXCell*)
-                xIfcTunnel->getSomething(SwXCell::getUnoTunnelId());
+        SwXCell* pCell = xIfcTunnel.is() ? (SwXCell*)
+            xIfcTunnel->getSomething(SwXCell::getUnoTunnelId()) : 0;
         if(pCell)
         {
             SwFrmFmt* pTblFrmFmt = pCell->GetFrmFmt();
@@ -502,8 +502,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                 }
             }
         }
-        SwXCellRange* pRange = (SwXCellRange*)
-                xIfcTunnel->getSomething(SwXCellRange::getUnoTunnelId());
+        SwXCellRange* pRange = xIfcTunnel.is() ? (SwXCellRange*)
+            xIfcTunnel->getSomething(SwXCellRange::getUnoTunnelId()) : 0;
         if(pRange)
         {
            const SwUnoCrsr* pUnoCrsr = pRange->GetTblCrsr();
