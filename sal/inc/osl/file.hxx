@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hro $ $Date: 2002-07-09 13:10:41 $
+ *  last change: $Author: tra $ $Date: 2002-07-22 07:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,12 +969,7 @@ public:
 
     inline RC readLine( ::rtl::ByteSequence& aSeq )
     {
-        sal_Sequence* pSeq = 0;
-        rtl_byte_sequence_construct(&pSeq,0);
-        FileBase::RC aErr = (RC) osl_readLine( _pData, &pSeq );
-        aSeq.realloc(pSeq->nElements);
-        aSeq = pSeq;
-        return aErr;
+        return (RC) osl_readLine( _pData, reinterpret_cast<sal_Sequence**>(&aSeq) );
     }
 
 
