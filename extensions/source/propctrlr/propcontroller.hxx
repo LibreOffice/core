@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 08:14:28 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,8 @@ namespace pcr
     class OPropertyEditor;
     struct OLineDescriptor;
 
-#define OWN_PROPERTY_ID_INTROSPECTEDOBJECT  1
-#define OWN_PROPERTY_ID_CURRENTPAGE         2
+#define OWN_PROPERTY_ID_INTROSPECTEDOBJECT  0x0010
+#define OWN_PROPERTY_ID_CURRENTPAGE         0x0011
 
     //========================================================================
     //= OPropertyBrowserController
@@ -391,6 +391,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/06 08:14:28  fs
+ *  #86096# +implGetInt32FontProperty / +implInvalidateItem
+ *
  *  Revision 1.8  2001/05/30 13:41:46  fs
  *  #86838# be a focus listener on the container window, forward the focus to the property box
  *
