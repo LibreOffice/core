@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontSlant.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,51 +68,43 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::awt::FontSlant
 /** used to specify the slant of a font.
  */
 enum FontSlant
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::FontSlant::NONE
     /** specifies a font without slant.
      */
     NONE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::FontSlant::OBLIQUE
     /** specifies an oblique font (slant not designed into the font).
      */
     OBLIQUE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::FontSlant::ITALIC
     /** specifies an italic font (slant designed into the font).
      */
     ITALIC,
 
     //-------------------------------------------------------------------------
-    // specifies a font with an unknown slant.
 
-    // DocMerge from xml: value com::sun::star::awt::FontSlant::DONTKNOW
-    /** specifies that the slant is unknown.
+    /** specifies a font with an unknown slant.
      */
     DONTKNOW,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::FontSlant::REVERSE_OBLIQUE
-    /** specifies an reverse oblique font (slant not designed into the font).
+    /** specifies a reverse oblique font (slant not designed into the font).
      */
     REVERSE_OBLIQUE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::FontSlant::REVERSE_ITALIC
-    /** specifies an reverse italic font (slant designed into the font).
+    /** specifies a reverse italic font (slant designed into the font).
      */
     REVERSE_ITALIC
 
