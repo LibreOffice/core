@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-03 08:49:33 $
+ *  last change: $Author: mhu $ $Date: 2001-06-06 18:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,6 +1971,7 @@ void SAL_CALL UcbContent::propertiesChange(
 #define MYWIN_ITEMID_URI2SYS        22
 #define MYWIN_ITEMID_OFFLINE        23
 #define MYWIN_ITEMID_ONLINE         24
+#define MYWIN_ITEMID_REORGANIZE     25
 
 //-------------------------------------------------------------------------
 class MyWin : public WorkWindow
@@ -2147,6 +2148,15 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
                           UniString::CreateFromAscii(
                               RTL_CONSTASCII_STRINGPARAM(
                                 "Search the content" ) ) );
+
+    m_pTool->InsertItem ( MYWIN_ITEMID_REORGANIZE,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Reorganize" ) ) );
+    m_pTool->SetHelpText( MYWIN_ITEMID_REORGANIZE,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Reorganize the content storage" ) ) );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_COPY,
@@ -2480,6 +2490,16 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
                 m_pContent->open(OUString::createFromAscii("search"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
+            else
+                print( "No content!" );
+
+            break;
+
+        case MYWIN_ITEMID_REORGANIZE:
+            if ( m_pContent )
+                m_pContent->executeCommand (
+                    OUString::createFromAscii ("reorganizeData"),
+                    Any());
             else
                 print( "No content!" );
 
