@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:58:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _LINKMGR_HXX
@@ -677,7 +680,8 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
 
         {
             SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE,
-                                      XML_PROPERTIES, sal_True, sal_True );
+                                      XML_TABLE_COLUMN_PROPERTIES,
+                                      sal_True, sal_True );
         }
     }
 }
@@ -932,9 +936,11 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
                 //     (with value and number format)
                 if (sCellFormula.getLength()>0)
                 {
+                    OUString sQValue =
+                        GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_OOOW, sCellFormula );
                     // formula
-                    AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA,
-                                sCellFormula);
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue );
                 }
 
                 // value and format (if NumberFormat != -1)
@@ -949,7 +955,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
                     if (NUMBERFORMAT_TEXT == nNumberFormat)
                     {
                         // text format
-                        AddAttribute( XML_NAMESPACE_TABLE,
+                        AddAttribute( XML_NAMESPACE_OFFICE,
                                     XML_VALUE_TYPE, XML_STRING );
                     }
                     else if (-1 != nNumberFormat)
@@ -960,7 +966,6 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
                                 *this, nNumberFormat, xCell->getValue(),
-                                XML_NAMESPACE_TABLE,
                                 (xText->getString().getLength() > 0) );
                     }
                     // else: invalid key; ignore
@@ -1004,8 +1009,11 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
                                       XML_TABLE_CELL, sal_True, sal_True );
             {
+                AddAttribute( XML_NAMESPACE_TABLE, XML_IS_SUB_TABLE,
+                                GetXMLToken( XML_TRUE ) );
+
                 SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                          XML_SUB_TABLE, sal_True, sal_True );
+                                          XML_TABLE, sal_True, sal_True );
                 ExportTableLines( rBox.GetTabLines(), rTblInfo );
             }
         }
