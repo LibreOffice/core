@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ void OTools::getValue(  OConnection* _pConnection,
 void OTools::bindParameter( OConnection* _pConnection,
                             SQLHANDLE _hStmt,
                             sal_Int32 nPos,
-                            sal_Int8* pDataBuffer,
+                            sal_Int8*& pDataBuffer,
                             sal_Int8* pLenBuffer,
                             SQLSMALLINT _nJDBCtype,
                             sal_Bool _bUseWChar,
@@ -123,7 +123,7 @@ void OTools::bindParameter( OConnection* _pConnection,
     SWORD   fSqlType;
     SWORD   fCType;
     SDWORD  nMaxLen = 0;
-    void*   pData   = pDataBuffer;
+    //  void*&   pData   = pDataBuffer;
     SDWORD* pLen    = (SDWORD*)pLenBuffer;
     SQLUINTEGER nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
@@ -131,9 +131,9 @@ void OTools::bindParameter( OConnection* _pConnection,
 
     OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nJDBCtype,fSqlType,fCType,nColumnSize,nDecimalDigits);
 
-    OTools::bindData(fSqlType,_bUseWChar,pData,pLen,_pValue,_nTextEncoding);
+    OTools::bindData(fSqlType,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding);
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
-        memcpy(pData,&nPos,sizeof(nPos));
+        memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
     nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
 
@@ -144,7 +144,7 @@ void OTools::bindParameter( OConnection* _pConnection,
                   fSqlType,
                   nColumnSize,
                   nDecimalDigits,
-                  pData,
+                  pDataBuffer,
                   nMaxLen,
                   pLen);
 
@@ -153,7 +153,7 @@ void OTools::bindParameter( OConnection* _pConnection,
 // -----------------------------------------------------------------------------
 void OTools::bindData(  SWORD fSqlType,
                         sal_Bool _bUseWChar,
-                        void *&_pData,
+                        sal_Int8 *&_pData,
                         SDWORD*& pLen,
                         const void* _pValue,
                         rtl_TextEncoding _nTextEncoding)
@@ -170,7 +170,7 @@ void OTools::bindData(  SWORD fSqlType,
                 *((rtl::OUString*)_pData) = *(::rtl::OUString*)_pValue;
 
                 // Zeiger auf Char*
-                _pData = (void*)((rtl::OUString*)_pData)->getStr();
+                _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
             }
             else
             {
@@ -190,7 +190,7 @@ void OTools::bindData(  SWORD fSqlType,
                 *pLen = nMaxLen;
                 *((rtl::OUString*)_pData) = aString;
                 // Zeiger auf Char*
-                _pData = (void*)((rtl::OUString*)_pData)->getStr();
+                _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
             }
             else
             {
@@ -223,8 +223,19 @@ void OTools::bindData(  SWORD fSqlType,
             break;
         case SQL_BINARY:
         case SQL_VARBINARY:
-            _pData = (void*)((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getConstArray();
-            *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getLength();
+            {
+                const ::com::sun::star::uno::Sequence< sal_Int8 >* pSeq = static_cast< const ::com::sun::star::uno::Sequence< sal_Int8 >* >(_pValue);
+                OSL_ENSURE(pSeq,"OTools::bindData: Sequence is null!");
+
+                if(pSeq)
+                {
+                    //  memcpy(_pData,pSeq->getConstArray(),pSeq->getLength());
+                    _pData = (sal_Int8*)((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getConstArray();
+                    *pLen = pSeq->getLength();
+                }
+                //  _pData = (sal_Int8*)((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getConstArray();
+                //  *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getLength();
+            }
             break;
         case SQL_LONGVARBINARY:
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 11:30:44 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
     checkParameterIndex(parameterIndex);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    sal_Int8* bindBuf = allocBindBuf(parameterIndex, 4);
+    sal_Int8* bindBuf = allocBindBuf(parameterIndex, sizeof(sal_Int8));
     PREP_BIND_PARAM(sal_Int8,SQL_TINYINT);
 }
 // -------------------------------------------------------------------------
@@ -410,7 +410,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
 
     checkParameterIndex(parameterIndex);
 
-    sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
+    sal_Int8* bindBuf = allocBindBuf (parameterIndex, sizeof(DATE_STRUCT));
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     DATE_STRUCT x = OTools::DateToOdbcDate(aData);
@@ -431,7 +431,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
     // the bound data in native format.
     checkParameterIndex(parameterIndex);
 
-    sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
+    sal_Int8* bindBuf = allocBindBuf (parameterIndex, sizeof(TIME_STRUCT));
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     TIME_STRUCT x = OTools::TimeToOdbcTime(aVal);
@@ -451,7 +451,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
     // the bound data in native format.
     checkParameterIndex(parameterIndex);
 
-    sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
+    sal_Int8* bindBuf = allocBindBuf (parameterIndex, sizeof(TIMESTAMP_STRUCT));
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     TIMESTAMP_STRUCT x = OTools::DateTimeToTimestamp(aVal);
@@ -472,7 +472,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     checkParameterIndex(parameterIndex);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    sal_Int8* bindBuf = allocBindBuf (parameterIndex, 8);
+    sal_Int8* bindBuf = allocBindBuf (parameterIndex, sizeof(double));
     PREP_BIND_PARAM(double,DataType::DOUBLE);
 }
 
@@ -491,7 +491,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
     checkParameterIndex(parameterIndex);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    sal_Int8* bindBuf = allocBindBuf (parameterIndex, 8);
+    sal_Int8* bindBuf = allocBindBuf (parameterIndex, sizeof(float));
     PREP_BIND_PARAM(float,DataType::FLOAT);
 }
 // -------------------------------------------------------------------------
@@ -509,7 +509,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
     checkParameterIndex(parameterIndex);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    sal_Int8* bindBuf = allocBindBuf (parameterIndex, 4);
+    sal_Int8* bindBuf = allocBindBuf (parameterIndex, sizeof(sal_Int32));
     PREP_BIND_PARAM(sal_Int32,DataType::INTEGER);
 }
 // -------------------------------------------------------------------------
@@ -528,7 +528,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 a
     checkParameterIndex(parameterIndex);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    sal_Int8 *bindBuf = allocBindBuf (parameterIndex, 8);
+    sal_Int8 *bindBuf = allocBindBuf (parameterIndex, sizeof(float));
     float x = (float)aVal;
     PREP_BIND_PARAM(float,DataType::BIGINT);
 }
@@ -1104,6 +1104,20 @@ void OPreparedStatement::setBinary (sal_Int32 parameterIndex,sal_Int32 SQLtype,
     // the bound data in native format.
     checkParameterIndex(parameterIndex);
 
+
+//  SQLRETURN nRetcode;
+//  SWORD   fSqlType;
+//  SWORD   fCType;
+//  SDWORD  nMaxLen = 0;
+//  SQLUINTEGER nColumnSize=0;
+//  SQLSMALLINT nDecimalDigits=0;
+//  SQLSMALLINT nNullable=0;
+//  nRetcode = (*(T3SQLDescribeParam)m_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(m_aStatementHandle,
+//          (SQLUSMALLINT)parameterIndex,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
+//
+//  OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+
+//  sal_Int8* bindBuf = allocBindBuf (parameterIndex,(nColumnSize > x.getLength()) ? nColumnSize : x.getLength());
     sal_Int8* bindBuf = allocBindBuf (parameterIndex,x.getLength());
 
     // Get the buffer needed for the length

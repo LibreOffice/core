@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 14:30:34 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ namespace connectivity
 
             static void bindData(   SWORD fSqlType,
                                     sal_Bool _bUseWChar,
-                                    void *&_pData,
+                                    sal_Int8 *&_pData,
                                     SDWORD*& pLen,
                                     const void* _pValue,
                                     rtl_TextEncoding _nTextEncoding);
@@ -253,7 +253,7 @@ namespace connectivity
             static void bindParameter(  OConnection* _pConnection,
                                         SQLHANDLE _hStmt,
                                         sal_Int32 nPos,
-                                        sal_Int8* pDataBuffer,
+                                        sal_Int8*& pDataBuffer,
                                         sal_Int8* pLenBuffer,
                                         SQLSMALLINT _nJDBCtype,
                                         sal_Bool _bUseWChar,

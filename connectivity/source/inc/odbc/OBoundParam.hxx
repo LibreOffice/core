@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OBoundParam.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@ namespace connectivity
         public:
             OBoundParam()
             {
+                paramLength = NULL;
+                binaryData  = NULL;
                 pA1=0;
                 pA2=0;
                 pB1=0;
@@ -83,6 +85,11 @@ namespace connectivity
                 pC2=0;
                 pS1=0;
                 pS2=0;
+            }
+            ~OBoundParam()
+            {
+                delete [] binaryData;
+                delete [] paramLength;
             }
             //--------------------------------------------------------------------
             // initialize

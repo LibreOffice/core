@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 13:01:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,15 +327,30 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
 
             aTypeName = xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
 
-            if(aTypeName.hasValue() && getString(aTypeName).getLength())
-                aSql += getString(aTypeName);
-            else
-                aSql += getTypeString(xColProp) + ::rtl::OUString::createFromAscii(" ");
+            sal_Int32 nDataType = 0;
+            xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nDataType;
 
-            switch(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
+            switch(nDataType)
+            {
+                case DataType::VARBINARY:
+                    aSql += ::rtl::OUString::createFromAscii("VAR");
+                    /* run through*/
+                case DataType::BINARY:
+                    aSql += ::rtl::OUString::createFromAscii("CHAR");
+                    break;
+                default:
+                    if(aTypeName.hasValue() && getString(aTypeName).getLength())
+                        aSql += getString(aTypeName);
+                    else
+                        aSql += getTypeString(xColProp) + ::rtl::OUString::createFromAscii(" ");
+            }
+
+            switch(nDataType)
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
+                case DataType::FLOAT:
+                case DataType::REAL:
                     aSql += ::rtl::OUString::createFromAscii("(")
                                 + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
                                 + ::rtl::OUString::createFromAscii(")");
@@ -348,6 +363,12 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                                 + ::rtl::OUString::createFromAscii(",")
                                 + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
                                 + ::rtl::OUString::createFromAscii(")");
+                    break;
+                case DataType::BINARY:
+                case DataType::VARBINARY:
+                    aSql += ::rtl::OUString::createFromAscii("(")
+                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
+                                + ::rtl::OUString::createFromAscii(") BYTE");
                     break;
             }
             ::rtl::OUString aDefault = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));

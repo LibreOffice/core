@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 13:50:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 11:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1665,10 +1665,12 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
     ::std::vector< ORowSetValue >::iterator pColumn     = m_aRow.begin() + nColumn;
     ::std::vector< ORowSetValue >::iterator pColumnEnd  = m_aRow.begin() + _nToColumn + 1;
 
+    sal_Int32 nDataType;
     for (; pColumn < pColumnEnd; ++nColumn, ++pColumn)
     {
-        pColumn->setTypeKind(xMeta->getColumnType(nColumn));
-        switch (pColumn->getTypeKind())
+        nDataType = xMeta->getColumnType(nColumn);
+
+        switch (nDataType)
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1718,6 +1720,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 *pColumn = getBytes(nColumn);
                 break;
         }
+        pColumn->setTypeKind(nDataType);
     }
     m_nLastColumnPos = _nToColumn;
     m_bFetchData = sal_True;
