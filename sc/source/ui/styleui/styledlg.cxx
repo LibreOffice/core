@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-06 08:40:34 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,14 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/align.hxx>
-#include <svx/backgrnd.hxx>
-#include <svx/border.hxx>
-#include <svx/chardlg.hxx>
-#include <svx/numfmt.hxx>
-#include <svx/page.hxx>
-#include <svx/paragrph.hxx>
+//CHINA001 #include <svx/align.hxx>
+//CHINA001 #include <svx/backgrnd.hxx>
+//CHINA001 #include <svx/border.hxx>
+//CHINA001 #include <svx/chardlg.hxx>
+//CHINA001 #include <svx/numfmt.hxx>
+#include <svx/numinf.hxx> //CHINA001
+//CHINA001 #include <svx/page.hxx>
+//CHINA001 #include <svx/paragrph.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/style.hxx>
 #include <svtools/cjkoptions.hxx>
@@ -86,7 +87,19 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "styledlg.hrc"
-
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxids.hrc> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
+#ifndef _SVX_FLSTITEM_HXX //CHINA001
+#include <svx/flstitem.hxx> //CHINA001
+#endif //CHINA001
+#ifndef _AEITEM_HXX //CHINA001
+#include <svtools/aeitem.hxx> //CHINA001
+#endif //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
 //==================================================================
 
 ScStyleDlg::ScStyleDlg( Window*             pParent,
@@ -99,31 +112,56 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
                           FALSE ),
         nDlgRsc         ( nRscId )
 {
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
     switch ( nRscId )
     {
         case RID_SCDLG_STYLES_PAR:  // Zellformatvorlagen
             {
                 SvtCJKOptions aCJKOptions;
-
-                AddTabPage( TP_NUMBER, &SvxNumberFormatTabPage::Create, &SvxNumberFormatTabPage::GetRanges );
-                AddTabPage( TP_FONT, &SvxCharNamePage::Create,          &SvxCharNamePage::GetRanges );
-                AddTabPage( TP_FONTEFF, &SvxCharEffectsPage::Create,            &SvxCharEffectsPage::GetRanges );
-                AddTabPage( TP_ALIGNMENT, &SvxAlignmentTabPage::Create, &SvxAlignmentTabPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_NUMBERFORMAT ) );  //CHINA001 AddTabPage( TP_NUMBER, &SvxNumberFormatTabPage::Create, &SvxNumberFormatTabPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) ); //CHINA001 AddTabPage( TP_FONT, &SvxCharNamePage::Create,           &SvxCharNamePage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_FONTEFF, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) ); //CHINA001 AddTabPage( TP_FONTEFF, &SvxCharEffectsPage::Create,            &SvxCharEffectsPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT( pFact->GetTabPageRangesFunc( RID_SVXPAGE_ALIGNMENT ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_ALIGNMENT ) ); //CHINA001 AddTabPage( TP_ALIGNMENT, &SvxAlignmentTabPage::Create, &SvxAlignmentTabPage::GetRanges );
                 if ( aCJKOptions.IsAsianTypographyEnabled() )
-                    AddTabPage( TP_ASIAN, &SvxAsianTabPage::Create,     &SvxAsianTabPage::GetRanges );
+                {
+                //CHINA001  AddTabPage( TP_ASIAN, &SvxAsianTabPage::Create,     &SvxAsianTabPage::GetRanges );
+
+                    DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");//CHINA001
+                    DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");//CHINA001
+                    AddTabPage( TP_ASIAN,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+                }
                 else
                     RemoveTabPage( TP_ASIAN );
-                AddTabPage( TP_BORDER, &SvxBorderTabPage::Create,       &SvxBorderTabPage::GetRanges );
-                AddTabPage( TP_BACKGROUND, &SvxBackgroundTabPage::Create,   &SvxBackgroundTabPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) ); //CHINA001 AddTabPage( TP_BORDER, &SvxBorderTabPage::Create,        &SvxBorderTabPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) ); //CHINA001 AddTabPage( TP_BACKGROUND, &SvxBackgroundTabPage::Create,    &SvxBackgroundTabPage::GetRanges );
                 AddTabPage( TP_PROTECTION, &ScTabPageProtection::Create,    &ScTabPageProtection::GetRanges );
             }
             break;
 
         case RID_SCDLG_STYLES_PAGE: // Seitenvorlagen
             {
-                AddTabPage( TP_PAGE_STD, &SvxPageDescPage::Create,  &SvxPageDescPage::GetRanges );
-                AddTabPage( TP_BORDER, &SvxBorderTabPage::Create,   &SvxBorderTabPage::GetRanges );
-                AddTabPage( TP_BACKGROUND, &SvxBackgroundTabPage::Create,   &SvxBackgroundTabPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_PAGE_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ) ); //CHINA001 AddTabPage( TP_PAGE_STD, &SvxPageDescPage::Create, &SvxPageDescPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) ); //CHINA001 AddTabPage( TP_BORDER, &SvxBorderTabPage::Create,    &SvxBorderTabPage::GetRanges );
+                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");//CHINA001
+                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");//CHINA001
+                AddTabPage( TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) ); //CHINA001 AddTabPage( TP_BACKGROUND, &SvxBackgroundTabPage::Create,    &SvxBackgroundTabPage::GetRanges );
                 AddTabPage( TP_PAGE_HEADER, &ScHeaderPage::Create,      &ScHeaderPage::GetRanges );
                 AddTabPage( TP_PAGE_FOOTER, &ScFooterPage::Create,      &ScFooterPage::GetRanges );
                 AddTabPage( TP_TABLE, &ScTablePage::Create,     &ScTablePage::GetRanges );
@@ -151,7 +189,7 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
     if ( nDlgRsc == RID_SCDLG_STYLES_PAR )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
-
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool())); //CHINA001
         switch ( nPageId )
         {
             case TP_NUMBER:
@@ -161,9 +199,11 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 
                     DBG_ASSERT( pInfoItem, "NumberInfoItem nicht gefunden!" );
 
-                    ((SvxNumberFormatTabPage&)rTabPage).
-                        SetNumberFormatList(
-                            (const SvxNumberInfoItem&)*pInfoItem ) ;
+                    //CHINA001 ((SvxNumberFormatTabPage&)rTabPage).
+                        //CHINA001 SetNumberFormatList(
+                            //CHINA001 (const SvxNumberInfoItem&)*pInfoItem ) ;
+                    aSet.Put (SvxNumberInfoItem( (const SvxNumberInfoItem&)*pInfoItem ) );
+                    rTabPage.PageCreated(aSet);
                 }
                 break;
 
@@ -174,9 +214,11 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 
                     DBG_ASSERT( pInfoItem, "FontListItem nicht gefunden!" );
 
-                    ((SvxCharNamePage&)rTabPage).
-                        SetFontList(
-                            (const SvxFontListItem&)*pInfoItem );
+                    //CHINA001 ((SvxCharNamePage&)rTabPage).
+                        //CHINA001 SetFontList(
+                            //CHINA001 (const SvxFontListItem&)*pInfoItem );
+                    aSet.Put (SvxFontListItem(((const SvxFontListItem&)*pInfoItem).GetFontList(), SID_ATTR_CHAR_FONTLIST));
+                    rTabPage.PageCreated(aSet);
                 }
                 break;
 
@@ -186,10 +228,13 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
     }
     else if ( nDlgRsc == RID_SCDLG_STYLES_PAGE )
     {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//CHINA001
         switch ( nPageId )
         {
             case TP_PAGE_STD:
-                ((SvxPageDescPage&)rTabPage).SetMode( SVX_PAGE_MODE_CENTER );
+                //CHINA001 ((SvxPageDescPage&)rTabPage).SetMode( SVX_PAGE_MODE_CENTER );
+                aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_CENTER)); //CHINA001
+                rTabPage.PageCreated(aSet); //CHINA001
                 break;
 
             case TP_PAGE_HEADER:
@@ -200,7 +245,11 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
                 break;
             case TP_BACKGROUND:
                     if( nDlgRsc == RID_SCDLG_STYLES_PAGE)
-                        ((SvxBackgroundTabPage&)rTabPage).ShowSelector();
+                        //CHINA001 ((SvxBackgroundTabPage&)rTabPage).ShowSelector();
+                    {   //add CHINA001
+                        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
+                        rTabPage.PageCreated(aSet);
+                    }
                 break;
 
             default:
