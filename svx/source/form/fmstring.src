@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 08:51:23 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 14:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,9 +974,9 @@ String RID_STR_FORMS
 String RID_STR_NO_PROPERTIES
 {
     Text = "Kein Kontrollelement markiert oder gemischte Selektion" ;
-    Text [ English ] = "No Control or mixed selection" ;
+    Text [ English ] = "No Control marked or mixed selection" ;
     Text [ portuguese ] = "Nenhum controlo seleccionado" ;
-    Text [ english_us ] = "No control selected" ;
+    Text [ english_us ] = "No Control marked or mixed selection" ;
     Text [ portuguese_brazilian ] = "Kein Control markiert" ;
     Text [ swedish ] = "Inget kontrollelement markerat eller blandad markering" ;
     Text [ danish ] = "Intet kontrolelement markeret eller blandet markering" ;
