@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printwarningoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-26 19:47:40 $
+ *  last change: $Author: os $ $Date: 2001-09-27 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,19 +100,21 @@ using namespace ::com::sun::star::uno   ;
 //  const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print/Warning"))
+#define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print"))
 
-#define PROPERTYNAME_PAPERSIZE          OUString(RTL_CONSTASCII_USTRINGPARAM("PaperSize"))
-#define PROPERTYNAME_PAPERORIENTATION   OUString(RTL_CONSTASCII_USTRINGPARAM("PaperOrientation"))
-#define PROPERTYNAME_NOTFOUND           OUString(RTL_CONSTASCII_USTRINGPARAM("NotFound"))
-#define PROPERTYNAME_TRANSPARENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("Transparency"))
+#define PROPERTYNAME_PAPERSIZE          OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/PaperSize"))
+#define PROPERTYNAME_PAPERORIENTATION   OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/PaperOrientation"))
+#define PROPERTYNAME_NOTFOUND           OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/NotFound"))
+#define PROPERTYNAME_TRANSPARENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/Transparency"))
+#define PROPERTYNAME_PRINTINGMODIFIESDOCUMENT  OUString(RTL_CONSTASCII_USTRINGPARAM("PrintingModifiesDocument"))
 
 #define PROPERTYHANDLE_PAPERSIZE        0
 #define PROPERTYHANDLE_PAPERORIENTATION 1
 #define PROPERTYHANDLE_NOTFOUND         2
 #define PROPERTYHANDLE_TRANSPARENCY     3
+#define PROPERTYHDL_PRINTINGMODIFIESDOCUMENT            4
 
-#define PROPERTYCOUNT                   4
+#define PROPERTYCOUNT                   5
 
 class SvtPrintWarningOptions_Impl : public ConfigItem
 {
@@ -139,11 +141,13 @@ public:
     sal_Bool    IsPaperOrientation() const { return m_bPaperOrientation; }
     sal_Bool    IsNotFound() const { return m_bNotFound; }
     sal_Bool    IsTransparency() const { return m_bTransparency; }
+    sal_Bool    IsModifyDocumentOnPrintingAllowed() const { return m_bModifyDocumentOnPrintingAllowed; }
 
     void        SetPaperSize( sal_Bool bState ) { m_bPaperSize = bState; SetModified(); }
     void        SetPaperOrientation( sal_Bool bState ) { m_bPaperOrientation = bState; SetModified(); }
     void        SetNotFound( sal_Bool bState ) { m_bNotFound = bState; SetModified(); }
     void        SetTransparency( sal_Bool bState ) { m_bTransparency = bState; SetModified(); }
+    void        SetModifyDocumentOnPrintingAllowed( sal_Bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
@@ -163,6 +167,7 @@ private:
     sal_Bool    m_bPaperOrientation;
     sal_Bool    m_bNotFound;
     sal_Bool    m_bTransparency;
+    sal_Bool    m_bModifyDocumentOnPrintingAllowed;
 };
 
 //_________________________________________________________________________________________________________________
@@ -177,7 +182,8 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
     m_bPaperSize( sal_False ),
     m_bPaperOrientation( sal_False ),
     m_bNotFound( sal_False ),
-    m_bTransparency( sal_True )
+    m_bTransparency( sal_True ),
+    m_bModifyDocumentOnPrintingAllowed( sal_True )
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues( GetProperties( seqNames ) );
@@ -221,6 +227,13 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
                 seqValues[nProperty] >>= m_bTransparency;
             }
             break;
+            case PROPERTYHDL_PRINTINGMODIFIESDOCUMENT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "Invalid type" );
+                seqValues[nProperty] >>= m_bModifyDocumentOnPrintingAllowed;
+            }
+            break;
+
         }
     }
 }
@@ -261,6 +274,9 @@ void SvtPrintWarningOptions_Impl::Commit()
             case PROPERTYHANDLE_TRANSPARENCY:
                 aSeqValues[nProperty] <<= m_bTransparency;
             break;
+            case PROPERTYHDL_PRINTINGMODIFIESDOCUMENT:
+                aSeqValues[nProperty] <<= m_bModifyDocumentOnPrintingAllowed;
+            break;
         }
     }
 
@@ -278,7 +294,8 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
         PROPERTYNAME_PAPERSIZE,
         PROPERTYNAME_PAPERORIENTATION,
         PROPERTYNAME_NOTFOUND,
-        PROPERTYNAME_TRANSPARENCY
+        PROPERTYNAME_TRANSPARENCY,
+        PROPERTYNAME_PRINTINGMODIFIESDOCUMENT
     };
 
     // Initialize return sequence with these list ...
@@ -399,6 +416,21 @@ void SvtPrintWarningOptions::SetTransparency( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetTransparency( bState );
+}
+// -----------------------------------------------------------------------------
+
+sal_Bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsModifyDocumentOnPrintingAllowed();
+}
+
+// -----------------------------------------------------------------------------
+
+void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetModifyDocumentOnPrintingAllowed( bState ) ;
 }
 
 //*****************************************************************************************************************
