@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
+ *  last change: $Author: mh $ $Date: 2000-11-29 10:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
 
 #ifndef _XMLOFF_ELEMENTEXPORT_HXX_
 #include "elementexport.hxx"
@@ -1377,6 +1379,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/19 15:41:32  fs
+ *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
+ *
  *  Revision 1.1  2000/11/17 19:01:21  fs
  *  initial checkin - export and/or import the applications form layer
  *
