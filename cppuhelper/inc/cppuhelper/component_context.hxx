@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:54:52 $
+ *  last change: $Author: dbo $ $Date: 2001-08-27 10:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 namespace cppu /** */ //for docpp
 {
 
+/** Context entries struct for calling createComponentContext().
+*/
 struct ContextEntry_Init
 {
     /** late init denotes a object that will be raised when first get() is calling for it

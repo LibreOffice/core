@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
+ *  last change: $Author: dbo $ $Date: 2001-08-27 10:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,30 @@
 namespace cppu
 {
 
+/** Implementation helper base class for components. Inherits from ::cppu::OWeakObject and
+    ::com::sun::star::lang::XComponent.
+*/
 class SAL_NO_VTABLE WeakComponentImplHelperBase
     : public ::cppu::OWeakObject
     , public ::com::sun::star::lang::XComponent
 {
 protected:
+    /** boradcast helper for disposing events
+    */
     ::cppu::OBroadcastHelper rBHelper;
 
-    /** Is called upon disposing the component.
+    /** this function is called upon disposing the component
     */
     virtual void SAL_CALL disposing();
 
+    /** This is the one and only constructor that is called from derived implementations.
+
+        @param rMutex mutex to sync upon disposing
+    */
     WeakComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
 public:
+    /** Destructor
+    */
     virtual ~WeakComponentImplHelperBase() SAL_THROW( () );
 
     // these are here to force memory de/allocation to sal lib.

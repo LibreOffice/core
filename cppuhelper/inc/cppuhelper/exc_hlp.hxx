@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_hlp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: dbo $ $Date: 2001-08-27 10:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,11 @@
 namespace cppu
 {
 
-/**
-   This function throws the exception given in the Any rExc. The given value has to be of type class
-   EXCEPTION and must be dervived from or of type com.sun.star.uno.Exception.
-   <BR>
-   @param rExc exception to be thrown.
- */
+/** This function throws the exception given in the Any rExc. The given value has to be of type
+    class EXCEPTION and must be dervived from or of type com.sun.star.uno.Exception.
+
+    @param rExc exception to be thrown.
+*/
 void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
