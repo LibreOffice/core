@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-07 07:10:51 $
+ *  last change: $Author: dr $ $Date: 2002-10-10 09:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1583,6 +1583,7 @@ FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab
             case 0x1034:    pChart->ReadEnd();                                  break;  // END
             case 0x1035:    pChart->ReadPlotarea();                             break;  // PLOTAREA
             case 0x103A:    pChart->Read3D( aIn );                              break;  // 3D
+            case 0x103C:    pChart->ReadPicf( aIn );                            break;  // PICF
             case 0x103D:    pChart->ReadDropbar( aIn );                         break;  // DROPBAR
             case 0x103E:    pChart = aObjManager.ReplaceChartData( aIn, ctNet );    break;  // RADAR
             case 0x103F:    pChart = aObjManager.ReplaceChartData( aIn, ctSurface );break;  // SURFACE
