@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:32:14 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 14:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,11 +989,6 @@ void lcl_SetFontProperties(
     rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
 }
 
-#define SETONALLFONTS( MethodName, Value )                  \
-rFont.MethodName( Value );                                  \
-rCJKFont.MethodName( Value );                               \
-rCTLFont.MethodName( Value );
-
 void AutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
     if ( pCurData )
@@ -1020,13 +1015,22 @@ void AutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font
         lcl_SetFontProperties( rCJKFont, *pCJKFontItem, *pCJKWeightItem, *pCJKPostureItem );
         lcl_SetFontProperties( rCTLFont, *pCTLFontItem, *pCTLWeightItem, *pCTLPostureItem );
 
-        SETONALLFONTS( SetUnderline,    (FontUnderline)pUnderlineItem->GetValue() );
-        SETONALLFONTS( SetStrikeout,    (FontStrikeout)pCrossedOutItem->GetValue() );
-        SETONALLFONTS( SetOutline,      pContourItem->GetValue() );
-        SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() );
-        SETONALLFONTS( SetColor,        pColorItem->GetValue() );
-        SETONALLFONTS( SetSize,         aFontSize );
-        SETONALLFONTS( SetTransparent,  TRUE );
+        Color aColor( pColorItem->GetValue() );
+        if( aColor.GetColor() == COL_TRANSPARENT )
+            aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+
+#define SETONALLFONTS( MethodName, Value ) \
+rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Value );
+
+        SETONALLFONTS( SetUnderline,    (FontUnderline)pUnderlineItem->GetValue() )
+        SETONALLFONTS( SetStrikeout,    (FontStrikeout)pCrossedOutItem->GetValue() )
+        SETONALLFONTS( SetOutline,      pContourItem->GetValue() )
+        SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() )
+        SETONALLFONTS( SetColor,        aColor )
+        SETONALLFONTS( SetSize,         aFontSize )
+        SETONALLFONTS( SetTransparent,  TRUE )
+
+#undef SETONALLFONTS
     }
 }
 
@@ -1193,7 +1197,7 @@ void AutoFmtPreview::DrawString( USHORT nIndex )
                 //---------------------
                 // Standardausrichtung:
                 //---------------------
-                if ( ((nIndex%5) == 0) || (nIndex == 4) )
+                if ( ((nIndex%5) == 0) || (nIndex < 5) )
                 {
                     // Text-Label links oder Summe linksbuendig
                     aPos.X() += FRAME_OFFSET;
@@ -1246,35 +1250,19 @@ void AutoFmtPreview::PaintCells()
     {
         USHORT i = 0;
 
-        //---------------
-        // 1. Hintergrund
-        //---------------
+        // 1) background
         if ( pCurData->GetIncludeBackground() )
-        {
-            for ( i=0; i<=24; i++ )
-            {
+            for ( i=0; i<25; i++ )
                 DrawBackground( i );
-            }
-        }
 
-        //----------
-        // 2. Rahmen
-        //----------
+        // 2) border
         if ( pCurData->GetIncludeFrame() )
-        {
-            for ( i=0; i<=24; i++ )
-            {
+            for ( i=0; i<25; i++ )
                 DrawFrame( i );
-            }
-        }
 
-        //---------
-        // 3. Werte
-        //---------
-        for ( i = 0; i<=24; i++ )
-        {
+        // 3) values
+        for ( i = 0; i<25; i++ )
             DrawString( i );
-        }
     }
 }
 
@@ -1412,40 +1400,26 @@ void AutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 void AutoFmtPreview::DoPaint( const Rectangle& rRect )
 {
-    Bitmap  thePreview;
-    Point   aCenterPos;
-    Size    theWndSize = GetSizePixel();
-    Size    thePrevSize;
-    Font    aFont;
+    Size aWndSize( GetSizePixel() );
+    Font aFont( aVD.GetFont() );
+    Color aBackCol( GetSettings().GetStyleSettings().GetWindowColor() );
+    Rectangle aRect( Point(), aWndSize );
 
-    aFont = aVD.GetFont();
     aFont.SetTransparent( TRUE );
-
     aVD.SetFont( aFont );
     aVD.SetLineColor();
-    aVD.SetFillColor( Color( COL_WHITE ) );
-    aVD.SetOutputSizePixel( aPrvSize );
+    aVD.SetFillColor( aBackCol );
+    aVD.SetOutputSize( aWndSize );
+    aVD.DrawRect( aRect );
 
-    //--------------------------------
-    // Zellen auf virtual Device malen
-    // und Ergebnis sichern
-    //--------------------------------
     PaintCells();
-    thePreview = aVD.GetBitmap( Point(0,0), aPrvSize );
 
-    //--------------------------------------
-    // Rahmen malen und Vorschau zentrieren:
-    // (virtual Device fuer Fensterausgabe)
-    //--------------------------------------
-    aVD.SetOutputSizePixel( theWndSize );
-    aCenterPos  = Point( (theWndSize.Width()  - aPrvSize.Width() ) / 2,
-                         (theWndSize.Height() - aPrvSize.Height()) / 2 );
-    aVD.DrawBitmap( aCenterPos, thePreview );
+    SetLineColor();
+    SetFillColor( aBackCol );
+    DrawRect( aRect );
 
-    //----------------------------
-    // Ausgabe im Vorschaufenster:
-    //----------------------------
-    DrawBitmap( Point(0,0), aVD.GetBitmap( Point(0,0), theWndSize ) );
+    Point aPos( (aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2 );
+    DrawOutDev( aPos, aWndSize, Point(), aWndSize, aVD );
 }
 
 //------------------------------------------------------------------------
