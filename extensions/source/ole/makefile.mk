@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:25:41 $
+#   last change: $Author: vg $ $Date: 2003-10-06 18:57:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -166,7 +166,7 @@ SHL1STDLIBS=\
     advapi32.lib	\
     oleaut32.lib
 
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
     SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
 .ENDIF
 
