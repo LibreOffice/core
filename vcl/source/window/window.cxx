@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
+ *  last change: $Author: ssa $ $Date: 2002-04-03 08:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         pFrame->SetCallback( this, ImplWindowFrameProc );
 #else
-        if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) )
+        if ( !(nStyle & WB_MOVEABLE) &&
+            (mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) ) )
             nStyle = WB_SYSTEMFLOATWIN; // window corresponds to a float win on the server
 
         RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;;
