@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-26 11:24:24 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,10 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         rPos.nContent++;
         bInsChar = FALSE;
     }
+
+    BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( TRUE );
+
     pTxtNd->Insert( cIns, rPos.nContent );
     aInsStr.Insert( cIns );
 
@@ -155,7 +159,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         const SwIndex aTmpIndex( rPos.nContent, -2 );
         pTxtNd->Erase( aTmpIndex, 1 );
     }
-
+    pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 }
 
 SwUndoOverwrite::~SwUndoOverwrite()
@@ -219,6 +223,10 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         else
             bInsChar = TRUE;
     }
+
+    BOOL bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
+    pDelTxtNd->SetIgnoreDontExpand( TRUE );
+
     pDelTxtNd->Insert( cIns, rPos.nContent );
     aInsStr.Insert( cIns );
 
@@ -227,6 +235,7 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         const SwIndex aTmpIndex( rPos.nContent, -2 );
         pDelTxtNd->Erase( aTmpIndex, 1 );
     }
+    pDelTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
     bGroup = TRUE;
     return TRUE;
@@ -269,6 +278,9 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
         String aTmpStr( '1' );
         sal_Unicode* pTmpStr = aTmpStr.GetBufferAccess();
 
+        BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+        pTxtNd->SetIgnoreDontExpand( TRUE );
+
         rIdx++;
         for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
         {
@@ -279,10 +291,15 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
             pTxtNd->Erase( rIdx, 1 );
             rIdx += 2;
         }
+        pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
         rIdx--;
     }
     if( pHistory )
+    {
+        if( pTxtNd->GetpSwpHints() )
+            pTxtNd->ClearSwpHintsArr( FALSE );
         pHistory->TmpRollback( pDoc, 0, FALSE );
+    }
 
     if( pAktPam->GetMark()->nContent.GetIndex() != nSttCntnt )
     {
@@ -334,6 +351,9 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
     }
     rIdx.Assign( pTxtNd, aDelStr.Len() ? nSttCntnt+1 : nSttCntnt );
 
+    BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( TRUE );
+
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
         // einzeln, damit die Attribute stehen bleiben !!!
@@ -345,6 +365,7 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
             rIdx += n+1 < aDelStr.Len() ? 2 : 1;
         }
     }
+    pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
     // alte Anfangs-Position vom UndoNodes-Array zurueckholen
     if( pHistory )
@@ -360,11 +381,14 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.3 2000-10-26 11:24:24 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.4 2000-11-06 10:47:36 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/26 11:24:24  jp
+      for bug #78848#: don't call DeleteRedline
+
       Revision 1.2  2000/10/25 15:13:25  jp
       use CharClass/BreakIt instead of old WordSelection
 

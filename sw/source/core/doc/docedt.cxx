@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:54:10 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,9 @@ sal_Bool SwDoc::Overwrite( const SwPaM &rRg, sal_Unicode c )
     }
     else
     {
+        BOOL bOldExpFlg = pNode->IsIgnoreDontExpand();
+        pNode->SetIgnoreDontExpand( TRUE );
+
         // hinter das Zeichen (zum aufspannen der Attribute !!)
         if( nStart < pNode->GetTxt().Len() )
             rIdx++;
@@ -804,6 +807,7 @@ sal_Bool SwDoc::Overwrite( const SwPaM &rRg, sal_Unicode c )
             pNode->Erase( rIdx, 1 );
             rIdx++;
         }
+        pNode->SetIgnoreDontExpand( bOldExpFlg );
     }
 
     sal_uInt16 nNewAttrCnt = pNode->GetpSwpHints()
@@ -863,6 +867,9 @@ sal_Bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     sal_Unicode c;
     String aStr;
 
+    BOOL bOldExpFlg = pNode->IsIgnoreDontExpand();
+    pNode->SetIgnoreDontExpand( TRUE );
+
     for( xub_StrLen nCnt = 0; nCnt < rStr.Len(); ++nCnt )
     {
         // hinter das Zeichen (zum aufspannen der Attribute !!)
@@ -895,6 +902,7 @@ sal_Bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
             }
         }
     }
+    pNode->SetIgnoreDontExpand( bOldExpFlg );
 
     sal_uInt16 nNewAttrCnt = pNode->GetpSwpHints()
                                 ? pNode->GetpSwpHints()->Count() : 0;
