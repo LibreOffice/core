@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swframeposstrings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: od $ $Date: 2004-08-12 14:00:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,16 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 /* -----------------04.03.2004 12:58-----------------
     contains strings needed for positioning dialogs
     of frames and drawing in Writer
  --------------------------------------------------*/
 class SvxSwFramePosString_Impl;
-class SvxSwFramePosString
+class SVX_DLLPUBLIC SvxSwFramePosString
 {
     SvxSwFramePosString_Impl* pImpl;
 public:
