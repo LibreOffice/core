@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:31:21 $
+ *  last change: $Author: sb $ $Date: 2000-12-05 16:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,10 @@ void SAL_CALL UniversalContentBroker::deregisterContentProvider(
     {
         aMapIt = m_aProviders.find(Scheme);
     }
-    catch (IllegalArgumentException const &) {}
+    catch (IllegalArgumentException const &)
+    {
+        return; //@@@
+    }
 
     if (aMapIt != m_aProviders.end())
     {
