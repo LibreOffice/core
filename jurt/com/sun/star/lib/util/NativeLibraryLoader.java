@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeLibraryLoader.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:40:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,11 @@ package com.sun.star.lib.util;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /** Helper functions to locate and load native files.
 
@@ -154,13 +156,16 @@ public final class NativeLibraryLoader {
 
     private NativeLibraryLoader() {} // do not instantiate
 
-    // java.net.URI is only available since Java 1.4:
-    private static Class uriClass;
+    // java.net.URLEncoder.encode(String, String) and java.net.URI are only
+    // available since Java 1.4:
+    private static Method urlEncoderEncode;
     private static Constructor uriConstructor;
     private static Constructor fileConstructor;
     static {
         try {
-            uriClass = Class.forName("java.net.URI");
+            urlEncoderEncode = URLEncoder.class.getMethod(
+                "encode", new Class[] { String.class, String.class });
+            Class uriClass = Class.forName("java.net.URI");
             uriConstructor = uriClass.getConstructor(
                 new Class[] { String.class });
             fileConstructor = File.class.getConstructor(
@@ -188,15 +193,20 @@ public final class NativeLibraryLoader {
                 : null;
         } else {
             // If java.net.URI is avaliable, do
-            //   URI uri = new URI(url.toString());
+            //   URI uri = new URI(encodedUrl);
             //   try {
             //       return new File(uri);
             //   } catch (IllegalArgumentException e) {
             //       return null;
             //   }
+            // where encodedUrl is url.toString(), but since that may contain
+            // unsafe characters (e.g., space, " "), it is encoded, as otherwise
+            // the URI constructor might throw java.net.URISyntaxException (in
+            // Java 1.5, URL.toURI might be used instead).
+            String encodedUrl = encode(url.toString());
             try {
                 Object uri = uriConstructor.newInstance(
-                    new Object[] { url.toString() });
+                    new Object[] { encodedUrl });
                 try {
                     return (File) fileConstructor.newInstance(
                         new Object[] { uri });
@@ -222,5 +232,34 @@ public final class NativeLibraryLoader {
                 }
             }
         }
+    }
+
+    private static String encode(String url) {
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < url.length(); ++i) {
+            char c = url.charAt(i);
+            // The RFC 2732 <uric> characters: !$&'()*+,-./:;=?@[]_~ plus digits
+            // and letters; additionally, do not encode % again.
+            if (c >= 'a' && c <= 'z' || c >= '?' && c <= '['
+                || c >= '$' && c <= ';' || c == '!' || c == '=' || c == ']'
+                || c == '_' || c == '~')
+            {
+                buf.append(c);
+            } else if (c == ' ') {
+                buf.append("%20");
+            } else {
+                String enc;
+                try {
+                    enc = (String) urlEncoderEncode.invoke(
+                        null, new Object[] { Character.toString(c), "UTF-8" });
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("This cannot happen: " + e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException("This cannot happen: " + e);
+                }
+                buf.append(enc);
+            }
+        }
+        return buf.toString();
     }
 }
