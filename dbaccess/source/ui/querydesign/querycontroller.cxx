@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:17:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,7 +968,7 @@ OJoinDesignView* OQueryController::getJoinView()
 void OQueryController::describeSupportedFeatures()
 {
     OJoinController::describeSupportedFeatures();
-    implDescribeSupportedFeature( ".uno:SaveAs",            SID_SAVEASDOC,              CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SaveAs",            ID_BROWSER_SAVEASDOC,       CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SbaNativeSql",      ID_BROWSER_ESACPEPROCESSING,CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:DBViewFunctions",   SID_QUERY_VIEW_FUNCTIONS,   CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewTableNames",  SID_QUERY_VIEW_TABLES,      CommandGroup::VIEW );
