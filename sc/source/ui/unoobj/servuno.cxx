@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 18:00:02 $
+ *  last change: $Author: nn $ $Date: 2001-02-23 13:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include "fielduno.hxx"
 #include "styleuno.hxx"
 #include "afmtuno.hxx"
+#include "defltuno.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 
@@ -106,7 +107,9 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         "com.sun.star.drawing.TransparencyGradientTable",   // SC_SERVICE_TRGRADTAB
         "com.sun.star.drawing.MarkerTable",         // SC_SERVICE_MARKERTAB
         "com.sun.star.drawing.DashTable",           // SC_SERVICE_DASHTAB
-        "com.sun.star.text.NumberingRules"          // SC_SERVICE_NUMRULES
+        "com.sun.star.text.NumberingRules",         // SC_SERVICE_NUMRULES
+        "com.sun.star.sheet.Defaults",              // SC_SERVICE_DOCDEFLTS
+        "com.sun.star.drawing.Defaults"             // SC_SERVICE_DRAWDEFLTS
     };
 
 //
@@ -135,7 +138,9 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_TRGRADTAB
         "",                                         // SC_SERVICE_MARKERTAB
         "",                                         // SC_SERVICE_DASHTAB
-        ""                                          // SC_SERVICE_NUMRULES
+        "",                                         // SC_SERVICE_NUMRULES
+        "",                                         // SC_SERVICE_DOCDEFLTS
+        ""                                          // SC_SERVICE_DRAWDEFLTS
     };
 
 
@@ -208,6 +213,15 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             //  -> DocShell muss gesetzt sein, aber leere Ranges
             if (pDocShell)
                 xRet = (sheet::XSheetCellRanges*)new ScCellRangesObj( pDocShell, ScRangeList() );
+            break;
+
+        case SC_SERVICE_DOCDEFLTS:
+            if (pDocShell)
+                xRet = (beans::XPropertySet*)new ScDocDefaultsObj( pDocShell );
+            break;
+
+        case SC_SERVICE_DRAWDEFLTS:
+            //! waiting for CL's implementation
             break;
 
         //  Drawing layer tables are not in SvxUnoDrawMSFactory,
