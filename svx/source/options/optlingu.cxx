@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 14:16:29 $
+ *  last change: $Author: tl $ $Date: 2001-12-04 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,6 +1221,9 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             DBG_ASSERT( pImplNames, "service implementation names missing" )
             if (pImplNames)
             {
+#ifdef DEBUG
+                const OUString *pTmpStr = pImplNames->getConstArray();
+#endif
                 Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
                 Locale aLocale( SvxCreateLocale(nLang) );
                 if (xMgr.is())
@@ -1955,6 +1958,9 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     aPrioUpPB  .SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
     aPrioDownPB.SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
     aBackPB    .SetClickHdl( LINK( this, SvxEditModulesDlg, BackHdl_Impl ));
+    // in case of not installed language modules
+    aPrioUpPB  .Enable( FALSE );
+    aPrioDownPB.Enable( FALSE );
 
     //
     //fill language box
@@ -2043,7 +2049,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
                 }
                 if(nCurPos > 1)
                 {
-                    bDisableUp = ((ModuleUserData_Impl*)pBox->
+                                bDisableUp = ((ModuleUserData_Impl*)pBox->
                             GetEntry(nCurPos - 1)->GetUserData())->IsParent();
                 }
             }
@@ -2299,27 +2305,30 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
  ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
 {
-    aModulesCLB.SetUpdateMode(FALSE);
     sal_Bool bUp = &aPrioUpPB == pBtn;
     USHORT  nCurPos = aModulesCLB.GetSelectEntryPos();
-    SvLBoxEntry* pEntry = aModulesCLB.GetEntry(nCurPos);
-    SvLBoxTreeList *pModel = aModulesCLB.GetModel();
+    SvLBoxEntry* pEntry;
+    if (nCurPos != LISTBOX_ENTRY_NOTFOUND  &&
+        0 != (pEntry = aModulesCLB.GetEntry(nCurPos)))
+    {
+        aModulesCLB.SetUpdateMode(FALSE);
+        SvLBoxTreeList *pModel = aModulesCLB.GetModel();
 
-    ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
-    String aStr(aModulesCLB.GetEntryText(pEntry));
-    SvLBoxEntry* pToInsert = CreateEntry( aStr, CBCOL_FIRST );
-    pToInsert->SetUserData( (void *)pData);
-    BOOL bIsChecked = aModulesCLB.IsChecked(nCurPos);
+        ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
+        String aStr(aModulesCLB.GetEntryText(pEntry));
+        SvLBoxEntry* pToInsert = CreateEntry( aStr, CBCOL_FIRST );
+        pToInsert->SetUserData( (void *)pData);
+        BOOL bIsChecked = aModulesCLB.IsChecked(nCurPos);
 
-    pModel->Remove(pEntry);
+        pModel->Remove(pEntry);
 
-    USHORT nDestPos = bUp ? nCurPos - 1 : nCurPos + 1;
-    pModel->Insert(pToInsert, nDestPos);
-    aModulesCLB.CheckEntryPos(nDestPos, bIsChecked );
-    aModulesCLB.SelectEntryPos(nDestPos );
-    aModulesCLB.SetUpdateMode(TRUE);
-    SelectHdl_Impl(&aModulesCLB);
-
+        USHORT nDestPos = bUp ? nCurPos - 1 : nCurPos + 1;
+        pModel->Insert(pToInsert, nDestPos);
+        aModulesCLB.CheckEntryPos(nDestPos, bIsChecked );
+        aModulesCLB.SelectEntryPos(nDestPos );
+        SelectHdl_Impl(&aModulesCLB);
+        aModulesCLB.SetUpdateMode(TRUE);
+    }
     return 0;
 }
 /* ---------------------------------------------------------------------------
