@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-24 10:29:21 $
+ *  last change: $Author: nf $ $Date: 2001-08-28 11:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ String STR_SENDER_TOKENS
     Text[ catalan ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
     Text[ finnish ] = "YRITYS;CR;ETUNIMI; ;SUKUNIMI;CR;OSOITE;CR;POSTITOIMIPAIKKA; ;OSAVALTIO; ;POSTINUMERO;CR;MAA;CR;";
 };
+
 
 
 
