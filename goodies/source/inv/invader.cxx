@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:08:08 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 19:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ void MyWindow::Paint(const Rectangle& rRect)
             pFighter->Paint(*pVirtualDevice);
             pMunition->Paint(*pVirtualDevice);
             pBombe->Paint(*pVirtualDevice);
-              pExplosion->Paint(*pVirtualDevice);
+            pExplosion->Paint(*pVirtualDevice);
         }
         else
         {
