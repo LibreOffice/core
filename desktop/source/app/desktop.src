@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:19:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 14:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,29 +67,29 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
     DefButton = WB_DEF_OK ;
     Message ="%PRODUCTNAME %PRODUCTVERSION ist nicht f�r die Verwendung von Java konfiguriert.\nKlicken Sie auf 'OK', um das %PRODUCTNAME %PRODUCTVERSION Java-Setup zu starten. Mit dem Java-Setup k�nnen Sie ein Java Runtime Environment (JRE) installieren oder aus vorhandenen JREs eins ausw�hlen.\nUm die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
     Message[ english_us ] ="%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation." ;
-    Message[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'est pas configur� pour ex�cuter Java.\nCliquez sur 'OK' pour lancer le Setup de Java de PRODUCTNAME %PRODUCTVERSION et installer un environnement d'ex�cution Java (JRE), ou pour choisir parmi les JRE d�j� install�s.\nSi vous ne souhaitez pas installer de JRE, cliquez sur 'Annuler' (ceci annulera �galement l'op�ration en cours).";
     Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no est� configurado para ejecutar Java.\nPulse en 'Aceptar' para iniciar el programa de instalaci�n de Java de %PRODUCTNAME %PRODUCTVERSION e instalar un entorno de ejecuci�n Java (JRE) o seleccione 'JREs' ya instalados.\nSi no desea instalar ning�n entorno de ejecuci�n Java, pulse en 'Cancelar'. Se cancelar� la operaci�n actual.";
-    Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non � stato configurato per lanciare Java\n.Fate click su 'OK' per avviare il setup di Java di %PRODUCTNAME %PRODUCTVERSION e installare un JRE (Java Runtime Environment) oppure per sceglierne uno gi� installato.\nSe preferite non installare JRE fate click su 'Annulla'. Quest'azione eliminer� la presente operazione.";
-    Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION �r inte konfigurerad f�r att k�ra Java.\nKlicka p� 'OK' f�r att starta %PRODUCTNAME %PRODUCTVERSION Java Setup och installera en Java Runtime Environment (JRE) eller v�lja bland redan installerade JRE.\nKlicka p� 'Avbryt' om du inte vill installera en JRE. Detta avbryter i s� fall �ven den aktuella operationen.";
-    Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ portuguese_brazilian ] = "O %PRODUCTNAME %PRODUCTVERSION detectou uma configura��o errada do arquivo java.ini. O %PRODUCTNAME necessita do java.ini. Clique 'OK' para iniciar o setup do Java e instalar um ambiente de execu��o Java (JRE) ou escolha entre os JREs j� instalados.\n Se n�o quiser instalar um JRE, clique em 'Cancelar'. Esta a��o tamb�m cancelar� a opera��o atual.";
     Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION は、Java を実行するように設定されていません。\nOK ボタンをクリックして Java セットアップを開始し、Java Runtime Environment (JRE) をインストールするか、すでにインストールされている JRE の中から 1 つ選択してください。\nJRE をインストールする必要がなければ、[キャンセル] ボタンをクリックします。この場合、現在の操作も終了します。";
     Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION은(는) Java가 실행되도록 구성되지 않았습니다.\n%PRODUCTNAME %PRODUCTVERSION Java 설치를 시작하려면 [OK] 버튼을 누릅니다. Java 설치를 사용하여 Java Runtime Environment(JRE)를 설치하거나 이미 설치된 JRE 중 하나를 선택할 수 있습니다.\nJRE의 설치가 필요하지 않은 경우 [취소] 버튼을 눌러 현재 작업을 취소합니다.  ";
     Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 尚未配置 Java 。\n按一下“确定”，启动 %PRODUCTNAME %PRODUCTVERSION Java 安装程式来安装 Java 运行时间环境(JRE)。\n如果您不想安装 Java 运行时间环境，就点击“取消”。";
     Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 尚未配置使用 Java 。\n按一下「確定」，啓動 %PRODUCTNAME %PRODUCTVERSION Java 安裝程式來安裝 Java 運行時間環境(JRE)。\n如果您不想安裝 Java 運行時間環境，就按一下「取消」。這樣也會取消目前的操作。";
     Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION java.ini yap�land�rmas� i�inde hata tespit etti. %PRODUCTNAME  java.ini gerektiriyor. Java Ayarlar� i�in 'OK' bas�n ve bir JRE kurun veya se�ilmi� JRE'ler aras�ndan se�im yap�n. \nJRE kurmak istemezseniz 'Cancel' e bas�n. Bu i�lem ayn� zamanda ge�erli i�lemi sona erdirecektir.";
-    Message[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ thai ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION zjistil chybné nastavení java.ini. %PRODUCTNAME vyžaduje java.ini. Klikněte na 'OK' ke spuštění instalace Javy nebo zvolte z nainstalovaných JRE.\nPokud nechcete instalovat JRE, klikněte na 'Zrušit', což také přeruší současnou operaci.";
+    Message[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ thai ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION nebyl nakonfigurován pro spuštění Javy.\nKlepněte na 'OK' pro spuštění nástroje %PRODUCTNAME %PRODUCTVERSION pro nastavení Javy a nainstalujte Java Runtime Environment (JRE) nebo vyberte již nainstalované JRE.\nPokud nechcete nainstalovat JRE, klepněte na 'Zrušit'. Tento krok také ukončí právě probíhající operaci.";
     Message[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini-Konfiguration gefunden. %PRODUCTNAME benötigt die java.ini. Klicken Sie 'OK' um das Java-Setup zu starten. Mit dem Java-Setup können Sie ein JRE installieren oder aus vorhandenen JREs eins auswählen.\nUm die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
-    Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
+    Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION nebol nakonfigurovaný pre Javu.\nKliknite na 'OK' pre štart %PRODUCTNAME %PRODUCTVERSION nastavenie Javy a nainštalujte Java Runtime Environment (JRE) alebo si vyberte medzí už nainštalovanými JRE.\nAk nechcete inštalovať JRE, kliknite na 'Cancel'. To zruší aj práve prebiehajúcu operáciu.";
 };
 
@@ -1414,7 +1414,7 @@ String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
     Text[ chinese_traditional ] = "由於存取 %PRODUCTNAME 配置資料的錯誤，無法啟動 %PRODUCTNAME。\n\n請和系統管理員聯絡。";
     Text[ arabic ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
     Text[ catalan ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ czech ] = "%PRODUCTNAME nemůže být spuštěn kvůli chybě v přístupu ke kenfiguračním datům %PRODUCTNAME.\n\nKontaktujte prosím vašeho systémového administrátora.";
+    Text[ czech ] = "%PRODUCTNAME nemůže být spuštěn kvůli chybě v přístupu ke konfiguračním datům %PRODUCTNAME.\n\nKontaktujte prosím vašeho systémového administrátora.";
     Text[ hebrew ] = "%PRODUCTNAME kann nicht gestartet werden, da beim Zugriff auf die %PRODUCTNAME Konfigurationsdaten ein Fehler aufgetreten ist.\n\nBitte wenden Sie sich an Ihren Systemadministrator.";
     Text[ hindi ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
     Text[ slovak ] = "%PRODUCTNAME nemohol byť spustený kvôli chybe prístupu k nastaveniam %PRODUCTNAME.\n\nProsím kontaktujte vášho systémového administrátora.";
@@ -1634,6 +1634,20 @@ String STR_TITLE_EXPIRED
     Text[ hindi ] = "इशारा";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
