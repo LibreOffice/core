@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp5.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ int     skip;       /* TRUE if short-circuit evaluation */
  * evaleval() returns the new pointer to the top of the value stack.
  */
 {
-    register int    v1, v2;
+    register int    v1, v2 = 0;
 
     if (isbinary(op))
         v2 = *--valp;
