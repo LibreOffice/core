@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: cd $ $Date: 2002-04-19 06:13:16 $
+#   last change: $Author: pb $ $Date: 2002-05-08 07:23:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,12 @@ SLOFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/xmlaccelcfg.obj				\
     $(SLO)$/cjkoptions.obj				\
+    $(SLO)$/ctloptions.obj				\
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
     $(SLO)$/undoopt.obj             	\
     $(SLO)$/helpopt.obj             	\
-    $(SLO)$/javaoptions.obj                 \
+    $(SLO)$/javaoptions.obj             \
     $(SLO)$/useroptions.obj             \
     $(SLO)$/moduleoptions.obj			\
     $(SLO)$/securityoptions.obj			\
@@ -104,8 +105,9 @@ SLOFILES = \
     $(SLO)$/syslocaleoptions.obj        \
     $(SLO)$/cacheoptions.obj			\
     $(SLO)$/regoptions.obj				\
-    $(SLO)$/accessibilityoptions.obj		\
-    $(SLO)$/cmdoptions.obj				
+    $(SLO)$/accessibilityoptions.obj	\
+    $(SLO)$/cmdoptions.obj				\
+    $(SLO)$/asianlanguagesoptions.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
@@ -115,3 +117,4 @@ EXCEPTIONSFILES = \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
