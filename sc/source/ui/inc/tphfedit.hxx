@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:26:00 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,25 +77,24 @@
 #ifndef _SV_GROUP_HXX //autogen
 #include <vcl/group.hxx>
 #endif
-
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-
-#ifndef SC_ITEMS_HXX
-#include "scitems.hxx"          // wegen enum SvxNumType
-#endif
-
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
-
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"          // wegen enum SvxNumType
+#endif
 #ifndef SC_POPMENU_HXX
-#include <popmenu.hxx>
+#include "popmenu.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
@@ -115,7 +114,8 @@ class SvxFieldItem;
 class ScAccessibleEditObject;
 class ScEditWindow;
 
-extern ScEditWindow* GetScEditWindow (); //CHINA001
+SC_DLLPUBLIC ScEditWindow* GetScEditWindow (); //CHINA001
+
 enum ScEditWindowLocation
 {
     Left,
@@ -123,7 +123,7 @@ enum ScEditWindowLocation
     Right
 };
 
-class ScEditWindow : public Control
+class SC_DLLPUBLIC ScEditWindow : public Control
 {
 public:
             ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc );
@@ -161,7 +161,7 @@ private:
 };
 
 //===================================================================
-class ScExtIButton : public ImageButton
+class SC_DLLPUBLIC ScExtIButton : public ImageButton
 {
 private:
 
@@ -170,7 +170,7 @@ private:
     Link            aMLink;
     USHORT          nSelected;
 
-    DECL_LINK( TimerHdl, Timer*);
+    SC_DLLPRIVATE  DECL_LINK( TimerHdl, Timer*);
 
 //  void            DrawArrow();
 
