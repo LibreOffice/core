@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleFixedText.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:51:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ service AccessibleFixedText
                 >AccessibleStateType::DEFUNC</const>
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
-                <type scope="::com::sun::star::lang">DisposedException</type>
+                <type scope="com::sun::star::lang">DisposedException</type>
                 exceptions.</li>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::ENABLED</const> is set
