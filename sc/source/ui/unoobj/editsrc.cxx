@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-31 17:57:55 $
+ *  last change: $Author: thb $ $Date: 2002-02-11 15:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,12 @@ void ScSharedHeaderFooterEditSource::UpdateData()
     pTextData->UpdateData();
 }
 
+SfxBroadcaster& ScSharedHeaderFooterEditSource::GetBroadcaster() const
+{
+    // TODO: see svx/source/unodraw/unoshtxt.cxx for required notifications
+    return *new SfxBroadcaster();
+}
+
 ScEditEngineDefaulter* ScSharedHeaderFooterEditSource::GetEditEngine()
 {
     return pTextData->GetEditEngine();
@@ -178,6 +184,12 @@ SvxTextForwarder* ScSharedCellEditSource::GetTextForwarder()
 void ScSharedCellEditSource::UpdateData()
 {
     pCellTextData->UpdateData();
+}
+
+SfxBroadcaster& ScSharedCellEditSource::GetBroadcaster() const
+{
+    // TODO: see svx/source/unodraw/unoshtxt.cxx for required notifications
+    return *new SfxBroadcaster();
 }
 
 void ScSharedCellEditSource::SetDoUpdateData(sal_Bool bValue)
@@ -289,6 +301,12 @@ void ScAnnotationEditSource::UpdateData()
     }
 }
 
+SfxBroadcaster& ScAnnotationEditSource::GetBroadcaster() const
+{
+    // TODO: see svx/source/unodraw/unoshtxt.cxx for required notifications
+    return *new SfxBroadcaster();
+}
+
 void ScAnnotationEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
@@ -341,5 +359,10 @@ void ScSimpleEditSource::UpdateData()
     //  nothing
 }
 
+SfxBroadcaster& ScSimpleEditSource::GetBroadcaster() const
+{
+    // TODO: see svx/source/unodraw/unoshtxt.cxx for required notifications
+    return *new SfxBroadcaster();
+}
 
 
