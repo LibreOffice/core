@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 11:15:54 $
+ *  last change: $Author: pb $ $Date: 2001-11-05 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #include <comphelper/types.hxx>
@@ -242,7 +242,7 @@ sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case SVX_LINE_SPACE_FIX :
         case SVX_LINE_SPACE_MIN :
             aLSp.Mode = eLineSpace == SVX_LINE_SPACE_FIX ? style::LineSpacingMode::FIX : style::LineSpacingMode::MINIMUM;
-            aLSp.Height = nMemberId&CONVERT_TWIPS ? TWIP_TO_MM100(nLineHeight) : nLineHeight;
+            aLSp.Height = ( ( nMemberId & CONVERT_TWIPS ) == CONVERT_TWIPS ) ? (short)TWIP_TO_MM100(nLineHeight) : nLineHeight;
         break;
     }
     rVal <<= aLSp;
@@ -284,7 +284,7 @@ sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
             nLineHeight = aLSp.Height;
             if(nMemberId&CONVERT_TWIPS)
-                nLineHeight = MM100_TO_TWIP(nLineHeight);
+                nLineHeight = (USHORT)MM100_TO_TWIP(nLineHeight);
         }
         break;
     }
@@ -751,13 +751,13 @@ sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             bHyphen = Any2Bool(rVal);
         break;
         case MID_HYPHEN_MIN_LEAD:
-            nMinLead = nNewVal;
+            nMinLead = (BYTE)nNewVal;
         break;
         case MID_HYPHEN_MIN_TRAIL:
-            nMinTrail = nNewVal;
+            nMinTrail = (BYTE)nNewVal;
         break;
         case MID_HYPHEN_MAX_HYPHENS:
-            nMaxHyphens = nNewVal;
+            nMaxHyphens = (BYTE)nNewVal;
         break;
     }
     return sal_True;
@@ -881,8 +881,7 @@ SvxTabStop::SvxTabStop()
 {
     nTabPos = 0;
     eAdjustment = SVX_TAB_ADJUST_LEFT;
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    cDecimal = aLocaleWrapper.getNumDecimalSep().GetChar(0);
+    cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
     cFill = cDfltFillChar;
 }
 
@@ -893,14 +892,7 @@ SvxTabStop::SvxTabStop( const long nPos, const SvxTabAdjust eAdjst,
 {
     nTabPos = nPos;
     eAdjustment = eAdjst;
-
-    if ( cDfltDecimalChar == cDec )
-    {
-        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-        cDecimal = aLocaleWrapper.getNumDecimalSep().GetChar(0);
-    }
-    else
-        cDecimal = cDec;
+    cDecimal = ( cDfltDecimalChar == cDec ) ? SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0) : cDec;
     cFill = cFil;
 }
 
