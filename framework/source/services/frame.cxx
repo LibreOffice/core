@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-15 09:41:19 $
+ *  last change: $Author: pb $ $Date: 2001-06-15 11:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,8 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
 
     //-------------------------------------------------------------------------------------------------------------
     // Initialize a the drop target listener.
-    m_xDropTargetListener = new DropTargetListener( this );
+    DropTargetListener* pListener = new DropTargetListener( this );
+    m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pListener), css::uno::UNO_QUERY );
 
     // Don't forget it - or we live for ever!
     --m_refCount;
