@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:34:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,20 +626,3 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
         }
     }
 }
-/* -----------------------------08.02.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-void    SwGlossaryGroupTLB::Clear()
-{
-    SvLBoxEntry* pEntry = First();
-    while(pEntry)
-    {
-        GlosBibUserData* pData = (GlosBibUserData*)pEntry->GetUserData();
-        delete pData;
-        pEntry = Next(pEntry);
-    }
-    SvTabListBox::Clear();
-}
-
-
-
