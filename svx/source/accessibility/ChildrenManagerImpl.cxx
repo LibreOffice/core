@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 11:50:19 $
+ *  last change: $Author: af $ $Date: 2002-04-29 12:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,9 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
                     uno::Any(),
                     aOldValue);
 
-                // Remove the accessible object.
+                // Dispose and remove the object.
+                Reference<lang::XComponent> xComponent (I->mxAccessibleShape, uno::UNO_QUERY);
+                xComponent->dispose ();
                 I->mxAccessibleShape = NULL;
             }
         }
@@ -406,10 +408,10 @@ void ChildrenManagerImpl::SetShapeList (const ::com::sun::star::uno::Reference<
 
 
 
-void ChildrenManagerImpl::AddAccessibleShape (AccessibleShape* pShape)
+void ChildrenManagerImpl::AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape)
 {
-    if (pShape != NULL)
-        maAccessibleShapes.push_back (pShape);
+    if (pShape.get() != NULL)
+        maAccessibleShapes.push_back (pShape.release());
 }
 
 
@@ -475,6 +477,20 @@ void SAL_CALL
     ChildrenManagerImpl::disposing (const lang::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
+    if (rEventObject == mpShapeTreeInfo->GetControllerBroadcaster())
+
+    // Release the child containers.
+    if (mpChildrenManager != NULL)
+    {
+        delete mpChildrenManager;
+        mpChildrenManager = NULL;
+    }
+    if (mpText != NULL)
+    {
+        delete mpText;
+        mpText = NULL;
+    }
+
     // Not yet interested in disposing events.
 }
 
