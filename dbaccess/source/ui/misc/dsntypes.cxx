@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
+ *  last change: $Author: fs $ $Date: 2001-07-31 15:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ODsnTypeCollection::ODsnTypeCollection()
     DBG_ASSERT(sConnectionTypes.GetTokenCount(';') == sConnectionTypeNames.GetTokenCount(';'),
         "ODsnTypeCollection::ODsnTypeCollection : invalid resources !");
     String sCurrentType;
-    for (sal_Int32 i=0; i<sConnectionTypeNames.GetTokenCount(); ++i)
+    for (sal_uInt16 i=0; i<sConnectionTypeNames.GetTokenCount(); ++i)
     {
         m_aDsnTypesDisplayNames.push_back(sConnectionTypeNames.GetToken(i));
 
@@ -121,7 +121,7 @@ String ODsnTypeCollection::getTypeDisplayName(DATASOURCE_TYPE _eType)
     String sDisplayName;
 
     sal_Int32 nIndex = implDetermineTypeIndex(_eType);
-    if ((nIndex >= 0) && (nIndex < m_aDsnTypesDisplayNames.size()))
+    if ((nIndex >= 0) && (nIndex < (sal_Int32)m_aDsnTypesDisplayNames.size()))
         sDisplayName = m_aDsnTypesDisplayNames[nIndex];
 
     return sDisplayName;
@@ -132,7 +132,7 @@ String ODsnTypeCollection::getDatasourcePrefix(DATASOURCE_TYPE _eType)
 {
     String sPrefix;
     sal_Int32 nIndex = implDetermineTypeIndex(_eType);
-    if ((nIndex >= 0) && (nIndex < m_aDsnPrefixes.size()))
+    if ((nIndex >= 0) && (nIndex < (sal_Int32)m_aDsnPrefixes.size()))
         sPrefix = m_aDsnPrefixes[nIndex];
 
     return sPrefix;
@@ -174,7 +174,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
 //-------------------------------------------------------------------------
 DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
 {
-    sal_Int32 nSeparator = _rDsn.Search((sal_Unicode)':');
+    sal_uInt16 nSeparator = _rDsn.Search((sal_Unicode)':');
     if (STRING_NOTFOUND == nSeparator)
     {
         // there should be at least one such separator
@@ -303,29 +303,29 @@ ODsnTypeCollection::TypeIterator::~TypeIterator()
 //-------------------------------------------------------------------------
 DATASOURCE_TYPE ODsnTypeCollection::TypeIterator::getType() const
 {
-    DBG_ASSERT(m_nPosition < m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::getType : invalid position!");
+    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::getType : invalid position!");
     return m_pContainer->m_aDsnTypes[m_nPosition];
 }
 
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::TypeIterator::getPrefix() const
 {
-    DBG_ASSERT(m_nPosition < m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getPrefix : invalid position!");
+    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getPrefix : invalid position!");
     return m_pContainer->m_aDsnPrefixes[m_nPosition];
 }
 
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::TypeIterator::getDisplayName() const
 {
-    DBG_ASSERT(m_nPosition < m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
+    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnTypesDisplayNames[m_nPosition];
 }
 
 //-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator++()
 {
-    DBG_ASSERT(m_nPosition < m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
-    if (m_nPosition < m_pContainer->m_aDsnTypes.size())
+    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
+    if (m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size())
         ++m_nPosition;
     return *this;
 }
@@ -376,6 +376,41 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
     return new DbuTypeCollectionItem(*this);
 }
 
+//=========================================================================
+//= AddressBookTypes
+//=========================================================================
+//-------------------------------------------------------------------------
+String AddressBookTypes::getAddressURL( ADDRESSBOOK_TYPE _eType )
+{
+    const sal_Char* pURL = "";
+    switch ( _eType )
+    {
+        case ABT_MORK       : pURL = "sdbc:address:mozilla"; break;
+        case ABT_LDAP       : pURL = "sdbc:address:ldap"; break;
+        case ABT_OUTLOOK    : pURL = "sdbc:address:outlook"; break;
+        case ABT_OE         : pURL = "sdbc:address:outlookexp"; break;
+        default:
+            DBG_ERROR("AddressBookTypes::getAddressURL: invalid type!");
+    }
+    return String::CreateFromAscii( pURL );
+}
+
+//-------------------------------------------------------------------------
+ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
+{
+    if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:mozilla" ) )
+        return ABT_MORK;
+    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:ldap" ) )
+        return ABT_LDAP;
+    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:outlook" ) )
+        return ABT_OUTLOOK;
+    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:outlookexp" ) )
+        return ABT_OE;
+
+    DBG_ERROR( "AddressBookTypes::getAddressType: no valid address URL!" );
+    return ABT_UNKNOWN;
+}
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
@@ -383,6 +418,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/29 13:11:51  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.7  2001/05/23 14:16:41  oj
  *  #87149# new helpids
  *
