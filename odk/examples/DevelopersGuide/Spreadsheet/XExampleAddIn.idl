@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExampleAddIn.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:46:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,32 +38,28 @@
  *
  *************************************************************************/
 
-#ifndef _COM_SUN_STAR_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
-#define _COM_SUN_STAR_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
+#ifndef _ORG_OPENOFFICE_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
+#define _ORG_OPENOFFICE_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XVolatileResult.idl>
 
-module com {
-  module sun {
-    module star {
-      module sheet {
-        module addin {
+module org {
+    module openoffice {
+        module sheet {
+            module addin {
+                /// The interface that the example addin implements
+                interface XExampleAddIn : com::sun::star::uno::XInterface
+                {
+                    /// Sample function that just increments a value.
+                    long getIncremented( [in] long nValue );
 
-            /// The interface that the example addin implements
-            interface XExampleAddIn : com::sun::star::uno::XInterface
-            {
-                /// Sample function that just increments a value.
-                long getIncremented( [in] long nValue );
-
-                /// Sample function that returns a volatile result.
-                com::sun::star::sheet::XVolatileResult getCounter( [in] string aName );
+                    /// Sample function that returns a volatile result.
+                    com::sun::star::sheet::XVolatileResult getCounter( [in] string aName );
+                };
             };
-
         };
-      };
     };
-  };
 };
 
 #endif
