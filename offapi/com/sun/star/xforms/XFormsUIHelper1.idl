@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XFormsUIHelper1.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:11:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xforms_XFormsUIHelper1_idl__
+#define __com_sun_star_xforms_XFormsUIHelper1_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_xml_dom_XNode_idl__
+#include <com/sun/star/xml/dom/XNode.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XSet.idl>
+#endif
+
+#ifndef __com_sun_star_xforms_XDataTypeRepository_idl__
+#include <com/sun/star/xforms/XDataTypeRepository.idl>
+#endif
+
+#ifndef __com_sun_star_xml_dom_XDocument_idl__
+#include <com/sun/star/xml/dom/XDocument.idl>
+#endif
+
+#ifndef __com_sun_star_xml_dom_XDocument_idl__
+#include <com/sun/star/xml/dom/XNode.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+
+#ifndef __com_sun_star_xforms_XModel_idl__
+#include <com/sun/star/xforms/XModel.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xforms {
+
+//=============================================================================
+
+/** provide several helper methods for the UI
+
+    <b>This interfaces is for UI use only, and will likely be unsupported in
+    future versions.</p>
+*/
+interface XFormsUIHelper1
+{
+    string getDefaultServiceNameForNode( [in] com::sun::star::xml::dom::XNode xNode );
+
+    string getDefaultBindingExpressionForNode( [in] com::sun::star::xml::dom::XNode xNode );
+
+    string getNodeDisplayName( [in] com::sun::star::xml::dom::XNode xNode,
+                               [in] boolean bDetail );
+
+    string getNodeName( [in] com::sun::star::xml::dom::XNode xNode );
+
+    string getBindingName( [in] com::sun::star::beans::XPropertySet xBinding,
+                           [in] boolean bDetail );
+
+    string getSubmissionName( [in] com::sun::star::beans::XPropertySet xSubm,
+                              [in] boolean bDetail );
+
+
+    // handle instances
+
+    com::sun::star::xml::dom::XDocument newInstance( [in] string sName,
+                      [in] string sURL,
+                      [in] boolean bURLOnce );
+
+    void renameInstance( [in] string sFrom, [in] string sTo );
+
+    void removeInstance( [in] string sName );
+
+
+    // handle models
+    com::sun::star::xforms::XModel newModel( [in] com::sun::star::frame::XModel xModel,
+                   [in] string sName );
+    void renameModel( [in] com::sun::star::frame::XModel xModel,
+                      [in] string sFrom, [in] string sTo );
+    void removeModel( [in] com::sun::star::frame::XModel xModel,
+                      [in] string sName );
+
+
+    // DOM helpers
+    com::sun::star::xml::dom::XNode
+        createElement( [in] com::sun::star::xml::dom::XNode xParent,
+                       [in] string sName );
+    com::sun::star::xml::dom::XNode
+        createAttribute( [in] com::sun::star::xml::dom::XNode xParent,
+                         [in] string sName );
+
+    com::sun::star::xml::dom::XNode renameNode(
+        [in] com::sun::star::xml::dom::XNode xNode,
+        [in] string sName );
+
+    com::sun::star::beans::XPropertySet getBindingForNode(
+        [in] com::sun::star::xml::dom::XNode xNode,
+        [in] boolean bCreate );
+
+    void removeBindingForNode(
+        [in] com::sun::star::xml::dom::XNode xNode );
+
+    string getResultForExpression(
+        [in] com::sun::star::beans::XPropertySet xBinding,
+        [in] boolean bIsBindingExpression,
+        [in] string sExpression );
+
+    boolean isValidXMLName( [in] string sName );
+
+    boolean isValidPrefixName( [in] string sName );
+
+    void setNodeValue(
+        [in] com::sun::star::xml::dom::XNode xNode,
+        [in] string sValue );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
