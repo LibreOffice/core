@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.5 2000-11-06 14:43:09 cl Exp $
+	$Id: dtypes.mod,v 1.6 2000-11-22 12:59:44 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -158,6 +158,6 @@
 <!ENTITY % shapes "(draw:rect|draw:line|draw:polyline|draw:polygon|draw:path|
 					draw:circle|draw:ellipse|draw:g|draw:page-thumbnail|
 					text:text-box|office:image|draw:measure|draw:caption|
-					draw:connector)" >
+					draw:connector|chart:chart)" >
 
 <!ENTITY % anchorType "(page|frame|paragraph|char|as-char)">
