@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:19:20 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,14 @@ namespace
     typedef uno::Reference< script::XTypeConverter > TypeConverter;
 
     static inline
-    uno::Reference< uno::XInterface > createTCV(BasicParser::ServiceFactory const & _xSvcFactory)
+    uno::Reference< uno::XInterface > createTCV(BasicParser::Context const & _xContext)
     {
-        OSL_ENSURE(_xSvcFactory.is(),"Cannot create Parser without a ServiceManager");
+        OSL_ENSURE(_xContext.is(),"Cannot create Parser without a Context");
 
         static const rtl::OUString k_sTCVService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"));
 
-        return TypeConverter::query(_xSvcFactory->createInstance(k_sTCVService));
+        uno::Reference< lang::XMultiComponentFactory > xSvcFactory = _xContext->getServiceManager();
+        return TypeConverter::query(xSvcFactory->createInstanceWithContext(k_sTCVService,_xContext));
     }
 
     static inline
@@ -140,10 +141,10 @@ struct BasicParser::ValueData : ValueConverter
 };
 // -----------------------------------------------------------------------------
 
-BasicParser::BasicParser(ServiceFactory const & _xSvcFactory)
-: m_xTypeConverter( createTCV(_xSvcFactory) )
+BasicParser::BasicParser(Context const & _xContext)
+: m_xTypeConverter( createTCV(_xContext) )
 , m_xLocator(NULL)
-, m_aDataParser()
+, m_aDataParser(Logger(_xContext))
 , m_aNodes()
 , m_aValueType()
 , m_pValueData(NULL)
@@ -531,6 +532,7 @@ void BasicParser::raiseParseException( uno::Any const & _aTargetException, sal_C
     if (_aTargetException >>= aEx)
         sMessage += aEx.Message;
 
+    getLogger().error(sMessage,"parse","configuration::xml::BasicParser");
     throw sax::SAXException( sMessage, *this, _aTargetException );
 }
 // -----------------------------------------------------------------------------
@@ -544,6 +546,7 @@ void BasicParser::raiseParseException( sal_Char const * _pMsg )
 
     OUString const sMessage = OUString::createFromAscii(_pMsg);
 
+    getLogger().error(sMessage,"parse","configuration::xml::BasicParser");
     throw sax::SAXException( sMessage, *this, uno::Any() );
 }
 // -----------------------------------------------------------------------------
