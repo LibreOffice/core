@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:43:44 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 07:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,26 +80,17 @@ namespace dbaui
     // ------------------
     // - DBTreeListModel -
     // ------------------
-    class DBTreeListModel : public SvLBoxTreeList,
-                            public dbaui::OModuleClient
+    class DBTreeListModel : public SvLBoxTreeList
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                        m_xDatabaseContext;     /// database context we're working in
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        m_xORB;
-
-        void insertEntries(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xNameAccess,SvLBoxEntry* _pParent,const Image& _rImage);
     public:
         struct DBTreeListUserData
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInterface;
-            sal_Bool bTable;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                        xObject;
+            sal_Bool    bTable;
         };
 
-        DBTreeListModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xMultiServiceFacatory);
-        ~DBTreeListModel();
-
-        void fillEntry(SvLBoxEntry* _pParent);
+        DBTreeListModel();
     };
 }
 
