@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:24 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,6 +638,12 @@ void SwXMLImport::endDocument( void )
         SvXMLGraphicHelper::Destroy( pGraphicResolver );
     if( pEmbeddedResolver )
         SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
+    // Clear the shape import to sort the shapes  (and not in the
+    // destructor that might be called after the import has finished
+    // for Java filters.
+    if( HasShapeImport() )
+        ClearShapeImport();
+
 
     SwDoc *pDoc = 0;
     if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
@@ -768,6 +774,9 @@ void SwXMLImport::endDocument( void )
             }
         }
     }
+
+    /* #108146# Was called too early. Moved from
+        SwXMLBodyContext_Impl::EndElement */
 
     GetTextImport()->RedlineAdjustStartNodeCursor( sal_False );
 
@@ -1179,7 +1188,6 @@ void main()
         }
         pValues++;
     }
-//<<<<<<< xmlimp.cxx
 
     // finally, treat the non-default cases
     if( ! bPrinterIndependentLayout )
