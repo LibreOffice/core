@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:00:22 $
+ *  last change: $Author: obo $ $Date: 2004-08-16 08:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,10 +688,12 @@ public:
     FASTBOOL GoPrevCell();
     // gehe zu dieser Box (wenn vorhanden und in Tabelle!)
     FASTBOOL GotoTable( const String& rName );
+    FASTBOOL GotoTblBox( const String& rName );
 
     // select a table row, column or box (based on the current cursor)
     FASTBOOL SelTblRow();
     FASTBOOL SelTblCol();
+    FASTBOOL SelTblBox();
 
     // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
     FASTBOOL GotoNextNum();
