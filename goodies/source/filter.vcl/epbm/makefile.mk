@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+#   last change: $Author: sj $ $Date: 2001-03-08 10:03:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,10 +99,7 @@ RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
 SHL1TARGET= 	epb$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	epbm
-SHL1STDLIBS=	$(TOOLSLIB)		\
-                $(SVLIB)		\
-                $(CPPULIB)		\
-                $(SVTOOLLIB)
+SHL1STDLIBS=	$(TOOLSLIB) $(SVLIB) $(CPPULIB)	$(SVTOOLLIB) $(SALLIB)
 
 SHL1DEPN=		$(LB)$/epbm.lib
 SHL1LIBS=		$(SLB)$/epbm.lib

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepbm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 10:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #pragma hdrstop
 #include <tools/ref.hxx>
-#include <vcl/config.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include <vcl/msgbox.hxx>
 #include "dlgepbm.hxx"
 #include "dlgepbm.hrc"
@@ -81,15 +81,15 @@ DlgExportEPBM::DlgExportEPBM( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
     // Config-Parameter lesen
 
-    String aFormatStr( ResId( KEY_FORMAT, pMgr ) );
-    sal_Int32   nFormat = pConfig->ReadKey( ByteString( aFormatStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PBM" ) );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    sal_Int32   nFormat = pConfigItem->ReadInt32( String( ResId( KEY_FORMAT, pMgr ) ), 1 );
 
     BOOL bCheck = FALSE;
     if ( !nFormat )
@@ -102,6 +102,11 @@ DlgExportEPBM::DlgExportEPBM( FltCallDialogParameter& rPara ) :
     aBtnOK.SetClickHdl( LINK( this, DlgExportEPBM, OK ) );
 }
 
+DlgExportEPBM::~DlgExportEPBM()
+{
+    delete pConfigItem;
+}
+
 /*************************************************************************
 |*
 |* Speichert eingestellte Werte in ini-Datei
@@ -112,14 +117,10 @@ IMPL_LINK( DlgExportEPBM, OK, void *, EMPTYARG )
 {
 
     // Config-Parameter schreiben
-    String aStr;
-
-    sal_Int32 nCheck = 0;
+    sal_Int32 nFormat = 0;
     if ( aRBASCII.IsChecked() )
-        nCheck++;
-    String aFormatStr( ResId( KEY_FORMAT, pMgr ) );
-    pConfig->WriteKey( ByteString( aFormatStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nCheck ) );
-
+        nFormat++;
+    pConfigItem->WriteInt32( String( ResId( KEY_FORMAT, pMgr ) ), nFormat );
     EndDialog( RET_OK );
 
     return 0;

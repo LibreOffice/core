@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepbm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 10:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@
 |*
 \************************************************************************/
 
-class Config;
 class ResMgr;
 
+class FilterConfigItem;
 class DlgExportEPBM : public ModalDialog
 {
 private:
@@ -89,13 +89,14 @@ private:
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
 
-    Config*             pConfig;
+    FilterConfigItem*   pConfigItem;
     ResMgr*             pMgr;
 
     DECL_LINK( OK, void * );
 
 public:
             DlgExportEPBM( FltCallDialogParameter& rPara );
+            ~DlgExportEPBM();
 };
 
 #endif // _DLGEPBM_HXX_

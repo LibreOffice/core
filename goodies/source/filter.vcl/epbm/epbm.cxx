@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epbm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 10:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/config.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include "strings.hrc"
 #include "dlgepbm.hrc"
 #include "dlgepbm.hxx"
@@ -83,7 +83,7 @@ private:
     USHORT              mpOStmOldModus;
 
     BOOL                mbStatus;
-    UINT32              mnMode;             // 0 -> raw, 1-> ascii
+    sal_Int32           mnMode;             // 0 -> raw, 1-> ascii
     BitmapReadAccess*   mpAcc;
     ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
@@ -98,7 +98,7 @@ public:
 
     BOOL                WritePBM( const Graphic& rGraphic, SvStream& rPBM,
                                   PFilterCallback pCallback, void* pCallerdata,
-                                  Config* pOptionsConfig );
+                                  FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von PBMWriter ==============================
@@ -134,17 +134,15 @@ BOOL PBMWriter::ImplCallback( USHORT nPercent )
 
 BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM,
                           PFilterCallback pCallback, void* pCallerdata,
-                          Config* pOptionsConfig )
+                          FilterConfigItem* pConfigItem )
 {
 
     mpOStm = &rPBM;
     mpCallback = pCallback;
     mpCallerData = pCallerdata;
 
-    if ( pOptionsConfig )
-    {
-        mnMode = pOptionsConfig->ReadKey( "PBM-EXPORT-FORMAT", "0" ).ToInt32();
-    }
+    if ( pConfigItem )
+        mnMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFPBM-EXPORT-FORMAT" ) ), 0 );
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     Bitmap      aBmp = aBmpEx.GetBitmap();
@@ -240,7 +238,7 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
 {
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
-    for( sal_Int32 n = 0, nLen = aNum.Len(); n < nLen; n++ )
+    for( sal_Int16 n = 0, nLen = aNum.Len(); n < nLen; n++ )
         *mpOStm << aNum.GetChar( n );
 
 }
@@ -253,11 +251,11 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                PFilterCallback pCallback, void* pCallerData,
-                                               Config* pOptionsConfig, BOOL )
+                                               FilterConfigItem* pConfigItem, BOOL )
 {
     PBMWriter aPBMWriter;
 
-    return aPBMWriter.WritePBM( rGraphic, rStream, pCallback, pCallerData, pOptionsConfig );
+    return aPBMWriter.WritePBM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
 // ------------------------------------------------------------------------
@@ -266,7 +264,7 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 {
     BOOL bRet = FALSE;
 
-    if ( rPara.pWindow && rPara.pCfg )
+    if ( rPara.pWindow )
     {
         ByteString  aResMgrName( "epb" );
         ResMgr* pResMgr;
