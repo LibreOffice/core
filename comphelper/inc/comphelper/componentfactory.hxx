@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentfactory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: kz $ $Date: 2001-05-15 11:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #ifndef _COMPHELPER_COMPONENTFACTORY_HXX
 #define _COMPHELPER_COMPONENTFACTORY_HXX
+
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 
 /**
