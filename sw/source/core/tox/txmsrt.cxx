@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 09:32:38 $
+ *  last change: $Author: fme $ $Date: 2002-08-22 07:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,14 +984,10 @@ BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
         for(USHORT i = 0; i < pType->GetSortKeyCount(); i++)
         {
             const SwTOXSortKey* pKey = pType->GetSortKey(i);
-
-            String sMyTxt;
+            String sMyTxt = pField->GetFieldText(pKey->eField);
             String sMyTxtReading;
-            GetTxt( sMyTxt, sMyTxtReading );
-
-            String sOtherTxt;
+            String sOtherTxt = pCmpField->GetFieldText(pKey->eField);
             String sOtherTxtReading;
-            rBase.GetTxt( sOtherTxt, sOtherTxtReading );
 
             sal_Int32 nComp = pTOXIntl->Compare( sMyTxt, sMyTxtReading, GetLocale(),
                                                  sOtherTxt, sOtherTxtReading, rBase.GetLocale() );
