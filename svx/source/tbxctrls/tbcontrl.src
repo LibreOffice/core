@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 20:23:00 $
+ *  last change: $Author: obo $ $Date: 2001-08-29 20:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ String RID_SVXSTR_TRANSPARENT
     Text[ turkish ] = "Dolgu yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sin relleno";
-    Text[ finnish ] = "Ei täyttöä";
+    Text[ finnish ] = "Ei t?ytt?";
 };
 String RID_SVXSTR_FILLPATTERN
 {
@@ -197,7 +197,7 @@ String RID_SVXSTR_FRAME_COLOR
     Text [ italian ] = "Colore bordo" ;
     Text [ portuguese_brazilian ] = "Cor da Borda" ;
     Text [ portuguese ] = "Cor do contorno" ;
-    Text [ finnish ] = "Reunan väri" ;
+    Text [ finnish ] = "Reunan v?ri" ;
     Text [ danish ] = "Rammefarve" ;
     Text [ french ] = "Couleur de bordure" ;
     Text [ swedish ] = "Inramningsfärg" ;
@@ -340,6 +340,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
 };
 
 // ********************************************************************** EOF
+
 
 
 
