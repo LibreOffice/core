@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-05 17:01:08 $
+#   last change: $Author: nf $ $Date: 2001-04-18 09:52:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,15 +76,6 @@ NO_DEFAULT_STL=TRUE
 .INCLUDE :  ../static.mk
 
 # --- Files --------------------------------------------------------
-
-APP1TARGET= javadep
-APP1OBJS=	$(OBJ)$/javadep.obj
-APP1STDLIBS=$(STATIC_LIBS) 
-
-.IF "$(GUI)"=="UNX"
-APP2TARGET= checkdll
-APP2OBJS=	$(OBJ)$/checkdll.obj
-.ENDIF
 
 APP3TARGET=	mkunroll
 APP3OBJS=   $(OBJ)$/mkfilt.obj
