@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:13:43 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 12:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,24 +86,18 @@ void Change::swap(Change& aOther)
 //= SubtreeChange
 //==========================================================================
 //--------------------------------------------------------------------------
-SubtreeChange::SubtreeChange(OUString const& _rName)
-    :Change(_rName)
-{
-}
-//--------------------------------------------------------------------------
-
 void SubtreeChange::swap(SubtreeChange& aOther)
 {
     Change::swap(aOther);
-    m_mChanges.swap(aOther.m_mChanges);
+    m_aChanges.swap(aOther.m_aChanges);
     std::swap(m_sTemplateName, aOther.m_sTemplateName);
 }
 
 //--------------------------------------------------------------------------
 SubtreeChange::~SubtreeChange()
 {
-    for(Children::iterator aIter = m_mChanges.begin();
-        aIter != m_mChanges.end();
+    for(Children::iterator aIter = m_aChanges.begin();
+        aIter != m_aChanges.end();
         ++aIter)
     {
         // Change* pChange = aIter->second;
@@ -115,22 +109,22 @@ SubtreeChange::~SubtreeChange()
 void SubtreeChange::addChange(std::auto_ptr<Change> aChange)
 {
     OUString aNodeName(aChange->getNodeName());
-    OSL_ENSHURE(m_mChanges.end() == m_mChanges.find(aNodeName),
+    OSL_ENSHURE(m_aChanges.end() == m_aChanges.find(aNodeName),
         "SubtreeChange::addChange : overwriting an existent change !");
-    delete m_mChanges[aNodeName];
-    m_mChanges[aNodeName] = aChange.release();
+    delete m_aChanges[aNodeName];
+    m_aChanges[aNodeName] = aChange.release();
 }
 
 //--------------------------------------------------------------------------
 ::std::auto_ptr<Change> SubtreeChange::removeChange(OUString const& _rName)
 {
-    Children::iterator aIter = m_mChanges.find(_rName);
+    Children::iterator aIter = m_aChanges.find(_rName);
 
     ::std::auto_ptr<Change> aReturn;
-    if (m_mChanges.end() != aIter)
+    if (m_aChanges.end() != aIter)
     {
         aReturn = ::std::auto_ptr<Change>(aIter->second);
-        m_mChanges.erase(aIter);
+        m_aChanges.erase(aIter);
     }
     return aReturn;
 }
@@ -162,8 +156,8 @@ void SubtreeChange::dispatch(ChangeTreeModification& _anAction)
 //--------------------------------------------------------------------------
 void SubtreeChange::forEachChange(ChangeTreeAction& _anAction) const
 {
-    ::std::map< ::rtl::OUString,Change* >::const_iterator aIter = m_mChanges.begin();
-    for(;aIter != m_mChanges.end();)
+    ::std::map< ::rtl::OUString,Change* >::const_iterator aIter = m_aChanges.begin();
+    for(;aIter != m_aChanges.end();)
     {
         ::std::map< ::rtl::OUString,Change* >::const_iterator aNextIter = aIter;
         ++aNextIter;
@@ -175,16 +169,16 @@ void SubtreeChange::forEachChange(ChangeTreeAction& _anAction) const
 //--------------------------------------------------------------------------
 void SubtreeChange::forEachChange(ChangeTreeModification& _anAction)
 {
-    ::std::map< ::rtl::OUString,Change* >::const_iterator aIter = m_mChanges.begin();
-    for(;aIter != m_mChanges.end();++aIter)
+    ::std::map< ::rtl::OUString,Change* >::const_iterator aIter = m_aChanges.begin();
+    for(;aIter != m_aChanges.end();++aIter)
         aIter->second->dispatch(_anAction);
 }
 
 //--------------------------------------------------------------------------
 Change* SubtreeChange::doGetChild(OUString const& _rName) const
 {
-    Children::const_iterator aIter = m_mChanges.find(_rName);
-    return (aIter != m_mChanges.end()) ? aIter->second : NULL;
+    Children::const_iterator aIter = m_aChanges.find(_rName);
+    return (aIter != m_aChanges.end()) ? aIter->second : NULL;
 }
 
 //--------------------------------------------------------------------------
@@ -193,8 +187,8 @@ uno::Sequence< OUString > SubtreeChange::elementNames() const
     uno::Sequence< OUString > aReturn(size());
     OUString* pReturn = aReturn.getArray();
 
-    for (   Children::const_iterator aCollector = m_mChanges.begin();
-            aCollector != m_mChanges.end();
+    for (   Children::const_iterator aCollector = m_aChanges.begin();
+            aCollector != m_aChanges.end();
             ++aCollector, ++pReturn
         )
     {
@@ -207,13 +201,13 @@ uno::Sequence< OUString > SubtreeChange::elementNames() const
 //--------------------------------------------------------------------------
 SubtreeChange::MutatingChildIterator SubtreeChange::begin_changes() throw()
 {
-    return MutatingChildIterator(m_mChanges.begin());
+    return MutatingChildIterator(m_aChanges.begin());
 }
 
 //--------------------------------------------------------------------------
 SubtreeChange::MutatingChildIterator SubtreeChange::end_changes() throw()
 {
-    return MutatingChildIterator(m_mChanges.end());
+    return MutatingChildIterator(m_aChanges.end());
 }
 
 //--------------------------------------------------------------------------
@@ -295,6 +289,9 @@ bool operator==(SubtreeChange::ChildIterator const& lhs, SubtreeChange::ChildIte
 SubtreeChangeReferrer::SubtreeChangeReferrer(const SubtreeChange& _rSource)
     :SubtreeChange(_rSource.getNodeName())
 {
+    // don't forget the template name
+    setChildTemplateName(_rSource.getChildTemplateName());
+
     ChildIterator aSourceChildren = _rSource.begin();
     while (aSourceChildren != _rSource.end())
     {
@@ -321,8 +318,8 @@ SubtreeChangeReferrer::SubtreeChangeReferrer(const SubtreeChange& _rSource)
 //--------------------------------------------------------------------------
 SubtreeChangeReferrer::~SubtreeChangeReferrer()
 {
-    for (   Children::iterator aChildren = m_mChanges.begin();
-            aChildren != m_mChanges.end();
+    for (   Children::iterator aChildren = m_aChanges.begin();
+            aChildren != m_aChanges.end();
             ++aChildren
         )
     {
@@ -333,7 +330,7 @@ SubtreeChangeReferrer::~SubtreeChangeReferrer()
             )
         {
             // we just hold references to the non-SubtreeChange-objects, so don't delete them
-            m_mChanges.erase(aChildren);
+            m_aChanges.erase(aChildren);
         }
         else if (   pChange->isA(SubtreeChange::getStaticType())
                 ||  pChange->isA(SubtreeChangeReferrer::getStaticType())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:13:43 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 12:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,14 @@ ValueChange::ValueChange(SetToDefault,  ValueNode const& aOldValue)
      ,m_eMode(setToDefault)
 {
 }
+
+// -------------------------------------------------------------------------
+ValueChange::ValueChange(const ValueChange& _rChange)
+            :Change(_rChange.getNodeName())
+            ,m_aValue(_rChange.getNewValue())
+            ,m_aOldValue(_rChange.getOldValue())
+            ,m_eMode(_rChange.getMode())
+{}
 
 // -------------------------------------------------------------------------
 namespace tree_changes_internal {
