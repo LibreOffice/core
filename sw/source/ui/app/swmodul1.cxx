@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 11:14:45 $
+ *  last change: $Author: os $ $Date: 2001-02-15 09:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,12 +613,6 @@ void SwModule::ExecDB(SfxRequest &rReq)
             {
                 SwWrtShell &rSh = GetView()->GetWrtShell();
                 sDBName = rSh.GetDBName();
-#ifdef DEBUG
-                sDBName = String::CreateFromAscii("Address Book File");
-                sDBName += DB_DELIM;
-                sDBName += String::CreateFromAscii("address");
-#endif //DEBUG
-
                 rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
                                     // das Mischen von DB-Feldern notwendig.
                 GetView()->AttrChangedNotify( &rSh );
@@ -632,7 +626,7 @@ void SwModule::ExecDB(SfxRequest &rReq)
                 uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
 
                 uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
-                    OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::ALL);
+                    OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
 
                 if(xBeamerFrame.is())
                 {
@@ -642,8 +636,9 @@ void SwModule::ExecDB(SfxRequest &rReq)
                     {
                         OUString uEmpty;
                          util::URL aURL;
-                        aURL.Complete = OUString::createFromAscii(".uno:WriterDB/MailMerge");
-                        uno::Reference< frame::XDispatch >  xDisp = xDispProv->queryDispatch(aURL, uEmpty, frame::FrameSearchFlag::AUTO);
+                        aURL.Complete = OUString::createFromAscii(".uno:DataSourceBrowser/FormLetter");
+                        uno::Reference< frame::XDispatch >  xDisp = xDispProv->queryDispatch(
+                                                    aURL, uEmpty, frame::FrameSearchFlag::AUTO);
                         if(xDisp.is())
                         {
                             uno::Reference< frame::XStatusListener >  xDispatchListener =
