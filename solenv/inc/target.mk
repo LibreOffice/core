@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-05 15:30:49 $
+#   last change: $Author: hjs $ $Date: 2001-11-07 14:28:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1432,9 +1432,6 @@ HXXCOPYTARGET=	copy_hxxcopyfiles
 .ENDIF
 
 .IF "$(IMGLST_SRS)"!=""
-.IF "$(NO_REC_RES)"==""
-IMGLSTTARGET=$(MISCX)$/$(TARGET)_img.don
-.ELSE
 .IF "$(make_srs_deps)"==""
 .IF "$(common_build_reslib)"!=""
 IMGLSTTARGET=$(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)_img$i.don)
@@ -1442,7 +1439,6 @@ IMGLSTTARGET=$(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MIS
 IMGLSTTARGET=$(foreach,i,$(alllangext) $(MISC)$/$(TARGET)_img$i.don)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF			# "$(make_srs_deps)"==""
-.ENDIF			# "$(NO_REC_RES)"==""
 .ENDIF			# "$(IMGLST_SRS)"!=""
 
 .IF "$(LIB1TARGET)" != ""
@@ -1504,128 +1500,110 @@ LIB9ARCHIV=
 
 .IF "$(RESLIB1NAME)" != ""
 RESLIB1 ?= TNR!:=1
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB1TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(UPD)LANGEXT.res
+RSC_MULTI1=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB1NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB1TARGETN=$(BIN)$/$(RESLIB1NAME)$(UPD)LANGEXT.res
+RSC_MULTI1=$(MISC)$/rsc_$(RESLIB1NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB1TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB1TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB1TARGETN=$(BIN)$/$(RESLIB1NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB2NAME)" != ""
 RESLIB2 ?= TNR!:=2
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB2TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(UPD)LANGEXT.res
+RSC_MULTI2=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB2NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB2TARGETN=$(BIN)$/$(RESLIB2NAME)$(UPD)LANGEXT.res
+RSC_MULTI2=$(MISC)$/rsc_$(RESLIB2NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB2TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB2TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB2TARGETN=$(BIN)$/$(RESLIB2NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB3NAME)" != ""
 RESLIB3 ?= TNR!:=3
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB3TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(UPD)LANGEXT.res
+RSC_MULTI3=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB3NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB3TARGETN=$(BIN)$/$(RESLIB3NAME)$(UPD)LANGEXT.res
+RSC_MULTI3=$(MISC)$/rsc_$(RESLIB3NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB3TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB3TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB3TARGETN=$(BIN)$/$(RESLIB3NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB4NAME)" != ""
 RESLIB4 ?= TNR!:=4
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB4TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(UPD)LANGEXT.res
+RSC_MULTI4=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB4NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB4TARGETN=$(BIN)$/$(RESLIB4NAME)$(UPD)LANGEXT.res
+RSC_MULTI4=$(MISC)$/rsc_$(RESLIB4NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB4TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB4TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB4TARGETN=$(BIN)$/$(RESLIB4NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB5NAME)" != ""
 RESLIB5 ?= TNR!:=5
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB5TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(UPD)LANGEXT.res
+RSC_MULTI5=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB5NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB5TARGETN=$(BIN)$/$(RESLIB5NAME)$(UPD)LANGEXT.res
+RSC_MULTI5=$(MISC)$/rsc_$(RESLIB5NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB5TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB5TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB5TARGETN=$(BIN)$/$(RESLIB5NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB6NAME)" != ""
 RESLIB6 ?= TNR!:=6
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB6TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(UPD)LANGEXT.res
+RSC_MULTI6=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB6NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB6TARGETN=$(BIN)$/$(RESLIB6NAME)$(UPD)LANGEXT.res
+RSC_MULTI6=$(MISC)$/rsc_$(RESLIB6NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB6TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB6TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB6TARGETN=$(BIN)$/$(RESLIB6NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB7NAME)" != ""
 RESLIB7 ?= TNR!:=7
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB7TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(UPD)LANGEXT.res
+RSC_MULTI7=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB7NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB7TARGETN=$(BIN)$/$(RESLIB7NAME)$(UPD)LANGEXT.res
+RSC_MULTI7=$(MISC)$/rsc_$(RESLIB7NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB7TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB7TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB7TARGETN=$(BIN)$/$(RESLIB7NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB8NAME)" != ""
 RESLIB8 ?= TNR!:=8
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB8TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(UPD)LANGEXT.res
+RSC_MULTI8=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB8NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB8TARGETN=$(BIN)$/$(RESLIB8NAME)$(UPD)LANGEXT.res
+RSC_MULTI8=$(MISC)$/rsc_$(RESLIB8NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB8TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB8TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB8TARGETN=$(BIN)$/$(RESLIB8NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(RESLIB9NAME)" != ""
 RESLIB9 ?= TNR!:=9
-.IF "$(NO_REC_RES)"!=""
 .IF "$(common_build_reslib)"!=""
 RESLIB9TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(UPD)LANGEXT.res
+RSC_MULTI9=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB9NAME)
 .ELSE			# "$(common_build_reslib)"!=""
 RESLIB9TARGETN=$(BIN)$/$(RESLIB9NAME)$(UPD)LANGEXT.res
+RSC_MULTI9=$(MISC)$/rsc_$(RESLIB9NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
 RESLIB9TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB9TARGETN:s/LANGEXT/$i/))
-.ELSE			# "$(NO_REC_RES)"!=""
-RESLIB9TARGETN=$(BIN)$/$(RESLIB9NAME)$(UPD)$(LANGEXT).res
-.ENDIF			# "$(NO_REC_RES)"!=""
 .ENDIF
 
 .IF "$(INDPRESLIB1NAME)"!=""
@@ -1816,12 +1794,6 @@ ALL_JAVA_TARGETS= \
 
 # bei MAKE...DIR die gleiche Reihenfolge wie in settings.mak einhalten!
 
-.IF "$(NO_REC_RES)"==""
-.IF "$(solarlang)" != "deut"
-MAKELANGDIR=makelang.dir
-.ENDIF
-.ENDIF
-
 .IF "$(lintit)"==""
 .IF "$(L10N_framework)"!=""
 ALLTAR:	\
@@ -1858,6 +1830,15 @@ ALLTAR:	\
         $(SRC13TARGET)	$(SRC14TARGET)	$(SRC15TARGET)		\
         $(SRC16TARGET) \
         $(IMGLSTTARGET) \
+        $(RSC_MULTI1) \
+        $(RSC_MULTI2) \
+        $(RSC_MULTI3) \
+        $(RSC_MULTI4) \
+        $(RSC_MULTI5) \
+        $(RSC_MULTI6) \
+        $(RSC_MULTI7) \
+        $(RSC_MULTI8) \
+        $(RSC_MULTI9) \
         $(INDPRESLIB1TARGETN) \
         $(RESLIB1TARGETN) $(RESLIB2TARGETN) \
         $(RESLIB3TARGETN) $(RESLIB4TARGETN) \
@@ -1978,11 +1959,21 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(SRC13TARGET)	$(SRC14TARGET)	$(SRC15TARGET)		\
         $(SRC16TARGET) \
         $(IMGLSTTARGET) \
+        $(RSC_MULTI1) \
+        $(RSC_MULTI2) \
+        $(RSC_MULTI3) \
+        $(RSC_MULTI4) \
+        $(RSC_MULTI5) \
+        $(RSC_MULTI6) \
+        $(RSC_MULTI7) \
+        $(RSC_MULTI8) \
+        $(RSC_MULTI9) \
         $(INDPRESLIB1TARGETN) \
         $(RESLIB1TARGETN) $(RESLIB2TARGETN) \
         $(RESLIB3TARGETN) $(RESLIB4TARGETN) \
         $(RESLIB5TARGETN) $(RESLIB6TARGETN) \
         $(RESLIB7TARGETN) $(RESLIB8TARGETN) \
+        $(RESLIB9TARGETN) \
         $(RESLIBSPLIT1TARGETN) $(RESLIBSPLIT2TARGETN)\
         $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
@@ -2145,9 +2136,6 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
     @+echo Making Imagelists:
     @+echo -----------------
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(NO_REC_RES)"==""
-    +$(BMP) $(IMGLST_SRS) $(BMP_IN) $(BMP_OUT) $(solarlang)
-.ELSE
 .IF "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
     @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
@@ -2158,7 +2146,6 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
     +$(BMP) $(IMGLST_SRS) $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) $(lang_{$(subst,$(TARGET)_img, $(@:b))}) -f $@
 .ENDIF			# "$(common_build_reslib)"!=""
-.ENDIF
 .IF "$(BMP_WRITES_FLAG)"==""
     @+echo > $@
 .ENDIF
@@ -2282,10 +2269,12 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 # - RESLIBTARGET -
 # -------
 
+.IF "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
 .IF "$(MK_UNROLL)"!=""
 .INCLUDE : _tg_rslb.mk
 .ELSE
 .INCLUDE : tg_rslb.mk
+.ENDIF
 .ENDIF
 
 # -------
