@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-24 07:34:52 $
+#   last change: $Author: jl $ $Date: 2001-04-24 07:42:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,7 @@ APP1STDLIBS= \
 .IF "$(OS)" == "WNT"
 APP1STDLIBS+=   $(LB)$/isalhelper.lib
 .ELSE
-APP1STDLIBS+=   -lsalhelper2C52
+APP1STDLIBS+=   -lsalhelper$(SALHELPER_MAJOR)$(COM)
 .ENDIF
 
 
