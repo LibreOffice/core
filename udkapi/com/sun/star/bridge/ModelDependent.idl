@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelDependent.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,8 @@
     <p>They are only used for creating bridges to other component models.
 
     @see com::sun::star::bridge::XBridgeSupplier2
-
  */
-constants ModelDependent
+published constants ModelDependent
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR constants::1
