@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ BOOL SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck )
     // wird ueberhaupt ein Bereich umspannt ??
     // - ist kein Bereich, dann nicht returnen wenn am Anfang vom Absatz
     // - Felder aussortieren, koennen keinen Bereich haben !!
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     USHORT nWhich = pAttr->Which();
 #endif
     if (nMkNode.GetIndex() == nPtNode.GetIndex()
@@ -276,7 +276,7 @@ BOOL SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck )
         pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, FALSE);
     }
     rRegion.GetPoint()->nContent.Assign(pCNd, nPtCntnt);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ASSERT( CheckNodesRange( rRegion.Start()->nNode,
                              rRegion.End()->nNode, TRUE ),
              "Attribut oder AEhnliches ueber Bereichs-Grenzen" );
@@ -537,7 +537,7 @@ static void MakePosition(SwFltStackEntry* pEntry, SwDoc* pDoc, SwPosition& rPosi
     rPosi.nContent.Assign(pCNd, pEntry->nMkCntnt);
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 extern FASTBOOL CheckNodesRange( const SwNodeIndex& rStt,
                     const SwNodeIndex& rEnd, FASTBOOL bChkSection );
 #endif
@@ -1566,7 +1566,7 @@ void SwFltOutDoc::NextTableRow()
         aSelBoxes.Insert( pTableBox );
         GetDoc().InsertRow(aSelBoxes);
 //      GetDoc().InsertRow(pTable->SelLineFromBox(pTableBox, aSelBoxes));
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const SwTableLines* pTableLines = &pTable->GetTabLines();
         SwTableLine* pTableLine = (*pTableLines)[usTableY+1];
         SwTableBoxes* pTableBoxes = &pTableLine->GetTabBoxes();
@@ -1767,7 +1767,7 @@ BOOL SwFltOutDoc::SeekCell(short nRow, short nCol, BOOL bPam)
         pPaM->GetPoint()->nNode = pTableBox->GetSttIdx() + 1;
         pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 //#pragma message(__FILE__ "(?) : Sw's const problem")
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const SwTxtFmtColl* p = GetDoc().GetDfltTxtFmtColl();
         p = GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE);
 #endif
