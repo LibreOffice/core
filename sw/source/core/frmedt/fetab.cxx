@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:45:50 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
+#endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
 #endif
 #ifndef _CELLFRM_HXX
 #include <cellfrm.hxx>
@@ -1272,6 +1275,67 @@ void SwFEShell::SetRowsToRepeat( USHORT nSet )
         GetDoc()->SetRowsToRepeat( *pTab->GetTable(), nSet );
         EndAllActionAndCall();
     }
+}
+/*-- 30.06.2004 08:46:35---------------------------------------------------
+    returns the number of rows consecutively selected from top
+  -----------------------------------------------------------------------*/
+USHORT lcl_GetRowNumber( const SwPosition& rPos )
+{
+    USHORT nRet = USHRT_MAX;
+    Point aTmpPt;
+    const SwCntntNode *pNd;
+    const SwCntntFrm *pFrm;
+
+    if( 0 != ( pNd = rPos.nNode.GetNode().GetCntntNode() ))
+        pFrm = pNd->GetFrm( &aTmpPt, &rPos, FALSE );
+    else
+        pFrm = 0;
+
+    if ( pFrm && pFrm->IsInTab() )
+    {
+        const SwFrm* pRow = pFrm->GetUpper();
+        while ( !pRow->GetUpper()->IsTabFrm() )
+            pRow = pRow->GetUpper();
+
+        const SwTabFrm* pTabFrm = (const SwTabFrm*)pRow->GetUpper();
+        const SwTableLine* pTabLine = static_cast<const SwRowFrm*>(pRow)->GetTabLine();
+
+        USHORT nI = 0;
+        while ( nI < pTabFrm->GetTable()->GetTabLines().Count() )
+        {
+            if ( pTabFrm->GetTable()->GetTabLines()[ nI ] == pTabLine )
+            {
+                nRet = nI;
+                break;
+            }
+            ++nI;
+        }
+    }
+
+    return nRet;
+}
+USHORT SwFEShell::GetRowSelectionFromTop() const
+{
+    USHORT nRet = 0;
+    const SwPaM* pPaM = IsTableMode() ? GetTableCrsr() : _GetCrsr();
+    const USHORT nPtLine = lcl_GetRowNumber( *pPaM->GetPoint() );
+
+    if ( !IsTableMode() )
+    {
+        nRet = 0 == nPtLine ? 1 : 0;
+    }
+    else
+    {
+        const USHORT nMkLine = lcl_GetRowNumber( *pPaM->GetMark() );
+
+        if ( ( nPtLine == 0 && nMkLine != USHRT_MAX ) ||
+             ( nMkLine == 0 && nPtLine != USHRT_MAX ) )
+        {
+            nRet = Max( nPtLine, nMkLine ) + 1;
+        }
+    }
+
+    return nRet;
 }
 
 /*
