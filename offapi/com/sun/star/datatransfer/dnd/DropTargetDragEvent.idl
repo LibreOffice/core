@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropTargetDragEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 09:55:32 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 18:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,14 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDropTargetDragContext;
 
 //=============================================================================
-/** The DropTargetDragEvent is delivered from the DropTarget, to the currently
+/** The DropTargetDragEvent is delivered from the DropTarget to the currently
      registered DropTargetListener.
 
     <p>It contains state regarding the current state of the operation to enable
     the operations initiator to provide the end user with the appropriate drag
     over feedback.</p>
+
+    <!-- Editor: Please reword, "It contains state regarding the current state" -->
 */
 
 struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
@@ -96,19 +98,19 @@ struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
     byte DropAction;
 
     //-------------------------------------------------------------------------
-    /** the cursor's current x location within the windows's coordinates.
+    /** the cursor's current x location within the window's coordinates.
      */
 
     long LocationX;
 
     //-------------------------------------------------------------------------
-    /** the cursor's current y location within the windows's coordinates.
+    /** the cursor's current y location within the window's coordinates.
      */
 
     long LocationY;
 
     //-------------------------------------------------------------------------
-    /** this value represents the action(s) supported by the source.
+    /** this value represents the action or actions supported by the source.
      */
 
     byte SourceActions;
