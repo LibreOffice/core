@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:40:57 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <ctype.h>
 
 #ifndef _RTL_CRC_H_
@@ -601,7 +600,8 @@ BOOL BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                 if( pBmpExSrc->IsAlpha() )
                 {
                     if( IsAlpha() )
-                        aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
+                        // cast to use the optimized AlphaMask::CopyPixel
+                        ((AlphaMask*) &aMask)->CopyPixel( rRectDst, rRectSrc, (AlphaMask*)&pBmpExSrc->aMask );
                     else if( IsTransparent() )
                     {
                         AlphaMask* pAlpha = new AlphaMask( aMask );
