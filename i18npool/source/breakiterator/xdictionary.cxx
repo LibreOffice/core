@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:27:22 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,24 +91,24 @@ xdictionary::xdictionary(sal_Char *lang)
     OUStringBuffer aBuf( strlen(lang) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
 #endif
     aBuf.appendAscii( "dict_" ).appendAscii( lang ).appendAscii( SAL_DLLEXTENSION );
-        oslModule hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
-        if( hModule ) {
-            int (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
-            existMark = (sal_uInt8*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
-            index1 = (sal_Int16*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
-            index2 = (sal_Int32*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
-            lenArray = (sal_Int32*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
-            dataArea = (sal_Unicode*) (*func)();
-        }
-        else
-            existMark = NULL;
-        for (sal_Int32 i = 0; i < CACHE_MAX; i++)
-            cache[i].size = 0;
+    hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+    if( hModule ) {
+        int (*func)();
+        func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
+        existMark = (sal_uInt8*) (*func)();
+        func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
+        index1 = (sal_Int16*) (*func)();
+        func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
+        index2 = (sal_Int32*) (*func)();
+        func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
+        lenArray = (sal_Int32*) (*func)();
+        func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
+        dataArea = (sal_Unicode*) (*func)();
+    }
+    else
+        existMark = NULL;
+    for (sal_Int32 i = 0; i < CACHE_MAX; i++)
+        cache[i].size = 0;
 
         // for CTL breakiterator, which the word boundary should not inside cell.
         useCellBoundary = sal_False;
