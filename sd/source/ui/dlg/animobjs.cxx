@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-14 07:21:23 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 10:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "res_bmp.hrc"
+#include "viewshel.hxx"
 
 #include <string>
 #include <algorithm>
@@ -116,11 +117,11 @@ SFX_IMPL_DOCKINGWINDOW( SdAnimationChildWindow, SID_ANIMATION_OBJECTS)
 
 SdDisplay::SdDisplay( Window* pWin, SdResId Id ) :
         Control( pWin, Id ),
-        pBitmapEx( NULL ),
         aScale( 1, 1 )
 {
     SetMapMode( MAP_PIXEL );
-    SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
 }
 
 // -----------------------------------------------------------------------
@@ -131,24 +132,37 @@ SdDisplay::~SdDisplay()
 
 // -----------------------------------------------------------------------
 
+void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
+{
+    if( pBmpEx )
+    {
+        aBitmapEx = *pBmpEx;
+    }
+    else
+    {
+        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+        const Color aFillColor = rStyles.GetFieldColor();
+        aBitmapEx.Erase(aFillColor);
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void SdDisplay::Paint( const Rectangle& rRect )
 {
-    if( pBitmapEx )
-    {
-        Point aPt;
-        Size aSize = GetOutputSize();
-        Size aBmpSize = pBitmapEx->GetBitmap().GetSizePixel();
-        aBmpSize.Width() = (long) ( (double) aBmpSize.Width() * (double) aScale );
-        aBmpSize.Height() = (long) ( (double) aBmpSize.Height() * (double) aScale );
+    Point aPt;
+    Size aSize = GetOutputSize();
+    Size aBmpSize = aBitmapEx.GetBitmap().GetSizePixel();
+    aBmpSize.Width() = (long) ( (double) aBmpSize.Width() * (double) aScale );
+    aBmpSize.Height() = (long) ( (double) aBmpSize.Height() * (double) aScale );
 
-        if( aBmpSize.Width() < aSize.Width() )
-            aPt.X() = ( aSize.Width() - aBmpSize.Width() ) / 2;
-        if( aBmpSize.Height() < aSize.Height() )
-            aPt.Y() = ( aSize.Height() - aBmpSize.Height() ) / 2;
+    if( aBmpSize.Width() < aSize.Width() )
+        aPt.X() = ( aSize.Width() - aBmpSize.Width() ) / 2;
+    if( aBmpSize.Height() < aSize.Height() )
+        aPt.Y() = ( aSize.Height() - aBmpSize.Height() ) / 2;
 
-        pBitmapEx->Draw( this, aPt, aBmpSize );
-        //DrawBitmap( aPt, aBmpSize, *pBitmap );
-    }
+    aBitmapEx.Draw( this, aPt, aBmpSize );
+    //DrawBitmap( aPt, aBmpSize, *pBitmap );
 }
 
 // -----------------------------------------------------------------------
@@ -156,6 +170,18 @@ void SdDisplay::Paint( const Rectangle& rRect )
 void SdDisplay::SetScale( const Fraction& rFrac )
 {
     aScale = rFrac;
+}
+
+void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Control::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+        SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
+        SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    }
 }
 
 /*************************************************************************
@@ -572,7 +598,41 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
 {
     String aString;
 
-    aCtlDisplay.SetBitmapEx( pBitmapEx );
+    if( pBitmapEx )
+    {
+        BitmapEx aBmp( *pBitmapEx );
+
+        SdPage* pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
+        SdrObject* pObject = (SdrObject*) pPage->GetObj( (ULONG) nListPos );
+        if( pObject )
+        {
+            SdrPaintInfoRec aPaintInfoRec;
+            VirtualDevice   aVD;
+            Rectangle       aObjRect( pObject->GetBoundRect() );
+            Size            aObjSize( aObjRect.GetSize() );
+            Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
+            MapMode         aMap( aVD.GetMapMode() );
+            aMap.SetMapUnit( MAP_100TH_MM );
+            aMap.SetOrigin( aOrigin );
+            aVD.SetMapMode( aMap );
+            aVD.SetOutputSize( aObjSize );
+            const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+            aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
+            //AdjustVDev( &aVD );
+            ExtOutputDevice aOut( &aVD );
+            aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+            aVD.Erase();
+            pObject->Paint( aOut, aPaintInfoRec );
+            aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
+        }
+
+
+        aCtlDisplay.SetBitmapEx( &aBmp );
+    }
+    else
+    {
+        aCtlDisplay.SetBitmapEx( pBitmapEx );
+    }
     aCtlDisplay.Invalidate();
     aCtlDisplay.Update();
 
@@ -1266,6 +1326,16 @@ SdAnimationChildWindow::SdAnimationChildWindow( Window* pParent,
     pAnimWin->aFltWinSize = pWindow->GetSizePixel();
     */
     SetHideNotDelete( TRUE );
+}
+
+void SdAnimationWin::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxDockingWindow::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        UpdateControl( aBmpExList.GetCurPos() );
+    }
 }
 
 /*************************************************************************
