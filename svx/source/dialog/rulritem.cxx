@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:05:59 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,11 @@
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_LEFTRIGHTMARGIN_HPP_
-#include <drafts/com/sun/star/frame/status/LeftRightMargin.hpp>
+#ifndef _COM_SUN_STAR_FRAME_STATUS_LEFTRIGHTMARGIN_HPP_
+#include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_UPPERLOWERMARGIN_HPP_
-#include <drafts/com/sun/star/frame/status/UpperLowerMargin.hpp>
+#ifndef _COM_SUN_STAR_FRAME_STATUS_UPPERLOWERMARGIN_HPP_
+#include <com/sun/star/frame/status/UpperLowerMargin.hpp>
 #endif
 
 //------------------------------------------------------------------------
@@ -115,7 +115,7 @@ sal_Bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE 
     {
         case 0:
         {
-            ::drafts::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
+            ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
             aLeftRightMargin.Left = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
             aLeftRightMargin.Right = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
             rVal <<= aLeftRightMargin;
@@ -143,7 +143,7 @@ sal_Bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
     sal_Int32 nVal;
     if ( nMemberId == 0 )
     {
-        drafts::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
+        ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
         if ( rVal >>= aLeftRightMargin )
         {
             lLeft    = bConvert ? MM100_TO_TWIP( aLeftRightMargin.Left ) : aLeftRightMargin.Left;
@@ -240,7 +240,7 @@ sal_Bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE 
     {
         case 0:
         {
-            drafts::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
+            ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
             aUpperLowerMargin.Upper = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
             aUpperLowerMargin.Lower = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
             rVal <<= aUpperLowerMargin;
@@ -268,7 +268,7 @@ sal_Bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
     sal_Int32 nVal;
     if ( nMemberId == 0 )
     {
-        drafts::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
+        ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
         if ( rVal >>= aUpperLowerMargin )
         {
             lLeft    = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
