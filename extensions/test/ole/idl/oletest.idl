@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-04 16:01:00 $
+ *  last change: $Author: jl $ $Date: 2002-09-13 06:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,14 @@ interface XTestInterfaces: com::sun::star::uno::XInterface
     // Any test
     void testInterface( [in] oletest::XCallback xCallback, [in] long mode);
     void testInterface2( [in] oletest::XSimple xSimple, [in] long mode);
+};
+
+interface XIdentity: com::sun::star::uno::XInterface
+{
+    void setObject([in] com::sun::star::uno::XInterface val);
+    boolean isSame( [in] com::sun::star::uno::XInterface val);
+
+    com::sun::star::uno::XInterface getThis();
 };
 
 }; // oletest

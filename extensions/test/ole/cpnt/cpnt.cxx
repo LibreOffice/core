@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-04 15:59:47 $
+ *  last change: $Author: jl $ $Date: 2002-09-13 06:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring>
@@ -86,6 +86,7 @@
 #include <oletest/XSimple3.hpp>
 #include <oletest/XTestInParameters.hpp>
 #include <oletest/XTestOutParameters.hpp>
+#include <oletest/XIdentity.hpp>
 #include <com/sun/star/beans/Property.hpp>
 using namespace cppu;
 using namespace osl;
@@ -103,10 +104,11 @@ using namespace com::sun::star::reflection;
 #define KEY1 L"/oletest.OleTestImpl/UNO/SERVICES"
 #define KEY2 L"oletest.OleTest"
 
-class OComponent : public WeakImplHelper7<
+class OComponent : public WeakImplHelper8<
          XTestSequence, XTestStruct, XTestOther, XTestInterfaces,
-                   XSimple, XTestOutParameters, XTestInParameters >
+                   XSimple, XTestOutParameters, XTestInParameters, XIdentity >
 {
+    Reference<XInterface> m_xIntIdentity;
     sal_Int32 m_arrayConstructor;
     Reference<XMultiServiceFactory> m_rFactory;
 
@@ -273,6 +275,10 @@ public: // XTestSequence
     void SAL_CALL func( const OUString &message) throw(::com::sun::star::uno::RuntimeException);
     OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
+    // XIdentity
+    virtual void SAL_CALL setObject( const Reference< XInterface >& val ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL isSame( const Reference< XInterface >& val ) throw (RuntimeException);
+    virtual Reference< XInterface > SAL_CALL getThis(  ) throw (RuntimeException);
 };
 
 class EventListener: public WeakImplHelper1<XEventListener>
@@ -295,7 +301,9 @@ OComponent::~OComponent()
 
 Reference<XInterface> SAL_CALL OComponent_CreateInstance( const Reference<XMultiServiceFactory> & rSMgr ) throw(RuntimeException)
 {
-    Reference<XInterface> xService = *new OComponent( rSMgr );
+//  Reference<XInterface> xService(static_cast<XWeak*>(new OComponent( rSMgr )), UNO_QUERY);
+    OComponent* o= new OComponent( rSMgr );
+    Reference<XInterface> xService(static_cast<XIdentity*>(o), UNO_QUERY);
     return xService;
 }
 
@@ -458,6 +466,13 @@ Sequence< Any > SAL_CALL OComponent::methodAny(const Sequence< Any >& aSeq) thro
 //  throw (RuntimeException)
 Sequence< Reference< XInterface > > SAL_CALL OComponent::methodXInterface( const Sequence< Reference< XInterface > >& aSeq ) throw(RuntimeException)
 {
+    for( sal_Int32 i= 0; i < aSeq.getLength(); i++)
+    {
+        Reference<XInterface> xInt= aSeq[i];
+        Reference<XEventListener> xList( xInt, UNO_QUERY);
+        if( xList.is())
+            xList->disposing( EventObject());
+    }
     return aSeq;
 }
 
@@ -1708,6 +1723,26 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
     }
 
+}
+
+void SAL_CALL OComponent::setObject( const Reference< XInterface >& val ) throw (RuntimeException)
+{
+    m_xIntIdentity= val;
+}
+
+sal_Bool SAL_CALL OComponent::isSame( const Reference< XInterface >& val ) throw (RuntimeException)
+{
+    if( m_xIntIdentity == val)
+        return sal_True;
+    else
+        return sal_False;
+}
+
+Reference< XInterface > SAL_CALL OComponent::getThis(  ) throw (RuntimeException)
+{
+//    return Reference<XInterface>(static_cast<XIdentity*>(this), UNO_QUERY);
+    Reference<XInterface> ret(static_cast<XIdentity*>(this), UNO_QUERY);
+    return ret;
 }
 
 void SAL_CALL EventListener::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
