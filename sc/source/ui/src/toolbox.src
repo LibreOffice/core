@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:11:17 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 14:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: tbe $ $Date: 2000-11-10 16:11:17 $ $Revision: 1.5 $
+ // $Author: nn $ $Date: 2000-11-23 14:13:33 $ $Revision: 1.6 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1668,6 +1668,10 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ japanese ] = "sc_out81.bmp" ;
         File [ portuguese ] = "sc_out03.bmp" ;
         File [ turkish ] = "sc_out90.bmp" ;
+        File [ chinese_simplified ] = "sc_out86.bmp" ;
+        File [ chinese_traditional ] = "sc_out88.bmp" ;
+        File [ japanese ] = "sc_out81.bmp" ;
+        File [ korean ] = "sc_out82.bmp" ;
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -1692,6 +1696,10 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File [ japanese ] = "lc_out81.bmp" ;
         File [ portuguese ] = "lc_out03.bmp" ;
         File [ turkish ] = "lc_out90.bmp" ;
+        File [ chinese_simplified ] = "lc_out86.bmp" ;
+        File [ chinese_traditional ] = "lc_out88.bmp" ;
+        File [ japanese ] = "lc_out81.bmp" ;
+        File [ korean ] = "lc_out82.bmp" ;
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
