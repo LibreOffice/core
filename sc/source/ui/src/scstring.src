@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:56:31 $
+ *  last change: $Author: dr $ $Date: 2002-07-25 12:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,21 +59,7 @@
  *
  ************************************************************************/
 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "sc.hrc" // -> #include <sfx.hrc>
-
-
 
  // Strings fuer Interface-Namen ------------------------------------------
 
@@ -3232,8 +3218,8 @@ String STR_DLG_SELECTTABLES_LBNAME
 
 String STR_REPLCELLSWARN
 {
-    Text = "Sollen die Inhalte der Zellen des Zielbereichs überschrieben werden?";
-    Text[ english ] = "Do you want to replace the contents of the destination cells?";
-    Text[ english_us ] = "Do you want to replace the contents of the destination cells?";
+    Text = "Die Zellen, in die Sie Daten einfügen wollen, enthalten bereits Daten.\nWollen Sie die vorhandenen Daten wirklich überschreiben?";
+    Text[ english ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
+    Text[ english_us ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
 };
 
