@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:38:34 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
     Moveable = TRUE ;
     Text [ en-US ] = "%MACROLANG Macros";
     Closeable = TRUE ;
-
+    HelpId = HID_SCRIPTORG_DIALOG;
     FixedText SF_TXT_SCRIPTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -90,6 +90,16 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
         Pos = MAP_APPFONT ( 6 , 16 ) ;
         Size = MAP_APPFONT ( 130 , 144 ) ;
         TabStop = TRUE ;
+        Image IMG_HARDDISK
+        {
+            ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
+            MASKCOLOR
+        };
+        Image IMG_HARDDISK_HC
+        {
+            ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
+            MASKCOLOR
+        };
         Image IMG_PLUS
         {
             ImageBitmap = Bitmap { File = "plus.bmp" ; };
@@ -109,6 +119,16 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
         {
             ImageBitmap = Bitmap { File = "minus_sch.bmp" ; };
             MASKCOLOR
+        };
+        String STR_MYMACROS
+        {
+            Text [ de ] = "Meine Makros";
+            Text [ en-US ] = "My Macros";
+        };
+        String STR_PRODMACROS
+        {
+            Text [ de ] = "%PRODUCTNAME Makros";
+            Text [ en-US ] = "%PRODUCTNAME Macros";
         };
     };
 
@@ -156,7 +176,7 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
     {
         Pos = MAP_APPFONT ( 144 , 114 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~LÃ¶schen..." ;
+        Text [ de ] = "~Löschen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
     };
@@ -172,7 +192,7 @@ ModalDialog RID_DLG_NEWLIB
 {
     Text [ de ] = "Bibliothek erstellen" ;
     Text [ en-US ] = "Create Library" ;
-    Size = MAP_APPFONT ( 160 , 55 ) ;
+    Size = MAP_APPFONT ( 160 , 50 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton PB_OK
@@ -191,15 +211,15 @@ ModalDialog RID_DLG_NEWLIB
     FixedText FT_NEWLIB
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 50 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Geben Sie den Namen fÃ¼r die neue Bibliothek ein." ;
+        Text [ de ] = "Geben Sie den Namen für die neue Bibliothek ein." ;
         Text [ en-US ] = "Enter the name for the new library." ;
     };
     Edit ED_LIBNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Pos = MAP_APPFONT ( 6 , 59 ) ;
         Size = MAP_APPFONT ( 92 , 12 ) ;
         TabStop = TRUE ;
     };
@@ -215,7 +235,7 @@ ModalDialog RID_DLG_NEWLIB
     };
     String STR_FT_NEWMACRO
     {
-        Text [ de ] = "Geben Sie den Namen fÃ¼r das neue Macro ein." ;
+        Text [ de ] = "Geben Sie den Namen für das neue Macro ein." ;
         Text [ en-US ] = "Enter the name for the new macro." ;
     };
     String STR_RENAME
@@ -225,33 +245,33 @@ ModalDialog RID_DLG_NEWLIB
     };
     String STR_FT_RENAME
     {
-        Text [ de ] = "Geben Sie den Namen fÃ¼r das ausgewÃ¤hlte Objekt ein." ;
+        Text [ de ] = "Geben Sie den Namen für das ausgewählte Objekt ein." ;
         Text [ en-US ] = "Enter the new name for the selected object." ;
     };
 };
 String RID_SVXSTR_DELQUERY
 {
-    Text [ de ] = "MÃ¶chten Sie das folgende Objekt lÃ¶schen?";
+    Text [ de ] = "Möchten Sie das folgende Objekt löschen?";
     Text [ en-US ] = "Do you want to delete the following object?";
 };
 String RID_SVXSTR_DELQUERY_TITLE
 {
-    Text [ de ] = "LÃ¶schen bestÃ¤tigen";
+    Text [ de ] = "Löschen bestätigen";
     Text [ en-US ] = "Confirm Deletion";
 };
 String RID_SVXSTR_DELFAILED
 {
-    Text [ de ] = "Das ausgewÃ¤lte Objekt konnte nicht gelÃ¶scht werden.";
+    Text [ de ] = "Das ausgewälte Objekt konnte nicht gelöscht werden.";
     Text [ en-US ] = "The selected object could not be deleted.";
 };
 String RID_SVXSTR_DELFAILEDPERM
 {
-    Text [ de ] = " Sie haben keine Berechtigung zum LÃ¶schen dieses Objektes.";
+    Text [ de ] = " Sie haben keine Berechtigung zum Löschen dieses Objektes.";
     Text [ en-US ] = " You do not have permission to delete this object.";
 };
 String RID_SVXSTR_DELFAILED_TITLE
 {
-    Text [ de ] = "Fehler beim LÃ¶schen";
+    Text [ de ] = "Fehler beim Löschen";
     Text [ en-US ] = "Error Deleting Object";
 };
 String RID_SVXSTR_CREATEFAILED
@@ -288,4 +308,63 @@ String RID_SVXSTR_RENAMEFAILED_TITLE
 {
     Text [ de ] = "Fehler beim Umbennen";
     Text [ en-US ] = "Error Renaming Object";
+};
+
+String RID_SVXSTR_ERROR_TITLE
+{
+    Text [ de ] = "%PRODUCTNAME Fehler";
+    Text [ en-US ] = "%PRODUCTNAME Error";
+};
+
+String RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED
+{
+    Text [ de ] = "Die Skriptsprache %LANGUAGENAME wird nicht unterstützt.";
+    Text [ en-US ] = "The scripting language %LANGUAGENAME is not supported.";
+};
+String RID_SVXSTR_ERROR_RUNNING
+{
+    Text [ de ] = "Ein Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME auf.";
+    Text [ en-US ] = "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
+};
+
+String RID_SVXSTR_EXCEPTION_RUNNING
+{
+    Text [ de ] = "Ein Ausnahmefehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME auf.";
+    Text [ en-US ] = "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
+};
+
+String RID_SVXSTR_ERROR_AT_LINE
+{
+    Text [ de ] = "Ein Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME in Zeile: %LINENUMBER auf.";
+    Text [ en-US ] = "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
+};
+
+String RID_SVXSTR_EXCEPTION_AT_LINE
+{
+    Text [ de ] = "Ein Ausnahmefehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME in Zeile: %LINENUMBER auf.";
+    Text [ en-US ] = "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
+};
+
+String RID_SVXSTR_FRAMEWORK_ERROR_RUNNING
+{
+    Text [ de ] = "Ein Scripting Framework Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME auf.";
+    Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
+};
+
+String RID_SVXSTR_FRAMEWORK_ERROR_AT_LINE
+{
+    Text [ de ] = "Ein Scripting Framework Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME in Zeile: % LINENUMBER auf.";
+    Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
+};
+
+String RID_SVXSTR_ERROR_TYPE_LABEL
+{
+    Text [ de ] = "Typ:";
+    Text [ en-US ] = "Type:";
+};
+
+String RID_SVXSTR_ERROR_MESSAGE_LABEL
+{
+    Text [ de ] = "Meldung:";
+    Text [ en-US ] = "Message:";
 };
