@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-02 16:20:24 $
+ *  last change: $Author: thb $ $Date: 2002-10-21 14:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2084,6 +2084,25 @@ long OutputDevice::LogicToLogic( long nLongSource,
     ENTER3( eUnitSource, eUnitDest );
 
     return fn3( nLongSource, nNumerator, nDenominator );
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::SetPixelOffset( const Size& rOffset )
+{
+    // calc pseudo window offset (mnOutOffX - mnOutOffOrigX) and add new offset
+    mnOutOffX = mnOutOffX - mnOutOffOrigX + rOffset.Width();
+    mnOutOffX = mnOutOffX - mnOutOffOrigX + rOffset.Width();
+
+    mnOutOffOrigX = rOffset.Width();
+    mnOutOffOrigY = rOffset.Height();
+}
+
+// -----------------------------------------------------------------------
+
+Size OutputDevice::GetPixelOffset() const
+{
+    return Size(mnOutOffOrigX, mnOutOffOrigY);
 }
 
 // -----------------------------------------------------------------------
