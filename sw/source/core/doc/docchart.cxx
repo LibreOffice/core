@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:48:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
 #endif
@@ -397,6 +394,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
             if( pData->GetColCount() && pData->GetRowCount() )
             {
                 SchDLL::Update( rOObj.GetOleRef(), pData, rVSh.GetWin() );
+                rOObj.GetObject().UpdateReplacement();
 
                 SwClientIter aIter( *pONd );
                 for( pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) ); pFrm;
@@ -471,7 +469,10 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
                 {
                     pData->SetMainTitle( rNewName );
                     if( pVSh )
+                    {
                         SchDLL::Update( rOObj.GetOleRef(), pData, pVSh->GetWin() );
+                        rOObj.GetObject().UpdateReplacement();
+                    }
                 }
 
                 if( pVSh )
