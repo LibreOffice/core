@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 using namespace com::sun::star;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_PROPERTIES;
+using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 
 //------------------------------------------------------------------
 
@@ -115,13 +115,14 @@ SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLName, XML_PROPERTIES ) )
+    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLName, XML_HEADER_FOOTER_PROPERTIES ) )
     {
         PageContextType aType = Header;
         if (!bHeader)
             aType = Footer;
         pContext = new PagePropertySetContext( GetImport(), nPrefix,
                                                 rLName, xAttrList,
+                                                XML_TYPE_PROP_HEADER_FOOTER,
                                                 rProperties,
                                                 rMap,  nStartIndex, nEndIndex, aType);
     }
