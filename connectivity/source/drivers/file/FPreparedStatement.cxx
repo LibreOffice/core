@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 12:11:40 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace connectivity;
 using namespace comphelper;
@@ -115,18 +118,31 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbc.driver.file.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
+DBG_NAME( file_OPreparedStatement )
+// -------------------------------------------------------------------------
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     : OStatement_BASE2( _pConnection )
     ,m_pResultSet(NULL)
 {
+    DBG_CTOR( file_OPreparedStatement, NULL );
 }
+
+// -------------------------------------------------------------------------
+OPreparedStatement::~OPreparedStatement()
+{
+    DBG_DTOR( file_OPreparedStatement, NULL );
+}
+
 // -------------------------------------------------------------------------
 void OPreparedStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if(m_pResultSet)
+    {
         m_pResultSet->release();
+        m_pResultSet = NULL;
+    }
     clearMyResultSet();
 
     OStatement_BASE2::disposing();
