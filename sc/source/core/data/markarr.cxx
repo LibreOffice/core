@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markarr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-01-18 12:01:08 $
+ *  last change: $Author: er $ $Date: 2002-01-18 16:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ void ScMarkArray::SetMarkArea( USHORT nStartRow, USHORT nEndRow, BOOL bMarked )
                             pData[ni-1].nRow = pData[nj].nRow;
                             nj++;
                         }
-                        else if ( nj == nInsert && nj == ni )
+                        else if ( ni == nInsert )
                             pData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
                     nInsert = MAXROW+1;
