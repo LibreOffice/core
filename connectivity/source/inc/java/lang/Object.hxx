@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:14:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <jvmaccess/virtualmachine.hxx>
 #endif // INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 //=====================================================================
 
@@ -102,17 +103,18 @@ inline jlong Make_Os2_Int64( sal_Int32 hi, sal_Int32 lo ) {jlong x = CONST64( hi
 
 namespace connectivity
 {
+    typedef ::boost::shared_ptr< jvmaccess::VirtualMachine::AttachGuard> TGuard;
     class SDBThreadAttach
     {
-        ::std::auto_ptr< jvmaccess::VirtualMachine::AttachGuard> m_aGuard;
+        TGuard m_aGuard;
         SDBThreadAttach(SDBThreadAttach&);
     public:
         SDBThreadAttach();
         ~SDBThreadAttach();
 
         JNIEnv* pEnv;
-        void addRef();
-        void releaseRef();
+        static void addRef();
+        static void releaseRef();
     };
     //=====================================================================
     class java_lang_Class;
@@ -134,8 +136,6 @@ namespace connectivity
 
         // neu in SJ2:
         static jclass theClass;             // die Klasse braucht nur einmal angefordert werden !
-        static jclass theJSbxObjectClass;   // die Klasse braucht nur einmal angefordert werden !
-        static sal_uInt32 nObjCount;                // Zaehler fuer die Anzahl der Instanzen
 
     public:
         // der Konstruktor, der fuer die abgeleiteten Klassen verwendet
@@ -149,6 +149,8 @@ namespace connectivity
         void                saveRef( JNIEnv * pEnv, jobject myObj );
         jobject             getJavaObject() const { return object; }
         java_lang_Object *  GetWrapper() { return this; }
+        void clearObject(JNIEnv& rEnv);
+        void clearObject();
 
         java_lang_Class *   getClass();
 
