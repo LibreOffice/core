@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 18:00:43 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModelessDialog RID_SCDLG_FILTER
     Text [ italian ] = "Filtro standard" ;
     Text [ portuguese_brazilian ] = "Filtro Padr?o" ;
     Text [ portuguese ] = "Filtro padrão" ;
-    Text [ finnish ] = "Vakiosuodatus" ;
+    Text [ finnish ] = "Oletussuodatin" ;
     Text [ danish ] = "Standardfilter" ;
     Text [ french ] = "Filtre standard" ;
     Text [ swedish ] = "Standardfilter" ;
@@ -241,8 +241,8 @@ ModelessDialog RID_SCDLG_FILTER
         };
         StringList [ finnish ] =
         {
-            < "AND" ; Default ; > ;
-            < "OR" ; Default ; > ;
+            < "JA" ; Default ; > ;
+            < "TAI" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -374,8 +374,8 @@ ModelessDialog RID_SCDLG_FILTER
         };
         StringList [ finnish ] =
         {
-            < "AND" ; Default ; > ;
-            < "OR" ; Default ; > ;
+            < "JA" ; Default ; > ;
+            < "TAI" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -1512,11 +1512,11 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "~Maiuscole/minuscole" ;
         Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
         Text [ portuguese ] = "~Maiúsculas/minúsculas" ;
-        Text [ finnish ] = "Kirjainkoon ~erottelu" ;
+        Text [ finnish ] = "Sama ~kirjainkoko" ;
         Text [ danish ] = "Store og små bogstaver" ;
         Text [ french ] = "Respecter la casse" ;
         Text [ swedish ] = "Versalkänsli~g" ;
-        Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
+        Text [ dutch ] = "~Hoofdletters/kleine letters" ;
         Text [ spanish ] = "M~ayúsculas/minúsculas" ;
         Text [ english_us ] = "Case ~sensitive" ;
         TabStop = TRUE ;
@@ -1576,7 +1576,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
         Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
         Text [ portuguese ] = "A área ~contém cabeçalhos de colunas" ;
-        Text [ finnish ] = "~Alue sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "~Alue sisältää sarakeotsikot" ;
         Text [ danish ] = "Område indholder kolonneoverskrifter" ;
         Text [ french ] = "La plage contient des en-têtes de colonne" ;
         Text [ swedish ] = "Område ~innehåller kolumnhuvuden" ;
@@ -1585,7 +1585,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ english_us ] = "Range contains ~column labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~C)";
-        Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
+        Text[ russian ] = "Îáëàñòü ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~C)";
         Text[ chinese_traditional ] = "å€åŸŸåŒ…å«æ¬„æ¨™é¡Œ(~C)";
@@ -1649,7 +1649,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ english_us ] = "Copy ~results to..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å°†ç­›é€‰ç»“æœå¤åˆ¶åˆ°(~R)...";
-        Text[ russian ] = "Ğåçóëüòàò ôèëüòğà â";
+        Text[ russian ] = "Êîïèğîâàòü ğåçóëüòàò â";
         Text[ polish ] = "Kopiuj rezultaty filtrowania do";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿çµæœã®è²¼ã‚Šä»˜ã‘å…ˆ(~R)";
         Text[ chinese_traditional ] = "è¤‡è£½ç¯©é¸çµæœåˆ°(~R)...";
@@ -1888,11 +1888,11 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Text [ italian ] = "Filtro speciale" ;
     Text [ portuguese_brazilian ] = "Filtro Especial" ;
     Text [ portuguese ] = "Filtro especial" ;
-    Text [ finnish ] = "Lisäsuodatin" ;
+    Text [ finnish ] = "Erityisssuodatus" ;
     Text [ danish ] = "Specialfilter" ;
     Text [ french ] = "Filtre spécial" ;
     Text [ swedish ] = "Specialfilter" ;
-    Text [ dutch ] = "Speciaal filter" ;
+    Text [ dutch ] = "Speciale filter" ;
     Text [ spanish ] = "Filtro especial" ;
     Text [ english_us ] = "Advanced Filter" ;
     Moveable = TRUE ;
@@ -1912,10 +1912,10 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ french ] = "Lire les critères de filtre dans" ;
         Text [ swedish ] = "Fi~lterkriterier finns i" ;
         Text [ dutch ] = "~Filtercriteria bevinden zich in" ;
-        Text [ spanish ] = "Leer criterios del ~filtro en" ;
+        Text [ spanish ] = "Leer los criterios del ~filtro en" ;
         Text [ english_us ] = "Read ~filter criteria from" ;
         Text[ chinese_simplified ] = "ç­›é€‰æ¡ä»¶æ¥è‡ª(~F)";
-        Text[ russian ] = "Óñëîâèÿ ôèëüòğà íàõîäÿòñÿ â";
+        Text[ russian ] = "Óñëîâèÿ ôèëüòğà èç";
         Text[ polish ] = "Kryteria filtrowania znajduj¹ siê w";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿æ¡ä»¶ã«ã™ã‚‹ç¯„å›²(~F)";
         Text[ chinese_traditional ] = "ç¯©é¸æ¢ä»¶ä¾†è‡ª(~F)";
@@ -1988,7 +1988,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ danish ] = "Store og små bogstaver" ;
         Text [ french ] = "Respecter la casse" ;
         Text [ swedish ] = "Versalkänsli~g" ;
-        Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
+        Text [ dutch ] = "~Hoofdletters/kleine letters" ;
         Text [ spanish ] = "M~ayúsculas/minúsculas" ;
         Text [ english_us ] = "~Case sensitive" ;
         TabStop = TRUE ;
@@ -2048,16 +2048,16 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
         Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
         Text [ portuguese ] = "Contém ~cabeçalhos para colunas" ;
-        Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "~Sisältää sarakeotsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
         Text [ french ] = "La plage contient des en-têtes de colonne" ;
         Text [ swedish ] = "Område ~innehåller kolumnhuvuden" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
-        Text [ spanish ] = "Área contiene títulos de ~columnas" ;
+        Text [ spanish ] = "El área contiene títulos de ~columnas" ;
         Text [ english_us ] = "Range c~ontains column labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~O)";
-        Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
+        Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~O)";
         Text[ chinese_traditional ] = "å€åŸŸåŒ…å«æ¬„æ¨™é¡Œ(~O)";
@@ -2360,7 +2360,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text [ italian ] = "Filtro" ;
     Text [ portuguese_brazilian ] = "Filtro" ;
     Text [ portuguese ] = "Filtro" ;
-    Text [ finnish ] = "Suodatin" ;
+    Text [ finnish ] = "Suodatus" ;
     Text [ danish ] = "Filter" ;
     Text [ french ] = "Filtre" ;
     Text [ swedish ] = "Filter" ;
@@ -2528,8 +2528,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         };
         StringList [ finnish ] =
         {
-            < "AND" ; Default ; > ;
-            < "OR" ; Default ; > ;
+            < "JA" ; Default ; > ;
+            < "TAI" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -2661,8 +2661,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         };
         StringList [ finnish ] =
         {
-            < "AND" ; Default ; > ;
-            < "OR" ; Default ; > ;
+            < "JA" ; Default ; > ;
+            < "TAI" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -3542,7 +3542,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ danish ] = "Store og små bogstaver" ;
         Text [ french ] = "Respecter la casse" ;
         Text [ swedish ] = "Versalkänsli~g" ;
-        Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
+        Text [ dutch ] = "~Hoofdletters/kleine letters" ;
         Text [ spanish ] = "M~ayúsculas/minúsculas" ;
         Text [ english_us ] = "~Case sensitive" ;
         TabStop = TRUE ;
