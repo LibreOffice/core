@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-11 09:12:25 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,8 +368,11 @@ OUString SvtPathOptions_Impl::SubstituteAndConvert( const rtl::OUString& rPath )
 {
     OUString aPath = SubstVar( rPath );
     OUString aSysPath;
+#ifdef TF_FILEURL
+#else
     if ( FileBase::getSystemPathFromNormalizedPath( aPath, aSysPath ) == FileBase::E_None )
         aPath = aSysPath;
+#endif
     return aPath;
 }
 
@@ -405,6 +408,29 @@ OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
     }
     else
     {
+#ifdef TF_FILEURL
+        if ( FileBase::getFileURLFromSystemPath( aPath, aTmp )  == FileBase::E_None )
+        {
+            nIdx = aPath.indexOf( m_aProgPath );
+            while ( nIdx != -1 )
+            {
+                aPath = aPath.replaceAt( nIdx, m_aProgPath.Len(), SUBSTITUTE_PROGPATH );
+                nIdx = aPath.indexOf( m_aProgPath );
+            }
+            nIdx = aPath.indexOf( m_aUserPath );
+            while ( nIdx != -1 )
+            {
+                aPath = aPath.replaceAt( nIdx, m_aUserPath.Len(), SUBSTITUTE_USERPATH );
+                nIdx = aPath.indexOf( m_aUserPath );
+            }
+            nIdx = aPath.indexOf( m_aInstPath );
+            while ( nIdx != -1 )
+            {
+                aPath = aPath.replaceAt( nIdx, m_aInstPath.Len(), SUBSTITUTE_INSTPATH );
+                nIdx = aPath.indexOf( m_aInstPath );
+            }
+        }
+#else
         if ( FileBase::normalizePath( aPath, aTmp )  == FileBase::E_None )
         {
             aPath = aTmp;
@@ -427,6 +453,7 @@ OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
                 nIdx = aPath.indexOf( m_aInstPath );
             }
         }
+#endif
     }
 
     return aPath;
@@ -773,7 +800,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     OUString aOfficePath;
     if ( aAny >>= aOfficePath )
     {
+#ifdef TF_FILEURL
+        aTmp = aOfficePath;
+#else
         FileBase::normalizePath( aOfficePath, aTmp );
+#endif
         m_aInstPath = aTmp;
     }
     else
@@ -785,7 +816,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
         m_aInstURL = aOfficePath;
         if ( !m_aInstURL.Len() )
         {
+#ifdef TF_FILEURL
+            FileBase::getFileURLFromSystemPath( m_aInstPath, aTmp );
+#else
             FileBase::getFileURLFromNormalizedPath( m_aInstPath, aTmp );
+#endif
             INetURLObject aObj( aTmp );
             m_aInstURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
         }
@@ -797,7 +832,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     OUString aUserPath;
     if ( aAny >>= aUserPath )
     {
+#ifdef TF_FILEURL
+        aTmp = aUserPath;
+#else
         FileBase::normalizePath( aUserPath, aTmp );
+#endif
         m_aUserPath = aTmp;
     }
     else
@@ -809,7 +848,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
         m_aUserURL = aUserPath;
         if ( !m_aUserURL.Len() )
         {
+#ifdef TF_FILEURL
+            FileBase::getFileURLFromSystemPath( m_aUserPath, aTmp );
+#else
             FileBase::getFileURLFromNormalizedPath( m_aUserPath, aTmp );
+#endif
             INetURLObject aObj( aTmp );
             m_aUserURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
         }
@@ -823,8 +866,16 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     sal_Int32 lastIndex = aProgName.lastIndexOf('/');
     if ( lastIndex >= 0 )
     {
+#ifdef TF_FILEURL
+        ::rtl::OUString aTmpProgPath;
+
+        aTmp = aProgName.copy( 0, lastIndex );
+        FileBase::getSystemPathFromFileURL( aTmp, aTmpProgPath );
+        m_aProgPath = aTmpProgPath;
+#else
         m_aProgPath = aProgName.copy( 0, lastIndex );
         FileBase::getFileURLFromNormalizedPath( m_aProgPath, aTmp );
+#endif
         INetURLObject aObj( aTmp );
         m_aProgURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
     }
