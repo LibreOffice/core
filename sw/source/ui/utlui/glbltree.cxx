@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-09-24 07:58:55 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 10:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,7 +1207,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
                                 SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON );
                 SfxObjectShell& rObj = *pFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
-                String sNewFile(pMedium->GetURLObject().GetMainURL());
+                String sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
                 // Bereich mit dem Dok-Namen einfgen
                 // eigenes Dok in den Vordergrund
 
@@ -1451,7 +1451,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     while( !bFound && pCurr )
     {
         if(pCurr->GetMedium() &&
-            pCurr->GetMedium()->GetURLObject().GetMainURL() == sFileName)
+            pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI) == sFileName)
         {
             bFound = TRUE;
             SwGlobalTree::SetShowShell(pCurr);
