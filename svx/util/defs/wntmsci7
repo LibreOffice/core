@@ -19789,3 +19789,4 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?setSourceDocument@GraphicExporter@svx@@UAAXABV?$Reference@VXComponent@lang@star@sun@com@@@uno@star@sun@com@@@Z
 ?supportsService@GraphicExporter@svx@@UAAEABVOUString@rtl@@@Z
 writeInfo
+?valueOf@OString@rtl@@SA?AV12@JF@Z
