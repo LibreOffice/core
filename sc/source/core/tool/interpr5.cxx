@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:30:40 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,72 +515,120 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
     return pMat;
 }
 
-ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef(
+ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const ScToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
 {
     ScMatrixRef pMat = NULL;
     if (nTab1 == nTab2 && !nGlobalError)
     {
+        ScTokenMatrixMap::const_iterator aIter;
         if ( static_cast<SCSIZE>(nRow2 - nRow1 + 1) *
                 static_cast<SCSIZE>(nCol2 - nCol1 + 1) >
                 ScMatrix::GetElementsMax() )
             SetError(errStackOverflow);
+        else if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken))
+                    != pTokenMatrixMap->end()))
+            pMat = (*aIter).second->GetMatrix();
         else
         {
-            pMat = GetNewMat(static_cast<SCSIZE>(nCol2 - nCol1 + 1),
-                    static_cast<SCSIZE>(nRow2 - nRow1 + 1));
+            SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
+            SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
+            pMat = GetNewMat( nMatCols, nMatRows);
             if (pMat && !nGlobalError)
             {
-                ScAddress aAdr( nCol1, nRow1, nTab1 );
-                for (SCROW i = nRow1; i <= nRow2; i++)
+                // Set position where the next entry is expected.
+                SCROW nNextRow = nRow1;
+                SCCOL nNextCol = nCol1;
+                // Set last position as if there was a previous entry.
+                SCROW nThisRow = nRow2;
+                SCCOL nThisCol = nCol1 - 1;
+                ScCellIterator aCellIter( pDok, nCol1, nRow1, nTab1, nCol2,
+                        nRow2, nTab2);
+                for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell =
+                        aCellIter.GetNext())
                 {
-                    aAdr.SetRow( i );
-                    for (SCCOL j = nCol1; j <= nCol2; j++)
+                    nThisCol = aCellIter.GetCol();
+                    nThisRow = aCellIter.GetRow();
+                    if (nThisCol != nNextCol || nThisRow != nNextRow)
                     {
-                        aAdr.SetCol( j );
-                        ScBaseCell* pCell = GetCell( aAdr );
-                        if ( pCell && pCell->GetCellType() !=
-                                CELLTYPE_NOTE)
+                        // Fill empty between iterator's positions.
+                        for ( ; nNextCol <= nThisCol; ++nNextCol)
                         {
-                            if (HasCellValueData(pCell))
+                            SCSIZE nC = nNextCol - nCol1;
+                            SCSIZE nMatStopRow = ((nNextCol < nThisCol) ?
+                                    nMatRows : nThisRow - nRow1);
+                            for (SCSIZE nR = nNextRow - nRow1; nR <
+                                    nMatStopRow; ++nR)
                             {
-                                double fVal = GetCellValue( aAdr,
-                                        pCell);
-                                if ( nGlobalError )
-                                {
-                                    fVal = CreateDoubleError(
-                                            nGlobalError);
-                                    nGlobalError = 0;
-                                }
-                                pMat->PutDouble( fVal,
-                                        static_cast<SCSIZE>(j-nCol1),
-                                        static_cast<SCSIZE>(i-nRow1));
+                                pMat->PutEmpty( nC, nR);
                             }
-                            else
+                            nNextRow = nRow1;
+                        }
+                    }
+                    if (nThisRow == nRow2)
+                    {
+                        nNextCol = nThisCol + 1;
+                        nNextRow = nRow1;
+                    }
+                    else
+                    {
+                        nNextCol = nThisCol;
+                        nNextRow = nThisRow + 1;
+                    }
+                    if ( pCell->GetCellType() == CELLTYPE_NOTE)
+                        pMat->PutEmpty( static_cast<SCSIZE>(nThisCol-nCol1),
+                                static_cast<SCSIZE>(nThisRow-nRow1));
+                    else
+                    {
+                        if (HasCellValueData(pCell))
+                        {
+                            ScAddress aAdr( nThisCol, nThisRow, nTab1);
+                            double fVal = GetCellValue( aAdr, pCell);
+                            if ( nGlobalError )
                             {
-                                String aStr;
-                                GetCellString(aStr, pCell);
-                                if ( nGlobalError )
-                                {
-                                    double fVal = CreateDoubleError(
-                                            nGlobalError);
-                                    nGlobalError = 0;
-                                    pMat->PutDouble( fVal,
-                                            static_cast<SCSIZE>(j-nCol1),
-                                            static_cast<SCSIZE>(i-nRow1));
-                                }
-                                else
-                                    pMat->PutString( aStr,
-                                            static_cast<SCSIZE>(j-nCol1),
-                                            static_cast<SCSIZE>(i-nRow1));
+                                fVal = CreateDoubleError( nGlobalError);
+                                nGlobalError = 0;
                             }
+                            pMat->PutDouble( fVal,
+                                    static_cast<SCSIZE>(nThisCol-nCol1),
+                                    static_cast<SCSIZE>(nThisRow-nRow1));
                         }
                         else
-                            pMat->PutEmpty( static_cast<SCSIZE>(j-nCol1),
-                                    static_cast<SCSIZE>(i-nRow1));
+                        {
+                            String aStr;
+                            GetCellString( aStr, pCell);
+                            if ( nGlobalError )
+                            {
+                                double fVal = CreateDoubleError( nGlobalError);
+                                nGlobalError = 0;
+                                pMat->PutDouble( fVal,
+                                        static_cast<SCSIZE>(nThisCol-nCol1),
+                                        static_cast<SCSIZE>(nThisRow-nRow1));
+                            }
+                            else
+                                pMat->PutString( aStr,
+                                        static_cast<SCSIZE>(nThisCol-nCol1),
+                                        static_cast<SCSIZE>(nThisRow-nRow1));
+                        }
                     }
                 }
+                // Fill empty if iterator's last position wasn't the end.
+                if (nThisCol != nCol2 || nThisRow != nRow2)
+                {
+                    for ( ; nNextCol <= nCol2; ++nNextCol)
+                    {
+                        SCSIZE nC = nNextCol - nCol1;
+                        for (SCSIZE nR = nNextRow - nRow1; nR < nMatRows; ++nR)
+                        {
+                            pMat->PutEmpty( nC, nR);
+                        }
+                        nNextRow = nRow1;
+                    }
+                }
+                if (pTokenMatrixMap)
+                    pTokenMatrixMap->insert( ScTokenMatrixMap::value_type(
+                                pToken, new ScMatrixToken( pMat)));
             }
         }
     }
@@ -621,14 +669,12 @@ ScMatrixRef ScInterpreter::GetMatrix()
         break;
         case svDoubleRef:
         {
-            SCCOL nCol1;
-            SCROW nRow1;
-            SCTAB nTab1;
-            SCCOL nCol2;
-            SCROW nRow2;
-            SCTAB nTab2;
+            SCCOL nCol1, nCol2;
+            SCROW nRow1, nRow2;
+            SCTAB nTab1, nTab2;
+            const ScToken* p = sp ? pStack[sp-1] : NULL;
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            pMat = CreateMatrixFromDoubleRef( nCol1, nRow1, nTab1,
+            pMat = CreateMatrixFromDoubleRef( p, nCol1, nRow1, nTab1,
                     nCol2, nRow2, nTab2);
         }
         break;
@@ -1280,9 +1326,10 @@ ScMatrixRef ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
         nMinR = nR1;
     else
         nMinR = nR2;
-    ScMatrixRef pResMat = GetNewMat(nMinC, nMinR);
-    if (pResMat)
+    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    if (xResMat)
     {
+        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1296,7 +1343,7 @@ ScMatrixRef ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
             }
         }
     }
-    return pResMat;
+    return xResMat;
 }
 
 ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
@@ -1314,9 +1361,10 @@ ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
         nMinR = nR1;
     else
         nMinR = nR2;
-    ScMatrixRef pResMat = GetNewMat(nMinC, nMinR);
-    if (pResMat)
+    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    if (xResMat)
     {
+        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1330,7 +1378,7 @@ ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
             }
         }
     }
-    return pResMat;
+    return xResMat;
 }
 
 ScMatrixRef ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
@@ -1348,9 +1396,10 @@ ScMatrixRef ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
         nMinR = nR1;
     else
         nMinR = nR2;
-    ScMatrixRef pResMat = GetNewMat(nMinC, nMinR);
-    if (pResMat)
+    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    if (xResMat)
     {
+        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1364,7 +1413,7 @@ ScMatrixRef ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
             }
         }
     }
-    return pResMat;
+    return xResMat;
 }
 
 ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
@@ -1382,9 +1431,10 @@ ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
         nMinR = nR1;
     else
         nMinR = nR2;
-    ScMatrixRef pResMat = GetNewMat(nMinC, nMinR);
-    if (pResMat)
+    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    if (xResMat)
     {
+        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1398,7 +1448,7 @@ ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
             }
         }
     }
-    return pResMat;
+    return xResMat;
 }
 
 ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
@@ -1416,9 +1466,10 @@ ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
         nMinR = nR1;
     else
         nMinR = nR2;
-    ScMatrixRef pResMat = GetNewMat(nMinC, nMinR);
-    if (pResMat)
+    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    if (xResMat)
     {
+        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1432,7 +1483,7 @@ ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
             }
         }
     }
-    return pResMat;
+    return xResMat;
 }
 
 ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
@@ -1450,9 +1501,10 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
         nMinR = nR1;
     else
         nMinR = nR2;
-    ScMatrixRef pResMat = GetNewMat(nMinC, nMinR);
-    if (pResMat)
+    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    if (xResMat)
     {
+        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1471,7 +1523,7 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
             }
         }
     }
-    return pResMat;
+    return xResMat;
 }
 
 
