@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:05:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,8 +1177,12 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
   -----------------------------------------------------------------------*/
 BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPage)
 {
+    Push();
     if(!GotoPage(nStartPage))
+    {
+        Pop(sal_False);
         return FALSE;
+    }
     MovePage( fnPageCurr, fnPageStart );
     SwPaM aCpyPam( *GetCrsr()->GetPoint() );
     String sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
@@ -1187,7 +1191,10 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
         rToFill.ChgCurPageDesc( *pDesc );
 
     if(!GotoPage(nEndPage))
+    {
+        Pop(sal_False);
         return FALSE;
+    }
     //if the page starts with a table a paragraph has to be inserted before
     SwNode* pTableNode = aCpyPam.GetNode()->FindTableNode();
     if(pTableNode)
@@ -1212,7 +1219,6 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
 
     StartAllAction();
     GetDoc()->LockExpFlds();
-    Push();
     SetSelection(aCpyPam);
     // copy the text of the selection
     SwEditShell::Copy(&rToFill);
@@ -1250,10 +1256,9 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
             SwFrmFmt * pNew = rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor );
         }
     }
-
-    Pop();
     GetDoc()->UnlockExpFlds();
     GetDoc()->UpdateFlds();
+    Pop(sal_False);
     EndAllAction();
 
     return TRUE;
