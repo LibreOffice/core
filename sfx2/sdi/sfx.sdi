@@ -6126,9 +6126,6 @@ SfxVoidItem Paste SID_PASTE
     RecordPerSet;
     Synchron;
 
-    /* status: */
-    SlotType = SfxBoolItem
-
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
