@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:47:43 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,14 +170,8 @@
 // PALETTE record - color information =========================================
 
 XclImpPalette::XclImpPalette( const XclImpRoot& rRoot ) :
-    XclDefaultPalette( rRoot.GetBiff() ),
-    XclImpRoot( rRoot )
+    XclDefaultPalette( rRoot )
 {
-}
-
-void XclImpPalette::OnChangeBiff()
-{
-    SetDefaultColors( GetBiff() );
 }
 
 ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
@@ -517,181 +511,36 @@ void XclImpFontBuffer::FillToItemSet(
 
 // FORMAT record - number formats =============================================
 
-/** Stores the SvNumberFormatter index offset of an Excel built-in number format. */
-struct XclImpBuiltInFormat
-{
-    sal_uInt32                  mnIndex;        /// Excel built-in index.
-    NfIndexTableOffset          meOffset;       /// SvNumberFormatter format index.
-    const sal_Char*             mpFormat;       /// Format string, if no format index exists.
-    LanguageType                eLanguage;      /// Set hard language (default == 0 == system).
-};
-
-static const XclImpBuiltInFormat pBuiltInFormats[] =
-{
-    {   0,      NF_NUMBER_STANDARD              },  // General
-    {   1,      NF_NUMBER_INT                   },  // 0
-    {   2,      NF_NUMBER_DEC2                  },  // 0.00
-    {   3,      NF_NUMBER_1000INT               },  // #,##0
-    {   4,      NF_NUMBER_1000DEC2              },  // #,##0.00
-    // 5...8 contained in file
-    {   9,      NF_PERCENT_INT                  },  // 0%
-    {   10,     NF_PERCENT_DEC2                 },  // 0.00%
-    {   11,     NF_SCIENTIFIC_000E00            },  // 0.00E+00
-    {   12,     NF_FRACTION_1                   },  // # ?/?
-
-    // 14...22 date and time formats
-    {   14,     NF_DATE_SYS_DDMMYYYY            },
-    {   15,     NF_NUMBER_STANDARD,             "D-MMM-YY",                 LANGUAGE_ENGLISH_US },
-    {   15,     NF_NUMBER_STANDARD,             "DD. MMM YY",               LANGUAGE_GERMAN },
-    {   15,     NF_DATE_SYS_DMMMYY              },
-    {   16,     NF_NUMBER_STANDARD,             "DD-MMM",                   LANGUAGE_ENGLISH_US },
-    {   16,     NF_NUMBER_STANDARD,             "DD. MMM",                  LANGUAGE_GERMAN },
-    {   16,     NF_DATE_SYS_DDMMM               },
-    {   17,     NF_NUMBER_STANDARD,             "MMM-YY",                   LANGUAGE_ENGLISH_US },
-    {   17,     NF_NUMBER_STANDARD,             "MMM YY",                   LANGUAGE_GERMAN },
-    {   17,     NF_DATE_SYS_MMYY                },
-    {   18,     NF_NUMBER_STANDARD,             "h:mm AM/PM",               LANGUAGE_ENGLISH_US },
-    {   18,     NF_NUMBER_STANDARD,             "h:mm AM/PM",               LANGUAGE_GERMAN },
-    {   18,     NF_TIME_HHMMAMPM                },
-    {   19,     NF_NUMBER_STANDARD,             "h:mm:ss AM/PM",            LANGUAGE_ENGLISH_US },
-    {   19,     NF_NUMBER_STANDARD,             "h:mm:ss AM/PM",            LANGUAGE_GERMAN },
-    {   19,     NF_TIME_HHMMSSAMPM              },
-    {   20,     NF_NUMBER_STANDARD,             "h:mm",                     LANGUAGE_ENGLISH_US },
-    {   20,     NF_TIME_HHMM                    },
-    {   21,     NF_NUMBER_STANDARD,             "h:mm:ss",                  LANGUAGE_ENGLISH_US },
-    {   21,     NF_TIME_HHMMSS                  },
-    {   22,     NF_NUMBER_STANDARD,             "M/D/YYYY h:mm",            LANGUAGE_ENGLISH_US },
-    {   22,     NF_NUMBER_STANDARD,             "DD.MM.YYYY hh:mm",         LANGUAGE_GERMAN },
-    {   22,     NF_NUMBER_STANDARD,             "[$-0404]YYYY/M/D hh:mm",   LANGUAGE_CHINESE_TRADITIONAL },
-    {   22,     NF_DATETIME_SYSTEM_SHORT_HHMM   },
-
-    // 23...36 international formats
-    {   27,     NF_DATE_SYS_DDMMYYYY            },  // default
-    {   28,     NF_DATE_SYS_DDMMYYYY            },  // default
-    {   29,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    {   30,     NF_NUMBER_STANDARD,             "[$-0411]M/D/YY",           LANGUAGE_JAPANESE },
-    {   30,     NF_NUMBER_STANDARD,             "[$-0412]M-D-YY",           LANGUAGE_KOREAN },
-    {   30,     NF_NUMBER_STANDARD,             "[$-0404]M/D/YY",           LANGUAGE_CHINESE_TRADITIONAL },
-    {   30,     NF_NUMBER_STANDARD,             "[$-0804]M/D/YY",           LANGUAGE_CHINESE_SIMPLIFIED },
-    {   30,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    {   31,     NF_NUMBER_STANDARD,             "[$-0411]YYYY年M月D日",   LANGUAGE_JAPANESE },
-    {   31,     NF_NUMBER_STANDARD,             "[$-0412]YYYY년 M월 D일", LANGUAGE_KOREAN },
-    {   31,     NF_NUMBER_STANDARD,             "[$-0404]YYYY年M月D日",   LANGUAGE_CHINESE_TRADITIONAL },
-    {   31,     NF_NUMBER_STANDARD,             "[$-0804]YYYY年M月D日",   LANGUAGE_CHINESE_SIMPLIFIED },
-    {   31,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    {   32,     NF_NUMBER_STANDARD,             "[$-0411]HH時MM分",       LANGUAGE_JAPANESE },
-    {   32,     NF_NUMBER_STANDARD,             "[$-0412]H시 MM분",       LANGUAGE_KOREAN },
-    {   32,     NF_NUMBER_STANDARD,             "[$-0404]HH時MM分",       LANGUAGE_CHINESE_TRADITIONAL },
-    {   32,     NF_NUMBER_STANDARD,             "[$-0804]HH时MM分" ,      LANGUAGE_CHINESE_SIMPLIFIED },
-    {   32,     NF_TIME_HHMMSS                  },  // default
-
-    {   33,     NF_NUMBER_STANDARD,             "[$-0411]HH時MM分SS秒",  LANGUAGE_JAPANESE  },
-    {   33,     NF_NUMBER_STANDARD,             "[$-0412]H시 MM분 SS초", LANGUAGE_KOREAN  },
-    {   33,     NF_NUMBER_STANDARD,             "[$-0404]HH時MM分SS秒",  LANGUAGE_CHINESE_TRADITIONAL  },
-    {   33,     NF_NUMBER_STANDARD,             "[$-0804]HH时MM分SS秒",  LANGUAGE_CHINESE_SIMPLIFIED  },
-    {   33,     NF_TIME_HHMMSS                  },  // default
-
-    {   34,     NF_TIME_HHMMSS                  },  // default
-    {   35,     NF_TIME_HHMMSS                  },  // default
-    {   36,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    // ---
-    {   37,     NF_NUMBER_STANDARD,             "#,##0 _$;-#,##0 _$",               },
-    {   38,     NF_NUMBER_STANDARD,             "#,##0 _$;[RED]-#,##0 _$"           },
-    {   39,     NF_NUMBER_STANDARD,             "#,##0.00 _$;-#,##0.00 _$"          },
-    {   40,     NF_NUMBER_STANDARD,             "#,##0.00 _$;[RED]-#,##0.00 _$"     },
-
-    // 41...44 contained in file
-    {   45,     NF_NUMBER_STANDARD,             "mm:ss"                     },
-    {   46,     NF_NUMBER_STANDARD,             "[h]:mm:ss",                LANGUAGE_ENGLISH_US },
-    {   46,     NF_NUMBER_STANDARD,             "[h]:mm:ss",                LANGUAGE_GERMAN },
-    {   46,     NF_TIME_HH_MMSS                 },  // default
-    {   47,     NF_NUMBER_STANDARD,             "mm:ss.0",                  LANGUAGE_ENGLISH_US },
-    {   47,     NF_NUMBER_STANDARD,             "mm:ss.0",                  LANGUAGE_GERMAN },
-    {   47,     NF_TIME_MMSS00                  },  // default
-    {   48,     NF_NUMBER_STANDARD,             "##0.0E+0"                  },
-    {   49,     NF_TEXT                         },  // @
-
-    // 50...??? international formats
-    {   50,     NF_DATE_SYS_DDMMYYYY            },  // default
-    {   51,     NF_DATE_SYS_DDMMYYYY            },  // default
-    {   52,     NF_DATE_SYS_DDMMYYYY            },  // default
-    {   53,     NF_DATE_SYS_DDMMYYYY            },  // default
-    {   54,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    {   55,     NF_NUMBER_STANDARD,             "[$-0411]YYYY年M月",      LANGUAGE_JAPANESE },
-    {   55,     NF_NUMBER_STANDARD,             "[$-0412]YYYY-M-D",         LANGUAGE_KOREAN },
-    {   55,     NF_NUMBER_STANDARD,             "[$-0404]AM/PM HH時MM分", LANGUAGE_CHINESE_TRADITIONAL },
-    {   55,     NF_NUMBER_STANDARD,             "[$-0804]AM/PM HH时MM分", LANGUAGE_CHINESE_SIMPLIFIED },
-    {   55,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    {   56,     NF_NUMBER_STANDARD,             "[$-0411]M月D日",                 LANGUAGE_JAPANESE },
-    // unable to locate Korean
-    {   56,     NF_NUMBER_STANDARD,             "[$-0404]AM/PM HH時MM分SS秒",    LANGUAGE_CHINESE_TRADITIONAL  },
-    {   56,     NF_NUMBER_STANDARD,             "[$-0804]AM/PM HH时MM分SS秒",    LANGUAGE_CHINESE_SIMPLIFIED },
-    {   56,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    {   57,     NF_NUMBER_STANDARD,             "[$-030411]GE.M.D",             LANGUAGE_JAPANESE },
-    {   57,     NF_NUMBER_STANDARD,             "[$-0412]YYYY年 M月 D日",    LANGUAGE_KOREAN },
-    {   57,     NF_NUMBER_STANDARD,             "[$-0404]YYYY/M/D",             LANGUAGE_CHINESE_TRADITIONAL },
-    {   57,     NF_NUMBER_STANDARD,             "[$-0804]YYYY年M日",          LANGUAGE_CHINESE_SIMPLIFIED },
-    {   57,     NF_DATE_SYS_DDMMYYYY            },  // default
-
-    {   58,     NF_NUMBER_STANDARD,             "[$-030411]GGGE年M月D日",    LANGUAGE_JAPANESE },
-    {   58,     NF_NUMBER_STANDARD,             "[$-0412]M-D",                  LANGUAGE_KOREAN },
-    {   58,     NF_NUMBER_STANDARD,             "[$-0404]YYYY年M月D日",      LANGUAGE_CHINESE_TRADITIONAL },
-    {   58,     NF_NUMBER_STANDARD,             "[$-0804]M月D日",             LANGUAGE_CHINESE_SIMPLIFIED } ,
-    {   58,     NF_DATE_SYS_DDMMYYYY            }  // default
-};
-
-
-// ----------------------------------------------------------------------------
-
 XclImpNumFmtBuffer::XclImpNumFmtBuffer( const XclImpRoot& rRoot ) :
+    XclNumFmtBuffer( rRoot ),
     XclImpRoot( rRoot ),
-    mnStdFmt( GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
+    mnNextXclIdx( 0 )
 {
-}
-
-sal_uInt32 XclImpNumFmtBuffer::GetFormat( sal_uInt16 nNumFmt ) const
-{
-    if( maKeyVec.empty() )
-        const_cast< XclImpNumFmtBuffer* >( this )->InsertBuiltinFormats();
-
-    return (nNumFmt < maKeyVec.size()) ? maKeyVec[ nNumFmt ] : mnStdFmt;
 }
 
 void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
 {
-    if( maKeyVec.empty() && (GetBiff() >= xlBiff5) )
-        InsertBuiltinFormats();
-
     String aFormat;
-    sal_uInt16 nIndex;
-    bool bAppend = false;       // BIFF2-BIFF3: append, BIFF4+: read position from record
-
     switch( GetBiff() )
     {
         case xlBiff2:
         case xlBiff3:
             rStrm.AppendByteString( aFormat, false );
-            bAppend = true;
         break;
 
         case xlBiff4:
-            bAppend = true;     // In BIFF4 the index field exists, but is undefined
-            // run through
+            rStrm.Ignore( 2 );  // in BIFF4 the index field exists, but is undefined
+            rStrm.AppendByteString( aFormat, false );
+        break;
+
         case xlBiff5:
         case xlBiff7:
-            rStrm >> nIndex;
+            rStrm >> mnNextXclIdx;
             rStrm.AppendByteString( aFormat, false );
         break;
 
         case xlBiff8:
-            rStrm >> nIndex;
+            rStrm >> mnNextXclIdx;
             rStrm.AppendUniString( aFormat );
         break;
 
@@ -700,67 +549,57 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
             return;
     }
 
-    xub_StrLen nCheckPos;
-    sal_Int16 nType = NUMBERFORMAT_DEFINED;
-    sal_uInt32 nKey;
-
-    GetFormatter().PutandConvertEntry( aFormat, nCheckPos, nType, nKey,
-        LANGUAGE_ENGLISH_US, ScGlobal::eLnge );
-
-    if( bAppend )
-        maKeyVec.push_back( nKey );
-    else
-        InsertKey( nIndex, nKey );
+    if( mnNextXclIdx < 0xFFFF )
+    {
+        InsertFormat( mnNextXclIdx, aFormat );
+        ++mnNextXclIdx;
+    }
 }
 
-void XclImpNumFmtBuffer::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nNumFmt, bool bSkipPoolDefs ) const
+void XclImpNumFmtBuffer::CreateScFormats()
 {
-    FillScFmtToItemSet( rItemSet, GetFormat( nNumFmt ), bSkipPoolDefs );
+    DBG_ASSERT( maIndexMap.empty(), "XclImpNumFmtBuffer::CreateScFormats - already created" );
+
+    SvNumberFormatter& rFormatter = GetFormatter();
+    for( XclNumFmtMap::const_iterator aIt = GetFormatMap().begin(), aEnd = GetFormatMap().end(); aIt != aEnd; ++aIt )
+    {
+        const XclNumFmt& rNumFmt = aIt->second;
+
+        // insert/convert the Excel number format
+        xub_StrLen nCheckPos;
+        short nType = NUMBERFORMAT_DEFINED;
+        ULONG nKey;
+        if( rNumFmt.maFormat.Len() )
+        {
+            String aFormat( rNumFmt.maFormat );
+            rFormatter.PutandConvertEntry( aFormat, nCheckPos,
+                nType, nKey, LANGUAGE_ENGLISH_US, rNumFmt.meLanguage );
+        }
+        else
+            nKey = rFormatter.GetFormatIndex( rNumFmt.meOffset, rNumFmt.meLanguage );
+
+        // insert the resulting format key into the Excel->Calc index map
+        maIndexMap[ aIt->first ] = nKey;
+    }
 }
 
-void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uInt32 nScNumFmt, bool bSkipPoolDefs ) const
+ULONG XclImpNumFmtBuffer::GetScFormat( sal_uInt16 nXclNumFmt ) const
+{
+    XclImpIndexMap::const_iterator aIt = maIndexMap.find( nXclNumFmt );
+    return (aIt != maIndexMap.end()) ? aIt->second : GetStdScNumFmt();
+}
+
+void XclImpNumFmtBuffer::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nXclNumFmt, bool bSkipPoolDefs ) const
+{
+    FillScFmtToItemSet( rItemSet, GetScFormat( nXclNumFmt ), bSkipPoolDefs );
+}
+
+void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, ULONG nScNumFmt, bool bSkipPoolDefs ) const
 {
     ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
     if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, FALSE ) == SFX_ITEM_SET )
         ScGlobal::AddLanguage( rItemSet, GetFormatter() );
 }
-
-void XclImpNumFmtBuffer::InsertBuiltinFormats()
-{
-    const XclImpBuiltInFormat* pEnd = STATIC_TABLE_END( pBuiltInFormats );
-
-    String aFormat;
-    xub_StrLen nCheckPos;
-    sal_Int16 nType = NUMBERFORMAT_DEFINED;
-    sal_uInt32 nKey;
-    sal_uInt32 nSaveIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
-
-    for( const XclImpBuiltInFormat* pCurr = pBuiltInFormats; pCurr != pEnd; ++pCurr )
-    {
-        if((pCurr->eLanguage == LANGUAGE_SYSTEM || pCurr->eLanguage == GetSysLanguage()) &&
-            nSaveIndex != pCurr->mnIndex)
-        {
-            if( pCurr->mpFormat )
-            {
-                aFormat = String( pCurr->mpFormat, RTL_TEXTENCODING_UTF8 );
-                GetFormatter().PutandConvertEntry( aFormat, nCheckPos,
-                    nType, nKey, LANGUAGE_ENGLISH_US, pCurr->eLanguage );
-            }
-            else
-                nKey = GetFormatter().GetFormatIndex( pCurr->meOffset, pCurr->eLanguage );
-            InsertKey( pCurr->mnIndex, nKey );
-            nSaveIndex = pCurr->mnIndex;
-        }
-    }
-}
-
-void XclImpNumFmtBuffer::InsertKey( sal_uInt32 nIndex, sal_uInt32 nFormatKey )
-{
-    if( nIndex >= maKeyVec.size() )
-        maKeyVec.resize( nIndex + 1, mnStdFmt );
-    maKeyVec[ nIndex ] = nFormatKey;
-}
-
 
 // XF, STYLE record - Cell formatting =========================================
 
@@ -1753,7 +1592,7 @@ void XclImpXFIndexBuffer::DecodeXFIndex( sal_uInt16& rnXFIndex, sal_uInt32& rnFo
 {
     rnXFIndex = static_cast< sal_uInt16 >( nEncXFIndex );
     // #108770# set 'Standard' number format for all Boolean cells
-    rnForcedNumFmt = ::get_flag( nEncXFIndex, EXC_XFBUFF_BOOLFLAG ) ? GetNumFmtBuffer().GetStandardFormat() : NUMBERFORMAT_ENTRY_NOT_FOUND;
+    rnForcedNumFmt = ::get_flag( nEncXFIndex, EXC_XFBUFF_BOOLFLAG ) ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
 void XclImpXFIndexBuffer::SetXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode )
