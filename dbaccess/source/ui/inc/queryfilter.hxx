@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:43:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,7 @@ namespace dbaui
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer>& _rxQueryComposer,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols,
-                        const String& rFieldName = String()
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols
                     );
         ~DlgFilterCrit();
 
