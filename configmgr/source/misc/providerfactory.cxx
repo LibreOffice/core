@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-22 07:42:07 $
+ *  last change: $Author: jb $ $Date: 2001-06-22 08:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,40 +165,36 @@ namespace configmgr
     }
 
     //---------------------------------------------------------------------------------------
-    static bool checkForOptions(const ConnectionSettings& _rSettings)
+    static bool isReusableConnection(const ConnectionSettings& _rSettings)
     {
-        return  _rSettings.hasLocale()          ||
-                _rSettings.hasAsyncSetting();
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::implGetProvider(const ConnectionSettings& _rSettings, sal_Bool _bCanReuse)
-    {
-        // the providers for the given session type
-        UserSpecificProviders& rProviders = m_aProviders[_rSettings.getSessionType()];
-
-        // the user to retrieve the provider for
-        ::rtl::OUString sUser;
-        if (_rSettings.hasUser())
-            sUser = _rSettings.getUser();
-
-        if (checkForOptions(_rSettings))
-            _bCanReuse = false;
-
-        Reference< XInterface > xReturn;
-        if (_bCanReuse)
-        {
-            UserSpecificProvidersIterator aExistentProvider = rProviders.find(sUser);
-            if (rProviders.end() != aExistentProvider)
-            {
-                // should check for differing parameters here
-                xReturn = aExistentProvider->second;
-            }
-        }
-
         // #78409
         // if a provider is queried with a password, we always create a new instance for it,
         // as don't wan't to remember the passwords for the user.
+
+        if ( _rSettings.hasPassword() && !_rSettings.isLocalSession())
+            return false;
+
+        if (_rSettings.hasReinitializeFlag() && _rSettings.getReinitializeFlag())
+            return false;
+
+        return  true;
+    }
+
+    //---------------------------------------------------------------------------------------
+    extern OUString buildConnectString(const ConnectionSettings& _rSettings);
+
+    //---------------------------------------------------------------------------------------
+    Reference< XInterface > OProviderFactory::implGetProvider(const ConnectionSettings& _rSettings)
+    {
+        OUString const sConnectString = buildConnectString(_rSettings);
+
+        Reference< XInterface > xReturn;
+
+        ProviderCacheIterator aExistentProviderPos = m_aProviders.find(sConnectString);
+        if (m_aProviders.end() != aExistentProviderPos)
+        {
+            xReturn = aExistentProviderPos->second;
+        }
 
         if (!xReturn.is())
         {
@@ -215,19 +211,19 @@ namespace configmgr
             }
 
             // remember it for later usage
-            if (_bCanReuse)
-                rProviders[sUser] = xReturn;
+            if (isReusableConnection(_rSettings))
+                m_aProviders[sConnectString] = xReturn;
         }
 
         return xReturn;
     }
 
     //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool _bRequiresBootstrap, bool _bCanReuse)
+    Reference< XInterface > OProviderFactory::implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool _bRequiresBootstrap)
     {
         try
         {
-            return implGetProvider(_rSettings, _bCanReuse);
+            return implGetProvider(_rSettings);
         }
         catch(uno::Exception& e)
         {
@@ -259,7 +255,7 @@ namespace configmgr
         aThisRoundSettings.validate();
         OSL_ENSURE(aThisRoundSettings.isComplete(), "Incomplete Data for creating a ConfigurationProvider");
 
-        m_xDefaultProvider = implCreateProviderWithSettings(aThisRoundSettings,true,true);
+        m_xDefaultProvider = implCreateProviderWithSettings(aThisRoundSettings,true);
 
         // register disposing listener
         Reference<com::sun::star::lang::XComponent> xComponent(m_xDefaultProvider, UNO_QUERY);
@@ -332,7 +328,11 @@ namespace configmgr
                 try
                 {
                     aThisRoundSettings.setSessionType(sLocalSessionIdentifier, Settings::SO_ADJUSTMENT);
-                    return implGetProvider(aThisRoundSettings,true);
+
+                    Reference< XInterface > xLocalProvider
+                        = implGetProvider(aThisRoundSettings);
+
+                    if (xLocalProvider.is()) return xLocalProvider;
                 }
                 catch(Exception&)
                 {
@@ -358,8 +358,7 @@ namespace configmgr
         OSL_ENSURE(aThisRoundSettings.isComplete(), "Incomplete Data for creating a ConfigurationProvider");
 
         Reference< XInterface > xProvider =
-            implCreateProviderWithSettings( aThisRoundSettings,bUseBootstrapData,
-                                            !aThisRoundSettings.hasPassword() );
+            implCreateProviderWithSettings( aThisRoundSettings,bUseBootstrapData);
 
         return xProvider;
     }
@@ -416,6 +415,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/22 07:42:07  jb
+ *  #81412# Erroneous handling of default provider
+ *
  *  Revision 1.9  2001/05/18 16:16:52  jb
  *  #81412# Cleaned up bootstrap settings handling; Added recognition of bootstrap errors
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-14 10:04:33 $
+ *  last change: $Author: jb $ $Date: 2001-06-22 08:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,10 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _RTL_USTRING_HXX_
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
 #ifndef _OSL_FILE_HXX_
@@ -1203,6 +1206,92 @@ namespace configmgr
     , settings(ConnectionSettings::bootstrap(status,url))
     {}
 
+// ---------------------------------------------------------------------------------------
+// caching helpers
+//---------------------------------------------------------------------------------------
+    OUString buildConnectString(const ConnectionSettings& _rSettings)
+    {
+        OSL_ENSURE(_rSettings.isComplete(),"WARNING: creating connect string for incomplete settings");
+
+        rtl::OUStringBuffer sConnect = _rSettings.getSessionType();
+
+        if (_rSettings.isServiceRequired())
+        {
+            sConnect.append(sal_Unicode(":"));
+            sConnect.append(_rSettings.getService());
+        }
+
+        if (_rSettings.isLocalSession())
+        {
+            if (_rSettings.isSourcePathValid())
+            {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(":share@"));
+                sConnect.append(_rSettings.getSourcePath());
+            }
+            if (_rSettings.isUpdatePathValid())
+            {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(":user@"));
+                sConnect.append(_rSettings.getUpdatePath());
+            }
+            // maybe consider user here as well ?
+        }
+        else if (_rSettings.isRemoteSession())
+        {
+            if (_rSettings.hasServer() || _rSettings.hasPort())
+            {
+                sConnect.append(sal_Unicode("@"));
+
+                if ( _rSettings.hasServer())
+                {
+                    sConnect.append(_rSettings.getServer());
+                }
+
+                if ( _rSettings.hasPort())
+                {
+                    sConnect.append(sal_Unicode(":"));
+                    sConnect.append(_rSettings.getPort());
+                }
+            }
+
+            if (_rSettings.hasUser())
+            {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(";user="));
+                sConnect.append(_rSettings.getUser());
+            }
+            if (_rSettings.hasPassword())
+            {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(";pwd="));
+                sConnect.append(_rSettings.getPassword());
+            }
+            if (_rSettings.hasTimeout())
+            {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(";timeout="));
+                sConnect.append( _rSettings.getTimeout());
+            }
+        }
+        else
+        {
+            OSL_ENSURE(false, "Unknown session type");
+        }
+
+        if (_rSettings.hasLocale())
+        {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(";locale="));
+                sConnect.append(_rSettings.getLocale());
+        }
+        if (_rSettings.hasAsyncSetting())
+        {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(";async="));
+                sConnect.append(_rSettings.getAsyncSetting());
+        }
+        if (_rSettings.hasReinitializeFlag() && _rSettings.getReinitializeFlag())
+        {
+                sConnect.appendAscii(RTL_CONSTASCII_STRINGPARAM(";reinitialize="));
+                sConnect.append(_rSettings.getReinitializeFlag());
+        }
+
+        return sConnect.makeStringAndClear();
+    }
 // ---------------------------------------------------------------------------------------
 // - helper
 // ---------------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-18 16:16:52 $
+ *  last change: $Author: jb $ $Date: 2001-06-22 08:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,8 @@ namespace configmgr
         BootstrapSettings const*            m_pPureSettings;
 
         typedef uno::WeakReference< uno::XInterface >   ProviderReference;
-        DECLARE_STL_USTRINGACCESS_MAP(ProviderReference, UserSpecificProviders);
-        DECLARE_STL_USTRINGACCESS_MAP(UserSpecificProviders, SessionSpecificProviders);
-        SessionSpecificProviders    m_aProviders;
+        DECLARE_STL_USTRINGACCESS_MAP(ProviderReference, ProviderCache);
+        ProviderCache   m_aProviders;
 
     public:
         OProviderFactory(
@@ -148,12 +147,9 @@ namespace configmgr
         void    ensureDefaultProvider();
         void    ensureBootstrapSettings();
 
-        uno::Reference< uno::XInterface > implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool bRequiresBootstrap, bool _bReusable);
+        uno::Reference< uno::XInterface > implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool bRequiresBootstrap);
         // from the given map, extract a provider for the given user. (if necessary, create one and insert it into the map)
-        uno::Reference< uno::XInterface > implGetProvider(
-                    const ConnectionSettings& _rSettings,
-                    sal_Bool _bReusable
-                );
+        uno::Reference< uno::XInterface > implGetProvider( const ConnectionSettings& _rSettings );
 
         // to be called with m:aMutex locked
         void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
@@ -168,6 +164,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/18 16:16:52  jb
+ *  #81412# Cleaned up bootstrap settings handling; Added recognition of bootstrap errors
+ *
  *  Revision 1.4  2001/04/03 16:33:58  jb
  *  Local AdministrationProvider now mapped to Setup-session
  *
