@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:23:08 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_MACROCHOOSER
     Text [ italian ] = "Macro" ;
     Text [ portuguese_brazilian ] = "Macro" ;
     Text [ portuguese ] = "Macro" ;
-    Text [ finnish ] = "Makro" ;
+    Text [ finnish ] = "Macro" ;
     Text [ danish ] = "Makro" ;
     Text [ french ] = "Macro" ;
     Text [ swedish ] = "Makro" ;
@@ -110,7 +110,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "Nome ~macro" ;
         Text [ portuguese_brazilian ] = "Nome da ~macro" ;
         Text [ portuguese ] = "Nome da ~macro" ;
-        Text [ finnish ] = "~Makron nimi" ;
+        Text [ finnish ] = "Makron nimi" ;
         Text [ danish ] = "Makronavn" ;
         Text [ french ] = "~Nom de la macro" ;
         Text [ swedish ] = "~Makronamn" ;
@@ -138,7 +138,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "Macro ~da" ;
         Text [ portuguese_brazilian ] = "Macro ~from" ;
         Text [ portuguese ] = "Macro ~de" ;
-        Text [ finnish ] = "Macro ~from" ;
+        Text [ finnish ] = "Makro tiedostosta" ;
         Text [ danish ] = "Makro fra" ;
         Text [ french ] = "~Macro de" ;
         Text [ swedish ] = "Ma~kro från" ;
@@ -174,7 +174,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "De~scrizione" ;
         Text [ portuguese_brazilian ] = "De~scrição" ;
         Text [ portuguese ] = "De~scrição" ;
-        Text [ finnish ] = "Kuvau~s" ;
+        Text [ finnish ] = "Ku~vaus" ;
         Text [ danish ] = "Beskrivelse" ;
         Text [ french ] = "~Description" ;
         Text [ swedish ] = "Be~skrivning" ;
@@ -204,7 +204,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "Eseg~ui" ;
         Text [ portuguese_brazilian ] = "Exec~utar" ;
         Text [ portuguese ] = "Exec~utar" ;
-        Text [ finnish ] = "S~uorita" ;
+        Text [ finnish ] = "Suo~rita" ;
         Text [ danish ] = "Kør" ;
         Text [ french ] = "E~xécuter" ;
         Text [ swedish ] = "K~ör" ;
@@ -239,7 +239,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "~Assegna..." ;
         Text [ portuguese_brazilian ] = "~Assign..." ;
         Text [ portuguese ] = "~Atribuir" ;
-        Text [ finnish ] = "~Assign..." ;
+        Text [ finnish ] = "~Määritä" ;
         Text [ danish ] = "Tildel..." ;
         Text [ french ] = "~Assigner..." ;
         Text [ swedish ] = "~Tilldela..." ;
@@ -268,7 +268,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "Modi~fica" ;
         Text [ portuguese_brazilian ] = "~Editar" ;
         Text [ portuguese ] = "~Editar" ;
-        Text [ finnish ] = "Muo~kkaa" ;
+        Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "~Rediger" ;
         Text [ french ] = "~Éditer" ;
         Text [ swedish ] = "~Redigera" ;
@@ -298,7 +298,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "Elimina..." ;
         Text [ portuguese_brazilian ] = "Apa~gar..." ;
         Text [ portuguese ] = "~Eliminar..." ;
-        Text [ finnish ] = "~Poista..." ;
+        Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "~Slet..." ;
         Text [ french ] = "~Supprimer..." ;
         Text [ swedish ] = "R~adera..." ;
@@ -327,7 +327,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "~Gestisci..." ;
         Text [ portuguese_brazilian ] = "Geren~ciar..." ;
         Text [ portuguese ] = "~Gerir..." ;
-        Text [ finnish ] = "~Käsittele..." ;
+        Text [ finnish ] = "~Järjestelytyökalu" ;
         Text [ danish ] = "Administrer..." ;
         Text [ french ] = "~Gérer..." ;
         Text [ swedish ] = "~Administrera..." ;
@@ -379,7 +379,7 @@ String RID_STR_STDMACRONAME
     Text [ italian ] = "Macro" ;
     Text [ portuguese_brazilian ] = "Macro" ;
     Text [ portuguese ] = "Macro" ;
-    Text [ finnish ] = "Makro" ;
+    Text [ finnish ] = "Macro" ;
     Text [ danish ] = "Makro" ;
     Text [ french ] = "Macro" ;
     Text [ swedish ] = "Makro" ;
@@ -410,7 +410,7 @@ String RID_STR_BTNDEL
     Text [ italian ] = "Eli~mina..." ;
     Text [ portuguese_brazilian ] = "~Apagar..." ;
     Text [ portuguese ] = "E~liminar..." ;
-    Text [ finnish ] = "~Poista..." ;
+    Text [ finnish ] = "~Poista" ;
     Text [ danish ] = "~Slet..." ;
     Text [ french ] = "~Supprimer..." ;
     Text [ swedish ] = "R~adera..." ;
@@ -491,7 +491,7 @@ String RID_STR_CHOOSE
     Text [ portuguese_brazilian ] = "Choose" ;
     Text [ portuguese ] = "Seleccionar" ;
     Text [ english_us ] = "Choose" ;
-    Text [ finnish ] = "Choose" ;
+    Text [ finnish ] = "Valitse" ;
     Text [ danish ] = "Vælg" ;
     Text [ french ] = "Sélectionner" ;
     Text [ swedish ] = "Välj" ;
