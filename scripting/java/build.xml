@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-11-04 17:45:27 $
+#   last change: $Author: rt $ $Date: 2004-01-05 12:50:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,13 +67,17 @@
 
   <property name="prj" value=".."/>
   <property name="build.compiler"   value="classic"/>
-  <property name="optimize"   value="on"/>
-  <property name="debug"   value="off"/>
+  <property name="optimize"   value="off"/>
+  <property name="debug"   value="on"/>
   <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
   <property name="idesupport.dir" value="org/openoffice/idesupport"/>
   <property name="netbeans.dir" value="org/openoffice/netbeans/modules/office"/>
   <property name="framework.dir" value="Framework/com/sun/star/script/framework/security"/>
+
+  <!-- Change this property if you are building NetBeans editor support jar.
+       Not needed in default build -->
+  <property name="netbeans.install.path" value="/export/home/netbeans"/>
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
@@ -100,6 +104,11 @@
     <pathelement path="${jardir}"/>
     <pathelement path="${solar.jar}/openide.jar"/>
     <!-- <pathelement path="${install.dir}/xerces.jar"/> -->
+  </path>
+
+  <path id="netbeans.editor.support.classpath">
+    <pathelement path="${jardir}"/>
+    <pathelement path="${netbeans.install.path}/modules/ext/nb-editor.jar"/>
   </path>
 
   <!-- ===================== Prepare Directories ========================= -->
@@ -146,6 +155,23 @@
       <exclude name="${netbeans.dir}/**/.*/*"/>
       <include name="${netbeans.dir}/**/*.java"/>
     </javac>
+  </target>
+
+  <target name="netbeans.editor.support" depends="prepare">
+    <javac srcdir="." destdir="${jardir}"
+           debug="${debug}" deprecation="on">
+      <classpath refid="netbeans.editor.support.classpath"/>
+      <include name="org/openoffice/netbeans/editor/*.java"/>
+    </javac>
+    <jar jarfile="${jardir}/nb-editorsupport.jar">
+      <fileset dir="${jardir}">
+          <include name="org/openoffice/netbeans/editor/*.class"/>
+      </fileset>
+      <fileset dir=".">
+        <include name="org/openoffice/netbeans/editor/OOo.jcs"/>
+        <include name="org/openoffice/netbeans/editor/OOo.jcb"/>
+      </fileset>
+    </jar>
   </target>
 
   <!-- ===================== jar ========================= -->
