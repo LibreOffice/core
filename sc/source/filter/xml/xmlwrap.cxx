@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-29 15:47:49 $
+ *  last change: $Author: sab $ $Date: 2002-07-22 14:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
                         aAny.getValueType() == ::getBooleanCppuType() &&
                         *(sal_Bool *)aAny.getValue();
     }
-    else if ( pMedium )
+    // #99667#; no longer necessary
+/*  else if ( pMedium )
     {
         // if there is a medium and if this medium has a load environment,
         // we get an active data source from the medium.
@@ -277,7 +278,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
         aParserInput.aInputStream =
             uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
-    }
+    }*/
     else
         return sal_False;
 
@@ -591,10 +592,11 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         xStream->SetBufferSize( 16*1024 );
         xOut = new utl::OOutputStreamWrapper( *xStream );
     }
-    else if ( pMedium )
+    // #99667#; no longer necessary
+/*  else if ( pMedium )
     {
         xOut = pMedium->GetDataSink();
-    }
+    }*/
 
     uno::Reference<io::XActiveDataSource> xSrc( xWriter, uno::UNO_QUERY );
     xSrc->setOutputStream( xOut );
