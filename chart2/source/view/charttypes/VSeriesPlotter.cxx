@@ -662,7 +662,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         Clipping::clipPolygonAtRectangle( aRegressionPoly, m_pPosHelper->getTransformedClipDoubleRect(), aClippedPoly );
         aRegressionPoly = aClippedPoly;
 
-        if( !aRegressionPoly.SequenceX[0].getLength() )
+        if( !aRegressionPoly.SequenceX.getLength() || !aRegressionPoly.SequenceX[0].getLength() )
             continue;
 
         uno::Reference< beans::XPropertySet > xCurveModelProp( xRegressionCurve, uno::UNO_QUERY );
