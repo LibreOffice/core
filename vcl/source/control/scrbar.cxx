@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:52:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SCRBAR_CXX
-
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
 #endif
@@ -78,7 +76,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 
@@ -214,8 +212,8 @@ void ScrollBar::ImplLoadRes( const ResId& rResId )
 
 BOOL ScrollBar::ImplUpdateThumbRect( const Rectangle& rOldRect )
 {
-    Size aThumbRectSize  = rOldRect.GetSize();
 /* !!! Wegen ueberlappenden Fenstern ... !!!
+    Size aThumbRectSize  = rOldRect.GetSize();
     if ( aThumbRectSize == maThumbRect.GetSize() )
     {
         DrawOutDev( maThumbRect.TopLeft(), aThumbRectSize,
@@ -691,6 +689,8 @@ long ScrollBar::ImplDoAction( BOOL bCallEndScroll )
         case SCROLL_PAGEDOWN:
             nDelta = ImplScroll( mnThumbPos+mnPageSize, bCallEndScroll );
             break;
+        default:
+            DBG_ERROR( "ImplDoAction - Invalid Action" );
     }
 
     return nDelta;
@@ -744,6 +744,9 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
             else
                 mnStateFlags &= ~SCRBAR_STATE_PAGE2_DOWN;
             break;
+        default:
+            DBG_ERROR( "ImplDoMouseAction - Invalid Action" );
+
     }
 
     if ( nOldStateFlags != mnStateFlags )
