@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:18:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ class ODatabaseForm :public OFormComponents
     sal_Bool                    m_bSubForm : 1;
     sal_Bool                    m_bForwardingConnection : 1;    // sal_True if we're setting the ActiveConnection on the aggregate
     sal_Bool                    m_bSharingConnection : 1;       // sal_True if the connection we're using is shared with out parent
+    sal_Bool                    m_bInContext : 1;       // sal_True if the form was loaded inside a context
 
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
