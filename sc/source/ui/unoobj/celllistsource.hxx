@@ -2,9 +2,9 @@
  *
  *  $RCSfile: celllistsource.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:50:24 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_CELLLISTSOURCE_HXX
 #define SC_CELLLISTSOURCE_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSOURCE_HPP_
-#include <drafts/com/sun/star/form/XListEntrySource.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
 #endif
 #ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
@@ -113,7 +113,7 @@ namespace calc
     //=====================================================================
     class OCellListSource;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper4 <   ::drafts::com::sun::star::form::XListEntrySource
+    typedef ::cppu::WeakAggComponentImplHelper4 <   ::com::sun::star::form::binding::XListEntrySource
                                                 ,   ::com::sun::star::util::XModifyListener
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 ,   ::com::sun::star::lang::XInitialization
@@ -157,8 +157,8 @@ namespace calc
         virtual sal_Int32 SAL_CALL getListEntryCount(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getListEntry( sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addListEntryListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeListEntryListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addListEntryListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeListEntryListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
 
         // OComponentHelper/XComponent
         virtual void SAL_CALL disposing();
