@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:27:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <unotools/configitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #define HTML_FONT_COUNT 7
 
 // !!!be aware!!!: the following defines are _not_ used as values in the configuration file
@@ -85,7 +89,7 @@
 struct HtmlOptions_Impl;
 // -----------------------------------------------------------------------
 
-class SvxHtmlOptions : public utl::ConfigItem
+class SVX_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 {
     HtmlOptions_Impl*pImp;
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
