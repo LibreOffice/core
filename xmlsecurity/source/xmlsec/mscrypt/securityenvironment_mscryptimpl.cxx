@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-19 11:36:23 $
+ *  last change: $Author: mmi $ $Date: 2004-07-26 06:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,121 +1235,5 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
     }
 
     return xcert ;
-}
-
-/*-
- * This is just one temporary conversion
- */
-Sequence< sal_Int8 > numericStringToBigInteger (
-    OUString serialNumber
-) {
-    xmlChar* chSerial ;
-    unsigned long ui ;
-    unsigned char bb[5] ;
-    int len ;
-
-    rtl::OString oseri = rtl::OUStringToOString( serialNumber , RTL_TEXTENCODING_ASCII_US ) ;
-
-    chSerial = xmlStrndup( ( const xmlChar* )oseri.getStr(), ( int )oseri.getLength() ) ;
-    ui = atoi( ( const char* )chSerial ) ;
-    xmlFree( chSerial ) ;
-
-    bb[0] = 0;
-    bb[1] = (unsigned char) (ui >> 24);
-    bb[2] = (unsigned char) (ui >> 16);
-    bb[3] = (unsigned char) (ui >> 8);
-    bb[4] = (unsigned char) (ui);
-
-    /*
-    ** Small integers are encoded in a single byte. Larger integers
-    ** require progressively more space.
-    */
-    if( ui > 0x7f ) {
-        if( ui > 0x7fff ) {
-            if( ui > 0x7fffffL ) {
-                if( ui >= 0x80000000L ) {
-                    len = 5 ;
-                } else {
-                    len = 4 ;
-                }
-            } else {
-                len = 3 ;
-            }
-        } else {
-            len = 2 ;
-        }
-    } else {
-        len = 1 ;
-    }
-
-    Sequence< sal_Int8 > serial( len ) ;
-    for( int i = 0 ; i < len ; i ++ )
-        serial[i] = *( bb + sizeof( bb ) - len + i ) ;
-
-    return serial ;
-}
-
-/*-
- * This is just one temporary conversion
- */
-OUString bigIntegerToNumericString( Sequence< sal_Int8 > serial )
-{
-    OUString aRet;
-
-    if( serial.getLength() )
-    {
-        long ival = 0;
-
-        {
-            unsigned len = serial.getLength() ;
-            unsigned char *cp = ( unsigned char* )&serial[0] ;
-            unsigned long overflow = 0x1ffUL << (((sizeof(ival) - 1) * 8) - 1);
-            unsigned long ofloinit;
-
-            if (*cp & 0x80)
-                ival = -1L;
-            ofloinit = ival & overflow;
-
-            while (len) {
-                if ((ival & overflow) != ofloinit) {
-                    return aRet;
-                }
-                ival = ival << 8;
-                ival |= *cp++;
-                --len;
-            }
-        }
-
-    /*----------------------
-        {
-            unsigned len = serial.getLength() ;
-            unsigned char *cp = ( unsigned char* )&serial[len-1] ;
-            unsigned long overflow = 0x1ffUL << (((sizeof(ival) - 1) * 8) - 1);
-            unsigned long ofloinit;
-
-            if (*cp & 0x80)
-                ival = -1L;
-            ofloinit = ival & overflow;
-
-            while (len) {
-                if ((ival & overflow) != ofloinit) {
-                    return aRet;
-                }
-                ival = ival << 8;
-                ival |= *cp--;
-                --len;
-            }
-        }
-    ----------------------*/
-
-        {
-            char str[10] ;
-            int len ;
-            len = sprintf( str, "%d", ival ) ;
-            aRet = OUString::createFromAscii( str ) ;
-        }
-    }
-
-    return aRet;
 }
 
