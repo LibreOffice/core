@@ -7,84 +7,12 @@
 <BODY id=theBody>
 
 <script language="JScript">
-// XEventListener implementation in JScript --------------------------------------------------
-var factory= new ActiveXObject("com.sun.star.ServiceManager");
-var oletest= factory.createInstance("oletest.OleTest");
 
-var arFunctions= new Array();
-arFunctions["methodByte"]= "sequence&lt;byte&gt; methodByte( [in] sequence&lt;byte&gt; aSeq )";
-arFunctions["methodFloat"]= "sequence&lt;float&gt; methodFloat( [in] sequence&lt;float&gt; aSeq)";
-arFunctions["methodDouble"]= "sequence&lt;double&gt; methodDouble( [in] sequence&lt;double&gt; aSeq)";
-arFunctions["methodBool"]= 	"sequence&lt;boolean&gt; methodBool( [in] sequence&lt;boolean&gt; aSeq)";
-arFunctions["methodShort"]= "sequence&lt;short&gt; methodShort( [in] sequence&lt;short&gt; aSeq)";
-arFunctions["methodUShort"]= "sequence&lt;unsigned short&gt; methodUShort( [in] sequence&lt;unsigned short&gt; aSeq)";
-arFunctions["methodLong"]= "sequence&lt;long&gt; methodLong( [in] sequence&lt;long&gt; aSeq)";
-arFunctions["methodULong"]= "sequence&lt;unsigned long&gt; methodULong( [in] sequence&lt;unsigned long&gt; aSeq)";
-arFunctions["methodString"]= "sequence&lt;string&gt; methodString( [in] sequence&lt;string&gt; aSeq)";
-arFunctions["methodChar"]= "sequence&lt;char&gt; methodChar( [in] sequence&lt;char&gt; aSeq)";
-arFunctions["methodAny"]= "sequence&lt;any&gt; methodAny	( [in] sequence&lt;any&gt; aSeq)";
-arFunctions["methodXInterface"]= "sequence&lt;XInterface&gt; methodXInterface ( [in] sequence&lt;XInterface&gt; aSeq)";
-arFunctions["methodSequence"]= "sequence&lt; sequence &lt;long&gt; &gt; methodSequence( [in] sequence&lt; sequence&lt; long &gt; &gt; aSeq)";
-arFunctions["methodSequence2"]= "sequence&lt; sequence &lt;sequence &lt;long&gt; &gt; &gt; methodSequence2( [in] sequence&lt; sequence&lt; sequence&lt;long&gt; &gt; &gt; aSeq)";
-arFunctions["methodXEventListeners"]= "sequence&lt; com::sun::star::lang::XEventListener &gt; methodXEventListeners( [in] sequence&lt;com::sun::star::lang::XEventListener&gt; aSeq)";
-arFunctions["methodXEventListenersMul"]= "sequence&lt; sequence&lt; com::sun::star::lang::XEventListener &gt; &gt; methodXEventListenersMul( [in] sequence&lt; sequence&lt; com::sun::star::lang::XEventListener&gt; &gt; aSeq)";
-arFunctions["AttrByte"]="[attribute] sequence<byte> AttrByte";
-arFunctions["AttrFloat"]="[attribute] sequence<float> AttrFloat";
-arFunctions["AttrDouble"]="[attribute] sequence<double> AttrDouble";
-arFunctions["AttrBool"]="[attribute] sequence<boolean> AttrBool";
-arFunctions["AttrShort"]="[attribute] sequence<short> AttrShort";
-arFunctions["AttrUShort"]="[attribute] sequence<unsigned short> AttrUShort";
-arFunctions["AttrLong"]="[attribute] sequence<long> AttrLong";
-arFunctions["AttrULong"]="[attribute] sequence<unsigned long> AttrULong";
-arFunctions["AttrString"]="[attribute] sequence<string> AttrString";
-arFunctions["AttrChar"]="[attribute] sequence<char> AttrChar";
-arFunctions["AttrAny"]="[attribute] sequence<any> AttrAny";
-arFunctions["AttrSequence"]="[attribute] sequence< sequence<long> > AttrSequence";
-arFunctions["AttrSequence2"]="[attribute] sequence< sequence< sequence <long> > > AttrSequence2";
-arFunctions["AttrXInterface"]="[attribute] sequence< com::sun::star::uno::XInterface > AttrXInterface";
-
-arFunctions["testout_methodByte"]= " void testout_methodByte( [out] byte rOut )";
-arFunctions["testout_methodFloat"]= "void testout_methodFloat( [out] float rOut)";
-arFunctions["testout_methodDouble"]= "void testout_methodDouble( [out] double rOut)";
-arFunctions["testout_methodBool"]= "void testout_methodBool( [out] boolean rOut)";
-arFunctions["testout_methodShort"]= "void testout_methodShort( [out] short rOut)";
-arFunctions["testout_methodUShort"]= "void testout_methodUShort( [out] unsigned short rOut)";
-arFunctions["testout_methodLong"]= "void testout_methodLong( [out]  long rOut)";
-arFunctions["testout_methodULong"]= "void testout_methodULong( [out] unsigned long rOut)";
-arFunctions["testout_methodString"]= "void testout_methodString( [out] string rOut)";
-arFunctions["testout_methodChar"]= "void testout_methodChar( [out] char rOut)";
-arFunctions["testout_methodAny"]= "void testout_methodAny( [out] any rOut)";
-arFunctions["testout_methodSequence"]= "void testout_methodSequence( [out] sequence< long > rOut)";
-arFunctions["testout_methodSequence2"]= "void testout_methodSequence2( [out] sequence < sequence< long > > rOut)";
-arFunctions["testout_methodXInterface"]= "void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut)";
-arFunctions["testout_methodMulParams1"]= "void testout_methodMulParams1( [out] long rout1, [out] long rout2)";
-arFunctions["testout_methodMulParams2"]= "void testout_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3)";
-arFunctions["testout_methodMulParams3"]= "void testout_methodMulParams3( [in] string sin, [out] string sout)";
-arFunctions["testout_methodMulParams4"]= "void testout_methodMulParams4( [in] float in1, [out] float out1, [in] long in2, [out] long out2, [in] long in3)";
-arFunctions["testinout_methodByte"]="void testinout_methodByte( [inout] byte rOut )";
-arFunctions["testinout_methodFloat"]="void testinout_methodFloat( [inout] float rOut)";
-arFunctions["testinout_methodDouble"]="void testinout_methodDouble( [inout] double rOut)";
-arFunctions["testinout_methodBool"]="void testinout_methodBool( [inout] boolean rOut)";
-arFunctions["testinout_methodShort"]="void testinout_methodShort( [inout] short rOut)";
-arFunctions["testinout_methodUShort"]="void testinout_methodUShort( [inout] unsigned short rOut)";
-arFunctions["testinout_methodLong"]="void testinout_methodLong( [inout]  long rOut)";
-arFunctions["testinout_methodULong"]="void testinout_methodULong( [inout] unsigned long rOut)";
-arFunctions["testinout_methodString"]="void testinout_methodString( [inout] string rOut)";
-arFunctions["testinout_methodChar"]="void testinout_methodChar( [inout] char rOut)";
-arFunctions["testinout_methodAny"]="void testinout_methodAny( [inout] any rOut)";
-arFunctions["testinout_methodSequence"]="void testinout_methodSequence( [inout] sequence< long > rOut)";
-arFunctions["testinout_methodSequence2"]="void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut)";
-arFunctions["testinout_methodXInterface"]="void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut)";
-arFunctions["testinout_methodXInterface2"]="void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut)";
-
-arFunctions["methodAnyTest1"]="any methodAnyTest1( [in] any rIn)";
-arFunctions["AttrAny2"]= "[attribute]  any AttrAny2";
-arFunctions["retMethodStruct"]= "com::sun::star::beans::Property retMethodStruct()";
-arFunctions["AttrStruct"]= "[attribute] com::sun::star::beans::Property AttrStruct";
-arFunctions["methodStruct2"]= "com::sun::star::beans::Property methodStruct2( [in] com::sun::star::beans::Property aProp)";
-
-
-var Log= new Logger();
+function runJScriptTest( Log)
+{
+document.writeln("================================================================================<br>");
+document.writeln("JScript<br>");
+document.writeln("================================================================================<p>");
 
 var arr= new Array( 1, 2, 3, 4, 0);
 var arrInt= new Array( 1,2,3,4,5);
@@ -105,8 +33,9 @@ var arArEventListener= new Array( arEventListener, arEventListener2);
 
 var arObj= new Array();
 for( i=0; i< 3; i++)
+{
     arObj[i]= new Object();
-
+}
 var outVal= new Array();
 var outVal2= new Array();
 var outVal3= new Array();
@@ -219,8 +148,7 @@ for( i=0; i < arr1.length; i++)
 Log.print( bOk, "methodSequence2");
 
 ret= oletest.methodXInterface( arObj);
-_ret= new VBArray( ret);
-_ret= _ret.toArray();
+_ret= new VBArray( ret).toArray();
 bOk= true;
 for(i in _ret)
 {
@@ -366,7 +294,7 @@ for( i=0; i < arr1.length; i++)
 }
 Log.print( bOk, "AttrSequence2");
 
-oletest.AttrXInterface( arObj);
+oletest.AttrXInterface= arObj;
 ret= oletest.AttrXInterface;
 _ret= new VBArray( ret).toArray();
 bOk= true;
@@ -380,6 +308,19 @@ for(i in _ret)
 }
 Log.print( bOk, "AttrXInterface");
 
+ret= oletest.methodXInterface( arObj);
+_ret= new VBArray( ret);
+_ret= _ret.toArray();
+bOk= true;
+for(i in _ret)
+{
+    if( _ret[i] !== arObj[i])
+    {
+        bOk= false;
+        break;
+    }
+}
+Log.print( bOk, "methodXInterface");
 document.writeln("<br>");
 
 oletest.testout_methodByte( outVal );
@@ -612,47 +553,21 @@ oletest.AttrStruct=  astruct;
 var ret= oletest.AttrStruct;
 Log.print( ret.Attributes == 127 && ret.Handle == 255 && ret.Name == "OleTest_Property", "AttrStruct");
 
+
+// The function returns the struct. Since structs are passed by value the returned struct
+// will be wrapped in another IDispatch object
+astruct.Attributes= 1;
+astruct.Handle= 2;
+astruct.Name= "Property";
 ret= oletest.methodStruct2( astruct);
-Log.print( ret === astruct, "methodStruct2");
-
-
-/* 		alert("2100"); */
-/* 		var ret= oletest.retMethodByte(); */
-/* 		var sfarray= VBArray( ret); */
-/* 		document.writeln( sfarray.toArray() ); */
+Log.print( ret.Attributes == 1 && ret.Handle == 2 && ret.Name == "Property", "methodStruct2");
 
 
 document.writeln("<p>");
-Log.summarize();
-
-
-
-
-function Logger()
-{
-    this.print= logger_print;
-    this.summarize= logger_summarize;
-    this.bAllOk= true;
-}
-function logger_print( bool, method)
-{
-    if( bool)
-        document.writeln( "Ok &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
-    else
-    {
-        document.writeln( "Failed &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
-        this.bAllOk= this.bAllOk && false;
-    }
 }
 
-function logger_summarize()
-{
-    document.writeln("<p> ==============================================================================<br>");
-    if(this.bAllOk)
-        document.writeln("No errors <br>");
-    else
-        document.writeln("Error ! The test failed! <br>");
-}
+
+
     
 function isEqualAr( ar1, ar2)
 {
@@ -662,8 +577,8 @@ function isEqualAr( ar1, ar2)
         bOk= true;
         for( x in ar1)
         {
-/*             document.writeln( ar1[x] + " "); */
-/*              document.writeln( ar2[x] + " "); */
+//            document.writeln( ar1[x] + " ");
+//             document.writeln( ar2[x] + " ");
             if( ar1[x] != ar2[x])
             {
                 bOk= false;
@@ -726,88 +641,347 @@ function XEventListener_disposingCalled()
 {
      return this.bdisposingCalled;
 }
-
-//--------------------------------------------------------------------------------------------
-function callOleTest(	 id)
-{   
-	var factory= new ActiveXObject("com.sun.star.ServiceManager");
-	var oletest= factory.createInstance("oletest.OleTest");
-//	alert(oletest);
-		
-	var arr= new Array( 1, 2, 3, 4, 0);
-	var arrDouble= new Array( 1.2345, 12.345, 123,45, 1234.5, 12345);
-	var arrBool= new Array( 1, 0, 2, 0, 3);
-	var arrChar= new Array( '1', 'A', "1", "A", ' ', 55, 56);
-	var arrString= new Array("hamburger","cheeseburger", "chicken nuggets", "chicken wings" , "pizza");
-	var arrAny= new Array( 100, 100.1235,"hallo");
-	var arrSeq= new Array( arr, arr, arr);
-	var arrSeq2= new Array( arrSeq, arrSeq, arrSeq)
-
-	
-	var arrout1= new Array();
-	var arrout2= new Array();
-	var arrout3= new Array();
-
-	var ret, i;
-	var sfarray, sfarray1, sfarray2, sfarray3;
-	var arEventListener= new Array( new XEventListener_Impl(), new XEventListener_Impl(),
-	                                new XEventListener_Impl());
-	var arEventListener2= new Array( new XEventListener_Impl(), new XEventListener_Impl(),
-	                                new XEventListener_Impl());
-	var arArEventListener= new Array( arEventListener, arEventListener2);
-	switch( id)
-	{
-	// Array in-param
-
-
-
-	
-	// Structs ----------------------------------------------
-	case 1020:
-		 var struct= oletest._GetStruct("com.sun.star.beans.Property");
-		 struct.Attributes= 1;
-		 struct.Handle= 2;
-		 struct.Name= "some Property"
-		 oletest.methodStruct( struct);
-		 break;
-	case 1021:
-		var struct= oletest.retMethodStruct();
-		alert( "Property::Attributes : " + struct.Attributes + " \nProperty::Handle : "
-		+ struct.Handle + "\n Property::Name : " + struct.Name);
-		break;
-	case 1022:
-		 var struct= oletest._GetStruct("com.sun.star.beans.Property");
-		 struct.Attributes= 1;
-		 struct.Handle= 2;
-		 struct.Name= "some Property"
-		 oletest.AttrStruct=  struct;
-
-		 var struct2= oletest.AttrStruct;
-		alert( "property get: \n Property::Attributes : " + struct2.Attributes + " \nProperty::Handle : "
-		+ struct2.Handle + "\n Property::Name : " + struct2.Name);
-		break;
-
-	case 2100:
-		alert("2100");
-		var ret= oletest.retMethodByte();
-		var sfarray= VBArray( ret);
-		document.writeln( sfarray.toArray() );
-		break;
-
-
-
-	}
-
-}
-
-function funcOut( out)
-{
-	out["du"]= 0xffff;
-}
-
 </script>
 
 <script language="VBScript">
+Function runVBTest( Log)
+document.writeln("================================================================================<br>")
+document.writeln("VB Script<br>")
+document.writeln("================================================================================<p>")
+Set	factory= GetObject("", "com.sun.star.ServiceManager")
+Set	oletest= factory.createInstance("oletest.OleTest")
+    
+Dim arrInt
+arrInt= Array(1,2,3,-4,-5, 0)
+arrUInt= Array(1,2,3,4,5)    
+arrDouble= Array( 1.2345, 12.345, 123.45, 1234.5, 12345)
+arrBool= Array( true, false, true, false, true)
+arrChar= Array("A","B",67)
+arrString= Array("hamburger","cheeseburger", "chicken nuggets", "chicken wings" , "pizza")
+arrAny=  Array( 100, 100.1235,"hallo")
+
+    
+Dim arrDim2Int(2,1)
+Dim i,j,k
+For i= 0 To 1
+  For j= 0 To 2
+    arrDim2Int(j,i) = i*3 + j
+  Next
+Next
+
+    
+Dim arrDim3Int(3,2,1)
+For i= 0 To 1
+  For j= 0 To 2
+    For k= 0 To 3
+      arrDim3Int(k,j,i)= i* 3 + j* 4 + k
+    Next
+  Next
+Next
+
+Dim arrXEvent(2)
+For i= 0 To 2
+  Set arrXEvent(i)= new VBEventListener
+  arrXEvent(i).Init
+Next
+
+Dim arrXEvent2(2,1)
+For i= 0 To 1
+  For j= 0 To 2
+   Set arrXEvent2(j,i)= new VBEventListener
+   arrXEvent2(j,i).Init
+  Next
+Next
+
+
+    
+ret= oletest.methodByte( arrUInt)
+Log.print isEqualVBAr( ret, arrUInt), "methodByte"
+
+ret= oletest.methodFloat( arrDouble)
+Log.print isEqualVBAr( ret, arrDouble), "methodFloat"
+
+ret= oletest.methodDouble( arrDouble)    
+Log.print isEqualVBAr( ret, arrDouble), "methodDouble"
+
+ret= oletest.methodBool( arrBool)
+Log.print isEqualVBAr( ret, arrBool), "methodBool"
+
+ret= oletest.methodShort( arrInt)
+Log.print isEqualVBAr( ret, arrInt), "methodShort"
+
+ret= oletest.methodUShort( arrUInt)
+Log.print isEqualVBAr( ret, arrUInt), "methodUShort"
+
+ret= oletest.methodLong( arrInt)
+Log.print isEqualVBAr( ret, arrInt), "methodLong"
+
+ret= oletest.methodULong( arrUInt)
+Log.print isEqualVBAr( ret, arrUInt), "methodULong"
+
+ret= oletest.methodChar( arrChar)
+bOk= false
+if ret(0) = 65 AND ret(1) = 66 AND ret(2) = 67 then
+    bOk= true
+end if        
+Log.print bOk, "methodChar"
+
+ret= oletest.methodString( arrString)
+Log.print isEqualVBAr( ret, arrString), "methodString"
+
+ret= oletest.methodAny( arrAny)
+Log.print isEqualVBAr( ret, arrAny), "methodAny"
+
+    
+ret= oletest.methodSequence( arrDim2Int)    
+bOk= true
+    
+For i= 0 To 1
+  Dim arr1
+  arr1= ret(i)  
+  For j= 0 To 2
+    if arr1(j) <> arrDim2Int(j,i)  then
+      bOk= false
+      exit for
+    end if
+  Next
+Next    
+Log.print bOk, "methodSequence"
+
+ret= oletest.methodSequence2( arrDim3Int)
+'arrDim3Int(3,2,1)
+bOk= true
+For i= 0 To 1
+  arr1= ret(i)
+  For j= 0 To 2
+    arr2= arr1(j)
+    For k= 0 To 3
+       If arr2(k) <> arrDim3Int(k,j,i) then
+         bOk= false
+         exit for
+       End If  
+    Next
+  Next  
+Next
+Log.print bOk, "methodSequence2"
+
+ret= oletest.methodXInterface(arrXEvent)
+bOk= true
+numArg= UBound( arrXEvent) - LBound( arrXEvent) + 1
+numRet= UBound( ret) - LBound( ret) + 1
+If numArg = numRet then
+  For i= 0 To numArg - 1
+    If  NOT (arrXEvent(i) Is ret(i))  then
+        bOk= false
+        Exit For
+    End if
+  Next   
+End If  
+Log.print bOk, "methodXInterface"
+
+ret= oletest.methodXEventListeners( arrXEvent)
+bOk= true
+For i= 0 To 2
+  If arrXEvent(i).disposingCalled = false then
+    bOk= false
+    Exit For
+  End If  
+Next
+Log.print bOk, "methodXEventListeners"
+
+ret= oletest.methodXEventListenersMul(arrXEvent2)
+bOk= true
+For i= 0 To 1
+  For j= 0 To 2
+    If arrXEvent2(j,i).disposingCalled = false then
+     bOk= false
+     Exit For
+   End If
+  Next
+Next
+Log.print bOk, "methodXEventListenersMul"
+
+' Attributes ------------------------------------------------------
+document.writeln( "<br>" )
+oletest.AttrByte= arrUInt
+ret= oletest.AttrByte
+Log.print isEqualVBAr( arrUInt, ret), "AttrByte"        
+
+oletest.AttrFloat= arrDouble
+ret= oletest.AttrFloat
+Log.print isEqualVBAr( arrDouble, ret), "AttrFloat"        
+
+oletest.AttrDouble= arrDouble
+ret= oletest.AttrDouble
+Log.print isEqualVBAr( arrDouble, ret), "AttrDouble"        
+
+oletest.AttrBool= arrBool
+ret= oletest.AttrBool
+Log.print isEqualVBAr( arrBool, ret), "AttrBool"        
+
+oletest.AttrShort= arrInt
+ret= oletest.AttrShort
+Log.print isEqualVBAr( arrInt, ret), "AttrShort"
+
+oletest.AttrUShort= arrUInt
+ret= oletest.AttrUShort
+Log.print isEqualVBAr( arrUInt, ret), "AttrUShort"        
+        
+oletest.AttrLong= arrInt
+ret= oletest.AttrLong
+Log.print isEqualVBAr( arrInt, ret), "AttrLong"
+
+oletest.AttrULong= arrUInt
+ret= oletest.AttrULong
+Log.print isEqualVBAr( arrUInt, ret), "AttrULong"
+
+oletest.AttrChar= arrChar
+ret= oletest.AttrChar
+bOk= false
+if ret(0) = 65 AND ret(1) = 66 AND ret(2) = 67 then
+    bOk= true
+end if        
+Log.print bOk, "AttrChar"
+
+oletest.AttrString= arrString
+ret= oletest.AttrString
+Log.print isEqualVBAr( arrString, ret), "AttrString"
+
+oletest.AttrSequence= arrDim2Int
+ret= oletest.AttrSequence
+bOk= true
+For i= 0 To 1
+  arr1= ret(i)  
+  For j= 0 To 2
+    if arr1(j) <> arrDim2Int(j,i)  then
+      bOk= false
+      exit for
+    end if
+  Next
+Next    
+Log.print bOk, "AttrSequence"
+    
+oletest.AttrSequence2= arrDim3Int
+ret= oletest.AttrSequence2
+'arrDim3Int(3,2,1)
+bOk= true
+For i= 0 To 1
+  arr1= ret(i)
+  For j= 0 To 2
+    arr2= arr1(j)
+    For k= 0 To 3
+       If arr2(k) <> arrDim3Int(k,j,i) then
+         bOk= false
+         exit for
+       End If  
+    Next
+  Next  
+Next
+Log.print bOk, "AttrSequence2"
+        
+oletest.AttrXInterface= arrXEvent   
+ret= oletest.AttrXInterface
+bOk= true
+numArg= UBound( arrXEvent) - LBound( arrXEvent) + 1
+numRet= UBound( ret) - LBound( ret) + 1
+If numArg = numRet then
+  For i= 0 To numArg - 1
+    If  NOT (arrXEvent(i) Is ret(i))  then
+        bOk= false
+        Exit For
+    End if
+  Next   
+End If  
+Log.print bOk, "AttrXInterface"
+        
+'out params ================================================================================
+document.writeln("<p>")
+        
+oletest.testout_methodByte outVal
+Log.print outVal = 111, "testout_methodByte"
+
+oletest.testout_methodFloat outVal 
+Log.print outVal > 3.13 AND outVal < 3.15, "testout_methodFloat"
+
+oletest.testout_methodDouble outVal 
+Log.print outVal = 3.14, "testout_methodDouble"
+
+oletest.testout_methodBool outVal 
+Log.print outVal = true, "testout_methodBool"
+
+oletest.testout_methodShort outVal 
+Log.print outVal = 222, "testout_methodShort"
+
+oletest.testout_methodUShort outVal 
+Log.print outVal = 333, "testout_methodUShort"
+
+oletest.testout_methodLong outVal 
+Log.print outVal = 444, "testout_methodLong"
+
+oletest.testout_methodULong outVal 
+Log.print outVal = 555, "testout_methodULong"
+
+oletest.testout_methodChar outVal 
+Log.print outVal = 65, "testout_methodChar"
+
+oletest.testout_methodString outVal 
+Log.print outVal = "a little string", "testout_methodString"
+
+oletest.testout_methodAny outVal 
+Log.print outVal = "I am a string in an any", "testout_methodAny"
+
+oletest.testout_methodSequence outVal 
+Log.print isEqualVBAr(outVal, Array( 0,1,2,3,4,5,6,7,8,9)), "testout_methodSequence"
+
+
+document.writeln("<p>###carry on here<p>")
+End Function    
+
+        
+Function isEqualVBAr( arr1, arr2)
+    ret = false
+    s1= UBound( arr1) - LBound( arr1) + 1
+    s2= UBound( arr2) - LBound( arr2) + 1
+
+    if s1 = s2 then
+      ret= true
+      Dim i
+      for i= 0 To s1 - 1
+        if arr1(i) <> arr2(i) then
+          ret= false
+          exit for
+        end if
+      next
+    end if
+    isEqualVBar= ret
+End Function
+
+
+'The listener object
+
+Class VBEventListener
+  Dim Bridge_ImplementedInterfaces(0)
+  Dim bDisposingCalled
+
+'XEventListener::dispoding
+  Function disposing( source)
+    bDisposingCalled= true
+  End Function
+
+  Sub Init
+    bDisposingCalled= false
+    Bridge_ImplementedInterfaces(0)= "com.sun.star.lang.XEventListener"
+  End Sub
+  
+  Function resetDisposing()
+    bDisposingCalled= false
+  End Function
+
+  Function disposingCalled()
+    disposingCalled= bDisposingCalled
+  End Function
+End Class
+        
 
 sub callBasic(id)
 	
@@ -826,7 +1000,7 @@ sub callBasic(id)
 	arrChar= Array("a",65, "M")
 	arrAny= Array("Mickey", 3.14, 100, "A")
 
-	Dim arrDim2Int(1,1)
+	Dim arrDim2Int(1,2)
 	For i= 0 To 1
 		For j= 0 To 1
 			arrDim2Int(i,j) = i*2 + j
@@ -844,77 +1018,6 @@ sub callBasic(id)
 
 	
 	select case id
-		case 0 
-			document.writeln "param: "
-			printArray arrInt
-			ret= oletest.methodByte(arrInt)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 1
-			document.writeln "param: "
-			printArray arrDouble
-			ret= oletest.methodDouble(arrDouble)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 2
-			document.writeln "param: "
-			printArray arrBool
-			ret= oletest.methodBool(arrBool)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 3
-			document.writeln "param: "
-			printArray arrInt2
-			ret= oletest.methodShort(arrInt2)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 4
-			document.writeln "param: "
-			printArray arrInt
-			ret= oletest.methodUShort(arrInt)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 5
-			document.writeln "param: "
-			printArray arrLong
-			ret= oletest.methodLong(arrLong)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 6
-			document.writeln "param: "
-			printArray arrInt
-			ret= oletest.methodULong(arrInt)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 7
-			document.writeln "param: "
-			printArray arrString
-			ret= oletest.methodString(arrString)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 8
-			document.writeln "param: "
-			printArray arrChar
-			ret= oletest.methodChar(arrChar)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 9
-			document.writeln "param: "
-			printArray arrAny
-			ret= oletest.methodAny(arrAny)
-			document.writeln "<br> return value: "
-			printArray ret
-		case 10
-			document.writeln "param: "
-			printArray2 arrDim2Int
-			ret= oletest.methodSequence(arrDim2Int)
-			document.writeln "<br> return value: "
-			for each val in ret
-				document.write "<br> array: "
-				for each val2 in val
-					document.write val2
-				next
-			next
 
 	// Out Parameter
 		case 150
@@ -1125,20 +1228,124 @@ sub printArrayEx( pre, post, array)
 end sub
 </script>
 
+<script language="JScript">
+var arFunctions= new Array();
+arFunctions["methodByte"]= "sequence&lt;byte&gt; methodByte( [in] sequence&lt;byte&gt; aSeq )";
+arFunctions["methodFloat"]= "sequence&lt;float&gt; methodFloat( [in] sequence&lt;float&gt; aSeq)";
+arFunctions["methodDouble"]= "sequence&lt;double&gt; methodDouble( [in] sequence&lt;double&gt; aSeq)";
+arFunctions["methodBool"]= 	"sequence&lt;boolean&gt; methodBool( [in] sequence&lt;boolean&gt; aSeq)";
+arFunctions["methodShort"]= "sequence&lt;short&gt; methodShort( [in] sequence&lt;short&gt; aSeq)";
+arFunctions["methodUShort"]= "sequence&lt;unsigned short&gt; methodUShort( [in] sequence&lt;unsigned short&gt; aSeq)";
+arFunctions["methodLong"]= "sequence&lt;long&gt; methodLong( [in] sequence&lt;long&gt; aSeq)";
+arFunctions["methodULong"]= "sequence&lt;unsigned long&gt; methodULong( [in] sequence&lt;unsigned long&gt; aSeq)";
+arFunctions["methodString"]= "sequence&lt;string&gt; methodString( [in] sequence&lt;string&gt; aSeq)";
+arFunctions["methodChar"]= "sequence&lt;char&gt; methodChar( [in] sequence&lt;char&gt; aSeq)";
+arFunctions["methodAny"]= "sequence&lt;any&gt; methodAny	( [in] sequence&lt;any&gt; aSeq)";
+arFunctions["methodXInterface"]= "sequence&lt;XInterface&gt; methodXInterface ( [in] sequence&lt;XInterface&gt; aSeq)";
+arFunctions["methodSequence"]= "sequence&lt; sequence &lt;long&gt; &gt; methodSequence( [in] sequence&lt; sequence&lt; long &gt; &gt; aSeq)";
+arFunctions["methodSequence2"]= "sequence&lt; sequence &lt;sequence &lt;long&gt; &gt; &gt; methodSequence2( [in] sequence&lt; sequence&lt; sequence&lt;long&gt; &gt; &gt; aSeq)";
+arFunctions["methodXEventListeners"]= "sequence&lt; com::sun::star::lang::XEventListener &gt; methodXEventListeners( [in] sequence&lt;com::sun::star::lang::XEventListener&gt; aSeq)";
+arFunctions["methodXEventListenersMul"]= "sequence&lt; sequence&lt; com::sun::star::lang::XEventListener &gt; &gt; methodXEventListenersMul( [in] sequence&lt; sequence&lt; com::sun::star::lang::XEventListener&gt; &gt; aSeq)";
+arFunctions["AttrByte"]="[attribute] sequence<byte> AttrByte";
+arFunctions["AttrFloat"]="[attribute] sequence<float> AttrFloat";
+arFunctions["AttrDouble"]="[attribute] sequence<double> AttrDouble";
+arFunctions["AttrBool"]="[attribute] sequence<boolean> AttrBool";
+arFunctions["AttrShort"]="[attribute] sequence<short> AttrShort";
+arFunctions["AttrUShort"]="[attribute] sequence<unsigned short> AttrUShort";
+arFunctions["AttrLong"]="[attribute] sequence<long> AttrLong";
+arFunctions["AttrULong"]="[attribute] sequence<unsigned long> AttrULong";
+arFunctions["AttrString"]="[attribute] sequence<string> AttrString";
+arFunctions["AttrChar"]="[attribute] sequence<char> AttrChar";
+arFunctions["AttrAny"]="[attribute] sequence<any> AttrAny";
+arFunctions["AttrSequence"]="[attribute] sequence< sequence<long> > AttrSequence";
+arFunctions["AttrSequence2"]="[attribute] sequence< sequence< sequence <long> > > AttrSequence2";
+arFunctions["AttrXInterface"]="[attribute] sequence< com::sun::star::uno::XInterface > AttrXInterface";
+
+arFunctions["testout_methodByte"]= " void testout_methodByte( [out] byte rOut )";
+arFunctions["testout_methodFloat"]= "void testout_methodFloat( [out] float rOut)";
+arFunctions["testout_methodDouble"]= "void testout_methodDouble( [out] double rOut)";
+arFunctions["testout_methodBool"]= "void testout_methodBool( [out] boolean rOut)";
+arFunctions["testout_methodShort"]= "void testout_methodShort( [out] short rOut)";
+arFunctions["testout_methodUShort"]= "void testout_methodUShort( [out] unsigned short rOut)";
+arFunctions["testout_methodLong"]= "void testout_methodLong( [out]  long rOut)";
+arFunctions["testout_methodULong"]= "void testout_methodULong( [out] unsigned long rOut)";
+arFunctions["testout_methodString"]= "void testout_methodString( [out] string rOut)";
+arFunctions["testout_methodChar"]= "void testout_methodChar( [out] char rOut)";
+arFunctions["testout_methodAny"]= "void testout_methodAny( [out] any rOut)";
+arFunctions["testout_methodSequence"]= "void testout_methodSequence( [out] sequence< long > rOut)";
+arFunctions["testout_methodSequence2"]= "void testout_methodSequence2( [out] sequence < sequence< long > > rOut)";
+arFunctions["testout_methodXInterface"]= "void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut)";
+arFunctions["testout_methodMulParams1"]= "void testout_methodMulParams1( [out] long rout1, [out] long rout2)";
+arFunctions["testout_methodMulParams2"]= "void testout_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3)";
+arFunctions["testout_methodMulParams3"]= "void testout_methodMulParams3( [in] string sin, [out] string sout)";
+arFunctions["testout_methodMulParams4"]= "void testout_methodMulParams4( [in] float in1, [out] float out1, [in] long in2, [out] long out2, [in] long in3)";
+arFunctions["testinout_methodByte"]="void testinout_methodByte( [inout] byte rOut )";
+arFunctions["testinout_methodFloat"]="void testinout_methodFloat( [inout] float rOut)";
+arFunctions["testinout_methodDouble"]="void testinout_methodDouble( [inout] double rOut)";
+arFunctions["testinout_methodBool"]="void testinout_methodBool( [inout] boolean rOut)";
+arFunctions["testinout_methodShort"]="void testinout_methodShort( [inout] short rOut)";
+arFunctions["testinout_methodUShort"]="void testinout_methodUShort( [inout] unsigned short rOut)";
+arFunctions["testinout_methodLong"]="void testinout_methodLong( [inout]  long rOut)";
+arFunctions["testinout_methodULong"]="void testinout_methodULong( [inout] unsigned long rOut)";
+arFunctions["testinout_methodString"]="void testinout_methodString( [inout] string rOut)";
+arFunctions["testinout_methodChar"]="void testinout_methodChar( [inout] char rOut)";
+arFunctions["testinout_methodAny"]="void testinout_methodAny( [inout] any rOut)";
+arFunctions["testinout_methodSequence"]="void testinout_methodSequence( [inout] sequence< long > rOut)";
+arFunctions["testinout_methodSequence2"]="void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut)";
+arFunctions["testinout_methodXInterface"]="void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut)";
+arFunctions["testinout_methodXInterface2"]="void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut)";
+
+arFunctions["methodAnyTest1"]="any methodAnyTest1( [in] any rIn)";
+arFunctions["AttrAny2"]= "[attribute]  any AttrAny2";
+arFunctions["retMethodStruct"]= "com::sun::star::beans::Property retMethodStruct()";
+arFunctions["AttrStruct"]= "[attribute] com::sun::star::beans::Property AttrStruct";
+arFunctions["methodStruct2"]= "com::sun::star::beans::Property methodStruct2( [in] com::sun::star::beans::Property aProp)";
+
+
+var factory= new ActiveXObject("com.sun.star.ServiceManager");
+var oletest= factory.createInstance("oletest.OleTest");
+
+Log= new Logger();
+
+runVBTest(Log);
+runJScriptTest(Log);
+
+Log.summarize();
+
+
+function Logger()
+{
+    this.print= logger_print;
+    this.summarize= logger_summarize;
+    this.bAllOk= true;
+}
+function logger_print( bool, method)
+{
+    if( bool)
+        document.writeln( "Ok &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
+    else
+    {
+        document.writeln( "Failed &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
+        this.bAllOk= this.bAllOk && false;
+    }
+}
+
+function logger_summarize()
+{
+    document.writeln("<p> ==============================================================================<br>");
+    if(this.bAllOk)
+        document.writeln("No errors <br>");
+    else
+        document.writeln("Error ! The test failed! <br>");
+}
+
+
+</script>
+
+
 <div id=out> </div>
 
 <!-- Insert HTML here -->
-
-<h2> JScript </h2>
-
-<p>
-
-<p>
-
-Test of Struct conversions<br>
-<button onclick='callOleTest( 1020)'>methodStruct </Button>
-<button onclick='callOleTest( 1021)'>return struct</Button>
-<button onclick='callOleTest( 1022)'>struct attribute</Button>
 
 
 
@@ -1147,20 +1354,6 @@ Test of Struct conversions<br>
 
 
 <h2> Visual Basic Tests </h2>
-Test array /Sequence conversion and return value<br>
-Template: <b> Sequence &lt type &gt method( Sequence&lt type &gt ) </b> <br>
-<!--<font color= red>Multi dimensional arrays are not processed by VBSript</font> <br>  -->
-<button onclick='callBasic(0)'>byte</button>
-<button onclick='callBasic(1)'>double</button>
-<button onclick='callBasic(2)'>boolean</button>
-<button onclick='callBasic(3)'>short</button>
-<button onclick='callBasic(4)'>u short</button>
-<button onclick='callBasic(5)'>long</button>
-<button onclick='callBasic(6)'>u long</button>
-<button onclick='callBasic(7)'>string</button>	 
-<button onclick='callBasic(8)'>char</button>	
-<button onclick='callBasic(9)'>any</button> <br>
-<button onclick='callBasic(10)'>Seq &lt int &gt</button> <br>
 
 
 IN/Out parameter <br>
