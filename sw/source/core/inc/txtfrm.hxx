@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:44:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,8 +469,6 @@ public:
 
     // Suche die Seitennummer von ErgoSum und QuoVadis
     SwTxtFrm *FindQuoVadisFrm();
-    SwTxtFrm *FindErgoSumFrm();
-    void SetErgoSumNum( const USHORT nErgo );
 
     // holt die Formatierug nach, wenn der Idle-Handler zugeschlagen hat.
     SwTxtFrm *GetFormatted();
@@ -515,8 +513,6 @@ public:
 
     // liefert die erste Zeilenhoehe zurueck
     USHORT FirstLineHeight() const;
-
-    const SwFrmFmt* IsFirstBullet();
 
     // Haengt FlyInCntFrm um, wenn nEnd > Index >= nStart ist.
     void MoveFlyInCnt( SwTxtFrm *pNew, USHORT nStart, USHORT nEnd );
