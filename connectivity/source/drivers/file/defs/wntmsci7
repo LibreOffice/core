@@ -2781,3 +2781,4 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?_M_clear@?$vector@PAVOSQLParseNode@connectivity@@V?$allocator@PAVOSQLParseNode@connectivity@@@_STL@@@_STL@@IAEXXZ
 ?_M_set@?$vector@PAVOSQLParseNode@connectivity@@V?$allocator@PAVOSQLParseNode@connectivity@@@_STL@@@_STL@@IAEXPAPAVOSQLParseNode@connectivity@@00@Z
 ?fill_n@_STL@@YAPAPAVOSQLParseNode@connectivity@@PAPAV23@IABQAV23@@Z
+?isCaseSensitiveParentFolder@?%O:\SRX642\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2220013418@@YAEABVString@@0@Z
