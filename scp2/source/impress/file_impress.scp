@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 12:08:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,13 @@ File gid_File_Share_Config_Sofficecfg_Impress_Menubar_Xml
     Name = "/uiconfig/simpress/menubar/menubar.xml";
 End
 */
+
+File gid_File_Registry_Spool_Oo_TypeDetection_Impress_UISort_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort;
+    Name = "/registry/spool/org/openoffice/TypeDetection/UISort-impress.xcu";
+End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Impress_Types_Xcu
     TXT_FILE_BODY;
