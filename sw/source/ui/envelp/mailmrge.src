@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:23:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ ModalDialog DLG_MAILMERGE
         Text [ italian ] = "~Mailing" ;
         Text [ spanish ] = "~Enviar correo" ;
         Text [ french ] = "~Par e-mail" ;
-        Text [ swedish ] = "~Mailing" ;
+        Text [ swedish ] = "~E-post" ;
         Text [ danish ] = "Mailing" ;
         Text [ portuguese ] = "~Correio-e" ;
         Text [ portuguese_brazilian ] = "~Mailing" ;
@@ -299,7 +299,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¹q¤l¶l¥ó(~M)";
         Text[ arabic ] = "ßÈÑíÏ ÅáßÊÑæäí";
         Text[ greek ] = "Áëëçëïãñáößá";
-        Text[ korean ] = "ÆíÁö(~M)";
+        Text[ korean ] = "Æû ·¹ÅÍ(~M)";
         Text[ turkish ] = "E-posta";
         Text[ language_user1 ] = "ENG:the anglicism \"Mailing\" as used in German cannot be used in Eng. because the real meaning has nothing to do with e-mail.EM17.5.00";
     };
@@ -441,7 +441,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "Predefinição manual" ;
         Text [ english_us ] = "Manual setting" ;
         Text [ portuguese_brazilian ] = "Manueller Vorgabe" ;
-        Text [ swedish ] = "Anpassa" ;
+        Text [ swedish ] = "Manuell inställning" ;
         Text [ danish ] = "Manuel forudindstilling" ;
         Text [ italian ] = "Preimpostazione manuale" ;
         Text [ spanish ] = "Manualmente" ;
@@ -553,7 +553,7 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "A~sunto" ;
         Text [ french ] = "~Objet" ;
         Text [ dutch ] = "~Betreft" ;
-        Text [ swedish ] = "~Angående" ;
+        Text [ swedish ] = "A~ngående" ;
         Text [ danish ] = "Emne" ;
         Text [ portuguese_brazilian ] = "Betreff" ;
         Text [ portuguese ] = "~Assunto" ;
