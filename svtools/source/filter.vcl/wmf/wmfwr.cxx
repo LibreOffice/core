@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-19 10:57:49 $
+ *  last change: $Author: sj $ $Date: 2002-08-15 12:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1563,6 +1563,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
                         aSrcFont.SetCharSet( gsl_getSystemTextEncoding() );
+                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE )
+                        aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                     eSrcTextAlign = aSrcFont.GetAlign();
                     aSrcTextColor = aSrcFont.GetColor();
                     aSrcFont.SetAlign( ALIGN_BASELINE );
