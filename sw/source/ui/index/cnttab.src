@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 07:15:14 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String STR_TITLE
     Text [ ENGLISH ] = "Titel" ;
     Text [ norwegian ] = "Tittel" ;
     Text [ italian ] = "Titolo" ;
-    Text [ portuguese_brazilian ] = "Títilo" ;
+    Text [ portuguese_brazilian ] = "T?tilo" ;
     Text [ portuguese ] = "Título" ;
     Text [ finnish ] = "Otsikko" ;
     Text [ danish ] = "Titel" ;
@@ -125,7 +125,7 @@ String STR_LEVEL
     Text [ ENGLISH ] = "Level " ;
     Text [ norwegian ] = "Nivå " ;
     Text [ italian ] = "Livello  " ;
-    Text [ portuguese_brazilian ] = "Nível" ;
+    Text [ portuguese_brazilian ] = "N?vel" ;
     Text [ portuguese ] = "Nível " ;
     Text [ finnish ] = "Taso " ;
     Text [ danish ] = "Niveau " ;
@@ -160,12 +160,12 @@ String STR_FILE_NOT_FOUND
     Text[ italian ] = "Non è stato possibile trovare il file \"%1\" nel percorso \"%2\".";
     Text[ danish ] = "Det var ikke muligt at finde filen \"%1\" på sti \"%2\".";
     Text[ swedish ] = "Filen \"%1\" kunde inte hittas i sökväg \"%2\".";
-    Text[ polish ] = "Nie znaleziono pliku \"%1\" w œcie¿ce \"%2\".";
+    Text[ polish ] = "Nie znaleziono pliku \"%1\" w ?cie¿ce \"%2\".";
     Text[ portuguese_brazilian ] = "The file \"%1\" could not be found.";
     Text[ japanese ] = "Ì§²Ùu%1v‚ÍÊß½u%2v‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "\"%1\" ÆÄÀÏÀ»\"%2\" °æ·Î¿¡¼­ Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚÂ·¾¶ \"%2\" ÖĞÎŞ·¨ÕÒµ½ÎÄ¼ş \"%1\" ¡£";
-    Text[ chinese_traditional ] = "µLªk¦b¸ô®|¡§%2¡¨¤º§ä¨ìÀÉ®×¡§%1¡¨¡C";
+    Text[ chinese_traditional ] = "µLªk¦b¸ô®|?%2?¤º§ä¨ìÀÉ®×?%1?¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì Çáãáİ \"%1\" İí ÇáãÓÇÑ \"%2\".";
     Text[ turkish ] = "Dosya \"%1\" \"%2\" veri yolunda bulunamadı.";
     Text[ catalan ] = "No se pudo encontrar el archivo \"%1\" en la ruta \"%2\".";
@@ -377,7 +377,7 @@ TabDialog DLG_MULTI_TOX
         Text[ italian ] = "Mostra anteprima";
         Text[ danish ] = "Vis eksempel";
         Text[ swedish ] = "~Visa förhandsvisning";
-        Text[ polish ] = "Wyœwietl podgl¹d";
+        Text[ polish ] = "Wy?wietl podgl¹d";
         Text[ portuguese_brazilian ] = "Show ~preview";
         Text[ japanese ] = "ÌßÚËŞ­°‚Ì•\\¦(~W)";
         Text[ korean ] = "¹Ì¸®º¸±â ³ªÅ¸³»±â(~W)";
@@ -600,7 +600,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ polish ] =
     {
-            < "Spis treœci" ;   TO_CONTENT      ;> ;
+            < "Spis tre?ci" ;   TO_CONTENT      ;> ;
         < "Skorowidz" ;     TO_INDEX        ;> ;
         < "Spis obrazów" ; TO_ILLUSTRATION ;> ;
         < "Spis tabel" ;    TO_TABLE        ;> ;
@@ -1441,7 +1441,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Riunisci con ~seg. o segg.";
         Text[ danish ] = "Kombiner med f. eller ff.";
         Text[ swedish ] = "Kombinera med ~f eller ff";
-        Text[ polish ] = "Streœæ za pomoc¹ s lub ss";
+        Text[ polish ] = "Stre?æ za pomoc¹ s lub ss";
         Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
         Text[ japanese ] = "‘±‚«Íß°¼Ş‚ğ ~p ‚Ü‚½‚Í pp ‚Å•\\¦";
         Text[ korean ] = "~f ¶Ç´Â ff µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½";
@@ -1829,7 +1829,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Livello dal capitolo ~sorgente";
         Text[ danish ] = "Niveau fra kildekapitel";
         Text[ swedish ] = "Nivå från urs~prungskapitel";
-        Text[ polish ] = "Poziom ze Ÿród³a";
+        Text[ polish ] = "Poziom ze ?ród³a";
         Text[ portuguese_brazilian ] = "Use level from source";
         Text[ japanese ] = "‚à‚Æ‚ÌÍ‚ÌÚÍŞÙ";
         Text[ korean ] = "¿ø·¡ Àå¿¡¼­ÀÇ ¼öÁØ »ç¿ë";
@@ -3604,7 +3604,7 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Contenuto";
         Text[ danish ] = "Indhold";
         Text[ swedish ] = "I~nnehåll";
-        Text[ polish ] = "Zawartoœæ";
+        Text[ polish ] = "Zawarto?æ";
         Text[ portuguese_brazilian ] = "Sort by content";
         Text[ japanese ] = "“à—e‡(~C)";
         Text[ korean ] = "³»¿ë(~C)";
@@ -3681,7 +3681,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ swedish ] = "Stigande";
         QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
-        QuickHelpText[ japanese ] = "¸‡";
+        QuickHelpText[ japanese ] = "¸‡!";
         QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
@@ -3716,7 +3716,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ swedish ] = "Fallande";
         QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
-        QuickHelpText[ japanese ] = "~‡";
+        QuickHelpText[ japanese ] = "~‡!";
         QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
@@ -3752,7 +3752,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ swedish ] = "Stigande";
         QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
-        QuickHelpText[ japanese ] = "¸‡";
+        QuickHelpText[ japanese ] = "¸‡!";
         QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
@@ -3787,7 +3787,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ swedish ] = "Fallande";
         QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
-        QuickHelpText[ japanese ] = "~‡";
+        QuickHelpText[ japanese ] = "~‡!";
         QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
@@ -3823,7 +3823,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ swedish ] = "Stigande";
         QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
-        QuickHelpText[ japanese ] = "¸‡";
+        QuickHelpText[ japanese ] = "¸‡!";
         QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
@@ -3858,7 +3858,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ swedish ] = "Fallande";
         QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
-        QuickHelpText[ japanese ] = "~‡";
+        QuickHelpText[ japanese ] = "~‡!";
         QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
@@ -4016,7 +4016,7 @@ TabPage TP_TOX_STYLES
         Text [ ENGLISH ] = "~Levels" ;
         Text [ norwegian ] = "~Nivåer" ;
         Text [ italian ] = "~Livelli" ;
-        Text [ portuguese_brazilian ] = "~Níveis" ;
+        Text [ portuguese_brazilian ] = "~N?veis" ;
         Text [ portuguese ] = "~Níveis" ;
         Text [ finnish ] = "~Tasot" ;
         Text [ danish ] = "Niveauer" ;
@@ -4054,7 +4054,7 @@ TabPage TP_TOX_STYLES
         Text [ ENGLISH ] = "~Paragraph styles" ;
         Text [ norwegian ] = "~Avsnittsmaler" ;
         Text [ italian ] = "Mo~delli di paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Estilos de parágrafo" ;
+        Text [ portuguese_brazilian ] = "~Estilos de par?grafo" ;
         Text [ portuguese ] = "Estilo~s de parágrafo" ;
         Text [ finnish ] = "Kappaletyylit" ;
         Text [ danish ] = "Afsnitstypografier" ;
@@ -4103,7 +4103,7 @@ TabPage TP_TOX_STYLES
         Text [ portuguese_brazilian ] = "Sta~ndard" ;
         Text[ chinese_simplified ] = "±ê×¼(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "•W€(~D)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
