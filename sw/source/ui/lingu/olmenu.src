@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:10:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,8 @@ String STR_HYP_OK
     Text[ hindi ] = "हाइफनेशन समाप्त हुआ";
     Text[ slovak ] = "Delenie slov je ukončené";
 };
+
+
 
 
 
