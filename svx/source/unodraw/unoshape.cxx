@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 20:18:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 22:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,7 +1253,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 {
                     double nSin=sin(nAngle*nPi180);
                     double nCos=cos(nAngle*nPi180);
-                    pObj->NbcRotate(aRef1,nAngle,nSin,nCos);
+                    pObj->Rotate(aRef1,nAngle,nSin,nCos);
                     return;
                 }
             }
@@ -1271,7 +1271,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 {
                     Point aRef1(pObj->GetSnapRect().Center());
                     double nTan=tan(nShear*nPi180);
-                    pObj->NbcShear(aRef1,nShear,nTan,FALSE);
+                    pObj->Shear(aRef1,nShear,nTan,FALSE);
                     return;
                 }
             }
