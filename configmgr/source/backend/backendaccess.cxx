@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:11:41 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,22 @@ BackendAccess::BackendAccess(void) {
 BackendAccess::~BackendAccess(void) {}
 //------------------------------------------------------------------------------
 
-static NodeResult merge(MergedComponentData& aData,
+static NodeResult merge(const uno::Reference<uno::XComponentContext>& aContext,
+        MergedComponentData& aData,
         const uno::Sequence<uno::Reference<backenduno::XLayer> >& aLayers,
         sal_Int32 aNbLayers,
         const rtl::OUString& aLocale,
         const AbsolutePath& aRootPath)
 {
+    uno::Reference<lang::XMultiServiceFactory> serviceFactory(
+                            aContext->getServiceManager(), uno::UNO_QUERY) ;
+
     for (sal_Int32 i = 0 ; i < aNbLayers ; ++ i) {
-        LayerMergeHandler *merger = new LayerMergeHandler(aData, aLocale) ;
+        LayerMergeHandler *merger = new LayerMergeHandler(
+                                            serviceFactory, aData, aLocale) ;
         uno::Reference<backenduno::XLayerHandler> layerHandler = merger ;
 
-        backend::promoteToDefault(aData) ;
+        //TODO Reactivate once the method is implemented backend::promoteToDefault(aData) ;
         aLayers [i]->readData(layerHandler) ;
     }
     NodeInstance retCode(aData.extractSchemaTree(), aRootPath) ;
@@ -115,14 +120,23 @@ NodeResult BackendAccess::getNodeData(const NodeRequest& aRequest,
 
     getSchemaAndLayers(aRequest, schema, layers) ;
     schema->readTemplates(schemaHandler) ;
-    return merge(schemaBuilder->result(), layers, layers.getLength(),
-            aRequest.getOptions().getLocale(), aRequest.getPath()) ;
+    return merge(mContext, schemaBuilder->result(), layers, layers.getLength(),
+                 aRequest.getOptions().getLocale(), aRequest.getPath()) ;
 }
 //------------------------------------------------------------------------------
 
 void BackendAccess::updateNodeData(const UpdateRequest& aUpdate)
     CFG_UNO_THROW_ALL()
 {
+    rtl::OUString entity = aUpdate.getOptions().getEntity() ;
+    rtl::OUString component =
+                    aUpdate.getUpdateRoot().getModuleName().toString() ;
+    uno::Reference<backenduno::XUpdateHandler> handler ;
+
+    if (entity.getLength() == 0) {
+        handler = mBackend->getOwnUpdateHandler(component) ;
+    }
+    else { handler = mBackend->getUpdateHandler(component, entity) ; }
 }
 //------------------------------------------------------------------------------
 
@@ -136,8 +150,9 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
 
     getSchemaAndLayers(aRequest, schema, layers) ;
     schema->readComponent(schemaHandler) ;
-    return merge(schemaBuilder->result(), layers, layers.getLength() - 1,
-            aRequest.getOptions().getLocale(), aRequest.getPath()) ;
+    return merge(mContext, schemaBuilder->result(), layers,
+                 layers.getLength() - 1, aRequest.getOptions().getLocale(),
+                 aRequest.getPath()) ;
 }
 //------------------------------------------------------------------------------
 

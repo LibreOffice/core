@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:11:41 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif // _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+
 namespace configmgr { namespace backend {
 
 namespace css = com::sun::star ;
@@ -121,6 +125,9 @@ class BackendAccess : public IMergedDataProvider {
     protected :
 
     private :
+        /** Component context used for service invocation */
+        uno::Reference<uno::XComponentContext> mContext ;
+        /** Backend being accessed */
         uno::Reference<backenduno::XBackend> mBackend ;
 
         /**
