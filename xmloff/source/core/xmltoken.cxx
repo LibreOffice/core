@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:06 $
+ *  last change: $Author: cl $ $Date: 2001-06-15 13:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2008,6 +2008,7 @@ namespace xmloff { namespace token {
         TOKEN( "unchecked" ),                  // XML_UNCHECKED
         TOKEN( "checked" ),                    // XML_CHECKED
         TOKEN( "unknown" ),                    // XML_UNKNOWN
+        TOKEN( "roll-from-top" ),             // XML_ROLL_FROM_TOP
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
