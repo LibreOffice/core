@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:47:37 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,8 +1794,8 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
 
         long nCount = ubidi_countRuns( pBidi, &nError );
 
-        UTextOffset nStart = 0;
-        UTextOffset nEnd;
+        int32_t nStart = 0;
+        int32_t nEnd;
         UBiDiLevel nCurrDir;
 
         for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
