@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:41:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,12 +101,12 @@ union MatValue
 
     Matrix elements are NOT initialized after construction!
 
-    All methods using an ULONG nIndex parameter and all Is... methods do NOT
+    All methods using an SCSIZE nIndex parameter and all Is... methods do NOT
     check the range for validity! However, the Put... and Get... methods using
-    USHORT nCol/nRow parameters do check the range. <p>
+    nCol/nRow parameters do check the range. <p>
 
-    GetString( ULONG nIndex ) does not check if there really is a string, do
-    this with IsString() first. GetString( USHORT nC, USHORT nR ) does check
+    GetString( SCSIZE nIndex ) does not check if there really is a string, do
+    this with IsString() first. GetString( SCSIZE nC, SCSIZE nR ) does check
     it and returns and empty string if there is no string. Both GetDouble()
     methods don't check for a string, do this with IsNumeric() or IsString()
     or IsValue() first. <p>
@@ -122,15 +122,15 @@ class ScMatrix
     BYTE*           bIsString;
     ScInterpreter*  pErrorInterpreter;
     ULONG           nRefCnt;     // reference count
-    USHORT          nAnzCol;
-    USHORT          nAnzRow;
+    SCSIZE          nColCount;
+    SCSIZE          nRowCount;
 
     void ResetIsString();
     void DeleteIsString();
-    void CreateMatrix( USHORT nC, USHORT nR);
+    void CreateMatrix( SCSIZE nC, SCSIZE nR);
 
     // pStr may be NULL, bFlag MUST NOT be 0
-    void PutStringEntry( const String* pStr, BYTE bFlag, ULONG nIndex );
+    void PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex );
 
     // only delete via Delete()
     ~ScMatrix();
@@ -144,17 +144,17 @@ class ScMatrix
 public:
 
     /// The maximum number of elements a matrix may have at runtime
-    inline static ULONG GetElementsMax()
+    inline static size_t GetElementsMax()
     {
         const size_t nMemMax = (((size_t)(~0))-64) / sizeof(MatValue);
-        const ULONG nArbitraryLimit = 0x80000;  // 512k elements ~= 4MB memory
+        const size_t nArbitraryLimit = 0x80000;  // 512k elements ~= 4MB memory
         return nMemMax < nArbitraryLimit ? nMemMax : nArbitraryLimit;
     }
 
     /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
         created instead and a double error value (errStackOverflow) is set.
         Compare nC and nR with a GetDimensions() call to check. */
-    ScMatrix( USHORT nC, USHORT nR) : nRefCnt(0) { CreateMatrix( nC, nR); }
+    ScMatrix( SCSIZE nC, SCSIZE nR) : nRefCnt(0) { CreateMatrix( nC, nR); }
     ScMatrix* Clone() const;
 
     /// disable refcounting forever, may only be deleted via Delete() afterwards
@@ -185,43 +185,47 @@ public:
     ScMatrix( SvStream& rStream);
     void Store( SvStream& rStream) const;
 
-    void GetDimensions( USHORT& rC, USHORT& rR) const
-        { rC = nAnzCol; rR = nAnzRow; };
-    ULONG GetElementCount() const
-        { return (ULONG) nAnzCol * nAnzRow; }
+    void GetDimensions( SCSIZE& rC, SCSIZE& rR) const
+        { rC = nColCount; rR = nRowCount; };
+    SCSIZE GetElementCount() const
+        { return nColCount * nRowCount; }
+    inline bool ValidColRow( SCSIZE nC, SCSIZE nR) const
+        { return nC < nColCount && nR < nRowCount; }
+    inline SCSIZE CalcOffset( SCSIZE nC, SCSIZE nR) const
+        { return nC * nRowCount + nR; }
 
-    void PutDouble( double fVal, USHORT nC, USHORT nR);
-    void PutDouble( double fVal, ULONG nIndex)
+    void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
+    void PutDouble( double fVal, SCSIZE nIndex)
         { pMat[nIndex].fVal = fVal; }
-    void PutDoubleAndResetString( double fVal, USHORT nC, USHORT nR );
-    void PutDoubleAndResetString( double fVal, ULONG nIndex );
-    void PutString( const String& rStr, USHORT nC, USHORT nR);
-    void PutString( const String& rStr, ULONG nIndex);
-    void PutEmpty( USHORT nC, USHORT nR);
-    void PutEmpty( ULONG nIndex);
+    void PutDoubleAndResetString( double fVal, SCSIZE nC, SCSIZE nR );
+    void PutDoubleAndResetString( double fVal, SCSIZE nIndex );
+    void PutString( const String& rStr, SCSIZE nC, SCSIZE nR);
+    void PutString( const String& rStr, SCSIZE nIndex);
+    void PutEmpty( SCSIZE nC, SCSIZE nR);
+    void PutEmpty( SCSIZE nIndex);
     /// Jump FALSE without path
-    void PutEmptyPath( USHORT nC, USHORT nR);
-    void PutEmptyPath( ULONG nIndex);
-    void PutError( USHORT nErrorCode, USHORT nC, USHORT nR )
+    void PutEmptyPath( SCSIZE nC, SCSIZE nR);
+    void PutEmptyPath( SCSIZE nIndex);
+    void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR )
         { PutDouble( CreateDoubleError( nErrorCode ), nC, nR ); }
-    void PutError( USHORT nErrorCode, ULONG nIndex )
+    void PutError( USHORT nErrorCode, SCSIZE nIndex )
         { PutDouble( CreateDoubleError( nErrorCode ), nIndex ); }
     void FillDouble( double fVal,
-            USHORT nC1, USHORT nR1, USHORT nC2, USHORT nR2 );
+            SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
     /// lower left triangle
-    void FillDoubleLowerLeft( double fVal, USHORT nC2 );
+    void FillDoubleLowerLeft( double fVal, SCSIZE nC2 );
 
     /** Use outside ScInterpreter before obtaining the double value of an
         element and passing it's NAN around.
         @returns 0 if no error, else one of err... constants */
-    USHORT GetError( USHORT nC, USHORT nR) const;
-    USHORT GetError( ULONG nIndex) const
+    USHORT GetError( SCSIZE nC, SCSIZE nR) const;
+    USHORT GetError( SCSIZE nIndex) const
         { return GetDoubleErrorValue( pMat[nIndex].fVal); }
 
     /// @return 0.0 if empty
-    double GetDouble( USHORT nC, USHORT nR) const;
+    double GetDouble( SCSIZE nC, SCSIZE nR) const;
     /// @return 0.0 if empty
-    double GetDouble( ULONG nIndex) const
+    double GetDouble( SCSIZE nIndex) const
     {
         if ( pErrorInterpreter )
         {
@@ -231,43 +235,43 @@ public:
         }
         return pMat[nIndex].fVal;
     }
-    const String& GetString( USHORT nC, USHORT nR) const;
-    const String& GetString( ULONG nIndex) const
+    const String& GetString( SCSIZE nC, SCSIZE nR) const;
+    const String& GetString( SCSIZE nIndex) const
         { return pMat[nIndex].GetString(); }
 
     /// @ATTENTION: If bString the MatValue->pS may still be NULL to indicate
     /// an empty string!
-    const MatValue* Get( USHORT nC, USHORT nR, BOOL& bString) const;
+    const MatValue* Get( SCSIZE nC, SCSIZE nR, BOOL& bString) const;
 
     /// @return <TRUE/> if string or empty
-    BOOL IsString( ULONG nIndex ) const
+    BOOL IsString( SCSIZE nIndex ) const
         { return bIsString && bIsString[nIndex]; }
     /// @return <TRUE/> if string or empty
-    BOOL IsString( USHORT nC, USHORT nR ) const
-        { return bIsString && bIsString[ (ULONG) nC * nAnzRow + nR ]; }
-    BOOL IsEmpty( ULONG nIndex ) const
+    BOOL IsString( SCSIZE nC, SCSIZE nR ) const
+        { return bIsString && bIsString[ nC * nRowCount + nR ]; }
+    BOOL IsEmpty( SCSIZE nIndex ) const
         { return bIsString && ((bIsString[nIndex] & SC_MATVAL_EMPTY) ==
                 SC_MATVAL_EMPTY); }
-    BOOL IsEmptyPath( USHORT nC, USHORT nR ) const
-        { return bIsString && ((bIsString[ (ULONG) nC * nAnzRow + nR ] &
+    BOOL IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
+        { return bIsString && ((bIsString[ nC * nRowCount + nR ] &
                     SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH); }
-    BOOL IsEmptyPath( ULONG nIndex ) const
+    BOOL IsEmptyPath( SCSIZE nIndex ) const
         { return bIsString && ((bIsString[nIndex] & SC_MATVAL_EMPTYPATH) ==
                 SC_MATVAL_EMPTYPATH); }
-    BOOL IsEmpty( USHORT nC, USHORT nR ) const
-        { return bIsString && ((bIsString[ (ULONG) nC * nAnzRow + nR ] &
+    BOOL IsEmpty( SCSIZE nC, SCSIZE nR ) const
+        { return bIsString && ((bIsString[ nC * nRowCount + nR ] &
                     SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
-    BOOL IsValue( ULONG nIndex ) const
+    BOOL IsValue( SCSIZE nIndex ) const
         { return !bIsString || !bIsString[nIndex]; }
-    BOOL IsValue( USHORT nC, USHORT nR ) const
-        { return !bIsString || !bIsString[ (ULONG) nC * nAnzRow + nR ]; }
-    BOOL IsValueOrEmpty( ULONG nIndex ) const
+    BOOL IsValue( SCSIZE nC, SCSIZE nR ) const
+        { return !bIsString || !bIsString[ nC * nRowCount + nR ]; }
+    BOOL IsValueOrEmpty( SCSIZE nIndex ) const
         { return !bIsString || !bIsString[nIndex] || ((bIsString[nIndex] &
                     SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
-    BOOL IsValueOrEmpty( USHORT nC, USHORT nR ) const
-        { return !bIsString || !bIsString[ (ULONG) nC * nAnzRow + nR ]
-            || ((bIsString[ (ULONG) nC * nAnzRow + nR ] & SC_MATVAL_EMPTY) ==
-                    SC_MATVAL_EMPTY); }
+    BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
+        { return !bIsString || !bIsString[ nC * nRowCount + nR ] ||
+            ((bIsString[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) ==
+             SC_MATVAL_EMPTY); }
 
     /// @return <TRUE/> if entire matrix is numeric and no strings are contained
     BOOL IsNumeric() const
