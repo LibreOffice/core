@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:43:10 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5368,6 +5368,20 @@ String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ hindi ] = "The entered criterion cannot be compared with this field.";
     Text[ slovak ] = "Zadané kritérium,nemôže byť porovnávané s týmto poľom.";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
