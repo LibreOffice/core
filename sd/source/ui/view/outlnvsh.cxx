@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: af $ $Date: 2002-11-04 16:45:39 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 20:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2295,9 +2295,13 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
 
     BOOL bNewObject = FALSE;
 
+    sal_uInt16 eOutlinerMode = OUTLINERMODE_TITLEOBJECT;
     pTO = (SdrTextObj*)pPage->GetPresObj( PRESOBJ_TEXT );
     if( !pTO )
+    {
+        eOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
         pTO = pOlView->GetLayoutTextObject( pPage );
+    }
 
     // wieviele Absaetze in der Gliederung?
     ULONG nTitlePara     = pOutliner->GetAbsPos( pPara );
@@ -2328,6 +2332,7 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
         pPresObjList->Insert( pTO, LIST_APPEND );
 
         pPage->InsertObject( pTO );
+        pOPO->SetOutlinerMode( eOutlinerMode );
         pTO->SetOutlinerParaObject( pOPO );
 
         AutoLayout eLayout = pPage->GetAutoLayout();
@@ -2367,6 +2372,7 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
     else if( pTO && pOPO )
     {
         pOPO->SetVertical( pTO->IsVerticalWriting() );
+        pOPO->SetOutlinerMode( eOutlinerMode );
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
 
