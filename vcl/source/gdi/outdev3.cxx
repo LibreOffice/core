@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:18:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,12 @@
  *
  ************************************************************************/
 
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -1032,14 +1035,23 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
 {
     DBG_TRACE( "OutputDevice::GetDefaultFont()" );
 
+    com::sun::star::lang::Locale aLocale;
     if( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW )
     {
-        eLang = Application::GetSettings().GetUILanguage();
+        aLocale = Application::GetSettings().GetUILocale();
+    }
+    else
+    {
+        String aLang, aCountry;
+        ConvertLanguageToIsoNames( eLang, aLang, aCountry );
+        aLocale.Language= aLang;
+        aLocale.Country = aCountry;
     }
 
+
     DefaultFontConfigItem* pDefaults = DefaultFontConfigItem::get();
-    String aSearch = pDefaults->getUserInterfaceFont( eLang ); // ensure a fallback
-    String aDefault = pDefaults->getDefaultFont( eLang, nType );
+    String aSearch = pDefaults->getUserInterfaceFont( aLocale ); // ensure a fallback
+    String aDefault = pDefaults->getDefaultFont( aLocale, nType );
     if( aDefault.Len() )
         aSearch = aDefault;
 
@@ -1199,8 +1211,8 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     case DEFAULTFONT_CTL_HEADING:   s = "DEFAULTFONT_CTL_HEADING"; break;
     case DEFAULTFONT_CTL_DISPLAY:   s = "DEFAULTFONT_CTL_DISPLAY"; break;
     }
-    fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" FontName=\"%s\"\n",
-         s,
+    fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" lang=%d flags=%d FontName=\"%s\"\n",
+         s, eLang, nFlags,
          OUStringToOString( aFont.GetName(), osl_getThreadTextEncoding() ).getStr()
          );
 #endif
@@ -1958,7 +1970,9 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
         if ( !pFoundData && bSymbolEncoding )
         {
-            String aFontname = DefaultFontConfigItem::get()->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SYMBOL );
+            com::sun::star::lang::Locale aLocale( OUString( RTL_CONSTASCII_USTRINGPARAM("en") ),
+                                                  OUString(), OUString() );
+            String aFontname = DefaultFontConfigItem::get()->getDefaultFont( aLocale, DEFAULTFONT_SYMBOL );
             ImplGetEnglishSearchFontName( aFontname );
             pFoundData = pFontList->ImplFindFontFromToken( aFontname );
         }
@@ -2419,23 +2433,25 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             // Try to use a Standard Unicode or a Standard Font to get
             // as max as possible characters
             DefaultFontConfigItem* pDefaults = DefaultFontConfigItem::get();
-            String aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SANS_UNICODE );
+            com::sun::star::lang::Locale aLoc( OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) ),
+                                               OUString(), OUString() );
+            String aFontname = pDefaults->getDefaultFont( aLoc, DEFAULTFONT_SANS_UNICODE );
             ImplGetEnglishSearchFontName( aFontname );
 
             pFoundData = pFontList->ImplFindFontFromToken( aFontname );
             if ( !pFoundData )
             {
-                aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SANS );
+                aFontname = pDefaults->getDefaultFont( aLoc, DEFAULTFONT_SANS );
                 ImplGetEnglishSearchFontName( aFontname );
                 pFoundData = pFontList->ImplFindFontFromToken( aFontname );
                 if ( !pFoundData )
                 {
-                    aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SERIF );
+                    aFontname = pDefaults->getDefaultFont( aLoc, DEFAULTFONT_SERIF );
                     ImplGetEnglishSearchFontName( aFontname );
                     pFoundData = pFontList->ImplFindFontFromToken( aFontname );
                     if ( !pFoundData )
                     {
-                        aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_FIXED );
+                        aFontname = pDefaults->getDefaultFont( aLoc, DEFAULTFONT_FIXED );
                         ImplGetEnglishSearchFontName( aFontname );
                         pFoundData = pFontList->ImplFindFontFromToken( aFontname );
                     }
