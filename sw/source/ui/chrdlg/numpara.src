@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:09:36 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ TabPage TP_NUMPARA
         Text [ dutch ] = "~Bij deze alinea opnieuw beginnen" ;
         Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶ÎÂä´¦ÖØĞÂ¿ªÊ¼(~A)";
         Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà";
-        Text[ polish ] = "Zacznij p~onownie przy tym akapicie";
+        Text[ polish ] = "Zacznij p~onownie od tego akapitu";
         Text[ japanese ] = "‚±‚Ì’i—‚ÅV‚µ‚­n‚ß‚é(~R)";
         Text[ chinese_traditional ] = "±q³o­Ó¬q¸¨­«·s¶}©l(~R)";
         Text[ arabic ] = "ÇáÈÏÁ ãä ÌÏíÏ ÚäÏ åĞå ÇáİŞÑÉ";
