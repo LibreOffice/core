@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:02:41 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 
 #pragma hdrstop
 
+#include "event.hxx"
 #include "unoctitm.hxx"
 #include "frame.hxx"
 #include "arrdecl.hxx"
@@ -358,6 +359,8 @@ sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
             {
                 bOther = ( pFrame->GetFrame() != this );
             }
+
+            SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEVIEW, pCur) );
 
             if ( bOther )
                 // if there are other views only the current view of this frame must be asked
