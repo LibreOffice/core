@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-23 07:27:28 $
+ *  last change: $Author: hdu $ $Date: 2002-05-03 16:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1633,10 +1633,10 @@ static BOOL ImplGetGlyphChar( SalGraphicsData* pData, sal_Unicode c,
 
 BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 {
-    HDC             hDC = maGraphicsData.mhDC;
-    BYTE            nPitchAndFamily;
-    long            nAscent;
+    HDC hDC = maGraphicsData.mhDC;
 
+    long nAscent;
+    BYTE nPitchAndFamily;
     ImplGetFamilyAndAscents( hDC, nPitchAndFamily, nAscent );
     if ( !(nPitchAndFamily & TMPF_TRUETYPE) )
         return FALSE;
@@ -1657,12 +1657,15 @@ BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
         nSize = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_METRICS | GGO_GLYPH_INDEX,
             &aGM, 0, NULL, &aMat );
 
-    BOOL bOK = (nSize != GDI_ERROR) && nSize;
-    if( bOK )
-        rRect = Rectangle( Point( aGM.gmptGlyphOrigin.x, nAscent-aGM.gmptGlyphOrigin.y ),
+    if( !nSize )    // blank glyphs are ok
+        rRect.SetEmpty();
+    else if( nSize != GDI_ERROR )
+        rRect = Rectangle( Point( aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
             Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
+    else
+        return false;
 
-    return bOK;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1694,7 +1697,9 @@ BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
         nSize1 = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
             &aGlyphMetrics, 0, NULL, &aMat );
 
-    if ( (nSize1 != GDI_ERROR) && nSize1 )
+    if( !nSize1 )       // blank glyphs are ok
+        bRet = TRUE;
+    else if( nSize1 != GDI_ERROR )
     {
         BYTE*   pData = new BYTE[ nSize1 ];
         ULONG   nTotalCount = 0;
@@ -1822,12 +1827,12 @@ BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
                 }
 
                 // end point is start point for closed contour
-// disabled, because Polygon class closes the contour itself
-//                pPoints[nPnt++] = pPoints[0];
+                // disabled, because Polygon class closes the contour itself
+                // pPoints[nPnt++] = pPoints[0];
 
                 // convert y-coordinates W32 -> VCL
                 for( int i = 0; i < nPnt; ++i )
-                    pPoints[i].Y() = nAscent - pPoints[i].Y();
+                    pPoints[i].Y() = -pPoints[i].Y();
 
                 // insert into polypolygon
                 Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
