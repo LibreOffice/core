@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:16:26 $
+ *  last change: $Author: hr $ $Date: 2004-03-12 12:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,8 @@ void ScAttrArray::TestData() const
     USHORT nErr = 0;
     if (pData)
     {
-        for (USHORT nPos=0; nPos<nCount; nPos++)
+        USHORT nPos;
+        for (nPos=0; nPos<nCount; nPos++)
         {
             if (nPos)
                 if (pData[nPos].pPattern == pData[nPos-1].pPattern || pData[nPos].nRow <= pData[nPos-1].nRow)
