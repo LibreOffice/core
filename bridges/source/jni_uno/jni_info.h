@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:31:42 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ inline void JNI_info::append_sig(
         buf->append( 'L' );
         buf->append(
             ::rtl::OUStringToOString(
-                uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+                uno_name.replace( '.', '/' ), RTL_TEXTENCODING_JAVA_UTF8 ) );
         buf->append( ';' );
         break;
     }
@@ -361,7 +361,8 @@ inline void JNI_info::append_sig(
             buf->append( 'L' );
             buf->append(
                 ::rtl::OUStringToOString(
-                    uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+                    uno_name.replace( '.', '/' ),
+                    RTL_TEXTENCODING_JAVA_UTF8 ) );
             buf->append( ';' );
         }
         break;
