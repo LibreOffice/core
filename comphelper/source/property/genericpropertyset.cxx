@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericpropertyset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 19:53:24 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 12:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -272,11 +268,11 @@ sal_Bool SAL_CALL GenericPropertySet::supportsService( const  OUString& ServiceN
     Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); ++i )
         if( pArray[i] == ServiceName )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 OUString SAL_CALL GenericPropertySet::getImplementationName() throw( RuntimeException )
