@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-08 08:59:07 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[ polish ] = "Typ";
     Text[ portuguese_brazilian ] = "Type";
     Text[ japanese ] = "種類";
-    Text[ korean ] = "Type";
+    Text[ korean ] = "형식";
     Text[ chinese_simplified ] = "类型";
     Text[ chinese_traditional ] = "類型";
     Text[ turkish ] = "Type";
@@ -335,7 +335,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ polish ] = "~Usu�";
             Text[ portuguese_brazilian ] = "Delete";
             Text[ japanese ] = "削除";
-            Text[ korean ] = "Delete";
+            Text[ korean ] = "삭제";
             Text[ chinese_simplified ] = "删除";
             Text[ chinese_traditional ] = "刪除";
             Text[ turkish ] = "Delete";
@@ -362,7 +362,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ polish ] = "~Zmie� nazw�";
             Text[ portuguese_brazilian ] = "Rename";
             Text[ japanese ] = "名前の変更";
-            Text[ korean ] = "Rename";
+            Text[ korean ] = "이름 바꾸기";
             Text[ chinese_simplified ] = "重命名";
             Text[ chinese_traditional ] = "重新命名";
             Text[ turkish ] = "Rename";
@@ -567,6 +567,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
 
 
 
