@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.13 $
-# Date:        $Date: 2003-12-17 15:01:33 $
+# Version:     $Revision: 1.14 $
+# Date:        $Date: 2004-02-02 18:17:15 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -919,6 +919,9 @@ elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
                         $D."PRODUCT".
                         $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
 }
+elsif ($platform eq "$Macosx") {
+	;
+}
 else
 {  AddWarning( "set_soenv", "$platform not configured for compiler directives" );
 }
@@ -1016,37 +1019,31 @@ if ($platform eq "$Winnt")
 }
      
 # The general environment path.
-if ($platform eq "$Solaris") 
-{  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
-                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
-                        $ps.'$SOLARENV'.$BIN.
-                        $ps.$USR_CCS.$BIN;
-   if ( $JAVA_HOME ne "" )
-   {
-      $PATH .=          $ps.'$JAVA_HOME'.$BIN;
-   }
-
-   $PATH             .= GetCorrectPath($COMPATH, $PERL_PATH, $TCSH_PATH, $compiler);
-
-   $PATH             .= $ps.$oldPATH;
-}
-elsif (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
-	($platform eq "$Tru64")  || ($platform eq "$Irix") ||
-	($platform eq "$Irix64") || ($platform eq "$FreeBSD") ||
-	($platform eq "AIX"))
+if (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
+    ($platform eq "$Tru64")  || ($platform eq "$Irix") ||
+    ($platform eq "$Irix64") || ($platform eq "$FreeBSD") ||
+    ($platform eq "AIX")     || ($platform eq "$Solaris"))
 {  $PATH              = $cur_dir.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
-   if ( $JAVA_HOME ne "" )
-   {
-      $PATH .=          $ps.'$JAVA_HOME'.$BIN;
+
+   if ($platform eq "$Solaris") {
+	$PATH .= $ps.$USR_CCS.$BIN;
    }
+
    $PATH             .= $ps.$oldPATH;
 
-   $PATH             .= GetCorrectPath($COMPATH, $PERL_PATH, $TCSH_PATH, $compiler);
-
+   my @javaBits;
+   if ( $JAVA_HOME ne "" ) {
+      @javaBits = ( '$JAVA_HOME'.$BIN, 'javac' );
+   } else {
+      @javaBits = (); 
+   }
+   $PATH              = GetCorrectPath ($PATH, $COMPATH, $CC,
+                                        $PERL_PATH, 'perl',
+					$TCSH_PATH, 'tcsh',
+                                        @javaBits);
 }
 
 elsif ($platform eq "$Winnt")
@@ -1468,19 +1465,26 @@ if ($platform eq "$Macosx")
     if( ! -e "/usr/bin/osascript" ) {
         # no command line applescript.  Chances are we're on a Darwin system
         
+        ToFile( "BUILD_OS_DARWIN", "TRUE", "e");
+
         $macosxCdefs.=" -DBUILD_OS_DARWIN";
         open DARVER, "/usr/bin/uname -v |";
         my $s=<DARVER>;
         chomp $s;
         if ( $s =~ /(\d+?)\.(\d+?)(.*?)/)
         {
+            ToFile("BUILD_OS_MAJOR", $1, "e");
             $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $1;
+
+            ToFile("BUILD_OS_MINOR", $2, "e");
             $macosxCdefs.=" -DBUILD_OS_MINOR=" . $2;
             
             $s=$3;
             if ( $s =~ /(\d+?)/) {
+                ToFile("BUILD_OS_REV", $1, "e");
                 $macosxCdefs.=" -DBUILD_OS_REV=" . $1;
             } else {
+                ToFile("BUILD_OS_REV", "0", "e");
                 $macosxCdefs.=" -DBUILD_OS_REV=0";
             }
         }
@@ -1489,6 +1493,7 @@ if ($platform eq "$Macosx")
     else
     {
         $macosxCdefs.=" -DBUILD_OS_APPLEOSX";
+        ToFile("BUILD_OS_APPLEOSX", "TRUE", "e");
         
         my $majorScript = <<EOF;
 on Num32ToHex(num)
@@ -1525,6 +1530,7 @@ EOF
         my $tmp=<OSXMAJ>;
         chomp $tmp;
         $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $tmp;
+        ToFile("BUILD_OS_MAJOR", $tmp, "e");
         close OSXMAJ;
         unlink "/tmp/os$$";
         
@@ -1563,6 +1569,7 @@ EOF
         $tmp=<OSXMIN>;
         chomp $tmp;
         $macosxCdefs.=" -DBUILD_OS_MINOR=" . $tmp;
+        ToFile("BUILD_OS_MINOR", $tmp, "e");
         close OSXMIN;
         unlink "/tmp/os$$";
         
@@ -1600,6 +1607,7 @@ EOF
         $tmp=<OSXREV>;
         chomp $tmp;
         $macosxCdefs.=" -DBUILD_OS_REV=" . $tmp;
+        ToFile("BUILD_OS_REV", $tmp, "e");
         close OSXREV;
         unlink "/tmp/os$$";
     }
@@ -2136,7 +2144,9 @@ sub ToFile
          $win_format_var =~ s/\\/\\\\/g;
          print OUT "$setenv $_[ 0 ] \"$win_format_var\" $newline";
          if(defined($outfile_sh))
-         {  print OUT_SH "$_[ 0 ]=\"$win_format_var\"$newline";    # to sh file
+         {  # bash needs one layer of escaping more
+            $win_format_var =~ s/\\\\/\\\\\\\\/g;
+            print OUT_SH "$_[ 0 ]=\"$win_format_var\"$newline";    # to sh file
             $exportvars .= " $_[ 0 ]";                     # add to export list for sh file
          }
          if (defined($outfile_bat))
@@ -2303,53 +2313,106 @@ sub CreateBuildEnv
    mkdir( $src_root, 0777 ) || 
       print ( "Cannot create directory $src_root \n");
 }
+
 #--------------------------------------------------------
 # Function name: GetCorrectPath
 # Description:   Creates the build environment. 
-# Arguments:     1. $COMPATH:     Compiler Path.
-#                2. $PERL_PATH:   Perl executable Path.
-#                2. $TCSH_PATH:   Tcsh executable Path.
+# Arguments:     1.   existing / original path
+#                2... pairs of <path, executable>
 # Return value:  String - Correct Path
 #--------------------------------------------------------
-sub GetCorrectPath 
-{  my ( $compath, $perl_path, $tcsh_path, $compiler, $perl_compath, $compath_perl, $correct_path );
-   $compath  = $_[ 0 ];
-   $perl_path = $_[ 1 ];
-   $tcsh_path = $_[ 2 ];
-   $compiler = $_[ 3 ];
-   if ($compath ne $perl_path) 
-   {  $perl_compath .= $compath.$ds."perl";
-      if ( !( -f $perl_compath ) ) 
-      {  $correct_path = $ps.$compath.
-                         $ps.$perl_path;
-      }
-      else 
-      {  $compath_perl .= $perl_path.$ds.$compiler;
-         if ( !( -f $compath_perl ) ) 
-         {  $correct_path = $ps.$perl_path.
-                         $ps.$compath;
-         }
-         else
-         {  AddWarning( "set_soenv", "Compiler path and Perl Path conflict, fix and run ./configure again" );
-            $correct_path = "";
-         }
-      }
-   }
-   else 
-   {  $correct_path = $ps.$compath;
-   }
-   if (($tcsh_path ne $compath) && ($tcsh_path ne $perl_path) && 
-       ($tcsh_path ne $USR.$BIN) && ($tcsh_path ne $BIN)) 
-   {  $correct_path .= $ps.$tcsh_path;
-   }
-   if (($compath ne $USR.$BIN) && ($perl_path ne $USR.$BIN) && ($tcsh_path ne $USR.$BIN)) 
-   {  $correct_path .= $ps.$USR.$BIN;
-   }
-   if (($compath ne $BIN) && ($perl_path ne $BIN)) 
-   {  $correct_path .= $ps.$BIN;
-   } 
-   return $correct_path;
+sub GetCorrectPath
+{
+	sub PathLookup
+	{
+	    my $cmd = shift;
+	    while (@_) {
+		my $elem = shift;
+		
+		-x "$elem/$cmd" && return $elem;
+	    }
+	    return '';
+	}
+
+	sub SaneGrep
+	{
+	    # Perl grep is unbelievably strange.
+	    my $needle = shift;
+	    my $haystack;
+	    while ($haystack = shift) {
+		if ($needle eq $haystack) {
+		    return 1;
+		} 
+	    }
+	    return 0;
+	}	
+
+	sub CleanupPath
+	{
+	    my @elements = @_;
+	    my @cleanName = ();
+	    my $elem;
+
+	    while ($elem = shift @elements) {
+		if (!SaneGrep ($elem, @cleanName)) {
+			push @cleanName, $elem;
+		}
+	    }
+
+	    return @cleanName;
+	}
+
+	my $oldPath = shift;
+	my @originalPairs = @_;
+	my @pairs = @originalPairs;
+	my @Path = split /$ps/, $oldPath;
+
+	while (@pairs) {
+	    my $path = shift @pairs;
+	    my $cmd = shift @pairs;
+	    my $to_append = 1;
+	    my $elem;
+
+	    if (! -x "$path/$cmd") {
+		AddWarning ("Missing executable $path/$cmd\n");
+	    }
+
+	    for $elem (@Path) {
+		if ($elem eq $path) {
+#		    print "Hit duplicate path in path; break\n";
+		    $to_append = 0;
+		    last;
+		}
+		if (-f "$elem/$cmd") {
+#		    print "Element already in path ...\n";
+		    unshift @Path, $path;
+		    $to_append = 0;
+		    last;
+		} else {
+#		    print "No file $elem/$cmd\n";
+		}
+	    }
+	    if ($to_append) {
+		push @Path, $path;
+	    }
+	}
+
+	@pairs = @originalPairs;
+	while (@pairs) {
+	    my $path = shift @pairs;
+	    my $cmd = shift @pairs;
+	    my $realpath;
+
+	    $realpath = PathLookup ($cmd, @Path);
+	    if (!($realpath eq $path)) {
+		AddWarning ("Path conflict for executables " .
+                            "$path/$cmd against $realpath");
+	    }
+	}
+
+	return join $ps, CleanupPath (@Path);
 }
+
 #------------------------------------------------------------
 # Function name: AddWarning 
 # Description:   Adds any kind of warning for the user.
