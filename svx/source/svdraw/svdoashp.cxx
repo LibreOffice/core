@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:47:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #endif
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #endif
 
@@ -165,10 +165,6 @@
 #include "xlnclit.hxx"
 
 
-
-#ifndef _PERSIST_HXX //autogen
-#include <so3/persist.hxx>
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include "svxids.hrc"
