@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tstring.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:23:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #define private public
@@ -154,6 +157,14 @@ ByteString ByteString::CreateFromDouble( double d )
 {
     sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
     return ByteString( aBuf, rtl_str_valueOfDouble( aBuf, d ) );
+}
+
+// -----------------------------------------------------------------------
+
+namespace { struct Empty : public rtl::Static< const ByteString, Empty> {}; }
+const ByteString& ByteString::EmptyString()
+{
+    return Empty::get();
 }
 
 // -----------------------------------------------------------------------
