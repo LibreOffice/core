@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 15:01:27 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:10:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -284,7 +284,7 @@ sub create_msi_database
 }
 
 #####################################################################
-# Returning the value from sis.lng for Summary Information Stream
+# Returning the value from sis.ulf for Summary Information Stream
 #####################################################################
 
 sub get_value_from_sis_lng
@@ -327,6 +327,7 @@ sub get_codepage_for_sis
     my ( $language ) = @_;
 
     my $codepage = "1252";  # determine dynamically in a function
+    # my $codepage = "65001";       # UTF-8
     return $codepage;
 }
 
