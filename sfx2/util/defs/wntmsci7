@@ -8214,3 +8214,10 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ??1ImageListDescriptor@framework@@QAE@XZ
 ??1ImageListsDescriptor@framework@@QAE@XZ
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2335511224@@YAXABVSbxVariableRef@@PAX@Z
+??1DisposeListener@@UAE@XZ
+?disposing@DisposeListener@@UAAXABUEventObject@lang@star@sun@com@@@Z
+??1?$WeakImplHelper1@VXDispatchResultListener@frame@star@sun@com@@@cppu@@UAE@XZ
+?__query@?$Reference@VXDispatchResultListener@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXDispatchResultListener@frame@345@PAVXInterface@2345@@Z
+?set@?$Reference@VXDispatchResultListener@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXDispatchResultListener@frame@345@@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2702916519@@YAXABVSbxVariableRef@@PAX@Z
+?GetFilterNameWithPrefix@SfxFilter@@QBE?AVString@@XZ
