@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:09:14 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 23:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #include "svdotext.hxx"
 #include "svdpagv.hxx"
 #include "fmglob.hxx"
+
+#ifndef SVX_LIGHT
+#include "fmdpage.hxx"
+#endif
 
 #define CONVERT_STARIMAGE_OLE_OBJECT_TO_GRAPHIC 1
 
@@ -1763,8 +1767,11 @@ uno::Reference< uno::XInterface > SdrPage::getUnoPage()
 
 uno::Reference< uno::XInterface > SdrPage::createUnoPage()
 {
-    DBG_ERROR( "SdrModel::createUnoPage() - base implementation should not be called!" );
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt
+#ifndef SVX_LIGHT
+        = static_cast<cppu::OWeakObject*>( new SvxFmDrawPage( this ) )
+#endif
+        ;
     return xInt;
 }
 
