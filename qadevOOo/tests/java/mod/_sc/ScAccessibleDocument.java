@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleDocument.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ public class ScAccessibleDocument extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xSheetDoc " );
-        xSpreadsheetDoc.dispose();
+        util.DesktopTools.closeDoc(xSpreadsheetDoc);
     }
 
     /**
