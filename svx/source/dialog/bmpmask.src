@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:35:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "»ö»ó";
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Colores";
     };
     FixedText FT_1
     {
@@ -133,6 +134,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "¼Ò½º »ö»ó";
         Text[ turkish ] = "Kaynak renk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Color fuente";
     };
     FixedText FT_2
     {
@@ -159,6 +161,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "Çã¿ë ¿ÀÂ÷";
         Text[ turkish ] = "Tolerans";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tolerancia";
     };
     FixedText FT_3
     {
@@ -185,6 +188,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "...·Î ¹Ù²Ù±â";
         Text[ turkish ] = "Yeni renk...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Reemplazar con...";
     };
     CheckBox CBX_1
     {
@@ -227,7 +231,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ english_us ] = "Tr~ansparency" ;
         Text [ italian ] = "Trasparenza" ;
         Text [ spanish ] = "Transparencia" ;
-        Text [ french ] = "Transparent" ;
+        Text [ french ] = "Transparence" ;
         Text [ dutch ] = "Transparantie" ;
         Text [ swedish ] = "Transparens" ;
         Text [ danish ] = "Transparens" ;
@@ -243,6 +247,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "Åõ¸í(~A)";
         Text[ turkish ] = "Saydamlýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Transparencia";
     };
     MetricField SP_1
     {
@@ -325,6 +330,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "¹Ù²Ù±â(~R)";
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Reemplazar";
     };
     ListBox LB_1
     {
@@ -408,6 +414,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text[ korean ] = "»ö °ñ¶ó³»±â";
                 Text[ turkish ] = "Renk örneði al";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Pipeta";
             };
         };
     };
@@ -437,6 +444,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text[ korean ] = "»ö °ñ¶ó³»±â";
     Text[ turkish ] = "Renk örneði al";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pipeta";
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP
@@ -461,6 +469,7 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ chinese_traditional ] = "³z©ú";
     Text[ turkish ] = "Saydam";
     Text[ arabic ] = "ÔÝÇÝ";
+    Text[ catalan ] = "Transparente";
 };
 
  // ********************************************************************** EOF
