@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenRetriever.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:47:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -232,7 +232,7 @@ public class ChildrenRetriever {
         }
 
         if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=8100";
+            m_connectString = "socket,host=localhost,port=2083";
         }
 
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
@@ -252,7 +252,7 @@ public class ChildrenRetriever {
         System.out.println(
             "Usage   : ChildrenRetriever -connect=socket,host=...,port=... -url=... -propNames=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=8100 -url=file:/// -propNames=Title,IsDocument" );
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=file:/// -propNames=Title,IsDocument" );
         System.out.println(
             "\nExample : -url=file:///temp/ -propNames=Title;IsFolder;IsDocument" );
     }
