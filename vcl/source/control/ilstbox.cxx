@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:47:07 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,6 +777,16 @@ void ImplListBoxWindow::ImplHideFocusRect()
 
 // -----------------------------------------------------------------------
 
+USHORT ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
+{
+    USHORT nSelect = (USHORT) ( ( rPoint.Y() + mnBorder ) / mnMaxHeight ) + (USHORT) mnTop;
+    if( nSelect < mnTop || nSelect >= mpEntryList->GetEntryCount() )
+        nSelect = LISTBOX_ENTRY_NOTFOUND;
+    return nSelect;
+}
+
+// -----------------------------------------------------------------------
+
 void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mbMouseMoveSelect = FALSE;  // Nur bis zum ersten MouseButtonDown
@@ -786,8 +796,8 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if( rMEvt.GetClicks() == 1 )
         {
-            USHORT nSelect = (USHORT) ( ( rMEvt.GetPosPixel().Y() + mnBorder ) / mnMaxHeight ) + (USHORT) mnTop;
-            if( nSelect < mpEntryList->GetEntryCount() )
+            USHORT nSelect = GetEntryPosForPoint( rMEvt.GetPosPixel() );
+            if( nSelect != LISTBOX_ENTRY_NOTFOUND )
             {
                 if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
                     mnTrackingSaveSelection = GetEntryList()->GetSelectEntryPos( 0 );
@@ -1756,6 +1766,8 @@ void ImplListBoxWindow::Resize()
 
     if ( bShowFocusRect )
         ImplShowFocusRect();
+
+    delete mpLayoutData, mpLayoutData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1919,6 +1931,7 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
         ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
+    delete mpLayoutData, mpLayoutData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -2794,6 +2807,14 @@ void ImplListBoxFloatingWindow::SetPosSizePixel( long nX, long nY, long nWidth, 
 
 // -----------------------------------------------------------------------
 
+void ImplListBoxFloatingWindow::Resize()
+{
+    mpImplLB->GetMainWindow()->ImplClearLayoutData();
+    FloatingWindow::Resize();
+}
+
+// -----------------------------------------------------------------------
+
 Size ImplListBoxFloatingWindow::CalcFloatSize()
 {
     Size aFloatSz( maPrefSz );
@@ -2881,5 +2902,7 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
 
         if ( mpImplLB->GetMainWindow()->IsGrabFocusAllowed() )
             mpImplLB->GetMainWindow()->GrabFocus();
+
+        mpImplLB->GetMainWindow()->ImplClearLayoutData();
     }
 }
