@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:13 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2094,7 +2094,7 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
         sal_Bool bOldLineColor = bLineColor;
         bLineColor = sal_False;
         std::vector<PolyPolygon> aPolyPolyVec;
-        if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString ) )
+        if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, STRING_LEN, TRUE, nWidth, pDXArry ) )
         {
             // always adjust text position to match baseline alignment
             ImplWriteLine( "pum" );
