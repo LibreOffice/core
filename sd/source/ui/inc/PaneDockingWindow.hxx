@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:58:29 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,22 +75,39 @@ class PaneDockingWindow
     : public SfxDockingWindow
 {
 public:
+    /** Create a new docking window that will be displayed in the specified
+        pane.
+        The constructor will determine the ViewShellBase via the given
+        bindings and tell its PaneManager about the new window.  It will ask
+        the PaneManager for a window title.
+        @param pBindings
+            Used, among others, to determine the ViewShellBase and
+            PaneManager that manage the new docking window.
+        @param pChildWindow
+            This child window is the logical container for the new docking
+            window.
+        @param pParent
+            The parent window of the new docking window.
+        @param rResId
+            The resource is used to determine initial size and attributes.
+        @param ePane
+            The pane in which to show the docking window.
+    */
     PaneDockingWindow (
         SfxBindings *pBindings,
         SfxChildWindow *pChildWindow,
         ::Window* pParent,
         const ResId& rResId,
-        PaneManager::PaneType eType,
-        const String& rsTitle);
+        PaneManager::PaneType ePane);
 
     virtual ~PaneDockingWindow (void);
 
     virtual void Paint (const Rectangle& rRectangle);
     virtual void Resize (void);
 
-    virtual long    Notify( NotifyEvent& rNEvt );
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual long Notify( NotifyEvent& rNEvt );
+    virtual void StateChanged( StateChangedType nType );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
     /** Add a top down menu to the title bar or rather the top-level menu
         entry.  The given callback is called when the menu is clicked and it
@@ -101,6 +118,12 @@ public:
             tool box.
     */
     USHORT AddMenu (const String& rsMenuName, const Link& rCallback);
+
+    /** Set the title of the docking window to the given string.  Use this
+        method when the title is not yet known at the time of construction
+        or can not be passed to the constructor.
+    */
+    void SetTitle (const String& rsTitle);
 
 private:
     /** The pane which is represented by the docking window.
