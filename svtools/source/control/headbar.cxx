@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:37:03 $
+ *  last change: $Author: pb $ $Date: 2002-09-13 12:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #define _SV_HEADBAR_CXX
 
+#ifndef _HEADBAR_HXX
+#include <headbar.hxx>
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -78,8 +82,8 @@
 #include <vcl/image.hxx>
 #endif
 
-#ifndef _HEADBAR_HXX
-#include <headbar.hxx>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 // =======================================================================
@@ -1671,3 +1675,23 @@ Size HeaderBar::CalcWindowSizePixel() const
 
     return aSize;
 }
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > HeaderBar::CreateAccessible()
+{
+    if ( !mxAccessible.is() )
+    {
+        if ( maCreateAccessibleHdl.IsSet() )
+            maCreateAccessibleHdl.Call( this );
+
+        if ( !mxAccessible.is() )
+            mxAccessible = Window::CreateAccessible();
+    }
+
+    return mxAccessible;
+}
+
+void HeaderBar::SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > _xAccessible )
+{
+    mxAccessible = _xAccessible;
+}
+
