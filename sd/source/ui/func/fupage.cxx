@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-07 08:53:30 $
+ *  last change: $Author: dl $ $Date: 2001-05-28 07:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,9 @@
 #ifndef _SVX_SVDORECT_HXX
 #include <svx/svdorect.hxx>
 #endif
-
+#ifndef _SVX_SVDUNDO_HXX
+#include <svx/svdundo.hxx>
+#endif
 #include "glob.hrc"
 #include <svx/shaditem.hxx>
 #include <svx/boxitem.hxx>
@@ -122,6 +124,7 @@
 #include "app.hrc"
 #include "preview.hxx"
 #include "prevchld.hxx"
+#include "unchss.hxx"
 
 // 50 cm 28350
 // erstmal vom Writer uebernommen
@@ -415,7 +418,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                 if( bMasterPage )
                 {
-                    pStyleSheet->GetItemSet().Put(aTempSet);
+                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, (SfxStyleSheet*)pStyleSheet, &aTempSet);
+                    pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                    pStyleSheet->GetItemSet().Put( aTempSet );
                     SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
                     pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                 }
