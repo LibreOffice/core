@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:16:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #endif
-
 /*
 static const SvxMSDffVertPair Vert[] =
 {
@@ -5531,6 +5530,8 @@ const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
             case mso_sptRoundRectangle :
             case mso_sptPictureFrame :
             case mso_sptFlowChartProcess :
+            case mso_sptFlowChartPredefinedProcess :
+            case mso_sptFlowChartInternalStorage :
             case mso_sptTextPlainText :
             case mso_sptTextBox :
                 nGluePointType = drafts::com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT;
