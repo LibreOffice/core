@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:32:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,39 +63,9 @@
 
 String STR_WARNING_ITEM
 {
-    TEXT = "Eintrag hat falsche Version!" ;
-    TEXT [ English ] = "Item has wrong version!" ;
-    TEXT [ norwegian ] = "Element har feil versjon!" ;
-    TEXT [ italian ] = "La voce ha una versione errata!" ;
-    TEXT [ portuguese_brazilian ] = "Versão Incorreta!" ;
-    TEXT [ portuguese ] = "O registo tem a versão errada!" ;
-    TEXT [ finnish ] = "Virheellinen versio" ;
-    TEXT [ danish ] = "Forkert version!" ;
-    TEXT [ french ] = "Version incorrecte !" ;
-    TEXT [ swedish ] = "Post har fel version!" ;
-    TEXT [ dutch ] = "Foutieve versie van item!" ;
-    TEXT [ spanish ] = "¡La entrada contiene una versión incorrecta!" ;
-    TEXT [ english_us ] = "Incorrect Version!" ;
-    TEXT[ chinese_simplified ] = "æ¡ç›®ç‰ˆæœ¬æ— æ•ˆ";
-    TEXT[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ!";
-    TEXT[ polish ] = "Nieprawid³owa wersja!";
-    TEXT[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
-    TEXT[ chinese_traditional ] = "æ¢ç›®ç‰ˆæœ¬ç„¡æ•ˆ";
-    TEXT[ arabic ] = "ÇáÅÏÎÇá áå ÅÕÏÇÑ ÎÇØÆ!";
-    TEXT[ dutch ] = "Foutieve versie van item!";
-    TEXT[ chinese_simplified ] = "æ¡ç›®ç‰ˆæœ¬æ— æ•ˆ";
-    TEXT[ greek ] = "Ç êáôá÷şñéóç õğÜñ÷åé óå ëÜèïò İêäïóç!";
-    TEXT[ korean ] = "ì˜ëª»ëœ ë²„ì „ì…ë‹ˆë‹¤.";
-    TEXT[ turkish ] = "Girişin sürümü yanlış!";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Versió incorrecta!";
-    TEXT[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡!";
-    TEXT[ czech ] = "NeplatnÃ¡ verze!";
-    TEXT[ hebrew ] = "â€®×’×¨×¡×” ×œ× × ×›×•× ×”!â€¬";
-    TEXT[ hindi ] = "Incorrect Version!";
-    TEXT[ slovak ] = "NeplatnÃ¡ verzia";
-    TEXT[ hungarian ] = "Nem megfelelÅ‘ verziÃ³!";
-    TEXT[ slovenian ] = "NapaÄna razliÄica!";
+    Text [ de ] = "Eintrag hat falsche Version!" ;
+    Text [ en-US ] = "Incorrect Version!" ;
+    Text [ x-comment ] = " ";
 };
 
 
