@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:48:44 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,12 +213,13 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     }
 
     // pre-calculate a hash code for all style strings to speed up xml read process
-    m_nHashCode_Style_Radio     = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
-    m_nHashCode_Style_Auto      = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
-    m_nHashCode_Style_Left      = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
-    m_nHashCode_Style_AutoSize  = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
-    m_nHashCode_Style_DropDown  = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
-    m_nHashCode_Style_Repeat    = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
+    m_nHashCode_Style_Radio         = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
+    m_nHashCode_Style_Auto          = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
+    m_nHashCode_Style_Left          = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
+    m_nHashCode_Style_AutoSize      = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
+    m_nHashCode_Style_DropDown      = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
+    m_nHashCode_Style_Repeat        = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
+    m_nHashCode_Style_DropDownOnly  = OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ).hashCode();
 
     m_bToolBarStartFound            = sal_False;
     m_bToolBarEndFound              = sal_False;
@@ -442,6 +443,8 @@ throw(  SAXException, RuntimeException )
                                             nItemBits |= ::com::sun::star::ui::ItemStyle::DROP_DOWN;
                                         else if ( nHashCode == m_nHashCode_Style_Repeat )
                                             nItemBits |= ::com::sun::star::ui::ItemStyle::REPEAT;
+                                        else if ( nHashCode == m_nHashCode_Style_DropDownOnly )
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY;
                                     }
                                 }
                                 while ( nIndex >= 0 );
