@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-10 14:36:08 $
+ *  last change: $Author: kso $ $Date: 2000-11-10 15:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,6 @@ void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
         mInputBuffer[ n ] = *inBuf;
         inBuf++;
     }
-
-
 }
 
 // -------------------------------------------------------------------
@@ -208,10 +206,10 @@ void SAL_CALL NeonInputStream::seek( sal_Int64 location )
     if ( location < 0 )
         throw ::com::sun::star::lang::IllegalArgumentException();
 
-    if ( location >= mLen )
-        throw IOException();
-
-    mPos = location;
+    if ( location < mLen )
+        mPos = location;
+    else
+        mPos = mLen;
 }
 
 // -------------------------------------------------------------------
