@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:40:04 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2624,7 +2624,10 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
         case SC_NOT_FOUND:
         {
             uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
+            aArgs[ 0 ] <<= beans::PropertyValue(
+                rtl::OUString::createFromAscii("Uri"), -1,
+                uno::makeAny(m_xIdentifier->getContentIdentifier()),
+                beans::PropertyState_DIRECT_VALUE);
 
             aException <<=
                 star::ucb::InteractiveAugmentedIOException(
