@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:11:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5362,8 +5362,8 @@
             </node>
             <node oor:name=".uno:UseWizards" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Autopiloten an/aus</value>
-                    <value xml:lang="en-US">AutoPilots On/Off</value>
+                    <value xml:lang="de">Assistenten an/aus</value>
+                    <value xml:lang="en-US">Wizards On/Off</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
