@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-30 14:23:55 $
+ *  last change: $Author: vg $ $Date: 2001-04-10 16:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ SvxClipBoardControl::~SvxClipBoardControl()
 
 SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
 {
-    SfxPoolItem* pState = 0;
+    const SfxPoolItem* pState = 0;
     SfxDispatcher &rDispatch = *GetBindings().GetDispatcher();
     SfxItemState eState = rDispatch.QueryState( SID_CLIPBOARD_FORMAT_ITEMS,
                                                 pState );
