@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,10 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-
+#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
+#endif
 using namespace connectivity::ado;
 using namespace connectivity;
 using namespace com::sun::star::uno;
@@ -93,7 +96,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
     ADOColumn* pColumn = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pColumn);
 
-    Reference< XNamed > xRet = new OAdoColumn(isCaseSensitive(),pColumn);
+    Reference< XNamed > xRet = new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn);
 
     return xRet;
 }
@@ -106,7 +109,7 @@ void OColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    OAdoColumn* pNew = new OAdoColumn(isCaseSensitive());
+    OAdoColumn* pNew = new OAdoColumn(isCaseSensitive(),m_pConnection);
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -119,7 +122,10 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
     if(xTunnel.is())
     {
         OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn::getUnoTunnelImplementationId());
-        m_pCollection->Append(OLEVariant(pColumn->getColumnImpl()));
+        if(pColumn)
+            m_pCollection->Append(OLEVariant(pColumn->getColumnImpl()));
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

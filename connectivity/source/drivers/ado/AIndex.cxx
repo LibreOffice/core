@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -109,38 +112,27 @@ void WpADOIndex::Create()
     }
 }
 // -------------------------------------------------------------------------
-OAdoIndex::OAdoIndex(sal_Bool _bCase,   ADOIndex* _pIndex) : OIndex_ADO(_bCase)
+OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex)
+    : OIndex_ADO(::rtl::OUString(),::rtl::OUString(),sal_False,sal_False,sal_False,_bCase)
+    ,m_pConnection(_pConnection)
 {
     construct();
-    if(_pIndex)
-        m_aIndex = WpADOIndex(_pIndex);
-    else
-        m_aIndex.Create();
+    m_aIndex = WpADOIndex(_pIndex);
+    fillPropertyValues();
 
     refreshColumns();
 }
 // -------------------------------------------------------------------------
-OAdoIndex::OAdoIndex(   const ::rtl::OUString& _Name,
-                const ::rtl::OUString& _Catalog,
-                sal_Bool _isUnique,
-                sal_Bool _isPrimaryKeyIndex,
-                sal_Bool _isClustered,
-                sal_Bool _bCase
-                ) : OIndex_ADO(_Name,
-                                  _Catalog,
-                                  _isUnique,
-                                  _isPrimaryKeyIndex,
-                                  _isClustered,_bCase)
+OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection)
+    : OIndex_ADO(_bCase)
+    ,m_pConnection(_pConnection)
 {
     construct();
     m_aIndex.Create();
-    m_aIndex.put_Name(_Name);
-    m_aIndex.put_Unique(_isUnique);
-    m_aIndex.put_PrimaryKey(_isPrimaryKeyIndex);
-    m_aIndex.put_Clustered(_isClustered);
 
     refreshColumns();
 }
+
 // -------------------------------------------------------------------------
 
 void OAdoIndex::refreshColumns()
@@ -167,7 +159,7 @@ void OAdoIndex::refreshColumns()
     }
     if(m_pColumns)
         delete m_pColumns;
-    m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive());
+    m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive(),m_pConnection);
 }
 
 // -------------------------------------------------------------------------
@@ -200,7 +192,6 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
 {
     if(m_aIndex.IsValid())
     {
-
         switch(nHandle)
         {
             case PROPERTY_ID_NAME:
@@ -228,39 +219,17 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
                 break;
         }
     }
+    OIndex_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OAdoIndex::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void OAdoIndex::fillPropertyValues()
 {
     if(m_aIndex.IsValid())
     {
-        switch(nHandle)
-        {
-            case PROPERTY_ID_NAME:
-                rValue <<= m_aIndex.get_Name();
-                break;
-            case PROPERTY_ID_CATALOG:
-                //  rValue <<= getResultSetType();
-                break;
-            case PROPERTY_ID_ISUNIQUE:
-                {
-                    sal_Bool _b = m_aIndex.get_Unique();
-                                        rValue <<= Any(&_b, ::getBooleanCppuType());
-                }
-                break;
-            case PROPERTY_ID_ISPRIMARYKEYINDEX:
-                {
-                    sal_Bool _b = m_aIndex.get_PrimaryKey();
-                                        rValue <<= Any(&_b, ::getBooleanCppuType());
-                }
-                break;
-            case PROPERTY_ID_ISCLUSTERED:
-                {
-                    sal_Bool _b = m_aIndex.get_Clustered();
-                                        rValue <<= Any(&_b, ::getBooleanCppuType());
-                }
-                break;
-        }
+        m_Name              = m_aIndex.get_Name();
+        m_IsUnique          = m_aIndex.get_Unique();
+        m_IsPrimaryKeyIndex = m_aIndex.get_PrimaryKey();
+        m_IsClustered       = m_aIndex.get_Clustered();
     }
 }
 // -----------------------------------------------------------------------------

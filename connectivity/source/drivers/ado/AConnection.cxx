@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,11 +203,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             WpADOProperty aProp(pProp);
             if(pProp)
             {
-                aProp.PutValue(OLEVariant(VARIANT_TRUE));
+                aProp.PutValue(OLEVariant(sal_True));
                 OLEVariant aVar = aProp.GetValue();
             }
             pProps->Release();
         }
+        buildTypeInfo();
         //bErg = TRUE;
     }
     else
@@ -272,7 +273,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
         WpADOProperty aProp(pProp);
         if(pProp)
         {
-            pProp->put_Value(OLEVariant(VARIANT_TRUE));
+            pProp->put_Value(OLEVariant(sal_True));
             WpADOCommand aCommand;
             aCommand.Create();
             aCommand.put_ActiveConnection((IDispatch*)*m_pAdoConnection);
@@ -506,7 +507,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         aInfo.nMinimumScale     = xRow->getShort (14);
         aInfo.nType             = xRow->getShort (2);
         aInfo.nSearchType       = xRow->getShort (9);
-        aInfo.nNumPrecRadix     = xRow->getInt (18);
+        aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt (18);
 
         aInfo.bCurrency         = xRow->getBoolean (11);
         aInfo.bAutoIncrement    = xRow->getBoolean (12);
@@ -518,7 +519,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         // in the Hashtable if we don't already have an
         // entry for this SQL type.
 
-        m_aTypeInfo.push_back(aInfo);
+        m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo.nType,aInfo));
     }
 
     // Close the result set/statement.

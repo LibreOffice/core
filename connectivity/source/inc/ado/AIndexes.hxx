@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,11 @@ namespace connectivity
 {
     namespace ado
     {
+        class OConnection;
         class OIndexes : public sdbcx::OCollection
         {
-            ADOIndexes* m_pCollection;
+            ADOIndexes*     m_pCollection;
+            OConnection*    m_pConnection;
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -86,8 +88,12 @@ namespace connectivity
             OIndexes(::cppu::OWeakObject& _rParent,
                      ::osl::Mutex& _rMutex,
                      const ::std::vector< ::rtl::OUString> &_rVector,
-                     ADOIndexes*    _pCollection,sal_Bool _bCase) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                ,m_pCollection(_pCollection)
+                     ADOIndexes*    _pCollection,
+                     sal_Bool _bCase,
+                     OConnection* _pConnection)
+                    : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
+                    , m_pCollection(_pCollection)
+                    , m_pConnection(_pConnection)
             {
                 if(m_pCollection)
                     m_pCollection->AddRef();

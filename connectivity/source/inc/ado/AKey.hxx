@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,33 +78,34 @@ namespace connectivity
     {
         typedef sdbcx::OKey OKey_ADO;
 
+        class OConnection;
         class OAdoKey : public OKey_ADO
         {
-            WpADOKey    m_aKey;
+            WpADOKey        m_aKey;
+            OConnection*    m_pConnection;
         protected:
-            virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
+            void fillPropertyValues();
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
         public:
             virtual void refreshColumns();
         public:
             DECLARE_CTY_DEFAULTS( OKey_ADO);
 
-            OAdoKey(sal_Bool _bCase,    ADOKey* _pKey=NULL);
-            OAdoKey(    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _ReferencedTable,
-                    sal_Int32       _Type,
-                    sal_Int32       _UpdateRule,
-                    sal_Int32       _DeleteRule,
-                    sal_Bool _bCase
-                );
+            OAdoKey(sal_Bool _bCase,OConnection* _pConnection,ADOKey* _pKey);
+            OAdoKey(sal_Bool _bCase,OConnection* _pConnection);
 
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOKey        getImpl() const { return m_aKey;}
+            // map the update/delete rules
             RuleEnum Map2Rule(const sal_Int32& _eNum) const;
             sal_Int32 MapRule(const RuleEnum& _eNum) const;
+
+            // map the keytypes
+            sal_Int32 MapKeyRule(const KeyTypeEnum& _eNum) const;
+            KeyTypeEnum Map2KeyRule(const sal_Int32& _eNum) const;
         };
     }
 }

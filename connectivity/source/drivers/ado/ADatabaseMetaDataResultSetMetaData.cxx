@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,8 +369,9 @@ sal_Int32 ODatabaseMetaDataResultSetMetaData::MapADOType2Jdbc(DataTypeEnum eType
         case adUnsignedTinyInt:
         case adTinyInt:             return DataType::TINYINT; break;
         default:
-            ;
+            OSL_ENSURE(0,"MapADOType2Jdbc: Unknown Type!");
     }
+    return DataType::VARCHAR;
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()

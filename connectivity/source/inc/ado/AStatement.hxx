@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:24:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ namespace connectivity
             friend class connectivity::OSubComponent< OStatement_Base>;
             friend class OResultSet;
 
-                        ::com::sun::star::sdbc::SQLWarning                                            m_aLastWarning;
+            ::com::sun::star::sdbc::SQLWarning          m_aLastWarning;
 
         protected:
             ::std::list< ::rtl::OUString>               m_aBatchList;

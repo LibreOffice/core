@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 09:08:48 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,17 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #define _CONNECTIVITY_ADO_AWRAPADO_HXX_
 
-#include <tools/prewin.h>
 // Includes fuer ADO
 #include <oledb.h>
 //#include <objbase.h>
 //#include <initguid.h>
 //#include <mapinls.h>
-#include <ocidl.h>
+//  #include <ocidl.h>
 
 #ifndef _ADOINT_H_
 #include <adoint.h>
 #endif
 
-#include <tools/postwin.h>
 
 #ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
 #include "ado/adoimp.hxx"
@@ -123,17 +121,16 @@ namespace connectivity
 
             inline rtl::OUString GetConnectionString() const
             {
-                BSTR aBSTR; pInterface->get_ConnectionString(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                OLEString aBSTR;
+                pInterface->get_ConnectionString(&aBSTR);
+                return aBSTR;
             }
 
             inline sal_Bool PutConnectionString(const ::rtl::OUString &aCon) const
             {
-                BSTR bstr = SysAllocString(aCon.getStr());
+                OLEString bstr(aCon);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_ConnectionString(bstr));
-                SysFreeString(bstr);
+
                 return bErg;
             }
 
@@ -168,15 +165,14 @@ namespace connectivity
 
             inline sal_Bool Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
             {
-                BSTR sStr1 = SysAllocString(_CommandText.getStr());
+                OLEString sStr1(_CommandText);
                 sal_Bool bErg = SUCCEEDED(pInterface->Execute(sStr1,&RecordsAffected,Options,(_ADORecordset**)ppiRset));
-                SysFreeString(sStr1);
                 return bErg;
             }
 
             inline sal_Bool BeginTrans()
             {
-                sal_Int32 nIso;
+                sal_Int32 nIso=0;
                 return SUCCEEDED(pInterface->BeginTrans(&nIso));
             }
 
@@ -192,13 +188,10 @@ namespace connectivity
 
             inline sal_Bool Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options)
             {
-                BSTR sStr1 = SysAllocString(ConnectionString.getStr());
-                BSTR sStr2 = SysAllocString(UserID.getStr());
-                BSTR sStr3 = SysAllocString(Password.getStr());
+                OLEString sStr1(ConnectionString);
+                OLEString sStr2(UserID);
+                OLEString sStr3(Password);
                 sal_Bool bErg = SUCCEEDED(pInterface->Open(sStr1,sStr2,sStr3,Options));
-                SysFreeString(sStr1);
-                SysFreeString(sStr2);
-                SysFreeString(sStr3);
                 return bErg;
             }
 
@@ -209,22 +202,21 @@ namespace connectivity
 
             inline ::rtl::OUString GetDefaultDatabase() const
             {
-                BSTR aBSTR; pInterface->get_DefaultDatabase(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR; pInterface->get_DefaultDatabase(&aBSTR);
+                return aBSTR;
             }
 
             inline sal_Bool PutDefaultDatabase(const ::rtl::OUString& _bstr)
             {
-                BSTR bstr = SysAllocString(_bstr.getStr());
+                OLEString bstr(_bstr);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_DefaultDatabase(bstr));
-                SysFreeString(bstr);
+
                 return bErg;
             }
 
             inline IsolationLevelEnum get_IsolationLevel() const
             {
-                IsolationLevelEnum eNum;
+                IsolationLevelEnum eNum=adXactUnspecified;
                 pInterface->get_IsolationLevel(&eNum);
                 return eNum;
             }
@@ -236,7 +228,7 @@ namespace connectivity
 
             inline sal_Int32 get_Attributes() const
             {
-                sal_Int32 nRet;
+                sal_Int32 nRet=0;
                 pInterface->get_Attributes(&nRet);
                 return nRet;
             }
@@ -248,7 +240,7 @@ namespace connectivity
 
             inline CursorLocationEnum get_CursorLocation() const
             {
-                CursorLocationEnum eNum;
+                CursorLocationEnum eNum=adUseNone;
                 pInterface->get_CursorLocation(&eNum);
                 return eNum;
             }
@@ -260,7 +252,7 @@ namespace connectivity
 
             inline ConnectModeEnum get_Mode() const
             {
-                ConnectModeEnum eNum;
+                ConnectModeEnum eNum=adModeUnknown;
                 pInterface->get_Mode(&eNum);
                 return eNum;
             }
@@ -273,22 +265,19 @@ namespace connectivity
 
             inline ::rtl::OUString get_Provider() const
             {
-                BSTR aBSTR; pInterface->get_Provider(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR; pInterface->get_Provider(&aBSTR);
+                return aBSTR;
             }
 
             inline sal_Bool put_Provider(const ::rtl::OUString& _bstr)
             {
-                BSTR bstr = SysAllocString(_bstr.getStr());
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Provider(bstr));
-                SysFreeString(bstr);
-                return bErg;
+                OLEString bstr(_bstr);
+                return SUCCEEDED(pInterface->put_Provider(bstr));
             }
 
             inline sal_Int32 get_State() const
             {
-                sal_Int32 nRet;
+                sal_Int32 nRet=0;
                 pInterface->get_State(&nRet);
                 return nRet;
             }
@@ -300,10 +289,9 @@ namespace connectivity
 
             inline ::rtl::OUString get_Version() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Version(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                return aBSTR;
             }
         };
 
@@ -348,7 +336,7 @@ namespace connectivity
                 if( !FAILED( hr ) )
                 {
                     pIUnknown->AddRef();
-                    ADOCommand* pCommand;
+                    ADOCommand* pCommand=NULL;
 
                     hr = pIUnknown->CreateInstanceLic(  pOuter,
                                                         NULL,
@@ -367,29 +355,28 @@ namespace connectivity
 
             inline sal_Int32 get_State() const
             {
-                sal_Int32 nRet;
+                sal_Int32 nRet=0;
                 pInterface->get_State(&nRet);
                 return nRet;
             }
 
             inline ::rtl::OUString get_CommandText() const
             {
-                BSTR aBSTR; pInterface->get_CommandText(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR; pInterface->get_CommandText(&aBSTR);
+                return aBSTR;
             }
 
             inline sal_Bool put_CommandText(const ::rtl::OUString &aCon)
             {
-                BSTR bstr = SysAllocString(aCon.getStr());
+                OLEString bstr(aCon);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_CommandText(bstr));
-                SysFreeString(bstr);
+
                 return bErg;
             }
 
             inline sal_Int32 get_CommandTimeout() const
             {
-                sal_Int32 nRet;
+                sal_Int32 nRet=0;
                 pInterface->get_CommandTimeout(&nRet);
                 return nRet;
             }
@@ -401,7 +388,7 @@ namespace connectivity
 
             inline sal_Bool get_Prepared() const
             {
-                VARIANT_BOOL bPrepared;
+                VARIANT_BOOL bPrepared = VARIANT_FALSE;
                 pInterface->get_Prepared(&bPrepared);
                 return bPrepared == VARIANT_TRUE;
             }
@@ -419,15 +406,15 @@ namespace connectivity
             inline ADOParameter* CreateParameter(const ::rtl::OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
             {
                 ADOParameter* pPara = NULL;
-                BSTR bstr = SysAllocString(_bstr.getStr());
-                sal_Bool bErg = SUCCEEDED(pInterface->CreateParameter(_bstr.getLength() ? bstr : NULL,Type,Direction,nSize,Value,&pPara));
-                SysFreeString(bstr);
+                OLEString bstr(_bstr);
+                sal_Bool bErg = SUCCEEDED(pInterface->CreateParameter(bstr,Type,Direction,nSize,Value,&pPara));
+
                 return bErg ? pPara : NULL;
             }
 
             inline ADOParameters* get_Parameters() const
             {
-                ADOParameters* pPara;
+                ADOParameters* pPara=NULL;
                 pInterface->get_Parameters(&pPara);
                 return pPara;
             }
@@ -439,7 +426,7 @@ namespace connectivity
 
             inline CommandTypeEnum get_CommandType( ) const
             {
-                CommandTypeEnum eNum;
+                CommandTypeEnum eNum=adCmdUnspecified;
                 pInterface->get_CommandType(&eNum);
                 return eNum;
             }
@@ -447,16 +434,16 @@ namespace connectivity
             // gibt den Namen des Feldes zur"ueck
             inline ::rtl::OUString GetName() const
             {
-                BSTR aBSTR; pInterface->get_Name(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR;
+                pInterface->get_Name(&aBSTR);
+                return aBSTR;
             }
 
             inline sal_Bool put_Name(const ::rtl::OUString& _Name)
             {
-                BSTR bstr = SysAllocString(_Name.getStr());
+                OLEString bstr(_Name);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-                SysFreeString(bstr);
+
                 return bErg;
             }
             inline sal_Bool Cancel()
@@ -483,28 +470,32 @@ namespace connectivity
 
             inline ::rtl::OUString GetDescription() const
             {
-                BSTR aBSTR; pInterface->get_Description(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR;
+                pInterface->get_Description(&aBSTR);
+                return aBSTR;
             }
 
-            inline ::rtl::OUString GetSource() const {BSTR aBSTR; pInterface->get_Source(&aBSTR);
-                                ::rtl::OUString sRetStr(aBSTR);
-                                SysFreeString(aBSTR); return sRetStr;}
+            inline ::rtl::OUString GetSource() const
+            {
+                OLEString aBSTR;
+                pInterface->get_Source(&aBSTR);
+                return aBSTR;
+            }
 
             inline sal_Int32 GetNumber() const {sal_Int32 nErrNr; pInterface->get_Number(&nErrNr);
                                     return nErrNr;}
 
             inline ::rtl::OUString GetSQLState() const
             {
-                BSTR aBSTR; pInterface->get_SQLState(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR;
+                pInterface->get_SQLState(&aBSTR);
+                return aBSTR;
             }
 
             inline sal_Int32 GetNativeError() const
             {
-                sal_Int32 nErrNr; pInterface->get_NativeError(&nErrNr);
+                sal_Int32 nErrNr=0;
+                pInterface->get_NativeError(&nErrNr);
                 return nErrNr;
             }
         };
@@ -535,13 +526,15 @@ namespace connectivity
 
             inline sal_Int32 GetActualSize() const
             {
-                sal_Int32 nActualSize; pInterface->get_ActualSize(&nActualSize);
+                sal_Int32 nActualSize=0;
+                pInterface->get_ActualSize(&nActualSize);
                 return nActualSize;
             }
 
             inline sal_Int32 GetAttributes() const
             {
-                sal_Int32 eADOSFieldAttributes; pInterface->get_Attributes(&eADOSFieldAttributes);
+                sal_Int32 eADOSFieldAttributes=0;
+                pInterface->get_Attributes(&eADOSFieldAttributes);
                 return eADOSFieldAttributes;
             }
 
@@ -554,7 +547,7 @@ namespace connectivity
 
             inline sal_Int32 GetDefinedSize() const
             {
-                sal_Int32 nDefinedSize;
+                sal_Int32 nDefinedSize=0;
                 pInterface->get_DefinedSize(&nDefinedSize);
                 return nDefinedSize;
             }
@@ -562,14 +555,15 @@ namespace connectivity
             // gibt den Namen des Feldes zur"ueck
             inline ::rtl::OUString GetName() const
             {
-                BSTR aBSTR; pInterface->get_Name(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR;
+                pInterface->get_Name(&aBSTR);
+                return aBSTR;
             }
 
             inline DataTypeEnum GetADOType() const
             {
-                DataTypeEnum eType; pInterface->get_Type(&eType);
+                DataTypeEnum eType=adEmpty;
+                pInterface->get_Type(&eType);
                 return eType;
             }
 
@@ -593,13 +587,15 @@ namespace connectivity
 
             inline sal_Int32 GetPrecision() const
             {
-                sal_uInt8 eType; pInterface->get_Precision(&eType);
+                sal_uInt8 eType=0;
+                pInterface->get_Precision(&eType);
                 return eType;
             }
 
             inline sal_Int32 GetNumericScale() const
             {
-                sal_uInt8 eType; pInterface->get_NumericScale(&eType);
+                sal_uInt8 eType=0;
+                pInterface->get_NumericScale(&eType);
                 return eType;
             }
 
@@ -705,20 +701,22 @@ namespace connectivity
 
             inline ::rtl::OUString GetName() const
             {
-                BSTR aBSTR; pInterface->get_Name(&aBSTR);
-                ::rtl::OUString sRetStr(aBSTR);
-                SysFreeString(aBSTR); return sRetStr;
+                OLEString aBSTR;
+                pInterface->get_Name(&aBSTR);
+                return aBSTR;
             }
 
             inline DataTypeEnum GetADOType() const
             {
-                DataTypeEnum eType; pInterface->get_Type(&eType);
+                DataTypeEnum eType=adEmpty;
+                pInterface->get_Type(&eType);
                 return eType;
             }
 
             inline sal_Int32 GetAttributes() const
             {
-                sal_Int32 eADOSFieldAttributes; pInterface->get_Attributes(&eADOSFieldAttributes);
+                sal_Int32 eADOSFieldAttributes=0;
+                pInterface->get_Attributes(&eADOSFieldAttributes);
                 return eADOSFieldAttributes;
             }
 
@@ -792,7 +790,7 @@ namespace connectivity
 
             inline LockTypeEnum GetLockType()
             {
-                LockTypeEnum eType;
+                LockTypeEnum eType=adLockUnspecified;
                 pInterface->get_LockType(&eType);
                 return eType;
             }
@@ -816,14 +814,14 @@ namespace connectivity
 
             inline sal_Bool Supports( /* [in] */ CursorOptionEnum CursorOptions)
             {
-                VARIANT_BOOL bSupports;
+                VARIANT_BOOL bSupports=VARIANT_FALSE;
                 pInterface->Supports(CursorOptions,&bSupports);
-                return (sal_Bool) bSupports;
+                return bSupports == VARIANT_TRUE;
             }
 
             PositionEnum get_AbsolutePosition()
             {
-                PositionEnum aTemp;
+                PositionEnum aTemp=adPosUnknown;
                 pInterface->get_AbsolutePosition(&aTemp);
                 return aTemp;
             }
@@ -852,7 +850,7 @@ namespace connectivity
 
             CompareEnum CompareBookmarks(const OLEVariant& left,const OLEVariant& right)
             {
-                CompareEnum eNum;
+                CompareEnum eNum=adCompareNotComparable;
                 pInterface->CompareBookmarks(left,right,&eNum);
                 return eNum;
             }
@@ -865,7 +863,7 @@ namespace connectivity
 
             inline ADOFields* GetFields() const
             {
-                ADOFields* pFields;
+                ADOFields* pFields=NULL;
                 pInterface->get_Fields(&pFields);
                 return pFields;
             }
@@ -879,16 +877,16 @@ namespace connectivity
 
             inline sal_Bool IsAtBOF() const
             {
-                VARIANT_BOOL bIsAtBOF;
+                VARIANT_BOOL bIsAtBOF=VARIANT_FALSE;
                 pInterface->get_BOF(&bIsAtBOF);
-                return (sal_Bool) bIsAtBOF;
+                return bIsAtBOF == VARIANT_TRUE;
             }
 
             inline sal_Bool IsAtEOF() const
             {
-                VARIANT_BOOL bIsAtEOF;
+                VARIANT_BOOL bIsAtEOF=VARIANT_FALSE;
                 pInterface->get_EOF(&bIsAtEOF);
-                return (sal_Bool) bIsAtEOF;
+                return bIsAtEOF == VARIANT_TRUE;
             }
 
             inline sal_Bool Delete(AffectEnum eNum)
@@ -986,37 +984,44 @@ namespace connectivity
                 {WpOLEBase<ADOParameter>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
-            inline ::rtl::OUString GetName() const {BSTR aBSTR; pInterface->get_Name(&aBSTR);
-                                ::rtl::OUString sRetStr(aBSTR);
-                                SysFreeString(aBSTR); return sRetStr;}
+            inline ::rtl::OUString GetName() const
+            {
+                OLEString aBSTR;
+                pInterface->get_Name(&aBSTR);
+                return aBSTR;
+            }
 
             inline DataTypeEnum GetADOType() const
             {
-                DataTypeEnum eType; pInterface->get_Type(&eType);
+                DataTypeEnum eType=adEmpty;
+                pInterface->get_Type(&eType);
                 return eType;
             }
 
             inline sal_Int32 GetAttributes() const
             {
-                sal_Int32 eADOSFieldAttributes; pInterface->get_Attributes(&eADOSFieldAttributes);
+                sal_Int32 eADOSFieldAttributes=0;
+                pInterface->get_Attributes(&eADOSFieldAttributes);
                 return eADOSFieldAttributes;
             }
 
             inline sal_Int32 GetPrecision() const
             {
-                sal_uInt8 eType; pInterface->get_Precision(&eType);
+                sal_uInt8 eType=0;
+                pInterface->get_Precision(&eType);
                 return eType;
             }
 
             inline sal_Int32 GetNumericScale() const
             {
-                sal_uInt8 eType; pInterface->get_NumericScale(&eType);
+                sal_uInt8 eType=0;
+                pInterface->get_NumericScale(&eType);
                 return eType;
             }
 
             inline ParameterDirectionEnum get_Direction() const
             {
-                ParameterDirectionEnum alParmDirection;
+                ParameterDirectionEnum alParmDirection=adParamUnknown;
                 pInterface->get_Direction(&alParmDirection);
                 return alParmDirection;
             }

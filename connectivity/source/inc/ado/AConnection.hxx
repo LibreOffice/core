@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,23 +104,25 @@ namespace connectivity
                                                         ::com::sun::star::lang::XServiceInfo> OConnection_BASE;
         class WpADOConnection;
         class ODriver;
+        typedef ::std::multimap<sal_Int32, ::connectivity::OTypeInfo> OTypeInfoMap;
+
 
         class OConnection : public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection>
         {
             friend class connectivity::OSubComponent<OConnection>;
-            ::osl::Mutex        m_aMutex;
+            ::osl::Mutex                m_aMutex;
 
         protected:
             //====================================================================
             // Data attributes
             //====================================================================
-            ::std::vector<connectivity::OTypeInfo>              m_aTypeInfo;    //  vector containing an entry
+            OTypeInfoMap                m_aTypeInfo;    //  vector containing an entry
                                                                                 //  for each row returned by
                                                                                 //  DatabaseMetaData.getTypeInfo.
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
 
-            connectivity::OWeakRefArray                         m_aStatements;  //  vector containing a list
+            connectivity::OWeakRefArray m_aStatements;  //  vector containing a list
                                                                                 //  of all the Statement objects
                                                                                 //  for this Connection
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
@@ -176,6 +178,7 @@ namespace connectivity
             //
             WpADOConnection* getConnection() { return m_pAdoConnection; }
             void setCatalog(const ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>& _xCat) { m_xCatalog = _xCat; }
+            const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo;}
         };
     }
 }

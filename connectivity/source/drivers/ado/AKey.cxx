@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#endif
 #ifndef _CONNECTIVITY_ADO_COLUMNS_HXX_
 #include "ado/AColumns.hxx"
 #endif
@@ -89,6 +92,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 
 // -------------------------------------------------------------------------
 void WpADOKey::Create()
@@ -111,36 +115,22 @@ void WpADOKey::Create()
     }
 }
 // -------------------------------------------------------------------------
-OAdoKey::OAdoKey(sal_Bool _bCase, ADOKey* _pKey) : OKey_ADO(_bCase)
+OAdoKey::OAdoKey(sal_Bool _bCase,OConnection* _pConnection, ADOKey* _pKey)
+    : OKey_ADO(_bCase)
+    ,m_pConnection(_pConnection)
 {
     construct();
-    if(_pKey)
-        m_aKey = WpADOKey(_pKey);
-    else
-        m_aKey.Create();
-
+    m_aKey = WpADOKey(_pKey);
+    fillPropertyValues();
     refreshColumns();
 }
 // -------------------------------------------------------------------------
-OAdoKey::OAdoKey(   const ::rtl::OUString& _Name,
-            const ::rtl::OUString& _ReferencedTable,
-            sal_Int32       _Type,
-            sal_Int32       _UpdateRule,
-            sal_Int32       _DeleteRule,
-            sal_Bool _bCase
-          ) : OKey_ADO(_Name,
-                          _ReferencedTable,
-                          _Type,
-                          _UpdateRule,
-                          _DeleteRule,_bCase)
+OAdoKey::OAdoKey(sal_Bool _bCase,OConnection* _pConnection)
+    : OKey_ADO(_bCase)
+    ,m_pConnection(_pConnection)
 {
     construct();
     m_aKey.Create();
-    m_aKey.put_Name(_Name);
-    m_aKey.put_UpdateRule(Map2Rule(_UpdateRule));
-    m_aKey.put_DeleteRule(Map2Rule(_DeleteRule));
-    m_aKey.put_RelatedTable(_ReferencedTable);
-    m_aKey.put_Type((KeyTypeEnum)_Type);
 
     refreshColumns();
 }
@@ -168,7 +158,7 @@ void OAdoKey::refreshColumns()
         }
     }
 
-    m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive());
+    m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive(),m_pConnection);
 }
 // -------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoKey::getUnoTunnelImplementationId()
@@ -200,7 +190,6 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
 {
     if(m_aKey.IsValid())
     {
-
         switch(nHandle)
         {
             case PROPERTY_ID_NAME:
@@ -214,7 +203,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                 {
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
-                    m_aKey.put_Type((KeyTypeEnum)nVal);
+                    m_aKey.put_Type(Map2KeyRule(nVal));
                 }
                 break;
             case PROPERTY_ID_REFERENCEDTABLE:
@@ -240,30 +229,18 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                 break;
         }
     }
+    OKey_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -------------------------------------------------------------------------
-void OAdoKey::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void OAdoKey::fillPropertyValues()
 {
     if(m_aKey.IsValid())
     {
-        switch(nHandle)
-        {
-            case PROPERTY_ID_NAME:
-                rValue <<= m_aKey.get_Name();
-                break;
-            case PROPERTY_ID_TYPE:
-                rValue <<= (sal_Int32)m_aKey.get_Type();
-                break;
-            case PROPERTY_ID_REFERENCEDTABLE:
-                rValue <<= m_aKey.get_RelatedTable();
-                break;
-            case PROPERTY_ID_UPDATERULE:
-                rValue <<= MapRule(m_aKey.get_UpdateRule());
-                break;
-            case PROPERTY_ID_DELETERULE:
-                rValue <<= MapRule(m_aKey.get_DeleteRule());
-                break;
-        }
+        m_Type              = MapKeyRule(m_aKey.get_Type());
+        m_Name              = m_aKey.get_Name();
+        m_ReferencedTable   = m_aKey.get_RelatedTable();
+        m_UpdateRule        = MapRule(m_aKey.get_UpdateRule());
+        m_DeleteRule        = MapRule(m_aKey.get_DeleteRule());
     }
 }
 // -------------------------------------------------------------------------
@@ -273,16 +250,16 @@ sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum) const
     switch(_eNum)
     {
         case adRICascade:
-                        eNum = KeyRule::CASCADE;
+            eNum = KeyRule::CASCADE;
             break;
         case adRISetNull:
-                        eNum = KeyRule::SET_NULL;
+            eNum = KeyRule::SET_NULL;
             break;
         case adRINone:
-                        eNum = KeyRule::NO_ACTION;
+            eNum = KeyRule::NO_ACTION;
             break;
         case adRISetDefault:
-                        eNum = KeyRule::SET_DEFAULT;
+            eNum = KeyRule::SET_DEFAULT;
             break;
     }
     return eNum;
@@ -293,17 +270,53 @@ RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum) const
     RuleEnum eNum = adRINone;
     switch(_eNum)
     {
-                case KeyRule::CASCADE:
+        case KeyRule::CASCADE:
             eNum = adRICascade;
             break;
-                case KeyRule::SET_NULL:
+        case KeyRule::SET_NULL:
             eNum = adRISetNull;
             break;
-                case KeyRule::NO_ACTION:
+        case KeyRule::NO_ACTION:
             eNum = adRINone;
             break;
-                case KeyRule::SET_DEFAULT:
+        case KeyRule::SET_DEFAULT:
             eNum = adRISetDefault;
+            break;
+    }
+    return eNum;
+}
+// -------------------------------------------------------------------------
+sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum) const
+{
+    sal_Int32 nKeyType = KeyType::PRIMARY;
+    switch(_eNum)
+    {
+        case adKeyPrimary:
+            nKeyType = KeyType::PRIMARY;
+            break;
+        case adKeyForeign:
+            nKeyType = KeyType::FOREIGN;
+            break;
+        case adKeyUnique:
+            nKeyType = KeyType::UNIQUE;
+            break;
+    }
+    return nKeyType;
+}
+// -------------------------------------------------------------------------
+KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum) const
+{
+    KeyTypeEnum eNum;
+    switch(_eNum)
+    {
+        case KeyType::PRIMARY:
+            eNum = adKeyPrimary;
+            break;
+        case KeyType::FOREIGN:
+            eNum = adKeyForeign;
+            break;
+        case KeyType::UNIQUE:
+            eNum = adKeyUnique;
             break;
     }
     return eNum;

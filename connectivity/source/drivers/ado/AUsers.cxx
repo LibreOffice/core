@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUsers.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #endif
 
+
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -115,7 +116,7 @@ void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descr
     {
         OUserExtend* pUser = (OUserExtend*)xTunnel->getSomething(OUserExtend::getUnoTunnelImplementationId());
         if(pUser)
-            m_pCollection->Append(OLEVariant(pUser->getImpl()),(BSTR)pUser->getPassword().getStr());
+            m_pCollection->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()));
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

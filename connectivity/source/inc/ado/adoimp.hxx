@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,11 @@ namespace connectivity
     ADOFields* pFields  = NULL;                     \
     m_pRecordSet->get_Fields(&pFields);             \
     WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);                   \
+    if(Name <= 0 || Name > aFields.GetItemCount())  \
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any()); \
     WpADOField aField(aFields.GetItem(Name-1));     \
     if(!aField.IsValid())                           \
-                throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
 
 
 #endif //_CONNECTIVITY_ADO_ADOIMP_HXX_

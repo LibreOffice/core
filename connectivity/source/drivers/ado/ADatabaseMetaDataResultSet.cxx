@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 #ifndef _CONNECTIVITY_ADO_ADATABASEMETADATARESULTSET_HXX_
 #include "ado/ADatabaseMetaDataResultSet.hxx"
 #endif
@@ -100,15 +102,17 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
+#ifndef _COMPHELPER_SEQSTREAM_HXX
+#include <comphelper/seqstream.hxx>
 #endif
+
 
 #include <oledb.h>
 
 
 using namespace connectivity::ado;
 using namespace cppu;
+using namespace ::comphelper;
 //------------------------------------------------------------------------------
 using namespace ::com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -131,7 +135,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
         m_pRecordSet->AddRef();
         VARIANT_BOOL bIsAtBOF;
         m_pRecordSet->get_BOF(&bIsAtBOF);
-        m_bOnFirstAfterOpen = !(sal_Bool)bIsAtBOF;
+        m_bOnFirstAfterOpen = bIsAtBOF != VARIANT_TRUE;
     }
     else
         m_bOnFirstAfterOpen = sal_False;
@@ -189,6 +193,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
             break;
     return i;
 }
+#define BLOCK_SIZE 256
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -199,7 +204,38 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
         throw SQLException();
 
     columnIndex = mapColumn(columnIndex);
-    return NULL;
+    ADO_GETFIELD(columnIndex);
+    if((aField.GetAttributes() & adFldLong) == adFldLong)
+    {
+        //Copy the data only upto the Actual Size of Field.
+        sal_Int32 nSize = aField.GetActualSize();
+        Sequence<sal_Int8> aData(nSize);
+        long index = 0;
+        while(index < nSize)
+        {
+            m_aValue = aField.GetChunk(BLOCK_SIZE);
+            if(m_aValue.isNull())
+                break;
+            UCHAR chData;
+            for(long index2 = 0;index2 < BLOCK_SIZE;++index2)
+            {
+                HRESULT hr = ::SafeArrayGetElement(m_aValue.parray,&index2,&chData);
+                if(SUCCEEDED(hr))
+                {
+                    //Take BYTE by BYTE and advance Memory Location
+                    aData.getArray()[index++] = chData;
+                }
+                else
+                    break;
+            }
+        }
+        return index ? Reference< ::com::sun::star::io::XInputStream >(new SequenceInputStream(aData)) : Reference< ::com::sun::star::io::XInputStream >();
+    }
+    // else we ask for a bytesequence
+    aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return NULL;
+    return new SequenceInputStream(m_aValue);
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -225,7 +261,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
-    aField.get_Value(m_aValue); return m_aValue;
+    aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return sal_False;
+    return m_aValue;
 }
 // -------------------------------------------------------------------------
 
@@ -240,10 +279,13 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (*m_aValueRangeIter).second[(sal_Int32)m_aValue];
+        return (sal_Int8)(*m_aValueRangeIter).second[(sal_Int32)m_aValue];
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
-        return (*m_aStrValueRangeIter).second[m_aValue];
+        return (sal_Int8)(*m_aStrValueRangeIter).second[m_aValue];
+
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -259,6 +301,8 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return Sequence< sal_Int8 >();
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -274,6 +318,8 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return ::com::sun::star::util::Date();
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -289,6 +335,8 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -304,6 +352,8 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -319,10 +369,14 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
+
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return (*m_aValueRangeIter).second[(sal_Int32)m_aValue];
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
         return (*m_aStrValueRangeIter).second[m_aValue];
+
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -443,10 +497,14 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
+
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (*m_aValueRangeIter).second[(sal_Int32)m_aValue];
+        return (sal_Int16)(*m_aValueRangeIter).second[(sal_Int32)m_aValue];
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
-        return (*m_aStrValueRangeIter).second[m_aValue];
+        return (sal_Int16)(*m_aStrValueRangeIter).second[m_aValue];
+
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -462,9 +520,11 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
-
+    if(m_aValue.isNull())
+        return ::rtl::OUString();
     if(m_aIntValueRange.size() && (m_aIntValueRangeIter = m_aIntValueRange.find(columnIndex)) != m_aIntValueRange.end())
         return (*m_aIntValueRangeIter).second[m_aValue];
+
     return m_aValue;
 }
 
@@ -481,7 +541,10 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
-    aField.get_Value(m_aValue); return m_aValue;
+    aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return ::com::sun::star::util::Time();
+    return m_aValue;
 }
 // -------------------------------------------------------------------------
 
@@ -496,7 +559,10 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
-    aField.get_Value(m_aValue); return m_aValue;
+    aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return ::com::sun::star::util::DateTime();
+    return m_aValue;
 }
 // -------------------------------------------------------------------------
 
@@ -508,9 +574,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException
     if(!m_pRecordSet)
         throw SQLException();
 
-    sal_Int16 bIsAtEOF;
+    VARIANT_BOOL bIsAtEOF;
     m_pRecordSet->get_EOF(&bIsAtEOF);
-    return bIsAtEOF;
+    return bIsAtEOF == VARIANT_TRUE;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, RuntimeException)
@@ -701,9 +767,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLExcepti
     if(!m_pRecordSet)
         return sal_True;
 
-    sal_Int16 bIsAtBOF;
+    VARIANT_BOOL bIsAtBOF;
     m_pRecordSet->get_BOF(&bIsAtBOF);
-    return bIsAtBOF;
+    return bIsAtBOF == VARIANT_TRUE;
 }
 // -------------------------------------------------------------------------
 
@@ -974,49 +1040,46 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     m_aColMapping.push_back(11);
 
     ::std::map<sal_Int32,sal_Int32> aMap;
-    aMap[DBTYPE_EMPTY] = DataType::SQLNULL;
-    aMap[DBTYPE_NULL] = DataType::SQLNULL;
-    aMap[DBTYPE_I2] = DataType::SMALLINT;
-    aMap[DBTYPE_I4] = DataType::INTEGER;
-    aMap[DBTYPE_R4] = DataType::FLOAT;
-    aMap[DBTYPE_R8] = DataType::DOUBLE;
-    aMap[DBTYPE_CY] = DataType::BIGINT;
-    aMap[DBTYPE_DATE] = DataType::DATE;
-    aMap[DBTYPE_BSTR] = DataType::VARCHAR;
-    aMap[DBTYPE_IDISPATCH] = DataType::OBJECT;
-    aMap[DBTYPE_ERROR] = DataType::OTHER;
-    aMap[DBTYPE_BOOL] = DataType::BIT;
-    aMap[DBTYPE_VARIANT] = DataType::STRUCT;
-    aMap[DBTYPE_IUNKNOWN] = DataType::OTHER;
-    aMap[DBTYPE_DECIMAL] = DataType::DECIMAL;
-    aMap[DBTYPE_UI1] = DataType::TINYINT;
-    aMap[DBTYPE_ARRAY] = DataType::ARRAY;
-    aMap[DBTYPE_BYREF] = DataType::REF;
-    aMap[DBTYPE_I1] = DataType::CHAR;
-    aMap[DBTYPE_UI2] = DataType::SMALLINT;
-    aMap[DBTYPE_UI4] = DataType::INTEGER;
-
-    // aMap[The] = ;
-    // aMap[in] = ;
-    aMap[DBTYPE_I8] = DataType::BIGINT;
-    aMap[DBTYPE_UI8] = DataType::BIGINT;
-    aMap[DBTYPE_GUID] = DataType::OTHER;
-    aMap[DBTYPE_VECTOR] = DataType::OTHER;
-    aMap[DBTYPE_FILETIME] = DataType::OTHER;
-    aMap[DBTYPE_RESERVED] = DataType::OTHER;
-
-    // aMap[The] = ;
-    aMap[DBTYPE_BYTES] = DataType::VARBINARY;
-    aMap[DBTYPE_STR] = DataType::LONGVARCHAR;
-    aMap[DBTYPE_WSTR] = DataType::LONGVARCHAR;
-    aMap[DBTYPE_NUMERIC] = DataType::NUMERIC;
-    aMap[DBTYPE_UDT] = DataType::OTHER;
-    aMap[DBTYPE_DBDATE] = DataType::DATE;
-    aMap[DBTYPE_DBTIME] = DataType::TIME;
-    aMap[DBTYPE_DBTIMESTAMP] = DataType::TIMESTAMP;
-    aMap[DBTYPE_HCHAPTER] = DataType::OTHER;
-    aMap[DBTYPE_PROPVARIANT] = DataType::OTHER;
-    aMap[DBTYPE_VARNUMERIC] = DataType::NUMERIC;
+    aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
+    aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
+    aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);
+    aMap[adInteger]         = ADOS::MapADOType2Jdbc(adInteger);
+    aMap[adBigInt]          = ADOS::MapADOType2Jdbc(adBigInt);
+    aMap[adUnsignedTinyInt] = ADOS::MapADOType2Jdbc(adUnsignedTinyInt);
+    aMap[adUnsignedSmallInt]= ADOS::MapADOType2Jdbc(adUnsignedSmallInt);
+    aMap[adUnsignedInt]     = ADOS::MapADOType2Jdbc(adUnsignedInt);
+    aMap[adUnsignedBigInt]  = ADOS::MapADOType2Jdbc(adUnsignedBigInt);
+    aMap[adSingle]          = ADOS::MapADOType2Jdbc(adSingle);
+    aMap[adDouble]          = ADOS::MapADOType2Jdbc(adDouble);
+    aMap[adCurrency]        = ADOS::MapADOType2Jdbc(adCurrency);
+    aMap[adDecimal]         = ADOS::MapADOType2Jdbc(adDecimal);
+    aMap[adNumeric]         = ADOS::MapADOType2Jdbc(adNumeric);
+    aMap[adBoolean]         = ADOS::MapADOType2Jdbc(adBoolean);
+    aMap[adError]           = ADOS::MapADOType2Jdbc(adError);
+    aMap[adUserDefined]     = ADOS::MapADOType2Jdbc(adUserDefined);
+    aMap[adVariant]         = ADOS::MapADOType2Jdbc(adVariant);
+    aMap[adIDispatch]       = ADOS::MapADOType2Jdbc(adIDispatch);
+    aMap[adIUnknown]        = ADOS::MapADOType2Jdbc(adIUnknown);
+    aMap[adGUID]            = ADOS::MapADOType2Jdbc(adGUID);
+    aMap[adDate]            = ADOS::MapADOType2Jdbc(adDate);
+    aMap[adDBDate]          = ADOS::MapADOType2Jdbc(adDBDate);
+    aMap[adDBTime]          = ADOS::MapADOType2Jdbc(adDBTime);
+    aMap[adDBTimeStamp]     = ADOS::MapADOType2Jdbc(adDBTimeStamp);
+    aMap[adBSTR]            = ADOS::MapADOType2Jdbc(adBSTR);
+    aMap[adChar]            = ADOS::MapADOType2Jdbc(adChar);
+    aMap[adVarChar]         = ADOS::MapADOType2Jdbc(adVarChar);
+    aMap[adLongVarChar]     = ADOS::MapADOType2Jdbc(adLongVarChar);
+    aMap[adWChar]           = ADOS::MapADOType2Jdbc(adWChar);
+    aMap[adVarWChar]        = ADOS::MapADOType2Jdbc(adVarWChar);
+    aMap[adLongVarWChar]    = ADOS::MapADOType2Jdbc(adLongVarWChar);
+    aMap[adBinary]          = ADOS::MapADOType2Jdbc(adBinary);
+    aMap[adVarBinary]       = ADOS::MapADOType2Jdbc(adVarBinary);
+    aMap[adLongVarBinary]   = ADOS::MapADOType2Jdbc(adLongVarBinary);
+    aMap[adChapter]         = ADOS::MapADOType2Jdbc(adChapter);
+    aMap[adFileTime]        = ADOS::MapADOType2Jdbc(adFileTime);
+    aMap[adPropVariant]     = ADOS::MapADOType2Jdbc(adPropVariant);
+    aMap[adVarNumeric]      = ADOS::MapADOType2Jdbc(adVarNumeric);
+    aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[12] = aMap;
 
@@ -1230,49 +1293,46 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap()
     m_aStrValueRange[18] = aMap1;
 
     ::std::map<sal_Int32,sal_Int32> aMap;
-    aMap[DBTYPE_EMPTY] = DataType::SQLNULL;
-    aMap[DBTYPE_NULL] = DataType::SQLNULL;
-    aMap[DBTYPE_I2] = DataType::SMALLINT;
-    aMap[DBTYPE_I4] = DataType::INTEGER;
-    aMap[DBTYPE_R4] = DataType::FLOAT;
-    aMap[DBTYPE_R8] = DataType::DOUBLE;
-    aMap[DBTYPE_CY] = DataType::BIGINT;
-    aMap[DBTYPE_DATE] = DataType::DATE;
-    aMap[DBTYPE_BSTR] = DataType::VARCHAR;
-    aMap[DBTYPE_IDISPATCH] = DataType::OBJECT;
-    aMap[DBTYPE_ERROR] = DataType::OTHER;
-    aMap[DBTYPE_BOOL] = DataType::BIT;
-    aMap[DBTYPE_VARIANT] = DataType::STRUCT;
-    aMap[DBTYPE_IUNKNOWN] = DataType::OTHER;
-    aMap[DBTYPE_DECIMAL] = DataType::DECIMAL;
-    aMap[DBTYPE_UI1] = DataType::TINYINT;
-    aMap[DBTYPE_ARRAY] = DataType::ARRAY;
-    aMap[DBTYPE_BYREF] = DataType::REF;
-    aMap[DBTYPE_I1] = DataType::CHAR;
-    aMap[DBTYPE_UI2] = DataType::SMALLINT;
-    aMap[DBTYPE_UI4] = DataType::INTEGER;
-
-    // aMap[The] = ;
-    // aMap[in] = ;
-    aMap[DBTYPE_I8] = DataType::BIGINT;
-    aMap[DBTYPE_UI8] = DataType::BIGINT;
-    aMap[DBTYPE_GUID] = DataType::OTHER;
-    aMap[DBTYPE_VECTOR] = DataType::OTHER;
-    aMap[DBTYPE_FILETIME] = DataType::OTHER;
-    aMap[DBTYPE_RESERVED] = DataType::OTHER;
-
-    // aMap[The] = ;
-    aMap[DBTYPE_BYTES] = DataType::VARBINARY;
-    aMap[DBTYPE_STR] = DataType::LONGVARCHAR;
-    aMap[DBTYPE_WSTR] = DataType::LONGVARCHAR;
-    aMap[DBTYPE_NUMERIC] = DataType::NUMERIC;
-    aMap[DBTYPE_UDT] = DataType::OTHER;
-    aMap[DBTYPE_DBDATE] = DataType::DATE;
-    aMap[DBTYPE_DBTIME] = DataType::TIME;
-    aMap[DBTYPE_DBTIMESTAMP] = DataType::TIMESTAMP;
-    aMap[DBTYPE_HCHAPTER] = DataType::OTHER;
-    aMap[DBTYPE_PROPVARIANT] = DataType::OTHER;
-    aMap[DBTYPE_VARNUMERIC] = DataType::NUMERIC;
+    aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
+    aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
+    aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);
+    aMap[adInteger]         = ADOS::MapADOType2Jdbc(adInteger);
+    aMap[adBigInt]          = ADOS::MapADOType2Jdbc(adBigInt);
+    aMap[adUnsignedTinyInt] = ADOS::MapADOType2Jdbc(adUnsignedTinyInt);
+    aMap[adUnsignedSmallInt]= ADOS::MapADOType2Jdbc(adUnsignedSmallInt);
+    aMap[adUnsignedInt]     = ADOS::MapADOType2Jdbc(adUnsignedInt);
+    aMap[adUnsignedBigInt]  = ADOS::MapADOType2Jdbc(adUnsignedBigInt);
+    aMap[adSingle]          = ADOS::MapADOType2Jdbc(adSingle);
+    aMap[adDouble]          = ADOS::MapADOType2Jdbc(adDouble);
+    aMap[adCurrency]        = ADOS::MapADOType2Jdbc(adCurrency);
+    aMap[adDecimal]         = ADOS::MapADOType2Jdbc(adDecimal);
+    aMap[adNumeric]         = ADOS::MapADOType2Jdbc(adNumeric);
+    aMap[adBoolean]         = ADOS::MapADOType2Jdbc(adBoolean);
+    aMap[adError]           = ADOS::MapADOType2Jdbc(adError);
+    aMap[adUserDefined]     = ADOS::MapADOType2Jdbc(adUserDefined);
+    aMap[adVariant]         = ADOS::MapADOType2Jdbc(adVariant);
+    aMap[adIDispatch]       = ADOS::MapADOType2Jdbc(adIDispatch);
+    aMap[adIUnknown]        = ADOS::MapADOType2Jdbc(adIUnknown);
+    aMap[adGUID]            = ADOS::MapADOType2Jdbc(adGUID);
+    aMap[adDate]            = ADOS::MapADOType2Jdbc(adDate);
+    aMap[adDBDate]          = ADOS::MapADOType2Jdbc(adDBDate);
+    aMap[adDBTime]          = ADOS::MapADOType2Jdbc(adDBTime);
+    aMap[adDBTimeStamp]     = ADOS::MapADOType2Jdbc(adDBTimeStamp);
+    aMap[adBSTR]            = ADOS::MapADOType2Jdbc(adBSTR);
+    aMap[adChar]            = ADOS::MapADOType2Jdbc(adChar);
+    aMap[adVarChar]         = ADOS::MapADOType2Jdbc(adVarChar);
+    aMap[adLongVarChar]     = ADOS::MapADOType2Jdbc(adLongVarChar);
+    aMap[adWChar]           = ADOS::MapADOType2Jdbc(adWChar);
+    aMap[adVarWChar]        = ADOS::MapADOType2Jdbc(adVarWChar);
+    aMap[adLongVarWChar]    = ADOS::MapADOType2Jdbc(adLongVarWChar);
+    aMap[adBinary]          = ADOS::MapADOType2Jdbc(adBinary);
+    aMap[adVarBinary]       = ADOS::MapADOType2Jdbc(adVarBinary);
+    aMap[adLongVarBinary]   = ADOS::MapADOType2Jdbc(adLongVarBinary);
+    aMap[adChapter]         = ADOS::MapADOType2Jdbc(adChapter);
+    aMap[adFileTime]        = ADOS::MapADOType2Jdbc(adFileTime);
+    aMap[adPropVariant]     = ADOS::MapADOType2Jdbc(adPropVariant);
+    aMap[adVarNumeric]      = ADOS::MapADOType2Jdbc(adVarNumeric);
+    aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[2] = aMap;
 

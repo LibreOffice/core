@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 #ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
-#ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
-#include "ado/Awrapadox.hxx"
-#endif
+//#ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
+//#include "ado/Awrapadox.hxx"
+//#endif
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 09:08:48 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #define _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 
 // Includes fuer ADO
-#include <tools/prewin.h>
 //#include <oledb.h>
 //#include <objbase.h>
 //#include <initguid.h>
@@ -107,7 +106,7 @@ typedef struct _ADOTable Table;
 #ifndef _ADOCTINT_H_
 #include <ado/adoctint.h>
 #endif
-#include <tools/postwin.h>
+
 
 #ifndef _CONNECTIVITY_ADO_AOLEWRAP_HXX_
 #include "ado/Aolewrap.hxx"
@@ -134,23 +133,31 @@ namespace connectivity
 
             ::rtl::OUString get_Name() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Name(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
+            }
+            ::rtl::OUString get_RelatedColumn() const
+            {
+                OLEString aBSTR;
+                pInterface->get_RelatedColumn(&aBSTR);
+                return aBSTR;
             }
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                BSTR bstr = SysAllocString(_rName.getStr());
+                OLEString bstr(_rName);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-                SysFreeString(bstr);
+            }
+            void put_RelatedColumn(const ::rtl::OUString& _rName)
+            {
+                OLEString bstr(_rName);
+                sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedColumn(bstr));
             }
 
             DataTypeEnum get_Type() const
             {
-                DataTypeEnum eNum;
+                DataTypeEnum eNum = adVarChar;
                 pInterface->get_Type(&eNum);
                 return eNum;
             }
@@ -179,14 +186,14 @@ namespace connectivity
                 return nPrec;
             }
 
-            void put_NumericScale(sal_Int32 _nScale)
+            void put_NumericScale(sal_Int8 _nScale)
             {
                 pInterface->put_NumericScale(_nScale);
             }
 
             SortOrderEnum get_SortOrder() const
             {
-                SortOrderEnum nPrec;
+                SortOrderEnum nPrec=adSortAscending;
                 pInterface->get_SortOrder(&nPrec);
                 return nPrec;
             }
@@ -198,7 +205,7 @@ namespace connectivity
 
             ColumnAttributesEnum get_Attributes() const
             {
-                ColumnAttributesEnum eNum;
+                ColumnAttributesEnum eNum=adColNullable;
                 pInterface->get_Attributes(&eNum);
                 return eNum;
             }
@@ -228,23 +235,21 @@ namespace connectivity
 
             ::rtl::OUString get_Name() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Name(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                BSTR bstr = SysAllocString(_rName.getStr());
+                OLEString bstr(_rName);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-                SysFreeString(bstr);
+
             }
 
             KeyTypeEnum get_Type() const
             {
-                KeyTypeEnum eNum;
+                KeyTypeEnum eNum=adKeyPrimary;
                 pInterface->get_Type(&eNum);
                 return eNum;
             }
@@ -256,23 +261,21 @@ namespace connectivity
 
             ::rtl::OUString get_RelatedTable() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_RelatedTable(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             void put_RelatedTable(const ::rtl::OUString& _rName)
             {
-                BSTR bstr = SysAllocString(_rName.getStr());
+                OLEString bstr(_rName);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr));
-                SysFreeString(bstr);
+
             }
 
             RuleEnum get_DeleteRule() const
             {
-                RuleEnum eNum;
+                RuleEnum eNum = adRINone;
                 pInterface->get_DeleteRule(&eNum);
                 return eNum;
             }
@@ -284,7 +287,7 @@ namespace connectivity
 
             RuleEnum get_UpdateRule() const
             {
-                RuleEnum eNum;
+                RuleEnum eNum = adRINone;
                 pInterface->get_UpdateRule(&eNum);
                 return eNum;
             }
@@ -314,23 +317,21 @@ namespace connectivity
 
             ::rtl::OUString get_Name() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Name(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                BSTR bstr = SysAllocString(_rName.getStr());
+                OLEString bstr(_rName);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-                SysFreeString(bstr);
+
             }
 
             sal_Bool get_Clustered() const
             {
-                VARIANT_BOOL eNum;
+                VARIANT_BOOL eNum = VARIANT_FALSE;
                 pInterface->get_Clustered(&eNum);
                 return eNum == VARIANT_TRUE;
             }
@@ -342,7 +343,7 @@ namespace connectivity
 
             sal_Bool get_Unique() const
             {
-                VARIANT_BOOL eNum;
+                VARIANT_BOOL eNum = VARIANT_FALSE;
                 pInterface->get_Unique(&eNum);
                 return eNum == VARIANT_TRUE;
             }
@@ -354,7 +355,7 @@ namespace connectivity
 
             sal_Bool get_PrimaryKey() const
             {
-                VARIANT_BOOL eNum;
+                VARIANT_BOOL eNum = VARIANT_FALSE;
                 pInterface->get_PrimaryKey(&eNum);
                 return eNum == VARIANT_TRUE;
             }
@@ -437,27 +438,23 @@ namespace connectivity
 
             ::rtl::OUString get_Name() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Name(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                BSTR bstr = SysAllocString(_rName.getStr());
+                OLEString bstr(_rName);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-                SysFreeString(bstr);
+
             }
 
             ::rtl::OUString get_Type() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Type(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             ADOColumns* get_Columns() const
@@ -508,11 +505,9 @@ namespace connectivity
 
             ::rtl::OUString get_Name() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Name(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             void get_Command(OLEVariant& _rVar) const
@@ -538,25 +533,23 @@ namespace connectivity
 
             ::rtl::OUString get_Name() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Name(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                BSTR bstr = SysAllocString(_rName.getStr());
+                OLEString bstr(_rName);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-                SysFreeString(bstr);
+
             }
 
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType)
             {
-                RightsEnum Rights;
+                RightsEnum Rights=adRightNone;
                 OLEVariant ObjectTypeId;
                 ObjectTypeId.setNoArg();
                 pInterface->GetPermissions(Name,ObjectType,ObjectTypeId,&Rights);
@@ -594,28 +587,23 @@ namespace connectivity
 
             ::rtl::OUString get_Name() const
             {
-                BSTR aBSTR;
+                OLEString aBSTR;
                 pInterface->get_Name(&aBSTR);
-                rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-                SysFreeString(aBSTR);
-                return sRetStr;
+                return aBSTR;
             }
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                BSTR bstr = SysAllocString(_rName.getStr());
+                OLEString bstr(_rName);
                 sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-                SysFreeString(bstr);
+
             }
 
             sal_Bool ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd)
             {
-                BSTR sStr1 = SysAllocString(_rPwd.getStr());
-                BSTR sStr2 = SysAllocString(_rNewPwd.getStr());
+                OLEString sStr1(_rPwd);
+                OLEString sStr2(_rNewPwd);
                 sal_Bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1,sStr2));
-                SysFreeString(sStr1);
-                SysFreeString(sStr2);
-
                 return bErg;
             }
 
@@ -630,7 +618,7 @@ namespace connectivity
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType)
             {
-                RightsEnum Rights;
+                RightsEnum Rights=adRightNone;
                 OLEVariant ObjectTypeId;
                 ObjectTypeId.setNoArg();
                 pInterface->GetPermissions(Name,ObjectType,ObjectTypeId,&Rights);

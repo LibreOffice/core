@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
+#endif
 
 namespace connectivity
 {
@@ -78,9 +81,10 @@ namespace connectivity
         class OAdoTable :   public OTable_TYPEDEF
         {
             WpADOTable      m_aTable;
+            OCatalog*       m_pCatalog;
 
         protected:
-            virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
+            void fillPropertyValues();
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
 
         public:
@@ -90,12 +94,9 @@ namespace connectivity
 
         public:
             DECLARE_CTY_DEFAULTS( OTable_TYPEDEF);
-            OAdoTable(sal_Bool _bCase, _ADOTable* _pTable=NULL);
-            OAdoTable(sal_Bool _bCase,  const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description = ::rtl::OUString(),
-                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _CatalogName = ::rtl::OUString());
+            OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
+            OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog);
+
 
             ::rtl::OUString SAL_CALL getName() { return m_Name; }
             const ::rtl::OUString& getSchema() const { return m_SchemaName; }
@@ -113,6 +114,7 @@ namespace connectivity
             sal_Bool create() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             WpADOTable getImpl() const { return m_aTable;}
+            OCatalog* getCatalog() const { return m_pCatalog; }
         };
     }
 }

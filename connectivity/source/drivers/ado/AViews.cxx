@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,10 @@ void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descr
     if(xTunnel.is())
     {
         OAdoView* pView = (OAdoView*)xTunnel->getSomething(OAdoView:: getUnoTunnelImplementationId());
-        m_pCollection->Append((BSTR)getString(descriptor->getPropertyValue(PROPERTY_NAME)).getStr(),(IDispatch *)pView->getImpl());
+        if(pView)
+            m_pCollection->Append(OLEString(getString(descriptor->getPropertyValue(PROPERTY_NAME))),(IDispatch *)pView->getImpl());
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

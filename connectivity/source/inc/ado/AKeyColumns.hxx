@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeyColumns.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,16 @@
  *
  ************************************************************************/
 
-#ifndef _CONNECTIVITY_ADABAS_KEYCOLUMNS_HXX_
-#define _CONNECTIVITY_ADABAS_KEYCOLUMNS_HXX_
+#ifndef _CONNECTIVITY_ADO_KEYCOLUMNS_HXX_
+#define _CONNECTIVITY_ADO_KEYCOLUMNS_HXX_
 
-#ifndef _CONNECTIVITY_ADABAS_COLUMNS_HXX_
-#include "adabas/BColumns.hxx"
+#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
+#include "connectivity/sdbcx/VCollection.hxx"
 #endif
 
 namespace connectivity
 {
-    namespace adabas
+    namespace ado
     {
         class OKeyColumns : public OColumns
         {
@@ -87,5 +87,5 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_ADABAS_KEYCOLUMNS_HXX_
+#endif // _CONNECTIVITY_ADO_KEYCOLUMNS_HXX_
 

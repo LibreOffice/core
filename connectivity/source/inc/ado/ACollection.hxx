@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACollection.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,10 +220,9 @@ namespace connectivity
                     SimT* pIdx = NULL;
                     m_pCollection->get_Item(aVar,&pIdx);
                     pIdx->AddRef();
-                    BSTR aBSTR;
-                    pIdx->get_Name(&aBSTR);
-                    (*pStringArray) = (sal_Unicode*)aBSTR;
-                    SysFreeString(aBSTR);
+                    _bstr_t sBSTR;
+                    pIdx->get_Name(&sBSTR);
+                    (*pStringArray) = (sal_Unicode*)sBSTR;
                     pIdx->Release();
                     ++pStringArray;
                 }

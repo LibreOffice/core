@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:45:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#include <oaidl.h>
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -77,11 +78,66 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
+#include <com/sun/star/sdbc/SQLException.hpp>
+#endif
 
 namespace connectivity
 {
     namespace ado
     {
+        class OLEString
+        {
+            BSTR m_sStr;
+        public:
+            OLEString()
+                :m_sStr(NULL)
+            {
+            }
+            OLEString(const BSTR& _sBStr)
+                :m_sStr(_sBStr)
+            {
+            }
+            OLEString(const ::rtl::OUString& _sBStr)
+            {
+                m_sStr = ::SysAllocString(_sBStr);
+            }
+            ~OLEString()
+            {
+                if(m_sStr)
+                    ::SysFreeString(m_sStr);
+            }
+            OLEString& operator=(const ::rtl::OUString& _rSrc)
+            {
+                if(m_sStr)
+                    ::SysFreeString(m_sStr);
+                m_sStr = ::SysAllocString(_rSrc);
+                return *this;
+            }
+            OLEString& operator=(const BSTR& _rSrc)
+            {
+                if(m_sStr)
+                    ::SysFreeString(m_sStr);
+                m_sStr = _rSrc;
+                return *this;
+            }
+            operator ::rtl::OUString() const
+            {
+                return (m_sStr != NULL) ? ::rtl::OUString(m_sStr,::SysStringLen(m_sStr)) : ::rtl::OUString();
+            }
+            operator BSTR() const
+            {
+                return m_sStr;
+            }
+            BSTR* operator &()
+            {
+                return &m_sStr;
+            }
+            sal_Int32 length() const
+            {
+                return (m_sStr != NULL) ? ::SysStringLen(m_sStr) : 0;
+            }
+        };
 
         class OLEVariant    :   public ::tagVARIANT
         {
@@ -92,39 +148,77 @@ namespace connectivity
                 ::VariantInit(this);
                 ::VariantCopy(this, const_cast<VARIANT*>(&varSrc));
             }
-            OLEVariant(const OLEVariant& varSrc)    {   VariantInit(this);
-                    VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));}
+            OLEVariant(const OLEVariant& varSrc)
+            {
+                ::VariantInit(this);
+                ::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));
+            }
+
+            OLEVariant(sal_Bool x)              {   VariantInit(this);  vt = VT_BOOL;   boolVal     = (x ? VARIANT_TRUE : VARIANT_FALSE);}
+            OLEVariant(sal_Int8 n)              {   VariantInit(this);  vt = VT_I1;     bVal        = n;}
+            OLEVariant(sal_Int16 n)             {   VariantInit(this);  vt = VT_I2;     intVal      = n;}
             OLEVariant(sal_Int32 n)             {   VariantInit(this);  vt = VT_I4;     lVal        = n;}
-            OLEVariant(const rtl::OUString& us) {   VariantInit(this);  vt = VT_BSTR;   bstrVal     = SysAllocString(us);}
-            ~OLEVariant()                   {   VariantClear(this); } // clears all the memory that was allocated before
+            OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I8;     llVal       = x;}
+
+            OLEVariant(const rtl::OUString& us)
+            {
+                ::VariantInit(this);
+                vt      = VT_BSTR;
+                bstrVal = SysAllocString(us);
+            }
+            ~OLEVariant()
+            {
+                ::VariantClear(this);
+            } // clears all the memory that was allocated before
 
             OLEVariant(const ::com::sun::star::util::Date& x )
             {
-                VariantInit(this);  vt = VT_R8;
-                dblVal      = ::dbtools::DBTypeConversion::toDouble(x);
+                VariantInit(this);
+                vt      = VT_R8;
+                dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
             }
             OLEVariant(const ::com::sun::star::util::Time& x )
             {
-                VariantInit(this);  vt = VT_R8;
-                dblVal      = ::dbtools::DBTypeConversion::toDouble(x);
+                VariantInit(this);
+                vt      = VT_R8;
+                dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
             }
             OLEVariant(const ::com::sun::star::util::DateTime& x )
             {
-                VariantInit(this);  vt = VT_R8;
-                dblVal      = ::dbtools::DBTypeConversion::toDouble(x);
+                VariantInit(this);
+                vt      = VT_R8;
+                dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
             }
-            OLEVariant(IDispatch* pDispInterface)
-            {   VariantInit(this); vt = VT_DISPATCH; pdispVal = pDispInterface;}
-
-                        OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
+            OLEVariant(float x)
             {
-                VariantInit(this);  vt = VT_ARRAY|VT_UI1;
-                parray = SafeArrayCreateVector(VT_UI1, 0, x.getLength());
+                VariantInit(this);
+                vt      = VT_R4;
+                fltVal  = x;
+            }
+            OLEVariant(double x)
+            {
+                VariantInit(this);
+                vt      = VT_R8;
+                dblVal  = x;
+            }
+
+
+            OLEVariant(IDispatch* pDispInterface)
+            {
+                VariantInit(this);
+                vt = VT_DISPATCH;
+                pdispVal = pDispInterface;
+            }
+
+            OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
+            {
+                VariantInit(this);
+                vt      = VT_ARRAY|VT_UI1;
+                parray  = SafeArrayCreateVector(VT_UI1, 0, x.getLength());
                 const sal_Int8* pBegin = x.getConstArray();
                 const sal_Int8* pEnd = pBegin + x.getLength();
                 for(sal_Int32 i=0;pBegin != pEnd;++i,++pBegin)
                     SafeArrayPutElement(parray,&i,&pBegin);
-
             }
 
             OLEVariant& operator=(const OLEVariant& varSrc)
@@ -158,8 +252,8 @@ namespace connectivity
             void setDate(DATE d)                    {   VariantClear(this); vt = VT_DATE;   date        = d;}
             void setChar(unsigned char a)           {   VariantClear(this); vt = VT_UI1;    bVal        = a;}
             void setCurrency(double aCur)           {   VariantClear(this); vt = VT_CY;     set(aCur*10000);}
-            void setBool(sal_Bool b)                {   VariantClear(this); vt = VT_BOOL;   boolVal     = b ? -1:0;}
-            void setString(const rtl::OUString& us){    VariantClear(this); vt = VT_BSTR;   bstrVal     = SysAllocString(us);}
+            void setBool(sal_Bool b)                {   VariantClear(this); vt = VT_BOOL;   boolVal     = b ? VARIANT_TRUE : VARIANT_FALSE;}
+            void setString(const rtl::OUString& us){    VariantClear(this); vt = VT_BSTR;   bstrVal     = ::SysAllocString(us);}
             void setNoArg()                         {   VariantClear(this); vt = VT_ERROR;  scode       = DISP_E_PARAMNOTFOUND;}
 
             void setIDispatch(IDispatch* pDispInterface)
@@ -178,173 +272,52 @@ namespace connectivity
             sal_Bool isEmpty() const {  return (vt == VT_EMPTY);    }
 
             VARTYPE getType() const { return vt; }
+            void ChangeType(VARTYPE vartype, const OLEVariant* pSrc);
 
-            operator rtl::OUString()
-            {
-                if(vt == VT_NULL)
-                    return rtl::OUString();
-                if (vt != VT_BSTR) VariantChangeType(this, this, NULL, VT_BSTR);
-                return rtl::OUString((sal_Unicode*)bstrVal);
-            }
 
-            rtl::OUString getString()
-            {
-                return (rtl::OUString)*this;
-            }
-            operator sal_Bool()     {   return getBool();   }
-            operator sal_Int32()    {   return getInt32();  }
-            operator sal_Int16()    {   return getInt16();  }
-            operator sal_Int8() {   return getInt8();   }
-            operator float()    {   return getFloat();  }
-            operator double()   {   return getDouble(); }
-            operator ::com::sun::star::util::Date()
+            operator ::rtl::OUString() const;
+
+            operator sal_Bool()     const { return getBool();   }
+            operator sal_Int8()     const { return getInt8();   }
+            operator sal_Int16()    const { return getInt16();  }
+            operator sal_Int32()    const { return getInt32();  }
+            operator float()        const { return getFloat();  }
+            operator double()       const { return getDouble(); }
+
+            operator ::com::sun::star::uno::Sequence< sal_Int8 >() const;
+            operator ::com::sun::star::util::Date() const
             {
                 return connectivity::DateConversion::toDate(date,::com::sun::star::util::Date(30,12,1899));
             }
-            operator ::com::sun::star::util::Time()
+            operator ::com::sun::star::util::Time() const
             {
                 return connectivity::DateConversion::toTime(date);
             }
-            operator ::com::sun::star::util::DateTime()
+            operator ::com::sun::star::util::DateTime()const
             {
                 return connectivity::DateConversion::toDateTime(date,::com::sun::star::util::Date(30,12,1899));
             }
 
-            sal_Bool getBool()
-            {
-                if (vt != VT_BOOL) VariantChangeType(this, this, NULL, VT_BOOL);
-                return boolVal ? sal_True : sal_False;
-            };
-
-            IUnknown* getIUnknown()
-            {
-                if (vt != VT_UNKNOWN) VariantChangeType(this, this, NULL, VT_UNKNOWN);
-                return (IUnknown*) punkVal;
-
-            }
-
-            IDispatch* getIDispatch()
-            {
-                if (vt != VT_DISPATCH) VariantChangeType(this,this, NULL, VT_DISPATCH);
-                return (IDispatch*) pdispVal;
-
-            }
-
-
-            sal_uInt8 getByte()
-            {
-                if (vt != VT_UI1) VariantChangeType(this, this, NULL, VT_UI1);
-                return (sal_uInt8) bVal;
-            }
-
-            sal_Int16 getInt16()
-            {
-                if (vt != VT_I2) VariantChangeType(this, this, NULL, VT_I2);
-                return (sal_Int16) iVal;
-            }
-
-            sal_Int8 getInt8()
-            {
-                if (vt != VT_UI1) VariantChangeType(this, this, NULL, VT_UI1);
-                return (sal_Int8) iVal;
-            }
-
-            sal_Int32 getInt32()
-            {
-                if (vt != VT_I4) VariantChangeType(this, this, NULL, VT_I4);
-                return (sal_Int32) lVal;
-            }
-
-            sal_Int32 getUInt32()
-            {
-                if (vt != VT_UI4) VariantChangeType(this, this, NULL, VT_UI4);
-                return (sal_uInt32) lVal;
-            }
-
-            float getFloat()
-            {
-                if (vt != VT_R4) VariantChangeType(this, this, NULL, VT_R4);
-                return (float) fltVal;
-            }
-
-            double getDouble()
-            {
-                if (vt != VT_R8) VariantChangeType(this, this, NULL, VT_R8);
-                return (double) dblVal;
-            }
-
-            double getDate()
-            {
-                if (vt != VT_DATE) VariantChangeType(this, this, NULL, VT_DATE);
-                return (double) date;
-            }
-
-            double getCurrency()
-            {
-                if (vt != VT_CY) VariantChangeType(this, this, NULL, VT_CY);
-                double toRet = ((double)cyVal.Hi*(double)4294967296.0 + (double)cyVal.Lo) / 10000;
-                return toRet;
-            }
-
-            SAFEARRAY* getUI1SAFEARRAYPtr()
-            {
-                if (vt != (VT_ARRAY|VT_UI1))
-                    VariantChangeType(this,this, NULL, VT_ARRAY|VT_UI1);
-                return (parray);
-            }
-
-            // static methods
-
-            // ACHTUNG! Der zurueckgegebene UnicodeString muﬂ vom
-            // Rufer mit delete[] freigegeben werden!!!!
-            inline static OLECHAR* UniCodeFromC(const char* pText)
-            {
-
-                int nLength = strlen(pText)+1;
-                OLECHAR* aReturnString = new OLECHAR[nLength];
-
-                MultiByteToWideChar(CP_ACP, //ANSI Code Page
-                                MB_PRECOMPOSED,
-                                pText,
-                                nLength,
-                                (OLECHAR*) aReturnString,
-                                nLength);
-
-                return aReturnString;
-
-            }
-
-            // Der zurueckgegebene BSTR muss noch mit
-            // SysFreeString() wieder freigegeben werden!
-        //  inline static BSTR BSTRFromC(const char* pText)
-        //  {
-        //      OLECHAR* pUniString = UniCodeFromC(pText);
-        //      BSTR aBSTR = SysAllocString(pUniString);
-        //      delete[] pUniString;
-        //      return aBSTR;
-        //  }
+            ::rtl::OUString getString()     const;
+            sal_Bool        getBool()       const;
+            IUnknown*       getIUnknown()   const;
+            IDispatch*      getIDispatch()  const;
+            sal_uInt8       getByte()       const;
+            sal_Int16       getInt16()      const;
+            sal_Int8        getInt8()       const;
+            sal_Int32       getInt32()      const;
+            sal_uInt32      getUInt32()     const;
+            float           getFloat()      const;
+            double          getDouble()     const;
+            double          getDate()       const;
+            CY              getCurrency()   const;
+            SAFEARRAY*      getUI1SAFEARRAYPtr() const;
 
             inline static VARIANT_BOOL VariantBool(sal_Bool bEinBoolean)
             {
-                return (VARIANT_BOOL) (bEinBoolean? -1:0);
+                return (bEinBoolean ? VARIANT_TRUE : VARIANT_FALSE);
             }
 
-        //  static String StringFromBSTR(BSTR& aBSTR)
-        //  {
-        //      sal_uInt16 nLength = SysStringLen(aBSTR);
-        //      String sRetString;
-        //      char* pBuf = sRetString.AllocStrBuf(nLength);
-        //
-        //      WideCharToMultiByte(CP_ACP, //ANSI Code Page
-        //                      WC_COMPOSITECHECK,
-        //                      aBSTR,
-        //                      nLength,
-        //                      pBuf,
-        //                      nLength,
-        //                      NULL, NULL);
-        //
-        //      return sRetString;
-        //  }
         private:
             void CHS()
             {
@@ -370,7 +343,248 @@ namespace connectivity
             }
 
         };
+        // -----------------------------------------------------------------------------
+        // inline implementaion
+        // cast operator
+        inline OLEVariant::operator rtl::OUString() const
+        {
+            if (V_VT(this) == VT_BSTR)
+                return V_BSTR(this);
+
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_BSTR, this);
+
+            return V_BSTR(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
+        {
+            ::com::sun::star::uno::Sequence< sal_Int8 > aRet;
+            if(V_VT(this) == VT_BSTR)
+            {
+                OLEString sStr(V_BSTR(this));
+                aRet = ::com::sun::star::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>((const wchar_t*)sStr),sizeof(sal_Unicode)*sStr.length());
+            }
+            else
+            {
+                SAFEARRAY* pArray = getUI1SAFEARRAYPtr();
+
+                if(pArray)
+                {
+                    HRESULT hresult1,hresult2;
+                    long lBound,uBound;
+                    // Verify that the SafeArray is the proper shape.
+                    hresult1 = ::SafeArrayGetLBound(pArray, 1, &lBound);
+                    hresult2 = ::SafeArrayGetUBound(pArray, 1, &uBound);
+                    if(SUCCEEDED(hresult1) && SUCCEEDED(hresult2))
+                    {
+                        long nIndex = 0;
+                        long nCount = uBound-lBound+1;
+                        aRet.realloc(nCount);
+                        for(long i=0;i<nCount;++i)
+                        {
+                            ::SafeArrayGetElement(pArray,&nIndex,(void*)aRet.getArray()[i]);
+                        }
+                    }
+                }
+            }
+
+            return aRet;
+        }
+        // -----------------------------------------------------------------------------
+        inline ::rtl::OUString OLEVariant::getString() const
+        {
+            return (rtl::OUString)*this;
+        }
+        // -----------------------------------------------------------------------------
+        inline sal_Bool OLEVariant::getBool() const
+        {
+            if (V_VT(this) == VT_BOOL)
+                return V_BOOL(this) == VARIANT_TRUE ? sal_True : sal_False;
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_BOOL, this);
+
+            return V_BOOL(&varDest) == VARIANT_TRUE ? sal_True : sal_False;
+        }
+        // -----------------------------------------------------------------------------
+        inline IUnknown* OLEVariant::getIUnknown() const
+        {
+            if (V_VT(this) == VT_UNKNOWN)
+            {
+                V_UNKNOWN(this)->AddRef();
+                return V_UNKNOWN(this);
+            }
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_UNKNOWN, this);
+
+            V_UNKNOWN(&varDest)->AddRef();
+            return V_UNKNOWN(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline IDispatch* OLEVariant::getIDispatch() const
+        {
+            if (V_VT(this) == VT_DISPATCH)
+            {
+                V_DISPATCH(this)->AddRef();
+                return V_DISPATCH(this);
+            }
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_DISPATCH, this);
+
+            V_DISPATCH(&varDest)->AddRef();
+            return V_DISPATCH(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline sal_uInt8 OLEVariant::getByte() const
+        {
+            if (V_VT(this) == VT_UI1)
+                return V_UI1(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_UI1, this);
+
+            return V_UI1(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline sal_Int16 OLEVariant::getInt16() const
+        {
+            if (V_VT(this) == VT_I2)
+                return V_I2(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_I2, this);
+
+            return V_I2(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline sal_Int8 OLEVariant::getInt8() const
+        {
+            if (V_VT(this) == VT_I1)
+                return V_I1(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_I1, this);
+
+            return V_I1(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline sal_Int32 OLEVariant::getInt32() const
+        {
+            if (V_VT(this) == VT_I4)
+                return V_I4(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_I4, this);
+
+            return V_I4(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline sal_uInt32 OLEVariant::getUInt32() const
+        {
+            if (V_VT(this) == VT_UI4)
+                return V_UI4(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_UI4, this);
+
+            return V_UI4(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline float OLEVariant::getFloat() const
+        {
+            if (V_VT(this) == VT_R4)
+                return V_R4(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_R4, this);
+
+            return V_R4(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline double OLEVariant::getDouble() const
+        {
+            if (V_VT(this) == VT_R8)
+                return V_R8(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_R8, this);
+
+            return V_R8(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline double OLEVariant::getDate() const
+        {
+            if (V_VT(this) == VT_DATE)
+                return V_DATE(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_DATE, this);
+
+            return V_DATE(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline CY OLEVariant::getCurrency() const
+        {
+            if (V_VT(this) == VT_CY)
+                return V_CY(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType(VT_CY, this);
+
+            return V_CY(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        inline SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
+        {
+            if (V_VT(this) == (VT_ARRAY|VT_UI1))
+                return V_ARRAY(this);
+
+            OLEVariant varDest;
+
+            varDest.ChangeType((VT_ARRAY|VT_UI1), this);
+
+            return V_ARRAY(&varDest);
+        }
+        // -----------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------
+        inline void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
+        {
+            //
+            // If pDest is NULL, convert type in place
+            //
+            if (pSrc == NULL)
+                pSrc = this;
+
+            if ((this != pSrc) || (vartype != V_VT(this)))
+            {
+                if(FAILED(::VariantChangeType(static_cast<VARIANT*>(this),
+                                  const_cast<VARIANT*>(static_cast<const VARIANT*>(pSrc)),
+                                  0, vartype)))
+                                  throw ::com::sun::star::sdbc::SQLException(::rtl::OUString::createFromAscii("Could convert type!"),NULL,::rtl::OUString(),1000,::com::sun::star::uno::Any());
+            }
+        }
     }
 }
+
 #endif // _CONNECTIVITY_ADO_AOLEVARIANT_HXX_
 

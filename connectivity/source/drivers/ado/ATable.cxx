@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 09:08:24 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,54 +134,25 @@ void WpADOTable::Create()
     }
 }
 // -------------------------------------------------------------------------
-OAdoTable::OAdoTable(sal_Bool _bCase,_ADOTable* _pTable) : OTable_TYPEDEF(_bCase)
+OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
+    : OTable_TYPEDEF(_bCase,::rtl::OUString(),::rtl::OUString())
+    ,m_pCatalog(_pCatalog)
 {
     construct();
-    if(_pTable)
-        m_aTable = WpADOTable(_pTable);
-    else
-        m_aTable.Create();
+    m_aTable = WpADOTable(_pTable);
+    fillPropertyValues();
 
     refreshColumns();
     refreshKeys();
     refreshIndexes();
 }
-// -------------------------------------------------------------------------
-OAdoTable::OAdoTable(sal_Bool _bCase,       const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description ,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _CatalogName
-                ) : OTable_TYPEDEF(_bCase,_Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
+// -----------------------------------------------------------------------------
+OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog)
+    : OTable_TYPEDEF(_bCase)
+    ,m_pCatalog(_pCatalog)
 {
     construct();
     m_aTable.Create();
-    m_aTable.put_Name(_Name);
-    {
-        ADOProperties* pProps = m_aTable.get_Properties();
-        pProps->AddRef();
-        ADOProperty* pProp = NULL;
-        pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Type")),&pProp);
-        WpADOProperty aProp(pProp);
-        if(pProp)
-            aProp.PutValue(_Type);
-        pProps->Release();
-    }
-    {
-        ADOProperties* pProps = m_aTable.get_Properties();
-        pProps->AddRef();
-        ADOProperty* pProp = NULL;
-        pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-        WpADOProperty aProp(pProp);
-        if(pProp)
-            aProp.PutValue(_Description);
-        pProps->Release();
-    }
-
 
     refreshColumns();
     refreshKeys();
@@ -211,7 +182,7 @@ void OAdoTable::refreshColumns()
         }
     }
 
-    m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive());
+    m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive(),m_pCatalog->getConnection());
 }
 // -------------------------------------------------------------------------
 void OAdoTable::refreshKeys()
@@ -237,7 +208,7 @@ void OAdoTable::refreshKeys()
         }
     }
 
-    m_pKeys = new OKeys(*this,m_aMutex,aVector,pKeys,isCaseSensitive());
+    m_pKeys = new OKeys(*this,m_aMutex,aVector,pKeys,isCaseSensitive(),m_pCatalog->getConnection());
 }
 // -------------------------------------------------------------------------
 void OAdoTable::refreshIndexes()
@@ -263,7 +234,7 @@ void OAdoTable::refreshIndexes()
         }
     }
 
-    m_pIndexes = new OIndexes(*this,m_aMutex,aVector,pIndexes,isCaseSensitive());
+    m_pIndexes = new OIndexes(*this,m_aMutex,aVector,pIndexes,isCaseSensitive(),m_pCatalog->getConnection());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()
@@ -312,8 +283,13 @@ void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, cons
     if(xTunnel.is())
     {
         OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn:: getUnoTunnelImplementationId());
-        m_aTable.get_Columns()->Delete(OLEVariant(colName));
-        m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
+        if(pColumn)
+        {
+            m_aTable.get_Columns()->Delete(OLEVariant(colName));
+            m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
+        }
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by name!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 
     refreshColumns();
@@ -330,8 +306,13 @@ void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< X
     if(xTunnel.is())
     {
         OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn:: getUnoTunnelImplementationId());
-        m_aTable.get_Columns()->Delete(OLEVariant(index));
-        m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
+        if(pColumn)
+        {
+            m_aTable.get_Columns()->Delete(OLEVariant(index));
+            m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
+        }
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by index!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 }
 // -------------------------------------------------------------------------
@@ -374,42 +355,32 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
                                 throw Exception();
         }
     }
+    OTable_TYPEDEF::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -------------------------------------------------------------------------
-void OAdoTable::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void OAdoTable::fillPropertyValues()
 {
     if(m_aTable.IsValid())
     {
-        switch(nHandle)
+        m_Name  = m_aTable.get_Name();
+        m_Type  = m_aTable.get_Type();
         {
-            case PROPERTY_ID_NAME:
-                rValue <<= m_aTable.get_Name();
-                break;
-            case PROPERTY_ID_TYPE:
-                rValue <<= m_aTable.get_Type();
-                break;
-            case PROPERTY_ID_CATALOGNAME:
-                {
-                    WpADOCatalog aCat(m_aTable.get_ParentCatalog());
-                    if(aCat.IsValid())
-                        rValue <<= aCat.GetObjectOwner(m_aTable.get_Name(),adPermObjTable);
-                }
-                break;
-            case PROPERTY_ID_SCHEMANAME:
-                //  rValue <<= m_aTable.get_Type();
-                break;
-            case PROPERTY_ID_DESCRIPTION:
-                {
-                    ADOProperties* pProps = m_aTable.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        rValue <<= (::rtl::OUString)aProp.GetValue();
-                    pProps->Release();
-                }
-                break;
+            WpADOCatalog aCat(m_aTable.get_ParentCatalog());
+            if(aCat.IsValid())
+                m_CatalogName = aCat.GetObjectOwner(m_aTable.get_Name(),adPermObjTable);
+        }
+        {
+            ADOProperties* pProps = m_aTable.get_Properties();
+            if(pProps)
+            {
+                pProps->AddRef();
+                ADOProperty* pProp = NULL;
+                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
+                WpADOProperty aProp(pProp);
+                if(pProp)
+                    m_Description = aProp.GetValue();
+                pProps->Release();
+            }
         }
     }
 }
@@ -418,13 +389,10 @@ void OAdoTable::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     OLEVariant _rVar;
     _rVar.setNoArg();
-    BSTR aBSTR;
-    BSTR sStr1 = SysAllocString(_rName.getStr());
+    OLEString aBSTR;
+    OLEString sStr1(_rName);
     pInterface->GetObjectOwner(sStr1,_eNum,_rVar,&aBSTR);
-    SysFreeString(sStr1);
-    rtl::OUString sRetStr((sal_Unicode*)aBSTR);
-    SysFreeString(aBSTR);
-    return sRetStr;
+    return aBSTR;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _CONNECTIVITY_ADO_COLUMN_HXX_
 #include "ado/AColumn.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
+#include "ado/AConnection.hxx"
+#endif
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
@@ -71,9 +74,15 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE ado
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 using namespace connectivity::ado;
@@ -102,61 +111,24 @@ void WpADOColumn::Create()
     }
 }
 // -------------------------------------------------------------------------
-OAdoColumn::OAdoColumn(sal_Bool _bCase,_ADOColumn* _pColumn) : connectivity::sdbcx::OColumn(_bCase)
+OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
+    : connectivity::sdbcx::OColumn(::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),0,0,0,0,sal_False,sal_False,sal_False,_bCase)
+    ,m_pConnection(_pConnection)
 {
-    if(_pColumn)
-        m_aColumn = WpADOColumn(_pColumn);
-    else
-        m_aColumn.Create();
+    construct();
+    OSL_ENSURE(_pColumn,"Column can not be null!");
+    m_aColumn = WpADOColumn(_pColumn);
+    fillPropertyValues();
 }
 // -------------------------------------------------------------------------
-OAdoColumn::OAdoColumn( const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _TypeName,
-                    const ::rtl::OUString& _DefaultValue,
-                    sal_Int32       _IsNullable,
-                    sal_Int32       _Precision,
-                    sal_Int32       _Scale,
-                    sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase
-                ) : connectivity::sdbcx::OColumn(_Name,
-                                  _TypeName,
-                                  _DefaultValue,
-                                  _IsNullable,
-                                  _Precision,
-                                  _Scale,
-                                  _Type,
-                                  _IsAutoIncrement,
-                                  sal_False,_IsCurrency,_bCase)
+OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
+    : connectivity::sdbcx::OColumn(_bCase)
+    ,m_pConnection(_pConnection)
 {
     m_aColumn.Create();
-    m_aColumn.put_Name(_Name);
-    m_aColumn.put_Type(ADOS::MapJdbc2ADOType(_Type));
-    m_aColumn.put_Precision(_Precision);
-    if(_IsNullable)
-        m_aColumn.put_Attributes(adColNullable);
-    {
-        ADOProperties* pProps = m_aColumn.get_Properties();
-        pProps->AddRef();
-        ADOProperty* pProp = NULL;
-        pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("AutoIncrement")),&pProp);
-        WpADOProperty aProp(pProp);
-        if(pProp)
-            aProp.PutValue(_IsAutoIncrement);
-        pProps->Release();
-    }
-    {
-        ADOProperties* pProps = m_aColumn.get_Properties();
-        pProps->AddRef();
-        ADOProperty* pProp = NULL;
-        pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Default")),&pProp);
-        WpADOProperty aProp(pProp);
-        if(pProp)
-            aProp.PutValue(_DefaultValue);
-        pProps->Release();
-    }
+    construct();
 }
+
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 {
@@ -182,14 +154,31 @@ sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 
     return OColumn_ADO::getSomething(rId);
 }
+// -------------------------------------------------------------------------
+void OAdoColumn::construct()
+{
+    sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
+
+    registerProperty(PROPERTY_ISASCENDING,      PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
+    registerProperty(PROPERTY_RELATEDCOLUMN,    PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+}
 // -----------------------------------------------------------------------------
 void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
 {
     if(m_aColumn.IsValid())
     {
-
         switch(nHandle)
         {
+            case PROPERTY_ID_ISASCENDING:
+                m_aColumn.put_SortOrder(::cppu::any2bool(rValue) ? adSortAscending : adSortDescending);
+                break;
+            case PROPERTY_ID_RELATEDCOLUMN:
+                {
+                    ::rtl::OUString aVal;
+                    rValue >>= aVal;
+                    m_aColumn.put_RelatedColumn(aVal);
+                }
+                break;
             case PROPERTY_ID_NAME:
                 {
                     ::rtl::OUString aVal;
@@ -205,7 +194,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 }
                 break;
             case PROPERTY_ID_TYPENAME:
-                //  rValue <<= getResultSetType();
+                //  rValue <<= m_pTable->getCatalog()->getConnection()->getTypeInfo()->find();
                 break;
             case PROPERTY_ID_PRECISION:
                 {
@@ -218,7 +207,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 {
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
-                    m_aColumn.put_NumericScale(nVal);
+                    m_aColumn.put_NumericScale((sal_Int8)nVal);
                 }
                 break;
             case PROPERTY_ID_ISNULLABLE:
@@ -229,13 +218,6 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                         m_aColumn.put_Attributes(adColNullable);
                 }
                 break;
-            case PROPERTY_ID_ISASCENDING:
-                {
-                    sal_Bool _b;
-                    rValue >>= _b;
-                    m_aColumn.put_SortOrder( _b ? adSortAscending : adSortDescending);
-                }
-                break;
             case PROPERTY_ID_ISROWVERSION:
                 break;
             case PROPERTY_ID_ISAUTOINCREMENT:
@@ -275,113 +257,53 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 }
                 break;
             case PROPERTY_ID_ISCURRENCY:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Fixed Length")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        aProp.PutValue(getBOOL(rValue));
-                    pProps->Release();
-                }
+                m_aColumn.put_Type(adCurrency);
                 break;
         }
     }
+    OColumn_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -------------------------------------------------------------------------
-void OAdoColumn::getFastPropertyValue(
-                                                                Any& rValue,
-                                sal_Int32 nHandle
-                                     ) const
+void OAdoColumn::fillPropertyValues()
 {
     if(m_aColumn.IsValid())
     {
-        switch(nHandle)
+        m_IsAscending = m_aColumn.get_SortOrder() == adSortAscending;
+        m_ReferencedColumn = m_aColumn.get_RelatedColumn();
+        m_Name = m_aColumn.get_Name();
+        m_Type = ADOS::MapADOType2Jdbc(m_aColumn.get_Type());
         {
-            case PROPERTY_ID_NAME:
-                rValue <<= m_aColumn.get_Name();
-                break;
-            case PROPERTY_ID_TYPE:
-                rValue <<= ADOS::MapADOType2Jdbc(m_aColumn.get_Type());
-                break;
-            case PROPERTY_ID_TYPENAME:
-                //  rValue <<= getResultSetType();
-                break;
-            case PROPERTY_ID_PRECISION:
-                rValue <<= m_aColumn.get_Precision();
-                break;
-            case PROPERTY_ID_SCALE:
-                rValue <<= m_aColumn.get_NumericScale();
-                break;
-            case PROPERTY_ID_ISNULLABLE:
-                {
-                    sal_Bool _b = m_aColumn.get_Attributes() == adColNullable;
-                                        rValue <<= Any(&_b, ::getBooleanCppuType());
-                }
-                break;
-            case PROPERTY_ID_ISASCENDING:
-                {
-                    sal_Bool _b = m_aColumn.get_SortOrder() == adSortAscending;
-                                        rValue <<= Any(&_b, ::getBooleanCppuType());
-                }
-            case PROPERTY_ID_ISAUTOINCREMENT:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("AutoIncrement")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                    {
-                        sal_Bool b = aProp.GetValue();
-                                                rValue <<= Any(&b, ::getBooleanCppuType());
-                    }
-                    pProps->Release();
-                }
-                break;
-            case PROPERTY_ID_ISROWVERSION:
-                //  rValue <<= getResultSetType();
-                break;
-            case PROPERTY_ID_DESCRIPTION:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        rValue <<= (::rtl::OUString)aProp.GetValue();
-                    pProps->Release();
-                }
-                break;
-            case PROPERTY_ID_DEFAULTVALUE:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Default")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        rValue <<= (::rtl::OUString)aProp.GetValue();
-                    pProps->Release();
-                }
-                break;
-            case PROPERTY_ID_ISCURRENCY:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Fixed Length")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                    {
-                        sal_Bool bVal = aProp.GetValue();
-                                                rValue <<= Any(&bVal,getBooleanCppuType());
-                    }
-                    pProps->Release();
-                }
-                break;
+            const OTypeInfoMap* pTypeInfo = m_pConnection->getTypeInfo();
+            OTypeInfoMap::const_iterator aFind = pTypeInfo->find(ADOS::MapADOType2Jdbc(m_aColumn.get_Type()));
+            if(aFind != pTypeInfo->end())
+                m_TypeName = aFind->second.aTypeName;
+        }
+        m_Precision     = m_aColumn.get_Precision();
+        m_Scale         = m_aColumn.get_NumericScale();
+        m_IsNullable    = (m_aColumn.get_Attributes() == adColNullable) ? ColumnValue::NULLABLE : ColumnValue::NO_NULLS;
+        m_IsCurrency    = (m_aColumn.get_Type() == adCurrency);
+        // fill some specific props
+        {
+            ADOProperties* pProps = m_aColumn.get_Properties();
+            if(pProps)
+            {
+                pProps->AddRef();
+                ADOProperty* pProp = NULL;
+                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("AutoIncrement")),&pProp);
+                WpADOProperty aProp(pProp);
+                if(pProp)
+                    m_IsAutoIncrement = aProp.GetValue();
+
+                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
+                aProp = pProp;
+                if(pProp)
+                    m_Description = (::rtl::OUString)aProp.GetValue();
+                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Default")),&pProp);
+                aProp = pProp;
+                if(pProp)
+                    m_DefaultValue = (::rtl::OUString)aProp.GetValue();
+                pProps->Release();
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:45:31 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+
 
 namespace connectivity
 {
@@ -218,7 +222,13 @@ namespace connectivity
             inline WrapT GetItem(const ::rtl::OUString& sStr) const
             {
                 T* pT;
-                if (FAILED(pInterface->get_Item(OLEVariant(sStr), &pT))) return WrapT(NULL);
+                if (FAILED(pInterface->get_Item(OLEVariant(sStr), &pT)))
+                {
+                    ::rtl::OString sTemp("Unknown Item: ");
+                    sTemp += ::rtl::OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding());
+                    OSL_ENSURE(0,sTemp);
+                    return WrapT(NULL);
+                }
                 return WrapT(pT);
             }
         };

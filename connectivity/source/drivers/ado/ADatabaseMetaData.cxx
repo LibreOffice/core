@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
 #include "ado/adoimp.hxx"
 #endif
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
+#endif
 
 using namespace connectivity;
 using namespace connectivity::ado;
@@ -90,6 +93,66 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
+
+const int JET_ENGINETYPE_UNKNOWN    = 0;
+const int JET_ENGINETYPE_JET10      = 1;
+const int JET_ENGINETYPE_JET11      = 2;
+const int JET_ENGINETYPE_JET20      = 3;
+const int JET_ENGINETYPE_JET3X      = 4;
+const int JET_ENGINETYPE_JET4X      = 5;
+const int JET_ENGINETYPE_DBASE3     = 10;
+const int JET_ENGINETYPE_DBASE4     = 11;
+const int JET_ENGINETYPE_DBASE5     = 12;
+const int JET_ENGINETYPE_EXCEL30    = 20;
+const int JET_ENGINETYPE_EXCEL40    = 21;
+const int JET_ENGINETYPE_EXCEL50    = 22;
+const int JET_ENGINETYPE_EXCEL80    = 23;
+const int JET_ENGINETYPE_EXCEL90    = 24;
+const int JET_ENGINETYPE_EXCHANGE4  = 30;
+const int JET_ENGINETYPE_LOTUSWK1   = 40;
+const int JET_ENGINETYPE_LOTUSWK3   = 41;
+const int JET_ENGINETYPE_LOTUSWK4   = 42;
+const int JET_ENGINETYPE_PARADOX3X  = 50;
+const int JET_ENGINETYPE_PARADOX4X  = 51;
+const int JET_ENGINETYPE_PARADOX5X  = 52;
+const int JET_ENGINETYPE_PARADOX7X  = 53;
+const int JET_ENGINETYPE_TEXT1X     = 60;
+const int JET_ENGINETYPE_HTML1X     = 70;
+
+sal_Bool isJetEngine(sal_Int32 _nEngineType)
+{
+    sal_Bool bRet = sal_False;
+    switch(_nEngineType)
+    {
+        case JET_ENGINETYPE_UNKNOWN:
+        case JET_ENGINETYPE_JET10:
+        case JET_ENGINETYPE_JET11:
+        case JET_ENGINETYPE_JET20:
+        case JET_ENGINETYPE_JET3X:
+        case JET_ENGINETYPE_JET4X:
+        case JET_ENGINETYPE_DBASE3:
+        case JET_ENGINETYPE_DBASE4:
+        case JET_ENGINETYPE_DBASE5:
+        case JET_ENGINETYPE_EXCEL30:
+        case JET_ENGINETYPE_EXCEL40:
+        case JET_ENGINETYPE_EXCEL50:
+        case JET_ENGINETYPE_EXCEL80:
+        case JET_ENGINETYPE_EXCEL90:
+        case JET_ENGINETYPE_EXCHANGE4:
+        case JET_ENGINETYPE_LOTUSWK1:
+        case JET_ENGINETYPE_LOTUSWK3:
+        case JET_ENGINETYPE_LOTUSWK4:
+        case JET_ENGINETYPE_PARADOX3X:
+        case JET_ENGINETYPE_PARADOX4X:
+        case JET_ENGINETYPE_PARADOX5X:
+        case JET_ENGINETYPE_PARADOX7X:
+        case JET_ENGINETYPE_TEXT1X:
+        case JET_ENGINETYPE_HTML1X:
+            bRet = sal_True;
+            break;
+    }
+    return bRet;
+}
 //  using namespace connectivity;
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
@@ -168,7 +231,7 @@ sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId) throw(SQLException, Runti
 sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty) throw(SQLException, RuntimeException)
 {
     WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
-    ADOS::ThrowException(*m_pADOConnection,*this);
+    //  ADOS::ThrowException(*m_pADOConnection,*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
     ADO_PROP(_aProperty);
     sal_Int32 nValue(0);
@@ -573,7 +636,8 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLExcept
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
-    return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Index"));
+    //  return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Index"));
+    return 0;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException)
@@ -818,49 +882,89 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
-    // Create elements used in the array
-    HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
-    OLEVariant varCriteria[5];
 
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
-    sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(getString(catalog));
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(schemaPattern.toChar() != '%')
-        varCriteria[nPos].setString(schemaPattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-
-    if(tableNamePattern.toChar() != '%')
-        varCriteria[nPos].setString(tableNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
-
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTOR
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTEE
-
-    OLEVariant  vtEmpty;
-    vtEmpty.setNoArg();
-
-    // Initialize and fill the SafeArray
-    OLEVariant vsa;
-    vsa.setArray(psa,VT_VARIANT);
-
-    ADORecordset *pRecordset = NULL;
-    m_pADOConnection->OpenSchema(adSchemaTablePrivileges,vsa,vtEmpty,&pRecordset);
-    ADOS::ThrowException(*m_pADOConnection,*this);
-
+    sal_Int32 nEngineType = getInt32Property(::rtl::OUString::createFromAscii("Jet OLEDB:Engine Type"));
     Reference< XResultSet > xRef = NULL;
+    if(!isJetEngine(nEngineType))
+    {   // the jet provider doesn't support this method
+        // Create elements used in the array
+        HRESULT hr = S_OK;
+        SAFEARRAYBOUND rgsabound[1];
+        SAFEARRAY *psa = NULL;
+        OLEVariant varCriteria[5];
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
-    pResult->setTablePrivilegesMap();
-    xRef = pResult;
+        // Create SafeArray Bounds and initialize the array
+        rgsabound[0].lLbound   = 0;
+        rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+        psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
+
+        sal_Int32 nPos=0;
+        if(catalog.hasValue())
+            varCriteria[nPos].setString(getString(catalog));
+
+        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+        if(schemaPattern.toChar() != '%')
+            varCriteria[nPos].setString(schemaPattern);
+        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+
+        if(tableNamePattern.toChar() != '%')
+            varCriteria[nPos].setString(tableNamePattern);
+        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+
+        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTOR
+        hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTEE
+
+        OLEVariant  vtEmpty;
+        vtEmpty.setNoArg();
+
+        // Initialize and fill the SafeArray
+        OLEVariant vsa;
+        vsa.setArray(psa,VT_VARIANT);
+
+        ADORecordset *pRecordset = NULL;
+        m_pADOConnection->OpenSchema(adSchemaTablePrivileges,vsa,vtEmpty,&pRecordset);
+        ADOS::ThrowException(*m_pADOConnection,*this);
+
+        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+        pResult->setTablePrivilegesMap();
+        xRef = pResult;
+    }
+    else
+    {
+        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+        xRef = pResult;
+        pResult->setTablePrivilegesMap();
+        ORows aRows;
+        ORow aRow(8);
+        aRow[0] = ORowSetValue();
+        aRow[1] = ORowSetValue();
+        aRow[2] = ORowSetValue(tableNamePattern);
+        aRow[3] = ORowSetValue();
+        aRow[4] = ORowSetValue();
+        aRow[5] = ORowSetValue(getUserName());
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("SELECT"));
+        aRow[7] = ORowSetValue(::rtl::OUString::createFromAscii("NO"));
+        // bound row
+        ORow::iterator aIter = aRow.begin();
+        for(;aIter != aRow.end();++aIter)
+            aIter->setBound(sal_True);
+        aRows.push_back(aRow);
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("INSERT"));
+        aRows.push_back(aRow);
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DELETE"));
+        aRows.push_back(aRow);
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("UPDATE"));
+        aRows.push_back(aRow);
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("CREATE"));
+        aRows.push_back(aRow);
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("READ"));
+        aRows.push_back(aRow);
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("ALTER"));
+        aRows.push_back(aRow);
+        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DROP"));
+        aRows.push_back(aRow);
+        pResult->setRows(aRows);
+    }
 
     return xRef;
 }
@@ -931,7 +1035,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return (getInt32Property(::rtl::OUString::createFromAscii("Quoted Identifier Case Sensitivity")) & DBPROPVAL_IC_LOWER) == DBPROPVAL_IC_LOWER ;
+    return (getInt32Property(::rtl::OUString::createFromAscii("Identifier Case Sensitivity")) & DBPROPVAL_IC_LOWER) == DBPROPVAL_IC_LOWER ;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException)
@@ -941,7 +1045,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return (getInt32Property(::rtl::OUString::createFromAscii("Quoted Identifier Case Sensitivity")) & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED ;
+    return (getInt32Property(::rtl::OUString::createFromAscii("Identifier Case Sensitivity")) & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED ;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
@@ -951,7 +1055,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return (getInt32Property(::rtl::OUString::createFromAscii("Quoted Identifier Case Sensitivity")) & DBPROPVAL_IC_UPPER) == DBPROPVAL_IC_UPPER ;
+    return (getInt32Property(::rtl::OUString::createFromAscii("Identifier Case Sensitivity")) & DBPROPVAL_IC_UPPER) == DBPROPVAL_IC_UPPER ;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException)
@@ -992,7 +1096,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
-    return getStringProperty(::rtl::OUString::createFromAscii("Special Characters"));
+    //  return getStringProperty(::rtl::OUString::createFromAscii("Special Characters"));
+    return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
@@ -1106,17 +1211,20 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_TABLE_DEFINITION) == DBPROPVAL_CU_TABLE_DEFINITION;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_TABLE_DEFINITION) == DBPROPVAL_CU_TABLE_DEFINITION;
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_INDEX_DEFINITION) == DBPROPVAL_CU_INDEX_DEFINITION;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_INDEX_DEFINITION) == DBPROPVAL_CU_INDEX_DEFINITION;
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
-    return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_DML_STATEMENTS) == DBPROPVAL_CU_DML_STATEMENTS;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_DML_STATEMENTS) == DBPROPVAL_CU_DML_STATEMENTS;
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
@@ -1311,7 +1419,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_PRIVILEGE_DEFINITION) == DBPROPVAL_CU_PRIVILEGE_DEFINITION;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_PRIVILEGE_DEFINITION) == DBPROPVAL_CU_PRIVILEGE_DEFINITION;
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
@@ -1497,17 +1606,17 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLExce
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException)
 {
-    return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Group By"));
+    return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in GROUP BY"));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
-    return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Order by"));
+    return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in ORDER BY"));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException)
 {
-    return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Select"));
+    return 0; // getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Select"));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)

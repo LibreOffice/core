@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-19 09:35:27 $
+#   last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/ADatabaseMetaData.obj					\
         $(SLO)$/AColumn.obj								\
         $(SLO)$/AColumns.obj							\
         $(SLO)$/AIndex.obj								\
@@ -100,7 +101,6 @@ SLOFILES=\
         $(SLO)$/ADatabaseMetaDataResultSet.obj			\
         $(SLO)$/AResultSet.obj							\
         $(SLO)$/AConnection.obj							\
-        $(SLO)$/ADatabaseMetaData.obj					\
         $(SLO)$/AStatement.obj							\
         $(SLO)$/APreparedStatement.obj					\
         $(SLO)$/AResultSetMetaData.obj					\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
     ADOIndex* pIndex = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pIndex);
 
-    Reference< XNamed > xRet = new OAdoIndex(isCaseSensitive(),pIndex);
+    Reference< XNamed > xRet = new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex);
 
     return xRet;
 }
@@ -104,7 +104,7 @@ void OIndexes::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
 {
-    OAdoIndex* pNew = new OAdoIndex(isCaseSensitive());
+    OAdoIndex* pNew = new OAdoIndex(isCaseSensitive(),m_pConnection);
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -117,8 +117,11 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
     if(xTunnel.is())
     {
         OAdoIndex* pIndex = (OAdoIndex*)xTunnel->getSomething(OAdoIndex:: getUnoTunnelImplementationId());
-        m_pCollection->Append(OLEVariant(getString(descriptor->getPropertyValue(PROPERTY_NAME))),
-                              OLEVariant(pIndex->getImpl()));
+        if(pIndex)
+            m_pCollection->Append(OLEVariant(getString(descriptor->getPropertyValue(PROPERTY_NAME))),
+                                  OLEVariant(pIndex->getImpl()));
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

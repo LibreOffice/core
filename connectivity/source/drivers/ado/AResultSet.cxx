@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,13 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COMPHELPER_SEQSTREAM_HXX
+#include <comphelper/seqstream.hxx>
+#endif
+#ifndef _COMPHELPER_SEQSTREAM_HXX
+#include <comphelper/seqstream.hxx>
+#endif
+
 
 #include <oledb.h>
 
@@ -158,7 +165,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
     m_pRecordSet->AddRef();
     VARIANT_BOOL bIsAtBOF;
     CHECK_RETURN(m_pRecordSet->get_BOF(&bIsAtBOF))
-    m_bOnFirstAfterOpen = !(sal_Bool)bIsAtBOF;
+    m_bOnFirstAfterOpen = bIsAtBOF != VARIANT_TRUE;
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
@@ -176,7 +183,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
     m_pRecordSet->AddRef();
     VARIANT_BOOL bIsAtBOF;
     CHECK_RETURN(m_pRecordSet->get_BOF(&bIsAtBOF))
-    m_bOnFirstAfterOpen = !(sal_Bool)bIsAtBOF;
+    m_bOnFirstAfterOpen = bIsAtBOF != VARIANT_TRUE;
     osl_decrementInterlockedCount( &m_refCount );
     //  allocBuffer();
 }
@@ -232,13 +239,46 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
             break;
     return i;
 }
+#define BLOCK_SIZE 256
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    return NULL;
+    ADO_GETFIELD(columnIndex);
+    if((aField.GetAttributes() & adFldLong) == adFldLong)
+    {
+        //Copy the data only upto the Actual Size of Field.
+        sal_Int32 nSize = aField.GetActualSize();
+        Sequence<sal_Int8> aData(nSize);
+        long index = 0;
+        while(index < nSize)
+        {
+            m_aValue = aField.GetChunk(BLOCK_SIZE);
+            if(m_aValue.isNull())
+                break;
+            UCHAR chData;
+            for(long index2 = 0;index2 < BLOCK_SIZE;++index2)
+            {
+                HRESULT hr = ::SafeArrayGetElement(m_aValue.parray,&index2,&chData);
+                if(SUCCEEDED(hr))
+                {
+                    //Take BYTE by BYTE and advance Memory Location
+                    aData.getArray()[index++] = chData;
+                }
+                else
+                    break;
+            }
+        }
+
+        return new ::comphelper::SequenceInputStream(aData);
+    }
+    // else we ask for a bytesequence
+    aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return NULL;
+    return new ::comphelper::SequenceInputStream(m_aValue);
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -257,6 +297,8 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
         throw DisposedException();
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return sal_False;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -268,6 +310,8 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
         throw DisposedException();
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -279,6 +323,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         throw DisposedException();
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return Sequence< sal_Int8 >();
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -291,6 +337,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return ::com::sun::star::util::Date();
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -303,6 +351,8 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -315,6 +365,8 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -327,6 +379,8 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -351,6 +405,8 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
         throw DisposedException();
 
     ADO_GETFIELD(columnIndex);
+    if(m_aValue.isNull())
+        return 0;
     return sal_Int64(0);
 }
 // -------------------------------------------------------------------------
@@ -409,6 +465,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return 0;
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -421,6 +479,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
     ADO_GETFIELD(columnIndex);
     m_aValue = aField.get_Value();
+    if(m_aValue.isNull())
+        return ::rtl::OUString();
     return m_aValue;
 }
 
@@ -435,6 +495,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return ::com::sun::star::util::Time();
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -448,6 +510,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
+    if(m_aValue.isNull())
+        return ::com::sun::star::util::DateTime();
     return m_aValue;
 }
 // -------------------------------------------------------------------------
@@ -458,9 +522,9 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    sal_Int16 bIsAtEOF;
+    VARIANT_BOOL bIsAtEOF;
     CHECK_RETURN(m_pRecordSet->get_EOF(&bIsAtEOF))
-    return bIsAtEOF;
+    return bIsAtEOF == VARIANT_TRUE;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
@@ -556,7 +620,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
         if(bCheck = SUCCEEDED(m_pRecordSet->MoveLast()))
         {
             while(++row < 0 && bCheck)
-                bCheck = m_pRecordSet->MovePrevious();
+                bCheck = SUCCEEDED(m_pRecordSet->MovePrevious());
         }
     }
     else
@@ -649,9 +713,9 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
         throw DisposedException();
 
     OSL_ENSURE(!m_nRowPos,"OResultSet::isBeforeFirst: Error in setting m_nRowPos!");
-    sal_Int16 bIsAtBOF;
+    VARIANT_BOOL bIsAtBOF;
     m_pRecordSet->get_BOF(&bIsAtBOF);
-    return bIsAtBOF;
+    return bIsAtBOF == VARIANT_TRUE;
 }
 // -------------------------------------------------------------------------
 
@@ -675,7 +739,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
         {
             VARIANT_BOOL bIsAtEOF;
             CHECK_RETURN(m_pRecordSet->get_EOF(&bIsAtEOF))
-            bRet = !(sal_Bool)bIsAtEOF;
+            bRet = bIsAtEOF != VARIANT_TRUE;
             ++m_nRowPos;
         }
         else
@@ -955,7 +1019,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(m_nRowPos < m_aBookmarks.size()) // this bookmark was already fetched
+    if(m_nRowPos < (sal_Int32)m_aBookmarks.size()) // this bookmark was already fetched
         return makeAny(sal_Int32(m_nRowPos-1));
 
     OLEVariant aVar;
@@ -973,8 +1037,8 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
 
     sal_Int32 nPos;
     bookmark >>= nPos;
-    OSL_ENSURE(nPos >= 0 && nPos < m_aBookmarks.size(),"Invalid Index for vector");
-    if(nPos < 0 || nPos >= m_aBookmarks.size())
+    OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
+    if(nPos < 0 || nPos >= (sal_Int32)m_aBookmarks.size())
         throw SQLException();
 
     return SUCCEEDED(m_pRecordSet->Move(0,m_aBookmarks[nPos]));
@@ -989,8 +1053,8 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     sal_Int32 nPos;
     bookmark >>= nPos;
     nPos += rows;
-    OSL_ENSURE(nPos >= 0 && nPos < m_aBookmarks.size(),"Invalid Index for vector");
-    if(nPos < 0 || nPos >= m_aBookmarks.size())
+    OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
+    if(nPos < 0 || nPos >= (sal_Int32)m_aBookmarks.size())
         throw SQLException();
     return SUCCEEDED(m_pRecordSet->Move(rows,m_aBookmarks[nPos]));
 }
@@ -1008,7 +1072,7 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& se
     if(nPos1 == nPos2)  // they should be equal
         return sal_True;
 
-    OSL_ENSURE((nPos1 >= 0 && nPos1 < m_aBookmarks.size()) || (nPos1 >= 0 && nPos2 < m_aBookmarks.size()),"Invalid Index for vector");
+    OSL_ENSURE((nPos1 >= 0 && nPos1 < (sal_Int32)m_aBookmarks.size()) || (nPos1 >= 0 && nPos2 < (sal_Int32)m_aBookmarks.size()),"Invalid Index for vector");
 
     CompareEnum eNum;
     m_pRecordSet->CompareBookmarks(m_aBookmarks[nPos1],m_aBookmarks[nPos2],&eNum);

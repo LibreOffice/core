@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:39:08 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,9 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.APreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql)
-    : OStatement_Base( _pConnection ),m_aTypeInfo(_TypeInfo)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const ::rtl::OUString& sql)
+    : OStatement_Base( _pConnection )
+    ,m_aTypeInfo(_TypeInfo)
 {
     osl_incrementInterlockedCount( &m_refCount );
 
@@ -144,8 +145,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 // -------------------------------------------------------------------------
 void OPreparedStatement::disposing()
 {
-    if(m_RecordSet.IsValid())
-        m_RecordSet.Close();
+    m_xMetaData = NULL;
     if(m_pParameters)
         m_pParameters->Release();
     OStatement_Base::disposing();
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
     // Reset the statement handle, warning and saved Resultset
 
-    reset();
+    //  reset();
 
     // Call SQLExecute
 
@@ -235,9 +235,13 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     else
     {
         ADOParameter* pParam = NULL;
-        m_pParameters->get_Item(OLEVariant(parameterIndex-1),&pParam);
+        m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
+        WpADOParameter aParam(pParam);
         if(pParam)
-            pParam->put_Value(_Val);
+        {
+            ::rtl::OUString sParam = aParam.GetName();
+            CHECK_RETURN(aParam.PutValue(_Val));
+        }
     }
     ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 }
@@ -264,22 +268,30 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    WpADORecordset aSet;
-    aSet.Create();
+    // first clear the old things
+    m_xMetaData = NULL;
+    disposeResultSet();
+    if(m_RecordSet.IsValid())
+        m_RecordSet.Close();
+    m_RecordSet.clear();
+
+
+    // the create the new onces
+    m_RecordSet.Create();
     OLEVariant aCmd;
     aCmd.setIDispatch(m_Command);
     OLEVariant aCon;
     aCon.setNoArg();
-    CHECK_RETURN(aSet.put_CacheSize(m_nFetchSize))
-    CHECK_RETURN(aSet.put_MaxRecords(m_nMaxRows))
-    CHECK_RETURN(aSet.Open(aCmd,aCon,m_eCursorType,m_eLockType,adOpenUnspecified))
+    CHECK_RETURN(m_RecordSet.put_CacheSize(m_nFetchSize))
+    CHECK_RETURN(m_RecordSet.put_MaxRecords(m_nMaxRows))
+    CHECK_RETURN(m_RecordSet.Open(aCmd,aCon,m_eCursorType,m_eLockType,adOpenUnspecified))
 
-    CHECK_RETURN(aSet.get_CacheSize(m_nFetchSize))
-    CHECK_RETURN(aSet.get_MaxRecords(m_nMaxRows))
-    CHECK_RETURN(aSet.get_CursorType(m_eCursorType))
-    CHECK_RETURN(aSet.get_LockType(m_eLockType))
+    CHECK_RETURN(m_RecordSet.get_CacheSize(m_nFetchSize))
+    CHECK_RETURN(m_RecordSet.get_MaxRecords(m_nMaxRows))
+    CHECK_RETURN(m_RecordSet.get_CursorType(m_eCursorType))
+    CHECK_RETURN(m_RecordSet.get_LockType(m_eLockType))
 
-    OResultSet* pSet = new OResultSet(aSet,this);
+    OResultSet* pSet = new OResultSet(m_RecordSet,this);
     Reference< XResultSet > pRs = pSet;
     m_xResultSet = WeakReference<XResultSet>(pRs);
 
@@ -408,6 +420,12 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
+    if(x.is())
+    {
+        Sequence< sal_Int8 > aData;
+        x->readBytes(aData,length);
+        setBytes(parameterIndex,aData);
+    }
 }
 // -------------------------------------------------------------------------
 
@@ -443,5 +461,7 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLExc
 {
     return Sequence< sal_Int32 > ();
 }
+// -----------------------------------------------------------------------------
+
 
 

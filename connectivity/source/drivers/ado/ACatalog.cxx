@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ void OCatalog::refreshTables()
 
     if(m_pTables)
         delete m_pTables;
-    m_pTables = new OTables(*this,m_aMutex,aVector,pTables,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    m_pTables = new OTables(this,m_aMutex,aVector,pTables,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshViews()

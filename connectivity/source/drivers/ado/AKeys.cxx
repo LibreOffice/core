@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
     ADOKey* pKey = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pKey);
 
-    Reference< XNamed > xRet = new OAdoKey(isCaseSensitive(),pKey);
+    Reference< XNamed > xRet = new OAdoKey(isCaseSensitive(),m_pConnection,pKey);
 
     return xRet;
 }
@@ -107,7 +107,7 @@ void OKeys::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OKeys::createEmptyObject()
 {
-    OAdoKey* pNew = new OAdoKey(isCaseSensitive());
+    OAdoKey* pNew = new OAdoKey(isCaseSensitive(),m_pConnection);
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -120,12 +120,17 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
     if(xTunnel.is())
     {
         OAdoKey* pKey = (OAdoKey*)xTunnel->getSomething(OAdoKey:: getUnoTunnelImplementationId());
-        // To pass as column parameter to Key's Apppend method
-        OLEVariant vOptional;
-        vOptional.vt = VT_ERROR;
-        vOptional.scode = DISP_E_PARAMNOTFOUND;
+        if(pKey)
+        {
+            // To pass as column parameter to Key's Apppend method
+            OLEVariant vOptional;
+            vOptional.vt = VT_ERROR;
+            vOptional.scode = DISP_E_PARAMNOTFOUND;
 
-        m_pCollection->Append(OLEVariant(pKey->getImpl()),(KeyTypeEnum)getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)),vOptional);
+            m_pCollection->Append(OLEVariant(pKey->getImpl()),(KeyTypeEnum)getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)),vOptional);
+        }
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
+#endif
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -102,7 +106,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
     ADOTable* pTable = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pTable);
 
-    Reference< XNamed > xRet = new OAdoTable(isCaseSensitive(),pTable);
+    Reference< XNamed > xRet = new OAdoTable(isCaseSensitive(),m_pCatalog,pTable);
 
     return xRet;
 }
@@ -114,7 +118,7 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdoTable* pNew = new OAdoTable(isCaseSensitive());
+    OAdoTable* pNew = new OAdoTable(isCaseSensitive(),m_pCatalog);
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -127,7 +131,10 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     if(xTunnel.is())
     {
         OAdoTable* pTable = (OAdoTable*)xTunnel->getSomething(OAdoTable:: getUnoTunnelImplementationId());
-        m_pCollection->Append(OLEVariant(pTable->getImpl()));
+        if(pTable)
+            m_pCollection->Append(OLEVariant(pTable->getImpl()));
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

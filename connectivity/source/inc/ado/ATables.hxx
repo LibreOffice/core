@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,24 +67,31 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
+#endif
 
 namespace connectivity
 {
     namespace ado
     {
+        class OCatalog;
         class OTables : public sdbcx::OCollection
         {
-            ADOTables* m_pCollection;
+            ADOTables*  m_pCollection;
+            OCatalog*   m_pCatalog;
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
             void setComments(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
-            OTables(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            OTables(OCatalog* _pParent, ::osl::Mutex& _rMutex,
                 const ::std::vector< ::rtl::OUString> &_rVector,
-                ADOTables* _pCollection,sal_Bool _bCase) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
+                ADOTables* _pCollection,
+                sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                 ,m_pCollection(_pCollection)
+                ,m_pCatalog(_pParent)
             {
                 if(m_pCollection)
                     m_pCollection->AddRef();

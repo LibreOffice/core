@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,34 +73,29 @@ namespace connectivity
 {
     namespace ado
     {
+        class OConnection;
         typedef sdbcx::OColumn OColumn_ADO;
         class OAdoColumn :  public OColumn_ADO
         {
             WpADOColumn     m_aColumn;
+            OConnection*    m_pConnection;
+            ::rtl::OUString m_ReferencedColumn;
+            sal_Bool        m_IsAscending;
+
+            void fillPropertyValues();
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const ::com::sun::star::uno::Any& rValue
                                      )
                                      throw (::com::sun::star::uno::Exception);
-            virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle) const;
         public:
             DECLARE_CTY_DEFAULTS( OColumn_ADO);
 
-            OAdoColumn(sal_Bool _bCase,_ADOColumn* _pColumn = NULL);
-            OAdoColumn(const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _TypeName,
-                    const ::rtl::OUString& _DefaultValue,
-                    sal_Int32       _IsNullable,
-                    sal_Int32       _Precision,
-                    sal_Int32       _Scale,
-                    sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool _bCase);
-
+            OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
+            OAdoColumn(sal_Bool _bCase,OConnection* _pConnection);
+            // ODescriptor
+            virtual void construct();
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,26 +78,21 @@ namespace connectivity
     {
         typedef sdbcx::OIndex OIndex_ADO;
 
+        class OConnection;
         class OAdoIndex :    public OIndex_ADO
         {
             WpADOIndex      m_aIndex;
+            OConnection*    m_pConnection;
         protected:
-            virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
+            void fillPropertyValues();
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
         public:
             virtual void refreshColumns();
         public:
             DECLARE_CTY_DEFAULTS( OIndex_ADO);
 
-            OAdoIndex(sal_Bool _bCase,  ADOIndex* _pIndex=NULL);
-            OAdoIndex( const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Catalog,
-                    sal_Bool _isUnique,
-                    sal_Bool _isPrimaryKeyIndex,
-                    sal_Bool _isClustered,
-                    sal_Bool _bCase
-                );
-
+            OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
+            OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection);
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

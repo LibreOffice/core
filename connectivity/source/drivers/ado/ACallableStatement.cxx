@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACallableStatement.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,13 @@ IMPLEMENT_SERVICE_INFO(OCallableStatement,"com.sun.star.sdbcx.ACallableStatement
 
 #define GET_PARAM()                                                 \
     ADOParameter* pParam = NULL;                                    \
-    m_pParameters->get_Item(OLEVariant(columnIndex-1),&pParam);     \
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);      \
     if(pParam)                                                      \
         pParam->get_Value(&m_aValue);
 //**************************************************************
 //************ Class: java.sql.CallableStatement
 //**************************************************************
-OCallableStatement::OCallableStatement( OConnection* _pConnection,const ::std::vector<connectivity::OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql )
+OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const ::rtl::OUString& sql )
                 : OPreparedStatement( _pConnection, _TypeInfo, sql )
 {
     m_Command.put_CommandType(adCmdStoredProc);
@@ -152,7 +152,7 @@ sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex ) throw(SQL
 sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     GET_PARAM()
-    return (sal_Int64)m_aValue.getCurrency();
+    return (sal_Int64)m_aValue.getCurrency().int64;
 }
 // -------------------------------------------------------------------------
 
@@ -193,7 +193,7 @@ sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(S
 void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
     ADOParameter* pParam = NULL;
-    m_pParameters->get_Item(OLEVariant(parameterIndex-1),&pParam);
+    m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
     if(pParam)
     {
         pParam->put_Type(ADOS::MapJdbc2ADOType(sqlType));
@@ -204,12 +204,12 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
 void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
     ADOParameter* pParam = NULL;
-    m_pParameters->get_Item(OLEVariant(parameterIndex-1),&pParam);
+    m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
     if(pParam)
     {
         pParam->put_Type(ADOS::MapJdbc2ADOType(sqlType));
         pParam->put_Direction(adParamOutput);
-        pParam->put_NumericScale(scale);
+        pParam->put_NumericScale((sal_Int8)scale);
     }
 }
 // -------------------------------------------------------------------------

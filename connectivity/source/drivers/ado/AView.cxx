@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+
 // -------------------------------------------------------------------------
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -195,14 +196,15 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
                     if(!aVar.isNull() && !aVar.isEmpty())
                     {
                         ADOCommand* pCom = (ADOCommand*)aVar.getIDispatch();
-                        BSTR aBSTR; pCom->get_CommandText(&aBSTR);
-                        ::rtl::OUString sRetStr(aBSTR);
-                        SysFreeString(aBSTR);
-                        rValue <<= sRetStr;
+                        OLEString aBSTR;
+                        pCom->get_CommandText(&aBSTR);
+                        rValue <<= (::rtl::OUString) aBSTR;
                     }
                 }
                 break;
         }
     }
 }
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:40:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,71 +159,87 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
 // -------------------------------------------------------------------------
 sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
 {
+    sal_Int32 nType;
     switch (eType)
     {
         case adUnsignedSmallInt:
-        case adSmallInt:            return DataType::SMALLINT; break;
+        case adSmallInt:            nType = DataType::SMALLINT;     break;
         case adUnsignedInt:
-        case adInteger:             return DataType::INTEGER; break;
+        case adInteger:             nType = DataType::INTEGER;      break;
         case adUnsignedBigInt:
-        case adBigInt:              return DataType::BIGINT; break;
-        case adSingle:              return DataType::FLOAT; break;
-        case adDouble:              return DataType::DOUBLE; break;
-        case adCurrency:            return DataType::DOUBLE; break;
+        case adBigInt:              nType = DataType::BIGINT;       break;
+        case adSingle:              nType = DataType::FLOAT;        break;
+        case adDouble:              nType = DataType::DOUBLE;       break;
+        case adCurrency:            nType = DataType::DOUBLE;       break;
         case adVarNumeric:
-        case adNumeric:             return DataType::NUMERIC; break;
-        case adDecimal:             return DataType::DECIMAL; break;
+        case adNumeric:             nType = DataType::NUMERIC;      break;
+        case adDecimal:             nType = DataType::DECIMAL;      break;
         case adDate:
-        case adDBDate:              return DataType::DATE; break;
-        case adDBTime:              return DataType::TIME; break;
-        case adDBTimeStamp:         return DataType::TIMESTAMP; break;
-        case adBoolean:             return DataType::BIT; break;
+        case adDBDate:              nType = DataType::DATE;         break;
+        case adDBTime:              nType = DataType::TIME;         break;
+        case adDBTimeStamp:         nType = DataType::TIMESTAMP;    break;
+        case adBoolean:             nType = DataType::BIT;          break;
+        case adArray:               nType = DataType::ARRAY;        break;
         case adBinary:
-        case adGUID:                return DataType::BINARY; break;
+        case adGUID:                nType = DataType::BINARY;       break;
         case adBSTR:
         case adVarWChar:
-        case adVarChar:             return DataType::VARCHAR; break;
-        case adLongVarWChar:
-        case adLongVarChar:         return DataType::LONGVARCHAR; break;
-        case adVarBinary:           return DataType::VARBINARY; break;
-        case adLongVarBinary:       return DataType::LONGVARBINARY; break;
         case adWChar:
-        case adChar:                return DataType::CHAR; break;
+        case adVarChar:             nType = DataType::VARCHAR;      break;
+        case adLongVarWChar:
+        case adLongVarChar:         nType = DataType::LONGVARCHAR;  break;
+        case adVarBinary:           nType = DataType::VARBINARY;    break;
+        case adLongVarBinary:       nType = DataType::LONGVARBINARY;break;
+        case adChar:                nType = DataType::CHAR;         break;
         case adUnsignedTinyInt:
-        case adTinyInt:             return DataType::TINYINT; break;
+        case adTinyInt:             nType = DataType::TINYINT;      break;
+        case adEmpty:               nType = DataType::SQLNULL;      break;
+        case adUserDefined:
+        case adPropVariant:
+        case adFileTime:
+        case adChapter:
+        case adIDispatch:
+        case adIUnknown:
+        case adError:
+        case adVariant:
+                                    nType = DataType::OTHER;        break;
         default:
+            OSL_ENSURE(0,"MapADOType2Jdbc: Unknown Type!");
             ;
     }
-    return DataType::TINYINT;
+    return nType;
 }
 // -------------------------------------------------------------------------
 DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType)
 {
     switch (_nType)
     {
-        case DataType::SMALLINT:            return adSmallInt;          break;
+        case DataType::SMALLINT:        return adSmallInt;          break;
         case DataType::INTEGER:         return adInteger;           break;
         case DataType::BIGINT:          return adBigInt;            break;
-        case DataType::FLOAT:               return adSingle;            break;
+        case DataType::FLOAT:           return adSingle;            break;
         case DataType::DOUBLE:          return adDouble;            break;
         case DataType::NUMERIC:         return adNumeric;           break;
         case DataType::DECIMAL:         return adDecimal;           break;
-        case DataType::DATE:                return adDBDate;            break;
-        case DataType::TIME:                return adDBTime;            break;
-        case DataType::TIMESTAMP:           return adDBTimeStamp;       break;
+        case DataType::DATE:            return adDBDate;            break;
+        case DataType::TIME:            return adDBTime;            break;
+        case DataType::TIMESTAMP:       return adDBTimeStamp;       break;
         case DataType::BIT:             return adBoolean;           break;
         case DataType::BINARY:          return adBinary;            break;
         case DataType::VARCHAR:         return adVarWChar;          break;
         case DataType::LONGVARCHAR:     return adLongVarWChar;      break;
-        case DataType::VARBINARY:           return adVarBinary;         break;
-        case DataType::LONGVARBINARY:       return adLongVarBinary;     break;
-        case DataType::CHAR:                return adWChar;             break;
+        case DataType::VARBINARY:       return adVarBinary;         break;
+        case DataType::LONGVARBINARY:   return adLongVarBinary;     break;
+        case DataType::CHAR:            return adWChar;             break;
         case DataType::TINYINT:         return adTinyInt;           break;
     default:
+        OSL_ENSURE(0,"MapADOType2Jdbc: Unknown Type!");
             ;
     }
     return adEmpty;
 }
+// -----------------------------------------------------------------------------
+
 
 
 
