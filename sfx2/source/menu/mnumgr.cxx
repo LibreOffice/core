@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-26 05:14:45 $
+ *  last change: $Author: cd $ $Date: 2002-05-08 13:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,6 +1258,7 @@ void SfxMenuBarManager::RestoreSlotIds( Menu* pMenu, USHORT nPopupMenuId )
                         if ( pSlot )
                         {
                             USHORT          nNewId      = pSlot->GetSlotId();
+                            ULONG           nHelpId     = pMenu->GetHelpId( nId );
                             ULONG           nUserValue  = pMenu->GetUserValue( nId );
                             MenuItemBits    nBits       = pMenu->GetItemBits( nId );
 
@@ -1270,6 +1271,13 @@ void SfxMenuBarManager::RestoreSlotIds( Menu* pMenu, USHORT nPopupMenuId )
                             pMenu->RemoveItem( nSVPos );
                             pMenu->InsertItem( nNewId, aLabel, nBits, nSVPos );
                             pMenu->SetUserValue( nNewId, nUserValue );
+                            pMenu->SetItemCommand( nNewId, aCommand );
+
+                            // Set help ID correctly
+                            if ( nHelpId > 0 )
+                                pMenu->SetHelpId( nNewId, nHelpId );
+                            else
+                                pMenu->SetHelpId( nNewId, nNewId );
                             break;
                         }
                     }
