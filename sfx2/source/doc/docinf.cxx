@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-08-13 07:13:08 $
+ *  last change: $Author: mba $ $Date: 2001-08-29 16:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,10 @@ static const char __FAR_DATA pDocInfoHeader[] = "SfxDocumentInfo";
 #define VERSION 11
 #define STREAM_BUFFER_SIZE 2048
 
+#define VT_I2         2
 #define VT_I4         3
 #define VT_LPSTR      30
+#define VT_LPWSTR     31
 #define VT_FILETIME   64
 
 #define PID_TITLE              0x02
@@ -145,12 +147,24 @@ class SfxPSStringProperty_Impl : public SfxPSProperty_Impl
 {
 private:
     String aString;
+    CharSet nEncoding;
+    BOOL bIsUniCode;
 
 public:
     SfxPSStringProperty_Impl( UINT32 nIdP, const String& aStr ) :
-        aString(aStr), SfxPSProperty_Impl( nIdP, VT_LPSTR ) {}
+        aString(aStr), SfxPSProperty_Impl( nIdP, VT_LPSTR ), bIsUniCode(FALSE)
+    {
+        nEncoding = osl_getThreadTextEncoding();
+    }
+
     SfxPSStringProperty_Impl( UINT32 nIdP ) :
-        SfxPSProperty_Impl( nIdP, VT_LPSTR ) {}
+        SfxPSProperty_Impl( nIdP, VT_LPSTR ), bIsUniCode(FALSE)
+    {
+        nEncoding = osl_getThreadTextEncoding();
+    }
+
+    void SetCodePage( UINT16 nCodePage );
+    void SetIsUniCode() { bIsUniCode = TRUE; }
 
     virtual ULONG   Save( SvStream& rStream );
     virtual ULONG   Load( SvStream& rStream );
@@ -159,11 +173,70 @@ public:
     const String&   GetString() { return aString; }
 };
 
+
+void SfxPSStringProperty_Impl::SetCodePage( UINT16 nCodePage )
+{
+    switch ( nCodePage )
+    {
+        case 1252:
+            nEncoding = RTL_TEXTENCODING_MS_1252;
+            break;
+        case 1250:
+            nEncoding = RTL_TEXTENCODING_MS_1250;
+            break;
+        case 1251:
+            nEncoding = RTL_TEXTENCODING_MS_1251;
+            break;
+        case 1253:
+            nEncoding = RTL_TEXTENCODING_MS_1253;
+            break;
+        case 1254:
+            nEncoding = RTL_TEXTENCODING_MS_1254;
+            break;
+        case 1255:
+            nEncoding = RTL_TEXTENCODING_MS_1255;
+            break;
+        case 1256:
+            nEncoding = RTL_TEXTENCODING_MS_1256;
+            break;
+        case 1257:
+            nEncoding = RTL_TEXTENCODING_MS_1257;
+            break;
+        case 1258:
+            nEncoding = RTL_TEXTENCODING_MS_1258;
+            break;
+        case 874:
+            nEncoding = RTL_TEXTENCODING_MS_874;
+            break;
+        case 932:
+            nEncoding = RTL_TEXTENCODING_MS_932;
+            break;
+        case 936:
+            nEncoding = RTL_TEXTENCODING_MS_936;
+            break;
+        case 949:
+            nEncoding = RTL_TEXTENCODING_MS_949;
+            break;
+        case 950:
+            nEncoding = RTL_TEXTENCODING_MS_950;
+            break;
+        case 1361:
+            nEncoding = RTL_TEXTENCODING_MS_1361;
+            break;
+        case 65000 :
+            nEncoding = RTL_TEXTENCODING_UTF7;
+            break;
+        case 65001 :
+            nEncoding = RTL_TEXTENCODING_UTF8;
+            break;
+    }
+}
+
 //-------------------------------------------------------------------------
 
 ULONG SfxPSStringProperty_Impl::Save( SvStream& rStream )
 {
-    ByteString aTemp( aString, GetSOStoreTextEncoding( rStream.GetStreamCharSet() ) );
+    ByteString aTemp( aString, rStream.GetStreamCharSet() );
     UINT32 nLen = aTemp.Len();
     rStream << (UINT32)( nLen + 1 );
     rStream.Write( aTemp.GetBuffer(), nLen );
@@ -179,9 +252,27 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
     rStream >> nLen;
     if ( nLen > 0 )
     {
-        ByteString aTemp;
-        rStream.Read( aTemp.AllocBuffer( (xub_StrLen)( nLen - 1 ) ), nLen );
-        aString = String( aTemp, GetSOLoadTextEncoding( rStream.GetStreamCharSet() ) );
+        if ( bIsUniCode )
+        {
+            sal_Unicode* pString = new sal_Unicode[ nLen ];
+            for ( UINT32 i = 0; i < nLen; i++ )
+                rStream >> pString[ i ];
+            if ( pString[ i - 1 ] == 0 )
+            {
+                if ( nLen > 1 )
+                    aString = String( pString, (USHORT) nLen - 1 );
+                else
+                    aString = String();
+            }
+
+            delete pString;
+        }
+        else
+        {
+            ByteString aTemp;
+            rStream.Read( aTemp.AllocBuffer( (xub_StrLen)( nLen - 1 ) ), nLen );
+            aString = String( aTemp, nEncoding );
+        }
     }
     else
         aString.Erase();
@@ -436,8 +527,8 @@ ULONG SfxPS_Impl::Load( SvStream& rStream )
     }
     SetSectionName( aName );
 
-    if ( nOsMinor == 5 )
-        rStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+/*    if ( nOsMinor == 5 )
+        rStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );*/
 
     return aSection.Load( rStream );
 }
@@ -446,6 +537,8 @@ ULONG SfxPSSection_Impl::Load( SvStream& rStream )
 {
 //Nur eine Section laden: ( Use of more than 1 section is discouraged
 //and will not be supported in future windows apis).
+
+    UINT16 nCodePage = 0;
 
     UINT32 nPos;
     rStream >> aId;
@@ -476,6 +569,7 @@ ULONG SfxPSSection_Impl::Load( SvStream& rStream )
             case VT_LPSTR:
             {
                 pProp = new SfxPSStringProperty_Impl( pKeyIds[ n ] );
+                ((SfxPSStringProperty_Impl*)pProp)->SetCodePage( nCodePage );
                 break;
             }
             case VT_FILETIME:
@@ -483,7 +577,22 @@ ULONG SfxPSSection_Impl::Load( SvStream& rStream )
                 pProp = new SfxPSDateTimeProperty_Impl( pKeyIds[ n ] );
                 break;
             }
+            case VT_LPWSTR:
+            {
+                pProp = new SfxPSStringProperty_Impl( pKeyIds[ n ] );
+                ((SfxPSStringProperty_Impl*)pProp)->SetIsUniCode();
+                break;
+            }
+            case VT_I2:
+            {
+                if( pKeyIds[ n ] == 1 )
+                {
+                    rStream >> nCodePage;
+                }
+                break;
+            }
         }
+
         if( pProp )
         {
             nErr = pProp->Load( rStream );
