@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:32:45 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,32 +67,14 @@
 #include <svdata.hxx>
 #include <salinst.h>
 #include <saldisp.hxx>
+#include <salsys.h>
 #include <cstdio>
 
-
-class X11SalSystem : public SalSystem
-{
-public:
-    X11SalSystem() {}
-    virtual ~X11SalSystem();
-
-    // overload pure virtual methods
-    virtual bool GetSalSystemDisplayInfo( DisplayInfo& rInfo );
-    virtual int ShowNativeDialog( const String& rTitle,
-                                  const String& rMessage,
-                                  const std::list< String >& rButtons,
-                                  int nDefButton );
-    virtual int ShowNativeMessageBox( const String& rTitle,
-                                      const String& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton);
-};
 
 SalSystem* X11SalInstance::CreateSalSystem()
 {
     return new X11SalSystem();
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -133,57 +115,19 @@ int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage
     if( pSVData->mpIntroWindow )
         pSVData->mpIntroWindow->Hide();
 
-    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator();
-    if( pIntegrator->GetDtType() == DtGNOME )
-    {
-        ByteString aCmdLine( "msgbox-gnome ");
-        int nButton = 0;
-        for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
-        {
-            if( nButton == nDefButton )
-                aCmdLine.Append( "-defaultbutton" );
-            else
-                aCmdLine.Append( "-button" );
-            nButton++;
-            aCmdLine.Append( " \"" );
-            aCmdLine.Append( ByteString( *it, RTL_TEXTENCODING_UTF8 ) );
-            aCmdLine.Append( "\" " );
-        }
-        aCmdLine.Append( " \"" );
-        aCmdLine.Append( ByteString( rTitle, RTL_TEXTENCODING_UTF8 ) );
-        aCmdLine.Append( "\" \"" );
-        aCmdLine.Append( ByteString( rMessage, RTL_TEXTENCODING_UTF8 ) );
-        aCmdLine.Append( "\" 2>/dev/null" );
+    WarningBox aWarn( NULL, WB_STDWORK, rMessage );
+    aWarn.SetText( rTitle );
+    aWarn.Clear();
 
-        FILE* fp = popen( aCmdLine.GetBuffer(), "r" );
-        if( fp )
-        {
-            ByteString aAnswer;
-            char buf[16];
-            while( fgets( buf, sizeof( buf ), fp ) )
-            {
-                aAnswer.Append( buf );
-            }
-            pclose( fp );
-            nRet = aAnswer.ToInt32();
-        }
-    }
-    else // default to a VCL dialogue since we do not have a native implementation
+    USHORT nButton = 0;
+    for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
-        WarningBox aWarn( NULL, WB_STDWORK, rMessage );
-        aWarn.SetText( rTitle );
-        aWarn.Clear();
-
-        USHORT nButton = 0;
-        for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
-        {
             aWarn.AddButton( *it, nButton+1, nButton == (USHORT)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
             nButton++;
-        }
-        aWarn.SetFocusButton( (USHORT)nDefButton+1 );
-
-        nRet = ((int)aWarn.Execute()) - 1;
     }
+    aWarn.SetFocusButton( (USHORT)nDefButton+1 );
+
+    nRet = ((int)aWarn.Execute()) - 1;
 
     // normalize behaviour, actually this should never happen
     if( nRet < -1 || nRet >= rButtons.size() )
