@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-09-27 09:46:58 $
+#   last change: $Author: jp $ $Date: 2000-09-28 12:07:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,30 +88,7 @@ SLOFILES =  \
 
 OBJFILES = $(OBJ)$/w4wflt.obj
 
-.IF "$(CPU)"=="S"
-SLOFILES +=  \
-        $(SLO)$/autorec.obj
-OBJFILES += \
-        $(OBJ)$/autorec.obj
-.ENDIF
-
-
 # --- Tagets -------------------------------------------------------
 
-.IF "$(OS)"=="SOLARIS"
-.IF "$(CPU)"=="S"
-ALL: $(OBJ)$/autorec.obj $(SLO)$/autorec.obj ALLTAR
-.ENDIF
-.ENDIF
-
 .INCLUDE :  target.mk
-
-
-$(OBJ)$/autorec.obj:
-    $(COPY) autorec.o $(OBJ)$/autorec.o
-    touch $@
-
-$(SLO)$/autorec.obj:
-    $(COPY) autorec.o $(SLO)$/autorec.o
-    touch $@
 
