@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mi $ $Date: 2001-06-11 14:27:44 $
+#   last change: $Author: bei $ $Date: 2001-09-14 06:44:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,8 @@ IDLFILES=\
     XEnumerationAccess.idl\
     XHierarchicalName.idl\
     XHierarchicalNameAccess.idl\
+    XHierarchicalNameReplace.idl\
+    XHierarchicalNameContainer.idl\
     XImplicitIDAccess.idl\
     XImplicitIDContainer.idl\
     XImplicitIDReplace.idl\
