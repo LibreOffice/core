@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:58:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace dbaui
             SbaTableQueryBrowser::EntryType eType;
 
             DBTreeListUserData();
+            ~DBTreeListUserData();
         };
 
         static sal_uInt16 getImageResId(SbaTableQueryBrowser::EntryType _eType);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 15:26:23 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,16 +417,18 @@ Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void
     aSupported[2] = ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControl");
     return aSupported;
 }
-
+DBG_NAME(SbaXGridControl );
 //---------------------------------------------------------------------------------------
 SbaXGridControl::SbaXGridControl(const Reference< XMultiServiceFactory >& _rM)
     : FmXGridControl(_rM)
 {
+    DBG_CTOR(SbaXGridControl ,NULL);
 }
 
 //---------------------------------------------------------------------------------------
 SbaXGridControl::~SbaXGridControl()
 {
+    DBG_DTOR(SbaXGridControl ,NULL);
 }
 
 //---------------------------------------------------------------------------------------
@@ -573,17 +575,19 @@ void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 //=======================================================================================
 // SbaXGridPeer
 //=======================================================================================
-
+DBG_NAME(SbaXGridPeer );
 //---------------------------------------------------------------------------------------
 SbaXGridPeer::SbaXGridPeer(const Reference< XMultiServiceFactory >& _rM)
 : FmXGridPeer(_rM)
 ,m_aStatusListeners(m_aMutex)
 {
+    DBG_CTOR(SbaXGridPeer ,NULL);
 }
 
 //---------------------------------------------------------------------------------------
 SbaXGridPeer::~SbaXGridPeer()
 {
+    DBG_DTOR(SbaXGridPeer ,NULL);
 }
 
 //---------------------------------------------------------------------------------------
@@ -1019,7 +1023,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 //==================================================================
 // SbaGridControl
 //==================================================================
-
+DBG_NAME(SbaGridControl );
 //---------------------------------------------------------------------------------------
 SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
                                Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
@@ -1032,11 +1036,13 @@ SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
     ,m_pMasterListener(NULL)
     ,m_bActivatingForDrop(sal_False)
 {
+    DBG_CTOR(SbaGridControl ,NULL);
 }
 
 //---------------------------------------------------------------------------------------
 SbaGridControl::~SbaGridControl()
 {
+    DBG_DTOR(SbaGridControl ,NULL);
 }
 
 //---------------------------------------------------------------------------------------

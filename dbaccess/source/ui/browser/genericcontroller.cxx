@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 06:47:21 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,8 +281,17 @@ Sequence< Type > SAL_CALL OGenericUnoController::getTypes(  ) throw (RuntimeExce
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL OGenericUnoController::getImplementationId(  ) throw (RuntimeException)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 // -------------------------------------------------------------------------

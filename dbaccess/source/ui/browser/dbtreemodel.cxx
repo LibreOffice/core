@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:58:35 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,17 @@ namespace dbaui
     //========================================================================
     //= DBTreeListModel
     //========================================================================
+    DBG_NAME(DBTreeListUserData);
     //------------------------------------------------------------------------
     DBTreeListModel::DBTreeListUserData::DBTreeListUserData()
         :eType(SbaTableQueryBrowser::etQuery)
     {
+        DBG_CTOR(DBTreeListUserData,NULL);
+    }
+    //------------------------------------------------------------------------
+    DBTreeListModel::DBTreeListUserData::~DBTreeListUserData()
+    {
+        DBG_DTOR(DBTreeListUserData,NULL);
     }
 
     //------------------------------------------------------------------------
@@ -103,6 +110,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/14 11:58:35  oj
+ *  #86744# some changes for entries and views
+ *
  *  Revision 1.7  2001/04/26 11:37:51  fs
  *  file is alive, again - added support for data source associated bookmarks
  *
