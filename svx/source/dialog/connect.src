@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:31:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_TYPE
     {
@@ -154,6 +155,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Zkosení čáry";
         Text[ hebrew ] = "‮הטית קו‬";
         Text[ hindi ] = "रेखा तिरछा";
+        Text[ slovak ] = "Skosenie čiary";
     };
     FixedText FT_LINE_1
     {
@@ -186,6 +188,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Čára 1";
         Text[ hebrew ] = "‮קו 1‬";
         Text[ hindi ] = "रेखा ~1";
+        Text[ slovak ] = "Čiara ~1";
     };
     MetricField MTR_FLD_LINE_1
     {
@@ -234,6 +237,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Čára 2";
         Text[ hebrew ] = "‮קו 2‬";
         Text[ hindi ] = "रेखा ~2";
+        Text[ slovak ] = "Čiara ~2";
     };
     MetricField MTR_FLD_LINE_2
     {
@@ -282,6 +286,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Čára 3";
         Text[ hebrew ] = "‮קו 3‬";
         Text[ hindi ] = "रेखा ~3";
+        Text[ slovak ] = "Čiara ~3";
     };
     MetricField MTR_FLD_LINE_3
     {
@@ -330,6 +335,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Řádkování";
         Text[ hebrew ] = "‮ריווח שורה‬";
         Text[ hindi ] = "रेखा के बीच अंतर देना";
+        Text[ slovak ] = "Riadkovanie";
     };
     FixedText FT_HORZ_1
     {
@@ -362,6 +368,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Vodorovný počátek";
         Text[ hebrew ] = "‮החל אופקי‬";
         Text[ hindi ] = "~समतल प्रारंभ";
+        Text[ slovak ] = "V~odorovný začiatok";
     };
     MetricField MTR_FLD_HORZ_1
     {
@@ -410,6 +417,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Vodorovný konec";
         Text[ hebrew ] = "‮קצה אופקי‬";
         Text[ hindi ] = "स~मतल अंत";
+        Text[ slovak ] = "Vodorovný ~koniec";
     };
     MetricField MTR_FLD_HORZ_2
     {
@@ -458,6 +466,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Svislý počátek";
         Text[ hebrew ] = "‮החל אנכי‬";
         Text[ hindi ] = "~लम्ब प्रारंभ";
+        Text[ slovak ] = "Zvislý ~začiatok";
     };
     MetricField MTR_FLD_VERT_1
     {
@@ -506,6 +515,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ czech ] = "Svislý konec";
         Text[ hebrew ] = "‮קצה אנכי‬";
         Text[ hindi ] = "लम्ब ~अंत";
+        Text[ slovak ] = "Z~vislý koniec";
     };
     MetricField MTR_FLD_VERT_2
     {
@@ -555,6 +565,7 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ czech ] = "Náhled";
         QuickHelpText[ hebrew ] = "Vorschau";
         QuickHelpText[ hindi ] = "पूर्वदृश्य";
+        QuickHelpText[ slovak ] = "Náhľad";
     };
     Text[ chinese_simplified ] = "连接符";
     Text[ russian ] = "�������������� �����";
@@ -572,8 +583,11 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ czech ] = "Spojnice";
     Text[ hebrew ] = "‮מחבר‬";
     Text[ hindi ] = "कनेक्टर";
+    Text[ slovak ] = "Spojnica";
 };
  // ******************************************************************* EOF
+
+
 
 
 
