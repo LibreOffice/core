@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:33:59 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifndef GCC
+#   pragma hdrstop
+#endif
 
 #include <tools/ref.hxx>
 #include <FilterConfigItem.hxx>
@@ -82,8 +84,9 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK_PIX ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL_PIX ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP_PIX ) ),
-                aGrpMode            ( this, ResId( GRP_MODE_PIX ) ),
-                aCbbRes             ( this, ResId( CBB_RES_PIX ) ),
+                aLbColors           ( this, ResId( LB_COLORS ) ),
+                aCbxRLE             ( this, ResId( CBX_RLE ) ),
+                aGrpColors          ( this, ResId( GRP_COLORS ) ),
                 aRbOriginal         ( this, ResId( RB_ORIGINAL_PIX ) ),
                 aRbRes              ( this, ResId( RB_RES_PIX ) ),
                 aRbSize             ( this, ResId( RB_SIZE_PIX ) ),
@@ -91,9 +94,8 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 aMtfSizeX           ( this, ResId( MTF_SIZEX_PIX ) ),
                 aFtSizeY            ( this, ResId( FT_SIZEY_PIX ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY_PIX ) ),
-                aGrpColors          ( this, ResId( GRP_COLORS ) ),
-                aLbColors           ( this, ResId( LB_COLORS ) ),
-                aCbxRLE             ( this, ResId( CBX_RLE ) ),
+                aGrpMode            ( this, ResId( GRP_MODE_PIX ) ),
+                aCbbRes             ( this, ResId( CBB_RES_PIX ) ),
                 pMgr                ( rPara.pResMgr ),
                 aExt                ( rPara.aFilterExt ),
                 rFltCallPara        ( rPara )
@@ -161,6 +163,9 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
             aMtfSizeY.SetUnit( rPara.eFieldUnit );
         }
         break;
+
+        default:
+        break;      // -Wall  multiple values not handled.
     }
 
     switch ( nMode )
@@ -380,6 +385,8 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
             aMtfSizeY.SetUnit( rPara.eFieldUnit );
         }
         break;
+        default:
+            break;  // -Wall Multiple values not handled.
     }
 
     switch ( nMode )
