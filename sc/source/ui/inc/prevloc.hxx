@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-22 09:55:59 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,47 @@ class ScAddress;
 class ScRange;
 class ScDocument;
 
+struct ScPreviewColRowInfo
+{
+    BOOL    bIsHeader;
+    USHORT  nDocIndex;
+    long    nPixelStart;
+    long    nPixelEnd;
+
+    void Set( BOOL bHeader, USHORT nIndex, long nStart, long nEnd )
+    {
+        bIsHeader   = bHeader;
+        nDocIndex   = nIndex;
+        nPixelStart = nStart;
+        nPixelEnd   = nEnd;
+    }
+};
+
+class ScPreviewTableInfo
+{
+    USHORT                  nTab;
+    USHORT                  nCols;
+    USHORT                  nRows;
+    ScPreviewColRowInfo*    pColInfo;
+    ScPreviewColRowInfo*    pRowInfo;
+
+public:
+            ScPreviewTableInfo();
+            ~ScPreviewTableInfo();
+
+    USHORT                      GetTab() const      { return nTab; }
+    USHORT                      GetCols() const     { return nCols; }
+    USHORT                      GetRows() const     { return nRows; }
+    const ScPreviewColRowInfo*  GetColInfo() const  { return pColInfo; }
+    const ScPreviewColRowInfo*  GetRowInfo() const  { return pRowInfo; }
+
+    void    SetTab( USHORT nNewTab );
+    void    SetColInfo( USHORT nCount, ScPreviewColRowInfo* pNewInfo );
+    void    SetRowInfo( USHORT nCount, ScPreviewColRowInfo* pNewInfo );
+    void    LimitToArea( const Rectangle& rPixelArea );
+};
+
+
 class ScPreviewLocationData
 {
     Window*     pWindow;
@@ -94,12 +135,18 @@ public:
 
     void    SetCellMapMode( const MapMode& rMapMode );
     void    Clear();
-    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange );
-    void    AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol );
-    void    AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow );
+    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow );
+    void    AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol );
+    void    AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow, BOOL bRepRow );
     void    AddHeaderFooter( const Rectangle& rRect );
     void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
     void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
+
+    //  Get info on visible columns/rows in the visible area
+    void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
+
+    //  Check if any cells (including column/row headers) are in the visible area
+    BOOL    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
 
     BOOL    GetCell( const Point& rPos, ScAddress& rCellPos, Rectangle& rCellRect ) const;
     BOOL    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;

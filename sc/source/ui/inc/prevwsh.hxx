@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:38:48 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,12 @@ class ScrollBar;
 
 #include "shellids.hxx"
 
+class ScDocument;
 class ScDocShell;
 class ScPreview;
 struct ScHeaderFieldData;
+class ScPreviewLocationData;
+class CommandEvent;
 
 //==================================================================
 
@@ -94,6 +97,8 @@ class ScPreviewShell: public SfxViewShell
 
     String          aSourceData;            // ViewData
     SvxZoomType     eZoom;
+
+    SfxBroadcaster* pAccessibilityBroadcaster;
 
 private:
     void            Construct( Window* pParent );
@@ -155,6 +160,14 @@ public:
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
     virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
     virtual USHORT          Print( SfxProgress& rProgress, PrintDialog* pPrintDialog = NULL );
+
+    void    AddAccessibilityObject( SfxListener& rObject );
+    void    RemoveAccessibilityObject( SfxListener& rObject );
+    void    BroadcastAccessibility( const SfxHint &rHint );
+    BOOL    HasAccessibilityObjects();
+
+    const ScPreviewLocationData& GetLocationData();
+    ScDocument*     GetDocument();
 };
 
 

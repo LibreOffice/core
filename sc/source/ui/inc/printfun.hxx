@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-22 09:55:59 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,11 +351,14 @@ private:
                                     long nScrX, long nScrY,
                                     BOOL bShLeft, BOOL bShTop, BOOL bShRight, BOOL bShBottom );
     void            LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
-                                    long nScrX, long nScrY, ScPreviewLocationData& rLocationData );
+                                    long nScrX, long nScrY, BOOL bRepCol, BOOL bRepRow,
+                                    ScPreviewLocationData& rLocationData );
     void            PrintColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY );
     void            PrintRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY );
-    void            LocateColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY, ScPreviewLocationData& rLocationData );
-    void            LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY, ScPreviewLocationData& rLocationData );
+    void            LocateColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY,
+                                BOOL bRepCol, ScPreviewLocationData& rLocationData );
+    void            LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY,
+                                BOOL bRepRow, ScPreviewLocationData& rLocationData );
     void            PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nStartY,
                                     BOOL bDoPrint, ScPreviewLocationData* pLocationData );
 

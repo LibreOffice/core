@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include "AccessibleDocumentBase.hxx"
 #endif
 
+class ScPreviewShell;
+
 class ScAccessibleDocumentPagePreview
     :   public ScAccessibleDocumentBase
 {
@@ -74,7 +76,8 @@ public:
     //=====  internal  ========================================================
     ScAccessibleDocumentPagePreview(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ScPreviewShell* pViewShell );
 protected:
     virtual ~ScAccessibleDocumentPagePreview(void);
 public:
@@ -148,6 +151,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
+    ScPreviewShell* mpViewShell;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxTable;
+
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
