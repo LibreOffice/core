@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 13:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,8 @@ public:
     ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XChartTypeTemplate >
         getTemplate() const;
+
+    bool HasChanged() const;
 };
 
 //.............................................................................

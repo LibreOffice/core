@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 13:21:59 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 13:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,6 +1253,12 @@ uno::Reference< chart2::XChartTypeTemplate > SchDiagramTypeDlg::getTemplate() co
 sal_Int32 SchDiagramTypeDlg::GetNumberOfLines() const
 {
     return aMtrFldNumLines.GetValue();
+}
+
+bool SchDiagramTypeDlg::HasChanged() const
+{
+    // todo: only return true if really settings have changed
+    return true;
 }
 
 //.............................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:19 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 13:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include "chartview/NumberFormatterWrapper.hxx"
 
 #include "dlg_ChartType.hxx"
-#include "ChartTypeItemConverter.hxx"
 
 //for SID_CHARMAP:
 #ifndef _SVX_SVXIDS_HRC
@@ -1092,24 +1091,13 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
     if( xChartDoc.is())
     {
         uno::Reference< lang::XMultiServiceFactory > xCTManager( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
-//         wrapper::ChartTypeItemConverter aItemConverter( xCTManager, xProp, m_pDrawModelWrapper->GetItemPool() );
-//         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();//creates only an empty itemset
-//         aItemConverter.FillItemSet( aItemSet );
         //-------------------------------------------------------------
         //prepare and open dialog
         Window* pParent( NULL );
         SchDiagramTypeDlg aDlg( pParent, xDia, xCTManager );
-        if( aDlg.Execute() == RET_OK )
+        if( aDlg.Execute() == RET_OK &&
+            aDlg.HasChanged() )
         {
-//             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-//             aDlg.GetAttr( aOutItemSet );
-
-//             bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
-
-//             // XPropertySet may have been changed
-//             uno::Reference< beans::XPropertySet > xNewProp( aItemConverter.GetPropertySet());
-//             bChanged = bChanged || (xProp != xNewProp);
-//             xProp = xNewProp;
             xTemplate.set( aDlg.getTemplate());
             bChanged = true;
         }
