@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-01 22:29:20 $
+ *  last change: $Author: pluby $ $Date: 2000-12-06 03:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,13 @@ struct SalData* SalGetSalData()
 struct SalData* SalGetAppSalData()
 {
     return GetAppSalData();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SalGetAppQuit()
+{
+    return ImplGetSVData()->maAppData.mbAppQuit;
 }
 
 #ifdef __cplusplus
