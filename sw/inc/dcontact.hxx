@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:30:33 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,13 +118,27 @@ FASTBOOL IsMarqueeTextObj( const SdrObject& rObj );
 //Basisklasse fuer die folgenden KontaktObjekte (Rahmen+Zeichenobjekte)
 class SwContact : public SdrObjUserCall, public SwClient
 {
-    SdrObject *pMasterObj;
+    SdrObject* pMasterObj;
+
+    // OD 05.09.2003 #112039# - boolean, indicating destruction of contact object
+    // important note: boolean has to be set at the beginning of each destructor
+    //                 in the subclasses using method <SetInDTOR()>.
+    bool mbInDTOR;
+
+protected:
+    // OD 05.09.2003 #112039# - accessor to set member <mbInDTOR>
+    void SetInDTOR();
+
 public:
     TYPEINFO();
 
     //Fuer den Reader, es wir nur die Verbindung hergestellt.
     SwContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj );
-    SwContact( SwModify *pToRegisterIn ) : SwClient( pToRegisterIn ){}
+    // OD 11.09.2003 #112039# - init new member <mbInDTOR>
+    SwContact( SwModify *pToRegisterIn ) :
+        SwClient( pToRegisterIn ),
+        pMasterObj( 0L ),
+        mbInDTOR( false ) {}
 
     // OD 13.05.2003 #108784# - made methods virtual and not inline
     virtual const SdrObject *GetMaster() const;
@@ -137,6 +151,8 @@ public:
     const SwFrmFmt  *GetFmt() const
         { return (const SwFrmFmt*)GetRegisteredIn(); }
 
+    // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
+    const bool IsInDTOR() const;
 };
 
 //KontactObjekt fuer die Verbindung zwischen Rahmen bzw. deren Formaten
