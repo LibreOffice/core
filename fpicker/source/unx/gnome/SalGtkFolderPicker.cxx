@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFolderPicker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:25:10 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,10 @@ namespace
 SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
     m_xServiceMgr( xServiceMgr )
 {
-    m_pDialog = gtk_file_chooser_dialog_new( "Folder Selection", NULL,
-        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+    CResourceProvider aResProvider;
+    m_pDialog = gtk_file_chooser_dialog_new(
+        OUStringToOString( aResProvider.getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
+        NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
@@ -231,8 +233,8 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
 
     sal_Int16 retVal = 0;
 
-    gint nStatus = gtk_dialog_run( GTK_DIALOG( m_pDialog ) );
-    gtk_widget_hide( m_pDialog );
+        RunDialog aRunInMain(m_pDialog);
+        gint nStatus = aRunInMain.runandwaitforresult();
     switch( nStatus )
     {
         case GTK_RESPONSE_ACCEPT:
