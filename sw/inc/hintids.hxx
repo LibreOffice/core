@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-05 13:50:48 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 12:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ RES_MSG_BEGIN = RES_FMT_END,
     RES_REFMARK_DELETED,
     RES_TOXMARK_DELETED,
     RES_GRAPHIC_SWAPIN,
-    RES_MSG_DUMMY9,
+    RES_FIELD_DELETED,
 RES_MSG_END
 };
 
