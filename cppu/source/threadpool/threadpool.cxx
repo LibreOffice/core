@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:37:01 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,8 +439,6 @@ struct _uno_ThreadPool
 {
     sal_Int32 dummy;
 };
-
-static oslInterlockedCount g_hPool;
 
 extern "C" uno_ThreadPool SAL_CALL
 uno_threadpool_create() SAL_THROW_EXTERN_C()
