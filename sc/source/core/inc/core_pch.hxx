@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,6 @@
 #include <vcl/window.hxx>
 #include <so3/advise.hxx>
 #include <svx/algitem.hxx>
-#include <scspew.hxx>
 #include <vcl/field.hxx>
 #include <svx/svdtypes.hxx>
 #include <vcl/graph.hxx>
@@ -277,7 +276,6 @@
 #include <vcl/exchange.hxx>
 #include <sot/exchange.hxx>
 #include <so3/linkname.hxx>
-#include <so3/moniker.hxx>
 #include <svx/editeng.hxx>
 #include <vcl/fonttype.hxx>
 #include <svx/editobj.hxx>
