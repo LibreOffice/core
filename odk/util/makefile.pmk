@@ -1,0 +1,32 @@
+ODKNAME=odk$(UPD)
+
+DESTDIR=$(OUT)$/bin$/$(ODKNAME)
+DESTDIRIDL=$(DESTDIR)$/idl$/
+DESTDIREXAMPLES=$(DESTDIR)$/examples$/cpp
+
+UDKZIPPATH=$(SOLARBINDIR)
+UDKNAME=udk208
+CHECKSCRIPT=$(SOLARENV)$/bin$/checkit.pl
+ 
+BINOUT=$(SOLARBINDIR)
+IDLOUT=$(SOLARIDLDIR)
+
+MY_COPY=$(GNUCOPY) -u
+MY_COPY_RECURSIVE=$(GNUCOPY) -urf
+
+
+.IF "$(GUI)"=="WNT"
+#--------------------
+# WNT ONLY
+#--------------------
+DESTDIRBIN=$(DESTDIR)$/bin$/windows
+MY_DELETE_RECURSIVE=del /sxyf
+MY_DIRCMP=dircmp -r
+.ELSE
+#--------------------
+# UNX ONLY
+#--------------------
+DESTDIRBIN=$(DESTDIR)$/bin$/solsparc
+MY_DELETE_RECURSIVE=rm -rf
+MY_DIRCMP=dircmp 
+.ENDIF
