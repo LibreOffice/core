@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2003-11-25 16:35:44 $
+#   last change: $Author: rt $ $Date: 2003-11-26 08:39:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -199,7 +199,6 @@ SHL2STDLIBS= \
 SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/swdet2.obj \
         $(SLO)$/detreg.obj  \
-        $(SLO)$/errhdl.obj	\
             $(OUT)$/obj$/w4wflt.obj
 
 SHL2DEPN+=  makefile.mk
