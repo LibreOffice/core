@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:30:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,34 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_NOSUPPORTEXCEPTION_HPP_
+#include <com/sun/star/lang/NoSupportException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalAccessException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
+#include <com/sun/star/container/ElementExistException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYEXISTEXCEPTION_HPP_
+#include <com/sun/star/beans/PropertyExistException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#endif
+
+// -----------------------------------------------------------------------------
+#define OUSTR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM(str) )
+// -----------------------------------------------------------------------------
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -86,6 +114,7 @@ namespace configmgr
         namespace beans     = ::com::sun::star::beans;
         namespace container = ::com::sun::star::container;
 
+        using backenduno::MalformedDataException;
 // -----------------------------------------------------------------------------
 
 DataBuilderContext::DataBuilderContext(  )
@@ -128,70 +157,90 @@ DataBuilderContext::~DataBuilderContext(  )
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseMalformedDataException(sal_Char const * _pText) const
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString sMessage = OUString::createFromAscii(_pText);
-    throw MalformedDataException(sMessage, m_pContext);
+    OUString const sMessage = OUString::createFromAscii(_pText);
+    throw MalformedDataException(sMessage, m_pContext, uno::Any());
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseIllegalAccessException(sal_Char const * _pText) const
-        CFG_UNO_THROW1( lang::IllegalAccessException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString sMessage = OUString::createFromAscii(_pText);
-    throw lang::IllegalAccessException(sMessage, m_pContext);
+    OUString const sMessage = OUString::createFromAscii(_pText);
+    lang::IllegalAccessException e(sMessage, m_pContext);
+
+    throw MalformedDataException(OUSTR("Illegal Access: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseIllegalTypeException(sal_Char const * _pText) const
-        CFG_UNO_THROW1( beans::IllegalTypeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString sMessage = OUString::createFromAscii(_pText);
-    throw beans::IllegalTypeException(sMessage, m_pContext);
+    OUString const sMessage = OUString::createFromAscii(_pText);
+    beans::IllegalTypeException e(sMessage, m_pContext);
+
+    throw MalformedDataException(OUSTR("Illegal Type: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseNoSupportException(sal_Char const * _pText) const
-        CFG_UNO_THROW1( lang::NoSupportException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString sMessage = OUString::createFromAscii(_pText);
-    throw lang::NoSupportException(sMessage, m_pContext);
+    OUString const sMessage = OUString::createFromAscii(_pText);
+    lang::NoSupportException e(sMessage, m_pContext);
+
+    throw MalformedDataException(OUSTR("Not Supported: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseIllegalArgumentException(sal_Char const * _pText, sal_Int16 _nPos) const
-        CFG_UNO_THROW1( lang::IllegalArgumentException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString sMessage = OUString::createFromAscii(_pText);
-    throw lang::IllegalArgumentException(sMessage, m_pContext, _nPos);
+    OUString const sMessage = OUString::createFromAscii(_pText);
+    lang::IllegalArgumentException e(sMessage, m_pContext, _nPos);
+
+    throw MalformedDataException(OUSTR("Illegal Argument: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseNoSuchElementException(sal_Char const * _pText, OUString const & _sElement) const
-        CFG_UNO_THROW1( container::NoSuchElementException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    throw container::NoSuchElementException(makeMessageWithName(_pText,_sElement), m_pContext);
+    OUString const sMessage = makeMessageWithName(_pText,_sElement);
+    container::NoSuchElementException e(sMessage, m_pContext);
+
+    throw MalformedDataException(OUSTR("No Such Node: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseElementExistException(sal_Char const * _pText, OUString const & _sElement) const
-        CFG_UNO_THROW1( container::ElementExistException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    throw container::ElementExistException(makeMessageWithName(_pText,_sElement), m_pContext);
+    OUString const sMessage = makeMessageWithName(_pText,_sElement);
+    container::ElementExistException e(sMessage, m_pContext);
+
+    throw MalformedDataException(OUSTR("Node Already Exists: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseUnknownPropertyException(sal_Char const * _pText, OUString const & _sElement) const
-        CFG_UNO_THROW1( beans::UnknownPropertyException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    throw beans::UnknownPropertyException(makeMessageWithName(_pText,_sElement), m_pContext);
+    OUString const sMessage = makeMessageWithName(_pText,_sElement);
+    beans::UnknownPropertyException e(sMessage, m_pContext);
+
+    throw MalformedDataException(OUSTR("No Such Property: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raisePropertyExistException(sal_Char const * _pText, OUString const & _sElement) const
-        CFG_UNO_THROW1( beans::PropertyExistException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    throw beans::PropertyExistException(makeMessageWithName(_pText,_sElement), m_pContext);
+    OUString const sMessage = makeMessageWithName(_pText,_sElement);
+    beans::PropertyExistException e(sMessage, m_pContext);
+
+    throw MalformedDataException(OUSTR("No Such Property: ").concat(sMessage), m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
@@ -202,7 +251,7 @@ OUString DataBuilderContext::makeMessageWithName(sal_Char const * _pText, OUStri
     sMessage.appendAscii(_pText);
 
     if (_aName.getLength() != 0)
-        sMessage.appendAscii(" [").append(_aName).appendAscii("]");
+        sMessage.appendAscii(" [").append(_aName).appendAscii("] ");
 
     return sMessage.makeStringAndClear();
 }
@@ -218,7 +267,7 @@ bool DataBuilderContext::isDone() const
 // -----------------------------------------------------------------------------
 
 ISubtree & DataBuilderContext::implGetCurrentParent() const
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     if (m_aParentStack.empty())
         raiseMalformedDataException("Invalid Component Data: Operation requires open parent node.");
@@ -280,7 +329,7 @@ TemplateIdentifier DataBuilderContext::completeComponent( const TemplateIdentifi
 // -----------------------------------------------------------------------------
 
 TemplateIdentifier DataBuilderContext::getCurrentItemType() const
-                CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     ISubtree const * pCurrentSet = getCurrentParent().asISubtree();
     if (!pCurrentSet || !pCurrentSet->isSetNode())
@@ -296,7 +345,7 @@ TemplateIdentifier DataBuilderContext::getCurrentItemType() const
 // -----------------------------------------------------------------------------
 
 TemplateIdentifier DataBuilderContext::getValidItemType(TemplateIdentifier const & aItemType) const
-                CFG_THROW3( MalformedDataException, beans::IllegalTypeException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     ISubtree const * pCurrentSet = getCurrentParent().asISubtree();
     if (!pCurrentSet || !pCurrentSet->isSetNode())
@@ -316,7 +365,7 @@ TemplateIdentifier DataBuilderContext::getValidItemType(TemplateIdentifier const
 // -----------------------------------------------------------------------------
 
 ISubtree  * DataBuilderContext::addNodeToCurrent(std::auto_ptr<ISubtree>  _aNode)
-    CFG_THROW3( MalformedDataException, container::ElementExistException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND(_aNode.get(), "ERROR: Adding a NULL node");
 
@@ -328,7 +377,7 @@ ISubtree  * DataBuilderContext::addNodeToCurrent(std::auto_ptr<ISubtree>  _aNode
 // -----------------------------------------------------------------------------
 
 ISubtree  * DataBuilderContext::addLocalizedToCurrent(std::auto_ptr<ISubtree>  _aNode)
-    CFG_THROW3( MalformedDataException, beans::PropertyExistException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND(_aNode.get(), "ERROR: Adding a NULL node");
 
@@ -340,7 +389,7 @@ ISubtree  * DataBuilderContext::addLocalizedToCurrent(std::auto_ptr<ISubtree>  _
 // -----------------------------------------------------------------------------
 
 ValueNode * DataBuilderContext::addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode, bool _bMayReplace)
-    CFG_THROW3( MalformedDataException, beans::PropertyExistException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND(_aNode.get(), "ERROR: Adding a NULL node");
 
@@ -378,14 +427,14 @@ bool DataBuilderContext::isProperty(INode * pProp) const
 // -----------------------------------------------------------------------------
 
 INode * DataBuilderContext::findChild(OUString const & _aName)
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     return getCurrentParent().getChild(_aName);
 }
 // -----------------------------------------------------------------------------
 
 INode * DataBuilderContext::findProperty(OUString const & _aName)
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     INode * pResult = findChild(_aName);
     if (pResult && !isProperty(pResult))
@@ -397,7 +446,7 @@ INode * DataBuilderContext::findProperty(OUString const & _aName)
 // -----------------------------------------------------------------------------
 
 ISubtree * DataBuilderContext::findNode(OUString const & _aName)
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     INode * pResult = findChild(_aName);
 
@@ -428,7 +477,7 @@ void DataBuilderContext::pushNode(ISubtree * pTree)
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::popNode()
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND(hasActiveComponent(), "Component Builder Context: Leaving a node without having an active component");
     if (m_aParentStack.empty())
@@ -441,7 +490,7 @@ void DataBuilderContext::popNode()
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::startActiveComponent(OUString const & _aComponent)
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND(!hasActiveComponent(), "Component Builder Context: Component is already active");
     OSL_PRECOND(m_aParentStack.empty(),  "Component Builder Context: Starting Component/Template while inside a node");
@@ -461,7 +510,7 @@ void DataBuilderContext::startActiveComponent(OUString const & _aComponent)
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::endActiveComponent()
-        CFG_THROW2( MalformedDataException, uno::RuntimeException )
+        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND( hasActiveComponent(), "Component Builder Context: No Component active");
     OSL_PRECOND(m_aParentStack.empty(), "Component Builder Context: Ending Component/Template while inside a node");
