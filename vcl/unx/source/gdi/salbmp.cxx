@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:45:28 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALBMP_CXX
-
-// -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #include <string.h>
 #include <stdio.h>
