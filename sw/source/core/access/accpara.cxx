@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,7 +1316,9 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
     DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
     DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
-    sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint );
+    SwCrsrMoveState aMoveState;
+    aMoveState.bPosMatchesBounds = TRUE;
+    sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
 
     return bSuccess ?
         GetPortionData().GetAccessiblePosition( aPos.nContent.GetIndex() )
