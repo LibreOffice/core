@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 09:17:50 $
+ *  last change: $Author: ab $ $Date: 2001-05-23 08:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,6 +785,13 @@ void StarBASIC::StaticSuppressSfxResource( BOOL bSuppress )
 {
     bStaticSuppressSfxResource = bSuppress;
 }
+
+// Hack for #83750, use bStaticSuppressSfxResource as setup flag
+BOOL runsInSetup( void )
+{
+    return bStaticSuppressSfxResource;
+}
+
 
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
