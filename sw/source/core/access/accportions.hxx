@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-24 14:51:50 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@ public:
     /// get the start & end positions of the sentence
     void GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
                           sal_Int32 nPos );
+
+    // get start and end position of the last line
+    void GetLastLineBoundary( com::sun::star::i18n::Boundary& rBound );
 
     /// get the position in the model string for a given
     /// (accessibility) position
