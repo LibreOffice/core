@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.4 $
+#*  $Revision: 1.5 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-07-16 17:43:29 $
+#*  last change: $Author: hr $ $Date: 2004-02-02 19:23:41 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -76,11 +76,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=   \
             $(SLO)$/registerservices.obj
-
-# Make symbol renaming match library name for Mac OS X
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=i18n$(UPD)$(DLLPOSTFIX)
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
