@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-04 18:54:42 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 16:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ TabDialog RID_TD_ORGANIZE
     TEXT[ chinese_simplified ] = "η®΅η†ε®";
     TEXT[ russian ] = "Ξπγΰνθηξβΰςό μΰκπξρϋ";
     TEXT[ polish ] = "ZarzΉdzaj makrami";
-    TEXT[ japanese ] = "οΎο½ΈοΎ›γ®η®΅η†";
+    TEXT[ japanese ] = "γƒγ‚―γƒ­γ®η®΅η†";
     TEXT[ chinese_traditional ] = "η®΅η†ε·¨ι›†";
     TEXT[ arabic ] = "ΕΟΗΡΙ ζΝΟΗΚ ΗαγΗίΡζ";
     Closeable = TRUE ;
@@ -113,7 +113,7 @@ TabDialog RID_TD_ORGANIZE
                 Text[ chinese_simplified ] = "ζ¨΅ε—";
                 Text[ russian ] = "Μξδσλθ";
                 Text[ polish ] = "Modu³y";
-                Text[ japanese ] = "οΎ“ο½ΌοΎο½­ο½°οΎ™";
+                Text[ japanese ] = "γƒΆγ‚Έγƒ¥γƒΌγƒ«";
                 Text[ chinese_traditional ] = "ζ¨΅ε΅";
                 Text[ arabic ] = "ζΝΟΗΚ δγΨνΙ";
                 Text[ greek ] = "Λειτουργικές μονάδες";
@@ -138,7 +138,7 @@ TabDialog RID_TD_ORGANIZE
                 Text[ chinese_simplified ] = "η¨‹εΊεΊ“";
                 Text[ russian ] = "Αθαλθξςεκθ";
                 Text[ polish ] = "Biblioteki";
-                Text[ japanese ] = "οΎ—ο½²οΎοΎοΎ—οΎ";
+                Text[ japanese ] = "γƒ©γ‚¤γƒ–γƒ©γƒª";
                 Text[ chinese_traditional ] = "η¨‹εΌεΊ«";
                 Text[ arabic ] = "γίΚΘΗΚ";
                 Text[ greek ] = "Βιβλιοθήκες";
@@ -190,7 +190,7 @@ TabPage RID_TP_MODULS
         Text[ chinese_simplified ] = "ζ¨΅ε—/ε―Ήθ―ζ΅†(~O)";
         Text[ russian ] = "Μξδσλό/Δθΰλξγ";
         Text[ polish ] = "Modu³/Dialog";
-        Text[ japanese ] = "οΎ“ο½ΌοΎο½­ο½°οΎ™/οΎ€οΎο½²ο½±οΎ›ο½ΈοΎ(~O)";
+        Text[ japanese ] = "γƒΆγ‚Έγƒ¥γƒΌγƒ«/γƒ€γ‚¤γ‚Άγƒ­γ‚°(~O)";
         Text[ chinese_traditional ] = "ζ¨΅ε΅/ε°θ©±ζ–Ήε΅(~O)";
         Text[ arabic ] = "ζΝΟΙ δγΨνΙ/ γΡΘΪ ΝζΗΡ";
         Text[ greek ] = "Λειτουργική μ~ονάδα/Διάλογος";
@@ -316,7 +316,7 @@ TabPage RID_TP_MODULS
         Text[ chinese_simplified ] = "ζ–°ε»Ίζ¨΅ε—(~M)...";
         Text[ russian ] = "Νξβϋι μξδσλό...";
         Text[ polish ] = "Nowy modu³...";
-        Text[ japanese ] = "ζ–°γ—γ„οΎ“ο½ΌοΎο½­ο½°οΎ™(~M)...";
+        Text[ japanese ] = "ζ–°γ—γ„γƒΆγ‚Έγƒ¥γƒΌγƒ«(~M)...";
         Text[ chinese_traditional ] = "ζ–°ε»Ίζ¨΅ε΅(~M)...";
         Text[ arabic ] = "ζΝΟΙ δγΨνΙ ΜΟνΟΙ...";
         Text[ greek ] = "Δημιουργία λειτουργικής ~μονάδας...";
@@ -345,7 +345,7 @@ TabPage RID_TP_MODULS
         Text[ chinese_simplified ] = "ζ–°ε»Ίε―Ήθ―ζ΅†(~N)...";
         Text[ russian ] = "Νξβϋι δθΰλξγ...";
         Text[ polish ] = "Nowe okno dialogowe...";
-        Text[ japanese ] = "ζ–°γ—γ„οΎ€οΎο½²ο½±οΎ›ο½ΈοΎ(~N)...";
+        Text[ japanese ] = "ζ–°γ—γ„γƒ€γ‚¤γ‚Άγƒ­γ‚°(~N)...";
         Text[ chinese_traditional ] = "ι–‹ε•ε°θ©±ζ–Ήε΅(~N)...";
         Text[ arabic ] = "γΡΘΪ ΝζΗΡ ΜΟνΟ...";
         Text[ greek ] = "Δημιουργία διαλό~γου...";
@@ -409,7 +409,7 @@ TabPage RID_TP_LIBS
         Text[ swedish ] = "Tillδmpning/d~okument";
         Text[ polish ] = "Aplikacja/D~okument";
         Text[ portuguese_brazilian ] = "Application/D~ocument";
-        Text[ japanese ] = "ο½±οΎοΎοΎο½Ήο½°ο½Όο½®οΎγ¨οΎ„οΎο½·ο½­οΎ’οΎοΎ„(~O)";
+        Text[ japanese ] = "γ‚Άγƒ—γƒªγ‚±γƒΌγ‚·γƒ§γƒ³γ¨γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ(~O)";
         Text[ korean ] = "μ‘μ© ν”„λ΅κ·Έλ¨/λ¬Έμ„(~O)";
         Text[ chinese_simplified ] = "εΊ”η”¨η¨‹εΊ/ζ–‡ζ΅£(~O)";
         Text[ chinese_traditional ] = "ζ‡‰η”¨η¨‹εΌ/ζ–‡δ»¶(~O)";
@@ -443,7 +443,7 @@ TabPage RID_TP_LIBS
         Text[ chinese_simplified ] = "η¨‹εΊεΊ“(~L)";
         Text[ russian ] = "Αθαλθξςεκΰ";
         Text[ polish ] = "Biblioteka";
-        Text[ japanese ] = "οΎ—ο½²οΎοΎοΎ—οΎ(~L)";
+        Text[ japanese ] = "γƒ©γ‚¤γƒ–γƒ©γƒª(~L)";
         Text[ chinese_traditional ] = "η¨‹εΌεΊ«(~L)";
         Text[ arabic ] = "ΗαγίΚΘΙ";
         Text[ greek ] = "Βιβλιοθή~κη";
@@ -561,7 +561,7 @@ TabPage RID_TP_LIBS
         Text[ chinese_simplified ] = "ε―†η (~P)...";
         Text[ russian ] = "Οΰπξλό...";
         Text[ polish ] = "Has³o...";
-        Text[ japanese ] = "οΎοΎο½½οΎο½°οΎ„οΎ(~P)...";
+        Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰(~P)...";
         Text[ chinese_traditional ] = "ε―†ηΆΌ(~P)...";
         Text[ arabic ] = "ίαγΙ ΗαΣΡ...";
         Text[ greek ] = "Κωδικός ~πρόσβασης";
@@ -718,7 +718,7 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_simplified ] = "ι€‰ι΅Ή";
         Text[ russian ] = "Οΰπΰμεςπϋ";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎ";
+        Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³";
         Text[ chinese_traditional ] = "ιΈι …";
         Text[ arabic ] = "ΞνΗΡΗΚ";
         Text[ greek ] = "Επιλογές";
@@ -774,7 +774,7 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_simplified ] = "ζ›ΏζΆη°ε­η„η¨‹εΊεΊ“";
         Text[ russian ] = "Ηΰμενθςό ρσωερςβσώωθε αθαλθξςεκθ";
         Text[ polish ] = "Zamieρ istniejΉce biblioteki";
-        Text[ japanese ] = "ζ—Άε­οΎ—ο½²οΎοΎοΎ—οΎγ®η½®ζ›";
+        Text[ japanese ] = "ζ—Άε­γƒ©γ‚¤γƒ–γƒ©γƒªγ®η½®ζ›";
         Text[ chinese_traditional ] = "ζ›Ώδ»£ηΎε­η„η¨‹εΌεΊ«";
         Text[ arabic ] = "ΗΣΚΘΟΗα ΗαγίΚΘΗΚ ΗαγζΜζΟΙ";
         Text[ greek ] = "Αντικατάσταση υπάρχουσες βιβλιοθήκες";
@@ -858,7 +858,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ chinese_simplified ] = "ε»Ίη«‹δΈ€δΈªε¦ε¤–η„ζ–‡δ»¶(~C)";
         Text[ russian ] = "Ρξηδΰςό ξςδελόνϋι τΰιλ";
         Text[ polish ] = "Utwσrz oddzielny plik";
-        Text[ japanese ] = "ε¥γ®οΎο½§ο½²οΎ™γ‚’δ½ζ(~C)";
+        Text[ japanese ] = "ε¥γ®γƒ•γ‚΅γ‚¤γƒ«γ‚’δ½ζ(~C)";
         Text[ chinese_traditional ] = "ε¦ι–‹ε•ζ–°ζª”(~C)";
         Text[ arabic ] = "ΕδΤΗΑ γαέ γδέΥα";
         Text[ greek ] = "Δημιουργία ξεχωρι~στού αρχείου";
@@ -868,6 +868,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
