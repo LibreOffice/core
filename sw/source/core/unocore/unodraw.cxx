@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 12:51:14 $
+ *  last change: $Author: os $ $Date: 2001-08-06 15:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,8 +718,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     if(pContact)
                     {
                         uno::Reference< uno::XInterface >  xInt = pPage->GetInterface( pContact->GetMaster() );
-                        uno::Reference< XPropertySet >  xTmp = new SwXShape(xInt);
-                        xRet = uno::Reference< drawing::XShapeGroup >(xTmp, UNO_QUERY);
+                        xRet = uno::Reference< drawing::XShapeGroup >(xInt, UNO_QUERY);
                     }
                     pDoc->EndUndo( UNDO_END );
                 }
