@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:25:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,9 +421,6 @@ nRunde++;
 #endif
         if( pCppOut != stdout && pCppOut != stderr )
             fclose( pCppOut );
-        if( pCppIn != stdin )
-            fclose( pCppIn  );
-
 
         if (errors > 0) {
             fprintf(stderr, (errors == 1)
