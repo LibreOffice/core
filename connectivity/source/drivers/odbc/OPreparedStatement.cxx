@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:48:57 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,8 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
 {
     prepareStatement();
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
+    SQLRETURN nRet = N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
+    nRet = N3SQLFreeStmt (m_aStatementHandle, SQL_UNBIND);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
