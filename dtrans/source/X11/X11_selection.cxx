@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-29 15:06:02 $
+ *  last change: $Author: pl $ $Date: 2001-07-09 12:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1093,7 +1093,8 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         m_xDragSourceListener.clear();
         aGuard.clear();
-        xListener->dragDropEnd( dsde );
+        if( xListener.is() )
+            xListener->dragDropEnd( dsde );
     }
 }
 
@@ -1491,9 +1492,11 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
         dsde.DropAction         = m_nSourceActions;
         dsde.UserAction         = m_nUserDragAction;
 
+        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         // caution: do not change anything after this
         aGuard.clear();
-        m_xDragSourceListener->dragOver( dsde );
+        if( xListener.is() )
+            xListener->dragOver( dsde );
     }
     else if( m_aDropEnterEvent.data.l[0] && m_aCurrentDropWindow )
     {
@@ -2071,6 +2074,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
 {
     ClearableMutexGuard aGuard( m_aMutex );
 
+    Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+
     m_nLastDragX = nX;
     m_nLastDragY = nY;
 
@@ -2152,7 +2157,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
             }
             aGuard.clear();
             aSecondGuard.clear();
-            m_xDragSourceListener->dragExit( dsde );
+            if( xListener.is() )
+                xListener->dragExit( dsde );
         }
 
         ClearableMutexGuard aSecondGuard(m_aMutex);
@@ -2168,7 +2174,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
         {
             aGuard.clear();
             aSecondGuard.clear();
-            m_xDragSourceListener->dragEnter( dsde );
+            if( xListener.is() )
+                xListener->dragEnter( dsde );
         }
         ClearableMutexGuard aThirdGuard(m_aMutex);
         // send XdndEnter
@@ -2220,7 +2227,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
     {
         aGuard.clear();
         // drag over for XdndAware windows comes when receiving XdndStatus
-        m_xDragSourceListener->dragOver( dsde );
+        if( xListener.is() )
+            xListener->dragOver( dsde );
     }
 }
 
@@ -2409,7 +2417,9 @@ void SelectionManager::dragDoDispatch()
         ClearableMutexGuard aGuard(m_aMutex);
 
         Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        Reference< XTransferable > xTransferable( m_xDragSourceTransferable );
         m_xDragSourceListener.clear();
+        m_xDragSourceTransferable.clear();
 
         DragSourceDropEvent dsde;
         dsde.Source             = static_cast< OWeakObject* >(this);
@@ -2434,7 +2444,6 @@ void SelectionManager::dragDoDispatch()
         m_nNoPosHeight                      = 0;
         m_aCurrentCursor                    = None;
 
-        m_xDragSourceTransferable.clear();
         XUngrabPointer( m_pDisplay, CurrentTime );
         XUngrabKeyboard( m_pDisplay, CurrentTime );
         XFlush( m_pDisplay );
@@ -2445,8 +2454,10 @@ void SelectionManager::dragDoDispatch()
         if( xListener.is() )
         {
             aGuard.clear();
+            xTransferable.clear();
             xListener->dragDropEnd( dsde );
         }
+
     }
     osl_destroyThread( aThread );
 }
