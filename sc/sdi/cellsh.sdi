@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:10:37 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,8 +189,9 @@ interface CellSelection : Selection
     SID_GET_CLPBRD_FORMAT_BY_IDX    [ ExecMethod = ExecuteEdit; ]
     SID_GET_CLPBRD_FORMAT_NAME      [ ExecMethod = ExecuteEdit; ]
     SID_EXTERNAL_SOURCE [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
-    FID_MERGE_ON    [ ExecMethod = Execute; StateMethod = GetState; ]
-    FID_MERGE_OFF   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_MERGE_ON        [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_MERGE_OFF       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_MERGE_TOGGLE    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_OUTLINE_HIDE    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OUTLINE_SHOW    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OUTLINE_MAKE    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
