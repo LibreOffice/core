@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: hr $ $Date: 2004-11-09 16:42:29 $
-#*    $Revision: 1.19 $
+#*    last change       $Author: obo $ $Date: 2004-11-16 13:48:19 $
+#*    $Revision: 1.20 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -463,6 +463,14 @@ shell SfxApplication
 
     //----------------------------------------------------------------------
 
+    FN_XFORMS_INIT  // #i31958# - new XForms document
+
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
+
+    //----------------------------------------------------------------------
     SID_COMP_BIBLIOGRAPHY
     [
         ExecMethod = OfaExec_Impl;
