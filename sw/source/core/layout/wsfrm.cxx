@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:38:53 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,7 +1679,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SdrObject *pObj = rObjs[i];
-                if ( pObj->IsWriterFlyFrame() )
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                     ASSERT( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
@@ -1954,7 +1954,7 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                         const SwFmt* pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
                         if( SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() )
                         {
-                            const SwFrm* pAnchor = pObj->IsWriterFlyFrame() ?
+                            const SwFrm* pAnchor = pObj->ISA(SwVirtFlyDrawObj) ?
                                                    ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchor() :
                                                    ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
 
@@ -3074,7 +3074,7 @@ static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
     for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
     {
         SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
             const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
@@ -3213,7 +3213,7 @@ BOOL lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
             for ( USHORT i = 0; i < nCnt; ++i )
             {
                 SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     if( pFly->IsHeightClipped() && (!pFly->IsFlyFreeFrm() ||
@@ -3681,7 +3681,7 @@ void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, BYTE nInv )
     for ( USHORT i = 0; i < rObjs.Count(); ++i )
     {
         SdrObject *pO = rObjs[i];
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
             if ( pFly->IsFlyInCntFrm() )
@@ -3713,7 +3713,7 @@ void SwRootFrm::InvalidateAllCntnt( BYTE nInv )
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     ::lcl_InvalidateCntnt( ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->ContainsCntnt(),
                                          nInv );
