@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:26:44 $
+ *  last change: $Author: os $ $Date: 2000-10-23 12:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,19 +1449,25 @@ void SwXTextDocument::Invalidate()
     bObjectValid = sal_False;
     if(xNumFmtAgg.is())
     {
-        const uno::Type& rTunnelType = ::getCppuType((Reference< XUnoTunnel > *)0);
-        Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFmt = 0;
-        if(aNumTunnel.getValueType() == rTunnelType)
         {
-            Reference< XUnoTunnel > xNumTunnel = *(Reference< XUnoTunnel >*)
-                aNumTunnel.getValue();
-            pNumFmt = (SvNumberFormatsSupplierObj*)
-                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+            const uno::Type& rTunnelType = ::getCppuType((Reference< XUnoTunnel > *)0);
+            Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
+            SvNumberFormatsSupplierObj* pNumFmt = 0;
+            if(aNumTunnel.getValueType() == rTunnelType)
+            {
+                Reference< XUnoTunnel > xNumTunnel = *(Reference< XUnoTunnel >*)
+                    aNumTunnel.getValue();
+                pNumFmt = (SvNumberFormatsSupplierObj*)
+                        xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
 
+            }
+            DBG_ASSERT(pNumFmt, "No number formatter available");
+            pNumFmt->SetNumberFormatter(0);
         }
-        DBG_ASSERT(pNumFmt, "No number formatter available");
-        pNumFmt->SetNumberFormatter(0);
+        Reference< XInterface >  x0;
+        xNumFmtAgg->setDelegator(x0);
+        xNumFmtAgg = 0;
+
     }
     InitNewDoc();
     pDocShell = 0;
