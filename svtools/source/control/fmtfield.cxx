@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 15:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -92,7 +95,11 @@ ULONG FormattedField::StaticFormatter::s_nReferences = 0;
 SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
 {
     if (!s_cFormatter)
-        s_cFormatter = new SvNumberFormatter(Application::GetAppInternational().GetLanguage());
+    {
+        s_cFormatter = new SvNumberFormatter(
+            ::comphelper::getProcessServiceFactory(),
+            Application::GetAppInternational().GetLanguage());
+    }
     return s_cFormatter;
 }
 
