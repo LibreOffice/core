@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,6 +1971,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         SID_BASICSTEPOUT ;
         SID_BASICSTOP ;
         SID_BASICIDE_TOGGLEBRKPNT ;
+        SID_BASICIDE_MANAGEBRKPNTS ;
         SID_BASICIDE_ADDWATCH ;
         SID_BASICIDE_MODULEDLG ;
         SID_BASICIDE_OBJCAT ;
@@ -2025,6 +2026,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         SID_BASICSTEPOUT ;
         SID_BASICSTOP ;
         SID_BASICIDE_TOGGLEBRKPNT ;
+        SID_BASICIDE_MANAGEBRKPNTS ;
         SID_BASICIDE_ADDWATCH ;
         SID_BASICIDE_MODULEDLG ;
         SID_BASICIDE_OBJCAT ;
@@ -2341,6 +2343,13 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ turkish ] = "Kesme noktas˝";
             Text[ catalan ] = "Punt de ruptura";
             Text[ thai ] = "‡∏à‡∏∏‡∏î‡πÅ‡∏ö‡πà‡∏á";
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BASICIDE_MANAGEBRKPNTS ;
+            Text = "Haltepunkte verwalten" ;
+            Text [ ENGLISH ] = "Manage Breakpoints" ;
+            Text [ english_us ] = "Manage Breakpoints" ;
         };
         ToolBoxItem
         {
@@ -2710,8 +2719,8 @@ Menu RID_POPUP_BRKPROPS
 };
 Menu RID_POPUP_BRKDLG
 {
-    Text = "Haltepunkte" ;
-    Text [ ENGLISH ] = "Breakpoints" ;
+    Text = "Haltepunkte verwalten" ;
+    Text [ ENGLISH ] = "Manage Breakpoints" ;
     Text [ norwegian ] = "Breakpoints" ;
     Text [ italian ] = "Punti di interruzione" ;
     Text [ portuguese_brazilian ] = "Pontos de interrup??o" ;
@@ -2722,15 +2731,15 @@ Menu RID_POPUP_BRKDLG
     Text [ swedish ] = "Brytpunkter" ;
     Text [ dutch ] = "Onderbrekingspunten" ;
     Text [ spanish ] = "Puntos de ruptura" ;
-    Text [ english_us ] = "Breakpoints" ;
+    Text [ english_us ] = "Manage Breakpoints" ;
     ItemList =
     {
         MenuItem
         {
             Identifier = RID_BRKDLG ;
             HelpId = HID_BASICIDE_BRKDLG ;
-            Text = "Haltepunkte..." ;
-            Text [ ENGLISH ] = "Breakpoints..." ;
+            Text = "Haltepunkte verwalten..." ;
+            Text [ ENGLISH ] = "Manage Breakpoints..." ;
             Text [ norwegian ] = "Breakpoints..." ;
             Text [ italian ] = "Punti di interruzione..." ;
             Text [ portuguese_brazilian ] = "Pontos de interrup??o..." ;
@@ -2741,7 +2750,7 @@ Menu RID_POPUP_BRKDLG
             Text [ swedish ] = "Brytpunkter..." ;
             Text [ dutch ] = "Onderbrekingspunten..." ;
             Text [ spanish ] = "Puntos de ruptura..." ;
-            Text [ english_us ] = "Breakpoints..." ;
+            Text [ english_us ] = "Manage Breakpoints..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Dialog f¸r die Haltepunkte : Dialog f≥r die Haltepunkte */
             Text[ chinese_simplified ] = "‰∏≠Êñ≠ÁÇπ...";
             Text[ russian ] = "“Ó˜ÍË ÓÒÚ‡ÌÓ‚‡...";
