@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-08 14:55:10 $
+ *  last change: $Author: nn $ $Date: 2001-06-11 16:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,6 +1049,16 @@ void ScViewData::EditGrowY()
     if ( !pCurView || !bEditActive[eWhich])
         return;
 
+    ULONG nControl = pEditView[eWhich]->GetControlWord();
+    if ( nControl & EV_CNTRL_AUTOSCROLL )
+    {
+        //  if end of screen had already been reached and scrolling enabled,
+        //  don't further try to grow the edit area
+
+        pCurView->SetOutputArea( pCurView->GetOutputArea() );   // re-align to pixels
+        return;
+    }
+
     EditEngine* pEngine = pCurView->GetEditEngine();
     Window* pWin = pCurView->GetWindow();
 
@@ -1079,7 +1089,6 @@ void ScViewData::EditGrowY()
 
         if (nEditEndRow >= nBottom)
         {
-            ULONG nControl = pEditView[eWhich]->GetControlWord();
             if ((nControl & EV_CNTRL_AUTOSCROLL) == 0)
                 pCurView->SetControlWord( nControl | EV_CNTRL_AUTOSCROLL );
         }
