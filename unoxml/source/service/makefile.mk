@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: lo $ $Date: 2004-02-16 16:41:54 $
+#   last change: $Author: hr $ $Date: 2004-07-23 11:03:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,23 +94,14 @@ SHL1LIBS= \
     $(SLB)$/xpathimpl.lib \
     $(SLB)$/eventsimpl.lib
 
-.IF "$(GUI)" == "WNT"
 SHL1STDLIBS= \
-    ixml2.lib \
+    $(XML2LIB) \
     $(TOOLSLIB)	\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)	\
     $(SALLIB)
-.ELSE
-SHL1STDLIBS= \
-    -lxml2 \
-    $(TOOLSLIB)	\
-    $(COMPHELPERLIB)	\
-    $(CPPUHELPERLIB)	\
-    $(CPPULIB)	\
-    $(SALLIB)
-.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
