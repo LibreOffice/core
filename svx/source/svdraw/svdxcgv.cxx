@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-22 15:40:48 $
+ *  last change: $Author: ka $ $Date: 2002-07-22 15:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,7 +766,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
     const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
     const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
-    sal_uInt32                                  n, nCount, nCloneErrCnt;
+    sal_uInt32                                  n, nCount, nCloneErrCnt = 0;
 
     for( n = 0, nCount = aMark.GetMarkCount(); n < nCount; n++ )
     {
