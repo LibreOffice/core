@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 08:56:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 10:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,7 +1103,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_EDITDOC ;
-            HelpId = ID_BROWSER_EDITDOC ;
+            HelpId = SID_EDITDOC ;
             Text = "Bearbeiten" ;
             Text [ ENGLISH ] = "Edit" ;
         };
@@ -1122,14 +1122,14 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_SAVEDOC ;
-            HelpId = ID_BROWSER_SAVEDOC ;
+            HelpId = SID_SAVEDOC ;
             Text = "Speichern" ;
             Text [ ENGLISH ] = "Save" ;
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_SAVEASDOC ;
-            HelpId = ID_BROWSER_SAVEASDOC ;
+            HelpId = SID_SAVEASDOC ;
             Text = "Speichern als" ;
             Text [ ENGLISH ] = "Save as" ;
         };
@@ -1148,19 +1148,19 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_CUT ;
-            HelpId = ID_BROWSER_CUT ;
+            HelpId = SID_CUT ;
             MID_SBA_QRY_CUT
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_COPY ;
-            HelpId = ID_BROWSER_COPY ;
+            HelpId = SID_COPY ;
             MID_SBA_QRY_COPY
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_PASTE ;
-            HelpId = ID_BROWSER_PASTE ;
+            HelpId = SID_PASTE ;
             MID_SBA_QRY_PASTE
         };
         ToolBoxItem
@@ -1170,14 +1170,14 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_UNDO ;
-            HelpId = ID_BROWSER_UNDO ;
+            HelpId = SID_UNDO ;
             Text = "Rückgängig" ;
             Text [ ENGLISH ] = "Undo" ;
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_REDO ;
-            HelpId = ID_BROWSER_REDO ;
+            HelpId = SID_REDO ;
             Text = "Wiederherstellen" ;
             Text [ ENGLISH ] = "Redo" ;
 
@@ -1189,7 +1189,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_QUERY_EXECUTE;
-            HelpId = ID_BROWSER_QUERY_EXECUTE ;
+            HelpId = SID_FM_EXECUTE ;
             Text = "Ausführen" ;
             Text [ ENGLISH ] = "Execute" ;
         };
@@ -1201,21 +1201,21 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_CLEAR_QUERY;
-            HelpId = ID_BROWSER_CLEAR_QUERY ;
+            HelpId = SID_SBA_CLEAR_QUERY ;
             Text = "Abfrage löschen" ;
             Text [ ENGLISH ] = "Clear query" ;
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_SQL;
-            HelpId = ID_BROWSER_SQL ;
+            HelpId = SID_SOURCEVIEW ;
             Text = "Design Ansicht an-, ausschalten" ;
             Text [ ENGLISH ] = "Switch design view on/off" ;
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_ADDTABLE;
-            HelpId = ID_BROWSER_ADDTABLE ;
+            HelpId = SID_FM_ADDTABLE ;
             Text = "Tabellen hinzufügen" ;
             Text [ ENGLISH ] = "Add tables" ;
         };
@@ -1226,14 +1226,14 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_ESACPEPROCESSING;
-            HelpId = ID_BROWSER_ESACPEPROCESSING ;
+            HelpId = SID_FM_NATIVESQL ;
             Text = "SQL-Kommando direkt ausführen" ;
             Text [ ENGLISH ] = "Native SQL command" ;
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_QUERY_VIEW_FUNCTIONS;
-            HelpId = ID_BROWSER_QUERY_VIEW_FUNCTIONS ;
+            HelpId = SID_SBA_QUERY_VIEW_FUNCTIONS ;
             Text = "Funktionen" ;
             Text [ ENGLISH ] = "Functions" ;
             Text[ english_us ] = "Functions";
@@ -1261,7 +1261,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_QUERY_VIEW_TABLES;
-            HelpId = ID_BROWSER_QUERY_VIEW_TABLES ;
+            HelpId = SID_SBA_QUERY_VIEW_TABLES ;
             Text = "Tabellenname" ;
             Text [ ENGLISH ] = "Table name" ;
             Text[ english_us ] = "Table name";
@@ -1289,7 +1289,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_QUERY_VIEW_ALIASES;
-            HelpId = ID_BROWSER_QUERY_VIEW_ALIASES ;
+            HelpId = SID_SBA_QUERY_VIEW_ALIASES ;
             Text = "Aliasname" ;
             Text [ ENGLISH ] = "Alias name" ;
             Text[ english_us ] = "Alias name";
@@ -1317,7 +1317,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_QUERY_DISTINCT_VALUES;
-            HelpId = ID_BROWSER_QUERY_DISTINCT_VALUES ;
+            HelpId = SID_SBA_QUERY_DISTINCT_VALUES ;
             Text = "Eindeutige Werte" ;
             Text [ ENGLISH ] = "Distinct values" ;
             Text[ english_us ] = "Distinct Values";

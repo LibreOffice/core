@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:06:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 10:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_EDITDOC ;
-            HelpId = ID_BROWSER_EDITDOC ;
+            HelpId = SID_EDITDOC ;
             Text = "Bearbeiten" ;
             Text [ ENGLISH ] = "Edit" ;
         };
@@ -105,7 +105,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_SAVEDOC ;
-            HelpId = ID_BROWSER_SAVEDOC ;
+            HelpId = SID_SAVEDOC ;
             Text = "Speichern" ;
             Text [ ENGLISH ] = "Save" ;
         };
@@ -124,14 +124,14 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_UNDO ;
-            HelpId = ID_BROWSER_UNDO ;
+            HelpId = SID_UNDO ;
             Text = "Rückgängig" ;
             Text [ ENGLISH ] = "Undo" ;
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_REDO ;
-            HelpId = ID_BROWSER_REDO ;
+            HelpId = SID_REDO ;
             Text = "Wiederherstellen" ;
             Text [ ENGLISH ] = "Redo" ;
 
@@ -143,7 +143,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_BROWSER_ADDTABLE;
-            HelpId = ID_BROWSER_ADDTABLE ;
+            HelpId = SID_FM_ADDTABLE ;
             Text = "Tabellen hinzufügen ..." ;
             Text [ ENGLISH ] = "Add tables ..." ;
         };
@@ -154,7 +154,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         ToolboxItem
         {
             Identifier = ID_REALTION_ADD_RELATION ;
-            HelpId = ID_REALTION_ADD_RELATION ;
+            HelpId = SID_SBA_ADD_RELATION ;
             Text = "neue Relation ..." ;
             Text [ ENGLISH ] = "new relation ..." ;
         };

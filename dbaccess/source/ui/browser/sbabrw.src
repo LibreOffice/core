@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:01:22 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 10:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,62 +168,62 @@ ToolBox RID_BRW_QRY_TOOLBOX
     CUR_ITEM
     {
         MID_BROWSER_EXPLORER
-        HelpId = ID_BROWSER_EXPLORER ;
+        HelpId = SID_DSBROWSER_EXPLORER ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_FM_SEARCH
-        HelpId = ID_BROWSER_SEARCH ;
+        HelpId = SID_FM_SEARCH ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_SORTUP
-        HelpId = ID_BROWSER_SORTUP ;
+        HelpId = SID_FM_SORTUP ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_SORTDOWN
-        HelpId = ID_BROWSER_SORTDOWN ;
+        HelpId = SID_FM_SORTDOWN ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_AUTOFILTER
-        HelpId = ID_BROWSER_AUTOFILTER ;
+        HelpId = SID_FM_AUTOFILTER ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_FILTERCRIT
-        HelpId = ID_BROWSER_FILTERCRIT ;
+        HelpId = SID_FM_FILTERCRIT ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_ORDERCRIT
-        HelpId = ID_BROWSER_ORDERCRIT ;
+        HelpId = SID_FM_ORDERCRIT ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_REMOVEFILTER
-        HelpId = ID_BROWSER_REMOVEFILTER ;
+        HelpId = SID_FM_REMOVE_FILTER_SORT ;
     };
     CUR_ITEM
     {
         MID_SBA_BROWSER_FILTERED
-        HelpId = ID_BROWSER_FILTERED ;
+        HelpId = SID_FM_FORM_FILTERED ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_REFRESH
-        HelpId = ID_BROWSER_REFRESH ;
+        HelpId = SID_FM_REFRESH ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_EDIT
-        HelpId = ID_BROWSER_EDITDOC ;
+        HelpId = SID_EDITDOC ;
     };
     CUR_ITEM
     {
@@ -233,44 +233,44 @@ ToolBox RID_BRW_QRY_TOOLBOX
     CUR_ITEM
     {
         MID_SBA_QRY_UNDO
-        HelpId = ID_BROWSER_UNDO ;
+        HelpId = SID_UNDO ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_CUT
-        HelpId = ID_BROWSER_CUT ;
+        HelpId = SID_CUT ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_COPY
-        HelpId = ID_BROWSER_COPY ;
+        HelpId = SID_COPY ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_PASTE
-        HelpId = ID_BROWSER_PASTE ;
+        HelpId = SID_PASTE ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_BROWSER_INSERTCOLUMNS
-        HelpId = ID_BROWSER_INSERTCOLUMNS ;
+        HelpId = SID_SBA_BRW_INSERT ;
     };
     CUR_ITEM
     {
         MID_BROWSER_INSERTCONTENT
-        HelpId = ID_BROWSER_INSERTCONTENT ;
+        HelpId = SID_SBA_BRW_UPDATE ;
     };
     CUR_ITEM
     {
         MID_BROWSER_FORMLETTER
-        HelpId = ID_BROWSER_FORMLETTER ;
+        HelpId = SID_SBA_BRW_MERGE ;
     };
     CUR_ITEM
     {
         Identifier = ID_BROWSER_CLOSE ;
-        HelpId = ID_BROWSER_CLOSE ;
+        HelpId = SID_CLOSEDOC ;
         Hide = TRUE;
         Text = "Schlieﬂen" ;
         Text [ ENGLISH ] = "Close" ;
@@ -294,72 +294,72 @@ ToolBox RID_BRW_TAB_TOOLBOX
     CUR_ITEM
     {
         MID_BROWSER_EXPLORER
-        HelpId = ID_BROWSER_EXPLORER ;
+        HelpId = SID_DSBROWSER_EXPLORER ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_FM_SEARCH
-        HelpId = ID_BROWSER_SEARCH ;
+        HelpId = SID_FM_SEARCH ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_SORTUP
-        HelpId = ID_BROWSER_SORTUP ;
+        HelpId = SID_FM_SORTUP ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_SORTDOWN
-        HelpId = ID_BROWSER_SORTDOWN ;
+        HelpId = SID_FM_SORTDOWN ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_AUTOFILTER
-        HelpId = ID_BROWSER_AUTOFILTER ;
+        HelpId = SID_FM_AUTOFILTER ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_FILTERCRIT
-        HelpId = ID_BROWSER_FILTERCRIT ;
+        HelpId = SID_FM_FILTERCRIT ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_ORDERCRIT
-        HelpId = ID_BROWSER_ORDERCRIT ;
+        HelpId = SID_FM_ORDERCRIT ;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_REMOVEFILTER
-        HelpId = ID_BROWSER_REMOVEFILTER ;
+        HelpId = SID_FM_REMOVE_FILTER_SORT ;
     };
     CUR_ITEM
     {
         MID_SBA_BROWSER_FILTERED
-        HelpId = ID_BROWSER_FILTERED ;
+        HelpId = SID_FM_FORM_FILTERED ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_REFRESH
-        HelpId = ID_BROWSER_REFRESH ;
+        HelpId = SID_FM_REFRESH ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_BROWSER_INSERTCOLUMNS
-        HelpId = ID_BROWSER_INSERTCOLUMNS ;
+        HelpId = SID_SBA_BRW_INSERT ;
     };
     CUR_ITEM
     {
         MID_BROWSER_INSERTCONTENT
-        HelpId = ID_BROWSER_INSERTCONTENT ;
+        HelpId = SID_SBA_BRW_UPDATE ;
     };
     CUR_ITEM
     {
         MID_BROWSER_FORMLETTER
-        HelpId = ID_BROWSER_FORMLETTER ;
+        HelpId = SID_SBA_BRW_MERGE ;
     };
     };
 };
