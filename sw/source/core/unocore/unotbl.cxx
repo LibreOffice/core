@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 17:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2683,6 +2683,8 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
+    sal_Bool bChanged = sal_False;
+
     if(!nRowCount || !nColCount)
     {
         RuntimeException aRuntime;
@@ -2715,8 +2717,11 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
                     throw uno::RuntimeException();
                 }
                 xCell->setValue(pColArray[nCol - nColStart]);
+                bChanged=sal_True;
             }
         }
+        if ( bChanged )
+            aChartLstnrCntnr.ChartDataChanged();
     }
 }
 /*-- 11.12.98 12:42:47---------------------------------------------------
