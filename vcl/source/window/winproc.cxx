@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:42:04 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_WINPROC_CXX
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -76,7 +74,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _INTN_HXX
-#include <tools/intn.hxx>
+//#include <tools/intn.hxx>
 #endif
 
 #define private public
@@ -598,29 +596,6 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                     {
                         pMouseDownWin->mpFrameData->mbStartDragCalled  = TRUE;
 
-#if 0
-                        /*
-                         * old drag and drop api
-                         */
-
-                        Point aCmdMousePos( pMouseDownWin->mpFrameData->mnFirstMouseX,
-                                            pMouseDownWin->mpFrameData->mnFirstMouseY );
-                        aCmdMousePos = pMouseDownWin->ImplFrameToOutput( aCmdMousePos );
-                        CommandEvent    aCEvt( aCmdMousePos, COMMAND_STARTDRAG, TRUE );
-                        NotifyEvent     aNCmdEvt( EVENT_COMMAND, pMouseDownWin, &aCEvt );
-                        ImplDelData     aDelData;
-                        pMouseDownWin->ImplAddDel( &aDelData );
-                        if ( !ImplCallPreNotify( aNCmdEvt ) )
-                            pMouseDownWin->Command( aCEvt );
-                        if ( aDelData.IsDelete() )
-                            return 1;
-                        pMouseDownWin->ImplRemoveDel( &aDelData );
-#endif
-
-                        /*
-                         * new drag and drop api
-                         */
-
                         // Check if drag source provides it's own recognizer
                         if( pMouseDownWin->mpFrameData->mbInternalDragGestureRecognizer )
                         {
@@ -764,7 +739,6 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     MouseEvent aMEvt( aChildPos, nClicks, nMode, nCode, nCode );
 
     // tracking window gets the mouse events
-    BOOL bTracking = FALSE;
     if ( pSVData->maWinData.mpTrackWin )
         pChild = pSVData->maWinData.mpTrackWin;
 
@@ -1802,8 +1776,6 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
 
 static void ImplHandleGetFocus( Window* pWindow )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
     pWindow->mpFrameData->mbHasFocus = TRUE;
 
     // Focus-Events zeitverzoegert ausfuehren, damit bei SystemChildFenstern
