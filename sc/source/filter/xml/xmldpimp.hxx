@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-15 09:11:27 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 08:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,12 +168,12 @@ public:
     void SetServicePassword(const rtl::OUString& sValue) { sServicePassword = sValue; }
     void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
-    void SetFilterUseRegularExpressions(const sal_Bool bValue) { bUseRegularExpression = bValue; }
+//  void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }
     void SetFilterOutputPosition(const ScAddress& aValue) { aFilterOutputPosition = aValue; }
     void SetFilterCopyOutputData(const sal_Bool bValue) { bFilterCopyOutputData = bValue; }
     void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
-    void SetFilterIsCaseSensitive(const sal_Bool bValue) { bIsCaseSensitive = bValue; }
-    void SetFilterSkipDuplicates(const sal_Bool bValue) { bSkipDuplicates = bValue; }
+//  void SetFilterIsCaseSensitive(const sal_Bool bValue) { aSourceQueryParam.bCaseSens = bValue; }
+//  void SetFilterSkipDuplicates(const sal_Bool bValue) { aSourceQueryParam.bDuplicate = !bValue; }
     void AddDimension(ScDPSaveDimension* pDim);
     void SetButtons();
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 08:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,61 +138,56 @@ ScXMLExportDataPilot::~ScXMLExportDataPilot()
 rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOperator, const sal_Bool bUseRegularExpressions,
     const sal_Bool bIsString, const double dVal) const
 {
-    if (bUseRegularExpressions)
+    switch (aFilterOperator)
     {
-        switch (aFilterOperator)
+        case SC_EQUAL :
         {
-            case SC_EQUAL :
+            if (bUseRegularExpressions)
                 return GetXMLToken(XML_MATCH);
-                break;
-            case SC_NOT_EQUAL :
-                return GetXMLToken(XML_NOMATCH);
-                break;
-        }
-    }
-    else
-    {
-        switch (aFilterOperator)
-        {
-            case SC_EQUAL :
+            else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-                break;
-            case SC_NOT_EQUAL :
+        }
+        break;
+        case SC_NOT_EQUAL :
+        {
+            if (bUseRegularExpressions)
+                return GetXMLToken(XML_NOMATCH);
+            else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
-                break;
-            case SC_BOTPERC :
-                return GetXMLToken(XML_BOTTOM_PERCENT);
-                break;
-            case SC_BOTVAL :
-                return GetXMLToken(XML_BOTTOM_VALUES);
-                break;
-            case SC_GREATER :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-                break;
-            case SC_GREATER_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-                break;
-            case SC_LESS :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-                break;
-            case SC_LESS_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-                break;
-            case SC_TOPPERC :
-                return GetXMLToken(XML_TOP_PERCENT);
-                break;
-            case SC_TOPVAL :
-                return GetXMLToken(XML_TOP_VALUES);
-                break;
-            default:
+        }
+        break;
+        case SC_BOTPERC :
+            return GetXMLToken(XML_BOTTOM_PERCENT);
+            break;
+        case SC_BOTVAL :
+            return GetXMLToken(XML_BOTTOM_VALUES);
+            break;
+        case SC_GREATER :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+            break;
+        case SC_GREATER_EQUAL :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+            break;
+        case SC_LESS :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+            break;
+        case SC_LESS_EQUAL :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+            break;
+        case SC_TOPPERC :
+            return GetXMLToken(XML_TOP_PERCENT);
+            break;
+        case SC_TOPVAL :
+            return GetXMLToken(XML_TOP_VALUES);
+            break;
+        default:
+        {
+            if (bIsString)
             {
-                if (bIsString)
-                {
-                    if (dVal == SC_EMPTYFIELDS)
-                        return GetXMLToken(XML_EMPTY);
-                    else if (dVal == SC_NONEMPTYFIELDS)
-                        return GetXMLToken(XML_NOEMPTY);
-                }
+                if (dVal == SC_EMPTYFIELDS)
+                    return GetXMLToken(XML_EMPTY);
+                else if (dVal == SC_NONEMPTYFIELDS)
+                    return GetXMLToken(XML_NOEMPTY);
             }
         }
     }
@@ -201,7 +196,7 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOper
 
 void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions)
 {
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aQueryEntry.nField));
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(sal_Int32(aQueryEntry.nField)));
     if (bIsCaseSensitive)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
     if (aQueryEntry.bQueryByString)
@@ -227,16 +222,19 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         sal_Bool bOr(sal_False);
         sal_Bool bHasEntries(sal_True);
         sal_Int16 nEntries(0);
-        for (sal_Int32 j = 1; (j < nQueryEntryCount) && bHasEntries; j++)
+        for (sal_Int32 j = 0; (j < nQueryEntryCount) && bHasEntries; j++)
         {
             ScQueryEntry aEntry = aQueryParam.GetEntry(static_cast<USHORT>(j));
             if (aEntry.bDoQuery)
             {
+                if (nEntries > 0)
+                {
+                    if (aEntry.eConnect == SC_AND)
+                        bAnd = sal_True;
+                    else
+                        bOr = sal_True;
+                }
                 nEntries++;
-                if (aEntry.eConnect == SC_AND)
-                    bAnd = sal_True;
-                else
-                    bOr = sal_True;
             }
             else
                 bHasEntries = sal_False;
@@ -244,13 +242,14 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         nQueryEntryCount = nEntries;
         if (nQueryEntryCount)
         {
-            if (!aQueryParam.bInplace)
+            // There is never a target range in a data pilot.
+/*          if (!aQueryParam.bInplace)
             {
                 ScAddress aTargetAddress(aQueryParam.nDestCol, aQueryParam.nDestRow, aQueryParam.nDestTab);
                 rtl::OUString sAddress;
                 ScXMLConverter::GetStringFromAddress( sAddress, aTargetAddress, pDoc );
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sAddress);
-            }
+            }*/
             if(!((aQueryParam.nCol1 == aQueryParam.nCol2) && (aQueryParam.nRow1 == aQueryParam.nRow2) && (aQueryParam.nCol1 == aQueryParam.nRow1)
                 && (aQueryParam.nCol1 == 0) && (aQueryParam.nTab == USHRT_MAX)))
             {
@@ -264,7 +263,11 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES, XML_FALSE);
             SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_FILTER, sal_True, sal_True);
             rExport.CheckAttrList();
-            if (bOr && !bAnd)
+            if (nQueryEntryCount  == 1)
+            {
+                    WriteDPCondition(aQueryParam.GetEntry(0), aQueryParam.bCaseSens, aQueryParam.bRegExp);
+            }
+            else if (bOr && !bAnd)
             {
                 SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, sal_True, sal_True);
                 for (j = 0; j < nQueryEntryCount; j++)
@@ -279,10 +282,6 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 {
                     WriteDPCondition(aQueryParam.GetEntry(static_cast<USHORT>(j)), aQueryParam.bCaseSens, aQueryParam.bRegExp);
                 }
-            }
-            else if (nQueryEntryCount  == 1)
-            {
-                    WriteDPCondition(aQueryParam.GetEntry(0), aQueryParam.bCaseSens, aQueryParam.bRegExp);
             }
             else
             {
