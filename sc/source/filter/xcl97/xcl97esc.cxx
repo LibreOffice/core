@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:46:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
 #endif
-#ifndef _IPOBJ_HXX //autogen wg. SvInPlaceObject
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SV_OUTDEV_HXX //autogen wg. OutputDevice
 #include <vcl/outdev.hxx>
 #endif
@@ -116,6 +113,11 @@
 #include "XclExpCharts.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+
+using namespace com::sun::star;
 
 // --- class XclEscherEx ---------------------------------------------
 
@@ -236,10 +238,10 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
         if( nObjType == OBJ_OLE2 )
         {
             //! not-const because GetObjRef may load the OLE object
-            SvInPlaceObjectRef xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
-            if ( xObj.Is() )
+            uno::Reference < embed::XClassifiedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( xObj.is() )
             {
-                SvGlobalName aObjClsId( *xObj->GetSvFactory() );
+                SvGlobalName aObjClsId( xObj->getClassID() );
                 if ( SotExchange::IsChart( aObjClsId ) )
                 {   // yes, it's a chart diagram
                     rRootData.pObjRecs->Add( new XclObjChart( rRoot, rShape ) );
