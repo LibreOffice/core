@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-30 14:34:01 $
+ *  last change: $Author: jp $ $Date: 2001-11-27 16:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,6 @@
 
 // einige Hilfs-Funktionen
 // char
-inline const SvxFontHeightItem& GetSize(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
-    { return (const SvxFontHeightItem&)rSet.Get( nId,bInP); }
 inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
     { return (const SvxEscapementItem&)rSet.Get( nId,bInP); }
 inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
@@ -361,11 +359,13 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     // eine neue Gruppe aufmachen
                     SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
                                                 *pAkt, *pInsPos, TRUE );
-                    pNew->aAttrSet.SetParent( pAkt->aAttrSet.GetParent() );
                     pNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // alle bis hierher gueltigen Attribute "setzen"
                     AttrGroupEnd();
+                    pAkt = aAttrStack.Top();  // can be changed after AttrGroupEnd!
+                    pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
+
                     aAttrStack.Push( pNew );
                     pAkt = pNew;
                 }
@@ -774,6 +774,8 @@ SET_FONTALIGNMENT:
                                     rSVFont.GetPitch(), rSVFont.GetCharSet(),
                                     SID_ATTR_CHAR_FONT );
                     SetScriptAttr( eCharType, *pSet, aTmpItem );
+                    if( RTF_F == nToken )
+                        SetEncoding( rSVFont.GetCharSet() );
                 }
                 break;
 
@@ -1801,11 +1803,12 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             {
                 // eine neue Gruppe aufmachen
                 SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, TRUE );
-                pNew->aAttrSet.SetParent( pAkt->aAttrSet.GetParent() );
                 pNew->SetRTFDefaults( GetRTFDefaults() );
 
                 // alle bis hierher gueltigen Attribute "setzen"
                 AttrGroupEnd();
+                pAkt = aAttrStack.Top();  // can be changed after AttrGroupEnd!
+                pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
                 aAttrStack.Push( pNew );
                 pAkt = pNew;
             }
@@ -1875,6 +1878,9 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             pAkt->nStyleNo = 0;     // Style-Nummer zuruecksetzen
 
         *ppSet = &pAkt->aAttrSet;
+
+        if( !bPard )
+            SetEncoding( GetCodeSet() );
     }
 }
 
