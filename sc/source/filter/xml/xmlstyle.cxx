@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:30:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,10 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "CellStyle", XML_NAMESPACE_STYLE, XML_STYLE, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING, CTF_SC_CELLSTYLE ),
     MAP( "ConditionalFormat", XML_NAMESPACE_STYLE, XML_MAP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_IMPORT_MAP ),
     MAP( "ConditionalFormatXML", XML_NAMESPACE_STYLE, XML_MAP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MAP ),
-    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALBLTR ),
-    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALBLTRWIDTH ),
-    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALTLBR ),
-    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALTLBRWIDTH ),
+    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALBLTR ),
+    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALBLTRWIDTH ),
+    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALTLBR ),
+    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALTLBRWIDTH ),
     MAP( "HoriJustify", XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_PROP_PARAGRAPH|XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_TEXT_ALIGN_SOURCE, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_REPEAT_CONTENT, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYREPEAT|MID_FLAG_MERGE_PROPERTY, 0 ),
@@ -168,7 +168,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_ALLPADDING ),
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING_BOTTOM, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_BOTTOMPADDING ),
     MAP( "ParaIndent", XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_MEASURE16, 0 ),
-    MAP( "ParaIsHyphenation", XML_NAMESPACE_FO, XML_HYPHENATE, XML_TYPE_PROP_TEXT|XML_TYPE_BOOL, 0 ),
+//  MAP( "ParaIsHyphenation", XML_NAMESPACE_FO, XML_HYPHENATE, XML_TYPE_PROP_TEXT|XML_TYPE_BOOL, 0 ),
     MAP( "ParaLeftMargin", XML_NAMESPACE_FO, XML_PADDING_LEFT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_LEFTPADDING ),
     MAP( "ParaRightMargin", XML_NAMESPACE_FO, XML_PADDING_RIGHT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_RIGHTPADDING ),
     MAP( "ParaTopMargin", XML_NAMESPACE_FO, XML_PADDING_TOP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_TOPPADDING ),
@@ -259,6 +259,15 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pDiagonalTLBRWidthState = NULL;
     XMLPropertyState* pDiagonalBLTRWidthState = NULL;
 
+    XMLPropertyState* pParaMarginLeft = NULL;
+    XMLPropertyState* pParaMarginLeftRel = NULL;
+    XMLPropertyState* pParaMarginRight = NULL;
+    XMLPropertyState* pParaMarginRightRel = NULL;
+    XMLPropertyState* pParaMarginTop = NULL;
+    XMLPropertyState* pParaMarginTopRel = NULL;
+    XMLPropertyState* pParaMarginBottom = NULL;
+    XMLPropertyState* pParaMarginBottomRel = NULL;
+
     XMLPropertyState* pParaAdjust = NULL;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -300,6 +309,14 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 case CTF_SC_DIAGONALBLTR:       pDiagonalBLTR = propertie; break;
                 case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertie; break;
                 case CTF_SD_SHAPE_PARA_ADJUST:  pParaAdjust = propertie; break;
+                case CTF_PARALEFTMARGIN:        pParaMarginLeft = propertie; break;
+                case CTF_PARALEFTMARGIN_REL:    pParaMarginLeftRel = propertie; break;
+                case CTF_PARARIGHTMARGIN:       pParaMarginRight = propertie; break;
+                case CTF_PARARIGHTMARGIN_REL:   pParaMarginRightRel = propertie; break;
+                case CTF_PARATOPMARGIN:         pParaMarginTop = propertie; break;
+                case CTF_PARATOPMARGIN_REL:     pParaMarginTopRel = propertie; break;
+                case CTF_PARABOTTOMMARGIN:      pParaMarginBottom = propertie; break;
+                case CTF_PARABOTTOMMARGIN_REL:  pParaMarginBottomRel = propertie; break;
             }
         }
     }
@@ -460,6 +477,47 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     {
         pSWBottomBorderWidthState->mnIndex = -1;
         pSWBottomBorderWidthState->maValue.clear();
+    }
+
+    if (pParaMarginLeft)
+    {
+        pParaMarginLeft->mnIndex = -1;
+        pParaMarginLeft->maValue.clear();
+    }
+    if (pParaMarginLeftRel)
+    {
+        pParaMarginLeftRel->mnIndex = -1;
+        pParaMarginLeftRel->maValue.clear();
+    }
+    if (pParaMarginRight)
+    {
+        pParaMarginRight->mnIndex = -1;
+        pParaMarginRight->maValue.clear();
+    }
+    if (pParaMarginRightRel)
+    {
+        pParaMarginRightRel->mnIndex = -1;
+        pParaMarginRightRel->maValue.clear();
+    }
+    if (pParaMarginTop)
+    {
+        pParaMarginTop->mnIndex = -1;
+        pParaMarginTop->maValue.clear();
+    }
+    if (pParaMarginTopRel)
+    {
+        pParaMarginTopRel->mnIndex = -1;
+        pParaMarginTopRel->maValue.clear();
+    }
+    if (pParaMarginBottom)
+    {
+        pParaMarginBottom->mnIndex = -1;
+        pParaMarginBottom->maValue.clear();
+    }
+    if (pParaMarginBottomRel)
+    {
+        pParaMarginBottomRel->mnIndex = -1;
+        pParaMarginBottomRel->maValue.clear();
     }
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
