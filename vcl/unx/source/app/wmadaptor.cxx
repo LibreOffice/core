@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-07 16:41:41 $
+ *  last change: $Author: pl $ $Date: 2001-12-12 11:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1348,6 +1348,20 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
     pFrame->maFrameData.mbMaximizedHorz = bHorizontal;
 
     const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+
+    // discard pending configure notifies for this frame
+    XSync( m_pDisplay, False );
+    XEvent aDiscard;
+    while( XCheckTypedWindowEvent( m_pDisplay,
+                                   pFrame->maFrameData.GetShellWindow(),
+                                   ConfigureNotify,
+                                   &aDiscard ) )
+        ;
+    while( XCheckTypedWindowEvent( m_pDisplay,
+                                   pFrame->maFrameData.GetWindow(),
+                                   ConfigureNotify,
+                                   &aDiscard ) )
+        ;
 
     if( bHorizontal || bVertical )
     {
