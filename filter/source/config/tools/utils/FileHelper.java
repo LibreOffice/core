@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:01:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 10:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@ package com.sun.star.filter.config.tools.utils;
 // __________ Imports __________
 
 import java.io.*;
-import java.nio.channels.*;
 import java.lang.*;
 import java.net.*;
 import java.util.*;
@@ -100,17 +99,38 @@ public class FileHelper
                                       java.io.File aDestination)
         throws java.io.IOException
     {
-        java.io.FileInputStream       aInStream  = new java.io.FileInputStream (aSource     );
-        java.io.FileOutputStream      aOutStream = new java.io.FileOutputStream(aDestination);
-        java.nio.channels.FileChannel aSrc       = aInStream.getChannel();
-        java.nio.channels.FileChannel aDst       = aOutStream.getChannel();
+        /*
+        Solution I : using nio.channel locks doesnt exists for java 1.3  :-(
+        Solution II: using system call "cp" cant work with cygwin shells :-(
 
-        java.nio.channels.FileLock aDstLock = aDst.lock();
-        aDst.transferFrom(aSrc, 0, aSrc.size());
-        aDstLock.release();
+        boolean bOK = false;
+        try
+        {
+            java.lang.Runtime aRunner = java.lang.Runtime.getRuntime();
 
-        aSrc.close();
-        aDst.close();
+            java.lang.String[] lCommands = new java.lang.String[3];
+            lCommands[0] = "cp";
+            lCommands[1] = aSource.getAbsolutePath();
+            lCommands[2] = aDestination.getAbsolutePath();
+
+            java.lang.Process aProc = aRunner.exec(lCommands);
+            aProc.waitFor();
+
+            bOK = (aProc.exitValue()==0);
+        }
+        catch(java.lang.Throwable ex)
+            { bOK = false; }
+
+        if (!bOK)
+        {
+            java.lang.String sMsg = "atomic copy from \"";
+            sMsg += aSource.getAbsolutePath();
+            sMsg += "\" to \"";
+            sMsg += aDestination.getAbsolutePath();
+            sMsg += "\" failed.";
+            throw new java.io.IOException(sMsg);
+        }
+        */
     }
 
     // ____________________
@@ -467,5 +487,7 @@ public class FileHelper
         aWriter.write(sText, 0, sText.length());
         aWriter.flush();
         aWriter.close();
+        if (!aFile.exists())
+            throw new java.io.IOException("File \""+aFile.getAbsolutePath()+"\" not written correctly.");
     }
 }
