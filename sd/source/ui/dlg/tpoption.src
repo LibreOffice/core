@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:36:02 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ chinese_traditional ] = "Ήο»τ¦μΈm¤£¶ΘΎA¥Ξ©σ¥Ν¦¨ΉΟ§Ξª«¥σ΅M¦Σ¥B¤]ΎA¥Ξ©σ²Ύ°ΚΉΟ§Ξª«¥σ΅C";
         Text[ arabic ] = "νδΨΘή ΗαΝΘΣ Ϊαμ ία γδ ΕδΤΗΑ ζΚΝΡνί ίΗΖδΗΚ ΗαΡΣγ.";
         Text[ greek ] = "Η 'προσκόλληση' αναφέρεται τόσο στη δημιουργία, όσο και στη μετακίνηση των αντικειμένων γραφικών.";
-        Text[ korean ] = "ΈΒΓί±β΄Β ±Χ·΅ΗΘ °³ΓΌΈ¦ ΐΫΌΊΗÒ ¶§ΏΝ ΐΜµΏΗÒ ¶§ ΈπµΞ °ό·ΓµΛ΄Ο΄Ω.";
+        Text[ korean ] = "ΈΒΓί±β΄Β ±Χ·΅ΗΘ °³ΓΌ ΐΫΌΊ/ΐΜµΏ ΈπµΞΏΝ °ό·ΓΐΜ ΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Kavrama, nesnelerin oluώturulmasύnύ ve taώύnma sύrasύndaki hareketlerini belirler.";
         Text[ language_user1 ] = " ";
     };
@@ -371,7 +371,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ chinese_traditional ] = "³zΉLΉο»τ¦μΈm±z―ΰ°χ©wΈq¤@­Σª«¥σ¬O§_¤τ¥­΅M««ª½©ΞªΜΉο¨¤(45«Χ)²Ύ°Κ΅C¦b²Ύ°Κ¤@­Σª«¥σ®Ι¤@­Σªψ¤θ§ΞΕά¦¨¤@­Σ¥Ώ¤θ§Ξ©ΞªΜ¤@­Σ¶κ§ΞΕά¦¨¤@­ΣΎς¶κ§Ξ΅C";
         Text[ arabic ] = "ΚΝΚ ΪδζΗδ ΗαΚΪΤνή νγίδί ΚΝΟνΟ γΗ ΕΠΗ ίδΚ ΚΡνΟ ΕΪΗήΙ ΗαίΗΖδ ΓΛδΗΑ ΚΝΡνίε ζΠαί ΓέήνΗπ Γζ ΡΓΣνΗπ Γζ γΗΖαΗπ (45 ΟΡΜΙ). \n ΪδΟ ΗαΕδΤΗΑ ΣνΚΝζα ΗαγΣΚΨνα Εαμ γΡΘΪ Γζ ΗαΤία ΗαΘνΦζν Εαμ ΟΗΖΡΙ.";
         Text[ greek ] = "Με τη θέση προσκόλλησης καθορίζετε αν ένα αντικείμενο μετακινηθεί οριζόντια, κατακόρυφα ή διαγωνίως (45°). \nΚατά τη δημιουργία σχηματίζεται από ένα ορθογώνιο ένα τετράγωνο και από μια έλλειψη σχηματίζεται ένας κύκλος.";
-        Text[ korean ] = "ΈΒΓί±β·Ξ °³ΓΌ°΅ ΐΜµΏΗÒ ¶§ ΌφΖς, ΌφΑχ Θ¤ΐΊ ΄λ°ΆΌ±(45µµ)ΐΈ·Ξ °νΑ¤µΙ °ΝΐΞΑφΈ¦ °αΑ¤ΗΟ½Κ½ΓΏΐ. \n°³ΓΌΈ¦ ΈΈµι ¶§ Αχ»η°ΆΗόΐΊ Α¤»η°ΆΗόΐΈ·Ξ, ΕΈΏψΗόΐΊ ΏψΐΈ·Ξ ΉΩ²ς΄Ο΄Ω.";
+        Text[ korean ] = "ΐ§Δ΅ ΈΒΓί±βΏ΅Ό­,  ΐΜµΏ½ΓΏ΅ °³ΓΌ°΅  ΌφΖς, ΌφΑχ ¶Η΄Β ΄λ°ΆΌ±(45µµ)ΐΈ·Ξ °νΑ¤µΙ °ΝΐΞΑφΈ¦ °αΑ¤ΗΟ½Κ½ΓΏΐ. \n°³ΓΌΈ¦ ΈΈµι ¶§ Αχ»η°ΆΗόΐΊ Α¤»η°ΆΗόΐΈ·Ξ, ΕΈΏψΗόΐΊ ΏψΐΈ·Ξ ΉΩ²ς΄Ο΄Ω.";
         Text[ turkish ] = "Kavrama yφnό, nesnenin taώύma sύrasύndaki hareket alanύnύ belirler: Yatay, dikey ya da diyagonal (45 derece). \nOluώturma sύrasύnda bir dikdφrtgenden kare, bir elipsten ise daire oluώur.";
         Text[ language_user1 ] = " ";
     };
@@ -401,7 +401,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ chinese_traditional ] = "¦b¥Ν¦¨©M²Ύ°Κª«¥σ®Ι(~W)";
         Text[ arabic ] = "ΓΛδΗΑ ΗαΕδΤΗΑ Γζ ΗαΚΝΡνί";
         Text[ greek ] = "Κατά την δημιουργία και μετακίνηση";
-        Text[ korean ] = "ΐΫΌΊΗÒ ¶§ΏΝ ΐΜµΏΗÒ ¶§(~W)";
+        Text[ korean ] = "ΐΫΌΊ½ΓΏΝ  ΐΜµΏ½ΓΏ΅(~W)";
         Text[ turkish ] = "Oluώturma ve taώύma sύrasύnda";
         Text[ language_user1 ] = " ";
     };
@@ -699,7 +699,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text[ chinese_traditional ] = "¦±½u½sΏθµ{¦΅¤ΊªΊ¥ώ³΅±±ΒI(~A)";
         Text[ arabic ] = "ία δήΗΨ ΗαΚΝίγ έν γΝΡΡ Bιzier";
         Text[ greek ] = "Όλες τα σημε~ία ελέγχου σε επεξεργασία Bιzier";
-        Text[ korean ] = "Ί£ΑφΎξ ΖνΑύ±βΐΗ Έπµη ΗΪµι(~A)";
+        Text[ korean ] = "Ί£ΑφΏ΅ ΖνΑύ±βΐΗ Έπµη ΗΪµι(~A)";
         Text[ turkish ] = "Bιzier dόzenleyicisindeki tόm denetim nokt.";
         Text[ language_user1 ] = " ";
     };
@@ -1311,7 +1311,7 @@ TabPage TP_OPTIONS_MISC
         Text[ chinese_traditional ] = "Α`¬O―ΰ°χ²Ύ°Κª«¥σ";
         Text[ arabic ] = "ΗαίΗΖδΗΚ ήΗΘαΙ ααΕÒΗΝΙ ΟΗΖγΗπ";
         Text[ greek ] = "~Πάντα δυνατότητα μετακίνησης αντικειμένων";
-        Text[ korean ] = "ΗΧ»σ °³ΓΌ ΐΜµΏ °΅΄Ι";
+        Text[ korean ] = "°³ΓΌ΄Β ΗΧ»σ ΐΜµΏΐΜ °΅΄Ι";
         Text[ turkish ] = "Nesneler hep taώύnabilir";
         Text[ language_user1 ] = " ";
     };
