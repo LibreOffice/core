@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,12 @@
 #include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
-#include <drafts/com/sun/star/configuration/backend/XSingleBackend.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
+#include <com/sun/star/configuration/backend/XBackend.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XMULTILAYERSTRATUM_HPP_
+#include <com/sun/star/configuration/backend/XMultiLayerStratum.hpp>
+#endif
 
 namespace configmgr
 {
@@ -96,18 +100,16 @@ namespace configmgr
 // -------------------------------------------------------------------------
         namespace uno = ::com::sun::star::uno;
         namespace lang = ::com::sun::star::lang;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -------------------------------------------------------------------------
 const sal_Char k_DefaultBackendWrapper[] = "com.sun.star.comp.configuration.backend.SingleBackendAdapter";
 const sal_Char k_DefaultBackendService[] = "com.sun.star.comp.configuration.backend.LocalSingleBackend";
 
 // -------------------------------------------------------------------------
 const sal_Char k_DefaultBackendServiceAndImplName[]         = K_DefaultBackendServiceAndImplName ;
-const sal_Char k_DefaultSingleBackendServiceAndImplName[]   = K_DefaultSingleBackendServiceAndImplName ;
 
 // -------------------------------------------------------------------------
 const sal_Char k_GenericBackendServiceAndImplName[]         = "com.sun.star.configuration.backend.Backend" ;
-const sal_Char k_GenericSingleBackendServiceAndImplName[]   = "com.sun.star.configuration.backend.SingleBackend" ;
 
 // -------------------------------------------------------------------------
 static AsciiServiceName const k_BackendServiceNames [] =
@@ -116,33 +118,17 @@ static AsciiServiceName const k_BackendServiceNames [] =
     k_GenericBackendServiceAndImplName,
     0
 };
-static AsciiServiceName const k_SingleBackendServiceNames [] =
-{
-    k_DefaultSingleBackendServiceAndImplName,
-    k_GenericSingleBackendServiceAndImplName,
-    0
-};
 // -------------------------------------------------------------------------
 static const ServiceRegistrationInfo k_DefaultBackendServiceInfo =
 {
     k_DefaultBackendServiceAndImplName,
     k_BackendServiceNames
 };
-static const ServiceRegistrationInfo k_DefaultSingleBackendServiceInfo =
-{
-    k_DefaultSingleBackendServiceAndImplName,
-    k_SingleBackendServiceNames
-};
 // -------------------------------------------------------------------------
 static const ServiceRegistrationInfo k_GenericBackendServiceInfo =
 {
     k_GenericBackendServiceAndImplName,
     k_BackendServiceNames + 1
-};
-static const ServiceRegistrationInfo k_GenericSingleBackendServiceInfo =
-{
-    k_GenericSingleBackendServiceAndImplName,
-    k_SingleBackendServiceNames + 1
 };
 // -------------------------------------------------------------------------
 static const SingletonRegistrationInfo k_DefaultBackendSingletonInfo =
@@ -152,13 +138,6 @@ static const SingletonRegistrationInfo k_DefaultBackendSingletonInfo =
     k_DefaultBackendServiceAndImplName,
     & k_GenericBackendServiceInfo
 };
-static const SingletonRegistrationInfo k_DefaultSingleBackendSingletonInfo =
-{
-    K_DefaultSingleBackendSingletonName,
-    k_DefaultSingleBackendServiceAndImplName,
-    k_DefaultSingleBackendServiceAndImplName,
-    & k_GenericSingleBackendServiceInfo
-};
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 const SingletonRegistrationInfo * getDefaultBackendSingletonInfo()
@@ -166,20 +145,10 @@ const SingletonRegistrationInfo * getDefaultBackendSingletonInfo()
     return & k_DefaultBackendSingletonInfo;
 }
 // -------------------------------------------------------------------------
-const SingletonRegistrationInfo * getDefaultSingleBackendSingletonInfo()
-{
-    return & k_DefaultSingleBackendSingletonInfo;
-}
-// -------------------------------------------------------------------------
 
 const ServiceRegistrationInfo   * getDefaultBackendServiceInfo()
 {
     return & k_DefaultBackendServiceInfo;
-}
-// -------------------------------------------------------------------------
-const ServiceRegistrationInfo   * getDefaultSingleBackendServiceInfo()
-{
-    return & k_DefaultSingleBackendServiceInfo;
 }
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -219,39 +188,6 @@ uno::Reference<uno::XInterface> SAL_CALL
 }
 // -------------------------------------------------------------------------
 
-uno::Reference<uno::XInterface> SAL_CALL
-    getDefaultSingleBackendSingleton( CreationContext const& xContext )
-{
-    OSL_ENSURE( xContext.is(), "ERROR: NULL context has no singletons" );
-
-    UnoContextTunnel aTunnel;
-    aTunnel.passthru( xContext );
-
-    uno::Reference<uno::XInterface> xResult;
-
-    if (xContext.is())
-    try
-    {
-        xContext->getValueByName(SINGLETON(K_DefaultSingleBackendSingletonName))
-            >>= xResult;
-    }
-    catch (uno::Exception & )
-    {
-        // to do: really use the tunneled failure when that is set properly
-        if ( aTunnel.recoverFailure(true).hasValue() )
-        {
-            // have a failure, but can't recover it
-            // -> try to regenerate
-            instantiateDefaultSingleBackend(xContext);
-
-            OSL_ENSURE(false, "Cannot recreate configuration backend instantiation failure - using generic error");
-        }
-        // cannot recover any failure
-        throw;
-    }
-
-    return xResult;
-}
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
@@ -280,8 +216,8 @@ uno::Reference< uno::XInterface > createService(ContextReader const & _aCtx, Uno
 }
 // -------------------------------------------------------------------------
 
-typedef uno::Reference< backenduno::XSingleBackend >    UnoSingleBackend;
-typedef uno::Reference< backenduno::XBackend >          UnoBackend;
+typedef uno::Reference< backenduno::XMultiLayerStratum >    UnoSingleBackend;
+typedef uno::Reference< backenduno::XBackend >              UnoBackend;
 
 static
 UnoBackend wrapSingleBackend(ContextReader const & _aSettings, UnoInitArgs const & _aInitArgs, UnoSingleBackend const & _xWrappedBackend)
@@ -412,23 +348,10 @@ uno::Reference<uno::XInterface> SAL_CALL instantiateDefaultBackend( CreationCont
         return createUnoBackend(xContext);
     }
     TUNNEL_ALL_EXCEPTIONS()
+
+    OSL_ASSERT(!"unreached");
+    return NULL;
 }
-// -------------------------------------------------------------------------
-uno::Reference<uno::XInterface> SAL_CALL instantiateDefaultSingleBackend( CreationContext const& xTargetContext )
-{
-    CreationContext xContext = UnoContextTunnel::recoverContext(xTargetContext);
-
-    ContextReader aSettings( xContext );
-
-    UnoInitArgs aArguments = createInitArgs(aSettings);
-
-    try
-    {
-        return createRealBackend(aSettings,aArguments);
-    }
-    TUNNEL_ALL_EXCEPTIONS()
-}
-
 // -------------------------------------------------------------------------
 
 UnoBackend BackendFactory::getUnoBackend()
