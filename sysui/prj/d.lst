@@ -19,6 +19,7 @@ mkdir: %_DEST%\inc%_EXT%\icons
 ..\%__SRC%\misc\sweb.sh %_DEST%\bin%_EXT%\sweb
 ..\%__SRC%\misc\swriter.sh %_DEST%\bin%_EXT%\swriter
 ..\%__SRC%\misc\fromTemplate.sh %_DEST%\bin%_EXT%\fromTemplate
+..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
 ..\unix\office\icons\*.xpm %_DEST%\inc%_EXT%\icons\*.xpm
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
