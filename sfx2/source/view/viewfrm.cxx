@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:25:29 $
+ *  last change: $Author: mba $ $Date: 2000-12-11 18:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,10 +496,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         // Umschalten ohne Reload ist moeglich
                         pSh->DoHandsOff();
                         pMed->Close();
-                        pMed->GetItemSet()->ClearItem( SID_DOC_READONLY );
+                        pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
                         pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
-//AS                        if ( nOpenMode == SFX_STREAM_READONLY )
-//AS                            pMed->CheckOpenMode_Impl(sal_False,sal_True);
                         pMed->ReOpen();
                         if ( !pMed->GetErrorCode() )
                             bOK = sal_True;
@@ -531,8 +529,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                 SfxApplication* pApp = SFX_APP();
                                 SfxAllItemSet aSet( pApp->GetPool() );
                                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-                                SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer,
-                                                 SfxStringItem, SID_REFERER, sal_False );
+                                SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False );
                                 if ( pReferer )
                                     aSet.Put( *pReferer );
                                 aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
@@ -541,16 +538,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                                 if( pMed->GetFilter() )
                                 {
-                                    aSet.Put( SfxStringItem( SID_FILTER_NAME,
-                                                             pMed->GetFilter()->GetName() ) );
+                                    aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetName() ) );
                                     SFX_ITEMSET_ARG( pMed->GetItemSet(), pOptions,
                                                      SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
                                     if ( pOptions )
                                         aSet.Put( *pOptions );
                                 }
 
-                                //MI: im selben Frame => er macht gar nix !?!
-                                //SfxFrameItem aFrameItem( SID_DOCFRAME, GetFrame() );
+                                aSet.Put( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
+                                aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
                                 GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
                                 return;
                             }
