@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-09 12:14:01 $
+ *  last change: $Author: os $ $Date: 2001-07-02 09:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,16 +734,12 @@ IMPL_LINK(BibGeneralPage, ScrollHdl, ScrollBar*, pScroll)
 {
     BOOL bVertical = &aVertScroll == pScroll;
     long nOffset = 0;
+    long nCurrentOffset = 0;
     if(bVertical)
-    {
-        long nCurrentOffset = aFixedTexts[0]->GetPosPixel().Y() - aBasePos.Y();
-        nOffset = pScroll->GetThumbPos() + nCurrentOffset;
-    }
+        nCurrentOffset = aFixedTexts[0]->GetPosPixel().Y() - aBasePos.Y();
     else
-    {
-        long nCurrentOffset = aFixedTexts[0]->GetPosPixel().X() - aBasePos.X();
-        nOffset = pScroll->GetThumbPos() + nCurrentOffset;
-    }
+        nCurrentOffset = aFixedTexts[0]->GetPosPixel().X() - aBasePos.X();
+    nOffset = pScroll->IsVisible() ? pScroll->GetThumbPos() + nCurrentOffset : nCurrentOffset;;
 
     for(USHORT i = 0; i < FIELD_COUNT; i++)
     {
