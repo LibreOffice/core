@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 17:56:46 $
+ *  last change: $Author: oj $ $Date: 2001-01-29 13:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,10 +467,13 @@ void OSQLMessageBox::Construct(const SQLExceptionInfo& _rException, WinBits _nSt
         {
             // loop through all the remaining exceptions
             SQLExceptionIteratorHelper aIter((const SQLException*)pFirst);
+            // skip the first one
+            if(aIter.hasMoreElements())
+                aIter.next();
                 // note that this leaves aIter in a state where it's current exception is only an SQLException,
                 // even if _rException was more than this. But this is irrelevant here, as we always handled
                 // this first chain element
-            while (aIter.hasMoreElements())
+            while (aIter.hasMoreElements() && !sMessage.Len())
             {
                 SQLExceptionInfo aInfo(*aIter.next());
                 if (aInfo.isValid())
@@ -568,6 +571,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/08 17:56:46  fs
+ *  #79541# wrong define in the previous brandname fix - and, cause I was just touching it, adjusted the changes to our own style :)
+ *
  *  Revision 1.4  2000/12/07 18:55:34  csaba
  *  79541 Branding/Configuration Change
  *
