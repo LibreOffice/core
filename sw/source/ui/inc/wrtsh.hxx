@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:57:35 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ struct SwCallMouseEvent;
 class DropEvent;
 struct ChartSelectionInfo;
 class SfxStringListItem;
+class SfxRequest;
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
@@ -318,10 +319,12 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                     const Graphic &, SwFlyFrmAttrMgr * = 0,
                     BOOL bRule = FALSE );
     //OLE
-    void    Insert      ( SvInPlaceObjectRef *pObj,     // != 0 fuer Clipboard
+    void    Insert(     SvInPlaceObjectRef *pObj,        // != 0 fuer Clipboard
                           SvGlobalName *pName = 0,      // != 0 entspr. Object erzeugen.
                           BOOL bActivate = TRUE,
-                          USHORT nSlotId = 0);          // SlotId fuer Dialog
+                          USHORT nSlotId = 0,       // SlotId fuer Dialog
+                          SfxRequest* pReq = 0 );
+
     BOOL    InsertOle   ( SvInPlaceObjectRef aRef  );   // In die Core einfuegen.
     void    LaunchOLEObj( long nVerb = 0 );             // Server starten
     BOOL    IsOLEObj() const { return GetCntType() == CNT_OLE;}
