@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-25 13:35:48 $
+ *  last change: $Author: pb $ $Date: 2001-10-08 12:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,8 @@ private:
     String                  aSearchText;
     Image                   aIndexOnImage;
     Image                   aIndexOffImage;
+
+    sal_Bool                HasSelection() const;
 
     DECL_LINK(              SelectHdl, Timer* );
 
