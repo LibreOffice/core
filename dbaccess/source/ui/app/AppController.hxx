@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:38:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ namespace dbaui
         /** fills the list with the selected entries.
             @param  _rNames
         */
-        void getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames);
+        void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames );
 
         /// deletes the entries selected.
         void deleteEntries();
@@ -250,17 +250,29 @@ namespace dbaui
         /// renames the selected entry in the detail page
         void renameEntry();
 
-        /** deletes queries.
+        /** deletes queries, forms, or reports
             @param  _eType
                 the type of the objects
             @param  _rList
-                The list of queries.
-            @param  _nTextResource
-                The ID for the resource string.
+                The names of the elements to delete
+            @param  _bConfirm
+                determines whether the user must confirm the deletion
         */
-        void deleteObjects( ElementType _eType
-                            ,const ::std::vector< ::rtl::OUString>& _rList
-                            ,sal_uInt16 _nTextResource);
+        void deleteObjects( ElementType _eType,
+                            const ::std::vector< ::rtl::OUString>& _rList,
+                            bool _bConfirm );
+
+        /** deletes multiple elements from the given container
+            @param  _rxNames
+                the object container
+            @param  _rList
+                The names of the elements to delete
+            @param  _bConfirm
+                determines whether the user must confirm the deletion
+        */
+        void deleteObjects( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& _rxNames,
+                            const ::std::vector< ::rtl::OUString>& _rList,
+                            bool _bConfirm );
 
 
         /** deletes tables.
@@ -492,13 +504,14 @@ namespace dbaui
 
         // IControlActionListener overridables
         virtual sal_Bool        requestContextMenu( const CommandEvent& _rEvent );
+        virtual sal_Bool        requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
         virtual sal_Bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8        queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt );
 
         // OGenericUnoController
         virtual void            updateTitle( );
-        virtual void            loadSubToolbar(const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
+        virtual void            onLoadedMenu( const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
 
         virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
 
