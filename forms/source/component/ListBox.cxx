@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 10:17:08 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 09:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ sal_Bool OListBoxModel::convertFastPropertyValue(
             break;
 
         case PROPERTY_ID_LISTSOURCETYPE:
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_eListSourceType);
+            bModified = tryPropertyValueEnum(_rConvertedValue, _rOldValue, _rValue, m_eListSourceType);
             break;
 
         case PROPERTY_ID_LISTSOURCE:
@@ -879,13 +879,13 @@ void OListBoxModel::loadData()
 
     m_aValueSeq.realloc(aValueList.size());
     ::rtl::OUString* pustrValues = m_aValueSeq.getArray();
-    for (i = 0; i < aValueList.size(); ++i)
+    for (i = 0; i < (sal_Int32)aValueList.size(); ++i)
         pustrValues[i] = aValueList[i];
 
     // String-Sequence fuer ListBox erzeugen
     StringSequence aStringSeq(aStringList.size());
     ::rtl::OUString* pustrStrings = aStringSeq.getArray();
-    for (i = 0; i < aStringList.size(); ++i)
+    for (i = 0; i < (sal_Int32)aStringList.size(); ++i)
         pustrStrings[i] = aStringList[i];
 
     setFastPropertyValue(PROPERTY_ID_STRINGITEMLIST, makeAny(aStringSeq));
@@ -946,7 +946,7 @@ StringSequence OListBoxModel::GetCurValueSeq() const
     if (nSelCount)
     {
         const ::rtl::OUString *pVals    = NULL;
-        sal_uInt16 nValCnt          = 0;
+        sal_Int32 nValCnt           = 0;
         if (m_aValueSeq.getLength())
         {
             pVals = m_aValueSeq.getConstArray();
