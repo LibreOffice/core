@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-22 20:42:51 $
+ *  last change: $Author: os $ $Date: 2001-10-25 14:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
  // include ---------------------------------------------------------------
 #include <sfx2/sfx.hrc>
+#include <dialogs.hrc>
 #include "helpid.hrc"
 #include "optsave.hrc"
 
@@ -733,23 +734,50 @@ TabPage RID_SFXPAGE_SAVE
         DropDown = TRUE;
     };
 };
-
-// ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ModalDialog RID_SVXDLG_FILTER_WARNING
+{
+    HelpID = HID_SVXDLG_FILTER_WARNING;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = FALSE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 175 + 39 + (3 * 6), (4 * 9)+ 12 + (3 * 12) + 6 );
+    Text = "%PRODUCTNAME %PRODUCTVERSION" ;
+    FixedImage IMG_WARNING
+    {
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 30, 30 );
+    };
+    FixedText FT_FILTER_WARNING
+    {
+        Pos = MAP_APPFONT( 39, 6 );
+        Size = MAP_APPFONT( 175, 4 * 9 );
+        Wordbreak = TRUE;
+        Text = "Verwenden von \"%1\" als Standard-Dateiformat kann gegebenenfalls zu Informationsverlust führen.\n"\
+        "Sollen die Dateiformatänderungen übernommen werden?" ;
+        Text [ English ] = "Saving with \"%1\" may cause information loss.\n"\
+        "Should the changes be applied?" ;
+    };
+    CheckBox CB_DONT_SHOW_AGAIN
+    {
+        Pos = MAP_APPFONT( 39, (4 * 9) + 9 );
+        Size = MAP_APPFONT( 175, 12 );
+        Text = "~Diese Warnung nicht mehr anzeigen" ;
+        Text [ English ] = "~Don't show this warning again." ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT( 60, (4 * 9)+ 12 + 13 );
+        Size = MAP_APPFONT( 50, 14 );
+        DefButton = TRUE;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT( 120, (4 * 9)+ 12 + 13 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+};
 
 
