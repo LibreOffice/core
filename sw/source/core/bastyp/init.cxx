@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-21 14:34:06 $
+ *  last change: $Author: jp $ $Date: 2000-11-24 20:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,10 +626,7 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_CROSSEDOUT- POOLATTR_BEGIN ] = new SvxCrossedOutItem;
     aAttrTab[ RES_CHRATR_ESCAPEMENT- POOLATTR_BEGIN ] = new SvxEscapementItem;
     aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ] =
-        new SvxFontItem( FAMILY_ROMAN,
-                         System::GetStandardFont( STDFONT_ROMAN ).GetName(),
-                         aEmptyStr, PITCH_VARIABLE,
-/*?? GetSystemCharSet() ->*/    ::gsl_getSystemTextEncoding() );
+                                        new SvxFontItem( RES_CHRATR_FONT );
 
     aAttrTab[ RES_CHRATR_FONTSIZE- POOLATTR_BEGIN ] = new SvxFontHeightItem;
     aAttrTab[ RES_CHRATR_KERNING- POOLATTR_BEGIN ] = new SvxKerningItem;
@@ -651,10 +648,8 @@ void _InitCore()
                 = new SvxBrushItem( RES_CHRATR_BACKGROUND );
 
     // CJK-Attributes
-    aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ] = new SvxFontItem(
-            FAMILY_ROMAN, System::GetStandardFont( STDFONT_ROMAN ).GetName(),
-            aEmptyStr, PITCH_VARIABLE, ::gsl_getSystemTextEncoding(),
-            RES_CHRATR_CJK_FONT );
+    aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ] =
+                                    new SvxFontItem( RES_CHRATR_CJK_FONT );
 
     pItem = new SvxFontHeightItem;
     pItem->SetWhich( RES_CHRATR_CJK_FONTSIZE );
@@ -673,10 +668,8 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_CJK_WEIGHT - POOLATTR_BEGIN ] = pItem;
 
     // CTL-Attributes
-    aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] = new SvxFontItem(
-            FAMILY_ROMAN, System::GetStandardFont( STDFONT_ROMAN ).GetName(),
-            aEmptyStr, PITCH_VARIABLE, ::gsl_getSystemTextEncoding(),
-            RES_CHRATR_CTL_FONT );
+    aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] =
+                                    new SvxFontItem( RES_CHRATR_CTL_FONT );
 
     pItem = new SvxFontHeightItem;
     pItem->SetWhich( RES_CHRATR_CTL_FONTSIZE );
@@ -837,6 +830,11 @@ void _InitCore()
 
     aAttrTab[ RES_UNKNOWNATR_CONTAINER- POOLATTR_BEGIN ] =
                 new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER );
+
+    // get the correct fonts:
+    ::GetDefaultFonts( *(SvxFontItem*)aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ],
+                       *(SvxFontItem*)aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ],
+                       *(SvxFontItem*)aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] );
 
     // 1. Version - neue Attribute:
     //      - RES_CHRATR_BLINK
