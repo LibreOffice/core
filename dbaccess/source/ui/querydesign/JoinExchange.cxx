@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:06:46 $
+ *  last change: $Author: hr $ $Date: 2001-08-14 14:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 #ifndef DBAUI_JOINEXCHANGE_HXX
 #include "JoinExchange.hxx"
-#endif
-#ifndef _SV_EXCHANGE_HXX
-#include <vcl/exchange.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
