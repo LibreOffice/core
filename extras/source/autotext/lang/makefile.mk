@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 09:03:05 $
+#   last change: $Author: hjs $ $Date: 2001-09-04 11:36:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,6 @@
 PRJ=..$/..$/..
 
 
-
 PRJNAME=extras
 TARGET=autotext
 
@@ -74,7 +73,7 @@ TARGET=autotext
 
 ZIP1TARGET      = $(AUTOTEXT_SHARE_TARGET)
 
-ZIP1LIST        = $(LANGDIR)$/standard.bau $(LANGDIR)$/template.bau $(LANGDIR)$/crd*.bau
+ZIP1LIST        = $(LANGDIR)$/standar?.bau $(LANGDIR)$/templat?.bau $(LANGDIR)$/crd*.bau
 
 ZIP2TARGET      = $(AUTOCORR_TARGET)
 
@@ -82,7 +81,7 @@ ZIP2LIST        = $(LANGDIR)$/acor*.dat
 
 ZIP3TARGET      = $(AUTOTEXT_USER_TARGET)
 
-ZIP3LIST        = $(LANGDIR)/mytexts.bau
+ZIP3LIST        = $(LANGDIR)/mytext?.bau
 
 
 .INCLUDE : target.mk
