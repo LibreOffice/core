@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_propertyobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:46:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 
 #include <uno/data.h>
 
+#include "com/sun/star/bridge/InvalidProtocolChangeException.hpp"
 #include <com/sun/star/bridge/XProtocolProperties.hpp>
 
 #include "urp_propertyobject.hxx"
