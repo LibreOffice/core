@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-16 07:50:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ public:
 
     /** Creates and returns the accessible object of the Box. */
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif // _ICNVW_HXX
