@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:59:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,10 +1173,16 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
  * wird nur von InitFlyList benutzt, um die in Frage kommenden Objekte
  * einzusammeln.
  *************************************************************************/
-
-sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
+// --> OD 2004-10-06 #i26945# - change first parameter:
+// Now it's the <SwAnchoredObject> instance of the floating screen object
+sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
+                           const sal_Bool bInFtn,
                            const sal_Bool bInFooterOrHeader )
+// <--
 {
+    // --> OD 2004-10-06 #i26945#
+    const SdrObject* pNew = _pAnchoredObj->GetDrawObj();
+    // <--
     // pCurrFly is set, if pCurrFrm is inside a fly frame
     if( pNew != pCurrFly )
     {
@@ -1192,9 +1198,10 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
 
         if( ( bInFtn || bInFooterOrHeader ) && bTopRule )
         {
-            SwFrmFmt *pFmt = ((SwContact*)GetUserCall(pNew))->GetFmt();
-            const SwFmtAnchor& rNewA = pFmt->GetAnchor();
-
+            // --> OD 2004-10-06 #i26945#
+            const SwFrmFmt& rFrmFmt = _pAnchoredObj->GetFrmFmt();
+            const SwFmtAnchor& rNewA = rFrmFmt.GetAnchor();
+            // <--
             if ( FLY_PAGE == rNewA.GetAnchorId() )
             {
                 if ( bInFtn )
@@ -1202,7 +1209,7 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
 
                 if ( bInFooterOrHeader )
                 {
-                    SwFmtVertOrient aVert( pFmt->GetVertOrient() );
+                    SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
                     BOOL bVertPrt = aVert.GetRelationOrient() == PRTAREA ||
                             aVert.GetRelationOrient() == REL_PG_PRTAREA;
                     if( bVertPrt )
@@ -1232,8 +1239,9 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
                 const SwFmtChain &rChain = ((SwContact*)GetUserCall(pCurrFly))->GetFmt()->GetChain();
                 if ( !rChain.GetPrev() && !rChain.GetNext() )
                 {
-                    const SwFmtAnchor& rNewA =
-                        ((SwContact*)GetUserCall(pNew))->GetFmt()->GetAnchor();
+                    // --> OD 2004-10-06 #i26945#
+                    const SwFmtAnchor& rNewA = _pAnchoredObj->GetFrmFmt().GetAnchor();
+                    // <--
                     const SwFmtAnchor& rCurrA =
                         ((SwContact*)GetUserCall(pCurrFly))->GetFmt()->GetAnchor();
 
@@ -1283,8 +1291,9 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
 
         if ( bEvade )
         {
-            const SwFmtAnchor& rNewA =
-                ((SwContact*)GetUserCall(pNew))->GetFmt()->GetAnchor();
+            // --> OD 2004-10-06 #i26945#
+            const SwFmtAnchor& rNewA = _pAnchoredObj->GetFrmFmt().GetAnchor();
+            // <--
             ASSERT( FLY_IN_CNTNT != rNewA.GetAnchorId(), "Don't call GetTop with a FlyInCntFrm" );
             if( FLY_PAGE == rNewA.GetAnchorId() )
                 return sal_True;  // Seitengebundenen wird immer ausgewichen.
@@ -1294,29 +1303,45 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
             // Wenn wir aber gerade den Text des FlyCnt formatieren, dann
             // muss er natuerlich dem absatzgebundenen Frm ausweichen!
             // pCurrFrm ist der Anker von pNew?
-            const SwFrm* pTmp = &lcl_TheAnchor( pNew );
+            // --> OD 2004-10-06 #i26945#
+            const SwFrm* pTmp = _pAnchoredObj->GetAnchorFrm();
+            // <--
             if( pTmp == pCurrFrm )
                 return sal_True;
             if( pTmp->IsTxtFrm() && ( pTmp->IsInFly() || pTmp->IsInFtn() ) )
             {
-                Point aPos;
-                if( pNew->ISA(SwVirtFlyDrawObj) )
-                    aPos = ( (SwVirtFlyDrawObj*)pNew )->GetFlyFrm()->Frm().Pos();
-                else
-                    aPos = pNew->GetCurrentBoundRect().TopLeft();
+                // --> OD 2004-10-06 #i26945#
+                Point aPos = _pAnchoredObj->GetObjRect().Pos();
+                // <--
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
-            // OD 2004-05-13 #i28701# - consider all objects in same context,
+            // --> OD 2004-10-06 #i26945#
+            // If <pTmp> is a text frame inside a table, take the layout frame,
+            // at which the anchored object orients its vertical position.
+            else if ( pTmp->IsTxtFrm() && pTmp->IsInTab() &&
+                      _pAnchoredObj->GetVertPosOrientFrm() )
+            {
+                pTmp = _pAnchoredObj->GetVertPosOrientFrm();
+            }
+            // <--
+            // --> OD 2004-05-13 #i28701# - consider all objects in same context,
             // if wrapping style is considered on object positioning.
             // Thus, text will wrap around negative positioned objects.
             // --> OD 2004-08-25 #i3317# - remove condition on checking,
             // if wrappings style is considered on object postioning.
             // Thus, text is wrapping around negative positioned objects.
-            if ( ::FindKontext( pTmp, 0 ) == ::FindKontext( pCurrFrm, 0 ) )
-            // <--
+            // --> OD 2004-10-20 #i35640# - no consideration of negative
+            // positioned objects, if wrapping style isn't considered on
+            // object position and former text wrapping is applied.
+            // This condition is typically for documents imported from the
+            // OpenOffice.org file format.
+            if ( ( pCurrFrm->GetTxtNode()->GetDoc()->ConsiderWrapOnObjPos() ||
+                   !pCurrFrm->GetTxtNode()->GetDoc()->IsFormerTextWrapping() ) &&
+                 ::FindKontext( pTmp, 0 ) == ::FindKontext( pCurrFrm, 0 ) )
             {
                 return sal_True;
             }
+            // <--
 
             const SwFrm* pHeader = 0;
             if ( pCurrFrm->GetNext() != pTmp &&
@@ -1421,7 +1446,11 @@ SwFlyList *SwTxtFly::InitFlyList()
                 continue;
             }
 
-            if( GetTop( pAnchoredObj->GetDrawObj(), pCurrFrm->IsInFtn(), bFooterHeader ) )
+            // --> OD 2004-10-06 #i26945# - pass <pAnchoredObj> to method
+            // <GetTop(..)> instead of only the <SdrObject> instance of the
+            // anchored object
+            if ( GetTop( pAnchoredObj, pCurrFrm->IsInFtn(), bFooterHeader ) )
+            // <--
             {
                 // OD 11.03.2003 #107862# - adjust insert position:
                 // overlapping objects should be sorted from left to right and
