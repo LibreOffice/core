@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-23 08:16:13 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 06:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,13 +129,12 @@ hidspecial HID_BROWSER_ROWHEIGHT                        { HelpId = HID_BROWSER_R
 hidspecial HID_BROWSER_DSADMINISTRATE                   { HelpId = HID_BROWSER_DSADMINISTRATE; };
 hidspecial HID_BROWSER_CLOSECONN                        { HelpId = HID_BROWSER_CLOSECONN; };
 hidspecial HID_BROWSER_REFRESHCONN                      { HelpId = HID_BROWSER_REFRESHCONN; };
+hidspecial HID_DSADMIN_SPECIAL_MESSAGE                  { HelpId = HID_DSADMIN_SPECIAL_MESSAGE; };
 
 hidspecial HID_DLG_ROWHEIGHT                            { HelpId = HID_DLG_ROWHEIGHT; };
 hidspecial HID_DLG_COLWIDTH                             { HelpId = HID_DLG_COLWIDTH; };
 hidspecial HID_TLB_QUERYDESIGN                          { HelpId = HID_TLB_QUERYDESIGN; };
 hidspecial HID_CTL_QRYSQLEDIT                           { HelpId = HID_CTL_QRYSQLEDIT; };
-
-hidspecial HID_DSADMIN_SPECIAL_MESSAGE                  { HelpId = HID_DSADMIN_SPECIAL_MESSAGE; };
 
 hidspecial HID_BROWSER_QUERY_CREATE                     { HelpId = HID_BROWSER_QUERY_CREATE; };
 hidspecial HID_DLG_ERROR                                { HelpId = HID_DLG_ERROR; };
@@ -150,9 +149,18 @@ hidspecial HID_DSADMIN_PWDREC_ADO                       { HelpId = HID_DSADMIN_P
 hidspecial HID_DSADMIN_CONNURL_ADOPAGE                  { HelpId = HID_DSADMIN_CONNURL_ADOPAGE; };
 hidspecial HID_DSADMIN_PAGE_ADO                         { HelpId = HID_DSADMIN_PAGE_ADO; };
 
+hidspecial HID_DSADMIN_QUERYADMINISTRATION              { HelpId = HID_DSADMIN_QUERYADMINISTRATION; };
+hidspecial HID_DSADMIN_QUERIES                          { HelpId = HID_DSADMIN_QUERIES; };
+hidspecial HID_DSADMIN_QUERIES_NEW                      { HelpId = HID_DSADMIN_QUERIES_NEW; };
+hidspecial HID_DSADMIN_QUERIES_EDIT                     { HelpId = HID_DSADMIN_QUERIES_EDIT; };
+hidspecial HID_DSADMIN_QUERIES_DELETE                   { HelpId = HID_DSADMIN_QUERIES_DELETE; };
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/01/23 08:16:13  oj
+ *  #83023##83022##83027#
+ *
  *  Revision 1.10  2001/01/04 11:24:38  fs
  *  #81485# help ids for the ADO page
  *

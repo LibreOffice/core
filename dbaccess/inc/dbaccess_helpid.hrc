@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:54:13 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 06:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,11 +166,20 @@
 #define HID_DSADMIN_CONNURL_ADOPAGE                 (HID_DBACCESS_START + 82)
 #define HID_DSADMIN_PAGE_ADO                        (HID_DBACCESS_START + 83)
 
+#define HID_DSADMIN_QUERYADMINISTRATION             (HID_DBACCESS_START + 83)
+#define HID_DSADMIN_QUERIES                         (HID_DBACCESS_START + 84)
+#define HID_DSADMIN_QUERIES_NEW                     (HID_DBACCESS_START + 85)
+#define HID_DSADMIN_QUERIES_EDIT                    (HID_DBACCESS_START + 86)
+#define HID_DSADMIN_QUERIES_DELETE                  (HID_DBACCESS_START + 87)
+
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/01/09 15:54:13  oj
+ *  #81232# some new help id's
+ *
  *  Revision 1.14  2001/01/04 11:19:28  fs
  *  #81485# help ids for the ADO page
  *
@@ -182,37 +191,6 @@
  *
  *  Revision 1.11  2000/12/12 13:08:07  oj
  *  #80933# new hlp ids for the dialogs
- *
- *  Revision 1.10  2000/12/08 21:10:19  fs
- *  some new help ids for the data source browser
- *
- *  Revision 1.9  2000/12/05 15:58:16  fs
- *  #79820# HID_DSADMIN_DIALOG
- *
- *  Revision 1.8  2000/12/05 12:47:30  fs
- *  #80539# removed two obsolete ids
- *
- *  Revision 1.7  2000/12/05 11:39:45  fs
- *  #80539# HID_GENERIC_SQL_ERROR
- *
- *  Revision 1.6  2000/12/03 10:32:39  fs
- *  #79820# some new help ids
- *
- *  Revision 1.5  2000/12/01 13:24:37  oj
- *  #81036# new helpids
- *
- *  Revision 1.4  2000/12/01 11:48:33  oj
- *  #81036# some new help ids
- *
- *  Revision 1.3  2000/11/30 16:54:31  oj
- *  #81036# new helpids
- *
- *  Revision 1.2  2000/11/14 14:21:10  oj
- *  two new defines
- *
- *  Revision 1.1  2000/10/30 13:44:49  fs
- *  initial checkin - help ids for the dbaccess project
- *
  *
  *  Revision 1.0 30.10.00 14:03:48  fs
  ************************************************************************/
