@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 11:48:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,7 +1377,7 @@ sal_Int32 SAL_CALL rtl_uString_getToken( rtl_uString ** newStr , rtl_uString * s
 /* ======================================================================= */
 
 /* constAsciiStr must be a "..." or char const aFoo[] = "..." */
-#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, sizeof( constAsciiStr )-1, RTL_TEXTENCODING_ASCII_US
+#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(sizeof(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
 
 /* ======================================================================= */
 
