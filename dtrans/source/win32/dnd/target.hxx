@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-20 12:56:35 $
+ *  last change: $Author: jl $ $Date: 2001-02-26 15:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,18 +93,35 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 
-// DropTarget is a singleton, that is one cannot count on its destructor
-// do do the cleanup because the factory will hold a reference. The client
-// has to call XComponent::dispose before the HWND becomes invalid.
+// The client
+// has to call XComponent::dispose. The thread that calls initialize
+// must also execute the destruction of the instance. This is because
+// initialize calls OleInitialize and the destructor calls OleUninitialize.
+// If the service calls OleInitialize then it also calls OleUnitialize when
+// it is destroyed. Therefore no second instance may exist which was
+// created in the same thread and still needs OLE.
 class DropTarget: public MutexDummy,
-                  public WeakComponentImplHelper2< XInitialization, XDropTarget>,
-                  public IDropTarget
+                  public WeakComponentImplHelper2< XInitialization, XDropTarget>
+
 {
 private:
-    // The native window for which acts as drop target.
+    // The native window which acts as drop target.
+    // It is set in initialize. In case RegisterDragDrop fails it is set
+    // to NULL
     HWND m_hWnd; // set by initialize
+    // The thread id of the thread which called initialize. When the service dies
+    // than m_oleThreadId is used to determine if the service successfully called
+    // OleInitialize. If so then OleUninitialize has to be called.
+    DWORD m_oleThreadId;
+    // An Instance of IDropTargetImpl which receives calls from the system's drag
+    // and drop implementation. It delegate the calls to name alike functions in
+    // this class.
+    IDropTarget* m_pDropTarget;
+
     Reference<XMultiServiceFactory> m_serviceFactory;
-    sal_Bool m_bDropTargetRegistered;
+    // If m_bActive == sal_True then events are fired to XDropTargetListener s,
+    // none otherwise. The default value is sal_True.
+    sal_Bool m_bActive;
     sal_Int8    m_nDefaultActions;
 
     // This value is set when a XDropTargetListener calls accept or reject on
@@ -137,7 +154,10 @@ public:
 #ifdef DEBUG
     virtual void SAL_CALL release();
 #endif
-
+    // Overrides WeakComponentImplHelper::disposing which is called by
+    // WeakComponentImplHelper::dispose
+    // Must be called.
+    virtual void SAL_CALL disposing();
    // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException);
@@ -153,34 +173,25 @@ public:
     virtual sal_Int8 SAL_CALL getDefaultActions(  ) throw(RuntimeException);
     virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) throw(RuntimeException);
 
-
-    // IDropTarget
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-
-    virtual ULONG STDMETHODCALLTYPE AddRef( );
-
-    virtual ULONG STDMETHODCALLTYPE Release( );
-
-    virtual HRESULT STDMETHODCALLTYPE DragEnter(
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+    // Functions called from the IDropTarget implementation ( m_pDropTarget)
+    virtual HRESULT DragEnter(
+            /* [unique][in] */ IDataObject *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+            /* [out][in] */ DWORD *pdwEffect);
 
     virtual HRESULT STDMETHODCALLTYPE DragOver(
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+            /* [out][in] */ DWORD *pdwEffect);
 
     virtual HRESULT STDMETHODCALLTYPE DragLeave( ) ;
 
     virtual HRESULT STDMETHODCALLTYPE Drop(
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+            /* [unique][in] */ IDataObject *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+            /* [out][in] */ DWORD *pdwEffect);
 
 
 // Non - interface functions --------------------------------------------------
