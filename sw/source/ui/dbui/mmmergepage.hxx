@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmmergepage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:17:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _MAILMERGEHELPER_HXX
 #include <mailmergehelper.hxx>
 #endif
+#ifndef _ACTCTRL_HXX
+#include <actctrl.hxx>
+#endif
 class SwMailMergeWizard;
 /*-- 02.04.2004 09:21:06---------------------------------------------------
 
@@ -89,7 +92,7 @@ class SwMailMergeMergePage : public svt::OWizardPage
 
     FixedLine       m_aFindFL;
     FixedText       m_aFineFT;
-    Edit            m_aFindED;
+    ReturnActionEdit    m_aFindED;
     PushButton      m_aFindPB;
 
     CheckBox        m_aWholeWordsCB;
@@ -100,6 +103,8 @@ class SwMailMergeMergePage : public svt::OWizardPage
 
     DECL_LINK(EditDocumentHdl_Impl, PushButton*);
     DECL_LINK(FindHdl_Impl, PushButton*);
+    DECL_LINK(EnteredFindStringHdl_Impl, void*);
+
 public:
         SwMailMergeMergePage( SwMailMergeWizard* _pParent);
         ~SwMailMergeMergePage();
