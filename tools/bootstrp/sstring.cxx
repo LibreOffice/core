@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sstring.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,10 @@
  *
  ************************************************************************/
 
-#ifdef WTC
-#ifdef _TOOLS_STRINGLIST
-#undef _TOOLS_STRINGLIST
-#endif
+#ifndef _TOOLS_STRINGLIST
+#  define _TOOLS_STRINGLIST
 #endif
 
-#define _TOOLS_STRINGLIST
 #include "sstring.hxx"
 
 SByteStringList::SByteStringList()
