@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 16:40:21 $
+ *  last change: $Author: mba $ $Date: 2001-01-17 16:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
                 pStream->SetBufferSize( 4096 );
                 pStream->SetError( xLockBytes->GetError() );
             }
+        }
+        catch ( CommandAbortedException e )
+        {
         }
         catch ( Exception e )
         {
