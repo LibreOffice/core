@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 12:21:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ IMPL_LINK( ScHFPage, TurnOnHdl, CheckBox*, EMPTYARG )
     else
         aBtnEdit.Disable();
 
-    return NULL;
+    return 0;
 }
 
 
@@ -236,7 +236,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
     if ( !pViewSh )
     {
         DBG_ERROR( "Current ViewShell not found." );
-        return NULL;
+        return 0;
     }
 
     if (   aCntSharedBox.IsEnabled()
@@ -302,7 +302,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
         delete pDlg;
     }
 
-    return NULL;
+    return 0;
 }
 
 //==================================================================
