@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:34:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
@@ -124,6 +127,10 @@
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HXX_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
 
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
@@ -166,12 +173,12 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, SvStorage* pS) :
+ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
     rDoc(rD),
     pMedium(pM),
-    pStorage(pS)
+    xStorage(xStor)
 {
-    DBG_ASSERT( pMedium || pStorage, "ScXMLImportWrapper: Medium or Storage must be set" );
+    DBG_ASSERT( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
 }
 
 uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
@@ -230,9 +237,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     const rtl::OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs,
     sal_Bool bMustBeSuccessfull)
 {
-    SvStorageStreamRef xDocStream;
-    if ( !pStorage && pMedium )
-        pStorage = pMedium->GetStorage();
+    uno::Reference < io::XStream > xDocStream;
+    if ( !xStorage.is() && pMedium )
+        xStorage = pMedium->GetStorage();
 
     // Get data source ...
 
@@ -241,27 +248,35 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
     sal_Bool bEncrypted = sal_False;
     rtl::OUString sStream(sDocName);
-    if( pStorage )
+    if( xStorage.is() )
     {
-        if (pStorage->IsStream(sDocName))
-            xDocStream = pStorage->OpenStream( sDocName,
-                                  STREAM_READ | STREAM_NOCREATE );
-        else if (sOldDocName.getLength() && pStorage->IsStream(sOldDocName))
+        try
         {
-            xDocStream = pStorage->OpenStream( sOldDocName,
-                                  STREAM_READ | STREAM_NOCREATE );
-            sStream = sOldDocName;
-        }
-        else
-            return sal_False;
-        xDocStream->SetBufferSize( 16*1024 );
-        aParserInput.aInputStream = xDocStream->GetXInputStream();
+            uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
+            if ( xAccess->hasByName(sDocName) && xStorage->isStreamElement( sDocName) )
+                xDocStream = xStorage->openStreamElement( sDocName, embed::ElementModes::READ );
+            else if (sOldDocName.getLength() && xAccess->hasByName(sOldDocName) && xStorage->isStreamElement( sOldDocName) )
+            {
+                xDocStream = xStorage->openStreamElement( sOldDocName, embed::ElementModes::READ );
+                sStream = sOldDocName;
+            }
+            else
+                return sal_False;
 
-        uno::Any aAny;
-        bEncrypted = xDocStream->GetProperty(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
-                        aAny.getValueType() == ::getBooleanCppuType() &&
-                        *(sal_Bool *)aAny.getValue();
+            aParserInput.aInputStream = xDocStream->getInputStream();
+            uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
+
+            uno::Any aAny = xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+            aAny >>= bEncrypted;
+        }
+        catch( packages::WrongPasswordException& )
+        {
+            return ERRCODE_SFX_WRONGPASSWORD;
+        }
+        catch( uno::Exception& )
+        {
+            return SCERR_IMPORT_UNKNOWN;
+        }
     }
     // #99667#; no longer necessary
 /*  else if ( pMedium )
@@ -422,7 +437,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     return nReturn;
 }
 
-sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
+sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Import" );
 
@@ -478,13 +493,30 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         }
 
         // Set base URI
-        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-        xInfoSet->setPropertyValue( sPropName,
-            uno::makeAny( rtl::OUString(INetURLObject::GetBaseURL()) ) );
-        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() &&
-             !pStorage->IsRoot() )
+        OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
+        ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
+        if ( pMedium && pMedium->GetItemSet() )
         {
-            rtl::OUString aName( pStorage->GetName() );
+            const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                    pMedium->GetItemSet()->GetItem(SID_DOC_BASEURL) );
+            if ( pBaseURLItem )
+                aBaseURL = pBaseURLItem->GetValue();
+        }
+        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
+
+        // TODO/LATER: do not do it for embedded links
+        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
+        {
+            OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            if ( pMedium && pMedium->GetItemSet() )
+            {
+                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                    pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                if ( pDocHierarchItem )
+                    aName = pDocHierarchItem->GetValue();
+            }
+
             if( aName.getLength() )
             {
                 sPropName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
@@ -492,7 +524,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
             }
         }
 
-        sal_Bool bOasis = pStorage->GetVersion() > SOFFICE_FILEFORMAT_60;
+        sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
         sal_uInt32 nMetaRetval(0);
         if(!bStylesOnly)
@@ -519,15 +551,14 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
         SvXMLEmbeddedObjectHelper *pObjectHelper = NULL;
 
-        if( pStorage )
+        if( xStorage.is() )
         {
-            pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
+            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_READ );
             xGrfContainer = pGraphicHelper;
 
-            SvPersist *pPersist = pObjSh;
-            if( pPersist )
+            if( pObjSh )
             {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, *pObjSh, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
                 xObjectResolver = pObjectHelper;
             }
         }
@@ -606,7 +637,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         if (bStylesOnly)
         {
             if (nStylesRetval)
-                pStorage->SetError(nStylesRetval);
+                nError = nStylesRetval;
             else
                 bRet = sal_True;
         }
@@ -614,7 +645,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         {
             if (nDocRetval)
             {
-                pStorage->SetError(nDocRetval);
+                nError = nDocRetval;
                 if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW ||
                     nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
                     nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
@@ -622,11 +653,11 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
                     bRet = sal_True;
             }
             else if (nStylesRetval)
-                pStorage->SetError(nStylesRetval);
+                nError = nStylesRetval;
             else if (nMetaRetval)
-                pStorage->SetError(nMetaRetval);
+                nError = nMetaRetval;
             else if (nSettingsRetval)
-                pStorage->SetError(nSettingsRetval);
+                nError = nSettingsRetval;
             else
                 bRet = sal_True;
         }
@@ -645,30 +676,31 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 {
     sal_Bool bRet(sal_False);
     uno::Reference<io::XOutputStream> xOut;
-    SvStorageStreamRef xStream;
+    uno::Reference<io::XStream> xStream;
 
-    if( pStorage )
+    if( xStorage.is() )
     {
         // #96807#; trunc stream before use, because it could be an existing stream
         // and the new content could be shorter than the old content. In this case
         // would not all be over written by the new content and the xml file
         // would not be valid.
-        xStream = pStorage->OpenStream( sName,
-                                STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
+        xStream = xStorage->openStreamElement( sName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+        uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         uno::Any aAny; aAny <<= sMediaType;
-        xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
+        xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
         if (bPlainText)
         {
             aAny = ::cppu::bool2any(sal_False);
-            xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), aAny);
+            xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), aAny);
         }
         else
         {
             aAny = ::cppu::bool2any(sal_True);
-            xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")), aAny);
+//REMOVE                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")), aAny);
+            xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption")), aAny);
         }
-        xStream->SetBufferSize( 16*1024 );
-        xOut = new utl::OOutputStreamWrapper( *xStream );
+
+        xOut = xStream->getOutputStream();
     }
     // #99667#; no longer necessary
 /*  else if ( pMedium )
@@ -690,7 +722,6 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference<io::XActiveDataSource> xSrc( xWriter, uno::UNO_QUERY );
     xSrc->setOutputStream( xOut );
 
-
     uno::Reference<document::XFilter> xFilter(
         xServiceFactory->createInstanceWithArguments( sComponentName , aArgs ),
             uno::UNO_QUERY );
@@ -707,8 +738,9 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         bRet = xFilter->filter( aDescriptor );
         pSharedData = pExport->GetSharedData();
 
-        if (xStream.Is())
-            xStream->Commit();
+        //stream is closed by SAX parser
+        //if (xOut.is())
+        //    xOut->closeOutput();
     }
     return bRet;
 }
@@ -730,8 +762,8 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     if(!xWriter.is())
         return sal_False;
 
-    if ( !pStorage && pMedium )
-        pStorage = pMedium->GetOutputStorage( sal_True );
+    if ( !xStorage.is() && pMedium )
+        xStorage = pMedium->GetOutputStorage();
 
     uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter, uno::UNO_QUERY );
 
@@ -760,7 +792,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
-    if ( pObjSh && pStorage)
+    if ( pObjSh && xStorage.is() )
     {
         pObjSh->UpdateDocInfoForSave();     // update information
 
@@ -779,17 +811,33 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         aUsePrettyPrinting <<= bUsePrettyPrinting;
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), aUsePrettyPrinting);
 
-        // Set base URI
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-        xInfoSet->setPropertyValue( sPropName,
-                uno::makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() &&
-             !pStorage->IsRoot() )
+        OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
+        ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
+        if ( pMedium && pMedium->GetItemSet() )
         {
-            OUString aName( pStorage->GetName() );
+            const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                    pMedium->GetItemSet()->GetItem(SID_DOC_BASEURL) );
+            if ( pBaseURLItem )
+                aBaseURL = pBaseURLItem->GetValue();
+        }
+        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
+
+        // TODO/LATER: do not do it for embedded links
+        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
+        {
+            OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            if ( pMedium && pMedium->GetItemSet() )
+            {
+                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                    pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                if ( pDocHierarchItem )
+                    aName = pDocHierarchItem->GetValue();
+            }
+
             if( aName.getLength() )
             {
-                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                sPropName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
                 xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
             }
         }
@@ -800,7 +848,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         sal_Bool bSettingsRet(sal_False);
         ScMySharedData* pSharedData = NULL;
 
-        sal_Bool bOasis = pStorage->GetVersion() > SOFFICE_FILEFORMAT_60;
+        sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
         // meta export
         if (!bStylesOnly && !bMetaRet)
@@ -829,16 +877,15 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
         SvXMLGraphicHelper* pGraphicHelper = 0;
 
-        if( pStorage )
+        if( xStorage.is() )
         {
-            pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
             xGrfContainer = pGraphicHelper;
         }
 
-        SvPersist *pPersist = pObjSh;
-        if( pPersist )
+        if( pObjSh )
         {
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create( *pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *pObjSh, EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
             xObjectResolver = pObjectHelper;
         }
 
