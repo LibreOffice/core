@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-27 14:46:13 $
+ *  last change: $Author: fme $ $Date: 2001-06-19 12:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,14 +236,16 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
         sal_Bool bJump = sal_False;
         while( nLst < Count() && WRPOS( nLst ) < nEnd )
             ++nLst;
-        if( nLst > i && ( nWrPos = WRPOS( nLst - 1 ) ) <= nPos &&
-            nWrPos + ( nWrLen = WRLEN( nLst - 1 ) ) >= nEnd )
+        if( nLst > i && ( nWrPos = WRPOS( nLst - 1 ) ) <= nPos )
         {
-            nWrLen += (short)nDiff;
+            nWrLen = WRLEN( nLst - 1 );
+            // calculate new length of word
+            nWrLen = ( nEnd > nWrPos + nWrLen ) ?
+                       nPos - nWrPos :
+                       nWrLen + nDiff;
             if( nWrLen )
             {
-                GetObject( --nLst ) = nWrPos;
-                aLen.GetObject( nLst ) = nWrLen;
+                aLen.GetObject( --nLst ) = nWrLen;
                 bJump = sal_True;
             }
         }
@@ -252,12 +254,12 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
         if ( bJump )
             ++i;
         if( STRING_LEN == GetBeginInv() )
-            SetInvalid( nPos ? nPos - 1 : nPos, nPos );
+            SetInvalid( nPos ? nPos - 1 : nPos, nPos + 1 );
         else
         {
             ShiftLeft( nBeginInvalid, nPos, nEnd );
             ShiftLeft( nEndInvalid, nPos, nEnd );
-            _Invalidate( nPos ? nPos - 1 : nPos, nPos );
+            _Invalidate( nPos ? nPos - 1 : nPos, nPos + 1 );
         }
     }
     else
@@ -314,10 +316,20 @@ void SwWrongList::Clear( xub_StrLen nBegin, xub_StrLen nEnd )
     aLen.Remove( nFirst, i - nFirst );
 }
 
+/*************************************************************************
+ *                      SwWrongList::Fresh
+ *
+ * In this method the wrong list is updated, new wrong words are inserted,
+ * and by evaluating the postiztion of wrong words, we also know, which
+ * words are not wrong any longer and have to be removed.
+ * Note: Fresh has to be called at the end of the check of the invalid region,
+ * in order to find words, which are behind the last wrong word but not wrong
+ * any longer
+ *************************************************************************/
 sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
                          xub_StrLen nLen, MSHORT nIndex, xub_StrLen nCursorPos )
 {
-    sal_Bool bRet = nCursorPos > nPos + nLen || nCursorPos < nPos;
+    sal_Bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
     xub_StrLen nWrPos;
     xub_StrLen nWrEnd = rEnd;
     MSHORT nCnt = nIndex;
