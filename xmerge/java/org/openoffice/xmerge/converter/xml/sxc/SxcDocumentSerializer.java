@@ -546,24 +546,16 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         } else {
 
+            Debug.log(Debug.TRACE, "TRACE 1");
             CellStyle cStyle = (CellStyle)styleCat.lookup(styleName,
                                 SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
                                 CellStyle.class);
+            Debug.log(Debug.TRACE, "TRACE 2");
 
-            fmt.setItalic(cStyle.getAttribute(CellStyle.ITALIC));
-            fmt.setBold(cStyle.getAttribute(CellStyle.BOLD));
-            fmt.setUnderline(cStyle.getAttribute(CellStyle.UNDERLINE));
-
-            String align;
-
-            if(cStyle.getAttribute(CellStyle.ALIGN_CENTER))
-                align = "center";
-            else if(cStyle.getAttribute(CellStyle.ALIGN_RIGHT))
-                align = "right";
-            else
-                align = "left";
-
-            fmt.setAlign(align);
+            Format definedFormat = cStyle.getFormat();
+            Debug.log(Debug.TRACE, "TRACE 3");
+            fmt = new Format(definedFormat);
+            Debug.log(Debug.TRACE, "TRACE 4");
         }
 
         // There is a number of cols repeated attribute

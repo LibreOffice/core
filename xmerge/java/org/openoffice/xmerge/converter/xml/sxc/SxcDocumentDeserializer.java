@@ -473,7 +473,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 doc.insertBefore(autoStylesNode, bodyNode);
                }
 
-            CellStyle tStyle = fmt.getCellStyle();
+            CellStyle tStyle = new
+            CellStyle(  "Default",SxcConstants.TABLE_CELL_STYLE_FAMILY,
+                        SxcConstants.DEFAULT_STYLE, fmt, null);
             String styleName;
             Style result[] = (Style[]) styleCat.getMatching(tStyle);
             if(result.length==0) {

@@ -66,17 +66,44 @@ import org.openoffice.xmerge.util.Debug;
  */
 public class Format implements Cloneable {
 
+    /**  Alignment Constants. */
+    final public static int RIGHT_ALIGN     = 0x01;
+    final public static int CENTER_ALIGN    = 0x02;
+    final public static int LEFT_ALIGN      = 0x03;
+    final public static int JUST_ALIGN      = 0x04;
+
+    // final protected static int FIRST_ATTR = 0x01;
+    /** Indicates <i>bold</i> text. */
+    final public static int BOLD        = 0x01;
+    /** Indicates <i>italic</i> text. */
+    final public static int ITALIC      = 0x02;
+    /** Indicates <i>underlined</i> text. */
+    final public static int UNDERLINE   = 0x04;
+    /** Indicates <i>strike-through</i> in the text. */
+    final public static int STRIKETHRU  = 0x08;
+    /** Indicates <i>superscripted</i> text. */
+    final public static int SUPERSCRIPT = 0x10;
+    /** Indicates <i>subscripted</i> text. */
+    final public static int SUBSCRIPT   = 0x20;
+    // final protected static int LAST_ATTR = 0x20;
+
+    private int align;
     private String category;
     private String value;
     private String formatSpecifier;
     private int decimalPlaces;
-    private boolean bold;
-    private boolean italic;
-    private boolean underline;
-    private String font;
-    private Color foreground, background;
-    private String align;
 
+    /** Font name. */
+    private String fontName;
+    /** Font size in points. */
+    protected int sizeInPoints;
+
+    private Color foreground, background;
+
+    /** Values of text attributes. */
+    protected int attributes = 0;
+    /** Bitwise mask of text attributes. */
+    protected int mask = 0;
 
     /**
      *  Constructor for creating a new <code>Format</code>.
@@ -85,12 +112,24 @@ public class Format implements Cloneable {
         category = "";
         value = "";
         formatSpecifier = "";
-        font = "";
-        align = "";
+        fontName = "";
+        align = 0;
         foreground = Color.black;
         background = Color.white;
     }
 
+    /**
+     * Constructor that creates a new <code>Format</code> object
+     * by setting all the format attributes.
+     *
+     */
+       public Format(int attributes, int mask, int fontSize, String fontName) {
+
+        this.attributes = attributes;
+        this.mask = mask;
+        sizeInPoints = fontSize;
+        this.fontName = fontName;
+    }
 
     /**
      *  Constructor for creating a new <code>Format</code> object
@@ -103,10 +142,11 @@ public class Format implements Cloneable {
         value = fmt.getValue();
         formatSpecifier = fmt.getFormatSpecifier();
         decimalPlaces = fmt.getDecimalPlaces();
-        bold = fmt.isBold();
-        italic = fmt.isItalic();
-        underline = fmt.isUnderline();
-        font = fmt.getFont();
+
+        attributes = fmt.attributes;
+        mask = fmt.mask;
+
+        fontName = fmt.getFontName();
         align = fmt.getAlign();
         foreground = fmt.getForeground();
         background = fmt.getBackground();
@@ -121,13 +161,56 @@ public class Format implements Cloneable {
        value = "";
        formatSpecifier = "";
        decimalPlaces = 0;
-       bold = false;
-       italic = false;
-       underline = false;
-       align = "";
-       font = "";
+       attributes = 0;
+       mask = 0;
+       align = 0;
+       fontName = "";
        foreground = Color.black;
        background = Color.white;
+    }
+
+    /**
+     *  Set one or more text attributes to <i>on</i>.
+     *
+     *  @param  flags  Flag attributes to set <i>on</i>.
+     */
+    public void setAttribute(int flags, boolean toggle) {
+        mask |= flags;
+        if(toggle) {
+            attributes |= flags;
+        } else {
+            attributes &= ~flags;
+        }
+    }
+
+    /**
+     *  Return true if the <code>attribute</code> is set to <i>on</i>
+     *
+     *  @param  attribute  Attribute to check ({@link #BOLD},
+     *                     {@link #ITALIC}, etc.)
+     *
+     *  @return  true if <code>attribute</code> is set to <i>on</i>,
+     *           otherwise false.
+     */
+    public boolean getAttribute(int attribute) {
+        if ((mask & attribute) == 0)
+            return false;
+        return (!((attributes & attribute) == 0));
+    }
+
+    /**
+     *  Return true if text <code>attribute</code> is set in this
+     *  <code>Style</code>.  An attribute that is set may have a
+     *  value of <i>on</i> or <i>off</i>.
+     *
+     *  @param  attribute  The attribute to check ({@link #BOLD},
+     *                     {@link #ITALIC}, etc.).
+     *
+     *  @return  true if text <code>attribute</code> is set in this
+     *           <code>Style</code>, false otherwise.
+     */
+    public boolean isSet(int attribute) {
+        return (!((mask & attribute) == 0));
     }
 
 
@@ -216,75 +299,12 @@ public class Format implements Cloneable {
 
 
      /**
-      *  Set the object's bold flag.
-      *
-      *  @param  value  The value of the bold flag.  true is bold,
-      *                 false is not bold.
-      */
-     public void setBold(boolean value) {
-         bold = value;
-     }
-
-
-     /**
-      *  Get the object's bold flag.
-      *
-      *  @return  true if bold flag is on, false otherwise.
-      */
-     public boolean isBold() {
-         return bold;
-     }
-
-
-     /**
-      *  Set the object's italic flag.
-      *
-      *  @param  value  The value of the italic flag.  true is italic,
-      *                 false is not italic.
-      */
-     public void setItalic(boolean value) {
-         italic = value;
-     }
-
-
-     /**
-      *  Get the object's italic flag.
-      *
-      *  @return  True if italic flag is on, false otherwise.
-      */
-     public boolean isItalic() {
-         return italic;
-     }
-
-
-     /**
-      *  Set the object's underline flag.
-      *
-      *  @param  value  The value of the underline flag.  true is underlined,
-      *                 false is not underlined.
-      */
-     public void setUnderline(boolean value) {
-         underline = value;
-     }
-
-
-     /**
-      *  Get the object's underline flag.
-      *
-      *  @return  true if underline flag is on, false otherwise.
-      */
-     public boolean isUnderline() {
-         return underline;
-     }
-
-
-     /**
       *  Set the font used for this cell.
       *
       *  @param  fontName  The name of the font.
       */
-     public void setFont(String fontName) {
-         font = fontName;
+     public void setFontName(String fontName) {
+         this.fontName = fontName;
      }
 
 
@@ -293,16 +313,34 @@ public class Format implements Cloneable {
       *
       *  @return  The font name.
       */
-     public String getFont() {
-         return font;
+     public String getFontName() {
+         return fontName;
      }
 
+     /**
+      *  Set the font used for this cell.
+      *
+      *  @param  fontName  The name of the font.
+      */
+     public void setFontSize(int fontSize) {
+         sizeInPoints = fontSize;
+     }
+
+
+     /**
+      *  Get the font used for this cell.
+      *
+      *  @return  The font name.
+      */
+     public int getFontSize() {
+         return sizeInPoints;
+     }
       /**
       *  Set the alignmen used for this cell.
       *
       *  @param  fontName  The name of the font.
       */
-     public void setAlign(String align) {
+     public void setAlign(int align) {
          this.align = align;
      }
 
@@ -312,7 +350,7 @@ public class Format implements Cloneable {
       *
       *  @return  The font name.
       */
-     public String getAlign() {
+     public int getAlign() {
          return align;
      }
      /**
@@ -342,8 +380,9 @@ public class Format implements Cloneable {
       *  @param  color  A <code>Color</code> object representing
       *                 the background color.
       */
-     public void setBackground(Color color) {
-         background = new Color(color.getRGB());
+     public void setBackground(Color backgroundColor) {
+         if(backgroundColor != null)
+             background = new Color(backgroundColor.getRGB());
      }
 
 
@@ -365,40 +404,50 @@ public class Format implements Cloneable {
          return new String("Value : " + getValue() + " Category : " + getCategory());
      }
 
-     /**
-      * Return a <code>CellStyle</code> for this cell Format
-      *
-      *  @return    the <code>CellStyle</code> representing this format
-      */
-    public CellStyle getCellStyle() {
+    /**
+     *  Return true if <code>style</code> specifies as much or less
+     *  than this <code>Style</code>, and nothing it specifies
+     *  contradicts this <code>Style</code>.
+     *
+     *  @param  style  The <code>Style</code> to check.
+     *
+     *  @return  true if <code>style</code> is a subset, false
+     *           otherwise.
+     */
+    public boolean isSubset(Format rhs) {
+        if (rhs.getClass() != this.getClass())
+                return false;
 
-        // Setup cell style information
-        int mask = CellStyle.BOLD | CellStyle.ITALIC | CellStyle.UNDERLINE
-                    | CellStyle.STRIKETHRU
-                    | CellStyle.ALIGN_CENTER | CellStyle.ALIGN_RIGHT | CellStyle.ALIGN_LEFT;
+        if (rhs.attributes!= attributes)
+                return false;
 
-        int modifiers = 0;
-
-        if(italic) {
-            modifiers |= CellStyle.ITALIC;
-        }
-        if(bold) {
-            modifiers |= CellStyle.BOLD;
-        }
-        if(underline) {
-            modifiers |= CellStyle.UNDERLINE;
+        if (rhs.sizeInPoints != 0) {
+            if (sizeInPoints != rhs.sizeInPoints)
+                return false;
         }
 
-        if(align.equals("center")) {
-            modifiers |= CellStyle.ALIGN_CENTER;
-        } else if(align.equals("right")) {
-            modifiers |= CellStyle.ALIGN_RIGHT;
-        } else if(align.equals("left")) {
-            modifiers |= CellStyle.ALIGN_LEFT;
+        if (rhs.fontName != null) {
+            if (fontName == null)
+                return false;
+            if (!fontName.equals(rhs.fontName))
+                return false;
         }
 
-        return new CellStyle("Default", SxcConstants.TABLE_CELL_STYLE_FAMILY, SxcConstants.DEFAULT_STYLE,
-                                        mask, modifiers, 0, null, null);
-     }
+        if (rhs.foreground != null) {
+            if (foreground== null)
+                return false;
+            if (!foreground.equals(rhs.foreground))
+                return false;
+        }
+
+        if (rhs.background != null) {
+            if (background== null)
+                return false;
+            if (!background.equals(rhs.background))
+                return false;
+        }
+
+        return true;
+    }
 }
 

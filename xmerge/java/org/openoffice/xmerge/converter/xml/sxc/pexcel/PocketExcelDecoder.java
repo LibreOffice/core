@@ -401,9 +401,9 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         Debug.log(Debug.TRACE," ixfnt for Current Cell " + xf.getFontIndex());
         FontDescription fd = wb.getFontDescription(xf.getFontIndex());
 
-        fmt.setItalic(fd.isItalic());
-        fmt.setBold(fd.isBold());
-        fmt.setUnderline(fd.isUnderline());
+        fmt.setAttribute(Format.ITALIC, fd.isItalic());
+        fmt.setAttribute(Format.BOLD, fd.isBold());
+        fmt.setAttribute(Format.UNDERLINE, fd.isUnderline());
 
         fmt.setAlign(xf.getAlign());
 

@@ -286,9 +286,9 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *                 this cell.
      */
     public void setCellFormat(int row, int column, Format fmt) {
-        Debug.log(Debug.TRACE,"bold : " + fmt.isBold() +
-                            ",Italic : " + fmt.isItalic() +
-                            ",Underline : " + fmt.isUnderline());
+        Debug.log(Debug.TRACE,"bold : " + fmt.getAttribute(Format.BOLD) +
+                            ",Italic : " + fmt.getAttribute(Format.ITALIC) +
+                            ",Underline : " + fmt.getAttribute(Format.UNDERLINE));
     }
 
 

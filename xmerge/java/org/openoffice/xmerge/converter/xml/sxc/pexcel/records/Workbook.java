@@ -376,7 +376,7 @@ OfficeConstants {
     throws IOException {
 
         Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
-        FontDescription fd = new FontDescription(fmt.isItalic(), fmt.isBold(), fmt.isUnderline());
+        FontDescription fd = new FontDescription(fmt);
         int ixfnt = addFont(fd);
         ExtendedFormat xf = new ExtendedFormat(ixfnt, fmt);
         int ixfe = addExtendedFormat(xf);

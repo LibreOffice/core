@@ -60,6 +60,7 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
+import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 
@@ -87,22 +88,22 @@ public class FontDescription implements BIFFRecord {
       * @param  bold        Bold attribute
       * @param  underline   Underline attribute
       */
-    public FontDescription(boolean italic, boolean bold, boolean underline) throws IOException {
+    public FontDescription(Format fmt) throws IOException {
 
-        Debug.log(Debug.TRACE,"italic : " + italic + " bold : " + bold + " underline : " + underline);
+        Debug.log(Debug.TRACE,"Building FontDescriptor based on Format : " + fmt);
 
         this.dwHeight   = EndianConverter.writeShort((short) 200);
-        if (italic)
+        if (fmt.getAttribute(Format.ITALIC))
             this.grbit      = EndianConverter.writeShort((short) 2);
         else
             this.grbit      = EndianConverter.writeShort((short) 0);
 
-        if (bold)
+        if (fmt.getAttribute(Format.BOLD))
             this.bls        = EndianConverter.writeShort((short) 700);
         else
             this.bls        = EndianConverter.writeShort((short) 400);
 
-        if (underline)
+        if (fmt.getAttribute(Format.UNDERLINE))
             this.uls        = 1;
         else
             this.uls        = 0;

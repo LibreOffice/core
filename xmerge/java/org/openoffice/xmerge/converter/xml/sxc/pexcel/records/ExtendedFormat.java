@@ -117,12 +117,12 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
         this.fattributes    = new byte[] {(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
         this.fBaseAttr      = new byte[] {(byte)0x02,(byte)0x00};
 
-        String align = fmt.getAlign();
-        if(align.equals("center")) {
+        int align = fmt.getAlign();
+        if(align==Format.CENTER_ALIGN) {
             this.fTextAttr      = new byte[] {(byte)0x32,(byte)0x00};
-        } else if(align.equals("left")) {
+        } else if(align==Format.LEFT_ALIGN) {
             this.fTextAttr      = new byte[] {(byte)0x31,(byte)0x00};
-        } else if(align.equals("right")) {
+        } else if(align==Format.RIGHT_ALIGN) {
             this.fTextAttr      = new byte[] {(byte)0x33,(byte)0x00};
         } else {
             this.fTextAttr      = new byte[] {(byte)0x30,(byte)0x00};
@@ -161,22 +161,22 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      *
      * @return the alignment
      */
-    public String getAlign() {
+    public int getAlign() {
 
-        String align;
+        int align;
 
         switch(EndianConverter.readShort(fTextAttr)) {
             case 0x31:
-                align = "left";
+                align = Format.LEFT_ALIGN;
                 break;
             case 0x32:
-                align = "center";
+                align = Format.CENTER_ALIGN;
                 break;
             case 0x33:
-                align = "right";
+                align = Format.RIGHT_ALIGN;
                 break;
             default:
-                align = "left";
+                align = Format.LEFT_ALIGN;
                 break;
         }
 
@@ -191,11 +191,11 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      */
     public boolean compareTo(ExtendedFormat rhs) {
 
-        String currentAlignment = this.getAlign();
+        int currentAlignment = this.getAlign();
 
         if (this.getFontIndex() == rhs.getFontIndex() &&
             this.getFormatIndex() == rhs.getFormatIndex() &&
-            currentAlignment.equals(rhs.getAlign()))
+            currentAlignment == rhs.getAlign())
             return true;
         else
             return false;

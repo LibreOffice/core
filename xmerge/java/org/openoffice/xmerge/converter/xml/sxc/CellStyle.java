@@ -74,49 +74,11 @@ import org.openoffice.xmerge.util.Debug;
 /**
  *  Represents a text <code>Style</code> in an OpenOffice document.
  *
- *  @author   David Proulx
+ *  @author Martin Maher
  */
 public class CellStyle extends Style implements Cloneable {
 
-    final protected static int FIRST_ATTR = 0x01;
-    /** Indicates <i>bold</i> text. */
-    final public static int BOLD        = 0x01;
-    /** Indicates <i>italic</i> text. */
-    final public static int ITALIC      = 0x02;
-    /** Indicates <i>underlined</i> text. */
-    final public static int UNDERLINE   = 0x04;
-    /** Indicates <i>strike-through</i> in the text. */
-    final public static int STRIKETHRU  = 0x08;
-    /** Indicates <i>superscripted</i> text. */
-    final public static int SUPERSCRIPT = 0x10;
-    /** Indicates <i>subscripted</i> text. */
-    final public static int SUBSCRIPT   = 0x20;
-    /**  Align right. */
-    final public static int ALIGN_RIGHT   = 0x40;
-    /**  Align center. */
-    final public static int ALIGN_CENTER  = 0x80;
-    /**  Align justified. */
-    final public static int ALIGN_JUST    = 0x100;
-    /**  Align left. */
-    final public static int ALIGN_LEFT    = 0x200;
-
-
-    /** Indicates the last attribute. */
-    final protected static int LAST_ATTR = 0x200;
-
-    /** Values of text attributes. */
-    protected int values = 0;
-    /** Bitwise mask of text attributes. */
-    protected int mask = 0;
-
-    /** Font size in points. */
-    protected int sizeInPoints = 0;
-    /** Font name. */
-    protected String fontName = null;
-    /** Font <code>Color</code>. */
-    protected Color fontColor = null;
-    /** Background <code>Color</code>. */
-    protected Color bgColor = null;
+    private Format fmt = new Format();
 
     /**
      *  Constructor for use when going from DOM to client device format.
@@ -198,12 +160,22 @@ public class CellStyle extends Style implements Cloneable {
     public CellStyle(String name, String family, String parent,
     int mask, int values, int fontSize, String fontName, StyleCatalog sc) {
         super(name, family, parent, sc);
-        this.mask = mask;
-        this.values = values;
-        this.sizeInPoints = fontSize;
-        this.fontName = fontName;
+        fmt = new Format(values, mask, fontSize, fontName);
     }
 
+    public CellStyle(String name, String family, String parent,Format fmt, StyleCatalog sc) {
+        super(name, family, parent, sc);
+        this.fmt = fmt;
+    }
+
+    /**
+     * Returns the <code>Format</code> object for this particular style
+     *
+     * @returns the <code>Format</code> object
+     */
+    public Format getFormat() {
+        return fmt;
+    }
 
     /**
      *  Parse a color specification of the form <i>#rrggbb</i>
@@ -240,37 +212,31 @@ public class CellStyle extends Style implements Cloneable {
     private void handleAttribute(String attr, String value) {
 
         if (attr.equals("fo:font-weight")) {
-            if (value.equals("bold")) turnAttributesOn(BOLD);
-            else if (value.equals("normal")) turnAttributesOff(BOLD);
+            fmt.setAttribute(Format.BOLD, value.equals("bold"));
         }
 
         else if (attr.equals("fo:font-style")) {
-            if (value.equals("italic")) turnAttributesOn(ITALIC);
-            else if (value.equals("oblique")) turnAttributesOn(ITALIC);
-            else if (value.equals("normal")) turnAttributesOff(ITALIC);
+            if (value.equals("italic")  || value.equals("oblique"))
+                fmt.setAttribute(Format.ITALIC, true);
+            else if (value.equals("normal"))
+                fmt.setAttribute(Format.ITALIC, false);
         }
 
         else if (attr.equals("style:text-underline")) {
-            if (value.equals("none"))
-                turnAttributesOff(UNDERLINE);
-            else
-                turnAttributesOn(UNDERLINE);
+            fmt.setAttribute(Format.UNDERLINE, !value.equals("none"));
         }
 
         else if (attr.equals("style:text-crossing-out")) {
-            if (value.equals("none"))
-                turnAttributesOff(STRIKETHRU);
-            else
-                turnAttributesOn(STRIKETHRU);
+            fmt.setAttribute(Format.STRIKETHRU, !value.equals("none"));
         }
 
         else if (attr.equals("style:text-position")) {
             if (value.startsWith("super "))
-                turnAttributesOn(SUPERSCRIPT);
+                fmt.setAttribute(Format.SUPERSCRIPT, true);
             else if (value.startsWith("sub "))
-                turnAttributesOn(SUBSCRIPT);
+                fmt.setAttribute(Format.SUBSCRIPT, true);
             else if (value.startsWith("0% "))
-                turnAttributesOff(SUPERSCRIPT | SUBSCRIPT);
+                fmt.setAttribute(Format.SUPERSCRIPT | Format.SUBSCRIPT, false);
             else {
                 String firstPart = value.substring(0, value.indexOf(" "));
                 if (firstPart.endsWith("%")) {
@@ -282,8 +248,8 @@ public class CellStyle extends Style implements Cloneable {
                         amount = 0;
                         Debug.log(Debug.ERROR, "Problem with style:text-position tag", e);
                     }
-                    if (amount < 0) turnAttributesOn(SUBSCRIPT);
-                    else if (amount > 0) turnAttributesOn(SUPERSCRIPT);
+                    if (amount < 0) fmt.setAttribute(Format.SUBSCRIPT, true);
+                    else if (amount > 0) fmt.setAttribute(Format.SUPERSCRIPT, false);
                 }
             }
         }
@@ -291,26 +257,27 @@ public class CellStyle extends Style implements Cloneable {
         else if (attr.equals("fo:font-size")) {
             if (value.endsWith("pt")) {
                 String num = value.substring(0, value.length() - 2);
-                sizeInPoints = Integer.parseInt(num);
+                fmt.setFontSize(Integer.parseInt(num));
             }
         }
 
         else if (attr.equals("style:font-name"))
-            fontName = value;
+            fmt.setFontName(value);
 
         else if (attr.equals("fo:color"))
-            fontColor = parseColorString(value);
+            fmt.setForeground(parseColorString(value));
 
         else if (attr.equals("style:text-background-color"))
-            bgColor = parseColorString(value);
+            fmt.setBackground(parseColorString(value));
 
         else if (attr.equals("fo:text-align")) {
+            fmt.setAlign(Format.RIGHT_ALIGN);
             if(value.equals("center")) {
-                turnAttributesOn(ALIGN_CENTER);
+                fmt.setAlign(Format.CENTER_ALIGN);
             } else if(value.equals("end")) {
-                turnAttributesOn(ALIGN_RIGHT);
+                fmt.setAlign(Format.RIGHT_ALIGN);
             } else if(value.equals("start")) {
-                turnAttributesOn(ALIGN_LEFT);
+                fmt.setAlign(Format.LEFT_ALIGN);
             }
         }
 
@@ -319,98 +286,6 @@ public class CellStyle extends Style implements Cloneable {
         else {
             Debug.log(Debug.INFO, "CellStyle Unhandled: " + attr + "=" + value);
         }
-    }
-
-
-    /**
-     *  Return true if text <code>attribute</code> is set in this
-     *  <code>Style</code>.  An attribute that is set may have a
-     *  value of <i>on</i> or <i>off</i>.
-     *
-     *  @param  attribute  The attribute to check ({@link #BOLD},
-     *                     {@link #ITALIC}, etc.).
-     *
-     *  @return  true if text <code>attribute</code> is set in this
-     *           <code>Style</code>, false otherwise.
-     */
-    public boolean isSet(int attribute) {
-        return (!((mask & attribute) == 0));
-    }
-
-
-    /**
-     *  Return true if the <code>attribute</code> is set to <i>on</i>
-     *
-     *  @param  attribute  Attribute to check ({@link #BOLD},
-     *                     {@link #ITALIC}, etc.)
-     *
-     *  @return  true if <code>attribute</code> is set to <i>on</i>,
-     *           otherwise false.
-     */
-    public boolean getAttribute(int attribute) {
-        if ((mask & attribute) == 0)
-            return false;
-        return (!((values & attribute) == 0));
-    }
-
-
-    /**
-     *  Return the font size for this <code>Style</code>.
-     *
-     *  @return  The font size in points
-     */
-    public int getFontSize() {
-        return sizeInPoints;
-    }
-
-
-    /**
-     *  Return the name of the font for this <code>Style</code>.
-     *
-     *  @return  Name of font, or null if no font is specified by
-     *          this <code>Style</code>.
-     */
-    public String getFontName() {
-        return fontName;
-    }
-
-
-    /**
-     *  Return the font <code>Color</code> for this <code>Style</code>.
-     *  Can be null if none was specified.
-     *
-     *  @return  <code>Color</code> value for this <code>Style</code>.
-     *           Can be null.
-     */
-    public Color getFontColor() {
-        return fontColor;
-    }
-
-
-    /**
-     *  Return the background <code>Color</code> for this
-     *  <code>Style</code>.  Can be null if none was specified.
-     *
-     *  @return  Background <code>Color</code> value for this
-     *           <code>Style</code>.  Can be null.
-     */
-    public Color getBackgroundColor() {
-        return bgColor;
-    }
-
-
-    /**
-     *  Set the font and/or background <code>Color</code> for this
-     *  <code>Style</code>.
-     *
-     *  @param  fontColor        The font <code>Color</code> to set.
-     *  @param  backgroundColor  The background <code>Color</code> to set.
-     */
-    public void setColors(Color fontColor, Color backgroundColor) {
-        if (fontColor != null)
-            this.fontColor = fontColor;
-        if (backgroundColor != null)
-            this.bgColor = backgroundColor;
     }
 
 
@@ -456,105 +331,27 @@ public class CellStyle extends Style implements Cloneable {
         // set, try to get the values from the parent.
         if (parentStyle != null) {
             parentStyle = (CellStyle)parentStyle.getResolved();
+            Format parentFormat = parentStyle.getFormat();
+            Format resolvedFormat = resolved.getFormat();
 
-            if ((sizeInPoints == 0) && (parentStyle.sizeInPoints != 0))
-                resolved.sizeInPoints = parentStyle.sizeInPoints;
-            if ((fontName == null) && (parentStyle.fontName != null))
-                resolved.fontName = parentStyle.fontName;
-            if ((fontColor == null) && (parentStyle.fontColor != null))
-                resolved.fontColor = parentStyle.fontColor;
-            if ((bgColor == null) && (parentStyle.bgColor != null))
-                resolved.bgColor = parentStyle.bgColor;
-            for (int m = BOLD; m <= SUBSCRIPT; m = m << 1) {
-                if (((mask & m) == 0) && ((parentStyle.mask & m) != 0)) {
-                    resolved.mask |= m;
-                    resolved.values |= (parentStyle.mask & m);
+            if ((fmt.getFontSize() == 0) && (parentFormat.getFontSize() != 0))
+                resolvedFormat.setFontSize(parentFormat.getFontSize());
+            if ((fmt.getFontName() == null) && (parentFormat.getFontName() != null))
+                resolvedFormat.setFontName(parentFormat.getFontName());
+            if ((fmt.getForeground() == null) && (parentFormat.getForeground() != null))
+                resolvedFormat.setForeground(parentFormat.getForeground());
+            if ((fmt.getBackground() == null) && (parentFormat.getBackground() != null))
+                resolvedFormat.setBackground(parentFormat.getBackground());
+            for (int m = Format.BOLD; m <= Format.SUBSCRIPT; m = m << 1) {
+                if ((fmt.getAttribute(m)) && (parentFormat.getAttribute(m))) {
+                    resolvedFormat.setAttribute(m, parentFormat.getAttribute(m));
+                    // resolved.mask |= m;
+                    // resolved.values |= (parentStyle.mask & m);
                 }
             }
 
         }
         return resolved;
-    }
-
-
-    /**
-     *  Set one or more text attributes to <i>on</i>.
-     *
-     *  @param  flags  Flag values to set <i>on</i>.
-     */
-    private void turnAttributesOn(int flags) {
-        mask |= flags;
-        values |= flags;
-    }
-
-
-    /**
-     *  Set one or more text attributes to <i>off</i>.
-     *
-     *  @param  flags  The flag values to set <i>off</i>.
-     */
-    private void turnAttributesOff(int flags) {
-        mask |= flags;
-        values &= ~flags;
-    }
-
-
-    /**
-     *  Private function to return the value as an element in
-     *  a Comma Separated Value (CSV) format.
-     *
-     *  @param  The value to format.
-     *
-     *  @return  The formatted value.
-     */
-    private static String toCSV(String value) {
-        if (value != null)
-            return "\"" + value + "\",";
-        else
-            return "\"\",";
-    }
-
-
-    /**
-     *  Private function to return the value as a last element in
-     *  a Comma Separated Value (CSV) format.
-     *
-     *  @param  value  The value to format.
-     *
-     *  @return  The formatted value.
-     */
-    private static String toLastCSV(String value) {
-        if (value != null)
-            return "\"" + value + "\"";
-        else
-            return "\"\"";
-    }
-
-
-    /**
-     *  Print a Comma Separated Value (CSV) header line for the
-     *  spreadsheet dump.
-     */
-    public static void dumpHdr() {
-        System.out.println(toCSV("Name") + toCSV("Family") + toCSV("parent")
-        + toCSV("Font") + toCSV("Size")
-        + toCSV("Bold") + toCSV("Italic") + toCSV("Underline")
-        + toCSV("Strikethru") + toCSV("Superscript") + toLastCSV("Subscript"));
-    }
-
-
-    /**
-     *  Dump this <code>Style</code> as a Comma Separated Value (CSV) line.
-     */
-    public void dumpCSV() {
-        String attributes = "";
-        for (int bitVal = 0x01; bitVal <= 0x20; bitVal = bitVal << 1) {
-            if ((bitVal & mask) != 0) {
-                attributes += toCSV(((bitVal & values) != 0) ? "yes" : "no");
-            } else attributes += toCSV(null);  // unspecified
-        }
-        System.out.println(toCSV(name) + toCSV(family) + toCSV(parent)
-        + toCSV(fontName) + toCSV("" + sizeInPoints) + attributes + toLastCSV(null));
     }
 
 
@@ -591,34 +388,10 @@ public class CellStyle extends Style implements Cloneable {
                 return false;
         CellStyle tStyle = (CellStyle)style;
 
-        if (tStyle.values != values)
-                return false;
+        Format rhs = tStyle.getFormat();
 
-        if (tStyle.sizeInPoints != 0) {
-            if (sizeInPoints != tStyle.sizeInPoints)
-                return false;
-        }
-
-        if (tStyle.fontName != null) {
-            if (fontName == null)
-                return false;
-            if (!fontName.equals(tStyle.fontName))
-                return false;
-        }
-
-        if (tStyle.fontColor != null) {
-            if (fontColor == null)
-                return false;
-            if (!fontColor.equals(tStyle.fontColor))
-                return false;
-        }
-
-        if (tStyle.bgColor != null) {
-            if (bgColor == null)
-                return false;
-            if (!bgColor.equals(tStyle.bgColor))
-                return false;
-        }
+        if(!fmt.isSubset(rhs))
+            return false;
 
         return true;
     }
@@ -633,56 +406,47 @@ public class CellStyle extends Style implements Cloneable {
      */
     public void writeAttributes(Element node) {
 
-        if ((mask & ALIGN_RIGHT) != 0)
-            if ((values & ALIGN_RIGHT) != 0)
-                node.setAttribute("fo:text-align", "end");
+        if (fmt.getAlign()==Format.RIGHT_ALIGN)
+            node.setAttribute("fo:text-align", "end");
 
-        if ((mask & ALIGN_LEFT) != 0)
-            if ((values & ALIGN_LEFT) != 0)
-                node.setAttribute("fo:text-align", "start");
+        if (fmt.getAlign()==Format.LEFT_ALIGN)
+            node.setAttribute("fo:text-align", "start");
 
-        if ((mask & ALIGN_CENTER) != 0)
-            if ((values & ALIGN_CENTER) != 0)
-                node.setAttribute("fo:text-align", "center");
+        if (fmt.getAlign()==Format.CENTER_ALIGN)
+            node.setAttribute("fo:text-align", "center");
 
-        if ((mask & BOLD) != 0)
-            if ((values & BOLD) != 0)
-                node.setAttribute("fo:font-weight", "bold");
+        if (fmt.getAttribute(Format.BOLD))
+            node.setAttribute("fo:font-weight", "bold");
 
-        if ((mask & ITALIC) != 0)
-            if ((values & ITALIC) != 0)
-                node.setAttribute("fo:font-style", "italic");
+        if (fmt.getAttribute(Format.ITALIC))
+            node.setAttribute("fo:font-style", "italic");
 
-        if ((mask & UNDERLINE) != 0)
-            if ((values & UNDERLINE) != 0)
-                node.setAttribute("style:text-underline", "single");
+        if (fmt.getAttribute(Format.UNDERLINE))
+            node.setAttribute("style:text-underline", "single");
 
-        if ((mask & STRIKETHRU) != 0)
-            if ((values & STRIKETHRU) != 0)
-                node.setAttribute("style:text-crossing-out", "single-line");
+        if (fmt.getAttribute(Format.STRIKETHRU))
+            node.setAttribute("style:text-crossing-out", "single-line");
 
-        if ((mask & SUPERSCRIPT) != 0)
-            if ((values & SUPERSCRIPT) != 0)
-                node.setAttribute("style:text-position", "super 58%");
+        if (fmt.getAttribute(Format.SUPERSCRIPT))
+            node.setAttribute("style:text-position", "super 58%");
 
-        if ((mask & SUBSCRIPT) != 0)
-            if ((values & SUBSCRIPT) != 0)
-                node.setAttribute("style:text-position", "sub 58%");
+        if (fmt.getAttribute(Format.SUBSCRIPT))
+            node.setAttribute("style:text-position", "sub 58%");
 
-        if (sizeInPoints != 0) {
-            Integer fs = new Integer(sizeInPoints);
+        if (fmt.getFontSize() != 0) {
+            Integer fs = new Integer(fmt.getFontSize());
             node.setAttribute("fo:font-size", fs.toString() + "pt");
         }
 
-        if (fontName != null)
-            node.setAttribute("style:font-name", fontName);
+        if (fmt.getFontName() != null)
+            node.setAttribute("style:font-name", fmt.getFontName());
 
-        if (fontColor != null)
-            node.setAttribute("fo:color", buildColorString(fontColor));
+        if (fmt.getForeground() != null)
+            node.setAttribute("fo:color", buildColorString(fmt.getForeground()));
 
-        if (bgColor != null)
+        if (fmt.getBackground() != null)
             node.setAttribute("style:text-background-color",
-                              buildColorString(bgColor));
+                              buildColorString(fmt.getBackground()));
     }
 
 
