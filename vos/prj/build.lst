@@ -5,4 +5,3 @@ vo	vos\jobs								get		-	all	vo_jobs NULL
 vo	vos\prj									get		-	all	vo_prj NULL
 vo	vos\source								nmake	-	all	vo_sou NULL
 vo	vos\util								nmake	-	all	vo_util vo_sou NULL
-vo	vos\workben\proxy						nmake	-	all	vo_proxy vo_util NULL
