@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:42:18 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 15:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,12 +173,6 @@ ImageList* GetImageList( BOOL bBig, BOOL bHiContrast = FALSE )
             rpList = new ImageList( aResId );
         else
             rpList = new ImageList();
-
-        // Testcode!!!
-        char temp[128];
-        sprintf( temp, "g:\\imagelist%d%d.bmp", bBig ? 1 : 0, bHiContrast ? 1: 0 );
-        SvFileStream aBitmapStream( String::CreateFromAscii( temp ), STREAM_STD_WRITE);
-        aBitmapStream << rpList->GetBitmap();
     }
 
     return rpList;

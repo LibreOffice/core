@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:40:06 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 15:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,6 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig, BOOL bHiCon
             rpList = new ImageList( aResId );
         else
             rpList = new ImageList();
-
-        // Testcode!!!
-        char temp[128];
-        sprintf( temp, "g:\\imagelist_m%d%d.bmp", bBig ? 1 : 0, bHiContrast ? 1: 0 );
-        SvFileStream aBitmapStream( String::CreateFromAscii( temp ), STREAM_STD_WRITE);
-        aBitmapStream << rpList->GetBitmap();
     }
 
     return rpList;
