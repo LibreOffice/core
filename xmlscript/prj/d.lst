@@ -9,6 +9,8 @@ mkdir: %_DEST%\inc\xmlscript
 ..\inc\xmlscript\xmllib_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmllib_imexp.hxx
 ..\inc\xmlscript\xmlmod_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmlmod_imexp.hxx
 
+..\dtd\*.dtd %_DEST%\bin%_EXT%\*.dtd
+
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
