@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-20 10:47:06 $
+ *  last change: $Author: dr $ $Date: 2001-11-23 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4669,7 +4669,7 @@ void ExcArray::SaveCont( XclExpStream& rStrm )
 {
 //  rStrm   << nFirstRow << nLastRow << nFirstCol << nLastCol
 //          << ( UINT8 ) 0 << nID << ( UINT8 ) 0xFE << nFormLen;
-    rStrm   << nFirstRow << nLastRow << nFirstCol << nLastCol << ( UINT16 ) 0 << ( UINT32 ) 0 << nFormLen;
+    rStrm   << nFirstRow << nLastRow << nFirstCol << nLastCol << ( UINT16 ) 0x0003 << ( UINT32 ) 0 << nFormLen;
                                                                 // grbit            chn
 
     if( pData )
@@ -4798,7 +4798,7 @@ BOOL ExcArray::AppendBy( UINT8 nFCol, UINT16 nFRow, UINT8 nLCol, UINT16 nLRow )
     }
     else if( nNewCol == nLCol && nFirstRow <= nFRow && nNewRow >= nLRow )
     {
-        nLastRow = ( UINT8 ) nNewRow;
+        nLastCol = ( UINT8 ) nNewCol;
 
         if( nNewRow == nFRow )
             nLastRow = nNewRow;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 12:17:21 $
+ *  last change: $Author: dr $ $Date: 2001-11-23 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ BOOL ShrfmlaBuffer::GetAddress( const String& rName, ScRange& rRet )
                     nPos = aTmp.Search( '_' );
                     if( nPos != STRING_NOTFOUND )
                     {
-                        rRet.aStart.SetRow( ( USHORT ) aTmp.ToInt32() );
+                        rRet.aEnd.SetRow( ( USHORT ) aTmp.ToInt32() );
                         aTmp.Erase( 0, nPos + 1 );
 
                         rRet.aStart.SetTab( ( USHORT ) aTmp.ToInt32() );
