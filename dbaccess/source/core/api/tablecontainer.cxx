@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-01 09:49:03 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 11:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,44 +753,43 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
-    }
 
-
-    // create a new config entry
-    if(m_aTablesConfig.isValid())
-    {
-        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-        descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-        descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-        descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
-        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False);
-
-        OConfigurationNode aTableConfig;
-        if(m_aTablesConfig.hasByName(sComposedName))
-            aTableConfig = m_aTablesConfig.openNode(sComposedName);
-        else
+        // create a new config entry
+        if(m_aTablesConfig.isValid())
         {
-            aTableConfig = m_aTablesConfig.createNode(sComposedName);
-            m_aCommitLocation.commit();
-        }
-        Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-        if(xTunnel.is())
-        {
-            ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
-            if(pDecoTable)
-            {
-                pDecoTable->setConfigurationNode(aTableConfig.cloneAsRoot());
-            }
+            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+            descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+            descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+            descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+
+            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False);
+
+            OConfigurationNode aTableConfig;
+            if(m_aTablesConfig.hasByName(sComposedName))
+                aTableConfig = m_aTablesConfig.openNode(sComposedName);
             else
             {
-                ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
-                if(pTable)
-                    pTable->setConfigurationNode(aTableConfig.cloneAsRoot());
+                aTableConfig = m_aTablesConfig.createNode(sComposedName);
+                m_aCommitLocation.commit();
+            }
+            Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+            if(xTunnel.is())
+            {
+                ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
+                if(pDecoTable)
+                {
+                    pDecoTable->setConfigurationNode(aTableConfig.cloneAsRoot());
+                }
+                else
+                {
+                    ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
+                    if(pTable)
+                        pTable->setConfigurationNode(aTableConfig.cloneAsRoot());
+                }
             }
         }
+        OCollection::appendByDescriptor(descriptor);
     }
-    OCollection::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -862,7 +861,6 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     {
         Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
         OCollection::appendByDescriptor(xProp);
-
     }
 }
 // -----------------------------------------------------------------------------
