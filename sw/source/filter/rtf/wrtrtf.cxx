@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:31:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,6 +1127,8 @@ const rtl::OUString SwRTFWriter::XlateFmtName( const rtl::OUString &rName, SwGet
             "Style-UEbersetzungstabelle hat falsche Groesse" );
 
     sal_uInt16 idcol = ::SwStyleNameMapper::GetPoolIdFromUIName( rName, eFlags );
+    if (idcol==USHRT_MAX) //#i40770# user defined style names get lost
+        return rName;
 
     for (int i = 0; i < sizeof( aArr ) / sizeof( *aArr ); i++)
     {
