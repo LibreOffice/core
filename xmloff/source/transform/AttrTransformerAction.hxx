@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:26:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ enum XMLAttrTransformerAction
     XML_ATACTION_DRAW_MIRROR_OASIS,      // renames style:mirror to draw:mirror and adapts values
     XML_ATACTION_GAMMA_OASIS,            // converts percentage to double value
     XML_ATACTION_GAMMA_OOO,              // converts double value to percentage
+    XML_ATACTION_DECODE_ID,              // converts strings with non numeric characters to only numeric character ids
     XML_ATACTION_USER_DEFINED=0x80000000,// user defined actions start here
     XML_ATACTION_END=XML_TACTION_END
 };
