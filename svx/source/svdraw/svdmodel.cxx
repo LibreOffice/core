@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: ka $ $Date: 2000-10-31 17:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,6 +1494,18 @@ void SdrModel::MoveMasterPage(USHORT nPgNum, USHORT nNewPos)
 
 void SdrModel::WriteData(SvStream& rOut) const
 {
+    const ULONG nOldCompressMode = nStreamCompressMode;
+    ULONG       nNewCompressMode = nStreamCompressMode;
+
+    if( SOFFICE_FILEFORMAT_40 <= rOut.GetVersion() )
+    {
+        if( IsSaveCompressed() )
+            nNewCompressMode |= COMPRESSMODE_ZBITMAP;
+
+        if( IsSaveNative() )
+            nNewCompressMode |= COMPRESSMODE_NATIVE;
+    }
+
     // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
     SdrDownCompat aCompat(rOut, STREAM_WRITE);
 
@@ -1560,12 +1572,12 @@ void SdrModel::WriteData(SvStream& rOut) const
 #endif
 
             // ab V11
-            rOut << nStreamCompressMode;
+            rOut << nNewCompressMode;
 
             // ab V11
             rOut << UINT16(rOut.GetNumberFormatInt());
 
-            rOut.SetCompressMode(nStreamCompressMode);
+            rOut.SetCompressMode(nNewCompressMode);
             // CompressMode erst an dieser Stelle setzen, damit konform zu ReadData()
         }
 
