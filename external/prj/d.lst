@@ -58,3 +58,5 @@ mkdir: %_DEST%\inc%_EXT%\audio
 ..\pgp\pgp602\win32_60\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\pgp\pgp651\win32_65\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 
+..\%__SRC%\obj\autorec.o %_DEST%\lib%_EXT%\autorec.o
+
