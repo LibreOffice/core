@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:10:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -54,6 +54,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -174,10 +177,17 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     // this example works for the way the office serializes it's XML stream
     // but might need extension for other data sources...
     static OString aDocToken("office:document");
-    static OString aClassToken("office:class=\"");
+    // static OString aClassToken("office:class=\"");
+    static OString aMimeTypeToken("office:mimetype=\"");
 
     sal_Int32 nHeadSize = 4096;
     Sequence< sal_Int8 > aHeadData(nHeadSize);
+
+    // rewind seekable stream
+    Reference< XSeekable > xSeek(xInStream, UNO_QUERY);
+    if (xSeek.is())
+        xSeek->seek(0);
+
     long bytestRead = xInStream->readBytes(aHeadData, nHeadSize);
 
     OString aHead = OString((const sal_Char *)aHeadData.getConstArray(), bytestRead).toAsciiLowerCase();
@@ -186,20 +196,24 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     if (aHead.indexOf(aDocToken) >= 0)
     {
         // read document class
-        sal_Int32 n = aHead.indexOf(aClassToken);
+        sal_Int32 n = aHead.indexOf(aMimeTypeToken);
         if (n >= 0)
         {
-            n += aClassToken.getLength();
-            OString aClass = aHead.copy(n, aHead.indexOf('\"', n) - n);
+            n += aMimeTypeToken.getLength();
+            OString aMimeType = aHead.copy(n, aHead.indexOf('\"', n) - n);
             // return type for class found
-            if (aClass.equals("text"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_writer");
-            else if (aClass.equals("spreadsheet"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_calc");
-            else if (aClass.equals("drawing"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_draw");
-            else if (aClass.equals("presentation"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_impress");
+            if      (aMimeType.equals("application/x-vnd.oasis.openoffice.text") ||
+                     aMimeType.equals("application/vnd.oasis.openoffice.text"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_writer");
+            else if (aMimeType.equals("application/x-vnd.oasis.openoffice.spreadsheet") ||
+                     aMimeType.equals("application/vnd.oasis.openoffice.spreadsheet"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_calc");
+            else if (aMimeType.equals("application/x-vnd.oasis.openoffice.drawing") ||
+                     aMimeType.equals("application/vnd.oasis.openoffice.drawing"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_draw");
+            else if (aMimeType.equals("application/x-vnd.oasis.openoffice.presentation") ||
+                     aMimeType.equals("application/vnd.oasis.openoffice.presentation"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_impress");
         }
     }
     return sTypeName;
