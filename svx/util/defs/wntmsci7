@@ -21221,3 +21221,11 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?GetFocus@SvxRectCtl@@UAEXXZ
 ?LoseFocus@SvxRectCtl@@UAEXXZ
 ?SetFocusRectangle@SvxRectCtl@@QAEXXZ
+??1SvtLinguConfigItem@@UAE@XZ
+?GetNodeNames@SvtLinguConfigItem@@QAE?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@ABVOUString@rtl@@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXHyphenator@linguistic2@star@sun@com@@@2345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSpellChecker1@linguistic2@star@sun@com@@@2345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXThesaurus@linguistic2@star@sun@com@@@2345@@Z
+?getImplementationId@?$WeakImplHelper1@VXHyphenator@linguistic2@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getImplementationId@?$WeakImplHelper1@VXSpellChecker1@linguistic2@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getImplementationId@?$WeakImplHelper1@VXThesaurus@linguistic2@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
