@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:43 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,9 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        TextContentAnchorType eATyp,
-        // OD 2004-04-20 #i26791#
-        XMLTextFrameHint_Impl* pTextFrameHint ) :
+        TextContentAnchorType eATyp ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    eAnchorType( eATyp ),
-    // OD 2004-04-20 #i26791#
-    mpTextFrameHint( pTextFrameHint ),
+    eDefaultAnchorType( eATyp ),
     bMap( sal_False )
 {
     OUString sShow;
@@ -178,39 +174,17 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
 
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        sal_uInt16 nFrameType = USHRT_MAX;
-        if( IsXMLToken( rLocalName, XML_TEXT_BOX ) )
-            nFrameType = XML_TEXT_FRAME_TEXTBOX;
-        else if( IsXMLToken( rLocalName, XML_IMAGE ) )
-            nFrameType = XML_TEXT_FRAME_GRAPHIC;
-        else if( IsXMLToken( rLocalName, XML_OBJECT ) )
-            nFrameType = XML_TEXT_FRAME_OBJECT;
-        else if( IsXMLToken( rLocalName, XML_OBJECT_OLE ) )
-            nFrameType = XML_TEXT_FRAME_OBJECT_OLE;
-        else if( IsXMLToken( rLocalName, XML_APPLET) )
-            nFrameType = XML_TEXT_FRAME_APPLET;
-        else if( IsXMLToken( rLocalName, XML_PLUGIN ) )
-            nFrameType = XML_TEXT_FRAME_PLUGIN;
-        else if( IsXMLToken( rLocalName, XML_FLOATING_FRAME ) )
-            nFrameType = XML_TEXT_FRAME_FLOATING_FRAME;
-
-        if( USHRT_MAX != nFrameType )
+        if( IsXMLToken( rLocalName, XML_FRAME ) )
             pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                                 rLocalName, xAttrList,
-                                                eAnchorType,
-                                                nFrameType );
+                                                eDefaultAnchorType );
     }
 
     if( pTextFrameContext )
     {
         pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
-        // OD 2004-04-20 #i26791#
-        if ( mpTextFrameHint )
-        {
-            mpTextFrameHint->GetContextRef() = pTextFrameContext;
-            mpTextFrameHint->GetAnchorTypeRef() = pTextFrameContext->GetAnchorType();
-        }
         pContext = pTextFrameContext;
+        xFrameContext = pContext;
     }
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -219,4 +193,27 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
 }
 
 
+TextContentAnchorType XMLTextFrameHyperlinkContext::GetAnchorType() const
+{
+    if( xFrameContext.Is() )
+    {
+        SvXMLImportContext *pContext = &xFrameContext;
+        return PTR_CAST( XMLTextFrameContext, pContext ) ->GetAnchorType();
+    }
+    else
+        return eDefaultAnchorType;
+
+}
+
+Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
+{
+    Reference <XTextContent > xTxt;
+    if( xFrameContext.Is() )
+    {
+        SvXMLImportContext *pContext = &xFrameContext;
+        xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
+    }
+
+    return xTxt;
+}
 
