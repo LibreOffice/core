@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:37:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ void XPlugin_Impl::initInstance( const OUString& rURL,
     if( m_aDescription.Mimetype.compareToAscii( "application/pdf" ) )
         m_aPluginMode = PluginMode::FULL;
 
-    m_xModel = new PluginModel( rURL );
+    m_xModel = new PluginModel( rURL, m_aDescription.Mimetype );
 }
 
 void XPlugin_Impl::modelChanged()
@@ -541,13 +541,22 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     Guard< Mutex > aGuard( m_aMutex );
     sal_Bool bRet = sal_False;
 
-    if( m_nProvidingState == PROVIDING_NONE )
+    if( m_nProvidingState != PROVIDING_NONE )
     {
         m_nProvidingState = PROVIDING_NOW;
         Any aAny;
         aAny <<= url;
         Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
-        xPS->setPropertyValue( OUString::createFromAscii( "URL" ), aAny );
+        if( xPS.is() )
+        {
+            try
+            {
+                xPS->setPropertyValue( OUString::createFromAscii( "URL" ), aAny );
+            }
+            catch(...)
+            {
+            }
+        }
     }
     m_nProvidingState = PROVIDING_NOW;
 
@@ -589,13 +598,35 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     }
      if( ! m_pPluginComm )
         return sal_False;
-    PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
+
+     if( ! url.getLength() )
+         // this is valid if the plugin is supposed to
+         // pull data (via e.g. NPN_GetURL)
+         return sal_True;
+
+     // set mimetype on model
+     {
+         Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+         if( xPS.is() )
+         {
+             try
+             {
+                 Any aAny;
+                 aAny <<= m_aDescription.Mimetype;
+                 xPS->setPropertyValue( OUString::createFromAscii( "TYPE" ), aAny );
+             }
+             catch(...)
+             {
+             }
+         }
+     }
+
+     PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
                                                         length, lastmodified );
-    Reference< com::sun::star::io::XOutputStream > xNewStream( pStream );
+     Reference< com::sun::star::io::XOutputStream > xNewStream( pStream );
 
-
-    if( iter != m_aPEventListeners.end() )
-        pStream->getStream()->notifyData = (*iter)->getNotifyData();
+     if( iter != m_aPEventListeners.end() )
+         pStream->getStream()->notifyData = (*iter)->getNotifyData();
 
     uint16 stype = 0;
 
