@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-29 19:21:15 $
+ *  last change: $Author: nn $ $Date: 2001-02-21 11:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,15 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XDATABASERANGES_HPP_
+#include <com/sun/star/sheet/XDatabaseRanges.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XDATABASERANGE_HPP_
+#include <com/sun/star/sheet/XDatabaseRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEREFERRER_HPP_
+#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -261,32 +270,34 @@ Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int
 }
 
 void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<XNumberFormats>& xFormats,
-                        sal_Int32 nDocColumn,
+                        sal_Int32 nDocColumn, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                         ::rtl::OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
 {
-    //  nDocColumn is 0-based
-
-    //! detect missing header row
     //! avoid duplicate field names
 
-    //  get column name from first row
+    //  get column name from first row, if range contains headers
 
-    Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, 0 );
-    Reference<XText> xText( xCell, UNO_QUERY );
-    if ( xText.is() )
-        rName = xText->getString();
+    if ( bHasHeaders )
+    {
+        Reference<XCell> xHeaderCell = xSheet->getCellByPosition( nDocColumn, nStartRow );
+        Reference<XText> xHeaderText( xHeaderCell, UNO_QUERY );
+        if ( xHeaderText.is() )
+            rName = xHeaderText->getString();
+    }
 
     // get column type from first data row
 
-    sal_Int32 nDataRow = 1;         //! detect missing header row
-    xCell = lcl_GetUsedCell( xSheet, nDocColumn, nDataRow );
+    sal_Int32 nDataRow = nStartRow;
+    if ( bHasHeaders )
+        ++nDataRow;
+    Reference<XCell> xDataCell = lcl_GetUsedCell( xSheet, nDocColumn, nDataRow );
 
-    Reference<XPropertySet> xProp( xCell, UNO_QUERY );
+    Reference<XPropertySet> xProp( xDataCell, UNO_QUERY );
     if ( xProp.is() )
     {
         rCurrency = sal_False;          // set to true for currency below
 
-        CellContentType eCellType = lcl_GetContentOrResultType( xCell );
+        CellContentType eCellType = lcl_GetContentOrResultType( xDataCell );
         if ( eCellType == CellContentType_TEXT )
             rDataType = DataType::VARCHAR;
         else if ( eCellType == CellContentType_VALUE )
@@ -344,11 +355,14 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
 // -------------------------------------------------------------------------
 
 void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
+                    sal_Int32 nStartCol, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                     const ::Date& rNullDate,
                     sal_Int32 nDBRow, sal_Int32 nDBColumn, sal_Int32 nType )
 {
-    sal_Int32 nDocColumn = nDBColumn - 1;   // database counts from 1
-    sal_Int32 nDocRow = nDBRow;             //! detect missing header row
+    sal_Int32 nDocColumn = nStartCol + nDBColumn - 1;   // database counts from 1
+    sal_Int32 nDocRow = nStartRow + nDBRow - 1;
+    if (bHasHeaders)
+        ++nDocRow;
 
     Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
     if ( xCell.is() )
@@ -474,22 +488,19 @@ void OCalcTable::fillColumns()
     if ( !m_xSheet.is() )
         throw SQLException();
 
-    m_nDataRows = lcl_RowCount( m_xSheet );
-
-    sal_Int32 nFieldCount = lcl_ColumnCount( m_xSheet );
-
     String aStrFieldName;
     aStrFieldName.AssignAscii("Column");
     ::rtl::OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
-    for (sal_Int32 i = 0; i < nFieldCount; i++)
+    for (sal_Int32 i = 0; i < m_nDataCols; i++)
     {
         ::rtl::OUString aColumnName;
         sal_Int32 eType = DataType::OTHER;
         sal_Bool bCurrency = sal_False;
 
-        lcl_GetColumnInfo( m_xSheet, m_xFormats, i, aColumnName, eType, bCurrency );
+        lcl_GetColumnInfo( m_xSheet, m_xFormats, m_nStartCol + i, m_nStartRow, m_bHasHeaders,
+                            aColumnName, eType, bCurrency );
 
         if ( !aColumnName.getLength() )
             aColumnName = lcl_GetColumnStr( i );
@@ -547,7 +558,11 @@ void OCalcTable::fillColumns()
 // -------------------------------------------------------------------------
 OCalcTable::OCalcTable(OCalcConnection* _pConnection)
         :OCalcTable_BASE(_pConnection)
+        ,m_nStartCol(0)
+        ,m_nStartRow(0)
+        ,m_nDataCols(0)
         ,m_nDataRows(0)
+        ,m_bHasHeaders(sal_False)
 {
 }
 // -------------------------------------------------------------------------
@@ -562,7 +577,11 @@ OCalcTable::OCalcTable(OCalcConnection* _pConnection,
                                   _Description,
                                   _SchemaName,
                                   _CatalogName)
+                ,m_nStartCol(0)
+                ,m_nStartRow(0)
+                ,m_nDataCols(0)
                 ,m_nDataRows(0)
+                ,m_bHasHeaders(sal_False)
 {
     //  get sheet object
 
@@ -570,15 +589,75 @@ OCalcTable::OCalcTable(OCalcConnection* _pConnection,
     if (xDoc.is())
     {
         Reference<XSpreadsheets> xSheets = xDoc->getSheets();
-        if (xSheets.is())
+        if ( xSheets.is() && xSheets->hasByName( _Name ) )
         {
-            try
+            Any aAny = xSheets->getByName( _Name );
+            if ( aAny >>= m_xSheet )
             {
-                Any aAny = xSheets->getByName( _Name );
-                aAny >>= m_xSheet;
+                m_nDataCols = lcl_ColumnCount( m_xSheet );
+                m_nDataRows = lcl_RowCount( m_xSheet );
+                m_bHasHeaders = sal_True;
+                // whole sheet is always assumed to include a header row
             }
-            catch (NoSuchElementException&)
+        }
+        else        // no sheet -> try database range
+        {
+            Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
+            if ( xDocProp.is() )
             {
+                Any aRangesAny = xDocProp->getPropertyValue( ::rtl::OUString::createFromAscii("DatabaseRanges") );
+                Reference<XDatabaseRanges> xRanges;
+                if ( aRangesAny >>= xRanges )
+                {
+                    if ( xRanges.is() && xRanges->hasByName( _Name ) )
+                    {
+                        Any aAny = xRanges->getByName( _Name );
+                        Reference<XDatabaseRange> xDBRange;
+                        if ( aAny >>= xDBRange )
+                        {
+                            Reference<XCellRangeReferrer> xRefer( xDBRange, UNO_QUERY );
+                            if ( xRefer.is() )
+                            {
+                                //  Header flag is always stored with database range
+                                //  Get flag from FilterDescriptor
+
+                                sal_Bool bRangeHeader = sal_True;
+                                Reference<XSheetFilterDescriptor> xFilter = xDBRange->getFilterDescriptor();
+                                Reference<XPropertySet> xFiltProp( xFilter, UNO_QUERY );
+                                if ( xFiltProp.is() )
+                                {
+                                    Any aHdrAny = xFiltProp->getPropertyValue(
+                                            ::rtl::OUString::createFromAscii("ContainsHeader") );
+                                    aHdrAny >>= bRangeHeader;
+                                }
+
+                                Reference<XCellRange> xCellRange = xRefer->getReferredCells();
+                                Reference<XSheetCellRange> xSheetRange( xCellRange, UNO_QUERY );
+                                Reference<XCellRangeAddressable> xAddr( xCellRange, UNO_QUERY );
+                                if ( xSheetRange.is() && xAddr.is() )
+                                {
+                                    m_xSheet = xSheetRange->getSpreadsheet();
+                                    CellRangeAddress aRangeAddr = xAddr->getRangeAddress();
+                                    m_nStartCol = aRangeAddr.StartColumn;
+                                    m_nStartRow = aRangeAddr.StartRow;
+                                    m_nDataCols = aRangeAddr.EndColumn - m_nStartCol + 1;
+                                    if ( bRangeHeader )
+                                    {
+                                        //  m_nDataRows is excluding header row
+                                        m_nDataRows = aRangeAddr.EndRow - m_nStartRow;
+                                    }
+                                    else
+                                    {
+                                        //  m_nDataRows counts the whole range
+                                        m_nDataRows = aRangeAddr.EndRow - m_nStartRow + 1;
+                                    }
+
+                                    m_bHasHeaders = bRangeHeader;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -597,8 +676,6 @@ OCalcTable::OCalcTable(OCalcConnection* _pConnection,
     }
 
     //! default if no null date available?
-
-    //! detect missing header row
 
     fillColumns();
 
@@ -811,7 +888,8 @@ sal_Bool OCalcTable::fetchRow( file::OValueRow _rRow, const OSQLColumns & _rCols
             xColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
 
         if ((*_rRow)[i].isBound())
-            lcl_SetValue( (*_rRow)[i], m_xSheet, m_aNullDate, m_nFilePos, i, nType );
+            lcl_SetValue( (*_rRow)[i], m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,
+                            m_aNullDate, m_nFilePos, i, nType );
     }
     return sal_True;
 }

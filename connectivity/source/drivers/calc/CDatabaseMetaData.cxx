@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-20 13:09:01 $
+ *  last change: $Author: nn $ $Date: 2001-02-21 11:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XDATABASERANGES_HPP_
+#include <com/sun/star/sheet/XDatabaseRanges.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XDATABASERANGE_HPP_
+#include <com/sun/star/sheet/XDatabaseRange.hpp>
 #endif
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
@@ -491,7 +497,8 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
                     return sal_True;                // hidden
         }
 
-        //  test if sheet is empty
+#if 0
+        //  test if whole sheet is empty
 
         Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
         Reference<XCellRangesQuery> xQuery( xSheet, UNO_QUERY );
@@ -510,9 +517,58 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
                 }
             }
         }
+#endif
+
+        //  use the same data area as in OCalcTable to test for empty table
+
+        Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
+        Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
+        if ( xRange.is() )
+        {
+            xCursor->collapseToSize( 1, 1 );        // single (first) cell
+            xCursor->collapseToCurrentRegion();     // contiguous data area
+
+            CellRangeAddress aRangeAddr = xRange->getRangeAddress();
+            if ( aRangeAddr.StartColumn == aRangeAddr.EndColumn &&
+                 aRangeAddr.StartRow == aRangeAddr.EndRow )
+            {
+                //  single cell -> check content
+                Reference<XCell> xCell = xCursor->getCellByPosition( 0, 0 );
+                if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
+                    return sal_True;
+            }
+        }
     }
 
     return sal_False;
+}
+
+sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::OUString& rName )
+{
+    sal_Bool bUnnamed = sal_False;
+
+    Any aAny = xRanges->getByName( rName );
+    Reference<XDatabaseRange> xRange;
+    if ( aAny >>= xRange )
+    {
+        Reference<XPropertySet> xRangeProp( xRange, UNO_QUERY );
+        if ( xRangeProp.is() )
+        {
+            try
+            {
+                Any aUserAny = xRangeProp->getPropertyValue( ::rtl::OUString::createFromAscii("IsUserDefined") );
+                sal_Bool bUserDefined;
+                if ( aUserAny >>= bUserDefined )
+                    bUnnamed = !bUserDefined;
+            }
+            catch ( UnknownPropertyException& )
+            {
+                // optional property
+            }
+        }
+    }
+
+    return bUnnamed;
 }
 
 // -------------------------------------------------------------------------
@@ -575,6 +631,32 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
             aRow.push_back(ORowSetValue(aTable));
             aRow.push_back(ORowSetValue());
             aRows.push_back(aRow);
+        }
+    }
+
+    // also use database ranges
+
+    Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
+    if ( xDocProp.is() )
+    {
+        Any aRangesAny = xDocProp->getPropertyValue( ::rtl::OUString::createFromAscii("DatabaseRanges") );
+        Reference<XDatabaseRanges> xRanges;
+        if ( aRangesAny >>= xRanges )
+        {
+            Sequence< ::rtl::OUString > aDBNames = xRanges->getElementNames();
+            sal_Int32 nDBCount = aDBNames.getLength();
+            for (sal_Int32 nRange=0; nRange<nDBCount; nRange++)
+            {
+                ::rtl::OUString aName = aDBNames[nRange];
+                if ( !lcl_IsUnnamed( xRanges, aName ) )
+                {
+                    ORow aRow(3);
+                    aRow.push_back(ORowSetValue(aName));
+                    aRow.push_back(ORowSetValue(aTable));
+                    aRow.push_back(ORowSetValue());
+                    aRows.push_back(aRow);
+                }
+            }
         }
     }
 
