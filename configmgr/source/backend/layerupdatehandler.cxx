@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-30 12:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,9 @@ void SAL_CALL
     LayerUpdateHandler::removeProperty( const OUString& aName )
         throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "LayerUpdateHandler: No support for dropping a property");
+    // treat 'remove' as 'reset'. (Note: does not verify that this actually amounts to dropping the property)
+    if (!m_aBuilder.resetProperty(aName))
+        raisePropChangedBeforeException("LayerUpdateHandler: Cannot remove property - property has already been changed.");
 }
 // -----------------------------------------------------------------------------
 
