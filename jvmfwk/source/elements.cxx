@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-13 11:15:01 $
+ *  last change: $Author: jl $ $Date: 2004-05-20 08:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,25 +132,19 @@ bool createUserDirectory()
             "${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}")));
 
     FileBase::RC rc = Directory::create(sUserDir);
-    if (rc == FileBase::E_None)
+    if (rc == FileBase::E_None || rc == FileBase::E_EXIST)
     {
         // .StarOfficeXXX file created in home directory
         sUserDir += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user"));
         FileBase::RC rc = Directory::create(sUserDir);
-        if (rc == FileBase::E_None)
+        if (rc == FileBase::E_None || rc == FileBase::E_EXIST)
         {
             sUserDir += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/config"));
             FileBase::RC rc = Directory::create(sUserDir);
-            if (rc == FileBase::E_None)
+            if (rc == FileBase::E_None || rc == FileBase::E_EXIST)
                 ret = true;
         }
     }
-    else if (rc == FileBase::E_EXIST)
-    {
-        ret = true;
-    }
-    // if the folder exists then all subdirectories should exist as well
-
     return ret;
 }
 javaFrameworkError createUserSettingsDocument()
@@ -436,7 +430,8 @@ javaFrameworkError CNodeJava::loadUserSettings()
     javaFrameworkError errcode = JFW_E_NONE;
     CXmlDocPtr docUser;
 
-    javaFrameworkError err = prepareSettingsDocument();
+    if ((errcode = prepareSettingsDocument()) != JFW_E_NONE)
+        return errcode;
 
     //Read the user elements
     rtl::OString sSettingsPath = jfw::getUserSettingsPath();
@@ -678,7 +673,9 @@ javaFrameworkError CNodeJava::writeSettings() const
     CXPathContextPtr contextUser;
     CXPathObjectPtr pathObj;
 
-    javaFrameworkError err = prepareSettingsDocument();
+    if ((errcode = prepareSettingsDocument()) != JFW_E_NONE)
+        return errcode;
+
     //Read the user elements
     rtl::OString sSettingsPath = jfw::getUserSettingsPath();
     docUser = xmlParseFile(sSettingsPath.getStr());
