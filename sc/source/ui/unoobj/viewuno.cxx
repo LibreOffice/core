@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:22:22 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #include "sc.hrc"
 #include "unoguard.hxx"
 #include "unonames.hxx"
+#ifndef SC_GRIDWIN_HXX
+#include "gridwin.hxx"
+#endif
 
 using namespace com::sun::star;
 
@@ -388,9 +391,23 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 pViewShell->GetViewData()->GetActivePart() :
                                 (ScSplitPos) nPane;
-        Window* pWindow = pViewShell->GetWindowByPos(eWhich);
-        if (pWindow)
-            aVisArea = AWTRectangle(Rectangle(pViewShell->GetViewData()->GetPixPos(eWhich), pWindow->GetSizePixel()));
+        ScGridWindow* pWindow = (ScGridWindow*)pViewShell->GetWindowByPos(eWhich);
+        ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
+        if (pWindow && pDoc)
+        {
+            ScHSplitPos eWhichH = ((eWhich == SC_SPLIT_TOPLEFT) || (eWhich == SC_SPLIT_BOTTOMLEFT)) ?
+                                    SC_SPLIT_LEFT : SC_SPLIT_RIGHT;
+            ScVSplitPos eWhichV = ((eWhich == SC_SPLIT_TOPLEFT) || (eWhich == SC_SPLIT_TOPRIGHT)) ?
+                                    SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
+            ScAddress aCell(pViewShell->GetViewData()->GetPosX(eWhichH),
+                pViewShell->GetViewData()->GetPosY(eWhichV),
+                pViewShell->GetViewData()->GetTabNo());
+            Rectangle aVisRect(pDoc->GetMMRect(aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab()));
+
+            aVisRect.SetSize(pWindow->PixelToLogic(pWindow->GetSizePixel(), pWindow->GetDrawMapMode(sal_True)));
+
+            aVisArea = AWTRectangle(aVisRect);
+        }
     }
     return aVisArea;
 }
