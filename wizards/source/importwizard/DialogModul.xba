@@ -62,7 +62,7 @@ Public Const SBAPPLKEY = 9
 &apos; Applications(X,6) = True/False 		(Including Subdirectories)
 &apos; Applications(X,7) = &quot;File:///...&quot;		(SourceUrl of the templates)
 &apos; Applications(X,8) = &quot;File:///...&quot; 	(TargetUrl of the templates)
-&apos; Applications(X,9) = 0					(Key to the original Index of the Applications)
+&apos; Applications(X,9) = 0				    (Key to the original Index of the Applications)
 
 
 Sub FillStep_Welcome()
@@ -288,7 +288,7 @@ End Function
 
 
 Sub FillStep_Summary()
-&apos; Todo: Angabe ÃƒÆ’Ã‚Â¼ber die Vorlagengruppen,bzw. Template-Exportpfad
+&apos; Todo: Angabe über die Vorlagengruppen,bzw. Template-Exportpfad
 	With ImportDialog
 		.SummaryTextbox.Text = MakeSummaryString()
 		.cbGoOn.Enabled = .SummaryTextbox.Text &lt;&gt; &quot;&quot;
@@ -312,25 +312,6 @@ Sub FillStep_Progress()
    		.LabelCurDocument.Label = &quot;&quot;
 		.Step = 4
 	End With
-End Sub
-
-
-Sub DocumentDirSearchDialog()
-	CallDirSearchDialog(ImportDialog.DocumentImportPath)
-End Sub
-
-
-Sub StarDocumentDirSearchDialog()
-	CallDirSearchDialog(ImportDialog.DocumentExportPath)
-End Sub
-
-
-Sub CallDirSearchDialog(oTargetControl as Object)
-Dim sDirName as String
-	sDirName = Application.FileDialog(&quot;P&quot;, sPathDialogMessage, oTargetControl.Text)
-	If Len(sDirName) &gt; 0 Then
-		oTargetControl.Text = sDirName
-	End If
 End Sub
 
 

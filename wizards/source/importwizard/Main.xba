@@ -16,6 +16,7 @@ Public bCallCancelMsg as Boolean
 Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	bSetFonts = False
+	bCallCancelMsg = False
 	If bSetFonts Then
 		BasicLibraries.LoadLibrary(&quot;Translater&quot;)
 		GetFontNames()
@@ -37,11 +38,13 @@ Sub Main()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-	ImportDialogArea.Visible = True 
 	ImportDialog.cbGoOn.DefaultButton = True
+	ImportDialogArea.Execute()
+	ImportDialogArea.Dispose()
+	End
 	Exit Sub
 RTError:
-	Msgbox sRTErrorDesc, 16, sRTErrorHeader
+&apos;	Msgbox sRTErrorDesc, 16, sRTErrorHeader
 End Sub
 
 
@@ -107,7 +110,6 @@ Dim iCurStep as Integer
 			ImportDialog.cbCancel.Label = sCancelButton
 			FillStep_Summary()
 		Case 3
-&apos;Todo: muessen auch beim Zuruecksteppen wirklich die Importpfade auf ihre Gueltigkeit hin Ueberprueft werden?
 			FillStep_InputPaths(Applcount-1, False)
 		Case 2
 			SaveStep_InputPath
@@ -130,26 +132,25 @@ End Sub
 Sub CancelButton()
 	If bCallCancelMsg Then
 		&apos; Conversion is already running
-		ImportDialog.cbCancel.Enabled = False
-		bCancelTask = True
+		CancelTask()
+&apos;		ImportDialog.cbCancel.Enabled = False
+&apos;		bCancelTask = True
 	Else
 		ImportDialogArea.EndExecute()
-		ImportDialogArea.Dispose()
-		End
 	End If
 End Sub
 
 
-Sub CancelTask()
+Function CancelTask()
 	If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
 		ImportDialogArea.EndExecute		&apos;Visible = False 
-		ImportDialogArea.Dispose
-		End
+&apos;		CancelTask = True
 	Else
 		bCancelTask = False
 		ImportDialog.cbCancel.Enabled = True
+		CancelTask = False
 	End If
-End Sub
+End Function
 
 
 

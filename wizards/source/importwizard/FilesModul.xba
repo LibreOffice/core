@@ -6,7 +6,7 @@ Public AbsTemplateFound as Integer
 Public AbsDocuFound as Integer
 Public oLogDocument as Object
 Public oLogTable as Object
-
+Public bInsertRow as Boolean
 
 Function ReadApplicationDirectories(ApplIndex as Integer, FilesList(),bIsDocument as Boolean, sFiltername()) as Integer
 Dim bCheckDocuType as Boolean
@@ -114,6 +114,7 @@ Dim MaxFileIndex as Integer
 		ShowCurrentProgress(bIsDocument, CurFound)
 	Next i
 	TotFound = AbsTemplateFound + AbsDocuFound
+	CreateLogDocument(OpenProperties())
 	If TotFound &gt; 0 Then
 		bCallCancelMsg = True
 		InitializeProgressPage(ImportDialog)
@@ -123,16 +124,15 @@ Dim MaxFileIndex as Integer
 		For i = 0 To MaxFileIndex
 			bDoSave = True
 			If bCancelTask Then
-				Call CancelTask()
+				If CancelTask() Then
+					Exit Sub
+				End If
 			End if
 			sFullName = FilesList(i,0)
 			CurFiltername =	GetFilterName(FilesList(i,1), sFilterName(), sExtension, FilterIndex)
 			ApplIndex = FilesList(i,2)
 			sViewPath = CutPathView(sFullName, 60)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-			If i = 0 Then
-				CreateLogDocument(OpenProperties())
-			End If
 			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
 			If bSetFonts Then
 				CheckScripts(oDocument, 1)
@@ -175,7 +175,7 @@ Dim MaxFileIndex as Integer
 					End Select
 				End If
 				If bDoSave Then
-					InsertDocNamesToLogDocument(i+1, sFullName, TargetFile)
+					InsertDocNamesToLogDocument(sFullName, TargetFile)
 					On Local Error Resume Next
 &apos; Note:	 Files are automatically stored in Default format
 &apos;					FileProperties(0).Name = &quot;FilterName&quot;
@@ -205,14 +205,6 @@ Dim MaxFileIndex as Integer
 	ImportDialog.cbGoOn.Label = sReady
 	ImportDialog.cbGoOn.Enabled = True
 	bCallCancelMsg = False
-&apos;Todo: Natürlich nur schließen, wenn auch vorhanden!
-	If Not IsNull(oLogDocument) Then
-		oLogDocument.Dispose()
-	End If
-	ImportDialogArea.endExecute
-	ImportDialogArea.Dispose	
-	End
-
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
@@ -313,7 +305,7 @@ Dim i as Integer
 Dim bLogExists as Boolean
 	If ImportDialog.chkLogfile.State = 1 Then
 		i = 2
-		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
+		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
 		oLogCursor = oLogDocument.Text.CreateTextCursor
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
@@ -322,6 +314,7 @@ Dim bLogExists as Boolean
 		oLogCursor.SetString(sSourceDocuments)
 		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor
 		oLogCursor.SetString(sTargetDocuments)
+		bInsertRow = False
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
 		Do
 			bLogExists = oUcb.Exists(sLogUrl)
@@ -334,32 +327,35 @@ Dim bLogExists as Boolean
 				i = i + 1
 			End If
 		Loop Until Not bLogExists
-&apos; Todo Für das Logdokument einen sinnigen Titel festlegen!	
-		oLogDocument.StoreToUrl(sLogUrl, NoArgs())
+		oLogDocument.StoreAsUrl(sLogUrl, NoArgs())
 	EndIf
 End Sub
 
 
-Sub InsertDocNamesToLogDocument(iRow as Integer, SourceUrl as String, TargetUrl as String)
+Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String)
+Dim oCell as Object
 Dim oLogCursor as Object
 Dim UrlList(1) as String
 Dim LocFileName as String
 Dim LocUrl as String
 Dim i as Integer
 	If ImportDialog.chkLogfile.State = 1 Then
-		If iRow &gt; 1 Then
+		If bInsertRow Then
 			oLogTable.Rows.InsertByIndex(oLogTable.Rows.Count,1)
+		Else
+			bInsertRow = True
 		End If
 		UrlList(0) = SourceUrl
 		UrlList(1) = TargetUrl
 		For i = 0 To 1
-			oLogCursor = oLogTable.GetCellbyPosition(i,iRow).createTextCursor
+			oCell = oLogTable.GetCellbyPosition(i,oLogTable.Rows.Count-1)
+			oLogCursor = oCell.createTextCursor()
 			LocUrl = UrlList(i)
 			oLogCursor.HyperLinkURL = LocUrl
 			oLogCursor.HyperLinkName = LocUrl
 			oLogCursor.HyperLinkTarget = LocUrl
 			LocFileName = FileNameOutOfPath(LocUrl, &quot;/&quot;)
-			oLogTable.GetCellbyPosition(i,iRow).InsertString(oLogCursor, LocFileName,False)
+			oCell.InsertString(oLogCursor, LocFileName,False)
 		Next i 
 		oLogDocument.Store()
 	End If
