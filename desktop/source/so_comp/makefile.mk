@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-24 13:36:05 $
+#   last change: $Author: vg $ $Date: 2003-05-22 08:54:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..
 
 PRJNAME=desktop
-TARGET=eval
+TARGET=socomp
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
@@ -75,12 +75,15 @@ ENABLE_EXCEPTIONS=TRUE
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 # --- Define time bomb date. Not active for OOo --------------------
+# --- Change something in evaluation.cxx!!! (e.g. line 313)
 # --- You must use the yyyymmdd format!!! --------------------------
-CDEFS+=-DTIMEBOMB=20031231
+# CDEFS+=-DTIMEBOMB=20030930
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	$(SLO)$/evaluation.obj
+SLOFILES =	$(SLO)$/evaluation.obj \
+            $(SLO)$/oemjob.obj \
+            $(SLO)$/services.obj
 
 SHL1DEPN=	makefile.mk
 SHL1OBJS=	$(SLOFILES)
