@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-24 20:33:49 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "ε€ει‚η•(~S)";
         Text[ arabic ] = "ΝΟζΟ ΗαδΨΗή";
         Text[ greek ] = "Όρια τομέα";
-        Text[ korean ] = "κµ¬μ—­ κ²½κ³„(~S)";
+        Text[ korean ] = "μμ—­ κ²½κ³„(~S)";
         Text[ turkish ] = "~Bφlόm sύnύrlarύ";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Osion rajat";
@@ -545,7 +545,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "θ΅¨ζ Ό(~T)";
         Text[ arabic ] = "ΜΟΗζα          ";
         Text[ greek ] = "Πίνακες          ";
-        Text[ korean ] = "ν…μ΄λΈ”(~T)";
+        Text[ korean ] = "ν‘(~T)";
         Text[ turkish ] = "Tablolar          ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tablas                    ";
@@ -1090,7 +1090,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "ι ";
         Text[ arabic ] = "ΗαΥέΝΗΚ";
         Text[ greek ] = "Σελίδες";
-        Text[ korean ] = "μª½";
+        Text[ korean ] = "νμ΄μ§€";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pαginas";
@@ -1937,7 +1937,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "ε¨ζ―ι δΈι‡θ¤‡ι΅―η¤Ί(~P)";
         Text[ arabic ] = "ΚίΡΗΡ έν ία ΥέΝΙ";
         Text[ greek ] = "Επανάλη~ψη σε κάθε σελίδα";
-        Text[ korean ] = "λª¨λ“ γ€€μª½μ—μ„γ€€λ°λ³µ(~P)";
+        Text[ korean ] = "λª¨λ“  νμ΄μ§€μ—μ„ λ°λ³µ(~P)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Baώlύπύ her sayfada yinele";
         Text[ finnish ] = "~Toista ylδotsikko";
@@ -2058,7 +2058,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "θ‡ªε®θ­ε¥ζ•Έε­—";
         Text[ arabic ] = "ΚΪΡνέ ΗαΓΡήΗγ";
         Text[ greek ] = "Αναγνώριση αριθμών";
-        Text[ korean ] = "μ  μΈμ‹";
+        Text[ korean ] = "μ«μ μΈμ‹";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Sayύ tanύma";
         Text[ finnish ] = "Lukujen tunnistus";
@@ -2087,7 +2087,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "θ­ε¥ζ•Έε­—ζ ΌεΌ";
         Text[ arabic ] = "ΚΪΡνέ ΚδΣνή ΗαΓΡήΗγ";
         Text[ greek ] = "Αναγνώριση μορφής αριθμού";
-        Text[ korean ] = "μ«μν¬λ§· μΈμ‹";
+        Text[ korean ] = "μ«μ ν•μ‹ μΈμ‹";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Sayύ formatύ tanύma";
         Text[ finnish ] = "Numeromuodon tunnistus";
@@ -2456,7 +2456,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ polish ] = "Zmiany majΉ wp³yw tylko na obszary przyleg³e.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich nur auf den direkten Nachbarn aus";
         Text[ japanese ] = "ε¤‰ζ›΄γ―ι£ζ¥η―„ε›²γ γ‘γ«δ½η”¨γ—γΎγ™";
-        Text[ korean ] = "λ³€κ²½μ‚¬ν•­μ€ μ§μ ‘μ μΌλ΅ μΈμ ‘ν• μμ—­μ—λ§ μν–¥μ„ λ―ΈμΉ©λ‹λ‹¤.";
+        Text[ korean ] = "λ³€κ²½ μ‚¬ν•­μ€ μ§μ ‘μ μΌλ΅ μΈμ ‘ν• μμ—­μ—λ§ μν–¥μ„ λ―ΈμΉ©λ‹λ‹¤.";
         Text[ chinese_simplified ] = "θ΅ε—η„ζ›΄ζ”ΉεªδΌε½±ε“ε°η›΄ζ¥θΏζ¥η„εΊεγ€‚";
         Text[ chinese_traditional ] = "ζ¬„ε—η„θ®ζ›΄εƒ…εƒ…ζƒε½±ιΏε°η›΄ζ¥ι€£ηµη„ε€εγ€‚";
         Text[ turkish ] = "Satύr ya da sόtunlar όzerinde yapύlan deπiώiklikler yalnύzca bitiώik birimleri etkiler";
@@ -2513,7 +2513,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ polish ] = "Zmiany majΉ wp³yw na ca³Ή tabelκ.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich auf die gesamte Tabelle aus";
         Text[ japanese ] = "ε¤‰ζ›΄γ―θ΅¨ε…¨δ½“γ«δ½η”¨γ—γΎγ™";
-        Text[ korean ] = "λ³€κ²½μ‚¬ν•­μ€ μ „μ²΄ ν…μ΄λΈ”μ— μν–¥μ„ λ―ΈμΉ©λ‹λ‹¤.";
+        Text[ korean ] = "λ³€κ²½ μ‚¬ν•­μ΄ μ „μ²΄ μ‹νΈμ— μ μ©λ©λ‹λ‹¤.";
         Text[ chinese_simplified ] = "θ΅ε—η„ζ›΄ζ”ΉδΌε½±ε“ε°ζ•΄δΈªθ΅¨ζ Όγ€‚";
         Text[ chinese_traditional ] = "ζ¬„ε—η„θ®ζ›΄ζƒε½±ιΏε°ζ•΄ε€‹θ΅¨ζ Ό";
         Text[ turkish ] = "Satύr ya da sόtunlar όzerinde yapύlan deπiώiklikler tablonun tόmόnό etkiler";
@@ -2570,7 +2570,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ polish ] = "Zmiany majΉ wp³yw na rozmiar tabeli.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengr?e aus";
         Text[ japanese ] = "ε¤‰ζ›΄γ―θ΅¨γ®ο½»ο½²ο½½οΎγ«δ½η”¨γ—γΎγ™";
-        Text[ korean ] = "λ³€κ²½μ‚¬ν•­μ€ ν…μ΄λΈ”μ ν¬κΈ°μ— μν–¥μ„ λ―ΈμΉ©λ‹λ‹¤.";
+        Text[ korean ] = "λ³€κ²½ μ‚¬ν•­μ΄ μ‹νΈ ν¬κΈ°μ— μ μ©λ©λ‹λ‹¤.";
         Text[ chinese_simplified ] = "δΈ€θ΅ε’ε—η„ζ›΄ζ”ΉδΌε½±ε“θ΅¨ζ Όη„ε¤§ε°γ€‚";
         Text[ chinese_traditional ] = "δΈ€ε€‹ζ¬„ε—η„θ®ζ›΄ζƒε½±ιΏθ΅¨ζ Όη„ε¤§ε°";
         Text[ turkish ] = "Satύr ya da sόtunlar όzerinde yapύlan deπiώiklikler tablo boyutunu etkiler";
@@ -2611,7 +2611,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_traditional ] = "η”¨ε½©θ‰²ηªε‡Ίι΅―η¤Ίθªζ³•ιƒ¨ε†";
         Text[ arabic ] = "ΗαΓαζΗδ ΗαγΣΚΞΟγΙ αΚγννÒ ΘδΗΑ ΗαΜγαΙ";
         Text[ greek ] = "Ορισμός χρωμάτων για επισήμανση σύνταξης";
-        Text[ korean ] = "κµ¬λ¬Έ κ°•μ΅°λ¥Ό μ„ν• μƒ‰μƒ ν• λ‹Ή";
+        Text[ korean ] = "κµ¬λ¬Έ κ°•μ΅°λ¥Ό μ„ν• μƒ‰μƒ μ§€μ •";
         Text[ turkish ] = "Sφz dizimi vurgusu iηin renk dόzeni";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Syntaksin korostamiseen kδytettδvδt vδrit";
@@ -2709,7 +2709,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_traditional ] = "ι—ιµε­—(~K)";
         Text[ arabic ] = "ίαγΙ ΓΣΗΣνΙ";
         Text[ greek ] = "Λέξη-κλειδί";
-        Text[ korean ] = "ν‚¤ μ›λ“(~K)";
+        Text[ korean ] = "ν‚¤μ›λ“(~K)";
         Text[ turkish ] = "Anahtar sφzcόk";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Avainsana";
@@ -2744,7 +2744,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_traditional ] = "δΈζη„(~U)";
         Text[ arabic ] = "ΫνΡ γΪΡζέ";
         Text[ greek ] = "Άγνωστο";
-        Text[ korean ] = "μ•λ ¤μ Έγ€€μμ§€ μ•μ(~U)";
+        Text[ korean ] = "μ•λ ¤μ Έ μμ§€ μ•μ(~U)";
         Text[ turkish ] = "Bilinmeyen";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Tuntematon";
@@ -2853,7 +2853,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_traditional ] = "θ‡ªθ¨‚η„ι€£ε­—η¬¦(~Y)";
         Text[ arabic ] = "ζΗΥαΙ ΗΞΚνΗΡνΙ";
         Text[ greek ] = "Ή~πια διαχωριστικά";
-        Text[ korean ] = "μ„ νƒμ  ν•μ΄ν”(~Y)";
+        Text[ korean ] = "μ‚¬μ©μ μ •μ ν•μ΄ν”(~Y)";
         Text[ turkish ] = "Ay~ύrma iώareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "G~uiones opcionales";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
