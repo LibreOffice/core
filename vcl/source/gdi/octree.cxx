@@ -2,9 +2,9 @@
  *
  *  $RCSfile: octree.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,16 +69,6 @@
 #include<tools/new.hxx>
 #endif
 #include <octree.hxx>
-
-// ------------
-// - Typedefs -
-// ------------
-
-#ifdef WIN
-typedef ULONG huge* HPULONG;
-#else
-typedef ULONG*      HPULONG;
-#endif
 
 // ---------
 // - pMask -
@@ -345,13 +335,11 @@ void Octree::GetPalIndex( PNODE pNode )
 InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
 {
-    HPULONG         cdp;
+    ULONG*          cdp;
     BYTE*           crgbp;
     const ULONG     nColorMax = 1 << OCTREE_BITS;
     const ULONG     xsqr = 1 << ( nBits << 1 );
     const ULONG     xsqr2 = xsqr << 1;
-    const ULONG     gstride =  nColorMax;
-    const ULONG     rstride = nColorMax * nColorMax;
     const ULONG     nColors = rPal.GetEntryCount();
     const long      x = 1L << nBits;
     const long      x2 = x >> 1L;
@@ -378,7 +366,7 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
         cginc = ( xsqr - ( cGreen << nBits ) ) << 1L;
         cbinc = ( xsqr - ( cBlue << nBits ) ) << 1L;
 
-        cdp = (HPULONG) pBuffer;
+        cdp = (ULONG*) pBuffer;
         crgbp = pMap;
 
         for( r = 0, rxx = crinc; r < nColorMax; rdist += rxx, r++, rxx += xsqr2 )
@@ -412,8 +400,8 @@ void InverseColorMap::ImplCreateBuffers( const ULONG nMax )
     const ULONG nSize = nCount * sizeof( ULONG );
 
     pMap = (BYTE*) SvMemAlloc( nCount );
-    HMEMSET( pMap, 0x00, nCount );
+    memset( pMap, 0x00, nCount );
 
     pBuffer = (BYTE*) SvMemAlloc( nSize );
-    HMEMSET( pBuffer, 0xff, nSize );
+    memset( pBuffer, 0xff, nSize );
 }
