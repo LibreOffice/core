@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:10:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace rtl;
 #ifdef MACOSX
 #define OGL_LIBNAME "libGL.dylib"
 #else
-#define OGL_LIBNAME "libGL.so"
+#define OGL_LIBNAME "libGL.so.1"
 #endif
 
 // ----------
