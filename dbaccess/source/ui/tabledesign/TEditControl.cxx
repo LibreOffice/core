@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:49:04 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
                    ,bReadOnly(sal_True)
                    ,pActRow(NULL)
                    ,pDescrWin(NULL)
+                   ,m_eChildFocus(NONE)
 {
     DBG_CTOR(OTableEditorCtrl,NULL);
 
@@ -408,7 +409,7 @@ sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
         return sal_False;
 
     OSL_ENSURE((xub_StrLen)nRow < m_pRowList->size(),"Row is greater than size!");
-    if(nRow >= m_pRowList->size())
+    if(nRow >= (long)m_pRowList->size())
         return NULL;
     pActRow = (*m_pRowList)[nRow];
     return pActRow != NULL;
@@ -652,6 +653,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
                 // Wenn FieldDescr existiert, wurde Feld geloescht und alter Inhalt wird wiederhergestellt
                 if (pActFieldDescr)
                 {
+                    GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
                     SwitchType(NULL);
                     pActFieldDescr = pActRow->GetActFieldDescr();
                 }
@@ -807,11 +809,17 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     else
     {
         GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
-        SwitchType( GetView()->getController()->getTypeInfo(pTypeCell->GetSelectEntryPos()) );
+        USHORT nPos = pTypeCell->GetSelectEntryPos();
+        if(nPos != LISTBOX_ENTRY_NOTFOUND)
+            SwitchType( GetView()->getController()->getTypeInfo(nPos) );
+        else
+            SwitchType(NULL);
+
     }
-    GetUndoManager()->LeaveListAction();
 
     SaveData(nRow,nColId);
+    // SaveData could create a undo action as well
+    GetUndoManager()->LeaveListAction();
     RowModified(nRow);
     DbCellControllerRef xController(Controller());
     if(xController.Is())
@@ -1096,8 +1104,6 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const OTypeInfo* _
     if( !pFieldDescr && nColId != FIELD_TYPE)
         return;
 
-    String strYes(ModuleRes(STR_VALUE_YES));
-    String strNo(ModuleRes(STR_VALUE_NO));
     //////////////////////////////////////////////////////////////////////
     // Einzelne Felder setzen
     switch( nColId )
@@ -1121,9 +1127,17 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
     OFieldDescription* pFieldDescr = GetFieldDescr( nRow );
     if( !pFieldDescr && nColId != FIELD_TYPE)
         return;
+//  {
+//      OTypeInfoMap::const_iterator aTypeIter = GetView()->getController()->getTypeInfo()->find(DataType::VARCHAR);
+//      if(aTypeIter == GetView()->getController()->getTypeInfo()->end())
+//          aTypeIter = GetView()->getController()->getTypeInfo()->begin();
+//
+//      OTableRow* pRow = (*m_pRowList)[nRow];
+//      pRow->SetFieldType( aTypeIter->second );
+//      pFieldDescr = pRow->GetActFieldDescr();
+//  }
 
-    String strYes(ModuleRes(STR_VALUE_YES));
-    String strNo(ModuleRes(STR_VALUE_NO));
+
     //////////////////////////////////////////////////////////////////////
     // Einzelne Felder setzen
     switch( nColId )
@@ -1159,7 +1173,11 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
             break;
 
         case FIELD_PROPERTY_AUTOINC:
-            pFieldDescr->SetAutoIncrement(_rNewData.Equals(strYes));
+            {
+                String strYes(ModuleRes(STR_VALUE_YES));
+                String strNo(ModuleRes(STR_VALUE_NO));
+                pFieldDescr->SetAutoIncrement(_rNewData.Equals(strYes));
+            }
             break;
         case FIELD_PROPERTY_SCALE:
             pFieldDescr->SetScale(_rNewData.ToInt32());
@@ -1277,14 +1295,16 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 
     if(bIsCutAllowed)
     {
-        if(pDescrCell->HasChildPathFocus())
+        if(m_eChildFocus == DESCRIPTION)
             bIsCutAllowed = pDescrCell->GetSelected().Len() != 0;
-        else if(pNameCell->HasChildPathFocus())
+        else if(m_eChildFocus == NAME)
             bIsCutAllowed = pNameCell->GetSelected().Len() != 0;
-        else
-        // only rows are slected for cutting so we look if all rows are valid
+        else if(m_eChildFocus == ROW)
+        // only rows are selected for cutting so we look if all rows are valid
         // wwe don't waant to copy empty rows here
             bIsCutAllowed = IsCopyAllowed(nRow);
+        else
+            bIsCutAllowed = sal_False;
     }
 
 //  Reference<XPropertySet> xTable = GetView()->getController()->getTable();
@@ -1329,17 +1349,25 @@ sal_Bool OTableEditorCtrl::IsPasteAllowed( long nRow )
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Cut()
 {
-    if(pNameCell->HasChildPathFocus())
+    if(m_eChildFocus == NAME)
     {
         if(GetView()->getController()->isAlterAllowed())
+        {
+            SaveData(-1,FIELD_NAME);
             pNameCell->Cut();
+            CellModified(-1,FIELD_NAME);
+        }
     }
-    else if(pDescrCell->HasChildPathFocus())
+    else if(m_eChildFocus == DESCRIPTION)
     {
         if(GetView()->getController()->isAlterAllowed())
+        {
+            SaveData(-1,FIELD_DESCR);
             pDescrCell->Cut();
+            CellModified(-1,FIELD_DESCR);
+        }
     }
-    else
+    else if(m_eChildFocus == ROW)
     {
         if (nCutEvent)
             Application::RemoveUserEvent(nCutEvent);
@@ -1352,9 +1380,9 @@ void OTableEditorCtrl::Copy()
 {
     if(GetSelectRowCount())
         OTableRowView::Copy();
-    else if(pNameCell->HasChildPathFocus())
+    else if(m_eChildFocus == NAME)
         pNameCell->Copy();
-    else if(pDescrCell->HasChildPathFocus())
+    else if(m_eChildFocus == DESCRIPTION)
         pDescrCell->Copy();
 }
 
@@ -1368,12 +1396,12 @@ void OTableEditorCtrl::Paste()
             Application::RemoveUserEvent( nPasteEvent );
         nPasteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedPaste) );
     }
-    else if(pNameCell->HasChildPathFocus())
+    else if(m_eChildFocus == NAME)
     {
         if(GetView()->getController()->isAlterAllowed())
             pNameCell->Paste();
     }
-    else if(pDescrCell->HasChildPathFocus())
+    else if(m_eChildFocus == DESCRIPTION)
     {
         if(GetView()->getController()->isAlterAllowed())
             pDescrCell->Paste();
@@ -1753,10 +1781,7 @@ void OTableEditorCtrl::SwitchType( const OTypeInfo* _pType )
                     break;
             }
             if (nEntryPos < pTypeCell->GetEntryCount())
-            {
                 pTypeCell->SelectEntryPos( nEntryPos );
-                OSL_ENSURE(pController->getTypeInfo(pTypeCell->GetSelectEntryPos()) != _pType,"EntryPos wasn't correct!");
-            }
         }
     }
 
@@ -1788,6 +1813,21 @@ void OTableEditorCtrl::DeactivateCell(sal_Bool bUpdate)
     sal_uInt16 nCol(GetCurColumnId());
     if (pDescrWin)
         pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
+}
+//------------------------------------------------------------------------------
+long OTableEditorCtrl::PreNotify( NotifyEvent& rNEvt )
+{
+    if (rNEvt.GetType() == EVENT_GETFOCUS)
+    {
+        if( pDescrCell && pDescrCell->HasChildPathFocus() )
+            m_eChildFocus = DESCRIPTION;
+        else if(pNameCell && pNameCell->HasChildPathFocus() )
+            m_eChildFocus = NAME;
+        else
+            m_eChildFocus = ROW;
+    }
+
+    return OTableRowView::PreNotify(rNEvt);
 }
 // -----------------------------------------------------------------------------
 

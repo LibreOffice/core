@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ OTableDesignView::OTableDesignView( Window* pParent,
                                    ) :
     ODataView( pParent ,_rxOrb )
     ,m_pController(_pController)
+    ,m_eChildFocus(NONE)
 {
     DBG_CTOR(OTableDesignView,NULL);
 
@@ -324,28 +325,42 @@ IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, pAcc )
 
     return 0;
 }
+//------------------------------------------------------------------------------
+long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
+{
+    if (rNEvt.GetType() == EVENT_GETFOCUS)
+    {
+        if( GetDescWin()->HasChildPathFocus() )
+            m_eChildFocus = DESCRIPTION;
+        else
+            m_eChildFocus = EDITOR;
+    }
+
+    return ODataView::PreNotify(rNEvt);
+}
 // -----------------------------------------------------------------------------
 sal_Bool OTableDesignView::isCutAllowed()
 {
     sal_Bool bAllowed = sal_False;
-    if( GetDescWin()->HasChildPathFocus() )
+    switch(m_eChildFocus)
     {
-        bAllowed = GetDescWin()->isCutAllowed();
-    }
-    else
-    {
-        bAllowed = GetEditorCtrl()->IsCutAllowed();
+        case DESCRIPTION:
+            bAllowed = GetDescWin()->isCutAllowed();
+            break;
+        case EDITOR:
+            bAllowed = GetEditorCtrl()->IsCutAllowed();
+            break;
     }
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::copy()
 {
-    if( GetDescWin()->HasChildPathFocus() )
+    if( m_eChildFocus == DESCRIPTION)
     {
         GetDescWin()->copy();
     }
-    else
+    else if( m_eChildFocus == EDITOR)
     {
         GetEditorCtrl()->Copy();
     }
@@ -353,11 +368,11 @@ void OTableDesignView::copy()
 // -----------------------------------------------------------------------------
 void OTableDesignView::cut()
 {
-    if( GetDescWin()->HasChildPathFocus() )
+    if( m_eChildFocus == DESCRIPTION)
     {
         GetDescWin()->cut();
     }
-    else
+    else if( m_eChildFocus == EDITOR)
     {
         GetEditorCtrl()->Cut();
     }
@@ -365,11 +380,11 @@ void OTableDesignView::cut()
 // -----------------------------------------------------------------------------
 void OTableDesignView::paste()
 {
-    if( GetDescWin()->HasChildPathFocus() )
+    if( m_eChildFocus == DESCRIPTION)
     {
         GetDescWin()->paste();
     }
-    else
+    else if( m_eChildFocus == EDITOR)
     {
         GetEditorCtrl()->Paste();
     }

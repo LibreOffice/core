@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:14:29 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,9 +150,6 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
@@ -355,15 +352,13 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         m_bEditable             = sal_False;
         m_bRelationsPossible    = sal_False;
         {
-            String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-            ODataView* pWindow = getView();
-            InfoBox(pWindow, aMessage).Execute();
-            Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
-            if(xTask.is())
             {
-                xTask->close();
-                throw SQLException();
+                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+                ODataView* pWindow = getView();
+                InfoBox(pWindow, aMessage).Execute();
             }
+            closeTask();
+            throw SQLException();
         }
     }
     else if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
@@ -375,12 +370,8 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
             OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
             aDlg.Execute();
         }
-        Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
-        if(xTask.is())
-        {
-            xTask->close();
-            throw SQLException();
-        }
+        closeTask();
+        throw SQLException();
     }
     if(!m_bRelationsPossible)
         InvalidateAll();
@@ -490,17 +481,8 @@ sal_Bool SAL_CALL ORelationController::suspend(sal_Bool bSuspend) throw( Runtime
 // -----------------------------------------------------------------------------
 void ORelationController::AddSupportedFeatures()
 {
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Redo")] = ID_BROWSER_REDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Save")] = ID_BROWSER_SAVEDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Undo")] = ID_BROWSER_UNDO;
-
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserMode")] = SID_BROWSER_MODE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:HelpMenu")]    = SID_HELPMENU;
-    //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]      = SID_NEWDOC;
-    //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]   = SID_SAVEASDOC;
-    //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpen")]         = SID_EXPLORERCONTENT_OPEN;
-    //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpenDocument")] = SID_EXPLORERCONTENT_OPEN_DOCUMENT;
-
+    OJoinController::AddSupportedFeatures();
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]  = ID_REALTION_ADD_RELATION;
 }
 // -----------------------------------------------------------------------------
 ToolBox* ORelationController::CreateToolBox(Window* _pParent)
@@ -624,287 +606,10 @@ OTableWindowData* ORelationController::createTableWindowData()
 {
     return new OTableWindowData();
 }
-
 // -----------------------------------------------------------------------------
-//void ORelationController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_Bool _bKeyColumns)
-//{
-//  try
-//  {
-//      // now append the columns
-//      OSL_ENSURE(_rxColSup.is(),"No columns supplier");
-//      if(!_rxColSup.is())
-//          return;
-//      Reference<XNameAccess> xColumns = _rxColSup->getColumns();
-//      OSL_ENSURE(xColumns.is(),"No columns");
-//      Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY);
-//
-//      Reference<XAppend> xAppend(xColumns,UNO_QUERY);
-//      OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
-//
-//      ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
-//      for(;aIter != m_vRowList.end();++aIter)
-//      {
-//          OSL_ENSURE(*aIter,"OTableRow is null!");
-//          OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-//          if(!pField)
-//              continue;
-//
-//          Reference<XPropertySet> xColumn;
-//          if(pField->IsPrimaryKey() || !_bKeyColumns)
-//              xColumn = xColumnFactory->createDataDescriptor();
-//          if(xColumn.is())
-//          {
-//              if(!_bKeyColumns)
-//                  setColumnProperties(xColumn,pField);
-//              else
-//                  xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
-//
-//              xAppend->appendByDescriptor(xColumn);
-//              xColumn = NULL;
-//              // now only the settings are missing
-//              if(xColumns->hasByName(pField->GetName()))
-//              {
-//                  xColumns->getByName(pField->GetName()) >>= xColumn;
-//                  if(xColumn.is())
-//                  {
-//                      if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-//                          xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-//                      if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-//                          xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)pField->GetHorJustify()));
-//                  }
-//              }
-//              else
-//              {
-//                  OSL_ENSURE(sal_False, 0);
-//              }
-//
-//          }
-//      }
-//  }
-//  catch(SQLException& e)
-//  {
-//      showError(SQLExceptionInfo(e));
-//  }
-//  catch(Exception&)
-//  {
-//      OSL_ENSURE(sal_False, 0);
-//  }
-//}
+String ORelationController::getMenu() const
+{
+    return String::CreateFromInt32(RID_RELATION_DESIGN_MAIN_MENU);
+}
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-//void ORelationController::alterColumns()
-//{
-//  Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY);
-//  OSL_ENSURE(xColSup.is(),"What happen here?!");
-//
-//  Reference<XNameAccess> xColumns = xColSup->getColumns();
-//  OSL_ENSURE(xColumns.is(),"No columns");
-//  Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
-//  Reference<XDrop> xDrop(xColumns,UNO_QUERY);
-//  Reference<XAppend> xAppend(xColumns,UNO_QUERY);
-//  Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY);
-//
-//  sal_Bool bReload = sal_False; // refresh the data
-//
-//  ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
-//  ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
-//  for(;aIter != m_vRowList.end();++aIter)
-//  {
-//      OSL_ENSURE(*aIter,"OTableRow is null!");
-//      OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-//      if(!pField)
-//          continue;
-//
-//      Reference<XPropertySet> xColumn;
-//      if(xColumns->hasByName(pField->GetName()))
-//      {
-//          aColumns[pField->GetName()] = sal_True;
-//          xColumns->getByName(pField->GetName()) >>= xColumn;
-//          OSL_ENSURE(xColumn.is(),"Column is null!");
-//
-//          sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey,nAlignment;
-//          sal_Bool bAutoIncrement;
-//          ::rtl::OUString sDescription,sDefaultValue;
-//
-//          xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
-//          xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
-//          xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
-//          xColumn->getPropertyValue(PROPERTY_ISNULLABLE)      >>= nNullable;
-//          bAutoIncrement = ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
-//          //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
-//          if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-//              xColumn->getPropertyValue(PROPERTY_DESCRIPTION) >>= sDescription;
-//          if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-//              xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sDefaultValue;
-//          if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-//              xColumn->getPropertyValue(PROPERTY_FORMATKEY)   >>= nFormatKey;
-//          if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-//              xColumn->getPropertyValue(PROPERTY_ALIGN)       >>= nAlignment;
-//
-//          // check if something changed
-//          if((nType != pField->GetType()                  ||
-//              nPrecision != pField->GetPrecision()        ||
-//              nScale != pField->GetScale()                ||
-//              nNullable != pField->GetIsNullable()        ||
-//              bAutoIncrement != pField->IsAutoIncrement() ||
-//              sDescription != pField->GetDescription()    ||
-//              sDefaultValue != pField->GetDefaultValue()) &&
-//              xColumnFactory.is())
-//          {
-//              Reference<XPropertySet> xNewColumn;
-//              xNewColumn = xColumnFactory->createDataDescriptor();
-//              setColumnProperties(xNewColumn,pField);
-//              // first try to alter the column
-//              sal_Bool bNotOk = sal_False;
-//              try
-//              {
-//                  if(xAlter.is())
-//                      xAlter->alterColumnByName(pField->GetName(),xNewColumn);
-//              }
-//              catch(SQLException&)
-//              {
-//                  bNotOk = sal_True;
-//              }
-//              if((!xAlter.is() || bNotOk) && xDrop.is() && xAppend.is())
-//              {
-//                  xDrop->dropByName(pField->GetName());
-//                  xAppend->appendByDescriptor(xNewColumn);
-//              }
-//              xNewColumn = NULL;
-//              xColumns->getByName(pField->GetName()) >>= xColumn;
-//              bReload = sal_True;
-//          }
-//
-//          if(nFormatKey != pField->GetFormatKey())
-//          {
-//              if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-//                  xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-//          }
-//          if(nAlignment != (sal_Int32)pField->GetHorJustify())
-//          {
-//              if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-//                  xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(nAlignment));
-//          }
-//      }
-//      else if(xColumnFactory.is())
-//      {
-//          // Column is new
-//          xColumn = xColumnFactory->createDataDescriptor();
-//          setColumnProperties(xColumn,pField);
-//          xAppend->appendByDescriptor(xColumn);
-//          if(xColumns->hasByName(pField->GetName()))
-//          {
-//              xColumns->getByName(pField->GetName()) >>= xColumn;
-//              if(xColumn.is())
-//              {
-//                  if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-//                      xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-//                  if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-//                      xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)pField->GetHorJustify()));
-//              }
-//          }
-//          else
-//          {
-//              OSL_ENSURE(sal_False, 0);
-//          }
-//      }
-//  }
-//
-//  Reference<XNameAccess> xKeyColumns  = getKeyColumns();
-//  // now we have to look for the columns who where deleted
-//  if(xDrop.is())
-//  {
-//      Sequence< ::rtl::OUString> aColumnNames = xColumns->getElementNames();
-//      const ::rtl::OUString* pBegin = aColumnNames.getConstArray();
-//      const ::rtl::OUString* pEnd = pBegin + aColumnNames.getLength();
-//      for(;pBegin != pEnd;++pBegin)
-//      {
-//          if(aColumns.find(*pBegin) == aColumns.end()) // found a column to delete
-//          {
-//              if(xKeyColumns.is() && xKeyColumns->hasByName(*pBegin)) // check if this column is a memeber of the primary key
-//              {
-//                  String aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
-//                  aMsgT.SearchAndReplace(String::CreateFromAscii("\"$column$\""),*pBegin);
-//                  String aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
-//                  OSQLMessageBox aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
-//                  if(aMsg.Execute() == RET_YES)
-//                  {
-//                      xKeyColumns = NULL;
-//                      dropKey();
-//                  }
-//                  else
-//                  {
-//                      bReload = sal_True;
-//                      continue;
-//                  }
-//              }
-//              Reference<XDrop> xDrop(xColumns,UNO_QUERY);
-//              xDrop->dropByName(*pBegin);
-//          }
-//      }
-//  }
-//  // check if we have to do something with the primary key
-//  if(xKeyColumns.is())
-//  {
-//      aIter = m_vRowList.begin();
-//      for(;aIter != m_vRowList.end();++aIter)
-//      {
-//          OSL_ENSURE(*aIter,"OTableRow is null!");
-//          OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-//          if(!pField)
-//              continue;
-//          if(pField->IsPrimaryKey() && !xKeyColumns->hasByName(pField->GetName()))
-//          {
-//              dropKey();
-//              Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-//              appendKey(xKeySup);
-//              break;
-//          }
-//      }
-//  }
-//  else
-//  {
-//      Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-//      appendKey(xKeySup);
-//  }
-//
-//  if(bReload)
-//  {
-//      loadData();                 // fill the column information form the table
-//      getView()->initialize();    // show the windows and fill with our informations
-//      getUndoMgr()->Clear();      // clear all undo redo things
-//      setModified(sal_False);     // and we are not modified yet
-//  }
-//}
-// -----------------------------------------------------------------------------
-//void ORelationController::dropKey()
-//{
-//  Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-//  Reference<XIndexAccess> xKeys;
-//  if(xKeySup.is())
-//      xKeys = xKeySup->getKeys();
-//
-//  if(xKeys.is())
-//  {
-//      Reference<XPropertySet> xProp;
-//      for(sal_Int32 i=0;i< xKeys->getCount();++i)
-//      {
-//          xKeys->getByIndex(i) >>= xProp;
-//          sal_Int32 nKeyType = 0;
-//          xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-//          if(KeyType::PRIMARY == nKeyType)
-//          {
-//              Reference<XDrop> xDrop(xKeys,UNO_QUERY);
-//              xDrop->dropByIndex(i); // delete the key
-//              break;
-//          }
-//      }
-//  }
-//}
-// -----------------------------------------------------------------------------
-
-
-
-
-
 

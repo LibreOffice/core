@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:49:05 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,14 @@ namespace dbaui
 
     class OTableEditorCtrl : public OTableRowView
     {
+        enum ChildFocusState
+        {
+            DESCRIPTION,
+            NAME,
+            ROW,
+            NONE
+        };
+
         ::std::vector<OTableRow*>   m_aUndoList;
         ::std::vector<OTableRow*>*  m_pRowList;
 
@@ -97,13 +105,14 @@ namespace dbaui
 
         OTableRow*                  pActRow;
 
-        ULONG nIndexEvent;
-        ULONG nCutEvent;
-        ULONG nPasteEvent;
-        ULONG nDeleteEvent;
-        ULONG nInsNewRowsEvent;
-        ULONG nInvalidateTypeEvent;
-        ULONG nEntryNotFoundEvent;
+        ULONG                       nIndexEvent;
+        ULONG                       nCutEvent;
+        ULONG                       nPasteEvent;
+        ULONG                       nDeleteEvent;
+        ULONG                       nInsNewRowsEvent;
+        ULONG                       nInvalidateTypeEvent;
+        ULONG                       nEntryNotFoundEvent;
+        ChildFocusState             m_eChildFocus;
 
         long nOldDataPos;
 
@@ -197,6 +206,9 @@ namespace dbaui
         BOOL IsCopyAllowed( long nRow = -1 );
         BOOL IsPasteAllowed( long nRow = -1 );
         BOOL IsReadOnly();
+
+        // window overloads
+        virtual long            PreNotify( NotifyEvent& rNEvt );
 
         virtual void Cut();
         virtual void Copy();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-19 13:20:23 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ void OFieldDescGenWin::paste()
         m_pFieldControl->paste();
 }
 // -----------------------------------------------------------------------------
+
 
 
 

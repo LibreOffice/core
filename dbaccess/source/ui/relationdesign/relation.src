@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-10 20:31:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,13 @@
 #ifndef DBAUI_TOOLBOX_HXX
 #include "toolbox.hrc"
 #endif
+
+#define MN_EDIT     20
+#define MN_VIEW     21
+#define MN_EXTRA    22
+#define MN_INDEX    23
+#define MN_WIN      30
+#define MN_HELP     31
 
 
 ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
@@ -261,28 +268,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         };
         ToolboxItem
         {
-            Identifier = ID_REALTION_ADD_RELATION ;
-            HelpId = SID_SBA_ADD_RELATION ;
-            Text = "neue Relation ..." ;
-            Text [ ENGLISH ] = "new relation ..." ;
-            Text[ english_us ] = "New Relation...";
-            Text[ portuguese ] = "nova relaÁ„o...";
-            Text[ russian ] = "—ÓÁ‰‡Ú¸ Ò‚ˇÁ¸...";
-            Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ· Û˜›ÛÁÚ ...";
-            Text[ dutch ] = "nieuwe relatie...";
-            Text[ french ] = "Nouvelle relation ...";
-            Text[ spanish ] = "nueva relaciÛn ...";
-            Text[ italian ] = "Nuova relazione...";
-            Text[ danish ] = "new relation ...";
-            Text[ swedish ] = "ny relation ...";
-            Text[ polish ] = "nowa relacja ...";
-            Text[ portuguese_brazilian ] = "new relation ...";
-            Text[ japanese ] = "êVÇµÇ¢ÿ⁄∞ºÆ›...";
-            Text[ korean ] = "new relation ...";
-            Text[ chinese_simplified ] = "–¬µƒπÿœµ...";
-            Text[ chinese_traditional ] = "∑s√ˆ´Y...";
-            Text[ turkish ] = "new relation ...";
-            Text[ arabic ] = "⁄·«ﬁ… ÃœÌœ…...";
+            MID_DBUI_REALTION_ADD_RELATION
         };
 /*      ToolBoxItem
         {
@@ -392,6 +378,203 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ arabic ] = " „  €ÌÌ—  ’„Ì„ «·⁄·«ﬁ« .\nÂ·  —Ìœ Õ›Ÿ «· €ÌÌ—« ø";
 };
+
+Menu RID_RELATION_DESIGN_MAIN_MENU
+{
+    ItemList =
+    {
+    MenuItem
+    {
+        ITEM_FILE_PICKLIST
+        SubMenu = Menu
+        {
+        ItemList =
+        {
+            MenuItem
+            {
+                ITEM_FILE_NEWDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_OPENDOC
+            };
+            ITEM_FILE_AUTOPILOT
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                ITEM_FILE_CLOSEDOC
+                Command = ".uno:DB/Close";
+            };
+            MenuItem
+            {
+                ITEM_FILE_SAVEDOCS //!!muss fuer andere geoeffnete Tasks drinbleiben
+            };
+            MenuItem
+            {
+                ITEM_FILE_SAVEDOC
+                Command = ".uno:Save";
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                ITEM_FILE_QUITAPP
+            };
+        };
+        };
+    };
+    MenuItem
+    {
+        Identifier = MN_EDIT ;
+        HelpID = MN_EDIT ;
+        Text = "~Bearbeiten" ;
+        Text [ English ] = "~Edit" ;
+        Text [ norwegian ] = "~Rediger" ;
+        Text [ italian ] = "~Modifica" ;
+        Text [ portuguese_brazilian ] = "~Editar" ;
+        Text [ portuguese ] = "~Editar" ;
+        Text [ finnish ] = "~Muokkaa" ;
+        Text [ danish ] = "~Rediger" ;
+        Text [ french ] = "~…dition" ;
+        Text [ swedish ] = "R~edigera" ;
+        Text [ dutch ] = "Be~werken" ;
+        Text [ spanish ] = "~Editar" ;
+        Text [ english_us ] = "~Edit" ;
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    Identifier = ID_BROWSER_UNDO ;
+                    HelpId = SID_UNDO ;
+                    Command = ".uno:Undo";
+                    Text = "R¸ckg‰ngig" ;
+                    Text [ ENGLISH ] = "Undo" ;
+                    Text[ english_us ] = "Undo";
+                    Text[ portuguese ] = "Anular";
+                    Text[ russian ] = "ŒÚÏÂÌËÚ¸";
+                    Text[ greek ] = "¡Ì·ﬂÒÂÛÁ";
+                    Text[ dutch ] = "Ongedaan";
+                    Text[ french ] = "Annuler";
+                    Text[ spanish ] = "Deshacer";
+                    Text[ italian ] = "Annulla";
+                    Text[ danish ] = "Undo";
+                    Text[ swedish ] = "≈ngra";
+                    Text[ polish ] = "Cofnij";
+                    Text[ portuguese_brazilian ] = "Undo";
+                    Text[ japanese ] = "å≥Ç…ñﬂÇ∑";
+                    Text[ korean ] = "Undo";
+                    Text[ chinese_simplified ] = "≥∑œ˚√¸¡Ó";
+                    Text[ chinese_traditional ] = "¥_≠Ï";
+                    Text[ turkish ] = "Undo";
+                    Text[ arabic ] = " —«Ã⁄";
+                };
+                MenuItem
+                {
+                    Identifier = ID_BROWSER_REDO ;
+                    HelpId = SID_REDO ;
+                    Command = ".uno:Redo";
+
+                    Text = "Wiederherstellen" ;
+                    Text [ ENGLISH ] = "Redo" ;
+
+                    Text[ english_us ] = "Redo";
+                    Text[ portuguese ] = "Restaurar";
+                    Text[ russian ] = "¬ÓÒÒÚ‡ÌÓ‚ËÚ¸";
+                    Text[ greek ] = "≈·Ì·ˆÔÒ‹";
+                    Text[ dutch ] = "Herstellen";
+                    Text[ french ] = "Restaurer";
+                    Text[ spanish ] = "Restaurar";
+                    Text[ italian ] = "Ripristina";
+                    Text[ danish ] = "Redo";
+                    Text[ swedish ] = "≈terst‰ll";
+                    Text[ polish ] = "PrzywrÛÊ";
+                    Text[ portuguese_brazilian ] = "Redo";
+                    Text[ japanese ] = "Ç‚ÇËíºÇµ";
+                    Text[ korean ] = "Redo";
+                    Text[ chinese_simplified ] = "ª÷∏¥≥∑œ˚√¸¡Ó";
+                    Text[ chinese_traditional ] = "´Ï¥_∫MÆ¯´¸•O";
+                    Text[ turkish ] = "Redo";
+                    Text[ arabic ] = "≈⁄«œ…";
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+            };
+        };
+        Text[ russian ] = "~œ‡‚Í‡";
+            Text[ polish ] = "~Edytuj";
+            Text[ japanese ] = "ï“èW(~E)";
+            Text[ chinese_simplified ] = "±‡º≠(~E)";
+            Text[ chinese_traditional ] = "ΩsøË(~E)";
+            Text[ arabic ] = "~ Õ—Ì—";
+            Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+            Text[ korean ] = "∆Ì¡˝(~E)";
+            Text[ turkish ] = "~D¸zenle";
+            Text[ language_user1 ] = " ";
+        };
+
+    MenuItem
+    {
+        Identifier = MN_EXTRA ;
+        HelpID = MN_EXTRA ;
+        Text = "E~xtras" ;
+        Text [ English ] = "T~ools" ;
+        Text [ norwegian ] = "Verk~t¯y" ;
+        Text [ italian ] = "~Strumenti" ;
+        Text [ portuguese_brazilian ] = "F~erramentas" ;
+        Text [ portuguese ] = "~Ferramentas" ;
+        Text [ finnish ] = "~Tyˆkalut" ;
+        Text [ danish ] = "Fun~ktioner" ;
+        Text [ french ] = "~Outils" ;
+        Text [ swedish ] = "~Verktyg" ;
+        Text [ dutch ] = "E~xtra" ;
+        Text [ spanish ] = "~Herramientas" ;
+        Text [ english_us ] = "~Tools" ;
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                ITEM_DATASOURCE_ADMINISTRATION
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    ITEM_TOOLS_BASICCHOOSER
+                };
+                ITEM_MN_OPTIONS
+                MenuItem
+                {
+                    MID_DBUI_REALTION_ADD_RELATION
+                    Command = ".uno:DB/AddRelation";
+                };
+            };
+        };
+            Text[ russian ] = "~—Â‚ËÒ";
+            Text[ greek ] = "≈~Ò„·ÎÂﬂ·";
+            Text[ polish ] = "~NarzÍdzia";
+            Text[ japanese ] = "¬∞Ÿ(~T)";
+            Text[ korean ] = "µµ±∏(~T)";
+            Text[ chinese_simplified ] = "π§æﬂ(~T)";
+            Text[ chinese_traditional ] = "§u®„(~T)";
+            Text[ arabic ] = "√~œÊ« ";
+            Text[ turkish ] = "~AraÁlar";
+            Text[ language_user1 ] = " ";
+        };
+    ITEM_WINDOW_MENU
+    ITEM_HELP_MENU
+    };
+};
+
 
 
 

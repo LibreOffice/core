@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-17 09:15:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,10 +308,13 @@ void OTableController::disposing()
 FeatureState OTableController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
-        // (disabled automatically)
+    // (disabled automatically)
 
     switch (_nId)
     {
+        case SID_CLOSEDOC:
+            aReturn.bEnabled = sal_True;
+            break;
         case ID_TABLE_DESIGN_NO_CONNECTION:
             aReturn.aState = ::cppu::bool2any(m_xConnection.is());
             break;
@@ -326,13 +329,13 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bModified;
             break;
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = m_bEditable && static_cast<OTableDesignView*>(getView())->isCutAllowed();
+            aReturn.bEnabled = m_bEditable && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = sal_True && m_bFrameUiActive;
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = m_bEditable;
+            aReturn.bEnabled = m_bEditable && m_bFrameUiActive;
             break;
         case ID_BROWSER_UNDO:
             aReturn.bEnabled = m_bEditable && m_aUndoManager.GetUndoActionCount() != 0;
@@ -342,7 +345,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             break;
         case SID_INDEXDESIGN:
             aReturn.bEnabled =
-                (   (   (m_bNew || m_bModified)
+                (   (   ((!m_bNew && m_bModified) || m_bModified)
                     ||  Reference< XIndexesSupplier >(m_xTable, UNO_QUERY).is()
                     )
                 &&  m_xConnection.is()
@@ -357,6 +360,10 @@ void OTableController::Execute(sal_uInt16 _nId)
 {
     switch(_nId)
     {
+        case SID_CLOSEDOC:
+            closeTask();
+            return;
+            break;
         case ID_TABLE_DESIGN_NO_CONNECTION:
             if(!m_xConnection.is())
                 createNewConnection(sal_False); // ask the user for a new connection
@@ -575,14 +582,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         m_xTable = NULL;
         aInfo = SQLExceptionInfo(e);
     }
-    catch(const ElementExistException& e)
-    {
-        m_sName = ::rtl::OUString();
-        stopTableListening();
-        m_xTable = NULL;
-        //  aInfo = SQLExceptionInfo(e);
-        return sal_False;
-    }
     catch(Exception&)
     {
         m_sName = ::rtl::OUString();
@@ -784,16 +783,24 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
 // -----------------------------------------------------------------------------
 void OTableController::AddSupportedFeatures()
 {
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Redo")] = ID_BROWSER_REDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Save")] = ID_BROWSER_SAVEDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Undo")] = ID_BROWSER_UNDO;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]            = ID_BROWSER_REDO;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]            = ID_BROWSER_SAVEDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]            = ID_BROWSER_UNDO;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserMode")] = SID_BROWSER_MODE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:HelpMenu")]    = SID_HELPMENU;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]      = SID_NEWDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]   = SID_SAVEASDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpen")]         = SID_EXPLORERCONTENT_OPEN;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpenDocument")] = SID_EXPLORERCONTENT_OPEN_DOCUMENT;
+    //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserMode")] = SID_BROWSER_MODE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:HelpMenu")]        = SID_HELPMENU;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]          = SID_NEWDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]       = SID_SAVEASDOC;
+
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]            = ID_BROWSER_COPY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]             = ID_BROWSER_CUT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]           = ID_BROWSER_PASTE;
+
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/IndexDesign")]  = SID_INDEXDESIGN;
+
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/Close")]        = SID_CLOSEDOC;
+//  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpen")]         = SID_EXPLORERCONTENT_OPEN;
+//  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpenDocument")] = SID_EXPLORERCONTENT_OPEN_DOCUMENT;
 
 }
 // -----------------------------------------------------------------------------
@@ -1404,7 +1411,7 @@ void OTableController::alterColumns()
     // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
 
-    ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
+    ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->storesMixedCaseQuotedIdentifiers() ? true : false): sal_True);
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
     for(sal_Int32 nPos = 0;aIter != m_vRowList.end();++aIter,++nPos)
     {
@@ -1756,7 +1763,11 @@ void OTableController::reSyncRows()
     return sName;
 }
 // -----------------------------------------------------------------------------
-
+String OTableController::getMenu() const
+{
+    return String::CreateFromInt32(RID_TABLE_DESIGN_MAIN_MENU);
+}
+// -----------------------------------------------------------------------------
 
 
 

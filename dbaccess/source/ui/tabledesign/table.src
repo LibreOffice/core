@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 11:34:35 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,19 @@
 #include "toolbox.hrc"
 #endif
 
+#define MN_EDIT     20
+#define MN_VIEW     21
+#define MN_EXTRA    22
+#define MN_INDEX    23
+#define MN_WIN      30
+#define MN_HELP     31
+
+
 #define MID_INDEXDESIGN \
     Identifier = SID_INDEXDESIGN ; \
-    Text = "Indexentwurf" ; \
-    Text [ english ] = "Index Desgin" ; \
-    Text [ english_us ] = "Index Desgin";   \
+    Text = "I~ndexentwurf" ; \
+    Text [ english ] = "I~ndex Desgin" ; \
+    Text [ english_us ] = "I~ndex Desgin";  \
     Text[ portuguese ] = "Index Desgin";\
     Text[ russian ] = "œÓÂÍÚ ËÌ‰ÂÍÒ‡";\
     Text[ greek ] = "Index Desgin";\
@@ -1787,4 +1795,219 @@ String STR_TABLEDESIGN_TITLE
     Text = "Tabellen Entwurf";
     Text [ ENGLISH ] = "table design";
 };
+
+Menu RID_TABLE_DESIGN_MAIN_MENU
+{
+    ItemList =
+    {
+    MenuItem
+    {
+        ITEM_FILE_PICKLIST
+        SubMenu = Menu
+        {
+        ItemList =
+        {
+            MenuItem
+            {
+                ITEM_FILE_NEWDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_OPENDOC
+            };
+            ITEM_FILE_AUTOPILOT
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                ITEM_FILE_CLOSEDOC
+                Command = ".uno:DB/Close";
+            };
+            MenuItem
+            {
+                ITEM_FILE_SAVEDOCS //!!muss fuer andere geoeffnete Tasks drinbleiben
+            };
+            MenuItem
+            {
+                ITEM_FILE_SAVEDOC
+                Command = ".uno:Save";
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                ITEM_FILE_QUITAPP
+            };
+        };
+        };
+    };
+    MenuItem
+    {
+        Identifier = MN_EDIT ;
+        HelpID = MN_EDIT ;
+        Text = "~Bearbeiten" ;
+        Text [ English ] = "~Edit" ;
+        Text [ norwegian ] = "~Rediger" ;
+        Text [ italian ] = "~Modifica" ;
+        Text [ portuguese_brazilian ] = "~Editar" ;
+        Text [ portuguese ] = "~Editar" ;
+        Text [ finnish ] = "~Muokkaa" ;
+        Text [ danish ] = "~Rediger" ;
+        Text [ french ] = "~…dition" ;
+        Text [ swedish ] = "R~edigera" ;
+        Text [ dutch ] = "Be~werken" ;
+        Text [ spanish ] = "~Editar" ;
+        Text [ english_us ] = "~Edit" ;
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    Identifier = SID_UNDO ;
+                    HelpId = SID_UNDO ;
+                    Command = ".uno:Undo";
+                    Text = "R¸ckg‰ngig" ;
+                    Text [ ENGLISH ] = "Undo" ;
+                    Text[ english_us ] = "Undo";
+                    Text[ portuguese ] = "Anular";
+                    Text[ russian ] = "ŒÚÏÂÌËÚ¸";
+                    Text[ greek ] = "¡Ì·ﬂÒÂÛÁ";
+                    Text[ dutch ] = "Ongedaan";
+                    Text[ french ] = "Annuler";
+                    Text[ spanish ] = "Deshacer";
+                    Text[ italian ] = "Annulla";
+                    Text[ danish ] = "Undo";
+                    Text[ swedish ] = "≈ngra";
+                    Text[ polish ] = "Cofnij";
+                    Text[ portuguese_brazilian ] = "Undo";
+                    Text[ japanese ] = "å≥Ç…ñﬂÇ∑";
+                    Text[ korean ] = "Undo";
+                    Text[ chinese_simplified ] = "≥∑œ˚√¸¡Ó";
+                    Text[ chinese_traditional ] = "¥_≠Ï";
+                    Text[ turkish ] = "Undo";
+                    Text[ arabic ] = " —«Ã⁄";
+                };
+                MenuItem
+                {
+                    Identifier = SID_REDO ;
+                    HelpId = SID_REDO ;
+                    Command = ".uno:Redo";
+                    Text = "Wiederherstellen" ;
+                    Text [ ENGLISH ] = "Redo" ;
+
+                    Text[ english_us ] = "Redo";
+                    Text[ portuguese ] = "Restaurar";
+                    Text[ russian ] = "¬ÓÒÒÚ‡ÌÓ‚ËÚ¸";
+                    Text[ greek ] = "≈·Ì·ˆÔÒ‹";
+                    Text[ dutch ] = "Herstellen";
+                    Text[ french ] = "Restaurer";
+                    Text[ spanish ] = "Restaurar";
+                    Text[ italian ] = "Ripristina";
+                    Text[ danish ] = "Redo";
+                    Text[ swedish ] = "≈terst‰ll";
+                    Text[ polish ] = "PrzywrÛÊ";
+                    Text[ portuguese_brazilian ] = "Redo";
+                    Text[ japanese ] = "Ç‚ÇËíºÇµ";
+                    Text[ korean ] = "Redo";
+                    Text[ chinese_simplified ] = "ª÷∏¥≥∑œ˚√¸¡Ó";
+                    Text[ chinese_traditional ] = "´Ï¥_∫MÆ¯´¸•O";
+                    Text[ turkish ] = "Redo";
+                    Text[ arabic ] = "≈⁄«œ…";
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    ITEM_EDIT_CUT
+                    Command = ".uno:Cut";
+                };
+                MenuItem
+                {
+                    ITEM_EDIT_COPY
+                    Command = ".uno:Copy";
+                };
+                MenuItem
+                {
+                    ITEM_EDIT_PASTE
+                    Command = ".uno:Paste";
+                };
+            };
+        };
+        Text[ russian ] = "~œ‡‚Í‡";
+            Text[ polish ] = "~Edytuj";
+            Text[ japanese ] = "ï“èW(~E)";
+            Text[ chinese_simplified ] = "±‡º≠(~E)";
+            Text[ chinese_traditional ] = "ΩsøË(~E)";
+            Text[ arabic ] = "~ Õ—Ì—";
+            Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+            Text[ korean ] = "∆Ì¡˝(~E)";
+            Text[ turkish ] = "~D¸zenle";
+            Text[ language_user1 ] = " ";
+        };
+
+    MenuItem
+    {
+        Identifier = MN_EXTRA ;
+        HelpID = MN_EXTRA ;
+        Text = "E~xtras" ;
+        Text [ English ] = "T~ools" ;
+        Text [ norwegian ] = "Verk~t¯y" ;
+        Text [ italian ] = "~Strumenti" ;
+        Text [ portuguese_brazilian ] = "F~erramentas" ;
+        Text [ portuguese ] = "~Ferramentas" ;
+        Text [ finnish ] = "~Tyˆkalut" ;
+        Text [ danish ] = "Fun~ktioner" ;
+        Text [ french ] = "~Outils" ;
+        Text [ swedish ] = "~Verktyg" ;
+        Text [ dutch ] = "E~xtra" ;
+        Text [ spanish ] = "~Herramientas" ;
+        Text [ english_us ] = "~Tools" ;
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                ITEM_DATASOURCE_ADMINISTRATION
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    ITEM_TOOLS_BASICCHOOSER
+                };
+                ITEM_MN_OPTIONS
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    MID_INDEXDESIGN
+                    Command = ".uno:DB/IndexDesign";
+                };
+            };
+        };
+            Text[ russian ] = "~—Â‚ËÒ";
+            Text[ greek ] = "≈~Ò„·ÎÂﬂ·";
+            Text[ polish ] = "~NarzÍdzia";
+            Text[ japanese ] = "¬∞Ÿ(~T)";
+            Text[ korean ] = "µµ±∏(~T)";
+            Text[ chinese_simplified ] = "π§æﬂ(~T)";
+            Text[ chinese_traditional ] = "§u®„(~T)";
+            Text[ arabic ] = "√~œÊ« ";
+            Text[ turkish ] = "~AraÁlar";
+            Text[ language_user1 ] = " ";
+        };
+    ITEM_WINDOW_MENU
+    ITEM_HELP_MENU
+    };
+};
+
 

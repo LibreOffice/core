@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,8 @@ void OTableEditorTypeSelUndoAct::Undo()
     OFieldDescription* pFieldDesc = pTabEdCtrl->GetActRow()->GetActFieldDescr();
     if(pFieldDesc)
         m_pNewType = pFieldDesc->getTypeInfo();
+    else
+        m_pNewType = NULL;
     pTabEdCtrl->SetData(m_nRow,m_nCol,m_pOldType);
     pTabEdCtrl->SwitchType( m_pOldType );
 
