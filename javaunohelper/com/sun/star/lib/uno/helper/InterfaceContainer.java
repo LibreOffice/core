@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:39:51 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,7 @@ public class InterfaceContainer implements Cloneable
         synchronized (this)
         {
             aIt= iterator();
-            // Container freigeben, falls im disposing neue Einträge kommen
+            // Container freigeben, falls im disposing neue Eintraege kommen
             // set the member to null, the iterator delete the values
             clear();
             elementData= null;
