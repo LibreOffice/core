@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:25:04 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,6 @@
  *
  ************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-#include <vector>
-
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
@@ -74,6 +69,13 @@
 #include "uno/mapping.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/shlib.hxx"
+
+#include "com/sun/star/beans/XPropertySet.hpp"
+
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
+#include <vector>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -87,7 +89,7 @@ namespace cppu
 {
 
 #if OSL_DEBUG_LEVEL > 1
-//==================================================================================================
+//------------------------------------------------------------------------------
 static inline void out( const char * p ) SAL_THROW( () )
 {
     printf( p );
@@ -99,7 +101,7 @@ static inline void out( const OUString & r ) throw ()
 }
 #endif
 
-//==================================================================================================
+//------------------------------------------------------------------------------
 static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
 {
     static ::std::vector< OUString > * s_p = 0;
@@ -120,10 +122,12 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
                 do
                 {
                     OUString aStr( OStringToOUString(
-                        aEnv.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_ASCII_US ) );
+                        aEnv.getToken( 0, ';', nIndex ),
+                        RTL_TEXTENCODING_ASCII_US ) );
                     OUString aFileUrl;
                     OSL_VERIFY(
-                        osl_File_E_None == FileBase::getFileURLFromSystemPath(aStr, aFileUrl) );
+                        osl_File_E_None ==
+                        FileBase::getFileURLFromSystemPath(aStr, aFileUrl) );
                     s_v.push_back( aFileUrl );
                 } while( nIndex != -1 );
 #if OSL_DEBUG_LEVEL > 1
@@ -154,7 +158,7 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
     return s_p;
 }
 
-//==================================================================================================
+//------------------------------------------------------------------------------
 static bool checkAccessPath( OUString * pComp ) throw ()
 {
     const ::std::vector< OUString > * pPath = getAccessDPath();
@@ -178,7 +182,9 @@ static bool checkAccessPath( OUString * pComp ) throw ()
             }
             else
             {
-                if (osl_File_E_None != ::osl_getAbsoluteFileURL( aBaseDir.pData, pComp->pData, &aAbs.pData ))
+                if (osl_File_E_None !=
+                    ::osl_getAbsoluteFileURL(
+                        aBaseDir.pData, pComp->pData, &aAbs.pData ))
                 {
                     continue;
                 }
@@ -195,7 +201,8 @@ static bool checkAccessPath( OUString * pComp ) throw ()
             if (0 == aAbs.indexOf( aBaseDir ) && // still part of it?
                 aBaseDir.getLength() < aAbs.getLength() &&
                 (aBaseDir[ aBaseDir.getLength() -1 ] == (sal_Unicode)'/' ||
-                 aAbs[ aBaseDir.getLength() ] == (sal_Unicode)'/')) // dir boundary
+                 // dir boundary
+                 aAbs[ aBaseDir.getLength() ] == (sal_Unicode)'/'))
             {
 #if OSL_DEBUG_LEVEL > 1
                 out( ": ok.\n" );
@@ -222,18 +229,20 @@ static bool checkAccessPath( OUString * pComp ) throw ()
     }
 }
 
-//--------------------------------------------------------------------------------------------------
-static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd ) SAL_THROW( () )
+//------------------------------------------------------------------------------
+static inline sal_Int32 endsWith(
+    const OUString & rText, const OUString & rEnd ) SAL_THROW( () )
 {
     if (rText.getLength() >= rEnd.getLength() &&
-        rEnd.equalsIgnoreAsciiCase( rText.copy( rText.getLength() - rEnd.getLength() ) ))
+        rEnd.equalsIgnoreAsciiCase(
+            rText.copy( rText.getLength() - rEnd.getLength() ) ))
     {
         return rText.getLength() - rEnd.getLength();
     }
     return -1;
 }
 
-//==================================================================================================
+//------------------------------------------------------------------------------
 static OUString makeComponentPath(
     const OUString & rLibName, const OUString & rPath )
 {
@@ -241,8 +250,12 @@ static OUString makeComponentPath(
     // No system path allowed here !
     {
         OUString aComp;
-        OSL_ASSERT( osl_File_E_None == FileBase::getSystemPathFromFileURL( rLibName, aComp ) );
-        OSL_ASSERT( ! rPath.getLength() || osl_File_E_None == FileBase::getSystemPathFromFileURL( rPath, aComp ) );
+        OSL_ASSERT( osl_File_E_None ==
+                    FileBase::getSystemPathFromFileURL( rLibName, aComp ) );
+        OSL_ASSERT(
+            ! rPath.getLength() ||
+            osl_File_E_None ==
+              FileBase::getSystemPathFromFileURL( rPath, aComp ) );
     }
 #endif
 
@@ -285,7 +298,7 @@ static OUString makeComponentPath(
     return out;
 }
 
-//==================================================================================================
+//==============================================================================
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rLibName, OUString const & rPath,
     OUString const & rImplName,
@@ -294,18 +307,16 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
-
-    OUString aExcMsg;
-
     if (! checkAccessPath( &aModulePath ))
     {
         throw loader::CannotActivateFactoryException(
-            OUSTR("permission denied to load component library: ") + aModulePath,
+            OUSTR("permission denied to load component library: ") +
+            aModulePath,
             Reference< XInterface >() );
     }
 
-    oslModule lib =
-        osl_loadModule( aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+    oslModule lib = osl_loadModule(
+        aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
     {
         throw loader::CannotActivateFactoryException(
@@ -313,6 +324,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             Reference< XInterface >() );
     }
 
+    OUString aExcMsg;
     Reference< XInterface > xRet;
 
     void * pSym;
@@ -324,13 +336,15 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         uno_Environment * pEnv = 0;
 
         const sal_Char * pEnvTypeName = 0;
-        (*((component_getImplementationEnvironmentFunc) pSym))( &pEnvTypeName, &pEnv );
+        (*((component_getImplementationEnvironmentFunc) pSym))(
+            &pEnvTypeName, &pEnv );
         OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
 
         bool bNeedsMapping =
             ((pEnv != 0) ||
              !aEnvTypeName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ));
+                 RTL_CONSTASCII_STRINGPARAM(
+                     CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ));
         if (bNeedsMapping)
         {
             if (! pEnv)
@@ -339,7 +353,8 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             }
             if (pEnv)
             {
-                OUString aCppEnvTypeName = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+                OUString aCppEnvTypeName =
+                    OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
                 uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
                 if (pCurrentEnv)
                 {
@@ -352,8 +367,8 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         pSym = osl_getSymbol( lib, aGetFactoryName.pData );
         if (pSym != 0)
         {
-            OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-
+            OString aImplName(
+                OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
             if (bNeedsMapping)
             {
                 if (pEnv && pCurrentEnv)
@@ -363,37 +378,47 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
                     if (aCurrent2Env.is() && aEnv2Current.is())
                     {
-                        void * pSMgr =
-                            aCurrent2Env.mapInterface( xMgr.get(), ::getCppuType( &xMgr ) );
-                        void * pKey =
-                            aCurrent2Env.mapInterface( xKey.get(), ::getCppuType( &xKey ) );
+                        void * pSMgr = aCurrent2Env.mapInterface(
+                            xMgr.get(), ::getCppuType( &xMgr ) );
+                        void * pKey = aCurrent2Env.mapInterface(
+                            xKey.get(), ::getCppuType( &xKey ) );
 
                         void * pSSF =
                             (*((component_getFactoryFunc) pSym))(
                                 aImplName.getStr(), pSMgr, pKey );
 
                         if (pKey)
-                            (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pKey );
+                        {
+                            (*pEnv->pExtEnv->releaseInterface)(
+                                pEnv->pExtEnv, pKey );
+                        }
                         if (pSMgr)
-                            (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSMgr );
+                        {
+                            (*pEnv->pExtEnv->releaseInterface)(
+                                pEnv->pExtEnv, pSMgr );
+                        }
 
                         if (pSSF)
                         {
                             aEnv2Current.mapInterface(
                                 reinterpret_cast< void ** >( &xRet ),
                                 pSSF, ::getCppuType( &xRet ) );
-                            (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSSF );
+                            (*pEnv->pExtEnv->releaseInterface)(
+                                pEnv->pExtEnv, pSSF );
                         }
                         else
                         {
                             aExcMsg = aModulePath;
-                            aExcMsg += OUSTR(": cannot get factory of demanded implementation: ");
-                            aExcMsg += OStringToOUString( aImplName, RTL_TEXTENCODING_ASCII_US );
+                            aExcMsg += OUSTR(": cannot get factory of "
+                                             "demanded implementation: ");
+                            aExcMsg += OStringToOUString(
+                                aImplName, RTL_TEXTENCODING_ASCII_US );
                         }
                     }
                     else
                     {
-                        aExcMsg = OUSTR("cannot get uno mappings: C++ <=> UNO!");
+                        aExcMsg =
+                            OUSTR("cannot get uno mappings: C++ <=> UNO!");
                     }
                 }
                 else
@@ -414,8 +439,10 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
                 else
                 {
                     aExcMsg = aModulePath;
-                    aExcMsg += OUSTR(": cannot get factory of demanded implementation: ");
-                    aExcMsg += OStringToOUString( aImplName, RTL_TEXTENCODING_ASCII_US );
+                    aExcMsg += OUSTR(": cannot get factory of demanded "
+                                     "implementation: ");
+                    aExcMsg += OStringToOUString(
+                        aImplName, RTL_TEXTENCODING_ASCII_US );
                 }
             }
         }
@@ -443,7 +470,9 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             OUString aUnoEnvTypeName = OUSTR(UNO_LB_UNO);
             Mapping aUno2Cpp( aUnoEnvTypeName, aCppEnvTypeName );
             Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
-            OSL_ENSURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
+            OSL_ENSURE(
+                aUno2Cpp.is() && aCpp2Uno.is(),
+                "### cannot get uno mappings!" );
 
             if (aUno2Cpp.is() && aCpp2Uno.is())
             {
@@ -452,11 +481,14 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
                 uno_Interface * pUSFactory =
                     (uno_Interface *) aCpp2Uno.mapInterface(
                         xMgr.get(),
-                        ::getCppuType( (const Reference< lang::XMultiServiceFactory > *)0 ) );
+                        ::getCppuType(
+                            (const Reference< lang::XMultiServiceFactory > *)0 )
+                        );
                 uno_Interface * pUKey =
                     (uno_Interface *) aCpp2Uno.mapInterface(
                         xKey.get(),
-                        ::getCppuType( (const Reference< registry::XRegistryKey > *)0 ) );
+                        ::getCppuType(
+                            (const Reference< registry::XRegistryKey > *)0 ) );
 
                 pUComponentFactory =
                     (*((CreateComponentFactoryFunc) pSym))(
@@ -492,14 +524,16 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         out( aExcMsg );
         out( "\n" );
 #endif
-        throw loader::CannotActivateFactoryException( aExcMsg, Reference< XInterface >() );
+        throw loader::CannotActivateFactoryException(
+            aExcMsg,
+            Reference< XInterface >() );
     }
 
     rtl_registerModuleForUnloading( lib);
     return xRet;
 }
 
-//==================================================================================================
+//==============================================================================
 void SAL_CALL writeSharedLibComponentInfo(
     OUString const & rLibName, OUString const & rPath,
     Reference< lang::XMultiServiceFactory > const & xMgr,
@@ -513,16 +547,18 @@ void SAL_CALL writeSharedLibComponentInfo(
     if (! checkAccessPath( &aModulePath ))
     {
         throw registry::CannotRegisterImplementationException(
-            OUSTR("permission denied to load component library: ") + aModulePath,
+            OUSTR("permission denied to load component library: ") +
+            aModulePath,
             Reference< XInterface >() );
     }
 
-    oslModule lib =
-        osl_loadModule( aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+    oslModule lib = osl_loadModule(
+        aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
     {
         throw registry::CannotRegisterImplementationException(
-            OUSTR("loading component library failed: ") + aModulePath, Reference< XInterface >() );
+            OUSTR("loading component library failed: ") + aModulePath,
+            Reference< XInterface >() );
     }
 
     sal_Bool bRet = sal_False;
@@ -536,14 +572,15 @@ void SAL_CALL writeSharedLibComponentInfo(
         uno_Environment * pEnv = 0;
 
         const sal_Char * pEnvTypeName = 0;
-        (*((component_getImplementationEnvironmentFunc) pSym))( &pEnvTypeName, &pEnv );
+        (*((component_getImplementationEnvironmentFunc) pSym))(
+            &pEnvTypeName, &pEnv );
         OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
 
         bool bNeedsMapping =
             ((pEnv != 0) ||
              !aEnvTypeName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ));
-
+                 RTL_CONSTASCII_STRINGPARAM(
+                     CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ));
         if (bNeedsMapping)
         {
             if (! pEnv)
@@ -552,7 +589,8 @@ void SAL_CALL writeSharedLibComponentInfo(
             }
             if (pEnv)
             {
-                OUString aCppEnvTypeName = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+                OUString aCppEnvTypeName =
+                    OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
                 uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
                 if (pCurrentEnv)
                 {
@@ -572,30 +610,36 @@ void SAL_CALL writeSharedLibComponentInfo(
                     Mapping aCurrent2Env( pCurrentEnv, pEnv );
                     if (aCurrent2Env.is())
                     {
-                        void * pSMgr =
-                            aCurrent2Env.mapInterface( xMgr.get(), ::getCppuType( &xMgr ) );
-                        void * pKey =
-                            aCurrent2Env.mapInterface( xKey.get(), ::getCppuType( &xKey ) );
+                        void * pSMgr = aCurrent2Env.mapInterface(
+                            xMgr.get(), ::getCppuType( &xMgr ) );
+                        void * pKey = aCurrent2Env.mapInterface(
+                            xKey.get(), ::getCppuType( &xKey ) );
                         if (pKey)
                         {
-                            bRet = (*((component_writeInfoFunc) pSym))( pSMgr, pKey );
-                            (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pKey );
+                            bRet = (*((component_writeInfoFunc) pSym))(
+                                pSMgr, pKey );
+                            (*pEnv->pExtEnv->releaseInterface)(
+                                pEnv->pExtEnv, pKey );
                             if (! bRet)
                             {
                                 aExcMsg = aModulePath;
-                                aExcMsg += OUSTR(": component_writeInfo() returned false!");
+                                aExcMsg += OUSTR(": component_writeInfo() "
+                                                 "returned false!");
                             }
                         }
                         else
                         {
                             // key is mandatory
                             aExcMsg = aModulePath;
-                            aExcMsg +=
-                                OUSTR(": registry is mandatory to invoke component_writeInfo()!");
+                            aExcMsg += OUSTR(": registry is mandatory to invoke"
+                                             " component_writeInfo()!");
                         }
 
                         if (pSMgr)
-                            (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSMgr );
+                        {
+                            (*pEnv->pExtEnv->releaseInterface)(
+                                pEnv->pExtEnv, pSMgr );
+                        }
                     }
                     else
                     {
@@ -611,18 +655,21 @@ void SAL_CALL writeSharedLibComponentInfo(
             {
                 if (xKey.is())
                 {
-                    bRet = (*((component_writeInfoFunc) pSym))( xMgr.get(), xKey.get() );
+                    bRet = (*((component_writeInfoFunc) pSym))(
+                        xMgr.get(), xKey.get() );
                     if (! bRet)
                     {
                         aExcMsg = aModulePath;
-                        aExcMsg += OUSTR(": component_writeInfo() returned false!");
+                        aExcMsg += OUSTR(": component_writeInfo() returned "
+                                         "false!");
                     }
                 }
                 else
                 {
                     // key is mandatory
                     aExcMsg = aModulePath;
-                    aExcMsg += OUSTR(": registry is mandatory to invoke component_writeInfo()!");
+                    aExcMsg += OUSTR(": registry is mandatory to invoke "
+                                     "component_writeInfo()!");
                 }
             }
         }
@@ -646,7 +693,8 @@ void SAL_CALL writeSharedLibComponentInfo(
         pSym = osl_getSymbol( lib, aWriteInfoName.pData );
         if (pSym != 0)
         {
-            OUString aCppEnvTypeName = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+            OUString aCppEnvTypeName =
+                OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
             OUString aUnoEnvTypeName = OUSTR(UNO_LB_UNO);
             Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
 
