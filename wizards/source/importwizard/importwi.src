@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:19:12 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ String sWelcometextLabel1
     Text[ polish ] = "Dany AutoPilot konwertuje starsze dokumenty formatu StarOffice oraz dokumenty Microsoft Office na nowy format %PRODUCTNAME XML.";
     Text[ portuguese_brazilian ] = "This AutoPilot searches through a complete file with all subdirectories in the Microsoft Office Format. You can convert all documents and/or templates to a %PRODUCTNAME Format.";
     Text[ japanese ] = "このオートパイロットは、旧 StarOffice ドキュメントと Microsoft Office ドキュメントを、新しい %PRODUCTNAME の XML 形式に変換します。";
-    Text[ korean ] = "이 자동 파일럿은 StarSuite－형식과 Microsoft Office - 문서를 %PRODUCTNAME XML-형식으로 변환합니다.";
+    Text[ korean ] = "이 자동 파일럿은 이전 StarSuite형식과 Microsoft Office문서를 새로운 StarSuite XML형식으로 변환합니다.";
     Text[ chinese_simplified ] = "这个自动文件助理将 StarOffice 旧式文档和 Microsoft Office 文档转换成 %PRODUCTNAME XML 格式。";
     Text[ chinese_traditional ] = "這個檔案助理程式將 StarOffice 舊式格式或 Microsoft Office 文件轉換成新式的 %PRODUCTNAME XML 格式。";
     Text[ arabic ] = "���� ��� ������ ����� ������ ������� StarOffice  ������� �������� Microsoft Office  ��� ������� %PRODUCTNAME XML ������.";
@@ -362,7 +362,7 @@ String sWelcometextLabel2
     Text[ polish ] = "Nale�y uwzgl�dni�, �e podczas konwersji dokument�w Microsoft za��czone makra VBA strac� swoj� funkcjonalno��.";
     Text[ portuguese_brazilian ] = "On the following pages, you can choose if you want to import Winword texts, Excel spreadsheets or Powerpoint presentations. Select the Microsoft file folder and the target folder for the newly rendered %PRODUCTNAME file.";
     Text[ japanese ] = "Microsoft ドキュメントの変換時に、添付された VBA マクロの機能が失われないよう注意してください。";
-    Text[ korean ] = "Microsoft 문서를 변환할 때, 첨부된 VBA 매크로는 그 기능을 상실한다는  사실을 유의하십시오.";
+    Text[ korean ] = "Microsoft Office 문서를 변환할 때,첨부된 VBA매크로는 그 기능을 상실한다는 사실을 유의하십시오.";
     Text[ chinese_simplified ] = "请您注意在转换 Microsoft 文档时源文档内含 VBA 宏的功能就会流失。";
     Text[ chinese_traditional ] = "請注意在文件轉換格式時 Microsoft 文件內含的 VBA 巨集功能就會流失。";
     Text[ arabic ] = "������ ������ ��� ��� ����� ������� Microsoft ��� ���� ����� ������� VBA ���� �� ���� ����� �������.";
@@ -616,7 +616,7 @@ String sMSContainerName
     Text[ polish ] = "Microsoft Office";
     Text[ portuguese_brazilian ] = "Microsoft Office";
     Text[ japanese ] = "Microsoft Office";
-    Text[ korean ] = "마이크로 소프트 오피스";
+    Text[ korean ] = "Microsoft Office";
     Text[ chinese_simplified ] = "Microsoft Office";
     Text[ chinese_traditional ] = "Microsoft Office";
     Text[ turkish ] = "Microsoft Office";
@@ -672,7 +672,7 @@ String sTextImportLabel
     Text[ polish ] = "Import z:";
     Text[ portuguese_brazilian ] = "Import from:";
     Text[ japanese ] = "インポート元:";
-    Text[ korean ] = "에서 가져오기:";
+    Text[ korean ] = "가져오기:";
     Text[ chinese_simplified ] = "输入来源：";
     Text[ chinese_traditional ] = "匯入從：";
     Text[ turkish ] = "Import from:";
@@ -701,7 +701,7 @@ String sTextExportLabel
     Text[ polish ] = "Zapisz w:";
     Text[ portuguese_brazilian ] = "Text template group:";
     Text[ japanese ] = "保存先:";
-    Text[ korean ] = "에 저장:";
+    Text[ korean ] = "저장:";
     Text[ chinese_simplified ] = "存盘到：";
     Text[ chinese_traditional ] = "儲存到：";
     Text[ arabic ] = "��� ��:";
@@ -1397,7 +1397,7 @@ String sXMLTemplateCheckbox_3_
     Text[ polish ] = "Szablony rysunk�w/prezentacji";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Impress/%PRODUCTNAME Draw templates";
     Text[ japanese ] = "図形描画/プレゼンテーションテンプレート";
-    Text[ korean ] = "그리기/프리젠테이션 템플릿";
+    Text[ korean ] = "그리기/프레젠테이션 템플릿";
     Text[ chinese_simplified ] = "绘图/演示文稿样式";
     Text[ chinese_traditional ] = "繪圖/簡報樣式";
     Text[ arabic ] = "����� ����/��� ������";
@@ -1508,7 +1508,7 @@ String sXMLDocumentCheckbox_3_
     Text[ polish ] = "Dokumenty rysunku/prezentacji";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Impress/%PRODUCTNAME Draw documents";
     Text[ japanese ] = "図形描画/プレゼンテーションドキュメント";
-    Text[ korean ] = "그리기/프리젠테이션 문서";
+    Text[ korean ] = "그리기/프레젠테이션 문서";
     Text[ chinese_simplified ] = "绘图和演示文稿文档";
     Text[ chinese_traditional ] = "繪圖/簡報文件";
     Text[ arabic ] = "������� ����/��� ������";
