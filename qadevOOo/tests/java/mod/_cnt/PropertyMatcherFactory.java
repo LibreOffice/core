@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMatcherFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:26 $
+ *  last change:$Date: 2003-05-27 12:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ public class PropertyMatcherFactory extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         Object relationContainer = null ;
 
 
