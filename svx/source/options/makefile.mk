@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 15:03:48 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:38:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ CFLAGS+=-DDG_DLL
 
 # --- Files --------------------------------------------------------
 
-SRCFILES=\
+SRS1NAME=$(TARGET)
+SRC1FILES=\
     optasian.src		\
     optcolor.src		\
     optjsearch.src		\
@@ -120,11 +121,6 @@ SLOFILES=\
 
 SVXLIGHTOBJFILES=\
     $(OBJ)$/adritem.obj
-
-.IF "$(GUI)"=="WIN"
-SLOFILES+=\
-    $(SLO)$/optdll.obj
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 
