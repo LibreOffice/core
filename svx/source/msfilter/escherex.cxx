@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-01 13:42:12 $
+ *  last change: $Author: cmc $ $Date: 2002-11-20 17:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2847,6 +2847,8 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
         AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
         EscherPropertyContainer aPropOpt;
         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x00040004 );
+        aPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft, 0 );
+        aPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight, 0 );
         aPropOpt.Commit( *mpOutStrm );
         if ( mnGroupLevel > 1 )
         {
