@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:40:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ russian ] = "¬ этом диалоге ¬ы можете заменить базы данных, доступ к которым возможен при помощи полей базы данных, другими базами данных. «а одну операцию можно произвести только одно изменение. ¬ списке слева возможно многократное выделение.";
         Text[ polish ] = "W tym dialogu moњesz wymieniж dostкpne w twoim dokumencie poprzez pola bazy danych na inne. Moњesz dokonaж tylko jednej zmiany podczas sesji roboczej. Na liЬcie z lewej strony moњliwa jest wielokrotna selekcja.";
         Text[ japanese ] = "В±Вћјё≤±џЄёВ≈ВЌ√ё∞јЌё∞љћ®∞ўƒёВрТ ВµВƒБAƒёЈ≠“ЁƒВ…±ЄЊљВЈВй√ё∞јЌё∞љВрСЉВћ√ё∞јЌё∞љВ∆МрКЈВ≈ВЂВ№ВЈБBИкУxВ…1В¬ВћХѕНXВµВ©В≈ВЂВ№ВєВсБBНґВћЎљƒВ≈ВЌХ°РФСIСрВ™Й¬Ф\\В≈ВЈБB";
-        Text[ chinese_traditional ] = "¶b≥o≠”єпЄ№§иґф§Ї±zѓа∞ч®ѕ•ќ§@≠”®д•LЄкЃ∆Ѓw®”•Nіј±zЈнЂeљsњи™Ї§е•у©“®ѕ•ќ™ЇЄкЃ∆Ѓw°C±z®C¶Є•uѓаІ@§@¶Є≈№Іу°C±zѓа∞ч¶b•™ƒж§ЇІ@¶h≠ЂњпЊ№°C";
+        Text[ chinese_traditional ] = "¶b≥o≠”єпЄ№§иґф§Ї±zѓа∞ч®ѕ•ќ§@≠”®д•LЄкЃ∆Ѓw®”•Nіј±zЈнЂeљsњи™Ї§е•у©“®ѕ•ќ™ЇЄкЃ∆Ѓw°C±z®C¶Є•uѓаІ@§@¶Є≈№Іу°C±zѓа∞ч¶b•™ƒж§ЇІ@¶h≠Ђњп®ъ°C";
         Text[ arabic ] = "Ён г—»Џ «бЌж«— е–«° нгядя «” »ѕ«б ёж«Џѕ «б»н«д« ° «б н  ’б ≈бне« Ён г” дѕя »ж«”Ў… Ќёжб ёж«Џѕ «б»н«д« ° »√ќ—м. б«Ќў √де нгядя Џгб  џнн— ж«Ќѕ ЁёЎ яб г—…. нгяд Џгб √яЋ— гд  Ќѕнѕ Ён «бё«∆г… «бн”—м.";
         Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk.";
         Text[ chinese_simplified ] = "‘Џ’вЄцґ‘ї∞њтƒЏƒъƒ№єї є”√“їЄц∆дЋы эЊЁњвјііъћжƒъµ±«∞±аЉ≠µƒќƒµµЋщ є”√µƒ эЊЁњв°£√њіќƒъ÷їƒ№„ц“їѕоЄьЄƒ°£‘Џ„уЈљµƒЅ–µ•ƒЏƒъњ…“‘љш––ґа÷Ў—°‘с°£";
@@ -401,7 +401,7 @@ ModalDialog DLG_CHANGE_DB
     Text[ russian ] = "«аменить базу данных";
     Text[ polish ] = "Wymieс bazк danych";
     Text[ japanese ] = "√ё∞јЌё∞љВћМрКЈ";
-    Text[ chinese_traditional ] = "ІуіЂЄкЃ∆Ѓw";
+    Text[ chinese_traditional ] = "іјіЂЄкЃ∆Ѓw";
     Text[ arabic ] = "«” »ѕ«б ёж«Џѕ «б»н«д« ";
     Text[ dutch ] = "Database wisselen";
     Text[ chinese_simplified ] = "Єьїї эЊЁњв";
