@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-19 18:12:37 $
+#   last change: $Author: hjs $ $Date: 2002-03-21 18:21:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1206,7 +1206,9 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 .ELSE          # "$(DISABLE_ENHANCED_COMID)"==""
 COMID=$(COM)
 .ENDIF          # "$(DISABLE_ENHANCED_COMID)"==""
-
+.IF "$(SOLAR_JAVA)"=="TRUE"
+.INCLUDE : tg_javav.mk
+.ENDIF			# "$(SOLAR_JAVA)"=="TRUE"
 
 # --- Neues Environment erweitern ----------------------------------
 CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
