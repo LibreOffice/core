@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-26 07:53:08 $
+ *  last change: $Author: ama $ $Date: 2002-04-29 08:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2246,7 +2246,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     {
                         ULONG nOtherIndex = ((SwTxtFrm*)pFly->GetAnchor())
                                             ->GetTxtNode()->GetIndex();
-                        if( nMyIndex > nOtherIndex )
+                        if( nMyIndex >= nOtherIndex )
                         {
                             const SwFmtHoriOrient &rHori =
                                                 pFly->GetFmt()->GetHoriOrient();
