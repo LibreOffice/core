@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-17 14:25:07 $
+ *  last change: $Author: er $ $Date: 2002-08-07 14:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,6 +909,8 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
             sal_Int16 nMonth = (sal_Int16) aMStr.ToInt32();
             if (!nMonth)
             {
+                static const String aSeptCorrect( RTL_CONSTASCII_USTRINGPARAM( "SEPT" ) );
+                static const String aSepShortened( RTL_CONSTASCII_USTRINGPARAM( "SEP" ) );
                 uno::Sequence< i18n::CalendarItem > xMonths;
                 sal_Int32 i, nLen;
                 //  first test all month names from local international
@@ -919,6 +921,13 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
                     if ( rTransliteration.isEqual( aMStr, xMonths[i].FullName ) ||
                          rTransliteration.isEqual( aMStr, xMonths[i].AbbrevName ) )
                         nMonth = i+1;
+                    else if ( i == 8 && rTransliteration.isEqual( aSeptCorrect,
+                                xMonths[i].AbbrevName ) &&
+                            rTransliteration.isEqual( aMStr, aSepShortened ) )
+                    {   // #102136# correct English abbreviation is SEPT,
+                        // but data mostly contains SEP only
+                        nMonth = i+1;
+                    }
                 }
                 //  if none found, then test english month names
                 if ( !nMonth && pSecondCalendar && pSecondTransliteration )
@@ -930,6 +939,13 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
                         if ( pSecondTransliteration->isEqual( aMStr, xMonths[i].FullName ) ||
                              pSecondTransliteration->isEqual( aMStr, xMonths[i].AbbrevName ) )
                         {
+                            nMonth = i+1;
+                            bSecondCal = TRUE;
+                        }
+                        else if ( i == 8 && pSecondTransliteration->isEqual(
+                                    aMStr, aSepShortened ) )
+                        {   // #102136# correct English abbreviation is SEPT,
+                            // but data mostly contains SEP only
                             nMonth = i+1;
                             bSecondCal = TRUE;
                         }
@@ -949,20 +965,23 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
                 pCalendar->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDay );
                 pCalendar->setValue( i18n::CalendarFieldIndex::MONTH, nMonth );
                 pCalendar->setValue( i18n::CalendarFieldIndex::YEAR, nYear );
-//! TODO: validity check if XCalendar supports it
-                DateTime aDateTime( pCalendar->getGregorianDateTime() );
-                Date aNullDate = *pFormatter->GetNullDate();
-                double nValue = aDateTime - aNullDate;
+                if ( pCalendar->isValid() )
+                {
+                    double fDiff = DateTime(*pFormatter->GetNullDate()) -
+                        pCalendar->getEpochStart();
+                    double fDays = pCalendar->getDateTime();
+                    fDays -= fDiff;
 
-                LanguageType eLatin, eCjk, eCtl;
-                pDoc->GetLanguage( eLatin, eCjk, eCtl );
-                LanguageType eDocLang = eLatin;                 //! which language for date formats?
+                    LanguageType eLatin, eCjk, eCtl;
+                    pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                    LanguageType eDocLang = eLatin;     //! which language for date formats?
 
-                long nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eDocLang );
+                    long nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eDocLang );
 
-                pDoc->PutCell( nCol, nRow, nTab, new ScValueCell(nValue), nFormat, FALSE );
+                    pDoc->PutCell( nCol, nRow, nTab, new ScValueCell(fDays), nFormat, FALSE );
 
-                return;         // Erfolg
+                    return;     // success
+                }
             }
         }
     }
