@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:26:41 $
+ *  last change: $Author: rt $ $Date: 2005-04-05 08:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0692 UNO_NAME_OUT_SERVER_PASSWORD */  {MAP_CHAR_LEN("OutServerPassword")},
 /* 0693 UNO_NAME_SAVE_FILTER_OPTIONS */  {MAP_CHAR_LEN("SaveFilterOptions")},
 /* 0694 UNO_NAME_SAVE_FILTER_DATA    */  {MAP_CHAR_LEN("SaveFilterData")},
-/* 0695 UNO_NAME_LOCK_UPDATES        */  {MAP_CHAR_LEN("LockUpdates")}
+/* 0695 UNO_NAME_LOCK_UPDATES        */  {MAP_CHAR_LEN("LockUpdates")},
 /* 0696 UNO_NAME_PAGE_COUNT*/               {MAP_CHAR_LEN("PageCount")},
 /* 0697 UNO_NAME_LINE_COUNT*/               {MAP_CHAR_LEN("LineCount")},
 /* 0698 UNO_NAME_IS_CONSTANT_SPELLCHECK*/   {MAP_CHAR_LEN("IsConstantSpellcheck")},
