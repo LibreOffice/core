@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 07:01:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ TabDialog DLG_TAB_OUTLINE
     Text [ ENGLISH ] = "Outline Numbering" ;
     Text [ norwegian ] = "Outline Numbering" ;
     Text [ italian ] = "Numerazione capitolo" ;
-    Text [ portuguese_brazilian ] = "NumeraÁ„o Vazada" ;
+    Text [ portuguese_brazilian ] = "Numera??o Vazada" ;
     Text [ portuguese ] = "NumeraÁ„o de capÌtulos" ;
     Text [ finnish ] = "J‰sennysnumerointi" ;
     Text [ danish ] = "Kapitelnummerering" ;
@@ -884,7 +884,7 @@ TabPage TP_OUTLINE_NUM
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
         Text [ italian ] = "Livello" ;
-        Text [ portuguese_brazilian ] = "NÌvel" ;
+        Text [ portuguese_brazilian ] = "N?vel" ;
         Text [ portuguese ] = "NÌvel" ;
         Text [ finnish ] = "Taso " ;
         Text [ danish ] = "Niveau" ;
@@ -913,7 +913,7 @@ TabPage TP_OUTLINE_NUM
         Text [ ENGLISH ] = "~Paragraph style" ;
         Text [ norwegian ] = "~Avsnittsoppsett" ;
         Text [ italian ] = "~Modello di paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Estilo de par·grafo" ;
+        Text [ portuguese_brazilian ] = "~Estilo de par?grafo" ;
         Text [ portuguese ] = "~Estilo de par·grafo" ;
         Text [ finnish ] = "~Kappaleen tyyli" ;
         Text [ danish ] = "Afsnitstypografi" ;
@@ -955,7 +955,7 @@ TabPage TP_OUTLINE_NUM
         Text [ ENGLISH ] = "~Number" ;
         Text [ norwegian ] = "~Number" ;
         Text [ italian ] = "~Numero" ;
-        Text [ portuguese_brazilian ] = "~N˙mero" ;
+        Text [ portuguese_brazilian ] = "~N?ero" ;
         Text [ portuguese ] = "~N˙mero" ;
         Text [ finnish ] = "~Luku" ;
         Text [ danish ] = "Nummer" ;
@@ -1040,7 +1040,7 @@ TabPage TP_OUTLINE_NUM
         Text [ english_us ] = "Sho~w sublevels" ;
         Text[ chinese_simplified ] = "ÕÍ’˚µƒ(~W)";
         Text[ russian ] = "œÓÎÌÓÒÚ¸˛";
-        Text[ polish ] = "Kompletny";
+        Text[ polish ] = "Pokaø wszystkie poziomy";
         Text[ japanese ] = "ëçèÕêî(~W)";
         Text[ chinese_traditional ] = "ßπæ„™∫(~W)";
         Text[ arabic ] = "ﬂ«„·";
@@ -1142,7 +1142,7 @@ TabPage TP_OUTLINE_NUM
         Text [ ENGLISH ] = "behind" ;
         Text [ norwegian ] = "bak" ;
         Text [ italian ] = "D~ietro" ;
-        Text [ portuguese_brazilian ] = "atrﬂs" ;
+        Text [ portuguese_brazilian ] = "atr?s" ;
         Text [ portuguese ] = "~Atr·s" ;
         Text [ finnish ] = "~J‰lkeen" ;
         Text [ danish ] = "Efter" ;
@@ -1181,7 +1181,7 @@ TabPage TP_OUTLINE_NUM
         Text [ English ] = "~Start at" ;
         Text [ norwegian ] = "~Start pÂ" ;
         Text [ italian ] = "~Inizia con" ;
-        Text [ portuguese_brazilian ] = "~ComeÁar em" ;
+        Text [ portuguese_brazilian ] = "~Come?ar em" ;
         Text [ portuguese ] = "~ComeÁar em" ;
         Text [ finnish ] = "~Aloita kohdasta" ;
         Text [ danish ] = "Begynd med" ;
@@ -1226,7 +1226,7 @@ TabPage TP_OUTLINE_NUM
         Text [ ENGLISH ] = "Numbering" ;
         Text [ norwegian ] = "Nummering" ;
         Text [ italian ] = "Numerazione" ;
-        Text [ portuguese_brazilian ] = "NumeraÁ„o" ;
+        Text [ portuguese_brazilian ] = "Numera??o" ;
         Text [ portuguese ] = "NumeraÁ„o" ;
         Text [ finnish ] = "Numerointi" ;
         Text [ danish ] = "Nummerering" ;
