@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-25 12:13:32 $
+ *  last change: $Author: dl $ $Date: 2001-06-26 06:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,15 +286,15 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
     aPrefix.Insert(aSep);
 
     // Font fuer Titel und Gliederung
-    Font aLatinFont( OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, pDoc->GetLanguage( EE_CHAR_LANGUAGE ), 0 ) );
+    Font aLatinFont( OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, pDoc->GetLanguage( EE_CHAR_LANGUAGE ), DEFAULTFONT_FLAGS_ONLYONE        ) );
     SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
                               aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    Font aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, pDoc->GetLanguage( EE_CHAR_LANGUAGE_CJK ), 0 ) );
+    Font aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, pDoc->GetLanguage( EE_CHAR_LANGUAGE_CJK ), DEFAULTFONT_FLAGS_ONLYONE        ) );
     SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
                                  aCJKFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
 
-    Font aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, pDoc->GetLanguage( EE_CHAR_LANGUAGE_CTL ), 0 ) );
+    Font aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, pDoc->GetLanguage( EE_CHAR_LANGUAGE_CTL ), DEFAULTFONT_FLAGS_ONLYONE        ) );
     SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
