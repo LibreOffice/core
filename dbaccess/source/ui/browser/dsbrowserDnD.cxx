@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2001-12-07 13:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,7 +1200,15 @@ namespace dbaui
         sal_Bool bIsConnectionWriteAble = sal_False;
         Reference<XConnection> xCon = getConnectionFromEntry(_pEntry);
         if(xCon.is())
-            bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
+        {
+            try
+            {
+                bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
+            }
+            catch(SQLException&)
+            {
+            }
+        }
         return bIsConnectionWriteAble;
     }
 // .........................................................................
@@ -1210,6 +1218,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2001/11/23 14:51:40  oj
+ *  #95142# check eState of parser
+ *
  *  Revision 1.32  2001/11/15 15:15:05  oj
  *  #94820# check type of dest database and adjust if possible
  *
