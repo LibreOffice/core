@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:51:17 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,12 @@
 #ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #include <toolkit/controls/unocontrols.hxx>
 #endif
+#ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include "toolkit/controls/formattedcontrol.hxx"
+#endif
+#ifndef TOOLKIT_INC_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
+#include "toolkit/controls/tkscrollbar.hxx"
+#endif
 #ifndef _TOOLKIT_CONTROLS_STDTABCONTROLLER_HXX_
 #include <toolkit/controls/stdtabcontroller.hxx>
 #endif
@@ -399,6 +404,30 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
         pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
+
+    if ( !pNewModel )
+    {
+        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
+        if ( xORB.is() )
+        {
+            Reference< XInterface > xObject = xORB->createInstance( aServiceSpecifier );
+            Reference< XServiceInfo > xSI( xObject, UNO_QUERY );
+            Reference< XCloneable > xCloneAccess( xSI, UNO_QUERY );
+            Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
+            if ( xAgg.is() )
+            {
+                if ( xSI->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.awt.UnoControlModel" ) ) )
+                {
+                    // release 3 of the 4 references we have to the object
+                    xAgg.clear();
+                    xSI.clear();
+                    xObject.clear();
+
+                    pNewModel = new OCommonGeometryControlModel( xCloneAccess, aServiceSpecifier );
+                }
+            }
+        }
+    }
 
     Reference< XInterface > xNewModel = (::cppu::OWeakObject*)pNewModel;
     return xNewModel;
