@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:59:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,6 +1029,27 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
     delete [] pNamesBuffer;
     delete [] pPaperSizes;
     m_bPapersInit = true;
+}
+
+// -----------------------------------------------------------------------
+
+DuplexMode WinSalInfoPrinter::GetDuplexMode( const ImplJobSetup* pSetupData )
+{
+    DuplexMode nRet = DUPLEX_UNKNOWN;
+    DEVMODE* pDevMode;
+    if ( !pSetupData || !pSetupData->mpDriverData )
+        pDevMode = NULL;
+    else
+        pDevMode = SAL_DEVMODE( pSetupData );
+
+    if ( pDevMode && (pDevMode->dmFields & DM_DUPLEX ))
+    {
+        if ( pDevMode->dmDuplex == DMDUP_SIMPLEX )
+            nRet = DUPLEX_OFF;
+        else
+            nRet = DUPLEX_ON;
+    }
+    return nRet;
 }
 
 // -----------------------------------------------------------------------
