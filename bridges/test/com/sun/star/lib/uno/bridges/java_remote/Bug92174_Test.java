@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bug92174_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:38:50 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,13 @@ import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 
 public final class Bug92174_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
 
     public void test() throws Exception {
-        TestBed t = new TestBed();
-        assure("test", t.execute(new Provider(t), true, Client.class, 0));
+        assure("test",
+               new TestBed().execute(new Provider(), false, Client.class, 0));
     }
 
     public static final class Client extends TestBed.Client {
@@ -90,58 +86,36 @@ public final class Bug92174_Test extends ComplexTestCase {
         }
 
         protected boolean run(XBridge bridge) throws Throwable {
-            XTransport transport = (XTransport) UnoRuntime.queryInterface(
+            XTransport t = (XTransport) UnoRuntime.queryInterface(
                 XTransport.class, bridge.getInstance("Transport"));
-            final XDerived derived = transport.getDerived();
-            transport.announce(new XTransport() {
-                    public XBase getBase() {
-                        return derived;
-                    }
-
-                    public XDerived getDerived() {
-                        return derived;
-                    }
-
-                    public void announce(XTransport transport) {
-                    }
+            t.setDerived(new XDerived() {
+                    public void fn() {}
                 });
+            t.getBase().fn();
             return true;
         }
     }
 
     private static final class Provider implements XInstanceProvider {
-        public Provider(TestBed testBed) {
-            this.testBed = testBed;
-        }
-
         public Object getInstance(String instanceName) {
             return new XTransport() {
                     public XBase getBase() {
                         return derived;
                     }
 
-                    public XDerived getDerived() {
-                        return derived;
+                    public synchronized void setDerived(XDerived derived) {
+                        this.derived = derived;
                     }
 
-                    public void announce(XTransport transport) {
-/**/transport.getBase();
-                        boolean success
-                            = transport.getBase() instanceof XDerived;
-/**/System.gc();System.runFinalization();
-                        testBed.serverDone(success);
-/**/System.gc();System.runFinalization();
-                    }
-
-                    private final XDerived derived = new XDerived() {};
+                    private XDerived derived = null;
                 };
         }
-
-        private final TestBed testBed;
     }
 
     public interface XBase extends XInterface {
-        TypeInfo[] UNOTYPEINFO = null;
+        void fn();
+
+        TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("fn", 0, 0) };
     }
 
     public interface XDerived extends XBase {
@@ -151,12 +125,9 @@ public final class Bug92174_Test extends ComplexTestCase {
     public interface XTransport extends XInterface {
         XBase getBase();
 
-        XDerived getDerived();
-
-        void announce(XTransport transport);
+        void setDerived(XDerived derived);
 
         TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("getBase", 0, 0),
-                                   new MethodTypeInfo("getDerived", 1, 0),
-                                   new MethodTypeInfo("announce", 2, 0) };
+                                   new MethodTypeInfo("setDerived", 1, 0) };
     }
 }
