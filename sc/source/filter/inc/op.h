@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define _OP_H
 
 #include <tools/solar.h>
+#include <patattr.hxx>
 
 // OP-Code-Funktionen
 class SvStream;
@@ -86,6 +87,17 @@ void OP_Margins( SvStream &aStream, USHORT nLaenge );
 void OP_HiddenCols( SvStream &aStream, USHORT nLaenge );
 void OP_Window1( SvStream &aStream, USHORT nLaenge );
 void OP_Blank( SvStream &aStream, USHORT nLaenge );
+// Lotus 123 bits.
+void OP_BOF123( SvStream &aStream, USHORT nLaenge );
+void OP_EOF123( SvStream &aStream, USHORT nLaenge );
+void OP_Number123( SvStream &aStream, USHORT nLaenge );
+void OP_Label123( SvStream &aStream, USHORT nLaenge );
+void OP_Formula123( SvStream &aStream, USHORT nLaenge );
+void OP_IEEENumber123(SvStream& r, UINT16 n);
+void OP_Note123(SvStream &aStream, USHORT nLaenge);
+void OP_CreatePattern123(SvStream &aStream, USHORT nLaenge);
+void OP_HorAlign123(BYTE nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
+void OP_VerAlign123(BYTE nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
+void OP_ApplyPatternArea123(SvStream& r);
 
 #endif
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optab.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,22 @@
 typedef void ( *OPCODE_FKT )( SvStream &aStream, USHORT nLaenge );
 
 #define FKT_LIMIT   101
+
+#define FKT_LIMIT123    101
+
+#define LOTUS_EOF   0x01
+
+#define LOTUS_FILEPASSWD 0x4b
+
+#define LOTUS_PATTERN   0x284
+
+#define LOTUS_FORMAT_INDEX 0x800
+
+#define LOTUS_FORMAT_INFO 0x801
+
+#define ROW_FORMAT_MARKER 0x106
+
+#define COL_FORMAT_MARKER 0x107
 
 #endif
 
