@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleMenu.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:21:48 $ 
+'*  last change:$Date: 2003-06-11 16:32:41 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -75,6 +75,7 @@ option explicit
 Global accText As String
 Global menu As Object
 Global multiSelection As Boolean
+Global readOnly as Boolean
 
 
 Sub CreateObj()
@@ -98,6 +99,8 @@ On Error Goto ErrHndl
 
     multiSelection = false
     accText = oObj.getText()
+    readOnly = true
+    
 Exit Sub
 ErrHndl:
     Test.Exception()
