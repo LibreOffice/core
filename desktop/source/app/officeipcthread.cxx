@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:35:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,12 @@ void SAL_CALL OfficeIPCThread::run()
                         eFactory = SvtModuleOptions::E_WRITERWEB;
 
                     if ( eFactory != SvtModuleOptions::E_DATABASE )
-                        AddURLToStringList( aOpt.GetFactoryEmptyDocumentURL( eFactory ), pRequest->aOpenList );
+                    {
+                        if ( pRequest->aOpenList.getLength() )
+                            pRequest->aModule = aOpt.GetFactoryName( eFactory );
+                        else
+                            AddURLToStringList( aOpt.GetFactoryEmptyDocumentURL( eFactory ), pRequest->aOpenList );
+                    }
                     else
                         AddURLToStringList( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service:com.sun.star.sdb.DatabaseWizardDialog")), pRequest->aOpenList );
                     bDocRequestSent = sal_True;
@@ -767,7 +772,8 @@ static void AddToDispatchList(
     DispatchWatcher::DispatchList& rDispatchList,
     const OUString& aRequestList,
     DispatchWatcher::RequestType nType,
-    const OUString& aParam )
+    const OUString& aParam,
+    const OUString& aFactory )
 {
     if ( aRequestList.getLength() > 0 )
     {
@@ -777,7 +783,7 @@ static void AddToDispatchList(
             OUString aToken = aRequestList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
             if ( aToken.getLength() > 0 )
                 rDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( nType, aToken, aParam ));
+                    DispatchWatcher::DispatchRequest( nType, aToken, aParam, aFactory ));
         }
         while ( nIndex >= 0 );
     }
@@ -789,13 +795,13 @@ void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
     DispatchWatcher::DispatchList   aDispatchList;
 
     // Create dispatch list for dispatch watcher
-    AddToDispatchList( aDispatchList, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty );
-    AddToDispatchList( aDispatchList, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, aEmpty );
-    AddToDispatchList( aDispatchList, aRequest.aStartList, DispatchWatcher::REQUEST_START, aEmpty );
-    AddToDispatchList( aDispatchList, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, aEmpty );
-    AddToDispatchList( aDispatchList, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName );
-    AddToDispatchList( aDispatchList, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty );
-    AddToDispatchList( aDispatchList, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty );
+    AddToDispatchList( aDispatchList, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aStartList, DispatchWatcher::REQUEST_START, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
 
     osl::ClearableMutexGuard aGuard( GetMutex() );
 
