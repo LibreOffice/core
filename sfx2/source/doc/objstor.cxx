@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 12:30:19 $
+ *  last change: $Author: fs $ $Date: 2001-10-19 10:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,12 @@
 #include "filedlghelper.hxx"
 #include "scriptcont.hxx"
 
-
+#ifndef _SFX_HELP_HXX
+#include <sfx2/sfxhelp.hxx>
+#endif
+#ifndef _SFX_HELPID_HRC
+#include "helpid.hrc"
+#endif
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -1901,7 +1906,24 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
         // notify the document that saving was done successfully
         if ( !bCopyTo )
+        {
             bOk = DoSaveCompleted( pNewFile );
+            if ( pNewFile )
+            {
+                const SfxFilter* pFilter = pNewFile->GetFilter();
+                if  (   pFilter
+                    &&  pFilter->IsOwnFormat()
+                    &&  pFilter->UsesStorage()
+                    &&  pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60
+                    )
+                {
+                    SfxViewFrame* pDocViewFrame = SfxViewFrame::GetFirst( this );
+                    SfxFrame* pDocFrame = pDocViewFrame ? pDocViewFrame->GetFrame() : NULL;
+                    if ( pDocFrame )
+                        SfxHelp::OpenHelpAgent( pDocFrame, HID_DID_SAVE_PACKED_XML );
+                }
+            }
+        }
 
         if( bOk )
         {
