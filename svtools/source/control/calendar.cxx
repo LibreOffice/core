@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: nf $ $Date: 2000-10-18 11:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,7 +992,7 @@ void Calendar::ImplDraw( BOOL bPaint )
             nOffY = nY+TITLE_BORDERY;
             String aMonthText( maIntn.GetMonthText( nMonth ) );
             aMonthText += ' ';
-            aMonthText += nYear;
+            aMonthText += String::CreateFromInt64( nYear );
             long nMonthTextWidth = GetTextWidth( aMonthText );
             long nMonthOffX1 = 0;
             long nMonthOffX2 = 0;
@@ -1008,7 +1008,7 @@ void Calendar::ImplDraw( BOOL bPaint )
             {
                 aMonthText  = maIntn.GetAbbrevMonthText( nMonth );
                 aMonthText += ' ';
-                aMonthText += nYear;
+                aMonthText += String::CreateFromInt64( nYear );
                 nMonthTextWidth = GetTextWidth( aMonthText );
             }
             long nTempOff = (mnMonthWidth-nMonthTextWidth+1)/2;
