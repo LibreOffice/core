@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:39:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 11:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,8 +386,23 @@ void Outliner::StartSpelling (void)
 
     if (bMultiDoc)
     {
+        // At this point we have to be carfull when re-setting the
+        // selection.  The outline view may (very likely) have been removed
+        // from the view stack of the edit engine by previous BegTextEdit()
+        // and EndTextEdit() calls.  Without it setting the selection may
+        // lead to a crash.  To prevent this we push the view temporarily on
+        // the stack and only then set the selection.
         ESelection aSelection;
+        bool bPutViewOnStack = false;
+        if (GetView (0) == NULL)
+        {
+            bPutViewOnStack = true;
+            InsertView (mpOutlineView);
+        }
         mpOutlineView->SetSelection(aSelection);
+        if (bPutViewOnStack)
+            RemoveView (ULONG(0));
+
         mpView->UnmarkAllObj (mpView->GetPageViewPvNum(0));
         mpView->EndTextEdit();
     }
