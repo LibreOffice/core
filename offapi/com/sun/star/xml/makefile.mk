@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:45:41 $
+#   last change: $Author: dvo $ $Date: 2001-06-21 13:30:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,9 @@ PACKAGE=com$/sun$/star$/xml
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    AttributeData.idl
+    AttributeData.idl \
+    XMLImportFilter.idl \
+    XMLExportFilter.idl
 
 # ------------------------------------------------------------------
 
