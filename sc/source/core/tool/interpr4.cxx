@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: nn $ $Date: 2000-10-12 10:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ using namespace com::sun::star;
 #include "sc.hrc"
 #include "scdll.hxx"        // ScLibSignalFunc
 #include "cellsuno.hxx"
+#include "optuno.hxx"
 #include "rangeseq.hxx"
 #include "addinlis.hxx"
 
@@ -1785,7 +1786,17 @@ void ScInterpreter::ScExternal()
             SetError( errIllegalParameter );
 
         if ( aCall.NeedsCaller() && !GetError() )
-            aCall.SetCallerFromObjectShell( pDok->GetDocumentShell() );
+        {
+            SfxObjectShell* pShell = pDok->GetDocumentShell();
+            if (pShell)
+                aCall.SetCallerFromObjectShell( pShell );
+            else
+            {
+                // use temporary model object (without document) to supply options
+                aCall.SetCaller( static_cast<beans::XPropertySet*>(
+                                    new ScDocOptionsObj( pDok->GetDocOptions() ) ) );
+            }
+        }
 
         short nPar = nParamCount;
         while ( nPar && !GetError() )
