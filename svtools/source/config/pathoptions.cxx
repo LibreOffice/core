@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-22 18:07:11 $
+ *  last change: $Author: pb $ $Date: 2000-11-23 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
     // Search for first occure of "$(...".
     sal_Int32 nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE );  // = first position of "$(" in string
     sal_Int32 nLength = 0; // = count of letters from "$(" to ")" in string
-    sal_Bool bConvertToPath = sal_False;
 
     // Have we found any variable like "$(...)"?
     if ( nPosition != STRPOS_NOTFOUND )
@@ -394,7 +393,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             nReplaceLength = REPLACELENGTH_INST;
             aReplacement = m_aInstPath;
-            bConvertToPath = sal_True;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -403,7 +401,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             nReplaceLength = REPLACELENGTH_USER;
             aReplacement = m_aUserPath;
-            bConvertToPath = sal_True;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -412,7 +409,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             nReplaceLength = REPLACELENGTH_PROG;
             aReplacement = m_aProgPath;
-            bConvertToPath = sal_True;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -679,18 +675,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         }
     }
 
-    if ( bConvertToPath )
-    {
-        String aNew;
-        for ( sal_Int32 i = 0; i < aWorkText.getTokenCount(); ++i )
-        {
-            INetURLObject aTemp( aWorkText.getToken(i) );
-            if ( aNew.Len() > 0 )
-                aNew += ';';
-            aNew += aTemp.getFSysPath( INetURLObject::FSYS_DETECT );
-        }
-        aWorkText = aNew;
-    }
     // Return text with replaced substrings.
     return aWorkText ;
 }
