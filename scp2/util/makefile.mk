@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 19:26:02 $
+#   last change: $Author: hr $ $Date: 2004-11-26 21:58:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ SCP1LINK_PRODUCT_TYPE=osl
 SCP1TARGET = setup_osl
 SCP1FILES  = installation_ooo.par          \
              scpaction_ooo.par             \
-             helptext_ooo.par              \
              directory_ooo.par             \
              datacarrier_ooo.par           \
              file_ooo.par                  \
@@ -89,12 +88,9 @@ SCP1FILES  = installation_ooo.par          \
              file_library_ooo.par          \
              file_resource_ooo.par         \
              shortcut_ooo.par              \
-             custom_ooo.par                \
-             procedure_ooo.par             \
              module_ooo.par                \
              profile_ooo.par               \
              profileitem_ooo.par           \
-             starregistryitem_ooo.par      \
              module_writer.par             \
              file_writer.par               \
              module_calc.par               \
@@ -114,23 +110,19 @@ SCP1FILES  = installation_ooo.par          \
              file_lingu.par                \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
-             starregistryitem_xsltfilter.par \
              module_python.par             \
              file_python.par               \
-             procedure_python.par          \
-             starregistryitem_python.par   \
              profileitem_python.par
 
 .IF "$(SOLAR_JAVA)"!=""
-SCP1FILES +=                                  \
-             module_javafilter.par            \
-             file_javafilter.par              \
-             starregistryitem_javafilter.par
+SCP1FILES +=                               \
+             module_javafilter.par         \
+             file_javafilter.par
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!="" 
 .IF "$(GUI)"=="WNT"
-SCP1FILES +=                                  \
+SCP1FILES +=                               \
              registryitem_javafilter.par
 .ENDIF
 .ENDIF
@@ -155,10 +147,9 @@ SCP1FILES +=                           \
 SCP1FILES +=                           \
              module_activex.par        \
              file_activex.par          \
-             custom_activex.par \
-         module_winexplorerext.par  \
-         file_winexplorerext.par          \
-         registryitem_winexplorerext.par
+             module_winexplorerext.par \
+             file_winexplorerext.par   \
+             registryitem_winexplorerext.par
 .ENDIF
 
 .ENDIF
