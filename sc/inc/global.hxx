@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:04:14 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class Color;
 typedef USHORT SCROW;
 typedef USHORT SCCOL;
 typedef USHORT SCTAB;
+typedef USHORT SCCOLROW;
 
 // short typedefs
 // Use in all new code instead of short nCol, short nRow, short nTab
@@ -172,7 +173,8 @@ struct LabelData;
 
 #define MAXSUBTOTAL 3
 #define MAXQUERY    8
-#define PIVOT_MAXFIELD  8
+#define PIVOT_MAXFIELD      8
+#define PIVOT_MAXPAGEFIELD  10
 
 #define SC_START_INDEX_DB_COLL 50000
                                         // Oberhalb dieser Grenze liegen
@@ -1616,9 +1618,11 @@ struct ScPivotParam
     USHORT          nTab;
     LabelData**     ppLabelArr;
     USHORT          nLabels;
+    PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
     PivotField      aColArr[PIVOT_MAXFIELD];
     PivotField      aRowArr[PIVOT_MAXFIELD];
     PivotField      aDataArr[PIVOT_MAXFIELD];
+    USHORT          nPageCount;
     USHORT          nColCount;
     USHORT          nRowCount;
     USHORT          nDataCount;
@@ -1638,9 +1642,11 @@ struct ScPivotParam
     void            ClearPivotArrays();
     void            SetLabelData    ( LabelData**   ppLabArr,
                                       USHORT        nLab );
-    void            SetPivotArrays  ( const PivotField* pColArr,
+    void            SetPivotArrays  ( const PivotField* pPageArr,
+                                      const PivotField* pColArr,
                                       const PivotField* pRowArr,
                                       const PivotField* pDataArr,
+                                      USHORT            nPageCnt,
                                       USHORT            nColCnt,
                                       USHORT            nRowCnt,
                                       USHORT            nDataCnt );
