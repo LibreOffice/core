@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 11:54:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 
 #include "basmgr.hxx"
 #include "basrid.hxx"
+#include "sbintern.hxx"
 #include <sb.hrc>
 
 
@@ -3086,3 +3087,12 @@ Reference< XStarBasicAccess > getStarBasicAccess( BasicManager* pMgr )
     return xRet;
 }
 
+BasicManager* GetAppBasicManager()
+{
+    return GetSbData()->pAppBasMgr;
+}
+
+void SetAppBasicManager( BasicManager* pBasMgr )
+{
+    GetSbData()->pAppBasMgr = pBasMgr;
+}
