@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShellFactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:00:40 $
+ *  last change: $Author: af $ $Date: 2004-07-20 08:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@ template<class ShellType>
 class ShellFactory
 {
 public:
+    /** This abstract virtual class needs a destructor so that the
+        destructors of derived classes are called.
+    */
+    virtual ~ShellFactory (void) {};
+
     /** Create a new instance of a view shell for the given id that will
         be stacked onto the given view shell base.
         @return
