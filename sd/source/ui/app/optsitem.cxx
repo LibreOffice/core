@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-24 11:15:25 $
+ *  last change: $Author: ka $ $Date: 2000-11-14 16:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,16 +1091,11 @@ SdOptionsGrid::~SdOptionsGrid()
 
 void SdOptionsGrid::SetDefaults()
 {
-    UINT32 nVal;
-
-    if( GetConfigId() == SDCFG_DRAW )
-        nVal = ( ( /*!!!GetMetric() == FUNIT_INCH*/1 ) ? 254 : 250 );
-    else
-        nVal = ( ( /*!!!GetMetric() == FUNIT_INCH*/1 ) ? 635 : 500 );
+    const UINT32 nVal = 1000;
 
     SetFldDivisionX( nVal );
     SetFldDivisionY( nVal );
-    SetFldDrawX( nVal = ( ( /*!!!GetMetric() == FUNIT_INCH*/1 ) ? 1270 : 1000 ) );
+    SetFldDrawX( nVal );
     SetFldDrawY( nVal );
     SetFldSnapX( nVal );
     SetFldSnapY( nVal );
@@ -1218,8 +1213,8 @@ SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView
     {
         SetFldDrawX( pOpts->GetFldDrawX() );
         SetFldDrawY( pOpts->GetFldDrawY() );
-        SetFldDivisionX( pOpts->GetFldDivisionX() );
-        SetFldDivisionY( pOpts->GetFldDivisionY() );
+        SetFldDivisionX( pOpts->GetFldDivisionX() ? ( pOpts->GetFldDrawX() / pOpts->GetFldDivisionX() - 1 ) : 0 );
+        SetFldDivisionY( pOpts->GetFldDivisionY() ? ( pOpts->GetFldDrawY() / pOpts->GetFldDivisionY() - 1 ) : 0 );
         SetFldSnapX( pOpts->GetFldSnapX() );
         SetFldSnapY( pOpts->GetFldSnapY() );
         SetUseGridSnap( pOpts->IsUseGridSnap() );
@@ -1232,9 +1227,9 @@ SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView
 void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
 {
     pOpts->SetFldDrawX( GetFldDrawX() );
-    pOpts->SetFldDivisionX( GetFldDivisionX() );
+    pOpts->SetFldDivisionX( GetFldDrawX() / ( GetFldDivisionX() + 1 ) );
     pOpts->SetFldDrawY( GetFldDrawY() );
-    pOpts->SetFldDivisionY( GetFldDivisionY() );
+    pOpts->SetFldDivisionY( GetFldDrawY() / ( GetFldDivisionY() + 1 ) );
     pOpts->SetFldSnapX( GetFldSnapX() );
     pOpts->SetFldSnapY( GetFldSnapY() );
     pOpts->SetUseGridSnap( GetUseGridSnap() );
