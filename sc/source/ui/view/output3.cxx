@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 18:17:27 $
+ *  last change: $Author: nn $ $Date: 2002-03-13 11:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,15 @@ void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
     if ( aInfoRec.pPV && aInfoRec.pPV->GetObjList() == pPage )
         aInfoRec.bNotActive = FALSE;
 
+    //  handle high contrast draw modes in addition to the group draw modes,
+    //  aInfoRec.nOriginalDrawMode must include the high contrast bits if used
+    ULONG nOldDrawMode = pDev->GetDrawMode();
+    if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
+                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+    }
+
     //  DrawMode handling copied from SdrObjList::Paint
     UINT32 nWasDrawMode = pDev->GetDrawMode();
     if(!aInfoRec.bOriginalDrawModeSet)
@@ -338,7 +347,8 @@ void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
         }
     }
 
-    pDev->SetDrawMode(aInfoRec.nOriginalDrawMode);
+//  pDev->SetDrawMode(aInfoRec.nOriginalDrawMode);
+    pDev->SetDrawMode(nOldDrawMode);
 
     delete pXOut;
 }
