@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:23:08 $
+ *  last change: $Author: jp $ $Date: 2001-05-17 11:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,9 +549,18 @@ USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
         pStr = &sTmp;
 
     do {
-        while( UNDO_END == (nId = (pUndo = (*pUndos)[nSize])->GetId()) && nSize
-            && UNDO_END == (nId = ((SwUndoEnd*)pUndo)->GetUserId()) )
-            nSize--;
+        USHORT nUndoEndPos = USHRT_MAX;
+        if( UNDO_END == (nId = (pUndo = (*pUndos)[nSize])->GetId() ))
+        {
+            nUndoEndPos = nSize;
+            while( nSize &&
+                   UNDO_END == (nId = ((SwUndoEnd*)pUndo)->GetUserId()) )
+            {
+                nSize--;
+                if( UNDO_END != (nId = (pUndo = (*pUndos)[nSize])->GetId() ))
+                    break;
+            }
+        }
 
         switch( pUndo->GetId() )
         {
@@ -573,8 +582,10 @@ USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
         {
             SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, pStr );
             pUndoIds->Insert( pNew, pUndoIds->Count() );
-            if( UNDO_END == pUndo->GetId() )
-                nSize -= ((SwUndoEnd*)pUndo)->GetSttOffset();
+
+            if( USHRT_MAX != nUndoEndPos )
+                nSize = nUndoEndPos - ((SwUndoEnd*)(*pUndos)[
+                                            nUndoEndPos ])->GetSttOffset();
             if( !nSize-- )
                 break;
         }
@@ -721,7 +732,13 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
         pStr = &sTmp;
 
     do {
-        if( UNDO_START != ( nId = ( pUndo = (*pUndos)[nSize] )->GetId() ) ||
+
+        USHORT nUndoSttPos = USHRT_MAX;
+
+        if( UNDO_START == ( nId = ( pUndo = (*pUndos)[nSize] )->GetId() ) )
+            nUndoSttPos = nSize;
+
+        if( USHRT_MAX == nUndoSttPos ||  // no UndoStart
             UNDO_START != ( nId = ((SwUndoStart*)pUndo)->GetUserId() ) )
         {
             if( UNDO_REDLINE == nId )
@@ -734,7 +751,7 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
             ASSERT( UNDO_END != nId, "falsches Ende der Undoklammerung!");
 
             // auf den vorm Ende der Klammerung
-            USHORT nOld = nSize;
+            nUndoSttPos = nSize;
             nSize += ((SwUndoStart*)pUndo)->GetEndOffset();
             while( nSize &&
                     UNDO_END == ( nId = ( pUndo = (*pUndos)[ --nSize ] )->GetId()) &&
@@ -748,15 +765,18 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
             else if( UNDO_REDLINE == nId )
                 nId = ((SwUndoRedline*)pUndo)->GetUserId();
 
-            nSize = nOld;
+            nSize = nUndoSttPos;
         }
 
         if( pRedoIds )
         {
             SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, pStr );
             pRedoIds->Insert( pNew, pRedoIds->Count() );
-            if( UNDO_START == pUndo->GetId() )
-                nSize += ((SwUndoStart*)pUndo)->GetEndOffset();
+
+            if( USHRT_MAX != nUndoSttPos )
+                nSize = nUndoSttPos +
+                    ((SwUndoStart*)(*pUndos)[nUndoSttPos])->GetEndOffset();
+
             if( ++nSize >= pUndos->Count() )
                 break;
         }
