@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:05:47 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2814,7 +2814,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ polish ] = "[Z ustawienia drukarki]";
     Text[ japanese ] = "[ÌßØİÀ‚Ìİ’è‚©‚ç]";
     Text[ greek ] = "[Áğü ñõèìßóåéò åêôõğùôŞ]";
-    Text[ korean ] = "[ÀÎ¼â ¼³Á¤À¸·Î ºÎÅÍ]";
+    Text[ korean ] = "[ÇÁ¸°ÅÍ ¼³Á¤À¸·ÎºÎÅÍ]";
     Text[ chinese_traditional ] = "[±Ä¥Î¦Lªí¾÷³]©w]";
     Text[ arabic ] = "[ãä ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ]";
     Text[ turkish ] = "[Yazıcı ayarlarından]";
