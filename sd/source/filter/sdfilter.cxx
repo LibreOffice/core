@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 12:18:56 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 13:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,18 +138,11 @@ SdFilter::~SdFilter()
     ::rtl::OUString aNormalizedPath;
     ::vos::OModule* pRet;
 
-#if TF_FILEURL
     if ( ::osl::FileBase::getFileURLFromSystemPath( SvtPathOptions().GetFilterPath(), aDest ) != ::osl::FileBase::E_None )
         aDest = SvtPathOptions().GetFilterPath();
     aDest += ::rtl::OUString( sal_Unicode( '/' ) );
     aDest += ::rtl::OUString( ImplGetFullLibraryName( rLibraryName ) );
     ::osl::FileBase::getSystemPathFromFileURL( aDest, aNormalizedPath );
-#else
-    ::osl::FileBase::normalizePath( SvtPathOptions().GetFilterPath(), aDest );
-    aDest += ::rtl::OUString( sal_Unicode( '/' ) );
-    aDest += ::rtl::OUString( ImplGetFullLibraryName( rLibraryName ) );
-    ::osl::FileBase::getSystemPathFromNormalizedPath( aDest, aNormalizedPath );
-#endif
 
     if( !( pRet = new ::vos::OModule( aNormalizedPath ) )->isLoaded() )
         delete pRet, pRet = NULL;
@@ -180,7 +173,7 @@ void SdFilter::CreateStatusIndicator()
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
     }
 }
