@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: mba $ $Date: 2000-09-22 16:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     {
         String aBaseURL = INetURLObject::GetBaseURL();
         INetURLObject::SetBaseURL( aAppBasicObj.GetMainURL() );
-        pImp->pBasicMgr->Store( *aStor, NULL );
+        pImp->pBasicMgr->Store( *aStor );
         INetURLObject::SetBaseURL( aBaseURL );
     }
     if ( aStor->GetError() != 0 )
