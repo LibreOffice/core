@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:12 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:43:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -219,11 +219,11 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP$(TNR)ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP$(TNR)ICON:s/\//\/\//)\" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP$(TNR)ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
 .IF "$(APP$(TNR)VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-    @-+echo #include  \"$(APP$(TNR)VERINFO)\" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+echo \#include  \"$(APP$(TNR)VERINFO)\" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
