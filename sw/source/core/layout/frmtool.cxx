@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-14 14:40:22 $
+ *  last change: $Author: ama $ $Date: 2001-11-21 09:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2413,7 +2413,8 @@ void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
         {
             SwFlyFrm *pFly = pFObj->GetFlyFrm();
             //Ggf. ummelden, nicht anmelden wenn bereits bekannt.
-            SwPageFrm *pPg = pFly->FindPageFrm();
+            SwPageFrm *pPg = pFly->IsFlyFreeFrm() ?
+                        ((SwFlyFreeFrm*)pFly)->GetPage() : pFly->FindPageFrm();
             if ( pPg != pPage )
             {
                 if ( pPg )
