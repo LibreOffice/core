@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:15:28 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,8 +264,11 @@ public:
     /** Update the border that is set with SfxViewShell::SetBorderPixel().
         This is done by adding the border used by the ViewShellBase itself
         with the border used by the main view shell.
+
+        @param bForce   if true the borders are also updated if old border
+                        and new border are same.
     */
-    void UpdateBorder (void);
+    void UpdateBorder ( bool bForce = false );
 
     /** With this method the UI controls can be turned on or off.  It is
         used by the FuSlideShow to hide the UI controls while showing a
@@ -286,6 +289,9 @@ public:
         LateInit() has terminated.
     */
     tools::EventMultiplexer& GetEventMultiplexer (void);
+
+    /* returns the complete area of the current view relative to the frame window */
+    inline const Rectangle& getClientRectangle() const;
 
 protected:
     osl::Mutex maMutex;
@@ -311,6 +317,9 @@ private:
 
     ::std::auto_ptr<tools::EventMultiplexer> mpEventMultiplexer;
 
+    // contains the complete area of the current view relative to the frame window
+    Rectangle maClientArea;
+
     /** Common code of OuterResizePixel() and InnerResizePixel().
     */
     void ResizePixel (
@@ -332,6 +341,11 @@ private:
     DECL_LINK(WindowEventHandler,VclWindowEvent*);
 };
 
+
+inline const Rectangle& ViewShellBase::getClientRectangle() const
+{
+    return maClientArea;
+}
 
 } // end of namespace sd
 
