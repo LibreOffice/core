@@ -376,10 +376,10 @@
 <ReservedWords>
 <trueWord>จริง</trueWord>
 <falseWord>เท็จ</falseWord>
-<quarter1Word>ไตรมาศที่ 1</quarter1Word>
-<quarter2Word>ไตรมาศที่ 2</quarter2Word>
-<quarter3Word>ไตรมาศที่ 3</quarter3Word>
-<quarter4Word>ไตรมาศที่ 4</quarter4Word>
+<quarter1Word>ไตรมาสที่ 1</quarter1Word>
+<quarter2Word>ไตรมาสที่ 2</quarter2Word>
+<quarter3Word>ไตรมาสที่ 3</quarter3Word>
+<quarter4Word>ไตรมาสที่ 4</quarter4Word>
 <aboveWord>ข้างบน</aboveWord>
 <belowWord>ข้างใต้</belowWord>
 <quarter1Abbreviation>Q1</quarter1Abbreviation>
