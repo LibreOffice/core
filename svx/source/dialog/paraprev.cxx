@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-02 10:19:28 $
+ *  last change: $Author: os $ $Date: 2002-05-31 09:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,11 @@ void SvxParaPrevWindow::Paint( const Rectangle& rRect )
 
 void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
 {
-    SetFillColor( Color( COL_WHITE ) );
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color& rWinColor = rStyleSettings.GetWindowColor();
+    Color aGrayColor(COL_LIGHTGRAY);
+
+    SetFillColor( Color( rWinColor ) );
     if( bAll )
         DrawRect( Rectangle( Point(), aWinSize ) );
 
@@ -126,7 +130,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
          aSiz = aLineSiz;
     Point aPnt;
     aPnt.X() = DEF_MARGIN / 2;
-    SetFillColor( Color( COL_LIGHTGRAY ) );
+    SetFillColor( aGrayColor );
 
     for ( USHORT i = 0; i < 9; ++i )
     {
@@ -138,7 +142,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
         }
 
         if ( 6 == i )
-            SetFillColor( Color( COL_LIGHTGRAY ) );
+            SetFillColor( aGrayColor );
 
         if ( 3 <= i && 6 > i )
         {
@@ -232,7 +236,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
             if ( !bAll )
             {
                 Color aFillCol = GetFillColor();
-                SetFillColor( Color( COL_WHITE ) );
+                SetFillColor( rWinColor );
                 DrawRect( Lines[i] );
                 SetFillColor( aFillCol );
             }
