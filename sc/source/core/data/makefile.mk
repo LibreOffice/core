@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2001-01-16 13:03:53 $
+#   last change: $Author: nn $ $Date: 2001-01-31 16:42:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ CXXFILES = \
     bclist.cxx \
     bcaslot.cxx \
     docpool.cxx \
+    poolhelp.cxx \
     column.cxx \
     column2.cxx \
     column3.cxx \
@@ -140,6 +141,7 @@ SLOFILES =  \
     $(SLO)$/bclist.obj \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/docpool.obj \
+    $(SLO)$/poolhelp.obj \
     $(SLO)$/column.obj \
     $(SLO)$/column2.obj \
     $(SLO)$/column3.obj \
