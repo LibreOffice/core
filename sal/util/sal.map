@@ -459,6 +459,7 @@ UDK_3_0_0 {
         rtl_addUnloadingListener;
         rtl_removeUnloadingListener;
 
+        rtl_logfile_trace;
     local:
         *;
 };
