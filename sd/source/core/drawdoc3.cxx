@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:55:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,14 @@
  *
  ************************************************************************/
 
+
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #include <utility>
 #include <algorithm>
 
@@ -68,9 +76,7 @@
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -78,6 +84,8 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+
+#include <unotools/ucbstreamhelper.hxx>
 
 #ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
@@ -186,6 +194,22 @@ using namespace ::com::sun::star;
 |* Oeffnet ein Bookmark-Dokument
 |*
 \************************************************************************/
+/*
+SdStorageListener : public BaseImplHelper1 < lang::XEventListener >
+{
+    uno::Reference < embed::XStorage >& xStor;
+public:
+            SdStorageListener ( uno::Reference < embed::XStorage >& rStor )
+                : xStor( rStor )
+            {}
+
+    void disposing ( const lang::EventObject& aEvent ) throw ( uno::RuntimeException );
+};
+
+void SdStorageListener::disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+{
+    xStor = NULL;
+}*/
 
 SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 {
@@ -197,18 +221,10 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
     {
         DBG_ASSERT( rMedium.IsStorage(), "Kein Storage, keine Banane!" );
 
-        SvStorage* pStorage = rMedium.GetStorage();
-
-        if( !pStorage->IsStream( pStarDrawDoc ) &&
-            !pStorage->IsStream( pStarDrawDoc3 ) &&
-            !pStorage->IsStream( pStarDrawXMLContent ) &&
-            !pStorage->IsStream( pStarDrawOldXMLContent ))
-        {
-            // Es ist nicht unser Storage
-            DBG_ASSERT(bOK, "Nicht unser Storage");
-            bOK = FALSE;
-        }
-        else
+        uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
+        uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
+        if ( xAccess->hasByName( pStarDrawXMLContent ) && xStorage->isStreamElement( pStarDrawXMLContent ) ||
+             xAccess->hasByName( pStarDrawOldXMLContent ) && xStorage->isStreamElement( pStarDrawOldXMLContent ) )
         {
             CloseBookmarkDoc();
 
@@ -218,16 +234,26 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
             // enthalten sein koennten (Persist)
             // Wenn dem nicht so waere, so koennte man auch das Model
             // direkt laden
-
-            if ( pStorage->GetFormat() == SOT_FORMATSTR_ID_STARDRAW_50 )
+            uno::Reference < beans::XPropertySet > xSet (xStorage, uno::UNO_QUERY);
+            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("MediaType") );
+            ::rtl::OUString aType;
+            aAny >>= aType;
+            if ( SotExchange::GetFormatIdFromMimeType( aType ) == SOT_FORMATSTR_ID_STARDRAW_60 )
+                //TODO/MBA: needs testing, old code used STARDRAW_50 for testing
                 // Draw
                 xBookmarkDocShRef = new ::sd::GraphicDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
             else
                 // Impress
                 xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
 
-            if ( bOK = xBookmarkDocShRef->DoLoad(pStorage) )
+            if ( bOK = xBookmarkDocShRef->DoLoad(xStorage) )
                 pBookmarkDoc = xBookmarkDocShRef->GetDoc();
+        }
+        else
+        {
+            // Es ist nicht unser Storage
+            DBG_ASSERT(bOK, "Nicht unser Storage");
+            bOK = FALSE;
         }
     }
     else
@@ -276,7 +302,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 
         if (pMedium->IsStorage())
         {
-            if (!pMedium->GetStorage())
+            if (!pMedium->GetStorage().is())
             {
                 // READ/WRITE hat nicht geklappt, also wieder READ
                 pMedium->Close();
@@ -1362,11 +1388,14 @@ List* SdDrawDocument::GetCustomShowList(BOOL bCreate)
 
 SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
-    SotStorage* pStor = pDocSh ? pDocSh->GetMedium()->GetStorage() : NULL;
+    uno::Reference < embed::XStorage > xStor;
+    if (pDocSh)
+        xStor = pDocSh->GetMedium()->GetStorage();
     SvStream*   pRet = NULL;
 
-    if( pStor )
+    if( xStor.is() )
     {
+        //TODO/MBA: binary format removed, needs testing
         if( rStreamInfo.maUserData.Len() &&
             ( rStreamInfo.maUserData.GetToken( 0, ':' ) ==
               String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
@@ -1377,57 +1406,27 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
             if( aPicturePath.GetTokenCount( '/' ) == 2 )
             {
                 const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
-
-                if( !xPictureStorage.Is() )
+                const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
+                if( xStor->isStorageElement( aPictureStorageName )  )
                 {
-                    const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
-
-                    if( pStor->IsContained( aPictureStorageName ) &&
-                        pStor->IsStorage( aPictureStorageName )  )
+                    uno::Reference < embed::XStorage > xPictureStorage =
+                            xStor->openStorageElement( aPictureStorageName, embed::ElementModes::READ );
+                    try
                     {
-                        // cast away const
-                        ((SdDrawDocument*)this)->xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ );
+                        if( xPictureStorage.is() && xPictureStorage->isStreamElement( aPictureStreamName ) )
+                        {
+                            uno::Reference < io::XStream > xStream = xPictureStorage->openStreamElement( aPictureStreamName, embed::ElementModes::READ );
+                            if( xStream.is() )
+                                pRet = ::utl::UcbStreamHelper::CreateStream( xStream );
+                        }
                     }
-                }
-
-                if( xPictureStorage.Is() &&
-                    xPictureStorage->IsContained( aPictureStreamName ) &&
-                    xPictureStorage->IsStream( aPictureStreamName ) )
-                {
-                    pRet = xPictureStorage->OpenSotStream( aPictureStreamName, STREAM_READ );
-
-                    if( pRet )
+                    catch( container::NoSuchElementException& )
                     {
-                        pRet->SetVersion( xPictureStorage->GetVersion() );
-                        pRet->SetKey( xPictureStorage->GetKey() );
                     }
                 }
             }
 
             rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
-        }
-        else
-        {
-            // graphic from plain binary document stream
-            if( !pDocStor )
-            {
-                if( pStor->IsStream( pStarDrawDoc ) )
-                {
-                    BOOL bOK = pStor->Rename(pStarDrawDoc, pStarDrawDoc3);
-                    DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
-                }
-
-                SotStorageStreamRef docStream = pStor->OpenSotStream( pStarDrawDoc3, STREAM_READ );
-                docStream->SetVersion( pStor->GetVersion() );
-                docStream->SetKey( pStor->GetKey() );
-
-                // cast away const (should be regarded logical constness)
-                ((SdDrawDocument*)this)->xDocStream = docStream;
-                ((SdDrawDocument*)this)->pDocStor = pStor;
-            }
-
-            pRet = xDocStream;
-            rStreamInfo.mbDeleteAfterUse = FALSE;
         }
     }
 
@@ -1449,19 +1448,6 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
 #endif
 
     return pRet;
-}
-
-
-/*************************************************************************
-|*
-|* Release doc stream, if no longer valid
-|*
-\************************************************************************/
-
-void SdDrawDocument::HandsOff()
-{
-    xPictureStorage = SotStorageRef();
-    pDocStor = NULL;
 }
 
 
