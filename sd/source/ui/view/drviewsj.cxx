@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:58:33 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include "DrawViewShell.hxx"
 
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
+
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -114,10 +118,6 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
-
 #pragma hdrstop
 
 #include "app.hrc"
@@ -137,6 +137,7 @@
 #endif
 #include "optsitem.hxx"
 
+using namespace com::sun::star;
 
 namespace sd {
 
@@ -205,8 +206,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if ( pObj->ISA( SdrOle2Obj ) )
             {
                 SdrOle2Obj* pOleObj = PTR_CAST(SdrOle2Obj, pObj);
-                if (pOleObj->GetObjRef().Is() &&
-                    ((pOleObj->GetObjRef()->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE) == SVOBJ_MISCSTATUS_SERVERRESIZE))
+                if (pOleObj->GetObjRef().is() &&
+                    ((pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
                     rSet.DisableItem(SID_ORIGINAL_SIZE);
             }
 
