@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-21 12:21:32 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@
 #include "sfxbasemodel.hxx"
 #include "accmgr.hxx"
 #include "mnumgr.hxx"
+#include "imgmgr.hxx"
+#include "tbxconf.hxx"
 
 //====================================================================
 
@@ -597,6 +599,7 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
             // Konfiguration schreiben
             if ( GetConfigManager() )
             {
+/* //!MBA
                 if ( rDocInfo.HasTemplateConfig() )
                 {
                     const String aTemplFileName( rDocInfo.GetTemplateFileName() );
@@ -608,16 +611,17 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                         SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
                         if ( SVSTREAM_OK == aStor->GetError() )
                         {
-                            GetConfigManager()->SaveConfig(aStor);
+                            GetConfigManager()->StoreConfiguration(aStor);
                             if (aRef->IsStream(SfxConfigManager::GetStreamName()))
                                 aRef->Remove(SfxConfigManager::GetStreamName());
                         }
                     }
                 }
                 else
+ */
                 {
-                    GetConfigManager()->SetModified( TRUE );
-                    GetConfigManager()->SaveConfig(pNewStg);
+//! MBA                    GetConfigManager()->SetModified( TRUE );
+                    GetConfigManager()->StoreConfiguration( pNewStg );
                 }
             }
         }
@@ -664,6 +668,7 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
         // Konfiguration schreiben
         if (GetConfigManager())
         {
+/* //!MBA
             if ( rDocInfo.HasTemplateConfig() )
             {
                 const String aTemplFileName( rDocInfo.GetTemplateFileName() );
@@ -675,16 +680,17 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                     SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
                     if ( SVSTREAM_OK == aStor->GetError() )
                     {
-                        GetConfigManager()->SaveConfig(aStor);
+                        GetConfigManager()->StoreConfiguration(aStor);
                         if (pNewStg->IsStream(SfxConfigManager::GetStreamName()))
                             pNewStg->Remove(SfxConfigManager::GetStreamName());
                     }
                 }
             }
             else
+ */
             {
-                GetConfigManager()->SetModified( TRUE );
-                GetConfigManager()->SaveConfig(pNewStg);
+//!MBA                GetConfigManager()->SetModified( TRUE );
+                GetConfigManager()->StoreConfiguration(pNewStg);
             }
         }
 
@@ -880,8 +886,10 @@ SvEmbeddedInfoObject* SfxObjectShell::InsertObject
 
 //-------------------------------------------------------------------------
 
-SfxConfigManager* SfxObjectShell::GetConfigManager() const
+SfxConfigManager* SfxObjectShell::GetConfigManager( BOOL bForceCreation )
 {
+    if ( !pImp->pCfgMgr && ( bForceCreation || SfxConfigManager::HasConfiguration( *GetStorage() ) ) )
+        pImp->pCfgMgr = new SfxConfigManager( *this );
     return pImp->pCfgMgr;
 }
 
@@ -889,14 +897,13 @@ SfxConfigManager* SfxObjectShell::GetConfigManager() const
 
 void SfxObjectShell::SetConfigManager(SfxConfigManager *pMgr)
 {
-    if (pImp->pCfgMgr == SFX_CFGMANAGER() && pMgr)
-        pMgr->Activate(pImp->pCfgMgr);
+//    if ( pImp->pCfgMgr == SFX_CFGMANAGER() && pMgr)
+//        pMgr->Activate(pImp->pCfgMgr);
 
-    if (pImp->pCfgMgr)
+    if ( pImp->pCfgMgr && pImp->pCfgMgr != pMgr )
         delete pImp->pCfgMgr;
 
     pImp->pCfgMgr = pMgr;
-    pMgr->SetObjectShell(this);
 }
 
 //-------------------------------------------------------------------------
@@ -911,12 +918,12 @@ void SfxObjectShell::SetTemplateConfig(BOOL bTplConf)
 
 BOOL SfxObjectShell::HasTemplateConfig() const
 {
-//    return pImp->bTemplateConfig;
+//!MBA    return pImp->bTemplateConfig;
     return FALSE;
 }
 
 //-------------------------------------------------------------------------
-
+/*
 void SfxObjectShell::TransferConfig(SfxObjectShell& rObjSh)
 {
     SfxConfigManager *pNewCfgMgr=0, *pOldCfgMgr=0;
@@ -929,6 +936,7 @@ void SfxObjectShell::TransferConfig(SfxObjectShell& rObjSh)
     SetConfigManager(pNewCfgMgr);
     rObjSh.SetConfigManager(pOldCfgMgr);
 }
+*/
 
 //--------------------------------------------------------------------
 
@@ -963,11 +971,12 @@ USHORT SfxObjectShell::GetContentCount(USHORT nIdx1,
         }
         case CONTENT_MACRO:
             break;
-
+/*
         case CONTENT_CONFIG:
             return (GetConfigManager() && !HasTemplateConfig()) ?
                         GetConfigManager()->GetItemCount() : 0;
             break;
+ */
     }
     return 0;
 }
@@ -1006,8 +1015,10 @@ BOOL   SfxObjectShell::CanHaveChilds(USHORT nIdx1,
     case CONTENT_MACRO:
 //!!    return INDEX_IGNORE == nIdx2? FALSE: TRUE;
         return FALSE;
+/*
     case CONTENT_CONFIG:
         return INDEX_IGNORE == nIdx2 ? FALSE : TRUE;
+ */
     }
     return FALSE;
 }
@@ -1043,11 +1054,13 @@ void   SfxObjectShell::GetContent(String &rText,
                     nClosedBitmapResId= BMP_STYLES_CLOSED;
                     nOpenedBitmapResId= BMP_STYLES_OPENED;
                     break;
+/*
                 case CONTENT_CONFIG:
                     nTextResId = STR_CONFIG;
                     nClosedBitmapResId= BMP_STYLES_CLOSED;
                     nOpenedBitmapResId= BMP_STYLES_OPENED;
                     break;
+ */
             }
 
             if ( nTextResId )
@@ -1073,6 +1086,7 @@ void   SfxObjectShell::GetContent(String &rText,
             break;
         case CONTENT_MACRO:
             break;
+/*
         case CONTENT_CONFIG:
             if ( GetConfigManager() && !HasTemplateConfig())
             {
@@ -1084,6 +1098,7 @@ void   SfxObjectShell::GetContent(String &rText,
             rClosedBitmap = Bitmap(SfxResId(BMP_STYLES_CLOSED));
             rOpenedBitmap = Bitmap(SfxResId(BMP_STYLES_OPENED));
             break;
+*/
     }
 }
 
@@ -1242,6 +1257,7 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
         else
             bRet = FALSE;
     }
+/*
     else if (nSourceIdx1 == CONTENT_CONFIG)
     {
         nIdx1 = CONTENT_CONFIG;
@@ -1263,7 +1279,7 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
             SFX_APP()->GetDispatcher_Impl()->Update_Impl(TRUE);
         }
     }
-
+*/
     return bRet;
 }
 
@@ -1316,6 +1332,7 @@ BOOL SfxObjectShell::Remove
         if(bRet)
             SetModified( TRUE );
     }
+/*
     else if (nIdx1 == CONTENT_CONFIG)
     {
         if (GetConfigManager()->RemoveItem(nIdx2))
@@ -1325,6 +1342,7 @@ BOOL SfxObjectShell::Remove
             SFX_APP()->GetDispatcher_Impl()->Update_Impl(TRUE);
         }
     }
+*/
     return bRet;
 }
 
@@ -1682,7 +1700,6 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             }
 
             // StyleSheets aus Template updaten?
-            SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
             if ( bLoad )
             {
                 // Document-Instanz f"ur das Template erzeugen und laden
@@ -1705,6 +1722,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             }
 /*
             // Config aus Template laden?
+            SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
             BOOL bConfig = pInfo->HasTemplateConfig();
             {
                 // Config-Manager aus Template-Storage erzeugen
@@ -1739,10 +1757,10 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
         {
             // Es soll eine EventConfig konfiguriert werden, dazu mu\s sie am
             // ConfigManager des Dokuments h"angen
-            SfxConfigManager *pMgr = pApp->GetConfigManager();
-            SetConfigManager( new SfxConfigManager( 0, pMgr ) );
-            if ( this == SfxObjectShell::Current() )
-                pImp->pCfgMgr->Activate( pMgr );
+            GetConfigManager( TRUE );
+//            SfxConfigManager *pMgr = pApp->GetConfigManager();
+//            if ( this == SfxObjectShell::Current() )
+//                pImp->pCfgMgr->Activate( pMgr );
         }
 
         // Gegebenenfalls EventConfig erzeugen und ans Dokument konfigurieren
@@ -1751,19 +1769,35 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
             pImp->pEventConfig =
                 new SfxEventConfigItem_Impl( SFX_ITEMTYPE_DOCEVENTCONFIG,
                     pApp->GetEventConfig(), this );
-            pImp->pEventConfig->Init( pImp->pCfgMgr );
         }
     }
 
     return pImp->pEventConfig;
 }
 
+SvStorageRef SfxObjectShell::GetConfigurationStorage( SotStorage* pStor )
+{
+    // configuration storage shall be opened in own storage or a new storage, if the
+    // document is getting stored into this storage
+    if ( !pStor )
+        pStor = GetStorage();
+
+    if ( pStor->IsOLEStorage() )
+        return SotStorageRef();
+
+    // storage is always opened in transacted mode, so changes must be commited
+    SotStorageRef xStorage = pStor->OpenSotStorage( DEFINE_CONST_UNICODE("Configurations"),
+                IsReadOnly() ? STREAM_STD_READ : STREAM_STD_READWRITE );
+    if ( xStorage.Is() && xStorage->GetError() )
+        xStorage.Clear();
+    return xStorage;
+}
+
 SotStorageStreamRef SfxObjectShell::GetConfigurationStream( const String& rName, BOOL bCreate )
 {
     SotStorageStreamRef xStream;
-    SotStorageRef xStorage = GetStorage()->OpenSotStorage( DEFINE_CONST_UNICODE("Configurations"),
-            bCreate ? STREAM_STD_READWRITE : STREAM_STD_READ );
-    if ( xStorage.Is() && !xStorage->GetError() )
+    SvStorageRef xStorage = GetConfigurationStorage();
+    if ( xStorage.Is() )
     {
         xStream = xStorage->OpenSotStream( rName,
             bCreate ? STREAM_STD_READWRITE|STREAM_TRUNC : STREAM_STD_READ );
@@ -1776,37 +1810,23 @@ SotStorageStreamRef SfxObjectShell::GetConfigurationStream( const String& rName,
 
 SfxAcceleratorManager* SfxObjectShell::GetAccMgr_Impl()
 {
+    // already constructed ?!
+    if ( pImp->pAccMgr )
+        return pImp->pAccMgr;
+
     // get the typId ( = ResourceId )
     const ResId* pResId = GetFactory().GetAccelId();
     if ( !pResId )
         return NULL;
 
-    SfxAcceleratorManager* pMgr = new SfxAcceleratorManager( *pResId );
-    SotStorageStreamRef xStream = GetConfigurationStream(SfxAcceleratorManager::GetStreamName());
-    if ( xStream.Is() )
+    if ( GetConfigManager() && pImp->pCfgMgr->HasConfigItem( pResId->GetId() ) )
     {
-        // document has configuration in XML format
-        if ( pMgr->LoadFromStream( *xStream ) )
-            return pMgr;
+        // document has configuration
+        pImp->pAccMgr = new SfxAcceleratorManager( *pResId, pImp->pCfgMgr );
+        return pImp->pAccMgr;
     }
-
-    SvStream* pStream = SfxAcceleratorManager::GetDefaultStream( STREAM_STD_READ );
-    if ( pStream )
-    {
-        if ( pMgr->LoadFromStream( *pStream ) )
-            return pMgr;
-    }
-
-    if ( pImp->pCfgMgr && pImp->pCfgMgr->HasConfigItem( pResId->GetId() ) )
-    {
-        // document has configuration in binary format
-        pMgr->SfxConfigItem::Initialize();
-        return pMgr;
-    }
-
-    // document has no configuration; get accelerator for module
-    delete pMgr;
-    return GetFactory().GetAccMgr_Impl();
+    else
+        return GetFactory().GetAccMgr_Impl();
 }
 
 SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pViewFrame )
@@ -1818,26 +1838,68 @@ SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pVie
     if ( !pId )
         return NULL;
 
-    SfxMenuBarManager* pMgr = new SfxMenuBarManager( *pId, rBindings );
-    SotStorageStreamRef xStream = GetConfigurationStream(SfxMenuBarManager::GetStreamName());
-    if ( xStream.Is() )
-    {
-        // document has configuration in XML format
-        if ( pMgr->LoadMenuBar( *xStream, pViewFrame->ISA( SfxInPlaceFrame ) ) )
-            return pMgr;
-    }
+    SfxConfigManager *pCfgMgr = SFX_APP()->GetConfigManager_Impl();
+    if ( GetConfigManager() && pImp->pCfgMgr->HasConfigItem( pId->GetId() ) )
+        pCfgMgr = pImp->pCfgMgr;
 
-    SvStream* pStream = SfxMenuBarManager::GetDefaultStream( STREAM_STD_READ );
-    if ( pStream )
-    {
-        if ( pMgr->LoadMenuBar( *pStream, pViewFrame->ISA( SfxInPlaceFrame ) ) )
-            return pMgr;
-    }
+    SfxMenuBarManager* pMgr = new SfxMenuBarManager( *pId, rBindings, pCfgMgr );
+    return pMgr;
+}
 
-    // better connect MenuBar directly to its ConfigMgr!
-    //else if ( pImp->pCfgMgr && pImp->pCfgMgr->HasConfigItem( pId->GetId() ) )
-    //{
-        pMgr->SfxConfigItem::Initialize();
-        return pMgr;
-    //}
+SfxImageManager* SfxObjectShell::GetImageManager_Impl()
+{
+    if ( pImp->pImageManager )
+        return pImp->pImageManager;
+
+    // every document has its own ImageManager, but they may use the global configuration!
+    pImp->pImageManager = new SfxImageManager( this );
+    return pImp->pImageManager;
+}
+
+SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BOOL bForWriting )
+{
+    // check for own format
+    SfxObjectShellRef xDoc;
+    SfxMedium *pMed = new SfxMedium( aTargetURL, STREAM_STD_READ, FALSE, 0 );
+    const SfxFilter* pFilter = NULL;
+    if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter->IsOwnFormat() )
+    {
+        delete pMed;
+        StreamMode nMode = bForWriting ? STREAM_STD_READWRITE : STREAM_STD_READ;
+        SvStorageRef xStor = new SvStorage( aTargetURL, nMode, STORAGE_TRANSACTED );
+        xStor->SetVersion( pFilter->GetVersion() );
+        if ( SVSTREAM_OK == xStor->GetError() )
+        {
+            // create document
+            const SfxObjectFactory &rFactory =
+                ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())->GetFactory();
+
+            xDoc = (SfxObjectShell *) rFactory.CreateObject( SFX_CREATE_MODE_ORGANIZER );
+            if ( xDoc.Is() )
+            {
+                // partially load, so don't use DoLoad!
+                xDoc->DoInitNew(0);
+                if( !xDoc->LoadFrom( xStor ) )
+                    xDoc.Clear();
+                else
+                {
+                    // connect to storage, abandon temp. storage
+                    xDoc->DoHandsOff();
+                    xDoc->DoSaveCompleted( xStor );
+                }
+            }
+        }
+    }
+    else
+        delete pMed;
+
+    return xDoc;
+}
+
+SfxToolBoxConfig* SfxObjectShell::GetToolBoxConfig_Impl()
+{
+    if ( !pImp->pTbxConfig )
+        pImp->pTbxConfig = new SfxToolBoxConfig(
+            GetConfigManager() ? pImp->pCfgMgr : SFX_APP()->GetConfigManager_Impl() );
+    return pImp->pTbxConfig;
 }
