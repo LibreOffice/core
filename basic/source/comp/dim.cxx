@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,11 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                             }
                         }
                     }
+                    else if( rEnumArray->Find( aCompleteName, SbxCLASS_OBJECT ) )
+                    {
+                        eType = SbxLONG;
+                        break;
+                    }
 
                     // In den String-Pool uebernehmen
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
@@ -230,7 +235,8 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         Next(), bConst = TRUE;
 
     // #110004 It can also be a sub/function
-    if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY || eCurTok == STATIC ) )
+    if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ||
+                    eCurTok == STATIC || eCurTok == ENUM ) )
     {
         // Next token is read here, because !bConst
         bool bPrivate = ( eFirstTok == PRIVATE );
@@ -251,6 +257,12 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             }
             Next();
             DefProc( FALSE, bPrivate );
+            return;
+        }
+        else if( eCurTok == ENUM )
+        {
+            Next();
+            DefEnum( bPrivate );
             return;
         }
     }
@@ -530,6 +542,13 @@ void SbiParser::Erase()
 
 void SbiParser::Type()
 {
+    DefType( FALSE );
+}
+
+void SbiParser::DefType( BOOL bPrivate )
+{
+    // TODO: Use bPrivate
+
     // Neues Token lesen, es muss ein Symbol sein
     if (!TestSymbol())
         return;
@@ -594,49 +613,141 @@ void SbiParser::Type()
 
     rTypeArray->Insert (pType,rTypeArray->Count());
 }
-/**********************************************************
-    // Variablennamen einlesen:
-    if( !TestSymbol() ) return;
-    String aName( aSym );
-    if( pDEFS->Find( aName ) )
-    {
-        Error( SbERR_VAR_DEFINED, aName ); return;
-    }
-    SbTypeDef* pDef = pDEFS->AddTypeDef( aName );
-    TestEoln();
 
-    // Deklarationen parsen:
+
+// Declaration of Enum type
+
+void SbiParser::Enum()
+{
+    DefEnum( FALSE );
+}
+
+void SbiParser::DefEnum( BOOL bPrivate )
+{
+    // Neues Token lesen, es muss ein Symbol sein
+    if (!TestSymbol())
+        return;
+
+    String aEnumName = aSym;
+    if( rEnumArray->Find(aEnumName,SbxCLASS_OBJECT) )
+    {
+        Error( SbERR_VAR_DEFINED, aSym );
+        return;
+    }
+
+    SbxObject *pEnum = new SbxObject( aEnumName );
+    if( bPrivate )
+        pEnum->SetFlag( SBX_PRIVATE );
+
     SbiSymDef* pElem;
     SbiDimList* pDim;
     BOOL bDone = FALSE;
-    while( !IsEof() && !bDone )
+
+    // Starting with -1 to make first default value 0 after ++
+    sal_Int32 nCurrentEnumValue = -1;
+    while( !bDone && !IsEof() )
     {
-        switch( Next() )
+        switch( Peek() )
         {
-            case SUB:
-            case FUNCTION:
-                pElem = ProcDecl( TRUE ); break;
-            case END:
+            case ENDENUM :
                 pElem = NULL;
                 bDone = TRUE;
-                if( Next() != TYPE )
-                    Error( SbERR_EXPECTED, TYPE );
-                break;
+                Next();
+            break;
+
+            case EOLN :
+            case REM :
+                pElem = NULL;
+                Next();
+            break;
+
             default:
-                pElem = VarDecl( &pDim );
-                if( pDim )
+            {
+                // TODO: Check existing!
+                BOOL bDefined = FALSE;
+
+                pDim = NULL;
+                pElem = VarDecl( &pDim, FALSE, TRUE );
+                if( !pElem )
                 {
-                    // HOT FIX, to be updated
-                    delete pDim;
-                    Error( SbERR_NO_STRINGS_ARRAYS );
+                    bDone = TRUE;   // Error occured
+                    break;
                 }
+                else if( pDim )
+                {
+                    delete pDim;
+                    Error( SbERR_SYNTAX );
+                    bDone = TRUE;   // Error occured
+                    break;
+                }
+
+                SbiExpression aVar( this, *pElem );
+                if( Peek() == EQ )
+                {
+                    Next();
+
+                    SbiConstExpression aExpr( this );
+                    if( !bDefined && aExpr.IsValid() )
+                    {
+                        SbxVariableRef xConvertVar = new SbxVariable();
+                        if( aExpr.GetType() == SbxSTRING )
+                            xConvertVar->PutString( aExpr.GetString() );
+                        else
+                            xConvertVar->PutDouble( aExpr.GetValue() );
+
+                        nCurrentEnumValue = xConvertVar->GetLong();
+                    }
+                }
+                else
+                    nCurrentEnumValue++;
+
+                SbiSymPool* pPoolToUse = bPrivate ? pPool : &aGlobals;
+
+                SbiSymDef* pOld = pPoolToUse->Find( pElem->GetName() );
+                if( pOld )
+                {
+                    Error( SbERR_VAR_DEFINED, pElem->GetName() );
+                    bDone = TRUE;   // Error occured
+                    break;
+                }
+
+                pPool->Add( pElem );
+
+                if( !bPrivate )
+                {
+                    SbiOpcode eOp = _GLOBAL;
+                    aGen.BackChain( nGblChain );
+                    nGblChain = 0;
+                    bGblDefs = bNewGblDefs = TRUE;
+                    aGen.Gen( eOp, pElem->GetId(), pElem->GetType() );
+
+                    aVar.Gen();
+                    USHORT nStringId = aGen.GetParser()->aGblStrings.Add( nCurrentEnumValue, SbxLONG );
+                    aGen.Gen( _NUMBER, nStringId );
+                    aGen.Gen( _PUTC );
+                }
+
+                SbiConstDef* pConst = pElem->GetConstDef();
+                pConst->Set( nCurrentEnumValue, SbxLONG );
+            }
         }
         if( pElem )
-            pDef->GetPool().Add( *pElem );
-        delete pElem;
+        {
+            SbxArray *pEnumMembers = pEnum->GetProperties();
+            SbxProperty *pEnumElem = new SbxProperty( pElem->GetName(), SbxLONG );
+            pEnumElem->PutLong( nCurrentEnumValue );
+            pEnumElem->ResetFlag( SBX_WRITE );
+            pEnumElem->SetFlag( SBX_CONST );
+            pEnumMembers->Insert( pEnumElem, pEnumMembers->Count() );
+        }
     }
+
+    pEnum->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_DONTCARE );
+    pEnum->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Parent") ), SbxCLASS_DONTCARE );
+
+    rEnumArray->Insert( pEnum, rEnumArray->Count() );
 }
-************************************************/
+
 
 // Prozedur-Deklaration
 // das erste Token ist bereits eingelesen (SUB/FUNCTION)
