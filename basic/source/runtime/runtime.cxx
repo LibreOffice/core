@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2002-01-18 11:51:29 $
+ *  last change: $Author: ab $ $Date: 2002-08-30 13:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,14 +313,15 @@ SbiInstance::~SbiInstance()
 
     try
     {
-        // Dispose components, especially dialogs created in CreateUnoDialog
-        ComponentVector_t::const_iterator iPos( ComponentVector.begin() );
-        while( iPos != ComponentVector.end() )
+        int nSize = ComponentVector.size();
+        if( nSize )
         {
-            Reference< XComponent > xDlgComponent = *iPos ;
-            if( xDlgComponent.is() )
-                xDlgComponent->dispose();
-            ++iPos;
+            for( int i = nSize - 1 ; i >= 0 ; --i )
+            {
+                Reference< XComponent > xDlgComponent = ComponentVector[i];
+                if( xDlgComponent.is() )
+                    xDlgComponent->dispose();
+            }
         }
     }
     catch( const Exception& )
