@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
+ *  last change: $Author: mtg $ $Date: 2001-02-22 16:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #include <svtools/htmltokn.h>
 #endif
 
+#ifndef _SW_APPLET_IMPL_HXX
+#include <SwAppletImpl.hxx>
+#endif
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -192,12 +195,6 @@ const ULONG HTML_FRMOPTS_IFRAME         =
 const ULONG HTML_FRMOPTS_OLE_CSS1       =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_hidden, "HIDDEN" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_HIDDEN_false, "FALSE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_archive, "ARCHIVE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_archives, "ARCHIVES" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_object, "OBJECT" );
 
 /*  */
 
@@ -547,7 +544,7 @@ void SwHTMLParser::InsertEmbed()
 
 /*  */
 
-#ifdef SOLAR_JAVA
+#if 0
 class SwHTMLApplet_Impl
 {
     SvAppletObjectRef xApplet;      // das aktuelle Applet
@@ -653,8 +650,7 @@ void SwHTMLParser::InsertApplet()
     // Eine neue Command-List anlegen
     if( pAppletImpl )
         delete pAppletImpl;
-    pAppletImpl = new SwHTMLApplet_Impl( pDoc->GetAttrPool(),
-                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+    pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -718,7 +714,8 @@ void SwHTMLParser::InsertApplet()
         return;
     }
 
-    pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, aAlt );
+    pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase);//, aAlt );
+    pAppletImpl->SetAltText( aAlt );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -901,13 +898,15 @@ void SwHTMLParser::InsertFloatingFrame()
 
 /*  */
 
-#define HTML_OPTTYPE_IGNORE 0
-#define HTML_OPTTYPE_TAG 1
-#define HTML_OPTTYPE_PARAM 2
+/*
+#define SWHTML_OPTTYPE_IGNORE 0
+#define SWHTML_OPTTYPE_TAG 1
+#define SWHTML_OPTTYPE_PARAM 2
+
 
 static USHORT GetOptionType( const String& rName, BOOL bApplet )
 {
-    USHORT nType = bApplet ? HTML_OPTTYPE_PARAM : HTML_OPTTYPE_TAG;
+    USHORT nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
 
     switch( rName.GetChar(0) )
     {
@@ -915,71 +914,72 @@ static USHORT GetOptionType( const String& rName, BOOL bApplet )
     case 'a':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_align ) ||
             rName.EqualsIgnoreCaseAscii( sHTML_O_alt ) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         else if( bApplet &&
                  (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
                  rName.EqualsIgnoreCaseAscii( sHTML_O_archives )) )
-            nType = HTML_OPTTYPE_TAG;
+            nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'C':
     case 'c':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_class ) ||
             (bApplet && (rName.EqualsIgnoreCaseAscii( sHTML_O_code ) ||
                          rName.EqualsIgnoreCaseAscii( sHTML_O_codebase ))) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'H':
     case 'h':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_height ) ||
             rName.EqualsIgnoreCaseAscii( sHTML_O_hspace ) ||
             (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_hidden )) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'I':
     case 'i':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_id ) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'M':
     case 'm':
         if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_mayscript ) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'N':
     case 'n':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_name ) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'O':
     case 'o':
         if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_object ) )
-            nType = HTML_OPTTYPE_TAG;
+            nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'S':
     case 's':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_style ) ||
             (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_src )) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'T':
     case 't':
         if( !bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_type ) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'V':
     case 'v':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_vspace ) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'W':
     case 'w':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_width ) )
-            nType = HTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_IGNORE;
         break;
     }
 
     return nType;
 }
+*/
 
 USHORT SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 {
@@ -1187,8 +1187,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             const SvCommand& rCommand = rCommands[ --i ];
             const String& rName = rCommand.GetCommand();
-            USHORT nType = GetOptionType( rName, TRUE );
-            if( HTML_OPTTYPE_TAG == nType )
+            USHORT nType = SwApplet_Impl::GetOptionType( rName, TRUE );
+            if( SWHTML_OPTTYPE_TAG == nType )
             {
                 const String& rValue = rCommand.GetArgument();
                 rWrt.Strm() << ' ';
@@ -1196,7 +1196,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                 rWrt.Strm() << "=\"";
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc ) << '\"';
             }
-            else if( HTML_OPTTYPE_PARAM == nType )
+            else if( SWHTML_OPTTYPE_PARAM == nType )
             {
                 aParams.Insert( i, aParams.Count() );
             }
@@ -1239,7 +1239,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             const SvCommand& rCommand = rCommands[ i ];
             const String& rName = rCommand.GetCommand();
 
-            if( GetOptionType( rName, FALSE ) == HTML_OPTTYPE_TAG )
+            if( SwApplet_Impl::GetOptionType( rName, FALSE ) == SWHTML_OPTTYPE_TAG )
             {
                 const String& rValue = rCommand.GetArgument();
                 rWrt.Strm() << ' ';
@@ -1316,11 +1316,14 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.4 2000-12-21 16:21:48 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.5 2001-02-22 16:14:17 mtg Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/12/21 16:21:48  jp
+      writegraphic optional in original format and not general as JPG
+
       Revision 1.3  2000/11/01 19:23:14  jp
       export of mail graphics removed
 
