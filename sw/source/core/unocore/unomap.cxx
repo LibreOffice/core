@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:19:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,11 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
+// --> OD 2004-08-06 #i28749#
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#endif
+// <--
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -1182,6 +1187,16 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     // --> OD 2004-06-29 #i28701#
                     { SW_PROP_NMID(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, MID_WRAP_INFLUENCE},
+                    // --> OD 2004-08-06 #i28749#
+                    { SW_PROP_NMID( UNO_NAME_TRANSFORMATION_IN_HORI_L2R),
+                                    FN_SHAPE_TRANSFORMATION_IN_HORI_L2R,
+                                    CPPU_E2T(CPPUTYPE_TRANSFORMATIONINHORIL2R),
+                                    PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID( UNO_NAME_POSITION_LAYOUT_DIR),
+                                    FN_SHAPE_POSITION_LAYOUT_DIR,
+                                    CPPU_E2T(CPPUTYPE_INT16),
+                                    PROPERTY_NONE, 0},
+                    // <--
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aShapeMap_Impl;
