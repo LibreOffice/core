@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintDateTime.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:17:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star {
  and time the document was last printed.
     @see com::sun::star::text::TextField
 */
-service PrintDateTime
+published service PrintDateTime
 {
     service  com::sun::star::text::TextField;
     /** contains the current content of the text field.
