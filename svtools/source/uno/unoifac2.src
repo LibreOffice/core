@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ Menu RID_CONTEXTMENU
             Text[ dutch ] = "~Link kopiλren";
             Text[ chinese_simplified ] = "Έ΄ΦΖΑ΄½Σ(~Y)";
             Text[ greek ] = "Αντιγραφή ~σύνδεσης";
-            Text[ korean ] = "Ώ¬°α ΊΉ»η(~Y)";
+            Text[ korean ] = "ΈµΕ© ΊΉ»η(~Y)";
             Text[ turkish ] = "Baπlantύyύ kopyala";
             Text[ language_user1 ] = " ";
         };
