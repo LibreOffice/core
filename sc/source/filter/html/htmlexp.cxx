@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:26:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,8 +333,8 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, ScDocument* pDocP,
             nFontSize[j] = nDefaultFontSize[j] * 20;
     }
 
-    const USHORT nCount = pDoc->GetTableCount();
-    for ( USHORT nTab = 0; nTab < nCount; nTab++ )
+    const SCTAB nCount = pDoc->GetTableCount();
+    for ( SCTAB nTab = 0; nTab < nCount; nTab++ )
     {
         if ( !IsEmptyTable( nTab ) )
             nUsedTables++;
@@ -505,8 +505,8 @@ void ScHTMLExport::WriteOverview()
 
         String       aStr;
 
-        const USHORT nCount = pDoc->GetTableCount();
-        for ( USHORT nTab = 0; nTab < nCount; nTab++ )
+        const SCTAB nCount = pDoc->GetTableCount();
+        for ( SCTAB nTab = 0; nTab < nCount; nTab++ )
         {
             if ( !IsEmptyTable( nTab ) )
             {
@@ -526,7 +526,7 @@ void ScHTMLExport::WriteOverview()
 }
 
 
-const SfxItemSet& ScHTMLExport::PageDefaults( USHORT nTab )
+const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 {
     SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase*      pStyleSheet = NULL;
@@ -574,11 +574,11 @@ const SfxItemSet& ScHTMLExport::PageDefaults( USHORT nTab )
 }
 
 
-BOOL ScHTMLExport::HasBottomBorder( USHORT nRow, USHORT nTab,
-        USHORT nStartCol, USHORT nEndCol )
+BOOL ScHTMLExport::HasBottomBorder( SCROW nRow, SCTAB nTab,
+        SCCOL nStartCol, SCCOL nEndCol )
 {
     BOOL bHas = TRUE;
-    for ( USHORT nCol=nStartCol; nCol<=nEndCol && bHas; nCol++ )
+    for ( SCCOL nCol=nStartCol; nCol<=nEndCol && bHas; nCol++ )
     {
         SvxBoxItem* pBorder = (SvxBoxItem*)
             pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
@@ -598,11 +598,11 @@ BOOL ScHTMLExport::HasBottomBorder( USHORT nRow, USHORT nTab,
 }
 
 
-BOOL ScHTMLExport::HasLeftBorder( USHORT nCol, USHORT nTab,
-        USHORT nStartRow, USHORT nEndRow )
+BOOL ScHTMLExport::HasLeftBorder( SCCOL nCol, SCTAB nTab,
+        SCROW nStartRow, SCROW nEndRow )
 {
     BOOL bHas = TRUE;
-    for ( USHORT nRow=nStartRow; nRow<=nEndRow && bHas; nRow++ )
+    for ( SCROW nRow=nStartRow; nRow<=nEndRow && bHas; nRow++ )
     {
         SvxBoxItem* pBorder = (SvxBoxItem*)
             pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
@@ -622,11 +622,11 @@ BOOL ScHTMLExport::HasLeftBorder( USHORT nCol, USHORT nTab,
 }
 
 
-BOOL ScHTMLExport::HasTopBorder( USHORT nRow, USHORT nTab,
-        USHORT nStartCol, USHORT nEndCol )
+BOOL ScHTMLExport::HasTopBorder( SCROW nRow, SCTAB nTab,
+        SCCOL nStartCol, SCCOL nEndCol )
 {
     BOOL bHas = TRUE;
-    for ( USHORT nCol=nStartCol; nCol<=nEndCol && bHas; nCol++ )
+    for ( SCCOL nCol=nStartCol; nCol<=nEndCol && bHas; nCol++ )
     {
         SvxBoxItem* pBorder = (SvxBoxItem*)
             pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
@@ -646,11 +646,11 @@ BOOL ScHTMLExport::HasTopBorder( USHORT nRow, USHORT nTab,
 }
 
 
-BOOL ScHTMLExport::HasRightBorder( USHORT nCol, USHORT nTab,
-        USHORT nStartRow, USHORT nEndRow )
+BOOL ScHTMLExport::HasRightBorder( SCCOL nCol, SCTAB nTab,
+        SCROW nStartRow, SCROW nEndRow )
 {
     BOOL bHas = TRUE;
-    for ( USHORT nRow=nStartRow; nRow<=nEndRow && bHas; nRow++ )
+    for ( SCROW nRow=nStartRow; nRow<=nEndRow && bHas; nRow++ )
     {
         SvxBoxItem* pBorder = (SvxBoxItem*)
             pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
@@ -743,13 +743,20 @@ void ScHTMLExport::WriteBody()
 
 void ScHTMLExport::WriteTables()
 {
-    const USHORT    nTabCount = pDoc->GetTableCount();
+    const SCTAB nTabCount = pDoc->GetTableCount();
     const String    aStrTable( ScResId( SCSTR_TABLE ) );
     String          aStr;
     String          aStrOut;
-    USHORT          nStartCol, nStartRow, nStartTab;
-    USHORT          nEndCol, nEndRow, nEndTab;
-    USHORT          nStartColFix, nStartRowFix, nEndColFix, nEndRowFix;
+    SCCOL           nStartCol;
+    SCROW           nStartRow;
+    SCTAB           nStartTab;
+    SCCOL           nEndCol;
+    SCROW           nEndRow;
+    SCTAB           nEndTab;
+    SCCOL           nStartColFix;
+    SCROW           nStartRowFix;
+    SCCOL           nEndColFix;
+    SCROW           nEndRowFix;
     ScDrawLayer*    pDrawLayer = pDoc->GetDrawLayer();
     if ( bAll )
     {
@@ -765,8 +772,8 @@ void ScHTMLExport::WriteTables()
         nEndRow = nEndRowFix = aRange.aEnd.Row();
         nEndTab = aRange.aEnd.Tab();
     }
-    USHORT nTableStrNum = 1;
-    for ( USHORT nTab=nStartTab; nTab<=nEndTab; nTab++ )
+    SCTAB nTableStrNum = 1;
+    for ( SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++ )
     {
         if ( !pDoc->IsVisible( nTab ) )
             continue;   // for
@@ -906,8 +913,8 @@ void ScHTMLExport::WriteTables()
         (((aByteStrOut += ' ' ) += sHTML_O_cellspacing ) += '=') +=
                                     ByteString::CreateFromInt32( nCellSpacing );
         // COLS=n
-        USHORT nColCnt = 0;
-        USHORT nCol;
+        SCCOL nColCnt = 0;
+        SCCOL nCol;
         for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
         {
             if ( !(pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) )
@@ -951,14 +958,14 @@ void ScHTMLExport::WriteTables()
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
         bTableDataWidth = TRUE;     // widths in first row
-        for ( USHORT nRow=nStartRow; nRow<=nEndRow; nRow++ )
+        for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
             if ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN )
                 continue;   // for
 
             IncIndent(1); TAG_ON_LF( sHTML_tablerow );
             bTableDataHeight = TRUE;  // height at every first cell of each row
-            for ( USHORT nCol=nStartCol; nCol<=nEndCol; nCol++ )
+            for ( SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++ )
             {
                 if ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN )
                     continue;   // for
@@ -1012,7 +1019,7 @@ void ScHTMLExport::WriteTables()
 }
 
 
-void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
+void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab );
@@ -1068,34 +1075,36 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
     const ScMergeAttr& rMergeAttr = (const ScMergeAttr&) pAttr->GetItem( ATTR_MERGE, pCondItemSet );
     if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
-        USHORT j, n, v;
+                SCCOL nC, jC;
+                SCROW nR, jR;
+        USHORT v;
         if ( pGraphEntry )
-            n = Max( USHORT(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
-                USHORT(rMergeAttr.GetColMerge()) );
+            nC = Max( SCCOL(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
+                SCCOL(rMergeAttr.GetColMerge()) );
         else
-            n = rMergeAttr.GetColMerge();
-        if ( n > 1 )
+            nC = rMergeAttr.GetColMerge();
+        if ( nC > 1 )
         {
-            (((aStrTD += ' ') += sHTML_O_colspan) += '=') += ByteString::CreateFromInt32( n );
-            n += nCol;
-            for ( j=nCol, v=0; j<n; j++ )
-                v += pDoc->GetColWidth( j, nTab );
+            (((aStrTD += ' ') += sHTML_O_colspan) += '=') += ByteString::CreateFromInt32( nC );
+            nC += nCol;
+            for ( jC=nCol, v=0; jC<nC; jC++ )
+                v += pDoc->GetColWidth( jC, nTab );
             nWidthPixel = ToPixel( v );
         }
         else
             nWidthPixel = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
 
         if ( pGraphEntry )
-            n = Max( USHORT(pGraphEntry->aRange.aEnd.Row() - nRow + 1),
-                USHORT(rMergeAttr.GetRowMerge()) );
+            nR = Max( SCROW(pGraphEntry->aRange.aEnd.Row() - nRow + 1),
+                SCROW(rMergeAttr.GetRowMerge()) );
         else
-            n = rMergeAttr.GetRowMerge();
-        if ( n > 1 )
+            nR = rMergeAttr.GetRowMerge();
+        if ( nR > 1 )
         {
-            (((aStrTD += ' ') += sHTML_O_rowspan) += '=') += ByteString::CreateFromInt32( n );
-            n += nRow;
-            for ( j=nRow, v=0; j<n; j++ )
-                v += pDoc->GetRowHeight( j, nTab );
+            (((aStrTD += ' ') += sHTML_O_rowspan) += '=') += ByteString::CreateFromInt32( nR );
+            nR += nRow;
+            for ( jR=nRow, v=0; jR<nR; jR++ )
+                v += pDoc->GetRowHeight( jR, nTab );
             nHeightPixel = ToPixel( v );
         }
         else
