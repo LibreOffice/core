@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-13 18:28:42 $
+#   last change: $Author: hjs $ $Date: 2001-08-13 18:58:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -277,9 +277,12 @@ $(UNOUCROUT)$/%.hdl : $(UNOUCRDEP)
 .IF "$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"==""
 
 #fallback
+LOCLALDESC=
+.IF "$(shell find . -name $(SHL1TARGET).xml)"==""
 $(MISC)$/%.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
-    
+.ENDIF
+
 .ENDIF          # "$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"==""
 
 .ENDIF			# "$(SHL1TARGET)$(SHL2TARGET)$(SHL3TARGET)$(SHL4TARGET)$(SHL5TARGET)$(SHL6TARGET)$(SHL7TARGET)$(SHL8TARGET)$(SHL9TARGET)"!=""
