@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-19 12:15:57 $
+ *  last change: $Author: ka $ $Date: 2001-04-19 12:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,37 +190,38 @@ SvtCacheOptions_Impl::SvtCacheOptions_Impl() :
 
     for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtCacheOptions_Impl::SvtCacheOptions_Impl()\nInvalid property value for property detected!\n" );
-
-        switch( nProperty )
+        if( seqValues[ nProperty ].hasValue() )
         {
-            case PROPERTYHANDLE_WRITEROLE:
+            switch( nProperty )
             {
-                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
-                    seqValues[nProperty] >>= mnWriterOLE;
-            }
-            break;
+                case PROPERTYHANDLE_WRITEROLE:
+                {
+                    if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                        seqValues[nProperty] >>= mnWriterOLE;
+                }
+                break;
 
-            case PROPERTYHANDLE_DRAWINGOLE:
-            {
-                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
-                    seqValues[nProperty] >>= mnDrawingOLE;
-            }
-            break;
+                case PROPERTYHANDLE_DRAWINGOLE:
+                {
+                    if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                        seqValues[nProperty] >>= mnDrawingOLE;
+                }
+                break;
 
-            case PROPERTYHANDLE_GRFMGR_TOTALSIZE:
-            {
-                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
-                    seqValues[nProperty] >>= mnGrfMgrTotalSize;
-            }
-            break;
+                case PROPERTYHANDLE_GRFMGR_TOTALSIZE:
+                {
+                    if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                        seqValues[nProperty] >>= mnGrfMgrTotalSize;
+                }
+                break;
 
-            case PROPERTYHANDLE_GRFMGR_OBJECTSIZE:
-            {
-                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
-                    seqValues[nProperty] >>= mnGrfMgrObjectSize;
+                case PROPERTYHANDLE_GRFMGR_OBJECTSIZE:
+                {
+                    if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                        seqValues[nProperty] >>= mnGrfMgrObjectSize;
+                }
+                break;
             }
-            break;
         }
     }
 }
