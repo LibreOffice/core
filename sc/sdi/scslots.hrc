@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scslots.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:52 $
+ *  last change: $Author: tbe $ $Date: 2001-05-22 14:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include <sfx2/sfx.hrc>
 #include <svx/dialogs.hrc>
 #include <offmgr/sba.hrc>
-#include <basctl/basicide.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include <sc.hrc>
