@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 14:36:20 $
+ *  last change: $Author: pl $ $Date: 2002-10-11 13:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,41 @@
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
+#endif
 
 #define USE_SM_EXTENSION
+
+extern "C" void SAL_CALL ICEConnectionWorker( void* );
+
+class ICEConnectionObserver
+{
+    friend void SAL_CALL ICEConnectionWorker(void*);
+    static BOOL bIsWatching;
+    static void ICEWatchProc( IceConn connection, IcePointer client_data,
+                              Bool opening, IcePointer* watch_data );
+
+    static struct pollfd* pFilehandles;
+    static IceConn* pConnections;
+    static int nConnections;
+    static oslMutex ICEMutex;
+    static oslThread ICEThread;
+public:
+
+    static void activate();
+    static void deactivate();
+};
+
 
 BOOL ICEConnectionObserver::bIsWatching = FALSE;
 SmcConn SessionManagerClient::aSmcConnection = NULL;
 ByteString SessionManagerClient::aClientID;
+struct pollfd* ICEConnectionObserver::pFilehandles = NULL;
+IceConn* ICEConnectionObserver::pConnections = NULL;
+int ICEConnectionObserver::nConnections = 0;
+oslMutex ICEConnectionObserver::ICEMutex = NULL;
+oslThread ICEConnectionObserver::ICEThread = NULL;
 
 static SmProp*  pSmProps = NULL;
 static SmProp** ppSmProps = NULL;
@@ -176,6 +205,17 @@ void SessionManagerClient::SaveYourselfProc(
 #endif
 }
 
+IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
+{
+#ifdef DEBUG
+    fprintf( stderr, GetSalData()->pFirstFrame_ ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
+#endif
+    if( GetSalData()->pFirstFrame_ )
+    {
+        GetSalData()->pFirstFrame_->maFrameData.ShutDown();
+    }
+}
+
 void SessionManagerClient::DieProc(
     SmcConn connection,
     SmPointer client_data
@@ -189,8 +229,7 @@ void SessionManagerClient::DieProc(
 #endif
     if( connection == aSmcConnection )
         aSmcConnection = NULL;
-    if( GetSalData()->pFirstFrame_ )
-        GetSalData()->pFirstFrame_->maFrameData.ShutDown();
+    Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, ShutDownHdl ) );
 }
 
 void SessionManagerClient::SaveCompleteProc(
@@ -217,8 +256,6 @@ void SessionManagerClient::open()
     static SmcCallbacks aCallbacks;
 
 #ifdef USE_SM_EXTENSION
-    // erst scharf schalten wenn getestet
-
     // this is the way Xt does it, so we can too
     if( ! aSmcConnection && getenv( "SESSION_MANAGER" ) )
     {
@@ -323,6 +360,7 @@ void ICEConnectionObserver::activate()
 {
     if( ! bIsWatching )
     {
+        ICEMutex = osl_createMutex();
         bIsWatching = TRUE;
 #ifdef USE_SM_EXTENSION
         IceAddConnectionWatch( ICEWatchProc, NULL );
@@ -338,7 +376,38 @@ void ICEConnectionObserver::deactivate()
 #ifdef USE_SM_EXTENSION
         IceRemoveConnectionWatch( ICEWatchProc, NULL );
 #endif
+        if( ICEThread )
+        {
+            osl_terminateThread( ICEThread );
+            osl_destroyThread( ICEThread );
+            ICEThread = NULL;
+        }
+        osl_destroyMutex( ICEMutex );
     }
+}
+
+void ICEConnectionWorker( void* pData )
+{
+#ifdef USE_SM_EXTENSION
+    while( ICEConnectionObserver::nConnections )
+    {
+        osl_acquireMutex( ICEConnectionObserver::ICEMutex );
+        int nRet = poll( ICEConnectionObserver::pFilehandles,
+                         ICEConnectionObserver::nConnections,
+                         400 );
+        if( nRet > 0 )
+        {
+#ifdef DEBUG
+            fprintf( stderr, "IceProcessMessages\n" );
+#endif
+            for( int i = 0; i < ICEConnectionObserver::nConnections; i++ )
+                if( ICEConnectionObserver::pFilehandles[i].revents & POLLIN )
+                    IceProcessMessages( ICEConnectionObserver::pConnections[i], NULL, NULL );
+        }
+        osl_releaseMutex( ICEConnectionObserver::ICEMutex );
+        osl_yieldThread();
+    }
+#endif
 }
 
 void ICEConnectionObserver::ICEWatchProc(
@@ -350,13 +419,45 @@ void ICEConnectionObserver::ICEWatchProc(
 {
 #ifdef USE_SM_EXTENSION
     if( opening )
-        GetSalData()->GetLib()->Insert( IceConnectionNumber( connection ),
-                                        connection,
-                                        (YieldFunc)Pending,
-                                        (YieldFunc)Queued,
-                                        (YieldFunc)HandleEvents );
+    {
+        osl_acquireMutex( ICEMutex );
+        int fd = IceConnectionNumber( connection );
+        nConnections++;
+        pConnections = (IceConn*)rtl_reallocateMemory( pConnections, sizeof( IceConn )*nConnections );
+        pFilehandles = (struct pollfd*)rtl_reallocateMemory( pFilehandles, sizeof( struct pollfd )*nConnections );
+        pConnections[ nConnections-1 ] = connection;
+        pFilehandles[ nConnections-1 ].fd       = fd;
+        pFilehandles[ nConnections-1 ].events   = POLLIN;
+        osl_releaseMutex( ICEMutex );
+        if( nConnections == 1 )
+            ICEThread = osl_createThread( ICEConnectionWorker, NULL );
+    }
     else
-        GetSalData()->GetLib()->Remove( IceConnectionNumber( connection ) );
+    {
+        osl_acquireMutex( ICEMutex );
+        for( int i = 0; i < nConnections; i++ )
+        {
+            if( pConnections[i] == connection )
+            {
+                if( i < nConnections-1 )
+                {
+                    rtl_moveMemory( pConnections+i, pConnections+i+1, sizeof( IceConn )*(nConnections-i-1) );
+                    rtl_moveMemory( pFilehandles+i, pFilehandles+i+1, sizeof( struct pollfd )*(nConnections-i-1) );
+                }
+                nConnections--;
+                pConnections = (IceConn*)rtl_reallocateMemory( pConnections, sizeof( IceConn )*nConnections );
+                pFilehandles = (struct pollfd*)rtl_reallocateMemory( pFilehandles, sizeof( struct pollfd )*nConnections );
+                break;
+            }
+        }
+        osl_releaseMutex( ICEMutex );
+        if( nConnections == 0 )
+        {
+            osl_terminateThread( ICEThread );
+            osl_destroyThread( ICEThread );
+            ICEThread = NULL;
+        }
+    }
 #ifdef DEBUG
     fprintf( stderr, "ICE connection on %d %s\n",
              IceConnectionNumber( connection ),
@@ -364,28 +465,3 @@ void ICEConnectionObserver::ICEWatchProc(
 #endif
 #endif
 }
-
-int ICEConnectionObserver::Pending( int fd, void* data )
-{
-    struct pollfd aPoll;
-    aPoll.fd = fd;
-    aPoll.events = POLLIN;
-    return ( poll( &aPoll, 1, 0 ) > 0 && aPoll.revents ) ? 1 : 0;
-}
-
-int ICEConnectionObserver::Queued( int fd, void* data )
-{
-    return Pending( fd, data );
-}
-
-int ICEConnectionObserver::HandleEvents( int fd, void* data )
-{
-#ifdef USE_SM_EXTENSION
-#ifdef DEBUG
-    fprintf( stderr, "IceProcessMessages\n" );
-#endif
-    IceProcessMessages( (IceConn)data, NULL, NULL );
-#endif
-    return 0;
-}
-

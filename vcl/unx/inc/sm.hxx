@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
+ *  last change: $Author: pl $ $Date: 2002-10-11 13:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,9 @@
 #ifndef _VCL_SM_HXX
 #define _VCL_SM_HXX
 
+#include <tools/link.hxx>
 #include <salunx.h>
 #include <X11/SM/SMlib.h>
-
-class ICEConnectionObserver
-{
-    static BOOL bIsWatching;
-
-    static void ICEWatchProc( IceConn connection, IcePointer client_data,
-                              Bool opening, IcePointer* watch_data );
-public:
-
-    // YieldProcs for SalDisplay
-    static int Pending( int fd, void* data );
-    static int Queued( int fd, void* data );
-    static int HandleEvents( int fd, void* data );
-
-    static void activate();
-    static void deactivate();
-};
 
 class SessionManagerClient
 {
@@ -100,6 +84,8 @@ class SessionManagerClient
                                         SmPointer client_data );
 
     static const ByteString& getPreviousSessionID();
+
+    DECL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void* );
 public:
     static void open();
     static void close();

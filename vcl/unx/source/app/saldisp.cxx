@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-08 13:17:32 $
+ *  last change: $Author: pl $ $Date: 2002-10-11 13:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,8 @@ SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalDisplay::~SalDisplay( )
 {
+    SessionManagerClient::close();
+
     SalData *pSalData = GetSalData();
 
     delete m_pWMAdaptor;
