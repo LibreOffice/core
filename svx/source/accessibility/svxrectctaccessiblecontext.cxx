@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-19 14:15:35 $
+ *  last change: $Author: gt $ $Date: 2002-03-19 14:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,11 @@ SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
 {
     DBG_DTOR( SvxRectCtlAccessibleContext, NULL );
 
-    disposing();    // set mpRepr = NULL & release all childs
+    if( IsAlive() )
+    {
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();      // set mpRepr = NULL & release all childs
+    }
 }
 
 //=====  XAccessible  =========================================================
