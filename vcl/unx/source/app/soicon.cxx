@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:42:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SOICON_CXX
 
 #include <dlfcn.h>
 #include <stdio.h>
@@ -121,7 +119,7 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
     int nWidth, nHeight, nColors, nCharsPerPixel;
     XColor *pColors;
     char *pColorAlias;
-    int nElement = 0,nColor = 0,i,nX,nY;
+    int nElement = 0,nColor = 0,nX,nY;
     char pColorString[256];
     BOOL bTransparent = FALSE;
 
@@ -321,9 +319,7 @@ static void NextLine( SvStream& rFile, ByteString& rLine, BOOL bXpm2Mode )
 BOOL ReadXBMFile( Display* pDisplay, const String& rFile, SalBitmap*& rpBmp )
 {
     SvFileStream    aFile( rFile, STREAM_READ );
-    int             nBytes = 0;
     int             nWidth= -1, nHeight=-1;
-    BOOL            bSuccess = FALSE;
 
     rpBmp = NULL;
 
@@ -414,10 +410,9 @@ BOOL ReadXPMFile( Display* pDisplay, const String& rFile,
     SvFileStream    aFile( rFile, STREAM_READ );
     ByteString      aColorName, aColorString, aLine;
     int             nWidth, nHeight, nColors, nCharsPerPixel;
-    int             nElement = 0,nColor = 0, i, nX, nY;
+    int             nColor = 0,  nX, nY;
     UINT8*          pColorTable;
     char*           pColorAlias;
-    BOOL            bTransparent = FALSE;
     BOOL            bXpm2Mode = FALSE;
 
     rpBmp = rpMsk = NULL;
