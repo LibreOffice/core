@@ -52,7 +52,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
-<FormatCode>MMMM</FormatCode>
+<FormatCode>[NatNum2][~jewish]MMMM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
@@ -80,7 +80,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>D MMM, YYYY</FormatCode>
+<FormatCode>[NatNum2][~jewish]MMMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
@@ -88,7 +88,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN, D MMM, YYYY</FormatCode>
+<FormatCode>[NatNum2][~jewish]NN DD MMMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
@@ -100,7 +100,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
-<FormatCode>D. MMMM YYYY</FormatCode>
+<FormatCode>[NatNum2][~jewish]DD MMMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
@@ -117,6 +117,10 @@
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>WW</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="50">
+<FormatCode>[NatNum2][~jewish]YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
