@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:39:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         // OD 22.09.2003 #i18732# - determine layout frame for vertical
         // positions aligned to 'page areas'.
         const SwLayoutFrm& rPageAlignLayFrm =
-                aEnvOfObj.GetVertEnvironmentLayoutFrm( *pOrientFrm, true );
+                aEnvOfObj.GetVertEnvironmentLayoutFrm( *pOrientFrm );
 
         if ( aVert.GetVertOrient() != VERT_NONE )
         {
@@ -639,7 +639,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 // OD 08.09.2003 #110354# - allow negative position, but keep it
                 // inside environment layout frame.
                 const SwLayoutFrm& rVertEnvironLayFrm =
-                    aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm, false );
+                    aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm );
                 // --> OD 2004-07-22 #i31805# - do not check, if bottom of
                 // anchored object would fit into environment layout frame, if
                 // anchored object has to follow the text flow.
@@ -679,7 +679,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         // --> OD 2004-07-06 #i28701# - adjust calculated
                         // relative vertical position to object's environment.
                         const SwFrm& rVertEnvironLayFrm =
-                            aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm, false );
+                            aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm );
                         // --> OD 2004-08-20 - do not check, if bottom of
                         // anchored object would fit into environment layout
                         // frame, if anchored object has to follow the text flow.
@@ -772,7 +772,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                             // OD 06.10.2003 #i18732# - do not follow text flow respectively
                             // align at 'page areas', but stay inside given environment
                             const SwFrm& rVertEnvironLayFrm =
-                                aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm, false );
+                                aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm );
                             nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                                           rVertEnvironLayFrm,
                                                           nRelPosY,
@@ -886,7 +886,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     else
                         nTmpRelPosY = aRelPos.Y() + nDist;
                     const SwLayoutFrm& rVertEnvironLayFrm =
-                        aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm, false );
+                        aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm );
                     nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                                      rVertEnvironLayFrm,
                                                      nTmpRelPosY,
