@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-11 05:31:07 $
+ *  last change: $Author: pb $ $Date: 2001-04-17 09:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,58 @@ static USHORT pExtRanges[] =
     SID_ATTR_CHAR_CASEMAP,
     SID_ATTR_CHAR_ESCAPEMENT,
     SID_ATTR_CHAR_ESCAPEMENT,
+    0
+};
+
+static USHORT pNameRanges[] =
+{
+    SID_ATTR_CHAR_FONT,
+    SID_ATTR_CHAR_WEIGHT,
+    SID_ATTR_CHAR_FONTHEIGHT,
+    SID_ATTR_CHAR_FONTHEIGHT,
+    SID_ATTR_CHAR_COLOR,
+    SID_ATTR_CHAR_COLOR,
+    SID_ATTR_CHAR_LANGUAGE,
+    SID_ATTR_CHAR_LANGUAGE,
+    SID_ATTR_CHAR_CJK_FONT,
+    SID_ATTR_CHAR_CJK_WEIGHT,
+    0
+};
+
+static USHORT pEffectsRanges[] =
+{
+    SID_ATTR_CHAR_SHADOWED,
+    SID_ATTR_CHAR_UNDERLINE,
+    SID_ATTR_CHAR_CASEMAP,
+    SID_ATTR_CHAR_CASEMAP,
+    SID_ATTR_FLASH,
+    SID_ATTR_FLASH,
+    SID_ATTR_CHAR_EMPHASISMARK,
+    SID_ATTR_CHAR_EMPHASISMARK,
+    SID_ATTR_CHAR_RELIEF,
+    SID_ATTR_CHAR_RELIEF,
+    0
+};
+
+static USHORT pPositionRanges[] =
+{
+    SID_ATTR_CHAR_KERNING,
+    SID_ATTR_CHAR_KERNING,
+    SID_ATTR_CHAR_ESCAPEMENT,
+    SID_ATTR_CHAR_ESCAPEMENT,
+    SID_ATTR_CHAR_AUTOKERN,
+    SID_ATTR_CHAR_AUTOKERN,
+    SID_ATTR_CHAR_ROTATED,
+    SID_ATTR_CHAR_SCALEWIDTH,
+    SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+    SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+    0
+};
+
+static USHORT pTwoLinesRanges[] =
+{
+    SID_ATTR_CHAR_TWO_LINES,
+    SID_ATTR_CHAR_TWO_LINES,
     0
 };
 
@@ -3852,7 +3904,7 @@ SfxTabPage* SvxCharNamePage::Create( Window* pParent, const SfxItemSet& rSet )
 
 USHORT* SvxCharNamePage::GetRanges()
 {
-    return NULL;
+    return pNameRanges;
 }
 
 // -----------------------------------------------------------------------
@@ -4206,7 +4258,7 @@ SfxTabPage* SvxCharEffectsPage::Create( Window* pParent, const SfxItemSet& rSet 
 
 USHORT* SvxCharEffectsPage::GetRanges()
 {
-    return NULL;
+    return pEffectsRanges;
 }
 
 // -----------------------------------------------------------------------
@@ -5129,7 +5181,7 @@ SfxTabPage* SvxCharPositionPage::Create( Window* pParent, const SfxItemSet& rSet
 
 USHORT* SvxCharPositionPage::GetRanges()
 {
-    return NULL;
+    return pPositionRanges;
 }
 
 // -----------------------------------------------------------------------
@@ -5795,7 +5847,7 @@ SfxTabPage* SvxCharTwoLinesPage::Create( Window* pParent, const SfxItemSet& rSet
 
 USHORT* SvxCharTwoLinesPage::GetRanges()
 {
-    return NULL;
+    return pTwoLinesRanges;
 }
 
 // -----------------------------------------------------------------------
