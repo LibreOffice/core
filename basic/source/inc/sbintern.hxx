@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2001-11-26 16:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,15 @@
 #define _SB_INTERN_HXX
 
 #include <svtools/sbxfac.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 #include "sb.hxx"
 
+class ::utl::TransliterationWrapper;
 class SbUnoFactory;
 class SbiInstance;
 class SbModule;
-
 
 class SbiFactory : public SbxFactory
 {
@@ -112,6 +115,7 @@ struct SbiGlobals
     String          aErrMsg;        // Puffer fuer GetErrorText()
     SbLanguageMode  eLanguageMode;  // Flag fuer Visual-Basic-Script-Modus
     SbErrorStack*   pErrStack;      // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
+    ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
 
     SbiGlobals();
     ~SbiGlobals();

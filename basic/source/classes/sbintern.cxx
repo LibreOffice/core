@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2001-11-26 16:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
+
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
 #include "token.hxx"                // Tokenizer
@@ -98,6 +99,7 @@ SbiGlobals::SbiGlobals()
     bRunInit = FALSE;
     eLanguageMode = SB_LANG_BASIC;
     pErrStack = NULL;
+    pTransliterationWrapper = NULL;
 }
 
 SbiGlobals::~SbiGlobals()
@@ -105,5 +107,6 @@ SbiGlobals::~SbiGlobals()
     delete pErrStack;
     delete pSbFac;
     delete pUnoFac;
+    delete pTransliterationWrapper;
 }
 
