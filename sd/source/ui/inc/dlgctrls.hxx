@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrls.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 15:46:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,16 @@
 #include "fadedef.h"
 #endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
 
 /*************************************************************************
 |*
 |* FadeEffectLB
 |*
 \************************************************************************/
-class FadeEffectLB : public ListBox
+class SD_DLLPUBLIC FadeEffectLB : public ListBox
 {
 private:
 
