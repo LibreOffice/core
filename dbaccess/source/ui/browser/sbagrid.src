@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:46:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ italian ] = "Formattazione ~colonna..." ;
             Text [ portuguese_brazilian ] = "Formatar coluna..." ;
             Text [ portuguese ] = "~Formatar colunas..." ;
-            Text [ finnish ] = "Sarakkeen muoto..." ;
+            Text [ finnish ] = "Sarake~muoto" ;
             Text [ danish ] = "Kolonneformatering..." ;
             Text [ french ] = "Formatage de colonne..." ;
             Text [ swedish ] = "Kolumn~formatering..." ;
@@ -107,7 +107,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             HelpID = HID_BROWSER_COLUMNWIDTH ;
             Text = "Spalten~breite..." ;
             Text [ ENGLISH ] = "Column ~width..." ;
-            Text [ finnish ] = "Sarakkeen leveyden..." ;
+            Text [ finnish ] = "Sarakkeen ~leveys" ;
             Text [ danish ] = "Kolonnebredde..." ;
             Text [ french ] = "Largeur de colonne..." ;
             Text [ swedish ] = "Kolumn~bredd..." ;
@@ -153,6 +153,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ turkish ] = "Copy column d~escription";
             Text[ arabic ] = "äÓÎ æÕÝ ÇáÚãæÏ";
             Text[ catalan ] = "Copy column d~escription";
+            Text[ finnish ] = "Spaltenb~eschreibung kopieren";
         };
     };
 };
@@ -186,6 +187,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ korean ] = "Ç¥ Æ÷¸ËÆÃ...";
             Text[ turkish ] = "Tablo formatý...";
             Text[ catalan ] = "Formateado de tabla...";
+            Text[ finnish ] = "~Taulukon muotoilu";
         };
         MenuItem
         {
@@ -197,7 +199,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ italian ] = "Altezza riga..." ;
             Text [ portuguese_brazilian ] = "Altura da fileira..." ;
             Text [ portuguese ] = "Altura da linha..." ;
-            Text [ finnish ] = "Rivin korkeus..." ;
+            Text [ finnish ] = "Rivikorkeus" ;
             Text [ danish ] = "Rækkehøjde..." ;
             Text [ french ] = "Hauteur de ligne..." ;
             Text [ swedish ] = "Radhöjd..." ;
@@ -241,6 +243,7 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
     Text[ turkish ] = "Geri al: Veri giriþi";
     Text[ catalan ] = "Deshacer: Entrada de datos";
+    Text[ finnish ] = "Peruuta: tietojen syöttö";
 };
 
 String RID_STR_SAVE_CURRENT_RECORD
@@ -268,6 +271,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ korean ] = "ÇöÀçÀÇ  ·¹ÄÚµå ÀúÀå";
     Text[ turkish ] = "Yürürlükteki verileri kaydet";
     Text[ catalan ] = "guardar registro actual";
+    Text[ finnish ] = "Tallenna nykyinen tietue";
 };
 
 String STR_QRY_TITLE
@@ -296,6 +300,7 @@ String STR_QRY_TITLE
     Text[ turkish ] = "Sorgu #";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Consulta #";
+    Text[ finnish ] = "Kysely ";
 };
 String STR_TBL_TITLE
 {
@@ -323,6 +328,7 @@ String STR_TBL_TITLE
     Text[ turkish ] = "Tablo #";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla #";
+    Text[ finnish ] = "Taulukko ";
 };
 String STR_VIEW_TITLE
 {
@@ -342,10 +348,11 @@ String STR_VIEW_TITLE
     Text[ portuguese_brazilian ] = "View #";
     Text[ japanese ] = "ËÞ­° #";
     Text[ korean ] = "View #";
-    Text[ chinese_simplified ] = "View #";
-    Text[ chinese_traditional ] = "View #";
+    Text[ chinese_simplified ] = "&#35270;&#22270; #";
+    Text[ chinese_traditional ] = "ÀËµø #";
     Text[ turkish ] = "View #";
     Text[ arabic ] = "View #";
     Text[ catalan ] = "View #";
+    Text[ finnish ] = "Ansicht #";
 };
 
