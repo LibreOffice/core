@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-21 21:15:45 $
+ *  last change: $Author: vg $ $Date: 2002-02-22 21:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "~Run macro";
         Text[ portuguese_brazilian ] = "~Run macro";
         Text[ japanese ] = "マクロの実行";
-        Text[ korean ] = "매크로 실행(R)";
+        Text[ korean ] = "매크로 실행(~R)";
         Text[ chinese_simplified ] = "执行宏";
         Text[ chinese_traditional ] = "執行巨集";
         Text[ turkish ] = "~Run macro";
@@ -1616,7 +1616,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "C~onfirm in case of other document sources";
         Text[ portuguese_brazilian ] = "C~onfirm in case of other document sources";
         Text[ japanese ] = "ほかのドキュメントソースでは確認する";
-        Text[ korean ] = "기타 문서 소스의 경우 확인(O)";
+        Text[ korean ] = "다른 문서에서는 확인(~O)";
         Text[ chinese_simplified ] = "如果是其它文档来源就需要确认";
         Text[ chinese_traditional ] = "如果是其它文件來源就需要確認";
         Text[ turkish ] = "C~onfirm in case of other document sources";
@@ -1643,7 +1643,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "Show ~warning before running macro";
         Text[ portuguese_brazilian ] = "Show ~warning before running macro";
         Text[ japanese ] = "実行前に常に警告する";
-        Text[ korean ] = "매크로 실행 전 경고 표시(W)";
+        Text[ korean ] = "실행하기 전에 경고(~W)";
         Text[ chinese_simplified ] = "在执行之前自动警告";
         Text[ chinese_traditional ] = "在執行之前自動警告";
         Text[ turkish ] = "Show ~warning before running macro";
