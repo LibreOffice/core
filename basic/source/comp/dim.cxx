@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: ab $ $Date: 2002-08-12 12:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
     if( !TestSymbol() ) return NULL;
     String aName( aSym );
     SbxDataType eType = eScanType;
-    SbiProcDef* pDef = new SbiProcDef( this, aName );
+    SbiProcDef* pDef = new SbiProcDef( this, aName, true );
     pDef->SetType( eType );
     if( Peek() == _CDECL_ )
     {
@@ -732,6 +732,13 @@ void SbiParser::DefProc( BOOL bStatic )
         {
             // Als Variable deklariert
             Error( SbERR_BAD_DECLARATION, pDef->GetName() );
+            delete pDef;
+            pProc = NULL;
+        }
+        // #100027: Multiple declaration -> Error
+        else if( pProc->IsUsedForProcDecl() )
+        {
+            Error( SbERR_PROC_DEFINED, pDef->GetName() );
             delete pDef;
             pProc = NULL;
         }
