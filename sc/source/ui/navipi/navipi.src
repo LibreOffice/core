@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:10:15 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ chinese_simplified ] = " ßªÓ";
         Text[ russian ] = "ÌÂ‡ÍÚË‚Ì˚È";
         Text[ polish ] = "nieaktywny";
-        Text[ japanese ] = "±∏√®ÃﬁÇ≈Ç»Ç¢";
+        Text[ japanese ] = "îÒ±∏√®Ãﬁ";
         Text[ chinese_traditional ] = "•¢¨°";
         Text[ arabic ] = "€Ì— ‰‘ÿ";
         Text[ dutch ] = "inactief";
@@ -724,7 +724,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ dutch ] = "Commentaar";
         Text[ chinese_simplified ] = "◊¢Ω‚";
         Text[ greek ] = "”˜¸ÎÈÔ";
-        Text[ korean ] = "¡÷";
+        Text[ korean ] = "¡÷ºÆ";
         Text[ turkish ] = "AÁ˝klama";
         Text[ language_user1 ] = " ";
     };
