@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hr $ $Date: 2003-11-07 14:54:20 $
+#   last change: $Author: rt $ $Date: 2003-12-01 11:45:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -261,18 +261,24 @@ APP5LINKRES=$(MISC)$/ooffice.res
 .ENDIF # WNT
 
 
-
-all: $(BIN)$/so ALLTAR
-
-.IF "$(GUI)" == "WNT"
-
-ALLTAR: $(BIN)$/$(TARGET).exe.manifest
-
-.ENDIF # WNT
-
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+$(APP1TARGETN) : $(BIN)$/so
+    
+.IF "$(GUI)" == "WNT"
+ALLTAR: $(BIN)$/$(TARGET).exe.manifest
+.ENDIF # WNT
+
+$(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
+    +$(COPY) $< $@
+    
+$(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
+    +$(COPY) $< $@
+
+ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST) 
+    
 
 .IF "$(GUI)" == "WNT"
 
