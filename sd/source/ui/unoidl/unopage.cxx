@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 07:30:11 $
+ *  last change: $Author: cl $ $Date: 2001-06-22 11:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,7 +1894,7 @@ SdMasterPage::SdMasterPage( SdXImpressDocument* mpModel, SdPage* pPage ) throw()
             }
         }
 
-        mbHasBackgroundObject = sal_True;
+        mbHasBackgroundObject = NULL != mpBackgroundObj;
     }
 }
 
@@ -2025,7 +2025,9 @@ sal_Int32 SAL_CALL SdMasterPage::getCount()
     throw(uno::RuntimeException)
 {
     sal_Int32 nCount = SdGenericDrawPage::getCount();
-    if( mbHasBackgroundObject )
+    DBG_ASSERT( !mbHasBackgroundObject || (nCount > 0), "possible wrong shape count!" );
+
+    if( mbHasBackgroundObject && ( nCount > 0 ) )
         nCount--;
 
     return nCount;
