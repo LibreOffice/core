@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
+#   last change: $Author: abi $ $Date: 2001-05-22 07:29:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,23 +60,14 @@
 #
 #*************************************************************************
 
-# @@@ UCP Version - Increase, if your UCP libraray becomes incompatible.
-UCP_VERSION=1
-
-# @@@ Name for your UCP. Will become part of the library name (See below).
-UCP_NAME=chelp
-
-# @@@ Relative path to project root.
 PRJ=..$/..$/..
-
-# @@@ Name of the project your UCP code recides it.
 PRJNAME=xmlhelp
-
-TARGET=ucp$(UCP_NAME)
+TARGET=chelp
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
+
 
 # --- Settings ---------------------------------------------------------
 
@@ -88,7 +79,6 @@ CFLAGS+=/GR
 
 # --- General -----------------------------------------------------
 
-# @@@ Adjust template file names. Add own files here.
 SLOFILES=\
     $(SLO)$/services.obj    	   \
     $(SLO)$/provider.obj    	   \
@@ -100,43 +90,6 @@ SLOFILES=\
     $(SLO)$/contentcaps.obj        \
     $(SLO)$/urlparameter.obj       \
     $(SLO)$/databases.obj
-
-# You need these only if you implement a folder content,
-# which supports the command "open" returning a result set.
-#	$(SLO)$/myucp_resultset.obj
-#	$(SLO)$/myucp_datasupplier.obj
-
-LIB1TARGET=$(SLB)$/_$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
-
-# --- Shared-Library ---------------------------------------------------
-
-SHL1TARGET=$(TARGET)$(UCP_VERSION)
-SHL1IMPLIB=i$(TARGET)
-SHL1VERSIONMAP=exports.map
-
-# @@@ Add additional libs here.
-SHL1STDLIBS=                 \
-    $(CPPUHELPERLIB)         \
-    $(CPPULIB)               \
-    $(SALLIB)                \
-    $(VOSLIB)                \
-    $(UCBHELPERLIB)          \
-    libdb32.lib              \
-    $(SLB)$/jaqe.lib         \
-    $(SLB)$/jautil.lib       \
-    $(SLB)$/jadb.lib
-
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=$(LIB1TARGET)
-
-# --- Def-File ---------------------------------------------------------
-
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-
-# @@@ A description string for you UCP.
-DEF1DES=UCB Help Content Provider
 
 # --- Targets ----------------------------------------------------------
 

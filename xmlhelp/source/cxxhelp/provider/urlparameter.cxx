@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 07:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,20 +445,6 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
         processor->execute( command,
                             CommandId,
                              Environment );
-//          OpenCommandArgument2 aOpenCommand;
-
-//          if ( !( command.Argument >>= aOpenCommand ) )
-//          {
-//              VOS_ENSURE( sal_False,
-//                          "Content::execute - invalid parameter!" );
-//          }
-
-//          Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
-//          Reference< XInputStream> ref = xActiveDataSink->getInputStream();
-//          Sequence< sal_Int8 > aD;
-//          sal_Int32 du = ref->readBytes( aD,
-//                                         1000000 );
-//          rtl::OUString bla( reinterpret_cast< const char* >(aD.getConstArray()),du,RTL_TEXTENCODING_UTF8 );
     }
 }
 
