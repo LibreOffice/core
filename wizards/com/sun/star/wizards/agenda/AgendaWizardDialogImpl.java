@@ -2,8 +2,8 @@
 *
 *  $RCSfile: AgendaWizardDialogImpl.java,v $
 *
-*  $Revision: 1.3 $
-*  last change: $Author: kz $  $Date: 2004-11-27 09:04:30 $
+*  $Revision: 1.4 $
+*  last change: $Author: vg $  $Date: 2004-12-23 09:38:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -170,7 +170,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             drawNaviBar();
 
             // create the peer
-            XWindow xw = agendaTemplate.xFrame.getComponentWindow();
+            XWindow xw = agendaTemplate.xFrame.getContainerWindow();
             XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xw);
             this.createWindowPeer( xWindowPeer );
 
@@ -262,7 +262,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     /** used in developement to start the wizard */
     public static void main(String args[])
     {
-        String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost
+        String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost
                                                                                                                                // ;Lo-1.Germany.sun.com;
                                                                                                                                // 10.16.65.155
         try {
