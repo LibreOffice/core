@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-03-20 14:36:00 $
+ *  last change: $Author: th $ $Date: 2001-05-09 12:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,96 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
             ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
                      ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )))) == 0) )
     {
+        pStr1++;
+        pStr2++;
+    }
+
+    if ( nRet )
+        return nRet;
+    return nStr1Len - nStr2Len;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+                                                                    sal_Int32 nStr1Len,
+                                                                    const IMPL_RTL_STRCODE* pStr2,
+                                                                    sal_Int32 nStr2Len,
+                                                                    sal_Int32 nShortenedLength )
+{
+    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
+    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
+    sal_Int32 nRet = 0;
+    while( nShortenedLength &&
+           (pStr1 < pStr1End) &&
+           (pStr2 < pStr2End) &&
+            ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
+                     ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )))) == 0) )
+    {
+        nShortenedLength--;
+        pStr1++;
+        pStr2++;
+    }
+
+    if ( nRet || (nShortenedLength == 0) )
+        return nRet;
+    return nStr1Len - nStr2Len;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_STRCODE* pStr1,
+                                                               const IMPL_RTL_STRCODE* pStr2 )
+{
+    sal_Int32   nRet;
+    sal_Int32   c1;
+    sal_Int32   c2;
+    do
+    {
+        /* If character between 'A' and 'Z', than convert it to lowercase */
+        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
+        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = c1-c2;
+        if ( nRet != 0 )
+            break;
+
+        pStr1++;
+        pStr2++;
+    }
+    while ( c2 );
+
+    return nRet;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+                                                                          sal_Int32 nStr1Len,
+                                                                          const IMPL_RTL_STRCODE* pStr2,
+                                                                          sal_Int32 nStr2Len )
+{
+    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
+    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
+    sal_Int32   nRet = 0;
+    sal_Int32   c1;
+    sal_Int32   c2;
+    while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
+    {
+        /* If character between 'A' and 'Z', than convert it to lowercase */
+        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
+        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = c1-c2;
+        if ( nRet != 0 )
+            break;
+
         pStr1++;
         pStr2++;
     }
@@ -443,11 +533,121 @@ void SAL_CALL IMPL_RTL_STRNAME( replaceChar_WithLength )( IMPL_RTL_STRCODE* pStr
 
 /* ----------------------------------------------------------------------- */
 
+void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase )( IMPL_RTL_STRCODE* pStr )
+{
+    while ( *pStr )
+    {
+        /* Between A-Z (65-90), than to lowercase (+32) */
+        if ( (*pStr >= 65) && (*pStr <= 90) )
+            *pStr += 32;
+
+        pStr++;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+
+void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase_WithLength )( IMPL_RTL_STRCODE* pStr,
+                                                               sal_Int32 nLen )
+{
+    while ( nLen > 0 )
+    {
+        /* Between A-Z (65-90), than to lowercase (+32) */
+        if ( (*pStr >= 65) && (*pStr <= 90) )
+            *pStr += 32;
+
+        pStr++;
+        nLen--;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+
+void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase )( IMPL_RTL_STRCODE* pStr )
+{
+    while ( *pStr )
+    {
+        /* Between a-z (97-122), than to uppercase (-32) */
+        if ( (*pStr >= 97) && (*pStr <= 122) )
+            *pStr -= 32;
+
+        pStr++;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+
+void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase_WithLength )( IMPL_RTL_STRCODE* pStr,
+                                                               sal_Int32 nLen )
+{
+    while ( nLen > 0 )
+    {
+        /* Between a-z (97-122), than to uppercase (-32) */
+        if ( (*pStr >= 97) && (*pStr <= 122) )
+            *pStr -= 32;
+
+        pStr++;
+        nLen--;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim )( IMPL_RTL_STRCODE* pStr )
+{
+    return IMPL_RTL_STRNAME( trim_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ) );
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
+{
+    sal_Int32 nPreSpaces    = 0;
+    sal_Int32 nPostSpaces   = 0;
+    sal_Int32 nIndex        = nLen-1;
+
+    while ( (nPreSpaces < nLen) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nPreSpaces)) ) )
+        nPreSpaces++;
+
+    while ( (nIndex > nPreSpaces) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nIndex)) ) )
+    {
+        nPostSpaces++;
+        nIndex--;
+    }
+
+    if ( nPostSpaces )
+    {
+        nLen -= nPostSpaces;
+        *(pStr+nLen) = 0;
+    }
+
+    if ( nPreSpaces )
+    {
+        IMPL_RTL_STRCODE* pNewStr = pStr+nPreSpaces;
+
+        nLen -= nPreSpaces;
+        nIndex = nLen;
+
+        while ( nIndex )
+        {
+            *pStr = *pNewStr;
+            pStr++;
+            pNewStr++;
+            nIndex--;
+        }
+        *pStr = 0;
+    }
+
+    return nLen;
+}
+
+/* ----------------------------------------------------------------------- */
+
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfBoolean )( IMPL_RTL_STRCODE* pStr, sal_Bool b )
 {
     if ( b )
     {
-        *pStr = 'T';
+        *pStr = 't';
         pStr++;
         *pStr = 'r';
         pStr++;
@@ -460,7 +660,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfBoolean )( IMPL_RTL_STRCODE* pStr, s
     }
     else
     {
-        *pStr = 'F';
+        *pStr = 'f';
         pStr++;
         *pStr = 'a';
         pStr++;
@@ -1222,351 +1422,6 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
     }
 }
 
-/* ======================================================================= */
-/* ======================================================================= */
-
-#if 0
-
-/* This file is included from string.c and ustring.c and shares the
-   template code between both implementations */
-
-/* ======================================================================= */
-/* C-String functions which could be used without the String-Class         */
-/* ======================================================================= */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( getLengthMax )( const IMPL_RTL_STRCODE* pStr,
-                                                     sal_Int32 nMaxCount )
-{
-    sal_Int32 nMaxLen = 0;
-    while ( (nMaxLen < nMaxCount) && *pStr )
-    {
-        pStr++;
-        nMaxLen++;
-    }
-    return nMaxLen;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareMax )( const IMPL_RTL_STRCODE* pStr1,
-                                                   const IMPL_RTL_STRCODE* pStr2,
-                                                   sal_Int32 nCount )
-{
-    sal_Int32 nRet = 0;
-    while ( nCount &&
-            ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
-                     ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )))) == 0) &&
-            *pStr2 )
-    {
-        pStr1++;
-        pStr2++;
-        nCount--;
-    }
-
-    return nRet;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_STRCODE* pStr1,
-                                                               const IMPL_RTL_STRCODE* pStr2 )
-{
-    sal_Int32   nRet;
-    sal_Int32   c1;
-    sal_Int32   c2;
-    do
-    {
-        /* If character between 'A' and 'Z', than convert it to lowercase */
-        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
-        if ( nRet != 0 )
-            break;
-
-        pStr1++;
-        pStr2++;
-    }
-    while ( c2 );
-
-    return nRet;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCaseMax )( const IMPL_RTL_STRCODE* pStr1,
-                                                                  const IMPL_RTL_STRCODE* pStr2,
-                                                                  sal_Int32 nCount )
-{
-    sal_Int32   nRet = 0;
-    sal_Int32   c1;
-    sal_Int32   c2;
-    do
-    {
-        if ( !nCount )
-            break;
-
-        /* If character between 'A' and 'Z', than convert it to lowercase */
-        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
-        if ( nRet != 0 )
-            break;
-
-        pStr1++;
-        pStr2++;
-        nCount--;
-    }
-    while ( c2 );
-
-    return nRet;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const IMPL_RTL_STRCODE* pStr1,
-                                                                          sal_Int32 nStr1Len,
-                                                                          const IMPL_RTL_STRCODE* pStr2,
-                                                                          sal_Int32 nStr2Len )
-{
-    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
-    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32   nRet = 0;
-    sal_Int32   c1;
-    sal_Int32   c2;
-    while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
-    {
-        /* If character between 'A' and 'Z', than convert it to lowercase */
-        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
-        if ( nRet != 0 )
-            break;
-
-        pStr1++;
-        pStr2++;
-    }
-
-    if ( nRet )
-        return nRet;
-    return nStr1Len - nStr2Len;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Bool SAL_CALL IMPL_RTL_STRNAME( equals )( const IMPL_RTL_STRCODE* pStr1,
-                                              const IMPL_RTL_STRCODE* pStr2 )
-{
-    return IMPL_RTL_STRNAME( compare )( pStr1, pStr2 ) == 0;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Bool SAL_CALL IMPL_RTL_STRNAME( equals_WithLength )( const IMPL_RTL_STRCODE* pStr1,
-                                                         sal_Int32 nStr1Len,
-                                                         const IMPL_RTL_STRCODE* pStr2,
-                                                         sal_Int32 nStr2Len )
-{
-    if ( nStr1Len != nStr2Len )
-        return sal_False;
-
-    return IMPL_RTL_STRNAME( compare_WithLength )( pStr1, nStr1Len, pStr2, nStr2Len ) == 0;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Bool SAL_CALL IMPL_RTL_STRNAME( equalsIgnoreAsciiCase )( const IMPL_RTL_STRCODE* pStr1,
-                                                             const IMPL_RTL_STRCODE* pStr2 )
-{
-    return IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( pStr1, pStr2 ) == 0;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Bool SAL_CALL IMPL_RTL_STRNAME( equalsIgnoreAsciiCase_WithLength )( const IMPL_RTL_STRCODE* pStr1,
-                                                                        sal_Int32 nStr1Len,
-                                                                        const IMPL_RTL_STRCODE* pStr2,
-                                                                        sal_Int32 nStr2Len )
-{
-    if ( nStr1Len != nStr2Len )
-        return sal_False;
-
-    return IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( pStr1, nStr1Len, pStr2, nStr2Len ) == 0;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfCharMax )( const IMPL_RTL_STRCODE* pStr,
-                                                       IMPL_RTL_STRCODE c,
-                                                       sal_Int32 nCount )
-{
-    const IMPL_RTL_STRCODE* pTempStr = pStr;
-    while ( nCount && *pTempStr )
-    {
-        if ( *pTempStr == c )
-            return pTempStr-pStr;
-
-        pTempStr++;
-        nCount--;
-    }
-
-    return -1;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfCharMax )( const IMPL_RTL_STRCODE* pStr,
-                                                           IMPL_RTL_STRCODE c,
-                                                           sal_Int32 nCount )
-{
-    return IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( pStr, IMPL_RTL_STRNAME( getLengthMax )( pStr, nCount ), c );
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStrMax )( const IMPL_RTL_STRCODE* pStr,
-                                                      const IMPL_RTL_STRCODE* pSubStr,
-                                                      sal_Int32 nMaxLen )
-{
-    return IMPL_RTL_STRNAME( indexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLengthMax )( pStr, nMaxLen ),
-                                                      pSubStr, IMPL_RTL_STRNAME( getLengthMax )( pSubStr, nMaxLen ) );
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStrMax )( const IMPL_RTL_STRCODE* pStr,
-                                                          const IMPL_RTL_STRCODE* pSubStr,
-                                                          sal_Int32 nMaxLen )
-{
-    return IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLengthMax )( pStr, nMaxLen ),
-                                                          pSubStr, IMPL_RTL_STRNAME( getLengthMax )( pSubStr, nMaxLen ) );
-}
-
-/* ----------------------------------------------------------------------- */
-
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase )( IMPL_RTL_STRCODE* pStr )
-{
-    while ( *pStr )
-    {
-        /* Between A-Z (65-90), than to lowercase (+32) */
-        if ( (*pStr >= 65) && (*pStr <= 90) )
-            *pStr += 32;
-
-        pStr++;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase_WithLength )( IMPL_RTL_STRCODE* pStr,
-                                                               sal_Int32 nLen )
-{
-    while ( nLen > 0 )
-    {
-        /* Between A-Z (65-90), than to lowercase (+32) */
-        if ( (*pStr >= 65) && (*pStr <= 90) )
-            *pStr += 32;
-
-        pStr++;
-        nLen--;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase )( IMPL_RTL_STRCODE* pStr )
-{
-    while ( *pStr )
-    {
-        /* Between a-z (97-122), than to uppercase (-32) */
-        if ( (*pStr >= 97) && (*pStr <= 122) )
-            *pStr -= 32;
-
-        pStr++;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase_WithLength )( IMPL_RTL_STRCODE* pStr,
-                                                               sal_Int32 nLen )
-{
-    while ( nLen > 0 )
-    {
-        /* Between a-z (97-122), than to uppercase (-32) */
-        if ( (*pStr >= 97) && (*pStr <= 122) )
-            *pStr -= 32;
-
-        pStr++;
-        nLen--;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim )( IMPL_RTL_STRCODE* pStr )
-{
-    return IMPL_RTL_STRNAME( trim_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ) );
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
-{
-    sal_Int32 nPreSpaces    = 0;
-    sal_Int32 nPostSpaces   = 0;
-    sal_Int32 nIndex        = nLen-1;
-
-    while ( (nPreSpaces < nLen) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nPreSpaces)) ) )
-        nPreSpaces++;
-
-    while ( (nIndex > nPreSpaces) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nIndex)) ) )
-    {
-        nPostSpaces++;
-        nIndex--;
-    }
-
-    if ( nPostSpaces )
-    {
-        nLen -= nPostSpaces;
-        *(pStr+nLen) = 0;
-    }
-
-    if ( nPreSpaces )
-    {
-        IMPL_RTL_STRCODE* pNewStr = pStr+nPreSpaces;
-
-        nLen -= nPreSpaces;
-        nIndex = nLen;
-
-        while ( nIndex )
-        {
-            *pStr = *pNewStr;
-            pStr++;
-            pNewStr++;
-            nIndex--;
-        }
-        *pStr = 0;
-    }
-
-    return nLen;
-}
-
-/* ======================================================================= */
-/* String-Class functions                                                  */
-/* ======================================================================= */
-
 /* ----------------------------------------------------------------------- */
 
 void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
@@ -1787,37 +1642,22 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newTrim )( IMPL_RTL_STRINGDATA** ppThis,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getTokenCount )( const IMPL_RTL_STRINGDATA* pThis,
-                                                         IMPL_RTL_STRCODE cTok )
-{
-    sal_Int32               nTokCount   = 1;
-    sal_Int32               nLen        = pThis->length;
-    const IMPL_RTL_STRCODE* pCharStr    = pThis->buffer;
-    while ( nLen > 0 )
-    {
-        if ( *pCharStr == cTok )
-            nTokCount++;
-        pCharStr++;
-        nLen--;
-    }
-
-    return nTokCount;
-}
-
-/* ----------------------------------------------------------------------- */
-
-void SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis,
-                                               IMPL_RTL_STRINGDATA* pStr,
-                                               sal_Int32 nToken,
-                                               IMPL_RTL_STRCODE cTok )
+sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis,
+                                                    IMPL_RTL_STRINGDATA* pStr,
+                                                    sal_Int32 nToken,
+                                                    IMPL_RTL_STRCODE cTok,
+                                                    sal_Int32 nIndex )
 {
     IMPL_RTL_STRINGDATA*    pOrg            = *ppThis;
     const IMPL_RTL_STRCODE* pCharStr        = pStr->buffer;
-    const IMPL_RTL_STRCODE* pCharStrStart   = pCharStr;
+    const IMPL_RTL_STRCODE* pCharStrStart;
+    const IMPL_RTL_STRCODE* pOrgCharStr;
+    sal_Int32               nLen            = pStr->length-nIndex;
     sal_Int32               nTokCount       = 0;
-    sal_Int32               nFirstChar      = 0;
-    sal_Int32               nLen            = pStr->length;
 
+    pCharStr += nIndex;
+    pOrgCharStr = pCharStr;
+    pCharStrStart = pCharStr;
     while ( nLen > 0 )
     {
         if ( *pCharStr == cTok )
@@ -1838,9 +1678,16 @@ void SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis,
     }
 
     if ( (nToken < 0) || (nTokCount < nToken) || (pCharStr == pCharStrStart) )
+    {
         IMPL_RTL_STRINGNAME( new )( ppThis );
+        return -1;
+    }
     else
+    {
         IMPL_RTL_STRINGNAME( newFromStr_WithLength )( ppThis, pCharStrStart, pCharStr-pCharStrStart );
+        if ( nLen )
+            return nIndex+(pCharStr-pOrgCharStr)+1;
+        else
+            return -1;
+    }
 }
-
-#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-13 22:20:31 $
+ *  last change: $Author: th $ $Date: 2001-05-09 12:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,41 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+
+/* ----------- */
+/* - Scripts - */
+/* ----------- */
+
+typedef sal_uInt16 rtl_Script;
+#define SCRIPT_DONTKNOW             ((rtl_Script)0)
+#define SCRIPT_UNICODE              ((rtl_Script)1)
+#define SCRIPT_SYMBOL               ((rtl_Script)2)
+#define SCRIPT_LATIN                ((rtl_Script)3)
+#define SCRIPT_EASTEUROPE           ((rtl_Script)4)
+#define SCRIPT_CYRILLIC             ((rtl_Script)5)
+#define SCRIPT_BALTIC               ((rtl_Script)6)
+#define SCRIPT_TURKISH              ((rtl_Script)7)
+#define SCRIPT_GREEK                ((rtl_Script)8)
+#define SCRIPT_JAPANESE             ((rtl_Script)9)
+#define SCRIPT_CHINESE_SIMPLIFIED   ((rtl_Script)10)
+#define SCRIPT_CHINESE_TRADITIONAL  ((rtl_Script)11)
+#define SCRIPT_KOREAN               ((rtl_Script)12)
+#define SCRIPT_ARABIC               ((rtl_Script)13)
+#define SCRIPT_HEBREW               ((rtl_Script)14)
+#define SCRIPT_ARMENIAN             ((rtl_Script)15)
+#define SCRIPT_DEVANAGARI           ((rtl_Script)16)
+#define SCRIPT_BENGALI              ((rtl_Script)17)
+#define SCRIPT_GURMUKHI             ((rtl_Script)18)
+#define SCRIPT_GUJARATI             ((rtl_Script)19)
+#define SCRIPT_ORIYA                ((rtl_Script)20)
+#define SCRIPT_TAMIL                ((rtl_Script)21)
+#define SCRIPT_TELUGU               ((rtl_Script)22)
+#define SCRIPT_KANNADA              ((rtl_Script)23)
+#define SCRIPT_MALAYALAM            ((rtl_Script)24)
+#define SCRIPT_THAI                 ((rtl_Script)25)
+#define SCRIPT_VIETNAMESE           ((rtl_Script)26)
+#define SCRIPT_LAO                  ((rtl_Script)27)
+#define SCRIPT_GEORGIEN             ((rtl_Script)28)
 
 /* -------- */
 /* - Help - */

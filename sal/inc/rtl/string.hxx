@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: th $ $Date: 2001-05-09 12:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,411 +257,405 @@ public:
     */
     const sal_Char * getStr() const SAL_THROW(()) { return pData->buffer; }
 
-
-
-
-
-
     /**
-        Allocates a new string that contains the sequence of characters
-        currently contained in the string buffer argument.
+      Compares two strings.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      This function can't be used for language specific sorting.
 
-        @param  buffer   a <code>StringBuffer</code>.
-     */
-    //public OString (StringBuffer buffer) {
-
-    /**
-        Compares this string to the specified object.
-        The result is <code>true</code> if and only if the argument is not
-        <code>null</code> and is a <code>OString</code> object that represents
-        the same sequence of characters as this object.
-
-        @param  anObject   the object to compare this <code>OString</code>
-                           against.
-        @return <code>true</code> if the <code>OString </code>are equal;
-                <code>false</code> otherwise.
-     */
-    sal_Bool equals( const OString & rObj ) const
-    {
-        return getLength() == rObj.getLength() && compareTo( rObj ) == 0;
-    }
-
-    /**
-        Compares this OString to another object.
-        The result is <code>true</code> if and only if the argument is not
-        <code>null</code> and is a <code>OString</code> object that represents
-        the same sequence of characters as this object, where case is ignored.
-        <p>
-        Two characters are considered the same, ignoring case, if at
-        least one of the following is true:
-        <ul>
-        <li>The two characters are the same (as compared by the <code>==</code>
-           operator).
-        <li>Applying the method <code>Character.toUppercase</code> to each
-           character produces the same result.
-        <li>Applying the method <code>Character.toLowercase</code> to each
-           character produces the same result.
-        </ul>
-        <p>
-        Two sequences of characters are the same, ignoring case, if the
-        sequences have the same length and corresponding characters are
-        the same, ignoring case.
-
-        @param  anotherString   the <code>OString</code> to compare this
-                                <code>OString</code> against.
-        @return <code>true</code> if the <code>OString</code>s are equal,
-                ignoring case; <code>false</code> otherwise.
-     */
-    sal_Bool equalsIgnoreCase( const OString & rObj ) const
-    {
-        return rtl_str_equalsIgnoreCase_WithLength( pData->buffer, pData->length,
-                                rObj.pData->buffer, rObj.pData->length );
-    }
-
-    /**
-        Compares two strings lexicographically.
-        The comparison is based on the Unicode value of each character in
-        the strings.
-
-        @param  anotherString   the <code>OString</code> to be compared.
-        @return the value <code>0</code> if the argument string is equal to
-                this string; a value less than <code>0</code> if this string
-                is lexicographically less than the string argument; and a
-                value greater than <code>0</code> if this string is
-                lexicographically greater than the string argument.
-     */
-    sal_Int32 compareTo( const OString & rObj ) const
+      @param    str         the object to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 compareTo( const OString & str ) const SAL_THROW(())
     {
         return rtl_str_compare_WithLength( pData->buffer, pData->length,
-                                rObj.pData->buffer, rObj.pData->length );
+                                           str.pData->buffer, str.pData->length );
     }
 
     /**
-        Compares two strings lexicographically using only the number of
-        characters given in the length parameter.
-        The comparison is based on the Unicode value of each character in
-        the strings.
+      Compares two strings with an maximum count of characters.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      This function can't be used for language specific sorting.
 
-        @param  anotherString   the <code>OString</code> to be compared.
-        @param  length    the number of characters that are compared.
-        @return 'This string' and 'argument string' here means the substring
-                defined by the length parameter.
-                the value <code>0</code> if the argument string is equal to
-                this string; a value less than <code>0</code> if this string
-                is lexicographically less than the string argument; and a
-                value greater than <code>0</code> if this string is
-                lexicographically greater than the string argument.
-     */
-    sal_Int32 compareTo( const OString & rObj, sal_Int32 length ) const
+      @param    str         the object to be compared.
+      @param    length      the maximum numbers to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 compareTo( const OString & rObj, sal_Int32 length ) const SAL_THROW(())
     {
-        return rtl_str_compare_WithLength( pData->buffer, length,
-                                rObj.pData->buffer, rObj.pData->length );
+        return rtl_str_shortenedCompare_WithLength( pData->buffer, length,
+                                                    rObj.pData->buffer, rObj.pData->length, length );
     }
 
-    friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 )
+    /**
+      Perform a comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string.
+      This function can't be used for language specific comparison.
+
+      @param    str         the object to be compared.
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equals( const OString & str ) const SAL_THROW(())
+    {
+        if ( pData->length != str.pData->length )
+            return sal_False;
+        if ( pData == str.pData )
+            return sal_True;
+        return rtl_str_compare_WithLength( pData->buffer, pData->length,
+                                           str.pData->buffer, str.pData->length ) == 0;
+    }
+
+    /**
+      Perform a ASCII lowercase comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string,
+      ignoring the case.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object to be compared.
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsIgnoreAsciiCase( const OString & str ) const SAL_THROW(())
+    {
+        if ( pData->length != str.pData->length )
+            return sal_False;
+        if ( pData == str.pData )
+            return sal_True;
+        return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
+                                                          str.pData->buffer, str.pData->length ) == 0;
+    }
+
+    friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.getLength() == rStr2.getLength() && rStr1.compareTo( rStr2 ) == 0; }
-    friend sal_Bool     operator == ( const OString& rStr1, const sal_Char * pStr2 )
+    friend sal_Bool     operator == ( const OString& rStr1, const sal_Char * pStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( pStr2 ) == 0; }
-    friend sal_Bool     operator == ( const sal_Char * pStr1,   const OString& rStr2 )
+    friend sal_Bool     operator == ( const sal_Char * pStr1,   const OString& rStr2 ) SAL_THROW(())
                         { return OString( pStr1 ).compareTo( rStr2 ) == 0; }
 
-    friend sal_Bool     operator != ( const OString& rStr1,     const OString& rStr2 )
+    friend sal_Bool     operator != ( const OString& rStr1,     const OString& rStr2 ) SAL_THROW(())
                         { return !(operator == ( rStr1, rStr2 )); }
-    friend sal_Bool     operator != ( const OString& rStr1, const sal_Char * pStr2 )
+    friend sal_Bool     operator != ( const OString& rStr1, const sal_Char * pStr2 ) SAL_THROW(())
                         { return !(operator == ( rStr1, pStr2 )); }
-    friend sal_Bool     operator != ( const sal_Char * pStr1,   const OString& rStr2 )
+    friend sal_Bool     operator != ( const sal_Char * pStr1,   const OString& rStr2 ) SAL_THROW(())
                         { return !(operator == ( pStr1, rStr2 )); }
 
-    friend sal_Bool     operator <  ( const OString& rStr1,    const OString& rStr2 )
+    friend sal_Bool     operator <  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) < 0; }
-    friend sal_Bool     operator >  ( const OString& rStr1,    const OString& rStr2 )
+    friend sal_Bool     operator >  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) > 0; }
-    friend sal_Bool     operator <= ( const OString& rStr1,    const OString& rStr2 )
+    friend sal_Bool     operator <= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) <= 0; }
-    friend sal_Bool     operator >= ( const OString& rStr1,    const OString& rStr2 )
+    friend sal_Bool     operator >= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) >= 0; }
 
     /**
-        Returns a hashcode for this string.
+      Returns a hashcode for this string.
 
-        @return a hash code value for this object.
-     */
-    sal_Int32 hashCode() const
+      @return   a hash code value for this object.
+    */
+    sal_Int32 hashCode() const SAL_THROW(())
     {
         return rtl_str_hashCode_WithLength( pData->buffer, pData->length );
     }
 
     /**
-        Returns the index within this string of the first occurrence of the
-        specified character, starting the search at the specified index.
+      Returns the index within this string of the first occurrence of the
+      specified character, starting the search at the specified index.
 
-        @param  ch          a character.
-        @param  fromIndex   the index to start the search from.
-        @return the index of the first occurrence of the character in the
-                character sequence represented by this object that is greater
-                than or equal to <code>fromIndex</code>, or <code>-1</code>
-                if the character does not occur.
-     */
-    sal_Int32 indexOf( sal_Char ch, sal_Int32 fromIndex = 0 ) const
+      @param    ch          character to be located.
+      @param    fromIndex   the index to start the search from.
+                            The index must be greater or equal than 0
+                            and less or equal as the string length.
+      @return   the index of the first occurrence of the character in the
+                character sequence represented by this string that is
+                greater than or equal to fromIndex, or
+                <code>-1</code> if the character does not occur.
+    */
+    sal_Int32 indexOf( sal_Char ch, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
-        sal_Int32 ret = rtl_str_indexOfChar_WithLength( pData->buffer + fromIndex, pData->length - fromIndex, ch );
-        return (ret < 0 ? ret : ret + fromIndex);
+        sal_Int32 ret = rtl_str_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
+        return (ret < 0 ? ret : ret+fromIndex);
     }
 
     /**
-        Returns the index within this string of the first occurence of
-        the specified substring.
-        The returned index indicates the start of the substring, and it
-        must be equal to or less than <code>fromIndex</code>.
+      Returns the index within this string of the last occurrence of the
+      specified character, searching backward starting at the end.
 
-        @param  str         the substring to search for.
-        @param  fromIndex   the index to start the search from.
-        @return If the string argument occurs one or more times as a substring
-                within this object at a starting index no greater than
-                <code>fromIndex</code>, then the index of the first character of
-                the last such substring is returned. If it does not occur as a
-                substring starting at <code>fromIndex</code> or earlier,
-                <code>-1</code> is returned.
-     */
-    sal_Int32 indexOf( const OString & str, int fromIndex = 0) const
-    {
-        sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer + fromIndex, pData->length - fromIndex,
-                                                       str.pData->buffer, str.pData->length );
-        return (ret < 0 ? ret : ret + fromIndex);
-    }
-
-    /**
-        Returns the index within this string of the last occurrence of the
-        specified character, searching backward starting at the end.
-
-        @param  ch          a character.
-        @param  fromIndex   the index to start the search from.
-        @return the index of the last occurrence of the character in the
-                character sequence represented by this object that is less
-                than or equal to <code>length -1</code>, or <code>-1</code>
-                if the character does not occur before that point.
-     */
-    sal_Int32 lastIndexOf( sal_Char ch, int fromIndex ) const
-    {
-        return rtl_str_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
-    }
-
-    /**
-        Returns the index within this string of the last occurrence of the
-        specified character, searching backward starting at the end.
-
-        @param  ch          a character.
-        @param  fromIndex   the index to start the search from.
-        @return the index of the last occurrence of the character in the
-                character sequence represented by this object that is less
-                than or equal to <code>length -1</code>, or <code>-1</code>
-                if the character does not occur before that point.
-     */
-    sal_Int32 lastIndexOf( sal_Char ch ) const
+      @param    ch          character to be located.
+      @return   the index of the last occurrence of the character in the
+                character sequence represented by this string, or
+                <code>-1</code> if the character does not occur.
+    */
+    sal_Int32 lastIndexOf( sal_Char ch ) const SAL_THROW(())
     {
         return rtl_str_lastIndexOfChar_WithLength( pData->buffer, pData->length, ch );
     }
 
     /**
-        Returns the index within this string of the last occurrence of
-        the specified substring.
-        The returned index indicates the start of the substring, and it
-        must be equal to or less than <code>fromIndex</code>.
+      Returns the index within this string of the last occurrence of the
+      specified character, searching backward starting at the specified index.
 
-        @param  str         the substring to search for.
-        @param  fromIndex   the index to start the search from.
-        @return If the string argument occurs one or more times as a substring
-                within this object at a starting index no greater than
-                <code>fromIndex</code>, then the index of the first character of
-                the last such substring is returned. If it does not occur as a
-                substring starting at <code>fromIndex</code> or earlier,
-                <code>-1</code> is returned.
-     */
-    sal_Int32 lastIndexOf( const OString & str, int fromIndex ) const
+      @param    ch          character to be located.
+      @return   the index of the last occurrence of the character in the
+                character sequence represented by this string that
+                is less or than or equal to fromIndex, or <code>-1</code>
+                if the character does not occur before that point.
+    */
+    sal_Int32 lastIndexOf( sal_Char ch, int fromIndex ) const SAL_THROW(())
     {
-        return rtl_str_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
-                                                str.pData->buffer, str.pData->length );
+        return rtl_str_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
     }
 
     /**
-        Returns the index within this string of the last occurrence of
-        the specified substring.
-        The returned index indicates the start of the substring, and it
-        must be equal to or less than <code>fromIndex</code>.
+      Returns the index within this string of the first occurrence of the
+      specified substring, starting at the specified index.
+      If str doesn't include any character, always <code>-1</code> is
+      returned. This is also the case, if both strings are empty.
 
-        @param  str         the substring to search for.
-        @param  fromIndex   the index to start the search from.
-        @return If the string argument occurs one or more times as a substring
-                within this object at a starting index no greater than
-                <code>fromIndex</code>, then the index of the first character of
-                the last such substring is returned. If it does not occur as a
-                substring starting at <code>fromIndex</code> or earlier,
-                <code>-1</code> is returned.
-     */
-    sal_Int32 lastIndexOf( const OString & str ) const
+      @param    str         the substring to search for.
+      @param    fromIndex   the index to start the search from.
+      @return   If the string argument occurs one or more times as a substring
+                within this string at the starting index, then the index
+                of the first character of the first such substring is
+                returned. If it does not occur as a substring starting
+                at fromIndex or beyond, <code>-1</code> is returned.
+    */
+    sal_Int32 indexOf( const OString & str, int fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                       str.pData->buffer, str.pData->length );
+        return (ret < 0 ? ret : ret+fromIndex);
+    }
+
+    /**
+      Returns the index within this string of the last occurrence of
+      the specified substring, searching backward starting at the end.
+      The returned index indicates the starting index of the substring
+      in this string.
+      If str doesn't include any character, always <code>-1</code> is
+      returned. This is also the case, if both strings are empty.
+
+      @param    str         the substring to search for.
+      @return   If the string argument occurs one or more times as a substring
+                within this string, then the index of the first character of
+                the last such substring is returned. If it does not occur as
+                a substring, <code>-1</code> is returned.
+    */
+    sal_Int32 lastIndexOf( const OString & str ) const SAL_THROW(())
     {
         return rtl_str_lastIndexOfStr_WithLength( pData->buffer, pData->length,
-                                                str.pData->buffer, str.pData->length );
+                                                  str.pData->buffer, str.pData->length );
     }
 
     /**
-        Returns a new string that is a substring of this string. The
-        substring begins at the specified index and extends to the end of
-        this string.
+      Returns the index within this string of the last occurrence of
+      the specified substring, searching backward starting at the end.
+      The returned index indicates the starting index of the substring
+      in this string.
+      If str doesn't include any character, always <code>-1</code> is
+      returned. This is also the case, if both strings are empty.
 
-        @param     beginIndex   the beginning index, inclusive.
-        @return    the specified substring.
-        @exception  StringIndexOutOfBoundsException if the
-                   <code>beginIndex</code> is out of range.
-     */
-    OString copy( sal_Int32 beginIndex) const
+      @param    str         the substring to search for.
+      @param    fromIndex   the index to start the search from.
+      @return   If the string argument occurs one or more times as a substring
+                within this string at the starting index, then the index
+                of the first character of the last such substring is
+                returned. If it does not occur as a substring starting
+                at fromIndex or earlier, <code>-1</code> is returned.
+    */
+    sal_Int32 lastIndexOf( const OString & str, int fromIndex ) const SAL_THROW(())
     {
-        return copy( beginIndex, getLength() - beginIndex );
+        return rtl_str_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
+                                                  str.pData->buffer, str.pData->length );
     }
 
-
     /**
-        Returns a new string that is a substring of this string. The
-        substring begins at the specified <code>beginIndex</code> and
-        extends to the character at index <code>endIndex - 1</code>.
+      Returns a new string that is a substring of this string. The
+      substring begins at the specified beginIndex.
 
-        @param     beginIndex   the beginning index, inclusive.
-        @param     count        the number of characters.
-        @return    the specified substring.
-        @exception  StringIndexOutOfBoundsException if the
-                   <code>beginIndex</code> or the <code>endIndex</code> is
-                   out of range.
-     */
-    OString copy( sal_Int32 beginIndex, sal_Int32 count ) const
+      @param     beginIndex   the beginning index, inclusive.
+      @return    the specified substring.
+    */
+    OString copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
-        if( beginIndex == 0 && count == getLength() )
+        if ( beginIndex == 0 )
             return *this;
         else
         {
-            OString newStr;
-            rtl_string_newFromStr_WithLength( &newStr.pData, pData->buffer + beginIndex, count );
-            return newStr;
+            rtl_String* pNew = 0;
+            rtl_string_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, getLength()-beginIndex );
+            return OString( pNew, (DO_NOT_ACQUIRE*)0 );
         }
     }
 
     /**
-        Concatenates the specified string to the end of this string.
-        <p>
-        If the length of the argument string is <code>0</code>, then this
-        object is returned.
+      Returns a new string that is a substring of this string. The
+      substring begins at the specified beginIndex and
+      extends to the character at index endIndex - 1.
 
-        @param  str   the <code>OString</code> that is concatenated to the end
-                      of this <code>OString</code>.
-        @return a string that represents the concatenation of this object's
-                characters followed by the string argument's characters.
-     */
-    OString concat( const OString & str ) const
+      @param     beginIndex   the beginning index, inclusive.
+      @param     count        the number of characters.
+      @return    the specified substring.
+    */
+    OString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        OString newStr;
-        rtl_string_newConcat( &newStr.pData, pData, str.pData );
-        return newStr;
-    }
-
-    friend OString  operator+( const OString& rStr1, const OString& rStr2  )
-    {
-        return rStr1.concat( rStr2 );
-    }
-
-    /**
-        Returns a new string resulting from replacing all occurrences of
-        <code>oldChar</code> in this string with <code>newChar</code>.
-        <p>
-        If the character <code>oldChar</code> does not occur in the
-        character sequence represented by this object, then this string is
-        returned.
-
-        @param  oldChar   the old character.
-        @param  newChar   the new character.
-        @return a string derived from this string by replacing every
-                occurrence of <code>oldChar</code> with <code>newChar</code>.
-     */
-    OString replace( sal_Char oldChar, sal_Char newChar ) const
-    {
-        rtl_String * pNew = 0;
-        rtl_string_newReplace( &pNew, pData, oldChar, newChar );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        if ( (beginIndex == 0) && (count == getLength()) )
+            return *this;
+        else
+        {
+            rtl_String* pNew = 0;
+            rtl_string_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, count );
+            return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        }
     }
 
     /**
-        Returns a new string resulting from replacing n = count characters
-        from position index in this string with <code>newStr</code>.
-        <p>
+      Concatenates the specified string to the end of this string.
 
-        @param  index   the index for beginning.
-        @param  count   the count of charcters that will replaced
-        @param  newStr  the new substring.
-        @return the new string. The reference count is 1.
-     */
-    OString replaceAt(sal_Int32 index, sal_Int32 count, const OString& newStr ) const
+      @param    str   the string that is concatenated to the end
+                      of this string.
+      @return   a string that represents the concatenation of this string
+                followed by the string argument.
+    */
+    OString concat( const OString & str ) const SAL_THROW(())
     {
-        rtl_String * pNew = 0;
+        rtl_String* pNew = 0;
+        rtl_string_newConcat( &pNew, pData, str.pData );
+        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    friend OString operator+( const OString & str1, const OString & str2  ) SAL_THROW(())
+    {
+        return str1.concat( str2 );
+    }
+
+    /**
+      Returns a new string resulting from replacing n = count characters
+      from position index in this string with newStr.
+
+      @param  index   the replacing index in str.
+                      The index must be greater or equal as 0 and
+                      less or equal as the length of the string.
+      @param  count   the count of charcters that will replaced
+                      The count must be greater or equal as 0 and
+                      less or equal as the length of the string minus index.
+      @param  newStr  the new substring.
+      @return the new string.
+    */
+    OString replaceAt( sal_Int32 index, sal_Int32 count, const OString& newStr ) const SAL_THROW(())
+    {
+        rtl_String* pNew = 0;
         rtl_string_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
-        Converts this <code>OString</code> to lowercase.
-        <p>
-        If no character in the string has a different lowercase version,
-        based on calling the <code>toLowerCase</code> method defined by
-        <code>Character</code>, then the original string is returned.
-        <p>
-        Otherwise, a new string is allocated, whose length is identical
-        to this string, and such that each character that has a different
-        lowercase version is mapped to this lowercase equivalent.
+      Returns a new string resulting from replacing all occurrences of
+      oldChar in this string with newChar.
+      If the character oldChar does not occur in the character sequence
+      represented by this object, then the string is assigned with
+      str.
 
-        @return the string, converted to lowercase.
-     */
-    OString toLowerCase() const
+      @param    oldChar     the old character.
+      @param    newChar     the new character.
+      @return   a string derived from this string by replacing every
+                occurrence of oldChar with newChar.
+    */
+    OString replace( sal_Char oldChar, sal_Char newChar ) const SAL_THROW(())
     {
-        rtl_String * pNew = 0;
-        rtl_string_newToLowerCase( &pNew, pData );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        rtl_String* pNew = 0;
+        rtl_string_newReplace( &pNew, pData, oldChar, newChar );
+        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
-        Converts this string to uppercase.
-        <p>
-        If no character in this string has a different uppercase version,
-        based on calling the <code>toUpperCase</code> method defined by
-        <code>Character</code>, then the original string is returned.
-        <p>
-        Otherwise, a new string is allocated, whose length is identical
-        to this string, and such that each character that has a different
-        uppercase version is mapped to this uppercase equivalent.
+      Converts from this string all ASCII uppercase characters (65-90)
+      to ASCII lowercase characters (97-122).
+      This function can't be used for language specific conversion.
+      If the string doesn't contain characters which must be converted,
+      then the new string is assigned with str.
 
-        @return the string, converted to uppercase.
-     */
-    OString toUpperCase() const
+      @return   the string, converted to ASCII lowercase.
+    */
+    OString toAsciiLowerCase() const SAL_THROW(())
     {
-        rtl_String * pNew = 0;
-        rtl_string_newToUpperCase( &pNew, pData );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        rtl_String* pNew = 0;
+        rtl_string_newToAsciiLowerCase( &pNew, pData );
+        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
-        Removes white space from both ends of this string.
-        <p>
-        All characters that have codes less than or equal to
-        <code>'&#92;u0020'</code> (the space character) are considered to be
-        white space.
+      Converts from this string all ASCII lowercase characters (97-122)
+      to ASCII uppercase characters (65-90).
+      This function can't be used for language specific conversion.
+      If the string doesn't contain characters which must be converted,
+      then the new string is assigned with str.
 
-        @return this string, with white space removed from the front and end.
-     */
-    OString trim() const
+      @return   the string, converted to ASCII uppercase.
+    */
+    OString toAsciiUpperCase() const SAL_THROW(())
     {
-        rtl_String * pNew = 0;
+        rtl_String* pNew = 0;
+        rtl_string_newToAsciiUpperCase( &pNew, pData );
+        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns a new string resulting from removing white space from both ends
+      of the string. All characters that have codes less than or equal to
+      32 (the space character) are considered to be white space.
+      If the string doesn't contain white spaces at both ends,
+      then the new string is assigned with str.
+
+      @return   the string, with white space removed from the front and end.
+    */
+    OString trim() const SAL_THROW(())
+    {
+        rtl_String* pNew = 0;
         rtl_string_newTrim( &pNew, pData );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
+    /**
+      Returns a token in the string.
 
+      Example:
+        sal_Int32 nIndex = 0;
+        do
+        {
+            ...
+            OString aToken = aStr.getToken( 0, ';', nIndex );
+            ...
+        }
+        while ( nIndex >= 0 );
 
+      @param    token       the number of the token to return. The number
+                            must be greater or equal as 0.
+      @param    cTok        the character which seperate the tokens.
+      @param    index       the position at which the token is searched in the
+                            string.
+                            The index must be greater or equal as 0 and
+                            less or equal as the length of the string.
+                            This param is set to the position of the
+                            next token or to -1, if it is the last token.
+      @return   the token
+    */
+    OString getToken( sal_Int32 token, sal_Char cTok, sal_Int32& index ) const SAL_THROW(())
+    {
+        rtl_String * pNew = 0;
+        index = rtl_string_getToken( &pNew, pData, token, cTok, index );
+        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+    }
 
     /**
       Returns the Boolean value from this string.
@@ -825,29 +819,6 @@ public:
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfDouble( aBuf, d ) );
         return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
-
-
-
-
-    // UString compatibility deprecated
-    sal_Int32           len() const { return getLength(); }
-
-    sal_Int32           search( sal_Char ch ) const { return indexOf( ch ); }
-
-    sal_Int32           getTokenCount( sal_Char cTok = ';' ) const
-    {
-            return rtl_string_getTokenCount(pData, cTok );
-    }
-
-    OString             getToken( sal_Int32 nToken, sal_Char cTok = ';' ) const
-    {
-            OString newStr;
-            rtl_string_getToken( &newStr.pData, pData, nToken, cTok );
-            return newStr;
-    }
-
-    sal_Int32           search( const OString& rStr, sal_Int32 nIndex = 0) const { return indexOf( rStr, nIndex ); }
-    sal_Int32           search( const sal_Char* pchar, sal_Int32 nIndex = 0) const { return indexOf( pchar, nIndex ); }
 };
 
 /* ======================================================================= */

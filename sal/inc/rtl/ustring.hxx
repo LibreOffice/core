@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: th $ $Date: 2001-05-09 12:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,47 +62,876 @@
 #ifndef _RTL_USTRING_HXX_
 #define _RTL_USTRING_HXX_
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
 #endif
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
-#ifndef _RTL_LOCALE_HXX_
-#include <rtl/locale.hxx>
+#ifndef _RTL_MEMORY_H_
+#include <rtl/memory.h>
 #endif
+
+class String;
 
 namespace rtl
 {
+/* ======================================================================= */
 
 /**
-    Converts all of the characters in this <code>OUString</code> to lower
-    case using the rules of the given locale.
-    @param locale use the case transformation rules for this locale
-    @return the OUString, converted to lowercase.
- */
-inline OUString OUString::toLowerCase( const OLocale & locale ) const
+  This String class provide base functionality for C++ like Unicode
+  character array handling. The advantage of this class is, that it
+  handle all the memory managament for you - and it do it
+  more efficient. If you assign a string to another string, the
+  data of both strings are shared (without any copy operation or
+  memory allocation) as long as you change the string. This class
+  stores also the length of the string, so that many operations are
+  faster as the C-str-functions.
+
+  This class provide only readonly string handling. So you could create
+  a string and you could only query the content from this string.
+  It provide also functionality to change the string, but this results
+  in every case in a new string instance (in the most cases with an
+  memory allocation). You don't have functionality to change the
+  content of the string. If you want change the string content, than
+  you should us the OStringBuffer class, which provide these
+  functionality and avoid to much memory allocation.
+
+  The design of this class is similar to the string classes in Java
+  and so more people should have fewer understanding problems when they
+  use this class.
+*/
+
+class OUString
 {
-    OUString newStr;
-    rtl_uString_newToLowerCase( &newStr.pData, pData, *(rtl_Locale **)&locale );
-    return newStr;
-}
+    friend class String;
+
+public:
+    rtl_uString * pData;
+
+private:
+    class DO_NOT_ACQUIRE;
+    OUString( rtl_uString * value, DO_NOT_ACQUIRE * )
+    {
+        pData = value;
+    }
+
+public:
+    /**
+      New string containing no characters.
+    */
+    OUString() SAL_THROW(())
+    {
+        pData = 0;
+        rtl_uString_new( &pData );
+    }
+
+    /**
+      New string from OUString.
+
+      @param    str         a OUString.
+    */
+    OUString( const OUString & str ) SAL_THROW(())
+    {
+        pData = str.pData;
+        rtl_uString_acquire( pData );
+    }
+
+    /**
+      New string from OUString data.
+
+      @param    str         a OUString data.
+    */
+    OUString( rtl_uString * str )  SAL_THROW(())
+    {
+        pData = str;
+        rtl_uString_acquire( pData );
+    }
+
+    /**
+      New string from a Unicode character buffer array.
+
+      @param    value       a NULL-terminated Unicode character array.
+    */
+    OUString( const sal_Unicode * value ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_uString_newFromStr( &pData, value );
+    }
+
+    /**
+      New string from a Uniocde character buffer array.
+
+      @param    value       a Unicode character array.
+      @param    length      the number of character which should be copied.
+                            The character array length must be greater or
+                            equal than this value.
+    */
+    OUString( const sal_Unicode * value, sal_Int32 length ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_uString_newFromStr_WithLength( &pData, value, length );
+    }
+
+    /**
+      New string from a 8-Bit character buffer array.
+
+      @param    value           a 8-Bit character array.
+      @param    length          the number of character which should be converted.
+                                The 8-Bit character array length must be
+                                greater or equal than this value.
+      @param    encoding        the text encoding from which the 8-Bit character
+                                sequence should be converted.
+      @param    convertFlags    flags which controls the conversion.
+                                see RTL_TEXTTOUNICODE_FLAGS_...
+    */
+    OUString( const sal_Char * value, sal_Int32 length,
+              rtl_TextEncoding encoding,
+              sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_string2UString( &pData, value, length, encoding, convertFlags );
+    }
+
+    OUString( const String & value ) SAL_THROW(());
+
+    /**
+      Release the string data.
+    */
+    ~OUString() SAL_THROW(())
+    {
+        rtl_uString_release( pData );
+    }
+
+    /**
+      Assign a new string.
+
+      @param    str         a OUString.
+    */
+    OUString & operator=( const OUString & str ) SAL_THROW(())
+    {
+        rtl_uString_assign( &pData, str.pData );
+        return *this;
+    }
+
+    /**
+      Append a string to this string.
+
+      @param    str         a OUString.
+    */
+    OUString & operator+=( const OUString & str ) SAL_THROW(())
+    {
+        rtl_uString_newConcat( &pData, pData, str.pData );
+        return *this;
+    }
+
+    /**
+      Returns the length of this string.
+      The length is equal to the number of Unicode characters in this string.
+
+      @return   the length of the sequence of characters represented by this
+                object.
+    */
+    sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
+
+    /**
+      Returns a pointer to the Unicode character buffer from this string.
+      It isn't necessarily NULL terminated.
+
+      @return   a pointer to the Unicode characters buffer from this object.
+    */
+    operator const sal_Unicode *() const SAL_THROW(()) { return pData->buffer; }
+
+    /**
+      Returns a pointer to the Unicode character buffer from this string.
+      It isn't necessarily NULL terminated.
+
+      @return   a pointer to the Unicode characters buffer from this object.
+    */
+    const sal_Unicode * getStr() const SAL_THROW(()) { return pData->buffer; }
+
+    /**
+      Compares two strings.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      This function can't be used for language specific sorting.
+
+      @param    str         the object to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 compareTo( const OUString & str ) const SAL_THROW(())
+    {
+        return rtl_ustr_compare_WithLength( pData->buffer, pData->length,
+                                            str.pData->buffer, str.pData->length );
+    }
+
+    /**
+      Compares two strings with an maximum count of characters.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      This function can't be used for language specific sorting.
+
+      @param    str         the object to be compared.
+      @param    length      the maximum numbers to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 compareTo( const OUString & str, sal_Int32 length ) const SAL_THROW(())
+    {
+        return rtl_ustr_shortenedCompare_WithLength( pData->buffer, pData->length,
+                                                     str.pData->buffer, str.pData->length, length );
+    }
+
+    /**
+      Compares two strings.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated.
+      This function can't be used for language specific sorting.
+
+      @param  anotherString   the 8-Bit ASCII character string to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 compareToAscii( const sal_Char* anotherString ) const
+    {
+        return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length,
+                                                  anotherString );
+    }
+
+    /**
+      Perform a comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string.
+      This function can't be used for language specific comparison.
+
+      @param    str         the object to be compared.
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equals( const OUString & str ) const SAL_THROW(())
+    {
+        if ( pData->length != str.pData->length )
+            return sal_False;
+        if ( pData == str.pData )
+            return sal_True;
+        return rtl_ustr_compare_WithLength( pData->buffer, pData->length,
+                                            str.pData->buffer, str.pData->length ) == 0;
+    }
+
+    /**
+      Perform a ASCII lowercase comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string,
+      ignoring the case.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object to be compared.
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    {
+        if ( pData->length != str.pData->length )
+            return sal_False;
+        if ( pData == str.pData )
+            return sal_True;
+        return rtl_ustr_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
+                                                           str.pData->buffer, str.pData->length ) == 0;
+    }
+
+    friend sal_Bool     operator == ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
+                        { return rStr1.getLength() == rStr2.getLength() && rStr1.compareTo( rStr2 ) == 0; }
+    friend sal_Bool     operator == ( const OUString& rStr1,    const sal_Unicode * pStr2 ) SAL_THROW(())
+                        { return rStr1.compareTo( pStr2 ) == 0; }
+    friend sal_Bool     operator == ( const sal_Unicode * pStr1,    const OUString& rStr2 ) SAL_THROW(())
+                        { return OUString( pStr1 ).compareTo( rStr2 ) == 0; }
+
+    friend sal_Bool     operator != ( const OUString& rStr1,        const OUString& rStr2 ) SAL_THROW(())
+                        { return !(operator == ( rStr1, rStr2 )); }
+    friend sal_Bool     operator != ( const OUString& rStr1,    const sal_Unicode * pStr2 ) SAL_THROW(())
+                        { return !(operator == ( rStr1, pStr2 )); }
+    friend sal_Bool     operator != ( const sal_Unicode * pStr1,    const OUString& rStr2 ) SAL_THROW(())
+                        { return !(operator == ( pStr1, rStr2 )); }
+
+    friend sal_Bool     operator <  ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
+                        { return rStr1.compareTo( rStr2 ) < 0; }
+    friend sal_Bool     operator >  ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
+                        { return rStr1.compareTo( rStr2 ) > 0; }
+    friend sal_Bool     operator <= ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
+                        { return rStr1.compareTo( rStr2 ) <= 0; }
+    friend sal_Bool     operator >= ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
+                        { return rStr1.compareTo( rStr2 ) >= 0; }
+
+    /**
+      Returns a hashcode for this string.
+
+      @return   a hash code value for this object.
+    */
+    sal_Int32 hashCode() const SAL_THROW(())
+    {
+        return rtl_ustr_hashCode_WithLength( pData->buffer, pData->length );
+    }
+
+    /**
+      Returns the index within this string of the first occurrence of the
+      specified character, starting the search at the specified index.
+
+      @param    ch          character to be located.
+      @param    fromIndex   the index to start the search from.
+                            The index must be greater or equal than 0
+                            and less or equal as the string length.
+      @return   the index of the first occurrence of the character in the
+                character sequence represented by this string that is
+                greater than or equal to fromIndex, or
+                <code>-1</code> if the character does not occur.
+    */
+    sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
+        return (ret < 0 ? ret : ret+fromIndex);
+    }
+
+    /**
+      Returns the index within this string of the last occurrence of the
+      specified character, searching backward starting at the end.
+
+      @param    ch          character to be located.
+      @return   the index of the last occurrence of the character in the
+                character sequence represented by this string, or
+                <code>-1</code> if the character does not occur.
+    */
+    sal_Int32 lastIndexOf( sal_Unicode ch ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, pData->length, ch );
+    }
+
+    /**
+      Returns the index within this string of the last occurrence of the
+      specified character, searching backward starting at the specified index.
+
+      @param    ch          character to be located.
+      @return   the index of the last occurrence of the character in the
+                character sequence represented by this string that
+                is less or than or equal to fromIndex, or <code>-1</code>
+                if the character does not occur before that point.
+    */
+    sal_Int32 lastIndexOf( sal_Unicode ch, int fromIndex ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
+    }
+
+    /**
+      Returns the index within this string of the first occurrence of the
+      specified substring, starting at the specified index.
+      If str doesn't include any character, always <code>-1</code> is
+      returned. This is also the case, if both strings are empty.
+
+      @param    str         the substring to search for.
+      @param    fromIndex   the index to start the search from.
+      @return   If the string argument occurs one or more times as a substring
+                within this string at the starting index, then the index
+                of the first character of the first such substring is
+                returned. If it does not occur as a substring starting
+                at fromIndex or beyond, <code>-1</code> is returned.
+    */
+    sal_Int32 indexOf( const OUString & str, int fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                        str.pData->buffer, str.pData->length );
+        return (ret < 0 ? ret : ret+fromIndex);
+    }
+
+    /**
+      Returns the index within this string of the last occurrence of
+      the specified substring, searching backward starting at the end.
+      The returned index indicates the starting index of the substring
+      in this string.
+      If str doesn't include any character, always <code>-1</code> is
+      returned. This is also the case, if both strings are empty.
+
+      @param    str         the substring to search for.
+      @return   If the string argument occurs one or more times as a substring
+                within this string, then the index of the first character of
+                the last such substring is returned. If it does not occur as
+                a substring, <code>-1</code> is returned.
+    */
+    sal_Int32 lastIndexOf( const OUString & str ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
+                                                   str.pData->buffer, str.pData->length );
+    }
+
+    /**
+      Returns the index within this string of the last occurrence of
+      the specified substring, searching backward starting at the end.
+      The returned index indicates the starting index of the substring
+      in this string.
+      If str doesn't include any character, always <code>-1</code> is
+      returned. This is also the case, if both strings are empty.
+
+      @param    str         the substring to search for.
+      @param    fromIndex   the index to start the search from.
+      @return   If the string argument occurs one or more times as a substring
+                within this string at the starting index, then the index
+                of the first character of the last such substring is
+                returned. If it does not occur as a substring starting
+                at fromIndex or earlier, <code>-1</code> is returned.
+    */
+    sal_Int32 lastIndexOf( const OUString & str, int fromIndex ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
+                                                   str.pData->buffer, str.pData->length );
+    }
+
+    /**
+      Returns a new string that is a substring of this string. The
+      substring begins at the specified beginIndex.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @return    the specified substring.
+    */
+    OUString copy( sal_Int32 beginIndex ) const SAL_THROW(())
+    {
+        if ( beginIndex == 0 )
+            return *this;
+        else
+        {
+            rtl_uString* pNew = 0;
+            rtl_uString_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, getLength()-beginIndex );
+            return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        }
+    }
+
+    /**
+      Returns a new string that is a substring of this string. The
+      substring begins at the specified beginIndex and
+      extends to the character at index endIndex - 1.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @param     count        the number of characters.
+      @return    the specified substring.
+    */
+    OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
+    {
+        if ( (beginIndex == 0) && (count == getLength()) )
+            return *this;
+        else
+        {
+            rtl_uString* pNew = 0;
+            rtl_uString_newFromStr_WithLength( &newStr.pData, pData->buffer+beginIndex, count );
+            return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        }
+    }
+
+    /**
+      Concatenates the specified string to the end of this string.
+
+      @param    str   the string that is concatenated to the end
+                      of this string.
+      @return   a string that represents the concatenation of this string
+                followed by the string argument.
+    */
+    OUString concat( const OUString & str ) const SAL_THROW(())
+    {
+        rtl_uString* pNew = 0;
+        rtl_uString_newConcat( &pNew, pData, str.pData );
+        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    friend OUString operator+( const OUString& rStr1, const OUString& rStr2  )
+    {
+        return rStr1.concat( rStr2 );
+    }
+
+    /**
+      Returns a new string resulting from replacing n = count characters
+      from position index in this string with newStr.
+
+      @param  index   the replacing index in str.
+                      The index must be greater or equal as 0 and
+                      less or equal as the length of the string.
+      @param  count   the count of charcters that will replaced
+                      The count must be greater or equal as 0 and
+                      less or equal as the length of the string minus index.
+      @param  newStr  the new substring.
+      @return the new string.
+    */
+    OUString replaceAt( sal_Int32 index, sal_Int32 count, const OUString& newStr ) const SAL_THROW(())
+    {
+        rtl_uString* pNew = 0;
+        rtl_uString_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of
+      oldChar in this string with newChar.
+      If the character oldChar does not occur in the character sequence
+      represented by this object, then the string is assigned with
+      str.
+
+      @param    oldChar     the old character.
+      @param    newChar     the new character.
+      @return   a string derived from this string by replacing every
+                occurrence of oldChar with newChar.
+    */
+    OUString replace( sal_Unicode oldChar, sal_Unicode newChar ) const SAL_THROW(())
+    {
+        rtl_uString* pNew = 0;
+        rtl_uString_newReplace( &pNew, pData, oldChar, newChar );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Converts from this string all ASCII uppercase characters (65-90)
+      to ASCII lowercase characters (97-122).
+      This function can't be used for language specific conversion.
+      If the string doesn't contain characters which must be converted,
+      then the new string is assigned with str.
+
+      @return   the string, converted to ASCII lowercase.
+    */
+    OUString toAsciiLowerCase() const SAL_THROW(())
+    {
+        rtl_uString* pNew = 0;
+        rtl_uString_newToAsciiLowerCase( &pNew, pData );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Converts from this string all ASCII lowercase characters (97-122)
+      to ASCII uppercase characters (65-90).
+      This function can't be used for language specific conversion.
+      If the string doesn't contain characters which must be converted,
+      then the new string is assigned with str.
+
+      @return   the string, converted to ASCII uppercase.
+    */
+    OUString toAsciiUpperCase() const SAL_THROW(())
+    {
+        rtl_uString* pNew = 0;
+        rtl_uString_newToAsciiUpperCase( &pNew, pData );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns a new string resulting from removing white space from both ends
+      of the string. All characters that have codes less than or equal to
+      32 (the space character) are considered to be white space.
+      If the string doesn't contain white spaces at both ends,
+      then the new string is assigned with str.
+
+      @return   the string, with white space removed from the front and end.
+    */
+    OUString trim() const SAL_THROW(())
+    {
+        rtl_uString* pNew = 0;
+        rtl_uString_newTrim( &pNew, pData );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns a token in the string.
+
+      Example:
+        sal_Int32 nIndex = 0;
+        do
+        {
+            ...
+            OUString aToken = aStr.getToken( 0, ';', nIndex );
+            ...
+        }
+        while ( nIndex >= 0 );
+
+      @param    token       the number of the token to return. The number
+                            must be greater or equal as 0.
+      @param    cTok        the character which seperate the tokens.
+      @param    index       the position at which the token is searched in the
+                            string.
+                            The index must be greater or equal as 0 and
+                            less or equal as the length of the string.
+                            This param is set to the position of the
+                            next token or to -1, if it is the last token.
+      @return   the token
+    */
+    OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const SAL_THROW(())
+    {
+        rtl_uString * pNew = 0;
+        index = rtl_uString_getToken( &pNew, pData, token, cTok, index );
+        return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
+    }
+
+    /**
+      Returns the Boolean value from this string.
+      This function can't be used for language specific conversion.
+
+      @return   sal_True, if the string is 1 or "True" in any ASCII case.
+                sal_False in any other case.
+    */
+    sal_Bool toBoolean() const SAL_THROW(())
+    {
+        return rtl_ustr_toBoolean( pData->buffer );
+    }
+
+    /**
+      Returns the first character from this string.
+
+      @return   the first character from this string or 0, if this string
+                is emptry.
+    */
+    sal_Unicode toChar() const SAL_THROW(())
+    {
+        return pData->buffer[0];
+    }
+
+    /**
+      Returns the int32 value from this string.
+      This function can't be used for language specific conversion.
+
+      @param    radix       the radix (between 2 and 36)
+      @return   the int32 represented from this string.
+                0 if this string represents no number.
+    */
+    sal_Int32 toInt32( sal_Int16 radix = 10 ) const SAL_THROW(())
+    {
+        return rtl_ustr_toInt32( pData->buffer, radix );
+    }
+
+    /**
+      Returns the int64 value from this string.
+      This function can't be used for language specific conversion.
+
+      @param    radix       the radix (between 2 and 36)
+      @return   the int64 represented from this string.
+                0 if this string represents no number.
+    */
+    sal_Int64 toInt64( sal_Int16 radix = 10 ) const SAL_THROW(())
+    {
+        return rtl_ustr_toInt64( pData->buffer, radix );
+    }
+
+    /**
+      Returns the float value from this string.
+      This function can't be used for language specific conversion.
+
+      @return   the float represented from this string.
+                0.0 if this string represents no number.
+    */
+    float toFloat() const SAL_THROW(())
+    {
+        return rtl_ustr_toFloat( pData->buffer );
+    }
+
+    /**
+      Returns the double value from this string.
+      This function can't be used for language specific conversion.
+
+      @return   the double represented from this string.
+                0.0 if this string represents no number.
+    */
+    double toDouble() const SAL_THROW(())
+    {
+        return rtl_ustr_toDouble( pData->buffer );
+    }
+
+    /**
+      Returns the string representation of the sal_Bool argument.
+      If the sal_Bool is true, the string "true" is returned.
+      If the sal_Bool is false, the string "false" is returned.
+      This function can't be used for language specific conversion.
+
+      @param    b   a sal_Bool.
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOf( sal_Bool b ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfBoolean( aBuf, b ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the char argument.
+
+      @param    c   a character.
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOf( sal_Unicode c ) SAL_THROW(())
+    {
+        return OUString( &c, 1 );
+    }
+
+    /**
+      Returns the string representation of the int argument.
+      This function can't be used for language specific conversion.
+
+      @param    i           a int32.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the long argument.
+      This function can't be used for language specific conversion.
+
+      @param    l           a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOf( sal_Int64 l, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, l, radix ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the float argument.
+      This function can't be used for language specific conversion.
+
+      @param    f           a float.
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOf( float f ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfFloat( aBuf, f ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the double argument.
+      This function can't be used for language specific conversion.
+
+      @param    d           a double.
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOf( double d ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns a OUString copied without conversion from an ASCII
+      character string.
+
+      @param    value       string in ASCII characters
+      @return   New OUString copied from the ASCII string.
+     */
+    static OUString createFromAscii( const sal_Char * value )
+    {
+        rtl_uString* pNew = 0;
+        rtl_uString_newFromAscii( &pNew, value );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+    }
 
 
-/**
-    Converts all of the characters in this <code>OUString</code> to upper
-    case using the rules of the given locale.
-    @param locale use the case transformation rules for this locale
-    @return the OUString, converted to uppercase.
- */
-inline OUString OUString::toUpperCase( const OLocale & locale) const
+
+
+
+
+
+
+    /**
+        Compares the string lexicographically with a 8-Bit ASCII
+        character string using only the number of characters given
+        in the length parameter. The comparison is based on the
+        numerical values of each Unicode/ASCII character in the
+        strings with a 8-Bit ASCII character string. Since this
+        method is optimized for performance. the ASCII character
+        values are not converted in any way. The caller has to
+        make sure that all ASCII characters are in the allowed
+       range between 0 and 127.
+        The ASCII string must be NULL-terminated.
+
+        @param  anotherString   the <code>OUString</code> to be compared.
+        @param  shortenedLength   the number of characters that are compared.
+        @return 'This string' and 'argument string' here means the substring
+                defined by the shortenedLength parameter.
+                the value <code>0</code> if the argument string is equal to
+                this string; a value less than <code>0</code> if this string
+                is lexicographically less than the string argument; and a
+                value greater than <code>0</code> if this string is
+                lexicographically greater than the string argument.
+     */
+    sal_Int32 compareToAscii( const sal_Char* anotherString, sal_Int32 shortenedLength ) const
+    {
+        return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer, pData->length,
+                                                  anotherString, shortenedLength );
+    }
+
+    /**
+        Compares the string reverse lexicographically with a 8-Bit ASCII
+        character string. <STRONG>The anotherStringLength parameter is the length of
+        the ASCII string and not the number of characters which should be
+        compared.</STRONG> The reverse comparison is based on the
+        numerical values of each Unicode/ASCII character in the
+        strings with a 8-Bit ASCII character string. Since this
+        method is optimized for performance. the ASCII character
+        values are not converted in any way. The caller has to
+        ensure that all ASCII characters are in the allowed
+        range between 0 and 127.
+        The ASCII string must be NULL-terminated.
+
+        @param  anotherString   the <code>OUString</code> to be compared.
+        @param  anotherStringLength   the number of characters that are compared.
+        @return the value <code>0</code> if the argument string is equal to
+                this string; a value less than <code>0</code> if this string
+                is lexicographically less than the string argument; and a
+                value greater than <code>0</code> if this string is
+                lexicographically greater than the string argument.
+                <STRONG>The compare order is from the last character to the
+                first one</STRONG>.
+     */
+    sal_Int32 reverseCompareToAsciiL( const sal_Char* anotherString, sal_Int32 anotherStringLength ) const
+    {
+        return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                          anotherString, anotherStringLength );
+    }
+
+    sal_Bool equalsAsciiL( const sal_Char* anotherString, sal_Int32 anotherStringLength ) const
+    {
+        if( pData->length == anotherStringLength )
+            return 0 == rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                              anotherString, anotherStringLength );
+        else
+            return sal_False;
+    }
+};
+
+/* ======================================================================= */
+
+struct OUStringHash
 {
-    OUString newStr;
-    rtl_uString_newToUpperCase( &newStr.pData, pData, *(rtl_Locale **)&locale );
-    return newStr;
-}
+    size_t operator()(const rtl::OUString& rString) const
+        { return (size_t)rString.hashCode(); }
+};
 
-// Helper functions
+/* ======================================================================= */
+
 inline OUString OStringToOUString( const OString & rStr,
                                    rtl_TextEncoding encoding,
                                    sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
@@ -117,6 +946,10 @@ inline OString OUStringToOString( const OUString & rUnicode,
     return OString( rUnicode.getStr(), rUnicode.getLength(), encoding, convertFlags );
 }
 
-}
+/* ======================================================================= */
 
-#endif /* _RTL_USTRING_HXX_ */
+} /* Namespace */
+
+#endif /* __cplusplus */
+
+#endif /* _RTL_USTRING_HXX */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-03-27 11:35:48 $
+ *  last change: $Author: th $ $Date: 2001-05-09 12:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,6 @@ sal_Bool SAL_CALL rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_T
             return sal_True;
         pEncInfo->Flags = 0;
 
-        if ( pEncInfo->StructSize < 14 )
-            return sal_True;
-        pEncInfo->Script = SCRIPT_DONTKNOW;
         return sal_False;
     }
 
@@ -199,10 +196,6 @@ sal_Bool SAL_CALL rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_T
     if ( pEncInfo->StructSize < 12 )
         return sal_True;
     pEncInfo->Flags = pData->mnInfoFlags;
-
-    if ( pEncInfo->StructSize < 14 )
-        return sal_True;
-    pEncInfo->Script = pData->mnScript;
 
     return sal_True;
 }
@@ -241,6 +234,8 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinC
 
 /* ----------------------------------------------------------------------- */
 
+#if 0
+
 rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromPCCodePage( sal_uInt32 nCodePage )
 {
     rtl_TextEncoding eTextEncoding;
@@ -274,7 +269,11 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromPCCodePage( sal_uInt32 nCodePag
     return eTextEncoding;
 }
 
+#endif
+
 /* ----------------------------------------------------------------------- */
+
+#if 0
 
 rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMacTextEncoding( sal_uInt32 nMacTextEncoding )
 {
@@ -429,6 +428,8 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMacTextEncoding( sal_uInt32 nMa
 
     return eTextEncoding;
 }
+
+#endif
 
 /* ----------------------------------------------------------------------- */
 
@@ -951,7 +952,7 @@ sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding e
 }
 
 /* ----------------------------------------------------------------------- */
-
+/*
 sal_uInt32 SAL_CALL rtl_getBestPCCodePageFromTextEncoding( rtl_TextEncoding eTextEncoding  )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
@@ -960,9 +961,9 @@ sal_uInt32 SAL_CALL rtl_getBestPCCodePageFromTextEncoding( rtl_TextEncoding eTex
     else
         return 0;
 }
-
+*/
 /* ----------------------------------------------------------------------- */
-
+/*
 sal_uInt32 SAL_CALL rtl_getBestMacTextEncodingFromTextEncoding( rtl_TextEncoding eTextEncoding )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
@@ -971,9 +972,9 @@ sal_uInt32 SAL_CALL rtl_getBestMacTextEncodingFromTextEncoding( rtl_TextEncoding
     else
         return 0xFFFFFFFF;
 }
-
+*/
 /* ----------------------------------------------------------------------- */
-
+/*
 const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
@@ -984,7 +985,7 @@ const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncodin
     else
         return 0;
 }
-
+*/
 /* ----------------------------------------------------------------------- */
 
 const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
