@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 15:37:23 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:03:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=miscdlgs
+LIBTARGET=no
 
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
@@ -108,7 +109,8 @@ SLOFILES =  \
     $(SLO)$/simpref.obj			\
     $(SLO)$/redcom.obj			\
     $(SLO)$/linkarea.obj		\
-    $(SLO)$/warnbox.obj
+    $(SLO)$/warnbox.obj	\
+    $(SLO)$/scuiautofmt.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
@@ -119,6 +121,22 @@ SRC1FILES = \
 
 NOOPTFILES=\
     $(SLO)$/chartdlg.obj
+    
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =  \
+    $(SLO)$/autofmt.obj			\
+    $(SLO)$/solvrdlg.obj		\
+    $(SLO)$/tabopdlg.obj		\
+    $(SLO)$/teamdlg.obj			\
+    $(SLO)$/chartdlg.obj		\
+    $(SLO)$/anyrefdg.obj		\
+    $(SLO)$/crnrdlg.obj			\
+    $(SLO)$/acredlin.obj		\
+    $(SLO)$/highred.obj			\
+    $(SLO)$/simpref.obj			\
+    $(SLO)$/redcom.obj			\
+    $(SLO)$/warnbox.obj
 
 # --- Tagets -------------------------------------------------------
 
