@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:30:55 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ using namespace ::osl;
 // -------------------------------------------------------------------------
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSQLQueryComposer >& _xComposer,
+                           const connectivity::ORowVector< ORowSetValue >&  _rParameterRow,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
                            sal_Bool&    _bNew)
@@ -287,7 +288,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            m_pCacheSet = new OKeySet(_xRs,m_aUpdateTable,aUpdateTableName ,_xComposer);
+            OKeySet* pKeySet = new OKeySet(_xRs,m_aUpdateTable,aUpdateTableName ,_xComposer);
+            // now we need to set the extern parameters because the select stmt could contain a :var1
+            pKeySet->setExternParameters(_rParameterRow);
+            m_pCacheSet = pKeySet;
 
             if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
             {
@@ -1601,6 +1605,9 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.38  2001/06/26 10:30:55  oj
+    #87808# setObject corrected and some more
+
     Revision 1.37  2001/06/26 09:32:05  fs
     #88392# added columnModified for diagnostics
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 08:30:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1462,16 +1462,18 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     {
                         ::dbtools::setObjectWithInfo(xParam,i,aIter->makeAny(),aIter->getTypeKind());
                     }
-                    m_aParameterRow.clear();
+
                     Reference< XResultSet> xRs = m_xStatement->executeQuery();
                     // create the composed table name
                     ::rtl::OUString aComposedTableName;
                     if(m_aUpdateTableName.getLength())
                         composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False);
 
-                    m_pCache = new ORowSetCache(xRs,m_xComposer,aComposedTableName,m_bModified,m_bNew);
+                    m_pCache = new ORowSetCache(xRs,m_xComposer,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
                     m_pCache->setMaxRowSize(m_nFetchSize);
                     m_aCurrentRow   = m_pCache->createIterator();
+                    // now we can clear the parameter row
+                    m_aParameterRow.clear();
 
                     // get the locale
                     ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 13:07:17 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ namespace dbaccess
         OKeySetMatrix::iterator m_aKeyIter;
         OColumnNamePos          m_aKeyColumnNames;  // contains all key column names
         OColumnNamePos          m_aColumnNames;     // contains all column names
+        connectivity::ORowVector< ORowSetValue > m_aParameterRow; // conazins the parameters from rowset
 
         connectivity::OSQLTable m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
@@ -109,9 +110,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
         ::rtl::OUString                                                                 m_sUpdateTableName;
 
-
-//      ::std::vector< OKeySetMatrix::iterator> m_aKeyPosition;
-//      ::std::vector< OKeySetMatrix::iterator>::iterator m_aKeyIter;
         sal_Bool m_bRowCountFinal;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
@@ -123,6 +121,8 @@ namespace dbaccess
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer);
         ~OKeySet();
+
+        void setExternParameters(const connectivity::ORowVector< ORowSetValue >& _rParameterRow);
 
         // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -193,6 +193,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/06/22 13:07:17  oj
+    #88012# change rowdeleted
+
     Revision 1.7  2001/02/01 14:23:57  oj
     change for insert , delete and update rows
 

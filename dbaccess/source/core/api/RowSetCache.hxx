@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:30:55 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ namespace dbaccess
     public:
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer,
+                     const connectivity::ORowVector< ORowSetValue >& _rParameterRow,
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew);
@@ -358,6 +359,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/06/26 10:30:55  oj
+    #87808# setObject corrected and some more
+
     Revision 1.8  2001/06/26 09:32:05  fs
     #88392# added columnModified for diagnostics
 

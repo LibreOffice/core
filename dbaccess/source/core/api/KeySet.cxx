@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 11:58:54 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,10 +816,71 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     ::comphelper::disposeComponent(m_xRow);
     // we just areassign the base members
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
-
-    connectivity::ORowVector< ORowSetValue >::iterator aIter = m_aKeyIter->second.first->begin();
+    connectivity::ORowVector< ORowSetValue >::const_iterator aExternParamIter = m_aParameterRow.begin();
+    sal_Int32 nPos=1;
+    for(;aExternParamIter != m_aParameterRow.end();++aExternParamIter,++nPos)
+    {
+        switch(aExternParamIter->getTypeKind())
+        {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            xParameter->setString(nPos,*aExternParamIter);
+            break;
+        case DataType::FLOAT:
+            xParameter->setFloat(nPos,*aExternParamIter);
+            break;
+        case DataType::DOUBLE:
+        case DataType::REAL:
+            xParameter->setDouble(nPos,*aExternParamIter);
+            break;
+        case DataType::DATE:
+            xParameter->setDate(nPos,*aExternParamIter);
+            break;
+        case DataType::TIME:
+            xParameter->setTime(nPos,*aExternParamIter);
+            break;
+        case DataType::TIMESTAMP:
+            xParameter->setTimestamp(nPos,*aExternParamIter);
+            break;
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+        case DataType::LONGVARBINARY:
+        case DataType::LONGVARCHAR:
+            xParameter->setBytes(nPos,*aExternParamIter);
+            break;
+        case DataType::BIT:
+            xParameter->setBoolean(nPos,*aExternParamIter);
+            break;
+        case DataType::TINYINT:
+            xParameter->setByte(nPos,*aExternParamIter);
+            break;
+        case DataType::SMALLINT:
+            xParameter->setShort(nPos,*aExternParamIter);
+            break;
+        case DataType::INTEGER:
+            xParameter->setInt(nPos,*aExternParamIter);
+            break;
+        case DataType::CLOB:
+            {
+                Reference<XInputStream> xStream;
+                aExternParamIter->getAny() >>= xStream;
+                xParameter->setCharacterStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
+            }
+            break;
+        case DataType::BLOB:
+            {
+                Reference<XInputStream> xStream;
+                aExternParamIter->getAny() >>= xStream;
+                xParameter->setBinaryStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
+            }
+            break;
+        }
+    }
+    connectivity::ORowVector< ORowSetValue >::const_iterator aIter = m_aKeyIter->second.first->begin();
     OColumnNamePos::const_iterator aPosIter = m_aKeyColumnNames.begin();
-    for(sal_Int32 nPos=1;aPosIter != m_aKeyColumnNames.end();++aPosIter,++aIter,++nPos)
+    for(;aPosIter != m_aKeyColumnNames.end();++aPosIter,++aIter,++nPos)
     {
         switch(aIter->getTypeKind())
         {
@@ -1106,6 +1167,11 @@ sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
     return bDeleted;
 }
 // -----------------------------------------------------------------------------
+void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >& _rParameterRow)
+{
+    m_aParameterRow = _rParameterRow;
+}
+// -----------------------------------------------------------------------------
 namespace dbaccess
 {
     void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
@@ -1151,6 +1217,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.20  2001/07/05 11:58:54  oj
+    #87744# check non casesensitive for table privs
+
     Revision 1.19  2001/07/03 10:58:28  oj
     #88888# only set values which are modified
 
