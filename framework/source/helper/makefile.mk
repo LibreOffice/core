@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:21:39 $
+#   last change: $Author: kz $ $Date: 2004-01-28 14:32:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,16 +84,12 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/ocomponentaccess.obj					\
                     $(SLO)$/ocomponentenumeration.obj				\
                     $(SLO)$/oframes.obj								\
-                    $(SLO)$/opluginframedispatcher.obj				\
                     $(SLO)$/statusindicatorfactory.obj				\
                     $(SLO)$/statusindicator.obj						\
                     $(SLO)$/imageproducer.obj						\
                     $(SLO)$/xmldocproperties.obj					\
                     $(SLO)$/propertysetcontainer.obj				\
                     $(SLO)$/actiontriggerhelper.obj					\
-                    $(SLO)$/asyncloadthread.obj						\
-                    $(SLO)$/componentloader.obj						\
-                    $(SLO)$/loadeventlistener.obj					\
                     $(SLO)$/persistentwindowstate.obj				\
                     $(SLO)$/networkdomain.obj						\
                     $(SLO)$/acceleratorinfo.obj
