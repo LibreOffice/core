@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 14:33:31 $
+ *  last change: $Author: cmc $ $Date: 2002-03-19 11:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
 #endif
+
 #ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
 #endif
@@ -98,6 +99,9 @@
 #endif
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 #ifndef _MSOLEEXP_HXX
 #include <svx/msoleexp.hxx>
@@ -2127,6 +2131,12 @@ ULONG SwWW8Writer::StoreDoc()
     PutCJKandCTLFontsInAttrPool();
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
+
+    if (const SvxLanguageItem* pLang = (const SvxLanguageItem*)
+        pDoc->GetAttrPool().GetPoolDefaultItem(RES_CHRATR_LANGUAGE))
+    {
+        pFib->lid = pLang->GetLanguage();
+    }
 
     SvStream* pOldStrm = pStrm;         // JP 19.05.99: wozu das ???
     SvStorageStreamRef xWwStrm( pStg->OpenStream( aMainStg ) );
