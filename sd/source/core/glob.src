@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:45:56 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1935,7 +1935,7 @@ String STR_POWERPOINT_IMPORT
     Text[ polish ] = "Import PowerPoint";
     Text[ portuguese_brazilian ] = "PowerPoint import";
     Text[ japanese ] = "PowerPoint ²ÝÎß°Ä";
-    Text[ korean ] = "PowerPoint import";
+    Text[ korean ] = "PowerPoint °¡Á®¿À±â";
     Text[ chinese_simplified ] = "PowerPoint ÊäÈë";
     Text[ chinese_traditional ] = "PowerPoint ¿é¤J";
     Text[ turkish ] = "PowerPoint import";
