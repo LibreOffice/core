@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 07:59:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,9 @@
 #endif
 #ifndef _XMLOFF_XMLNUMFE_HXX
 #include "xmlnumfe.hxx"
+#endif
+#ifndef _XMLOFF_XMLNUME_HXX
+#include "xmlnume.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
@@ -481,6 +484,11 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     }
 }
 
+bool lcl_validPropState( const XMLPropertyState& rState )
+{
+    return rState.mnIndex != -1;
+}
+
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   MultiPropertySetHelper& rPropSetHelper,
                                   const Reference < XPropertySet > & rPropSet,
@@ -561,7 +569,8 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             }
             break;
         }
-        if( xPropStates.size() > 0 )
+
+        if( find_if( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) != xPropStates.end() )
         {
             GetAutoStylePool().Add( nFamily, sParent, xPropStates );
             if( sCondParent.getLength() && sParent != sCondParent )
@@ -606,8 +615,7 @@ OUString XMLTextParagraphExport::Find(
             ppAddStates++;
         }
     }
-
-    if( xPropStates.size() > 0L )
+    if( find_if( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) != xPropStates.end() )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
 
     return sName;
@@ -862,6 +870,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pSectionExport( NULL ),
     pIndexMarkExport( NULL ),
     pRedlineExport( NULL ),
+    pHeadingStyles( NULL ),
     pFrameShapeIdxs( 0 ),
     bBlock( sal_False ),
     bOpenRuby( sal_False ),
@@ -995,6 +1004,14 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
     xFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                               GetExport() );
+
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
+    xParaDefaultPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
+                                                                 GetExport() );
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
+    xParaDefaultPropMapper->ChainExportMapper(
+        new XMLTextExportPropertySetMapper( xPropMapper, GetExport() ) );
+
     pSectionExport = new XMLSectionExport( rExp, *this );
     pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
     pRedlineExport = IsBlockMode() ? NULL : new XMLRedlineExport( rExp );
@@ -1015,6 +1032,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
 {
+    delete pHeadingStyles;
     delete pRedlineExport;
     delete pIndexMarkExport;
     delete pSectionExport;
@@ -3212,3 +3230,20 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         // else: no control shape -> nothing to do
     }
 }
+sal_Int32 XMLTextParagraphExport::GetHeadingLevel( const OUString& rStyleName )
+{
+    if( !pHeadingStyles )
+    {
+        pHeadingStyles = new XMLStringVector;
+        SvxXMLNumRuleExport::GetOutlineStyles( *pHeadingStyles,
+                                               GetExport().GetModel() );
+    }
+    for( XMLStringVector::size_type i=0; i < pHeadingStyles->size(); ++i )
+    {
+        if( (*pHeadingStyles)[i] == rStyleName )
+            return static_cast < sal_Int32 >( i );
+    }
+
+    return -1;
+}
+
