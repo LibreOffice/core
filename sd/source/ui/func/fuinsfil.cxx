@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 17:26:46 $
+ *  last change: $Author: dl $ $Date: 2001-04-02 14:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,14 +615,16 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             {
                 SdrRectObj* pTO = new SdrRectObj(OBJ_TEXT);
                 pTO->SetOutlinerParaObject(pOPO);
-                Size aSize(pOutliner->CalcTextSize());
+
+                pView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
+                pPage->InsertObject(pTO);
 
                 // koennte groesser sein als die max. erlaubte Groesse:
                 // falls noetig, die Objektgroesse begrenzen
+                Size aSize(pOutliner->CalcTextSize());
                 Size aMaxSize = pDoc->GetMaxObjSize();
                 aSize.Height() = Min(aSize.Height(), aMaxSize.Height());
                 aSize.Width()  = Min(aSize.Width(), aMaxSize.Width());
-
                 aSize = pWindow->LogicToPixel(aSize);
 
                 // in der Mitte des Fensters absetzen
@@ -639,8 +641,6 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     pTO->SetTextLink(aFile, aFilterName, gsl_getSystemTextEncoding() );
                 }
 
-                pView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
-                pPage->InsertObject(pTO);
                 pView->AddUndo(new SdrUndoInsertObj(*pTO));
                 pView->EndUndo();
             }
