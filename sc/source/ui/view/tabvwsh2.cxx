@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:05:48 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 18:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,15 +421,10 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             SetDrawTextShell( TRUE );
         else
         {
-            if (bEx)
-            {
-                SetDrawShell( TRUE );
-            }
+            if ( bEx || pView->GetMarkList().GetMarkCount() != 0 )
+                SetDrawShellOrSub();
             else
-            {
-                SetDrawShell( pView->GetMarkList().GetMarkCount() != 0 );
-                nCtrlSfxId = USHRT_MAX;// hier pfuschte JN
-            }
+                SetDrawShell( FALSE );
         }
     }
 
