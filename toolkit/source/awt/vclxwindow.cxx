@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-23 13:31:48 $
+ *  last change: $Author: mt $ $Date: 2001-04-11 09:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     }
                 }
             }
+            break;
             case BASEPROPERTY_HELPTEXT:
             {
                 ::rtl::OUString aHelpText;
