@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2002-03-26 18:25:31 $
+ *  last change: $Author: fs $ $Date: 2002-03-28 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,12 +364,21 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
 void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( ( rVclWindowEvent.GetId() == VCLEVENT_BUTTON_CLICK ) && maActionListeners.getLength() )
+    switch ( rVclWindowEvent.GetId() )
     {
-        ::com::sun::star::awt::ActionEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.ActionCommand = maActionCommand;
-        maActionListeners.actionPerformed( aEvent );
+        case VCLEVENT_BUTTON_CLICK:
+            if ( maActionListeners.getLength() )
+            {
+                ::com::sun::star::awt::ActionEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.ActionCommand = maActionCommand;
+                maActionListeners.actionPerformed( aEvent );
+            }
+            break;
+
+        default:
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -742,27 +751,35 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
 
 void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( rVclWindowEvent.GetId() == VCLEVENT_BUTTON_CLICK )
+    switch ( rVclWindowEvent.GetId() )
     {
-        CheckBox* pCheckBox = (CheckBox*)GetWindow();
-        if ( pCheckBox )
+        case VCLEVENT_BUTTON_CLICK:
         {
-            if ( maItemListeners.getLength() )
+            CheckBox* pCheckBox = (CheckBox*)GetWindow();
+            if ( pCheckBox )
             {
-                ::com::sun::star::awt::ItemEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.Highlighted = sal_False;
-                aEvent.Selected = pCheckBox->GetState();
-                maItemListeners.itemStateChanged( aEvent );
-            }
-            if ( maActionListeners.getLength() )
-            {
-                ::com::sun::star::awt::ActionEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.ActionCommand = maActionCommand;
-                maActionListeners.actionPerformed( aEvent );
+                if ( maItemListeners.getLength() )
+                {
+                    ::com::sun::star::awt::ItemEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Highlighted = sal_False;
+                    aEvent.Selected = pCheckBox->GetState();
+                    maItemListeners.itemStateChanged( aEvent );
+                }
+                if ( maActionListeners.getLength() )
+                {
+                    ::com::sun::star::awt::ActionEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.ActionCommand = maActionCommand;
+                    maActionListeners.actionPerformed( aEvent );
+                }
             }
         }
+        break;
+
+        default:
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -963,20 +980,26 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 
 void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( rVclWindowEvent.GetId() == VCLEVENT_BUTTON_CLICK )
+    switch ( rVclWindowEvent.GetId() )
     {
-        if ( maActionListeners.getLength() )
-        {
-            ::com::sun::star::awt::ActionEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            aEvent.ActionCommand = maActionCommand;
-            maActionListeners.actionPerformed( aEvent );
-        }
-        ImplClickedOrToggled( FALSE );
-    }
-    else if ( rVclWindowEvent.GetId() == VCLEVENT_RADIOBUTTON_TOGGLE )
-    {
-        ImplClickedOrToggled( TRUE );
+        case VCLEVENT_BUTTON_CLICK:
+            if ( maActionListeners.getLength() )
+            {
+                ::com::sun::star::awt::ActionEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.ActionCommand = maActionCommand;
+                maActionListeners.actionPerformed( aEvent );
+            }
+            ImplClickedOrToggled( FALSE );
+            break;
+
+        case VCLEVENT_RADIOBUTTON_TOGGLE:
+            ImplClickedOrToggled( TRUE );
+            break;
+
+        default:
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -1083,26 +1106,36 @@ void VCLXSpinField::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno
 
 void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_UP ) || ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_DOWN ) ||
-         ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_FIRST ) || ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_LAST ) )
+    switch ( rVclWindowEvent.GetId() )
     {
-        if ( maSpinListeners.getLength() )
+        case VCLEVENT_SPINFIELD_UP:
+        case VCLEVENT_SPINFIELD_DOWN:
+        case VCLEVENT_SPINFIELD_FIRST:
+        case VCLEVENT_SPINFIELD_LAST:
         {
-            ::com::sun::star::awt::SpinEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            switch ( rVclWindowEvent.GetId() )
+            if ( maSpinListeners.getLength() )
             {
-                case VCLEVENT_SPINFIELD_UP:     maSpinListeners.up( aEvent );
-                                                break;
-                case VCLEVENT_SPINFIELD_DOWN:   maSpinListeners.down( aEvent );
-                                                break;
-                case VCLEVENT_SPINFIELD_FIRST:  maSpinListeners.first( aEvent );
-                                                break;
-                case VCLEVENT_SPINFIELD_LAST:   maSpinListeners.last( aEvent );
-                                                break;
-            }
+                ::com::sun::star::awt::SpinEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                switch ( rVclWindowEvent.GetId() )
+                {
+                    case VCLEVENT_SPINFIELD_UP:     maSpinListeners.up( aEvent );
+                                                    break;
+                    case VCLEVENT_SPINFIELD_DOWN:   maSpinListeners.down( aEvent );
+                                                    break;
+                    case VCLEVENT_SPINFIELD_FIRST:  maSpinListeners.first( aEvent );
+                                                    break;
+                    case VCLEVENT_SPINFIELD_LAST:   maSpinListeners.last( aEvent );
+                                                    break;
+                }
 
+            }
         }
+        break;
+
+        default:
+            VCLXEdit::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -1376,44 +1409,55 @@ void VCLXListBox::makeVisible( sal_Int16 nEntry ) throw(::com::sun::star::uno::R
 
 void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( rVclWindowEvent.GetId() == VCLEVENT_LISTBOX_SELECT )
+    switch ( rVclWindowEvent.GetId() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox > xKeepAlive( this );
-            // in the DoubleClickHdl, the object may be destroyed, so we have to ensure
-            // that we stay alive as long as we're herein
-            // 97515 - 04.03.2002 - fs@openoffice.org
-
-        ListBox* pListBox = (ListBox*)GetWindow();
-
-        sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
-        if ( bDropDown && maActionListeners.getLength() )
+        case VCLEVENT_LISTBOX_SELECT:
         {
-            // Bei DropDown den ActionListener rufen...
-            ::com::sun::star::awt::ActionEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            aEvent.ActionCommand = pListBox->GetSelectEntry();
-            maActionListeners.actionPerformed( aEvent );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox > xKeepAlive( this );
+                // in the DoubleClickHdl, the object may be destroyed, so we have to ensure
+                // that we stay alive as long as we're herein
+                // 97515 - 04.03.2002 - fs@openoffice.org
+
+            ListBox* pListBox = (ListBox*)GetWindow();
+
+            sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
+            if ( bDropDown && maActionListeners.getLength() )
+            {
+                // Bei DropDown den ActionListener rufen...
+                ::com::sun::star::awt::ActionEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.ActionCommand = pListBox->GetSelectEntry();
+                maActionListeners.actionPerformed( aEvent );
+            }
+
+            if ( maItemListeners.getLength() )
+            {
+                ::com::sun::star::awt::ItemEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Highlighted = sal_False;
+
+                // Bei Mehrfachselektion 0xFFFF, sonst die ID
+                aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 )
+                    ? pListBox->GetSelectEntryPos() : 0xFFFF;
+
+                maItemListeners.itemStateChanged( aEvent );
+            }
         }
+        break;
 
-        if ( maItemListeners.getLength() )
-        {
-            ::com::sun::star::awt::ItemEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            aEvent.Highlighted = sal_False;
+        case VCLEVENT_LISTBOX_DOUBLECLICK:
+            if ( maActionListeners.getLength() )
+            {
+                ::com::sun::star::awt::ActionEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.ActionCommand = ((ListBox*)GetWindow())->GetSelectEntry();
+                maActionListeners.actionPerformed( aEvent );
+            }
+            break;
 
-            // Bei Mehrfachselektion 0xFFFF, sonst die ID
-            aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 )
-                ? pListBox->GetSelectEntryPos() : 0xFFFF;
-
-            maItemListeners.itemStateChanged( aEvent );
-        }
-    }
-    else if ( ( rVclWindowEvent.GetId() == VCLEVENT_LISTBOX_DOUBLECLICK ) && maActionListeners.getLength() )
-    {
-        ::com::sun::star::awt::ActionEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.ActionCommand = ((ListBox*)GetWindow())->GetSelectEntry();
-        maActionListeners.actionPerformed( aEvent );
+        default:
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -2204,30 +2248,39 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
 
 void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( ( rVclWindowEvent.GetId() == VCLEVENT_SCROLLBAR_SCROLL ) && maAdjustmentListeners.getLength() )
+    switch ( rVclWindowEvent.GetId() )
     {
-        ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
+        case VCLEVENT_SCROLLBAR_SCROLL:
+            if ( maAdjustmentListeners.getLength() )
+            {
+                ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
 
-        ::com::sun::star::awt::AdjustmentEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.Value = pScrollBar->GetThumbPos();
+                ::com::sun::star::awt::AdjustmentEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Value = pScrollBar->GetThumbPos();
 
-        // set adjustment type
-        ScrollType aType = pScrollBar->GetType();
-        if ( aType == SCROLL_LINEUP || aType == SCROLL_LINEDOWN )
-        {
-            aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_LINE;
-        }
-        else if ( aType == SCROLL_PAGEUP || aType == SCROLL_PAGEDOWN )
-        {
-            aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE;
-        }
-        else if ( aType == SCROLL_DRAG )
-        {
-            aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_ABS;
-        }
+                // set adjustment type
+                ScrollType aType = pScrollBar->GetType();
+                if ( aType == SCROLL_LINEUP || aType == SCROLL_LINEDOWN )
+                {
+                    aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_LINE;
+                }
+                else if ( aType == SCROLL_PAGEUP || aType == SCROLL_PAGEDOWN )
+                {
+                    aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE;
+                }
+                else if ( aType == SCROLL_DRAG )
+                {
+                    aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_ABS;
+                }
 
-        maAdjustmentListeners.adjustmentValueChanged( aEvent );
+                maAdjustmentListeners.adjustmentValueChanged( aEvent );
+            }
+            break;
+
+        default:
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -2543,11 +2596,20 @@ void VCLXEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(:
 
 void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( ( rVclWindowEvent.GetId() == VCLEVENT_EDIT_MODIFY ) && GetTextListeners().getLength() )
+    switch ( rVclWindowEvent.GetId() )
     {
-        ::com::sun::star::awt::TextEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        GetTextListeners().textChanged( aEvent );
+        case VCLEVENT_EDIT_MODIFY:
+            if ( GetTextListeners().getLength() )
+            {
+                ::com::sun::star::awt::TextEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTextListeners().textChanged( aEvent );
+            }
+            break;
+
+        default:
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -2812,27 +2874,39 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
 
 void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( ( rVclWindowEvent.GetId() == VCLEVENT_COMBOBOX_SELECT ) && maItemListeners.getLength() )
+    switch ( rVclWindowEvent.GetId() )
     {
-        ComboBox* pComboBox = (ComboBox*)GetWindow();
-        if ( !pComboBox->IsTravelSelect() )
-        {
-            ::com::sun::star::awt::ItemEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            aEvent.Highlighted = sal_False;
+        case VCLEVENT_COMBOBOX_SELECT:
+            if ( maItemListeners.getLength() )
+            {
+                ComboBox* pComboBox = (ComboBox*)GetWindow();
+                if ( !pComboBox->IsTravelSelect() )
+                {
+                    ::com::sun::star::awt::ItemEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.Highlighted = sal_False;
 
-            // Bei Mehrfachselektion 0xFFFF, sonst die ID
-            aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
+                    // Bei Mehrfachselektion 0xFFFF, sonst die ID
+                    aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
 
-            maItemListeners.itemStateChanged( aEvent );
-        }
-    }
-    else if ( ( rVclWindowEvent.GetId() == VCLEVENT_COMBOBOX_DOUBLECLICK ) && maActionListeners.getLength() )
-    {
-        ::com::sun::star::awt::ActionEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-//      aEvent.ActionCommand = ...;
-        maActionListeners.actionPerformed( aEvent );
+                    maItemListeners.itemStateChanged( aEvent );
+                }
+            }
+            break;
+
+        case VCLEVENT_COMBOBOX_DOUBLECLICK:
+            if ( maActionListeners.getLength() )
+            {
+                ::com::sun::star::awt::ActionEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+//              aEvent.ActionCommand = ...;
+                maActionListeners.actionPerformed( aEvent );
+            }
+            break;
+
+        default:
+            VCLXEdit::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
