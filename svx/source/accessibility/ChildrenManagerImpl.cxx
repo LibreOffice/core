@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:26:31 $
+ *  last change: $Author: af $ $Date: 2002-05-08 09:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,6 @@ namespace accessibility {
 
 struct ChildDescriptor; // See below for declaration.
 
-static AccessibleShapeTreeInfo aEmptyShapeTreeInfo;
-
 //=====  AccessibleChildrenManager  ===========================================
 
 ChildrenManagerImpl::ChildrenManagerImpl (
@@ -88,7 +86,7 @@ ChildrenManagerImpl::ChildrenManagerImpl (
     AccessibleContextBase& rContext)
     : mxShapeList (rxShapeList),
       mxParent (rxParent),
-      mpShapeTreeInfo (&rShapeTreeInfo),
+      mShapeTreeInfo (rShapeTreeInfo),
       mrContext (rContext)
 {
     OSL_TRACE ("creating new children manager with %d children", rxShapeList->getCount());
@@ -109,8 +107,8 @@ ChildrenManagerImpl::~ChildrenManagerImpl (void)
 void ChildrenManagerImpl::Init (void)
 {
     // Register as document::XEventListener.
-    if (mpShapeTreeInfo->GetControllerBroadcaster().is())
-        mpShapeTreeInfo->GetControllerBroadcaster()->addEventListener (
+    if (mShapeTreeInfo.GetControllerBroadcaster().is())
+        mShapeTreeInfo.GetControllerBroadcaster()->addEventListener (
             static_cast<document::XEventListener*>(this));
 }
 
@@ -169,7 +167,7 @@ uno::Reference<XAccessible>
                         rChildDescriptor.mxShape,
                         mxParent,
                         this),
-                    *mpShapeTreeInfo);
+                    mShapeTreeInfo);
             //            rChildDescriptor.mpAccessibleShape = pShape;
             rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
                 static_cast<uno::XWeak*>(pShape),
@@ -214,7 +212,9 @@ uno::Reference<XAccessible>
 */
 void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 {
-    Rectangle aVisibleArea = mpShapeTreeInfo->GetViewForwarder()->GetVisibleArea();
+    if (mShapeTreeInfo.GetViewForwarder() == NULL)
+        return;
+    Rectangle aVisibleArea = mShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
     OSL_TRACE ("ChildrenManagerImpl::update called with VisibleArea = %d %d %d %d",
         aVisibleArea.getX(), aVisibleArea.getY(),
         aVisibleArea.getWidth(), aVisibleArea.getHeight());
@@ -257,7 +257,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 {
     ::vos::OGuard aGuard (maMutex);
 
-    Rectangle aVisibleArea = mpShapeTreeInfo->GetViewForwarder()->GetVisibleArea();
+    Rectangle aVisibleArea = mShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
 
     // Add the visible shapes for wich the accessible objects already exist.
     AccessibleShapeList::iterator I;
@@ -374,7 +374,7 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
         if (pShape != NULL)
             pShape->ViewForwarderChanged (
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
-                mpShapeTreeInfo->GetViewForwarder());
+                mShapeTreeInfo.GetViewForwarder());
     }
 }
 
@@ -474,20 +474,20 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
 
 
 
-void ChildrenManagerImpl::SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo)
+void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo)
 {
     uno::Reference<document::XEventBroadcaster> xCurrentBroadcaster;
     {
         ::vos::OGuard aGuard (maMutex);
-        xCurrentBroadcaster = mpShapeTreeInfo->GetControllerBroadcaster();
-        mpShapeTreeInfo = &rShapeTreeInfo;
+        xCurrentBroadcaster = mShapeTreeInfo.GetControllerBroadcaster();
+        mShapeTreeInfo = rShapeTreeInfo;
     }
 
-    if (mpShapeTreeInfo->GetControllerBroadcaster() != xCurrentBroadcaster)
+    if (mShapeTreeInfo.GetControllerBroadcaster() != xCurrentBroadcaster)
     {
         // Register at new broadcaster.
-        if (mpShapeTreeInfo->GetControllerBroadcaster().is())
-            mpShapeTreeInfo->GetControllerBroadcaster()->addEventListener (
+        if (mShapeTreeInfo.GetControllerBroadcaster().is())
+            mShapeTreeInfo.GetControllerBroadcaster()->addEventListener (
                 static_cast<document::XEventListener*>(this));
 
         // Unregister at old broadcaster.
@@ -506,7 +506,7 @@ void SAL_CALL
     ChildrenManagerImpl::disposing (const lang::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    if (rEventObject.Source == mpShapeTreeInfo->GetControllerBroadcaster())
+    if (rEventObject.Source == mShapeTreeInfo.GetControllerBroadcaster())
     {
         // The disposing of a model should be handled elsewhere.  But to be
         // on the safe side we remove all of our children.
@@ -605,6 +605,8 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
     AccessibleShape* pReplacement)
     throw (uno::RuntimeException)
 {
+    sal_Bool bResult = sal_False;
+
     // Iterate over the visible children.  If one of them has an already
     // created accessible object that matches pCurrentChild then replace
     // it.  Otherwise the child to replace is either not in the list or has
@@ -629,13 +631,15 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
                 AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
                 uno::makeAny (I->mxAccessibleShape),
                 uno::Any());
-
+            bResult = sal_True;
             break;
         }
     }
 
     // When not found among the visible children we have to search the list
     // of accessible shapes.  This is not yet implemented.
+
+    return bResult;
 }
 
 

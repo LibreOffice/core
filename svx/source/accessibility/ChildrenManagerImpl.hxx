@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:20:54 $
+ *  last change: $Author: af $ $Date: 2002-05-08 09:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,12 +265,12 @@ public:
     */
     void ClearAccessibleShapeList (void);
 
-    /** Take a new event shape tree info.  Call this method to inform the
+    /** Set a new event shape tree info.  Call this method to inform the
         children manager of a change of the info bundle.
         @param rShapeTreeInfo
             The new info that replaces the current one.
     */
-    void SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo);
+    void SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
 
     //=====  lang::XEventListener  ============================================
@@ -367,7 +367,7 @@ protected:
 
     /** Bundel of information passed down the shape tree.
     */
-    const AccessibleShapeTreeInfo* mpShapeTreeInfo;
+    AccessibleShapeTreeInfo mShapeTreeInfo;
 
     /** Reference to an accessible context object that is used to inform its
         listeners of new and remved children.
