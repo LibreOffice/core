@@ -314,7 +314,7 @@ sub walkThroughJobFile
     closePackage();
     close(FILE);
 
-    print "done.\n\nThe following files are created:\n";
+    print "done.\n\nThe following files have been created in the current directory:\n";
 
     foreach $sFilename (@sFilenameStack)
     {
@@ -469,7 +469,7 @@ sub generateMakefileEntry
 # ------------------------------------------------------------------------------
 sub usage
 {
-    print "usage:\ncodegen.pl joblist\n";
+    print "usage:\ncodegen.pl joblist [targetname]\n";
     print "\n(c) Sun Microsystems Inc. 2002\n";
     print "
 This is a testshl2 codegenerator which creates compilable C++ source files
@@ -529,7 +529,7 @@ sub main
     }
     else
     {
-        print "warning: no makefile found, please add the content of makefile.add to a makefile.mk file\n";
+        print "warning: No makefile.mk found, please add the content of makefile.add to a makefile.mk file\n";
         open(MAKEFILE, ">makefile.add");
         generateMakefileEntry($sTargetName, 1);
         close(MAKEFILE);
@@ -544,7 +544,7 @@ sub main
     }
     else
     {
-        print "The file 'export.exp' file already exist, please make sure that it contain an entry 'registerAllTestFunction'.\n";
+        print "The file 'export.exp' file already exist, please make sure that it contains the entry 'registerAllTestFunction'.\n";
     }
 }
 
