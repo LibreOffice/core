@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:37:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ public:
     XlfdStorage*    GetXlfdList();
     ExtendedFontStruct*
     GetFont( const ExtendedXlfd *pFont,
-             int nPixelSize, sal_Bool bVertical );
+             const Size& rPixelSize, sal_Bool bVertical );
     const ExtendedXlfd*
     GetFallbackFactory()
     { return mpFallbackFactory; }
