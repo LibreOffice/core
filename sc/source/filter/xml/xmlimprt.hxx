@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 14:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ enum ScXMLTableAttrTokens
 {
     XML_TOK_TABLE_NAME,
     XML_TOK_TABLE_STYLE_NAME,
-    XML_TOK_TABLE_PROTECTION
+    XML_TOK_TABLE_PROTECTION,
+    XML_TOK_TABLE_PRINT_RANGES
 };
 
 enum ScXMLTableScenarioAttrTokens
@@ -667,8 +668,10 @@ public:
     void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) { aMyNamedExpressions.insert(aMyNamedExpressions.end(), pMyNamedExpression); }
     ScMyNamedExpressions* GetNamedExpressions() { return &aMyNamedExpressions; }
 
-    void    GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange );
-    void    GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList );
+    void        GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange );
+    void        GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList );
+    sal_Int32   GetRangeFromString( const rtl::OUString& rRangeListStr, sal_Int32 nOffset,
+                                    com::sun::star::table::CellRangeAddress& rCellRange );
 };
 
 #endif

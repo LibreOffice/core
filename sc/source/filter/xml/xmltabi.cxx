@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 14:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 using namespace com::sun::star;
@@ -122,6 +124,9 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 case XML_TOK_TABLE_PROTECTION:
                         if (sValue.compareToAscii(sXML_true) == 0)
                             bProtection = sal_True;
+                    break;
+                case XML_TOK_TABLE_PRINT_RANGES:
+                        sPrintRanges = sValue;
                     break;
             }
         }
@@ -187,5 +192,35 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
+    sal_Int16 nTable = GetScImport().GetTables().GetCurrentSheet();
+    uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
+    if( xSpreadDoc.is() )
+    {
+        uno::Reference< sheet::XSpreadsheets > xSheets = xSpreadDoc->getSheets();
+        uno::Reference< container::XIndexAccess > xIndex( xSheets, uno::UNO_QUERY );
+        if( xIndex.is() )
+        {
+            uno::Reference< sheet::XSpreadsheet > xTable;
+            uno::Any aTable = xIndex->getByIndex( nTable );
+            if( aTable >>= xTable )
+            {
+                uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
+                if( xPrintAreas.is() )
+                {
+                    uno::Sequence< table::CellRangeAddress > aRangeList;
+                    sal_Int32 nIndex = 0;
+                    while( nIndex >= 0 )
+                    {
+                        table::CellRangeAddress aCellRange;
+                        nIndex = GetScImport().GetRangeFromString( sPrintRanges, nIndex, aCellRange );
+                        aRangeList.realloc( aRangeList.getLength() + 1 );
+                        aRangeList[ aRangeList.getLength() - 1 ] = aCellRange;
+                    }
+                    xPrintAreas->setPrintAreas( aRangeList );
+                }
+            }
+        }
+    }
     GetScImport().GetTables().DeleteTable();
 }
+

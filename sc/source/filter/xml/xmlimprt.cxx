@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 14:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_name,                       XML_TOK_TABLE_NAME              },
     { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_STYLE_NAME        },
     { XML_NAMESPACE_TABLE, sXML_use_cell_protection,        XML_TOK_TABLE_PROTECTION        },
+    { XML_NAMESPACE_TABLE, sXML_print_ranges,               XML_TOK_TABLE_PRINT_RANGES      },
     XML_TOKEN_MAP_END
 };
 
@@ -1249,19 +1250,20 @@ void ScXMLImport::GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& r
 void ScXMLImport::GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList )
 {
     rtl::OUStringBuffer aBuffer;
-    sal_Int32           nIndex( 0 );
-    sal_Bool            bQuote( sal_False );
-    sal_Bool            bGetRange( sal_False );
-    while( nIndex < rRangeListStr.getLength() )
+    sal_Int32           nLength     = rRangeListStr.getLength();
+    sal_Int32           nIndex      = 0;
+    sal_Bool            bQuote      = sal_False;
+    sal_Bool            bGetRange   = sal_False;
+    while( nIndex < nLength )
     {
-        sal_Unicode nCode( rRangeListStr[nIndex] );
+        sal_Unicode nCode = rRangeListStr[nIndex];
         if( (nCode != ' ') || bQuote )
         {
             aBuffer.append( nCode );
             bQuote = (bQuote != (nCode == '\''));
         }
         else bGetRange = (nCode == ' ');
-        if( bGetRange || (nIndex == rRangeListStr.getLength() - 1) )
+        if( bGetRange || (nIndex == nLength - 1) )
         {
             ScRange* pRange = new ScRange;
             GetRangeFromString( aBuffer.makeStringAndClear(), *pRange );
@@ -1270,5 +1272,37 @@ void ScXMLImport::GetRangeListFromString( const rtl::OUString& rRangeListStr, Sc
         }
         nIndex++;
     }
+}
+
+sal_Int32 ScXMLImport::GetRangeFromString( const rtl::OUString& rRangeListStr, sal_Int32 nOffset,
+                table::CellRangeAddress& rCellRange )
+{
+    rtl::OUStringBuffer aBuffer;
+    sal_Int32           nLength     = rRangeListStr.getLength();
+    sal_Int32           nIndex      = nOffset;
+    sal_Bool            bQuote      = sal_False;
+    sal_Bool            bExitLoop   = sal_False;
+
+    while( !bExitLoop && (nIndex < nLength) )
+    {
+        sal_Unicode nCode = rRangeListStr[nIndex];
+        if( (nCode != ' ') || bQuote )
+        {
+            aBuffer.append( nCode );
+            bQuote = (bQuote != (nCode == '\''));
+        }
+        else bExitLoop = (nCode == ' ');
+        nIndex++;
+    }
+
+    ScRange aRange;
+    GetRangeFromString( aBuffer.makeStringAndClear(), aRange );
+    rCellRange.Sheet = aRange.aStart.Tab();
+    rCellRange.StartColumn = aRange.aStart.Col();
+    rCellRange.EndColumn = aRange.aEnd.Col();
+    rCellRange.StartRow = aRange.aStart.Row();
+    rCellRange.EndRow = aRange.aEnd.Row();
+
+    return (nIndex < nLength) ? nIndex : -1;
 }
 
