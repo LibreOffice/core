@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-22 13:44:16 $
+ *  last change: $Author: mt $ $Date: 2002-10-10 08:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,13 @@ void FileControl::ImplBrowseFile( )
             if ( nError == osl_File_E_INVAL )
                 sFileURL = GetText();   // #97709# Maybe URL is already a file URL...
 
-            // initially set this directory
-            xFilePicker->setDisplayDirectory( sFileURL );
+            //#90430# Check if URL is really a file URL
+            ::rtl::OUString aTmp;
+            if ( osl_getSystemPathFromFileURL( sFileURL.pData, &aTmp.pData ) == osl_File_E_None )
+            {
+                // initially set this directory
+                xFilePicker->setDisplayDirectory( sFileURL );
+            }
 
             if ( xFilePicker.is() && xFilePicker->execute() )
             {
@@ -135,9 +140,8 @@ void FileControl::ImplBrowseFile( )
         else
             ShowServiceNotAvailableError( this, sServiceName, sal_True );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        e;  // make compiler happy
         DBG_ERROR( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
     }
 }
@@ -145,6 +149,9 @@ void FileControl::ImplBrowseFile( )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/08/22 13:44:16  mt
+ *  #97709# Maybe URL is already a file URL...
+ *
  *  Revision 1.1  2001/09/04 09:00:26  fs
  *  initial checkin - exception enabled parts of filectrl.cxx
  *
