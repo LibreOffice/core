@@ -1,3 +1,5 @@
+all_fragments+=palm
+
 # -----------------------------------------------
 # count = 1
 T4_PALM = \
@@ -26,6 +28,6 @@ CONTENTHANDLERS_4fcfg_palm = $(foreach,i,$(C4_PALM) contenthandlers$/$i.xcu)
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_palm = \
     $(TYPES_4fcfg_palm) \
-    $(FILTERS_4fcfg_palm) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_palm) \
     $(CONTENTHANDLERS_4fcfg_palm)
