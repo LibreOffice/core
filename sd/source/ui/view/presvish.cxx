@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:50:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #ifndef _SFX_DISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
+
+#include <sfx2/objface.hxx>
 
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
