@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:03:15 $
+ *  last change:$Date: 2003-09-08 13:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,15 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
 
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.XControl;
@@ -71,15 +78,11 @@ import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-import com.sun.star.text.XTextDocument;
+import com.sun.star.util.XCloseable;
+
 
 /**
 * Test for object which is represented by service
@@ -112,8 +115,7 @@ import com.sun.star.text.XTextDocument;
 * @see ifc.awt._XView
 */
 public class UnoControlDialog extends TestCase {
-
-    private XWindow xWinDlg = null ;
+    private XWindow xWinDlg = null;
     public XTextDocument xTextDoc;
 
     /**
@@ -122,12 +124,11 @@ public class UnoControlDialog extends TestCase {
     * for Control, adds to Dialog a button, sets its size and
     * sets the dialog visible. <p>
     */
-    public synchronized TestEnvironment createTestEnvironment
-        ( TestParameters Param,PrintWriter log ) {
-
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                              PrintWriter log) {
         XInterface oObj = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF() ;
-        XControlModel dlgModel = null ;
+        XMultiServiceFactory xMSF =  (XMultiServiceFactory) Param.getMSF();
+        XControlModel dlgModel = null;
 
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
@@ -135,127 +136,140 @@ public class UnoControlDialog extends TestCase {
         XGraphics aGraphic = null;
 
         XControl butControl = null;
-        XControl butControl1 = null ;
-        XControl butControl2 = null ;
+        XControl butControl1 = null;
+        XControl butControl2 = null;
 
         XControlContainer ctrlCont = null;
 
-        if (xWinDlg != null) xWinDlg.dispose() ;
+        if (xWinDlg != null) {
+            xWinDlg.dispose();
+        }
 
         try {
-            dlgModel = (XControlModel) UnoRuntime.queryInterface
-                (XControlModel.class, xMSF.createInstance
-                ("com.sun.star.awt.UnoControlDialogModel")) ;
+            dlgModel = (XControlModel) UnoRuntime.queryInterface(
+                               XControlModel.class,
+                               xMSF.createInstance(
+                                       "com.sun.star.awt.UnoControlDialogModel"));
 
-            XControl dlgControl = (XControl) UnoRuntime.queryInterface
-                (XControl.class, xMSF.createInstance
-                ("com.sun.star.awt.UnoControlDialog")) ;
+            XControl dlgControl = (XControl) UnoRuntime.queryInterface(
+                                          XControl.class,
+                                          xMSF.createInstance(
+                                                  "com.sun.star.awt.UnoControlDialog"));
 
-            dlgControl.setModel(dlgModel) ;
+            dlgControl.setModel(dlgModel);
 
-            XControlModel butModel = (XControlModel) UnoRuntime.queryInterface
-                (XControlModel.class,
-                xMSF.createInstance("com.sun.star.awt.UnoControlButtonModel")) ;
+            XControlModel butModel = (XControlModel) UnoRuntime.queryInterface(
+                                             XControlModel.class,
+                                             xMSF.createInstance(
+                                                     "com.sun.star.awt.UnoControlButtonModel"));
 
-            butControl = (XControl) UnoRuntime.queryInterface
-                (XControl.class,
-                xMSF.createInstance("com.sun.star.awt.UnoControlButton")) ;
+            butControl = (XControl) UnoRuntime.queryInterface(XControl.class,
+                                                              xMSF.createInstance(
+                                                                      "com.sun.star.awt.UnoControlButton"));
 
-            butControl.setModel(butModel) ;
+            butControl.setModel(butModel);
+
 
             // creating additional controls for XControlContainer
+            butModel = (XControlModel) UnoRuntime.queryInterface(
+                               XControlModel.class,
+                               xMSF.createInstance(
+                                       "com.sun.star.awt.UnoControlButtonModel"));
 
-            butModel = (XControlModel) UnoRuntime.queryInterface
-                (XControlModel.class,
-                xMSF.createInstance("com.sun.star.awt.UnoControlButtonModel")) ;
+            butControl1 = (XControl) UnoRuntime.queryInterface(XControl.class,
+                                                               xMSF.createInstance(
+                                                                       "com.sun.star.awt.UnoControlButton"));
 
-            butControl1 = (XControl) UnoRuntime.queryInterface
-                (XControl.class,
-                xMSF.createInstance("com.sun.star.awt.UnoControlButton")) ;
+            butControl1.setModel(butModel);
 
-            butControl1.setModel(butModel) ;
+            butModel = (XControlModel) UnoRuntime.queryInterface(
+                               XControlModel.class,
+                               xMSF.createInstance(
+                                       "com.sun.star.awt.UnoControlButtonModel"));
 
-            butModel = (XControlModel) UnoRuntime.queryInterface
-                (XControlModel.class,
-                xMSF.createInstance("com.sun.star.awt.UnoControlButtonModel")) ;
+            butControl2 = (XControl) UnoRuntime.queryInterface(XControl.class,
+                                                               xMSF.createInstance(
+                                                                       "com.sun.star.awt.UnoControlButton"));
 
-            butControl2 = (XControl) UnoRuntime.queryInterface
-                (XControl.class,
-                xMSF.createInstance("com.sun.star.awt.UnoControlButton")) ;
+            butControl2.setModel(butModel);
 
-            butControl2.setModel(butModel) ;
+            ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
+                               XControlContainer.class, dlgControl);
 
-            ctrlCont = (XControlContainer)
-                UnoRuntime.queryInterface(XControlContainer.class, dlgControl) ;
+            xWinDlg = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                          dlgControl);
 
+            xWinDlg.setVisible(true);
 
-            xWinDlg = (XWindow) UnoRuntime.queryInterface
-                (XWindow.class, dlgControl) ;
-
-            xWinDlg.setVisible(true) ;
-
-            xWinDlg.setPosSize(10, 10, 220, 110, PosSize.SIZE) ;
+            xWinDlg.setPosSize(10, 10, 220, 110, PosSize.SIZE);
 
             the_win = dlgControl.getPeer();
             the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(220,220);
+            aDevice = the_kit.createScreenCompatibleDevice(220, 220);
             aGraphic = aDevice.createGraphics();
 
-            oObj = dlgControl ;
-
+            oObj = dlgControl;
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Error creating dialog :") ;
-            e.printStackTrace(log) ;
+            log.println("Error creating dialog :");
+            e.printStackTrace(log);
         }
 
+        log.println("creating a new environment for object");
 
-        log.println( "creating a new environment for object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
 
         //Adding ObjRelation for XView
-        tEnv.addObjRelation("GRAPHICS",aGraphic);
+        tEnv.addObjRelation("GRAPHICS", aGraphic);
+
 
         //Adding ObjRelation for XControl
-        tEnv.addObjRelation("CONTEXT",dlgModel);
-        tEnv.addObjRelation("WINPEER",the_win);
-        tEnv.addObjRelation("TOOLKIT",the_kit);
-        tEnv.addObjRelation("MODEL",dlgModel);
+        tEnv.addObjRelation("CONTEXT", dlgModel);
+        tEnv.addObjRelation("WINPEER", the_win);
+        tEnv.addObjRelation("TOOLKIT", the_kit);
+        tEnv.addObjRelation("MODEL", dlgModel);
 
-        tEnv.addObjRelation("INSTANCE",butControl);
-        tEnv.addObjRelation("XContainer.Container",ctrlCont);
+        tEnv.addObjRelation("INSTANCE", butControl);
+        tEnv.addObjRelation("XContainer.Container", ctrlCont);
+
 
         // adding relations for XControlContainer
-        tEnv.addObjRelation("CONTROL1", butControl1) ;
-        tEnv.addObjRelation("CONTROL2", butControl2) ;
+        tEnv.addObjRelation("CONTROL1", butControl1);
+        tEnv.addObjRelation("CONTROL2", butControl2);
 
-
-        XWindow forObjRel =
-                xTextDoc.getCurrentController().getFrame().getComponentWindow();
-        tEnv.addObjRelation("XWindow.AnotherWindow",forObjRel);
+        XWindow forObjRel = xTextDoc.getCurrentController().getFrame()
+                                    .getComponentWindow();
+        tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);
 
         return tEnv;
-
     } // finish method getTestEnvironment
 
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-
-        log.println("Disposing dialog ...") ;
-        xWinDlg.dispose() ;
-        xTextDoc.dispose();
-    }
-
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        log.println("Disposing dialog ...");
+        xWinDlg.dispose();
+        log.println("    disposing xTextDoc ");
 
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
         }
     }
 
-}
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
 
+        try {
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
+            // Some exception occures.FAILED
+            e.printStackTrace(log);
+            throw new StatusException("Couldn³t create document", e);
+        }
+    }
+}
