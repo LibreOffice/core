@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_DDELinksEnumeration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:07:31 $
+ *  last change:$Date: 2003-09-08 12:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,8 @@
 
 package mod._sc;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -81,8 +70,18 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 import util.utils;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
     XSpreadsheetDocument xSheetDoc = null;
@@ -118,7 +117,6 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        Object oInterface = null;
         XInterface oObj = null;
 
         // creation of testobject here
@@ -128,18 +126,6 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
         // create testobject here
 
         XMultiServiceFactory oMSF = (XMultiServiceFactory)Param.getMSF();
-        try {
-            oInterface = oMSF.createInstance("com.sun.star.frame.Desktop" );
-        } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create instance", e);
-        }
-
-        // query the desktop interface and then it's componentloader
-        XDesktop oDesktop = ( XDesktop )
-            UnoRuntime.queryInterface(XDesktop.class, oInterface);
-        XComponentLoader oCLoader = ( XComponentLoader )
-            UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
 
         // load the predefined testdocument
         String testdoc = utils.getFullTestURL("ScDDELinksObj.sdc");
