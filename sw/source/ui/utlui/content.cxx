@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-06-25 08:56:47 $
+ *  last change: $Author: os $ $Date: 2002-06-27 11:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2996,7 +2996,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         String sForbiddenChars;
         if(CONTENT_TYPE_BOOKMARK == nType)
         {
-            sForbiddenChars = C2S("/\\@:*?\";,.# ");
+            sForbiddenChars = C2S("/\\@:*?\";,.#");
         }
         else if(CONTENT_TYPE_TABLE == nType)
         {
