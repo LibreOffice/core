@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 14:52:27 $
+ *  last change: $Author: mtg $ $Date: 2000-12-07 11:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             pFolder->aEntry.nCrc = 0;
             pFolder->aEntry.nSize = 0;
             pFolder->aEntry.nCompressedSize = 0;
+            pFolder->aEntry.nMethod = STORED;
             try
             {
                 rZipOut.putNextEntry(pFolder->aEntry);

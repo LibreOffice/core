@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:08 $
+ *  last change: $Author: mtg $ $Date: 2000-12-07 11:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,8 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
             case STORED:
 
                 pEntry->nCrc = aCRC.getValue();
-                writeEXT(*pEntry);
+                if (!((pEntry->nFlag & 8) == 0))
+                    writeEXT(*pEntry);
                 /*
                 if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
                 {
