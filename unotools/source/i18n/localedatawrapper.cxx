@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2001-12-05 17:51:01 $
+ *  last change: $Author: er $ $Date: 2002-06-06 18:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 
 #ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYINDEX_HPP_
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_NUMBERFORMATINDEX_HPP_
+#include <com/sun/star/i18n/NumberFormatIndex.hdl>
 #endif
 
 #define LOCALEDATA_LIBRARYNAME "i18npool"
@@ -1094,12 +1098,15 @@ void LocaleDataWrapper::getDateFormatsImpl()
         nDateFormat = nLongDateFormat = DMY;
         return ;
     }
-    // find a default (medium preferred), a medium (default preferred), and a long (default preferred)
+    // find the edit (21), a default (medium preferred),
+    // a medium (default preferred), and a long (default preferred)
     NumberFormatCode const * const pFormatArr = aFormatSeq.getArray();
-    sal_Int32 nElem, nDef, nMedium, nLong;
-    nDef = nMedium = nLong = -1;
+    sal_Int32 nElem, nEdit, nDef, nMedium, nLong;
+    nEdit = nDef = nMedium = nLong = -1;
     for ( nElem = 0; nElem < nCnt; nElem++ )
     {
+        if ( nEdit == -1 && pFormatArr[nElem].Index == NumberFormatIndex::DATE_SYS_DDMMYYYY )
+            nEdit = nElem;
         if ( nDef == -1 && pFormatArr[nElem].Default )
             nDef = nElem;
         switch ( pFormatArr[nElem].Type )
@@ -1119,33 +1126,37 @@ void LocaleDataWrapper::getDateFormatsImpl()
             {
                 if ( pFormatArr[nElem].Default )
                     nLong = nElem;
-                else if ( nMedium == -1 )
+                else if ( nLong == -1 )
                     nLong = nElem;
             }
             break;
         }
     }
-    if ( nDef == -1 )
+    if ( nEdit == -1 )
     {
 #ifndef PRODUCT
-        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no default" ) );
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no edit" ) );
         DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
 #endif
-        if ( nMedium != -1 )
-            nDef = nMedium;
-        else if ( nLong != -1 )
-            nDef = nLong;
-        else
-            nDef = 0;
+        if ( nDef == -1 )
+        {
+#ifndef PRODUCT
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no default" ) );
+            DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
+            if ( nMedium != -1 )
+                nDef = nMedium;
+            else if ( nLong != -1 )
+                nDef = nLong;
+            else
+                nDef = 0;
+        }
+        nEdit = nDef;
     }
-    DateFormat nDF = scanDateFormatImpl( pFormatArr[nDef].Code );
-    if ( pFormatArr[nDef].Type == KNumberFormatType::LONG )
-    {
-        nLongDateFormat = nDF;
-        if ( nMedium == -1 )
-            nDateFormat = nDF;
-        else
-            nDateFormat = scanDateFormatImpl( aFormatSeq[nMedium].Code );
+    DateFormat nDF = scanDateFormatImpl( pFormatArr[nEdit].Code );
+    if ( pFormatArr[nEdit].Type == KNumberFormatType::LONG )
+    {   // normally this is not the case
+        nLongDateFormat = nDateFormat = nDF;
     }
     else
     {
@@ -1153,7 +1164,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
         if ( nLong == -1 )
             nLongDateFormat = nDF;
         else
-            nLongDateFormat = scanDateFormatImpl( aFormatSeq[nLong].Code );
+            nLongDateFormat = scanDateFormatImpl( pFormatArr[nLong].Code );
     }
 }
 
