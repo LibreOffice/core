@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:08:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,11 @@
 #ifndef _XMLOFF_FORMS_VALUEPROPERTIES_HXX_
 #include "valueproperties.hxx"
 #endif
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
+#include <com/sun/star/text/XTextCursor.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -83,6 +88,8 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
+/** === end UNO includes === **/
+
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
@@ -471,6 +478,11 @@ namespace xmloff
     */
     class OTextLikeImport : public OControlImport
     {
+    private:
+        ::com::sun::star::uno::Reference< com::sun::star::text::XTextCursor >   m_xCursor;
+        ::com::sun::star::uno::Reference< com::sun::star::text::XTextCursor >   m_xOldCursor;
+        bool                                                                    m_bEncounteredTextPara;
+
     public:
         OTextLikeImport(
             IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -481,6 +493,14 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+        virtual SvXMLImportContext* CreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+        virtual void    EndElement();
+
+    private:
+        void    adjustDefaultControlProperty();
+        void    removeRedundantCurrentValue();
     };
 
     //=====================================================================
