@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mav $ $Date: 2001-10-11 06:55:40 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,8 +1640,8 @@ UUIInteractionHandler::handleErrorRequest(
             if (!xManager.get())
                 return;
         }
-        if (!ErrorResource(ResId(aId[eSource], xManager.get())).
-                 getString(nErrorCode, &aMessage))
+        ResId aResId(aId[eSource], xManager.get());
+        if (!ErrorResource(aResId).  getString(nErrorCode, &aMessage))
             return;
     }
     for (sal_Int32 i = 0;;)
