@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:23:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,8 @@ BOOL WinSalFrame::mbInReparent = FALSE;
 
 // =======================================================================
 
-static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame );
+static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
+static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
 
 static void ImplSaveFrameState( WinSalFrame* pFrame )
 {
@@ -603,14 +604,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     {
         // #96084 set a useful internal window size because
         // the window will not be maximized (and the size updated) before show()
-        RECT aRect;
-        ImplSalGetWorkArea( pFrame->mhWnd, &aRect, NULL );
-        AdjustWindowRectEx( &aRect, GetWindowStyle( hWnd ),
-                            FALSE,     GetWindowExStyle( hWnd ) );
-        pFrame->maGeometry.nX = aRect.left;
-        pFrame->maGeometry.nY = aRect.top;;
-        pFrame->maGeometry.nWidth = aRect.right - aRect.left + 1;
-        pFrame->maGeometry.nHeight = aRect.bottom - aRect.top + 1;
+
+        SetMaximizedFrameGeometry( hWnd, pFrame );
     }
 
     return pFrame;
@@ -1579,11 +1574,15 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
 static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAsChild )
 {
-    pThis->mbInReparent = TRUE;
-
     // save hwnd, will be overwritten in WM_CREATE during createwindow
     HWND hWndOld = pThis->mhWnd;
     HWND hWndOldParent = ::GetParent( hWndOld );
+
+    if( hNewParentWnd == hWndOldParent )
+        return;
+
+    pThis->mbInReparent = TRUE;
+
     BOOL bNeedGraphics = pThis->mbGraphics;
     HFONT   hFont   = NULL;
     HPEN    hPen    = NULL;
@@ -1668,7 +1667,8 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
     }
 
     // now destroy original hwnd
-    DestroyWindow( hWndOld );
+    if( !DestroyWindow( hWndOld ) )
+        SetWindowPtr( hWndOld, 0 );
 
     pThis->mbInReparent = FALSE;
 }
@@ -1842,25 +1842,7 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
         {
             // #96084 set a useful internal window size because
             // the window will not be maximized (and the size updated) before show()
-            POINT pt;
-            GetCursorPos( &pt );
-            RECT aRectMouse;
-            aRectMouse.left = pt.x;
-            aRectMouse.top = pt.y;
-            aRectMouse.right = pt.x+2;
-            aRectMouse.bottom = pt.y+2;
-
-            // dualmonitor support:
-            // Get screensize of the monitor whith the mouse pointer
-
-            RECT aRect;
-            ImplSalGetWorkArea( mhWnd, &aRect, &aRectMouse );
-            AdjustWindowRectEx( &aRect, GetWindowStyle( mhWnd ),
-                                FALSE,     GetWindowExStyle( mhWnd ) );
-            maGeometry.nX = aRect.left;
-            maGeometry.nY = aRect.top;;
-            maGeometry.nWidth = aRect.right - aRect.left + 1;
-            maGeometry.nHeight = aRect.bottom - aRect.top + 1;
+            SetMaximizedFrameGeometry( mhWnd, this );
         }
         else
             SetWindowPos( mhWnd, 0,
@@ -3926,7 +3908,36 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
 
 // -----------------------------------------------------------------------
 
-static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
+static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
+{
+    // calculate and set frame geometry of a maximized window - useful if the window is still hidden
+
+    // dualmonitor support:
+    // Get screensize of the monitor whith the mouse pointer
+
+    POINT pt;
+    GetCursorPos( &pt );
+    RECT aRectMouse;
+    aRectMouse.left = pt.x;
+    aRectMouse.top = pt.y;
+    aRectMouse.right = pt.x+2;
+    aRectMouse.bottom = pt.y+2;
+
+    RECT aRect;
+    ImplSalGetWorkArea( hWnd, &aRect, &aRectMouse );
+
+    // a maximized window has no other borders than the caption
+    pFrame->maGeometry.nLeftDecoration = pFrame->maGeometry.nRightDecoration = pFrame->maGeometry.nBottomDecoration = 0;
+    pFrame->maGeometry.nTopDecoration = pFrame->mbCaption ? GetSystemMetrics( SM_CYCAPTION ) : 0;
+
+    aRect.top += pFrame->maGeometry.nTopDecoration;
+    pFrame->maGeometry.nX = aRect.left;
+    pFrame->maGeometry.nY = aRect.top;
+    pFrame->maGeometry.nWidth = aRect.right - aRect.left;
+    pFrame->maGeometry.nHeight = aRect.bottom - aRect.top;
+}
+
+static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
 {
     if( !pFrame )
         return;
