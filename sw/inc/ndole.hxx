@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:16:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,16 @@
 #include <ndnotxt.hxx>
 #endif
 
+#include <svtools/embedhlp.hxx>
+
 class SwGrfFmtColl;
 class SwDoc;
-class SvInPlaceObjectRef;
-class SvInPlaceObject;
 class SwOLENode;
 class SwOLELink;
 class SwOLELRUCache;
 
 
+class SwOLEListener_Impl;
 class SwOLEObj
 {
     friend class SwOLENode;
@@ -81,11 +82,12 @@ class SwOLEObj
     static SwOLELRUCache* pOLELRU_Cache;
 
     const SwOLENode* pOLENd;
+    SwOLEListener_Impl* pListener;
 
     //Entweder Ref oder Name sind bekannt, wenn nur der Name bekannt ist, wird
     //dir Ref bei Anforderung durch GetOleRef() vom Sfx besorgt.
-    SvInPlaceObjectRef *pOLERef;
-    //new/delete, damit so2.hxx wegfaellt.
+    svt::EmbeddedObjectRef xOLERef;
+    //com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xOLERef;
     String aName;
 
     SwOLEObj( const SwOLEObj& rObj );   //nicht erlaubt.
@@ -94,7 +96,7 @@ class SwOLEObj
     void SetNode( SwOLENode* pNode );
 
 public:
-    SwOLEObj( SvInPlaceObject *pObj );
+    SwOLEObj( const svt::EmbeddedObjectRef& pObj );
     SwOLEObj( const String &rName );
     ~SwOLEObj();
 
@@ -103,8 +105,10 @@ public:
     String GetDescription();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-    SvInPlaceObjectRef GetOleRef();
-    const String &GetName() const { return aName; }
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
+    svt::EmbeddedObjectRef& GetObject();
+//    const String &GetName() const { return aName; }
+    const String& GetCurrentPersistName() const { return aName; }
 
     BOOL IsOleRef() const;  //Damit das Objekt nicht unnoetig geladen werden muss.
 #endif
@@ -115,20 +119,19 @@ public:
 // SwOLENode
 // --------------------
 
-struct SwPersistentOleData;
-
 class SwOLENode: public SwNoTxtNode
 {
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
-    SwPersistentOleData* pSavedData;
+    Graphic*    pGraphic;
+    sal_Int64   nViewAspect;
     String sChartTblName;       // bei Chart Objecten: Name der ref. Tabelle
     BOOL   bOLESizeInvalid;     //Soll beim SwDoc::PrtOLENotify beruecksichtig
                                 //werden (zum Beispiel kopiert). Ist nicht
                                 //Persistent.
 
     SwOLENode(  const SwNodeIndex &rWhere,
-                SvInPlaceObject *,
+                const svt::EmbeddedObjectRef&,
                 SwGrfFmtColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
@@ -143,12 +146,15 @@ class SwOLENode: public SwNoTxtNode
 public:
     const SwOLEObj& GetOLEObj() const { return aOLEObj; }
           SwOLEObj& GetOLEObj()       { return aOLEObj; }
+    ~SwOLENode();
 
     virtual SwCntntNode *SplitNode( const SwPosition & );
         // steht in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     virtual Size GetTwipSize() const;
+    Graphic* GetGraphic();
+    void GetNewReplacement();
 
     virtual BOOL SavePersistentData();
     virtual BOOL RestorePersistentData();
@@ -159,6 +165,11 @@ public:
     BOOL IsOLESizeInvalid() const   { return bOLESizeInvalid; }
     void SetOLESizeInvalid( BOOL b ){ bOLESizeInvalid = b; }
 
+    sal_Int64 GetAspect() const { return nViewAspect; }
+    void SetAspect( sal_Int64 nAspect) { nViewAspect = nAspect; }
+
+    // OLE-Object aus dem "Speicher" entfernen
+    // inline void Unload() { aOLEObj.Unload(); }
     String GetDescription() const { return aOLEObj.GetDescription(); }
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
