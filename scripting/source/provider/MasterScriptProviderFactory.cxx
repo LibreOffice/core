@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 13:07:51 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,19 +83,12 @@ namespace func_provider
 
 MasterScriptProviderFactory::MasterScriptProviderFactory(
     Reference< XComponentContext > const & xComponentContext )
-    : m_xComponentContext( xComponentContext ), m_MSPList(0)
+    : m_xComponentContext( xComponentContext )
 {
 }
 
 MasterScriptProviderFactory::~MasterScriptProviderFactory()
 {
-    // by setting m_MSPListHolder to an empty reference the existing
-    // Reference to the ActiveMSPList object will get released causing
-    // the ActiveMSPList to get destructed
-    if (m_MSPListHolder.is())
-    {
-        m_MSPListHolder = Reference< lang::XEventListener >();
-    }
 }
 
 
@@ -107,7 +100,7 @@ MasterScriptProviderFactory::~MasterScriptProviderFactory()
 Reference< provider::XScriptProvider > SAL_CALL
 MasterScriptProviderFactory::createScriptProvider( const Any& context ) throw ( lang::IllegalArgumentException, RuntimeException)
 {
-    Reference< provider::XScriptProvider > xMsp( getActiveMSPList().createMSP( context ), UNO_QUERY_THROW );
+    Reference< provider::XScriptProvider > xMsp( getActiveMSPList()->createMSP( context ), UNO_QUERY_THROW );
     return xMsp;
 }
 
@@ -115,19 +108,16 @@ MasterScriptProviderFactory::createScriptProvider( const Any& context ) throw ( 
 // Helper methods
 //############################################################################
 
-ActiveMSPList&
-MasterScriptProviderFactory::getActiveMSPList()
+const rtl::Reference< ActiveMSPList > &
+MasterScriptProviderFactory::getActiveMSPList() const
 {
-    if ( !m_MSPList )
+    if ( !m_MSPList.is() )
     {
         ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if ( !m_MSPList )
-        {
+        if ( !m_MSPList.is() )
            m_MSPList = new ActiveMSPList( m_xComponentContext );
-           m_MSPListHolder = m_MSPList;
-        }
     }
-    return *m_MSPList;
+    return m_MSPList;
 }
 
 //############################################################################
