@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-15 21:46:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ String RID_GALLERYSTR_THEME_FLAGS
     Text[ chinese_traditional ] = "¦U¦¡°êºX";
     Text[ arabic ] = "ÃÚáÇã";
     Text[ greek ] = "Óçìáßåò";
-    Text[ korean ] = "±¹±â";
+    Text[ korean ] = "ÇÃ·¡±×";
     Text[ turkish ] = "Bayraklar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Banderas";
@@ -341,7 +341,7 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ portuguese_brazilian ] = "Homepage";
     Text[ japanese ] = "Î°ÑÍß°¼Þ";
     Text[ chinese_simplified ] = "Ö÷Ò³";
-    Text[ chinese_traditional ] = "ºô¸ô¥D­¶";
+    Text[ chinese_traditional ] = "­º­¶";
     Text[ arabic ] = "ãæÞÚ ÅäÊÑäÊ";
     Text[ greek ] = "Áñ÷éêÞ óåëßäá";
     Text[ korean ] = "È¨ÆäÀÌÁö";
@@ -905,7 +905,7 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[ polish ] = "Klimat";
     Text[ portuguese_brazilian ] = "Climate";
     Text[ japanese ] = "‹CŒó";
-    Text[ korean ] = "Climate";
+    Text[ korean ] = "±âÈÄ";
     Text[ chinese_simplified ] = "Æøºò";
     Text[ chinese_traditional ] = "®ð­Ô";
     Text[ turkish ] = "Climate";
@@ -933,7 +933,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[ polish ] = "Szko³a i uniwersytet";
     Text[ portuguese_brazilian ] = "School & University";
     Text[ japanese ] = "‹³ˆç‹@ŠÖ";
-    Text[ korean ] = "School & University";
+    Text[ korean ] = "ÇÐ±³ & ´ëÇÐ";
     Text[ chinese_simplified ] = "ÖÐÑ§ºÍ´óÑ§";
     Text[ chinese_traditional ] = "¤¤¾Ç©M¤j¾Ç";
     Text[ turkish ] = "School & University";
@@ -961,7 +961,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[ polish ] = "Rozwi¹zania problemu";
     Text[ portuguese_brazilian ] = "Problem Solving";
     Text[ japanese ] = "Ä×ÌÞÙ‰ðŒˆ";
-    Text[ korean ] = "Problem Solving";
+    Text[ korean ] = "¹®Á¦ ÇØ°á";
     Text[ chinese_simplified ] = "½â¾öÎÊÌâµÄ·½°¸";
     Text[ chinese_traditional ] = "¸Ñ¨M°ÝÃDªº¤è®×";
     Text[ turkish ] = "Problem Solving";
@@ -985,6 +985,7 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
 
 
 
