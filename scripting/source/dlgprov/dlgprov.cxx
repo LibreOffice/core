@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:14:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ namespace dlgprov
                 // also add the dialog control itself to the sequence
                 pObjects[nControlCount] = Reference< XInterface >( rxDialogControl, UNO_QUERY );
 
-                Reference< XScriptListener > xScriptListener = new DialogScriptListenerImpl( m_xModel );
+                Reference< XScriptListener > xScriptListener = new DialogScriptListenerImpl( m_xContext, m_xModel );
 
                 if ( xScriptListener.is() )
                 {
