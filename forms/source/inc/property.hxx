@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:50:25 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 11:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,20 +162,20 @@ public:
 
 //------------------------------------------------------------------------------
 #define DECL_PROP_IMPL(varname, type) \
-    pProps[nPos++] = starbeans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< type* >(NULL)),
+        pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< type* >(NULL)),
 
 //------------------------------------------------------------------------------
 #define DECL_BOOL_PROP_IMPL(varname) \
-pProps[nPos++] = starbeans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getBooleanCppuType(),
+pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getBooleanCppuType(),
 
 //------------------------------------------------------------------------------
 #define DECL_IFACE_PROP_IMPL(varname, type) \
-pProps[nPos++] = starbeans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< staruno::Reference< type >* >(NULL)),
+pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< com::sun::star::uno::Reference< type >* >(NULL)),
 
 //------------------------------------------------------------------------------
 #define BEGIN_AGGREGATION_PROPERTY_HELPER(count, aggregate) \
     _rProps.realloc(count); \
-    starbeans::Property* pProps = _rProps.getArray();   \
+        com::sun::star::beans::Property* pProps = _rProps.getArray();       \
     sal_Int32 nPos = 0; \
     \
     if (aggregate.is()) \
@@ -194,19 +194,19 @@ pProps[nPos++] = starbeans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, 
 
 //------------------------------------------------------------------------------
 #define DECL_PROP1(varname, type, attrib1)  \
-    DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1)
+        DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1)
 
 //------------------------------------------------------------------------------
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
-    DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2)
+        DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
 //------------------------------------------------------------------------------
 #define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
-    DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3)
+        DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3)
 
 //------------------------------------------------------------------------------
 #define DECL_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4)   \
-    DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3 | starbeans::PropertyAttribute::attrib4)
+        DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3 | starbeans::PropertyAttribute::attrib4)
 
 // === some property types require special handling
 // === such as interfaces
@@ -220,7 +220,7 @@ pProps[nPos++] = starbeans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, 
 
 //------------------------------------------------------------------------------
 #define DECL_IFACE_PROP2(varname, type, attrib1, attrib2)   \
-    DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2)
+        DECL_IFACE_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
 //------------------------------------------------------------------------------
 #define DECL_IFACE_PROP3(varname, type, attrib1, attrib2, attrib3)  \
@@ -237,11 +237,11 @@ pProps[nPos++] = starbeans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, 
 
 //------------------------------------------------------------------------------
 #define DECL_BOOL_PROP1(varname, attrib1)   \
-    DECL_BOOL_PROP_IMPL(varname) starbeans::PropertyAttribute::attrib1)
+        DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1)
 
 //------------------------------------------------------------------------------
 #define DECL_BOOL_PROP2(varname, attrib1, attrib2)  \
-    DECL_BOOL_PROP_IMPL(varname) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2)
+        DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
 // ===
 //------------------------------------------------------------------------------
