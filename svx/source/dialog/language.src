@@ -2,9 +2,9 @@
  *
  *  $RCSfile: language.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:37:46 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String RID_SVXSTR_LANGUAGE_ALL
     Text [ french ] = "[Toutes]" ;
     Text [ swedish ] = "[Alla]" ;
     Text [ dutch ] = "[Alle]  " ;
-    Text [ spanish ] = "Todas" ;
+    Text [ spanish ] = "Todos" ;
     Text [ english_us ] = "[All]" ;
     Text[ chinese_simplified ] = "[È«²¿]";
     Text[ russian ] = "[Âñå]";
