@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:40:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,15 +944,27 @@ void SpellDialog::Paint( const Rectangle& rRect )
   -----------------------------------------------------------------------*/
 long SpellDialog::Notify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() ==  EVENT_GETFOCUS )
+    /* #i38338#
+    *   FIXME: LoseFocus and GetFocus are signals from vcl that
+    *   a window actually got/lost the focus, it never should be
+    *   forwarded from another window, that is simply wrong.
+    *   FIXME: overloading the virtual methods GetFocus and LoseFocus
+    *   in SpellDialogChildWindow by making them pure is at least questionable.
+    *   The only sensible thing would be to call the new Method differently,
+    *   e.g. DialogGot/LostFocus or so.
+    */
+    if( IsVisible() )
     {
-        //notify the child window of the focus change
-        rParent.GetFocus();
-    }
-    else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
-    {
-        //notify the child window of the focus change
-        rParent.LoseFocus();
+        if( rNEvt.GetType() ==  EVENT_GETFOCUS )
+        {
+            //notify the child window of the focus change
+            rParent.GetFocus();
+        }
+        else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+        {
+            //notify the child window of the focus change
+            rParent.LoseFocus();
+        }
     }
     return SfxModelessDialog::Notify(rNEvt);
 }
