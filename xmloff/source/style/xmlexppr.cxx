@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:35:00 $
+ *  last change: $Author: mib $ $Date: 2000-10-25 12:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,19 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
         sal_uInt16 nFlags ) const
 {
     _exportXML( rAttrList, rProperties, rUnitConverter, rNamespaceMap,
-                nFlags, 0 );
+                nFlags, 0, -1, -1 );
+}
+
+
+void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
+        const ::std::vector< XMLPropertyState >& rProperties,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
+        sal_uInt16 nFlags ) const
+{
+    _exportXML( rAttrList, rProperties, rUnitConverter, rNamespaceMap,
+                nFlags, 0, nPropMapStartIdx, nPropMapEndIdx );
 }
 
 
@@ -152,13 +164,25 @@ void SvXMLExportPropertyMapper::exportXML(
         const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt16 nFlags ) const
 {
+    exportXML( rHandler, rProperties, rUnitConverter, rNamespaceMap,
+               -1, -1,  nFlags );
+}
+
+void SvXMLExportPropertyMapper::exportXML(
+           const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        const ::std::vector< XMLPropertyState >& rProperties,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
+        sal_uInt16 nFlags ) const
+{
     SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
     uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
 
     SvUShorts aIndexArray;
 
     _exportXML( *pAttrList, rProperties, rUnitConverter, rNamespaceMap,
-                nFlags, &aIndexArray );
+                nFlags, &aIndexArray, nPropMapStartIdx, nPropMapEndIdx );
 
     if( pAttrList->getLength() > 0L || (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
         aIndexArray.Count() != 0 )
@@ -233,20 +257,28 @@ void SvXMLExportPropertyMapper::_exportXML(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt16 nFlags,
-        SvUShorts* pIndexArray ) const
+        SvUShorts* pIndexArray,
+        sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const
 {
     const sal_uInt32 nCount = rProperties.size();
     sal_uInt32 nIndex = 0;
 
+    if( -1 == nPropMapStartIdx )
+        nPropMapStartIdx = 0;
+    if( -1 == nPropMapEndIdx )
+        nPropMapEndIdx = maPropMapper->GetEntryCount();
+
     while( nIndex < nCount )
     {
-        if( rProperties[nIndex].mnIndex >= 0 )  // valid entry?
+        sal_Int32 nPropMapIdx = rProperties[nIndex].mnIndex;
+        if( nPropMapIdx >= nPropMapStartIdx &&
+            nPropMapIdx < nPropMapEndIdx  )// valid entry?
         {
             // we have a valid map entry here, so lets use it...
-            if( ( maPropMapper->GetEntryFlags( rProperties[nIndex].mnIndex )
+            if( ( maPropMapper->GetEntryFlags( nPropMapIdx )
                         & MID_FLAG_NO_ITEM_EXPORT ) == 0 )
             {
-                if( ( maPropMapper->GetEntryFlags( rProperties[nIndex].mnIndex )
+                if( ( maPropMapper->GetEntryFlags( nPropMapIdx )
                             & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
                 {
                     // element items do not add any properties,
