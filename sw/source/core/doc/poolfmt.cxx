@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:10:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2524,4 +2524,21 @@ USHORT GetPoolParent( USHORT nId )
     }
 
     return nRet;
+}
+
+void SwDoc::RemoveAllFmtLanguageDependencies()
+{
+    /* #106748# Restore the language independ pool defaults and styles. */
+    GetAttrPool().ResetPoolDefaultItem( RES_PARATR_ADJUST );
+    GetTxtCollFromPool( RES_POOLCOLL_STANDARD )->ResetAttr( RES_PARATR_ADJUST );
+
+    SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP );
+
+    sal_uInt16 nCount = GetPageDescCnt();
+    for( sal_uInt16 i=0; i<nCount; ++i )
+    {
+        SwPageDesc& rDesc = _GetPageDesc( i );
+        rDesc.GetMaster().SetAttr( aFrameDir );
+        rDesc.GetLeft().SetAttr( aFrameDir );
+    }
 }
