@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 17:12:41 $
+ *  last change: $Author: dvo $ $Date: 2002-02-05 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3937,19 +3937,19 @@ sal_Bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
     sal_Bool bRet = sal_True;
     switch( nVal )
     {
-        case text::WritingMode_LR_TB:
+        case text::WritingMode2_LR_TB:
             eVal = FRMDIR_HORI_LEFT_TOP;
             break;
-        case text::WritingMode_RL_TB:
+        case text::WritingMode2_RL_TB:
             eVal = FRMDIR_HORI_RIGHT_TOP;
             break;
-        case text::WritingMode_TB_RL:
+        case text::WritingMode2_TB_RL:
             eVal = FRMDIR_VERT_TOP_RIGHT;
             break;
-        case text::WritingMode_TB_LR:
+        case text::WritingMode2_TB_LR:
             eVal = FRMDIR_VERT_TOP_LEFT;
             break;
-        case text::WritingMode_PAGE:
+        case text::WritingMode2_PAGE:
             eVal = FRMDIR_ENVIRONMENT;
             break;
         default:
@@ -3970,24 +3970,24 @@ sal_Bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE ) const
 {
     // translate SvxFrameDirection into WritingDirection2
-    enum text::WritingMode eVal;
+    enum text::WritingMode2 eVal;
     sal_Bool bRet = sal_True;
     switch( GetValue() )
     {
         case FRMDIR_HORI_LEFT_TOP:
-            eVal = text::WritingMode_LR_TB;
+            eVal = text::WritingMode2_LR_TB;
             break;
         case FRMDIR_HORI_RIGHT_TOP:
-            eVal = text::WritingMode_RL_TB;
+            eVal = text::WritingMode2_RL_TB;
             break;
         case FRMDIR_VERT_TOP_RIGHT:
-            eVal = text::WritingMode_TB_RL;
+            eVal = text::WritingMode2_TB_RL;
             break;
         case FRMDIR_VERT_TOP_LEFT:
-            eVal = text::WritingMode_TB_LR;
+            eVal = text::WritingMode2_TB_LR;
             break;
         case FRMDIR_ENVIRONMENT:
-            eVal = text::WritingMode_PAGE;
+            eVal = text::WritingMode2_PAGE;
             break;
         default:
             DBG_ERROR("Unknown SvxFrameDirection value!");
