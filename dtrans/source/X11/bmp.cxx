@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ PixmapHolder::PixmapHolder( Display* pDisplay ) :
      */
     if( ! XMatchVisualInfo( m_pDisplay, DefaultScreen( m_pDisplay ), 24, TrueColor, &m_aInfo ) )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "PixmapHolder reverting to default visual\n" );
 #endif
         Visual* pVisual     = DefaultVisual( m_pDisplay, DefaultScreen( m_pDisplay ) );
@@ -448,7 +448,7 @@ PixmapHolder::PixmapHolder( Display* pDisplay ) :
         m_aInfo.depth       = DefaultDepth( m_pDisplay, m_aInfo.screen );
     }
     m_aColormap         = DefaultColormap( m_pDisplay, m_aInfo.screen );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static const char* pClasses[] =
         { "StaticGray", "GrayScale", "StaticColor", "PseudoColor", "TrueColor", "DirectColor" };
     fprintf( stderr, "PixmapHolder visual: id = 0x%x, class = %s (%d), depth=%d; color map = 0x%x\n",
