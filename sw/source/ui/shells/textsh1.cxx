@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:57:43 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,10 +409,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aFilter = ((const SfxStringItem *)pItem)->GetValue();
 
                 rReq.SetReturnValue(SfxBoolItem(nSlot, GetView().InsertDoc( nSlot, aFile, aFilter ) != -1));
+                rReq.Done();
             }
             break;
         case FN_FORMAT_RESET:
             rWrtSh.ResetAttr();
+            rReq.Done();
             break;
         case FN_INSERT_BREAK_DLG:
         {
@@ -555,6 +557,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // erstmal auf Blank defaulten
             sal_Unicode cChar = ' ';
             rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get()->GetAutoCorrect(), cChar );
+            rReq.Done();
         }
         break;
 
@@ -563,6 +566,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwSortDlg *pDlg = new SwSortDlg(GetView().GetWindow(), rWrtSh );
             pDlg->Execute();
             delete pDlg;
+            rReq.Done();
         }
         break;
         case FN_NUMBERING_OUTLINE_DLG:
@@ -571,6 +575,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(GetView().GetWindow(), &aTmp, rWrtSh);
             pDlg->Execute();
             delete pDlg;
+            rReq.Done();
         }
             break;
         case FN_CALCULATE:
@@ -580,6 +585,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     ::com::sun::star::datatransfer::XTransferable > xRef(
                                                     pTransfer );
                 pTransfer->CalculateAndCopy();
+                rReq.Done();
             }
             break;
         case FN_GOTO_REFERENCE:
@@ -592,6 +598,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                     ((SwGetRefField*)pFld)->GetSubType(),
                                     ((SwGetRefField*)pFld)->GetSeqNo() );
                 rWrtSh.EndAllAction();
+                rReq.Done();
             }
         }
             break;
@@ -990,11 +997,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_INC_INDENT:
             rWrtSh.MoveLeftMargin( SID_INC_INDENT == nSlot,
                                     rReq.GetModifier() != KEY_MOD1 );
+            rReq.Done();
             break;
         case FN_DEC_INDENT_OFFSET:
         case FN_INC_INDENT_OFFSET:
             rWrtSh.MoveLeftMargin( FN_INC_INDENT_OFFSET == nSlot,
                                     rReq.GetModifier() == KEY_MOD1 );
+            rReq.Done();
             break;
 
         case SID_ATTR_CHAR_COLOR2:
@@ -1098,17 +1107,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aTempl.nColor = nSlot;
                 rEdtWin.SetApplyTemplate(aTempl);
             }
+
+            rReq.Done();
         }
         break;
 
         case FN_NUM_BULLET_MOVEDOWN:
             if (!rWrtSh.IsAddMode())
                 rWrtSh.MoveParagraph(1);
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_MOVEUP:
             if (!rWrtSh.IsAddMode())
                 rWrtSh.MoveParagraph(-1);
+            rReq.Done();
             break;
         case SID_RUBY_DIALOG:
         case SID_HYPERLINK_DIALOG:
