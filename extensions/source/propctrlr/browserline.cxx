@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:50:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,50 +85,67 @@ namespace pcr
 
     OBrowserLine::OBrowserLine( Window* pParent)
             :m_aFtTitle(pParent)
-            ,m_pData(NULL)
+            ,m_nFlags( 0 )
             ,m_pBrowseButton(NULL)
+            ,m_pAdditionalBrowseButton( NULL )
             ,m_pBrowserControl(NULL)
-            ,m_bIsLocked(sal_False)
-            ,m_bIsHyperlink(sal_False)
+            ,m_bIndentTitle( sal_False )
             ,m_nNameWidth(0)
             ,m_pTheParent(pParent)
-            ,m_bNeedsRepaint(sal_True)
             ,m_eControlType(BCT_UNDEFINED)
+            ,m_pClickListener( NULL )
+            ,m_nEnableFlags( ENABLED_ALL )
     {
         DBG_CTOR(OBrowserLine,NULL);
         m_aFtTitle.Show();
     }
+
     //------------------------------------------------------------------
     OBrowserLine::~OBrowserLine()
     {
-        if(m_pBrowseButton)
-        {
-            m_pBrowseButton->Hide();
-            delete m_pBrowseButton;
-            m_pBrowseButton=NULL;
-        }
+        implHideBrowseButton( true, false );
+        implHideBrowseButton( false, false );
+
         DBG_DTOR(OBrowserLine,NULL);
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetHelpId(sal_uInt32 nHelpId,sal_uInt32 nBtUniqueId)
+    void OBrowserLine::IndentTitle( sal_Bool _bIndent )
     {
-        if(m_pBrowserControl)
-            m_pBrowserControl->SetCtrHelpId(nHelpId);
-
-        if(m_pBrowseButton)
+        if ( m_bIndentTitle != _bIndent )
         {
-            m_pBrowseButton->SetHelpId(nHelpId);
-            m_pBrowseButton->SetUniqueId(nBtUniqueId);
+            m_bIndentTitle = _bIndent;
+            layoutComponents();
+        }
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::SetComponentHelpIds( sal_uInt32 _nControlId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId )
+    {
+        if ( m_pBrowserControl )
+            m_pBrowserControl->GetMe()->SetHelpId( _nControlId );
+
+        bool bTwoButtons = ( m_pBrowseButton != NULL ) && ( m_pAdditionalBrowseButton != NULL );
+
+        if ( m_pBrowseButton )
+        {
+            m_pBrowseButton->SetHelpId( bTwoButtons ? _bPrimaryButtonId : _nControlId );
+            m_pBrowseButton->SetUniqueId( _bPrimaryButtonId );
+
+            if ( m_pAdditionalBrowseButton )
+            {
+                m_pAdditionalBrowseButton->SetHelpId( _nSecondaryButtonId );
+                m_pAdditionalBrowseButton->SetUniqueId( _nSecondaryButtonId );
+            }
         }
     }
 
     //------------------------------------------------------------------
     void OBrowserLine::setControl(IBrowserControl* pXControl)
     {
-        m_pBrowserControl=pXControl;
-        m_pBrowserControl->ShowCtr();
-        Resize();
+        m_pBrowserControl = pXControl;
+        m_pBrowserControl->GetMe()->Show();
+        layoutComponents();
     }
 
     //------------------------------------------------------------------
@@ -138,42 +155,35 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetSizePixel(Size aSize)
-    {
-        m_aOutputSize = aSize;
-        Resize();
-    }
-
-    //------------------------------------------------------------------
     void OBrowserLine::SetPosPixel(Point aPosPoint)
     {
-        m_aLinePos=aPosPoint;
-        Point aPos(m_aLinePos);
+        m_aLinePos = aPosPoint;
+        Point aPos( m_aLinePos );
         aPos.Y()+=2;
 
         Point aTitlePos(m_aLinePos);
         aTitlePos.Y()+=8;
-        Point aCtrPos(aPos);
-        Point aBtnPos(aPos);
-
-        if(m_pBrowserControl)
-        {
-            aCtrPos.X()=m_pBrowserControl->GetCtrPos().X();
-        }
-        if(m_pBrowseButton)
-        {
-            aBtnPos.X()=m_pBrowseButton->GetPosPixel().X();
-        }
         m_aFtTitle.SetPosPixel(aTitlePos);
 
-        if(m_pBrowserControl)
+        if ( m_pBrowserControl )
         {
-            m_pBrowserControl->SetCtrPos(aCtrPos);
+            Point aControlPos( aPos );
+            aControlPos.X() = m_pBrowserControl->GetCtrPos().X();
+            m_pBrowserControl->SetCtrPos( aControlPos );
         }
 
-        if(m_pBrowseButton)
+        if ( m_pBrowseButton )
         {
-            m_pBrowseButton->SetPosPixel(aBtnPos);
+            Point aButtonPos( aPos );
+            aButtonPos.X() = m_pBrowseButton->GetPosPixel().X();
+            m_pBrowseButton->SetPosPixel( aButtonPos );
+        }
+
+        if ( m_pAdditionalBrowseButton )
+        {
+            Point aButtonPos( aPos );
+            aButtonPos.X() = m_pAdditionalBrowseButton->GetPosPixel().X();
+            m_pAdditionalBrowseButton->SetPosPixel( aButtonPos );
         }
     }
 
@@ -197,17 +207,14 @@ namespace pcr
     void OBrowserLine::SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags )
     {
         m_aFtTitle.SetZOrder(pRefWindow,nFlags);
-        if(m_pBrowserControl)
-        {
-            m_pBrowserControl->
-                SetTabOrder((Window*)&m_aFtTitle,WINDOW_ZORDER_BEHIND);
-        }
+        if ( m_pBrowserControl )
+            m_pBrowserControl->GetMe()->SetZOrder( (Window*)&m_aFtTitle, WINDOW_ZORDER_BEHIND );
 
-        if(m_pBrowseButton)
-        {
-            m_pBrowseButton->SetZOrder(m_pBrowserControl->GetMe(),
-                            WINDOW_ZORDER_BEHIND);
-        }
+        if ( m_pBrowseButton )
+            m_pBrowseButton->SetZOrder( m_pBrowserControl->GetMe(), WINDOW_ZORDER_BEHIND );
+
+        if ( m_pAdditionalBrowseButton )
+            m_pAdditionalBrowseButton->SetZOrder( m_pBrowseButton, WINDOW_ZORDER_BEHIND );
     }
 
     //------------------------------------------------------------------
@@ -215,32 +222,31 @@ namespace pcr
     {
         sal_Bool bRes=sal_False;
 
-        if(m_pBrowserControl &&
-            m_pBrowserControl->GetMe()->IsEnabled())
+        if ( m_pBrowserControl && m_pBrowserControl->GetMe()->IsEnabled() )
         {
             m_pBrowserControl->GetMe()->GrabFocus();
-            bRes=sal_True;
+            bRes = sal_True;
         }
-        else if(m_pBrowseButton && m_pBrowseButton->IsEnabled())
+        else if ( m_pAdditionalBrowseButton && m_pAdditionalBrowseButton->IsEnabled() )
+        {
+            m_pAdditionalBrowseButton->GrabFocus();
+            bRes = sal_True;
+        }
+        else if ( m_pBrowseButton && m_pBrowseButton->IsEnabled() )
         {
             m_pBrowseButton->GrabFocus();
-            bRes=sal_True;
+            bRes = sal_True;
         }
         return bRes;
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetPosSizePixel(Point aPosPoint,Size aSize)
+    void OBrowserLine::SetPosSizePixel( Point _rPos, Size _rSize )
     {
-        if(m_aLinePos!=aPosPoint && m_aOutputSize!=aSize)
-        {
-            SetControlPosSize(aPosPoint,aSize);
-        }
-        else
-        {
-            m_aOutputSize=aSize;
-            Resize();
-        }
+        m_aLinePos = _rPos;
+        m_aOutputSize = _rSize;
+
+        layoutComponents();
     }
 
     //------------------------------------------------------------------
@@ -250,27 +256,15 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::Enable( sal_Bool _bDoEnable )
-    {
-        m_aFtTitle.Enable( _bDoEnable );
-        if ( m_pBrowserControl )
-            m_pBrowserControl->EnableControl( _bDoEnable );
-        if ( m_pBrowseButton )
-            m_pBrowseButton->Enable( _bDoEnable );
-    }
-
-    //------------------------------------------------------------------
     void OBrowserLine::Show(sal_Bool bFlag)
     {
         m_aFtTitle.Show(bFlag);
-        if(m_pBrowserControl)
-        {
-            m_pBrowserControl->ShowCtr(bFlag);
-        }
-        if(m_pBrowseButton)
-        {
-            m_pBrowseButton->Show(bFlag);
-        }
+        if ( m_pBrowserControl )
+            m_pBrowserControl->GetMe()->Show( bFlag );
+        if ( m_pBrowseButton )
+            m_pBrowseButton->Show( bFlag );
+        if ( m_pAdditionalBrowseButton )
+            m_pAdditionalBrowseButton->Show( bFlag );
     }
 
     //------------------------------------------------------------------
@@ -286,140 +280,58 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::Invalidate()
+    void OBrowserLine::SetFlags( sal_uInt16 _nFlags )
     {
-        m_aFtTitle.Invalidate();
-        if(m_pBrowserControl)
-        {
-            m_pBrowserControl->InvalidateCtr();
-        }
-        if(m_pBrowseButton)
-        {
-            m_pBrowseButton->Invalidate();
-        }
+        m_nFlags = _nFlags;
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::Update()
+    sal_uInt16 OBrowserLine::GetFlags()
     {
-        m_aFtTitle.Update();
-        if(m_pBrowserControl)
+        return m_nFlags;
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::layoutComponents()
+    {
         {
-            m_pBrowserControl->UpdateCtr();
+            Point aTitlePos( m_aLinePos.X(), m_aLinePos.Y() + 8 );
+            Size aTitleSize( m_nNameWidth - 3, m_aOutputSize.Height() );
+
+            if ( m_bIndentTitle )
+            {
+                Size aIndent( m_pTheParent->LogicToPixel( Size( 8, 0 ), MAP_APPFONT ) );
+                aTitlePos.X() += aIndent.Width();
+                aTitleSize.Width() -= aIndent.Width();
+            }
+            m_aFtTitle.SetPosSizePixel( aTitlePos, aTitleSize );
         }
-        if(m_pBrowseButton)
+
+        sal_Int32 nBrowseButtonSize = m_aOutputSize.Height() - 4;
+
+        if ( m_pBrowserControl )
         {
-            m_pBrowseButton->Update();
-        }
-    }
+            Point aControlPos( m_aLinePos.X() + m_nNameWidth, m_aLinePos.Y() + 2 );
+            m_pBrowserControl->SetCtrPos( aControlPos );
 
-    //------------------------------------------------------------------
-    void OBrowserLine::SetData(void *pPtr)
-    {
-        m_pData=pPtr;
-    }
-
-    //------------------------------------------------------------------
-    void* OBrowserLine::GetData()
-    {
-        return m_pData;
-    }
-    //------------------------------------------------------------------
-    void OBrowserLine::SetControlPosSize(Point aPos,Size aSize)
-    {
-        m_aLinePos=aPos;
-        m_aOutputSize=aSize;
-        Size a2Size(aSize);
-
-        aSize.Width()=m_nNameWidth-3;
-        a2Size.Width()-=m_nNameWidth;
-        a2Size.Height() -=2;
-
-        aPos.Y()+=2;
-        Point aTitlePos(m_aLinePos);
-        aTitlePos.Y()+=8;
-
-        m_aFtTitle.SetPosSizePixel(aTitlePos,aSize);
-        sal_uInt16 nBrowseButtonWidth=0;
-
-        nBrowseButtonWidth=(sal_uInt16)aSize.Height()-4;
-
-        a2Size.Width()=a2Size.Width()-nBrowseButtonWidth;
-
-        aPos.X()+=aSize.Width();
-
-        if(m_pBrowserControl)
-        {
-            a2Size.Height()=m_pBrowserControl->GetCtrSize().Height();
-            m_pBrowserControl->SetCtrPos(aPos);
-            m_pBrowserControl->SetCtrSize(a2Size);
+            Size aControlSize( m_aOutputSize.Width() - 4 - m_nNameWidth - nBrowseButtonSize - 4, m_pBrowserControl->GetCtrSize().Height() );
+            if ( m_pAdditionalBrowseButton )
+                aControlSize.Width() -= nBrowseButtonSize + 4;
+            m_pBrowserControl->SetCtrSize( aControlSize );
         }
 
         if ( m_pBrowseButton )
         {
-            long nx=m_aOutputSize.Width()-nBrowseButtonWidth;
-            if(nx>aPos.X())
+            Point aButtonPos( m_aOutputSize.Width() - 4 - nBrowseButtonSize, m_aLinePos.Y() + 2 );
+            Size aButtonSize( nBrowseButtonSize, nBrowseButtonSize );
+            m_pBrowseButton->SetPosSizePixel( aButtonPos, aButtonSize );
+
+            if ( m_pAdditionalBrowseButton )
             {
-                aPos.X()=nx;
+                aButtonPos.X() -= nBrowseButtonSize + 4;
+                m_pAdditionalBrowseButton->SetPosSizePixel( aButtonPos, aButtonSize );
             }
-            aSize.Width()=nBrowseButtonWidth-3;
-            aSize.Height()=nBrowseButtonWidth-2;
-            m_pBrowseButton->SetPosSizePixel(aPos,aSize);
         }
-    }
-
-    //------------------------------------------------------------------
-    void OBrowserLine::Resize()
-    {
-        Size aSize(m_aOutputSize);
-        Size a2Size(aSize);
-
-        aSize.Width()=m_nNameWidth-3;
-        a2Size.Width()-=m_nNameWidth;
-        a2Size.Height() -=2;
-
-        Point aPos(m_aLinePos);
-        aPos.Y()+=2;
-        Point aTitlePos(m_aLinePos);
-        aTitlePos.Y()+=8;
-
-        sal_uInt16 nBrowseButtonWidth=0;
-
-        nBrowseButtonWidth=(sal_uInt16)aSize.Height()-4;
-
-        a2Size.Width()=a2Size.Width()-nBrowseButtonWidth;
-
-        aPos.X()+=aSize.Width();
-
-        if(m_pBrowserControl)
-        {
-            a2Size.Height() = m_pBrowserControl->GetCtrSize().Height();
-            m_pBrowserControl->SetCtrSize(a2Size);
-        }
-
-        if ( m_pBrowseButton )
-        {
-            long nx=m_aOutputSize.Width()-nBrowseButtonWidth;
-            if(nx>aPos.X())
-            {
-                aPos.X()=nx;
-            }
-            aSize.Width()=nBrowseButtonWidth-3;
-            aSize.Height()=nBrowseButtonWidth-2;
-            m_pBrowseButton->SetPosSizePixel(aPos,aSize);
-        }
-    }
-
-    //------------------------------------------------------------------
-    void OBrowserLine::SetNeedsRepaint(sal_Bool bFlag)
-    {
-        m_bNeedsRepaint=bFlag;
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OBrowserLine::NeedsRepaint()
-    {
-        return m_bNeedsRepaint;
     }
 
     //------------------------------------------------------------------
@@ -466,52 +378,96 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::EnableInputControls( bool _bEnableInput, bool _bEnableBrowseButton )
+    sal_Bool OBrowserLine::IsPropertyInputEnabled( ) const
     {
-        if ( m_pBrowseButton )
-            m_pBrowseButton->Enable( _bEnableBrowseButton );
+        return ( m_nEnableFlags & ENABLED_INPUT ) != 0;
+    }
+
+    //------------------------------------------------------------------
+    namespace
+    {
+        void implSetFlag( sal_uInt16& _nEnabledFlags, bool _bSet, sal_uInt16 _nMask )
+        {
+            if ( _bSet )
+                _nEnabledFlags |= _nMask;
+            else
+                _nEnabledFlags &= ~_nMask;
+        }
+
+        void implEnable( Window* _pWindow, sal_uInt16 _nEnabledFlags, sal_uInt16 _nMatchAllMask )
+        {
+            if ( _pWindow )
+                _pWindow->Enable( ( _nEnabledFlags & _nMatchAllMask ) == _nMatchAllMask );
+        }
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::implUpdateEnabledDisabled()
+    {
+        implEnable( &m_aFtTitle,               m_nEnableFlags, ENABLED_LINE );
         if ( m_pBrowserControl )
-            m_pBrowserControl->EnableControl( _bEnableInput );
-        m_aFtTitle.Enable( _bEnableInput );
+            m_pBrowserControl->GetMe()->Enable( ( m_nEnableFlags & ( ENABLED_LINE | ENABLED_INPUT ) ) == ( ENABLED_LINE | ENABLED_INPUT ) );
+        implEnable( m_pBrowseButton,           m_nEnableFlags, ENABLED_LINE | ENABLED_PRIMARY );
+        implEnable( m_pAdditionalBrowseButton, m_nEnableFlags, ENABLED_LINE | ENABLED_SECONDARY );
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::ShowBrowseButton()
+    void OBrowserLine::EnablePropertyLine( bool _bEnable )
     {
-        if ( !m_pBrowseButton )
+        implSetFlag( m_nEnableFlags, _bEnable, ENABLED_LINE );
+        implUpdateEnabledDisabled();
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::EnablePropertyControls( bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton )
+    {
+        implSetFlag( m_nEnableFlags, _bEnableInput, ENABLED_INPUT );
+        implSetFlag( m_nEnableFlags, _bEnablePrimaryButton, ENABLED_PRIMARY );
+        implSetFlag( m_nEnableFlags, _bEnableSecondaryButton, ENABLED_SECONDARY );
+        implUpdateEnabledDisabled();
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::ShowBrowseButton( const Image& _rImage, bool _bPrimary )
+    {
+        PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
+
+        if ( !rpButton )
         {
-            delete m_pBrowseButton;
-            m_pBrowseButton=new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
-            m_pBrowseButton->SetGetFocusHdl( LINK( this, OBrowserLine, GetFocusHdl ) );
-            m_pBrowseButton->SetData( (void*)this );
-            m_pBrowseButton->SetText( String::CreateFromAscii( "..." ) );
+            rpButton = new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
+            rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
+            rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
+            rpButton->SetData( (void*)this );
+            if ( !_rImage )
+                rpButton->SetText( String::CreateFromAscii( "..." ) );
+            else
+                rpButton->SetModeImage( _rImage );
         }
-        m_pBrowseButton->Show();
-        Resize();
+        rpButton->Show();
+
+        layoutComponents();
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::HideBrowseButton()
+    void OBrowserLine::implHideBrowseButton( bool _bPrimary, bool _bReLayout )
     {
-        if ( m_pBrowseButton )
+        PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
+
+        if ( rpButton )
         {
-            m_pBrowseButton->Hide();
-            delete m_pBrowseButton;
-            m_pBrowseButton=NULL;
+            rpButton->Hide();
+            delete rpButton;
+            rpButton = NULL;
         }
-        Resize();
+
+        if ( _bReLayout )
+            layoutComponents();
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::Locked(sal_Bool nFlag)
+    void OBrowserLine::HideBrowseButton( bool _bPrimary )
     {
-        m_bIsLocked=nFlag;
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OBrowserLine::IsLocked()
-    {
-        return m_bIsLocked;
+        implHideBrowseButton( _bPrimary, true );
     }
 
     //------------------------------------------------------------------
@@ -520,21 +476,29 @@ namespace pcr
         if (m_nNameWidth != nWidth+10)
         {
             m_nNameWidth = nWidth+10;
-            SetControlPosSize(m_aLinePos,m_aOutputSize);
+            layoutComponents();
         }
         // #99102# ---------
         FullFillTitleString();
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetClickHdl(const Link& rLink)
+    void OBrowserLine::SetClickListener( IButtonClickListener* _pListener )
     {
-        if(m_pBrowseButton)
-            m_pBrowseButton->SetClickHdl(rLink );
+        m_pClickListener = _pListener;
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OBrowserLine, GetFocusHdl, PushButton*, pPB )
+    IMPL_LINK( OBrowserLine, OnButtonClicked, PushButton*, _pButton )
+    {
+        if ( m_pClickListener )
+            m_pClickListener->buttonClicked( this, _pButton == m_pBrowseButton );
+
+        return 0L;
+    }
+
+    //------------------------------------------------------------------
+    IMPL_LINK( OBrowserLine, OnButtonFocus, PushButton*, pPB )
     {
         if(m_pBrowserControl)
         {
