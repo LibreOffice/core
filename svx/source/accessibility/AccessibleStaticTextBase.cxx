@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-28 09:32:31 $
+ *  last change: $Author: thb $ $Date: 2002-07-24 13:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,14 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
+    /** AccessibleStaticTextBase_Impl
+
+        This class implements the AccessibleStaticTextBase
+        functionality, mainly by forwarding the calls to an aggregated
+        AccessibleEditableTextPara. As this is a therefore non-trivial
+        adapter, factoring out the common functionality from
+        AccessibleEditableTextPara might be a profitable future task.
+     */
     class AccessibleStaticTextBase_Impl
     {
 
@@ -646,30 +654,50 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        // TODO: paragraphs
         EPosition aPos( mpImpl->Index2Internal(nIndex) );
 
-        return mpImpl->GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
+        if( AccessibleTextType::PARAGRAPH == aTextType )
+        {
+            return mpImpl->GetParagraph( aPos.nPara ).getText();
+        }
+        else
+        {
+            return mpImpl->GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
+        }
     }
 
     ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        // TODO: paragraphs
         EPosition aPos( mpImpl->Index2Internal(nIndex) );
 
-        return mpImpl->GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
+        if( AccessibleTextType::PARAGRAPH == aTextType &&
+            aPos.nPara > 0 )
+        {
+            return mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
+        }
+        else
+        {
+            return mpImpl->GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
+        }
     }
 
     ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        // TODO: paragraphs
         EPosition aPos( mpImpl->Index2Internal(nIndex) );
 
-        return mpImpl->GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
+        if( AccessibleTextType::PARAGRAPH == aTextType &&
+            aPos.nPara + 1 < mpImpl->GetParagraphCount() )
+        {
+            return mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
+        }
+        else
+        {
+            return mpImpl->GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
+        }
     }
 
     sal_Bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
