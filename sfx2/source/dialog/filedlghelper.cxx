@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 15:43:04 $
+ *  last change: $Author: dv $ $Date: 2001-07-06 12:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     OUString                maPath;
     OUString                maCurFilter;
     Timer                   maPreViewTimer;
-    FilterList             *mpFilterList;
+    Graphic                 maGraphic;
 
     ErrCode                 mnError;
     sal_Bool                mbHasPassword   : 1;
@@ -243,9 +243,6 @@ private:
 
     void                    loadConfig();
     void                    saveConfig();
-
-    OUString                getDefaultExtension() const;
-    void                    setExtension( OUString& rFileName ) const;
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
 
@@ -275,6 +272,8 @@ public:
     OUString                getPath() const;
     OUString                getFilter() const;
     OUString                getRealFilter() const;
+
+    Graphic                 GetGraphic() const { return maGraphic; }
 };
 
 // ------------------------------------------------------------------------
@@ -463,6 +462,8 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
     if ( !mbHasPreview )
         return 0;
 
+    maGraphic.Clear();
+
     Any aAny;
     Reference < XFilePreview > xFilePicker( mxFileDlg, UNO_QUERY );
 
@@ -481,11 +482,9 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
         if( pIStm )
         {
-            Graphic aGraphic;
-
-            if( GraphicConverter::Import( *pIStm, aGraphic ) == ERRCODE_NONE )
+            if( GraphicConverter::Import( *pIStm, maGraphic ) == ERRCODE_NONE )
             {
-                Bitmap aBmp = aGraphic.GetBitmap();
+                Bitmap aBmp = maGraphic.GetBitmap();
 
                 // scale the bitmap to the correct size
                 sal_Int32 nOutWidth  = xFilePicker->getAvailableWidth();
@@ -571,7 +570,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
 
     mpMatcher = NULL;
-    mpFilterList = new FilterList;
 
     mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
 
@@ -664,8 +662,6 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 {
     if ( mbDeleteMatcher )
         delete mpMatcher;
-
-    delete mpFilterList;
 
     maPreViewTimer.SetTimeoutHdl( Link() );
 }
@@ -765,8 +761,6 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             if ( aPathSeq.getLength() == 1 )
             {
                 OUString aFileURL( aPathSeq[0] );
-
-                setExtension( aFileURL );
 
                 String* pURL = new String( aFileURL );
                 rpURLList->Insert( pURL, 0 );
@@ -874,7 +868,7 @@ void FileDialogHelper_Impl::setPath( const OUString& rPath )
     maPath = rPath;
 
     // set the path
-    if ( maPath.getLength() )
+    if ( maPath.getLength() && mxFileDlg.is() )
     {
         try
         {
@@ -976,8 +970,6 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         try
         {
             xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
-            mpFilterList->insert( mpFilterList->end(),
-                                 FilterEntry_Impl( aUIName, pFilter->GetWildcard().GetWildCard() ) );
         }
         catch( IllegalArgumentException )
         {
@@ -998,8 +990,6 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     try
     {
         xFltMgr->appendFilter( rFilterName, rExtension );
-
-        mpFilterList->insert( mpFilterList->end(), FilterEntry_Impl( rFilterName, rExtension ) );
     }
     catch( IllegalArgumentException )
     {
@@ -1057,7 +1047,6 @@ void FileDialogHelper_Impl::addGraphicFilter()
         try
         {
             xFltMgr->appendFilter( aName, aWildcard );
-            mpFilterList->insert( mpFilterList->end(), FilterEntry_Impl( aName, aWildcard ) );
         }
         catch( IllegalArgumentException )
         {
@@ -1110,7 +1099,7 @@ void FileDialogHelper_Impl::saveConfig()
     else
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-           String aUserData = String::CreateFromAscii( "1  " );
+           String aUserData = String::CreateFromAscii( "1 " );
 
         if ( aDlgOpt.Exists() )
         {
@@ -1134,10 +1123,6 @@ void FileDialogHelper_Impl::saveConfig()
 
         if ( aObj.GetProtocol() == INET_PROT_FILE )
             aUserData.SetToken( 1, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        String aFilter = getFilter();
-        aFilter = EncodeSpaces_Impl( aFilter );
-        aUserData.SetToken( 2, ' ', aFilter );
 
         aDlgOpt.SetUserData( aUserData );
     }
@@ -1203,13 +1188,6 @@ void FileDialogHelper_Impl::loadConfig()
             if ( ! maPath.getLength() )
                 setPath( aUserData.GetToken( 1, ' ' ) );
 
-            if ( ! maCurFilter.getLength() )
-            {
-                String aFilter = aUserData.GetToken( 2, ' ' );
-                aFilter = DecodeSpaces_Impl( aFilter );
-                setFilter( aFilter );
-            }
-
             if ( mbHasAutoExt )
             {
                 sal_Int32 nFlag = aUserData.GetToken( 0, ' ' ).ToInt32();
@@ -1221,80 +1199,6 @@ void FileDialogHelper_Impl::loadConfig()
                 catch( IllegalArgumentException ){}
             }
         }
-    }
-}
-
-// ------------------------------------------------------------------------
-OUString FileDialogHelper_Impl::getDefaultExtension() const
-{
-    OUString aExtension;
-    OUString aFilter = getFilter();
-
-    if ( ! mpFilterList->empty() )
-    {
-        FilterList::iterator aListIter;
-        for ( aListIter = mpFilterList->begin();
-              aListIter != mpFilterList->end(); ++aListIter )
-        {
-            FilterEntry_Impl& rEntry = *aListIter;
-
-            if ( rEntry.maTitle == aFilter )
-            {
-                // the first two chars are always '*.', so we should ignore them
-                OUString aTmp = rEntry.maFilter.copy( 2 );
-
-                // if there are mor then one extension, we will use the first one
-                sal_Int32 nIndex = aTmp.indexOf( ';' );
-
-                if ( nIndex != -1 )
-                    aTmp = aTmp.copy( 0, nIndex );
-
-                aExtension = aTmp;
-                break;
-            }
-        }
-    }
-
-    return aExtension;
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setExtension( OUString& rFileName ) const
-{
-    if ( ! mbHasAutoExt )
-        return;
-
-    if ( utl::UCBContentHelper::IsFolder( rFileName ) )
-        return;
-
-    Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-
-    if ( ! xCtrlAccess.is() )
-        return;
-
-    sal_Bool bSetExtension;
-
-    try
-    {
-        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
-        aValue >>= bSetExtension;
-    }
-    catch( IllegalArgumentException ){}
-
-    if ( ! bSetExtension )
-        return;
-
-    INetURLObject aURL( rFileName );
-    OUString aFileExt = aURL.getExtension( INetURLObject::LAST_SEGMENT,
-                                           true, INetURLObject::NO_DECODE );
-    if ( aFileExt.getLength() )
-        return;
-
-    OUString aDefaultExt = getDefaultExtension();
-    if ( aDefaultExt.getLength() )
-    {
-        aURL.setExtension( aDefaultExt );
-        rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
 }
 
@@ -1404,7 +1308,6 @@ String FileDialogHelper::GetPath() const
         if ( aPathSeq.getLength() == 1 )
         {
             aPath = aPathSeq[0];
-            mpImp->setExtension( aPath );
         }
     }
 
@@ -1421,6 +1324,12 @@ String FileDialogHelper::GetDisplayDirectory() const
 String FileDialogHelper::GetCurrentFilter() const
 {
     return mpImp->getFilter();
+}
+
+// ------------------------------------------------------------------------
+Graphic FileDialogHelper::GetGraphic() const
+{
+    return mpImp->GetGraphic();
 }
 
 // ------------------------------------------------------------------------
