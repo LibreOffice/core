@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:24:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -117,6 +120,7 @@
 #ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
 #endif
+
 
 /*************************************************************************
 |*
@@ -171,11 +175,13 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
 
-    // Setup the printer. This has to be done even if we use the virtual
-    // device for formatting, because the default page format is obtained
-    // from the printer
-    if( GetPrt( ! pDoc->IsBrowseMode() ) )
+    // --> FME 2005-01-21 #i41075#
+    // Only setup the printer if we need one:
+    if( GetPrt( !pDoc->IsBrowseMode() &&
+                com::sun::star::document::PrinterIndependentLayout::DISABLED ==
+                pDoc->IsUseVirtualDevice() ) )
         InitPrt( GetPrt() );
+    // <--
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - after InitPrt" );
 
