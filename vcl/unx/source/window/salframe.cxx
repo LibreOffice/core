@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-24 15:58:56 $
+ *  last change: $Author: pl $ $Date: 2002-05-27 14:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,28 +1263,46 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             && aPosSize.GetWidth() <= rScreenSize.Width()
             && aPosSize.GetHeight() <= rScreenSize.Height() )
         {
-            // adjust position so that frame fits onto screen
-            if( aPosSize.Right()+(long)maGeometry.nRightDecoration >= rScreenSize.Width() )
+            SalFrameGeometry aGeom = maGeometry;
+
+            if( ! (maFrameData.nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_CHILD ) ) &&
+               maFrameData.mpParent &&
+                aGeom.nLeftDecoration == 0 &&
+                aGeom.nTopDecoration == 0 )
             {
-                aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)maGeometry.nRightDecoration, 0 );
+                aGeom = maFrameData.mpParent->maGeometry;
+                if( aGeom.nLeftDecoration == 0 &&
+                    aGeom.nTopDecoration == 0 )
+                {
+                    aGeom.nLeftDecoration = 5;
+                    aGeom.nTopDecoration = 20;
+                    aGeom.nRightDecoration = 5;
+                    aGeom.nBottomDecoration = 5;
+                }
+            }
+
+            // adjust position so that frame fits onto screen
+            if( aPosSize.Right()+(long)aGeom.nRightDecoration >= rScreenSize.Width() )
+            {
+                aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
                 nGravity = EastGravity;
                 bAdjusted = true;
             }
-            if( aPosSize.Bottom()+(long)maGeometry.nBottomDecoration >= rScreenSize.Height() )
+            if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration >= rScreenSize.Height() )
             {
-                aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)maGeometry.nBottomDecoration );
+                aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
                 nGravity = nGravity == EastGravity ? SouthEastGravity : SouthGravity;
                 bAdjusted = true;
             }
-            if( aPosSize.Left() < (long)maGeometry.nLeftDecoration )
+            if( aPosSize.Left() < (long)aGeom.nLeftDecoration )
             {
-                aPosSize.Move( (long)maGeometry.nLeftDecoration - (long)aPosSize.Left(), 0 );
+                aPosSize.Move( (long)aGeom.nLeftDecoration - (long)aPosSize.Left(), 0 );
                 nGravity = ( nGravity == SouthGravity || nGravity == SouthEastGravity ) ? SouthWestGravity : WestGravity;
                 bAdjusted = true;
             }
-            if( aPosSize.Top() < (long)maGeometry.nTopDecoration )
+            if( aPosSize.Top() < (long)aGeom.nTopDecoration )
             {
-                aPosSize.Move( 0, (long)maGeometry.nTopDecoration - (long)aPosSize.Top() );
+                aPosSize.Move( 0, (long)aGeom.nTopDecoration - (long)aPosSize.Top() );
                 nGravity =
                     ( nGravity == SouthEastGravity || nGravity == EastGravity ) ? NorthEastGravity :
                     ( ( nGravity == SouthWestGravity || nGravity == WestGravity ) ? NorthWestGravity : NorthGravity );
