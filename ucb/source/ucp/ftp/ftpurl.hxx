@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:48 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,10 @@ namespace ftp {
 
         rtl::OUString parent(bool internal = false) const;
 
+        /** sets the unencoded title */
         void child(const rtl::OUString& title);
 
+        /** returns the unencoded title */
         rtl::OUString child(void) const;
 
         std::vector<FTPDirentry> list(sal_Int16 nMode) const
@@ -192,7 +194,7 @@ namespace ftp {
         mutable rtl::OUString m_aPort;
         mutable rtl::OUString m_aType;
 
-        /** Contains the decoded pathsegments of the url.
+        /** Contains the encoded pathsegments of the url.
          */
         std::vector<rtl::OUString> m_aPathSegmentVec;
 
