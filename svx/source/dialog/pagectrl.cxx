@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 14:19:47 $
+ *  last change: $Author: dr $ $Date: 2002-09-16 11:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
     else
         DrawRect( aRect );
 
-    if(pImpl->bFrameDirection)
+    if(pImpl->bFrameDirection && !bTable)
     {
        //pImpl->nFrameDirection
         Point aPos;
