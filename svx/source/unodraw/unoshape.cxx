@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 13:19:43 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,13 @@
 
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
+#endif
+
+#ifndef _SVX_XFLBSTIT_HXX
+#include "xflbstit.hxx"
+#endif
+#ifndef _SVX_XFLBMTIT_HXX
+#include "xflbmtit.hxx"
 #endif
 
 #include "svdmodel.hxx"
@@ -1196,7 +1203,16 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             }
             break;
         }
-
+        case OWN_ATTR_FILLBMP_MODE:
+        {
+            sal_Int32 nMode;
+            if( rVal >>= nMode )
+            {
+                pObj->SetItem( XFillBmpStretchItem( nMode == 1 ) );
+                pObj->SetItem( XFillBmpTileItem( nMode == 0 ) );
+            }
+            break;
+        }
         case SDRATTR_LAYERID:
         {
             sal_Int32 nLayerId;
@@ -1619,6 +1635,22 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 }
                 break;
             }
+            case OWN_ATTR_FILLBMP_MODE:
+            {
+                XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&pObj->GetItem(XATTR_FILLBMP_STRETCH);
+                XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&pObj->GetItem(XATTR_FILLBMP_TILE);
+
+                if( pStretchItem && pTileItem )
+                {
+                    if( pTileItem->GetValue() )
+                        aAny <<= (sal_Int32)0;
+                    else if( pStretchItem->GetValue() )
+                        aAny <<= (sal_Int32)1;
+                    else
+                        aAny <<= (sal_Int32)2;
+                }
+                break;
+            }
             case SDRATTR_LAYERID:
                 aAny <<= (sal_Int32)pObj->GetLayer();
                 break;
@@ -1807,7 +1839,21 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
     if( pObj == NULL || pMap == NULL )
         throw beans::UnknownPropertyException();
 
-    if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
+    if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+    {
+        const SfxItemSet& rSet = pObj->GetItemSet();
+
+        if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
+            rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
+        {
+            return beans::PropertyState_DIRECT_VALUE;
+        }
+        else
+        {
+            return beans::PropertyState_AMBIGUOUS_VALUE;
+        }
+    }
+    else if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
        ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
     {
         return beans::PropertyState_DIRECT_VALUE;
@@ -1857,7 +1903,12 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
     if( pObj == NULL || pModel == NULL || pMap == NULL )
         throw beans::UnknownPropertyException();
 
-    if((pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
+    if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+    {
+        pObj->ClearItem( XATTR_FILLBMP_STRETCH );
+        pObj->ClearItem( XATTR_FILLBMP_TILE );
+    }
+    else if((pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
        ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
     {
         return;
