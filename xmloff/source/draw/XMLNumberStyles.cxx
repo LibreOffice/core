@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
+ *  last change: $Author: cl $ $Date: 2001-05-11 09:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
     &aSdXML_TimeStyle_7
 };
 
-static SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle )
+static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle )
 {
     OUString sAttrValue;
 
