@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 18:16:55 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _RTL_CIPHER_H_
 #include <rtl/cipher.h>
 #endif
+#ifndef _RTL_DIGEST_H_
+#include <rtl/digest.h>
+#endif
 #include <memory.h> // for memcpy
 
 using namespace rtl;
@@ -93,7 +96,6 @@ EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
 , xSeek( xNewInput, UNO_QUERY )
 , rEntry (rNewEntry )
 , nCurrent( 0 )
-, aSequence ( 0 )
 , bHaveInMemory ( sal_False )
 , aInflater( sal_True )
 , aBuffer( 0 )
@@ -115,44 +117,52 @@ void EntryInputStream::readIntoMemory()
 {
     if (!bHaveInMemory)
     {
-        aBuffer.realloc ( static_cast < sal_Int32 > ( nUncompressedSize ) );
-        if (bRawStream)
-        {
-            xSeek->seek(rEntry.nOffset);
-            xStream->readBytes( aBuffer, static_cast < sal_Int32 > (nUncompressedSize) );
-        }
-        else
-        {
-            sal_Int32 nSize = static_cast < sal_Int32 > (nEnd - rEntry.nOffset );
-            aSequence.realloc( nSize );
-            xSeek->seek(rEntry.nOffset);
-            xStream->readBytes(aSequence, nSize );
-            aInflater.setInputSegment(aSequence, 0, nSize );
-            aInflater.doInflate(aBuffer);
-            aInflater.end();
-            aSequence.realloc( 0 );
-        }
-        bHaveInMemory = sal_True;
+        Sequence < sal_Int8 > aReadBuffer;
+        xSeek->seek(rEntry.nOffset);
+        sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
+        xStream->readBytes( aReadBuffer, nSize ); // Now it holds the raw stuff from disk
 
-        /*
-         * Don't have the decryption code yet...
-        if (rEncryptionKey.getLength())
+        if (xEncryptionData->aSalt.getLength())
         {
-            // An encrypted entry!
+            // Have salt, will travel
+            Sequence < sal_uInt8 > aDerivedKey (16);
             rtlCipherError aResult;
-            aSequence.realloc ( rEntry.nSize );
+            Sequence < sal_Int8 > aDecryptBuffer;
+
+            // Get the key
+            rtl_digest_PBKDF2 ( aDerivedKey.getArray(), 16,
+                                reinterpret_cast < const sal_uInt8 * > (xEncryptionData->aKey.getConstArray()),
+                                xEncryptionData->aKey.getLength(),
+                                xEncryptionData->aSalt.getConstArray(),
+                                xEncryptionData->aSalt.getLength(),
+                                xEncryptionData->nIterationCount );
+
             rtlCipher aCipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
             aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionDecode,
-                                       reinterpret_cast < const sal_uInt8 * > ( rEncryptionKey.getConstArray()),
-                                       rEncryptionKey.getLength(),
-                                       reinterpret_cast < const sal_uInt8 * > ( rVector.getConstArray()),
-                                       rVector.getLength() );
+                                       aDerivedKey.getConstArray(),
+                                       aDerivedKey.getLength(),
+                                       xEncryptionData->aInitVector.getConstArray(),
+                                       xEncryptionData->aInitVector.getLength());
             OSL_ASSERT (aResult == rtl_Cipher_E_None);
-            aBuffer.realloc ( 0 );
-            aBuffer = aSequence;
-            aSequence.realloc ( 0 );
+            aDecryptBuffer.realloc ( nSize );
+            aResult = rtl_cipher_decode ( aCipher,
+                                          aReadBuffer.getConstArray(),
+                                          nSize,
+                                          reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
+                                          nSize);
+            OSL_ASSERT (aResult == rtl_Cipher_E_None);
+            aReadBuffer = aDecryptBuffer; // Now it holds the decrypted data
         }
-        */
+        if (bRawStream || rEntry.nMethod == STORED)
+            aBuffer = aReadBuffer; // bRawStream means the caller doesn't want it decompressed
+        else
+        {
+            aInflater.setInputSegment(aReadBuffer, 0, nSize );
+            aBuffer.realloc( rEntry.nSize );
+            aInflater.doInflate(aBuffer);
+            aInflater.end();
+        }
+        bHaveInMemory = sal_True;
     }
 }
 EntryInputStream::~EntryInputStream( void )
