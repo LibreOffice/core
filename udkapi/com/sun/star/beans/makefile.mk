@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nn $ $Date: 2001-04-25 11:52:03 $
+#   last change: $Author: fs $ $Date: 2001-09-14 09:46:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ IDLFILES=\
     Introspection.idl\
     IntrospectionException.idl\
     MethodConcept.idl\
+    NamedValue.idl\
     NotRemoveableException.idl\
     Property.idl\
     PropertyAttribute.idl\
@@ -92,6 +93,7 @@ IDLFILES=\
     PropertyValues.idl\
     PropertyVetoException.idl\
     UnknownPropertyException.idl\
+    StringPair.idl\
     XExactName.idl\
     XFastPropertySet.idl\
     XHierarchicalPropertySet.idl\
