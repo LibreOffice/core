@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2000-10-23 13:19:27 $
+ *  last change: $Author: er $ $Date: 2000-10-23 16:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1428,26 +1428,29 @@ inline ULONG SetIndexTable( NfIndexTableOffset nTabOff, ULONG nIndOff )
 }
 
 
-// quasi static
-sal_Int32 lcl_SvNumberFormatter_GetFormatCodeIndex(
+sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
             ::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode >& rSeq,
-            const sal_Int16 nIndex )
+            const NfIndexTableOffset nTabOff )
 {
     const sal_Int32 nLen = rSeq.getLength();
     for ( sal_Int16 j=0; j<nLen; j++ )
     {
-        if ( rSeq[j].Index == nIndex )
+        if ( rSeq[j].Index == nTabOff )
             return j;
     }
 #ifndef PRODUCT
-    ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "lcl_SvNumberFormatter_GetFormatCodeIndex: not found: " ) );
-    aMsg += ByteString::CreateFromInt32( nIndex );
+    ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "GetFormatCodeIndex: not found: " ) );
+    aMsg += ByteString::CreateFromInt32( nTabOff );
     DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
     if ( !nLen )
-    {
+    {   // we need at least _some_ format
         rSeq.realloc(1);
         rSeq[0] = ::com::sun::star::lang::NumberFormatCode();
+        String aTmp( '0' );
+        aTmp += GetDecimalSep();
+        aTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "############" ) );
+        rSeq[0].Code = aTmp;
     }
     return 0;
 }
@@ -1523,27 +1526,27 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
         = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::FIXED_NUMBER );
 
     // 0
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_INT, ZF_STANDARD+1 ));
 
     // 0.00
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_DEC2 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_DEC2 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_DEC2, ZF_STANDARD+2 ));
 
     // #,##0
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000INT );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000INT );
     ImpInsertFormat( aFormatSeq[nIdx],
             CLOffset + SetIndexTable( NF_NUMBER_1000INT, ZF_STANDARD+3 ));
 
     // #,##0.00
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000DEC2 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_1000DEC2 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_1000DEC2, ZF_STANDARD+4 ));
 
     // #.##0,00 System country/language dependent   since number formatter version 6
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_NUMBER_SYSTEM );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_SYSTEM );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1553,12 +1556,12 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::PERCENT_NUMBER );
 
     // 0%
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_PERCENT_INT );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_PERCENT_INT );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_PERCENT_INT, ZF_STANDARD_PERCENT ));
 
     // 0.00%
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_PERCENT_DEC2 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_PERCENT_DEC2 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_PERCENT_DEC2, ZF_STANDARD_PERCENT+1 ));
 
@@ -1568,32 +1571,32 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::CURRENCY );
 
     // #,##0
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000INT, ZF_STANDARD_CURRENCY ));
 
     // #,##0.00
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2 );
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2, ZF_STANDARD_CURRENCY+1 ));
         //! MUST be ZF_STANDARD_CURRENCY+1 for Calc currency function, e.g. DM()
 
     // #,##0 negative red
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT_RED );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT_RED );
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000INT_RED, ZF_STANDARD_CURRENCY+2 ));
 
     // #,##0.00 negative red
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_RED );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_RED );
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_RED, ZF_STANDARD_CURRENCY+3 ));
 
     // #,##0.00 USD   since number formatter version 3
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
     aFormatSeq[nIdx].Default = sal_False;
     pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_CCC, ZF_STANDARD_CURRENCY+4 ));
@@ -1601,7 +1604,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
         pNewFormat->SetUsed(TRUE);      // must be saved for older versions
 
     // #.##0,--   since number formatter version 6
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_DASHED, ZF_STANDARD_CURRENCY+5 ),
@@ -1641,51 +1644,51 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::DATE );
 
     // DD.MM.YY   System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYSTEM_SHORT, ZF_STANDARD_DATE ));
 
     // NN DD.MMM YY
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DEF_NNDDMMMYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DEF_NNDDMMMYY );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DEF_NNDDMMMYY, ZF_STANDARD_DATE+1 ));
 
     // DD.MM.YY   def/System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_MMYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_MMYY );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_MMYY, ZF_STANDARD_DATE+2 ));
 
     // DD MMM
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMM );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMM, ZF_STANDARD_DATE+3 ));
 
     // MMMM
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_MMMM );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_MMMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_MMMM, ZF_STANDARD_DATE+4 ));
 
     // QQ YY
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_QQJJ );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_QQJJ );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_QQJJ, ZF_STANDARD_DATE+5 ));
 
     // DD.MM.YYYY   since number formatter version 2, was DD.MM.[YY]YY
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYYYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYYYY );
     pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYYYY, ZF_STANDARD_DATE+6 ));
     if ( pNewFormat )
         pNewFormat->SetUsed(TRUE);      // must be saved for older versions
 
     // DD.MM.YY   def/System, since number formatter version 6
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYY, ZF_STANDARD_DATE+7 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NNN, D. MMMM YYYY   System
     // Long day of week: "NNNN" instead of "NNN," because of compatibility
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_LONG );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_LONG );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYSTEM_LONG, ZF_STANDARD_DATE+8 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1694,7 +1697,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     // since numberformatter version 6
 
     // D. MMM YY   def/System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYY, ZF_STANDARD_DATE+9 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1704,31 +1707,31 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     //! Therefore they are inserted with nNewExtended++ (which is also limited)
 
     // D. MMM YYYY   def/System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYYYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // D. MMMM YYYY   def/System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMMYYYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_DMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NN, D. MMM YY   def/System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NN, D. MMMM YYYY   def/System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMMYYYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // NNN, D. MMMM YYYY   def/System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNNNDMMMMYYYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNNNDMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYS_NNNNDMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1736,31 +1739,31 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     // Hard coded DIN (Deutsche Industrie Norm) and EN (European Norm) date formats
 
     // D. MMM. YYYY   DIN/EN
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMYYYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_DMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // D. MMMM YYYY   DIN/EN
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMMYYYY );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMMYYYY );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_DMMMMYYYY, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // MM-DD   DIN/EN
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_MMDD );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_MMDD );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_MMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // YY-MM-DD   DIN/EN
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYMMDD );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYMMDD );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_YYMMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
     // YYYY-MM-DD   DIN/EN
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_DIN_YYYYMMDD, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
@@ -1771,37 +1774,37 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::TIME );
 
     // HH:MM
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMM );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMM, ZF_STANDARD_TIME ));
 
     // HH:MM:SS
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSS );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSS );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMSS, ZF_STANDARD_TIME+1 ));
 
     // HH:MM AM/PM
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMAMPM );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMAMPM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMAMPM, ZF_STANDARD_TIME+2 ));
 
     // HH:MM:SS AM/PM
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSSAMPM );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMMSSAMPM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HHMMSSAMPM, ZF_STANDARD_TIME+3 ));
 
     // [HH]:MM:SS
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HH_MMSS, ZF_STANDARD_TIME+4 ));
 
     // MM:SS,00
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_MMSS00 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_MMSS00 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_MMSS00, ZF_STANDARD_TIME+5 ));
 
     // [HH]:MM:SS,00
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS00 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS00 );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_TIME_HH_MMSS00, ZF_STANDARD_TIME+6 ),
         SV_NUMBERFORMATTER_VERSION_NF_TIME_HH_MMSS00 );
@@ -1812,12 +1815,12 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::DATE_TIME );
 
     // DD.MM.YY HH:MM   System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYSTEM_SHORT_HHMM );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYSTEM_SHORT_HHMM );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATETIME_SYSTEM_SHORT_HHMM, ZF_STANDARD_DATETIME ));
 
     // DD.MM.YYYY HH:MM:SS   System
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, ZF_STANDARD_DATETIME+1 ),
         SV_NUMBERFORMATTER_VERSION_NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
@@ -1828,12 +1831,12 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::SCIENTIFIC_NUMBER );
 
     // 0.00E+000
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E000 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E000 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_SCIENTIFIC_000E000, ZF_STANDARD_SCIENTIFIC ));
 
     // 0.00E+00
-    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E00 );
+    nIdx = GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E00 );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_SCIENTIFIC_000E00, ZF_STANDARD_SCIENTIFIC+1 ));
 
