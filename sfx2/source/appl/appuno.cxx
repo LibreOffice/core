@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 16:37:45 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,7 +1566,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
         {
             // current/actual document
             pDoc = pCurrent;
-            pBasMgr = pDoc->GetBasicManager();
+            if (pDoc)
+                pBasMgr = pDoc->GetBasicManager();
         }
         else
         {
