@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ void SwViewImp::_ScrolledRect( const SwRect& rRect, long nOffs )
 //Speicherbedarf sind vorgegeben.
 #define MAXKB 180L
 
-void lcl_CalcVirtHeight( OutputDevice *pOut, Size &rSz )
+static void lcl_CalcVirtHeight( OutputDevice *pOut, Size &rSz )
 {
     char nBytes;
     const ULONG nColorCount = pOut->GetColorCount();
