@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: pb $ $Date: 2001-07-04 08:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,10 @@ BOOL SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
 ULONG SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     return _pImp->GetEntryListPos( pEntry );
+}
+void SvtIconChoiceCtrl::SetCursor( SvxIconChoiceCtrlEntry* pEntry )
+{
+    _pImp->SetCursor( pEntry );
 }
 void SvtIconChoiceCtrl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
 {
