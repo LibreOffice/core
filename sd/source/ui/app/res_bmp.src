@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 13:29:09 $
+ *  last change: $Author: cl $ $Date: 2002-05-30 11:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,8 +1361,11 @@ Image IMG_SLIDE_MANU_H
     ImageBitmap = Bitmap { File = "slidmanu_h.bmp" ; };
     MaskColor = IMAGE_MASK_STDCOLOR_HC;
 };
+
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
+
+
     StyleFamilyList =
     {
         SfxStyleFamilyItem
@@ -1388,11 +1391,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ korean ] = "그래픽개체 유형";
             Text[ turkish ] = "Grafik nesne bi�imi";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "sco206.bmp" ; };
-                MaskColor = IMAGE_MASK_STDCOLOR;
-            };
             FilterList =
             {
                 < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
@@ -1423,17 +1421,32 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ korean ] = "프레젠테이션 개체 템플릿";
             Text[ turkish ] = "Sunu nesne bi�imi";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "presobjs.bmp" ; };
-                MaskColor = IMAGE_MASK_STDCOLOR;
-            };
             FilterList =
             {
                 < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             };
         };
     };
+    #define STYLE_IMAGE_LISTEF \
+        IdList = \
+        { \
+            1; 2; \
+        }; \
+        IdCount = 2;
+
+    ImageList 1 // == BMP_COLOR_NORMAL + 1
+    {
+        ImageBitmap = Bitmap { File = "sf_out.bmp" ; };
+        MaskColor = IMAGE_MASK_STDCOLOR;
+        STYLE_IMAGE_LISTEF
+    };
+    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
+    {
+        ImageBitmap = Bitmap { File = "sfh_out.bmp" ; };
+        MaskColor = IMAGE_MASK_STDCOLOR_HC;
+        STYLE_IMAGE_LISTEF
+    };
+    #undef STYLE_IMAGE_LISTEF
 };
 
 Bitmap BMP_PAGE_ON
