@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mhids.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-02 16:01:37 $
+#   last change: $Author: rt $ $Date: 2004-12-10 17:15:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,18 @@ $delim = $1;
 
 if ( $filename =~ /.*[\\\/](.*)\..*?/ )
 {
-    $filebase = $srs.$delim.$1;
+    $filebase = $1;
 }
 else
 {
     $filename =~ /(.*)\..*?/;
-    $filebase = $srs.$delim.$1;
+    $filebase = $1;
 }
+
+#remove old objects which remained in place by a former bug
+unlink "$filebase.obj";
+
+$filebase = $srs.$delim.$filebase;
 
 print "filebase: $filebase\n";
 
@@ -134,8 +139,9 @@ while (<PRE>)
 close PRE;
 close C_PROG;
 
-print  "cl $ENV{SOLARINCLUDES} $filebase.c /Fe$filebase.exe \n";
-$ret = system "cl $ENV{SOLARINCLUDES} $filebase.c /Fe$filebase.exe";
+#cl %SOLARINCLUDES% %_srs%\%_filebase%.c /Fe%_srs%\%_filebase%.exe
+print         "cl $ENV{SOLARINCLUDES} $defs $filebase.c /Fo$filebase.obj /Fe$filebase.exe \n";
+$ret = system "cl $ENV{SOLARINCLUDES} $defs $filebase.c /Fo$filebase.obj /Fe$filebase.exe";
 if ( $ret ) { die "$@\n"; }    # die on returncode != 0
 
 
@@ -261,3 +267,8 @@ while (<C3>)
 }
 
 
+unlink "$filebase.c";
+unlink "$filebase.c1";
+unlink "$filebase.c2";
+unlink "$filebase.obj";
+unlink "$filebase.exe";
