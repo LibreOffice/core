@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:29:21 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 16:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <vcl/system.hxx>
 #include <stdlib.h>     // qsort
 #include <svx/eeitem.hxx>
+#include <svx/scriptspaceitem.hxx>
 
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -855,6 +856,8 @@ void ScTextWnd::StartEditEngine()
             SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
             pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
             lcl_ExtendEditFontAttribs( *pSet );
+            // turn off script spacing to match DrawText output
+            pSet->Put( SvxScriptSpaceItem( FALSE, EE_PARA_ASIANCJKSPACING ) );
             pEditEngine->SetDefaults( pSet );
         }
 
