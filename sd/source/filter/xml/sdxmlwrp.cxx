@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-18 15:03:13 $
+ *  last change: $Author: cl $ $Date: 2002-01-22 09:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,6 +831,11 @@ sal_Bool SdXMLFilter::Export()
                 {
                     const OUString sDocName( OUString::createFromAscii( pServices->mpStream ) );
                     xDocStream = pStorage->OpenStream( sDocName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
+                    if( !xDocStream.Is() )
+                        return sal_False;
+
+                    xDocStream->SetSize(0);
                     xDocStream->SetVersion( pStorage->GetVersion() );
 //                  xDocStream->SetKey( pStorage->GetKey() );
                     xDocStream->SetBufferSize( 16*1024 );
