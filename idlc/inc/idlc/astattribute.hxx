@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astattribute.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:39:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "idlc/astscope.hxx"
 
 #include "registry/types.h"
+#include "rtl/ustring.hxx"
 
 namespace typereg { class Writer; }
 
@@ -87,13 +88,20 @@ public:
     virtual ~AstAttribute() {}
 
     void setExceptions(
-        DeclList const * getter, DeclList const * setter)
+        rtl::OUString const * getDocumentation, DeclList const * getExceptions,
+        rtl::OUString const * setDocumentation, DeclList const * setExceptions)
     {
-        if (getter != 0) {
-            m_getExceptions = *getter;
+        if (getDocumentation != 0) {
+            m_getDocumentation = *getDocumentation;
         }
-        if (setter != 0) {
-            m_setExceptions = *setter;
+        if (getExceptions != 0) {
+            m_getExceptions = *getExceptions;
+        }
+        if (setDocumentation != 0) {
+            m_setDocumentation = *setDocumentation;
+        }
+        if (setExceptions != 0) {
+            m_setExceptions = *setExceptions;
         }
     }
 
@@ -133,12 +141,15 @@ public:
 
 private:
     void dumpExceptions(
-        typereg::Writer & writer, DeclList const & exceptions,
-        RTMethodMode flags, sal_uInt16  * methodIndex);
+        typereg::Writer & writer, rtl::OUString const & documentation,
+        DeclList const & exceptions, RTMethodMode flags,
+        sal_uInt16 * methodIndex);
 
     const sal_uInt32    m_flags;
     AstType const * m_pType;
+    rtl::OUString m_getDocumentation;
     DeclList m_getExceptions;
+    rtl::OUString m_setDocumentation;
     DeclList m_setExceptions;
 };
 
