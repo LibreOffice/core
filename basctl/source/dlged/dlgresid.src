@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 13:57:40 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,10 +139,10 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ swedish ] = "Egenskaper: ";
     Text[ polish ] = "W³aœciwoœci: ";
     Text[ portuguese_brazilian ] = "Properties: ";
-    Text[ japanese ] = "ÌßÛÊßÃ¨: ";
-    Text[ korean ] = "¼Ó¼º: ";
-    Text[ chinese_simplified ] = "ÊôĞÔ£º";
-    Text[ chinese_traditional ] = "Äİ©Ê¡G";
+    Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï¾Šï¾Ÿï¾ƒï½¨: ";
+    Text[ korean ] = "ì†ì„±: ";
+    Text[ chinese_simplified ] = "å±æ€§ï¼š";
+    Text[ chinese_traditional ] = "å±¬æ€§ï¼š";
     Text[ turkish ] = "Properties: ";
     Text[ arabic ] = "ÇáÎÕÇÆÕ: ";
     Text[ finnish ] = "Ominaisuudet:";
@@ -164,10 +164,10 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ swedish ] = "Inget kontrollelement markerat";
     Text[ polish ] = "Nie zaznaczono formantu";
     Text[ portuguese_brazilian ] = "No Control marked";
-    Text[ japanese ] = "ºİÄÛ°Ù—v‘f‚Ì‘I‘ğ‚È‚µ";
-    Text[ korean ] = "ÄÁÆ®·Ñ ¿ä¼Ò°¡ ¸¶Å©Ç¥½ÃµÇÁö ¾Ê¾ÒÀ½";
-    Text[ chinese_simplified ] = "Ã»ÓĞÑ¡Ôñ¿ØÖÆµ¥Ôª";
-    Text[ chinese_traditional ] = "¨S¦³¿ï¨ú±±¨î³æ¤¸";
+    Text[ japanese ] = "ï½ºï¾ï¾„ï¾›ï½°ï¾™è¦ç´ ã®é¸æŠãªã—";
+    Text[ korean ] = "ì»¨íŠ¸ë¡¤ ìš”ì†Œê°€ ë§ˆí¬í‘œì‹œë˜ì§€ ì•Šì•˜ìŒ";
+    Text[ chinese_simplified ] = "æ²¡æœ‰é€‰æ‹©æ§åˆ¶å•å…ƒ";
+    Text[ chinese_traditional ] = "æ²’æœ‰é¸å–æ§è£½å–®å…ƒ";
     Text[ turkish ] = "No Control marked";
     Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÚäÕÑ ÊÍßã";
     Text[ finnish ] = "Kein Kontrollelement markiert";
@@ -189,10 +189,10 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ swedish ] = "Multimarkering";
     Text[ polish ] = "Wybór wielokrotny";
     Text[ portuguese_brazilian ] = "Multiselection";
-    Text[ japanese ] = "•¡”‘I‘ğ";
-    Text[ korean ] = "´ÙÁß ¼±ÅÃ";
-    Text[ chinese_simplified ] = "¶àÖØÑ¡Ôñ";
-    Text[ chinese_traditional ] = "¦h­«¿ï¨ú";
+    Text[ japanese ] = "è¤‡æ•°é¸æŠ";
+    Text[ korean ] = "ë‹¤ì¤‘ ì„ íƒ";
+    Text[ chinese_simplified ] = "å¤šé‡é€‰æ‹©";
+    Text[ chinese_traditional ] = "å¤šé‡é¸å–";
     Text[ turkish ] = "Multiselection";
     Text[ arabic ] = "ÊÍÏíÏ ãÊÚÏÏ";
     Text[ finnish ] = "Monivalinta";
@@ -200,6 +200,7 @@ String RID_STR_BRWTITLE_MULTISELECT
 };
 
 // -----------------------------------------------------------------------
+
 
 
 
