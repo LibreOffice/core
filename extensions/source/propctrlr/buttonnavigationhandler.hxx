@@ -2,9 +2,9 @@
  *
  *  $RCSfile: buttonnavigationhandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:02:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@ namespace pcr
         virtual ::com::sun::star::uno::Any              SAL_CALL getPropertyValue( PropertyId _nPropId, bool _bLazy = true ) const;
         virtual void                                    SAL_CALL setPropertyValue( PropertyId _nPropId, const ::com::sun::star::uno::Any& _rValue );
         virtual ::com::sun::star::beans::PropertyState  SAL_CALL getPropertyState( PropertyId _nPropId ) const;
-        virtual ::std::vector< ::rtl::OUString >        SAL_CALL getSupersededProperties( ) const;
 
         // PropertyHandler overridables
         virtual ::std::vector< ::com::sun::star::beans::Property >
