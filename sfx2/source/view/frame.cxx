@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 10:59:07 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,7 +899,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     SFX_ITEMSET_ARG( pItemSet, pRefererItem, SfxStringItem, SID_REFERER, sal_False);
     SFX_ITEMSET_ARG( pItemSet, pOptionsItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
     SFX_ITEMSET_ARG( pItemSet, pTitle1Item, SfxStringItem, SID_DOCINFO_TITLE, sal_False);
-    SFX_ITEMSET_ARG( pItemSet, pTitle2Item, SfxStringItem, SID_FILE_LONGNAME, sal_False);
 
     SfxItemSet *pSet = GetDescriptor()->GetArgs();
 
@@ -916,9 +915,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     if ( pTitle1Item )
         pSet->Put( *pTitle1Item );
-
-    if ( pTitle2Item )
-        pSet->Put( *pTitle2Item );
 
     pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilter ));
 }
