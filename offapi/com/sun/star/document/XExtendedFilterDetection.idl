@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedFilterDetection.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com { module sun { module star { module document {
     @see TypeDetection
     @see FilterFactory
  */
-interface XExtendedFilterDetection: com::sun::star::uno::XInterface
+published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** controls agreement of a "flat" <type>TypeDetection</type>
