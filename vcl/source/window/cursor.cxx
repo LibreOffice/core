@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,56 +122,59 @@ static void ImplCursorInvert( ImplCursorData* pData )
     if ( pData->mnDirection || pData->mnOrientation || pData->mnPixSlant )
     {
         Polygon aPoly( aRect );
-        aPoly[1].X() += 1;  // include the right border
-        aPoly[2].X() += 1;
-        if ( pData->mnPixSlant )
+        if( aPoly.GetSize() == 5 )
         {
-            Point aPoint = aPoly.GetPoint( 0 );
-            aPoint.X() += pData->mnPixSlant;
-            aPoly.SetPoint( aPoint, 0 );
-            aPoly.SetPoint( aPoint, 4 );
-            aPoint = aPoly.GetPoint( 1 );
-            aPoint.X() += pData->mnPixSlant;
-            aPoly.SetPoint( aPoint, 1 );
-        }
-
-        // apply direction flag after slant to use the correct shape
-        if ( pData->mnDirection )
-        {
-            Point pAry[7];
-            int delta = 3*aRect.getWidth()+1;
-            if( pData->mnDirection == CURSOR_DIRECTION_LTR )
+            aPoly[1].X() += 1;  // include the right border
+            aPoly[2].X() += 1;
+            if ( pData->mnPixSlant )
             {
-                // left-to-right
-                pAry[0] = aPoly.GetPoint( 0 );
-                pAry[1] = aPoly.GetPoint( 1 );
-                pAry[2] = pAry[1];
-                pAry[2].X() += delta;
-                pAry[3] =  pAry[1];
-                pAry[3].Y() += delta;
-                pAry[4] = aPoly.GetPoint( 2 );
-                pAry[5] = aPoly.GetPoint( 3 );
-                pAry[6] = aPoly.GetPoint( 4 );
+                Point aPoint = aPoly.GetPoint( 0 );
+                aPoint.X() += pData->mnPixSlant;
+                aPoly.SetPoint( aPoint, 0 );
+                aPoly.SetPoint( aPoint, 4 );
+                aPoint = aPoly.GetPoint( 1 );
+                aPoint.X() += pData->mnPixSlant;
+                aPoly.SetPoint( aPoint, 1 );
             }
-            else if( pData->mnDirection == CURSOR_DIRECTION_RTL )
-            {
-                // right-to-left
-                pAry[0] = aPoly.GetPoint( 0 );
-                pAry[1] = aPoly.GetPoint( 1 );
-                pAry[2] = aPoly.GetPoint( 2 );
-                pAry[3] = aPoly.GetPoint( 3 );
-                pAry[4] = pAry[0];
-                pAry[4].Y() += delta;
-                pAry[5] =  pAry[0];
-                pAry[5].X() -= delta;
-                pAry[6] = aPoly.GetPoint( 4 );
-            }
-            aPoly = Polygon( 7, pAry);
-        }
 
-        if ( pData->mnOrientation )
-            aPoly.Rotate( pData->maPixRotOff, pData->mnOrientation );
-        pWindow->Invert( aPoly, nInvertStyle );
+            // apply direction flag after slant to use the correct shape
+            if ( pData->mnDirection )
+            {
+                Point pAry[7];
+                int delta = 3*aRect.getWidth()+1;
+                if( pData->mnDirection == CURSOR_DIRECTION_LTR )
+                {
+                    // left-to-right
+                    pAry[0] = aPoly.GetPoint( 0 );
+                    pAry[1] = aPoly.GetPoint( 1 );
+                    pAry[2] = pAry[1];
+                    pAry[2].X() += delta;
+                    pAry[3] =  pAry[1];
+                    pAry[3].Y() += delta;
+                    pAry[4] = aPoly.GetPoint( 2 );
+                    pAry[5] = aPoly.GetPoint( 3 );
+                    pAry[6] = aPoly.GetPoint( 4 );
+                }
+                else if( pData->mnDirection == CURSOR_DIRECTION_RTL )
+                {
+                    // right-to-left
+                    pAry[0] = aPoly.GetPoint( 0 );
+                    pAry[1] = aPoly.GetPoint( 1 );
+                    pAry[2] = aPoly.GetPoint( 2 );
+                    pAry[3] = aPoly.GetPoint( 3 );
+                    pAry[4] = pAry[0];
+                    pAry[4].Y() += delta;
+                    pAry[5] =  pAry[0];
+                    pAry[5].X() -= delta;
+                    pAry[6] = aPoly.GetPoint( 4 );
+                }
+                aPoly = Polygon( 7, pAry);
+            }
+
+            if ( pData->mnOrientation )
+                aPoly.Rotate( pData->maPixRotOff, pData->mnOrientation );
+            pWindow->Invert( aPoly, nInvertStyle );
+        }
     }
     else
         pWindow->Invert( aRect, nInvertStyle );
