@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-06-20 14:49:22 $
+ *  last change: $Author: jsc $ $Date: 2001-06-20 15:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,10 @@ public:
     ::rtl::OString  getName() { return m_name; }
 
     // friend functions
-    friend ostream &operator<<(ostream& o, ::rtl::OString*);
-    friend ostream &operator<<(ostream& o, const ::rtl::OString&);
+    friend ostream &operator<<(ostream& o, ::rtl::OString* s)
+        {   return o << s->getStr(); }
+    friend ostream &operator<<(ostream& o, const ::rtl::OString& s)
+        {   return o << s.getStr(); }
 
 protected:
     ::rtl::OString m_name;
