@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:00:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,18 +135,8 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
 }
 
 //-------------------------------------------------------------------------
-
+/*
 class SfxMenuIter_Impl
-
-/*  [Beschreibung]
-
-    Mit solchen Instanzen wird beim Auslesen des Men"us f"ur die
-    Konfiguration ein Stack gebildet, um die Iterator-Position zu
-    bestimmen.
-
-    Die Instanzen l"oschen sich selbst, wenn der Stack abgebaut wird.
-*/
-
 {
     String              _aCommand;
     SfxMenuIter_Impl*   _pPrev;     // der vorherige auf dem Stack
@@ -294,18 +284,17 @@ BOOL SfxMenuIter_Impl::IsBinding( SfxModule* pMod ) const
             return FALSE;
     return _nId >= SID_SFX_START || ( GetCommand().Len() != 0);
 }
-
+*/
 //--------------------------------------------------------------------
 
-SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings, SfxConfigManager* pMgr, BOOL bBar )
-:   SfxConfigItem( rResId.GetId(), pMgr ),
+SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings )
+:   //SfxConfigItem( rResId.GetId(), pMgr ),
+    nType( rResId.GetId() ),
     pMenu(0),
     pOldMenu(0),
-    bMenuBar(bBar),
     pBindings(&rBindings),
     pResMgr(rResId.GetResMgr())
 {
-    bOLE = FALSE;
     bAddClipboardFuncs = FALSE;
     DBG_MEMTEST();
 }
@@ -334,7 +323,7 @@ void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
 }
 
 //--------------------------------------------------------------------
-
+/*
 BOOL SfxMenuManager::Store( SvStream& rStream )
 {
     DBG_MEMTEST();
@@ -342,7 +331,7 @@ BOOL SfxMenuManager::Store( SvStream& rStream )
     SfxModule *pMod = pDisp ? SFX_APP()->GetActiveModule( pDisp->GetFrame() ) :0;
     return StoreMenu( rStream, pMenu->GetSVMenu(), pMod );
 }
-
+*/
 //-------------------------------------------------------------------------
 void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs, Menu* pMenu )
 {
@@ -374,13 +363,8 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
         }
     }
 }
-
+/*
 void SfxMenuManager::InsertVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs)
-
-/*  Man k"onnte hier auch einen Separator oder eine bestimmte Menu-Id
-    als Kennung zu Einf"ugen benutzen, dann mu\s man aber das Items-Array
-    verschieben etc.
-*/
 
 {
     Menu *pMenu = GetMenu()->GetSVMenu();
@@ -430,7 +414,7 @@ int SfxMenuManager::Load( SvStream& rStream )
 
     return SfxConfigItem::ERR_OK;
 }
-
+*/
 //--------------------------------------------------------------------
 
 void SfxMenuManager::UseDefault()
@@ -446,6 +430,7 @@ void SfxMenuManager::UseDefault()
     }
 
     SfxVirtualMenu *pVMenu = 0;
+    /*
     if ( bMenuBar )
     {
         ResId aId( GetType(), pResMgr );
@@ -463,13 +448,13 @@ void SfxMenuManager::UseDefault()
             pVMenu = new SfxVirtualMenu( pSvMenu, FALSE, *pBindings, bOLE, TRUE );
         }
     }
-    else
+    else    */
     {
         ResId aResId(GetType());
         aResId.SetRT(RSC_MENU);
         aResId.SetResMgr(pResMgr);
         Menu *pSVMenu = new PopupMenu( aResId );
-        SfxMenuManager::EraseItemCmds( pSVMenu ); // Remove .uno cmds to be compatible with 6.0/src641
+        //SfxMenuManager::EraseItemCmds( pSVMenu ); // Remove .uno cmds to be compatible with 6.0/src641
 
         if ( bAddClipboardFuncs )
         {
@@ -498,7 +483,7 @@ void SfxMenuManager::UseDefault()
     }
 
     Construct(*pVMenu);
-
+/*
     if ( bMenuBar && pOldVirtMenu )
     {
         SfxMenuBarManager *pBar = (SfxMenuBarManager*) this;
@@ -507,18 +492,18 @@ void SfxMenuManager::UseDefault()
         if ( pBar->GetWindow()->GetMenuBar() == pOldBar )
             pBar->GetWindow()->SetMenuBar( pSvBar );
     }
-
+*/
     if (pOldVirtMenu)
     {
         delete pOldVirtMenu;
         pBindings->LEAVEREGISTRATIONS();
     }
 
-    SetDefault( TRUE );
+    //SetDefault( TRUE );
 }
 
 // ------------------------------------------------------------------------
-
+/*
 String SfxMenuManager::GetStreamName() const
 {
     return SfxConfigItem::GetStreamName( GetType() );
@@ -791,7 +776,7 @@ void SfxMenuManager::LeavePopup()
 
     pCfgStack->Pop();
 }
-
+*/
 //--------------------------------------------------------------------
 
 // executes the function for the selected item
@@ -818,7 +803,7 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pMenu )
 //--------------------------------------------------------------------
 
 // resets the item iterator, FALSE if none
-
+/*
 BOOL SfxMenuManager::FirstItem()
 {
     pIterator = SfxMenuIter_Impl::Create( pMenu->GetSVMenu() );
@@ -1002,7 +987,7 @@ void SfxMenuManager::Reconfigure()
     pBindings->LEAVEREGISTRATIONS();
     SetDefault( FALSE );
 }
-
+*/
 void SfxMenuManager::Construct_Impl( Menu* pSVMenu, BOOL bWithHelp )
 {
     SfxVirtualMenu *pOldVirtMenu=0;
@@ -1014,17 +999,17 @@ void SfxMenuManager::Construct_Impl( Menu* pSVMenu, BOOL bWithHelp )
     }
 
     TryToHideDisabledEntries_Impl( pSVMenu );
-    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, bOLE );
+    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, TRUE );
     Construct(*pVMenu);
 
-    if ( bMenuBar && pOldVirtMenu )
+    /*if ( bMenuBar && pOldVirtMenu )
     {
         SfxMenuBarManager *pBar = (SfxMenuBarManager*) this;
         MenuBar* pOldBar = (MenuBar*) pOldVirtMenu->GetSVMenu();
         MenuBar* pSvBar = (MenuBar*) GetMenu()->GetSVMenu();
         if ( pBar->GetWindow()->GetMenuBar() == pOldBar )
             pBar->GetWindow()->SetMenuBar( pSvBar );
-    }
+    } */
 
     if ( pOldVirtMenu )
     {
@@ -1036,7 +1021,7 @@ void SfxMenuManager::Construct_Impl( Menu* pSVMenu, BOOL bWithHelp )
 //--------------------------------------------------------------------
 
 // reload all KeyCodes
-
+/*
 void SfxMenuManager::InvalidateKeyCodes()
 {
     if ( pMenu )
@@ -1053,28 +1038,6 @@ BOOL SfxMenuManager::IsPopupFunction( USHORT nId )
            nId == SID_ADDONLIST;
 }
 
-//====================================================================
-
-// creates a menu-manager and loads it from resource RID_DEFAULTMENU or RID_DEFAULTPLUGINMENU
-/*
-SfxMenuBarManager::SfxMenuBarManager( SfxBindings& rBindings, BOOL bPlugin ) :
-
-    SfxMenuManager( bPlugin ? RID_DEFAULTPLUGINMENU : RID_DEFAULTMENU, rBindings, TRUE ),
-
-    pWindow( rBindings.GetSystemWindow() )
-
-{
-    DBG_MEMTEST();
-
-    // initialize ObjectMenus
-    for ( int n = 0; n < 4; ++n )
-    {
-        aObjMenus[n].nId = 0;
-        aObjMenus[n].pPMMgr = NULL;
-        aObjMenus[n].pResMgr = NULL;
-    }
-}
-*/
 //--------------------------------------------------------------------
 
 // creates a menu-manager and loads it from a resource
@@ -1137,7 +1100,6 @@ SfxMenuBarManager::~SfxMenuBarManager()
 }
 
 
-/*
 SvStream* SfxMenuBarManager::GetDefaultStream( StreamMode nMode )
 {
     String aUserConfig = SvtPathOptions().GetUserConfigPath();
@@ -1154,7 +1116,6 @@ BOOL SfxMenuBarManager::Load( SvStream& rStream, BOOL bOLEServer )
         Construct_Impl( pSVMenu, FALSE );
     return ( pSVMenu != NULL );
 }
-*/
 
 //------------------------------------------------------------------------
 // To be compatible to 6.0/src641 we have to erase .uno commands we got
@@ -1178,6 +1139,7 @@ void SfxMenuManager::EraseItemCmds( Menu* pMenu )
         }
     }
 }
+
 
 //------------------------------------------------------------------------
 // Restore the correct macro ID so that menu items with an associated accelerator
@@ -1374,10 +1336,10 @@ void SfxMenuBarManager::ReconfigureObjectMenus()
     }
 }
 //====================================================================
-
+*/
 // don't insert Popups into ConfigManager, they are not configurable at the moment !
 SfxPopupMenuManager::SfxPopupMenuManager(const ResId& rResId, SfxBindings &rBindings )
-    : SfxMenuManager( rResId, rBindings, NULL/*rBindings.GetConfigManager( rResId.GetId() )*/, FALSE )
+    : SfxMenuManager( rResId, rBindings )
     , pSVMenu( NULL )
 {
     DBG_MEMTEST();
@@ -1489,15 +1451,16 @@ void SfxPopupMenuManager::CheckItem( USHORT nId, BOOL bCheck )
 
 void SfxPopupMenuManager::AddClipboardFunctions()
 {
+    /*
     if ( bMenuBar )
     {
         DBG_ERROR( "Not for menubars!" );
         return;
-    }
+    } */
 
     bAddClipboardFuncs = TRUE;
 }
-
+/*
 int SfxMenuManager::Load( SotStorage& rStorage )
 {
     SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxMenuManager::GetStreamName(), STREAM_STD_READ );
@@ -1544,16 +1507,15 @@ BOOL SfxMenuBarManager::Store( SotStorage& rStorage )
     else
         return StoreMenuBar( *xStream, (MenuBar*) GetMenu()->GetSVMenu() );
 }
-
+*/
 SfxMenuManager::SfxMenuManager( Menu* pMenu, SfxBindings &rBindings )
-:   SfxConfigItem( 0, NULL ),
-    bMenuBar(FALSE),
+:
+    nType(0),
     pMenu(0),
     pOldMenu(0),
     pResMgr(NULL),
     pBindings(&rBindings)
 {
-    bOLE = FALSE;
     bAddClipboardFuncs = FALSE;
     SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenu, FALSE, rBindings, TRUE, TRUE );
     Construct(*pVMenu);
@@ -1607,11 +1569,11 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         aPop.Execute( rPoint, pWindow );
     }
 }
-
+/*
 BOOL SfxMenuBarManager::ReInitialize()
 {
     BOOL bRet = SfxConfigItem::ReInitialize();
     if ( bRet )
         UpdateObjectMenus();
     return bRet;
-}
+} */
