@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-31 12:52:50 $
+ *  last change: $Author: iha $ $Date: 2003-11-08 22:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,9 +464,6 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
                           OBJECTTYPE_DATA_SERIES, ObjectIdentifier::getParticleID(aObjectCID) );
             eObjectType = OBJECTTYPE_DATA_SERIES;
         }
-
-        rtl::OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
-        bool bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
         //-------------------------------------------------------------
         //convert properties to ItemSet
         ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
@@ -481,15 +478,13 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
 
         //-------------------------------------------------------------
         //prepare dialog
-        OldModelWrapper aOldChartModelWrapper = OldModelWrapper();
+        ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter( aObjectCID );
+        aDialogParameter.init( m_aModel->getModel() );
         Window* pParent( NULL );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper, m_pNumberFormatterWrapper );
         Graphic aSymbolGraphic;
 
-        SchAttribTabDlg aDlg( pParent
-            , eObjectType, &aItemSet
-            , &aViewElementListProvider, &aOldChartModelWrapper
-            , bAffectsMultipleObjects );
+        SchAttribTabDlg aDlg( pParent, &aItemSet, &aDialogParameter, &aViewElementListProvider );
             //, pSymbolAttr, aSymbolGraphic );
 
         //-------------------------------------------------------------

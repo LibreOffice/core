@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: iha $ $Date: 2003-11-08 22:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,16 @@
 #include "SchSlotIds.hxx"
 #include "ResId.hxx"
 #include "ViewElementListProvider.hxx"
+#include "macros.hxx"
+#include "ChartModelHelper.hxx"
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
+#endif
+
 
 #ifndef _SVX_CHARDLG_HXX
 #include <svx/chardlg.hxx>
@@ -108,7 +118,260 @@ namespace chart
 {
 //.............................................................................
 
-/************************************************************************/
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star::chart2;
+
+namespace
+{
+bool lcl_doesChartTypeHasGeometryProperties( const uno::Reference< XChartType >& xChartType )
+{
+    //form tab only for 3D-bar and 3D-column charts.
+
+    //@todo ask charttype itself --> need model change first
+    if(xChartType.is())
+    {
+        sal_Int32 nDimension=2;
+        {
+            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
+            if(xChartTypeProp.is())
+                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
+        }
+        if(nDimension==3)
+        {
+            rtl::OUString aChartTypeName = xChartType->getChartType();
+            if( aChartTypeName.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.BarChart")) )
+                return true;
+            if( aChartTypeName.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.ColumnChart")) )
+                return true;
+        }
+    }
+    return false;
+}
+
+bool lcl_doesChartTypeHasStatisticProperties( const uno::Reference< XChartType >& xChartType )
+{
+    //3D charts, pie, net and stock do not have statistic properties
+
+    //@todo ask charttype itself (and series? --> stock chart?)  --> need model change first
+    if(xChartType.is())
+    {
+        sal_Int32 nDimension=2;
+        {
+            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
+            if(xChartTypeProp.is())
+                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
+        }
+        if(nDimension==3)
+            return false;
+
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
+            return false;
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
+            return false;
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.Stock")) )
+            return false;
+    }
+    return true;
+}
+
+bool lcl_doesChartTypeProvidesSecondaryYAxis( const uno::Reference< XChartType >& xChartType )
+{
+    //3D, pie and net charts do not support a second y-axis
+
+    //@todo ask charttype itself --> need model change first
+    if(xChartType.is())
+    {
+        sal_Int32 nDimension=2;
+        {
+            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
+            if(xChartTypeProp.is())
+                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
+        }
+        if(nDimension==3)
+            return false;
+
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
+            return false;
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
+            return false;
+    }
+    return true;
+}
+bool lcl_doesChartTypeHasAreaProperties( const uno::Reference< XChartType >& xChartType )
+{
+    //2D line charts do not support area properties
+
+    //@todo ask charttype itself --> need model change first
+    if(xChartType.is())
+    {
+        sal_Int32 nDimension=2;
+        {
+            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
+            if(xChartTypeProp.is())
+                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
+        }
+        if(nDimension==2)
+        {
+            rtl::OUString aChartTypeName = xChartType->getChartType();
+            if( aChartTypeName.match(C2U("com.sun.star.chart2.LineChart")) )
+                return false;
+            //@todo add the more complicated line charts
+        }
+    }
+    return true;
+}
+bool lcl_doesChartTypeHasSymbolProperties( const uno::Reference< XChartType >& xChartType )
+{
+    //only special 2D symbol charts do provide symbols
+
+    //@todo ask charttype itself --> need model change first
+    if(xChartType.is())
+    {
+        sal_Int32 nDimension=2;
+        {
+            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
+            if(xChartTypeProp.is())
+                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
+        }
+        if(nDimension==3)
+            return false;
+
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.indexOf(C2U("symbol"))!=-1 )
+            return true;
+    }
+    return false;
+}
+
+sal_Int32 lcl_getDimensionCount( const uno::Reference< frame::XModel >& xChartModel )
+{
+    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::OUString aChartType;
+    sal_Int32 nDimension = ChartModelHelper::getDimensionAndFirstChartType(xDiagram,aChartType);
+    return nDimension;
+}
+
+}//end anonymous namespace
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUString& rObjectCID )
+        : m_aObjectCID( rObjectCID )
+        , m_eObjectType( ObjectIdentifier::getObjectType( m_aObjectCID ) )
+        , m_bAffectsMultipleObjects(false)
+        , m_bHasGeometryProperties(false)
+        , m_bHasStatisticProperties(false)
+        , m_bProvidesSecondaryYAxis(false)
+        , m_bHasAreaProperties(false)
+        , m_bHasLineProperties(false)
+        , m_bHasSymbolProperties(false)
+        , m_bHasScaleProperties(false)
+        , m_bCanAxisLabelsBeStaggered(false)
+{
+    rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
+    m_bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
+}
+ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
+{
+}
+ObjectType ObjectPropertiesDialogParameter::getObjectType() const
+{
+    return m_eObjectType;
+}
+
+void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
+{
+    uno::Reference< XChartType > xChartType(NULL);
+    uno::Reference< XDataSeries > xSeries(NULL);
+
+    switch(m_eObjectType)
+    {
+    case OBJECTTYPE_DATA_LABELS:
+    case OBJECTTYPE_DATA_SERIES:
+    {
+        rtl::OUString aSeriesID = ObjectIdentifier::getParticleID( m_aObjectCID );
+        xSeries = ChartModelHelper::getSeriesByIdentifier( aSeriesID, xChartModel );
+        break;
+    }
+    case OBJECTTYPE_DATA_LABEL:
+    case OBJECTTYPE_DATA_POINT:
+    {
+        rtl::OUString aSeriesID = ObjectIdentifier::getParentParticleID( m_aObjectCID );
+        xSeries = ChartModelHelper::getSeriesByIdentifier( aSeriesID, xChartModel );
+        break;
+    }
+    default:
+        break;
+    }
+    if(xSeries.is())
+        xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
+
+    m_bHasGeometryProperties = lcl_doesChartTypeHasGeometryProperties( xChartType );
+    m_bHasAreaProperties   = lcl_doesChartTypeHasAreaProperties( xChartType );
+    m_bHasSymbolProperties = lcl_doesChartTypeHasSymbolProperties( xChartType );
+    m_bHasLineProperties = true; //@todo ask object
+
+    if(    OBJECTTYPE_DATA_SERIES==m_eObjectType
+        || OBJECTTYPE_DATA_LABELS==m_eObjectType )
+    {
+        m_bHasStatisticProperties = lcl_doesChartTypeHasStatisticProperties( xChartType );
+        m_bProvidesSecondaryYAxis = lcl_doesChartTypeProvidesSecondaryYAxis( xChartType );
+    }
+
+    if( OBJECTTYPE_AXIS == m_eObjectType )
+    {
+        //show scale properties only for a single axis not for multiselection
+        m_bHasScaleProperties = !m_bAffectsMultipleObjects;
+
+        //no staggering of labels for 3D axis
+        sal_Int32 nDimensionCount = lcl_getDimensionCount( xChartModel );
+        m_bCanAxisLabelsBeStaggered = nDimensionCount==2;
+    }
+}
+
+bool ObjectPropertiesDialogParameter::HasGeometryProperties() const
+{
+    return m_bHasGeometryProperties;
+}
+bool ObjectPropertiesDialogParameter::HasStatisticProperties() const
+{
+    return m_bHasStatisticProperties;
+}
+bool ObjectPropertiesDialogParameter::ProvidesSecondaryYAxis() const
+{
+    return m_bProvidesSecondaryYAxis;
+}
+bool ObjectPropertiesDialogParameter::HasAreaProperties() const
+{
+    return m_bHasAreaProperties;
+}
+bool ObjectPropertiesDialogParameter::HasLineProperties() const
+{
+    return m_bHasLineProperties;
+}
+bool ObjectPropertiesDialogParameter::HasSymbolProperties() const
+{
+    return m_bHasSymbolProperties;
+}
+bool ObjectPropertiesDialogParameter::HasScaleProperties() const
+{
+    return m_bHasScaleProperties;
+}
+bool ObjectPropertiesDialogParameter::CanAxisLabelsBeStaggered() const
+{
+    return m_bCanAxisLabelsBeStaggered;
+}
+
+//const USHORT nNoArrowDlg          = 1100;
+const USHORT nNoArrowNoShadowDlg    = 1101;
+
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //provide Resource-Id of a tab dialog for the given ObjectType
 USHORT SchAttribTabDlg::GetResId(ObjectType eObjectType)
@@ -218,80 +481,18 @@ USHORT SchAttribTabDlg::GetResId(AttrType eType)
     }
 }
 */
-//-------------------------------------------------------------------
 
-OldModelWrapper::OldModelWrapper()
-{
-}
-
-OldModelWrapper::~OldModelWrapper()
-{
-}
-/*
-BOOL OldModelWrapper::IsXYChart() const
-{
-    return false;
-}
-*/
-BOOL OldModelWrapper::IsBar() const
-{
-    return true;
-}
-BOOL OldModelWrapper::Is3DChart() const
-{
-    return false;
-}
-/*
-BOOL OldModelWrapper::Is3DPie() const
-{
-    return false;
-}
-*/
-BOOL OldModelWrapper::IsStatisticChart() const
-{
-    return true;
-}
-
-BOOL OldModelWrapper::HasAreaProperties() const
-{
-    return true;
-}
-BOOL OldModelWrapper::HasScaleProperties() const
-{
-    return true;
-}
-
-BOOL OldModelWrapper::ProvidesSecondaryYAxis() const
-{
-    return true;
-}
-BOOL OldModelWrapper::IsCol( long nRow ) const
-{
-    return false;
-}
-
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
-//const USHORT nNoArrowDlg          = 1100;
-const USHORT nNoArrowNoShadowDlg    = 1101;
-
-SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
+SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                                  const SfxItemSet* pAttr,
+                                 const ObjectPropertiesDialogParameter* pDialogParameter,
                                  const ViewElementListProvider* pViewElementListProvider,
-                                 const OldModelWrapper* pModel,
-                                 bool  AffectsMultipleObjects,
                                  const SfxItemSet* pSymbolAttr,
                                  Graphic aGraphic)
-    : SfxTabDialog(pParent, SchResId(GetResId(eType)), pAttr)
-    , eObjectType(eType)
-    , bAffectsMultipleObjects(AffectsMultipleObjects)
+    : SfxTabDialog(pParent, SchResId(GetResId(pDialogParameter->getObjectType())), pAttr)
+    , eObjectType(pDialogParameter->getObjectType())
     , nDlgType(nNoArrowNoShadowDlg)
     , nPageType(0)
-    , m_pModelWrapper( pModel )
+    , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
     , mpSymbolAttr(pSymbolAttr)
     , maSymbolGraphic(aGraphic)
@@ -318,10 +519,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_ALIGNMENT, SchAlignmentTabPage::Create, NULL);
-            /*if (//(nID == CHOBJID_DIAGRAM_TITLE_X_AXIS) || (nID == CHOBJID_DIAGRAM_TITLE_Z_AXIS) ||
-                (nID == CHOBJID_TITLE_MAIN) || (nID == CHOBJID_TITLE_SUB))
-                RemoveTabPage (TP_ALIGNMENT);*/
-////            nDlgType = nNoArrowDlg;
             break;
 
         case OBJECTTYPE_LEGEND://ATTR_LEGEND:
@@ -331,7 +528,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_LEGEND_POS, SchLegendPosTabPage::Create, NULL);
-////            nDlgType = nNoArrowDlg;
             break;
 
         case OBJECTTYPE_DATA_SERIES://ATTR_DATA_ROW:
@@ -341,7 +537,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_AREA, SvxAreaTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, NULL);
-            if(!m_pModelWrapper->HasAreaProperties())
+            if(!m_pParameter->HasAreaProperties())
             {
                 RemoveTabPage(RID_SVXPAGE_AREA);
                 RemoveTabPage(RID_SVXPAGE_TRANSPARENCE);
@@ -350,30 +546,15 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_DATA_DESCR, SchDataDescrTabPage::Create, NULL);
             AddTabPage(TP_STAT, SchStatisticTabPage::Create, NULL);
-            if(    OBJECTTYPE_DATA_POINT == eObjectType
-                || OBJECTTYPE_DATA_LABEL == eObjectType
-                || !m_pModelWrapper->IsStatisticChart())
-            {
+            if( !m_pParameter->HasStatisticProperties() )
                 RemoveTabPage (TP_STAT);
-            }
             AddTabPage(TP_LAYOUT,SchLayoutTabPage::Create, NULL);
-            //  Layout tab only for 3D bar and column charts.
-            if( !(m_pModelWrapper->Is3DChart() && (m_pModelWrapper->IsBar() || m_pModelWrapper->IsCol(0))))
+            if( !m_pParameter->HasGeometryProperties() )
                 RemoveTabPage(TP_LAYOUT);
-            /*
-            if(m_pModelWrapper->Is3DPie() )
-                RemoveTabPage(TP_LAYOUT);
-            */
 
             AddTabPage(TP_OPTIONS,SchOptionTabPage::Create, NULL);
-            //if ((((const SfxInt32Item &)pAttr->Get (SCHATTR_DUMMY1)).GetValue () == CHOBJID_DIAGRAM_DATA) ||
-
-            if(    OBJECTTYPE_DATA_POINT == eObjectType
-                || OBJECTTYPE_DATA_LABEL == eObjectType
-                || !m_pModelWrapper->ProvidesSecondaryYAxis() )
+            if( !m_pParameter->ProvidesSecondaryYAxis() )
                 RemoveTabPage(TP_OPTIONS);
-
-////            nDlgType = nNoArrowNoShadowDlg;
             break;
 
             /*
@@ -383,14 +564,13 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_DATA_DESCR, SchDataDescrTabPage::Create, NULL);
-            //if (m_pModelWrapper->IsStatisticChart())
+            //if (m_pParameter->HasStatisticProperties())
             AddTabPage(TP_STAT, SchStatisticTabPage::Create, NULL);
             AddTabPage(TP_OPTIONS,SchOptionTabPage::Create, NULL);
-            if (!m_pModelWrapper->IsStatisticChart())
+            if (!m_pParameter->HasStatisticProperties())
                 RemoveTabPage (TP_STAT);
-            if(!m_pModelWrapper->ProvidesSecondaryYAxis())
+            if(!m_pParameter->ProvidesSecondaryYAxis())
                 RemoveTabPage(TP_OPTIONS);
-            nDlgType = nNoArrowDlg;
             break;
             */
 
@@ -401,7 +581,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
-            nDlgType = nNoArrowDlg;
             break;
 
         case ATTR_X_AXIS_2D:
@@ -415,12 +594,11 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(TP_SCALE_Y, SchScaleYAxisTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_NUMBERFORMAT, SvxNumberFormatTabPage::Create, NULL);
 
-            if( bAffectsMultipleObjects || !m_pModelWrapper->HasScaleProperties() )
+            if( !m_pParameter->HasScaleProperties() )
             {
                 RemoveTabPage (TP_SCALE_Y);
                 RemoveTabPage (RID_SVXPAGE_NUMBERFORMAT);
             }
-////            nDlgType = nNoArrowDlg;
 ////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
 ////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_X));
 
@@ -437,7 +615,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(TP_SCALE_Y, SchScaleYAxisTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_NUMBERFORMAT, SvxNumberFormatTabPage::Create, NULL);
             AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
-            nDlgType = nNoArrowDlg;
 ////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
 ////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_Y));
 
@@ -449,7 +626,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
-            nDlgType = nNoArrowDlg;
 ////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
 ////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_Z));
 
@@ -464,7 +640,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
         case OBJECTTYPE_DATA_FUNCTION:
         case OBJECTTYPE_DATA_STOCK_RANGE://ATTR_LINE
             AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
-////            nDlgType = nNoArrowDlg;
             break;
 
         case OBJECTTYPE_DATA_STOCK_LOSS://ATTR_DIAGRAM_STOCK_LOSS:
@@ -476,26 +651,13 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent, ObjectType eType,
             AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_AREA, SvxAreaTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, NULL);
-////            nDlgType = nNoArrowNoShadowDlg;
             break;
     }
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 SchAttribTabDlg::~SchAttribTabDlg()
 {
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 {
@@ -511,8 +673,8 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             ((SvxLineTabPage&)rPage).SetDlgType(&nDlgType);
             ((SvxLineTabPage&)rPage).Construct();
             ((SvxLineTabPage&)rPage).ActivatePage(*GetInputSetImpl());
-            if(mpSymbolAttr)//unfein, aber wenn man schon die Attribute setzt, wird es wohl ne Linie
-            {               //mit Symbolen sein.
+            if( m_pParameter->HasSymbolProperties() && mpSymbolAttr )
+            {
                 ((SvxLineTabPage&)rPage).ShowSymbolControls(TRUE);
                 ((SvxLineTabPage&)rPage).SetSymbolList(m_pViewElementListProvider->GetSymbolList());
                 ((SvxLineTabPage&)rPage).SetSymbolAttr(mpSymbolAttr);
@@ -552,44 +714,19 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 
         case TP_AXIS_LABEL:
         {
-            //for 3D axis staggering is disabled
-            BOOL bShowStaggeringControls = !m_pModelWrapper->Is3DChart();
+            bool bShowStaggeringControls = m_pParameter->CanAxisLabelsBeStaggered();
             ((SchAxisLabelTabPage&)rPage).ShowStaggeringControls( bShowStaggeringControls );
-////            ((SchAxisLabelTabPage&)rPage).AllowTextOverlap( TRUE );
             break;
         }
 
         case TP_ALIGNMENT:
-        {
-            /*
-            OrderMode eMode;
-            switch (eObjectType)
-            {
-                case ATTR_X_AXIS_2D:
-                    eMode = CHORDMODE_X_AXIS;
-                    break;
-
-                case ATTR_Y_AXIS_2D:
-                    eMode = CHORDMODE_Y_AXIS;
-                    break;
-
-                default:
-                    eMode = CHORDMODE_NONE;
-                    break;
-            }
-            ((SchAlignmentTabPage&)rPage).SetOrderMode(eMode);
-            xxx
-            */
-            ((SchAlignmentTabPage&)rPage).SetTextCanOverlap(/*m_pModelWrapper->IsReal3D()*/TRUE);
             break;
-        }
 
         case TP_SCALE_Y:
             {
                 SchScaleYAxisTabPage & rAxisTabPage = static_cast< SchScaleYAxisTabPage & >( rPage );
 
-                // #101318# use own number formatter with higher precision for
-                // rendering the values in the dialog.
+                // #101318# use own number formatter with higher precision for rendering the values in the dialog.
                 rAxisTabPage.SetNumFormatter( m_pViewElementListProvider->GetOwnNumberFormatter() );
             }
             break;

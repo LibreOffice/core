@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: iha $ $Date: 2003-11-08 22:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,24 +100,37 @@ enum AttrType
 };
 */
 
-class OldModelWrapper
+class ObjectPropertiesDialogParameter
 {
 public:
-    OldModelWrapper();
-    virtual ~OldModelWrapper();
+    ObjectPropertiesDialogParameter( const rtl::OUString& rObjectCID );
+    virtual ~ObjectPropertiesDialogParameter();
 
-    //model
-    //// BOOL                IsXYChart()         const;
-    BOOL                HasScaleProperties() const;
-    BOOL                IsBar()             const;
-    BOOL                Is3DChart()         const;
-    //// BOOL                Is3DPie()           const;
-    BOOL                IsStatisticChart()  const;
-    BOOL                HasAreaProperties() const;
+    void        init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    ObjectType  getObjectType() const;
 
-    /// return TRUE if the current chart type supports a given axis type
-    BOOL                ProvidesSecondaryYAxis() const;//was BOOL CanAxis(CHART_AXIS_SECONDARY_Y)
-    BOOL                IsCol( long nRow ) const;
+    bool HasGeometryProperties() const;
+    bool HasStatisticProperties() const;
+    bool ProvidesSecondaryYAxis() const;
+    bool HasAreaProperties() const;
+    bool HasLineProperties() const;
+    bool HasSymbolProperties() const;
+    bool HasScaleProperties() const;
+    bool CanAxisLabelsBeStaggered() const;
+
+private:
+    rtl::OUString   m_aObjectCID;
+    ObjectType      m_eObjectType;
+    bool m_bAffectsMultipleObjects;//is true if more than one object of the given type will be changed (e.g. all axes or all titles)
+
+    bool m_bHasGeometryProperties;
+    bool m_bHasStatisticProperties;
+    bool m_bProvidesSecondaryYAxis;
+    bool m_bHasAreaProperties;
+    bool m_bHasLineProperties;
+    bool m_bHasSymbolProperties;
+    bool m_bHasScaleProperties;
+    bool m_bCanAxisLabelsBeStaggered;
 };
 
 /*
@@ -153,8 +166,8 @@ private:
     USHORT                   nDlgType;
     USHORT                   nPageType;
 
-    const OldModelWrapper * const        m_pModelWrapper;
-    const ViewElementListProvider* const m_pViewElementListProvider;
+    const ObjectPropertiesDialogParameter * const        m_pParameter;
+    const ViewElementListProvider* const                 m_pViewElementListProvider;
 
     const SfxItemSet*   mpSymbolAttr;
     Graphic             maSymbolGraphic;
@@ -178,11 +191,9 @@ private:
     virtual void PageCreated(USHORT nId, SfxTabPage& rPage);
 
 public:
-    SchAttribTabDlg(Window* pParent, ObjectType eType,
-                    const SfxItemSet* pAttr,
+    SchAttribTabDlg(Window* pParent, const SfxItemSet* pAttr,
+                    const ObjectPropertiesDialogParameter* pDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
-                    const OldModelWrapper* pModel,
-                    bool  bAffectsMultipleObjects = false,
                     const SfxItemSet* pSymbolAttr=NULL,
                     Graphic aSymbolGraphic=Graphic());
     virtual ~SchAttribTabDlg();
