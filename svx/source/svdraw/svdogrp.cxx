@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
+ *  last change: $Author: aw $ $Date: 2001-01-12 17:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,36 +1409,31 @@ void SdrObjGroup::SetRelativePos(const Point& rPnt)
 
 const SfxItemSet& SdrObjGroup::GetItemSet() const
 {
-    if(!mpGroupItemSet)
+    // prepare ItemSet
+    if(mpGroupItemSet)
+        mpGroupItemSet->ClearItem();
+    else
     {
         ((SdrObjGroup*)this)->mpGroupItemSet =
-        ((SdrObjGroup*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
+            ((SdrObjGroup*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
         DBG_ASSERT(mpGroupItemSet, "Could not create an SfxItemSet(!)");
     }
 
     // collect all ItemSets in mpGroupItemSet
-    mpGroupItemSet->ClearItem();
-
     sal_uInt32 nCount(pSub->GetObjCount());
     for(sal_uInt32 a(0); a < nCount; a++)
     {
-//-/        mpGroupItemSet->MergeValues(pSub->GetObj(a)->GetItemSet(), TRUE);
         const SfxItemSet& rSet = pSub->GetObj(a)->GetItemSet();
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich(aIter.FirstWhich());
 
         while(nWhich)
         {
-            const SfxPoolItem* pItem = NULL;
-            rSet.GetItemState(nWhich, TRUE, &pItem);
+            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
+                mpGroupItemSet->InvalidateItem(nWhich);
+            else
+                mpGroupItemSet->MergeValue(rSet.Get(nWhich), TRUE);
 
-            if(pItem)
-            {
-                if(pItem == (SfxPoolItem *)-1)
-                    mpGroupItemSet->InvalidateItem(nWhich);
-                else
-                    mpGroupItemSet->MergeValue(*pItem, TRUE);
-            }
             nWhich = aIter.NextWhich();
         }
     }
