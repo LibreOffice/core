@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-06 05:54:23 $
+ *  last change: $Author: os $ $Date: 2002-10-08 13:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,8 +381,11 @@ Color SwViewImp::GetRetoucheColor() const
         if ( rSh.GetDoc()->IsBrowseMode() &&
              COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor().GetColor() )
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
+        else if(rSh.GetViewOptions()->IsPagePreview()  &&
+                    !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
+            aRet.SetColor(COL_WHITE);
         else
-            aRet = SW_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
+            aRet = SwViewOption::GetDocColor();
     }
     else
     {
