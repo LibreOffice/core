@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-04 17:55:38 $
+#   last change: $Author: kz $ $Date: 2002-01-10 09:34:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -193,7 +193,7 @@ $(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
 .IF "$(BUILD_SOSL)"==""
-    @+-mhids hidother.src $(SRS) $(PRJNAME)
+    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
 .ENDIF
 .ELSE
     @+echo nix
