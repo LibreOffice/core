@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,14 @@
 #endif
 #ifndef _IDLC_OPTIONS_HXX_
 #include <idlc/options.hxx>
+#endif
+
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#define PATH_SEPARATOR "/"
+#else
+#define SEPARATOR '\\'
+#define PATH_SEPARATOR "\\"
 #endif
 
 class AstModule;
@@ -163,6 +171,13 @@ sal_Int32 SAL_CALL compileFile(const ::rtl::OString& fileName);
 sal_Int32 SAL_CALL produceFile(const ::rtl::OString& fileName);
 void SAL_CALL removeIfExists(const ::rtl::OString& fileName);
 sal_Bool SAL_CALL canBeRedefined(AstDeclaration *pDecl);
+
+::rtl::OString makeTempName(const ::rtl::OString& prefix, const ::rtl::OString& postfix);
+sal_Bool copyFile(const ::rtl::OString& sourceFile, const ::rtl::OString& targetFile);
+
+sal_Bool isFileUrl(const ::rtl::OString& fileName);
+::rtl::OString convertToAbsoluteSystemPath(const ::rtl::OString& fileName);
+::rtl::OString convertToFileUrl(const ::rtl::OString& fileName);
 
 class AstType;
 AstType* SAL_CALL resolveTypeDef(AstType* pType);
