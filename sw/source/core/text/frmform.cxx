@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:10:19 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,10 +999,14 @@ sal_Bool SwTxtFrm::CalcPreps()
             // Bevor wir FormatAdjust aufrufen muessen wir dafuer
             // sorgen, dass die Zeilen, die unten raushaengen
             // auch tatsaechlich abgeschnitten werden.
-            sal_Bool bBreak = aFrmBreak.IsBreakNow( aLine );
+            // OD 2004-02-25 #i16128# - method renamed
+            sal_Bool bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
             bRet = sal_True;
             while( !bBreak && aLine.Next() )
-                bBreak = aFrmBreak.IsBreakNow( aLine );
+            {
+                // OD 2004-02-25 #i16128# - method renamed
+                bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
+            }
             if( bBreak )
             {
                 // Es gibt Komplikationen: wenn TruncLines gerufen wird,
@@ -1087,24 +1091,22 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     xub_StrLen nEnd = rLine.GetStart();
 
-    // Wir muessen fuer eindeutige Verhaeltnisse sorgen
-    // rFrmBreak.SetRstHeight( rLine );
-
-    // rLine.GetStart(): die letzte Zeile von rLine,
-    // ist bereits die Zeile, die nicht
-    // mehr passte. Ihr Anfang ist das Ende des Masters.
-    // @@@if( !GetFollow() && nEnd < nStrLen )
-    // (nEnd < nStrLen || rFrmBreak.IsBreakNow(rLine));
-
     sal_Bool bHasToFit = pPara->IsPrepMustFit();
 
     // Das StopFlag wird durch Fussnoten gesetzt,
     // die auf die naechste Seite wollen.
-    sal_uInt8 nNew = ( !GetFollow() && nEnd < nStrLen &&
-        ( rLine.IsStop() || ( bHasToFit ?
-        ( rLine.GetLineNr() > 1 && !rFrmBreak.IsInside( rLine ) )
-        : rFrmBreak.IsBreakNow( rLine ) ) ) ) ? 1 : 0;
-    if( nNew )
+    // OD, FME 2004-03-03 - call base class method <SwTxtFrmBreak::IsBreakNow(..)>
+    // instead of method <WidowsAndOrphans::IsBreakNow(..)> to get a break,
+    // even if due to widow rule no enough lines exists.
+    sal_uInt8 nNew = ( !GetFollow() &&
+                       nEnd < nStrLen &&
+                       ( rLine.IsStop() ||
+                         ( bHasToFit
+                           ? ( rLine.GetLineNr() > 1 &&
+                               !rFrmBreak.IsInside( rLine ) )
+                           : rFrmBreak.IsBreakNow( rLine ) ) ) )
+                     ? 1 : 0;
+    if ( nNew )
         SplitFrm( nEnd );
 
     const SwFrm *pBodyFrm = (const SwFrm*)(FindBodyFrm());
@@ -1530,12 +1532,14 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // nicht mehr passt in rLine eingestellt ist. Ansonsten geht Textmasse
     // verloren, weil der Ofst im Follow falsch eingestellt wird.
 
+    // OD 2004-02-25 #i16128# - method renamed
     sal_Bool bBreak = ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 )
-                    && aFrmBreak.IsBreakNow( rLine );
+                    && aFrmBreak.IsBreakNowWidAndOrp( rLine );
     if( bBreak )
     {
         sal_Bool bPrevDone = 0 != rLine.Prev();
-        while( bPrevDone && aFrmBreak.IsBreakNow(rLine) )
+        // OD 2004-02-25 #i16128# - method renamed
+        while( bPrevDone && aFrmBreak.IsBreakNowWidAndOrp(rLine) )
             bPrevDone = 0 != rLine.Prev();
         if( bPrevDone )
         {
@@ -1545,7 +1549,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         rLine.TruncLines();
 
         // auf Nummer sicher:
-        bBreak = aFrmBreak.IsBreakNow(rLine) &&
+        // OD 2004-02-25 #i16128# - method renamed
+        bBreak = aFrmBreak.IsBreakNowWidAndOrp(rLine) &&
                   ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 );
     }
 
@@ -1694,7 +1699,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                     break;
             }
         }
-        bBreak = aFrmBreak.IsBreakNow(rLine);
+        // OD 2004-02-25 #i16128# - method renamed
+        bBreak = aFrmBreak.IsBreakNowWidAndOrp(rLine);
     }while( !bBreak );
 
     if( pFreeze )
