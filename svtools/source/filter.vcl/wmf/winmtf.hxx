@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:03:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,8 +265,21 @@ struct LOGFONTW
 #define SYMBOL_CHARSET          2
 #define SHIFTJIS_CHARSET        128
 #define HANGEUL_CHARSET         129
+#define GB2312_CHARSET          134
 #define CHINESEBIG5_CHARSET     136
 #define OEM_CHARSET             255
+/*WINVER >= 0x0400*/
+#define JOHAB_CHARSET           130
+#define HEBREW_CHARSET          177
+#define ARABIC_CHARSET          178
+#define GREEK_CHARSET           161
+#define TURKISH_CHARSET         162
+#define VIETNAMESE_CHARSET      163
+#define THAI_CHARSET            222
+#define EASTEUROPE_CHARSET      238
+#define RUSSIAN_CHARSET         204
+#define MAC_CHARSET             77
+#define BALTIC_CHARSET          186
 
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
