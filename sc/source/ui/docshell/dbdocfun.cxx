@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:30:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,11 +301,11 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
                 }
             }
 
-            USHORT nTab;
-            USHORT nStartCol;
-            USHORT nStartRow;
-            USHORT nEndCol;
-            USHORT nEndRow;
+            SCTAB nTab;
+            SCCOL nStartCol;
+            SCROW nStartRow;
+            SCCOL nEndCol;
+            SCROW nEndRow;
             pDBData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 
             //!     Undo nur benoetigte Daten ?
@@ -317,23 +317,26 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
 
             if (bRecord)
             {
-                USHORT nTabCount = pDoc->GetTableCount();
+                SCTAB nTabCount = pDoc->GetTableCount();
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                 ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
                 if (pTable)
                 {
                     pUndoTab = new ScOutlineTable( *pTable );
 
-                    USHORT nOutStartCol;                            // Zeilen/Spaltenstatus
-                    USHORT nOutStartRow;
-                    USHORT nOutEndCol;
-                    USHORT nOutEndRow;
+                    // column/row state
+                    SCCOLROW nOutStartCol, nOutEndCol;
+                    SCCOLROW nOutStartRow, nOutEndRow;
                     pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
                     pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
 
                     pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-                    pDoc->CopyToDocument( nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
-                    pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
+                    pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0,
+                            nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab,
+                            IDF_NONE, FALSE, pUndoDoc );
+                    pDoc->CopyToDocument( 0, static_cast<SCROW>(nOutStartRow),
+                            nTab, MAXCOL, static_cast<SCROW>(nOutEndRow), nTab,
+                            IDF_NONE, FALSE, pUndoDoc );
                 }
                 else
                     pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
@@ -389,8 +392,11 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
             if (bRecord)
             {
                 USHORT nDummy;
-                USHORT nNewEndRow;
-                pDBData->GetArea( nDummy, nDummy,nDummy, nDummy,nNewEndRow );
+                SCTAB nDummyTab;
+                SCCOL nDummyCol;
+                SCROW nDummyRow;
+                SCROW nNewEndRow;
+                pDBData->GetArea( nDummyTab, nDummyCol,nDummyRow, nDummyCol,nNewEndRow );
 
                 const ScRange* pOld = NULL;
                 const ScRange* pNew = NULL;
@@ -430,7 +436,7 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
 
 // -----------------------------------------------------------------
 
-BOOL ScDBDocFunc::Sort( USHORT nTab, const ScSortParam& rSortParam,
+BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
                             BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
@@ -438,7 +444,7 @@ BOOL ScDBDocFunc::Sort( USHORT nTab, const ScSortParam& rSortParam,
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
-    USHORT nSrcTab = nTab;
+    SCTAB nSrcTab = nTab;
 
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
@@ -610,10 +616,10 @@ BOOL ScDBDocFunc::Sort( USHORT nTab, const ScSortParam& rSortParam,
     if (bPaint)
     {
         USHORT nPaint = PAINT_GRID;
-        USHORT nStartX = aLocalParam.nCol1;
-        USHORT nStartY = aLocalParam.nRow1;
-        USHORT nEndX = aLocalParam.nCol2;
-        USHORT nEndY = aLocalParam.nRow2;
+        SCCOL nStartX = aLocalParam.nCol1;
+        SCROW nStartY = aLocalParam.nRow1;
+        SCCOL nEndX = aLocalParam.nCol2;
+        SCROW nEndY = aLocalParam.nRow2;
         if ( bRepeatQuery )
         {
             nPaint |= PAINT_LEFT;
@@ -640,7 +646,7 @@ BOOL ScDBDocFunc::Sort( USHORT nTab, const ScSortParam& rSortParam,
 
 // -----------------------------------------------------------------
 
-BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
+BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                         const ScRange* pAdvSource, BOOL bRecord, BOOL bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
@@ -667,8 +673,8 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
         {
             //  alte Filterung aufheben
 
-            USHORT nEC = aOldQuery.GetEntryCount();
-            for (USHORT i=0; i<nEC; i++)
+            SCSIZE nEC = aOldQuery.GetEntryCount();
+            for (SCSIZE i=0; i<nEC; i++)
                 aOldQuery.GetEntry(i).bDoQuery = FALSE;
             aOldQuery.bDuplicate = TRUE;
             Query( nTab, aOldQuery, NULL, bRecord, bApi );
@@ -679,14 +685,14 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
     BOOL bCopy = !rQueryParam.bInplace;             // kopiert wird in Table::Query
     ScDBData* pDestData = NULL;                     // Bereich, in den kopiert wird
     BOOL bDoSize = FALSE;                           // Zielgroesse anpassen (einf./loeschen)
-    USHORT nFormulaCols = 0;                        // nur bei bDoSize
+    SCCOL nFormulaCols = 0;                     // nur bei bDoSize
     BOOL bKeepFmt = FALSE;
     ScRange aOldDest;
     ScRange aDestTotal;
     if ( bCopy && rQueryParam.nDestCol == rQueryParam.nCol1 &&
                   rQueryParam.nDestRow == rQueryParam.nRow1 && rQueryParam.nDestTab == nTab )
         bCopy = FALSE;
-    USHORT nDestTab = nTab;
+    SCTAB nDestTab = nTab;
     if ( bCopy )
     {
         aLocalParam.MoveToDest();
@@ -717,8 +723,8 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
             //  Test, ob Formeln aufgefuellt werden muessen (nFormulaCols):
             if ( bDoSize && aOldDest.aEnd.Col() == aDestTotal.aEnd.Col() )
             {
-                USHORT nTestCol = aOldDest.aEnd.Col() + 1;      // neben dem Bereich
-                USHORT nTestRow = rQueryParam.nDestRow +
+                SCCOL nTestCol = aOldDest.aEnd.Col() + 1;       // neben dem Bereich
+                SCROW nTestRow = rQueryParam.nDestRow +
                                     ( aLocalParam.bHasHeader ? 1 : 0 );
                 while ( nTestCol <= MAXCOL &&
                         pDoc->GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
@@ -812,11 +818,11 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
     }
 
     //  Filtern am Dokument ausfuehren
-    USHORT nCount = pDoc->Query( nTab, rQueryParam, bKeepSub );
+    SCSIZE nCount = pDoc->Query( nTab, rQueryParam, bKeepSub );
     if (bCopy)
     {
         aLocalParam.nRow2 = aLocalParam.nRow1 + nCount;
-        if (!aLocalParam.bHasHeader && nCount)
+        if (!aLocalParam.bHasHeader && nCount > 0)
             --aLocalParam.nRow2;
 
         if ( bDoSize )
@@ -828,7 +834,7 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
                                 aLocalParam.nCol2, aLocalParam.nRow2, nDestTab );
             pDoc->FitBlock( aDestTotal, aNewDest, FALSE );      // FALSE - nicht loeschen
 
-            if ( nFormulaCols )
+            if ( nFormulaCols > 0 )
             {
                 //  Formeln ausfuellen
                 //! Undo (Query und Repeat) !!!
@@ -841,7 +847,7 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
 
                 ScMarkData aMark;
                 aMark.SelectOneTable(nDestTab);
-                USHORT nFStartY = aLocalParam.nRow1 + ( aLocalParam.bHasHeader ? 1 : 0 );
+                SCROW nFStartY = aLocalParam.nRow1 + ( aLocalParam.bHasHeader ? 1 : 0 );
                 pDoc->Fill( aLocalParam.nCol2+1, nFStartY,
                             aLocalParam.nCol2+nFormulaCols, nFStartY, aMark,
                             aLocalParam.nRow2 - nFStartY,
@@ -860,9 +866,9 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
             }
 
             //  Daten
-            USHORT nAttrEndCol = aAttribRange.aEnd.Col();
-            USHORT nAttrRow = aAttribRange.aStart.Row() + ( aLocalParam.bHasHeader ? 1 : 0 );
-            for (USHORT nCol = aAttribRange.aStart.Col(); nCol<=nAttrEndCol; nCol++)
+            SCCOL nAttrEndCol = aAttribRange.aEnd.Col();
+            SCROW nAttrRow = aAttribRange.aStart.Row() + ( aLocalParam.bHasHeader ? 1 : 0 );
+            for (SCCOL nCol = aAttribRange.aStart.Col(); nCol<=nAttrEndCol; nCol++)
             {
                 const ScPatternAttr* pSrcPattern = pAttribDoc->GetPattern(
                                                     nCol, nAttrRow, nDestTab );
@@ -927,8 +933,8 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
 
     if (bCopy)
     {
-        USHORT nEndX = aLocalParam.nCol2;
-        USHORT nEndY = aLocalParam.nRow2;
+        SCCOL nEndX = aLocalParam.nCol2;
+        SCROW nEndY = aLocalParam.nRow2;
         if (pDestData)
         {
             if ( aOldDest.aEnd.Col() > nEndX )
@@ -951,7 +957,7 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
 
 // -----------------------------------------------------------------
 
-BOOL ScDBDocFunc::DoSubTotals( USHORT nTab, const ScSubTotalParam& rParam,
+BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                 const ScSortParam* pForceNewSort, BOOL bRecord, BOOL bApi )
 {
     //! auch fuer ScDBFunc::DoSubTotals benutzen!
@@ -1012,7 +1018,7 @@ BOOL ScDBDocFunc::DoSubTotals( USHORT nTab, const ScSubTotalParam& rParam,
         ScOutlineTable* pUndoTab = NULL;
         ScRangeName*    pUndoRange = NULL;
         ScDBCollection* pUndoDB = NULL;
-        USHORT          nTabCount = 0;              // fuer Referenz-Undo
+        SCTAB           nTabCount = 0;              // fuer Referenz-Undo
 
         if (bRecord)                                        // alte Daten sichern
         {
@@ -1025,15 +1031,14 @@ BOOL ScDBDocFunc::DoSubTotals( USHORT nTab, const ScSubTotalParam& rParam,
             {
                 pUndoTab = new ScOutlineTable( *pTable );
 
-                USHORT nOutStartCol;                            // Zeilen/Spaltenstatus
-                USHORT nOutStartRow;
-                USHORT nOutEndCol;
-                USHORT nOutEndRow;
+                // column/row state
+                SCCOLROW nOutStartCol, nOutEndCol;
+                SCCOLROW nOutStartRow, nOutEndRow;
                 pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
                 pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
 
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-                pDoc->CopyToDocument( nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
                 pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
             }
             else
@@ -1189,7 +1194,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             //  delete table
 
             ScRange aRange = pOldObj->GetOutRange();
-            USHORT nTab = aRange.aStart.Tab();
+            SCTAB nTab = aRange.aStart.Tab();
 
             if ( bRecord )
             {
@@ -1220,7 +1225,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if ( bRecord )
                 {
                     ScRange aRange = pOldObj->GetOutRange();
-                    USHORT nTab = aRange.aStart.Tab();
+                    SCTAB nTab = aRange.aStart.Tab();
                     pOldUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                     pOldUndoDoc->InitUndo( pDoc, nTab, nTab );
                     pDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pOldUndoDoc );
@@ -1320,7 +1325,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
                 if ( bRecord )
                 {
-                    USHORT nTab = aNewOut.aStart.Tab();
+                    SCTAB nTab = aNewOut.aStart.Tab();
                     pNewUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                     pNewUndoDoc->InitUndo( pDoc, nTab, nTab );
                     pDoc->CopyToDocument( aNewOut, IDF_ALL, FALSE, pNewUndoDoc );
@@ -1403,9 +1408,10 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
         return;
     }
 
-    USHORT nTab;
-    USHORT nDummy;
-    pData->GetArea( nTab, nDummy,nDummy,nDummy,nDummy );
+    SCTAB nTab;
+    SCCOL nDummyCol;
+    SCROW nDummyRow;
+    pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
     pData->GetImportParam( aImportParam );
 
     BOOL bSql = ( rStatement.Len() != 0 );
