@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:06 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,12 +269,21 @@ enum SwMoveFlags
    DOC_MOVEREDLINES     = 0x04
 };
 
+//
+// COMPATIBILITY FLAGS START
+//
+
 #define DUMMY_PARASPACEMAX          0x04
 #define DUMMY_PARASPACEMAX_AT_PAGES 0x20
 #define DUMMY_TAB_COMPAT            0x40
 #define DUMMY_USE_VIRTUAL_DEVICE    0x80
 #define DUMMY_ADD_FLY_OFFSETS       0x01
+#define DUMMY_ADD_EXTERNAL_LEADING  0x02
+#define DUMMY_USE_HIRES_VIR_DEV     0x04
 
+//
+// COMPATIBILITY FLAGS END
+//
 
 #define SW_HYPH_ERROR       0
 #define SW_HYPH_OK          1
@@ -1320,7 +1329,7 @@ public:
     void        SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged = sal_True );
 
     // sets the flag at the document and invalidates the layout if flag has changed
-    void SetUseVirtualDevice( sal_Bool bFlag );
+    void SetUseVirtualDevice( short bNew );
 
     const JobSetup* GetJobsetup() const;
     void        SetJobsetup( const JobSetup& rJobSetup );
@@ -1915,7 +1924,9 @@ public:
     USHORT SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         USHORT nMode );
 
-    // ------------------- Zugriff auf Dummy-Member --------------------
+    //
+    // DOCUMENT COMPATIBILITY FLAGS START
+    //
 
     sal_Bool IsParaSpaceMax() const { return n8Dummy1 & DUMMY_PARASPACEMAX; }
     sal_Bool IsParaSpaceMaxAtPages() const { return n8Dummy1 & DUMMY_PARASPACEMAX_AT_PAGES; }
@@ -1933,19 +1944,26 @@ public:
         SetModified();
     }
 
-    sal_Bool IsUseVirtualDevice() const { return n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE; }
-    void _SetUseVirtualDevice( sal_Bool bNew )
-    {
-        if( bNew ) n8Dummy1 |= DUMMY_USE_VIRTUAL_DEVICE;
-        else n8Dummy1 &= ~DUMMY_USE_VIRTUAL_DEVICE;
-    }
-
     sal_Bool IsAddFlyOffsets() const { return n8Dummy2 & DUMMY_ADD_FLY_OFFSETS; }
     void SetAddFlyOffsets( sal_Bool bNew )
     {
         if( bNew ) n8Dummy2 |= DUMMY_ADD_FLY_OFFSETS;
         else n8Dummy2 &= ~DUMMY_ADD_FLY_OFFSETS;
     }
+
+    sal_Bool IsAddExtLeading() const { return n8Dummy2 & DUMMY_ADD_EXTERNAL_LEADING; }
+    void SetAddExtLeading( sal_Bool bNew )
+    {
+        if( bNew ) n8Dummy2 |= DUMMY_ADD_EXTERNAL_LEADING;
+        else n8Dummy2 &= ~DUMMY_ADD_EXTERNAL_LEADING;
+    }
+
+    short IsUseVirtualDevice() const;
+    void _SetUseVirtualDevice( short nNew );
+
+    //
+    // DOCUMENT COMPATIBILITY FLAGS END
+    //
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
