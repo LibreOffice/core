@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: iha $ $Date: 2003-12-09 13:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,39 +71,36 @@ PageItem \
     Identifier = RID_SVXPAGE_LINE ; \
     PageResID = RID_SVXPAGE_LINE ; \
     Text = "Linie" ; \
+    Text [ ENGLISH ] = "Line" ; \
+    Text [ english_us ] = "Borders" ; \
+    Text [ italian ] = "Linea" ; \
+    Text [ spanish ] = "Bordes" ; \
+    Text [ french ] = "Bordure" ; \
+    Text [ dutch ] = "Lijn" ; \
+    Text [ swedish ] = "Linje" ; \
+    Text [ danish ] = "Ramme" ; \
+    Text [ portuguese ] = "Contornos" ; \
+    Text [ portuguese_brazilian ] = "Bordas" ; \
+    Text[ chinese_simplified ] = "çº¿æ¡"; \
+    Text[ russian ] = "Îáğàìëåíèå"; \
+    Text[ polish ] = "Krawêdzie"; \
+    Text[ japanese ] = "å¤–æ ç·š"; \
+    Text[ chinese_traditional ] = "ç·šæ¢"; \
+    Text[ arabic ] = "ÍÏæÏ"; \
+    Text[ dutch ] = "Lijn"; \
+    Text[ chinese_simplified ] = "çº¿æ¡"; \
+    Text[ greek ] = "ÃñáììŞ"; \
+    Text[ korean ] = "í…Œë‘ë¦¬"; \
+    Text[ turkish ] = "Çizgi"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Vores"; \
+    Text[ finnish ] = "Reunat"; \
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š"; \
+    Text[ czech ] = "Okraje"; \
+    Text[ hebrew ] = "â€®××¡×’×¨×•×ªâ€¬"; \
+    Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡à¤‚"; \
+    Text[ slovak ] = "Okraje"; \
 };
-/*
-    Text [ ENGLISH ] = "Line" ;
-    Text [ english_us ] = "Borders" ;
-    Text [ italian ] = "Linea" ;
-    Text [ spanish ] = "Bordes" ;
-    Text [ french ] = "Bordure" ;
-    Text [ dutch ] = "Lijn" ;
-    Text [ swedish ] = "Linje" ;
-    Text [ danish ] = "Ramme" ;
-    Text [ portuguese ] = "Contornos" ;
-    Text [ portuguese_brazilian ] = "Bordas" ;
-    Text[ chinese_simplified ] = "çº¿æ¡";
-    Text[ russian ] = "Îáğàìëåíèå";
-    Text[ polish ] = "Krawêdzie";
-    Text[ japanese ] = "å¤–æ ç·š";
-    Text[ chinese_traditional ] = "ç·šæ¢";
-    Text[ arabic ] = "ÍÏæÏ";
-    Text[ dutch ] = "Lijn";
-    Text[ chinese_simplified ] = "çº¿æ¡";
-    Text[ greek ] = "ÃñáììŞ";
-    Text[ korean ] = "í…Œë‘ë¦¬";
-    Text[ turkish ] = "Çizgi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Vores";
-    Text[ finnish ] = "Reunat";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
-    Text[ czech ] = "Okraje";
-    Text[ hebrew ] = "â€®××¡×’×¨×•×ªâ€¬";
-    Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Okraje";
-*/
-
 
 #define PAGE_AREA \
 PageItem \
@@ -111,39 +108,37 @@ PageItem \
     Identifier = RID_SVXPAGE_AREA ; \
     PageResID = RID_SVXPAGE_AREA ; \
     Text = "Fläche" ; \
+    Text [ ENGLISH ] = "Area" ; \
+    Text [ english_us ] = "Area" ; \
+    Text [ norwegian ] = "Område" ; \
+    Text [ italian ] = "Area" ; \
+    Text [ portuguese_brazilian ] = "Área" ; \
+    Text [ portuguese ] = "Preenchimento" ; \
+    Text [ finnish ] = "Alue" ; \
+    Text [ danish ] = "Område" ; \
+    Text [ french ] = "Remplissage" ; \
+    Text [ swedish ] = "Yta" ; \
+    Text [ dutch ] = "Vlak" ; \
+    Text [ spanish ] = "Área" ; \
+    Text[ chinese_simplified ] = "å¹³é¢"; \
+    Text[ russian ] = "Îáëàñòü"; \
+    Text[ polish ] = "Obszar"; \
+    Text[ japanese ] = "ã‚¨ãƒªã‚¢"; \
+    Text[ chinese_traditional ] = "å¹³é¢"; \
+    Text[ arabic ] = "ãÓÇÍÉ"; \
+    Text[ dutch ] = "Vlak"; \
+    Text[ chinese_simplified ] = "å¹³é¢"; \
+    Text[ greek ] = "ÅğéöÜíåéá"; \
+    Text[ korean ] = "ì˜ì—­"; \
+    Text[ turkish ] = "Yüzey"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Àrea"; \
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ"; \
+    Text[ czech ] = "Oblast"; \
+    Text[ hebrew ] = "FlÃ¤che"; \
+    Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£"; \
+    Text[ slovak ] = "OblasÅ¥"; \
 };
-/*
-    Text [ ENGLISH ] = "Area" ;
-    Text [ english_us ] = "Area" ;
-    Text [ norwegian ] = "Område" ;
-    Text [ italian ] = "Area" ;
-    Text [ portuguese_brazilian ] = "Área" ;
-    Text [ portuguese ] = "Preenchimento" ;
-    Text [ finnish ] = "Alue" ;
-    Text [ danish ] = "Område" ;
-    Text [ french ] = "Remplissage" ;
-    Text [ swedish ] = "Yta" ;
-    Text [ dutch ] = "Vlak" ;
-    Text [ spanish ] = "Área" ;
-    Text[ chinese_simplified ] = "å¹³é¢";
-    Text[ russian ] = "Îáëàñòü";
-    Text[ polish ] = "Obszar";
-    Text[ japanese ] = "ã‚¨ãƒªã‚¢";
-    Text[ chinese_traditional ] = "å¹³é¢";
-    Text[ arabic ] = "ãÓÇÍÉ";
-    Text[ dutch ] = "Vlak";
-    Text[ chinese_simplified ] = "å¹³é¢";
-    Text[ greek ] = "ÅğéöÜíåéá";
-    Text[ korean ] = "ì˜ì—­";
-    Text[ turkish ] = "Yüzey";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Àrea";
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
-    Text[ czech ] = "Oblast";
-    Text[ hebrew ] = "FlÃ¤che";
-    Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
-    Text[ slovak ] = "OblasÅ¥";
-*/
 
 #define PAGE_TRANSPARENCE \
 PageItem \
@@ -151,35 +146,33 @@ PageItem \
     Identifier = RID_SVXPAGE_TRANSPARENCE ; \
     PageResID = RID_SVXPAGE_TRANSPARENCE ; \
     Text = "Transparenz" ; \
+    Text [ ENGLISH ] = "Transparence"; \
+    Text[ english_us ] = "Transparency"; \
+    Text[ portuguese ] = "Transparência"; \
+    Text[ russian ] = "Ïğîçğà÷íîñòü"; \
+    Text[ greek ] = "ÄéáöÜíåéá"; \
+    Text[ dutch ] = "Transparantie"; \
+    Text[ french ] = "Transparence"; \
+    Text[ spanish ] = "Transparencia"; \
+    Text[ italian ] = "Trasparenza"; \
+    Text[ danish ] = "Transparens"; \
+    Text[ swedish ] = "Transparens"; \
+    Text[ polish ] = "Przezroczystoœæ"; \
+    Text[ portuguese_brazilian ] = "Transparência"; \
+    Text[ japanese ] = "é€éæ€§"; \
+    Text[ korean ] = "íˆ¬ëª…ë„"; \
+    Text[ chinese_simplified ] = "é€æ˜"; \
+    Text[ chinese_traditional ] = "é€æ˜"; \
+    Text[ arabic ] = "ÔİÇİíÉ"; \
+    Text[ turkish ] = "Saydamlık"; \
+    Text[ catalan ] = "Transparència"; \
+    Text[ finnish ] = "Läpinäkyvyys"; \
+    Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡"; \
+    Text[ czech ] = "PrÅ¯hlednost"; \
+    Text[ hebrew ] = "Transparenz"; \
+    Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾"; \
+    Text[ slovak ] = "PriehÄ¾adnosÅ¥"; \
 };
-/*
-    Text [ ENGLISH ] = "Transparence";
-    Text[ english_us ] = "Transparency";
-    Text[ portuguese ] = "Transparência";
-    Text[ russian ] = "Ïğîçğà÷íîñòü";
-    Text[ greek ] = "ÄéáöÜíåéá";
-    Text[ dutch ] = "Transparantie";
-    Text[ french ] = "Transparence";
-    Text[ spanish ] = "Transparencia";
-    Text[ italian ] = "Trasparenza";
-    Text[ danish ] = "Transparens";
-    Text[ swedish ] = "Transparens";
-    Text[ polish ] = "Przezroczystoœæ";
-    Text[ portuguese_brazilian ] = "Transparência";
-    Text[ japanese ] = "é€éæ€§";
-    Text[ korean ] = "íˆ¬ëª…ë„";
-    Text[ chinese_simplified ] = "é€æ˜";
-    Text[ chinese_traditional ] = "é€æ˜";
-    Text[ arabic ] = "ÔİÇİíÉ";
-    Text[ turkish ] = "Saydamlık";
-    Text[ catalan ] = "Transparència";
-    Text[ finnish ] = "Läpinäkyvyys";
-    Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-    Text[ czech ] = "PrÅ¯hlednost";
-    Text[ hebrew ] = "Transparenz";
-    Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
-    Text[ slovak ] = "PriehÄ¾adnosÅ¥";
-*/
 
 #define PAGE_CHARACTERS \
 PageItem \
@@ -187,39 +180,37 @@ PageItem \
     Identifier = RID_SVXPAGE_CHAR_NAME ; \
     PageResID = RID_SVXPAGE_CHAR_NAME ; \
     Text = "Zeichen" ; \
+    Text [ ENGLISH ] = "Char" ; \
+    Text [ english_us ] = "Characters" ; \
+    Text [ norwegian ] = "Char" ; \
+    Text [ italian ] = "Carattere" ; \
+    Text [ portuguese_brazilian ] = "Caracteres" ; \
+    Text [ portuguese ] = "Caracteres" ; \
+    Text [ finnish ] = "Merkit" ; \
+    Text [ danish ] = "Tegn" ; \
+    Text [ french ] = "Caractères" ; \
+    Text [ swedish ] = "Tecken" ; \
+    Text [ dutch ] = "Tekens" ; \
+    Text [ spanish ] = "Caracteres" ; \
+    Text[ chinese_simplified ] = "å­—ç¬¦"; \
+    Text[ russian ] = "Øğèôò"; \
+    Text[ polish ] = "Znaki"; \
+    Text[ japanese ] = "æ–‡å­—"; \
+    Text[ chinese_traditional ] = "å­—å…ƒ"; \
+    Text[ arabic ] = "ÎØæØ"; \
+    Text[ dutch ] = "Tekens"; \
+    Text[ chinese_simplified ] = "å­—ç¬¦"; \
+    Text[ greek ] = "×áñáêôŞñåò"; \
+    Text[ korean ] = "ê¸€ê¼´"; \
+    Text[ turkish ] = "Karakterler"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Caràcters"; \
+    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°"; \
+    Text[ czech ] = "Znaky"; \
+    Text[ hebrew ] = "â€®×ª×•×™×â€¬"; \
+    Text[ hindi ] = "à¤…à¤•à¥à¤·à¤°à¥‡à¤‚"; \
+    Text[ slovak ] = "Znaky"; \
 };
-/*
-    Text [ ENGLISH ] = "Char" ;
-    Text [ english_us ] = "Characters" ;
-    Text [ norwegian ] = "Char" ;
-    Text [ italian ] = "Carattere" ;
-    Text [ portuguese_brazilian ] = "Caracteres" ;
-    Text [ portuguese ] = "Caracteres" ;
-    Text [ finnish ] = "Merkit" ;
-    Text [ danish ] = "Tegn" ;
-    Text [ french ] = "Caractères" ;
-    Text [ swedish ] = "Tecken" ;
-    Text [ dutch ] = "Tekens" ;
-    Text [ spanish ] = "Caracteres" ;
-    Text[ chinese_simplified ] = "å­—ç¬¦";
-    Text[ russian ] = "Øğèôò";
-    Text[ polish ] = "Znaki";
-    Text[ japanese ] = "æ–‡å­—";
-    Text[ chinese_traditional ] = "å­—å…ƒ";
-    Text[ arabic ] = "ÎØæØ";
-    Text[ dutch ] = "Tekens";
-    Text[ chinese_simplified ] = "å­—ç¬¦";
-    Text[ greek ] = "×áñáêôŞñåò";
-    Text[ korean ] = "ê¸€ê¼´";
-    Text[ turkish ] = "Karakterler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Caràcters";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-    Text[ czech ] = "Znaky";
-    Text[ hebrew ] = "â€®×ª×•×™×â€¬";
-    Text[ hindi ] = "à¤…à¤•à¥à¤·à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Znaky";
-*/
 
 #define PAGE_FONTEFFECTS \
 PageItem \
@@ -227,37 +218,35 @@ PageItem \
     Identifier = RID_SVXPAGE_CHAR_EFFECTS ; \
     PageResID = RID_SVXPAGE_CHAR_EFFECTS ; \
     Text = "Schrifteffekt" ; \
+    Text [ ENGLISH ] = "Character Extension" ; \
+    Text [ english_us ] = "Font Effects" ; \
+    Text [ norwegian ] = "Character Extension" ; \
+    Text [ italian ] = "Effetto carattere" ; \
+    Text [ portuguese_brazilian ] = "Efeitos da Fonte" ; \
+    Text [ portuguese ] = "Efeitos do tipo de letra" ; \
+    Text [ finnish ] = "Fonttitehosteet" ; \
+    Text [ danish ] = "Skrifteffekt" ; \
+    Text [ french ] = "Effets de caractères" ; \
+    Text [ swedish ] = "Teckeneffekt" ; \
+    Text [ dutch ] = "Schrifteffect" ; \
+    Text [ spanish ] = "Efectos de fuente" ; \
+    Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ"; \
+    Text[ russian ] = "İôôåêòû øğèôòà"; \
+    Text[ polish ] = "Efekty czcionki"; \
+    Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ"; \
+    Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ"; \
+    Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ"; \
+    Text[ greek ] = "Åöİ ÷áñáêôŞñùí"; \
+    Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼"; \
+    Text[ turkish ] = "Yazı Tipi Efektleri"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Efectes de lletra"; \
+    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£"; \
+    Text[ czech ] = "Efekty pÃ­sma"; \
+    Text[ hebrew ] = "Font Effects"; \
+    Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿà¥ à¤ªà¥à¤°à¤­à¤¾à¤µ"; \
+    Text[ slovak ] = "Efekty pre pÃ­smo"; \
 };
-/*
-    Text [ ENGLISH ] = "Character Extension" ;
-    Text [ english_us ] = "Font Effects" ;
-    Text [ norwegian ] = "Character Extension" ;
-    Text [ italian ] = "Effetto carattere" ;
-    Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
-    Text [ portuguese ] = "Efeitos do tipo de letra" ;
-    Text [ finnish ] = "Fonttitehosteet" ;
-    Text [ danish ] = "Skrifteffekt" ;
-    Text [ french ] = "Effets de caractères" ;
-    Text [ swedish ] = "Teckeneffekt" ;
-    Text [ dutch ] = "Schrifteffect" ;
-    Text [ spanish ] = "Efectos de fuente" ;
-    Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
-    Text[ russian ] = "İôôåêòû øğèôòà";
-    Text[ polish ] = "Efekty czcionki";
-    Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ";
-    Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
-    Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
-    Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
-    Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
-    Text[ turkish ] = "Yazı Tipi Efektleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Efectes de lletra";
-    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
-    Text[ czech ] = "Efekty pÃ­sma";
-    Text[ hebrew ] = "Font Effects";
-    Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿà¥ à¤ªà¥à¤°à¤­à¤¾à¤µ";
-    Text[ slovak ] = "Efekty pre pÃ­smo";
-*/
 
 #define PAGE_DATALABELS \
 PageItem \
@@ -265,39 +254,37 @@ PageItem \
     Identifier = TP_DATA_DESCR ; \
     PageResID = TP_DATA_DESCR ; \
     Text = "Datenbeschriftung" ; \
+    Text [ ENGLISH ] = "Data Descritption" ; \
+    Text [ english_us ] = "Data Labels" ; \
+    Text [ norwegian ] = "Data Descritption" ; \
+    Text [ italian ] = "Dicitura dati" ; \
+    Text [ portuguese_brazilian ] = "Rótulos dos Dados" ; \
+    Text [ portuguese ] = "Legenda para dados" ; \
+    Text [ finnish ] = "Tietoselitteet" ; \
+    Text [ danish ] = "Dataetiketter" ; \
+    Text [ french ] = "Étiquetage des données" ; \
+    Text [ swedish ] = "Dataetiketter" ; \
+    Text [ dutch ] = "Gegevenslabels" ; \
+    Text [ spanish ] = "Etiqueta de datos" ; \
+    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—"; \
+    Text[ russian ] = "Ïîäïèñè äàííûõ"; \
+    Text[ polish ] = "Etykiety danych"; \
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«"; \
+    Text[ chinese_traditional ] = "è³‡æ–™æ¨™ç±¤"; \
+    Text[ arabic ] = "ÚäæäÉ ÇáÈíÇäÇÊ"; \
+    Text[ dutch ] = "Gegevenslabels"; \
+    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—"; \
+    Text[ greek ] = "ÅğéãñáöŞ äåäïìİíùí"; \
+    Text[ korean ] = "ë°ì´í„° ë ˆì´ë¸”"; \
+    Text[ turkish ] = "Veri etiketi"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Etiquetes de dades"; \
+    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥"; \
+    Text[ czech ] = "Popisky dat"; \
+    Text[ hebrew ] = "Datenbeschriftung"; \
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚"; \
+    Text[ slovak ] = "Popisy dÃ¡t"; \
 };
-/*
-    Text [ ENGLISH ] = "Data Descritption" ;
-    Text [ english_us ] = "Data Labels" ;
-    Text [ norwegian ] = "Data Descritption" ;
-    Text [ italian ] = "Dicitura dati" ;
-    Text [ portuguese_brazilian ] = "Rótulos dos Dados" ;
-    Text [ portuguese ] = "Legenda para dados" ;
-    Text [ finnish ] = "Tietoselitteet" ;
-    Text [ danish ] = "Dataetiketter" ;
-    Text [ french ] = "Étiquetage des données" ;
-    Text [ swedish ] = "Dataetiketter" ;
-    Text [ dutch ] = "Gegevenslabels" ;
-    Text [ spanish ] = "Etiqueta de datos" ;
-    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—";
-    Text[ russian ] = "Ïîäïèñè äàííûõ";
-    Text[ polish ] = "Etykiety danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«";
-    Text[ chinese_traditional ] = "è³‡æ–™æ¨™ç±¤";
-    Text[ arabic ] = "ÚäæäÉ ÇáÈíÇäÇÊ";
-    Text[ dutch ] = "Gegevenslabels";
-    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—";
-    Text[ greek ] = "ÅğéãñáöŞ äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„° ë ˆì´ë¸”";
-    Text[ turkish ] = "Veri etiketi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Etiquetes de dades";
-    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Popisky dat";
-    Text[ hebrew ] = "Datenbeschriftung";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚";
-    Text[ slovak ] = "Popisy dÃ¡t";
-*/
 
 #define PAGE_STATISTIC \
 PageItem \
@@ -305,38 +292,36 @@ PageItem \
     Identifier = TP_STAT ; \
     PageResID = TP_STAT ; \
     Text = "Statistik" ; \
+    Text [ ENGLISH ] = "Statistics" ; \
+    Text [ english_us ] = "Statistics" ; \
+    Text [ italian ] = "Statistica" ; \
+    Text [ spanish ] = "Estadística" ; \
+    Text [ french ] = "Statistiques" ; \
+    Text [ dutch ] = "Statistiek" ; \
+    Text [ swedish ] = "Statistik" ; \
+    Text [ danish ] = "Statistik" ; \
+    Text [ portuguese_brazilian ] = "Estatísticas" ; \
+    Text [ portuguese ] = "Estatística" ; \
+    Text[ chinese_simplified ] = "ç»Ÿè®¡"; \
+    Text[ russian ] = "Ñòàòèñòèêà"; \
+    Text[ polish ] = "Statystyka"; \
+    Text[ japanese ] = "çµ±è¨ˆ"; \
+    Text[ chinese_traditional ] = "çµ±è¨ˆ"; \
+    Text[ arabic ] = "ÅÍÕÇÆíÇÊ"; \
+    Text[ dutch ] = "Statistiek"; \
+    Text[ chinese_simplified ] = "ç»Ÿè®¡"; \
+    Text[ greek ] = "ÓôáôéóôéêÜ"; \
+    Text[ korean ] = "í†µê³„"; \
+    Text[ turkish ] = "İstatistik"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Estadística"; \
+    Text[ finnish ] = "Tilastotiedot"; \
+    Text[ thai ] = "à¸ªà¸–à¸´à¸•à¸´"; \
+    Text[ czech ] = "Statistika"; \
+    Text[ hebrew ] = "×¡×˜×˜×™×¡×˜×™×§×•×ª"; \
+    Text[ hindi ] = "à¤…à¤à¤•à¤¡à¤¼à¥‡"; \
+    Text[ slovak ] = "Å tatistika"; \
 };
-/*
-    Text [ ENGLISH ] = "Statistics" ;
-    Text [ english_us ] = "Statistics" ;
-    Text [ italian ] = "Statistica" ;
-    Text [ spanish ] = "Estadística" ;
-    Text [ french ] = "Statistiques" ;
-    Text [ dutch ] = "Statistiek" ;
-    Text [ swedish ] = "Statistik" ;
-    Text [ danish ] = "Statistik" ;
-    Text [ portuguese_brazilian ] = "Estatísticas" ;
-    Text [ portuguese ] = "Estatística" ;
-    Text[ chinese_simplified ] = "ç»Ÿè®¡";
-    Text[ russian ] = "Ñòàòèñòèêà";
-    Text[ polish ] = "Statystyka";
-    Text[ japanese ] = "çµ±è¨ˆ";
-    Text[ chinese_traditional ] = "çµ±è¨ˆ";
-    Text[ arabic ] = "ÅÍÕÇÆíÇÊ";
-    Text[ dutch ] = "Statistiek";
-    Text[ chinese_simplified ] = "ç»Ÿè®¡";
-    Text[ greek ] = "ÓôáôéóôéêÜ";
-    Text[ korean ] = "í†µê³„";
-    Text[ turkish ] = "İstatistik";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estadística";
-    Text[ finnish ] = "Tilastotiedot";
-    Text[ thai ] = "à¸ªà¸–à¸´à¸•à¸´";
-    Text[ czech ] = "Statistika";
-    Text[ hebrew ] = "×¡×˜×˜×™×¡×˜×™×§×•×ª";
-    Text[ hindi ] = "à¤…à¤à¤•à¤¡à¤¼à¥‡";
-    Text[ slovak ] = "Å tatistika";
-*/
 
 #define PAGE_LAYOUT \
 PageItem \
@@ -344,38 +329,36 @@ PageItem \
     Identifier = TP_LAYOUT ; \
     PageResID = TP_LAYOUT ; \
     Text = "Layout" ; \
+    Text [ ENGLISH ] = "Layout" ; \
+    Text[ english_us ] = "Layout"; \
+    Text[ italian ] = "Layout"; \
+    Text[ portuguese_brazilian ] = "Layout"; \
+    Text[ portuguese ] = "Layout"; \
+    Text[ danish ] = "Layout"; \
+    Text[ french ] = "Mise en page"; \
+    Text[ swedish ] = "Layout"; \
+    Text[ dutch ] = "Lay-out"; \
+    Text[ spanish ] = "Diseño"; \
+    Text[ chinese_simplified ] = "ç‰ˆå¼"; \
+    Text[ russian ] = "Ğàçìåòêà"; \
+    Text[ polish ] = "Uk³ad"; \
+    Text[ japanese ] = "ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ"; \
+    Text[ chinese_traditional ] = "ç‰ˆå¼"; \
+    Text[ arabic ] = "ÊÎØíØ"; \
+    Text[ dutch ] = "Lay-out"; \
+    Text[ chinese_simplified ] = "ç‰ˆå¼"; \
+    Text[ greek ] = "ÄéÜôáîç"; \
+    Text[ korean ] = "ë ˆì´ì•„ì›ƒ"; \
+    Text[ turkish ] = "Sayfa düzeni"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Format"; \
+    Text[ finnish ] = "Asettelu"; \
+    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡"; \
+    Text[ czech ] = "Vzhled"; \
+    Text[ hebrew ] = "â€®×¤×¨×™×¡×”â€¬"; \
+    Text[ hindi ] = "à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸"; \
+    Text[ slovak ] = "FormÃ¡t"; \
 };
-/*
-    Text [ ENGLISH ] = "Layout" ;
-    Text[ english_us ] = "Layout";
-    Text[ italian ] = "Layout";
-    Text[ portuguese_brazilian ] = "Layout";
-    Text[ portuguese ] = "Layout";
-    Text[ danish ] = "Layout";
-    Text[ french ] = "Mise en page";
-    Text[ swedish ] = "Layout";
-    Text[ dutch ] = "Lay-out";
-    Text[ spanish ] = "Diseño";
-    Text[ chinese_simplified ] = "ç‰ˆå¼";
-    Text[ russian ] = "Ğàçìåòêà";
-    Text[ polish ] = "Uk³ad";
-    Text[ japanese ] = "ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
-    Text[ chinese_traditional ] = "ç‰ˆå¼";
-    Text[ arabic ] = "ÊÎØíØ";
-    Text[ dutch ] = "Lay-out";
-    Text[ chinese_simplified ] = "ç‰ˆå¼";
-    Text[ greek ] = "ÄéÜôáîç";
-    Text[ korean ] = "ë ˆì´ì•„ì›ƒ";
-    Text[ turkish ] = "Sayfa düzeni";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Format";
-    Text[ finnish ] = "Asettelu";
-    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
-    Text[ czech ] = "Vzhled";
-    Text[ hebrew ] = "â€®×¤×¨×™×¡×”â€¬";
-    Text[ hindi ] = "à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
-    Text[ slovak ] = "FormÃ¡t";
-*/
 
 #define PAGE_OPTIONS \
 PageItem \
@@ -383,38 +366,36 @@ PageItem \
     Identifier = TP_OPTIONS; \
     PageResID = TP_OPTIONS; \
     Text = "Optionen"; \
+    Text[ENGLISH] = "Options"; \
+    Text[ english_us ] = "Options"; \
+    Text[ portuguese ] = "Opções"; \
+    Text[ russian ] = "Ïàğàìåòğû"; \
+    Text[ dutch ] = "Opties"; \
+    Text[ french ] = "Options"; \
+    Text[ spanish ] = "Opciones"; \
+    Text[ italian ] = "Opzioni"; \
+    Text[ danish ] = "Indstillinger"; \
+    Text[ swedish ] = "Alternativ"; \
+    Text[ polish ] = "Opcje"; \
+    Text[ portuguese_brazilian ] = "Opções"; \
+    Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³"; \
+    Text[ chinese_simplified ] = "é€‰é¡¹"; \
+    Text[ chinese_traditional ] = "é¸é …"; \
+    Text[ arabic ] = "ÎíÇÑÇÊ"; \
+    Text[ dutch ] = "Opties"; \
+    Text[ chinese_simplified ] = "é€‰é¡¹"; \
+    Text[ greek ] = "Åğéëïãİò"; \
+    Text[ korean ] = "ì˜µì…˜"; \
+    Text[ turkish ] = "Seçenekler"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Opcions"; \
+    Text[ finnish ] = "Asetukset"; \
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸"; \
+    Text[ czech ] = "Volby"; \
+    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬"; \
+    Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª"; \
+    Text[ slovak ] = "Nastavenia"; \
 };
-/*
-    Text[ENGLISH] = "Options";
-    Text[ english_us ] = "Options";
-    Text[ portuguese ] = "Opções";
-    Text[ russian ] = "Ïàğàìåòğû";
-    Text[ dutch ] = "Opties";
-    Text[ french ] = "Options";
-    Text[ spanish ] = "Opciones";
-    Text[ italian ] = "Opzioni";
-    Text[ danish ] = "Indstillinger";
-    Text[ swedish ] = "Alternativ";
-    Text[ polish ] = "Opcje";
-    Text[ portuguese_brazilian ] = "Opções";
-    Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ chinese_simplified ] = "é€‰é¡¹";
-    Text[ chinese_traditional ] = "é¸é …";
-    Text[ arabic ] = "ÎíÇÑÇÊ";
-    Text[ dutch ] = "Opties";
-    Text[ chinese_simplified ] = "é€‰é¡¹";
-    Text[ greek ] = "Åğéëïãİò";
-    Text[ korean ] = "ì˜µì…˜";
-    Text[ turkish ] = "Seçenekler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opcions";
-    Text[ finnish ] = "Asetukset";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-    Text[ czech ] = "Volby";
-    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
-    Text[ slovak ] = "Nastavenia";
-*/
 
 #define PAGE_AXISLABEL \
 PageItem \
@@ -422,36 +403,34 @@ PageItem \
     Identifier = TP_AXIS_LABEL ; \
     PageResID = TP_AXIS_LABEL ; \
     Text = "Beschriftung" ; \
+    Text [ ENGLISH ] = "Labelling" ; \
+    Text [ english_us ] = "Label" ; \
+    Text[ portuguese ] = "Legenda"; \
+    Text[ russian ] = "Ïîäïèñü"; \
+    Text[ greek ] = "ÅğéãñáöŞ"; \
+    Text[ dutch ] = "Opschrift"; \
+    Text[ french ] = "Étiquette"; \
+    Text[ spanish ] = "Etiqueta"; \
+    Text[ italian ] = "Dicitura"; \
+    Text[ danish ] = "Etiket"; \
+    Text[ swedish ] = "Etikett"; \
+    Text[ polish ] = "Etykieta"; \
+    Text[ portuguese_brazilian ] = "Rótulo"; \
+    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«"; \
+    Text[ korean ] = "ë ˆì´ë¸”"; \
+    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—"; \
+    Text[ chinese_traditional ] = "æ¨™ç±¤"; \
+    Text[ arabic ] = "ÚäæäÉ"; \
+    Text[ turkish ] = "Etiket"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Etiqueta"; \
+    Text[ finnish ] = "Selite"; \
+    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­"; \
+    Text[ czech ] = "Popisek"; \
+    Text[ hebrew ] = "Beschriftung"; \
+    Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤²"; \
+    Text[ slovak ] = "OznaÄenie"; \
 };
-/*
-    Text [ ENGLISH ] = "Labelling" ;
-    Text [ english_us ] = "Label" ;
-    Text[ portuguese ] = "Legenda";
-    Text[ russian ] = "Ïîäïèñü";
-    Text[ greek ] = "ÅğéãñáöŞ";
-    Text[ dutch ] = "Opschrift";
-    Text[ french ] = "Étiquette";
-    Text[ spanish ] = "Etiqueta";
-    Text[ italian ] = "Dicitura";
-    Text[ danish ] = "Etiket";
-    Text[ swedish ] = "Etikett";
-    Text[ polish ] = "Etykieta";
-    Text[ portuguese_brazilian ] = "Rótulo";
-    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«";
-    Text[ korean ] = "ë ˆì´ë¸”";
-    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—";
-    Text[ chinese_traditional ] = "æ¨™ç±¤";
-    Text[ arabic ] = "ÚäæäÉ";
-    Text[ turkish ] = "Etiket";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Etiqueta";
-    Text[ finnish ] = "Selite";
-    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
-    Text[ czech ] = "Popisek";
-    Text[ hebrew ] = "Beschriftung";
-    Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤²";
-    Text[ slovak ] = "OznaÄenie";
-*/
 
 #define PAGE_AXISSCALE \
 PageItem \
@@ -459,39 +438,37 @@ PageItem \
     Identifier = TP_SCALE_Y ; \
     PageResID = TP_SCALE_Y ; \
     Text = "Skalierung" ; \
+    Text [ ENGLISH ] = "Scale" ; \
+    Text [ english_us ] = "Scale" ; \
+    Text [ norwegian ] = "Scale" ; \
+    Text [ italian ] = "Scala" ; \
+    Text [ portuguese_brazilian ] = "Escala" ; \
+    Text [ portuguese ] = "Escala" ; \
+    Text [ finnish ] = "Skaalaa" ; \
+    Text [ danish ] = "Skalering" ; \
+    Text [ french ] = "Échelle" ; \
+    Text [ swedish ] = "Skalning" ; \
+    Text [ dutch ] = "Schaal" ; \
+    Text [ spanish ] = "Escala" ; \
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹"; \
+    Text[ russian ] = "Ìàñøòàáèğîâàíèå"; \
+    Text[ polish ] = "Skala"; \
+    Text[ japanese ] = "ç›®ç››"; \
+    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹"; \
+    Text[ arabic ] = "ãŞíÇÓ"; \
+    Text[ dutch ] = "Schaal"; \
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹"; \
+    Text[ greek ] = "Êëßìáêá"; \
+    Text[ korean ] = "ë°°ìœ¨ ì¡°ì •"; \
+    Text[ turkish ] = "Ölçeklendirme"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Escala"; \
+    Text[ thai ] = "à¸ªà¹€à¸à¸¥"; \
+    Text[ czech ] = "MÄ›Å™Ã­tko"; \
+    Text[ hebrew ] = "â€®×”×ª×××ª ×’×•×“×œâ€¬"; \
+    Text[ hindi ] = "à¤¸à¥à¤•à¥‡à¤²"; \
+    Text[ slovak ] = "PravÃ­tko"; \
 };
-/*
-    Text [ ENGLISH ] = "Scale" ;
-    Text [ english_us ] = "Scale" ;
-    Text [ norwegian ] = "Scale" ;
-    Text [ italian ] = "Scala" ;
-    Text [ portuguese_brazilian ] = "Escala" ;
-    Text [ portuguese ] = "Escala" ;
-    Text [ finnish ] = "Skaalaa" ;
-    Text [ danish ] = "Skalering" ;
-    Text [ french ] = "Échelle" ;
-    Text [ swedish ] = "Skalning" ;
-    Text [ dutch ] = "Schaal" ;
-    Text [ spanish ] = "Escala" ;
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
-    Text[ russian ] = "Ìàñøòàáèğîâàíèå";
-    Text[ polish ] = "Skala";
-    Text[ japanese ] = "ç›®ç››";
-    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
-    Text[ arabic ] = "ãŞíÇÓ";
-    Text[ dutch ] = "Schaal";
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
-    Text[ greek ] = "Êëßìáêá";
-    Text[ korean ] = "ë°°ìœ¨ ì¡°ì •";
-    Text[ turkish ] = "Ölçeklendirme";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Escala";
-    Text[ thai ] = "à¸ªà¹€à¸à¸¥";
-    Text[ czech ] = "MÄ›Å™Ã­tko";
-    Text[ hebrew ] = "â€®×”×ª×××ª ×’×•×“×œâ€¬";
-    Text[ hindi ] = "à¤¸à¥à¤•à¥‡à¤²";
-    Text[ slovak ] = "PravÃ­tko";
-*/
 
 #define PAGE_NUMBERFORMAT \
 PageItem \
@@ -499,40 +476,38 @@ PageItem \
     Identifier = RID_SVXPAGE_NUMBERFORMAT ; \
     PageResID = RID_SVXPAGE_NUMBERFORMAT ; \
     Text = "Zahlen" ; \
+    Text [ english_us ] = "Numbers" ; \
+    Text [ ENGLISH ] = "Number" ; \
+    Text [ norwegian ] = "Number" ; \
+    Text [ italian ] = "Numeri" ; \
+    Text [ portuguese_brazilian ] = "Números" ; \
+    Text [ portuguese ] = "Números" ; \
+    Text [ finnish ] = "Luku" ; \
+    Text [ danish ] = "Tal" ; \
+    Text [ french ] = "Nombres" ; \
+    Text [ swedish ] = "Tal" ; \
+    Text [ dutch ] = "Getallen" ; \
+    Text [ spanish ] = "Números" ; \
+    Text[ chinese_simplified ] = "æ•°å­—"; \
+    Text[ russian ] = "×èñëà"; \
+    Text[ polish ] = "Liczby"; \
+    Text[ japanese ] = "æ•°"; \
+    Text[ chinese_traditional ] = "æ•¸å­—"; \
+    Text[ arabic ] = "ÃÑŞÇã"; \
+    Text[ dutch ] = "Getallen"; \
+    Text[ chinese_simplified ] = "æ•°å­—"; \
+    Text[ greek ] = "Áñéèìïß"; \
+    Text[ korean ] = "ìˆ«ì"; \
+    Text[ turkish ] = "Sayılar"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Números"; \
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚"; \
+    Text[ czech ] = "ÄŒÃ­sla"; \
+    Text[ hebrew ] = "Zahlen"; \
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾"; \
+    Text[ slovak ] = "ÄŒÃ­sla"; \
 };
-/*
-    Text [ english_us ] = "Numbers" ;
-    Text [ ENGLISH ] = "Number" ;
-    Text [ norwegian ] = "Number" ;
-    Text [ italian ] = "Numeri" ;
-    Text [ portuguese_brazilian ] = "Números" ;
-    Text [ portuguese ] = "Números" ;
-    Text [ finnish ] = "Luku" ;
-    Text [ danish ] = "Tal" ;
-    Text [ french ] = "Nombres" ;
-    Text [ swedish ] = "Tal" ;
-    Text [ dutch ] = "Getallen" ;
-    Text [ spanish ] = "Números" ;
 
-    Text[ chinese_simplified ] = "æ•°å­—";
-    Text[ russian ] = "×èñëà";
-    Text[ polish ] = "Liczby";
-    Text[ japanese ] = "æ•°";
-    Text[ chinese_traditional ] = "æ•¸å­—";
-    Text[ arabic ] = "ÃÑŞÇã";
-    Text[ dutch ] = "Getallen";
-    Text[ chinese_simplified ] = "æ•°å­—";
-    Text[ greek ] = "Áñéèìïß";
-    Text[ korean ] = "ìˆ«ì";
-    Text[ turkish ] = "Sayılar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Números";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚";
-    Text[ czech ] = "ÄŒÃ­sla";
-    Text[ hebrew ] = "Zahlen";
-    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-    Text[ slovak ] = "ÄŒÃ­sla";
-*/
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -563,39 +538,38 @@ PushButton 1 \
     Size = MAP_APPFONT ( 50 , 14 ) ; \
     TabStop = TRUE ; \
     Text = "Zurück" ; \
+    Text [ ENGLISH ] = "Return" ; \
+    Text [ norwegian ] = "Return" ; \
+    Text [ italian ] = "Indietro" ; \
+    Text [ portuguese_brazilian ] = "Voltar" ; \
+    Text [ portuguese ] = "Anterior" ; \
+    Text [ finnish ] = "Edellinen" ; \
+    Text [ danish ] = "Tilbage" ; \
+    Text [ french ] = "Précédent" ; \
+    Text [ swedish ] = "Tillbaka" ; \
+    Text [ dutch ] = "Vorige" ; \
+    Text [ spanish ] = "Regresar" ; \
+    Text [ english_us ] = "Back" ; \
+    Text[ chinese_simplified ] = "è¿”å›"; \
+    Text[ russian ] = "Íàçàä"; \
+    Text[ polish ] = "Wstecz"; \
+    Text[ japanese ] = "æˆ»ã‚‹"; \
+    Text[ chinese_traditional ] = "è¿”å›"; \
+    Text[ arabic ] = "ÇáÓÇÈŞ"; \
+    Text[ dutch ] = "Vorige"; \
+    Text[ chinese_simplified ] = "è¿”å›"; \
+    Text[ greek ] = "Ğßóù"; \
+    Text[ korean ] = "ë’¤ë¡œ"; \
+    Text[ turkish ] = "Geri"; \
+    Text[ language_user1 ] = " "; \
+    Text[ catalan ] = "Enrere"; \
+    Text[ thai ] = "à¸à¸¥à¸±à¸š"; \
+    Text[ czech ] = "ZpÄ›t"; \
+    Text[ hebrew ] = "â€®×§×•×“×â€¬"; \
+    Text[ hindi ] = "à¤ªà¥€à¤›à¥‡"; \
+    Text[ slovak ] = "SpÃ¤Å¥"; \
 };
-/*
-    Text [ ENGLISH ] = "Return" ;
-    Text [ norwegian ] = "Return" ;
-    Text [ italian ] = "Indietro" ;
-    Text [ portuguese_brazilian ] = "Voltar" ;
-    Text [ portuguese ] = "Anterior" ;
-    Text [ finnish ] = "Edellinen" ;
-    Text [ danish ] = "Tilbage" ;
-    Text [ french ] = "Précédent" ;
-    Text [ swedish ] = "Tillbaka" ;
-    Text [ dutch ] = "Vorige" ;
-    Text [ spanish ] = "Regresar" ;
-    Text [ english_us ] = "Back" ;
-    Text[ chinese_simplified ] = "è¿”å›";
-    Text[ russian ] = "Íàçàä";
-    Text[ polish ] = "Wstecz";
-    Text[ japanese ] = "æˆ»ã‚‹";
-    Text[ chinese_traditional ] = "è¿”å›";
-    Text[ arabic ] = "ÇáÓÇÈŞ";
-    Text[ dutch ] = "Vorige";
-    Text[ chinese_simplified ] = "è¿”å›";
-    Text[ greek ] = "Ğßóù";
-    Text[ korean ] = "ë’¤ë¡œ";
-    Text[ turkish ] = "Geri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Enrere";
-    Text[ thai ] = "à¸à¸¥à¸±à¸š";
-    Text[ czech ] = "ZpÄ›t";
-    Text[ hebrew ] = "â€®×§×•×“×â€¬";
-    Text[ hindi ] = "à¤ªà¥€à¤›à¥‡";
-    Text[ slovak ] = "SpÃ¤Å¥";
-*/
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
