@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:55:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ using namespace ::osl;
 
 // -------------------------------------------------------------------------
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
-                           const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
+                           const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
                            const Reference< XMultiServiceFactory >& _xServiceFactory,
                            const ORowSetValueVector&    _rParameterRow,
                            const ::rtl::OUString& _rUpdateTableName,
@@ -181,11 +181,11 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
     ::rtl::OUString aUpdateTableName = _rUpdateTableName;
     Reference< XConnection> xConnection;
-    if(_xComposer.is())
+    if(_xAnalyzer.is())
     {
         try
         {
-            Reference<XTablesSupplier> xTabSup(_xComposer,UNO_QUERY);
+            Reference<XTablesSupplier> xTabSup(_xAnalyzer,UNO_QUERY);
             OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
             Reference<XNameAccess> xTables = xTabSup->getTables();
 
@@ -240,7 +240,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             OSL_ENSURE(xConnection.is(),"No connection!");
 
                             Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-                            Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+                            Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
                             if ( xColSup.is() )
                             {
                                 Reference<XNameAccess> xSelColumns = xColSup->getColumns();
@@ -298,7 +298,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     if(bNeedKeySet)
     {
         // need to check if we could handle this select clause
-        bAllKeysFound = bAllKeysFound && (nTablesCount == 1 || checkJoin(xConnection,_xComposer,aUpdateTableName));
+        bAllKeysFound = bAllKeysFound && (nTablesCount == 1 || checkJoin(xConnection,_xAnalyzer,aUpdateTableName));
 
         // || !(comphelper::hasProperty(PROPERTY_CANUPDATEINSERTEDROWS,xProp) && any2bool(xProp->getPropertyValue(PROPERTY_CANUPDATEINSERTEDROWS)))
 
@@ -314,7 +314,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
             OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
-            Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+            Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
             Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
             Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();
             ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
@@ -343,16 +343,12 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,aUpdateTableName ,_xComposer);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,aUpdateTableName ,_xAnalyzer);
             try
             {
                 m_pCacheSet = pKeySet;
                 m_xCacheSet = m_pCacheSet;
                 pKeySet->construct(_xRs);
-
-                // now we need to set the extern parameters because the select stmt could contain a :var1
-                pKeySet->setExternParameters(_rParameterRow);
-
 
                 if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
                 {
@@ -1430,6 +1426,7 @@ void ORowSetCache::cancelRowModification()
     }
 }
 // -------------------------------------------------------------------------
+/*
 void ORowSetCache::updateRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
@@ -1445,6 +1442,7 @@ void ORowSetCache::updateRow(  )
     m_bModified = sal_False;
     refreshRow(  );
 }
+*/
 // -------------------------------------------------------------------------
 void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
 {
@@ -1646,11 +1644,11 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
-                                 const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
+                                 const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
                                  const ::rtl::OUString& _sUpdateTableName )
 {
     sal_Bool bOk = sal_False;
-    ::rtl::OUString sSql = _xComposer->getQuery();
+    ::rtl::OUString sSql = _xAnalyzer->getQuery();
     ::rtl::OUString sErrorMsg;
     ::connectivity::OSQLParser aSqlParser(m_xServiceFactory);
     ::connectivity::OSQLParseNode* pSqlParseNode = aSqlParser.parseTree(sErrorMsg,sSql);
