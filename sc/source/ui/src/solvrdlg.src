@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:23:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   solvrdlg.src  $
  //   $Author: hr $
- //     $Date: 2003-07-03 17:23:40 $
- // $Revision: 1.21 $
+ //     $Date: 2003-07-17 12:58:36 $
+ // $Revision: 1.22 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -486,6 +486,10 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ hindi ] = "गोल सीक";
     Text[ slovak ] = "Vyhľadanie cieľa";
 };
+
+
+
+
 
 
 
