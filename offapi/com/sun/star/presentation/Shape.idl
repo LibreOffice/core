@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:50 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef __com_sun_star_presentation_Shape_idl__
 #define __com_sun_star_presentation_Shape_idl__
 
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
 #ifndef __com_sun_star_presentation_AnimationEffect_idl__
 #include <com/sun/star/presentation/AnimationEffect.idl>
 #endif
@@ -101,7 +105,7 @@ service Shape
         <p>This color is used if the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
         is <TRUE/> and <member scope="com::sun::star::drawing">Shape::DimHide</member> is <FALSE/>.</p>
      */
-    [property] long DimColor;
+    [property] com::sun::star::util::Color DimColor;
 
     //-------------------------------------------------------------------------
 
