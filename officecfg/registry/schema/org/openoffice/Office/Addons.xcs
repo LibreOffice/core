@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:50:16 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,663 +62,188 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains general structures used to integrate external components into the Office user interface.</desc>
+		<desc >Contains general structures used to integrate external components into the Office user interface.</desc>
 	</info>
 	<templates>
 		<group oor:name="MenuItem">
 			<info>
-				<desc xml:lang="en-US">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="zh-CN">描述表示外部组件功能的菜单项。名称必须明确，并且应该使用软件包方案 (如 org.openoffice.external.applicationexecuter) 编写，以尽量减少名称冲突。</desc>
-				<desc xml:lang="x-comment">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="ja">外部コンポーネントの機能を表現するツールバー項目が記述されています。名前の衝突を最小限に抑えるため、ツールバー項目の名前は一意で、かつ、パッケージの命名形式で記述する必要があります。例: org.openoffice.external.applicationexecuter</desc>
-				<desc xml:lang="el">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="nl">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="hu">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="cs">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="sk">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="da">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="sl">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+				<desc>Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="zh-CN">表示要执行的功能的命令 URL 。</desc>
-					<desc xml:lang="x-comment">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="ja">実行する機能を表すコマンド URL。</desc>
-					<desc xml:lang="el">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="nl">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="hu">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="cs">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="sk">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="da">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="sl">A command URL which represents the function to execute.</desc>
+					<desc>A command URL which represents the function to execute.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
 				<info>
-					<desc xml:lang="en-US">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="zh-CN">用作菜单项标题的本地化的字串。</desc>
-					<desc xml:lang="x-comment">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="ja">メニュー項目のタイトルとして使用する、別言語に翻訳した文字列。</desc>
-					<desc xml:lang="el">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="nl">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="hu">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="cs">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="sk">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="da">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="sl">A localized string used to as the menu item title.</desc>
+					<desc>A localized string used to as the menu item title.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageIdentifier" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="zh-CN">用于引用可选的内部菜单图像的专用 URL。示例：private:image/3216 引用 id=3216 的 Office 内部图像。</desc>
-					<desc xml:lang="x-comment">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="ja">任意指定の内部メニューイメージを参照するために使用する、非公開の URL。たとえば private:image/3216 は id=3216 の内部 Office イメージを指します。</desc>
-					<desc xml:lang="el">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="nl">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="hu">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="cs">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="sk">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="da">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="sl">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+					<desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Target" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="zh-CN">这是分发命令使用的目标 URL。某些目标要使用特殊的 URL：_self，当前框; _default，默认; _blank，建立新框。</desc>
-					<desc xml:lang="x-comment">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="ja">ディスパッチコマンドに使用する、ターゲット URL。ターゲットに応じて異なる URL を指定できます。たとえば、現在のフレームには _self、デフォルトには _default、新しいフレームを作成するには _blank を指定します。</desc>
-					<desc xml:lang="el">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="nl">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="hu">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="cs">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="sk">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="da">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="sl">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+					<desc>This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Context" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="x-comment">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="ja">サブメニューを持つメニュー項目の内容を定義するプロパティ。このプロパティの指定は、空でもかまいません。サポートするアプリケーションモジュールをコンマで区切って指定することもできます。</desc>
-					<desc xml:lang="zh-CN">一个定义菜单或子菜单条目的属性。这可以是空缺或一受支持程序模块的栏列。</desc>
-					<desc xml:lang="el">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="nl">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="hu">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="cs">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="sk">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="da">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="sl">An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
+					<desc>An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
 				</info>
 			</prop>
 			<set oor:name="Submenu" oor:node-type="MenuItem">
 				<info>
-					<desc xml:lang="en-US">An optional set to allow sub menus.</desc>
-					<desc xml:lang="zh-CN">允许子菜单的可选集合。</desc>
-					<desc xml:lang="x-comment">An optional set to allow sub menus.</desc>
-					<desc xml:lang="ja">サブニューを許可する任意指定の設定。</desc>
-					<desc xml:lang="el">An optional set to allow sub menus.</desc>
-					<desc xml:lang="nl">An optional set to allow sub menus.</desc>
-					<desc xml:lang="hu">An optional set to allow sub menus.</desc>
-					<desc xml:lang="cs">An optional set to allow sub menus.</desc>
-					<desc xml:lang="sk">An optional set to allow sub menus.</desc>
-					<desc xml:lang="da">An optional set to allow sub menus.</desc>
-					<desc xml:lang="sl">An optional set to allow sub menus.</desc>
+					<desc>An optional set to allow sub menus.</desc>
 				</info>
 			</set>
 		</group>
 		<group oor:name="PopupMenu">
 			<info>
-				<desc xml:lang="en-US">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="zh-CN">描述表示外部组件功能的菜单项/图标栏项。名称必须明确，并且应该使用软件包方案 (如 org.openoffice.external.applicationexecuter) 编写，以尽量减少名称冲突。</desc>
-				<desc xml:lang="x-comment">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="ja">外部コンポーネントの機能を表現するメニュー項目やツールバー項目が記述されています。名前の衝突を最小限に抑えるため、ツールバー項目の名前は一意で、かつ、パッケージの命名形式で記述する必要があります。例: org.openoffice.external.applicationexecuter</desc>
-				<desc xml:lang="el">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="nl">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="hu">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="cs">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="sk">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="da">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="sl">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+				<desc>Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
 			</info>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
 				<info>
-					<desc xml:lang="en-US">A localized string used to as the menu title.</desc>
-					<desc xml:lang="zh-CN">用作菜单标题的本地化的字串。</desc>
-					<desc xml:lang="x-comment">A localized string used to as the menu title.</desc>
-					<desc xml:lang="ja">メニュータイトルとして使用する、別言語に翻訳した文字列。</desc>
-					<desc xml:lang="el">A localized string used to as the menu title.</desc>
-					<desc xml:lang="nl">A localized string used to as the menu title.</desc>
-					<desc xml:lang="hu">A localized string used to as the menu title.</desc>
-					<desc xml:lang="cs">A localized string used to as the menu title.</desc>
-					<desc xml:lang="sk">A localized string used to as the menu title.</desc>
-					<desc xml:lang="da">A localized string used to as the menu title.</desc>
-					<desc xml:lang="sl">A localized string used to as the menu title.</desc>
+					<desc>A localized string used to as the menu title.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Context" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="x-comment">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="ja">最上位のポップアップメニューの内容を定義するプロパティ。このプロパティの指定は、空でもかまいません。サポートするアプリケーションモジュールをコンマで区切って指定することもできます。</desc>
-					<desc xml:lang="zh-CN">一个定义最上层上下文菜单的属性。这可以是空缺或一受支持程序模块的栏列。</desc>
-					<desc xml:lang="el">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="nl">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="hu">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="cs">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="sk">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="da">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="sl">An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
+					<desc>An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
 				</info>
 			</prop>
 			<set oor:name="Submenu" oor:node-type="MenuItem">
 				<info>
-					<desc xml:lang="en-US">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="zh-CN">允许子菜单的可选集合。此属性不能用于定义图标栏项。</desc>
-					<desc xml:lang="x-comment">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="ja">サブニューを許可する任意指定の設定。このプロパティは、ツールバー項目の定義には使用できません。</desc>
-					<desc xml:lang="el">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="nl">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="hu">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="cs">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="sk">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="da">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-					<desc xml:lang="sl">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
+					<desc>An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
 				</info>
 			</set>
 		</group>
 		<group oor:name="ToolBarItem">
 			<info>
-				<desc xml:lang="en-US">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="zh-CN">描述表示外部组件功能的图标栏项。名称必须明确，并且应该使用软件包方案 (如 org.openoffice.external.applicationexecuter) 编写，以尽量减少名称冲突。</desc>
-				<desc xml:lang="x-comment">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="ja">外部コンポーネントの機能を表現するツールバー項目が記述されています。名前の衝突を最小限に抑えるため、ツールバー項目の名前は一意で、かつ、パッケージの命名形式で記述する必要があります。例: org.openoffice.external.applicationexecuter</desc>
-				<desc xml:lang="el">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="nl">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="hu">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="cs">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="sk">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="da">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-				<desc xml:lang="sl">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+				<desc>Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="zh-CN">表示要执行的功能的命令 URL。</desc>
-					<desc xml:lang="x-comment">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="ja">実行する機能を表すコマンド URL。</desc>
-					<desc xml:lang="el">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="nl">Een opdracht-URL die staat voor de uit te voeren functie.</desc>
-					<desc xml:lang="hu">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="cs">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="sk">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="da">A command URL which represents the function to execute.</desc>
-					<desc xml:lang="sl">A command URL which represents the function to execute.</desc>
+					<desc>A command URL which represents the function to execute.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
 				<info>
-					<desc xml:lang="en-US">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="zh-CN">用作菜单项标题的本地化的字串。</desc>
-					<desc xml:lang="x-comment">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="ja">メニュー項目のタイトルとして使用する、別言語に翻訳した文字列。</desc>
-					<desc xml:lang="el">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="nl">Een gelocaliseerde string gebruikt als de titel van het menu item.</desc>
-					<desc xml:lang="hu">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="cs">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="sk">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="da">A localized string used to as the menu item title.</desc>
-					<desc xml:lang="sl">A localized string used to as the menu item title.</desc>
+					<desc>A localized string used to as the menu item title.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageIdentifier" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="zh-CN">用于引用可选的内部菜单图像的专用 URL。示例：private:image/3216 引用 id=3216 的 Office 内部图像。</desc>
-					<desc xml:lang="x-comment">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="ja">任意指定の内部メニューイメージを参照するために使用する、非公開の URL。たとえば private:image/3216 は id=3216 の内部 Office イメージを指します。</desc>
-					<desc xml:lang="el">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="nl">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="hu">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="cs">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="sk">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="da">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-					<desc xml:lang="sl">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+					<desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Target" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="zh-CN">这是分发命令使用的目标 URL。某些目标要使用特殊的 URL：_self，当前框; _default，默认; _blank，建立新框。</desc>
-					<desc xml:lang="x-comment">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="ja">ディスパッチコマンドに使用する、ターゲット URL。ターゲットに応じて異なる URL を指定できます。たとえば、現在のフレームには _self、デフォルトには _default、新しいフレームを作成するには _blank を指定します。</desc>
-					<desc xml:lang="el">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="nl">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="hu">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="cs">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="sk">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="da">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-					<desc xml:lang="sl">This is the target URL which is used for the dispatch command. There are special URL&apos;s to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+					<desc>This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Context" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="x-comment">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="ja">ツールバー項目の内容を定義するプロパティ。このプロパティの指定は、空でもかまいません。サポートするアプリケーションモジュールをコンマで区切って指定することもできます。</desc>
-					<desc xml:lang="zh-CN">一个定义工具栏内容的属性。这可以是空缺或一受支持程序模块的栏列。</desc>
-					<desc xml:lang="el">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="nl">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="hu">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="cs">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="sk">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="da">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-					<desc xml:lang="sl">An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
+					<desc>An property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="UserDefinedImages">
 			<info>
-				<desc xml:lang="en-US">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="x-comment">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="ja">任意設定のユーザー定義イメージのグループ。イメージを定義する方法は 2 つあります。1. イメージデータを直接設定に埋め込む。2. 外部ビットマップファイルを含むファイルの URL を指定する。両方実行した場合は、イメージを直接埋め込む方法で指定したものが優先されます。</desc>
-				<desc xml:lang="zh-CN">一组可选式自定图形。可以采用两种方法定义图形： 1. 直接将图形加入配置内。2. 使用文件 URL 指向外部位图文件。加入配置内的位图将会比文件 URL 优先得到使用。</desc>
-				<desc xml:lang="el">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="nl">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="hu">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="cs">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="sk">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="da">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-				<desc xml:lang="sl">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
+				<desc>A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
 			</info>
 			<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
 				<info>
-					<desc xml:lang="en-US">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="zh-CN">菜单图像和图标栏上的小按钮使用的二元位图数据。小图像的标准大小为 16x16 像素。</desc>
-					<desc xml:lang="x-comment">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="ja">メニューのイメージやサイズの小さいツールボックスボタンに使用するバイナリビットマップデータ。サイズの小さいイメージに適用される標準サイズは 16 x 16 ピクセルです。</desc>
-					<desc xml:lang="el">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="nl">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="hu">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="cs">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="sk">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="da">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="sl">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
+					<desc>Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBig" oor:type="xs:hexBinary">
 				<info>
-					<desc xml:lang="en-US">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="zh-CN">图标栏上的大按钮使用的二元位图数据。大图像的标准大小为 26x26 像素。</desc>
-					<desc xml:lang="x-comment">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="ja">大きいサイズのツールボックスボタンに使用するバイナリビットマップデータ。サイズの大きいイメージに適用される標準サイズは 26 x 26 ピクセルです。</desc>
-					<desc xml:lang="el">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="nl">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="hu">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="cs">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="sk">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="da">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="sl">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
+					<desc>Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
 				<info>
-					<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="zh-CN">高对比度显示使用的二元位图数据。小图像的标准大小为 16x16 像素。</desc>
-					<desc xml:lang="x-comment">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="ja">高コントラストのディスプレイに使用するバイナリビットマップデータ。サイズの小さいイメージに適用される標準サイズは 16 x 16 ピクセルです。</desc>
-					<desc xml:lang="el">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="nl">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="hu">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="cs">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="sk">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="da">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-					<desc xml:lang="sl">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
+					<desc>Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
 				<info>
-					<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="zh-CN">高对比度显示使用的二元位图数据。大图像的标准大小为 26x26 像素。</desc>
-					<desc xml:lang="x-comment">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="ja">高コントラストのディスプレイに使用するバイナリビットマップデータ。サイズの大きいイメージに適用される標準サイズは 26 x 26 ピクセルです。</desc>
-					<desc xml:lang="el">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="nl">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="hu">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="cs">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="sk">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="da">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-					<desc xml:lang="sl">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
+					<desc>Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageSmallURL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="pt">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ru">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="el">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="nl">Een bestands-URL voor toegang to een extern bitmapbestand, gebruikt voor menu-afbeeldingen en/of kleine werkbalkknoppen. Standaardafmetingen van een kleine afbeelding is 16x16 pixel.</desc>
-					<desc xml:lang="fr">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="es">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="fi">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="it">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="cs">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="da">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="sv">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="pl">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ja">メニューのイメージや小さいサイズのツールボックスボタンに使用する、外部ビットマップファイルを含むファイルの URL。サイズの小さいイメージに適用される標準サイズは 16 x 16 ピクセルです。</desc>
-					<desc xml:lang="ko">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="zh-CN">一个文件 URL 指向一个外部的位图，此位图用于高对比度菜单图形和/或对话框按钮。标准大小是一个 16x16 像素的小图形。</desc>
-					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="tr">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ar">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="he">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ca">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="th">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="sk">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="hu">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="sl">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc>A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigURL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="pt">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ru">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="el">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="nl">Een bestands-URL voor toegang to een extern bitmapbestand, gebruikt voor grote werkbalkknoppen. Standaardafmetingen van een grote afbeelding is 16x16 pixel.</desc>
-					<desc xml:lang="fr">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="es">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="fi">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="it">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="cs">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="da">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="sv">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="pl">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ja">大きいサイズのツールボックスボタンに使用する、外部ビットマップファイルを含むファイルの URL。サイズの大きいイメージに適用される標準サイズは 26 x 26 ピクセルです。</desc>
-					<desc xml:lang="ko">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="zh-CN">一个文件 URL 指向一个外部的位图，此位图用于高对比度菜单图形和/或对话框按钮。标准大小是一个 26x26 像素的大图形。</desc>
-					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="tr">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ar">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="he">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ca">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="th">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="sk">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="hu">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="sl">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc>A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageSmallHCURL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="pt">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ru">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="el">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="nl">Een bestands-URL voor toegang to een extern bitmapbestand, gebruikt voor hoog-contrast menu afbeeldingen en/of toolbox knoppen. Standaardafmetingen van een kleine afbeelding is 16x16 pixel.</desc>
-					<desc xml:lang="fr">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="es">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="fi">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="it">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="cs">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="da">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="sv">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="pl">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ja">メニューに使用する高コントラストのイメージやツールボックスボタンに使用する、外部ビットマップファイルを含むファイルの URL。サイズの小さいイメージに適用される標準サイズは 16 x 16 ピクセルです。</desc>
-					<desc xml:lang="ko">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="zh-CN">一个文件 URL 指向一个外部的位图，此位图用于高对比度菜单图形和/或对话框按钮。标准大小是一个 16x16 像素的小图形。</desc>
-					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="tr">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ar">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="he">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="ca">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="th">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="sk">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="hu">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-					<desc xml:lang="sl">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc>A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigHCURL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="pt">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ru">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="el">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="nl">Een bestands-URL voor toegang to een extern bitmapbestand, gebruikt voor grote, hoog-contrast menu afbeeldingen en/of toolbox knoppen. Standaardafmetingen van een grote afbeelding is 26x26 pixel.</desc>
-					<desc xml:lang="fr">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="es">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="fi">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="it">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="cs">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="da">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="sv">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="pl">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ja">サイズが大きくコントラストの高いツールボックスボタンに使用する、外部ビットマップイメージを含むファイルの URL。大きいサイズのイメージに適用される標準サイズは、 26 x 26 ピクセルです。</desc>
-					<desc xml:lang="ko">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="zh-CN">一个文件 URL 指向一个外部的位图，此位图用于高对比度菜单图形和/或对话框按钮。标准大小是一个 26x26 像素的大图形。</desc>
-					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="tr">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ar">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="he">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="ca">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="th">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="sk">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="hu">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-					<desc xml:lang="sl">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc>A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="Images">
 			<info>
-				<desc xml:lang="en-US">A group that associates images to a command URL</desc>
-				<desc xml:lang="x-comment">A group that associates images to a command URL</desc>
-				<desc xml:lang="ja">イメージをコマンドの URL に関連付けるグループ</desc>
-				<desc xml:lang="zh-CN">一组图形和命令 URL 相关联</desc>
-				<desc xml:lang="el">A group that associates images to a command URL</desc>
-				<desc xml:lang="nl">Een groep die afbeeldingen aan een opdracht-URL koppelt.</desc>
-				<desc xml:lang="hu">A group that associates images to a command URL</desc>
-				<desc xml:lang="cs">A group that associates images to a command URL</desc>
-				<desc xml:lang="sk">A group that associates images to a command URL</desc>
-				<desc xml:lang="da">A group that associates images to a command URL</desc>
-				<desc xml:lang="sl">A group that associates images to a command URL</desc>
+				<desc>A group that associates images to a command URL</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The command URL that is bound to the defined images.</desc>
-					<desc xml:lang="x-comment">The command URL that is bound to the defined images.</desc>
-					<desc xml:lang="ja">定義したイメージに関連付けられたコマンドの URL。</desc>
-					<desc xml:lang="zh-CN">命令 URL 连接到指定的图形。</desc>
-					<desc xml:lang="el">The command URL that is bound to the defined images.</desc>
-					<desc xml:lang="nl">De opdracht-URL die is gekoppeld aan de gedefinieerde afbeeldingen.</desc>
-					<desc xml:lang="hu">The command URL that is bound to the defined images.</desc>
-					<desc xml:lang="cs">The command URL that is bound to the defined images.</desc>
-					<desc xml:lang="sk">The command URL that is bound to the defined images.</desc>
-					<desc xml:lang="da">The command URL that is bound to the defined images.</desc>
-					<desc xml:lang="sl">The command URL that is bound to the defined images.</desc>
+					<desc>The command URL that is bound to the defined images.</desc>
 				</info>
 			</prop>
 			<node-ref oor:name="UserDefinedImages" oor:node-type="UserDefinedImages">
 				<info>
-					<desc xml:lang="en-US">An user-defined images group.</desc>
-					<desc xml:lang="x-comment">An user-defined images group.</desc>
-					<desc xml:lang="ja">ユーザー定義のイメージグループ。</desc>
-					<desc xml:lang="zh-CN">一个自定的图形组。</desc>
-					<desc xml:lang="el">An user-defined images group.</desc>
-					<desc xml:lang="nl">Een gebruiker-gedefinieerde afbeeldingengroep.</desc>
-					<desc xml:lang="hu">An user-defined images group.</desc>
-					<desc xml:lang="cs">An user-defined images group.</desc>
-					<desc xml:lang="sk">An user-defined images group.</desc>
-					<desc xml:lang="da">An user-defined images group.</desc>
-					<desc xml:lang="sl">An user-defined images group.</desc>
+					<desc>An user-defined images group.</desc>
 				</info>
 			</node-ref>
 		</group>
 		<set oor:name="ToolBarItems" oor:node-type="ToolBarItem">
 			<info>
-				<desc xml:lang="en-US">Contains a list of toolbar items used by an Add-On.</desc>
-				<desc xml:lang="x-comment">Contains a list of toolbar items used by an Add-On.</desc>
-				<desc xml:lang="ja">「アドオン」で使用するツールバー項目のリストが含まれています。</desc>
-				<desc xml:lang="zh-CN">含有一个 Add-On 使用的工具栏条目的列单。</desc>
-				<desc xml:lang="el">Contains a list of toolbar items used by an Add-On.</desc>
-				<desc xml:lang="nl">Bevat een lijst van werkbalk-items die door een Add-On worden gebruikt.</desc>
-				<desc xml:lang="hu">Contains a list of toolbar items used by an Add-On.</desc>
-				<desc xml:lang="cs">Contains a list of toolbar items used by an Add-On.</desc>
-				<desc xml:lang="sk">Contains a list of toolbar items used by an Add-On.</desc>
-				<desc xml:lang="da">Contains a list of toolbar items used by an Add-On.</desc>
-				<desc xml:lang="sl">Contains a list of toolbar items used by an Add-On.</desc>
+				<desc>Contains a list of toolbar items used by an Add-On.</desc>
 			</info>
 		</set>
 	</templates>
 	<component>
 		<group oor:name="AddonUI">
 			<info>
-				<desc xml:lang="en-US">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="el">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="nl">Bevat informatie over de structuur van een add-on gebruikersinterface.</desc>
-				<desc xml:lang="fr">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="fi">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="cs">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="da">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="zh-CN">含有有关 Addon 使用者界面结构的信息。</desc>
-				<desc xml:lang="zh-TW">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="ar">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="he">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="ca">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="pt">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="ru">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="es">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="it">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="sv">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="pl">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="pt-BR">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="ja">addon ユーザーインタフェースの構成に関する情報が含まれます。</desc>
-				<desc xml:lang="ko">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="tr">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="th">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="hi-IN">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="x-comment">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="hu">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="sk">Contains information about the structure of addon user interface.</desc>
-				<desc xml:lang="sl">Contains information about the structure of addon user interface.</desc>
+				<desc>Contains information about the structure of addon user interface.</desc>
 			</info>
 			<set oor:name="AddonMenu" oor:node-type="MenuItem">
 				<info>
-					<desc xml:lang="en-US">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="el">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="nl">Bevat de structuur van het add-on menu dat door de Office wordt gebruikt. Het biedt de gebruiker functies van externe componenten.</desc>
-					<desc xml:lang="fr">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="fi">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="cs">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="da">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="zh-CN">含有 Office 使用的 Addon 菜单的结构。它向使用者提供外部组件的功能。</desc>
-					<desc xml:lang="zh-TW">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ar">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="he">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ca">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="pt">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ru">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="es">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="it">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="sv">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="pl">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="pt-BR">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ja">Office によって使用されるアドオンメニューの構成が含まれます。外部コンポーネントの機能をユーザーに提供します。</desc>
-					<desc xml:lang="ko">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="tr">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="th">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="hi-IN">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="x-comment">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="hu">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="sk">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-					<desc xml:lang="sl">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc>Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
 				</info>
 			</set>
 			<set oor:name="Images" oor:node-type="Images">
 				<info>
-					<desc xml:lang="en-US">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-					<desc xml:lang="x-comment">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-					<desc xml:lang="ja">メニュー項目およびツールバーボタンに使用できる、ユーザー定義のイメージの構造が含まれています。</desc>
-					<desc xml:lang="zh-CN">含有用于自定菜单和工具栏按钮图形的结构。</desc>
-					<desc xml:lang="el">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-					<desc xml:lang="nl">Bevat de structuur voor gebruikergedefinieerde afbeeldingen die gebruikt kunnen worden door menu-items en werkbalkknoppen.</desc>
-					<desc xml:lang="hu">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-					<desc xml:lang="cs">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-					<desc xml:lang="sk">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-					<desc xml:lang="da">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-					<desc xml:lang="sl">Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
+					<desc>Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
 				</info>
 			</set>
 			<set oor:name="OfficeMenuBar" oor:node-type="PopupMenu">
 				<info>
-					<desc xml:lang="en-US">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="el">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="nl">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="fr">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="fi">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="cs">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="da">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="zh-CN">含有插入到 Office 菜单栏中的 Addon 弹出式菜单的结构。它向使用者提供外部组件的功能。</desc>
-					<desc xml:lang="zh-TW">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ar">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="he">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ca">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="pt">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ru">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="es">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="it">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="sv">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="pl">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="pt-BR">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="ja">Office メニューバーに挿入されるアドオンのポップアップメニューの構成が含まれます。外部コンポーネントの機能をユーザーに提供します。</desc>
-					<desc xml:lang="ko">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="tr">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="th">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="hi-IN">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="x-comment">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="hu">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="sk">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-					<desc xml:lang="sl">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc>Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
 				</info>
 			</set>
 			<set oor:name="OfficeToolBar" oor:node-type="ToolBarItems">
 				<info>
-					<desc xml:lang="en-US">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="zh-CN">含有插入到 Office 功能栏中的功能列单。</desc>
-					<desc xml:lang="x-comment">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="ja">Office ファンクションバーに挿入される機能のリストが含まれています。</desc>
-					<desc xml:lang="el">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="nl">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="hu">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="cs">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="sk">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="da">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
-					<desc xml:lang="sl">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
+					<desc>Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
 				</info>
 			</set>
 			<set oor:name="OfficeHelp" oor:node-type="MenuItem">
 				<info>
-					<desc xml:lang="en-US">Contains a list of functions inserted into the Office help menu. The optional property 'Submeno' will be ignored for this set.</desc>
-					<desc xml:lang="x-comment">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
-					<desc xml:lang="ja">Office ヘルプメニューに挿入される機能のリストが含まれています。任意設定のプロパティ「Submemo」の設定は、ここでは無視されます。</desc>
-					<desc xml:lang="zh-CN">含有插入到 Office 功能栏中的功能列单。此集合将忽视可选属性“Submeno”！</desc>
-					<desc xml:lang="el">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
-					<desc xml:lang="nl">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
-					<desc xml:lang="hu">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
-					<desc xml:lang="cs">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
-					<desc xml:lang="sk">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
-					<desc xml:lang="da">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
-					<desc xml:lang="sl">Contains a list of functions inserted into the Office help menu. The optional property &apos;Submeno&apos; will be ignored for this set.</desc>
+					<desc>Contains a list of functions inserted into the Office help menu. The optional property 'Submeno' will be ignored for this set.</desc>
 				</info>
 			</set>
 		</group>
