@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:12:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ PushButton RID_PREVIEW_BUTTON
     Text[ hebrew ] = "Ab~spielen";
     Text[ hindi ] = "शुरु";
     Text[ slovak ] = "Prehrať";
+    Text[ hungarian ] = "Lejátszás";
+    Text[ slovenian ] = "Predvajaj";
 };
 Bitmap BMP_TAB_PAGEMODE
 {
@@ -1397,6 +1399,9 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ turkish ] = "Grafik Bi�emleri";
             Text[ czech ] = "Grafické styly";
             Text[ slovak ] = "Grafické štýly";
+            Text[ hungarian ] = "Képstílusok";
+            Text[ finnish ] = "Grafiikkatyylit";
+            Text[ slovenian ] = "Slogi grafike";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList =
             {
@@ -1429,6 +1434,9 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ turkish ] = "Sunum Bi�emleri";
             Text[ czech ] = "Styly prezentace";
             Text[ slovak ] = "Štýly prezentácie";
+            Text[ hungarian ] = "Bemutatóstílusok";
+            Text[ finnish ] = "Esitystyylit";
+            Text[ slovenian ] = "Slogi predstavitve";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList =
             {
@@ -1508,6 +1516,7 @@ Bitmap BMP_PRESOBJ_IMAGE
     File = "image.bmp" ;
 };
 #endif
+
 
 
 
