@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStreamWrapper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:07:35 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ public class XInputStreamWrapper extends InputStream {
 
     public int read() throws java.io.IOException
     {
-        byte[][] byteRet = new byte[1][1];
+        byte[][] byteRet = new byte[1][0];
         long numRead;
 
         try {
@@ -86,6 +86,20 @@ public class XInputStreamWrapper extends InputStream {
             return -1;
         }
         return byteRet[0][0];
+    }
+
+    public int read( byte[] b ) throws java.io.IOException
+    {
+        byte[][] byteRet = new byte[1][];
+        byteRet[0] = b;
+        try
+        {
+           return m_xInputStream.readBytes( byteRet, b.length );
+        }
+        catch ( com.sun.star.io.IOException ioe)
+        {
+            throw new java.io.IOException(ioe.getMessage());
+        }
     }
 
     public long skip(long n) throws java.io.IOException
@@ -118,4 +132,5 @@ public class XInputStreamWrapper extends InputStream {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
+
 }
