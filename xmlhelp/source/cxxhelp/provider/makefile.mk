@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
+#   last change: $Author: abi $ $Date: 2001-06-08 08:53:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,11 +73,10 @@ NO_BSYMBOLIC=TRUE
 
 .INCLUDE: settings.mk
 
-INC+=-Ie:/w3c/Sablot-0.52/include
+CFLAGS +=  -DHAVE_EXPAT_H
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=/GR
-.ENDIF
 
 # --- General -----------------------------------------------------
 
@@ -94,6 +93,7 @@ SLOFILES=\
     $(SLO)$/databases.obj
 
 # --- Targets ----------------------------------------------------------
+.ENDIF
 
 .INCLUDE: target.mk
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-08 08:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,10 @@
 #include <rtl/uri.hxx>
 #endif
 #ifndef SablotHIncl
-#include <sablot.h>
-//#include <sablot/sablot.h>
+#include <sablot/sablot.h>
 #endif
 #ifndef ShandlerHIncl
-#include <shandler.h>
-//#include <sablot/shandler.h>
+#include <sablot/shandler.h>
 #endif
 #ifndef _DB_CXX_H_
 #include <berkeleydb/db_cxx.h>

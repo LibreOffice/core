@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-10 15:25:10 $
+#   last change: $Author: abi $ $Date: 2001-06-08 08:53:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=/GR
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -85,6 +84,8 @@ SLOFILES=\
         $(SLO)$/Schema.obj
 
 # --- Targets ------------------------------------------------------
+
+.ENDIF
 
 .INCLUDE :	target.mk
 
