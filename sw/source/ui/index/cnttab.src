@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:58:33 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2881,7 +2881,7 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Struktur";
         Text[ swedish ] = "~Struktur";
         Text[ polish ] = "Struktura";
-        Text[ japanese ] = "~Structure";
+        Text[ japanese ] = "構成(~S)";
         Text[ korean ] = "구조(~S)";
         Text[ chinese_simplified ] = "结构(~S)";
         Text[ chinese_traditional ] = "結構(~S)";
@@ -5660,6 +5660,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ slovak ] = "Upraviť súbor konkordancií­";
 };
 // -----------------------------------------------------------------------------
+
 
 
 
