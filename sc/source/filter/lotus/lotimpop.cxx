@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,8 +183,8 @@ void ImportLotus::Columnwidth( UINT16 nRecLen )
     Read( nTab );
     Read( nWindow2 );
 
-    if( !pD->HasTable( nTab ) )
-        pD->MakeTable( nTab );
+    if( !pD->HasTable( static_cast<SCTAB> (nTab) ) )
+        pD->MakeTable( static_cast<SCTAB> (nTab) );
 
     if( !nWindow2 )
     {
@@ -197,7 +197,7 @@ void ImportLotus::Columnwidth( UINT16 nRecLen )
             Read( nCol );
             Read( nSpaces );
             // ACHTUNG: Korrekturfaktor nach 'Augenmass' ermittelt!
-            pD->SetColWidth( nCol, nTab, ( UINT16 ) ( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
+            pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nTab), ( UINT16 ) ( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
 
             nCnt--;
         }
@@ -225,7 +225,7 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
         {
             Read( nCol );
 
-            pD->SetColFlags( nCol, nTab, pD->GetColFlags( nCol, nTab ) | CR_HIDDEN );
+            pD->SetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nTab), pD->GetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nTab) ) | CR_HIDDEN );
 
             nCnt--;
         }
@@ -373,9 +373,9 @@ void ImportLotus::RowPresentation( UINT16 nRecLen )
             nHeight *= 20;  // -> 32 * TWIPS
             nHeight /= 32;  // -> TWIPS
 
-            pD->SetRowFlags( nRow, nTab, pD->GetRowFlags( nRow, nTab ) | CR_MANUALSIZE );
+            pD->SetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pD->GetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab) ) | CR_MANUALSIZE );
 
-            pD->SetRowHeight( nRow, nTab, nHeight );
+            pD->SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), nHeight );
         }
 
         nCnt--;
@@ -391,10 +391,10 @@ void ImportLotus::NamedSheet( void )
     Read( nTab );
     Read( aName );
 
-    if( pD->HasTable( nTab ) )
-        pD->RenameTab( nTab, aName );
+    if( pD->HasTable( static_cast<SCTAB> (nTab) ) )
+        pD->RenameTab( static_cast<SCTAB> (nTab), aName );
     else
-        pD->InsertTab( nTab, aName );
+        pD->InsertTab( static_cast<SCTAB> (nTab), aName );
 }
 
 
@@ -451,12 +451,12 @@ void ImportLotus::_Row( const UINT16 nRecLen )
     UINT16          nRow;
     UINT16          nHeight;
     UINT16          nCntDwn = ( nRecLen - 4 ) / 5;
-    UINT16          nColCnt = 0;
+    SCCOL           nColCnt = 0;
     UINT8           nRepeats;
     LotAttrWK3      aAttr;
 
     BOOL            bCenter = FALSE;
-    UINT16          nCenterStart, nCenterEnd;
+    SCCOL           nCenterStart, nCenterEnd;
 
     Read( nRow );
     Read( nHeight );
@@ -465,7 +465,7 @@ void ImportLotus::_Row( const UINT16 nRecLen )
     nHeight *= 22;
 
     if( nHeight )
-        pD->SetRowHeight( nRow, ( UINT16 ) nExtTab, nHeight );
+        pD->SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nExtTab), nHeight );
 
     while( nCntDwn )
         {
@@ -474,7 +474,7 @@ void ImportLotus::_Row( const UINT16 nRecLen )
 
         if( aAttr.HasStyles() )
             pLotusRoot->pAttrTable->SetAttr(
-                ( UINT8 ) nColCnt, ( UINT8 ) ( nColCnt + nRepeats ), nRow, aAttr );
+                nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), static_cast<SCROW> (nRow), aAttr );
 
         // hier und NICHT in class LotAttrTable, weil nur Attributiert wird,
         // wenn die anderen Attribute gesetzt sind
@@ -483,29 +483,29 @@ void ImportLotus::_Row( const UINT16 nRecLen )
             {
             if( bCenter )
                 {
-                if( pD->HasData( nColCnt, nRow, ( UINT16 ) nExtTab ) )
+                if( pD->HasData( nColCnt, static_cast<SCROW> (nRow), static_cast<SCTAB> (nExtTab) ) )
                     {// neue Center nach vorheriger Center
-                    pD->DoMerge( ( UINT16 ) nExtTab, nCenterStart, nRow, nCenterEnd, nRow );
-                    nCenterStart = ( UINT16 ) nColCnt;
+                    pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
+                    nCenterStart = nColCnt;
                     }
                 }
             else
                 {// ganz neue Center
                 bCenter = TRUE;
-                nCenterStart = ( UINT16 ) nColCnt;
+                nCenterStart = nColCnt;
                 }
-            nCenterEnd = nColCnt + nRepeats;
+            nCenterEnd = nColCnt + static_cast<SCCOL>(nRepeats);
             }
         else
             {
             if( bCenter )
                 {// evtl. alte Center bemachen
-                pD->DoMerge( ( UINT16 ) nExtTab, nCenterStart, nRow, nCenterEnd, nRow );
+                pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
                 bCenter = FALSE;
                 }
             }
 
-        nColCnt += nRepeats;
+        nColCnt += static_cast<SCCOL>(nRepeats);
         nColCnt++;
 
         nCntDwn--;
@@ -513,7 +513,7 @@ void ImportLotus::_Row( const UINT16 nRecLen )
 
     if( bCenter )
         // evtl. alte Center bemachen
-        pD->DoMerge( ( UINT16 ) nExtTab, nCenterStart, nRow, nCenterEnd, nRow );
+        pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
     }
 
 
