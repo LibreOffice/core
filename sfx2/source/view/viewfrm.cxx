@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-05 15:00:42 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2317,6 +2317,7 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
                 if ( GetFrame()->GetFrameInterface()->isActive() || !bPreview && ( !pCurrent || bGrabFocus ) )
                 {
                     pSfxApp->SetViewFrame( this );
+                    GetBindings().SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
                     if ( bGrabFocus )
                     {
                         SvInPlaceClient *pCli = GetViewShell()->GetIPClient();
