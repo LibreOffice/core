@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-29 07:57:54 $
+ *  last change: $Author: ama $ $Date: 2001-06-29 11:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1346,7 +1346,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             // auf die naechste Seite schieben. Innerhalb eines Rahmens auch
             // nicht ( in der 1. Spalte eines Rahmens waere pFrm Moveable()! )
             // Auch in spaltigen Bereichen in Tabellen waere pFrm Moveable.
-            BOOL bMoveNext = nEndIdx - rSttIdx.GetIndex() > 40;
+            BOOL bMoveNext = nEndIdx - rSttIdx.GetIndex() > 120;
             if ( bMoveNext && !pFrm->IsInFly() && pFrm->IsMoveable() &&
                  (!pFrm->IsInTab() || pFrm->IsTabFrm() ) )
             {
