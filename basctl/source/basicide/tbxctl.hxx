@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:19:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,17 @@
 #ifndef _BASIDE_TBXCTL_HXX
 #define _BASIDE_TBXCTL_HXX
 
-
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
 #endif
-
 #ifndef _SFXTBXMGR_HXX
 #include <sfx2/tbxmgr.hxx>
 #endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
+
 /*
 #ifdef _BASIDE_POPUPWINDOWTBX
 
@@ -101,7 +104,17 @@ public:
 //-------------------
 class TbxControls : public SfxToolBoxControl
 {
+private:
+
+    struct StateChangedInfo
+    {
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        bool bDisabled;
+    };
+
     USHORT                  nLastSlot;
+
+    DECL_STATIC_LINK( TbxControls, StateChangedHdl_Impl, StateChangedInfo* );
 
 protected:
     virtual void            StateChanged( USHORT nSID, SfxItemState eState,
