@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartType.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 10:46:58 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 16:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,19 @@
 
 #include "ChartType.hxx"
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
+#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#endif
+
 namespace chart
 {
 
 class LineChartType : public ChartType
 {
 public:
-    LineChartType( sal_Int32 nDim = 2 );
+    LineChartType( sal_Int32 nDim = 2,
+        ::drafts::com::sun::star::chart2::CurveStyle eCurveStyle =
+                   ::drafts::com::sun::star::chart2::CurveStyle_LINES );
     virtual ~LineChartType();
 
 protected:

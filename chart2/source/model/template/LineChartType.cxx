@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartType.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 10:46:58 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 16:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
+#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
@@ -86,7 +89,7 @@ namespace
 enum
 {
     PROP_LINECHARTTYPE_DIMENSION,
-    PROP_LINECHARTTYPE_SPLINE
+    PROP_LINECHARTTYPE_CURVE_STYLE
 };
 
 void lcl_AddPropertiesToVector(
@@ -100,9 +103,9 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "Offset" ),
-                  PROP_LINECHARTTYPE_SPLINE,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+        Property( C2U( "CurveStyle" ),
+                  PROP_LINECHARTTYPE_CURVE_STYLE,
+                  ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -115,9 +118,9 @@ void lcl_AddDefaultsToMap(
     rOutMap[ PROP_LINECHARTTYPE_DIMENSION ] =
         uno::makeAny( sal_Int32( 2 ) );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_SPLINE ));
-    rOutMap[ PROP_LINECHARTTYPE_SPLINE ] =
-        uno::makeAny( sal_Int32( 0 ) );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_CURVE_STYLE ));
+    rOutMap[ PROP_LINECHARTTYPE_CURVE_STYLE ] =
+        uno::makeAny( chart2::CurveStyle_LINES );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
@@ -148,9 +151,15 @@ const Sequence< Property > & lcl_GetPropertySequence()
 namespace chart
 {
 
-LineChartType::LineChartType( sal_Int32 nDim /* = 2 */ ) :
+LineChartType::LineChartType(
+    sal_Int32 nDim /* = 2 */,
+    chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */ ) :
         ChartType( nDim )
-{}
+{
+    if( eCurveStyle != chart2::CurveStyle_LINES )
+        setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_CURVE_STYLE,
+                                          uno::makeAny( eCurveStyle ));
+}
 
 LineChartType::~LineChartType()
 {}

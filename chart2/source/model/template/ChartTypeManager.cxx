@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 16:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
 #include <drafts/com/sun/star/chart2/StackMode.hpp>
 #endif
+#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -400,47 +401,47 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             // Line
             case TEMPLATE_LINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, LineChartTypeTemplate::NO_SPLINE, false ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_LINES, false ));
                 break;
             case TEMPLATE_STACKEDLINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_STACKED, LineChartTypeTemplate::NO_SPLINE, false ));
+                    chart2::StackMode_STACKED, chart2::CurveStyle_LINES, false ));
                 break;
             case TEMPLATE_PERCENTSTACKEDLINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_STACKED_PERCENT, LineChartTypeTemplate::NO_SPLINE, false ));
+                    chart2::StackMode_STACKED_PERCENT, chart2::CurveStyle_LINES, false ));
                 break;
             case TEMPLATE_LINESYMBOL:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, LineChartTypeTemplate::NO_SPLINE, true ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_LINES, true ));
                 break;
             case TEMPLATE_STACKEDLINESYMBOL:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_STACKED, LineChartTypeTemplate::NO_SPLINE, true ));
+                    chart2::StackMode_STACKED, chart2::CurveStyle_LINES, true ));
                 break;
             case TEMPLATE_PERCENTSTACKEDLINESYMBOL:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_STACKED_PERCENT, LineChartTypeTemplate::NO_SPLINE, true ));
+                    chart2::StackMode_STACKED_PERCENT, chart2::CurveStyle_LINES, true ));
                 break;
             case TEMPLATE_CUBICSPLINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, LineChartTypeTemplate::CUBIC_SPLINE, false ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_CUBIC_SPLINES, false ));
                 break;
             case TEMPLATE_CUBICSPLINESYMBOL:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, LineChartTypeTemplate::CUBIC_SPLINE, true ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_CUBIC_SPLINES, true ));
                 break;
             case TEMPLATE_BSPLINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, LineChartTypeTemplate::B_SPLINE, false ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_B_SPLINES, false ));
                 break;
             case TEMPLATE_BSPLINESYMBOL:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, LineChartTypeTemplate::B_SPLINE, true ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_B_SPLINES, true ));
                 break;
             case TEMPLATE_THREEDLINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, LineChartTypeTemplate::NO_SPLINE, false, 3 ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_LINES, false, 3 ));
                 break;
 
             // Bar/Column

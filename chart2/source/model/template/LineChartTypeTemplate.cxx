@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:35 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 16:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,14 @@
  ************************************************************************/
 #include "LineChartTypeTemplate.hxx"
 #include "LineChartType.hxx"
+#include "macros.hxx"
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
+#include <drafts/com/sun/star/chart2/SymbolStyle.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
+#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
@@ -72,12 +80,12 @@ LineChartTypeTemplate::LineChartTypeTemplate(
         uno::XComponentContext > const & xContext,
     const ::rtl::OUString & rServiceName,
     chart2::StackMode eStackMode,
-    SplineMode eSplineMode,
+    chart2::CurveStyle eCurveStyle,
     bool bSymbols,
     sal_Int32 nDim /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
         m_eStackMode( eStackMode ),
-        m_eSplineMode( eSplineMode ),
+        m_eCurveStyle( eCurveStyle ),
         m_bHasSymbols( bSymbols ),
         m_nDim( nDim )
 {}
@@ -98,7 +106,41 @@ chart2::StackMode LineChartTypeTemplate::getStackMode() const
 uno::Reference< chart2::XChartType > LineChartTypeTemplate::getDefaultChartType()
     throw (uno::RuntimeException)
 {
-    return new LineChartType( m_nDim );
+    return new LineChartType( m_nDim, m_eCurveStyle );
+}
+
+// ____ XChartTypeTemplate ____
+uno::Reference< chart2::XDiagram > SAL_CALL
+    LineChartTypeTemplate::createDiagram(
+        const uno::Sequence< uno::Reference< chart2::XDataSeries > >& aSeriesSeq )
+    throw (uno::RuntimeException)
+{
+    // set symbol type at data series
+    chart2::SymbolStyle eStyle = m_bHasSymbols
+        ? chart2::SymbolStyle_STANDARD
+        : chart2::SymbolStyle_NONE;
+
+    for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
+    {
+        try
+        {
+            chart2::SymbolProperties aSymbProp;
+            uno::Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
+            if( (xProp->getPropertyValue( C2U( "SymbolProperties" )) >>= aSymbProp ) )
+            {
+                aSymbProp.aStyle = eStyle;
+                if( m_bHasSymbols )
+                    aSymbProp.nStandardSymbol = i;
+                xProp->setPropertyValue( C2U( "SymbolProperties" ), uno::makeAny( aSymbProp ));
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+
+    return ChartTypeTemplate::createDiagram( aSeriesSeq );
 }
 
 } //  namespace chart

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:35 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 16:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
 #include <drafts/com/sun/star/chart2/StackMode.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
+#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#endif
 
 namespace chart
 {
@@ -73,22 +76,23 @@ namespace chart
 class LineChartTypeTemplate : public ChartTypeTemplate
 {
 public:
-    enum SplineMode
-    {
-        NO_SPLINE,
-        CUBIC_SPLINE,
-        B_SPLINE
-    };
-
     explicit LineChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::drafts::com::sun::star::chart2::StackMode eStackMode, SplineMode eSplineMode,
+        ::drafts::com::sun::star::chart2::StackMode eStackMode,
+        ::drafts::com::sun::star::chart2::CurveStyle eCurveStyle,
         bool bSymbols, sal_Int32 nDim = 2 );
     virtual ~LineChartTypeTemplate();
 
 protected:
+    // ____ XChartTypeTemplate ____
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL
+        createDiagram( const ::com::sun::star::uno::Sequence<
+                           ::com::sun::star::uno::Reference<
+                               ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
     virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
@@ -99,7 +103,8 @@ protected:
 private:
     ::drafts::com::sun::star::chart2::StackMode
                        m_eStackMode;
-    SplineMode         m_eSplineMode;
+    ::drafts::com::sun::star::chart2::CurveStyle
+                       m_eCurveStyle;
     bool               m_bHasSymbols;
     sal_Int32          m_nDim;
 };
