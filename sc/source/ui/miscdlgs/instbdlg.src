@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:57:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,29 +66,9 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 274 , 190 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
-    Text = "Tabelle einfügen" ;
-    Text [ ENGLISH ] = "Insert table" ;
-    Text [ DANISH ] = "Indsæt ark" ;
-    Text [ ENGLISH_US ] = "Insert Sheet" ;
-    Text [ SPANISH ] = "Insertar hoja" ;
-    Text [ FRENCH ] = "Insertion de feuilles" ;
-    Text [ ITALIAN ] = "Inserisci tabella" ;
-    Text [ DUTCH ] = "Werkblad invoegen" ;
-    Text [ PORTUGUESE_BRAZILIAN ] = "Inserir Planilha" ;
-    Text [ SWEDISH ] = "Infoga tabell" ;
-    Text [ PORTUGUESE ] = "Inserir folha" ;
-    Text[ chinese_simplified ] = "æ’å…¥å·¥ä½œè¡¨";
-    Text[ russian ] = "Âñòàâèòü ëèñò";
-    Text[ polish ] = "Wstaw arkusz";
-    Text[ japanese ] = "è¡¨ã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥å·¥ä½œè¡¨";
-    Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
-    Text[ greek ] = "ÅéóáãùãŞ öıëëïõ";
-    Text[ korean ] = "ì‹œíŠ¸ ì‚½ì…";
-    Text[ turkish ] = "Tablo ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix un full";
-    Text[ finnish ] = "Lisää taulukko";
+    Text [ de ] = "Tabelle einfügen" ;
+    Text [ en-US ] = "Insert Sheet" ;
+    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -111,213 +91,51 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 206 , 8 ) ;
-        Text = "Position" ;
-        Text [ ENGLISH ] = "Position" ;
-        Text [ english_us ] = "Position" ;
-        Text [ portuguese_brazilian ] = "Posição" ;
-        Text [ swedish ] = "Placering" ;
-        Text [ danish ] = "Placering" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ spanish ] = "Posición" ;
-        Text [ french ] = "Position" ;
-        Text [ dutch ] = "Positie" ;
-        Text [ portuguese ] = "Posição" ;
-        Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ russian ] = "Ïîëîæåíèå";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ä½ç½®";
-        Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ arabic ] = "ÇáãæÖÚ";
-        Text[ greek ] = "Èİóç";
-        Text[ korean ] = "ìœ„ì¹˜";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posició";
-        Text[ finnish ] = "Sijainti";
-        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "PozÃ­ciÃ³";
-        Text[ slovenian ] = "PoloÅ¾aj";
+        Text [ de ] = "Position" ;
+        Text [ en-US ] = "Position" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_BEFORE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
-        Text = "~Vor aktueller Tabelle" ;
-        Text [ ENGLISH ] = "Before selected sheet" ;
+        Text [ de ] = "~Vor aktueller Tabelle" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Antes da folha seleccionada" ;
-        Text [ english_us ] = "B~efore current sheet" ;
-        Text [ portuguese_brazilian ] = "~Antes da planilha atual" ;
-        Text [ swedish ] = "~Före aktuell tabell" ;
-        Text [ danish ] = "~Før nuværende ark" ;
-        Text [ italian ] = "~Prima della tabella attiva" ;
-        Text [ spanish ] = "~Delante de la hoja actual" ;
-        Text [ french ] = "A~vant la feuille courante" ;
-        Text [ dutch ] = "~Voor huidige tabel" ;
-        Text[ chinese_simplified ] = "åœ¨å½“å‰çš„å·¥ä½œè¡¨ä¹‹å‰(~E)";
-        Text[ russian ] = "Ïåğåä òåêóùèì ëèñòîì";
-        Text[ polish ] = "Przed ~bie¿¹cym arkuszem";
-        Text[ japanese ] = "è¡¨ç¤ºä¸­ã®è¡¨ã®å‰ã«(~E)";
-        Text[ chinese_traditional ] = "åœ¨ç›®å‰çš„å·¥ä½œè¡¨ä¹‹å‰(~E)";
-        Text[ arabic ] = "ŞÈá ÇáÌÏæá ÇáÍÇáí";
-        Text[ greek ] = "Ğñéí áğü ôï åíåñãü öıëëï";
-        Text[ korean ] = "í˜„ì¬ ì‹œíŠ¸ ì•ì—(~E)";
-        Text[ turkish ] = "Açık tablonun ~önüne";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~bans del full actual";
-        Text[ finnish ] = "~Ennen nykyistä taulukkoa";
-        Text[ thai ] = "à¸à¹ˆ~à¸­à¸™à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
-        Text[ czech ] = "PÅ™ed aktivnÃ­ list";
-        Text[ hebrew ] = "~Vor aktueller Tabelle";
-        Text[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤¶à¥€à¤Ÿà¥ à¤¸à¥‡ à¤ª~à¤¹à¤¿à¤²à¥‡";
-        Text[ slovak ] = "Pr~ed aktuÃ¡lny list";
-        Text[ hungarian ] = "J~elenlegi munkalap elÃ©";
-        Text[ slovenian ] = "Pr~ed trenutnim listom";
+        Text [ en-US ] = "B~efore current sheet" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_BEHIND
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
-        Text = "~Nach aktueller Tabelle" ;
-        Text [ ENGLISH ] = "After selected sheet" ;
+        Text [ de ] = "~Nach aktueller Tabelle" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Após folha activa" ;
-        Text [ english_us ] = "~After current sheet" ;
-        Text [ portuguese_brazilian ] = "A~pós a planilha selecionada" ;
-        Text [ swedish ] = "~Efter aktuell tabell" ;
-        Text [ danish ] = "~Efter nuværende ark" ;
-        Text [ italian ] = "~Dopo la tabella attiva" ;
-        Text [ spanish ] = "Detrás de la ~hoja actual" ;
-        Text [ french ] = "~Après la feuille courante" ;
-        Text [ dutch ] = "~Na huidige tabel" ;
-        Text[ chinese_simplified ] = "åœ¨å½“å‰çš„å·¥ä½œè¡¨ä¹‹å(~A)";
-        Text[ russian ] = "Ïîñëå òåêóùåãî ëèñòà";
-        Text[ polish ] = "P~o bie¿¹cym arkuszu";
-        Text[ japanese ] = "è¡¨ç¤ºä¸­ã®è¡¨ã®å¾Œã«(~A)";
-        Text[ chinese_traditional ] = "åœ¨ç›®å‰çš„å·¥ä½œè¡¨ä¹‹å¾Œ(~A)";
-        Text[ arabic ] = "ÈÚÏ ÇáÌÏæá ÇáÍÇáí";
-        Text[ greek ] = "ÌåôÜ áğü ôï åíåñãü öıëëï";
-        Text[ korean ] = "í˜„ì¬ ì‹œíŠ¸ ë’¤ì—(~A)";
-        Text[ turkish ] = "Açık tablonun ~arkasına";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Després del full actual";
-        Text[ finnish ] = "Nykyisen taulukon ~perään";
-        Text[ thai ] = "~à¸«à¸¥à¸±à¸‡à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
-        Text[ czech ] = "Za aktivnÃ­ list";
-        Text[ hebrew ] = "~Nach aktueller Tabelle";
-        Text[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤¶à¥€à¤Ÿà¥ ~à¤•à¥‡ à¤ªà¤¶à¥à¤šà¤¾à¤¤à¥";
-        Text[ slovak ] = "Z~a aktuÃ¡lny list";
-        Text[ hungarian ] = "Jelenlegi mu~nkalap mÃ¶gÃ©";
-        Text[ slovenian ] = "~Za trenutnim listom";
+        Text [ en-US ] = "~After current sheet" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 206 , 8 ) ;
-        Text = "Tabelle" ;
-        Text [ ENGLISH ] = "Table" ;
-        Text [ english_us ] = "Sheet" ;
-        Text [ portuguese_brazilian ] = "Planilha" ;
-        Text [ swedish ] = "Tabell" ;
-        Text [ danish ] = "Ark" ;
-        Text [ italian ] = "Tabella" ;
-        Text [ spanish ] = "Hoja" ;
-        Text [ french ] = "Feuille" ;
-        Text [ dutch ] = "Tabel" ;
-        Text [ portuguese ] = "Folha" ;
-        Text[ chinese_simplified ] = "å·¥ä½œè¡¨";
-        Text[ russian ] = "Ëèñò";
-        Text[ polish ] = "Arkusz";
-        Text[ japanese ] = "è¡¨";
-        Text[ chinese_traditional ] = "å·¥ä½œè¡¨";
-        Text[ arabic ] = "ÌÏæá";
-        Text[ greek ] = "Öıëëï";
-        Text[ korean ] = "ì‹œíŠ¸";
-        Text[ turkish ] = "Yaprak";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Crea";
-        Text[ finnish ] = "Taulukko";
-        Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡";
-        Text[ czech ] = "List";
-        Text[ hebrew ] = "Tabelle";
-        Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥";
-        Text[ slovak ] = "List";
-        Text[ hungarian ] = "Munkalap";
-        Text[ slovenian ] = "Delovni list";
+        Text [ de ] = "Tabelle" ;
+        Text [ en-US ] = "Sheet" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_NEW
     {
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
-        Text = "Neu ~erstellen" ;
-        Text [ ENGLISH ] = "~Create new" ;
-        Text [ DANISH ] = "~Nyt ark" ;
-        Text [ ENGLISH_US ] = "~New sheet" ;
-        Text [ SPANISH ] = "~Hoja nueva" ;
-        Text [ FRENCH ] = "Créer" ;
-        Text [ ITALIAN ] = "Crea nuovo" ;
-        Text [ DUTCH ] = "~Nieuw" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Nova planilha" ;
-        Text [ SWEDISH ] = "Skapa ~ny" ;
-        Text [ PORTUGUESE ] = "~Nova folha" ;
-        Text[ chinese_simplified ] = "æ–°å»ºå·¥ä½œè¡¨(~N)";
-        Text[ russian ] = "Íîâûé ëèñò";
-        Text[ polish ] = "~Nowy arkusz";
-        Text[ japanese ] = "æ–°ã—ãä½œæˆ(~N)";
-        Text[ chinese_traditional ] = "æ–°å¢å·¥ä½œè¡¨(~N)";
-        Text[ arabic ] = "ÅäÔÇÁ ãä ÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
-        Text[ turkish ] = "~Yeni alan";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Full nou";
-        Text[ finnish ] = "~Uusi taulukko";
-        Text[ thai ] = "à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¹ƒ~à¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½ list";
-        Text[ hebrew ] = "Neu ~erstellen";
-        Text[ hindi ] = "~à¤¨à¤¯à¤¾ à¤¶à¥€à¤Ÿà¥";
-        Text[ slovak ] = "~NovÃ½ list";
-        Text[ hungarian ] = "Ãš~j munkalap";
-        Text[ slovenian ] = "~Nov list";
+        Text [ de ] = "Neu ~erstellen" ;
+        Text [ en-US ] = "~New sheet" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_COUNT
     {
         Pos = MAP_APPFONT ( 20 , 68 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "An~zahl" ;
-        Text [ ENGLISH ] = "Count" ;
-        Text [ portuguese ] = "~N° de folhas" ;
-        Text [ english_us ] = "N~o. of sheets" ;
-        Text [ portuguese_brazilian ] = "~N° de planilhas" ;
-        Text [ swedish ] = "An~tal" ;
-        Text [ danish ] = "An~tal ark" ;
-        Text [ italian ] = "~Numero" ;
-        Text [ spanish ] = "~Núm. de hojas" ;
-        Text [ french ] = "N~ombre" ;
-        Text [ dutch ] = "Aan~tal" ;
-        Text[ chinese_simplified ] = "æ•°ç›®(~O)";
-        Text[ russian ] = "Êîëè÷åñòâî";
-        Text[ polish ] = "~Liczba arkuszy";
-        Text[ japanese ] = "è¡¨ã®æ•°(~O)";
-        Text[ chinese_traditional ] = "æ•¸ç›®(~O)";
-        Text[ arabic ] = "ÇáÚÏÏ";
-        Text[ greek ] = "Áñé~èìüò";
-        Text[ korean ] = "ê°œìˆ˜(~O)";
-        Text[ turkish ] = "Tablo A~deti";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nú~m. de fulls";
-        Text[ finnish ] = "~Taulukoiden määrä";
-        Text[ thai ] = "à¸«~à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
-        Text[ czech ] = "PoÄet listÅ¯";
-        Text[ hebrew ] = "An~zahl";
-        Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥‹à¤‚ à¤•à¥€ à¤¸à¤‚~à¤–à¥à¤¯à¤¾";
-        Text[ slovak ] = "P~oÄet listov";
-        Text[ hungarian ] = "~HÃ¡ny lapot?";
-        Text[ slovenian ] = "Å t. list~ov";
+        Text [ de ] = "An~zahl" ;
+        Text [ en-US ] = "N~o. of sheets" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_COUNT
     {
@@ -335,35 +153,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     {
         Pos = MAP_APPFONT ( 20 , 84 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Na~me" ;
-        Text [ ENGLISH ] = "Name" ;
-        Text[ english_us ] = "Na~me";
-        Text[ portuguese ] = "No~me";
-        Text[ russian ] = "Èìÿ";
-        Text[ greek ] = "¼íï~ìá";
-        Text[ dutch ] = "~Naam";
-        Text[ french ] = "Nom";
-        Text[ spanish ] = "No~mbre";
-        Text[ italian ] = "No~me";
-        Text[ danish ] = "Na~vn";
-        Text[ swedish ] = "Na~mn";
-        Text[ polish ] = "Naz~wa";
-        Text[ portuguese_brazilian ] = "No~me";
-        Text[ japanese ] = "åå‰(~M)";
-        Text[ korean ] = "ì´ë¦„(~M)";
-        Text[ chinese_simplified ] = "åç§°(~M)";
-        Text[ chinese_traditional ] = "åç¨±(~M)";
-        Text[ turkish ] = "~Ad";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ catalan ] = "N~om";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "Na~me";
-        Text[ hindi ] = "à¤¨à¤¾~à¤®";
-        Text[ slovak ] = "NÃ¡z~ov";
-        Text[ hungarian ] = "NÃ©~v";
-        Text[ slovenian ] = "I~me";
+        Text [ de ] = "Na~me" ;
+        Text [ en-US ] = "Na~me";
     };
     Edit ED_TABNAME
     {
@@ -375,36 +166,9 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
-        Text = "~Aus Datei erstellen" ;
-        Text [ ENGLISH ] = "F~rom file" ;
-        Text [ DANISH ] = "~Fra fil" ;
-        Text [ ENGLISH_US ] = "~From file" ;
-        Text [ SPANISH ] = "~A partir de archivo" ;
-        Text [ FRENCH ] = "~Création à partir d'un fichier" ;
-        Text [ ITALIAN ] = "Crea da file" ;
-        Text [ DUTCH ] = "~Uit bestand vervaardigen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Do arquivo" ;
-        Text [ SWEDISH ] = "Sk~apa från fil" ;
-        Text [ PORTUGUESE ] = "~Criar a partir do ficheiro" ;
-        Text[ chinese_simplified ] = "ä»æ–‡ä»¶åˆ›å»º(~F)";
-        Text[ russian ] = "Èç ôàéëà";
-        Text[ polish ] = "Z plik~u";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ä½œæˆ(~F)";
-        Text[ chinese_traditional ] = "å¾æª”æ¡ˆæ–°å¢(~F)";
-        Text[ arabic ] = "ÅäÔÇÁ ãä Çáãáİ";
-        Text[ greek ] = "Äçìéïõñãß~á áğü áñ÷åßï";
-        Text[ korean ] = "íŒŒì¼ë¡œë¶€í„°(~F)";
-        Text[ turkish ] = "~Dosyadan ";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Des d'un fitxer";
-        Text[ finnish ] = "~Tiedostosta";
-        Text[ thai ] = "~à¸ˆà¸²à¸à¹à¸Ÿà¹‰à¸¡";
-        Text[ czech ] = "Ze souboru";
-        Text[ hebrew ] = "â€®××§×•×‘×¥â€¬";
-        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² ~à¤¸à¥‡";
-        Text[ slovak ] = "Zo sÃº~boru";
-        Text[ hungarian ] = "~FÃ¡jlbÃ³l";
-        Text[ slovenian ] = "~Iz datoteke";
+        Text [ de ] = "~Aus Datei erstellen" ;
+        Text [ en-US ] = "~From file" ;
+        Text [ x-comment ] = " ";
     };
     MultiListBox LB_TABLES
     {
@@ -418,85 +182,24 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     {
         Pos = MAP_APPFONT ( 149 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Durchsuchen..." ;
-        Text [ ENGLISH ] = "~Browse..." ;
-        Text [ DANISH ] = "~Gennemse..." ;
-        Text [ ENGLISH_US ] = "~Browse..." ;
-        Text [ SPANISH ] = "~Buscar..." ;
-        Text [ FRENCH ] = "~Parcourir..." ;
-        Text [ ITALIAN ] = "~Sfoglia..." ;
-        Text [ DUTCH ] = "~Bladeren..." ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Navegar..." ;
-        Text [ SWEDISH ] = "~Genomsök..." ;
-        Text [ PORTUGUESE ] = "~Pesquisar" ;
-        Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
-        Text[ russian ] = "Îáçîğ...";
-        Text[ polish ] = "~Przegl¹daj...";
-        Text[ japanese ] = "æ¤œç´¢(~B)...";
-        Text[ chinese_traditional ] = "ç€è¦½(~B)...";
-        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
-        Text[ greek ] = "ÁíáæŞôçóç...";
-        Text[ korean ] = "ì°¾ì•„ë³´ê¸°(~B)...";
-        Text[ turkish ] = "~Tara...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Navega...";
-        Text[ finnish ] = "~Selaa...";
-        Text[ thai ] = "à¹€~à¸£à¸µà¸¢à¸à¸”à¸¹...";
-        Text[ czech ] = "ProchÃ¡zet...";
-        Text[ hebrew ] = "â€®×¢×™×•×Ÿ...â€¬";
-        Text[ hindi ] = "~à¤¬à¥à¤°à¤‰à¤œà¤¼...";
-        Text[ slovak ] = "~ListovaÅ¥...";
-        Text[ hungarian ] = "~TallÃ³zÃ¡s...";
-        Text[ slovenian ] = "Pre~brskaj...";
+        Text [ de ] = "~Durchsuchen..." ;
+        Text [ en-US ] = "~Browse..." ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_LINK
     {
         Pos = MAP_APPFONT ( 149 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ver~knüpfen : Ver~kn³pfen */
-        Text = "Ver~knüpfen" ;
-        Text [ ENGLISH ] = "Lin~k" ;
-        Text [ DANISH ] = "Sammen~kæd" ;
-        Text [ ENGLISH_US ] = "Lin~k" ;
-        Text [ SPANISH ] = "~Vincular" ;
-        Text [ FRENCH ] = "~Lier" ;
-        Text [ ITALIAN ] = "~Collega" ;
-        Text [ DUTCH ] = "~Koppelen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Vínculo" ;
-        Text [ SWEDISH ] = "Län~ka" ;
-        Text [ PORTUGUESE ] = "~Ligar" ;
-        Text[ chinese_simplified ] = "é“¾æ¥(~K)";
-        Text[ russian ] = "Ñâÿçü ñ ôàéëîì";
-        Text[ polish ] = "£¹c~z z plikiem";
-        Text[ japanese ] = "ãƒªãƒ³ã‚¯(~K)";
-        Text[ chinese_traditional ] = "æ·å¾‘(~K)";
-        Text[ arabic ] = "ÑÈØ";
-        Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "ì—°ê²°(~K)";
-        Text[ turkish ] = "Bağlantı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Enlla~ç";
-        Text[ finnish ] = "Lin~kki";
-        Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚~à¸¢à¸‡ ";
-        Text[ czech ] = "Odkaz";
-        Text[ hebrew ] = "Ver~knÃ¼pfen";
-        Text[ hindi ] = "à¤²à¤¿à¤‚~à¤•";
-        Text[ slovak ] = "Od~kaz";
-        Text[ hungarian ] = "Hiv~atkozÃ¡s";
-        Text[ slovenian ] = "Po~vezava";
+        Text [ de ] = "Ver~knüpfen" ;
+        Text [ en-US ] = "Lin~k" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_PATH
     {
         Pos = MAP_APPFONT ( 20 , 176 ) ;
         Size = MAP_APPFONT ( 192 , 8 ) ;
     };
-    Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
-    Text[ czech ] = "VloÅ¾it list";
-    Text[ hebrew ] = "Tabelle einfÃ¼gen";
-    Text[ hindi ] = "Insert Sheet";
-    Text[ slovak ] = "VloÅ¾iÅ¥ list";
-    Text[ hungarian ] = "Munkalap beillesztÃ©se";
-    Text[ slovenian ] = "Vstavi list";
 };
 
 
