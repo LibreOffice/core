@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:53:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1083,10 +1083,25 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     const SwAttrSet& rSet = pInfo->GetCharFmt(*pDoc)->GetAttrSet();
 
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
-    SwFont *pFnt = new SwFont( pParSet, rInf.GetDoc() );
-    pFnt->SetDiffFnt(&rSet, rInf.GetDoc() );
-    pFnt->SetVertical( pFnt->GetOrientation(), pFrm->IsVertical() );
-    SwFtnNumPortion* pNewPor = new SwFtnNumPortion( aFtnTxt, pFnt );
+    SwFont *pNumFnt = new SwFont( pParSet, rInf.GetDoc() );
+
+    // --> FME 2005-02-17 #i37142#
+    // Underline style of paragraph font should not be considered
+    // Weight style of paragraph font should not be considered
+    // Posture style of paragraph font should not be considered
+    // See also #i18463# and SwTxtFormatter::NewNumberPortion()
+    pNumFnt->SetUnderline( UNDERLINE_NONE );
+    pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
+    pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
+    pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );
+    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_LATIN );
+    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CJK );
+    pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
+    // <--
+
+    pNumFnt->SetDiffFnt(&rSet, rInf.GetDoc() );
+    pNumFnt->SetVertical( pFnt->GetOrientation(), pFrm->IsVertical() );
+    SwFtnNumPortion* pNewPor = new SwFtnNumPortion( aFtnTxt, pNumFnt );
     pNewPor->SetLeft( !pFrm->IsRightToLeft() );
     return pNewPor;
 }
