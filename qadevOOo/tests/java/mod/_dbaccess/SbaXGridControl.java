@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SbaXGridControl.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-09-08 11:43:40 $
+ *  last change:$Date: 2005-03-29 11:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ public class SbaXGridControl extends TestCase {
         tEnv.addObjRelation("Comparer",
                             new Comparator() {
             public int compare(Object o1, Object o2) {
-                return ((Integer) o1).compareTo(o2);
+                return ((Integer) o1).compareTo((Integer)o2);
             }
 
             public boolean equals(Object obj) {
