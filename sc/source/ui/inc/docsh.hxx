@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:30:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,9 @@
 #include <sfx2/objsh.hxx>
 #endif
 
-#ifndef _SFX_INTERNO_HXX //autogen
-#include <sfx2/interno.hxx>
-#endif
+//REMOVE    #ifndef _SFX_INTERNO_HXX //autogen
+//REMOVE    #include <sfx2/interno.hxx>
+//REMOVE    #endif
 
 #ifndef _SFX_OBJFAC_HXX //autogen
 #include <sfx2/docfac.hxx>
@@ -133,7 +133,7 @@ class ScDocShellModificator;
 #define SC_PF_TESTMERGE     2
 #define SC_PF_WHOLEROWS     4
 
-class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxListener
+class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 {
     static const sal_Char __FAR_DATA pStarCalcDoc[];
     static const sal_Char __FAR_DATA pStyleName[];
@@ -179,10 +179,10 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxInPlaceObject, p
     SC_DLLPRIVATE void          ResetDrawObjectShell();
 
     SC_DLLPRIVATE BOOL          GetTabParam( const SfxItemSet* pArgs, USHORT nId, SCTAB& rTab );
-    SC_DLLPRIVATE BOOL          LoadCalc( SvStorage* pStor );
-    SC_DLLPRIVATE BOOL          SaveCalc( SvStorage* pStor );
-    SC_DLLPRIVATE BOOL          LoadXML( SfxMedium* pMedium, SvStorage* pStor );
-    SC_DLLPRIVATE BOOL          SaveXML( SfxMedium* pMedium, SvStorage* pStor );
+    //BOOL            LoadCalc( SotStorage* pStor );
+    //BOOL            SaveCalc( SotStorage* pStor );
+    SC_DLLPRIVATE BOOL            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    SC_DLLPRIVATE BOOL            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     SC_DLLPRIVATE SCTAB         GetSaveTab();
     SC_DLLPRIVATE void          UpdateAllRowHeights();
 
@@ -211,7 +211,7 @@ public:
                     TYPEINFO();
 
                     SFX_DECL_INTERFACE(SCID_DOC_SHELL);
-                    SFX_DECL_OBJECTFACTORY( ScDocShell);
+                    SFX_DECL_OBJECTFACTORY();
 
                     ScDocShell( const ScDocShell& rDocShell );
                     ScDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
@@ -227,15 +227,14 @@ public:
                                String * pAppName,
                                String * pFullTypeName,
                                String * pShortTypeName,
-                               long nFileFormat = SOFFICE_FILEFORMAT_CURRENT ) const;
+                               sal_Int32 nFileFormat ) const;
 
-    virtual BOOL    InitNew( SvStorage * );
-    virtual BOOL    Load( SvStorage * );
-    virtual BOOL    LoadFrom( SvStorage * );
+    virtual BOOL    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    virtual BOOL    Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    virtual BOOL    LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     virtual BOOL    ConvertFrom( SfxMedium &rMedium );
-    virtual void    HandsOff();
     virtual BOOL    Save();
-    virtual BOOL    SaveAs( SvStorage * pNewStor );
+    virtual BOOL    SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     virtual BOOL    ConvertTo( SfxMedium &rMedium );
     virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
     virtual void    PrepareReload();
@@ -245,7 +244,7 @@ public:
                                 USHORT nSourceIdx1, USHORT nSourceIdx2, USHORT nSourceIdx3,
                                 USHORT &nIdx1, USHORT &nIdx2, USHORT &nIdx3, USHORT &rIdxDeleted );
 
-    virtual BOOL    SaveCompleted( SvStorage * pNewStor );      // SfxInPlaceObject
+    virtual BOOL    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
     virtual BOOL    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell
 
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
@@ -397,7 +396,7 @@ public:
                                 ::com::sun::star::uno::Any & rValue );
     virtual long DdeSetData( const String& rItem, const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    virtual ::so3::SvLinkSource* DdeCreateLinkSource( const String& rItem );
+    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const String& rItem );
 
     const String& GetDdeTextFmt() const { return aDdeTextFmt; }
 
