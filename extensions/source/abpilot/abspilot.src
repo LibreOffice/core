@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:03:30 $
+ *  last change: $Author: kz $ $Date: 2001-10-12 20:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,13 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Closeable       = TRUE ;
     Hide            = TRUE;
     Text[ portuguese ] = "Autopiloto da fonte de dados dos endereços";
-    Text[ russian ] = "Àâòîïèëîò èñòî÷íèêà äàííûõ àäğåñíîé êíèãè";
+    Text[ russian ] = "Àâòîïèëîò èñõîäíûõ äàííûõ àäğåñîâ";
     Text[ greek ] = "Autopilot Address Book Data Source";
-    Text[ dutch ] = "Autopiloot Adres-Gegevensbron";
+    Text[ dutch ] = "Autopiloot Adresgegevensbron";
     Text[ french ] = "AutoPilote de source de données des adresses";
     Text[ spanish ] = "AutoPiloto de fuente de datos de la libreta de direcciones";
     Text[ finnish ] = "Autopilot Address Book Data Source";
-    Text[ italian ] = "Pilota automatico della sorgente dati della ribrica";
+    Text[ italian ] = "Pilota automatico della sorgente dati della Rubrica";
     Text[ danish ] = "Autopilot Address Book Data Source";
     Text[ swedish ] = "AutoPilot för adressdatakällor";
     Text[ polish ] = "AutoPilot: ród³o danych adresowych";
@@ -120,23 +120,23 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system. "
             "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
             "This auto pilot will assist you in the creation of this data source.";
-        Text [ english_us ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a new %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis AutoPilot helps you create the data source.";
+        Text [ english_us ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis AutoPilot helps you create the data source.";
         Text[ portuguese ] = "O %PRODUCTNAME permite-lhe o acesso a dados de endereços já disponíveis no seu sistema.\nPara isso é criada uma fonte de dados %PRODUCTNAME que permite o acesso aos seus livros de endereço na forma de tabelas.\n\nEste AutoPiloto ajuda-o a configurar essa fonte de dados.";
-        Text[ russian ] = "%PRODUCTNAME ïğåäîñòàâëÿåò âîçìîæíîñòü äîñòóïà ê ñóùåñòâóşùèì â ñèñòåìå àäğåñíûì äàííûì.\nÄëÿ ıòîãî áóäåò ñîçäàí èñòî÷íèê äàííûõ %PRODUCTNAME, â êîòîğîì Âàøè àäğåñíûå êíèãè áóäóò äîñòóïíû â âèäå òàáëèö.\n\nÄàííûé Àâòîïèëîò ïîìîæåò Âàì ïğè ñîçäàíèè òàêîãî èñòî÷íèêà äàííûõ.";
+        Text[ russian ] = "%PRODUCTNAME ïğåäîñòàâëÿåò âîçìîæíîñòü äîñòóïà ê ñóùåñòâóşùèì â ñèñòåìå àäğåñíûì äàííûì.\nÄëÿ ıòîãî áóäóò ñîçäàíû èñõîäíûå äàííûå %PRODUCTNAME, ãäå Âàøè àäğåñíûå êíèãè áóäóò äîñòóïíû â âèäå òàáëèö.\n\nÄàííûé Àâòîïèëîò ïîìîæåò Âàì ïğè ñîçäàíèè òàêèõ èñõîäíûõ äàííûõ.";
         Text[ greek ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
-        Text[ dutch ] = "Met %PRODUCTNAME heeft u toegang tot adresgegevens die reeds in uw systeem voorhanden zijn.\nFDaartoe wordt er een %PRODUCTNAME gegevensbron aangelegd via welke u toegang heeft tot uw adresboeken als tabellen.\n\nDeze autopiloot ondersteunt u bij het inrichten van deze gegevensbron.";
+        Text[ dutch ] = "Met %PRODUCTNAME heeft u toegang tot adresgegevens die reeds in uw systeem voorhanden zijn. Daartoe wordt er een %PRODUCTNAME gegevensbron aangelegd via welke u toegang heeft tot uw adresboeken als tabellen.\n\nDeze autopiloot ondersteunt u bij het inrichten van deze gegevensbron.";
         Text[ french ] = "%PRODUCTNAME permet l'accès aux données des adresses présentes dans votre système. Cette fonction nécessite la création d'une source de données %PRODUCTNAME dans laquelle vos carnets d'adresses existeront sous forme de tables.\n\nCet AutoPilote vous assite lors du paramétrage de cette source de données.";
         Text[ spanish ] = "%PRODUCTNAME le permite acceder a las direcciones que se encuentren en su sistema.\nPara ello se creará una fuente de datos %PRODUCTNAME en la que las libretas de direcciones estarán disponibles en tablas.\n\nEste AutoPiloto le apoya durante la creación de esta fuente de datos.";
         Text[ finnish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
-        Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della rubrica già presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi sarà di sostegno durante l'impostazione della sorgente dati.";
+        Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della Rubrica già presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle Rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi sarà di sostegno durante l'impostazione della sorgente dati.";
         Text[ danish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
-        Text[ swedish ] = "%PRODUCTNAME ger dig möjlighet att ha tillgång till adressdata som redan finns i ditt system.\nFör att du ska kunna göra detta skapas en ny %PRODUCTNAME-datakälla där dina adressböcker är tillgängliga som tabeller.\n\nDenna AutoPilot hjälper dig att skapa datakällan.";
+        Text[ swedish ] = "%PRODUCTNAME ger dig möjlighet att ha tillgång till adressdata som redan finns i ditt system. För att du ska kunna göra detta skapas en %PRODUCTNAME-datakälla där dina adressböcker är tillgängliga som tabeller.\n\nDenna AutoPilot hjälper dig att skapa datakällan.";
         Text[ polish ] = "%PRODUCTNAME umo¿liwia dostêp do danych adresowych istniej¹cych ju¿ w systemie komputera. Utworzone zostanie w tym celu Ÿród³o danych programu %PRODUCTNAME, udostêpniaj¹ce ksi¹¿ki adresowe u¿ytkownika, wyœwietlane w postaci tabel.\n\nW tworzeniu Ÿród³a danych pomocny bêdzie niniejszy AutoPilot.";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
-        Text[ japanese ] = "%PRODUCTNAME ãŒãŠä½¿ã„ã®ï½¼ï½½ï¾ƒï¾‘ã«æ—¢å­˜ã™ã‚‹ï½±ï¾„ï¾ï¾šï½½å¸³ï¾ƒï¾ï½°ï¾€ã¸ã®ï½±ï½¸ï½¾ï½½ã‚’å¯èƒ½ã«ã—ã¾ã™ã€‚\nãã‚Œã«ã¯æ—¢å­˜ã™ã‚‹ï½±ï¾„ï¾ï¾šï½½å¸³ã¸ï¾ƒï½°ï¾Œï¾ï¾™ã¨ã—ã¦ï½±ï½¸ï½¾ï½½ã§ãã‚‹ã‚ˆã†ã« %PRODUCTNAME ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã‚’æ ¼ç´ã—ã¾ã™ã€‚\n\nã“ã®ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®è¨­å®šã‚’ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ãŒãŠæ‰‹ä¼ã„ã—ã¾ã™ã€‚";
+        Text[ japanese ] = "%PRODUCTNAME ã¯ï½¼ï½½ï¾ƒï¾‘ä¸Šã®æ—¢å­˜ã®ï½±ï¾„ï¾ï¾šï½½å¸³ï¾ƒï¾ï½°ï¾€ã«ï½±ï½¸ï½¾ï½½ã§ãã¾ã™ã€‚\nï½±ï¾„ï¾ï¾šï½½å¸³ï¾ƒï¾ï½°ï¾€ã«ï½±ï½¸ï½¾ï½½ã™ã‚‹ã«ã¯ã€ï¾ƒï½°ï¾Œï¾ï¾™å½¢å¼ã§ï½±ï½¸ï½¾ï½½ã§ãã‚‹ %PRODUCTNAME ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã‚’ä½œæˆã—ã¾ã™ã€‚\n\nã“ã®ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®è¨­å®šã‚’ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ãŒãŠæ‰‹ä¼ã„ã—ã¾ã™ã€‚";
         Text[ korean ] = "%PRODUCTNAMEì—ì„œëŠ” ì‚¬ìš©ìì˜ ì‹œìŠ¤í…œì´ ìˆëŠ” ì£¼ì†Œ ë°ì´í„°ë¥¼ ì•¡ì„¸ìŠ¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\nì´ ì‘ì—…ì„ ìœ„í•´ ìƒˆ %PRODUCTNAME ë°ì´í„° ì†ŒìŠ¤ê°€ ìƒì„±ë˜ë©°, ì´ ë°ì´í„° ì†ŒìŠ¤ì—ì„œ ì£¼ì†Œ ë°ì´í„°ë¥¼ í…Œì´ë¸”ë¡œ ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n\nì´ ìë™ íŒŒì¼ëŸ¿ì´ ì´ ë°ì´í„° ì†ŒìŠ¤ì˜ ìƒì„± ì‘ì—…ì„ ì§€ì›í•©ë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "%PRODUCTNAME å…è®¸æ‚¨è¯»å–ç³»ç»Ÿä¸Šç°æœ‰çš„é€šè®¯ç°¿æ•°æ®ã€‚å¯¹æ­¤ç¨‹åºä¼šå»ºç«‹ä¸€ä¸ª %PRODUCTNAME æ•°æ®æºï¼Œè¿™æ ·æ‚¨çš„é€šè®¯ç°¿ä¾¿ä¼šå˜æˆæ­¤æ•°æ®æºä¸­çš„ä¸€ä¸ªå·¥ä½œè¡¨ä»¥ä¾›è¯»å–ã€‚\n\nè‡ªåŠ¨æ–‡æ¡£åŠ©ç†ä¼šå¸®åŠ©æ‚¨å»ºç«‹è¿™ä¸ªæ•°æ®æºã€‚";
-        Text[ chinese_traditional ] = "%PRODUCTNAME å…è¨±æ‚¨å­˜å–ç³»çµ±ä¸Šçš„é€šè¨ŠéŒ„è³‡æ–™ã€‚\nåœ¨åŸ·è¡Œé€™å€‹å‹•ä½œä¹‹å‰æœƒå…ˆå»ºç«‹ä¸€å€‹æ–°çš„ %PRODUCTNAME è³‡æ–™æºï¼Œè€Œé€šè¨ŠéŒ„å°±æœƒè®Šæˆå®ƒçš„è³‡æ–™è¡¨æ ¼ã€‚\n\næ‚¨é€éé€™å€‹è‡ªå‹•æª”æ¡ˆåŠ©ç†å°±å¯ä»¥å»ºç«‹é€™æ¨£çš„ä¸€å€‹è³‡æ–™æºã€‚";
+        Text[ chinese_traditional ] = "%PRODUCTNAME å‘æ‚¨æä¾›ä¸€å€‹å­˜å–ç³»çµ±çš„é€šè¨ŠéŒ„è³‡æ–™çš„åŠŸèƒ½ã€‚åœ¨åŸ·è¡Œé€™å€‹åŠŸèƒ½æ™‚æœƒå»ºç«‹ä¸€å€‹æ–°çš„ %PRODUCTNAME è³‡æ–™æºï¼Œé€šè¨ŠéŒ„å°±æœƒè®Šæˆé€™å€‹è³‡æ–™åº«çš„ä¸€å€‹è³‡æ–™è¡¨ã€‚\n\næ‚¨é€éé€™å€‹è‡ªå‹•æª”æ¡ˆåŠ©ç†å°±å¯ä»¥å»ºç«‹é€™æ¨£çš„ä¸€å€‹è³‡æ–™æºã€‚";
         Text[ turkish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ arabic ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ catalan ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
@@ -157,7 +157,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ french ] = "Sélectionnez le type du carnet d'adresses externe :";
         Text[ spanish ] = "Seleccione el tipo de su libreta de direcciones externa:";
         Text[ finnish ] = "Please choose the type of your external address book:";
-        Text[ italian ] = "Selezionate il tipo di rubrica esterna:";
+        Text[ italian ] = "Selezionate il tipo di Rubrica esterna:";
         Text[ danish ] = "Please choose the type of your external address book:";
         Text[ swedish ] = "Välj typen för din externa adressbok:";
         Text[ polish ] = "Wybierz typ swojej zewnêtrznej ksi¹¿ki adresowej:";
@@ -215,7 +215,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ french ] = "Stock des adresses LDAP";
         Text[ spanish ] = "LDAP Direcciones";
         Text[ finnish ] = "LDAP address data";
-        Text[ italian ] = "Dati rubrica LDAP";
+        Text[ italian ] = "Dati Rubrica LDAP";
         Text[ danish ] = "LDAP address data";
         Text[ swedish ] = "LDAP-adressdata";
         Text[ polish ] = "Zbiór danych LDAP";
@@ -313,13 +313,13 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ catalan ] = "other external data source";
     };
     Text[ portuguese ] = "Bem-vindo ao AutoPiloto da fonte de dados dos endereços!";
-    Text[ russian ] = "Äîáğî ïîæàëîâàòü â Àâòîïèëîò èñòî÷íèêà äàííûõ àäğåñîâ!";
+    Text[ russian ] = "Äîáğî ïîæàëîâàòü â Àâòîïèëîò èñõîäíûõ äàííûõ àäğåñîâ!";
     Text[ greek ] = "Welcome to the Address Data Source AutoPilot";
-    Text[ dutch ] = "Welkom bij de AutoPiloot Adresgegevens";
+    Text[ dutch ] = "Welkom bij de AutoPiloot voor het inrichten van adresgegevensbronnen";
     Text[ french ] = "Bienvenue dans l'AutoPilote pour le paramétrage des sources de données des adresses !";
     Text[ spanish ] = "Bienvenido al AutoPiloto de fuentes de datos de direcciones";
     Text[ finnish ] = "Welcome to the Address Data Source AutoPilot";
-    Text[ italian ] = "Benvenuti nel Pilota automatico per la sorgente dati della Rubrica";
+    Text[ italian ] = "Benvenuti nel Pilota automatico per impostare la sorgente dati della Rubrica";
     Text[ danish ] = "Welcome to the Address Data Source AutoPilot";
     Text[ swedish ] = "Välkommen till AutoPiloten för att skapa adressdatakällor";
     Text[ polish ] = "Wita AutoPilot, s³u¿¹cy do tworzenia Ÿróde³ danych adresowych.";
@@ -419,20 +419,20 @@ TabPage RID_PAGE_ADMININVOKATION
             "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text [ english_us ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
         Text[ portuguese ] = "Foi impossível estabelecer a ligação à fonte de dados.\nAntes de continuar, verifique as definições ou seleccione outro tipo (página anterior) para a fonte de dados dos endereços.";
-        Text[ russian ] = "Ñîåäèíèòüñÿ ñ èñòî÷íèêîì äàííûõ íå óäàëîñü.\nÏğåæäå ÷åì ïğîäîëæèòü ïğîöåññ, ïğîâåğüòå âûïîëíåííûå íàñòğîéêè èëè âûáåğèòå (íà ïğåäûäóùåé ñòğàíèöå) äğóãîé òèï äëÿ èñòî÷íèêà äàííûõ àäğåñîâ.";
+        Text[ russian ] = "Ñîåäèíèòüñÿ ñ èñõîäíûìè äàííûìè íå óäàëîñü.\nÏğåæäå ÷åì ïğîäîëæèòü ïğîöåññ, ïğîâåğüòå âûïîëíåííûå íàñòğîéêè èëè âûáåğèòå (íà ïğåäûäóùåé ñòğàíèöå) äğóãîé òèï èñõîäíûõ äàííûõ àäğåñîâ.";
         Text[ greek ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ dutch ] = "De verbinding met de gegevensbron kon niet tot stand worden gebracht.\nControlleer eerst de gedefinieerde instellingen of kies (op de vorige pagina) een ander type adres-gegevensbron.";
         Text[ french ] = "La connexion à la source de données n'a pas pu être établie.\nAvant de poursuivre, vérifiez le paramétrage effectué ou choisissez (sur la page précédente) un autre type pour la source de données des adresses.";
         Text[ spanish ] = "No se pudo efectuar la conexión a la fuente de datos.\nAntes de continuar, compruebe la configuración realizada o elija (en la ficha anterior) otro tipo para la fuente de datos de direcciones.";
         Text[ finnish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
-        Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.\nPrima di proseguire vi consigliamo di verificare le impostazioni appena fatte oppure selezionate un altro tipo di sorgente dati per la rubrica nella pagina precedente.";
+        Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.\nPrima di proseguire vi consigliamo di verificare le impostazioni appena fatte oppure selezionate un altro tipo di sorgente dati per la Rubrica nella pagina precedente.";
         Text[ danish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ swedish ] = "Det gick inte att koppla till datakällan.\nKontrollera de gjorda inställningarna innan du fortsätter eller välj en annan typ för din adressdatakälla (på föregående sida).";
         Text[ polish ] = "Brak po³¹czenia ze Ÿród³em danych.\nPrzed kontynuacj¹ operacji nale¿y sprawdziæ dokonane ustawienia lub wybraæ (na poprzedniej stronie) inny typ Ÿród³a danych adresowych.";
         Text[ portuguese_brazilian ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã¸ã¯æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\nç¶šè¡Œã™ã‚‹å‰ã«ã€ã‚‚ã†ä¸€åº¦é¸æŠã—ãŸè¨­å®šã‚’ç¢ºèªã™ã‚‹ã‹ã€ã‚ã‚‹ã„ã¯å‰ï¾ï¾Ÿï½°ï½¼ï¾ã§ãŠä½¿ã„ã®ï½±ï¾„ï¾ï¾šï½½å¸³ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®ç¨®é¡ã«åˆ¥ã®ã‚‚ã®ã‚’é¸æŠã—ã¾ã™ã€‚";
         Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ì—°ê²°ì´ ì„¤ì •ë˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\nì§„í–‰í•˜ê¸° ì „ì— ì„¤ì • ëª¨ë“œë¥¼ í™•ì¸í•˜ê±°ë‚˜ ì´ì „ í˜ì´ì§€ì—ì„œ ë‹¤ë¥¸ ì£¼ì†Œ ë°ì´í„° í˜•ì‹ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "æ— æ³•ä¸æ•°æ®æºå»ºç«‹è¿æ¥ã€‚\nåœ¨ç»§ç»­æ‰§è¡Œå‘½ä»¤ä¹‹å‰ï¼Œè¯·æ£€æŸ¥ä¸€ä¸‹æ‰€æœ‰å·²ç»å®Œæˆçš„è®¾å®šï¼Œæˆ–è€…è¿”å›åˆ°ä¸Šä¸€é¡µï¼Œé€‰æ‹©å…¶å®ƒçš„åœ°å€æ•°æ®æºç±»å‹ã€‚";
+        Text[ chinese_simplified ] = "æ— æ³•ä¸æ•°æ®æºå»ºç«‹è¿æ¥ã€‚\nåœ¨ç»§ç»­æ‰§è¡Œå‘½ä»¤ä¹‹å‰ï¼Œè¯·æ£€æŸ¥ä¸€ä¸‹æ‰€æœ‰å·²ç»å®Œæˆçš„è®¾å®šï¼Œæˆ–è€…è¿”å›åˆ°ä¸Šä¸€é¡µï¼Œé€‰æ‹©å…¶å®ƒçš„é€šè®¯ç°¿æ•°æ®æºç±»å‹ã€‚";
         Text[ chinese_traditional ] = "ç„¡æ³•å’Œè³‡æ–™æºé€£ç·šã€‚\nåœ¨ç¹¼çºŒåŸ·è¡Œå‘½ä»¤ä¹‹å‰ï¼Œè«‹æª¢æŸ¥æ‰€æœ‰å®Œæˆçš„è¨­å®šï¼Œæˆ–è€…è¿”å›åˆ°ä¸Šä¸€é ï¼Œé¸æ“‡å¦å¤–ä¸€å€‹åœ°å€è³‡æ–™æºã€‚";
         Text[ turkish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ arabic ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
@@ -663,7 +663,7 @@ TabPage RID_PAGE_FINAL
         Text[ french ] = "Toutes les informations requises pour l'intégration des données des adresses dans %PRODUCTNAME sont à présent réunies.\n\nSaisissez maintenant le nom sous lequel enregistrer la source de données dans %PRODUCTNAME.";
         Text[ spanish ] = "Ya se dispone de la información necesaria para la integración de sus datos de direcciones en %PRODUCTNAME.\n\nIndique ahora el nombre con el que se deba registrar la fuente de datos en %PRODUCTNAME.";
         Text[ finnish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
-        Text[ italian ] = "Queste informazioni erano necessarie per integrare i dati della rubrica in %PRODUCTNAME.\n\nIndicate ancora il nome con cui volete registrare la sorgente dati in %PRODUCTNAME.";
+        Text[ italian ] = "Queste informazioni erano necessarie per integrare i dati della Rubrica in %PRODUCTNAME.\n\nIndicate ancora il nome con cui volete registrare la sorgente dati in %PRODUCTNAME.";
         Text[ danish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ swedish ] = "Detta var alla uppgifter som behövs för att dina adressdata ska kunna integreras i %PRODUCTNAME.\n\nAnge nu namnet som datakällan i %PRODUCTNAME ska registreras med.";
         Text[ polish ] = "Podano wszystkie dane wymagane do integracji danych adresowych w programie %PRODUCTNAME.\n\nTeraz nale¿y wpisaæ jeszcze nazwê, pod któr¹ Ÿród³o danych zarejestrowane zostanie w programie %PRODUCTNAME.";
@@ -744,7 +744,7 @@ Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™";
         Text [ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ arabic ] = "íæÌÏ ÈÇáİÚá ãÕÏÑ ÈíÇäÇÊ ÂÎÑ áå åĞÇ ÇáÇÓã. äÙÑÇğ áÃä ÃÓãÇÁ ãÕÇÏÑ ÇáÈíÇäÇÊ íÌÈ ÚãæãÇğ Ãä Êßæä İÑíÏÉ¡ ÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
         Text[ finnish ] = "Toisella tietolähteellä on jo sama nimi. Tietolähteillä on oltava yksilölliset nimet, valitse toinen nimi.";
-        Text[ catalan ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente único.";
+        Text[ catalan ] = "Ja existeix una altra font de dades amb aquest nom. Has d'escollir-ne un altre perquè el nom de la font de dades ha de ser globalment únic.";
     };
     Text[ portuguese ] = "Título da fonte de dados";
     Text[ russian ] = "Çàãîëîâîê èñòî÷íèêà äàííûõ";
@@ -782,7 +782,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message[ french ] = "Sélectionnez un type de carnet d'adresses !";
     Message[ spanish ] = "Seleccione un tipo de libreta de direcciones";
     Message[ finnish ] = "Bitte wählen sie einen Adressbuch-Typ aus";
-    Message[ italian ] = "Selezionate un tipo di rubrica adatto";
+    Message[ italian ] = "Selezionate un tipo di Rubrica adatto";
     Message[ danish ] = "Bitte wählen sie einen Adressbuch-Typ aus";
     Message[ swedish ] = "Välj en typ av adressbok";
     Message[ polish ] = "Wybierz typ ksi¹¿ki adresowej";
@@ -793,7 +793,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹åˆé©çš„é€šè¨ŠéŒ„é¡å‹ã€‚";
     Message[ turkish ] = "Bitte wählen sie einen Adressbuch-Typ aus";
     Message[ arabic ] = "Bitte wählen sie einen Adressbuch-Typ aus";
-    Message[ catalan ] = "Bitte wählen sie einen Adressbuch-Typ aus";
+    Message[ catalan ] = "Bitte wählen sie einen Adressbuch-Typ aus!";
 };
 
 //........................................................................
@@ -808,20 +808,20 @@ QueryBox RID_QRY_NOTABLES
         "Do you want to install it as address data source, anyway?";
     Message [ english_us ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
     Message[ portuguese ] = "A fonte de dados não contém nenhuma tabela.\nMesmo assim, configurá-la como fonte de dados dos endereços?";
-    Message[ russian ] = "İòîò èñòî÷íèê äàííûõ íå ñîäåğæèò íè îäíîé òàáëèöû.\nÈíñòàëëèğîâàòü åãî â êà÷åñòâå èñòî÷íèêà äàííûõ àäğåñîâ íåñìîòğÿ íà ıòî?";
+    Message[ russian ] = "İòè èñõîäíûå äàííûå íå ñîäåğæàò íè îäíîé òàáëèöû.\nÈíñòàëëèğîâàòü èõ â êà÷åñòâå èñõîäíûõ äàííûõ àäğåñîâ íåñìîòğÿ íà ıòî?";
     Message[ greek ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
-    Message[ dutch ] = "De gegevensbron bevat geen tabellen.\nWilt u deze toch als adres-gegevensbron inrichten?";
+    Message[ dutch ] = "De gegevensbron bevat geen tabel.\nWilt u deze toch als adresgegevensbron inrichten?";
     Message[ french ] = "La source de données ne contient aucune table.\nVoulez-vous tout de même la paramétrer comme source de données des adresses ?";
     Message[ spanish ] = "La fuente de datos no contiene tablas.\n¿Desea no obstante configurarla como fuente de datos de direcciones?";
     Message[ finnish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
-    Message[ italian ] = "La sorgente dati non contiene tabelle.\nVolete comunque impostarla come sorgente dati della rubrica?";
+    Message[ italian ] = "La sorgente dati non contiene tabelle.\nVolete comunque impostarla come sorgente dati della Rubrica?";
     Message[ danish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
-    Message[ swedish ] = "Datakällan innehåller inga tabeller.\nVill du ändå installera den som adress-datakälla?";
+    Message[ swedish ] = "Datakällan innehåller ingen tabell.\nVill du ändå installera den som adress-datakälla?";
     Message[ polish ] = "ród³o danych nie zawiera ¿adnych tabel.\nCzy pomimo tego utworzyæ Ÿród³o danych adresowych?";
     Message[ portuguese_brazilian ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ japanese ] = "ã“ã®ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã«ã¯ï¾ƒï½°ï¾Œï¾ï¾™ãŒã²ã¨ã¤ã‚‚ã‚ã‚Šã¾ã›ã‚“ã€‚\nãã‚Œã§ã‚‚ï½±ï¾„ï¾ï¾šï½½å¸³ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã¨ã—ã¦è¨­å®šã—ã¾ã™ã‹ã€‚";
     Message[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ì— í…Œì´ë¸”ì´ ë“¤ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤.\nê·¸ë˜ë„ ë°ì´í„° ì†ŒìŠ¤ë¥¼ ì£¼ì†Œ ë°ì´í„° ì†ŒìŠ¤ë¡œì„œ ì„¤ì¹˜í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ chinese_simplified ] = "è¿™ä¸ªæ•°æ®æºæ²¡æœ‰ä»»ä½•æ•°æ®è¡¨æ ¼ã€‚\nè¿˜æ˜¯è¦å»ºç«‹è¿™ä¸ªé€šè®¯ç°¿æ•°æ®æºï¼Ÿ";
+    Message[ chinese_simplified ] = "è¿™ä¸ªæ•°æ®æºæ²¡æœ‰åŒ…å«ä»»ä½•è¡¨æ ¼ã€‚\næ‚¨è¿˜æ˜¯è¦è®¾å®šè¯¥æ•°æ®æºä¸ºé€šè®¯ç°¿æ•°æ®æºï¼Ÿ";
     Message[ chinese_traditional ] = "é€™å€‹è³‡æ–™æºæ²’æœ‰ä»»ä½•çš„è³‡æ–™è¡¨æ ¼ã€‚\né‚„æ˜¯è¦å»ºç«‹é€™å€‹é€šè¨ŠéŒ„è³‡æ–™æºï¼Ÿ";
     Message[ turkish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ arabic ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
@@ -976,7 +976,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ french ] = "Aucun champ n'est assigné.\nSi vous ne souhaitez pas procéder à l'assignation pour le moment, vous pourrez le faire plus tard sous :\n\"Fichier - Modèle de document - Source du carnet d'adresses ...\"";
     Text[ spanish ] = "Actualmente no existen campos asignados.\nSi no puede llevar a cabo de momento ninguna asignación, lo puede hacer posteriormente en cualquier momento:\nMenú \"Archivo - Plantillas - Fuente de libreta de direcciones...\"";
     Text[ finnish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
-    Text[ italian ] = "Al momento non è assegnato alcun campo.\nSe preferite non fare assegnazioni al momento, potete farlo in un secondo momento:\nMenu \"File - Modelli di documenti - Sorgente rubrica...\"";
+    Text[ italian ] = "Al momento non è assegnato alcun campo.\nSe preferite non fare assegnazioni al momento, potete farlo in un secondo momento:\nMenu \"File - Modelli di documenti - Sorgente Rubrica...\"";
     Text[ danish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ swedish ] = "För närvarande är inga fält tilldelade.\nDu kan göra tilldelningen nu eller senare om du väljer:\n\"Arkiv - Dokumentmall - Adressbokskälla ...\"";
     Text[ polish ] = "Brak przyporz¹dkowanych pól.\nPola mo¿na przyporz¹dkowaæ równie¿ póŸniej,\nwybieraj¹c sekwencjê \"Plik - Szablon dokumentu - ród³o danych adresowych...\"";
@@ -1004,7 +1004,7 @@ String RID_STR_ABP_SUCCESS
     Text[ french ] = "Le carnet d'adresses externe a été enregistré dans %PRODUCTNAME.\nLes données des adresses sont à présent utilisables comme les autres sources de données.";
     Text[ spanish ] = "Su libreta de direcciones externa se registró satisfactoriamente en %PRODUCTNAME.\nAhora puede usar sus datos de direcciones como cualquier otra fuente de datos.";
     Text[ finnish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ italian ] = "La vostra rubrica esterna è stata registrata in %PRODUCTNAME.\nAdesso potete utilizzare i dati della rubrica come qualsiasi altra sorgente dati.";
+    Text[ italian ] = "La vostra Rubrica esterna è stata registrata in %PRODUCTNAME.\nAdesso potete utilizzare i dati della Rubrica come qualsiasi altra sorgente dati.";
     Text[ danish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ swedish ] = "Din externa adressbok har registrerats i %PRODUCTNAME.\nDu kan nu använda dina adressdata som vilken annan datakälla som helst.";
     Text[ polish ] = "Zewnêtrzna ksi¹¿ka adresowa zosta³a zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych mo¿na teraz u¿ywaæ tak jak innego Ÿród³a danych.";
@@ -1012,7 +1012,7 @@ String RID_STR_ABP_SUCCESS
     Text[ japanese ] = "å¤–éƒ¨ï½±ï¾„ï¾ï¾šï½½å¸³ã® %PRODUCTNAME ã¸ã®ç™»éŒ²ã¯æ­£å¸¸ã«å®Œäº†ã—ã¾ã—ãŸã€‚\nã“ã‚Œã‹ã‚‰ã¯ï½±ï¾„ï¾ï¾šï½½å¸³ï¾ƒï¾ï½°ï¾€ã‚‚ã»ã‹ã®ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã¨åŒã˜ã‚ˆã†ã«ä½¿ç”¨ãŒå¯èƒ½ã§ã™ã€‚";
     Text[ korean ] = "ì™¸ë¶€ ì£¼ì†Œë¡ì´ ì„±ê³µì ìœ¼ë¡œ %PRODUCTNAMEì— ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.\nì´ì œ ì£¼ì†Œ ë°ì´í„°ë¥¼ ë‹¤ë¥¸ ì„ì˜ì˜ ë°ì´í„° ì†ŒìŠ¤ì²˜ëŸ¼ ì•¡ì„¸ìŠ¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "å¤–æ¥çš„é€šè®¯ç°¿å·²ç»æˆåŠŸåœ°ç™»è®°åˆ° %PRODUCTNAME é‡Œã€‚\nè¿™æ ·ï¼Œæ‚¨å°±èƒ½å¤Ÿå¦‚åŒä½¿ç”¨ä»»ä½•ä¸€ä¸ªå…¶ä»–çš„æ•°æ®æºä¸€æ ·éšæ„ä½¿ç”¨æ‚¨çš„é€šè®¯ç°¿ã€‚";
-    Text[ chinese_traditional ] = "%PRODUCTNAME å·²ç¶“æˆåŠŸåœ°ç™»è¨˜é€™å€‹å¤–ä¾†çš„é€šè¨ŠéŒ„ã€‚\né€™æ¨£ï¼Œæ‚¨å°±èƒ½å¤ å¦‚åŒä½¿ç”¨ä»»ä½•ä¸€å€‹å…¶ä»–çš„è³‡æ–™æºä¸€æ¨£éš¨æ„åœ°ä½¿ç”¨æ‚¨çš„é€šè¨ŠéŒ„ã€‚";
+    Text[ chinese_traditional ] = "%PRODUCTNAME å·²ç¶“æˆåŠŸåœ°ç™»è¨˜é€™å€‹å¤–ä¾†çš„é€šè¨ŠéŒ„ã€‚\nå¾ç¾åœ¨èµ·æ‚¨å°±èƒ½å¤ å¦‚åŒä½¿ç”¨ä»»ä½•ä¸€å€‹å…¶ä»–çš„è³‡æ–™æºä¸€æ¨£æ–¹ä¾¿åœ°ä½¿ç”¨é€™å€‹é€šè¨ŠéŒ„ã€‚";
     Text[ turkish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ arabic ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ catalan ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
@@ -1028,6 +1028,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/10/02 21:03:30  kz
+ *  Merge SRC641: 10/02/01 - 23:03:17
+ *
  *  Revision 1.18  2001/09/28 15:11:50  fs
  *  #92550# small corrections in the german text
  *
@@ -1085,6 +1088,7 @@ Bitmap BMP_HEADERIMAGE
  *
  *  Revision 1.0 26.07.01 09:03:45  fs
  ************************************************************************/
+
 
 
 
