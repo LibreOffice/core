@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-12 12:23:39 $
+ *  last change: $Author: dr $ $Date: 2001-01-16 14:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,16 +857,20 @@ UINT16 ExcLabelSst::GetLen() const
 
 ExcXf8::ExcXf8( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
                 BOOL& rbLineBreak, BOOL bSt ) :
-        ExcXf( nFont, nForm, pPattAttr, rbLineBreak, bSt )
+        ExcXf( nFont, nForm, pPattAttr, rbLineBreak, bSt ),
+        nTrot( 0 ),
+        nCIndent( 0 ),
+        bFShrinkToFit( FALSE ),
+        bFMergeCell( FALSE ),
+        nIReadingOrder( 0 ),
+        nGrbitDiag( 0 ),
+        nIcvDiagSer( 0 ),
+        nDgDiag( 0 )
 {
-    nTrot           = 0;
-    nCIndent        = 0;
-    bFShrinkToFit   = 0;
-    bFMergeCell     = 0;
-    nIReadingOrder  = 0;
-    nGrbitDiag      = 0;
-    nIcvDiagSer     = 0;
-    nDgDiag         = 0;
+    if( eOri == ETO_TopBottom )
+        nTrot = 0x00FF;
+    else if( pPattAttr )
+        nTrot = GetExcRotation( ((const SfxInt32Item&) pPattAttr->GetItem( ATTR_ROTATE_VALUE )).GetValue() );
 }
 
 
