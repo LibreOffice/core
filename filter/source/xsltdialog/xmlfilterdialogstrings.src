@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:31:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,22 +120,22 @@ String STR_APPL_NAME_DRAW
 
 String STR_APPL_NAME_OASIS_WRITER
 {
-    Text = "%PRODUCTNAME Writer (.oot)";
+    Text = "%PRODUCTNAME Writer (.odt)";
 };
 
 String STR_APPL_NAME_OASIS_CALC
 {
-    Text = "%PRODUCTNAME Calc (.oos)";
+    Text = "%PRODUCTNAME Calc (.ods)";
 };
 
 String STR_APPL_NAME_OASIS_IMPRESS
 {
-    Text = "%PRODUCTNAME Impress (.oop)";
+    Text = "%PRODUCTNAME Impress (.odp)";
 };
 
 String STR_APPL_NAME_OASIS_DRAW
 {
-    Text = "%PRODUCTNAME Draw (.ood)";
+    Text = "%PRODUCTNAME Draw (.odg)";
 };
 
 String STR_WARN_DELETE
