@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:42:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,6 +770,8 @@ void SvxNumberFormatTabPage::Obstructing()
 void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 {
     BOOL bEnable = !aCbSourceFormat.IsChecked();
+    if ( !bEnable )
+        aCbSourceFormat.GrabFocus();
     aFtCategory     .Enable( bEnable );
     aLbCategory     .Enable( bEnable );
     aFtFormat       .Enable( bEnable );
@@ -791,8 +793,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     aIbInfo         .Enable( bEnable );
     aFtComment      .Enable( bEnable );
     aEdComment      .Enable( bEnable );
-    if ( !bEnable )
-        aCbSourceFormat.GetFocus();
+    aLbFormat.Invalidate(); // #i43322#
 }
 
 
