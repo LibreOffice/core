@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 17:20:01 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:39:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET=moz_unzip
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)" == "MACOSX" || "$(WITH_MOZILLA)" == "NO"
+.IF "$(OS)" == "MACOSX" || "$(SYSTEM_MOZILLA)" == "YES" || "$(WITH_MOZILLA)" == "NO"
 
 dummy:
     @echo "Nothing to build for OS $(OS)"
