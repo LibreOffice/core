@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 13:17:36 $
+ *  last change: $Author: af $ $Date: 2002-04-11 17:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
+#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
+#define _SD_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_IVIEW_FORWARDER_HXX
 #include <svx/IAccessibleViewForwarder.hxx>
