@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-11 02:13:08 $
+ *  last change: $Author: obr $ $Date: 2001-05-02 12:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,48 @@
 #include <osl/diagnose.h>
 #include <osl/time.h>
 
+/* FIXME: detection should be done in configure script */
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
+#define STRUCT_TM_HAS_GMTOFF 1
+
+#elif defined(SOLARIS)
+#define HAS_ALTZONE 1
+#define HAS_GMTIME_R 1
+#define HAS_LOCALTIME_R 1
+
+#elif defined(LINUX)
+#define STRUCT_TM_HAS_GMTOFF 1
+#define HAS_GMTIME_R 1
+#define HAS_LOCALTIME_R 1
+#endif
+
+
+#if !defined(HAS_LOCALTIME_R)
+struct tm *localtime_r(const time_t *clock, struct tm *res)
+{
+    // FIXME: copy buffer and make thread safe!
+    return localtime( clock );
+}
+#endif
+
+#if !defined(HAS_GMTIME_R)
+struct tm *gmtime_r(const time_t *clock, struct tm *res)
+{
+    // FIXME: copy buffer and make thread safe!
+    return gmtime( clock );
+}
+#endif
+
+
+/*--------------------------------------------------
+ * osl_getSystemTime
+ *-------------------------------------------------*/
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* TimeValue)
 {
     struct timeval tp;
 
+    /* FIXME: use higher resolution */
     gettimeofday(&tp, NULL);
 
     TimeValue->Seconds = tp.tv_sec;
@@ -85,13 +122,14 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* TimeValue)
 
 sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
-    struct tm   *pSystemTime;
-    time_t      atime;
+    struct tm *pSystemTime;
+    struct tm tmBuf;
+    time_t atime;
 
     atime = (time_t)pTimeVal->Seconds;
 
     /* Convert time from type time_t to struct tm */
-    pSystemTime = gmtime( &atime );
+    pSystemTime = gmtime_r( &atime, &tmBuf );
 
 
     /* Convert struct tm to struct oslDateTime */
@@ -118,50 +156,62 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime
 
 sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
-    struct tm   aSystemTime;
-    time_t      aSeconds;
+    struct tm   aTime;
+    time_t      nSeconds;
 
     /* Convert struct oslDateTime to struct tm */
-    aSystemTime.tm_sec          =   pDateTime->Seconds;
-    aSystemTime.tm_min          =   pDateTime->Minutes;
-    aSystemTime.tm_hour         =   pDateTime->Hours;
-    aSystemTime.tm_mday         =   pDateTime->Day;
-    aSystemTime.tm_wday         =   pDateTime->DayOfWeek;
+    aTime.tm_sec  = pDateTime->Seconds;
+    aTime.tm_min  = pDateTime->Minutes;
+    aTime.tm_hour = pDateTime->Hours;
+    aTime.tm_mday = pDateTime->Day;
+    aTime.tm_wday = pDateTime->DayOfWeek;
 
-    if ( pDateTime->Month > 1)
-        aSystemTime.tm_mon      =   pDateTime->Month - 1;
+    if ( pDateTime->Month > 0 )
+        aTime.tm_mon = pDateTime->Month - 1;
     else
         return sal_False;
 
-    if ( pDateTime->Year >= 1900)
-        aSystemTime.tm_year     =   pDateTime->Year - 1900;
+    if ( pDateTime->Year >= 1900 )
+        aTime.tm_year = pDateTime->Year - 1900;
     else
         return sal_False;
 
-    aSystemTime.tm_isdst        =   0;
-    aSystemTime.tm_wday         =   0;
-    aSystemTime.tm_yday         =   0;
+    aTime.tm_isdst = -1;
+    aTime.tm_wday  = 0;
+    aTime.tm_yday  = 0;
 
     /* Convert time to calendar value */
-    aSeconds = mktime( &aSystemTime );
+    nSeconds = mktime( &aTime );
 
-    if (aSeconds != (time_t) -1)
+    /*
+     * mktime expects the struct tm to be in local timezone, so we have to adjust
+     * the returned value to be timezone neutral.
+     */
+
+    if ( nSeconds != (time_t) -1 )
     {
-        tzset();
+        time_t bias;
 
         /* timezone corrections */
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
-        if ( (sal_Int64) aSeconds > (aSystemTime.tm_gmtoff * -1) )
-            aSeconds += aSystemTime.tm_gmtoff;
-#else
-        if ( (sal_Int64) aSeconds > timezone )
-            aSeconds -= timezone;
-#endif
-        else
-            return sal_False;
+        tzset();
 
-        pTimeVal->Seconds = aSeconds;
+#if defined(STRUCT_TM_HAS_GMTOFF)
+        /* members of struct tm are corrected by mktime */
+        bias = 0 - aTime.tm_gmtoff;
+
+#elif defined(HAS_ALTZONE)
+        /* check if daylight saving time is in effect */
+        bias = aTime.tm_isdst > 0 ? altzone : timezone;
+#else
+        /* exspect daylight saving time to be one hour */
+        bias = aTime.tm_isdst > 0 ? timezone - 3600 : timezone;
+#endif
+
+        pTimeVal->Seconds = nSeconds;
         pTimeVal->Nanosec = pDateTime->NanoSeconds;
+
+        if ( nSeconds > bias )
+            pTimeVal->Seconds -= bias;
 
         return sal_True;
     }
@@ -176,23 +226,24 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
 
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
-    sal_Int64   bias;
-    struct tm   *pLocalTime;
-    time_t      atime;
+    struct tm *pLocalTime;
+    struct tm tmBuf;
+    time_t bias;
+    time_t atime;
 
-    atime = (time_t)pSystemTimeVal->Seconds;
+    atime = (time_t) pSystemTimeVal->Seconds;
+    pLocalTime = localtime_r( &atime, &tmBuf );
 
-    tzset();
+#if defined(STRUCT_TM_HAS_GMTOFF)
+    /* members of struct tm are corrected by mktime */
+    bias = 0 - pLocalTime->tm_gmtoff;
 
-    /* timezone an daylight saving time */
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
-    pLocalTime = localtime( &atime );
-    bias = pLocalTime->tm_gmtoff * -1;
+#elif defined(HAS_ALTZONE)
+    /* check if daylight saving time is in effect */
+    bias = pLocalTime->tm_isdst > 0 ? altzone : timezone;
 #else
-    if ( daylight != 0)
-        bias = timezone - 3600;
-    else
-        bias = timezone;
+    /* exspect daylight saving time to be one hour */
+    bias = pLocalTime->tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 
     if ( (sal_Int64) pSystemTimeVal->Seconds > bias )
@@ -212,33 +263,36 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, Tim
 
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
-    sal_Int64   bias;
-    struct tm   *pLocalTime;
-    time_t      atime;
+    struct tm *pLocalTime;
+    struct tm tmBuf;
+    time_t bias;
+    time_t atime;
 
-    atime = (time_t)pLocalTimeVal->Seconds;
+    atime = (time_t) pLocalTimeVal->Seconds;
 
-    tzset();
-
-    /* timezone an daylight saving time */
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
     /* Convert atime, which is a local time, to it's GMT equivalent. Then, get
      * the timezone offset for the local time for the GMT equivalent time. Note
      * that we cannot directly use local time to determine the timezone offset
      * because GMT is the only reliable time that we can determine timezone
      * offset from.
      */
-    atime = mktime( gmtime( &atime ) );
-    pLocalTime = localtime( &atime );
-    bias = pLocalTime->tm_gmtoff * -1;
+
+    atime = mktime( gmtime_r( &atime, &tmBuf ) );
+    pLocalTime = localtime_r( &atime, &tmBuf );
+
+#if defined(STRUCT_TM_HAS_GMTOFF)
+    /* members of struct tm are corrected by mktime */
+    bias = 0 - pLocalTime->tm_gmtoff;
+
+#elif defined(HAS_ALTZONE)
+    /* check if daylight saving time is in effect */
+    bias = pLocalTime->tm_isdst > 0 ? altzone : timezone;
 #else
-    if ( daylight != 0)
-        bias = timezone - 3600;
-    else
-        bias = timezone;
+    /* exspect daylight saving time to be one hour */
+    bias = pLocalTime->tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 
-    if ( (sal_Int64) pSystemTimeVal->Seconds + bias > 0)
+    if ( (sal_Int64) pSystemTimeVal->Seconds + bias > 0 )
     {
         pSystemTimeVal->Seconds = pLocalTimeVal->Seconds + bias;
         pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
@@ -259,6 +313,7 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
   struct timeval currentTime;
   sal_uInt32 nSeconds;
 
+  // FIXME: not thread safe !!
   if ( bGlobalTimer == sal_False )
   {
       gettimeofday( &startTime, NULL );
@@ -269,5 +324,5 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
 
   nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
 
-  return ( nSeconds * 1000 ) + (long)( currentTime.tv_usec - startTime.tv_usec);
+  return ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
 }
