@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,35 +58,20 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
+#include "excform.hxx"
 
 #include "cell.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"
 
-#include "excimp8.hxx"
-#include "root.hxx"
-#include "excform.hxx"
-
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
 #endif
-
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
 #ifndef SC_XINAME_HXX
 #include "xiname.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
 #endif
 
 
@@ -139,7 +124,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( _STRINGCONST( "-/-" ) );
+        aPool.Store( CREATE_STRING( "-/-" ) );
         aPool >> aStack;
         rpTokArray = aPool[ aStack.Get() ];
         return ConvOK;
@@ -1335,10 +1320,13 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
     _common:
                 // do not check abs/rel flags, linked controls have set them!
 //               if( !(( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 )) )
-                    r.Insert( new ScRange( static_cast<SCCOL>(nCol1 & ~0xC000),
-                                static_cast<SCROW>(nRow1), nTab1,
-                                static_cast<SCCOL>(nCol2 & ~0xC000),
-                                static_cast<SCROW>(nRow2), nTab2 ), LIST_APPEND);
+                {
+                    ScRange aScRange;
+                    nCol1 &= 0x3FFF;
+                    nCol2 &= 0x3FFF;
+                    if( GetAddressConverter().ConvertRange( aScRange, XclRange( nCol1, nRow1, nCol2, nRow2 ), nTab1, nTab2, true ) )
+                        r.Append( aScRange );
+                }
                 break;
             case 0x1C: // Error Value                           [314 266]
             case 0x1D: // Boolean                               [315 266]
@@ -1436,7 +1424,6 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
     }
     aIn.Seek( nMaxPos );
 
-    CheckCellRangeList( r );
     return r.Count() != 0;
 }
 
