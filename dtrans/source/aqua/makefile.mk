@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-15 21:20:29 $
+#   last change: $Author: pluby $ $Date: 2001-03-16 16:50:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,6 @@ SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(SALLIB)	\
-        $(VOSLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
         -framework Cocoa
@@ -105,8 +104,21 @@ SHL1IMPLIB=	i$(SHL1TARGET)
 
 SHL1OBJS=	$(SLOFILES)
 
+APP1NOSAL=TRUE
+APP1TARGET=test_aquacb
+APP1OBJS=$(SLO)$/test_aquacb.obj
+APP1STDLIBS= \
+        $(SALLIB)	\
+        $(CPPULIB) 	\
+        $(CPPUHELPERLIB) \
+        -framework Cocoa
+
 .ENDIF		# "$(OS)"!="MACOSX"
 
 # --- Targets ------------------------------------------------------
+
+#.IF "$(depend)" == ""
+ALL : ALLTAR  
+    +regcomp -register -r $(BIN)$/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
 
 .INCLUDE :	target.mk

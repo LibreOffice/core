@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aqua_service.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-15 20:57:12 $
+ *  last change: $Author: pluby $ $Date: 2001-03-16 16:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, AQUA_CLIPBOARD_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( AQUA_CLIPBOARD_SERVICE_NAME ) );
+        aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( AQUA_CLIPBOARD_SERVICE_NAME ) );
 
         //OUString( RTL_CONSTASCII_USTRINGPARAM( FPS_IMPL_NAME ) )
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
