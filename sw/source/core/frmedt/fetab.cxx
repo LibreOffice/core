@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:44:44 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,11 @@
 #ifndef _SWTBLFMT_HXX
 #include <swtblfmt.hxx>
 #endif
-
 #ifndef _SWSWERROR_H
 #include <swerror.h>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
 #endif
 
 #include <node.hxx> // #i23726#
@@ -437,7 +439,9 @@ BOOL SwFEShell::DeleteCol()
         ParkCursorInTab();
 
         // dann loesche doch die Spalten
+        StartUndo(UNDO_COL_DELETE);
         bRet = GetDoc()->DeleteRowCol( aBoxes );
+        EndUndo(UNDO_COL_DELETE);
 
     }
     else
@@ -557,7 +561,9 @@ BOOL SwFEShell::DeleteRow()
         }
 
         // dann loesche doch die Zeilen
+        StartUndo(UNDO_ROW_DELETE);
         bRet = GetDoc()->DeleteRowCol( aBoxes );
+        EndUndo(UNDO_ROW_DELETE);
     }
     else
         bRet = FALSE;
