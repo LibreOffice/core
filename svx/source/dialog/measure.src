@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-07 12:31:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ chinese_traditional ] = "½u±ψ¶΅Ήj(~D)";
         Text[ arabic ] = "ΘυΪΟ ΗαΞΨ";
         Text[ greek ] = "Απόσταση μεταξύ γραμμών";
-        Text[ korean ] = "Ό± °ΕΈ®(~D)";
+        Text[ korean ] = "Ό± °£°έ(~D)";
         Text[ turkish ] = "~Nesneye uzaklύk";
         Text[ language_user1 ] = " ";
     };
@@ -188,7 +188,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ chinese_traditional ] = "»²§U½u¶΅Ήj(~G)";
         Text[ arabic ] = "ΘυΪΟ ΞΨζΨ ΗαγΣΗΪΟΙ";
         Text[ greek ] = "Απόσταση βοηθητικών γραμμών";
-        Text[ korean ] = "ΎΘ³»Ό± °ΕΈ®(~G)";
+        Text[ korean ] = "ΎΘ³»Ό± °£°έ(~G)";
         Text[ turkish ] = "Kύlavuz ηizgi uzakl~ύπύ";
         Text[ language_user1 ] = " ";
     };
@@ -557,7 +557,7 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ chinese_simplified ] = "¶¨³ί΄η";
     Text[ russian ] = "Πΰημεπϋ";
     Text[ polish ] = "Wymiary";
-    Text[ japanese ] = "΅–@‹L“ό";
+    Text[ japanese ] = "΅–@‚Μ‹L“ό";
     Text[ chinese_traditional ] = "©w¤Ψ¤o";
     Text[ arabic ] = "ΗαήνΗΣ";
     Text[ greek ] = "Διαστασιολόγηση";
