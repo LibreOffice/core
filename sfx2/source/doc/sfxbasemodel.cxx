@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-03 11:51:03 $
+ *  last change: $Author: as $ $Date: 2002-04-08 11:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,17 +343,17 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                             static_cast< XCOMPONENT*            > ( this )  ,
                                                static_cast< XPRINTABLE*         > ( this )  ,
                                                static_cast< XSTARBASICACCESS*       > ( this )  ,
-                                               static_cast< XSTORABLE*              > ( this )  ) ) ;
+                                            static_cast< XSTORABLE*             > ( this )  ,
+                                            static_cast< XCLOSEABLE*            > ( this )  ) );
 
-#if SUPD>614
     if ( aReturn.hasValue() == sal_False )
     {
         aReturn = ::cppu::queryInterface(   rType                                           ,
-                                            static_cast< XVIEWDATASUPPLIER*      > ( this )  ,
+                                                static_cast< XCLOSEBROADCASTER*     > ( this )  ,
+                                            static_cast< XVIEWDATASUPPLIER*     > ( this )  ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
                                                static_cast< XEVENTSSUPPLIER*        > ( this )  ) ;
     }
-#endif
     // If searched interface supported by this class ...
     if ( aReturn.hasValue() == sal_True )
     {
@@ -413,22 +413,22 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER          >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XCHILD                   >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XDOCUMENTINFOSUPPLIER    >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XEVENTLISTENER           >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XMODEL                   >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XMODIFIABLE          >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XPRINTABLE               >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XSTORABLE                >*)NULL ) ,
-#if SUPD>614
-                                                      ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XEVENTBROADCASTER        >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XVIEWDATASUPPLIER      >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER      >*)NULL ) ) ;
-#else
-                                                      ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ) ;
-#endif
+            static OTYPECOLLECTION aTypeCollectionFirst( ::getCppuType(( const REFERENCE< XTYPEPROVIDER          >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XCHILD                 >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XDOCUMENTINFOSUPPLIER  >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XEVENTLISTENER         >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XMODEL                 >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XMODIFIABLE            >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XPRINTABLE             >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XSTORABLE              >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XCLOSEABLE             >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XCLOSEBROADCASTER      >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XSTARBASICACCESS       >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XEVENTBROADCASTER      >*)NULL ) );
+
+            static OTYPECOLLECTION aTypeCollection     ( ::getCppuType(( const REFERENCE< XVIEWDATASUPPLIER      >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
+                                                         aTypeCollectionFirst.getTypes()                                   );
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -944,6 +944,33 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENE
         return;
 
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________
+//  XCloseable
+//____________________________________________________________________________________________________
+
+void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETOEXCEPTION, RUNTIMEEXCEPTION)
+{
+    /*TODO must be implemented in further times ...*/
+}
+
+//____________________________________________________________________________________________________
+//  XCloseBroadcaster
+//____________________________________________________________________________________________________
+
+void SAL_CALL SfxBaseModel::addCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
+{
+    /*TODO must be implemented in further times ...*/
+}
+
+//____________________________________________________________________________________________________
+//  XCloseBroadcaster
+//____________________________________________________________________________________________________
+
+void SAL_CALL SfxBaseModel::removeCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
+{
+    /*TODO must be implemented in further times ...*/
 }
 
 //________________________________________________________________________________________________________
