@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:15:14 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ french ] = "S�lection de l'utilisateur";
         Text[ spanish ] = "Selecci�n de usuario";
         Text[ italian ] = "Selezione utente";
-        Text[ danish ] = "Brugerudvalg";
+        Text[ danish ] = "Bruger markering";
         Text[ swedish ] = "Anv�ndarurval";
         Text[ polish ] = "Wyb�r u�ytkownika";
         Text[ portuguese_brazilian ] = "Selecionar usu�rio";
@@ -110,6 +110,8 @@ TabPage TAB_PAGE_USERADMIN
         Text[ hebrew ] = "Benutzerauswahl";
         Text[ hindi ] = "उपभोक्ता चुनाव";
         Text[ slovak ] = "Voľba užívateľa";
+        Text[ hungarian ] = "Felhasználó kiválasztása";
+        Text[ slovenian ] = "Izbor uporabnika";
     };
 
     FixedText FT_USER
@@ -143,6 +145,8 @@ TabPage TAB_PAGE_USERADMIN
         Text[ hebrew ] = "B~enutzer:";
         Text[ hindi ] = "~उपभोक्ता:";
         Text[ slovak ] = "Užívat~eľ:";
+        Text[ hungarian ] = "~Felhasználó:";
+        Text[ slovenian ] = "Up~orabnik:";
     };
 
     ListBox LB_USER
@@ -192,6 +196,8 @@ TabPage TAB_PAGE_USERADMIN
         Text[ hebrew ] = "Benutzer ~hinzufügen...";
         Text[ hindi ] = "~उपभोक्ता जोड़ो...";
         Text[ slovak ] = "Prid~ať užívateľa...";
+        Text[ hungarian ] = "~Felhasználó hozzáadása ...";
+        Text[ slovenian ] = "~Dodaj uporabnika...";
     };
 
     PushButton PB_CHANGEPWD
@@ -228,6 +234,8 @@ TabPage TAB_PAGE_USERADMIN
         Text[ hebrew ] = "~Passwort ändern...";
         Text[ hindi ] = "~कूटशब्द बदलो...";
         Text[ slovak ] = "Zmeniť he~slo...";
+        Text[ hungarian ] = "~Jelszócsere...";
+        Text[ slovenian ] = "Spremeni ~geslo...";
     };
 
     PushButton PB_DELETEUSER
@@ -264,6 +272,8 @@ TabPage TAB_PAGE_USERADMIN
         Text[ hebrew ] = "Benut~zer löschen...";
         Text[ hindi ] = "~उपभोक्ता को मिटाओ...";
         Text[ slovak ] = "~Zmazať užívateľa...";
+        Text[ hungarian ] = "Felhasználó ~törlése...";
+        Text[ slovenian ] = "~Izbriši uporabnika...";
     };
 
     FixedLine FL_TABLE_GRANTS
@@ -280,7 +290,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ french ] = "Droits d'acc�s pour l'utilisateur s�lectionn�";
         Text[ spanish ] = "Derechos de usuario para usuarios seleccionados";
         Text[ italian ] = "Diritti utente per utente selezionato";
-        Text[ danish ] = "Adgangsrettigheder for den udvalgte bruger";
+        Text[ danish ] = "Adgangsrettigheder for den valgte bruger";
         Text[ swedish ] = "�tkomstr�ttigheter f�r markerad anv�ndare";
         Text[ polish ] = "Prawa dost�pu dla wybranego u�ytkownika";
         Text[ portuguese_brazilian ] = "Direitos de acesso para o usu�rio selecionado";
@@ -297,6 +307,8 @@ TabPage TAB_PAGE_USERADMIN
         Text[ hebrew ] = "Zugriffsrechte für ausgewählten Benutzer";
         Text[ hindi ] = "चुने हुए उपभोक्ता केलिए प्रवेश अधिकार";
         Text[ slovak ] = "Prístupové práva pre vybraného užívateľa";
+        Text[ hungarian ] = "A kijelölt felhasználó hozzáférési jogai";
+        Text[ slovenian ] = "Dostopne pravice za izbranega uporabnika";
     };
 
     Control CTRL_TABLE_GRANTS
@@ -323,7 +335,7 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ spanish ] = "�Desea realmente borrar el usuario?";
     Message[ finnish ] = "Haluatko varmasti poistaa k�ytt�j�n?";
     Message[ italian ] = "Volete davvero eliminare l'utente selezionato?";
-    Message[ danish ] = "Skal brugeren virkelig slettes?";
+    Message[ danish ] = "Er du sikker p�, at du vil slette brugeren?";
     Message[ swedish ] = "Vill du verkligen radera anv�ndaren?";
     Message[ polish ] = "Czy na pewno chcesz usun�� u�ytkownika?";
     Message[ portuguese_brazilian ] = "Deseja realmente excluir o usu�rio?";
@@ -339,6 +351,8 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ hebrew ] = "Soll der Benutzer wirklich gelöscht werden?";
     Message[ hindi ] = "आप सचमुच में उपभोक्ता को मिटाना चाहते है ?";
     Message[ slovak ] = "Určite chcete zmazať užívateľa?";
+    Message[ hungarian ] = "Biztosan törölni akarja a felhasználót?  ";
+    Message[ slovenian ] = "Ali ste prepričani, da želite izbrisati uporabnika?";
 };
 
 #define EDIT_SIZE_X     50
@@ -364,30 +378,31 @@ ModalDialog DLG_PASSWORD
         Text = "Benutzer \"$name$:  $\"" ;
         Text [ English ] = "User \"$name$:  $\"" ;
         Text[ english_us ] = "User \"$name$:  $\"";
-        Text[ portuguese ] = "Utilizador \"$Name: not supported by cvs2svn $\"";
-        Text[ russian ] = "������������ \"$Name: not supported by cvs2svn $\"";
-        Text[ greek ] = "������� \"$Name: not supported by cvs2svn $\"";
-        Text[ dutch ] = "Gebruiker \"$Name: not supported by cvs2svn $\"";
-        Text[ french ] = "Utilisateur \"$name:  $\"";
-        Text[ spanish ] = "Usuario \"$name:  $\"";
-        Text[ finnish ] = "K�ytt�j� \"$Name: not supported by cvs2svn $\"";
-        Text[ italian ] = "Utente \"$name: $\"";
-        Text[ danish ] = "Bruger \"$Name: not supported by cvs2svn $\"";
+        Text[ portuguese ] = "Utilizador \"$name$:  $\"";
+        Text[ russian ] = "������������ \"$name$:  $\"";
+        Text[ greek ] = "������� \"$name$\"";
+        Text[ dutch ] = "Gebruiker \"$name$\"";
+        Text[ french ] = "Utilisateur \"$name$:  $\"";
+        Text[ spanish ] = "Usuario \"$name$:  $\"";
+        Text[ finnish ] = "K�ytt�j� \"$name$:  $\"";
+        Text[ italian ] = "Utente \"$name$: $\"";
+        Text[ danish ] = "Bruger \"$name$\"";
         Text[ swedish ] = "Anv�ndare \"$name$:  $\"";
-        Text[ polish ] = "U�ytkownik \"$Name: not supported by cvs2svn $\"";
-        Text[ portuguese_brazilian ] = "Usu�rio \"$Name: not supported by cvs2svn $\"";
-        Text[ japanese ] = "ユーザー \"$Name: not supported by cvs2svn $\"";
+        Text[ polish ] = "U�ytkownik \"$name$:  $\"";
+        Text[ portuguese_brazilian ] = "Usu�rio \"$name$:  $\"";
+        Text[ japanese ] = "ユーザー \"$name$:  $\"";
         Text[ korean ] = "사용자 \"$name$:  $\"";
         Text[ chinese_simplified ] = "使用者 \"$Name: not supported by cvs2svn $\"";
         Text[ chinese_traditional ] = "使用者 \"$name$:  $\"";
         Text[ turkish ] = "Kullan�c� \"$name$: $\"";
-        Text[ arabic ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ catalan ] = "Usuari \"$Name: not supported by cvs2svn $\"";
-        Text[ thai ] = "ผู้ใช้ \"$ชื่อ: OpenOffice641C $\"";
-        Text[ czech ] = "Uživatel \"$Name: not supported by cvs2svn $\"";
+        Text[ arabic ] = "User \"$name$:  $\"";
+        Text[ catalan ] = "Usuari \"$name$:  $\"";
+        Text[ czech ] = "Uživatel \"$name$\"";
         Text[ hebrew ] = "Benutzer \"$name$:  $\"";
-        Text[ hindi ] = "उपभोक्ता \"$Name: not supported by cvs2svn $\"";
-        Text[ slovak ] = "Užívateľ \"$Name: not supported by cvs2svn $\"";
+        Text[ hindi ] = "उपभोक्ता \"$name$:  $\"";
+        Text[ slovak ] = "Užívateľ \"$name$\"";
+        Text[ hungarian ] = "Felhasználó: \"$name$: $\"";
+        Text[ slovenian ] = "Uporabnik \"$name$:  $\"";
     };
 
     FixedText FT_OLDPASSWORD
@@ -421,6 +436,8 @@ ModalDialog DLG_PASSWORD
         Text[ hebrew ] = "Altes K~ennwort";
         Text[ hindi ] = "पुराना कू~टशब्द";
         Text[ slovak ] = "St~aré heslo";
+        Text[ hungarian ] = "Régi j~elszó";
+        Text[ slovenian ] = "Staro g~eslo";
     };
     Edit ED_OLDPASSWORD
     {
@@ -461,6 +478,8 @@ ModalDialog DLG_PASSWORD
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
         Text[ slovak ] = "~Heslo";
+        Text[ hungarian ] = "~Jelszó";
+        Text[ slovenian ] = "~Geslo";
     };
     Edit ED_PASSWORD
     {
@@ -500,6 +519,8 @@ ModalDialog DLG_PASSWORD
         Text[ hebrew ] = "Kennwort ~bestätigen";
         Text[ hindi ] = "~कूटशब्द दृढ़ करो";
         Text[ slovak ] = "~Potvrdiť heslo";
+        Text[ hungarian ] = "~Jelszó megerősítése";
+        Text[ slovenian ] = "~Potrditev gesla";
     };
     Edit ED_PASSWORD_REPEAT
     {
@@ -550,6 +571,8 @@ ModalDialog DLG_PASSWORD
     Text[ hebrew ] = "Kennwort ändern";
     Text[ hindi ] = "कूटशब्द बदलो";
     Text[ slovak ] = "Zmeniť heslo";
+    Text[ hungarian ] = "Jelszó módosítása";
+    Text[ slovenian ] = "Sprememba gesla";
 };
 
 String STR_ERROR_PASSWORDS_NOT_IDENTICAL
@@ -565,7 +588,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ spanish ] = "Las contrase�as no coinciden. Introd�zcalas otra vez.";
     Text[ finnish ] = "Salasanat eiv�t ole identtiset. Anna salasana uudestaan.";
     Text[ italian ] = "Le due password non coincidono. Digitate di nuovo la password.";
-    Text[ danish ] = "De to adgangskoder stemmer ikke overens, pr�v igen!";
+    Text[ danish ] = "Adgangskoderne stemmer ikke overens. Pr�v igen.";
     Text[ swedish ] = "De b�da l�senorden st�mmer inte �verens, mata in l�senordet igen.";
     Text[ polish ] = "Podane has�a r�ni� si�. Wpisz ponownie has�o.";
     Text[ portuguese_brazilian ] = "As senhas n�o s�o iguais. Por favor, digite-as novamente.";
@@ -581,6 +604,8 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ hebrew ] = "Die beiden Kennwörter stimmen nicht überein, bitte noch einmal eingeben";
     Text[ hindi ] = "कूटशब्द समान नहीं है । कृपया फ़िर से कूटशब्द को प्रविष्ट कीजिए ।";
     Text[ slovak ] = "Heslá sa nezhodujú. Zadajte, prosím, heslo znovu.";
+    Text[ hungarian ] = "A megadott jelszavak különbözőek. Adja meg ismét a jelszót.";
+    Text[ slovenian ] = "Gesli se ne ujemata. Prosimo, da ponovno vnesete geslo.";
 };
 
 
