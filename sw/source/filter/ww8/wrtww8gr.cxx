@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-15 11:57:32 $
+ *  last change: $Author: cmc $ $Date: 2001-10-15 14:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
+#endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
 #endif
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
@@ -298,6 +301,10 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
             SwTwips nHeight = pFlyFmt->GetFrmSize().GetHeight();
             nHeight/=20;    //nHeight was in twips, want it in half points, but
                             //then half of total height.
+            long nFontHeight = ((SvxFontHeightItem&)GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
+            nHeight-=nFontHeight/20;
+            nHeight*=2;
+
             Set_UInt16( pArr, 0x4845 );
             Set_UInt16( pArr, -nHeight);
         }
@@ -486,6 +493,19 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
     Set_UInt16( pArr, nHdrLen );                    // set cbHeader
 
     Set_UInt16( pArr, mm );                         // set mm
+
+    /*
+    #92494#
+    Just in case our original size is too big to fit inside a ushort we can
+    substitute the final size and loose on retaining the scaling factor but
+    still keep the correct display size anyway.
+    */
+    if ( (aGrTwipSz.Width() > USHRT_MAX) || (aGrTwipSz.Height() > USHRT_MAX)
+        || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
+        {
+            aGrTwipSz.Width() = nWidth;
+            aGrTwipSz.Height() = nHeight;
+        }
 
     Set_UInt16( pArr, aGrTwipSz.Width() * 254L / 144 );     // set xExt
     Set_UInt16( pArr, aGrTwipSz.Height() * 254L / 144 );    // set yExt
