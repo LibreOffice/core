@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 13:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3794,5 +3794,8 @@ void MenuBarWindow::LoseFocus()
 void MenuBarWindow::GetFocus()
 {
     if ( nHighlightedItem == ITEMPOS_INVALID )
+    {
+        mbAutoPopup = FALSE;    // do not open menu when activated by focus handling like taskpane cycling
         ChangeHighlightItem( 0, FALSE );
+    }
 }
