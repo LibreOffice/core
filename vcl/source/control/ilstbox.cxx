@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-15 11:20:16 $
+ *  last change: $Author: mt $ $Date: 2001-09-03 17:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1635,9 +1635,13 @@ void ImplListBoxWindow::Paint( const Rectangle& rRect )
 
 void ImplListBoxWindow::Resize()
 {
+    if ( mbHasFocusRect )
+        HideFocus();
     Size aSz( GetOutputSizePixel().Width(), mnMaxHeight );
     maFocusRect.SetSize( aSz );
     mnMaxVisibleEntries = (USHORT) ( GetOutputSizePixel().Height() / mnMaxHeight );
+    if ( mbHasFocusRect )
+        ShowFocus( maFocusRect );
 }
 
 // -----------------------------------------------------------------------
