@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-27 13:22:45 $
+ *  last change: $Author: bm $ $Date: 2001-08-28 09:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2070,6 +2070,8 @@ namespace xmloff { namespace token {
 
         TOKEN( "symbol-image" ),               // XML_SYMBOL_IMAGE
         TOKEN( "text-overlap" ),               // XML_TEXT_OVERLAP
+        TOKEN( "spline-order" ),               // XML_SPLINE_ORDER
+        TOKEN( "spline-resolution" ),          // XML_SPLINE_RESOLUTION
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
