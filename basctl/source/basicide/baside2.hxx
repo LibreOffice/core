@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:37:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@ DBG_NAMEEX( ModulWindow );
 #define MARKER_NOMARKER 0xFFFF
 
 
+// #108672 Helper functions to get/set text in TextEngine
+// using the stream interface (get/setText() only supports
+// tools Strings limited to 64K).
+::rtl::OUString getTextEngineText( ExtTextEngine* pEngine );
+void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr );
 
 class ProgressInfo : public SfxProgress
 {
