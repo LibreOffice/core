@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:39:29 $
+ *  last change: $Author: sj $ $Date: 2001-10-19 12:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4041,8 +4041,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
         case SVX_NUM_CHARS_LOWER_LETTER_N :
         {
             sal_uInt32 nFont = rCharLevel.mnFont;
-            PptFontEntityAtom* pFontEnityAtom;
-            pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
+            PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
             if ( pFontEnityAtom )
             {
                 Font aFont;
@@ -4095,9 +4094,8 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
                 if ( pPtr )
                 {
                     sal_uInt32 nFont;
-                    PptFontEntityAtom* pFontEnityAtom;
                     pPtr->GetAttrib( PPT_CharAttr_Font, nFont, nInstanceInSheet );
-                    pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
+                    PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
                     if ( pFontEnityAtom )
                     {
                         Font aFont;
@@ -6288,7 +6286,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
             if ( pPortion )
             {
                 PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nFont );
-                nPropLineSpace = (sal_uInt8)((double)nVal2 * pAtom->fScaling + 0.5);
+                if ( pAtom )
+                    nPropLineSpace = (sal_uInt8)((double)nVal2 * pAtom->fScaling + 0.5);
             }
             aItem.SetPropLineSpace( nPropLineSpace );
             aItem.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
