@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-22 17:48:09 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,17 +1086,15 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-    if(!pCur)
-        throw UnknownPropertyException();
+
+    if (!pCur)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     if(pFmt)
     {
         sal_Bool bNextFrame = sal_False;
         if ( pCur->nFlags & PropertyAttribute::READONLY)
-        {
-            IllegalArgumentException aExcept;
-            aExcept.Message = C2U("Readonly");
-            throw aExcept;
-        }
+            throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
 
         SwDoc* pDoc = pFmt->GetDoc();
         if( eType == FLYCNTTYPE_GRF &&
@@ -1406,8 +1404,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     uno::Any aAny;
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-    if(!pCur)
-        throw UnknownPropertyException();
+    if (!pCur)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     if(FN_UNO_ANCHOR_TYPES == pCur->nWID)
     {
         uno::Sequence<TextContentAnchorType> aTypes(5);
@@ -1628,8 +1627,9 @@ Sequence< PropertyState > SwXFrame::getPropertyStates(
         for(int i = 0; i < aPropertyNames.getLength(); i++)
         {
             const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, pNames[i]);
-            if(!pCur)
-                throw UnknownPropertyException();
+            if (!pCur)
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+
             if(pCur->nWID == FN_UNO_ANCHOR_TYPES||
                 pCur->nWID == FN_PARAM_LINK_DISPLAY_NAME||
                 FN_UNO_FRAME_STYLE_NAME == pCur->nWID||
@@ -1687,8 +1687,8 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     {
         const SwAttrSet& rFmtSet = pFmt->GetAttrSet();
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-        if(!pCur)
-            throw UnknownPropertyException();
+        if (!pCur)
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pCur->nFlags & PropertyAttribute::READONLY)
             throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -1771,7 +1771,7 @@ Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
             }
         }
         else
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else if(!IsDescriptor())
         throw RuntimeException();
