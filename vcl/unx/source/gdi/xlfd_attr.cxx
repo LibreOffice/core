@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-19 11:24:11 $
+ *  last change: $Author: cp $ $Date: 2000-12-19 17:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ Attribute::TagFeature( unsigned short nFeature )
             || (strcmp(mpName, "heiseimin")   == 0) /* */
             || (strcmp(mpName, "myeongjo")    == 0) /* solaris: korean   */
             || (strcmp(mpName, "kai")         == 0) /* solaris: chinese  */
+            || (strcmp(mpName, "ar pl mingti2l big5") == 0) /* turbo linux: chinese  */
            )
        )
     {
