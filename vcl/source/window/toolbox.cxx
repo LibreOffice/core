@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:30:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1713,6 +1713,8 @@ BOOL ToolBox::ImplCalcItem()
     if ( !mbCalc )
         return FALSE;
 
+    ImplDisableFlatButtons();
+
     long            nDefWidth;
     long            nDefHeight;
     long            nDefLeftWidth;
@@ -2761,6 +2763,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     if( nPos >= mpData->m_aItems.size() )
         return;
 
+    ImplDisableFlatButtons();
+
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
     String* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
@@ -3415,6 +3419,8 @@ BOOL ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, BOOL bRepeat )
 
 BOOL ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, BOOL bCancel )
 {
+    ImplDisableFlatButtons();
+
     if ( mbDrag || mbSelection )
     {
         // Hier die MouseDaten setzen, wenn Selection-Modus, da dann kein
@@ -3537,6 +3543,8 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     if ( ImplHandleMouseMove( rMEvt ) )
         return;
+
+    ImplDisableFlatButtons();
 
     Point aMousePos = rMEvt.GetPosPixel();
 
@@ -5336,3 +5344,42 @@ void ToolBox::ImplHideFocus()
     }
 }
 
+// -----------------------------------------------------------------------
+
+void ToolBox::ImplDisableFlatButtons()
+{
+#ifdef WNT        // Check in the Windows registry if an AT tool wants no flat toolboxes
+    static bool bInit = false, bValue = false;
+    if( ! bInit )
+    {
+        bInit = true;
+        HKEY hkey;
+
+        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
+            "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+            &hkey) )
+        {
+            DWORD dwType = 0;
+            WIN_BYTE Data[6]; // possible values: "true", "false", "1", "0", DWORD
+            DWORD cbData = sizeof(Data);
+
+            if( ERROR_SUCCESS == RegQueryValueEx(hkey, "DisableFlatToolboxButtons",
+                NULL, &dwType, Data, &cbData) )
+            {
+                switch (dwType)
+                {
+                    case REG_SZ:
+                        bValue = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true")));
+                        break;
+                    case REG_DWORD:
+                        bValue = (bool)(((DWORD *) Data)[0]);
+                        break;
+                }
+            }
+            RegCloseKey(hkey);
+        }
+    }
+    if( bValue )
+        mnOutStyle &= ~TOOLBOX_STYLE_FLAT;
+#endif
+}
