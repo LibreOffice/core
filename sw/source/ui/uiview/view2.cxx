@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                         Point aPt(LONG_MIN, LONG_MIN);
                         //go out of the frame
                         pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
+                        SfxBindings& rBind = GetViewFrame()->GetBindings();
+                        rBind.Invalidate( SID_ATTR_SIZE );
                     }
                     pWrtShell->EnterStdMode();
                     AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
@@ -1588,9 +1590,22 @@ void SwView::EnableMailMerge(BOOL bEnable )
     rBind.Invalidate(FN_INSERT_FIELD_DATA_ONLY);
     rBind.Update(FN_INSERT_FIELD_DATA_ONLY);
 }
-/* -----------------05.02.2003 16:33-----------------
- *
- * --------------------------------------------------*/
+/*
+*/
+namespace
+{
+    sal_Bool lcl_NeedAdditionalDataSource( const Reference< XNameAccess >& _rDatasourceContext )
+    {
+        Sequence < OUString > aNames = _rDatasourceContext->getElementNames();
+
+        return  (   !aNames.getLength()
+                ||  (   ( 1 == aNames.getLength() )
+                    &&  aNames.getConstArray()[0] == SW_MOD()->GetDBConfig()->GetBibliographySource().sDataSource
+                    )
+                );
+    }
+}
+
 /* -----------------27.11.2002 12:12-----------------
  *
  * --------------------------------------------------*/
@@ -1611,18 +1626,16 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             }
             if(!xDBContext.is())
                 return ;
-            Sequence < OUString > aNames = xDBContext->getElementNames();
             BOOL bCallAddressPilot = FALSE;
-            if(!aNames.getLength() ||
-                (1 == aNames.getLength() &&
-                    aNames.getConstArray()[0] == SW_MOD()->GetDBConfig()->GetBibliographySource().sDataSource))
+            if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
                 WarningBox aWarning(
                             &GetViewFrame()->GetWindow(),
                             SW_RES(MSG_DATA_SOURCES_UNAVAILABLE));
                 // no cancel allowed
-                aWarning.Execute();
+                if ( RET_OK != aWarning.Execute() )
+                    return;
                 bCallAddressPilot = TRUE;
             }
             else
@@ -1640,6 +1653,10 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             {
                 GetViewFrame()->GetDispatcher()->Execute(
                                 SID_ADDRESS_DATA_SOURCE, SFX_CALLMODE_SYNCHRON);
+                if ( lcl_NeedAdditionalDataSource( xDBContext ) )
+                    // no additional data source has been created
+                    // -> assume that the user has cancelled the pilot
+                    return;
             }
 
             //call insert fields with database field page available, only
