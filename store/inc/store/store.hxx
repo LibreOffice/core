@@ -2,9 +2,9 @@
  *
  *  $RCSfile: store.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORE_HXX_
-#define _STORE_STORE_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORE_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -74,9 +74,8 @@
 #include <store/store.h>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 /*========================================================================
  *
@@ -86,44 +85,51 @@ namespace store {
 class OStoreStream
 {
 public:
-    inline OStoreStream (void);
-    inline ~OStoreStream (void);
+    inline OStoreStream (void) SAL_THROW(());
+    inline ~OStoreStream (void) SAL_THROW(());
 
-    inline OStoreStream (const OStoreStream& rOther);
-    inline OStoreStream& operator= (const OStoreStream& rOther);
+    inline OStoreStream (
+        const OStoreStream& rOther) SAL_THROW(());
+    inline OStoreStream& operator= (
+        const OStoreStream& rOther) SAL_THROW(());
 
-    inline OStoreStream (storeStreamHandle Handle);
-    inline operator storeStreamHandle (void) const;
+    inline OStoreStream (storeStreamHandle Handle) SAL_THROW(());
+    inline operator storeStreamHandle (void) const SAL_THROW(());
 
-    inline sal_Bool isValid (void) const;
+    inline sal_Bool isValid (void) const SAL_THROW(());
 
     inline storeError create (
         storeFileHandle      hFile,
         const rtl::OUString &rPath,
         const rtl::OUString &rName,
-        storeAccessMode      eMode);
+        storeAccessMode      eMode
+    ) SAL_THROW(());
 
-    inline void close (void);
+    inline void close (void) SAL_THROW(());
 
     inline storeError readAt (
         sal_uInt32  nOffset,
         void       *pBuffer,
         sal_uInt32  nBytes,
-        sal_uInt32 &rnDone);
+        sal_uInt32 &rnDone
+    ) SAL_THROW(());
 
     inline storeError writeAt (
         sal_uInt32  nOffset,
         const void *pBuffer,
         sal_uInt32  nBytes,
-        sal_uInt32 &rnDone);
+        sal_uInt32 &rnDone
+    ) SAL_THROW(());
 
-    inline storeError flush (void) const;
+    inline storeError flush (void) const SAL_THROW(());
 
-    inline storeError getSize (sal_uInt32 &rnSize) const;
+    inline storeError getSize (sal_uInt32 &rnSize) const SAL_THROW(());
 
-    inline storeError setSize (sal_uInt32 nSize);
+    inline storeError setSize (sal_uInt32 nSize) SAL_THROW(());
 
 private:
+    /** Representation.
+     */
     storeStreamHandle m_hImpl;
 };
 
@@ -135,16 +141,18 @@ private:
 class OStoreDirectory
 {
 public:
-    inline OStoreDirectory (void);
-    inline ~OStoreDirectory (void);
+    inline OStoreDirectory (void) SAL_THROW(());
+    inline ~OStoreDirectory (void) SAL_THROW(());
 
-    inline OStoreDirectory (const OStoreDirectory& rOther);
-    inline OStoreDirectory& operator= (const OStoreDirectory& rOther);
+    inline OStoreDirectory (
+        const OStoreDirectory& rOther) SAL_THROW(());
+    inline OStoreDirectory& operator= (
+        const OStoreDirectory& rOther) SAL_THROW(());
 
-    inline OStoreDirectory (storeDirectoryHandle Handle);
-    inline operator storeDirectoryHandle (void) const;
+    inline OStoreDirectory (storeDirectoryHandle Handle) SAL_THROW(());
+    inline operator storeDirectoryHandle (void) const SAL_THROW(());
 
-    inline sal_Bool isValid (void) const;
+    inline sal_Bool isValid (void) const SAL_THROW(());
 
     /** create.
      */
@@ -152,18 +160,19 @@ public:
         storeFileHandle      hFile,
         const rtl::OUString &rPath,
         const rtl::OUString &rName,
-        storeAccessMode      eMode);
+        storeAccessMode      eMode
+    ) SAL_THROW(());
 
     /** close.
      */
-    inline void close (void);
+    inline void close (void) SAL_THROW(());
 
     /** Iteration.
      */
     typedef storeFindData iterator;
 
-    inline storeError first (iterator& it);
-    inline storeError next  (iterator& it);
+    inline storeError first (iterator& it) SAL_THROW(());
+    inline storeError next  (iterator& it) SAL_THROW(());
 
     /** Traversal.
      */
@@ -176,6 +185,8 @@ public:
     inline storeError travel (traveller& rTraveller) const;
 
 private:
+    /** Representation.
+     */
     storeDirectoryHandle m_hImpl;
 };
 
@@ -187,32 +198,38 @@ private:
 class OStoreFile
 {
 public:
-    inline OStoreFile (void);
-    inline ~OStoreFile (void);
+    inline OStoreFile (void) SAL_THROW(());
+    inline ~OStoreFile (void) SAL_THROW(());
 
-    inline OStoreFile (const OStoreFile& rOther);
-    inline OStoreFile& operator= (const OStoreFile& rOther);
+    inline OStoreFile (
+        const OStoreFile& rOther) SAL_THROW(());
+    inline OStoreFile& operator= (
+        const OStoreFile& rOther) SAL_THROW(());
 
-    inline OStoreFile (storeFileHandle Handle);
-    inline operator storeFileHandle (void) const;
+    inline OStoreFile (storeFileHandle Handle) SAL_THROW(());
+    inline operator storeFileHandle (void) const SAL_THROW(());
 
-    inline sal_Bool isValid (void) const;
+    inline sal_Bool isValid (void) const SAL_THROW(());
 
     inline storeError create (
         const rtl::OUString &rFilename,
         storeAccessMode      eAccessMode,
-        sal_uInt16           nPageSize = STORE_DEFAULT_PAGESIZE);
+        sal_uInt16           nPageSize = STORE_DEFAULT_PAGESIZE
+    ) SAL_THROW(());
 
     inline storeError createInMemory (
-        sal_uInt16 nPageSize = STORE_DEFAULT_PAGESIZE);
+        sal_uInt16 nPageSize = STORE_DEFAULT_PAGESIZE
+    ) SAL_THROW(());
 
-    inline void close (void);
+    inline void close (void) SAL_THROW(());
 
-    inline storeError flush (void) const;
+    inline storeError flush (void) const SAL_THROW(());
 
-    inline storeError getRefererCount (sal_uInt32 &rnRefCount) const;
+    inline storeError getRefererCount (
+        sal_uInt32 &rnRefCount) const SAL_THROW(());
 
-    inline storeError getSize (sal_uInt32 &rnSize) const;
+    inline storeError getSize (
+        sal_uInt32 &rnSize) const SAL_THROW(());
 
     /** Directory and Stream Manipulation.
      */
@@ -221,30 +238,39 @@ public:
         const rtl::OUString &rName,
         sal_uInt32           nMask1,
         sal_uInt32           nMask2,
-        sal_uInt32          &rnAttrib);
+        sal_uInt32          &rnAttrib
+    ) SAL_THROW(());
+
     inline storeError attrib (
         const rtl::OUString &rPath,
         const rtl::OUString &rName,
         sal_uInt32           nMask1,
-        sal_uInt32           nMask2);
+        sal_uInt32           nMask2
+    ) SAL_THROW(());
 
     inline storeError link (
         const rtl::OUString &rSrcPath, const rtl::OUString &rSrcName,
-        const rtl::OUString &rDstPath, const rtl::OUString &rDstName);
+        const rtl::OUString &rDstPath, const rtl::OUString &rDstName
+    ) SAL_THROW(());
 
     inline storeError symlink (
         const rtl::OUString &rSrcPath, const rtl::OUString &rSrcName,
-        const rtl::OUString &rDstPath, const rtl::OUString &rDstName);
+        const rtl::OUString &rDstPath, const rtl::OUString &rDstName
+    ) SAL_THROW(());
 
     inline storeError rename (
         const rtl::OUString &rSrcPath, const rtl::OUString &rSrcName,
-        const rtl::OUString &rDstPath, const rtl::OUString &rDstName);
+        const rtl::OUString &rDstPath, const rtl::OUString &rDstName
+    ) SAL_THROW(());
 
     inline storeError remove (
         const rtl::OUString &rPath,
-        const rtl::OUString &rName);
+        const rtl::OUString &rName
+    ) SAL_THROW(());
 
 private:
+    /** Representation.
+     */
     storeFileHandle m_hImpl;
 };
 
@@ -256,9 +282,7 @@ private:
 
 #include <store/store.inl>
 
-#ifdef _USE_NAMESPACE
-}
-#endif
+} // namespace store
 
 #endif /* !_STORE_STORE_HXX_ */
 
