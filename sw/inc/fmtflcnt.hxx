@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtflcnt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@ public:
 
     const SwTxtFlyCnt *GetTxtFlyCnt() const { return pTxtAttr; }
           SwTxtFlyCnt *GetTxtFlyCnt()       { return pTxtAttr; }
+
+    // OD 27.06.2003 #108784#
+    const bool Sw3ioExportAllowed() const;
 };
 
 #endif
