@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 16:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,7 +1399,8 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 
     BOOL bRet = FALSE;
     // wenn Modify gelockt ist, werden keine Modifies verschickt
-    if( IsModifyLocked() || !GetDepends() )
+    if( IsModifyLocked() ||
+        ( !GetDepends() &&  RES_PARATR_NUMRULE != rAttr.Which() ))
     {
         if( 0 != ( bRet = (0 != pAttrSet->Put( rAttr )) ))
             // einige Sonderbehandlungen fuer Attribute
@@ -1437,7 +1438,8 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
     BOOL bRet = FALSE;
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt
-    if( IsModifyLocked() || !GetDepends() )
+    if( IsModifyLocked() || ( !GetDepends() &&
+        SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, FALSE )) )
     {
         // einige Sonderbehandlungen fuer Attribute
         if( 0 != (bRet = (0 != pAttrSet->Put( rSet ))) )
