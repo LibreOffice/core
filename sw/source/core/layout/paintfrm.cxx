@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-20 10:18:16 $
+ *  last change: $Author: os $ $Date: 2002-06-21 07:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,8 +1690,10 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     if ( pSh->GetWin() && pSh->Imp()->HasDrawView() &&
          pSh->Imp()->GetDrawView()->IsGridVisible() )
+    {
         pSh->Imp()->GetDrawView()->GetPageViewPgNum(0)->DrawGrid(
-                                            *pSh->GetOut(), rRect.SVRect() );
+            *pSh->GetOut(), rRect.SVRect(), SwViewOption::GetTextGridColor() );
+    }
 
     if ( bResetRootPaint )
         SwRootFrm::bInPaint = FALSE;
