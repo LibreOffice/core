@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 16:03:09 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,7 +942,7 @@ String RID_POPUP_EDIT
     Text[ japanese ] = "Îß¯Ìß±¯ÌßÒÆ­° Ã·½Ä“ü—Í—p";
     Text[ chinese_traditional ] = "Äæ¦ì°Ï¥\\¯àªí";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áÅÏÎÇá ÇáäÕ";
-    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá åéóáãùãŞ êåéìİíïõ";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôçí åéóáãùãŞ êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ®ÀÔ·Â ÆË¾÷¸Ş´º";
     Text[ turkish ] = "Metin girişi için popup mönü";
     Text[ language_user1 ] = " ";
@@ -1209,7 +1209,7 @@ Menu RID_POPUP_AUDIT
             Text [ finnish ] = "Etsi edeltäjä" ;
             Text [ danish ] = "Spor overordnede" ;
             Text [ french ] = "Repérer les ~antécédents" ;
-            Text [ swedish ] = "Spår till ~föregångare" ;
+            Text [ swedish ] = "Spår till ö~verordnade" ;
             Text [ dutch ] = "Spoor naar ~voorganger" ;
             Text [ spanish ] = "Rastrear ~precedentes" ;
             Text [ english_us ] = "Trace ~Precedent" ;
@@ -1241,7 +1241,7 @@ Menu RID_POPUP_AUDIT
             Text [ finnish ] = "Poista edeltäjä" ;
             Text [ danish ] = "Fjern overordnede pile" ;
             Text [ french ] = "~Supprimer le repérage des antécédents" ;
-            Text [ swedish ] = "Ta bort spår till ~föregångaren" ;
+            Text [ swedish ] = "Ta bort spår till öv~erordnade" ;
             Text [ dutch ] = "Spoor naar voorganger v~erwijderen" ;
             Text [ spanish ] = "~Eliminar rastro a precedente" ;
             Text [ english_us ] = "~Remove Precedent" ;
@@ -1272,7 +1272,7 @@ Menu RID_POPUP_AUDIT
             Text [ finnish ] = "Etsi seuraaja" ;
             Text [ danish ] = "Spor underordnede" ;
             Text [ french ] = "R~epérer les dépendants" ;
-            Text [ swedish ] = "Spår till ~efterträdaren" ;
+            Text [ swedish ] = "Spår till u~nderordnade" ;
             Text [ dutch ] = "Spoor naar ~opvolger" ;
             Text [ spanish ] = "Rastrear ~dependientes" ;
             Text [ english_us ] = "~Trace Dependent" ;
@@ -1303,7 +1303,7 @@ Menu RID_POPUP_AUDIT
             Text [ finnish ] = "Poista seuraaja" ;
             Text [ danish ] = "Fjern underordnede pile" ;
             Text [ french ] = "~Supprimer le repérage des dépendants" ;
-            Text [ swedish ] = "Ta bort spår till ~efterträdaren" ;
+            Text [ swedish ] = "Ta bort spår till un~derordnade" ;
             Text [ dutch ] = "Spoor naar opvolger ve~rwijderen" ;
             Text [ spanish ] = "~Eliminar rastro a dependiente" ;
             Text [ english_us ] = "Remove Dependent" ;
@@ -1361,7 +1361,7 @@ Menu RID_POPUP_AUDIT
             Text [ spanish ] = "~Salir del modo de relleno" ;
             Text [ french ] = "Quitter le mode ~Remplissage" ;
             Text [ dutch ] = "Opvulmodus ~beëindigen" ;
-            Text [ swedish ] = "~Avsluta fyllningsläget" ;
+            Text [ swedish ] = "~Avsluta fyllningsläge" ;
             Text [ danish ] = "Afslut fyldmodus" ;
             Text [ portuguese_brazilian ] = "Füll-Modus ~beenden" ;
             Text [ portuguese ] = "~Sair do modo de preenchimento" ;
