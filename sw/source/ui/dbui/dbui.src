@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:35:23 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ ModalDialog DLG_DBSELECTION
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼±ÅÃ";
     Text[ turkish ] = "Veritabaný seçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar base de datos";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
@@ -177,6 +178,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ korean ] = "Ãâ·Â Çü½Ä";
         Text[ turkish ] = "Çýktý türü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "se está imprimiendo en";
     };
     FixedText FT_SENDING
     {
@@ -211,6 +213,7 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ korean ] = "£®£®¿¡¡¡Àü¼Û";
         TEXT[ turkish ] = "Alýcý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "se envía a";
     };
     FixedText FT_PRINTER
     {
@@ -274,6 +277,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ korean ] = "Àü¼Û ¸ð´ÏÅÍ";
         Text[ turkish ] = "Gönderme ekraný";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Enviar-Monitor";
     };
     Text [ portuguese ] = "Monitor de impressão" ;
     Text [ english_us ] = "Print monitor" ;
@@ -294,6 +298,7 @@ ModelessDialog DLG_PRINTMONITOR
     Text[ greek ] = "ÁðïèÞêåõóç-Ïèüíç";
     Text[ korean ] = "ÀúÀå ¸ð´ÏÅÍ";
     Text[ turkish ] = "Yazdýrma ekraný";
+    Text[ catalan ] = "Monitor de impresión";
 };
 
 String STR_DB_EMAIL
@@ -319,4 +324,5 @@ String STR_DB_EMAIL
     Text[ korean ] = "£Å-£Íail";
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "E-mail";
 };
