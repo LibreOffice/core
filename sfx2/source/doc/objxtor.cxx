@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:08:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,11 +140,9 @@
 #include "docfac.hxx"
 #include "docfile.hxx"
 #include "event.hxx"
-#include "cfgmgr.hxx"
 #include "dispatch.hxx"
 #include "viewsh.hxx"
 #include "viewfrm.hxx"
-//#include "interno.hxx"
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appbas.hxx"
@@ -161,9 +159,6 @@
 #include "basmgr.hxx"
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
-#include "imgmgr.hxx"
-#include "tbxconf.hxx"
-#include "accmgr.hxx"
 #include "QuerySaveDocument.hxx"
 #include "helpid.hrc"
 #include "msg.hxx"
@@ -268,10 +263,10 @@ SfxObjectShell::~SfxObjectShell()
     SfxObjectShell::Close();
     pImp->xModel = NULL;
 
-    DELETEX(pImp->pEventConfig);
-    DELETEX(pImp->pTbxConfig);
-    DELETEX(pImp->pAccMgr);
-    DELETEX(pImp->pCfgMgr);
+//  DELETEX(pImp->pEventConfig);
+//    DELETEX(pImp->pTbxConfig);
+//    DELETEX(pImp->pAccMgr);
+//    DELETEX(pImp->pCfgMgr);
     DELETEX(pImp->pReloadTimer );
 
     SfxApplication *pSfxApp = SFX_APP();
@@ -296,7 +291,8 @@ SfxObjectShell::~SfxObjectShell()
 //REMOVE        if ( pMedium && pMedium->IsTemporary() )
 //REMOVE            HandsOff();
 
-    if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == GetStorage() )
+    // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
+    if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == pImp->m_xDocStorage )
         pMedium->CanDisposeStorage_Impl( sal_False );
 
     DELETEX( pMedium );
