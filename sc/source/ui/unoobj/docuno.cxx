@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-27 12:08:48 $
+ *  last change: $Author: sab $ $Date: 2002-09-27 12:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_APPLYFMDES),   0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_AREALINKS),    0,  &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0},
         {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),  0,  &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), 0},
+        {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
