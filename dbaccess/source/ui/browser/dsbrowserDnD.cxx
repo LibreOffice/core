@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 11:00:10 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 12:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,12 +1012,11 @@ namespace dbaui
     sal_Bool SbaTableQueryBrowser::isTableFormat()  const
     {
         sal_Bool bTableFormat = sal_False;
-        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-        bTableFormat    =   aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
-                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
-                    ||  aTransferData.HasFormat(SOT_FORMAT_RTF)
-                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML)
-                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
+        bTableFormat    =   getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
+                    ||  getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
+                    ||  getViewClipboard().HasFormat(SOT_FORMAT_RTF)
+                    ||  getViewClipboard().HasFormat(SOT_FORMATSTR_ID_HTML)
+                    ||  getViewClipboard().HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
 
         return bTableFormat;
     }
@@ -1213,8 +1212,7 @@ namespace dbaui
             case etQuery:
             case etQueryContainer:
             {
-                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-                bAllowed = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                bAllowed = getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
                 break;
             }
             case etView:
@@ -1246,19 +1244,18 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::pasteEntry(SvLBoxEntry* _pEntry)
     {
-        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
         EntryType eType = getEntryType(_pEntry);
         switch(eType)
         {
             case etQuery:
             case etQueryContainer:
-                implPasteQuery(_pEntry, aTransferData);
+                implPasteQuery(_pEntry, getViewClipboard());
                 break;
 
             case etView:
             case etTable:
             case etTableContainer:
-                implPasteTable( _pEntry, aTransferData );
+                implPasteTable( _pEntry, getViewClipboard() );
             default:
                 ;
         }
@@ -1305,6 +1302,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.41  2002/05/23 11:00:10  oj
+ *  #99407# check columns to set
+ *
  *  Revision 1.40  2002/05/10 10:06:53  oj
  *  #95472# showError mesg when table isn't any longer in container
  *
