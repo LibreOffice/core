@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:37:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,13 +345,21 @@ void SdModule::Execute(SfxRequest& rReq)
                             }
                             else
                             {
-                                SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                                DBG_ASSERT( pViewFrame, "The autopilot needs a frame to load a document!" );
-                                if( pViewFrame )
+                                SfxRequest aRequest (SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
+                                    SFX_APP()->GetPool());
+                                aRequest.AppendItem (aFile);
+                                aRequest.AppendItem (aReferer);
+                                aRequest.AppendItem (aPassword);
+                                aRequest.AppendItem (SfxStringItem (
+                                    SID_TARGETNAME,
+                                    String (RTL_CONSTASCII_USTRINGPARAM ("_default"))));
+                                try
                                 {
-                                    SdDrawDocShell*             pDocShell = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
-                                    SdViewShell*                pViewShell = pDocShell ? pDocShell->GetViewShell() : NULL;
-                                    const SfxObjectShellItem*   pRet = (SfxObjectShellItem*)pViewFrame->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aPassword, 0L );
+                                    SFX_APP()->ExecuteSlot (aRequest);
+                                }
+                                catch (::com::sun::star::uno::Exception e)
+                                {
+                                    DBG_ASSERT (FALSE, "caught IllegalArgumentException while loading document from Impress autopilot");
                                 }
                             }
                         }
