@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnumPropertyHdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 19:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include <EnumPropertyHdl.hxx>
@@ -121,7 +125,24 @@ sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValu
 
     if( SvXMLUnitConverter::convertEnum( nValue, rStrImpValue, mpEnumMap ) )
     {
-        rValue = ::cppu::int2enum( nValue, mrType );
+        switch( mrType.getTypeClass() )
+        {
+        case TypeClass_ENUM:
+            rValue = ::cppu::int2enum( nValue, mrType );
+            break;
+        case TypeClass_LONG:
+            rValue <<= (sal_Int32) nValue;
+            break;
+        case TypeClass_SHORT:
+            rValue <<= (sal_Int16) nValue;
+            break;
+        case TypeClass_BYTE:
+            rValue <<= (sal_Int8) nValue;
+            break;
+        default:
+            DBG_ERROR( "Wrong type for enum property handler!" );
+            return sal_False;
+        }
         return sal_True;
     }
 
