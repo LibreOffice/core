@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:18:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,6 @@ class CustomAnimationListEntryItem : public SvLBoxString
 public:
                     CustomAnimationListEntryItem( SvLBoxEntry*,USHORT nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
     virtual         ~CustomAnimationListEntryItem();
-    virtual USHORT  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
@@ -311,13 +310,6 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvLBoxEntry* pEntry,
 
 CustomAnimationListEntryItem::~CustomAnimationListEntryItem()
 {
-}
-
-// --------------------------------------------------------------------
-
-USHORT CustomAnimationListEntryItem::IsA()
-{
-    return -1;
 }
 
 // --------------------------------------------------------------------
