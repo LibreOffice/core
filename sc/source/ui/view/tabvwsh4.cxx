@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:54:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,11 +219,11 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_NAVIGATOR_UPDATEALL ) );
             bFirstActivate = FALSE;
 
-            if ( aPendingUserData.Len() )
+            if ( aPendingUserData.hasElements() )
             {
                 //  #89897# read user data from print preview now, after ctor
-                DoReadUserData( aPendingUserData );
-                aPendingUserData.Erase();
+                DoReadUserDataSequence( aPendingUserData );
+                aPendingUserData.realloc( 0 );
             }
 
             // #116278# ReadExtOptions (view settings from Excel import) must also be done
@@ -600,9 +600,12 @@ void __EXPORT ScTabViewShell::ReadUserData(const String& rData, BOOL bBrowse)
 
 void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool bBrowse )
 {
-    if ( GetViewData()->GetDocShell()->IsPreview() )
-        return;
+    if ( !GetViewData()->GetDocShell()->IsPreview() )
+        DoReadUserDataSequence( rSettings );
+}
 
+void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::PropertyValue >& rSettings )
+{
     Window* pOldWin = GetActiveWin();
     BOOL bFocus = pOldWin && pOldWin->HasFocus();
 
