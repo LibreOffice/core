@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mav $ $Date: 2002-03-26 16:23:35 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 07:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include <com/sun/star/uno/Reference.hxx>
+
+#ifndef _COM_SUN_STAR_DOCUMENT_CONFIGITEMAPIMODE_HPP_
+#include <com/sun/star/document/ConfigItemAPIMode.hpp>
+#endif
 
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
@@ -125,6 +129,7 @@
 #include "tbxconf.hxx"
 #include "docfile.hxx"
 #include "objuno.hxx"
+#include "request.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1598,6 +1603,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     if ( !xDocStor.Is() || !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
 
+    SFX_ITEMSET_ARG( pFile->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCFROMTEMP, sal_False);
+    sal_Int16 bCanUpdateFromTemplate = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::ConfigItemAPIMode::VALUE_NO;
+
     // created from template?
     SfxDocumentInfo *pInfo = &GetDocInfo();
     String aTemplName( pInfo->GetTemplateName() );
@@ -1667,7 +1675,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 // but only if template name is set, not if only a template filename is given
                 String aMsg( SfxResId( STR_TEMPL_RESET ) );
                 aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
-                if( QueryBox( GetDialogParent(), WB_YES_NO, aMsg ).Execute() == RET_NO )
+                if( bCanUpdateFromTemplate == document::ConfigItemAPIMode::USE_CONFIG_VALUE
+                 && QueryBox( GetDialogParent(), WB_YES_NO, aMsg ).Execute() == RET_NO )
                 {
                     String aStr;
                     pInfo->SetTemplateFileName( aStr );
@@ -1725,10 +1734,16 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 if ( aTemplDate > aInfoDate )
                 {
                     // ask user
-                    QueryBox aBox( GetDialogParent(), SfxResId(MSG_QUERY_LOAD_TEMPLATE) );
-                    if ( RET_YES == aBox.Execute() )
+                    if( bCanUpdateFromTemplate == document::ConfigItemAPIMode::VALUE_YES )
                         bLoad = TRUE;
-                    else
+                    else if ( bCanUpdateFromTemplate == document::ConfigItemAPIMode::USE_CONFIG_VALUE )
+                    {
+                        QueryBox aBox( GetDialogParent(), SfxResId(MSG_QUERY_LOAD_TEMPLATE) );
+                        if ( RET_YES == aBox.Execute() )
+                            bLoad = TRUE;
+                    }
+
+                    if( !bLoad )
                     {
                         // user refuses, so don't ask again for this document
                         pInfo->SetQueryLoadTemplate(FALSE);

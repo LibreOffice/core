@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:12:40 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 07:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,13 +1538,28 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
      || pImp->nMacroMode != MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
     {
         SvtSecurityOptions aOpt;
+        sal_Int16 nAutoConformation = 0;
 
+        // get setting from configuration
         if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG )
         {
-            // get setting from configuration
             pImp->nMacroMode = aOpt.GetBasicMode();
-            DBG_ASSERT( pImp->nMacroMode != MacroExecMode::USE_CONFIG, "Configuration should contain explicit value!\n" );
         }
+        else if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
+        {
+            nAutoConformation = -1;
+            pImp->nMacroMode = aOpt.GetBasicMode();
+        }
+        else if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
+        {
+            nAutoConformation = 1;
+            pImp->nMacroMode = aOpt.GetBasicMode();
+        }
+
+        DBG_ASSERT( pImp->nMacroMode != MacroExecMode::USE_CONFIG
+                 && pImp->nMacroMode != MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION
+                 && pImp->nMacroMode != MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION,
+                    "Configuration should contain explicit value!\n" );
 
         if ( pImp->nMacroMode == MacroExecMode::FROM_LIST || pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE )
         {
@@ -1555,23 +1570,28 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
             sal_Bool bSecure = pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE || IsSecure();
             if ( bSecure && bWarn || !bSecure && bConfirm )
             {
-                QueryBox aBox( GetDialogParent(), SfxResId( DLG_MACROQUERY ) );
-                aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
-                aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
-                String aText = aBox.GetMessText();
-                if ( bSecure )
+                if ( !nAutoConformation )
                 {
-                    aBox.SetFocusButton( aBox.GetButtonId(0) );
-                    aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_OK) ) );
+                    QueryBox aBox( GetDialogParent(), SfxResId( DLG_MACROQUERY ) );
+                    aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
+                    aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
+                    String aText = aBox.GetMessText();
+                    if ( bSecure )
+                    {
+                        aBox.SetFocusButton( aBox.GetButtonId(0) );
+                        aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_OK) ) );
+                    }
+                    else
+                    {
+                        aBox.SetFocusButton( aBox.GetButtonId(1) );
+                        aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_CANCEL) ) );
+                    }
+
+                    aBox.SetMessText( aText );
+                    bSecure = ( aBox.Execute() == RET_OK );
                 }
                 else
-                {
-                    aBox.SetFocusButton( aBox.GetButtonId(1) );
-                    aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_CANCEL) ) );
-                }
-
-                aBox.SetMessText( aText );
-                bSecure = ( aBox.Execute() == RET_OK );
+                    bSecure = ( nAutoConformation > 0 );
             }
 
             pImp->nMacroMode = bSecure ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;

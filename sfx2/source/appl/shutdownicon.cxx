@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-21 08:52:42 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 07:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_CONFIGITEMAPIMODE_HPP_
+#include <com/sun/star/document/ConfigItemAPIMode.hpp>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <filedlghelper.hxx>
@@ -270,8 +273,8 @@ void ShutdownIcon::FileOpen()
                     Sequence< OUString >        sFiles = xPicker->getFiles();
                     int                         nFiles = sFiles.getLength();
 
-                    int                         nArgs=2;
-                    Sequence< PropertyValue >   aArgs(2);
+                    int                         nArgs=3;
+                    Sequence< PropertyValue >   aArgs(3);
 
                     Reference < com::sun::star::task::XInteractionHandler > xInteraction(
                         ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
@@ -283,6 +286,10 @@ void ShutdownIcon::FileOpen()
                     sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
                     aArgs[1].Name = OUString::createFromAscii( "MacroExecutionMode" );
                     aArgs[1].Value <<= nMacroExecMode;
+
+                    sal_Int16 nUpdateDoc = ::com::sun::star::document::ConfigItemAPIMode::USE_CONFIG_VALUE;
+                    aArgs[2].Name = OUString::createFromAscii( "UpdateDocFromTemplate" );
+                    aArgs[2].Value <<= nUpdateDoc;
 
                     OUString                    aFilterName;
                     if ( xFilterManager.is() )
