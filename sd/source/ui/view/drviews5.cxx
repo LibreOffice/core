@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: af $ $Date: 2004-08-02 12:43:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
 #endif
+
+#include <sfx2/viewfrm.hxx>
 #include "LayerTabBar.hxx"
 #include "LayerDialogChildWindow.hxx"
 
@@ -306,10 +308,10 @@ void DrawViewShell::ArrangeGUIElements (void)
     OSL_ASSERT (GetViewShell()!=NULL);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
     BOOL bClientActive = FALSE;
-    if ( pIPClient && pIPClient->IsInPlaceActive() )
+    if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
         bClientActive = TRUE;
 
-    BOOL bInPlaceActive = GetDocSh()->IsInPlaceActive();
+    BOOL bInPlaceActive = GetViewFrame()->GetFrame()->IsInPlace();
 
 //        if ( bZoomOnPage && GetDocSh()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
     if ( bZoomOnPage && !bInPlaceActive && !bClientActive )
