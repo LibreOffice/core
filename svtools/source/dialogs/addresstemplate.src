@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 21:37:07 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Moveable = TRUE ;
     Text = "Vorlagen: Adressbuch-Zuordnung";
     Text [ english ] = "Templates: Address Book assignment";
-    Text [ english_us ] = "Templates: Address Book ";
+    Text [ english_us ] = "Templates: Address Book Assignment";
 
     FixedLine FL_DATASOURCEFRAME
     {
@@ -134,7 +134,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ japanese ] = "ÃŞ°À¿°½";
         Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
         Text[ chinese_simplified ] = "Êı¾İÔ´";
-        Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½";
+        Text[ chinese_traditional ] = "¸ê®Æ·½";
         Text[ turkish ] = "Datasource";
         Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
         Text[ catalan ] = "Fuente de datos";
@@ -423,7 +423,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "Avdelning";
     Text[ polish ] = "Dzia³";
     Text[ portuguese_brazilian ] = "Department";
-    Text[ japanese ] = "•”–å";
+    Text[ japanese ] = "•”";
     Text[ korean ] = "ºÎ¼­";
     Text[ chinese_simplified ] = "²¿ÃÅ";
     Text[ chinese_traditional ] = "³¡ªù";
@@ -623,7 +623,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "Befattning";
     Text[ polish ] = "Stanowisko";
     Text[ portuguese_brazilian ] = "Position";
-    Text[ japanese ] = "–ğE";
+    Text[ japanese ] = "•”";
     Text[ korean ] = "Á÷À§";
     Text[ chinese_simplified ] = "Ö°Î»";
     Text[ chinese_traditional ] = "Â¾°È";
@@ -1026,7 +1026,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ polish ] = "Telefon (s³u¿b.)";
     Text[ portuguese_brazilian ] = "Telephon Office";
     Text[ japanese ] = "Tel.µÌ¨½";
-    Text[ korean ] = "Tel£® »ç¹«½Ç";
+    Text[ korean ] = "ÀüÈ­(»ç¹«½Ç)";
     Text[ chinese_simplified ] = "°ì¹«ÊÒµÄµç»°ºÅÂë";
     Text[ chinese_traditional ] = "¿ì¤½«Ç¹q¸Ü¸¹½X";
     Text[ turkish ] = "Telephon Office";
@@ -1075,7 +1075,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "Mobil";
     Text[ polish ] = "Telefon komórkowy";
     Text[ portuguese_brazilian ] = "Mobile";
-    Text[ japanese ] = "Œg‘Ñ";
+    Text[ japanese ] = "Œg‘Ñ“d˜b";
     Text[ korean ] = "ÇÚµåÆù";
     Text[ chinese_simplified ] = "ÊÖ»úºÅÂë";
     Text[ chinese_traditional ] = "¤â¾÷¸¹½X";
@@ -1160,4 +1160,5 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ finnish ] = "Kutsu";
         };
 };
+
 
