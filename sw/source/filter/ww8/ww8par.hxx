@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:18:06 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _WW8GLSY_HXX
 #include "ww8glsy.hxx"
 #endif
+#ifndef SW_MS_MSFILTER_HXX
+#include "../inc/msfilter.hxx"
+#endif
 
 class SwDoc;
 class SwPaM;
@@ -193,11 +196,8 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_DEFSTYLES        0x400
 
 #define WW8FL_NO_OUTLINE         0x1000
-#define WW8FL_NO_NUMRULE         0x2000
 #define WW8FL_NO_IMPLPASP        0x4000  // no implicit para space
 #define WW8FL_NO_GRAFLAYER       0x8000
-#define WW8FL_NO_OLE            0x20000
-#define WW8FL_NO_TOX           0x400000
 
 // Zusatz-Filter-Flags, gueltig ab Winword 8
 #define WW8FL_NO_FLY_FOR_TXBX         1
@@ -331,7 +331,6 @@ public:
 
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
     const SfxPoolItem* GetStackAttr(const SwPosition& rPos, USHORT nWhich);
-    void Delete(const SwPaM &rPam);
 };
 
 class wwRedlineStack
@@ -681,10 +680,14 @@ public:
     bool PageRestartNo() const { return maSep.fPgnRestart ? true : false; }
     bool IsBiDi() const { return maSep.fBiDi ? true : false; }
     sal_uInt32 GetPageWidth() const { return nPgWidth; }
+    sal_uInt32 GetTextAreaWidth() const
+        { return GetPageWidth() - GetPageLeft() - GetPageRight(); }
     sal_uInt32 GetPageHeight() const { return maSep.yaPage; }
     sal_uInt32 GetPageLeft() const { return nPgLeft; }
     sal_uInt32 GetPageRight() const { return nPgRight; }
     bool IsLandScape() const { return maSep.dmOrientPage ? true : false; }
+    bool IsFixedHeightHeader() const { return maSep.dyaTop < 0; }
+    bool IsFixedHeightFooter() const { return maSep.dyaBottom < 0; }
 };
 
 class wwSectionManager
@@ -712,20 +715,22 @@ private:
         bool bIgnoreCols);
 
     void GetPageULData(const wwSection &rNewSection, bool bFirst,
-        wwULSpaceData& rData);
-    void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData);
+        wwULSpaceData& rData) const;
+    void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData,
+        const wwSection &rSection) const;
 
     void SetPage(SwPageDesc &rPageDesc, SwFrmFmt &rFmt,
-        const wwSection &rSection, bool bIgnoreCols);
+        const wwSection &rSection, bool bIgnoreCols) const;
 
-    void SetNumberingType(const wwSection &rNewSection, SwPageDesc &rPageDesc);
+    void SetNumberingType(const wwSection &rNewSection, SwPageDesc &rPageDesc)
+        const;
 
     void SetUseOn(wwSection &rSection);
     void SetHdFt(wwSection &rSection, int nSect, const wwSection *pPrevious);
 
     SwSectionFmt *InsertSection(SwPaM& rMyPaM, wwSection &rSection);
     bool SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
-        sal_uInt32 nNettoWidth);
+        sal_uInt32 nNettoWidth) const;
     bool SectionIsProtected(const wwSection &rSection) const;
     void SetLeftRight(wwSection &rSection);
     bool IsNewDoc() const;
@@ -755,6 +760,7 @@ public:
     sal_uInt32 GetPageLeft() const;
     sal_uInt32 GetPageRight() const;
     sal_uInt32 GetPageWidth() const;
+    sal_uInt32 GetTextAreaWidth() const;
 };
 
 class wwFrameNamer
@@ -812,6 +818,15 @@ struct ApoTestResults
     bool HasFrame() const { return (mpSprm29 || mpSprm37 || mpStyleApo); }
 };
 
+struct ANLDRuleMap
+{
+    SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, varient 1
+    SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, varient 2
+    SwNumRule* GetNumRule(BYTE nNumType);
+    void SetNumRule(SwNumRule*, BYTE nNumType);
+    ANLDRuleMap() : mpOutlineNumRule(0), mpNumberingNumRule(0) {}
+};
+
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
@@ -840,6 +855,7 @@ private:
     SvStream* pStrm;                // Input-(Storage)Stream
     SvStream* pTableStream;         // Input-(Storage)Stream
     SvStream* pDataStream;          // Input-(Storage)Stream
+    SvStorageRef mxDstStg;          // Ole object temp storage
 
 // allgemeines
     SwDoc& rDoc;
@@ -886,7 +902,6 @@ private:
     */
     std::deque<FtnDescriptor> maFtnStack;
 
-
     /*
     A queue of the ms sections in the document
     */
@@ -906,6 +921,12 @@ private:
     Creates unique names to give to graphics
     */
     wwFrameNamer maGrfNameGenerator;
+
+    /*
+    Knows which writer style a given word style should be imported as.
+    */
+    sw::util::ParaStyleMapper maParaStyleMapper;
+    sw::util::CharStyleMapper maCharStyleMapper;
 
     /*
      Stack of textencoding being used as we progress through the document text
@@ -953,7 +974,7 @@ private:
     //Keep track of tables within tables
     std::stack<WW8TabDesc*> maTableStack;
 
-    SwNumRule* mpNumRule;       // fuer Nummerierung / Aufzaehlungen im Text
+    ANLDRuleMap maANLDRules;
     WW8_OLST* pNumOlst;         // Gliederung im Text
 
     SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
@@ -1076,9 +1097,12 @@ private:
     void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
         std::vector<const xub_StrLen*> &rPositions);
 
-    void Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPageDesc* pPD,
-        const SwPageDesc *pPrev);
+    void Read_HdFt(bool bIsTitle, int nSect, const SwPageDesc *pPrev,
+        const wwSection &rSection);
     void Read_HdFtText(long nStartCp, long nLen, SwFrmFmt* pHdFtFmt);
+    void Read_HdFtTextAsHackedFrame(long nStart, long nLen,
+        SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth);
+
     bool HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt, int nSect);
 
     void HandleLineNumbering(const wwSection &rSection);
@@ -1163,12 +1187,13 @@ private:
         WW8_FSPA *pF );
 
     bool IsDropCap();
-    WW8FlyPara *ConstructApo(const ApoTestResults &rApo, WW8_TablePos *pTabPos);
-    bool StartApo(const ApoTestResults &rApo, WW8_TablePos *pTabPos);
+    WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
+        const WW8_TablePos *pTabPos);
+    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     void StopApo();
-    bool TestSameApo(const ApoTestResults &rApo, WW8_TablePos *pTabPos);
+    bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
-        WW8_TablePos *pTabPos);
+        const WW8_TablePos *pTabPos);
 
     void EndSpecial();
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);
@@ -1235,7 +1260,8 @@ private:
 
     void StartAnl(const BYTE* pSprm13);
     void NextAnlLine(const BYTE* pSprm13);
-    void StopAnl(bool bGoBack = true);
+    void StopAllAnl(bool bGoBack = true);
+    void StopAnlToRestart(BYTE nType, bool bGoBack = true);
 
 // GrafikLayer
 
