@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:32:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1288,7 +1288,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
  * Return: Offset im String
  *************************************************************************/
 xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
-                     const MSHORT nChgNode, const SwCrsrMoveState* pCMS ) const
+                     const MSHORT nChgNode, SwCrsrMoveState* pCMS ) const
 {
     // Adjustierung ggf. nachholen
     GetAdjusted();
@@ -1445,6 +1445,18 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         ( pPor->InNumberGrp() && !pPor->IsFtnNumPortion() ) ||
         ( pPor->IsMarginPortion() && nWidth > nX + 30 ) ) )
         ((SwCrsrMoveState*)pCMS)->bPosCorr = sal_True;
+
+
+    // #i27615#
+    if (pCMS)
+    {
+        if( pCMS->bInFrontOfLabel)
+        {
+            if (! (2 * nX < nWidth && pPor->InNumberGrp() &&
+                   !pPor->IsFtnNumPortion()))
+                pCMS->bInFrontOfLabel = sal_False;
+        }
+    }
 
     // 7684: Wir sind genau auf der HyphPortion angelangt und muessen dafuer
     // sorgen, dass wir in dem String landen.
