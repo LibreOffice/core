@@ -127,22 +127,23 @@ sub MakeDir {
 
 
 #
-# Make dependeCheck if project should be built when all parent projects are built
+# Get string of parent projects to build
 #
 sub GetParentsString {
-    my ($ParentPrjs, @Arr, $PrjDir);
+    my ($PrjDir);
     $PrjDir = $_[0];
     if (!open (PrjBuildFile, $PrjDir."/prj/build.lst")) {
         return "";
     };
-    @Arr = <PrjBuildFile>;
-    $Arr[0] =~ /(\:)([\t | \s]+)/;
-    $ParentPrjs = $';
-    close PrjBuildFile;
-    if (!$') {
-        return "NULL";
+    while (<PrjBuildFile>) {
+        s/\r\n//;
+        if ($_ =~ /([\:]+)([\t | \s]+)/) {
+            $ParentPrjs = $';
+            close PrjBuildFile;
+            return $';
+        };
     };
-    return $';
+    return "NULL";
 };
 
 #
@@ -266,7 +267,7 @@ sub GetQuantityToBuild {
 
 
 #
-# Procedure prooves if current dir is a root dir in the drive
+# Procedure prooves if current dir is a root dir of the drive
 #
 sub IsRootDir {
     my ($Dir);
