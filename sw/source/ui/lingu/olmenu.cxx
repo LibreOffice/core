@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:01:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -108,6 +105,7 @@
 #include <svx/splwrap.hxx>
 #endif
 
+#include <svx/acorrcfg.hxx>
 
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
@@ -350,7 +348,7 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
 
 
             // nur aufnehmen, wenn es NICHT schon in der Autokorrektur vorhanden ist
-            SvxAutoCorrect* pACorr = OFF_APP()->GetAutoCorrect();
+            SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
             LanguageType eLanguage = SvxLocaleToLanguage( xSpellAlt->getLocale() );
 
