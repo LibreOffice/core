@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:10:03 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _DYNARY_HXX
 #include <tools/dynary.hxx>
 #endif
-
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
 
 /* class VBA:
  * The VBA class provides a set of methods to handle Visual Basic For
@@ -123,6 +125,7 @@ public:
         return pOffsets[ nIndex ].sName;
     }
     virtual void Output(int len, const sal_uInt8 *data);
+    std::vector<String> maReferences;
 private:
     struct VBAOffset_Impl
     {
@@ -147,7 +150,6 @@ private:
     int ReadVBAProject(const SvStorageRef &rxVBAStorage);
     int DecompressVBA(int index, SvStorageStreamRef &rxVBAStream);
     sal_uInt8 ReadPString(SvStorageStreamRef &xVBAProject, bool bIsUnicode);
-    bool SkipTrickyMac(SvStorageStreamRef &xVBAProject);
 };
 
 #endif
