@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-08 08:25:46 $
+ *  last change: $Author: od $ $Date: 2002-08-28 11:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,31 @@ public:
 
     //Auf dieser Shell painten (PreView, Print-Flag usw. rekursiv beachten)?.
     static BOOL IsPaint( SdrObject *pObj, const ViewShell *pSh );
+
+    /** SwFlyFrm::IsBackgroundTransparent - for feature #99657#
+
+        OD 12.08.2002
+        determines, if background of fly frame has to be drawn transparent
+        definition found in /core/layout/paintfrm.cxx
+
+        @author OD
+
+        @return true, if background color is transparent or a existing background
+        graphic is transparent.
+    */
+    const sal_Bool IsBackgroundTransparent() const;
+
+    /** SwFlyFrm::IsShadowTransparent - for feature #99657#
+
+        OD 05.08.2002
+        determine, if shadow color of fly frame has to be drawn transparent
+        definition found in /core/layout/paintfrm.cxx
+
+        @author OD
+
+        @return true, if shadow color is transparent.
+    */
+    const sal_Bool IsShadowTransparent() const;
 };
 
 inline BOOL SwFlyFrm::IsUpperOf( const SwFlyFrm *pLower ) const
