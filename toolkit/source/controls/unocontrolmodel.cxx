@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 05:50:49 $
+ *  last change: $Author: fs $ $Date: 2002-07-15 12:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1373,7 +1373,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
         }
     }
 
-    delete pHandles;
+    delete[] pHandles;
 }
 
 
