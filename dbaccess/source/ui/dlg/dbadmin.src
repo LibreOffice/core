@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-10 13:08:03 $
+ *  last change: $Author: kz $ $Date: 2002-01-25 21:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,7 +871,7 @@ TabPage PAGE_GENERAL
         Text [ spanish ] = "No se han encontrado fuentes de datos Adabas en su sistema.";
         Text [ italian ] = "Impossibile trovare una sorgente dati Adabas nel sistema";
         Text [ danish ] = "No Adabas data sources have been found on your system.";
-        Text [ swedish ] = "Inga Adabasdatak�llor har hittats p� Ditt system.";
+        Text [ swedish ] = "Inga Adabasdatak�llor har hittats i ditt system.";
         Text [ polish ] = "W systemie komputera u�ytkownika nie znaleziono �r�de� danych Adabas.";
         Text [ portuguese_brazilian ] = "No Adabas data sources have been found on your system.";
         Text [ japanese ] = "お使いのシステム上に Adabas データソースは見つかりません。";
@@ -2624,7 +2624,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ spanish ] = "Debe introducir una contrase�a para la conexi�n a la fuente de datos \"$name$\".";
     Text [ italian ] = "Per il collegamento alla sorgente dati \"$name$\" � necessaria una password.";
     Text [ danish ] = "Forbindelsen til datakilden \"$name$\" kr�ver at du indtaster en adgangskode.";
-    Text [ swedish ] = "F�rbindelsen till datak�llan \"$name$\" kr�ver att Du anger ditt l�senord.";
+    Text [ swedish ] = "Anslutningen till datak�llan \"$name$\" kr�ver att du anger ditt l�senord.";
     Text [ polish ] = "Po��czenie ze �r�d�em danych \"$name$\" wymaga wprowadzenia has�a.";
     Text [ portuguese_brazilian ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text [ japanese ] = "\"$name$\" データソースへの接続にはパスワードの入力が必要です。";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.85  2002/01/10 13:08:03  fs
+ *  #96387# changed the widths of some fixed texts (were too small for french texts)
+ *
  *  Revision 1.84  2002/01/09 21:12:47  kz
  *  Merge SRC641: 09.01.02 - 22:08:38
  *
