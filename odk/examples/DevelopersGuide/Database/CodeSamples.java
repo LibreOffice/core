@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CodeSamples.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:51:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -54,6 +54,7 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.sdbc.*;
 import com.sun.star.sdb.*;
 import com.sun.star.sdbcx.*;
+import com.sun.star.frame.*;
 
 public class CodeSamples
 {
@@ -61,7 +62,7 @@ public class CodeSamples
     public static void main(String argv[]) throws java.lang.Exception
     {
         try{
-            rSmgr = connect("socket,host=localhost,port=2083");
+            rSmgr = connect("socket,host=localhost,port=8100");
             //  checkConnection( openConnectionWithDriverManager(rSmgr) );
             //  checkConnection( openConnectionWithDriver(rSmgr) );
             createQuerydefinition( rSmgr );
@@ -298,7 +299,7 @@ public class CodeSamples
             sComposedName += sTable;
         }
         else
-        {
+                {
             sComposedName += sTable;
         }
         if (0 != sCatalog.length() && !dbmd.isCatalogAtStart() && 0 != sCatalogSep.length())
@@ -329,13 +330,16 @@ public class CodeSamples
         xProp.setPropertyValue("EscapeProcessing",new Boolean(true));
 
         XNameContainer xCont = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xQDefs);
-        try
-        {
-            xCont.removeByName("Query1");
-        }
-        catch(com.sun.star.uno.Exception e)
-        {}
+                try
+                {
+                    if ( xCont.hasByName("Query1") )
+                        xCont.removeByName("Query1");
+                }
+                catch(com.sun.star.uno.Exception e)
+                {}
         xCont.insertByName("Query1",xProp);
+                XStorable xStore = (XStorable)UnoRuntime.queryInterface(XStorable.class,xQuerySup);
+                xStore.store();
     }
 
     // prints all column names from Query1
