@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:28 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,13 +591,37 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-// draw:frame
+// draw:floating-frame
 
-class SdXMLFrameShapeContext : public SdXMLShapeContext
+class SdXMLFloatingFrameShapeContext : public SdXMLShapeContext
 {
 private:
     rtl::OUString maFrameName;
     rtl::OUString maHref;
+
+public:
+    TYPEINFO();
+
+    SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+    virtual ~SdXMLFloatingFrameShapeContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// draw:-frame
+
+class SdXMLFrameShapeContext : public SdXMLShapeContext
+{
+private:
+    SvXMLImportContextRef mxImplContext;
 
 public:
     TYPEINFO();
@@ -608,10 +632,12 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLFrameShapeContext();
 
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
-    // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
