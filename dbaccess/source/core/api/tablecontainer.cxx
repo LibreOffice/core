@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #endif
 #ifndef _DBA_CORE_TABLEDECORATOR_HXX_
 #include "TableDeco.hxx"
+#endif
+#ifndef DBACORE_SDBCORETOOLS_HXX
+#include "sdbcoretools.hxx"
 #endif
 
 using namespace dbaccess;
@@ -489,7 +492,7 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
     }
 
     if(xProp.is())
-        return new ODBTableDecorator(aTableConfig,m_xMetaData,xSup);
+        return new ODBTableDecorator( aTableConfig, m_xMetaData, xSup, getDataSourceNumberFormats( m_xConnection ) );
     else
     {
         ::rtl::OUString sCatalog,sSchema,sTable;
@@ -514,7 +517,7 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
         }
         ::comphelper::disposeComponent(xRes);
         return new ODBTable(aTableConfig,
-                            m_xMetaData,
+                            m_xConnection,
                             sCatalog,
                             sSchema,
                             sTable,
@@ -532,11 +535,11 @@ Reference< XPropertySet > OTableContainer::createEmptyObject()
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterTables,UNO_QUERY);
     if(xDataFactory.is())
     {
-        xMasterColumnsSup = Reference<XColumnsSupplier >(xDataFactory->createDataDescriptor(),UNO_QUERY);
-        xRet = new ODBTableDecorator(m_xMetaData,xMasterColumnsSup);
+        xMasterColumnsSup = Reference< XColumnsSupplier >( xDataFactory->createDataDescriptor(), UNO_QUERY );
+        xRet = new ODBTableDecorator( m_xMetaData, xMasterColumnsSup, getDataSourceNumberFormats( m_xConnection ) );
     }
     else
-        xRet = new ODBTable(m_xMetaData);
+        xRet = new ODBTable( m_xConnection );
     return xRet;
 }
 // -----------------------------------------------------------------------------
@@ -793,13 +796,13 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
                 ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
                 if(pDecoTable)
                 {
-                    pDecoTable->setConfigurationNode(aTableConfig.cloneAsRoot());
+                    pDecoTable->setContext( aTableConfig.cloneAsRoot(), getDataSourceNumberFormats( m_xConnection ) );
                 }
                 else
                 {
                     ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
-                    if(pTable)
-                        pTable->setConfigurationNode(aTableConfig.cloneAsRoot());
+                    if ( pTable )
+                        pTable->setConfigurationNode( aTableConfig.cloneAsRoot() );
                 }
             }
         }
@@ -907,11 +910,11 @@ void OTableContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aCo
         if((*aIter)->second.is())
         {
             Reference< XUnoTunnel > xTunnel((*aIter)->second, UNO_QUERY);
-            OConfigurationFlushable* pObjectImpl = NULL;
+            ODBTableDecorator* pObjectImpl = NULL;
             if (xTunnel.is())
             {
-                static Sequence<sal_Int8> aTunnelId = OConfigurationFlushable::getUnoTunnelImplementationId();
-                pObjectImpl = reinterpret_cast<OConfigurationFlushable*> (xTunnel->getSomething(aTunnelId));
+                static Sequence<sal_Int8> aTunnelId = ODBTableDecorator::getUnoTunnelImplementationId();
+                pObjectImpl = reinterpret_cast< ODBTableDecorator* >( xTunnel->getSomething( aTunnelId ) );
             }
             if(pObjectImpl)
             {
@@ -923,7 +926,7 @@ void OTableContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aCo
                     aTableConfig = m_aTablesConfig.createNode((*aIter)->first);
                     m_aCommitLocation.commit();
                 }
-                pObjectImpl->setConfigurationNode(aTableConfig.cloneAsRoot());
+                pObjectImpl->setContext( aTableConfig.cloneAsRoot(), getDataSourceNumberFormats( m_xConnection ) );
             }
         }
     }

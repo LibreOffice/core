@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 13:16:22 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
 #endif
-#ifndef _DBA_CORE_REGISTRYHELPER_HXX_
-#include "registryhelper.hxx"
-#endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
@@ -111,7 +108,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::registry;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -311,14 +307,13 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
             // we are not interessted in the result
             pNewObject->getColumns();
             OConfigurationNode aQueryNode = implGetObjectKey(sNewObjectName, sal_True);
-            OConfigurationTreeRoot aQueryRootNode = aQueryNode.cloneAsRoot();
-            pNewObject->storeTo(aQueryRootNode);
-            aQueryRootNode.commit();
+            pNewObject->storeTo( aQueryNode );
         }
             // need this new object only if we have listeners, else it will be created on request
         m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sNewObjectName, pNewObject)).first);
         xNewObject = m_aQueriesIndexed[m_aQueriesIndexed.size() - 1]->second;
     }
+    m_aConfigurationNode.commit();
 
     // notify our listeners
     ContainerEvent aEvent(*this, makeAny(sNewObjectName), makeAny(xNewObject), Any());
@@ -637,9 +632,7 @@ void OQueryContainer::flush_NoBroadcast_NoCommit()
         if (aLoop->second)
         {
             aQueryNode = implGetObjectKey(aLoop->first, sal_True);
-            aQueryRootNode = aQueryNode.cloneAsRoot();
-            aLoop->second->storeTo(aQueryRootNode);
-            aQueryRootNode.commit();
+            aLoop->second->storeTo( aQueryNode );
         }
     }
 }
@@ -676,7 +669,7 @@ OQuery* OQueryContainer::implCreateWrapper(const Reference< XPropertySet >& _rxC
 
     ::rtl::OUString sName;
     pNewObject->getPropertyValue(PROPERTY_NAME) >>= sName;
-    pNewObject->initializeFrom(implGetObjectKey(sName, sal_True));
+    pNewObject->loadFrom( implGetObjectKey( sName, sal_True ) );
 
     return pNewObject;
 }

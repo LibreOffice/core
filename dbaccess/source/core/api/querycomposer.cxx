@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,8 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XAGGREGATION_HPP_
 #include <com/sun/star/uno/XAggregation.hpp>
@@ -152,7 +146,6 @@ using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
-//  using namespace ::com::sun::star::registry;
 
 #define STR_SELECT      ::rtl::OUString::createFromAscii("SELECT ")
 #define STR_FROM        ::rtl::OUString::createFromAscii(" FROM ")
