@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:54:04 $
+ *  last change: $Author: rt $ $Date: 2001-07-24 20:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,11 +284,11 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Letzte Seite" ;
                 Text [ portuguese ] = "Última página" ;
                 Text [ swedish ] = "Sista sidan" ;
-                Text[ chinese_simplified ] = "Î²Ò³";
+                Text[ chinese_simplified ] = "×îºóÒ»Ò³";
                 Text[ russian ] = "Ïîñëåäíèé ñëàéä";
                 Text[ polish ] = "Ostatni slajd";
                 Text[ japanese ] = "ÅŒã‚ÌÍß°¼Ş";
-                Text[ chinese_traditional ] = "§À­¶";
+                Text[ chinese_traditional ] = "³Ì«á¤@­¶";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÃÎíÑÉ";
                 Text[ greek ] = "Ôåëåõôáßá óåëßäá";
                 Text[ korean ] = "¸¶Áö¸· ½½¶óÀÌµå";
@@ -371,6 +371,7 @@ Window FLT_NAVIGATOR
         QuickHelpText[ finnish ] = "Asiakirjat";
     };
 };
+
 
 
 
