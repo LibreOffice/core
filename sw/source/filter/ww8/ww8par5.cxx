@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:34:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,8 @@ void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
 
     //#82900# Need the more sophisticated url converter. cmc
     if (rName.Len())
-        rName = URIHelper::SmartRelToAbs(rName);
+        rName = URIHelper::SmartRel2Abs(
+            INetURLObject(sBaseURL), rName, URIHelper::GetMaybeFileHdl());
 }
 
 // ConvertUFNneme uebersetzt FeldParameter-Namen u. ae. in den
