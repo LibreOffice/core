@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regtype.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-04 13:30:46 $
+ *  last change: $Author: kr $ $Date: 2001-05-14 09:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,14 @@
 #include <sal/types.h>
 #endif
 
+#ifndef _SAL_UDKVERSION_H_
+#include <sal/udkversion.h>
+#endif
+
 // version number of the library. This number is used for the load on call
 // mechanism and must be modifed when the library will be upgraded to a new version.
-#ifdef SAL_W32
-#define LIBRARY_VERSION "2"
-#else
-#define LIBRARY_VERSION
-#endif
+#define LIBRARY_VERSION SAL_UDK_MAJOR
+
 
 typedef void*       RegHandle;
 
