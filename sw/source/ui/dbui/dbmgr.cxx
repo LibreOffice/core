@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:36:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,7 +1326,8 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                 pSfxFlt = SwIoSystem::GetFileFilter( sMainURL, ::aEmptyStr );
 
                 sTmpName = utl::TempFile::CreateTempName(0);
-                sTmpName = URIHelper::SmartRelToAbs(sTmpName);
+                sTmpName = URIHelper::SmartRel2Abs(
+                    INetURLObject(), sTmpName, URIHelper::GetMaybeFileHdl());
                 SWUnoHelper::UCB_CopyFile( sMainURL, sTmpName );
             }
             String sAddress;
@@ -2924,7 +2925,9 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     try
     {
         // save the working document into a temporary location
-        sSourceDocURL = URIHelper::SmartRelToAbs(utl::TempFile::CreateTempName());
+        sSourceDocURL = URIHelper::SmartRel2Abs(
+            INetURLObject(), utl::TempFile::CreateTempName(),
+            URIHelper::GetMaybeFileHdl());
         SfxStringItem aURL( SID_FILE_NAME, sSourceDocURL );
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 String::CreateFromAscii( FILTER_XML ),
