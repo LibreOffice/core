@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 09:00:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,7 +685,8 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             mpPaneManager->ExecuteModeChange (rRequest);
             break;
 
-        case SID_LEFT_PANE:
+        case SID_LEFT_PANE_DRAW:
+        case SID_LEFT_PANE_IMPRESS:
         case SID_RIGHT_PANE:
         case SID_NOTES_WINDOW:
         case SID_NORMAL_MULTI_PANE_GUI:
