@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
+ *  last change: $Author: as $ $Date: 2002-07-05 08:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,20 @@
 #include <classes/droptargetlistener.hxx>
 #endif
 
+#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <threadhelp/readguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#include <threadhelp/writeguard.hxx>
+#endif
+
 #ifndef __FRAMEWORK_TARGETS_H_
 #include <targets.h>
 #endif
 
-#ifndef __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
-#include <macros/debug/assertion.hxx>
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -95,6 +103,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -113,6 +125,10 @@
 
 #include <osl/file.hxx>
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -120,11 +136,12 @@
 namespace framework
 {
 
-DropTargetListener::DropTargetListener( css::uno::Reference< css::frame::XFrame > xFrame ) :
-
-    m_xTargetFrame  ( xFrame ),
-    m_pFormats      ( new DataFlavorExVector )
-
+DropTargetListener::DropTargetListener( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+                                        const css::uno::Reference< css::frame::XFrame >&              xFrame  )
+        : ThreadHelpBase  ( &Application::GetSolarMutex() )
+        , m_xFactory      ( xFactory                      )
+        , m_xTargetFrame  ( xFrame                        )
+        , m_pFormats      ( new DataFlavorExVector        )
 {
 }
 
@@ -132,13 +149,18 @@ DropTargetListener::DropTargetListener( css::uno::Reference< css::frame::XFrame 
 
 DropTargetListener::~DropTargetListener()
 {
+    m_xTargetFrame = css::uno::WeakReference< css::frame::XFrame >();
+    m_xFactory     = css::uno::Reference< css::lang::XMultiServiceFactory >();
     delete m_pFormats;
+    m_pFormats = NULL;
 }
 
 // -----------------------------------------------------------------------------
 
 void SAL_CALL DropTargetListener::disposing( const css::lang::EventObject& rSource ) throw( css::uno::RuntimeException )
 {
+    m_xTargetFrame = css::uno::WeakReference< css::frame::XFrame >();
+    m_xFactory     = css::uno::Reference< css::lang::XMultiServiceFactory >();
 }
 
 // -----------------------------------------------------------------------------
@@ -161,14 +183,14 @@ void SAL_CALL DropTargetListener::drop( const css::datatransfer::dnd::DropTarget
             {
                 ULONG i, nCount = aFileList.Count();
                 for ( i = 0; i < nCount; ++i )
-                    impl_OpenFile( aFileList.GetFile(i) );
+                    implts_OpenFile( aFileList.GetFile(i) );
                 bFormatFound = sal_True;
             }
 
             // then, if necessary, the file format
             String aFilePath;
             if ( !bFormatFound && aHelper.GetString( SOT_FORMAT_FILE, aFilePath ) )
-                impl_OpenFile( aFilePath );
+                implts_OpenFile( aFilePath );
         }
     }
     catch( const ::com::sun::star::uno::Exception& )
@@ -182,7 +204,7 @@ void SAL_CALL DropTargetListener::dragEnter( const css::datatransfer::dnd::DropT
 {
     try
     {
-        impl_BeginDrag( dtdee.SupportedDataFlavors );
+        implts_BeginDrag( dtdee.SupportedDataFlavors );
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -197,7 +219,7 @@ void SAL_CALL DropTargetListener::dragExit( const css::datatransfer::dnd::DropTa
 {
     try
     {
-        impl_EndDrag();
+        implts_EndDrag();
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -210,8 +232,8 @@ void SAL_CALL DropTargetListener::dragOver( const css::datatransfer::dnd::DropTa
 {
     try
     {
-        sal_Bool bAccept = ( impl_IsDropFormatSupported( SOT_FORMAT_FILE ) ||
-                             impl_IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) );
+        sal_Bool bAccept = ( implts_IsDropFormatSupported( SOT_FORMAT_FILE ) ||
+                             implts_IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) );
 
         if ( !bAccept )
             dtde.Context->rejectDrag();
@@ -229,12 +251,16 @@ void SAL_CALL DropTargetListener::dropActionChanged( const css::datatransfer::dn
 {
 }
 
-void DropTargetListener::impl_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors )
+void DropTargetListener::implts_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors )
 {
     DataFlavorEx aFlavorEx;
     const css::datatransfer::DataFlavor* pFlavor = rSupportedDataFlavors.getConstArray();
 
+    /* SAFE { */
+    WriteGuard aWriteLock(m_aLock);
     m_pFormats->clear();
+    aWriteLock.unlock();
+    /* } SAFE */
 
     for( sal_uInt32 i = 0, nCount = rSupportedDataFlavors.getLength(); i < nCount; i++, pFlavor++ )
     {
@@ -243,17 +269,27 @@ void DropTargetListener::impl_BeginDrag( const css::uno::Sequence< css::datatran
         aFlavorEx.DataType = pFlavor->DataType;
         aFlavorEx.mnSotId = SotExchange::RegisterFormat( *pFlavor );
 
+        /* SAFE { */
+        aWriteLock.lock();
         m_pFormats->push_back( aFlavorEx );
+        aWriteLock.unlock();
+        /* } SAFE */
     }
 }
 
-void DropTargetListener::impl_EndDrag()
+void DropTargetListener::implts_EndDrag()
 {
+    /* SAFE { */
+    WriteGuard aWriteLock(m_aLock);
     m_pFormats->clear();
+    aWriteLock.unlock();
+    /* } SAFE */
 }
 
-sal_Bool DropTargetListener::impl_IsDropFormatSupported( SotFormatStringId nFormat )
+sal_Bool DropTargetListener::implts_IsDropFormatSupported( SotFormatStringId nFormat )
 {
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
     DataFlavorExVector::iterator aIter( m_pFormats->begin() ), aEnd( m_pFormats->end() );
     sal_Bool bRet = sal_False;
 
@@ -265,11 +301,13 @@ sal_Bool DropTargetListener::impl_IsDropFormatSupported( SotFormatStringId nForm
             aIter = aEnd;
         }
     }
+    aReadLock.unlock();
+    /* } SAFE */
 
     return bRet;
 }
 
-void DropTargetListener::impl_OpenFile( const String& rFilePath )
+void DropTargetListener::implts_OpenFile( const String& rFilePath )
 {
     String aFileURL;
     if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )
@@ -282,11 +320,18 @@ void DropTargetListener::impl_OpenFile( const String& rFilePath )
             aFileURL = aStatus.getFileURL();
 
     // open file
-    css::uno::Reference< css::frame::XFrame > xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
-    if ( xTargetFrame.is() == sal_True )
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get()                                  , css::uno::UNO_QUERY );
+    css::uno::Reference< css::util::XURLTransformer > xParser     ( m_xFactory->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    /* } SAFE */
+    if (xTargetFrame.is() && xParser.is())
     {
         css::util::URL aURL;
         aURL.Complete = aFileURL;
+        xParser->parseStrict(aURL);
+
         css::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, css::uno::UNO_QUERY );
         css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, SPECIALTARGET_DEFAULT, 0 );
         if ( xDispatcher.is() )
