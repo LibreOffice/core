@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:41:41 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "rtl/uri.h"
 
 #include "osl/diagnose.h"
+#include "rtl/strbuf.hxx"
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
 #include "rtl/uri.h"
@@ -151,85 +152,117 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
     {
         *pBegin += 2;
         nChar = static_cast< sal_uInt32 >(nWeight1 << 4 | nWeight2);
-        switch (eCharset)
-        {
-        case RTL_TEXTENCODING_ASCII_US:
-            *pType = nChar <= 0x7F ? EscapeChar : EscapeOctet;
-            return nChar;
-
-        case RTL_TEXTENCODING_ISO_8859_1:
+        if (nChar <= 0x7F)
             *pType = EscapeChar;
-            return nChar;
-
-        default:
-            OSL_ENSURE(false, "unsupported eCharset"); // FIXME
-        case RTL_TEXTENCODING_UTF8:
-            if (nChar <= 0x7F)
-                *pType = EscapeChar;
-            else
+        else if (eCharset == RTL_TEXTENCODING_UTF8)
+        {
+            if (nChar >= 0xC0 && nChar <= 0xF4)
             {
-                if (nChar >= 0xC0 && nChar <= 0xFC)
+                sal_uInt32 nEncoded;
+                int nShift;
+                sal_uInt32 nMin;
+                if (nChar <= 0xDF)
                 {
-                    sal_uInt32 nEncoded;
-                    int nShift;
-                    sal_uInt32 nMin;
-                    if (nChar <= 0xDF)
-                    {
-                        nEncoded = (nChar & 0x1F) << 6;
-                        nShift = 0;
-                        nMin = 0x80;
-                    }
-                    else if (nChar <= 0xEF)
-                    {
-                        nEncoded = (nChar & 0x0F) << 12;
-                        nShift = 6;
-                        nMin = 0x800;
-                    }
-                    else if (nChar <= 0xF7)
-                    {
-                        nEncoded = (nChar & 0x07) << 18;
-                        nShift = 12;
-                        nMin = 0x10000;
-                    }
-                    else if (nChar <= 0xFB)
-                    {
-                        nEncoded = (nChar & 0x03) << 24;
-                        nShift = 18;
-                        nMin = 0x200000;
-                    }
-                    else
-                    {
-                        nEncoded = 0;
-                        nShift = 24;
-                        nMin = 0x4000000;
-                    }
-                    sal_Unicode const * p = *pBegin;
-                    bool bUTF8 = true;
-                    for (; nShift >= 0; nShift -= 6)
-                    {
-                        if (pEnd - p < 3 || p[0] != cEscapePrefix
-                            || (nWeight1 = getHexWeight(p[1])) < 8
-                            || nWeight1 > 11
-                            || (nWeight2 = getHexWeight(p[2])) < 0)
-                        {
-                            bUTF8 = sal_False;
-                            break;
-                        }
-                        p += 3;
-                        nEncoded |= ((nWeight1 & 3) << 4 | nWeight2) << nShift;
-                    }
-                    if (bUTF8 && nEncoded >= nMin && !isHighSurrogate(nEncoded)
-                        && !isLowSurrogate(nEncoded) && nEncoded <= 0x10FFFF)
-                    {
-                        *pBegin = p;
-                        *pType = EscapeChar;
-                        return nEncoded;
-                    }
+                    nEncoded = (nChar & 0x1F) << 6;
+                    nShift = 0;
+                    nMin = 0x80;
                 }
-                *pType = EscapeOctet;
+                else if (nChar <= 0xEF)
+                {
+                    nEncoded = (nChar & 0x0F) << 12;
+                    nShift = 6;
+                    nMin = 0x800;
+                }
+                else
+                {
+                    nEncoded = (nChar & 0x07) << 18;
+                    nShift = 12;
+                    nMin = 0x10000;
+                }
+                sal_Unicode const * p = *pBegin;
+                bool bUTF8 = true;
+                for (; nShift >= 0; nShift -= 6)
+                {
+                    if (pEnd - p < 3 || p[0] != cEscapePrefix
+                        || (nWeight1 = getHexWeight(p[1])) < 8
+                        || nWeight1 > 11
+                        || (nWeight2 = getHexWeight(p[2])) < 0)
+                    {
+                        bUTF8 = sal_False;
+                        break;
+                    }
+                    p += 3;
+                    nEncoded |= ((nWeight1 & 3) << 4 | nWeight2) << nShift;
+                }
+                if (bUTF8 && nEncoded >= nMin && !isHighSurrogate(nEncoded)
+                    && !isLowSurrogate(nEncoded) && nEncoded <= 0x10FFFF)
+                {
+                    *pBegin = p;
+                    *pType = EscapeChar;
+                    return nEncoded;
+                }
             }
-            return nChar;
+            *pType = EscapeOctet;
         }
+        else
+        {
+            rtl::OStringBuffer aBuf;
+            aBuf.append(static_cast< char >(nChar));
+            rtl_TextToUnicodeConverter aConverter
+                = rtl_createTextToUnicodeConverter(eCharset);
+            sal_Unicode const * p = *pBegin;
+            for (;;)
+            {
+                sal_Unicode aDst[2];
+                sal_uInt32 nInfo;
+                sal_Size nConverted;
+                sal_Size nDstSize = rtl_convertTextToUnicode(
+                    aConverter, 0, aBuf.getStr(), aBuf.getLength(), aDst,
+                    sizeof aDst / sizeof aDst[0],
+                    (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                     | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                     | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
+                    &nInfo, &nConverted);
+                if (nInfo == 0)
+                {
+                    OSL_ASSERT(nConverted == aBuf.getLength());
+                    rtl_destroyTextToUnicodeConverter(aConverter);
+                    *pBegin = p;
+                    *pType = EscapeChar;
+                    OSL_ASSERT(
+                        nDstSize == 1
+                        || (nDstSize == 2 && isHighSurrogate(aDst[0])
+                            && isLowSurrogate(aDst[1])));
+                    return nDstSize == 1
+                        ? aDst[0]
+                        : (((aDst[0] & 0x3FF) << 10) + (aDst[1] & 0x3FF)
+                           + 0x10000);
+                }
+                else if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
+                         && pEnd - p >= 3 && p[0] == cEscapePrefix
+                         && (nWeight1 = getHexWeight(p[1])) >= 0
+                         && (nWeight2 = getHexWeight(p[2])) >= 0)
+                {
+                    p += 3;
+                    aBuf.append(static_cast< char >(nWeight1 << 4 | nWeight2));
+                }
+                else if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
+                         && p != pEnd && *p <= 0x7F)
+                {
+                    aBuf.append(static_cast< char >(*p++));
+                }
+                else
+                {
+                    OSL_ASSERT(
+                        (nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL)
+                        == 0);
+                    break;
+                }
+            }
+            rtl_destroyTextToUnicodeConverter(aConverter);
+            *pType = EscapeOctet;
+        }
+        return nChar;
     }
     else
     {
@@ -241,15 +274,21 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
     }
 }
 
-void writeSurrogates(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
-                     sal_uInt32 nUtf32)
+void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 {
-    OSL_ENSURE(nUtf32 > 0xFFFF && nUtf32 <= 0x10FFFF, "bad UTF-32 char");
-    nUtf32 -= 0x10000;
-    writeUnicode(pBuffer, pCapacity,
-                 static_cast< sal_Unicode >(nUtf32 >> 10 | 0xD800));
-    writeUnicode(pBuffer, pCapacity,
-                 static_cast< sal_Unicode >(nUtf32 & 0x3FF | 0xDC00));
+    OSL_ENSURE(nUtf32 <= 0x10FFFF, "bad UTF-32 char");
+    if (nUtf32 <= 0xFFFF) {
+        writeUnicode(
+            pBuffer, pCapacity, static_cast< sal_Unicode >(nUtf32));
+    } else {
+        nUtf32 -= 0x10000;
+        writeUnicode(
+            pBuffer, pCapacity,
+            static_cast< sal_Unicode >(nUtf32 >> 10 | 0xD800));
+        writeUnicode(
+            pBuffer, pCapacity,
+            static_cast< sal_Unicode >(nUtf32 & 0x3FF | 0xDC00));
+    }
 }
 
 void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
@@ -267,22 +306,10 @@ void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
 }
 
 bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
-                     sal_uInt32 nUtf32, rtl_TextEncoding eCharset)
+                     sal_uInt32 nUtf32, rtl_TextEncoding eCharset, bool bStrict)
 {
     OSL_ENSURE(nUtf32 <= 0x10FFFF, "bad UTF-32 char");
-    switch (eCharset)
-    {
-    case RTL_TEXTENCODING_ASCII_US:
-    case RTL_TEXTENCODING_ISO_8859_1:
-        // FIXME  return false instead of OSL_ENSURE
-        OSL_ENSURE(nUtf32 <= (eCharset == RTL_TEXTENCODING_ASCII_US ? 0x7FU :
-                                                                     0xFFU),
-                   "bad ASCII or ISO 8859-1 char");
-        writeEscapeOctet(pBuffer, pCapacity, nUtf32);
-        return true;
-
-    case RTL_TEXTENCODING_UTF8:
-        // FIXME  only handle nUtf32 <= 0x10FFFF
+    if (eCharset == RTL_TEXTENCODING_UTF8) {
         if (nUtf32 < 0x80)
             writeEscapeOctet(pBuffer, pCapacity, nUtf32);
         else if (nUtf32 < 0x800)
@@ -296,71 +323,57 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 & 0x3F | 0x80);
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
         }
-        else if (nUtf32 < 0x200000)
+        else
         {
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 18 | 0xF0);
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 12 & 0x3F | 0x80);
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 & 0x3F | 0x80);
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
         }
-        else if (nUtf32 < 0x4000000)
+    } else {
+        rtl_UnicodeToTextConverter aConverter
+            = rtl_createUnicodeToTextConverter(eCharset);
+        sal_Unicode aSrc[2];
+        sal_Size nSrcSize;
+        if (nUtf32 <= 0xFFFF)
         {
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 24 | 0xF8);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 18 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 12 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
+            aSrc[0] = static_cast< sal_Unicode >(nUtf32);
+            nSrcSize = 1;
         }
         else
         {
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 30 | 0xFC);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 24 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 18 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 12 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
+            aSrc[0] = static_cast< sal_Unicode >(
+                ((nUtf32 - 0x10000) >> 10) | 0xD800);
+            aSrc[1] = static_cast< sal_Unicode >(
+                ((nUtf32 - 0x10000) & 0x3FF) | 0xDC00);
+            nSrcSize = 2;
         }
-        return true;
-
-    default:
-        {
-            rtl_UnicodeToTextConverter aConverter
-                = rtl_createUnicodeToTextConverter(eCharset);
-            sal_Unicode aSrc[2];
-            sal_Size nSrcSize;
-            if (nUtf32 <= 0xFFFF)
-            {
-                aSrc[0] = static_cast< sal_Unicode >(nUtf32);
-                nSrcSize = 1;
-            }
-            else
-            {
-                aSrc[0] = static_cast< sal_Unicode >(
-                    ((nUtf32 - 0x10000) >> 10) | 0xD800);
-                aSrc[1] = static_cast< sal_Unicode >(
-                    ((nUtf32 - 0x10000) & 0x3FF) | 0xDC00);
-                nSrcSize = 2;
-            }
-            sal_Char aDst[32]; // FIXME  random value
-            sal_uInt32 nInfo;
-            sal_Size nConverted;
-            sal_Size nDstSize = rtl_convertUnicodeToText(
-                aConverter, 0, aSrc, nSrcSize, aDst, sizeof aDst,
-                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
-                | RTL_UNICODETOTEXT_FLAGS_FLUSH,
-                &nInfo, &nConverted);
-            rtl_destroyUnicodeToTextConverter(aConverter);
-            if (nInfo != 0)
-                return false;
+        sal_Char aDst[32]; // FIXME  random value
+        sal_uInt32 nInfo;
+        sal_Size nConverted;
+        sal_Size nDstSize = rtl_convertUnicodeToText(
+            aConverter, 0, aSrc, nSrcSize, aDst, sizeof aDst,
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+            | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
+            | RTL_UNICODETOTEXT_FLAGS_FLUSH,
+            &nInfo, &nConverted);
+        OSL_ASSERT((nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0);
+        rtl_destroyUnicodeToTextConverter(aConverter);
+        if (nInfo == 0) {
             OSL_ENSURE(nConverted == nSrcSize, "bad rtl_convertUnicodeToText");
             for (sal_Size i = 0; i < nDstSize; ++i)
                 writeEscapeOctet(pBuffer, pCapacity,
                                  static_cast< unsigned char >(aDst[i]));
                     // FIXME  all octets are escaped, even if there is no need
-            return true;
+        } else {
+            if (bStrict) {
+                return false;
+            } else {
+                writeUcs4(pBuffer, pCapacity, nUtf32);
+            }
         }
     }
+    return true;
 }
 
 struct Component
@@ -604,20 +617,21 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
     while (p < pEnd)
     {
         EscapeType eType;
-        sal_uInt32 nUtf32 = readUcs4(&p, pEnd,
-                                     eMechanism != rtl_UriEncodeIgnoreEscapes,
-                                     eCharset, &eType);
+        sal_uInt32 nUtf32 = readUcs4(
+            &p, pEnd,
+            (eMechanism == rtl_UriEncodeKeepEscapes
+             || eMechanism == rtl_UriEncodeCheckEscapes),
+            eCharset, &eType);
         switch (eType)
         {
         case EscapeNo:
             if (isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
                 writeUnicode(pResult, &nCapacity,
                              static_cast< sal_Unicode >(nUtf32));
-            else if (!writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset))
+            else if (!writeEscapeChar(
+                         pResult, &nCapacity, nUtf32, eCharset,
+                         eMechanism == rtl_UriEncodeStrict))
             {
-                // Return an empty string if nUtf32 cannot be represented in
-                // eCharset (currently only for some charsets).
-                // FIXME  clean this up
                 rtl_uString_new(pResult);
                 return;
             }
@@ -628,11 +642,10 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                 && isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
                 writeUnicode(pResult, &nCapacity,
                              static_cast< sal_Unicode >(nUtf32));
-            else if (!writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset))
+            else if (!writeEscapeChar(
+                         pResult, &nCapacity, nUtf32, eCharset,
+                         eMechanism == rtl_UriEncodeStrict))
             {
-                // Return an empty string if nUtf32 cannot be represented in
-                // eCharset (currently only for some charsets).
-                // FIXME  clean this up
                 rtl_uString_new(pResult);
                 return;
             }
@@ -658,7 +671,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
 
     case rtl_UriDecodeToIuri:
         eCharset = RTL_TEXTENCODING_UTF8;
-    default: // rtl_UriDecodeWithCharset
+    default: // rtl_UriDecodeWithCharset, rtl_UriDecodeStrict
         {
             sal_Unicode const * p = pText->buffer;
             sal_Unicode const * pEnd = p + pText->length;
@@ -677,17 +690,14 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                         break;
                     }
                 case EscapeNo:
-                    if (nUtf32 <= 0xFFFF)
-                        writeUnicode(pResult, &nCapacity,
-                                     static_cast< sal_Unicode >(nUtf32));
-                    else if (nUtf32 <= 0x10FFFF)
-                        writeSurrogates(pResult, &nCapacity, nUtf32);
-                    else
-                        writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset);
-                            // FIXME  check return value
+                    writeUcs4(pResult, &nCapacity, nUtf32);
                     break;
 
                 case EscapeOctet:
+                    if (eMechanism == rtl_UriDecodeStrict) {
+                        rtl_uString_new(pResult);
+                        return;
+                    }
                     writeEscapeOctet(pResult, &nCapacity, nUtf32);
                     break;
                 }
