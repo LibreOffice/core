@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:40:19 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,14 +904,16 @@ USHORT SwTOXAuthority::GetLevel() const
 {
     String sText(((SwAuthorityField*)m_rField.GetFld())->
                         GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
-    USHORT nRet = 0;
+    //#i18655# the level '0' is the heading level therefor the values are incremented here
+    USHORT nRet = 1;
     if( pTOXIntl->IsNumeric( sText ) )
     {
         nRet = (USHORT)sText.ToInt32();
         nRet++;
     }
-    if(nRet >= AUTH_TYPE_END)
-        nRet = 0;
+    //illegal values are also set to 'ARTICLE' as non-numeric values are
+    if(nRet > AUTH_TYPE_END)
+        nRet = 1;
     return nRet;
 }
 /*-- 15.09.99 14:28:08---------------------------------------------------
