@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: mib $ $Date: 2000-11-16 12:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,8 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
     }
     uno::Any* pSur   = 0;
     GetProperty(C2S(UNO_NAME_SURROUND), pSur);
+    if( !pSur )
+        GetProperty(C2S(UNO_NAME_TEXT_WRAP), pSur);
     uno::Any* pSurAnch = 0;
     GetProperty(C2S(UNO_NAME_SURROUND_ANCHORONLY), pSurAnch);
     if(pSur || pSurAnch)
@@ -1716,7 +1718,6 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             SwFlyFrmFmt* pGFmt =    pDoc->Insert(aPam,
                                     sGraphicURL,
                                     sFltName, 0, &aFrmSet, &aGrSet);
-            uno::Any* pAltText;
             if(pGFmt)
             {
                 pGFmt->Add(this);
@@ -1724,9 +1725,16 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pGFmt, sName);
 
             }
+            uno::Any* pSurroundContour;
+            if(pProps->GetProperty(C2S(UNO_NAME_SURROUND_CONTOUR), pSurroundContour))
+                setPropertyValue(C2U(UNO_NAME_SURROUND_CONTOUR), *pSurroundContour);
+            uno::Any* pContourOutside;
+            if(pProps->GetProperty(C2S(UNO_NAME_CONTOUR_OUTSIDE), pContourOutside))
+                setPropertyValue(C2U(UNO_NAME_CONTOUR_OUTSIDE), *pContourOutside);
             uno::Any* pContourPoly;
             if(pProps->GetProperty(C2S(UNO_NAME_CONTOUR_POLY_POLYGON), pContourPoly))
                 setPropertyValue(C2U(UNO_NAME_CONTOUR_POLY_POLYGON), *pContourPoly);
+            uno::Any* pAltText;
             if(pProps->GetProperty(C2S(UNO_NAME_ALTERNATIVE_TEXT), pAltText))
                 setPropertyValue(C2U(UNO_NAME_ALTERNATIVE_TEXT), *pAltText);
         }
@@ -2640,6 +2648,9 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/11/15 15:00:48  os
+    chg: use optimized SfxItemPropertySet::get/setPropertyValue - methods
+
     Revision 1.7  2000/11/08 14:56:39  os
     #80121# createTextCursor in frames: skip tables
 
