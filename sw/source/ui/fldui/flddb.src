@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:47:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage TP_FLD_DB
         Text [ italian ] = "~Tipo di campo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~Fälttyp" ;
@@ -126,7 +126,7 @@ TabPage TP_FLD_DB
         TEXT [ italian ] = "Con~dizione" ;
         TEXT [ portuguese_brazilian ] = "condição" ;
         TEXT [ portuguese ] = "~Condição" ;
-        TEXT [ finnish ] = "Ehto" ;
+        TEXT [ finnish ] = "~Ehto" ;
         TEXT [ danish ] = "Betingelse" ;
         TEXT [ french ] = "~Si" ;
         TEXT [ swedish ] = "~Villkor" ;
@@ -163,7 +163,7 @@ TabPage TP_FLD_DB
         TEXT [ italian ] = "Numero di record" ;
         TEXT [ portuguese_brazilian ] = "Definir número" ;
         TEXT [ portuguese ] = "~Número de registo" ;
-        TEXT [ finnish ] = "Joukon numero" ;
+        TEXT [ finnish ] = "Tietueen numero" ;
         TEXT [ danish ] = "Datapostnummer" ;
         TEXT [ french ] = "~Numéro de l'enregistrement" ;
         TEXT [ swedish ] = "~Datapostnummer" ;
@@ -216,6 +216,7 @@ TabPage TP_FLD_DB
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼±ÅÃ(~E)";
         Text[ turkish ] = "Veritabaný seçimi";
         Text[ catalan ] = "~Seleccionar base de datos";
+        Text[ finnish ] = "~Tietokantavalinta";
     };
     Control TLB_DBLIST
     {
@@ -250,6 +251,7 @@ TabPage TP_FLD_DB
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º·ÎºÎÅÍ";
         Text[ turkish ] = "Kaynak veritabaný";
         Text[ catalan ] = "De la base de datos";
+        Text[ finnish ] = "Tietokannasta";
     };
     RadioButton RB_DBFORMAT
     {
@@ -276,6 +278,7 @@ TabPage TP_FLD_DB
         Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ";
         Text[ turkish ] = "Kullanýcý tanýmlý";
         Text[ catalan ] = "Definido por el usuario";
+        Text[ finnish ] = "Käyttäjän määrittämä";
     };
     ListBox LB_DBNUMFORMAT
     {
@@ -322,6 +325,7 @@ TabPage TP_FLD_DB
         Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "Format";
         Text[ catalan ] = "Formato";
+        Text[ finnish ] = "Muotoile";
     };
     Text [ english_us ] = "Database" ;
     Text [ portuguese_brazilian ] = "Datenbank" ;
@@ -342,4 +346,5 @@ TabPage TP_FLD_DB
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
     Text[ turkish ] = "Veritabaný";
     Text[ catalan ] = "Base de datos";
+    Text[ finnish ] = "Tietokanta";
 };
