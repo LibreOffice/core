@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:32:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ String STR_DRAW_OBJ_TOOLBOX
     Text [ english_us ] = "Draw Object Bar" ;
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσΐΈ";
     Text[ russian ] = "Οΰνελό ξαϊεκςξβ πθρξβΰνθÿ";
-    Text[ polish ] = "Pasek obiektσw rysunkowych";
+    Text[ polish ] = "Pasek obiektσw graficznych";
     Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔΚή°";
     Text[ greek ] = "Γραμμή αντικειμένων σχεδίασης";
     Text[ korean ] = "±ΧΈ®±β°³ΓΌ Έπΐ½";
@@ -246,7 +246,7 @@ String STR_GRAPHIC_OBJ_TOOLBOX
     Text [ dutch ] = "Tekenobjectbalk/grafisch" ;
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσΐΈ/ΝΌΠΞ";
     Text[ russian ] = "Οΰνελό ξαϊεκςξβ πθρξβΰνθÿ/Γπΰτθκΰ";
-    Text[ polish ] = "Pasek obiektσw rysunkowych/Grafika";
+    Text[ polish ] = "Pasek obiektσw graficznych/Grafika";
     Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔΚή°/ΈήΧΜ¨―Έ";
     Text[ greek ] = "Γραμμή αντικειμένων σχεδίασης/Γραφικά";
     Text[ korean ] = "±ΧΈ®±β°³ΓΌ Έπΐ½/±Χ·΅ΗΘ";
@@ -293,7 +293,7 @@ String STR_GRAPHIC_OPTIONS_TOOLBOX
     Text[ chinese_simplified ] = "Ρ΅ΟξΐΈ/ΝΌΠΞ";
     Text[ russian ] = "Οΰνελό ξοφθι/Γπΰτθκΰ";
     Text[ polish ] = "Pasek opcji/Grafika";
-    Text[ japanese ] = "µΜίΌ®έΚή°/ΈήΧΜ¨―Έ";
+    Text[ japanese ] = "µΜίΌ®έΚή°/}";
     Text[ greek ] = "Γραμμή επιλογών/Γραφικά";
     Text[ korean ] = "ΏΙΌΗ Έπΐ½/±Χ·΅ΗΘ";
     Text[ chinese_traditional ] = "Ώο¶µ¦C/ΉΟ§Ξ";
@@ -3709,7 +3709,7 @@ String STR_EXPORT_GRFILTER_OPENERROR
     TEXT[ chinese_simplified ] = "Ξή·¨΄ςΏªΥβΈφΝΌΠΞΞΔΌώ";
     TEXT[ russian ] = "Ξςκπϋςό τΰιλ γπΰτθκθ νεβξημξζνξ";
     TEXT[ polish ] = "Nie moΏna otworzyζ pliku graficznego";
-    TEXT[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚πJ‚­‚±‚Ζ‚ª‚Ε‚«‚ά‚Ή‚ρ";
+    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚πJ‚―‚ά‚Ή‚ρB";
     TEXT[ greek ] = "Το αρχείο γραφικού δεν είναι δυνατόν να ανοιχτεί";
     TEXT[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐ» Ώ­ Όφ Ύψ½ΐ΄Ο΄Ω.";
     TEXT[ chinese_traditional ] = "µLªk¶}±Ò³o­ΣΉΟ§ΞΐΙ®Χ";
@@ -3734,7 +3734,7 @@ String STR_EXPORT_GRFILTER_IOERROR
     TEXT[ chinese_simplified ] = "Ξή·¨¶ΑΥβΈφΝΌΠΞΞΔΌώ";
     TEXT[ russian ] = "Οπξχθςΰςό τΰιλ γπΰτθκθ νεβξημξζνξ";
     TEXT[ polish ] = "Nie moΏna odczytaζ pliku graficznego";
-    TEXT[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚ª“Η‚έζ‚κ‚ά‚Ή‚ρ";
+    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚Ν“Η‚έζ‚κ‚ά‚Ή‚ρB";
     TEXT[ greek ] = "Η ανάγνωση του αρχείου γραφικού δεν είναι δυνατή";
     TEXT[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐ» ΐΠΐ» Όφ Ύψ½ΐ΄Ο΄Ω.";
     TEXT[ chinese_traditional ] = "µLªkΕª¨ϊ³o­ΣΉΟ§ΞΐΙ®Χ";
@@ -3759,7 +3759,7 @@ String STR_EXPORT_GRFILTER_FORMATERROR
     TEXT[ chinese_simplified ] = "²»ΓχµΔΝΌΠΞΈρΚ½";
     TEXT[ russian ] = "Νεθηβερςνϋι τξπμΰς γπΰτθκθ";
     TEXT[ polish ] = "Nieznany filtr graficzny";
-    TEXT[ japanese ] = "•s–Ύ‚ΘΈήΧΜ¨―Έ‘®";
+    TEXT[ japanese ] = "•s–Ύ‚Θ}‚Μ‘®";
     TEXT[ greek ] = "Άγνωστη μορφή γραφικού";
     TEXT[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐΊ ±Χ·΅ΗΘ Ό­½Δ";
     TEXT[ chinese_traditional ] = "¤£©ϊªΊΉΟ§Ξ®ζ¦΅";
@@ -3785,7 +3785,7 @@ String STR_EXPORT_GRFILTER_VERSIONERROR
     TEXT[ chinese_simplified ] = "²»Φ§³ΦΥβΈφΝΌΠΞΞΔΌώµΔ°ζ±Ύ";
     TEXT[ russian ] = "έςΰ βεπρθÿ τΰιλΰ γπΰτθκθ νε οξδδεπζθβΰεςρÿ";
     TEXT[ polish ] = "Wersja pliku graficznego nie bκdzie obs³ugiwana";
-    TEXT[ japanese ] = "ΈήΧΜ¨―Έ½ Μ§²Ω‚ΜΚή-Όή®έ‚Νx‰‡‚³‚κ‚ά‚Ή‚ρ";
+    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚ΜΚή-Όή®έ‚Νx‰‡‚³‚κ‚ά‚Ή‚ρB";
     TEXT[ greek ] = "Δεν υποστηρίζεται η έκδοση αυτού του γραφικού αρχείου.";
     TEXT[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐΗ ΉφΐόΐΜ ΑφΏψµΗΑφ ΎΚΐ½";
     TEXT[ chinese_traditional ] = "¤£¤δ΄©³o­ΣΉΟ§ΞΐΙ®ΧªΊª©¥»";
@@ -3810,7 +3810,7 @@ String STR_EXPORT_GRFILTER_FILTERERROR
     TEXT[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΝΌΠΞΉύΒΛΖχ";
     TEXT[ russian ] = "Γπΰτθχερκθι τθλόςπ νε νΰιδεν";
     TEXT[ polish ] = "Filtru graficznego nie znaleziono";
-    TEXT[ japanese ] = "ΈήΧΜ¨―ΈΜ¨Ωΐ‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρ‚Ε‚µ‚½";
+    TEXT[ japanese ] = "‰ζ‘Μ¨Ωΐ‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρB";
     TEXT[ greek ] = "Το φίλτρο γραφικών δεν βρέθηκε";
     TEXT[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝΈ¦ Γ£Αφ ΈψΗίΐ½";
     TEXT[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ§ΞΉLΒoΎΉ";
@@ -3835,7 +3835,7 @@ String STR_EXPORT_GRFILTER_TOOBIG
     TEXT[ chinese_simplified ] = "ΔΪ΄ζ²»Χγ£¬Ξή·¨Κδ³φΥβΈφΝΌΠΞ";
     TEXT[ russian ] = "Νεδξρςΰςξχνξ οΰμÿςθ δλÿ ύκροξπςΰ γπΰτθκθ";
     TEXT[ polish ] = "Za ma³o wolnej pamiκci do eksportowania grafiki";
-    TEXT[ japanese ] = "ΈήΧΜ¨―Έ‚Μ΄Έ½Ξί°Δ‚Ι\\•ª‚ΜÒΣΨ—e—Κ‚ª‚ ‚θ‚ά‚Ή‚ρ";
+    TEXT[ japanese ] = "}‚π΄Έ½Ξί°Δ‚·‚ι‚Μ‚ΙAÒΣΨ—e—Κ‚Ν•s\\•ª‚Ε‚·B";
     TEXT[ greek ] = "Η μνήμη δεν επαρκεί για την εξαγωγή του γραφικού";
     TEXT[ korean ] = "±Χ·΅ΗΘΐ» ³»ΊΈ³»±β ΐ§ΗΡ ΐϊΐε°ψ°£ΐΜ ΊΞΑ·ΗΤ";
     TEXT[ chinese_traditional ] = "°OΎΠΕι¤£¨¬΅MµLªk¶Χ¥X³o­ΣΉΟ§Ξ";
@@ -3961,7 +3961,7 @@ String STR_EXPORT_IMPORTGRAPHIC_COUNT
     Text[ chinese_simplified ] = "ΝΌΠΞΉύΒΛΖχ";
     Text[ russian ] = "Γπΰτθχερκθι τθλόςπ";
     Text[ polish ] = "Filtr graficzny";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ¨Ωΐ";
+    Text[ japanese ] = "‰ζ‘Μ¨Ωΐ";
     Text[ greek ] = "Φίλτρο γραφικών";
     Text[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝ";
     Text[ chinese_traditional ] = "ΉΟ§ΞΉLΒoΎΉ";
@@ -5425,7 +5425,7 @@ String STR_WARN_DEL_PAGE
     Text [ portuguese_brazilian ] = "Diese Aktion lφscht die Seite $. \nDie Seite enthδlt Zeichenobjekte!" ;
     Text[ chinese_simplified ] = "ΥβΈφ²ΩΧχ»αΙΎ³ύÒ³ '$' ΅£\nΥβÒ³Ί¬ΣΠ»ζΝΌ¶ΤΟσ£΅";
     Text[ russian ] = "έςΰ ΰκφθÿ σδΰλÿες ρςπΰνθφσ '$'. \nέςΰ ρςπΰνθφΰ ρξδεπζθς γπΰτθχερκθε ξαϊεκςϋ!";
-    Text[ polish ] = "Ta akcja usuwa slajd '$'. \nSlajd zawiera obiekty rysunkowe!";
+    Text[ polish ] = "Ta akcja usuwa slajd '$'.\nSlajd zawiera obiekty graficzne!";
     Text[ japanese ] = "‚±‚Μ±ΈΌ®έ‚Ν '$' ‚ΜΝί°Όή‚πν‚µ‚ά‚·B\nΝί°Όή‚Ι‚Ν}`•`‰ζµΜήΌήªΈΔ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B";
     Text[ greek ] = "Η ενέργεια αυτή διαγράφει την σελίδα '$'. \nΗ σελίδα περιέχει αντικείμενα σχεδίασης!";
     Text[ korean ] = "ΐΜ°Νΐ» ½ΗΗΰΗΟΈι ΒΚ '$'ΐΜ(°΅) »θΑ¦µΛ΄Ο΄Ω. \nΐΜ ΒΚΐΊ ±ΧΈ®±β°³ΓΌΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!";
@@ -5448,7 +5448,7 @@ String STR_WARN_DEL_SEL_PAGES
     Text [ portuguese_brazilian ] = "Diese Aktion lφscht die selektierten Seiten. \nDie Seiten enthalten Zeichenobjekte!" ;
     Text[ chinese_simplified ] = "ΥβΈφ²ΩΧχΙΎ³ύ±»Ρ΅ΦΠµΔÒ³΅£\nΥβΠ©Ò³Ί¬ΣΠ»ζΝΌ¶ΤΟσ£΅";
     Text[ russian ] = "έςΰ ΰκφθÿ σδΰλÿες ρςπΰνθφϋ. \nέςθ ρςπΰνθφϋ ρξδεπζΰς γπΰτθχερκθε ξαϊεκςϋ!";
-    Text[ polish ] = "Ta akcja usuwa zaznaczone slajdy. \nSlajdy zawierajΉ obiekty rysunkowe!";
+    Text[ polish ] = "Ta akcja usuwa zaznaczone slajdy.\nSlajdy zawierajΉ obiekty graficzne!";
     Text[ japanese ] = "‚±‚Μ±ΈΌ®έ‚Ν‘I‘π‚µ‚½Νί°Όή‚πν‚µ‚ά‚·B\nΝί°Όή‚Ι‚Ν}`•`‰ζµΜήΌήªΈΔ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B";
     Text[ greek ] = "Η ενέργεια αυτή διαγράφει την επιλεγμένη σελίδα. \nΗ σελίδα περιέχει αντικείμενα σχεδίασης!";
     Text[ korean ] = "ΐΜ°Νΐ» ½ΗΗΰΗΟΈι Ό±ΕΓµΘ ΒΚΐΜ »θΑ¦µΛ΄Ο΄Ω .\nΐΜ ΒΚΐΊ ±ΧΈ®±β°³ΓΌΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!";
@@ -5471,7 +5471,7 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ italian ] = "Questo procedimento elimina la pagina selezionata.\nNota: La pagina contiene oggetti di disegno!";
     Text[ danish ] = "Denne handling sletter den udvalgte side \nSiden indeholder tegneobjekter!";
     Text[ swedish ] = "Den hδr εtgδrden tar bort den valda sidan. \nSidan innehεller ritobjekt!";
-    Text[ polish ] = "Akcja ta usuwa zaznaczonΉ stronκ. \nStrona ta zawiera obiekty graficzne.";
+    Text[ polish ] = "Akcja ta usuwa zaznaczonΉ stronκ.\nStrona ta zawiera obiekty graficzne.";
     Text[ portuguese_brazilian ] = "This action will delete the selected page.\nNote: the page contains drawing objects!";
     Text[ japanese ] = "‚±‚Μμ‹Ζ‚Ν‘I‘πΝί°Όή‚πν‚µ‚ά‚·B\n‚±‚Μƒy[ƒW‚Ν•`‰ζµΜήΌήªΈΔ‚πά‚ρ‚Ε‚Ά‚ά‚·!";
     Text[ korean ] = "ΐΜ°Νΐ» ½ΗΗΰΗΟΈι Ό±ΕΓµΘ ΒΚΐΜ »θΑ¦µΛ΄Ο΄Ω.\nΐΜ ΒΚΐΊ ±ΧΈ®±β°³ΓΌΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!";
@@ -5643,7 +5643,7 @@ String STR_REMOVE_LINK
     Text[ chinese_simplified ] = "ΥβΈφΝΌΠΞΚΗΊΝΞΔµµΑ΄½ΣµΔ΅£ \nΔϊÒªΘ΅ΟϋΥβΈφΑ΄½Σ£¬±ΰΌ­ΥβΈφΝΌΠΞΒπ£Ώ";
     Text[ russian ] = "έςξς πθρσνξκ ρρϋλΰεςρÿ νΰ δξκσμενς. \nΒϋ υξςθςε ρνÿςό ρρϋλκσ, χςξαϋ βϋοξλνθςό οπΰβκσ πθρσνκΰ?";
     Text[ polish ] = "Ta grafika jest po³Ήczona z dokumentem. \nCzy chcesz usunΉζ to po³Ήczenie, aby edytowaζ grafikκ?";
-    Text[ japanese ] = "‚±‚ΜΈήΧΜ¨―Έ‚ΝΔή·­ÒέΔ‚ΖΨέΈ‚³‚κ‚Δ‚Ά‚ά‚·B\nΈήΧΜ¨―Έ‚Μ•ÒW‚π‚·‚ι‚½‚ί‚ΙAΨέΈ‚πζ‚θ‚β‚ί‚ά‚·‚©?";
+    Text[ japanese ] = "‚±‚Μ}‚ΝΔή·­ÒέΔ‚ΖΨέΈ‚³‚κ‚Δ‚Ά‚ά‚·B\n}‚Μ•ÒW‚π‚·‚ι‚½‚ί‚ΙAΨέΈ‚π‰π‚µ‚ά‚·‚©B";
     Text[ greek ] = "Το γραφικό αυτό είναι συνδεδεμένο με το έγγραφο. \nΘέλετε να καταργηθεί η σύνδεση για να επεξεργάσετε το γραφικό;";
     Text[ korean ] = "ΐΜ ±Χ·΅ΗΘΐΊ Ή®Ό­ΏΝ Ώ¬°αµΗΎξ ΐΦ½ΐ΄Ο΄Ω. \n±Χ·΅ΗΘ ΖνΑύΐ» ΐ§ΗΨ Ώ¬°αΐ» ΗΨΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "³o­ΣΉΟ§Ξ¬O©M¤ε¥σ³sµ²ªΊ΅C \n±z­n¨ϊ®ψ³o­Σ³sµ²΅A½sΏθ³o­ΣΉΟ§Ξ΅H";
@@ -5667,7 +5667,7 @@ String STR_IMPORT_GRFILTER_OPENERROR
     Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΝΌΠΞΞΔΌώ";
     Text[ russian ] = "Νε σδΰεςρÿ ξςκπϋςό τΰιλ γπΰτθκθ";
     Text[ polish ] = "Pliku graficznego nie moΏna otworzyζ.";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚πJ‚­‚±‚Ζ‚ª‚Ε‚«‚ά‚Ή‚ρ";
+    Text[ japanese ] = "‰ζ‘Μ§²Ω‚πJ‚―‚ά‚Ή‚ρB";
     Text[ greek ] = "Το αρχείο γραφικού δεν είναι δυνατόν να ανοιχτεί";
     Text[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐ» Ώ­ Όφ Ύψ½ΐ΄Ο΄Ω";
     Text[ chinese_traditional ] = "µLªk¶}±ÒΉΟ§ΞΐΙ®Χ";
@@ -5690,7 +5690,7 @@ String STR_IMPORT_GRFILTER_IOERROR
     Text[ chinese_simplified ] = "Ξή·¨¶Α³φΝΌΠΞΞΔΌώ";
     Text[ russian ] = "Νε σδΰεςρÿ οπξχθςΰςό τΰιλ γπΰτθκθ";
     Text[ polish ] = "Pliku graficznego nie moΏna odczytaζ.";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚Ν“Η‚έζ‚κ‚ά‚Ή‚ρ";
+    Text[ japanese ] = "‰ζ‘Μ§²Ω‚Ν“Η‚έζ‚κ‚ά‚Ή‚ρB";
     Text[ greek ] = "Η ανάγνωση του αρχείου γραφικού δεν είναι δυνατή";
     Text[ korean ] = "±Χ·΅ΗΘΖΔΐΟΐ» ΐΠΐ» Όφ Ύψ½ΐ΄Ο΄Ω";
     Text[ chinese_traditional ] = "µLªkΕª¥XΉΟ§ΞΐΙ®Χ";
@@ -5737,7 +5737,7 @@ String STR_IMPORT_GRFILTER_VERSIONERROR
     Text[ chinese_simplified ] = "²»Φ§³ΦΥβΈφΝΌΠΞΞΔΌώµΔ°ζ±Ύ";
     Text[ russian ] = "έςΰ βεπρθÿ τΰιλΰ γπΰτθκθ νε οξδδεπζθβΰεςρÿ";
     Text[ polish ] = "Wersja pliku graficznego nie bκdzie obs³ugiwana.";
-    Text[ japanese ] = "ΈήΧΜ¨―Έ½ Μ§²Ω‚ΜΚή°Όή®έ‚Νx‰‡‚³‚κ‚ά‚Ή‚ρ";
+    Text[ japanese ] = "‰ζ‘Μ§²Ω‚ΜΚή°Όή®έ‚Νx‰‡‚³‚κ‚ά‚Ή‚ρB";
     Text[ greek ] = "Δεν υποστηρίζεται η έκδοση αυτού του γραφικού αρχείου.";
     Text[ korean ] = "±Χ·΅ΗΘΖΔΐΟΐΗ ΉφΐόΐΜ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω";
     Text[ chinese_traditional ] = "¤£¤δ΄©³o­ΣΉΟ§ΞΐΙ®ΧªΊª©¥»";
@@ -5760,7 +5760,7 @@ String STR_IMPORT_GRFILTER_FILTERERROR
     Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΝΌΠΞΉύΒΛΖχ";
     Text[ russian ] = "Γπΰτθχερκθι τθλόςπ νενΰιδεν";
     Text[ polish ] = "Filtru graficznego nie znaleziono";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ¨Ωΐ‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρ‚Ε‚µ‚½";
+    Text[ japanese ] = "‰ζ‘Μ¨Ωΐ‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρB";
     Text[ greek ] = "Το φίλτρο γραφικών δεν βρέθηκε";
     Text[ korean ] = "±Χ·΅ΗΘΗΚΕΝΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω";
     Text[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ§ΞΉLΒoΎΉ";
@@ -5783,7 +5783,7 @@ String STR_IMPORT_GRFILTER_TOOBIG
     Text[ chinese_simplified ] = "ΔΪ΄ζ²»Χγ£¬Ξή·¨ΚδΘλΝΌΠΞ";
     Text[ russian ] = "Νεδξρςΰςξχνξ οΰμÿςθ δλÿ θμοξπςΰ γπΰτθκθ";
     Text[ polish ] = "Za ma³o pamiκci dla importu grafiki.";
-    Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ²έΞί°Δ‚Ι[•ª‚ΘÒΣΨ—e—Κ‚ª‚ ‚θ‚ά‚Ή‚ρ";
+    Text[ japanese ] = "}‚π²έΞί°Δ‚·‚ι‚Μ‚ΙÒΣΨ—e—Κ‚ª•s\\•ª‚Ε‚·B";
     Text[ greek ] = "Δεν υπάρχει αρκετή μνήμη για την εισαγωγή του γραφικού";
     Text[ korean ] = "±Χ·΅ΗΘΐ» °΅Α®Ώΐ±β ΐ§ΗΡ ΐϊΐε°ψ°£ΐΜ ΊΞΑ·ΗΤ";
     Text[ chinese_traditional ] = "°OΎΠΕι¤£¨¬΅MµLªk΄΅¤JΉΟ§Ξ";
@@ -6118,7 +6118,7 @@ String STR_SCALE_OBJS_TO_PAGE
     Text[ chinese_simplified ] = "ÒªΈωΎέÒ³ΓζΈρΚ½¶ΤΥβΈφΝΌΠΞ¶ΤΟσΧφΟΰΣ¦µχΥϋΒπ£Ώ";
     Text[ russian ] = "Ρξγλΰρξβΰςό γπΰτθχερκθε ξαϊεκςϋ ρ νξβϋμ τξπμΰςξμ ρλΰιδΰ?";
     Text[ polish ] = "Czy obiekty graficzne majΉ zostaζ dostosowane do nowego formatu stron?";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈµΜήΌήªΈΔ‚πV‚µ‚ΆΝί°Όή‘®‚Ι‡‚ν‚Ή‚ά‚·‚©H";
+    Text[ japanese ] = "}µΜήΌήªΈΔ‚ΝAV‚µ‚ΆΝί°Όή‘®‚Ι‡‚ν‚Ή‚ά‚·‚©B";
     Text[ greek ] = "Θέλετε να γίνει προσαρμογή των αντικειμένων γραφικών στη μορφή της σελίδας;";
     Text[ korean ] = "±Χ·΅ΗΘ°³ΓΌΈ¦ »υ ½½¶σΐΜµε Ό­½ΔΏ΅ ΈΒΓί½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "³o­ΣΉΟ§Ξª«¥σ­n©M­¶­±®ζ¦΅§@¬Ϋΐ³½ΥΎγ΅H";
@@ -6238,7 +6238,7 @@ String STR_DRAW_FILTERPROGRESS
     Text[ chinese_simplified ] = "ΝΌΠΞΉύΒΛΖχ";
     Text[ russian ] = "Γπΰτθχερκθι τθλόςπ";
     Text[ polish ] = "Filtr graficzny";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ¨Ωΐ";
+    Text[ japanese ] = "‰ζ‘Μ¨Ωΐ";
     Text[ greek ] = "Φίλτρο γραφικών";
     Text[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝ";
     Text[ chinese_traditional ] = "ΉΟ§ΞΉLΒoΎΉ";
@@ -6357,7 +6357,7 @@ String STR_EXPORT_EMPTYGRAPHIC
     Text[ chinese_simplified ] = "²»Φ§³ΦΏΥ°ΧµΔΝΌΠΞ";
     Text[ russian ] = "Οσρςΰÿ γπΰτθκΰ νε οξδδεπζθβΰεςρÿ";
     Text[ polish ] = "Puste grafiki nie bκdΉ obs³ugiwane.";
-    Text[ japanese ] = "‹σ”’‚ΜΈήΧΜ¨―Έ½‚Νx‰‡‚³‚κ‚ά‚Ή‚ρ";
+    Text[ japanese ] = "‹σ”’‚Μ}‚Νx‰‡‚³‚κ‚ά‚Ή‚ρB";
     Text[ greek ] = "Δεν υποστηρίζονται κενά γραφικά.";
     Text[ korean ] = "Ίσ ±Χ·΅ΗΘΐΊ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
     Text[ chinese_traditional ] = "¤£¤δ΄©ªΕ¥ΥªΊΉΟ§Ξ";
@@ -10865,7 +10865,7 @@ String STR_RELEASE_GRAPHICLINK
     Text[ chinese_simplified ] = "ΥβΈφΝΌΠΞΚΗΊΝΞΔµµΑ΄½ΣµΔ΅£ΔϊÒªΘ΅ΟϋΥβΈφΑ΄½Σ£¬±ΰΌ­ΥβΈφΝΌΠΞΒπ£Ώ";
     Text[ russian ] = "έςξς πθρσνξκ ρρϋλΰεςρÿ νΰ δξκσμενς. Βϋ υξςθςε ρνÿςό ρρϋλκσ, χςξαϋ βϋοξλνθςό οπΰβκσ πθρσνκΰ?";
     Text[ polish ] = "Ta grafika jest po³Ήczona z dokumentem. Czy chcesz usunΉζ to po³Ήczenie, by edytowaζ grafikκ?";
-    Text[ japanese ] = "‚±‚ΜΈήΧΜ¨―Έ‚ΝΔή·­ÒέΔ‚ΖΨέΈ‚³‚κ‚Δ‚Ά‚ά‚·BΈήΧΜ¨―Έ‚Μ•ÒW‚π‚·‚ι‚½‚ί‚ΙAΨέΈ‚πζ‚θ‚β‚ί‚ά‚·‚©?";
+    Text[ japanese ] = "‚±‚Μ}‚ΝΔή·­ÒέΔ‚ΖΨέΈ‚³‚κ‚Δ‚Ά‚ά‚·B}‚Μ•ÒW‚π‚·‚ι‚½‚ί‚ΙAΨέΈ‚π‰π‚µ‚ά‚·‚©B";
     Text[ greek ] = "Το γραφικό αυτό είναι συνδεδεμένο με το έγγραφο. Θέλετε να καταργηθεί η σύνδεση για να επεξεργάσετε το γραφικό;";
     Text[ korean ] = "ΐΜ ±Χ·΅ΗΘΐΊ Ή®Ό­ΏΝ Ώ¬°αµΗΎξ ΐΦ½ΐ΄Ο΄Ω.±Χ·΅ΗΘ ΖνΑύΐ» ΐ§ΗΨ Ώ¬°αΐ» ΗΨΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "³o­ΣΉΟ§Ξ¬O©M¤ε¥σ³sµ²ªΊ΅C±z­n¨ϊ®ψ³o­Σ³sµ²΅A½sΏθ³o­ΣΉΟ§Ξ΅H";
@@ -11030,7 +11030,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_31
     Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 ΝΌΠΞ/ΡέΚΎΞΔΈε";
     Text[ russian ] = "Γπΰτθκΰ/οπεηενςΰφθÿ β %PRODUCTNAME 3.0";
     Text[ polish ] = "Grafika / Prezentacja w %PRODUCTNAME 3.0";
-    Text[ japanese ] = "%PRODUCTNAME 3.0 ΈήΧΜ¨―Έ½/ΜίΪΎήέΓ°Ό®έ";
+    Text[ japanese ] = "%PRODUCTNAME 3.0 }/ΜίΪΎήέΓ°Ό®έ";
     Text[ greek ] = "Γραφικά/Παρουσίαση (%PRODUCTNAME 3.0)";
     Text[ korean ] = "%PRODUCTNAME 3.0 ±Χ·΅ΗΘ/ΗΑΈ®Α¨ΕΧΐΜΌΗ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 ΉΟ§Ξ/Β²³ψ";
@@ -11236,7 +11236,7 @@ String STR_BREAK_FAIL
     Text[ english_us ] = "It was not possible to ungroup all drawing objects.";
     Text[ chinese_simplified ] = "Ξή·¨²πΏªΛωΣΠµΔΧΦ·ϋ¶ΤΟσ£΅";
     Text[ russian ] = "Νεβξημξζνξ πΰηγπσοοθπξβΰςό βρε γπΰτθχερκθε ξαϊεκςϋ!";
-    Text[ polish ] = "Nie moΏna by³o rozgrupowaζ wszystkich obiektσw rysunkowych!";
+    Text[ polish ] = "Nie moΏna by³o rozgrupowaζ wszystkich obiektσw graficznych!";
     Text[ japanese ] = "‚·‚Χ‚Δ‚Μ}`•`‰ζµΜήΌήªΈΔ‚Ν‰π‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
     Text[ greek ] = "Δεν ήταν δυνατόν να καταργηθεί η ομαδοποίηση όλων των αντικειμένων σχεδίασης!";
     Text[ korean ] = "±ΧΈ®±β °³ΓΌΈ¦ ΈπµΞ ±Χ·μΗΨΑ¦ΗΟΑφ΄Β ΈψΗί½ΐ΄Ο΄Ω!";
@@ -11696,7 +11696,7 @@ String STR_HTMLEXP_SETGRAPHIC
     Text[ chinese_simplified ] = "ΝΌΠΞ";
     Text[ russian ] = "Γπΰτθκΰ";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "ΈήΧΜ¨―Έ";
+    Text[ japanese ] = "}";
     Text[ greek ] = "Γραφικό";
     Text[ korean ] = "±Χ·΅ΗΘ";
     Text[ chinese_traditional ] = "ΉΟ§Ξ";
@@ -12009,7 +12009,7 @@ String STR_UNDO_GRAFFILTER
     Text[ swedish ] = "Grafikfilter";
     Text[ polish ] = "Filtr graficzny";
     Text[ portuguese_brazilian ] = "Graphic filter";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ¨Ωΐ";
+    Text[ japanese ] = "‰ζ‘Μ¨Ωΐ";
     Text[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝ";
     Text[ chinese_simplified ] = "ΝΌΠΞΉύΒΛΖχ";
     Text[ chinese_traditional ] = "ΉΟ§ΞΉLΒoΎΉ";
@@ -12221,7 +12221,7 @@ String STR_HTMLEXP_ERROR_GALLERY
     Text[ swedish ] = "Det uppstod ett fel vid kopieringen av grafikfiler frεn Gallery.";
     Text[ polish ] = "WystΉpi³ b³Ήd w kopiowaniu plikσw graficznych z galerii.";
     Text[ portuguese_brazilian ] = "Error while copying graphic filese from the Gallery.";
-    Text[ japanese ] = "·ή¬ΧΨ‚©‚ηΈήΧΜ¨―ΈΜ§²Ω‚ΜΊΛί°’†‚Ι΄Χ°‚ª”­¶‚µ‚ά‚µ‚½B";
+    Text[ japanese ] = "·ή¬ΧΨ‚©‚η‰ζ‘Μ§²Ω‚ΜΊΛί°’†‚ΙA΄Χ°‚ª”­¶‚µ‚ά‚µ‚½B";
     Text[ korean ] = "°¶·―Έ®Ώ΅Ό­ ±Χ·΅ΗΘ ΖΔΐΟΐ» ΊΉ»ηΗÒ ¶§ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "ΤΪΈ΄ΦΖ»­ΐΘΦΠµΔΝΌΠΞΞΔΌώΚ±³φΟΦΑΛÒ»Έφ΄νΞσ";
     Text[ chinese_traditional ] = "±qµe΄Y½Ζ»sΉΟ§ΞΐΙ®Ιµo¥ΝΏω»~΅C";
@@ -12339,7 +12339,7 @@ String STR_UNDO_GRAFMODE
     Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb grafiki";
     Text[ portuguese_brazilian ] = "Graphics mode";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΣ°Δή";
+    Text[ japanese ] = "}Σ°Δή";
     Text[ korean ] = "±Χ·΅ΗΘ Έπµε";
     Text[ chinese_simplified ] = "ΝΌΠΞΔ£Κ½";
     Text[ chinese_traditional ] = "ΉΟ§ΞΌÒ¦΅";
