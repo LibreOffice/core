@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-12 07:42:40 $
+ *  last change: $Author: gt $ $Date: 2001-11-09 16:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,12 @@ SfxTemplateCatalog::~SfxTemplateCatalog()
 void DropListBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     nModifier = rMEvt.GetModifier();
-    SvTreeListBox::MouseButtonDown( rMEvt );
+
+    BOOL bHitEmptySpace = ( NULL == GetEntry( rMEvt.GetPosPixel(), TRUE ) );
+    if( bHitEmptySpace && ( rMEvt.GetClicks() == 2 ) && rMEvt.IsMod1() )
+        Control::MouseButtonDown( rMEvt );
+    else
+        SvTreeListBox::MouseButtonDown( rMEvt );
 }
 
 sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
