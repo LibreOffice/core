@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2000-11-21 13:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #define _SV_BITMAP_CXX
 
+#include <stdlib.h>
 #include <vos/macros.hxx>
 #include <tools/new.hxx>
 #ifndef _SV_BMPACC_HXX
@@ -128,6 +129,10 @@ BOOL Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, cons
 
         case( BMP_FILTER_EMBOSS_GREY ):
             bRet = ImplEmbossGrey( pFilterParam, pProgress );
+        break;
+
+        case( BMP_FILTER_POPART ):
+            bRet = ImplPopArt( pFilterParam, pProgress );
         break;
 
         default:
@@ -948,6 +953,91 @@ BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgre
     }
     else
         bRet = TRUE;
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+struct PopArtEntry
+{
+    sal_uInt32  mnIndex;
+    sal_uInt32  mnCount;
+};
+
+// ------------------------------------------------------------------------
+
+extern "C" int __LOADONCALLAPI ImplPopArtCmpFnc( const void* p1, const void* p2 )
+{
+    int nRet;
+
+    if( ( (PopArtEntry*) p1 )->mnCount < ( (PopArtEntry*) p2 )->mnCount )
+        nRet = 1;
+    else if( ( (PopArtEntry*) p1 )->mnCount == ( (PopArtEntry*) p2 )->mnCount )
+        nRet = 0;
+    else
+        nRet = -1;
+
+    return nRet;
+}
+
+// ------------------------------------------------------------------------
+
+BOOL Bitmap::ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress )
+{
+    BOOL bRet = ( GetBitCount() > 8 ) ? Convert( BMP_CONVERSION_8BIT_COLORS ) : TRUE;
+
+    if( bRet )
+    {
+        bRet = FALSE;
+
+        BitmapWriteAccess* pWriteAcc = AcquireWriteAccess();
+
+        if( pWriteAcc )
+        {
+            const long      nWidth = pWriteAcc->Width();
+            const long      nHeight = pWriteAcc->Height();
+            const ULONG     nEntryCount = 1 << pWriteAcc->GetBitCount();
+            ULONG           n;
+            PopArtEntry*    pPopArtTable = new PopArtEntry[ nEntryCount ];
+
+            for( n = 0; n < nEntryCount; n++ )
+            {
+                PopArtEntry& rEntry = pPopArtTable[ n ];
+                rEntry.mnIndex = (sal_uInt16) n;
+                rEntry.mnCount = 0;
+            }
+
+            // get pixel count for each palette entry
+            for( long nY = 0; nY < nHeight ; nY++ )
+                for( long nX = 0; nX < nWidth; nX++ )
+                    pPopArtTable[ pWriteAcc->GetPixel( nY, nX ).GetIndex() ].mnCount++;
+
+            // sort table
+            qsort( pPopArtTable, nEntryCount, sizeof( PopArtEntry ), ImplPopArtCmpFnc );
+
+            // get last used entry
+            ULONG nFirstEntry, nLastEntry;
+
+            for( n = 0; n < nEntryCount; n++ )
+                if( pPopArtTable[ n ].mnCount )
+                    nLastEntry = n;
+
+            // rotate palette (one entry)
+            const BitmapColor aFirstCol( pWriteAcc->GetPaletteColor( pPopArtTable[ 0 ].mnIndex ) );
+            for( nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++ )
+            {
+                pWriteAcc->SetPaletteColor( pPopArtTable[ nFirstEntry ].mnIndex,
+                                            pWriteAcc->GetPaletteColor( pPopArtTable[ nFirstEntry + 1 ].mnIndex ) );
+            }
+            pWriteAcc->SetPaletteColor( pPopArtTable[ nLastEntry ].mnIndex, aFirstCol );
+
+            // cleanup
+            delete[] pPopArtTable;
+            ReleaseAccess( pWriteAcc );
+            bRet = TRUE;
+        }
+    }
 
     return bRet;
 }
