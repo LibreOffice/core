@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 10:20:50 $
+ *  last change: $Author: jp $ $Date: 2001-05-18 14:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,7 +1256,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     pFnd = &rTxtColl;
                             else if( !pAny )
                                 pAny = &rTxtColl;
-                            sStartTemplate = pFnd ? pFnd->GetName() : pAny ? pAny->GetName() : OUString();
+                            sStartTemplate = pFnd ? pFnd->GetName()
+                                                  : pAny ? pAny->GetName()
+                                                           : aEmptyStr;
                             nSelect = nIdx;
                         }
                         pEntries[nIdx++] = rTxtColl.GetName();
