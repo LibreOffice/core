@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,26 +271,22 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
       nTxtStart( rInf.GetTxtStart() )
 { }
 
+
 #ifndef PRODUCT
 /*************************************************************************
  *                      ChkOutDev()
  *************************************************************************/
-// Sonderbehandlung: wenn pVsh->GetPrt() null ist, ist alles erlaubt
 
 void ChkOutDev( const SwTxtSizeInfo &rInf )
 {
     const OutputDevice *pOut = rInf.GetOut();
-    const OutputDevice *pWin = rInf.GetWin();
-    const OutputDevice *pPrt = rInf.GetPrt();
-    ASSERT( pOut &&
-            ( !(rInf.GetVsh() && rInf.GetVsh()->GetPrt()) ||
-              (!pWin || OUTDEV_WINDOW  == pWin->GetOutDevType()
-                     || OUTDEV_VIRDEV  == pWin->GetOutDevType() ) &&
-              (!pPrt || pPrt == pWin || OUTDEV_PRINTER == pPrt->GetOutDevType())
-                     || ( OUTDEV_VIRDEV == pOut->GetOutDevType() ) ),
-            "ChkOutDev: invalid output device" );
+    const OutputDevice *pWin = rInf.GetVsh()->GetWin();
+    const OutputDevice *pRef = rInf.GetRefDev();
+
+    ASSERT( pOut && pRef, "ChkOutDev: invalid output devices" )
 }
 #endif  // PRODUCT
+
 
 inline xub_StrLen GetMinLen( const SwTxtSizeInfo &rInf )
 {
@@ -298,13 +294,13 @@ inline xub_StrLen GetMinLen( const SwTxtSizeInfo &rInf )
     return Min( rInf.GetTxt().Len(), nInfLen );
 }
 
+
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
     : SwTxtInfo( rNew ),
       pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
       pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
       pOut(((SwTxtSizeInfo&)rNew).GetOut()),
-      pWin(((SwTxtSizeInfo&)rNew).GetWin()),
-      pPrt(((SwTxtSizeInfo&)rNew).GetPrt()),
+      pRef(((SwTxtSizeInfo&)rNew).GetRefDev()),
       pFnt(((SwTxtSizeInfo&)rNew).GetFont()),
       pUnderFnt(((SwTxtSizeInfo&)rNew).GetUnderFnt()),
       pFrm(rNew.pFrm),
@@ -332,14 +328,6 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
 #endif
 }
 
-void SwTxtSizeInfo::_SelectOut()
-{
-    ASSERT( pVsh, "Where's my ViewShell?" );
-    pOut = pVsh->GetOut();
-    if( bOnWin )
-        pWin = pOut;
-}
-
 void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
                    const xub_StrLen nNewIdx, const xub_StrLen nNewLen )
 {
@@ -349,66 +337,50 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     SwTxtInfo::CtorInit( pFrm );
     const SwTxtNode *pNd = pFrm->GetTxtNode();
     pVsh = pFrm->GetShell();
-    if ( pVsh )
-        pOut = pVsh->GetOut();
-    else
-    {
-        //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        if ( pNd->GetDoc()->IsBrowseMode() ) //?!?!?!?
-            //in Ermangelung eines Besseren kann hier ja wohl nur noch das
-            //AppWin genommen werden?
-            pOut = GetpApp()->GetDefaultDevice();
-        else
-            pOut = pNd->GetDoc()->GetPrt(); //Muss es geben (oder sal_True uebergeben?)
-    }
 
-#ifdef BIDI
-    // Set default layout mode ( LTR or RTL ). pOut should be the window.
+    // Get the output and reference device
+    ASSERT( pVsh, "SwTxtSizeInfo::CtorInit without ViewShell" )
+    pOut = pVsh->GetOut();
+    pRef = &pVsh->GetRefDev();
+    bOnWin = pVsh->GetWin() || OUTDEV_WINDOW == pOut->GetOutDevType();
+
+#ifndef PRODUCT
+    ChkOutDev( *this );
+#endif
+
+    // Set default layout mode ( LTR or RTL ).
     if ( pFrm->IsRightToLeft() )
     {
         pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
+        pRef->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
         nDirection = DIR_RIGHT2LEFT;
     }
     else
     {
         pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+        pRef->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
         nDirection = DIR_LEFT2RIGHT;
     }
-#endif
 
-    pOpt = pVsh ? pVsh->GetViewOptions() : SW_MOD()->GetViewOption(pNd->GetDoc()->IsHTMLMode());//Options vom Module wg. StarONE
-    //Hier auf GetWin() abfragen nicht auf GetOut != PRINTER (SwFlyFrmFmt::MakeGraphic)
-    bOnWin = pVsh && ( pVsh->GetWin() ||
-        ( pOut && OUTDEV_PRINTER != pOut->GetOutDevType() && pOpt->IsPrtFormat() ) );
-    pWin = bOnWin ? pOut : 0;
+    //
+    // The Options
+    //
+    pOpt = pVsh ?
+           pVsh->GetViewOptions() :
+           SW_MOD()->GetViewOption(pNd->GetDoc()->IsHTMLMode()); //Options vom Module wg. StarONE
 
     // bURLNotify wird gesetzt, wenn MakeGraphic dies vorbereitet
-    bURLNotify = pNoteURL && !bOnWin
-        && (pOut && OUTDEV_PRINTER != pOut->GetOutDevType());
+    // TODO: Aufdröseln
+    bURLNotify = pNoteURL && !bOnWin;
+//    bURLNotify = pNoteURL && !bOnWin
+//        && (pOut && OUTDEV_PRINTER != pOut->GetOutDevType());
 
     SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
                    pFrm->IsInDocBody() );
 
     pFnt = pNewFnt;
     pUnderFnt = 0;
-
-    if( 0 == ( pPrt = pVsh ? pVsh->GetReferenzDevice():0 ) )
-        pPrt = pNd->GetDoc()->GetPrt();
-    else
-    {
-        ASSERT( !bOnWin, "SwTxtSizeInfo: Funny ReferenzDevice" );
-        if( ((Printer*)pPrt)->IsValid() )
-            pOut = pPrt;
-    }
-    if ( pPrt && !((Printer*)pPrt)->IsValid() )
-        pPrt = 0;
     pTxt = &pNd->GetTxt();
-#ifndef PRODUCT
-    ChkOutDev( *this );
-#endif
-    if( pVsh && pNd->GetDoc()->IsBrowseMode() &&
-        !pVsh->GetViewOptions()->IsPrtFormat() )
-        pPrt = pOut;
 
     nIdx = nNewIdx;
     nLen = nNewLen;
@@ -429,8 +401,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
       pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
       pOut(((SwTxtSizeInfo&)rNew).GetOut()),
-      pWin(((SwTxtSizeInfo&)rNew).GetWin()),
-      pPrt(((SwTxtSizeInfo&)rNew).GetPrt()),
+      pRef(((SwTxtSizeInfo&)rNew).GetRefDev()),
       pFnt(((SwTxtSizeInfo&)rNew).GetFont()),
       pUnderFnt(((SwTxtSizeInfo&)rNew).GetUnderFnt()),
       pFrm( rNew.pFrm ),
@@ -474,17 +445,16 @@ void SwTxtSizeInfo::SelectFont()
 }
 
 /*************************************************************************
- *                      SwTxtSizeInfo::_NoteAnimation()
+ *                      SwTxtSizeInfo::NoteAnimation()
  *************************************************************************/
 
-void SwTxtSizeInfo::_NoteAnimation()
+void SwTxtSizeInfo::NoteAnimation() const
 {
-    ASSERT( bOnWin, "NoteAnimation: Wrong Call" );
-    if( SwRootFrm::FlushVout() )
-    {
-        pOut = pVsh->GetOut();
-        pWin = pOut;
-    }
+    if( OnWin() )
+        SwRootFrm::FlushVout();
+
+    ASSERT( pOut == pVsh->GetOut(),
+            "SwTxtSizeInfo::NoteAnimation() changed pOut" )
 }
 
 /*************************************************************************
@@ -546,7 +516,7 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
-    nMaxSizeDiff = aDrawInf.GetKanaDiff();
+    nMaxSizeDiff = (USHORT)aDrawInf.GetKanaDiff();
     nMinSize = aSize.Width();
 }
 
@@ -568,6 +538,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                     GetKanaComp() :
                                 0 ;
 
+    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nMaxLen );
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
@@ -588,6 +559,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
+    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( pFrm );
@@ -611,6 +583,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
+    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( pFrm );
@@ -816,9 +789,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     aDrawInf.SetSpaceStop( ! rPor.GetPortion() ||
                              rPor.GetPortion()->InFixMargGrp() ||
                              rPor.GetPortion()->IsHolePortion() );
-
-    if( !pPrt )
-        aDrawInf.GetZoom() = GetParaPortion()->GetZoom();
 
     if( GetTxtFly()->IsOn() )
     {
@@ -1103,13 +1073,6 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         if ( ! aRect.HasArea() )
             return;
 
-#ifndef PRODUCT
-#ifdef DEBUG
-        if( IsOptDbg() )
-            pWin->DrawRect( aRect.SVRect() );
-#endif
-#endif
-
 #ifdef BIDI
         const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
                                   CHAR_TAB_RTL : CHAR_TAB;
@@ -1210,7 +1173,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
         Size aSize;
         Point aTmp;
 
-        const USHORT nPostItsWidth = pOpt->GetPostItsWidth( pWin );
+        const USHORT nPostItsWidth = pOpt->GetPostItsWidth( GetOut() );
         const USHORT nFontHeight = pFnt->GetHeight( pVsh, GetOut() );
         const USHORT nFontAscent = pFnt->GetAscent( pVsh, GetOut() );
 
@@ -1248,7 +1211,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
             GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
 
         const Rectangle aRect( aTmpRect.SVRect() );
-        pOpt->PaintPostIts( pWin, aRect, bScript );
+        pOpt->PaintPostIts( (OutputDevice*)GetOut(), aRect, bScript );
     }
 }
 
@@ -1463,8 +1426,7 @@ void SwTxtFormatInfo::CtorInit( SwTxtFrm *pNewFrm, const sal_Bool bNewInterHyph,
                                 const sal_Bool bNewQuick, const sal_Bool bTst )
 {
     SwTxtPaintInfo::CtorInit( pNewFrm, SwRect() );
-    if( !pPrt )
-        GetParaPortion()->GetZoom() = pOut->GetMapMode().GetScaleX();
+
     bQuick = bNewQuick;
     bInterHyph = bNewInterHyph;
 
