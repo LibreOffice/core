@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlconti.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlkywd.hxx>
 #include <xmloff/nmspmap.hxx>
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
 
 //------------------------------------------------------------------
 
@@ -83,7 +86,7 @@ ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
                                       const NAMESPACE_RTL(OUString)& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      rtl::OUString& sTempValue) :
+                                      rtl::OUStringBuffer& sTempValue) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sOUText(),
     sValue(sTempValue)
@@ -101,18 +104,26 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-//  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableRowElemTokenMap();
-//  BOOL bHeader = FALSE;
-//  switch( rTokenMap.Get( nPrefix, rLName ) )
-//  {
-//  case XML_TOK_TABLE_ROW_CELL_P:
-//      if( IsInsertTextPossible() )
-//          pContext = new ScXMLContentContext( GetScImport(), nPrefix,
-//                                                    rLName, xAttrList//,
-//                                                    //this
-//                                                    );
-//      break;
-//  }
+    if ((nPrefix == XML_NAMESPACE_TEXT) && (rLName.compareToAscii(sXML_s) == 0))
+    {
+        sal_Int32 nRepeat(0);
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        {
+            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+            rtl::OUString sValue = xAttrList->getValueByIndex( i );
+            rtl::OUString aLocalName;
+            USHORT nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                                sAttrName, &aLocalName );
+            if ((nPrfx == XML_NAMESPACE_TEXT) && (aLocalName.compareToAscii(sXML_c) == 0))
+                nRepeat = sValue.toInt32();
+        }
+        if (nRepeat)
+            for (sal_Int32 j = 0; j < nRepeat; j++)
+                sOUText.append(static_cast<sal_Unicode>(' '));
+        else
+            sOUText.append(static_cast<sal_Unicode>(' '));
+    }
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -122,10 +133,10 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLContentContext::Characters( const ::rtl::OUString& rChars )
 {
-    sOUText += rChars;
+    sOUText.append(rChars);
 }
 
 void ScXMLContentContext::EndElement()
 {
-    sValue += sOUText;
+    sValue.append(sOUText);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlconti.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,23 @@
 #ifndef SC_XMLCONTI_HXX
 #define SC_XMLCONTI_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
+/*#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
+#endif*/
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
 #endif
-
-#include "xmlimprt.hxx"
-#include "xmlcelli.hxx"
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 class ScXMLImport;
 
 class ScXMLContentContext : public SvXMLImportContext
 {
-    ::rtl::OUString sOUText;
-    rtl::OUString& sValue;
+    rtl::OUStringBuffer sOUText;
+    rtl::OUStringBuffer& sValue;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -88,7 +88,7 @@ public:
                        const NAMESPACE_RTL(OUString)& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        rtl::OUString& sValue);
+                        rtl::OUStringBuffer& sValue);
 
     virtual ~ScXMLContentContext();
 
