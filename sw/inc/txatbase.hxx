@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:47:26 $
+ *  last change: $Author: jp $ $Date: 2001-08-27 15:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ class SwTxtAttr
     BOOL bCharFmtAttr : 1;              // charfmt, inet
     BOOL bOverlapAllowedAttr : 1;       // refmarks, toxmarks
     BOOL bPriorityAttr : 1;             // attribute has priority (redlining)
+    BOOL bDontExpandStart : 1;          // don't expand start at paragraph start (ruby)
 protected:
     SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStart );
 
@@ -134,6 +135,7 @@ protected:
     void SetDontMoveAttr( BOOL bFlag )      { bDontMoveAttr = bFlag; }
     void SetCharFmtAttr( BOOL bFlag )       { bCharFmtAttr = bFlag; }
     void SetOverlapAllowedAttr( BOOL bFlag ){ bOverlapAllowedAttr = bFlag; }
+    void SetDontExpandStartAttr(BOOL bFlag) { bDontExpandStart = bFlag; }
 
 public:
     virtual ~SwTxtAttr();
@@ -158,7 +160,8 @@ public:
     BOOL IsCharFmtAttr() const              { return bCharFmtAttr; }
     BOOL IsOverlapAllowedAttr() const       { return bOverlapAllowedAttr; }
     BOOL IsPriorityAttr() const             { return bPriorityAttr; }
-    void SetPriorityAttr( BOOL bFlag )       { bPriorityAttr = bFlag; }
+    void SetPriorityAttr( BOOL bFlag )      { bPriorityAttr = bFlag; }
+    BOOL IsDontExpandStartAttr() const      { return bDontExpandStart; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline USHORT Which() const { return GetAttr().Which(); }
@@ -465,6 +468,9 @@ inline const SvxCharReliefItem& SwTxtAttr::GetCharRelief() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/03/15 15:47:26  ama
+      Opt.: The new attribute handler makes a lot of code superfluous
+
       Revision 1.12  2001/03/12 09:54:12  ama
       New: Fontattribute relief
 

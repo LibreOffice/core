@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:51:39 $
+ *  last change: $Author: jp $ $Date: 2001-08-27 15:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,8 @@ SwTxtAttr::SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStt )
     : pAttr( &rAttr ), nStart( nStt )
 {
     bDontExpand = bLockExpandFlag = bDontMergeAttr = bDontMoveAttr =
-        bCharFmtAttr = bOverlapAllowedAttr = bPriorityAttr = FALSE;
+        bCharFmtAttr = bOverlapAllowedAttr = bPriorityAttr =
+        bDontExpandStart = FALSE;
 }
 
 SwTxtAttr::~SwTxtAttr( )

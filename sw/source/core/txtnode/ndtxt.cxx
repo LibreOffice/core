@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-28 15:20:25 $
+ *  last change: $Author: jp $ $Date: 2001-08-27 15:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1662,7 +1662,8 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
                 Insert( pHt, SETATTR_NOHINTADJUST );
             }
             if ( !(nMode & INS_NOHINTEXPAND) &&
-                 rIdx == nLen && *pHt->GetStart() == rIdx.GetIndex() )
+                 rIdx == nLen && *pHt->GetStart() == rIdx.GetIndex() &&
+                 !pHt->IsDontExpandStartAttr() )
             {
                 // Kein Feld, am Absatzanfang, HintExpand
                 pSwpHints->DeleteAtPos(i);

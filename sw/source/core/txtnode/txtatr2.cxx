@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:18:44 $
+ *  last change: $Author: jp $ $Date: 2001-08-27 15:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,7 @@ SwTxtRuby::SwTxtRuby( const SwFmtRuby& rAttr,
     SetDontExpand( TRUE );              // never expand this attribut
     SetLockExpandFlag( TRUE );
     SetDontMergeAttr( TRUE );
+    SetDontExpandStartAttr( TRUE );
 }
 
 SwTxtRuby::~SwTxtRuby()
