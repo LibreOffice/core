@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 20:23:43 $
+ *  last change: $Author: rt $ $Date: 2001-11-16 22:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,6 +634,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text[ catalan ] = "Número de registro";
     Text[ finnish ] = "Tietueen numero";
 };
+
 
 
 
