@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:16 $
+ *  last change: $Author: cmc $ $Date: 2002-12-09 10:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -350,13 +354,16 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
         aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
         // MetaFile auf neue Groesse skalieren und
         // neue Groesse am MetaFile setzen
-        Size        aOldSiz( aWMF.GetPrefSize() );
-        Size        aNewSiz( rPic.MFP.xExt, rPic.MFP.yExt );
-        Fraction    aFracX( aNewSiz.Width(), aOldSiz.Width() );
-        Fraction    aFracY( aNewSiz.Height(), aOldSiz.Height() );
+        if (rPic.MFP.xExt && rPic.MFP.yExt)
+        {
+            Size aOldSiz(aWMF.GetPrefSize());
+            Size aNewSiz(rPic.MFP.xExt, rPic.MFP.yExt );
+            Fraction aFracX(aNewSiz.Width(), aOldSiz.Width());
+            Fraction aFracY(aNewSiz.Height(), aOldSiz.Height());
 
-        aWMF.Scale( aFracX, aFracY );
-        aWMF.SetPrefSize( aNewSiz );
+            aWMF.Scale(aFracX, aFracY);
+            aWMF.SetPrefSize(aNewSiz);
+        }
 
         rpGraphic = new Graphic( aWMF );
         return true;
@@ -942,8 +949,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             }
         pMSDffManager->EnableFallbackStream();
         }
-        else if ( (aPic.lcb >= 58) && aPic.MFP.xExt && aPic.MFP.yExt )
-            pRet = ImportGraf1( aPic, pDataStream, nPicLocFc );
+        else if (aPic.lcb >= 58)
+            pRet = ImportGraf1(aPic, pDataStream, nPicLocFc);
     }
     pDataStream->Seek( nOldPos );
 
