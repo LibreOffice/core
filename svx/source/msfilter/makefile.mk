@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-24 13:26:39 $
+#   last change: $Author: obo $ $Date: 2004-08-11 08:54:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ SLOFILES=\
     $(SLO)$/svxmsbas.obj	\
     $(SLO)$/msocximex.obj	\
     $(SLO)$/msashape3d.obj	\
+    $(SLO)$/mscodec.obj		\
     $(SLO)$/msfiltertracer.obj
 
 EXCEPTIONSFILES= \
