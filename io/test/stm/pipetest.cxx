@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipetest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-09-18 12:15:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
-#include <assert.h>
 #include <string.h>
 
 using namespace ::rtl;
