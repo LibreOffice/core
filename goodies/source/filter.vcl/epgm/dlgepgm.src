@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-08 09:08:37 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ ModalDialog DLG_EXPORT_EPGM
     Text[ catalan ] = "Opciones PGM";
     Text[ finnish ] = "PGM-asetukset";
 };
+
 
 
 
