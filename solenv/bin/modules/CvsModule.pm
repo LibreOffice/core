@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 13:45:55 $
+#   last change: $Author: hr $ $Date: 2004-12-13 18:10:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ my %CvsModuleClassData = (
     VCSID                   => $config->get_cvs_server_id()          # VCSID of CVS user
 );
 
-##### ctor ####
+##### constructor ####
 
 sub new
 {
@@ -97,7 +97,7 @@ sub new
     $self->{VERBOSE}        = 0;        # verbose diagnostics
     $self->{CVS_SERVER}     = undef;    # name of CVS server
     $self->{CVS_METHOD}     = undef;    # checkout method
-    $self->{CVS_REPOSITORY} = undef;    # CVS reposiory
+    $self->{CVS_REPOSITORY} = undef;    # CVS repository
     $self->{DEFS_CACHE}     = undef;    # cache for module definitions
     bless ($self, $class);
     return $self;
@@ -148,10 +148,10 @@ for my $ucdatum (keys %CvsModuleClassData) {
 # this procedure provides common output
 # the result of update method
 #
-sub handle_update_infomation {
+sub handle_update_information {
     my ($self, $updated_files_ref) = @_;
     my ($updated, $merged, $conflicts);
-    if ( $updated_files_ref eq 'invaildpath' || $updated_files_ref eq 'cantchdir') {
+    if ( $updated_files_ref eq 'invalidpath' || $updated_files_ref eq 'cantchdir') {
         die('ERROR: Can\'t chdir() into module'. $self->module());
     }
     else {
@@ -756,7 +756,7 @@ sub get_rcmd_root
             print STDERR "\nThe cvs rdiff command is broken for the OOo CVS server.\n";
             print STDERR "To fix this problem you have to issue the following cvs login command:\n\n";
             print STDERR "    cvs -d $root login\n\n";
-            print STDERR "The password is your ususal OOo password.\n\n";
+            print STDERR "The password is your usual OOo password.\n\n";
             exit(1);
         }
     }
