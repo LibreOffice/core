@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:15:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@
 #ifndef SD_FU_CUSTOM_SHOW_DLG_HXX
 #include "fucushow.hxx"
 #endif
-#include "dlgfield.hxx"
+//CHINA001 #include "dlgfield.hxx"
 #include "drawdoc.hxx"
 #include "sdattr.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
@@ -171,7 +171,8 @@
 #ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
 #endif
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "dlgfield.hrc" //CHINA001
 namespace sd {
 
 
@@ -604,10 +605,14 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
             {
                 // Dialog...
-                SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOutlinerView->GetAttribs() );
-                if( aDlg.Execute() == RET_OK )
+                //CHINA001 SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOutlinerView->GetAttribs() );
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+                AbstractSdModifyFieldDlg* pDlg = pFact->CreateSdModifyFieldDlg(ResId( DLG_FIELD_MODIFY ), pWindow, pFldItem->GetField(), pOutlinerView->GetAttribs() );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                 {
-                    SvxFieldData* pField = aDlg.GetField();
+                    SvxFieldData* pField = pDlg->GetField(); //CHINA001 SvxFieldData* pField = aDlg.GetField();
                     if( pField )
                     {
                         SvxFieldItem aFieldItem( *pField );
@@ -632,7 +637,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                         delete pField;
                     }
 
-                    SfxItemSet aSet( aDlg.GetItemSet() );
+                    SfxItemSet aSet( pDlg->GetItemSet() ); //CHINA001 SfxItemSet aSet( aDlg.GetItemSet() );
                     if( aSet.Count() )
                     {
                         pOutlinerView->SetAttribs( aSet );
@@ -642,6 +647,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                             pOutliner->UpdateFields();
                     }
                 }
+                delete pDlg; //add by CHINA001
             }
 
             Cancel();
