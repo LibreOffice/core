@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:08:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
                     // Fuellattribute (Extended OutputDevice)
     rISet.Put(XFillStyleItem(XFILL_SOLID));
-    rISet.Put(XFillColorItem(String(), Color(0,184,255))); // "Blau 7"
+    rISet.Put(XFillColorItem(String(), RGB_Color(COL_DEFAULT_SHAPE_FILLING))); // "Blue 8"
 
     rISet.Put(XFillGradientItem(pPool,aNullGrad));
     rISet.Put(XFillHatchItem(pPool,aNullHatch));
