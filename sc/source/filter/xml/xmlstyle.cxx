@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 21:06:54 $
+ *  last change: $Author: sab $ $Date: 2001-11-16 15:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,6 +1064,7 @@ sal_Bool XmlScPropHdl_HoriJustify::exportXML(
     {
         switch (nVal)
         {
+            case table::CellHoriJustify_REPEAT:
             case table::CellHoriJustify_LEFT:
             {
                 rStrExpValue = GetXMLToken(XML_START);
