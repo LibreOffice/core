@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:43:07 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,15 @@
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "sdgrffilter.hxx"
+
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
 
 // ---------------
 // - SdPPTFilter -
@@ -451,7 +460,13 @@ sal_Bool SdGRFFilter::Export()
 
             mrMedium.Close();
 
-            const USHORT nRet = pGraphicFilter->ExportGraphic( aGraphic, aURL, nFilter, sal_False );
+            const SfxPoolItem *pItem=0;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
+            if ( pSet->GetItemState( SID_FILTER_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                ((SfxUnoAnyItem*)pItem)->GetValue() >>= aFilterData;
+            }
+            const USHORT nRet = pGraphicFilter->ExportGraphic( aGraphic, aURL, nFilter, sal_False, &aFilterData );
 
             if( nRet )
                 SdGRFFilter::HandleGraphicFilterError( nRet, pGraphicFilter->GetLastError().nStreamError );
