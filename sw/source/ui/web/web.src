@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:07:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,8 @@
 #include "web.hrc"
 #include "swmn.hrc"
 #define ACC_SW_WEB
-#include "swacc.hrc"
 #include "toolbox.hrc"
 #include "helpid.h"
-ACC CFG_SWWEB_ACCEL
-{
-    ItemList =
-    {
-        ALL_ACCELS
-        FUNCTIONKEYS
-    };
-};
 String STR_HUMAN_SWWEBDOC_NAME
 {
     Text [ de ] = "HTML" ;
