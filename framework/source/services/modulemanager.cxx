@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modulemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:31:23 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,6 @@
 namespace css = ::com::sun::star;
 #endif
 
-#ifndef dcss
-// namespace dcss = ::drafts::com::sun::star;
-#define dcss  ::drafts::com::sun::star
-#endif
-
 namespace framework
 {
 
@@ -116,7 +111,7 @@ DEFINE_XINTERFACE_5(ModuleManager                                   ,
                     DIRECT_INTERFACE(css::lang::XServiceInfo       ),
                     DIRECT_INTERFACE(css::container::XNameAccess   ),
                     DIRECT_INTERFACE(css::container::XElementAccess),
-                    DIRECT_INTERFACE(dcss::frame::XModuleManager   ))
+                    DIRECT_INTERFACE(css::frame::XModuleManager   ))
 
 /*-----------------------------------------------
     04.12.2003 09:32
@@ -126,7 +121,7 @@ DEFINE_XTYPEPROVIDER_5(ModuleManager                 ,
                        css::lang::XServiceInfo       ,
                        css::container::XNameAccess   ,
                        css::container::XElementAccess,
-                       dcss::frame::XModuleManager   )
+                       css::frame::XModuleManager   )
 
 /*-----------------------------------------------
     04.12.2003 09:35
@@ -173,7 +168,7 @@ ModuleManager::~ModuleManager()
 -----------------------------------------------*/
 ::rtl::OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
     throw(css::lang::IllegalArgumentException,
-          dcss::frame::UnknownModuleException,
+          css::frame::UnknownModuleException,
           css::uno::RuntimeException         )
 {
     // valid parameter?
@@ -210,7 +205,7 @@ ModuleManager::~ModuleManager()
         xInfo = css::uno::Reference< css::lang::XServiceInfo >(xFrame, css::uno::UNO_QUERY);
 
     if (!xInfo.is())
-        throw dcss::frame::UnknownModuleException(
+        throw css::frame::UnknownModuleException(
                 ::rtl::OUString::createFromAscii("Cant classify given module."),
                 static_cast< ::cppu::OWeakObject* >(this));
 
@@ -363,7 +358,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_openCon
     30.01.2004 07:54
 -----------------------------------------------*/
 ::rtl::OUString ModuleManager::impl_identify(const css::uno::Reference< css::lang::XServiceInfo >& xModule)
-    throw(dcss::frame::UnknownModuleException)
+    throw(css::frame::UnknownModuleException)
 {
     const css::uno::Sequence< ::rtl::OUString > lKnownModules = getElementNames();
     const ::rtl::OUString*                      pKnownModules = lKnownModules.getConstArray();
@@ -376,7 +371,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_openCon
             return pKnownModules[m];
     }
 
-    throw dcss::frame::UnknownModuleException(
+    throw css::frame::UnknownModuleException(
             ::rtl::OUString::createFromAscii("Cant classify given module."),
             static_cast< ::cppu::OWeakObject* >(this));
 }
