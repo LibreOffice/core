@@ -117,23 +117,6 @@ public class FormulaParser {
     }
 
     /**
-     * Identify white spaces (ie. spaces or tab)
-     *
-     * @param  The character which is to be identified
-     * @return A boolean returning the result of the comparison
-     */
-    private boolean isWhite(char c) {
-
-         boolean eq;
-
-         if(c==' ' | c=='\t')
-             eq = true;
-         else
-             eq = false;
-         return eq;
-    }
-
-    /**
      * Identify + and - operators
      *
      * @param  c The character which is to be identified
@@ -305,7 +288,7 @@ public class FormulaParser {
 
          boolean success = true;
 
-         while(isWhite(look) && success) {
+         while(Character.isWhitespace(look) && success) {
              success = getChar();
          }
      }
