@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,16 +402,10 @@ String SID_WIN_FULLSCREEN
     Text[ thai ] = "Leave Full-Screen Mode";
 };
 
+String STR_MENU_ADDONHELP
+{
+    TEXT = "Add-~On-Hilfe" ;
+    TEXT [ english_us ] = "Add-~On Help" ;
+};
+
 // ******************************************************************* EOF
-
-
-
-
-
-
-
-
-
-
-
-
