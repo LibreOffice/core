@@ -43,8 +43,47 @@ arFunctions["AttrSequence"]="[attribute] sequence< sequence<long> > AttrSequence
 arFunctions["AttrSequence2"]="[attribute] sequence< sequence< sequence <long> > > AttrSequence2";
 arFunctions["AttrXInterface"]="[attribute] sequence< com::sun::star::uno::XInterface > AttrXInterface";
 
+arFunctions["testout_methodByte"]= " void testout_methodByte( [out] byte rOut )";
+arFunctions["testout_methodFloat"]= "void testout_methodFloat( [out] float rOut)";
+arFunctions["testout_methodDouble"]= "void testout_methodDouble( [out] double rOut)";
+arFunctions["testout_methodBool"]= "void testout_methodBool( [out] boolean rOut)";
+arFunctions["testout_methodShort"]= "void testout_methodShort( [out] short rOut)";
+arFunctions["testout_methodUShort"]= "void testout_methodUShort( [out] unsigned short rOut)";
+arFunctions["testout_methodLong"]= "void testout_methodLong( [out]  long rOut)";
+arFunctions["testout_methodULong"]= "void testout_methodULong( [out] unsigned long rOut)";
+arFunctions["testout_methodString"]= "void testout_methodString( [out] string rOut)";
+arFunctions["testout_methodChar"]= "void testout_methodChar( [out] char rOut)";
+arFunctions["testout_methodAny"]= "void testout_methodAny( [out] any rOut)";
+arFunctions["testout_methodSequence"]= "void testout_methodSequence( [out] sequence< long > rOut)";
+arFunctions["testout_methodSequence2"]= "void testout_methodSequence2( [out] sequence < sequence< long > > rOut)";
+arFunctions["testout_methodXInterface"]= "void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut)";
+arFunctions["testout_methodMulParams1"]= "void testout_methodMulParams1( [out] long rout1, [out] long rout2)";
+arFunctions["testout_methodMulParams2"]= "void testout_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3)";
+arFunctions["testout_methodMulParams3"]= "void testout_methodMulParams3( [in] string sin, [out] string sout)";
+arFunctions["testout_methodMulParams4"]= "void testout_methodMulParams4( [in] float in1, [out] float out1, [in] long in2, [out] long out2, [in] long in3)";
+arFunctions["testinout_methodByte"]="void testinout_methodByte( [inout] byte rOut )";
+arFunctions["testinout_methodFloat"]="void testinout_methodFloat( [inout] float rOut)";
+arFunctions["testinout_methodDouble"]="void testinout_methodDouble( [inout] double rOut)";
+arFunctions["testinout_methodBool"]="void testinout_methodBool( [inout] boolean rOut)";
+arFunctions["testinout_methodShort"]="void testinout_methodShort( [inout] short rOut)";
+arFunctions["testinout_methodUShort"]="void testinout_methodUShort( [inout] unsigned short rOut)";
+arFunctions["testinout_methodLong"]="void testinout_methodLong( [inout]  long rOut)";
+arFunctions["testinout_methodULong"]="void testinout_methodULong( [inout] unsigned long rOut)";
+arFunctions["testinout_methodString"]="void testinout_methodString( [inout] string rOut)";
+arFunctions["testinout_methodChar"]="void testinout_methodChar( [inout] char rOut)";
+arFunctions["testinout_methodAny"]="void testinout_methodAny( [inout] any rOut)";
+arFunctions["testinout_methodSequence"]="void testinout_methodSequence( [inout] sequence< long > rOut)";
+arFunctions["testinout_methodSequence2"]="void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut)";
+arFunctions["testinout_methodXInterface"]="void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut)";
+arFunctions["testinout_methodXInterface2"]="void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut)";
+
+arFunctions["methodAnyTest1"]="any methodAnyTest1( [in] any rIn)";
+
+
+var Log= new Logger();
 
 var arr= new Array( 1, 2, 3, 4, 0);
+var arrInt= new Array( 1,2,3,4,5);
 var arrDouble= new Array( 1.2345, 12.345, 123.45, 1234.5, 12345);
 var arrBool= new Array( true, false, true, false, true);
 var arrChar= new Array( '1', 'A'," ", 55);
@@ -60,6 +99,13 @@ var arEventListener2= new Array( new XEventListener_Impl(), new XEventListener_I
                                  new XEventListener_Impl());
 var arArEventListener= new Array( arEventListener, arEventListener2);
 
+var arObj= new Array();
+for( i=0; i< 3; i++)
+    arObj[i]= new Object();
+
+var outVal= new Array();
+var outVal2= new Array();
+var outVal3= new Array();
 
 for( i=0; i < 3; i++)
 {
@@ -79,7 +125,7 @@ for( i=0; i < 3; i++)
     
 ret= oletest.methodByte( arr); 
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "methodByte");
+Log.print( isEqualAr( arr, _ret), "methodByte");
 
 ret= oletest.methodFloat( arrDouble);
 _ret= new VBArray( ret).toArray();
@@ -91,46 +137,46 @@ if( (arrDouble.length == _ret.length)
     && (_ret[3] > 1234.4 && _ret[3] < 1234.6)
     && (_ret[4] > 12344 && _ret[4] < 12346))
     bOk= true;
-log( bOk, "methodFloat");
+Log.print( bOk, "methodFloat");
 
 ret= oletest.methodDouble( arrDouble);
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arrDouble, _ret), "methodDouble");
+Log.print( isEqualAr( arrDouble, _ret), "methodDouble");
 
 ret= oletest.methodBool( arrBool); 
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arrBool, _ret), "methodBool");
+Log.print( isEqualAr( arrBool, _ret), "methodBool");
 
 ret= oletest.methodShort( arr); 
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "methodShort");
+Log.print( isEqualAr( arr, _ret), "methodShort");
 
 ret= oletest.methodUShort( arr);
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "methodUShort");
+Log.print( isEqualAr( arr, _ret), "methodUShort");
 
 ret= oletest.methodLong( arr); 
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "methodLong");
+Log.print( isEqualAr( arr, _ret), "methodLong");
 
 ret= oletest.methodULong( arr);
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "methodULong");
+Log.print( isEqualAr( arr, _ret), "methodULong");
 
 ret= oletest.methodChar( arrChar); 
 _ret= new VBArray( ret).toArray();
 bOk= false;
 if( _ret.length == arrChar.length && _ret[0] == 49 && _ret[1] == 65 && _ret[2] == 32 && _ret[3] == 55)
     bOk= true;
-log( bOk, "methodChar");
+Log.print( bOk, "methodChar");
 
 ret= oletest.methodString( arrString); 
 _ret= new VBArray( ret).toArray();	
-log( isEqualAr( arrString, _ret), "methodString");
+Log.print( isEqualAr( arrString, _ret), "methodString");
 
 ret= oletest.methodAny( arrAny);
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arrAny, _ret), "methodAny");
+Log.print( isEqualAr( arrAny, _ret), "methodAny");
 		
 ret= oletest.methodSequence( arrSeq);
 _ret= new VBArray( ret).toArray();
@@ -144,7 +190,7 @@ for( i=0; i < _ret.length; i++)
         break;
     }        
 }
-log( bOk, "methodSequence");
+Log.print( bOk, "methodSequence");
 
 ret= oletest.methodSequence2( arrSeq2);
 arr1= new VBArray( ret).toArray();
@@ -166,26 +212,21 @@ for( i=0; i < arr1.length; i++)
         }
     }
 }
-log( bOk, "methodSequence2");
+Log.print( bOk, "methodSequence2");
 
-
-var ar= new Array();
-for( i=0; i< 3; i++)
-    ar[i]= new Object();
-
-ret	=	oletest.methodXInterface( ar);
+ret= oletest.methodXInterface( arObj);
 _ret= new VBArray( ret);
 _ret= _ret.toArray();
 bOk= true;
 for(i in _ret)
 {
-    if( _ret[i] !== ar[i])
+    if( _ret[i] !== arObj[i])
     {
         bOk= false;
         break;
     }
 }
-log( bOk, "methodXInterface");
+Log.print( bOk, "methodXInterface");
 
 ret= oletest.methodXEventListeners( arEventListener);
 _ret= new VBArray(ret).toArray();
@@ -198,7 +239,7 @@ for ( key in _ret)
         break;
     }
 }
-log( bOk, "methodXEventListeners");
+Log.print( bOk, "methodXEventListeners");
 
 ret= oletest.methodXEventListenersMul( arArEventListener);
 _ret= new VBArray(ret).toArray();
@@ -215,16 +256,16 @@ for( key in _ret)
         }
     }
 }
-log( bOk, "methodXEventListenersMul");
+Log.print( bOk, "methodXEventListenersMul");
 
 document.writeln("<br>");
 oletest.AttrByte = arr;
 ret= oletest.AttrByte;
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "AttrByte");
+Log.print( isEqualAr( arr, _ret), "AttrByte");
 
-oletest.AttrDouble= arrDouble;
-ret= oletest.AttrDouble;
+oletest.AttrFloat= arrDouble;
+ret= oletest.AttrFloat;
 _ret= new VBArray( ret).toArray();
 bOk= false;
 if( (arrDouble.length == _ret.length)
@@ -234,32 +275,37 @@ if( (arrDouble.length == _ret.length)
     && (_ret[3] > 1234.4 && _ret[3] < 1234.6)
     && (_ret[4] > 12344 && _ret[4] < 12346))
     bOk= true;
-log( bOk, "AttrDouble");
+Log.print( bOk, "AttrFloat");
+
+oletest.AttrDouble= arrDouble;
+ret= oletest.AttrDouble;
+_ret= new VBArray( ret).toArray();
+Log.print( isEqualAr( arrDouble, _ret), "AttrDouble");
 
 oletest.AttrBool= arrBool;
 ret= oletest.AttrBool;
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arrBool, _ret), "AttrBool");
+Log.print( isEqualAr( arrBool, _ret), "AttrBool");
 
 oletest.AttrShort= arr;
 ret= oletest.AttrShort;
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "AttrShort");
+Log.print( isEqualAr( arr, _ret), "AttrShort");
 
 oletest.AttrUShort= arr;
 ret= oletest.AttrUShort;
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "AttrUShort");
+Log.print( isEqualAr( arr, _ret), "AttrUShort");
 
 oletest.AttrLong= arr;
 ret= oletest.AttrLong;
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "AttrLong");
+Log.print( isEqualAr( arr, _ret), "AttrLong");
 
 oletest.AttrULong= arr;
 ret= oletest.AttrULong;
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arr, _ret), "AttrULong");
+Log.print( isEqualAr( arr, _ret), "AttrULong");
 
 oletest.AttrChar= arrChar;
 ret= oletest.AttrChar;
@@ -267,17 +313,17 @@ _ret= new VBArray(ret).toArray();
 bOk= false;
 if( _ret.length == arrChar.length && _ret[0] == 49 && _ret[1] == 65 && _ret[2] == 32 && _ret[3] == 55)
     bOk= true;
-log( bOk, "AttrChar");
+Log.print( bOk, "AttrChar");
 
 oletest.AttrString= arrString;
 ret= oletest.AttrString;
 _ret= new VBArray( ret).toArray();	
-log( isEqualAr( arrString, _ret), "AttrString");
+Log.print( isEqualAr( arrString, _ret), "AttrString");
 
 oletest.AttrAny= arrAny;
 ret= oletest.AttrAny;
 _ret= new VBArray( ret).toArray();
-log( isEqualAr( arrAny, _ret), "AttrAny");
+Log.print( isEqualAr( arrAny, _ret), "AttrAny");
 
 oletest.AttrSequence= arrSeq;
 ret= oletest.AttrSequence;
@@ -292,7 +338,7 @@ for( i=0; i < _ret.length; i++)
         break;
     }        
 }
-log( bOk, "AttrSequence");
+Log.print( bOk, "AttrSequence");
 
 oletest.AttrSequence2= arrSeq2;
 ret= oletest.AttrSequence2;
@@ -314,20 +360,214 @@ for( i=0; i < arr1.length; i++)
         }
     }
 }
-log( bOk, "AttrSequence2");
+Log.print( bOk, "AttrSequence2");
 
-oletest.AttrFloat= arrDouble;
-ret= oletest.AttrFloat;
+oletest.AttrXInterface( arObj);
+ret= oletest.AttrXInterface;
+_ret= new VBArray( ret).toArray();
+bOk= true;
+for(i in _ret)
+{
+    if( _ret[i] !== arObj[i])
+    {
+        bOk= false;
+        break;
+    }
+}
+Log.print( bOk, "AttrXInterface");
+
+document.writeln("<br>");
+
+oletest.testout_methodByte( outVal );
+Log.print( outVal[0] == 111, "testout_methodByte");
+
+oletest.testout_methodFloat( outVal );
+Log.print( outVal[0] > 3.13 && outVal[0] < 3.15, "testout_methodFloat");
+
+oletest.testout_methodDouble( outVal );
+Log.print( outVal[0] == 3.14, "testout_methodDouble" );
+
+oletest.testout_methodBool( outVal );
+Log.print( outVal[0] == true, "testout_methodBool");
+
+oletest.testout_methodShort( outVal );
+Log.print( outVal[0] == 222, "testout_methodShort");
+
+oletest.testout_methodUShort( outVal );
+Log.print( outVal[0] == 333, "testout_methodUShort");
+
+oletest.testout_methodLong( outVal );
+Log.print( outVal[0] == 444, "testout_methodLong");
+
+oletest.testout_methodULong( outVal );
+Log.print( outVal[0] == 555, "testout_methodULong");
+
+oletest.testout_methodChar( outVal );
+Log.print( outVal[0] == 65, "testout_methodChar");
+
+oletest.testout_methodString( outVal );
+Log.print( outVal[0] == "a little string", "testout_methodString");
+
+oletest.testout_methodAny( outVal );
+Log.print( outVal[0] == "I am a string in an any", "testout_methodAny");
+
+oletest.testout_methodSequence( outVal );
+var arr= new VBArray( outVal[0]).toArray();
+Log.print( isEqualAr(arr, new Array( 0,1,2,3,4,5,6,7,8,9)), "testout_methodSequence");
+
+oletest.testout_methodSequence2( outVal );
+var arr= new VBArray( outVal[0]).toArray();
+bOk= true;
+if( arr.length= 10)
+{    
+    for( i=0; i < arr.length; i++)
+    {
+        var arr2= new VBArray( arr[i]).toArray();
+        if( ! isEqualAr( arr2, new Array( 0,1,2,3,4,5,6,7,8,9)))
+        {
+            bOk= false;
+            break;
+        }
+    }
+}
+Log.print( bOk, "testout_methodSequence2");
+
+oletest.testout_methodMulParams1( outVal, outVal2 );
+Log.print( outVal[0] == 999 && outVal2[0] == 1111, "testout_methodMulParams1");
+
+oletest.testout_methodMulParams2( outVal, outVal2, outVal3 );
+Log.print( outVal[0] == 1111 && outVal2[0] == 1222 && outVal3[0] == " another string",
+     "testout_methodMulParams2");
+
+oletest.testout_methodMulParams3( "hallo", outVal );
+Log.print( outVal[0] == "Out Hallo!", "testout_methodMulParams3");
+
+var in1= 3.14;
+var in2= 1111;
+var in3= -2222;
+oletest.testout_methodMulParams4( in1, outVal, in2, outVal2, in3 );
+Log.print( (outVal[0] > 4.13 && outVal[0] < 4.15) && (outVal2[0] == 1112), "testout_methodMulParams4");
+
+oletest.testout_methodXInterface( outVal );
+var obj= outVal[0];
+Log.print( outVal[0].AttrAny2 == "Property Any", "testout_methodXInterface");
+
+document.writeln("<p>");
+
+
+outVal[0]= 100;
+oletest.testinout_methodByte( outVal );
+Log.print( outVal[0] == 101, "testinout_methodByte");
+
+outVal[0]= 3.14;
+oletest.testinout_methodFloat( outVal );
+Log.print( outVal[0] > 4.13 && outVal[0] < 4.15, "testinout_methodFloat");
+
+outVal[0]= 3.14;
+oletest.testinout_methodDouble( outVal );
+Log.print( outVal[0] > 4.13 && outVal[0] < 4.15, "testinout_methodDouble");
+
+outVal[0]= false;
+oletest.testinout_methodBool( outVal );
+Log.print( outVal[0] == true, "testinout_methodBool");
+
+outVal[0]= 200;
+oletest.testinout_methodShort( outVal );
+Log.print( outVal[0] == 201, "testinout_methodShort");
+
+outVal[0]= 300;
+oletest.testinout_methodUShort( outVal );
+Log.print( outVal[0] == 301, "testinout_methodUShort");
+
+outVal[0]= 400;
+oletest.testinout_methodLong( outVal );
+Log.print( outVal[0] == 401, "testinout_methodLong");
+
+outVal[0]= 500;
+oletest.testinout_methodULong( outVal );
+Log.print( outVal[0] == 501, "testinout_methodULong");
+
+outVal[0]= "A";
+oletest.testinout_methodChar( outVal );
+Log.print( outVal[0] == 66, "testinout_methodChar");
+
+outVal[0]= "I am a string";
+oletest.testinout_methodString( outVal );
+Log.print( outVal[0] == "I am a string out string", "testinout_methodString");
+
+outVal[0]= arrInt;
+oletest.testinout_methodAny( outVal ); 
+var arr2= new VBArray( outVal[0]).toArray();
+Log.print( isEqualAr(arrInt, arr2), "testinout_methodAny");
+
+outVal[0]= arrInt;
+oletest.testinout_methodSequence( outVal );
+arr= new VBArray( outVal[0]).toArray();
+Log.print( isEqualAr( arr, new Array( 2,3,4,5,6)), "testinout_methodSequence");
+		 
+
+outVal[0]= arrSeq;
+oletest.testinout_methodSequence2( outVal );
+var arr= new VBArray( outVal[0]).toArray();
+var i;
+bOk= true;
+if( arr.length == 3)
+{
+    var tmpArr= new Array(2,4,6,8,0);
+    for( i=0; i < arr.length; i++)
+    {
+        var arr2= new VBArray( arr[i]).toArray();
+        if( ! isEqualAr( arr2, tmpArr))
+        {
+            bOk= false;
+            break;
+        }
+    }
+}
+Log.print( bOk, "testinout_methodSequence2");
+
+
+var ob=  new Object();
+var sInVal= "this is a string"
+ob.value= sInVal;
+outVal[0]= ob;
+oletest.testinout_methodXInterface( outVal);
+Log.print( outVal[0].value == " this string was written in the UNO component to the inout pararmeter", "testinout_methodXInterface");
+
+document.writeln("<p>");
+
+
+Log.summarize();
 
 
 
-function log( bool, method)
+
+function Logger()
+{
+    this.print= logger_print;
+    this.summarize= logger_summarize;
+    this.bAllOk= true;
+}
+function logger_print( bool, method)
 {
     if( bool)
         document.writeln( "Ok &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
     else
+    {
         document.writeln( "Failed &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
+        this.bAllOk= this.bAllOk && false;
+    }
 }
+
+function logger_summarize()
+{
+    document.writeln("<p> ==============================================================================<br>");
+    if(this.bAllOk)
+        document.writeln("No errors <br>");
+    else
+        document.writeln("Error ! The test failed! <br>");
+}
+    
 function isEqualAr( ar1, ar2)
 {
     var bOk= false;
@@ -431,251 +671,7 @@ function callOleTest(	 id)
 	var arArEventListener= new Array( arEventListener, arEventListener2);
 	switch( id)
 	{
-	// Array in-params
-
-
-
-	// Properties: setting and getting values
-	case 200: oletest.AttrByte = arr;
-		ret= oletest.AttrByte; 
-		document.writeln("Setting AttrByte: " + arr.toString() + "<p>");
-		document.writeln("Getting AttrByte: " + arr.toString()); break;
-
-	case 201: oletest.AttrDouble= arrDouble; 
-		ret= oletest.AttrDouble; 
-		document.writeln("Setting AttrDouble: " + arrDouble.toString() + "<p>");
-		document.writeln("Getting AttrDouble: " + arrDouble.toString()); break;
-
-	case 202: oletest.AttrBool= arrBool;
-		ret= oletest.AttrBool; 
-		document.writeln("Setting AttrBool: " + arrBool.toString() + "<p>");
-		document.writeln("Getting AttrBool: " + arrBool.toString()); break;
-
-	case 203: oletest.AttrShort= arr; 
-		ret= oletest.AttrShort; 
-		document.writeln("Setting AttrShort: " + arr.toString() + "<p>");
-		document.writeln("Getting AttrShort: " + arr.toString()); break;
-
-	case 204: oletest.AttrUShort= arr; 
-		ret= oletest.AttrUShort; 
-		document.writeln("Setting AttrUShort: " + arr.toString() + "<p>");
-		document.writeln("Getting AttrUShort: " + arr.toString()); break;
-
-	case 205: oletest.AttrLong= arr; 
-		ret= oletest.AttrLong; 
-		document.writeln("Setting AttrLong: " + arr.toString() + "<p>");
-		document.writeln("Getting AttrLong: " + arr.toString()); break;
-
-	case 206: oletest.AttrULong= arr; 
-		ret= oletest.AttrULong; 
-		document.writeln("Setting AttrULong: " + arr.toString() + "<p>");
-		document.writeln("Getting AttrULong: " + arr.toString()); break;
-
-	case 207: oletest.AttrChar= arrChar; 
-		ret= oletest.AttrChar; 
-		document.writeln("Setting AttrChar: " + arrChar.toString() + "<p>");
-		document.writeln("Getting AttrChar: " + arrChar.toString()); break;
-
-	case 208: oletest.AttrString= arrString; 
-		ret= oletest.AttrString; 
-		document.writeln("Setting AttrString: " + arrString.toString() + "<p>");
-		document.writeln("Getting AttrString: " + arrString.toString()); break;
-
-	case 209: oletest.AttrAny= arrAny; 
-		ret= oletest.AttrAny; 
-		document.writeln("Setting AttrAny: " + arrAny.toString() + "<p>");
-		document.writeln("Getting AttrAny: " + arrAny.toString()); break;
-
-	case 210: oletest.AttrSequence= arrSeq; 
-		ret= oletest.AttrSequence; 
-		document.writeln("Setting AttrSequence: " + arrSeq.toString() + "<p>");
-		document.writeln("Getting AttrSequence: " + arrSeq.toString()); break;
-
-	case 211: oletest.AttrSequence2= arrSeq2; 
-		ret= oletest.AttrSequence2; 
-		document.writeln("Setting AttrSequence2: " + arrSeq2.toString() + "<p>");
-		document.writeln("Getting AttrSequence2: " + arrSeq2.toString()); break;
-
-	case 212: oletest.AttrFloat= arrDouble; 
-		ret= oletest.AttrFloat; 
-		document.writeln("Setting AttrFloat: " + arrDouble.toString() + "<p>");
-		document.writeln("Getting AttrFloat: " + arrDouble.toString()); break;
-
-
-
-	// Out-parameter ------------------------------------------------------------
-	case (2000): 
-		oletest.testout_methodByte( arrout1 );
-		alert("byte: " + arrout1[0] ); 	break;
-	case (2001): 
-		oletest.testout_methodDouble( arrout1 );
-		alert( "double: " + arrout1[0] ); break;
-	case (2002):
-		oletest.testout_methodBool( arrout1 );
-		alert( "boolean: " + arrout1[0] );	break;
-	case (2003): 
-		oletest.testout_methodShort( arrout1 );
-		alert( "short: " + arrout1[0] ); break;
-	case (2004):
-		oletest.testout_methodUShort( arrout1 );
-		alert( "unsigned short: " + arrout1[0] ); break;
-	case (2005): 
-		oletest.testout_methodLong( arrout1 );
-		alert( "long: " + arrout1[0] );	break;
-	case (2006): 
-		oletest.testout_methodULong( arrout1 );
-		alert( "unsigned long: " + arrout1[0] ); break;
-	case (2007): 
-		oletest.testout_methodChar( arrout1 );
-		alert( "char: " + arrout1[0] );	break;
-	case (2008):
-		oletest.testout_methodString( arrout1 );
-		alert( "string: " + arrout1[0] ); break;
-	case (2009):
-		oletest.testout_methodAny( arrout1 );
-		alert( "any: " + arrout1[0] );	break;
-	case (2010):
-		oletest.testout_methodSequence( arrout1 );
-		var sfarray= new VBArray( arrout1[0]);
-		arr= sfarray.toArray();
-		document.writeln("use the browser's back arrow to go to the previous page <p>");
-		document.writeln( arr.toString());
-		break;
-	case (2011): 
-		oletest.testout_methodSequence2( arrout1 );
-		var sfarray= new VBArray( arrout1[0]);
-		arr= sfarray.toArray();
-		var i;
-		for( i=0; i < arr.length; i++)
-		{
-			var sfarray= new VBArray( arr[i]);
-			var arr2= new Array();
-			arr2= sfarray.toArray();
-			document.writeln( arr2.toString() + "<br>" );
-		}
-		break;
-	case (2012):
-		oletest.testout_methodMulParams1( arrout1, arrout2 );
-		document.writeln( "int : " + arrout1[0] + " int :" + arrout2[0] ); break;
-	case (2013):
-		oletest.testout_methodMulParams2( arrout1, arrout2, arrout3 );
-		document.writeln( "int: " + arrout1[0] + " int: " + arrout2[0] + " string: " + arrout3[0] ); break;
-	case (2014):
-		oletest.testout_methodMulParams3( "hallo", arrout1 );
-		document.writeln( "string: " + arrout1[0] ); break;
-	case (2015):
-		oletest.testout_methodXInterface( arrout1 );
-		var outVal= arrout1[0];
-		alert( outVal.AttrAny2);
-		document.writeln( "string: " + arrout1[0].AttrAny2); break;
-	case (2016): 
-		oletest.testout_methodFloat( arrout1 );
-		alert( "float: " + arrout1[0] ); break;
-	case (2017): 
-		var in1= 3.14;
-		var in2= 1111;
-		var in3= -2222;
-		oletest.testout_methodMulParams4( in1, arrout1, in2, arrout2, in3 );
-		document.write("param1 [in] float: " + in1 + " param2 [out] float: " + arrout1[0] +
-					" param3 [in] long: " + in2 + " param4 [out] long: " + arrout2[0] +
-					" param5 [in] long: " + in3);
-		break;
-
-
-	// INOUT - Parameter -------------------------------------------------------------------------------
-	// The in value has to be placed on index 0 of the passed in array
-	case (500): 
-		arrout1[0]= 100;
-		oletest.testinout_methodByte( arrout1 );
-		alert("byte: " + arrout1[0] ); 	break;
-	case (501): 
-		arrout1[0]= 3.14;
-		oletest.testinout_methodDouble( arrout1 );
-		alert( "double: " + arrout1[0] ); break;
-	case (502):
-		arrout1[0]= false;
-		oletest.testinout_methodBool( arrout1 );
-		alert( "boolean: " + arrout1[0] );	break;
-	case (503): 
-		arrout1[0]= 200;
-		oletest.testinout_methodShort( arrout1 );
-		alert( "short: " + arrout1[0] ); break;
-	case (504):
-		arrout1[0]= 300;
-		oletest.testinout_methodUShort( arrout1 );
-		alert( "unsigned short: " + arrout1[0] ); break;
-	case (505): 
-		arrout1[0]= 400;
-		oletest.testinout_methodLong( arrout1 );
-		alert( "long: " + arrout1[0] );	break;
-	case (506): 
-		arrout1[0]= 500;
-		oletest.testinout_methodULong( arrout1 );
-		alert( "unsigned long: " + arrout1[0] ); break;
-	case (507): 
-		arrout1[0]= "A";
-		oletest.testinout_methodChar( arrout1 );
-		alert( "char: " + arrout1[0] );	break;
-	case (508):
-		arrout1[0]= "I am a string";
-		oletest.testinout_methodString( arrout1 );
-		alert( "string: " + arrout1[0] ); break;
-	case (509):
-		arrout1[0]= arr;
-		oletest.testinout_methodAny( arrout1 ); // the method simply returns the argument
-		sfarray= new VBArray( arrout1[0]);
-		arr= sfarray.toArray();
-		alert( "any: " + arr.toString() );	break;
-	case (510):
-		arrout1[0]= arr;
-		oletest.testinout_methodSequence( arrout1 );
-		var sfarray= new VBArray( arrout1[0]);
-		arr= sfarray.toArray();
-		document.writeln("use the browser's back arrow to go to the previous page <p>");
-		document.writeln( arr.toString());
-		break;
-	case (511): 
-		arrout1[0]= arrSeq;
-		oletest.testinout_methodSequence2( arrout1 );
-		var sfarray= new VBArray( arrout1[0]);
-		arr= sfarray.toArray();
-		var i;
-		for( i=0; i < arr.length; i++)
-		{
-			var sfarray= new VBArray( arr[i]);
-			var arr2= new Array();
-			arr2= sfarray.toArray();
-			document.writeln( arr2.toString() + "<br>" );
-		}
-		break;
-	case 512:
-		var ob= new Object();
-		ob.value= "this is a string";
-
-		arrout1[0]= ob;
-		alert (arrout1[0].value);
-		oletest.testinout_methodXInterface( arrout1);
-		alert (arrout1[0].value);
-		var outValue= arrout1[0];
-		for ( key in outValue)
-		{
-			document.write( outValue[key] );
-		}
-		document.write("Out value: " + outValue );
-		document.write("Out 1 value: " + arrout1[1]);
-		break;
-
-//	 	var ob= new Object();
-//		ob.value= "this is a string";
-//		inoutValue.Set( "object", ob);
-//		oletest.testinout_methodXInterface( inoutValue);
-//		document.write("Out value: " + inoutValue.Get().value );
-//		break;
-
-	case (513): 
-		arrout1[0]= 3.14;
-		oletest.testinout_methodFloat( arrout1 );
-		alert( "float: " + arrout1[0] ); break;
+	// Array in-param
 
 
 	
@@ -1114,43 +1110,7 @@ end sub
 <h2> JScript </h2>
 
 <p>
-Out Parameter <br>
-<button onclick='callOleTest( 2000)'>byte </Button>
-<button onclick='callOleTest( 2016)'>float</Button>
-<button onclick='callOleTest( 2001)'>double</Button>
-<button onclick='callOleTest( 2002)'>boolean</Button>
-<button onclick='callOleTest( 2003)'>short</Button>
-<button onclick='callOleTest( 2004)'>unsigned short</Button>
-<button onclick='callOleTest( 2005)'>long</Button>
-<button onclick='callOleTest( 2006)'>unsigned long</Button>
-<button onclick='callOleTest( 2007)'>char</Button>
-<button onclick='callOleTest( 2008)'>string</Button>
-<button onclick='callOleTest( 2009)'>any</Button>
-<button onclick='callOleTest( 2010)'>sequence&ltlong&gt </Button>
-<button onclick='callOleTest( 2011)'>sequence&ltsequence&ltlong&gt &gt </Button>
-<button onclick='callOleTest( 2012)'>2 out </Button>
-<button onclick='callOleTest( 2013)'>3 out </Button>
-<button onclick='callOleTest( 2014)'>1 in & 1 out </Button>
-<button onclick='callOleTest( 2015)'>XInterface </Button>
-<button onclick='callOleTest( 2017)'>mixed out and in </Button>
 
-
-<p>
-In Out Parameter <br>
-<button onclick='callOleTest( 500)'>byte </Button>
-<button onclick='callOleTest( 513)'>float</Button>
-<button onclick='callOleTest( 501)'>double</Button>
-<button onclick='callOleTest( 502)'>boolean</Button>
-<button onclick='callOleTest( 503)'>short</Button>
-<button onclick='callOleTest( 504)'>unsigned short</Button>
-<button onclick='callOleTest( 505)'>long</Button>
-<button onclick='callOleTest( 506)'>unsigned long</Button>
-<button onclick='callOleTest( 507)'>char</Button>
-<button onclick='callOleTest( 508)'>string</Button>
-<button onclick='callOleTest( 509)'>any</Button>
-<button onclick='callOleTest( 510)'>sequence&ltlong&gt </Button>
-<button onclick='callOleTest( 511)'>sequence&ltsequence&ltlong&gt &gt </Button>
-<button onclick='callOleTest( 512)'>XInterface </Button>
 <p>
 
 Tests Array/Sequence conversion with Attributes. All params are of type Sequence and 
