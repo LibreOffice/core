@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:25 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
@@ -321,10 +324,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     mpLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, aEmpty );
     mpCharClass = new CharClass( *mpLocale );
 
-    // if the current language is a language that uses right-to-left text...
-    if( (LANGUAGE_ARABIC == (eRealLanguage & 0x00ff)) ||
-        (LANGUAGE_URDU == (eRealLanguage & 0x00ff)) ||
-        (LANGUAGE_HEBREW == eRealLanguage) )
+    // If the current application language is a language that uses right-to-left text...
+    LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguage();
+    if( (LANGUAGE_ARABIC == (eRealCTLLanguage & 0x00ff)) ||
+        (LANGUAGE_URDU == (eRealCTLLanguage & 0x00ff)) ||
+        (LANGUAGE_HEBREW == eRealCTLLanguage) )
     {
         // ... then we have to set this as a default
         SetDefaultWritingMode( ::com::sun::star::text::WritingMode_RL_TB );
@@ -389,6 +393,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     }
     rOutliner.SetControlWord(nCntrl);
 
+    // Initialize the printer independent layout mode.
+    SetPrinterIndependentLayout (pOptions->GetPrinterIndependentLayout());
 
     // Dem HitTestOutliner den StyleSheetPool setzen.
     // Der Link zum StyleRequest-Handler des
@@ -805,6 +811,11 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
     rIn >> (FmFormModel&) rDoc;
     rDoc.GetItemPool().LoadCompleted();
     rDoc.SetTextDefaults();     // overwrites loaded pool defaults
+
+    // Turn off printer independent layout (make it printer *dependent*) for
+    // pre-6.0 documents.
+    rDoc.SetPrinterIndependentLayout (
+        ::com::sun::star::document::PrinterIndependentLayout::DISABLED);
 
     // Fehler ?
     if (rIn.GetError() != 0)
@@ -1795,4 +1806,44 @@ uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
 SvxNumType SdDrawDocument::GetPageNumType() const
 {
     return ePageNumType;
+}
+
+
+
+
+void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
+{
+    // #108104#
+    // DBG_ASSERT (pDocSh!=NULL, "No available document shell to set ref device at.");
+
+    switch (nMode)
+    {
+        case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
+        case ::com::sun::star::document::PrinterIndependentLayout::ENABLED:
+            // Just store supported modes and inform the doc shell.
+            mnPrinterIndependentLayout = nMode;
+
+            // #108104#
+            // Since it is possible that a SdDrawDocument is constructed without a
+            // SdDrawDocShell the pointer member pDocSh needs to be tested
+            // before the call is executed. This is e.-g. used for copy/paste.
+            if(pDocSh)
+            {
+                pDocSh->UpdateRefDevice ();
+            }
+
+            break;
+
+        default:
+            // Ignore unknown values.
+            break;
+    }
+}
+
+
+
+
+sal_Int32 SdDrawDocument::GetPrinterIndependentLayout (void)
+{
+    return mnPrinterIndependentLayout;
 }
