@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:06 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 16:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@ public class SVersionRCFile {
             System.getProperty("user.home") + File.separator +
             ".sversionrc";
 
+    private static final String FILE_URL_PREFIX =
+        System.getProperty("os.name").startsWith("Windows") == true ?
+            "file:///" : "file://";
+
     private static final String VERSIONS_LINE = "[Versions]";
     private static final String UNOILJAR = "skip_registration" + File.separator + "unoil.jar";
     private static final String UNOPACKAGEDIR = File.separator + "user" +
@@ -81,7 +85,6 @@ public class SVersionRCFile {
                                                 File.separator + "uno_packages";
     /* Make sure this is in LowerCase !!!!! */
     private static final String SCRIPTF = "scriptf";
-    private static final String FILE_URL_PREFIX = "file://";
     private File file = null;
 
     public SVersionRCFile() {
