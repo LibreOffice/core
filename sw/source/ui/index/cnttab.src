@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 18:49:55 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ TabPage TP_TOX_SELECT
         Text[ dutch ] = "T~itel";
         Text[ french ] = "~Titre";
         Text[ spanish ] = "Títu~lo";
-        Text[ italian ] = "T~itolo";
+        Text[ italian ] = "Titolo";
         Text[ danish ] = "Overskrift";
         Text[ swedish ] = "Rubr~ik";
         Text[ polish ] = "Tytu³";
@@ -804,7 +804,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Créer un index";
         Text[ spanish ] = "Crear índice";
         Text[ finnish ] = "Luo hakemisto";
-        Text[ italian ] = "Crea ~indice";
+        Text[ italian ] = "Crea indice";
         Text[ danish ] = "Create index of";
         Text[ swedish ] = "Skapa förte~ckning";
         Text[ polish ] = "Utwórz indeks";
@@ -3147,7 +3147,7 @@ TabPage TP_TOX_ENTRY
         Text[ dutch ] = "~Verwijderen";
         Text[ french ] = "~Supprimer";
         Text[ spanish ] = "~Eliminar";
-        Text[ italian ] = "Rimuovi";
+        Text[ italian ] = "Ri~muovi";
         Text[ danish ] = "Fjern";
         Text[ swedish ] = "~Ta bort";
         Text[ polish ] = "Usuñ";
@@ -4216,7 +4216,7 @@ TabPage TP_TOX_STYLES
         TabStop = TRUE ;
         Text [ dutch ] = "Stan~daard" ;
         Text [ english_us ] = "~Default" ;
-        Text [ italian ] = "Sta~ndard" ;
+        Text [ italian ] = "~Standard" ;
         Text [ spanish ] = "~Predeterminado" ;
         Text [ french ] = "~Standard" ;
         Text [ swedish ] = "Sta~ndard" ;
@@ -4784,6 +4784,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
