@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:01:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,7 +1278,7 @@ IMPL_LINK( ToolBarManager, Click, ToolBox*, pToolBar )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId < m_aControllerVector.size() ))
+    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
         Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
 
@@ -1297,7 +1297,7 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, pToolBar )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId < m_aControllerVector.size() ))
+    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
         Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
 
@@ -1316,7 +1316,7 @@ IMPL_LINK( ToolBarManager, DoubleClick, ToolBox*, pToolBar )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId < m_aControllerVector.size() ))
+    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
         Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
 
