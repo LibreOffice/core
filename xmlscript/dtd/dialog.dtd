@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.7 2001-03-07 14:57:38 dbo Exp $
+	$Id: dialog.dtd,v 1.8 2001-03-14 16:42:17 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -57,237 +57,234 @@
 <!ENTITY % boolean "(true|false)">
 <!ENTITY % numeric "CDATA">
 
-<!ENTITY % default-attributes "dialog:id CDATA #REQUIRED
-			       dialog:left %numeric; #REQUIRED
-			       dialog:top %numeric; #REQUIRED
-			       dialog:width %numeric; #REQUIRED
-			       dialog:height %numeric; #REQUIRED
-			       dialog:style-id CDATA #IMPLIED
-			       dialog:tab-index %numeric; #IMPLIED
-			       dialog:disabled %boolean; #IMPLIED
-			       dialog:printable %boolean; #IMPLIED
-			       dialog:page %numeric; #IMPLIED
-			       dialog:tag CDATA #IMPLIED
+<!ENTITY % default-attributes "dlg:id CDATA #REQUIRED
+			       dlg:left %numeric; #REQUIRED
+			       dlg:top %numeric; #REQUIRED
+			       dlg:width %numeric; #REQUIRED
+			       dlg:height %numeric; #REQUIRED
+			       dlg:style-id CDATA #IMPLIED
+			       dlg:tab-index %numeric; #IMPLIED
+			       dlg:disabled %boolean; #IMPLIED
+			       dlg:printable %boolean; #IMPLIED
+			       dlg:page %numeric; #IMPLIED
+			       dlg:tag CDATA #IMPLIED
 			       ">
 
-<!ENTITY % control "(dialog:bulletinboard|
-		     dialog:button|
-		     dialog:checkbox|
-		     dialog:combobox|
-		     dialog:menulist|
-		     dialog:radiogroup|
-		     dialog:titledbox|
-		     dialog:textfield|
-		     dialog:text|
-		     dialog:filecontrol|
-		     dialog:img|
-		     dialog:timefield|
-		     dialog:datefield|
-		     dialog:numericfield|
-		     dialog:currencyfield|
-		     dialog:patternfield)
-		   ">
-		    
-<!ELEMENT dialog:dialogs (dialog:window*)>
-<!ATTLIST dialog:dialogs xmlns:dialog CDATA #FIXED "http://openoffice.org/2000/dialog">
+<!ENTITY % control "(dlg:bulletinboard|
+		     dlg:button|
+		     dlg:checkbox|
+		     dlg:combobox|
+		     dlg:menulist|
+		     dlg:radiogroup|
+		     dlg:titledbox|
+		     dlg:textfield|
+		     dlg:text|
+		     dlg:filecontrol|
+		     dlg:img|
+		     dlg:timefield|
+		     dlg:datefield|
+		     dlg:numericfield|
+		     dlg:currencyfield|
+		     dlg:patternfield
+		    )">
 
-<!ELEMENT dialog:window (dialog:styles*, dialog:bulletinboard*)>
-<!ATTLIST dialog:window dialog:id CDATA #REQUIRED
-			dialog:left %numeric; #IMPLIED
-			dialog:top %numeric; #IMPLIED
-			dialog:width %numeric; #IMPLIED
-			dialog:height %numeric; #IMPLIED
-			dialog:title CDATA #IMPLIED
-			dialog:page %numeric; #IMPLIED
-			dialog:tag CDATA #IMPLIED
-			>
-
-<!ELEMENT dialog:styles (dialog:style+)>
-
-<!ELEMENT dialog:style EMPTY>
-<!ATTLIST dialog:style dialog:style-id CDATA #REQUIRED
-		       dialog:background-color %numeric; #IMPLIED
-		       dialog:text-color %numeric; #IMPLIED
-		       dialog:border (none|3d|simple) #IMPLIED
-		       dialog:font-name CDATA #IMPLIED
-		       dialog:font-height %numeric; #IMPLIED
-		       dialog:font-width %numeric; #IMPLIED
-		       dialog:font-stylename CDATA #IMPLIED
-		       dialog:font-family (decorative|modern|roman|script|swiss|system) #IMPLIED
-		       dialog:font-charset (ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol) #IMPLIED
-		       dialog:font-pitch (fixed|variable) #IMPLIED
-		       dialog:font-charwidth %numeric; #IMPLIED
-		       dialog:font-weight %numeric; #IMPLIED
-		       dialog:font-slant (oblique|italic|reverse_oblique|reverse_italic) #IMPLIED
-		       dialog:font-underline (single|double|dotted|dash|longdash|dashdot|dashdotdot|smallwave|wave|doublewave|bold|bolddotted|bolddash|boldlongdash|bolddashdot|bolddashdotdot|boldwave) #IMPLIED
-		       dialog:font-strikeout (single|double|bold|slash|x) #IMPLIED
-		       dialog:font-orientation CDATA #IMPLIED
-		       dialog:font-kerning %boolean; #IMPLIED
-		       dialog:font-wordlinemode %boolean; #IMPLIED
-		       dialog:font-type (raster|device|scalable) #IMPLIED
-		       >
-
-<!ELEMENT dialog:event EMPTY>
-<!ATTLIST dialog:event dialog:listener-type CDATA #REQUIRED
-		       dialog:event-method CDATA #REQUIRED
-		       dialog:script-type CDATA #IMPLIED
-		       dialog:script-code CDATA #IMPLIED
-		       dialog:param CDATA #IMPLIED
-		       >
-			
-<!ELEMENT dialog:bulletinboard ((%control;)*)>
-<!ATTLIST dialog:bulletinboard dialog:left %numeric; #IMPLIED
-			       dialog:top %numeric; #IMPLIED
-			       >
-
-<!ELEMENT dialog:button (dialog:event*)>
-<!ATTLIST dialog:button %default-attributes;
-			dialog:value CDATA #IMPLIED
-			dialog:default %boolean; #IMPLIED
-			dialog:tabstop %boolean; #IMPLIED
-			>
-
-<!ELEMENT dialog:checkbox (dialog:event*)>
-<!ATTLIST dialog:checkbox %default-attributes;
-			  dialog:value CDATA #IMPLIED
-			  dialog:checked %boolean; #IMPLIED
-			  dialog:tristate %boolean; #IMPLIED
-			  dialog:tabstop %boolean; #IMPLIED
-			  >
-
-<!ELEMENT dialog:combobox (dialog:menupopup?, dialog:event*)>
-<!ATTLIST dialog:combobox %default-attributes;
-			  dialog:tabstop %boolean; #IMPLIED
-			  dialog:readonly %boolean; #IMPLIED
-			  dialog:autocomplete %boolean; #IMPLIED
-			  dialog:spin %boolean; #IMPLIED
-			  dialog:maxlength %numeric; #IMPLIED
-			  dialog:linecount %numeric; #IMPLIED
-			  dialog:value CDATA #IMPLIED
-			  >
-
-<!ELEMENT dialog:menulist (dialog:menupopup?, dialog:event*)>
-<!ATTLIST dialog:menulist %default-attributes;
-			  dialog:tabstop %boolean; #IMPLIED
-			  dialog:spin %boolean; #IMPLIED
-			  dialog:multiselection %boolean; #IMPLIED
-			  dialog:linecount %numeric; #IMPLIED
-			  >
-
-<!ELEMENT dialog:menupopup (dialog:menuitem+)>
-<!ELEMENT dialog:menuitem EMPTY>
-<!ATTLIST dialog:menuitem dialog:value CDATA #REQUIRED
-			  dialog:selected %boolean; #IMPLIED
-			  >
-
-<!ELEMENT dialog:radiogroup (dialog:radio+)>
-<!ELEMENT dialog:radio (dialog:event*)>
-<!ATTLIST dialog:radio %default-attributes;
-		       dialog:tabstop %boolean; #IMPLIED
-		       dialog:value CDATA #IMPLIED
-		       dialog:checked %boolean; #IMPLIED
-		       dialog:tristate %boolean; #IMPLIED
-		       >
-
-<!ELEMENT dialog:titledbox (dialog:title?, dialog:radio*, (%control;)*)>
-<!ATTLIST dialog:titledbox %default-attributes;
-			   >
-<!ELEMENT dialog:title EMPTY>
-<!ATTLIST dialog:title dialog:value CDATA #IMPLIED
-		       >
-
-<!ELEMENT dialog:text EMPTY>
-<!ATTLIST dialog:text %default-attributes;
-		      dialog:align (left|center|right|none) #IMPLIED
-		      dialog:multiline %boolean; #IMPLIED
-		      dialog:value CDATA #IMPLIED
-		      >
-
-<!ELEMENT dialog:textfield (dialog:event*)>
-<!ATTLIST dialog:textfield %default-attributes;
-			   dialog:tabstop %boolean; #IMPLIED
-			   dialog:align (left|center|right|none) #IMPLIED
-			   dialog:readonly %boolean; #IMPLIED
-			   dialog:echochar CDATA #IMPLIED
-			   dialog:hard-linebreaks %boolean; #IMPLIED
-			   dialog:hscroll %boolean; #IMPLIED
-			   dialog:vscroll %boolean; #IMPLIED
-			   dialog:maxlength %numeric; #IMPLIED
-			   dialog:multiline %boolean; #IMPLIED
-			   dialog:value CDATA #IMPLIED
-			   >
-
-<!ELEMENT dialog:img (dialog:event*)>
-<!ATTLIST dialog:img %default-attributes;
-		     dialog:src CDATA #IMPLIED
+<!ELEMENT dlg:window (dlg:styles*, dlg:bulletinboard*)>
+<!ATTLIST dlg:window dlg:id CDATA #REQUIRED
+		     dlg:left %numeric; #IMPLIED
+		     dlg:top %numeric; #IMPLIED
+		     dlg:width %numeric; #IMPLIED
+		     dlg:height %numeric; #IMPLIED
+		     dlg:title CDATA #IMPLIED
+		     dlg:page %numeric; #IMPLIED
+		     dlg:tag CDATA #IMPLIED
+		     xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/dlg"
 		     >
 
-<!ELEMENT dialog:filecontrol (dialog:event*)>
-<!ATTLIST dialog:filecontrol %default-attributes;
-			     dialog:tabstop %boolean; #IMPLIED
-			     dialog:value CDATA #IMPLIED
-			     >
-			     
-<!ELEMENT dialog:currencyfield (dialog:event*)>
-<!ATTLIST dialog:currencyfield %default-attributes;
-			       dialog:tabstop %boolean; #IMPLIED
-			       dialog:readonly %boolean; #IMPLIED
-			       dialog:currency-symbol CDATA #IMPLIED
-			       dialog:strict-format %boolean; #IMPLIED
-			       dialog:decimal-accuracy %numeric; #IMPLIED
-			       dialog:thousands-separator %boolean; #IMPLIED
-			       dialog:value %numeric; #IMPLIED
-			       dialog:value-min %numeric; #IMPLIED
-			       dialog:value-max %numeric; #IMPLIED
-			       dialog:value-step %numeric; #IMPLIED
-			       dialog:spin %boolean; #IMPLIED
-			       >
-				
-<!ELEMENT dialog:datefield (dialog:event*)>
-<!ATTLIST dialog:datefield %default-attributes;
-			   dialog:tabstop %boolean; #IMPLIED
-			   dialog:readonly %boolean; #IMPLIED
-			   dialog:strict-format %boolean; #IMPLIED
-			   dialog:date-format (system_short|system_short_YY|system_short_YYYY|system_long|short_DDMMYY|short_MMDDYY|short_YYMMDD|short_DDMMYYYY|short_MMDDYYYY|short_YYYYMMDD|short_YYMMDD_DIN5008|short_YYYYMMDD_DIN5008) #IMPLIED
-			   dialog:value CDATA #IMPLIED
-			   dialog:value-min CDATA #IMPLIED
-			   dialog:value-max CDATA #IMPLIED
-			   dialog:spin %boolean; #IMPLIED
+<!ELEMENT dlg:styles (dlg:style+)>
+
+<!ELEMENT dlg:style EMPTY>
+<!ATTLIST dlg:style dlg:style-id CDATA #REQUIRED
+		    dlg:background-color %numeric; #IMPLIED
+		    dlg:text-color %numeric; #IMPLIED
+		    dlg:border (none|3d|simple) #IMPLIED
+		    dlg:font-name CDATA #IMPLIED
+		    dlg:font-height %numeric; #IMPLIED
+		    dlg:font-width %numeric; #IMPLIED
+		    dlg:font-stylename CDATA #IMPLIED
+		    dlg:font-family (decorative|modern|roman|script|swiss|system) #IMPLIED
+		    dlg:font-charset (ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol) #IMPLIED
+		    dlg:font-pitch (fixed|variable) #IMPLIED
+		    dlg:font-charwidth %numeric; #IMPLIED
+		    dlg:font-weight %numeric; #IMPLIED
+		    dlg:font-slant (oblique|italic|reverse_oblique|reverse_italic) #IMPLIED
+		    dlg:font-underline (single|double|dotted|dash|longdash|dashdot|dashdotdot|smallwave|wave|doublewave|bold|bolddotted|bolddash|boldlongdash|bolddashdot|bolddashdotdot|boldwave) #IMPLIED
+		    dlg:font-strikeout (single|double|bold|slash|x) #IMPLIED
+		    dlg:font-orientation CDATA #IMPLIED
+		    dlg:font-kerning %boolean; #IMPLIED
+		    dlg:font-wordlinemode %boolean; #IMPLIED
+		    dlg:font-type (raster|device|scalable) #IMPLIED
+		    >
+
+<!ELEMENT dlg:event EMPTY>
+<!ATTLIST dlg:event dlg:listener-type CDATA #REQUIRED
+		    dlg:event-method CDATA #REQUIRED
+		    dlg:script-type CDATA #IMPLIED
+		    dlg:script-code CDATA #IMPLIED
+		    dlg:param CDATA #IMPLIED
+		    >
+			
+<!ELEMENT dlg:bulletinboard ((%control;)*)>
+<!ATTLIST dlg:bulletinboard dlg:left %numeric; #IMPLIED
+			    dlg:top %numeric; #IMPLIED
+			    >
+
+<!ELEMENT dlg:button (dlg:event*)>
+<!ATTLIST dlg:button %default-attributes;
+		     dlg:value CDATA #IMPLIED
+		     dlg:default %boolean; #IMPLIED
+		     dlg:tabstop %boolean; #IMPLIED
+		     >
+
+<!ELEMENT dlg:checkbox (dlg:event*)>
+<!ATTLIST dlg:checkbox %default-attributes;
+		       dlg:value CDATA #IMPLIED
+		       dlg:checked %boolean; #IMPLIED
+		       dlg:tristate %boolean; #IMPLIED
+		       dlg:tabstop %boolean; #IMPLIED
+		       >
+
+<!ELEMENT dlg:combobox (dlg:menupopup?, dlg:event*)>
+<!ATTLIST dlg:combobox %default-attributes;
+		       dlg:tabstop %boolean; #IMPLIED
+		       dlg:readonly %boolean; #IMPLIED
+		       dlg:autocomplete %boolean; #IMPLIED
+		       dlg:spin %boolean; #IMPLIED
+		       dlg:maxlength %numeric; #IMPLIED
+		       dlg:linecount %numeric; #IMPLIED
+		       dlg:value CDATA #IMPLIED
+		       >
+
+<!ELEMENT dlg:menulist (dlg:menupopup?, dlg:event*)>
+<!ATTLIST dlg:menulist %default-attributes;
+		       dlg:tabstop %boolean; #IMPLIED
+		       dlg:spin %boolean; #IMPLIED
+		       dlg:multiselection %boolean; #IMPLIED
+		       dlg:linecount %numeric; #IMPLIED
+		       >
+
+<!ELEMENT dlg:menupopup (dlg:menuitem+)>
+<!ELEMENT dlg:menuitem EMPTY>
+<!ATTLIST dlg:menuitem dlg:value CDATA #REQUIRED
+		       dlg:selected %boolean; #IMPLIED
+		       >
+
+<!ELEMENT dlg:radiogroup (dlg:radio+)>
+<!ELEMENT dlg:radio (dlg:event*)>
+<!ATTLIST dlg:radio %default-attributes;
+		    dlg:tabstop %boolean; #IMPLIED
+		    dlg:value CDATA #IMPLIED
+		    dlg:checked %boolean; #IMPLIED
+		    dlg:tristate %boolean; #IMPLIED
+		    >
+
+<!ELEMENT dlg:titledbox (dlg:title?, dlg:radio*, (%control;)*)>
+<!ATTLIST dlg:titledbox %default-attributes;
+			>
+<!ELEMENT dlg:title EMPTY>
+<!ATTLIST dlg:title dlg:value CDATA #IMPLIED
+		    >
+
+<!ELEMENT dlg:text EMPTY>
+<!ATTLIST dlg:text %default-attributes;
+		   dlg:align (left|center|right|none) #IMPLIED
+		   dlg:multiline %boolean; #IMPLIED
+		   dlg:value CDATA #IMPLIED
+		   >
+
+<!ELEMENT dlg:textfield (dlg:event*)>
+<!ATTLIST dlg:textfield %default-attributes;
+			dlg:tabstop %boolean; #IMPLIED
+			dlg:align (left|center|right|none) #IMPLIED
+			dlg:readonly %boolean; #IMPLIED
+			dlg:echochar CDATA #IMPLIED
+			dlg:hard-linebreaks %boolean; #IMPLIED
+			dlg:hscroll %boolean; #IMPLIED
+			dlg:vscroll %boolean; #IMPLIED
+			dlg:maxlength %numeric; #IMPLIED
+			dlg:multiline %boolean; #IMPLIED
+			dlg:value CDATA #IMPLIED
+			>
+
+<!ELEMENT dlg:img (dlg:event*)>
+<!ATTLIST dlg:img %default-attributes;
+		  dlg:src CDATA #IMPLIED
+		  >
+
+<!ELEMENT dlg:filecontrol (dlg:event*)>
+<!ATTLIST dlg:filecontrol %default-attributes;
+			  dlg:tabstop %boolean; #IMPLIED
+			  dlg:value CDATA #IMPLIED
+			  >
+
+<!ELEMENT dlg:currencyfield (dlg:event*)>
+<!ATTLIST dlg:currencyfield %default-attributes;
+			    dlg:tabstop %boolean; #IMPLIED
+			    dlg:readonly %boolean; #IMPLIED
+			    dlg:currency-symbol CDATA #IMPLIED
+			    dlg:strict-format %boolean; #IMPLIED
+			    dlg:decimal-accuracy %numeric; #IMPLIED
+			    dlg:thousands-separator %boolean; #IMPLIED
+			    dlg:value %numeric; #IMPLIED
+			    dlg:value-min %numeric; #IMPLIED
+			    dlg:value-max %numeric; #IMPLIED
+			    dlg:value-step %numeric; #IMPLIED
+			    dlg:spin %boolean; #IMPLIED
+			    >
+
+<!ELEMENT dlg:datefield (dlg:event*)>
+<!ATTLIST dlg:datefield %default-attributes;
+			dlg:tabstop %boolean; #IMPLIED
+			dlg:readonly %boolean; #IMPLIED
+			dlg:strict-format %boolean; #IMPLIED
+			dlg:date-format (system_short|system_short_YY|system_short_YYYY|system_long|short_DDMMYY|short_MMDDYY|short_YYMMDD|short_DDMMYYYY|short_MMDDYYYY|short_YYYYMMDD|short_YYMMDD_DIN5008|short_YYYYMMDD_DIN5008) #IMPLIED
+			dlg:value CDATA #IMPLIED
+			dlg:value-min CDATA #IMPLIED
+			dlg:value-max CDATA #IMPLIED
+			dlg:spin %boolean; #IMPLIED
+			>
+
+<!ELEMENT dlg:numericfield (dlg:event*)>
+<!ATTLIST dlg:numericfield %default-attributes;
+			   dlg:tabstop %boolean; #IMPLIED
+			   dlg:readonly %boolean; #IMPLIED
+			   dlg:strict-format %boolean; #IMPLIED
+			   dlg:decimal-accuracy %numeric; #IMPLIED
+			   dlg:thousands-separator %boolean; #IMPLIED
+			   dlg:value %numeric; #IMPLIED
+			   dlg:value-min %numeric; #IMPLIED
+			   dlg:value-max %numeric; #IMPLIED
+			   dlg:value-step %numeric; #IMPLIED
+			   dlg:spin %boolean; #IMPLIED
 			   >
 
-<!ELEMENT dialog:numericfield (dialog:event*)>
-<!ATTLIST dialog:numericfield %default-attributes;
-			      dialog:tabstop %boolean; #IMPLIED
-			      dialog:readonly %boolean; #IMPLIED
-			      dialog:strict-format %boolean; #IMPLIED
-			      dialog:decimal-accuracy %numeric; #IMPLIED
-			      dialog:thousands-separator %boolean; #IMPLIED
-			      dialog:value %numeric; #IMPLIED
-			      dialog:value-min %numeric; #IMPLIED
-			      dialog:value-max %numeric; #IMPLIED
-			      dialog:value-step %numeric; #IMPLIED
-			      dialog:spin %boolean; #IMPLIED
-			      >
+<!ELEMENT dlg:timefield (dlg:event*)>
+<!ATTLIST dlg:timefield %default-attributes;
+			dlg:tabstop %boolean; #IMPLIED
+			dlg:readonly %boolean; #IMPLIED
+			dlg:strict-format %boolean; #IMPLIED
+			dlg:time-format (24h_short|24h_long|12h_short|12h_long|Duration_short|Duration_long) #IMPLIED
+			dlg:value CDATA #IMPLIED
+			dlg:value-min CDATA #IMPLIED
+			dlg:value-max CDATA #IMPLIED
+			dlg:spin %boolean; #IMPLIED
+			>
 
-<!ELEMENT dialog:timefield (dialog:event*)>
-<!ATTLIST dialog:timefield %default-attributes;
-			   dialog:tabstop %boolean; #IMPLIED
-			   dialog:readonly %boolean; #IMPLIED
-			   dialog:strict-format %boolean; #IMPLIED
-			   dialog:time-format (24h_short|24h_long|12h_short|12h_long|Duration_short|Duration_long) #IMPLIED
-			   dialog:value CDATA #IMPLIED
-			   dialog:value-min CDATA #IMPLIED
-			   dialog:value-max CDATA #IMPLIED
-			   dialog:spin %boolean; #IMPLIED
+<!ELEMENT dlg:patternfield (dlg:event*)>
+<!ATTLIST dlg:patternfield %default-attributes;
+			   dlg:tabstop %boolean; #IMPLIED
+			   dlg:readonly %boolean; #IMPLIED
+			   dlg:strict-format %boolean; #IMPLIED
+			   dlg:value CDATA #IMPLIED
+			   dlg:edit-mask CDATA #IMPLIED
+			   dlg:literal-mask CDATA #IMPLIED
 			   >
-
-<!ELEMENT dialog:patternfield (dialog:event*)>
-<!ATTLIST dialog:patternfield %default-attributes;
-			      dialog:tabstop %boolean; #IMPLIED
-			      dialog:readonly %boolean; #IMPLIED
-			      dialog:strict-format %boolean; #IMPLIED
-			      dialog:value CDATA #IMPLIED
-			      dialog:edit-mask CDATA #IMPLIED
-			      dialog:literal-mask CDATA #IMPLIED
-			      >
-
