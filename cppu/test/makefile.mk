@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: dbo $ $Date: 2001-10-17 12:48:47 $
+#   last change: $Author: dbo $ $Date: 2001-10-17 14:04:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,8 @@ APP1STDLIBS+=	\
 APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
 ALLIDLFILES:=	cpputest.idl 		\
-        language_binding.idl
+        language_binding.idl	\
+        alignment.idl
 
 # --- Targets ------------------------------------------------------
 
