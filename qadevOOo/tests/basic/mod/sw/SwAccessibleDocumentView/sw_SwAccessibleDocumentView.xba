@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sw_SwAccessibleDocumentView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:03:05 $ 
+'*  last change:$Date: 2003-05-27 12:19:46 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -92,7 +92,7 @@ On Error Goto ErrHndl
     Dim xRoot As Object
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 100)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.DOCUMENT)
     oScrollBar = utils.at_getAccessibleObjectForRole(xRoot, 40)
     multiSelection = false
 
