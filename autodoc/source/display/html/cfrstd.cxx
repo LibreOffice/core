@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ const char * const C_sStdStyle =
     "td { font-size:11pt; }"CRLF
     "td.title { font-family: Arial; font-size:19pt; font-weight:bold; text-align:center; background-color:#ccccff; line-height:30pt; }"CRLF
     "td.subtitle { font-family: Arial; font-size:13pt; background-color:#ccccff; line-height:20pt; }"CRLF
+    "td.crosstitle { font-size:12pt; font-weight:bold; background-color:#eeeeff; line-height:15pt; }"CRLF
     "td.imdetail { width:100%; background-color:#eeeeff; }"CRLF
     "a.membertitle { font-size:12pt; font-weight:bold; line-height:18pt; }"CRLF
 
