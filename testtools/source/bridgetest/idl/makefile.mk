@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 15:01:58 $
+#   last change: $Author: rt $ $Date: 2004-07-12 13:03:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,15 @@ TARGET := bridgetest_idl
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
 
-ALLTAR: $(MISC)$/$(TARGET).cppumaker.done $(MISC)$/$(TARGET).javamaker.done
+
+CLIMAKERFLAGS =
+.IF "$(debug)" != ""
+CLIMAKERFLAGS += --verbose
+.ENDIF
+
+ALLTAR: $(MISC)$/$(TARGET).cppumaker.done \
+    $(MISC)$/$(TARGET).javamaker.done \
+    $(BIN)$/cli_types_bridgetest.dll 
 
 $(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/bridgetest.rdb
     $(CPPUMAKER) -O$(INCCOM) -BUCR $< -X$(SOLARBINDIR)/types.rdb
@@ -74,6 +82,14 @@ $(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/bridgetest.rdb
 
 $(MISC)$/$(TARGET).javamaker.done: $(BIN)$/bridgetest.rdb
     $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -X$(SOLARBINDIR)/types.rdb $<
+    $(TOUCH) $@
+
+$(BIN)$/cli_types_bridgetest.dll : $(BIN)$/bridgetest.rdb
+    $(CLIMAKER) $(CLIMAKERFLAGS) \
+        --out $@ \
+        -r $(SOLARBINDIR)$/cli_types.dll \
+        -X $(SOLARBINDIR)$/types.rdb \
+        $< 
     $(TOUCH) $@
 
 $(BIN)$/bridgetest.rdb: bridgetest.idl
