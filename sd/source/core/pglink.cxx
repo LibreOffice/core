@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-19 18:02:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #pragma hdrstop
-#include <so3/iface.hxx>
 #ifndef _SVXLINK_HXX
 #include <svx/linkmgr.hxx>
 #endif
@@ -78,7 +77,7 @@
 
 SdPageLink::SdPageLink(SdPage* pPg, const String& rFileName,
                        const String& rBookmarkName) :
-    ::so3::SvBaseLink(::so3::LINKUPDATE_ONCALL, FORMAT_FILE),
+    ::sfx2::SvBaseLink(::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
     pPage(pPg)
 {
     pPage->SetFileName(rFileName);
