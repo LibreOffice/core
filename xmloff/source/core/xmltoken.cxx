@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:37:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2148,6 +2148,8 @@ namespace xmloff { namespace token {
         TOKEN( "no" ),                          // XML_NO
         TOKEN( "unsorted" ),                    // XML_UNSORTED
         TOKEN( "sorted-ascending" ),            // XML_SORTED_ASCENDING
+
+        TOKEN( "automatic-print-range" ),       // XML_AUTOMATIC_PRINT_RANGE
 
         TOKEN( "font-independent-line-spacing" ),   // XML_FONT_INDEPENDENT_LINE_SPACING
         TOKEN( "selection" ),                  // XML_SELECTION
