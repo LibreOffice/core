@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:48:38 $
+ *  last change: $Author: th $ $Date: 2001-05-11 15:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,8 +269,7 @@ sal_Bool SfxXMLMetaElementContext::ParseISODateTimeString(
     sal_Int32 nMin   = 0;
     sal_Int32 nSec   = 0;
 
-    const sal_Uniocde* pStr;
-    pStr = aDateStr.getStr();
+    const sal_Unicode* pStr = aDateStr.getStr();
     sal_Int32 nDateTokens = 1;
     while ( *pStr )
     {
