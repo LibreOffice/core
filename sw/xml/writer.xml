@@ -760,8 +760,8 @@
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -778,8 +778,8 @@
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -796,8 +796,8 @@
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -814,8 +814,8 @@
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -832,8 +832,8 @@
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -856,8 +856,8 @@
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -874,8 +874,8 @@
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -892,8 +892,8 @@
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -910,8 +910,8 @@
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -928,8 +928,8 @@
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
-    <reference-docu xlink:title="XML File Format Specification (draft)"
-        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:title="XML File Format Specification"
+        xlink:href="http://xml.openoffice.org/xml_specification.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
         xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
   </component-description>
@@ -946,8 +946,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleTextDocumentView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleTextDocumentView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -961,8 +961,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleTextDocumentPageView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleTextDocumentPageView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -976,8 +976,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessiblePageView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessiblePageView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -991,8 +991,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleHeaderFooterView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleHeaderFooterView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1006,8 +1006,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleHeaderFooterView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleHeaderFooterView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1021,8 +1021,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleFootnoteView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleFootnoteView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1036,8 +1036,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleEndnoteView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleEndnoteView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1051,8 +1051,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleParagraphView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleParagraphView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1066,8 +1066,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.table.AccessibleTableView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.table.AccessibleTableView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1081,8 +1081,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.table.AccessibleCellView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.table.AccessibleCellView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1096,8 +1096,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleTextFrameView</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleTextFrameView</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1111,8 +1111,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleTextGraphicObject</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleTextGraphicObject</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
@@ -1126,8 +1126,8 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="final"/>
-    <supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-    <supported-service>drafts.com.sun.star.text.AccessibleTextEmbeddedObject</supported-service>
+    <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+    <supported-service>com.sun.star.text.AccessibleTextEmbeddedObject</supported-service>
     <reference-docu xlink:href="http://ui.openoffice.org/accessibility/index.html"
         xlink:title="OpenOffice.org Accessibility project" />
   </component-description>
