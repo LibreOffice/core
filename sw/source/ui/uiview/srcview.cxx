@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:57:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-06 10:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,9 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#ifndef _SVX_HTMLCFG_HXX
+#include <svx/htmlcfg.hxx>
+#endif
 
 #define SwSrcView
 #define SearchSettings
@@ -359,7 +362,7 @@ rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
     rtl_TextEncoding eRet = eLoadEncoding;
     if(RTL_TEXTENCODING_DONTKNOW == eRet)
     {
-        OfaHtmlOptions* pHtmlOptions = OFF_APP()->GetHtmlOptions();
+        SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
         const sal_Char *pCharSet =
             rtl_getBestMimeCharsetFromTextEncoding( pHtmlOptions->GetTextEncoding() );
         eRet = rtl_getTextEncodingFromMimeCharset( pCharSet );
