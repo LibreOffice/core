@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 extern SvXMLItemMapEntry aXMLTableItemMap[];
 extern SvXMLItemMapEntry aXMLTableRowItemMap[];
@@ -191,7 +192,7 @@ SwXMLTableItemMapper_Impl::SwXMLTableItemMapper_Impl(
         SvXMLItemMapEntriesRef rMapEntries,
         SwXMLExport& rExp ) :
     SvXMLExportItemMapper( rMapEntries ),
-    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
+    sCDATA( GetXMLToken( XML_CDATA ) ),
     aBrushItemExport( rExp ),
     nAbsWidth( USHRT_MAX )
 {

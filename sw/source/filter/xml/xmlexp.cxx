@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-12 16:11:54 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::i18n;
+using namespace ::xmloff::token;
 
 #ifdef XML_CORE_API
 void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
@@ -770,8 +771,8 @@ void SwXMLExport::_ExportContent()
         {
             rtl::OUStringBuffer sBuffer;
             GetMM100UnitConverter().convertNumber(sBuffer, nYear);
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_null_year, sBuffer.makeStringAndClear());
-            SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, sXML_calculation_settings, sal_True, sal_True);
+            AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, sBuffer.makeStringAndClear());
+            SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, sal_True, sal_True);
         }
     }
 

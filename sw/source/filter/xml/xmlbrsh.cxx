@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -106,13 +107,13 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK, sXML_href,       XML_TOK_BGIMG_HREF      },
-    { XML_NAMESPACE_XLINK, sXML_type,       XML_TOK_BGIMG_TYPE      },
-    { XML_NAMESPACE_XLINK, sXML_actuate,    XML_TOK_BGIMG_ACTUATE   },
-    { XML_NAMESPACE_XLINK, sXML_show,       XML_TOK_BGIMG_SHOW      },
-    { XML_NAMESPACE_STYLE, sXML_position,   XML_TOK_BGIMG_POSITION  },
-    { XML_NAMESPACE_STYLE, sXML_repeat,     XML_TOK_BGIMG_REPEAT    },
-    { XML_NAMESPACE_STYLE, sXML_filter_name,XML_TOK_BGIMG_FILTER    },
+    { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
+    { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
+    { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
+    { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
+    { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
+    { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
+    { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
     XML_TOKEN_MAP_END
 };
 
@@ -211,25 +212,23 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
     const SvXMLUnitConverter& rUnitConv = GetExport().GetTwipUnitConverter();
     if( rItem.exportXML( sValue, MID_GRAPHIC_LINK, rUnitConv ) )
     {
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href,
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
                         GetExport().AddEmbeddedGraphicObject( sValue ) );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_type,
-                      OUString::createFromAscii(sXML_simple) );
-//      AddAttribute( XML_NAMESPACE_XLINK, sXML_show, ACP2WS(sXML_embed) );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate,
-                      OUString::createFromAscii(sXML_onLoad) );
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+//      AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, ACP2WS(sXML_embed) );
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
         if( rItem.exportXML( sValue, MID_GRAPHIC_POSITION, rUnitConv ) )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_position, sValue );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION, sValue );
 
         if( rItem.exportXML( sValue, MID_GRAPHIC_REPEAT, rUnitConv ) )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_repeat, sValue );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REPEAT, sValue );
 
         if( rItem.exportXML( sValue, MID_GRAPHIC_FILTER, rUnitConv ) )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_filter_name, sValue );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FILTER_NAME, sValue );
     }
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_background_image,
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE,
                               sal_True, sal_True );
 }
 
@@ -237,11 +236,14 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 
       Source Code Control ::com::sun::star::chaos::System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.2 2000-12-02 10:57:15 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.3 2001-06-15 17:16:59 dvo Exp $
 
       Source Code Control ::com::sun::star::chaos::System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/12/02 10:57:15  mib
+      #80795#: use packages
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 

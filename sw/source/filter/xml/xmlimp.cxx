@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-12 16:10:51 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,9 +165,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::i18n;
-
-sal_Char __READONLY_DATA sXML_np__text[] = "text";
-sal_Char __READONLY_DATA sXML_np__table[] = "table";
+using namespace ::xmloff::token;
 
 //----------------------------------------------------------------------------
 
@@ -186,14 +184,14 @@ enum SwXMLDocTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, sXML_font_decls, XML_TOK_DOC_FONTDECLS  },
-    { XML_NAMESPACE_OFFICE, sXML_styles,     XML_TOK_DOC_STYLES     },
-    { XML_NAMESPACE_OFFICE, sXML_automatic_styles, XML_TOK_DOC_AUTOSTYLES   },
-    { XML_NAMESPACE_OFFICE, sXML_master_styles,  XML_TOK_DOC_MASTERSTYLES   },
-    { XML_NAMESPACE_OFFICE, sXML_meta,       XML_TOK_DOC_META       },
-    { XML_NAMESPACE_OFFICE, sXML_body,       XML_TOK_DOC_BODY       },
-    { XML_NAMESPACE_OFFICE, sXML_script,     XML_TOK_DOC_SCRIPT     },
-    { XML_NAMESPACE_OFFICE, sXML_settings,   XML_TOK_DOC_SETTINGS       },
+    { XML_NAMESPACE_OFFICE, XML_FONT_DECLS,     XML_TOK_DOC_FONTDECLS   },
+    { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES      },
+    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES    },
+    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES   },
+    { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META        },
+    { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
+    { XML_NAMESPACE_OFFICE, XML_SCRIPT,         XML_TOK_DOC_SCRIPT      },
+    { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
     XML_TOKEN_MAP_END
 };
 
@@ -232,10 +230,9 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
                               &sLocalName );
 
         if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-             sLocalName.equalsAsciiL(sXML_class, sizeof(sXML_class)-1) )
+             IsXMLToken( sLocalName, XML_CLASS ) )
         {
-            if (xAttrList->getValueByIndex(nAttr).equalsAsciiL(
-                sXML_label, sizeof(sXML_label)-1))
+            if ( IsXMLToken( xAttrList->getValueByIndex(nAttr), XML_LABEL ) )
             {
                 // OK, we need to set label mode. To do this, tunnel
                 // to get the SwDoc, then set label mode.
@@ -282,8 +279,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_AUTOSTYLES:
         // don't use the autostyles from the styles-document for the progress
-        if ( ! GetLocalName().equalsAsciiL(sXML_document_styles,
-                                           sizeof(sXML_document_styles)-1) )
+        if ( ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
             GetSwImport().SetProgressValue( 2 * PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_True );
@@ -336,11 +332,11 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_OFFICE==nPrefix &&
-        ( 0 == rLocalName.compareToAscii(sXML_document) ||
-          0 == rLocalName.compareToAscii(sXML_document_meta) ||
-          0 == rLocalName.compareToAscii(sXML_document_settings) ||
-          0 == rLocalName.compareToAscii(sXML_document_styles) ||
-          0 == rLocalName.compareToAscii(sXML_document_content) ))
+        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
+          IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
     else

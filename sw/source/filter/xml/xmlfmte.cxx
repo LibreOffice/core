@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 16:34:16 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
+using namespace ::xmloff::token;
 
 void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
 {
@@ -156,7 +157,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
         return;
     DBG_ASSERT( pStr, "family must be specified" );
     // style:name="..."
-    AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rFmt.GetName() );
+    AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rFmt.GetName() );
 
     if( pStr )
         AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family, pStr );
@@ -185,7 +186,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
                 sName = SwXStyleFamilies::GetProgrammaticName(
                                     pPageDesc->GetName(),
                                     SFX_STYLE_FAMILY_PAGE );
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_master_page_name, sName );
+            AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, sName );
         }
     }
 
@@ -209,14 +210,14 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
                 addDataStyle(nFormat);
                 OUString sDataStyleName = getDataStyleName(nFormat);
                 if( sDataStyleName.getLength() > 0 )
-                    AddAttribute( XML_NAMESPACE_STYLE, sXML_data_style_name,
+                    AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
                                   sDataStyleName );
             }
         }
     }
 
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE, sXML_style,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE, XML_STYLE,
                                   sal_True, sal_True );
 
         SvXMLItemMapEntriesRef xItemMap;
@@ -432,9 +433,9 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
 SwXMLAutoStylePoolP::SwXMLAutoStylePoolP(SvXMLExport& rExp ) :
     SvXMLAutoStylePoolP(),
     rExport( rExp ),
-    sListStyleName( RTL_CONSTASCII_USTRINGPARAM( sXML_list_style_name) ),
-    sMasterPageName( RTL_CONSTASCII_USTRINGPARAM( sXML_master_page_name) ),
-    sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA) )
+    sListStyleName( GetXMLToken( XML_LIST_STYLE_NAME ) ),
+    sMasterPageName( GetXMLToken( XML_MASTER_PAGE_NAME ) ),
+    sCDATA( GetXMLToken( XML_CDATA ) )
 {
 }
 

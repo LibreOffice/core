@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 15:48:37 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <xmloff/xmlkywd.hxx>
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
@@ -164,6 +168,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::xmloff::token;
 using ::com::sun::star::table::XCell;
 
 Reference < XTextRange > lcl_xml_CreateTableBoxTextRange(
@@ -562,32 +567,32 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
     CheckAttrList();
 
     // style:name="..."
-    AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rCol.GetStyleName() );
+    AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rCol.GetStyleName() );
 
     // style:family="table-column"
-    AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family, sXML_table_column );
+    AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE_COLUMN );
 
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE, sXML_style, sal_True,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE, XML_STYLE, sal_True,
                                   sal_True );
         OUStringBuffer sValue;
         if( rCol.GetWidthOpt() )
         {
             GetTwipUnitConverter().convertMeasure( sValue, rCol.GetWidthOpt() );
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_column_width,
+            AddAttribute( XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH,
                           sValue.makeStringAndClear() );
         }
         if( rCol.GetRelWidth() )
         {
             sValue.append( (sal_Int32)rCol.GetRelWidth() );
             sValue.append( (sal_Unicode)'*' );
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_rel_column_width,
+            AddAttribute( XML_NAMESPACE_STYLE, XML_REL_COLUMN_WIDTH,
                           sValue.makeStringAndClear() );
         }
 
         {
             SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE,
-                                      sXML_properties, sal_True, sal_True );
+                                      XML_PROPERTIES, sal_True, sal_True );
         }
     }
 }
@@ -785,7 +790,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
             const String& rName = pFrmFmt->GetName();
             if( rName.Len() )
             {
-                AddAttribute( XML_NAMESPACE_TABLE, sXML_style_name, rName );
+                AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, rName );
             }
         }
     }
@@ -794,7 +799,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
     {
         OUStringBuffer sTmp;
         sTmp.append( (sal_Int32)nColSpan );
-        AddAttribute( XML_NAMESPACE_TABLE, sXML_number_columns_spanned,
+        AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED,
                       sTmp.makeStringAndClear() );
     }
 
@@ -821,7 +826,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                 if (sCellFormula.getLength()>0)
                 {
                     // formula
-                    AddAttribute(XML_NAMESPACE_TABLE, sXML_formula,
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA,
                                  sCellFormula);
                 }
 
@@ -837,8 +842,8 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                     if (NUMBERFORMAT_TEXT == nNumberFormat)
                     {
                         // text format
-                        AddAttributeASCII( XML_NAMESPACE_TABLE,
-                                           sXML_value_type, sXML_string );
+                        AddAttribute( XML_NAMESPACE_TABLE,
+                                      XML_VALUE_TYPE, XML_STRING );
                     }
                     else if (-1 != nNumberFormat)
                     {
@@ -857,15 +862,15 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                     aAny = xCellPropertySet->getPropertyValue(sIsProtected);
                     if (*(sal_Bool*)aAny.getValue())
                     {
-                        AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_protected,
-                                           sXML_true );
+                        AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED,
+                                           XML_TRUE );
                     }
                 }
             }
 
             // export cell element
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                      sXML_table_cell, sal_True, sal_True );
+                                      XML_TABLE_CELL, sal_True, sal_True );
 
             // export cell content
             GetTextParagraphExport()->exportText( xRange->getText(),
@@ -875,10 +880,10 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
         {
             // no start node -> merged cells: export subtable in cell
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                      sXML_table_cell, sal_True, sal_True );
+                                      XML_TABLE_CELL, sal_True, sal_True );
             {
                 SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                          sXML_sub_table, sal_True, sal_True );
+                                          XML_SUB_TABLE, sal_True, sal_True );
                 ExportTableLines( rBox.GetTabLines() );
             }
         }
@@ -894,13 +899,13 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         const String& rName = pFrmFmt->GetName();
         if( rName.Len() )
         {
-            AddAttribute( XML_NAMESPACE_TABLE, sXML_style_name, rName );
+            AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, rName );
         }
     }
 
     {
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                  sXML_table_row, sal_True, sal_True );
+                                  XML_TABLE_ROW, sal_True, sal_True );
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
 
@@ -927,7 +932,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             for( sal_uInt16 i=nOldCol; i<nCol; i++ )
             {
                 SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                          sXML_covered_table_cell, sal_True,
+                                          XML_COVERED_TABLE_CELL, sal_True,
                                           sal_False );
             }
 
@@ -986,20 +991,20 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         }
         else
         {
-            AddAttribute( XML_NAMESPACE_TABLE, sXML_style_name,
+            AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
                           pColumn->GetStyleName() );
 
             if( nColRep > 1U )
             {
                 OUStringBuffer sTmp(4);
                 sTmp.append( (sal_Int32)nColRep );
-                AddAttribute( XML_NAMESPACE_TABLE, sXML_number_columns_repeated,
+                AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
                               sTmp.makeStringAndClear() );
             }
 
             {
                 SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                          sXML_table_column, sal_True, sal_True );
+                                          XML_TABLE_COLUMN, sal_True, sal_True );
             }
 
             nColRep = 1U;
@@ -1015,7 +1020,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         if( bHeadline && 0U==nLine )
         {
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                      sXML_table_header_rows, sal_True, sal_True );
+                                      XML_TABLE_HEADER_ROWS, sal_True, sal_True );
             ExportTableLine( *pLine, *pLines );
         }
         else
@@ -1060,13 +1065,13 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
     const SwFrmFmt *pTblFmt = rTbl.GetFrmFmt();
     if( pTblFmt && pTblFmt->GetName().Len() )
     {
-        AddAttribute( XML_NAMESPACE_TABLE, sXML_name, pTblFmt->GetName() );
-        AddAttribute( XML_NAMESPACE_TABLE, sXML_style_name,
+        AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, pTblFmt->GetName() );
+        AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
                       pTblFmt->GetName() );
     }
 
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_table,
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_TABLE,
                                   sal_True, sal_True );
 
         // export DDE source (if this is a DDE table)
@@ -1077,28 +1082,28 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                 ((SwDDETable&)rTbl).GetDDEFldType();
 
             // connection name
-            AddAttribute( XML_NAMESPACE_OFFICE, sXML_name,
+            AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,
                           pDDEFldType->GetName() );
 
             // DDE command
             const String sCmd = pDDEFldType->GetCmd();
-            AddAttribute( XML_NAMESPACE_OFFICE, sXML_dde_application,
+            AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
                           sCmd.GetToken(0, cTokenSeperator) );
-            AddAttribute( XML_NAMESPACE_OFFICE, sXML_dde_item,
+            AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
                           sCmd.GetToken(1, cTokenSeperator) );
-            AddAttribute( XML_NAMESPACE_OFFICE, sXML_dde_topic,
+            AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
                           sCmd.GetToken(2, cTokenSeperator) );
 
             // auto update
             if (pDDEFldType->GetType() == LINKUPDATE_ALWAYS)
             {
-                AddAttributeASCII( XML_NAMESPACE_OFFICE,
-                                   sXML_automatic_update, sXML_true );
+                AddAttribute( XML_NAMESPACE_OFFICE,
+                              XML_AUTOMATIC_UPDATE, XML_TRUE );
             }
 
             // DDE source element (always empty)
             SvXMLElementExport aSource(*this, XML_NAMESPACE_OFFICE,
-                                       sXML_dde_source, sal_True, sal_False);
+                                       XML_DDE_SOURCE, sal_True, sal_False);
         }
 
         ExportTableLines( rTbl.GetTabLines(), rTbl.IsHeadlineRepeat() );

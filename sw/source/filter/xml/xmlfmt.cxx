@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-30 09:33:13 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@
 #ifndef _XMLOFF_XMLSTYLE_HXX
 #include <xmloff/xmlstyle.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_TXTSTYLI_HXX
 #include <xmloff/txtstyli.hxx>
@@ -179,6 +179,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 class SwXMLConditionParser_Impl
 {
@@ -274,66 +275,41 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
 
     if( bOK )
     {
-        switch( sFunc[0] )
+        if( IsXMLToken( sFunc, XML_ENDNOTE ) && !bHasSub )
+            nCondition = PARA_IN_ENDNOTE;
+        else if( IsXMLToken( sFunc, XML_FOOTER ) && !bHasSub )
+            nCondition = PARA_IN_FOOTER;
+        else if( IsXMLToken( sFunc, XML_FOOTNOTE ) && !bHasSub )
+            nCondition = PARA_IN_FOOTENOTE;
+        else if( IsXMLToken( sFunc, XML_HEADER ) && !bHasSub )
+            nCondition = PARA_IN_HEADER;
+        else if( IsXMLToken( sFunc, XML_LIST_LEVEL) &&
+                nSub >=1 && nSub <= MAXLEVEL )
         {
-        case 'e':
-            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_endnote) ) && !bHasSub )
-                nCondition = PARA_IN_ENDNOTE;
-            break;
-
-        case 'f':
-            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_footer) ) && !bHasSub )
-                nCondition = PARA_IN_FOOTER;
-            else if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_footnote) ) &&
-                     !bHasSub )
-                nCondition = PARA_IN_FOOTENOTE;
-            break;
-
-        case 'h':
-            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_header) ) && !bHasSub )
-                nCondition = PARA_IN_HEADER;
-            break;
-
-        case 'l':
-            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_list_level) ) &&
-                nSub >=1 && nSub <= MAXLEVEL )
-            {
-                nCondition = PARA_IN_LIST;
-                nSubCondition = nSub-1;
-            }
-            break;
-
-        case 'o':
-            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_outline_level) ) &&
-                nSub >=1 && nSub <= MAXLEVEL )
-            {
-                nCondition = PARA_IN_OUTLINE;
-                nSubCondition = nSub-1;
-            }
-            break;
-
-        case 's':
-            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_section) ) && !bHasSub )
-            {
-                nCondition = PARA_IN_SECTION;
-            }
-            break;
-
-        case 't':
-            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_table) ) && !bHasSub )
-            {
-                nCondition = PARA_IN_TABLEBODY;
-            }
-            else if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_table_header) ) &&
-                     !bHasSub )
-            {
-                nCondition = PARA_IN_TABLEHEAD;
-            }
-            else if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_text_box) ) && !bHasSub )
-            {
-                nCondition = PARA_IN_FRAME;
-            }
-            break;
+            nCondition = PARA_IN_LIST;
+            nSubCondition = nSub-1;
+        }
+        else if( IsXMLToken( sFunc, XML_OUTLINE_LEVEL) &&
+                 nSub >=1 && nSub <= MAXLEVEL )
+        {
+            nCondition = PARA_IN_OUTLINE;
+            nSubCondition = nSub-1;
+        }
+        else if( IsXMLToken( sFunc, XML_SECTION ) && !bHasSub )
+        {
+            nCondition = PARA_IN_SECTION;
+        }
+        else if( IsXMLToken( sFunc, XML_TABLE ) && !bHasSub )
+        {
+            nCondition = PARA_IN_TABLEBODY;
+        }
+        else if( IsXMLToken( sFunc, XML_TABLE_HEADER ) && !bHasSub )
+        {
+            nCondition = PARA_IN_TABLEHEAD;
+        }
+        else if( IsXMLToken( sFunc, XML_TEXT_BOX ) && !bHasSub )
+        {
+            nCondition = PARA_IN_FRAME;
         }
     }
 }
@@ -385,7 +361,7 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
         // TODO: use a map here
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_condition) ) )
+            if( IsXMLToken( aLocalName, XML_CONDITION ) )
             {
                 SwXMLConditionParser_Impl aCondParser( rValue );
                 if( aCondParser.IsValid() )
@@ -394,7 +370,7 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
                     nSubCondition = aCondParser.GetSubCondition();
                 }
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_apply_style_name) ) )
+            else if( IsXMLToken( aLocalName, XML_APPLY_STYLE_NAME ) )
             {
                 sApplyStyle = rValue;
             }
@@ -497,8 +473,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_map) ) )
+    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_MAP ) )
     {
         SwXMLConditionContext_Impl *pCond =
             new SwXMLConditionContext_Impl( GetImport(), nPrefix,
@@ -632,13 +607,12 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
-        if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_master_page_name) ))
+        if ( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
         {
             sMasterPageName = rValue;
             bHasMasterPageName = sal_True;
         }
-        else if (rLocalName.equalsAsciiL( sXML_data_style_name,
-                                          sizeof(sXML_data_style_name)-1 ))
+        else if ( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
         {
             // if we have a valid data style name
             if (rValue.getLength() > 0)
@@ -735,7 +709,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_properties) ) )
+        if( IsXMLToken( rLocalName, XML_PROPERTIES ) )
         {
             pContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
         }

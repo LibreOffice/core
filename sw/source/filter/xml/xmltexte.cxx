@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-21 06:00:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
@@ -144,6 +144,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
+using namespace ::xmloff::token;
 
 enum SvEmbeddedObjectTypes
 {
@@ -196,49 +197,50 @@ void SwXMLTextParagraphExport::exportStyleContent(
             {
                 const SwCollCondition& rCond = *rConditions[i];
 
-                const sal_Char *pFunc = 0;
+                enum XMLTokenEnum eFunc = XML_TOKEN_INVALID;
                 OUStringBuffer sBuffer( 20 );
                 switch( rCond.GetCondition() )
                 {
                 case PARA_IN_LIST:
-                    pFunc = sXML_list_level;
+                    eFunc = XML_LIST_LEVEL;
                     sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
                     break;
                 case PARA_IN_OUTLINE:
-                    pFunc = sXML_outline_level;
+                    eFunc = XML_OUTLINE_LEVEL;
                     sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
                     break;
                 case PARA_IN_FRAME:
-                    pFunc = sXML_text_box;
+                    eFunc = XML_TEXT_BOX;
                     break;
                 case PARA_IN_TABLEHEAD:
-                    pFunc = sXML_table_header;
+                    eFunc = XML_TABLE_HEADER;
                     break;
                 case PARA_IN_TABLEBODY:
-                    pFunc = sXML_table;
+                    eFunc = XML_TABLE;
                     break;
                 case PARA_IN_SECTION:
-                    pFunc = sXML_section;
+                    eFunc = XML_SECTION;
                     break;
                 case PARA_IN_FOOTENOTE:
-                    pFunc = sXML_footnote;
+                    eFunc = XML_FOOTNOTE;
                     break;
                 case PARA_IN_FOOTER:
-                    pFunc = sXML_footer;
+                    eFunc = XML_FOOTER;
                     break;
                 case PARA_IN_HEADER:
-                    pFunc = sXML_header;
+                    eFunc = XML_HEADER;
                     break;
                 case PARA_IN_ENDNOTE:
-                    pFunc = sXML_endnote;
+                    eFunc = XML_ENDNOTE;
                     break;
                 }
                 OUString sVal( sBuffer.makeStringAndClear() );
 
-                DBG_ASSERT( pFunc, "SwXMLExport::ExportFmt: unknon condition" );
-                if( pFunc )
+                DBG_ASSERT( eFunc != XML_TOKEN_INVALID,
+                            "SwXMLExport::ExportFmt: unknown condition" );
+                if( eFunc != XML_TOKEN_INVALID )
                 {
-                    sBuffer.appendAscii( pFunc );
+                    sBuffer.append( GetXMLToken(eFunc) );
                     sBuffer.append( (sal_Unicode)'(' );
                     sBuffer.append( (sal_Unicode)')' );
                     if( sVal.getLength() )
@@ -248,16 +250,16 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     }
 
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                sXML_condition,
+                                XML_CONDITION,
                                 sBuffer.makeStringAndClear() );
                     const String& rName =
                         SwXStyleFamilies::GetProgrammaticName(
                                     rCond.GetTxtFmtColl()->GetName(),
                                     SFX_STYLE_FAMILY_PARA );
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                sXML_apply_style_name, rName );
+                                XML_APPLY_STYLE_NAME, rName );
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                              sXML_map, sal_True, sal_True );
+                                              XML_MAP, sal_True, sal_True );
                 }
             }
         }
@@ -319,9 +321,9 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
 
 static void lcl_addParam ( SvXMLExport &rExport, const SvCommand &rCommand )
 {
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rCommand.GetCommand() );
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_value, rCommand.GetArgument() );
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_param, sal_False, sal_True );
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.GetCommand() );
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, rCommand.GetArgument() );
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
 }
 static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
                          sal_Bool bToRel = sal_True )
@@ -337,10 +339,10 @@ static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
 
     if (sRelURL.Len())
     {
-        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, sRelURL );
-        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
-        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
-        rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, sRelURL );
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
     }
 }
 
@@ -498,7 +500,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     }
 
     SvULongs aParams;
-    const sal_Char *pElementName;
+    enum XMLTokenEnum eElementName;
     SvXMLExport &rExport = GetExport();
 
     // First the stuff common to each of Applet/Plugin/Floating Frame
@@ -534,8 +536,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     }
 
     if( sAutoStyle.getLength() )
-        rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
-                                  sAutoStyle );
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME, sAutoStyle );
     addTextFrameAttributes( rPropSet, sal_False );
 
     switch (nType)
@@ -549,8 +550,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rExport, sURL, sal_False );
         }
-        pElementName = SV_EMBEDDED_OUTPLACE==nType ? sXML_object_ole
-                                                   : sXML_object;
+        eElementName = SV_EMBEDDED_OUTPLACE==nType ? XML_OBJECT_OLE
+                                                   : XML_OBJECT;
         break;
     case SV_EMBEDDED_APPLET:
         {
@@ -561,10 +562,10 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
             const String &rName = xApplet->GetName();
             if (rName.Len())
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_applet_name,
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME,
                                       rName );
 
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_code,
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE,
                                   xApplet->GetClass() );
 
             const SvCommandList& rCommands = xApplet->GetCommandList();
@@ -581,9 +582,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     aParams.Insert( i, aParams.Count() );
             }
 
-            rExport.AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_may_script,
-                        xApplet->IsMayScript() ? sXML_true : sXML_false );
-            pElementName = sXML_applet;
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT,
+                        xApplet->IsMayScript() ? XML_TRUE : XML_FALSE );
+            eElementName = XML_APPLET;
         }
         break;
     case SV_EMBEDDED_PLUGIN:
@@ -592,8 +593,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             lcl_addURL( rExport, xPlugin->GetURL()->GetMainURL() );
             const String &rType = xPlugin->GetMimeType();
             if (rType.Len())
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_mime_type, rType );
-            pElementName = sXML_plugin;
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, rType );
+            eElementName = XML_PLUGIN;
         }
         break;
     case SV_EMBEDDED_FRAME:
@@ -605,15 +606,15 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
             const String &rName = pDescriptor->GetName();
             if (rName.Len())
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_frame_name, rName );
-            pElementName = sXML_floating_frame;
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, rName );
+            eElementName = XML_FLOATING_FRAME;
         }
         break;
     default:
         ASSERT( !this, "unknown object type! Base class should have been called!" );
     }
 
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, pElementName,
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, eElementName,
                                   sal_False, sal_True );
     switch( nType )
     {

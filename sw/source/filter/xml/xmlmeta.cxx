@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-04 15:44:57 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 // ---------------------------------------------------------------------
 
@@ -194,13 +195,13 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
 {
-    { XML_NAMESPACE_META, sXML_table_count, XML_TOK_META_STAT_TABLE },
-    { XML_NAMESPACE_META, sXML_image_count, XML_TOK_META_STAT_IMAGE },
-    { XML_NAMESPACE_META, sXML_object_count,    XML_TOK_META_STAT_OLE   },
-    { XML_NAMESPACE_META, sXML_paragraph_count, XML_TOK_META_STAT_PARA  },
-    { XML_NAMESPACE_META, sXML_page_count,  XML_TOK_META_STAT_PAGE  },
-    { XML_NAMESPACE_META, sXML_word_count,  XML_TOK_META_STAT_WORD  },
-    { XML_NAMESPACE_META, sXML_character_count, XML_TOK_META_STAT_CHAR  },
+    { XML_NAMESPACE_META, XML_TABLE_COUNT,      XML_TOK_META_STAT_TABLE },
+    { XML_NAMESPACE_META, XML_IMAGE_COUNT,      XML_TOK_META_STAT_IMAGE },
+    { XML_NAMESPACE_META, XML_OBJECT_COUNT,     XML_TOK_META_STAT_OLE   },
+    { XML_NAMESPACE_META, XML_PARAGRAPH_COUNT,  XML_TOK_META_STAT_PARA  },
+    { XML_NAMESPACE_META, XML_PAGE_COUNT,       XML_TOK_META_STAT_PAGE  },
+    { XML_NAMESPACE_META, XML_WORD_COUNT,       XML_TOK_META_STAT_WORD  },
+    { XML_NAMESPACE_META, XML_CHARACTER_COUNT,  XML_TOK_META_STAT_CHAR  },
     XML_TOKEN_MAP_END
 };
 void SwXMLImport::SetStatisticAttributes(
@@ -308,31 +309,31 @@ void SwXMLExport::_ExportMeta()
 
         SwDocStat aDocStat( pText->GetDoc()->GetDocStat() );
         aOut.append( (sal_Int32)aDocStat.nTbl );
-        AddAttribute( XML_NAMESPACE_META, sXML_table_count,
+        AddAttribute( XML_NAMESPACE_META, XML_TABLE_COUNT,
                       aOut.makeStringAndClear() );
         aOut.append( (sal_Int32)aDocStat.nGrf );
-        AddAttribute( XML_NAMESPACE_META, sXML_image_count,
+        AddAttribute( XML_NAMESPACE_META, XML_IMAGE_COUNT,
                       aOut.makeStringAndClear() );
         aOut.append( (sal_Int32)aDocStat.nOLE );
-        AddAttribute( XML_NAMESPACE_META, sXML_object_count,
+        AddAttribute( XML_NAMESPACE_META, XML_OBJECT_COUNT,
                       aOut.makeStringAndClear() );
         if( aDocStat.nPage )
         {
             aOut.append( (sal_Int32)aDocStat.nPage );
-            AddAttribute( XML_NAMESPACE_META, sXML_page_count,
+            AddAttribute( XML_NAMESPACE_META, XML_PAGE_COUNT,
                           aOut.makeStringAndClear() );
         }
         aOut.append( (sal_Int32)aDocStat.nPara );
-        AddAttribute( XML_NAMESPACE_META, sXML_paragraph_count,
+        AddAttribute( XML_NAMESPACE_META, XML_PARAGRAPH_COUNT,
                       aOut.makeStringAndClear() );
         aOut.append( (sal_Int32)aDocStat.nWord );
-        AddAttribute( XML_NAMESPACE_META, sXML_word_count,
+        AddAttribute( XML_NAMESPACE_META, XML_WORD_COUNT,
                       aOut.makeStringAndClear() );
         aOut.append( (sal_Int32)aDocStat.nChar );
-        AddAttribute( XML_NAMESPACE_META, sXML_character_count,
+        AddAttribute( XML_NAMESPACE_META, XML_CHARACTER_COUNT,
                       aOut.makeStringAndClear() );
         SvXMLElementExport aElem( *this, XML_NAMESPACE_META,
-                                  sXML_document_statistic,
+                                  XML_DOCUMENT_STATISTIC,
                                   sal_True, sal_True );
 
         if( IsShowProgress() )

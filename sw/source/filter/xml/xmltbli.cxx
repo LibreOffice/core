@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-14 17:38:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 enum SwXMLTableElemTokens
 {
@@ -201,15 +202,15 @@ enum SwXMLTableCellAttrTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, sXML_table_header_columns,
+    { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,
             XML_TOK_TABLE_HEADER_COLS },
-    { XML_NAMESPACE_TABLE, sXML_table_columns,          XML_TOK_TABLE_COLS },
-    { XML_NAMESPACE_TABLE, sXML_table_column,           XML_TOK_TABLE_COL },
-    { XML_NAMESPACE_TABLE, sXML_table_header_rows,
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,           XML_TOK_TABLE_COLS },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COL },
+    { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,
             XML_TOK_TABLE_HEADER_ROWS },
-    { XML_NAMESPACE_TABLE, sXML_table_rows,             XML_TOK_TABLE_ROWS },
-    { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW },
-    { XML_NAMESPACE_OFFICE, sXML_dde_source,
+    { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,              XML_TOK_TABLE_ROWS },
+    { XML_NAMESPACE_TABLE, XML_TABLE_ROW,               XML_TOK_TABLE_ROW },
+    { XML_NAMESPACE_OFFICE, XML_DDE_SOURCE,
             XML_TOK_OFFICE_DDE_SOURCE },
 
     // There are slight differences between <table:table-columns> and
@@ -217,24 +218,24 @@ static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
     // supported in Writer (they are Calc-only features), so we
     // support column groups by simply using the <table:table-columns>
     // token for column groups, too.
-    { XML_NAMESPACE_TABLE, sXML_table_column_group,     XML_TOK_TABLE_COLS },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS },
 
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, sXML_style_name, XML_TOK_TABLE_STYLE_NAME },
-    { XML_NAMESPACE_TABLE, sXML_number_columns_spanned, XML_TOK_TABLE_NUM_COLS_SPANNED },
-    { XML_NAMESPACE_TABLE, sXML_number_rows_spanned, XML_TOK_TABLE_NUM_ROWS_SPANNED },
-    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated, XML_TOK_TABLE_NUM_COLS_REPEATED },
-    { XML_NAMESPACE_TABLE, sXML_formula, XML_TOK_TABLE_FORMULA },
-    { XML_NAMESPACE_TABLE, sXML_value, XML_TOK_TABLE_VALUE },
-    { XML_NAMESPACE_TABLE, sXML_time_value, XML_TOK_TABLE_TIME_VALUE },
-    { XML_NAMESPACE_TABLE, sXML_date_value, XML_TOK_TABLE_DATE_VALUE },
-    { XML_NAMESPACE_TABLE, sXML_boolean_value, XML_TOK_TABLE_BOOLEAN_VALUE },
-    { XML_NAMESPACE_TABLE, sXML_protected, XML_TOK_TABLE_PROTECTED },
-    { XML_NAMESPACE_TABLE, sXML_protect, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
+    { XML_NAMESPACE_TABLE, XML_STYLE_NAME, XML_TOK_TABLE_STYLE_NAME },
+    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, XML_TOK_TABLE_NUM_COLS_SPANNED },
+    { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, XML_TOK_TABLE_NUM_ROWS_SPANNED },
+    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, XML_TOK_TABLE_NUM_COLS_REPEATED },
+    { XML_NAMESPACE_TABLE, XML_FORMULA, XML_TOK_TABLE_FORMULA },
+    { XML_NAMESPACE_TABLE, XML_VALUE, XML_TOK_TABLE_VALUE },
+    { XML_NAMESPACE_TABLE, XML_TIME_VALUE, XML_TOK_TABLE_TIME_VALUE },
+    { XML_NAMESPACE_TABLE, XML_DATE_VALUE, XML_TOK_TABLE_DATE_VALUE },
+    { XML_NAMESPACE_TABLE, XML_BOOLEAN_VALUE, XML_TOK_TABLE_BOOLEAN_VALUE },
+    { XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TOK_TABLE_PROTECTED },
+    { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
 
     XML_TOKEN_MAP_END
 };
@@ -637,7 +638,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_TABLE == nPrefix &&
-        0 == rLocalName.compareToAscii( sXML_sub_table ) )
+        IsXMLToken( rLocalName, XML_SUB_TABLE ) )
     {
         if( !HasContent() )
         {
@@ -768,12 +769,11 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         const OUString& rValue = xAttrList->getValueByIndex( i );
         if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_style_name) ) )
+            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 aStyleName = rValue;
-            else if( aLocalName.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(sXML_number_columns_repeated ) ) )
+            else if( IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
                 nColRep = (sal_uInt32)rValue.toInt32();
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_default_cell_style_name) ) )
+            else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
                 aDfltCellStyleName = rValue;
         }
     }
@@ -857,7 +857,7 @@ SvXMLImportContext *SwXMLTableColsContext_Impl::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_TABLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_table_column ) == 0 &&
+        IsXMLToken( rLocalName, XML_TABLE_COLUMN ) &&
         GetTable()->IsInsertColPossible() )
         pContext = new SwXMLTableColContext_Impl( GetSwImport(), nPrefix,
                                                   rLocalName, xAttrList,
@@ -921,17 +921,17 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         const OUString& rValue = xAttrList->getValueByIndex( i );
         if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_style_name) ) )
+            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
             {
                 aStyleName = rValue;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_number_rows_repeated) ) )
+            else if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
             {
                 nRowRepeat = (sal_uInt32)rValue.toInt32();
                 if( nRowRepeat < 1UL )
                     nRowRepeat = 1UL;
             }
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_default_cell_style_name) ) )
+            else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
             {
                 aDfltCellStyleName = rValue;
             }
@@ -964,7 +964,7 @@ SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
 
     if( XML_NAMESPACE_TABLE == nPrefix )
     {
-        if( rLocalName.compareToAscii( sXML_table_cell ) == 0 )
+        if( IsXMLToken( rLocalName, XML_TABLE_CELL ) )
         {
             if( !GetTable()->IsValid() || GetTable()->IsInsertCellPossible() )
                 pContext = new SwXMLTableCellContext_Impl( GetSwImport(),
@@ -973,7 +973,7 @@ SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
                                                            xAttrList,
                                                            GetTable() );
         }
-        else if( rLocalName.compareToAscii( sXML_covered_table_cell ) == 0 )
+        else if( IsXMLToken( rLocalName, XML_COVERED_TABLE_CELL ) )
             pContext = new SvXMLImportContext( GetImport(), nPrefix,
                                                rLocalName );
     }
@@ -1035,7 +1035,7 @@ SvXMLImportContext *SwXMLTableRowsContext_Impl::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_TABLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_table_row ) == 0 &&
+        IsXMLToken( rLocalName, XML_TABLE_ROW ) &&
         GetTable()->IsInsertRowPossible() )
         pContext = new SwXMLTableRowContext_Impl( GetSwImport(), nPrefix,
                                                   rLocalName, xAttrList,
@@ -1110,28 +1110,23 @@ void SwXMLDDETableContext_Impl::StartElement(
 
         if (XML_NAMESPACE_OFFICE == nPrefix)
         {
-            if (aLocalName.equalsAsciiL(sXML_dde_application,
-                                        sizeof(sXML_dde_application)-1))
+            if ( IsXMLToken( aLocalName, XML_DDE_APPLICATION ) )
             {
                 sDDEApplication = rValue;
             }
-            else if (aLocalName.equalsAsciiL(sXML_dde_topic,
-                                             sizeof(sXML_dde_topic)-1))
+            else if ( IsXMLToken( aLocalName, XML_DDE_TOPIC ) )
             {
                 sDDETopic = rValue;
             }
-            else if (aLocalName.equalsAsciiL(sXML_dde_item,
-                                             sizeof(sXML_dde_item)-1))
+            else if ( IsXMLToken( aLocalName, XML_DDE_ITEM ) )
             {
                 sDDEItem = rValue;
             }
-            else if (aLocalName.equalsAsciiL(sXML_name,
-                                             sizeof(sXML_name)-1))
+            else if ( IsXMLToken( aLocalName, XML_NAME ) )
             {
                 sConnectionName = rValue;
             }
-            else if (aLocalName.equalsAsciiL(sXML_automatic_update,
-                                             sizeof(sXML_automatic_update)-1))
+            else if ( IsXMLToken( aLocalName, XML_AUTOMATIC_UPDATE ) )
             {
                 sal_Bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, rValue))
@@ -1290,11 +1285,11 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         const OUString& rValue = xAttrList->getValueByIndex( i );
         if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_style_name ) ) )
+            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 aStyleName = rValue;
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_name) ) )
+            else if( IsXMLToken( aLocalName, XML_NAME ) )
                 aName = rValue;
-            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_default_cell_style_name ) ) )
+            else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
                 aDfltCellStyleName = rValue;
         }
     }

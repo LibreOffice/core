@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #include "unoredline.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
@@ -122,6 +122,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::frame::XModel;
@@ -332,9 +333,9 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     const Reference<XPropertySet> & rModel,
     const Reference<XPropertySet> & rImportInfo ) :
         sEmpty(),
-        sInsertion(RTL_CONSTASCII_USTRINGPARAM(sXML_insertion)),
-        sDeletion(RTL_CONSTASCII_USTRINGPARAM(sXML_deletion)),
-        sFormatChange(RTL_CONSTASCII_USTRINGPARAM(sXML_format_change)),
+        sInsertion( GetXMLToken( XML_INSERTION )),
+        sDeletion( GetXMLToken( XML_DELETION )),
+        sFormatChange( GetXMLToken( XML_FORMAT_CHANGE )),
         sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges")),
         sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges")),
         sRedlineProtectionKey(RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey")),
