@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-15 17:53:13 $
+ *  last change: $Author: dbo $ $Date: 2000-12-14 16:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <osl/file.h>
 #include <vector>
 #include <osl/mutex.hxx>
+
+#ifdef MACOSX
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -351,6 +355,20 @@ static oslModule loadModule( const OUString & rLibName, sal_Int32 nMode )
     }
 }
 
+#ifdef MACOSX
+static OUString getMacSymbolName( const OUString & rLibName, const char * pSymName )
+{
+    sal_Int32 nSlash = rLibName.lastIndexOf( (sal_Unicode)'/' );
+    sal_Int32 nStart = (nSlash >= 0 ? nSlash+1+3 : 3); // /.../libNAME.dylib.framework.so
+    sal_Int32 nEnd = rLibName.indexOf( (sal_Unicode)'.', nStart );
+    OSL_ASSERT( nEnd > nStart );
+    OUStringBuffer buf( 16 );
+    buf.append( rLibName.copy( nStart, nEnd - nStart ) );
+    buf.appendAscii( pSymName );
+    return buf.makeStringAndClear();
+}
+#endif
+
 //*************************************************************************
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
@@ -368,7 +386,11 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
         void * pSym;
 
         // ========================= LATEST VERSION =========================
+#ifdef MACOSX
+        OUString aGetEnvName( getMacSymbolName( rLibName, COMPONENT_GETENV ) );
+#else
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
+#endif
         if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
         {
             uno_Environment * pCurrentEnv = 0;
@@ -394,7 +416,11 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
                 }
             }
 
+#ifdef MACOSX
+            OUString aGetFactoryName( getMacSymbolName( rLibName, COMPONENT_GETFACTORY ) );
+#else
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
+#endif
             if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
             {
                 OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
@@ -513,7 +539,11 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
         void * pSym;
 
         // ========================= LATEST VERSION =========================
+#ifdef MACOSX
+        OUString aGetEnvName( getMacSymbolName( rLibName, COMPONENT_GETENV ) );
+#else
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
+#endif
         if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
         {
             uno_Environment * pCurrentEnv = 0;
@@ -539,7 +569,11 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
                 }
             }
 
+#ifdef MACOSX
+            OUString aWriteInfoName( getMacSymbolName( rLibName, COMPONENT_WRITEINFO ) );
+#else
             OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
+#endif
             if (pSym = osl_getSymbol( lib, aWriteInfoName.pData ))
             {
                 if (bNeedsMapping)
