@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:04:12 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _COM_SUN_STAR_VIEW_DOCUMENTZOOMTYPE_HPP_
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _FLDMGR_HXX
 #include <fldmgr.hxx>
 #endif
@@ -165,6 +168,7 @@
 
 using namespace osl;
 using namespace svt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
@@ -227,10 +231,14 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
         aTempFile.EnableKillingFile();
     }
     SwView* pView = m_pWizard->GetSwView();
-    SfxStringItem aURL( SID_FILE_NAME, m_sExampleURL);
+    uno::Sequence< beans::PropertyValue > aValues(1);
+    beans::PropertyValue* pValues = aValues.getArray();
+    pValues[0].Name = C2U("FilterName");
+    pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
 
-    SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName());
-    pView->GetViewFrame()->GetDispatcher()->Execute( SID_EXPORTDOC, SFX_CALLMODE_SYNCHRON, &aURL, &aFilterName, 0);
+    uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+    xStore->storeToURL( m_sExampleURL, aValues   );
+
     Link aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
     m_pExampleFrame = new SwOneExampleFrame( m_aExampleWIN,
                                     EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
