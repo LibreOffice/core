@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 17:47:23 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
 #endif
+#ifndef _SV_GRAPH_HXX
+#include <graph.hxx>
+#endif
 #ifndef _SV_IMPIMAGETREE_H
 #include <impimagetree.hxx>
 #endif
@@ -90,10 +93,31 @@
 #include <image.hxx>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
+#endif
+
 DBG_NAME( Image );
 DBG_NAME( ImageList );
 
 #define IMAGE_FILE_VERSION 100
+
+using namespace ::com::sun::star;
 
 // ---------
 // - Image -
@@ -222,6 +246,23 @@ Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
 
 // -----------------------------------------------------------------------
 
+Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
+    mpImplData( NULL )
+{
+    DBG_CTOR( Image, NULL );
+
+    uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
+    uno::Reference< lang::XTypeProvider >   xProv( rxGraphic, uno::UNO_QUERY );
+    const ::Graphic*                        pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
+                                                         reinterpret_cast< ::Graphic* >( xTunnel->getSomething( xProv->getImplementationId() ) ) :
+                                                          NULL );
+
+    if( pGraphic )
+        ImplInit( pGraphic->GetBitmapEx() );
+}
+
+// -----------------------------------------------------------------------
+
 Image::~Image()
 {
     DBG_DTOR( Image, NULL );
@@ -312,6 +353,39 @@ BitmapEx Image::GetBitmapEx() const
     }
 
     return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
+{
+    const Graphic                       aGraphic( GetBitmapEx() );
+    uno::Reference< graphic::XGraphic > xRet;
+
+    if( aGraphic.GetType() != GRAPHIC_NONE )
+    {
+        uno::Reference < lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+
+        if( xMSF.is() )
+        {
+            uno::Reference< graphic::XGraphicProvider > xProv( xMSF->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ),
+                uno::UNO_QUERY );
+
+            if( xProv.is() )
+            {
+                uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
+                ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
+
+                aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( (sal_Int64) &aGraphic ) );
+
+                xRet = xProv->queryGraphic( aLoadProps );
+            }
+        }
+    }
+
+    return xRet;
 }
 
 // -----------------------------------------------------------------------
@@ -423,7 +497,7 @@ BOOL Image::operator==( const Image& rImage ) const
     DBG_CHKTHIS( Image, NULL );
     DBG_CHKOBJ( &rImage, Image, NULL );
 
-    BOOL bRet;
+    bool bRet = false;
 
     if( rImage.mpImplData == mpImplData )
         bRet = true;
@@ -583,7 +657,9 @@ ImageList::ImageList( const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const Color* pMaskColor  ) :
+ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
+                      const ::rtl::OUString& rPrefix,
+                      const Color* pMaskColor  ) :
     mpImplData( NULL ),
     mnInitSize( 1 ),
     mnGrowSize( 4 )
@@ -598,7 +674,13 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const
 
     for( int i = 0; i < rNameVector.size(); ++i )
     {
-        if( aImageTree->loadImage( rNameVector[ i ], aWorkBmpEx ) )
+        ::rtl::OUString aImageName;
+
+        aImageName = rPrefix.getLength() ?
+                     ( ( aImageName = rPrefix ) += rNameVector[ i ] ) :
+                     rNameVector[ i ];
+
+        if( aImageTree->loadImage( aImageName, aWorkBmpEx ) )
         {
             const Size aWorkSizePixel( aWorkBmpEx.GetSizePixel() );
 
@@ -620,7 +702,7 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const
         else
         {
             ByteString aErrorStr( "ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const Color* pMaskColor  ): could not load image <" );
-            DBG_ERROR( ( ( aErrorStr += ByteString( String( rNameVector[ i ] ), RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
+            DBG_ERROR( ( ( aErrorStr += ByteString( String( aImageName ), RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
         }
 #endif
     }
@@ -655,6 +737,20 @@ ImageList::ImageList( const BitmapEx& rBitmapEx,
     DBG_CTOR( ImageList, NULL );
 
     ImplInit( rBitmapEx, nInit, pIdAry, NULL, nGrow );
+}
+
+// -----------------------------------------------------------------------
+
+ImageList::ImageList( const BitmapEx& rBitmapEx,
+                        const ::std::vector< ::rtl::OUString >& rNameVector,
+                      USHORT nGrow ) :
+    mpImplData( NULL ),
+    mnInitSize( static_cast< USHORT >( rNameVector.size() ) ),
+    mnGrowSize( nGrow )
+{
+    DBG_CTOR( ImageList, NULL );
+
+    ImplInit( rBitmapEx, static_cast< USHORT >( rNameVector.size() ), NULL, &rNameVector, nGrow );
 }
 
 // -----------------------------------------------------------------------
@@ -1281,6 +1377,24 @@ USHORT ImageList::GetImageId( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
+void ImageList::GetImageIds( ::std::vector< USHORT >& rIds ) const
+{
+    DBG_CHKTHIS( ImageList, NULL );
+
+    rIds = ::std::vector< USHORT >();
+
+    if( mpImplData )
+    {
+        for( USHORT i = 0; i < mpImplData->mnArySize; ++i )
+        {
+            if( mpImplData->mpAry[ i ].mnId )
+                rIds.push_back( mpImplData->mpAry[ i ].mnId );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 ::rtl::OUString ImageList::GetImageName( USHORT nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -1302,6 +1416,24 @@ USHORT ImageList::GetImageId( USHORT nPos ) const
     }
 
     return ::rtl::OUString();
+}
+
+// -----------------------------------------------------------------------
+
+void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
+{
+    DBG_CHKTHIS( ImageList, NULL );
+
+    rNames = ::std::vector< ::rtl::OUString >();
+
+    if( mpImplData )
+    {
+        for( USHORT i = 0; i < mpImplData->mnArySize; ++i )
+        {
+            if( mpImplData->mpAry[ i ].mnId )
+                rNames.push_back( mpImplData->mpAry[ i ].maName );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1424,7 +1556,7 @@ BOOL ImageList::operator==( const ImageList& rImageList ) const
     DBG_CHKTHIS( ImageList, NULL );
     DBG_CHKOBJ( &rImageList, ImageList, NULL );
 
-    BOOL bRet;
+    bool bRet = false;
 
     if( rImageList.mpImplData == mpImplData )
         bRet = true;
