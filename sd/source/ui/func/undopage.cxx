@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undopage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-27 15:03:46 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "undopage.hxx"
+
 #include <svx/svxids.hrc>
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -73,13 +75,17 @@
 #endif
 
 #include "sdpage.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "undopage.hxx"
+#endif
 
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
+
 
 
 TYPEINIT1(SdPageFormatUndoAction, SdUndoAction);
@@ -121,9 +127,10 @@ void SdPageFormatUndoAction::Undo()
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
-    if ( pViewShell->ISA(SdDrawViewShell) )
+    /*  if ( pViewShell->ISA(::sd::DrawViewShell))
     {
-        SdDrawViewShell* pDrViewShell = (SdDrawViewShell*) pViewShell;
+        ::sd::DrawViewShell* pDrViewShell =
+              static_cast< ::sd::DrawViewShell*>(pViewShell);
         long nWidth = pPage->GetSize().Width();
         long nHeight = pPage->GetSize().Height();
 
@@ -138,6 +145,7 @@ void SdPageFormatUndoAction::Undo()
         pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
         pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
+    */
 }
 
 /*************************************************************************
@@ -164,9 +172,10 @@ void SdPageFormatUndoAction::Redo()
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
-    if ( pViewShell->ISA(SdDrawViewShell) )
+    /*  if ( pViewShell->ISA(::sd::DrawViewShell))
     {
-        SdDrawViewShell* pDrViewShell = (SdDrawViewShell*) pViewShell;
+        ::sd::DrawViewShell* pDrViewShell =
+              static_cast< ::sd::DrawViewShell*>(pViewShell);
         long nWidth = pPage->GetSize().Width();
         long nHeight = pPage->GetSize().Height();
 
@@ -181,6 +190,7 @@ void SdPageFormatUndoAction::Redo()
         pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
         pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
+    */
 }
 
 /*************************************************************************
