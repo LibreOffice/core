@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:26:23 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,7 +748,7 @@ public:
     USHORT GetPageOffset() const;           //Liefert den letzten Page Offset
 
     //SS fuer Beschriftungen
-    void InsertLabel( const SwLabelType eType, const String &rTxt,
+    void InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
                       const BOOL bBefore, const USHORT nId,
                       const String& rCharacterStyle,
                       const BOOL bCpyBrd = TRUE );
