@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:44:52 $
+ *  last change: $Author: ama $ $Date: 2001-02-28 08:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,15 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         if( nKern )
             new SwKernPortion( *this, nKern );
     }
-
+    // special case: hanging portion
+    else if( bFull && aGuess.GetHangingPortion() )
+    {
+        Width( aGuess.BreakWidth() );
+        SetLen( aGuess.BreakPos() - rInf.GetIdx() );
+        Insert( aGuess.GetHangingPortion() );
+        aGuess.GetHangingPortion()->SetAscent( GetAscent() );
+        aGuess.ClearHangingPortion();
+    }
     // breakPos >= index
     else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != STRING_LEN )
     {
@@ -288,7 +296,6 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         else    // case C2, last exit
             BreakCut( rInf, aGuess );
     }
-
     // breakPos < index or no breakpos at all
     else
     {

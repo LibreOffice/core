@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:41:27 $
+ *  last change: $Author: ama $ $Date: 2001-02-28 08:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,9 +320,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
 
         if( nBreakPos > nCutPos && nBreakPos != STRING_LEN )
         {
-            SwPosSize aTmpSize = rInf.GetTxtSize( --nBreakPos, 1 );
+            SwPosSize aTmpSize = rInf.GetTxtSize( nCutPos, nBreakPos - nCutPos );
             ASSERT( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );
+            nPorLen = nCutPos - rInf.GetIdx();
         }
     }
 
@@ -332,7 +333,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
         nBreakWidth = 0;
 
     if( pHanging )
-        --nBreakPos;
+        nBreakPos = nCutPos;
+
     return sal_False;
 }
 
