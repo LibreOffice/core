@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:06:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,9 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(::avmedia::MediaPlayer::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD_DATA_ONLY);
-
-        SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS, 1);
+        SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS,           CHILDWIN_LABEL    );
+        SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_CHILDWINDOW, CHILDWIN_MAILMERGE);
+//    SFX_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_SENDMAIL_CHILDWINDOW);
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS|
                                 SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 SW_RES(RID_TOOLS_TOOLBOX) );
@@ -198,4 +199,34 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
     if(GetDocShell()->IsReadOnly())
         pWrtShell->ShowCrsr();
 
+}
+/*-- 26.05.2004 09:14:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void   SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
+                sal_uInt16 nRestart, sal_Bool bIsSource)
+{
+    pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
+    UIFeatureChanged();
+}
+/*-- 26.05.2004 09:14:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailMergeConfigItem*  SwView::GetMailMergeConfigItem()
+{
+    return pViewImpl->GetMailMergeConfigItem();
+}
+/*-- 26.05.2004 09:14:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_uInt16 SwView::GetMailMergeRestartPage() const
+{
+    return pViewImpl->GetMailMergeRestartPage();
+}
+/*-- 03.09.2004 11:56:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwView::IsMailMergeSourceView() const
+{
+    return pViewImpl->IsMailMergeSourceView();
 }
