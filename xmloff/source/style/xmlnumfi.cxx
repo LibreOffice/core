@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 08:04:24 $
+ *  last change: $Author: vg $ $Date: 2001-04-25 13:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,7 +1014,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     USHORT nPrfx, const rtl::OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                    sal_Int32 nTempKey,
+                                    const sal_Int32 nTempKey,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_DATA_STYLE ),
     pData( NULL ),
