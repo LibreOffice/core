@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneTreeNode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:49:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,12 @@ public:
 
     /** The default implementation shows the window (when it exists) when
         bExpansionState is <TRUE/>.  It hides the window otherwise.
+        @return
+            Returns <TRUE/> when the expansion state changes.  When an
+            expansion state is requested that is already in place then
+            <FALSE/> is returned.
     */
-    virtual void Expand (bool bExpansionState);
+    virtual bool Expand (bool bExpansionState);
 
     /** The default implementation returns whether the window is showing.
         When there is no window then it returns <FALSE/>.
