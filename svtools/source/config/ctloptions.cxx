@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
 
 #pragma hdrstop
 
+#include "languageoptions.hxx"
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include "ctloptions.hxx"
 #endif
@@ -76,6 +81,7 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -286,6 +292,12 @@ void SvtCTLOptions_Impl::Load()
             }
         }
     }
+    sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+    if ( !m_bCTLFontEnabled && ( nType & SCRIPTTYPE_COMPLEX ) )
+    {
+        m_bCTLFontEnabled = sal_True;
+    }
+
     m_bIsLoaded = sal_True;
 }
 //------------------------------------------------------------------------------
@@ -409,3 +421,5 @@ sal_Bool SvtCTLOptions::IsReadOnly(EOption eOption) const
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsReadOnly(eOption);
 }
+// -----------------------------------------------------------------------------
+
