@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-06 17:36:48 $
+ *  last change: $Author: nn $ $Date: 2000-10-31 17:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1406,6 +1406,8 @@ void ScInterpreter::ScBackSolver()
                 ScFormulaCell* pFormula = (ScFormulaCell*) pFCell;
                 ScValueCell* pValue = (ScValueCell*) pVCell;
                 pFormula->Interpret();
+                BOOL bError = ( pFormula->GetErrCode() != 0 );
+                // bError always corresponds with fn
                 fn1 = pFormula->GetValue();
                 fn1 -= nVal;
                 xn1 = nBestX;
@@ -1423,9 +1425,18 @@ void ScInterpreter::ScBackSolver()
                     pValue->SetValue(xn);
                     pDok->SetDirty( aVRange );
                     pFormula->Interpret();
+                    bError = ( pFormula->GetErrCode() != 0 );
                     fn = pFormula->GetValue();
                     fn -= nVal;
-                    if (fabs(fn) < nDelta)
+                    if ( bError )
+                    {
+                        // move closer to last valid value (xn1), keep xn1/fn1
+                        double fDiff = ( xn1 - xn ) / 2;
+                        if (fabs(fDiff) < nEps)
+                            fDiff = (fDiff < 0.0) ? -nEps : nEps;
+                        xn += fDiff;
+                    }
+                    else if (fabs(fn) < nDelta)
                     {
                         nBestX = xn;
                         bRet = TRUE;
@@ -1461,6 +1472,10 @@ void ScInterpreter::ScBackSolver()
                     pFormula->Interpret();
                     if ( fabs( pFormula->GetValue() - nVal ) > fabs( fn ) )
                         nX = nBestX;
+                }
+                else if ( bError )
+                {
+                    nX = nBestX;
                 }
                 if ( bTempCell )
                 {
