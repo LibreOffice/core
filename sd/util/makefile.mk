@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:41:50 $
+#   last change: $Author: af $ $Date: 2002-02-05 14:39:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -183,7 +183,8 @@ LIB3FILES=      \
             $(SLB)$/grf.lib			\
             $(SLB)$/bin.lib			\
             $(SLB)$/filter.lib		\
-            $(SLB)$/unoidl.lib		
+            $(SLB)$/unoidl.lib		\
+            $(SLB)$/accessibility.lib		
 
 
 LIB4TARGET=$(LB)$/sdlib.lib
