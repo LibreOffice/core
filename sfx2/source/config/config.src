@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:30:43 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,32 +61,6 @@
 
 #include "config.hrc"
 
-String RID_STR_NAME_MISCCFG
-{
-    Text = "Sonstiges" ;
-    Text [ English ] = "Miscellaneous" ;
-    Text [ english_us ] = "Other" ;
-    Text [ swedish ] = "Övrigt" ;
-    Text [ danish ] = "Andet" ;
-    Text [ italian ] = "Altro" ;
-    Text [ spanish ] = "Otros" ;
-    Text [ french ] = "Autres" ;
-    Text [ dutch ] = "Overige" ;
-    Text [ portuguese ] = "Outros" ;
-    Text [ portuguese_brazilian ] = "Sonstiges" ;
-    Text[ chinese_simplified ] = "ÆäËü";
-    Text[ russian ] = "Ïðî÷åå";
-    Text[ polish ] = "Inne";
-    Text[ japanese ] = "‚»‚Ì‘¼";
-    Text[ chinese_traditional ] = "¨ä¥L";
-    Text[ arabic ] = "ÛíÑ Ðáß";
-    Text[ dutch ] = "Overige";
-    Text[ chinese_simplified ] = "ÆäËü";
-    Text[ greek ] = "¢ëëá";
-    Text[ korean ] = "±âÅ¸";
-    Text[ turkish ] = "Diðer";
-    Text[ language_user1 ] = " ";
-};
 String STR_EVENTCONFIG
 {
     Text = "Ereigniszuordnung" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 12:56:48 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ class SfxFilterMatcher;
 class SfxCancelManager;
 class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
-class OfaMiscCfg;
+class SfxMiscCfg;
 class SfxDocumentTemplates;
 class SfxFrameArr_Impl;
 class SvtSaveOptions;
@@ -168,7 +168,7 @@ public:
     SvStrings*                          pSecureURLs;
     SfxBmkMenu*                         pNewMenu;
     SfxBmkMenu*                         pAutoPilotMenu;
-    OfaMiscCfg*                         pMiscConfig;
+    SfxMiscCfg*                         pMiscConfig;
     SvtSaveOptions*                     pSaveOptions;
     SvtUndoOptions*                     pUndoOptions;
     SvtHelpOptions*                     pHelpOptions;

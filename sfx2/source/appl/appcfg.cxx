@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-27 11:31:35 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1669,13 +1669,10 @@ void SfxApplicationClass::Property( ApplicationProperty& rProp )
 
 IMPL_OBJHINT( SfxStringHint, String )
 
-OfaMiscCfg* SfxApplication::GetMiscConfig()
+SfxMiscCfg* SfxApplication::GetMiscConfig()
 {
     if ( !pAppData_Impl->pMiscConfig )
-    {
-        pAppData_Impl->pMiscConfig = new OfaMiscCfg;
-        pAppData_Impl->pMiscConfig->Initialize();
-    }
+        pAppData_Impl->pMiscConfig = new SfxMiscCfg;
 
     return pAppData_Impl->pMiscConfig;
 }

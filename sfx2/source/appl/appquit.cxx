@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-26 12:20:37 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@
 #include "bmkmenu.hxx"
 #include "objsh.hxx"
 #include "dlgcont.hxx"
+#include <misccfg.hxx>
 
 #ifndef PRODUCT
 DECLARE_LIST( SfxFrameWindowFactoryArray_Impl, SfxFrameWindowFactory* )
@@ -340,6 +341,7 @@ void SfxApplication::Deinitialize()
     DELETEX(pSlotPool);
     SfxToolBoxConfig::Release();
     DELETEX(pAppData_Impl->pEventConfig);
+    DELETEX(pAppData_Impl->pMiscConfig);
     SfxMacroConfig::Release_Impl();
     DELETEX(pAppData_Impl->pVerbs);
     DELETEX(pAppData_Impl->pFactArr);

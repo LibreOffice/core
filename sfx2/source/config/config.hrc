@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 11:56:02 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@
 
 #define STR_EVENTCONFIG                 (CONFIG_OSPATH_END+1)
 // #define DLG_MACROQUERY               (CONFIG_OSPATH_END+2)
-#define RID_STR_NAME_MISCCFG            (CONFIG_OSPATH_END+3)
+
 
 #define CB_WARNING                      1
 #define BTN_OK                          2
