@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:34:17 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese ] = "Comutar vista do conteúdo" ;
                 Text[ chinese_simplified ] = "ÇĞ»»ÄÚÈİÊÓÍ¼";
                 Text[ russian ] = "Ïåğåêëş÷èòü âèä ñîäåğæèìîãî";
-                Text[ polish ] = "Prze³¹cz widok tre?ci";
+                Text[ polish ] = "Prze³¹cz widok treœci";
                 Text[ japanese ] = "“à—eËŞ­°‚ÌØ‚èŠ·‚¦";
                 Text[ chinese_traditional ] = "¤Á´«¤º®eÀËµø";
                 Text[ arabic ] = "ÊÈÏíá ØÑíŞÉ ÚÑÖ ÇáãÍÊæíÇÊ";
@@ -454,7 +454,7 @@ Window DLG_NAVIGATION_PI
                 Text [ english_us ] = "Set Reminder" ;
                 Text[ chinese_simplified ] = "ÉèÖÃ±ê¼Ç";
                 Text[ russian ] = "Óñòàíîâèòü ïîìåòêó";
-                Text[ polish ] = "Osad? znaczniki";
+                Text[ polish ] = "OsadŸ znaczniki";
                 Text[ japanese ] = "Šo‚¦~‚ß‚ğ•t‚¯‚é";
                 Text[ chinese_traditional ] = "³]©w´£¿ô";
                 Text[ arabic ] = "æÖÚ ÚáÇãÉ ÊĞßíÑ";
@@ -580,12 +580,12 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese ] = "Níveis de títulos mostrados" ;
                 Text[ chinese_simplified ] = "ÏÔÊ¾µÄ´ó¸Ù¼¶";
                 Text[ russian ] = "Ïîêàç óğîâíåé çàãîëîâêîâ";
-                Text[ polish ] = "Wy?wietlone poziomy konspektu";
+                Text[ polish ] = "Wyœwietlone poziomy konspektu";
                 Text[ japanese ] = "Œ©o‚µÚÍŞÙ";
                 Text[ chinese_traditional ] = "Åã¥Üªº¤jºõ¯Å";
                 Text[ arabic ] = "ãÓÊæíÇÊ ÇáÚäÇæíä ÇáÙÇåÑÉ";
                 Text[ greek ] = "Åìöáíéæüìåíá åğßğåäá åğéêåöáëßäùí";
-                Text[ korean ] = "³ªÅ¸³ª´Â¡¡Ç¥Á¦¼öÁØ";
+                Text[ korean ] = "³ªÅ¸³ª´Â¡¡Ç¥Á¦ ¼öÁØ";
                 Text[ turkish ] = "Görüntülenen başlık düzeyleri";
                 Text[ catalan ] = "Niveles de encabezados mostrados";
                 Text[ finnish ] = "Otsikkotasojen näyttö";
@@ -643,7 +643,7 @@ Window DLG_NAVIGATION_PI
                 Text [ english_us ] = "Demote Level" ;
                 Text[ chinese_simplified ] = "½µ¼¶";
                 Text[ russian ] = "Íà îäèí óğîâåíü âíèç";
-                Text[ polish ] = "Obni¿ poziom";
+                Text[ polish ] = "Poziom ni¿ej";
                 Text[ japanese ] = "ÚÍŞÙ‚ğ‰º‚°‚é";
                 Text[ chinese_traditional ] = "­°¯Å";
                 Text[ arabic ] = "ãÓÊæì áÃÓİá";
@@ -795,7 +795,7 @@ Window DLG_NAVIGATION_PI
                 Text [ dutch ] = "Inhoud opslaan" ;
                 Text [ portuguese ] = "Guardar também conteúdos" ;
                 Text[ russian ] = "Ñîõğàíèòü ñîäåğæèìîå";
-                Text[ polish ] = "Zapisz zawarto?æ";
+                Text[ polish ] = "Zapisz zawartoœæ";
                 Text[ japanese ] = "“à—e‚ğ•Û‘¶‚·‚é";
                 Text[ chinese_simplified ] = "´æÅÌÄÚÈİ";
                 Text[ chinese_traditional ] = "Àx¦s¤º®e";
@@ -828,7 +828,7 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese ] = "Mover para cima" ;
                 Text[ chinese_simplified ] = "ÏòÉÏÒÆ¶¯";
                 Text[ russian ] = "Ïåğåìåñòèòü ââåğõ";
-                Text[ polish ] = "Przenie? w górê";
+                Text[ polish ] = "Przenieœ w górê";
                 Text[ japanese ] = "ã•û‚ÖˆÚ“®";
                 Text[ chinese_traditional ] = "¦V¤W²¾°Ê";
                 Text[ arabic ] = "ÅÒÇÍÉ Åáì ÃÚáì";
@@ -856,7 +856,7 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese ] = "Mover para baixo" ;
                 Text[ chinese_simplified ] = "ÏòÏÂÒÆ¶¯";
                 Text[ russian ] = "Ïåğåìåñòèòü âíèç";
-                Text[ polish ] = "Przenie? w dó³";
+                Text[ polish ] = "Przenieœ w dó³";
                 Text[ japanese ] = "‰º•û‚ÖˆÚ“®";
                 Text[ chinese_traditional ] = "¦V¤U²¾°Ê";
                 Text[ arabic ] = "ÅÒÇÍÉ Åáì ÃÓİá";
@@ -1055,7 +1055,7 @@ Window DLG_NAVIGATION_PI
         Text [ portuguese ] = "Mostrar" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾";
         Text[ russian ] = "Ïîêàçàòü";
-        Text[ polish ] = "Wy?wietlenie";
+        Text[ polish ] = "Wyœwietlenie";
         Text[ japanese ] = "•\\¦";
         Text[ chinese_traditional ] = "Åã¥Ü";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -1225,7 +1225,7 @@ Window DLG_NAVIGATION_PI
         Text [ danish ] = "Rediger" ;
         Text [ italian ] = "Modifica" ;
         Text [ spanish ] = "Editar" ;
-        Text [ french ] = "Edition" ;
+        Text [ french ] = "Édition" ;
         Text [ dutch ] = "Bewerken" ;
         Text [ portuguese_brazilian ] = "Bearbeiten" ;
         Text [ portuguese ] = "Editar" ;
@@ -1335,7 +1335,7 @@ Window DLG_NAVIGATION_PI
         Text[ russian ] = "Íîâûé äîêóìåíò";
         Text[ polish ] = "Nowy dokument";
         Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
-        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ";
+        Text[ chinese_traditional ] = "·s¼W¤å¥ó";
         Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
         Text[ korean ] = "»õ ¹®¼­";
