@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:52:33 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,9 @@
     QuickHelpText[ czech ] = "Zmenšit";    \
     QuickHelpText[ hebrew ] = "Verkleinern";    \
     QuickHelpText[ hindi ] = "सिकुडना";   \
-    QuickHelpText[ slovak ] = "Zmenšiť";
+    QuickHelpText[ slovak ] = "Zmenšiť"; \
+    QuickHelpText[ hungarian ] = "Zsugorítás"; \
+    QuickHelpText[ slovenian ] = "Skrči";
 
  //---------------------------------------------------------------------------
 
@@ -163,6 +165,8 @@ TabPage RID_SCTAB_PARAMETER
         Text[ hebrew ] = "‮פונקציה לא מוכרת‬";
         Text[ hindi ] = "अज्ञात फंक्शन्";
         Text[ slovak ] = "Neznáma funkcia";
+        Text[ hungarian ] = "Ismeretlen függvény";
+        Text[ slovenian ] = "Neznana funkcija";
     };
 
     FixedText FT_PARNAME
@@ -243,6 +247,7 @@ TabPage RID_SCTAB_PARAMETER
         MaskColor = SC_HC_MASKCOLOR;
     };
 };
+
 
 
 
