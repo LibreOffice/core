@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotesTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:22:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ void XMLNotesTransformerContext::StartElement(
     case XML_NOTES_CONFIGURATION:
         eToken = (m_bEndNote ? XML_ENDNOTES_CONFIGURATION
                              : XML_FOOTNOTES_CONFIGURATION);
+        break;
     case XML_NOTE_REF:
         eToken = (m_bEndNote ? XML_ENDNOTE_REF : XML_FOOTNOTE_REF);
         break;
