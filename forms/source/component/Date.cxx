@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:56:38 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ Sequence<Type> ODateModel::_getTypes()
 DBG_NAME( ODateModel )
 //------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD, sal_False )
+            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD, sal_False, sal_True )
                         // use the old control name for compytibility reasons
             ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
@@ -182,11 +182,17 @@ IMPLEMENT_DEFAULT_CLONING( ODateModel )
 StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_DATEFIELD;
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_DATEFIELD;
+    sal_Int32 nOldLen = aSupported.getLength();
+    aSupported.realloc( nOldLen + 4 );
+    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATEFIELD;
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_DATEFIELD;
+
     return aSupported;
 }
 
@@ -209,19 +215,12 @@ void ODateModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(11)
-        DECL_PROP1(NAME,                    ::rtl::OUString,        BOUND);
-        DECL_PROP2(CLASSID,                 sal_Int16,              READONLY, TRANSIENT);
+    BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
         DECL_PROP3(DEFAULT_DATE,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TAG,                     ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
-        DECL_PROP1(CONTROLSOURCE,           ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,        XPropertySet,           BOUND,READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,           BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   ::rtl::OUString,        READONLY, TRANSIENT);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
         DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
@@ -326,6 +325,19 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool _bPostReset )
         m_aSaveValue = aControlValue;
     }
     return sal_True;
+}
+
+//------------------------------------------------------------------------------
+Any ODateModel::translateControlValueToValidatableValue( ) const
+{
+    Any aValidatableValue( getControlValue() );
+    if ( aValidatableValue.hasValue() )
+    {
+        sal_Int32 nDate = 0;
+        OSL_ENSURE( aValidatableValue >>= nDate, "ODateModel::translateControlValueToValidatableValue: invalid date!" );
+        aValidatableValue <<= DBTypeConversion::toDate( nDate );
+    }
+    return aValidatableValue;
 }
 
 //------------------------------------------------------------------------------
