@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:13:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,18 +742,38 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             case FN_UNO_NUM_START_VALUE  :
                 lcl_SetNodeNumStart( rPam, aValue );
             break;
+            case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
+                {
+                    BYTE nLevel;
+                    aValue >>= nLevel;
+
+                    SwTxtNode * pTmpNode = rPam.GetNode()->GetTxtNode();
+
+                    if (pTmpNode)
+                        pTmpNode->SetOutlineLevel(nLevel);
+                }
+                break;
             case FN_UNO_NUM_LEVEL  :
             case FN_UNO_IS_NUMBER  :
             {
                 SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
                 const SwNumRule* pRule = pTxtNd->GetNumRule();
                 // hier wird Multiselektion nicht beruecksichtigt
-                if( pRule && pTxtNd->GetNum() )
+                if( pRule && pTxtNd->GetNum() && ! rPam.HasMark())
                 {
                     if( FN_UNO_NUM_LEVEL == pMap->nWID)
                     {
                         sal_Int16 nLevel;
                         aValue >>= nLevel;
+
+                        if (pTxtNd->GetNum())
+                        {
+                            SwNodeNum aNum = *pTxtNd->GetNum();
+                            aNum.SetLevel(nLevel);
+
+                            pTxtNd->UpdateNum(aNum);
+                        }
+#if 0
                         sal_Int16 nOldLevel = pTxtNd->GetNum()->GetRealLevel();
                         if(nLevel < MAXLEVEL && nOldLevel != nLevel)
                         {
@@ -765,6 +785,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                                 rPam.GetDoc()->NumUpDown( rPam, bDown );
                             }
                         }
+#endif
                     }
                     else
                     {
