@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:55:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include "macfix.hxx"
 
 
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
 static char* pOp1[] = {
 #else
 static const char* pOp1[] = {
@@ -129,7 +129,7 @@ static const char* pOp1[] = {
     "REDIMP_ERASE"
 };
 
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
 static char* pOp2[] = {
 #else
 static const char* pOp2[] = {
@@ -161,7 +161,7 @@ static const char* pOp2[] = {
     "ARGTYP",           // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
 static char* pOp3[] = {
 #else
 static const char* pOp3[] = {
@@ -192,7 +192,7 @@ static const char* pOp3[] = {
     "DCREATE_REDIMP",   // User defined Objekt-Array redimensionieren (+StringId+StringId)
 };
 
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
 static char** pOps[3] = { pOp1, pOp2, pOp3 };
 #else
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
@@ -200,7 +200,7 @@ static const char** pOps[3] = { pOp1, pOp2, pOp3 };
 
 typedef void( SbiDisas::*Func )( String& );     // Verarbeitungsroutine
 
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
 static Func pOperand2[] = {
 #else
 static const Func pOperand2[] = {
@@ -231,7 +231,7 @@ static const Func pOperand2[] = {
     MEMBER(SbiDisas::TypeOp),   // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
 static Func pOperand3[] = {
 #else
 static const Func pOperand3[] = {
