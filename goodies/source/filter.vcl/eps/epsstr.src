@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:46:35 $
+ *  last change: $Author: rt $ $Date: 2001-07-03 21:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ String KEY_VERSION_CHECK
     Text[ russian ] = "Βνθμΰνθε! Ρξυπΰνθςό βρε θμοξπςθπξβΰννϋε θηξαπΰζενθÿ EPS νΰ σπξβνε 1 νεβξημξζνξ,\nςΰκ κΰκ νεκξςξπϋε θη νθυ νΰυξδÿςρÿ νΰ αξλεε βϋρξκξμ σπξβνε!";
     Text[ polish ] = "Uwaga: Nie wszystkie importowane grafiki EPS mog³y zostaζ zapisane na poziomie1, \nponiewaΏ niektσre znajdujΉ siκ na wyΏszym poziomie!";
     Text[ japanese ] = "’Σ: ²έΞί°Δ‚³‚κ‚½ EPS ‰ζ‘‚Μ‚Ά‚­‚Β‚©‚ΝAκ‚Βγ‚ΜΪΝήΩ‚Ι‚ ‚θ\n‚Ι‚·‚Χ‚Δ‚πΪΝήΩ‚Pi”[‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
-    Text[ greek ] = "Προσοχή: Δεν ήταν δυνατόν να γίνει αποθήκευση όλων των εισηγμένων γραφικών EPS,\nεπειδή μερικά από αυτά υπάρχουν σε μορφή υψηλότερου επιπέδο? ";
-    Text[ korean ] = "ΑΦΐΗ: ΐΟΊΞ΅΅±Χ·΅ΗΘΐΜ΅΅»σΐ§ ·ΉΊ§Ώ΅ ΐΦ±β ¶§Ή®Ώ΅\n°΅Α®ΏΒ EPS ±Χ·΅ΗΘΐ» ·ΉΊ§1Ώ΅ ΈπµΞ ΐϊΐεΗΟΑφ΄Β ΈψΗί½ΐ΄Ο΄Ω.";
+    Text[ greek ] = "Προσοχή: Δεν ήταν δυνατόν να γίνει αποθήκευση όλων των εισηγμένων γραφικών EPS,\nεπειδή μερικά από αυτά υπάρχουν σε μορφή υψηλότερου επιπέδ";
+    Text[ korean ] = "ΑΦΐΗ: ΐΟΊΞ ±Χ·΅ΗΘΐΜ »σΐ§ ·ΉΊ§Ώ΅ ΐΦ±β ¶§Ή®Ώ΅\n°΅Α®ΏΒ EPS ±Χ·΅ΗΘ ΈπµΞΈ¦ ·ΉΊ§1Ώ΅ ΐϊΐεΗÒ Όφ΄Β ΎψΎϊ½ΐ΄Ο΄Ω.";
     Text[ chinese_traditional ] = "µω·N΅GµLªk±N©Ò¦³ªΊ¶Χ¤JΉΟ§Ξ¥H level 1 ΐx¦s΅M\n¦]¬°¤@¨ΗΉΟ§Ξ°ª©σ level 1 ΅I";
     Text[ arabic ] = "ΚΝΠνΡ: ΚΪΠΡ ΝέΩ ία ΥζΡ EPS ΗαγΣΚζΡΟΙ έν ΗαγΣΚζμ 1΅\nαΚζΗΜΟ ΘΪΦ γδεΗ έν γΣΚζμ ΓΪαμ!";
     Text[ turkish ] = "Dikkat: Bazύ EPS grafikleri daha όst dόzeyde olduπu iηin, iηe aktarύlan tόm grafikler dόzey 1'e kaydedilemedi.";
@@ -112,5 +112,6 @@ String KEY_VERSION_CHECK
     Text[ finnish ] = "Varoitus: Kaikkien tuotujen EPS-kuvien tallentaminen ei onnistunut tasolla 1,\nkoska joidenkin kuvien taso on korkeampi.";
     Text[ catalan ] = "΅Atenciσn: No han podido ser guardados en Level1 todos los grαficos EPS importados\nporque existen algunos en un nivel mαs alto!";
 };
+
 
 
