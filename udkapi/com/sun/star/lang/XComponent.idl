@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponent.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:33:56 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 13:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,20 @@ interface XComponent: com::sun::star::uno::XInterface
     /** adds an event listener to the object.
 
         <p>The broadcaster fires the disposing method of this listener
-        if the <member>XComponent::dispose</member> method is called.  </p>
+        if the <member>XComponent::dispose</member> method is called.</p>
 
-       <p>It is suggested to allow multiple registration of the same listener,
-        thus for each time a listener is added, it has to be removed.
+        <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.</p>
+
+        <p>If this <type scope="com::sun::star::lang">XComponent</type> is
+        already disposed when <member scope="com::sun::star::lang">
+        XComponent::addEventListener</member> is called, the call will not fail
+        with a <type scope="com::sun::star::lang">DisposedException</type>, but
+        the caller will be notified via the
+        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        callback.  This callback can occur synchronously within the
+        <member scope="com::sun::star::lang">XComponent::addEventListener
+        </member> call.</p>
 
         @see XComponent::removeEventListener
      */
@@ -142,10 +152,16 @@ interface XComponent: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::lang::XComponent::removeEventListener
     /** removes an event listener from the listener list.
 
-        <p>It is a "noop" if the specified listener is not registered.  </p>
+        <p>It is a "noop" if the specified listener is not registered.</p>
 
-       <p>It is suggested to allow multiple registration of the same listener,
+        <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
+
+        <p>If this <type scope="com::sun::star::lang">XComponent</type> is
+        already disposed when <member scope="com::sun::star::lang">
+        XComponent::removeEventListener</member> is called, the call will not
+        fail with a <type scope="com::sun::star::lang">DisposedException</type>,
+        but will rather be ignored silently.</p>
 
         @see XComponent::addEventListener
      */
@@ -160,6 +176,9 @@ interface XComponent: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/08/05 09:33:56  mi
+    add/remove...Listener more precisely specified for adding the same interface multiple times
+
     Revision 1.9  2002/01/18 13:39:36  jbu
     #96701# API review
 
