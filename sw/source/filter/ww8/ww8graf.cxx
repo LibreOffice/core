@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:47:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1557,6 +1557,7 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
     #define DEF_LINE_WIDTH_2        50
     #define DEF_LINE_WIDTH_3        80
     #define DEF_LINE_WIDTH_4        100
+    #define DEF_LINE_WIDTH_5        10
 
     #define DEF_MAX_LINE_WIDHT      DEF_LINE_WIDTH_4
     #define DEF_MAX_LINE_DIST       DEF_LINE_WIDTH_2
@@ -1613,17 +1614,18 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
 /* 2*/  { DEF_LINE_WIDTH_2, 0, 0 },
 /* 3*/  { DEF_LINE_WIDTH_3, 0, 0 },
 /* 4*/  { DEF_LINE_WIDTH_4, 0, 0 },
-/* 5*/  { DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_DIST },
-/* 6*/  { DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE1_DIST },
-/* 7*/  { DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE2_DIST },
-/* 8*/  { DEF_DOUBLE_LINE3_OUT, DEF_DOUBLE_LINE3_IN, DEF_DOUBLE_LINE3_DIST },
-/* 9*/  { DEF_DOUBLE_LINE4_OUT, DEF_DOUBLE_LINE4_IN, DEF_DOUBLE_LINE4_DIST },
-/*10*/  { DEF_DOUBLE_LINE5_OUT, DEF_DOUBLE_LINE5_IN, DEF_DOUBLE_LINE5_DIST },
-/*11*/  { DEF_DOUBLE_LINE6_OUT, DEF_DOUBLE_LINE6_IN, DEF_DOUBLE_LINE6_DIST },
-/*12*/  { DEF_DOUBLE_LINE7_OUT, DEF_DOUBLE_LINE7_IN, DEF_DOUBLE_LINE7_DIST },
-/*13*/  { DEF_DOUBLE_LINE8_OUT, DEF_DOUBLE_LINE8_IN, DEF_DOUBLE_LINE8_DIST },
-/*14*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST },
-/*15*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST}
+/* 5*/  { DEF_LINE_WIDTH_5, 0, 0 },
+/* 6*/  { DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_DIST },
+/* 7*/  { DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE1_DIST },
+/* 8*/  { DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE2_DIST },
+/* 9*/  { DEF_DOUBLE_LINE3_OUT, DEF_DOUBLE_LINE3_IN, DEF_DOUBLE_LINE3_DIST },
+/*10*/  { DEF_DOUBLE_LINE4_OUT, DEF_DOUBLE_LINE4_IN, DEF_DOUBLE_LINE4_DIST },
+/*11*/  { DEF_DOUBLE_LINE5_OUT, DEF_DOUBLE_LINE5_IN, DEF_DOUBLE_LINE5_DIST },
+/*12*/  { DEF_DOUBLE_LINE6_OUT, DEF_DOUBLE_LINE6_IN, DEF_DOUBLE_LINE6_DIST },
+/*13*/  { DEF_DOUBLE_LINE7_OUT, DEF_DOUBLE_LINE7_IN, DEF_DOUBLE_LINE7_DIST },
+/*14*/  { DEF_DOUBLE_LINE8_OUT, DEF_DOUBLE_LINE8_IN, DEF_DOUBLE_LINE8_DIST },
+/*15*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST },
+/*16*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST}
     };
     size_t nPos = static_cast<size_t>(eCode);
     ASSERT(nPos < sizeof(aLineTabVer8), "Impossible");
@@ -1720,8 +1722,10 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
-        if (nLineThick < 20)
+        if (nLineThick < 10)
             nIdx = WW8_BordersSO::single0;//   1 Twip bei uns
+        else if (nLineThick < 20)
+            nIdx = WW8_BordersSO::single5;//   10 Twips bei uns
         else if (nLineThick < 50)
             nIdx = WW8_BordersSO::single1;//  20 Twips
         else if (nLineThick < 80)
