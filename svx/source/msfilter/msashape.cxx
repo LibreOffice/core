@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-12 17:40:58 $
+ *  last change: $Author: sj $ $Date: 2002-04-26 13:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ static const mso_AutoShape msoRoundRectangle =
 
 static const SvxMSDffVertPair mso_sptRightTriangleVert[] =
 {
-    { 0, 0 }, { 21600, 21600 }, { 0, 21600 }
+    { 0, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptRightTriangleTextRect[] =
 {
@@ -325,7 +325,7 @@ static const mso_AutoShape msoParallelogram =
 
 static const SvxMSDffVertPair mso_sptDiamondVert[] =
 {
-    { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 }, { 0, 10800 }
+    { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 }, { 0, 10800 }, { 10800, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptDiamondTextRect[] =
 {
@@ -479,7 +479,7 @@ static const mso_AutoShape msoHexagon =
 static const SvxMSDffVertPair mso_sptPentagonVert[] =
 {
     { 0, 8260 }, { 10800, 0 }, { 21600, 8260 }, { 17370, 21600 },
-    { 4230, 21600 }
+    { 4230, 21600 }, { 0, 8260 }
 };
 static const SvxMSDffTextRectangles mso_sptPentagonTextRect[] =
 {
@@ -500,7 +500,7 @@ static const SvxMSDffVertPair mso_sptPlusVert[] =               // adjustment1 :
 {
     { 1 MSO_I, 0 }, { 2 MSO_I, 0 }, { 2 MSO_I, 1 MSO_I }, { 21600, 1 MSO_I },
     { 21600, 2 MSO_I }, { 2 MSO_I, 2 MSO_I }, { 2 MSO_I, 21600 }, { 1 MSO_I, 21600 },
-    { 1 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }, { 0, 1 MSO_I }, { 1 MSO_I, 1 MSO_I }
+    { 1 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }, { 0, 1 MSO_I }, { 1 MSO_I, 1 MSO_I }, { 1 MSO_I, 0 }
 };
 static const SvxMSDffCalculationData mso_sptPlusCalc[] =
 {
@@ -1081,7 +1081,7 @@ static const mso_AutoShape msoStripedRightArrow =
 static const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  // adjustment1 : x 0 - 21600    (default 16200)
 {                                                               // adjustment2 : y 0 - 10800    (default 5400)
     { 0, 1 MSO_I }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 0 }, { 21600, 10800 },
-    { 0 MSO_I, 21600 }, { 0 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }, { 5 MSO_I, 10800 }
+    { 0 MSO_I, 21600 }, { 0 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }, { 5 MSO_I, 10800 }, { 0, 1 MSO_I }
 };
 static const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
 {
@@ -3745,7 +3745,7 @@ static const mso_AutoShape msoWave =
 
 static const SvxMSDffVertPair mso_sptFlowChartProcessVert[] =
 {
-    { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }
+    { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 }
 };
 static const mso_AutoShape msoFlowChartProcess =
 {
@@ -3795,7 +3795,7 @@ static const mso_AutoShape msoFlowChartAlternateProcess =
 
 static const SvxMSDffVertPair mso_sptFlowChartDecisionVert[] =
 {
-    { 0, 10800 }, { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 }
+    { 0, 10800 }, { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 }, { 0, 10800 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartDecisionTextRect[] =
 {
@@ -3814,7 +3814,7 @@ static const mso_AutoShape msoFlowChartDecision =
 
 static const SvxMSDffVertPair mso_sptFlowChartInputOutputVert[] =
 {
-    { 4230, 0 }, { 21600, 0 }, { 17370, 21600 }, { 0, 21600 }
+    { 4230, 0 }, { 21600, 0 }, { 17370, 21600 }, { 0, 21600 }, { 4230, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartInputOutputTextRect[] =
 {
@@ -3974,7 +3974,7 @@ static const mso_AutoShape msoFlowChartTerminator =
 static const SvxMSDffVertPair mso_sptFlowChartPreparationVert[] =
 {
     { 4350, 0 }, { 17250, 0 }, { 21600, 10800 }, { 17250, 21600 },
-    { 4350, 21600 }, { 0, 10800 }
+    { 4350, 21600 }, { 0, 10800 }, { 4350, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartPreparationTextRect[] =
 {
@@ -3993,7 +3993,7 @@ static const mso_AutoShape msoFlowChartPreparation =
 
 static const SvxMSDffVertPair mso_sptFlowChartManualInputVert[] =
 {
-    { 0, 4300 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }
+    { 0, 4300 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 4300 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartManualInputTextRect[] =
 {
@@ -4012,7 +4012,7 @@ static const mso_AutoShape msoFlowChartManualInput =
 
 static const SvxMSDffVertPair mso_sptFlowChartManualOperationVert[] =
 {
-    { 0, 0 }, { 21600, 0 }, { 17250, 21600 }, { 4350, 21600 }
+    { 0, 0 }, { 21600, 0 }, { 17250, 21600 }, { 4350, 21600 }, { 0, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartManualOperationTextRect[] =
 {
@@ -4055,7 +4055,7 @@ static const mso_AutoShape msoFlowChartConnector =
 static const SvxMSDffVertPair mso_sptFlowChartOffpageConnectorVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 17150 }, { 10800, 21600 },
-    { 0, 17150 }
+    { 0, 17150 }, { 0, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartOffpageConnectorTextRect[] =
 {
@@ -4075,7 +4075,7 @@ static const mso_AutoShape msoFlowChartOffpageConnector =
 static const SvxMSDffVertPair mso_sptFlowChartPunchedCardVert[] =
 {
     { 4300, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
-    { 0, 4300 }
+    { 0, 4300 }, { 4300, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartPunchedCardTextRect[] =
 {
@@ -4186,7 +4186,7 @@ static const mso_AutoShape msoFlowChartOr =
 
 static const SvxMSDffVertPair mso_sptFlowChartCollateVert[] =
 {
-    { 0, 0 }, { 21600, 21600 }, { 0, 21600 }, { 21600, 0 }
+    { 0, 0 }, { 21600, 21600 }, { 0, 21600 }, { 21600, 0 }, { 0, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartCollateTextRect[] =
 {
@@ -4231,7 +4231,7 @@ static const mso_AutoShape msoFlowChartSort =
 
 static const SvxMSDffVertPair mso_sptFlowChartExtractVert[] =
 {
-    { 10800, 0 }, { 21600, 21600 }, { 0, 21600 }
+    { 10800, 0 }, { 21600, 21600 }, { 0, 21600 }, { 10800, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartExtractTextRect[] =
 {
@@ -4250,7 +4250,7 @@ static const mso_AutoShape msoFlowChartExtract =
 
 static const SvxMSDffVertPair mso_sptFlowChartMergeVert[] =
 {
-    { 0, 0 }, { 21600, 0 }, { 10800, 21600 }
+    { 0, 0 }, { 21600, 0 }, { 10800, 21600 }, { 0, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartMergeTextRect[] =
 {
