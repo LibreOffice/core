@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 15:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ void VTitle::changePosition( const awt::Point& rPos )
     }
     catch( uno::Exception& e )
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -241,7 +241,7 @@ void VTitle::createShapes( const awt::Point& rPos )
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
         if(bStackCharacters)
         {
@@ -289,7 +289,7 @@ void VTitle::createShapes( const awt::Point& rPos )
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
         m_fRotationAngleDegree = fRotationAngleDegree;
         m_nXPos = rPos.X;
@@ -305,7 +305,7 @@ void VTitle::createShapes( const awt::Point& rPos )
     }
     catch( uno::Exception& e )
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
