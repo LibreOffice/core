@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-09 13:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,10 +1279,14 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
             // Anders sieht es mit Links/Rechts wechseln aus. Dafuer muss
             // erkannt werden, wo der Seitenwechsel statt findet. Hier ist
             // es aber dafuer zuspaet!
-            if( pPd->GetFollow() && pPd != pPd->GetFollow() &&
-                pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&
-                rSepInfo.pPDNd &&
-                pPd->IsFollowNextPageOfNode( *rSepInfo.pPDNd ) )
+            if (
+                 pPd->GetFollow() && pPd != pPd->GetFollow() &&
+                 pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&
+                 (
+                   !rSepInfo.pPDNd ||
+                   pPd->IsFollowNextPageOfNode( *rSepInfo.pPDNd )
+                 )
+               )
             {
                 if( rSepInfo.pPDNd )
                     pPdFirstPgFmt = pPd->GetPageFmtOfNode( *rSepInfo.pPDNd );
