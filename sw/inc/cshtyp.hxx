@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cshtyp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,4 +143,10 @@ enum SwDocPositions
     DOCPOS_OTHEREND
 };
 
+extern SwWhichPara SwuiGetfnParaCurr();//CHINA001
+extern SwPosPara SwuiGetfnParaStart();//CHINA001
+extern SwWhichTable SwuiGetfnTablePrev(); //CHINA001
+extern SwWhichTable SwuiGetfnTableCurr(); //CHINA001
+extern SwPosTable SwuiGetfnTableStart(); //CHINA001
+extern SwPosTable SwuiGetfnTableEnd(); //CHINA001
 #endif  // _CSHTYP_HXX
