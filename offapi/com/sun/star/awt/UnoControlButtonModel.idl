@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlButtonModel.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:18:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,18 @@ published service UnoControlButtonModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies the alignment of the text in the control.
+
+        <pre>
+        0: left
+        1: center
+        2: right
+        </pre>
+     */
+    [optional, property] short Align;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
@@ -145,6 +157,17 @@ published service UnoControlButtonModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies the position of the image, if any, relative to the text, if any
+
+        <p>Valid values of this property are specified with <type>ImagePosition</type>.</p>
+
+        <p>If this property is present, it supersedes the <member>ImageAlign</member> property - setting
+        one of both properties sets the other one to the best possible match.</p>
+    */
+    [optional, property] short ImagePosition;
+
+    //-------------------------------------------------------------------------
+
     /** specifies an URL to an image to use for the button.
      */
     [property] string ImageURL;
@@ -199,6 +222,30 @@ published service UnoControlButtonModel
         down the mouse button.</p>
     */
     [optional, property] boolean Repeat;
+
+    /** specifies whether the button should toggle on a single operation.
+
+        <p>If this property is set to <TRUE/>, a single operation of the button control (pressing space
+        while it is focused, or clicking onto it) toggles it between a <em>pressed</em> and a <em>not
+        pressed</em> state.</p>
+
+        <p>The default for this property is <FALSE/>, which means the button behaves like a usual
+        push button.</p>
+
+        @since #i24683#
+    */
+    [optional, property] boolean Toggle;
+
+    /** specifies whether the button control should grab the focus when clicked.
+
+        <p>If set to <TRUE/> (which is the default), the button control automatically grabs the
+        focus when the user clicks onto it with the mouse.<br/>
+        If set to <FALSE/>, the focus is preserved when the user operates the button control with
+        the mouse.</p>
+
+        @since #i24685#
+    */
+    [optional, property] boolean FocusOnClick;
 };
 
 //=============================================================================
