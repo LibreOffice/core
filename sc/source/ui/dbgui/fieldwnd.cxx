@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:54:10 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@
 #include <vcl/mnemonic.hxx>
 #endif
 
+const size_t INVALID_INDEX = static_cast< size_t >( -1 );
+
 //===================================================================
 
 ScDPFieldWindow::ScDPFieldWindow(
@@ -99,15 +101,12 @@ ScDPFieldWindow::ScDPFieldWindow(
     pDlg( pDialog ),
     pFtCaption( pFtFieldCaption ),
     eType( eFieldType ),
-    nFieldCount( 0 ),
     nFieldSelected( 0 ),
     pAccessible( NULL )
 {
     Init();
     if (eType != TYPE_SELECT && pFtCaption)
-    {
         aName = MnemonicGenerator::EraseAllMnemonicChars( pFtCaption->GetText() );
-    }
 }
 
 ScDPFieldWindow::ScDPFieldWindow(
@@ -120,7 +119,6 @@ ScDPFieldWindow::ScDPFieldWindow(
     pDlg( pDialog ),
     pFtCaption( NULL ),
     eType( eFieldType ),
-    nFieldCount( 0 ),
     nFieldSelected( 0 ),
     pAccessible( NULL )
 {
@@ -130,11 +128,7 @@ ScDPFieldWindow::ScDPFieldWindow(
 void ScDPFieldWindow::Init()
 {
     aWndRect = Rectangle( GetPosPixel(), GetSizePixel() );
-    nFieldSize = (eType == TYPE_SELECT) ? PAGE_SIZE : MAX_FIELDS;
-
-    aFieldArr = new String*[ nFieldSize ];
-    for( long nIx = 0; nIx < nFieldSize; ++nIx )
-        aFieldArr[ nIx ] = NULL;
+    nFieldSize = (eType == TYPE_SELECT) ? PAGE_SIZE : ((eType == TYPE_PAGE) ? MAX_PAGEFIELDS : MAX_FIELDS);
 
     if( pFtCaption )
     {
@@ -149,10 +143,6 @@ void ScDPFieldWindow::Init()
 
 __EXPORT ScDPFieldWindow::~ScDPFieldWindow()
 {
-    for( long nIx = 0; nIx < nFieldCount; ++nIx )
-        delete aFieldArr[ nIx ];
-    delete[] aFieldArr;
-
     if (pAccessible)
     {
         com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
@@ -174,11 +164,15 @@ void ScDPFieldWindow::GetStyleSettings()
 
 //-------------------------------------------------------------------
 
-Point ScDPFieldWindow::GetFieldPosition( long nIndex ) const
+Point ScDPFieldWindow::GetFieldPosition( size_t nIndex ) const
 {
     Point aPos;
     switch( eType )
     {
+        case TYPE_PAGE:
+            aPos.X() = OWIDTH * (nIndex % (MAX_PAGEFIELDS / 2));
+            aPos.Y() = OHEIGHT * (nIndex / (MAX_PAGEFIELDS / 2));
+        break;
         case TYPE_COL:
             aPos.X() = OWIDTH * (nIndex % (MAX_FIELDS / 2));
             aPos.Y() = OHEIGHT * (nIndex / (MAX_FIELDS / 2));
@@ -206,31 +200,41 @@ Point ScDPFieldWindow::GetLastPosition() const
     return OutputToScreenPixel( GetFieldPosition( nFieldSize - 1 ) );
 }
 
-BOOL ScDPFieldWindow::GetFieldIndex( const Point& rPos, long& rnIndex ) const
+bool ScDPFieldWindow::GetFieldIndex( const Point& rPos, size_t& rnIndex ) const
 {
-    rnIndex = -1;
-    switch( eType )
+    rnIndex = INVALID_INDEX;
+    if( (rPos.X() >= 0) && (rPos.Y() >= 0) )
     {
-        case TYPE_ROW:
-        case TYPE_DATA:
-            rnIndex = rPos.Y() / OHEIGHT;
-        break;
-        case TYPE_COL:
+        switch( eType )
         {
-            long nRow = rPos.Y() / OHEIGHT;
-            long nCol = rPos.X() / OWIDTH;
-            rnIndex = nRow * MAX_FIELDS / 2 + nCol;
+            case TYPE_ROW:
+            case TYPE_DATA:
+                rnIndex = rPos.Y() / OHEIGHT;
+            break;
+            case TYPE_PAGE:
+            {
+                size_t nRow = rPos.Y() / OHEIGHT;
+                size_t nCol = rPos.X() / OWIDTH;
+                rnIndex = nRow * MAX_PAGEFIELDS / 2 + nCol;
+            }
+            break;
+            case TYPE_COL:
+            {
+                size_t nRow = rPos.Y() / OHEIGHT;
+                size_t nCol = rPos.X() / OWIDTH;
+                rnIndex = nRow * MAX_FIELDS / 2 + nCol;
+            }
+            break;
+            case TYPE_SELECT:
+            {
+                size_t nRow = rPos.Y() / (OHEIGHT + SSPACE);
+                size_t nCol = rPos.X() / (OWIDTH + SSPACE);
+                // is not between controls?
+                if( (rPos.Y() % (OHEIGHT + SSPACE) < OHEIGHT) && (rPos.X() % (OWIDTH + SSPACE) < OWIDTH) )
+                    rnIndex = nCol * LINE_SIZE + nRow;
+            }
+            break;
         }
-        break;
-        case TYPE_SELECT:
-        {
-            long nRow = rPos.Y() / (OHEIGHT + SSPACE);
-            long nCol = rPos.X() / (OWIDTH + SSPACE);
-            // is not between controls?
-            if( (rPos.Y() % (OHEIGHT + SSPACE) < OHEIGHT) && (rPos.X() % (OWIDTH + SSPACE) < OWIDTH) )
-                rnIndex = nCol * LINE_SIZE + nRow;
-        }
-        break;
     }
     return IsValidIndex( rnIndex );
 }
@@ -253,19 +257,31 @@ void ScDPFieldWindow::DrawBackground( OutputDevice& rDev )
         rDev.SetLineColor( aWinTextColor );
         rDev.SetFillColor( aWinColor );
         rDev.DrawRect( Rectangle( aPos0, aSize ) );
+
         rDev.SetTextColor( aWinTextColor );
         BOOL bOldRTL = rDev.IsRTLEnabled();
         rDev.EnableRTL( false );
-        rDev.DrawCtrlText( aTextPos, GetText() );
+
+        /*  Draw the caption text. This needs some special handling, because we
+            support hard line breaks here. This part will draw each line of the
+            text for itself. */
+
+        xub_StrLen nTokenCnt = GetText().GetTokenCount( '\n' );
+        long nY = (aSize.Height() - nTokenCnt * rDev.GetTextHeight()) / 2;
+        for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+        {
+            String aLine( GetText().GetToken( 0, '\n', nStringIx ) );
+            Point aLinePos( (aSize.Width() - rDev.GetCtrlTextWidth( aLine )) / 2, nY );
+            rDev.DrawCtrlText( aLinePos, aLine );
+            nY += rDev.GetTextHeight();
+        }
+
         rDev.EnableRTL( bOldRTL );
     }
 }
 
 void ScDPFieldWindow::DrawField(
-        OutputDevice& rDev,
-        const Rectangle& rRect,
-        const String& rText,
-        BOOL bSelected )
+        OutputDevice& rDev, const Rectangle& rRect, const String& rText, bool bFocus )
 {
     VirtualDevice aVirDev( rDev );
     aVirDev.EnableRTL( true );
@@ -282,7 +298,7 @@ void ScDPFieldWindow::DrawField(
     aVirDev.SetOutputSizePixel( aDevSize );
     aVirDev.SetFont( rDev.GetFont() );
     DecorationView aDecoView( &aVirDev );
-    aDecoView.DrawButton( Rectangle( Point( 0, 0 ), aDevSize ), bSelected ? BUTTON_DRAW_DEFAULT : 0 );
+    aDecoView.DrawButton( Rectangle( Point( 0, 0 ), aDevSize ), bFocus ? BUTTON_DRAW_DEFAULT : 0 );
     aVirDev.SetTextColor( aTextColor );
     aVirDev.EnableRTL( false );
     aVirDev.DrawText( aLabelPos, rText );
@@ -293,6 +309,7 @@ void ScDPFieldWindow::Redraw()
 {
     VirtualDevice   aVirDev;
     aVirDev.EnableRTL( true );
+    aVirDev.SetMapMode( MAP_PIXEL );
 
     Point           aPos0;
     Size            aSize( GetSizePixel() );
@@ -303,23 +320,21 @@ void ScDPFieldWindow::Redraw()
 
     DrawBackground( aVirDev );
 
-    nFieldSelected = Max( Min( nFieldSelected, (long)(nFieldCount - 1) ), 0L );
+    if( !aFieldArr.empty() && (nFieldSelected >= aFieldArr.size()) )
+        nFieldSelected = aFieldArr.size() - 1;
     Rectangle aFieldRect( aPos0, GetFieldSize() );
-    for( long nIx = 0; nIx < nFieldCount; ++nIx )
+    for( size_t nIx = 0; nIx < aFieldArr.size(); ++nIx )
     {
-        if( aFieldArr[ nIx ] )
-        {
-            aFieldRect.SetPos( GetFieldPosition( nIx ) );
-            BOOL bSel = HasFocus() && (nIx == nFieldSelected);
-            DrawField( aVirDev, aFieldRect, *(aFieldArr[ nIx ]), bSel );
-        }
+        aFieldRect.SetPos( GetFieldPosition( nIx ) );
+        bool bFocus = HasFocus() && (nIx == nFieldSelected);
+        DrawField( aVirDev, aFieldRect, aFieldArr[ nIx ], bFocus );
     }
     DrawBitmap( aPos0, aVirDev.GetBitmap( aPos0, aSize ) );
 
-    if( HasFocus() && aFieldArr[ nFieldSelected ] )
+    if( HasFocus() && (nFieldSelected < aFieldArr.size()) )
     {
         long nFieldWidth = aFieldRect.GetWidth();
-        long nSelectionWidth = Min( GetTextWidth( *(aFieldArr[ nFieldSelected ]) ) + 4, nFieldWidth - 6 );
+        long nSelectionWidth = Min( GetTextWidth( aFieldArr[ nFieldSelected ] ) + 4, nFieldWidth - 6 );
         Rectangle aSelection(
             GetFieldPosition( nFieldSelected ) + Point( (nFieldWidth - nSelectionWidth) / 2, 3 ),
             Size( nSelectionWidth, aFieldRect.GetHeight() - 6 ) );
@@ -327,26 +342,29 @@ void ScDPFieldWindow::Redraw()
     }
 
     WinBits nMask = ~(WB_TABSTOP | WB_NOTABSTOP);
-    SetStyle( (GetStyle() & nMask) | (nFieldCount ? WB_TABSTOP : WB_NOTABSTOP) );
+    SetStyle( (GetStyle() & nMask) | (IsEmpty() ? WB_NOTABSTOP : WB_TABSTOP) );
 }
 
 //-------------------------------------------------------------------
 
-BOOL ScDPFieldWindow::IsValidIndex( long nIndex ) const
+bool ScDPFieldWindow::IsValidIndex( size_t nIndex ) const
 {
-    return (nIndex >= 0) && (nIndex < nFieldSize);
+    return nIndex < nFieldSize;
 }
 
-BOOL ScDPFieldWindow::IsExistingIndex( long nIndex ) const
+bool ScDPFieldWindow::IsExistingIndex( size_t nIndex ) const
 {
-    return (nIndex >= 0) && (nIndex < nFieldCount);
+    return nIndex < aFieldArr.size();
 }
 
-long ScDPFieldWindow::CalcNewFieldIndex( short nDX, short nDY ) const
+size_t ScDPFieldWindow::CalcNewFieldIndex( short nDX, short nDY ) const
 {
-    long nNewField = nFieldSelected;
+    size_t nNewField = nFieldSelected;
     switch( eType )
     {
+        case TYPE_PAGE:
+            nNewField += nDX + nDY * MAX_PAGEFIELDS / 2;
+        break;
         case TYPE_COL:
             nNewField += nDX + nDY * MAX_FIELDS / 2;
         break;
@@ -362,43 +380,53 @@ long ScDPFieldWindow::CalcNewFieldIndex( short nDX, short nDY ) const
     return IsExistingIndex( nNewField ) ? nNewField : nFieldSelected;
 }
 
-void ScDPFieldWindow::SetSelection( long nIndex )
+void ScDPFieldWindow::SetSelection( size_t nIndex )
 {
-    nIndex = Max( Min( nIndex, (long)(nFieldCount - 1) ), 0L );
-    if( nFieldSelected != nIndex )
+    if( !aFieldArr.empty() )
     {
-        sal_Int32 nOldSelected(nFieldSelected);
-        nFieldSelected = nIndex;
-        Redraw();
-
-        if (pAccessible && HasFocus())
+        if( nFieldSelected >= aFieldArr.size() )
+            nFieldSelected = aFieldArr.size() - 1;
+        if( nFieldSelected != nIndex )
         {
-            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-            if (xTempAcc.is())
-                pAccessible->FieldFocusChange(nOldSelected, nFieldSelected);
-            else
-                pAccessible = NULL;
+            sal_Int32 nOldSelected(nFieldSelected);
+            nFieldSelected = nIndex;
+            Redraw();
+
+            if (pAccessible && HasFocus())
+            {
+                com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+                if (xTempAcc.is())
+                    pAccessible->FieldFocusChange(nOldSelected, nFieldSelected);
+                else
+                    pAccessible = NULL;
+            }
         }
     }
 }
 
 void ScDPFieldWindow::SetSelectionHome()
 {
-    if( eType == TYPE_SELECT )
-        pDlg->NotifyMoveSlider( KEY_HOME );
-    SetSelection( 0 );
+    if( !aFieldArr.empty() )
+    {
+        if( eType == TYPE_SELECT )
+            pDlg->NotifyMoveSlider( KEY_HOME );
+        SetSelection( 0 );
+    }
 }
 
 void ScDPFieldWindow::SetSelectionEnd()
 {
-    if( eType == TYPE_SELECT )
-        pDlg->NotifyMoveSlider( KEY_END );
-    SetSelection( nFieldCount - 1 );
+    if( !aFieldArr.empty() )
+    {
+        if( eType == TYPE_SELECT )
+            pDlg->NotifyMoveSlider( KEY_END );
+        SetSelection( aFieldArr.size() - 1 );
+    }
 }
 
 void ScDPFieldWindow::MoveSelection( USHORT nKeyCode, short nDX, short nDY )
 {
-    long nNewIndex = CalcNewFieldIndex( nDX, nDY );
+    size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
     if( (eType == TYPE_SELECT) && (nNewIndex == nFieldSelected) )
     {
         if( pDlg->NotifyMoveSlider( nKeyCode ) )
@@ -425,14 +453,14 @@ void ScDPFieldWindow::SelectNext()
         MoveSelection( KEY_DOWN, 0, 1 );
 }
 
-void ScDPFieldWindow::GrabFocusWithSel( long nIndex )
+void ScDPFieldWindow::GrabFocusWithSel( size_t nIndex )
 {
     SetSelection( nIndex );
     if( !HasFocus() )
         GrabFocus();
 }
 
-void ScDPFieldWindow::MoveField( long nDestIndex )
+void ScDPFieldWindow::MoveField( size_t nDestIndex )
 {
     if( nDestIndex != nFieldSelected )
     {
@@ -468,16 +496,15 @@ void __EXPORT ScDPFieldWindow::DataChanged( const DataChangedEvent& rDCEvt )
         GetStyleSettings();
         Redraw();
     }
-    else
-        Control::DataChanged( rDCEvt );
+    Control::DataChanged( rDCEvt );
 }
 
 void __EXPORT ScDPFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() )
     {
-        long nIndex = 0;
-        if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && aFieldArr[ nIndex ] )
+        size_t nIndex = 0;
+        if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsExistingIndex( nIndex ) )
         {
             GrabFocusWithSel( nIndex );
 
@@ -528,12 +555,12 @@ void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
         bKeyEvaluated = TRUE;
         switch( nCode )
         {
-            case KEY_UP:    MoveFieldRel( 0, -1 );          break;
-            case KEY_DOWN:  MoveFieldRel( 0, 1 );           break;
-            case KEY_LEFT:  MoveFieldRel( -1, 0 );          break;
-            case KEY_RIGHT: MoveFieldRel( 1, 0 );           break;
-            case KEY_HOME:  MoveField( 0 );                 break;
-            case KEY_END:   MoveField( nFieldCount - 1 );   break;
+            case KEY_UP:    MoveFieldRel( 0, -1 );              break;
+            case KEY_DOWN:  MoveFieldRel( 0, 1 );               break;
+            case KEY_LEFT:  MoveFieldRel( -1, 0 );              break;
+            case KEY_RIGHT: MoveFieldRel( 1, 0 );               break;
+            case KEY_HOME:  MoveField( 0 );                     break;
+            case KEY_END:   MoveField( aFieldArr.size() - 1 );  break;
             default:        bKeyEvaluated = FALSE;
         }
     }
@@ -595,13 +622,12 @@ void __EXPORT ScDPFieldWindow::LoseFocus()
 
 //-------------------------------------------------------------------
 
-void ScDPFieldWindow::AddField( const String& rText, long nNewIndex )
+void ScDPFieldWindow::AddField( const String& rText, size_t nNewIndex )
 {
-    if( IsValidIndex( nNewIndex ) && !aFieldArr[ nNewIndex ] )
+    DBG_ASSERT( nNewIndex == aFieldArr.size(), "ScDPFieldWindow::AddField - invalid index" );
+    if( IsValidIndex( nNewIndex ) )
     {
-        aFieldArr[ nNewIndex ] = new String( rText );
-        ++nFieldCount;
-
+        aFieldArr.push_back( rText );
         if (pAccessible)
         {
             com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
@@ -613,14 +639,11 @@ void ScDPFieldWindow::AddField( const String& rText, long nNewIndex )
     }
 }
 
-void ScDPFieldWindow::DelField( long nDelIndex )
+void ScDPFieldWindow::DelField( size_t nDelIndex )
 {
     if( IsExistingIndex( nDelIndex  ) )
     {
-        DELETEZ( aFieldArr[ nDelIndex ] );
-        for( long nIx = nDelIndex + 1; nIx < nFieldCount; ++nIx )
-            aFieldArr[ nIx - 1 ] = aFieldArr[ nIx ];
-
+        aFieldArr.erase( aFieldArr.begin() + nDelIndex );
         if (pAccessible) // before decrement fieldcount
         {
             com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
@@ -629,9 +652,6 @@ void ScDPFieldWindow::DelField( long nDelIndex )
             else
                 pAccessible = NULL;
         }
-
-        --nFieldCount;
-        aFieldArr[ nFieldCount ] = NULL;
         Redraw();
     }
 }
@@ -643,23 +663,19 @@ void ScDPFieldWindow::ClearFields()
         com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
         if (!xTempAcc.is() && pAccessible)
             pAccessible = NULL;
+        if (pAccessible)
+            for( size_t nIdx = aFieldArr.size(); nIdx > 0; --nIdx )
+                pAccessible->RemoveField( nIdx - 1 );
 
-        while( nFieldCount > 0 )
-        {
-            DELETEZ( aFieldArr[ nFieldCount - 1 ] );
-            if (pAccessible)
-                pAccessible->RemoveField(nFieldCount - 1);
-
-            --nFieldCount;
-        }
+        aFieldArr.clear();
     }
 }
 
-void ScDPFieldWindow::SetFieldText( const String& rText, long nIndex )
+void ScDPFieldWindow::SetFieldText( const String& rText, size_t nIndex )
 {
-    if( IsExistingIndex( nIndex ) && aFieldArr[ nIndex ] )
+    if( IsExistingIndex( nIndex ) )
     {
-        *(aFieldArr[ nIndex ]) = rText;
+        aFieldArr[ nIndex ] = rText;
         Redraw();
 
         if (pAccessible)
@@ -673,35 +689,27 @@ void ScDPFieldWindow::SetFieldText( const String& rText, long nIndex )
     }
 }
 
-const String& ScDPFieldWindow::GetFieldText( long nIndex ) const
+const String& ScDPFieldWindow::GetFieldText( size_t nIndex ) const
 {
-    if( IsExistingIndex( nIndex ) && aFieldArr[ nIndex] )
-        return *(aFieldArr[ nIndex ]);
+    if( IsExistingIndex( nIndex ) )
+        return aFieldArr[ nIndex ];
     return EMPTY_STRING;
 }
 
 //-------------------------------------------------------------------
 
-BOOL ScDPFieldWindow::AddField( const String& rText, const Point& rPos, long& rnIndex )
+bool ScDPFieldWindow::AddField( const String& rText, const Point& rPos, size_t& rnIndex )
 {
-    if ( nFieldCount == MAX_FIELDS )
+    if ( aFieldArr.size() == nFieldSize )
         return FALSE;
 
-    long nNewIndex = 0;
+    size_t nNewIndex = 0;
     if( GetFieldIndex( rPos, nNewIndex ) )
     {
-        if( nNewIndex > nFieldCount )
-            nNewIndex = nFieldCount;
+        if( nNewIndex > aFieldArr.size() )
+            nNewIndex = aFieldArr.size();
 
-        if( aFieldArr[ nNewIndex ] )
-        {
-            DBG_ASSERT( !aFieldArr[ nFieldSize - 1 ], "ScDPFieldWindow::AddField - overflow" );
-            for( long nIx = nFieldCount; nIx > nNewIndex; --nIx )
-                aFieldArr[ nIx ] = aFieldArr[ nIx - 1 ];
-        }
-
-        aFieldArr[ nNewIndex ] = new String( rText );
-        ++nFieldCount;
+        aFieldArr.insert( aFieldArr.begin() + nNewIndex, rText );
         nFieldSelected = nNewIndex;
         Redraw();
         rnIndex = nNewIndex;
@@ -715,25 +723,24 @@ BOOL ScDPFieldWindow::AddField( const String& rText, const Point& rPos, long& rn
                 pAccessible = NULL;
         }
 
-        return TRUE;
+        return true;
     }
-    else
-        return FALSE;
+
+    return false;
 }
 
-void ScDPFieldWindow::GetExistingIndex( const Point& rPos, long& rnIndex )
+void ScDPFieldWindow::GetExistingIndex( const Point& rPos, size_t& rnIndex )
 {
-    BOOL bFound = FALSE;
-    if ( (eType != TYPE_SELECT) && GetFieldIndex( rPos, rnIndex ) )
+    if( !aFieldArr.empty() && (eType != TYPE_SELECT) && GetFieldIndex( rPos, rnIndex ) )
     {
-        if( rnIndex >= nFieldCount )
-            rnIndex = nFieldCount - 1;
+        if( rnIndex >= aFieldArr.size() )
+            rnIndex = aFieldArr.size() - 1;
     }
     else
         rnIndex = 0;
 }
 
-String ScDPFieldWindow::GetDescription()const
+String ScDPFieldWindow::GetDescription() const
 {
     String sDescription;
     switch( eType )
@@ -766,5 +773,6 @@ String ScDPFieldWindow::GetDescription()const
 
     return xReturn;
 }
+
 //===================================================================
 
