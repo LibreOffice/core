@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-10 09:38:01 $
+ *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,83 +243,6 @@ using namespace com::sun::star;
 //            UNO-Controls
 //-----------------------------------------
 
-void SwWW8ImplReader::BuildInputField(sal_uInt16 nType)
-{
-    if( nIniFlags & WW8FL_NO_VCCONTROLS )
-    {
-#ifdef DEBUG
-        rDoc.Insert( *pPaM, sal_Unicode ('#') );
-        static long l;
-        l++;
-#endif
-        return;
-    }
-
-    if( !pDrawModel )               // MIB: Braucht man das?
-        GrafikCtor();
-    if( !pFormImpl )
-        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-
-    const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
-        pFormImpl->GetServiceFactory();
-    if(!rServiceFactory.is())
-        return;
-
-    rtl::OUString sType;
-    switch( (SwWw8ControlType)nType )
-    {
-        case WW8_CT_CHECKBOX:
-            sType = C2U(SL::aCheckBox);
-            break;
-    //  case WW8_CT_EDIT:
-        default:
-            // see change in ../html/htmlform.cxx as of 1999/11/25 11:20:16
-            // made by O.Specht
-            sType = C2U(SL::aTextField);
-            break;
-    }
-
-    rtl::OUString sServiceName(C2U("com.sun.star.form.component."));
-    sServiceName += sType;
-    uno::Reference< uno::XInterface >  xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return;
-
-    uno::Reference< form::XFormComponent > xFComp( xCreate, uno::UNO_QUERY );
-    if( !xFComp.is() )
-        return;
-
-    awt::Size aSz;
-    rtl::OUString sName;
-    sal_uInt16 nControl;
-    switch( (SwWw8ControlType)nType )
-    {
-        case WW8_CT_CHECKBOX:
-            aSz.Width = WW8_DFLT_CHECKBOX_WIDTH;
-            aSz.Height = WW8_DFLT_CHECKBOX_HEIGHT;
-            sName = C2U(SL::aCheckBox);
-            nControl = pFormImpl->GetCheckboxNum();
-            break;
-//      case WW8_CT_EDIT:
-        default:
-            aSz.Width = WW8_DFLT_EDIT_WIDTH; // etwas 20 Zeichen
-            aSz.Height = WW8_DFLT_EDIT_HEIGHT;
-            sName = C2U(SL::aTextBox);
-            nControl = pFormImpl->GetEditNum();
-            break;
-    }
-
-    uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
-
-    sName += rtl::OUString::valueOf(nControl);
-    uno::Any aTmp;
-    aTmp <<= sName;
-    xPropSet->setPropertyValue(C2U("Name"), aTmp );
-
-    pFormImpl->InsertControl(xFComp, aSz, 0,FALSE);
-}
-
 //cmc, OCX i.e. word 97 form controls
 eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, String& )
 {
@@ -371,20 +294,15 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
 eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
 {
-    if (0x01 == rStr.GetChar( pF->nLCode-1 ))
-    {
-        WW8FormulaCheckBox aFormula(*this);
-        if (ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1,
-            WW8_CT_CHECKBOX))
-        {
-            if( !pFormImpl )
-                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-            if (pFormImpl->InsertFormula(aFormula))
-                return FLD_OK;
-        }
-    }
-    ASSERT(!this,"New Formula Code Failed!\n");
-    BuildInputField(WW8_CT_CHECKBOX);
+    WW8FormulaCheckBox aFormula(*this);
+
+    if( !pFormImpl )
+        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
+
+    if (0x01 == rStr.GetChar(pF->nLCode-1))
+        ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
+
+    pFormImpl->InsertFormula(aFormula);
     return FLD_OK;
 }
 
@@ -1878,22 +1796,25 @@ BOOL SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     return(bRet);
 }
 
-BOOL SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula,
-    uno::Reference <drawing::XShape> *pShapeRef)
+BOOL SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
 {
     BOOL bRet=FALSE;
-
-    awt::Size aSz;
-    uno::Reference< form::XFormComponent> xFComp;
-    uno::Reference < drawing::XShape> xShape;
 
     const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
         GetServiceFactory();
 
     if(!rServiceFactory.is())
-        return(FALSE);
+        return FALSE;
+
+    awt::Size aSz;
+    uno::Reference< form::XFormComponent> xFComp;
+
     if (bRet = rFormula.Import(rServiceFactory, xFComp, aSz))
-        bRet = InsertControl( xFComp, aSz, pShapeRef,FALSE );
+    {
+        uno::Reference <drawing::XShape> xShapeRef;
+        if (bRet = InsertControl(xFComp, aSz, &xShapeRef,FALSE))
+            GetShapes()->add(xShapeRef);
+    }
     return bRet;
 }
 
@@ -2188,8 +2109,6 @@ BOOL SwMSConvertControls::InsertControl(
     uno::Reference< drawing::XShape > *pShape,
     BOOL bFloatingCtrl)
 {
-    uno::Reference< drawing::XShape >  xShape;
-
     const uno::Reference< container::XIndexContainer > &rComps = GetFormComps();
     uno::Any aTmp( &rFComp, ::getCppuType((const uno::Reference<
         form::XFormComponent >*)0) );
@@ -2205,12 +2124,13 @@ BOOL SwMSConvertControls::InsertControl(
     if( !xCreate.is() )
         return FALSE;
 
-    xShape = uno::Reference< drawing::XShape >(xCreate, uno::UNO_QUERY);
+    uno::Reference< drawing::XShape > xShape =
+        uno::Reference< drawing::XShape >(xCreate, uno::UNO_QUERY);
 
     DBG_ASSERT(xShape.is(), "XShape nicht erhalten")
     xShape->setSize(rSize);
 
-    uno::Reference< beans::XPropertySet >  xShapePropSet(
+    uno::Reference< beans::XPropertySet > xShapePropSet(
         xCreate, uno::UNO_QUERY );
 
     //I lay a small bet that this will change to
@@ -2235,8 +2155,6 @@ BOOL SwMSConvertControls::InsertControl(
     aTmp.setValue(&xTxtRg,::getCppuType((
         uno::Reference< text::XTextRange >*)0));
     xShapePropSet->setPropertyValue(C2U("TextRange"), aTmp );
-
-    GetShapes()->add( xShape );
 
     // Das Control-Model am Control-Shape setzen
     uno::Reference< drawing::XControlShape >  xControlShape( xShape,

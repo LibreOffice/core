@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,13 +538,13 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
 
 // MakeGrafInCntnt fuegt zeichengebundene Grafiken ein
-SwFlyFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
+SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     const WW8PicDesc& rPD, const Graphic* pGraph, const String& rFileName,
     const SfxItemSet& rGrfSet)
 {
     WW8FlySet aFlySet(*this, pPaM, rPic, rPD.nWidth, rPD.nHeight);
 
-    SwFlyFrmFmt* pFlyFmt = 0;
+    SwFrmFmt* pFlyFmt = 0;
 
     if (!rFileName.Len() && nObjLocFc)      // dann sollte ists ein OLE-Object
         pFlyFmt = ImportOle( pGraph, &aFlySet );
@@ -563,10 +563,10 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     return pFlyFmt;
 }
 
-SwFlyFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
+SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
     ULONG nFilePos )
 {
-    SwFlyFrmFmt* pRet = 0;
+    SwFrmFmt* pRet = 0;
     if( pSt->IsEof() || rPic.fError || rPic.MFP.mm == 99 )
         return 0;
 
@@ -746,7 +746,7 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
 SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
     SwFrmFmt* pOldFlyFmt, BOOL bSetToBackground )
 {
-    SwFlyFrmFmt* pRet = 0;
+    SwFrmFmt* pRet = 0;
     if (
         ((pStrm == pDataStream ) && !nPicLocFc) ||
         (nIniFlags & WW8FL_NO_GRAF)

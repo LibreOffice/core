@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
         SvStorageRef xSrc = xSrcStg->OpenStorage( sStorageName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
         ASSERT(rReader.pFormImpl, "No Form Implementation!");
+        STAR_REFERENCE( drawing::XShape ) xShape;
         if ( (!(rReader.bIsHeader || rReader.bIsFooter)) &&
             rReader.pFormImpl->ReadOCXStream(xSrc,&xShape,TRUE))
         {
@@ -328,19 +329,6 @@ void SwMSDffManager::EnableFallbackStream()
     pEscherBlipCache = pOldEscherBlipCache;
     pOldEscherBlipCache = 0;
     pFallbackStream = 0;
-}
-
-SwFrmFmt* SwMSDffManager::GetLastOCXShapeFrm() const
-{
-    STAR_REFERENCE( beans::XPropertySet ) xPropSet( xShape,
-        STAR_NMSPC::uno::UNO_QUERY );
-    STAR_REFERENCE( lang::XUnoTunnel ) xTunnel(xPropSet,
-        STAR_NMSPC::uno::UNO_QUERY);
-
-    SwXShape *pShape = 0;
-    if(xTunnel.is())
-        pShape = (SwXShape*)xTunnel->getSomething(SwXShape::getUnoTunnelId());
-    return pShape ? (SwFrmFmt*)(pShape->GetRegisteredIn()) : 0;
 }
 
 /***************************************************************************

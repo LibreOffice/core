@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2421,21 +2421,15 @@ UINT32 SwEscherEx::GetFlyShapeId( const SwFrmFmt& rFmt )
     return nShapeId;
 }
 
-UINT32 SwEscherEx::QueryTextID( const uno::Reference< drawing::XShape>& xXShapeRef, UINT32 nShapeId )
+UINT32 SwEscherEx::QueryTextID(
+    const uno::Reference< drawing::XShape>& xXShapeRef, UINT32 nShapeId )
 {
     UINT32 nId = 0;
-    uno::Reference< lang::XUnoTunnel > xTunnel(xXShapeRef, uno::UNO_QUERY);
-    SvxShape* pSvxShape = xTunnel.is() ?
-        (SvxShape*)xTunnel->getSomething(SvxShape::getUnoTunnelId()) : 0;
-    if( pSvxShape )
+    if (SdrObject* pObj = GetSdrObjectFromXShape(xXShapeRef))
     {
-        SdrObject* pObj = pSvxShape->GetSdrObject();
-        if( pObj )
-        {
-            pTxtBxs->Append( *pObj, nShapeId );
-            nId = pTxtBxs->Count();
-            nId *= 0x10000;
-        }
+        pTxtBxs->Append( *pObj, nShapeId );
+        nId = pTxtBxs->Count();
+        nId *= 0x10000;
     }
     return nId;
 }

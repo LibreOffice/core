@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,7 +1107,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                 // SdrTextObj in dessen Gruppe einsetzen
 
                                 Graphic aGraph;
-                                SdrObject* pNew = ImportOleBase( aGraph );
+                                SdrObject* pNew = ImportOleBase(aGraph);
 
                                 if( !pNew )
                                 {
@@ -1994,7 +1994,7 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
     }
 }
 
-SdrObject* SwWW8ImplReader::CreateContactObject(SwFlyFrmFmt* pFlyFmt)
+SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
 {
     if (pFlyFmt)
     {
@@ -2002,10 +2002,11 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFlyFrmFmt* pFlyFmt)
         SdrObject* pNewObject = bNew ? 0 : pFlyFmt->FindRealSdrObject();
         if (!pNewObject)
             pNewObject = pFlyFmt->FindSdrObject();
-        if (!pNewObject)
+        if (!pNewObject && pFlyFmt->ISA(SwFlyFrmFmt))
         {
             SwFlyDrawContact* pContactObject
-                = new SwFlyDrawContact(pFlyFmt, pDrawModel);
+                = new SwFlyDrawContact(static_cast<SwFlyFrmFmt*>(pFlyFmt),
+                pDrawModel);
             pNewObject = pContactObject->GetMaster();
         }
         return pNewObject;
@@ -2367,32 +2368,15 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             if (pRetFrmFmt)
                 bDone = TRUE;
         }
-        else if ((pObject) && FmFormInventor == pObject->GetObjInventor())
-        {
-            /*
-            #79055#
-            This was a FormControl. This means that the msdffimp ole import
-            has already converted it to the SdrObject that we have in pObject
-            here, *and* has already inserted it as a StarWriter FlyFrm,
-            tragically though it does not have its position set correctly, and
-            the OCXConverter returns a uno XShape so we turn this back into a
-            FlyFrm through the uno api and then set its correct position
-            information.
-            */
-            if (pRetFrmFmt = pMSDffManager->GetLastOCXShapeFrm())
-            {
-                pRetFrmFmt->SetAttr(aFlySet.Get(RES_VERT_ORIENT));
-                pRetFrmFmt->SetAttr(aFlySet.Get(RES_HORI_ORIENT));
-            }
-            bDone=TRUE;
-        }
 
         if( !bDone )
         {
-            if( pF->bBelowText || (pRecord ? pRecord->bDrawHell : 0) )
-                pObject->SetLayer( nDrawHell );
+            if (FmFormInventor == pObject->GetObjInventor())
+                pObject->SetLayer(rDoc.GetControlsId());
+            else if (pF->bBelowText || (pRecord ? pRecord->bDrawHell : 0))
+                pObject->SetLayer(nDrawHell);
             else
-                pObject->SetLayer( nDrawHeaven );
+                pObject->SetLayer(nDrawHeaven);
 
             /*
             #97824#  Need to make sure that the correct layer ordering is
@@ -2422,10 +2406,12 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
                 if( pTrueObject )
                 {
-                    if( pF->bBelowText || pRecord->bDrawHell)
-                        pTrueObject->SetLayer( nDrawHell );
+                    if (FmFormInventor == pTrueObject->GetObjInventor())
+                        pTrueObject->SetLayer(rDoc.GetControlsId());
+                    else if( pF->bBelowText || pRecord->bDrawHell)
+                        pTrueObject->SetLayer(nDrawHell);
                     else
-                        pTrueObject->SetLayer( nDrawHeaven );
+                        pTrueObject->SetLayer(nDrawHeaven);
                 }
 
                 if( pTrueObject == pRecord->pObj )
@@ -2677,16 +2663,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
                 MAN_TXBX : MAN_TXBX_HDFT );
 
             MoveOutsideFly(pRetFrmFmt, aSave.GetStartPos(),!bJoined);
-#if 0
-            /*
-            ##505##
-            Special test to see if we will be forced to disable allowing this
-            box to grow. Only if contains only one flyframe which is bigger
-            than the nominal size of this frame
-            */
-            if (pRecord->bLastBoxInChain)
-                EmbeddedFlyFrameSizeLock(aStart,pRetFrmFmt);
-#endif
+
             aSave.Restore( this );
         }
     }
@@ -2829,50 +2806,7 @@ void SwWW8ImplReader::GrafikDtor()
     DELETEZ(pDrawEditEngine); // evtl. von Grafik angelegt
     DELETEZ(pWWZOrder);       // dito
 }
-#if 0
-void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
-    SwFrmFmt *pFrmFmt)
-{
-    /*
-    ##505###
-    If we would ordinarily insert this textbox with a flexible size to expand
-    to fit its contents, but it consists solely of a textbox inside a textbox
-    where the internal textbox will force the size larger than itself then we
-    disable the grow to fit feature. We usually want the box to grow to fit if
-    it is the last in a chain so as to display all text, but some strange ww6
-    -> ww97 textbox conversions in word have placed textboxes without a size
-    setting inside textboxes that have them, and in this case the outer size
-    setting is the one that dominates
-    */
-    if ( (rStart == pPaM->GetPoint()->nNode) && rStart.GetNode().IsCntntNode() )
-    {
-        /*
-        Loop through the flyframes and see if any are anchored inside this
-        otherwise empty flyframe. If so and its size is bigger than the
-        current one then disable the current ones grow to fit feature
-        */
-        const SwSpzFrmFmts& rFmts = *rDoc.GetSpzFrmFmts();
-        for( USHORT iN = 0, nN = rFmts.Count(); iN < nN; ++iN )
-        {
-            const SwPosition *pAnchor = rFmts[iN]->GetAnchor().GetCntntAnchor();
-            if ( pAnchor && (pAnchor->nNode == rStart.GetNode()) )
-            {
-                const SwFmtFrmSize& rSNew = rFmts[iN]->GetFrmSize();
-                SwFmtFrmSize aSOld = pFrmFmt->GetFrmSize();
-                if (
-                    (rSNew.GetWidth() > aSOld.GetWidth()) ||
-                    (rSNew.GetHeight() > aSOld.GetHeight())
-                   )
-                {
-                    aSOld.SetSizeType(ATT_FIX_SIZE);
-                    pFrmFmt->SetAttr(aSOld);
-                }
-            break;
-            }
-        }
-    }
-}
-#endif
+
 void SwWW8ImplReader::GetNoninlineNodeAttribs(const SwTxtNode *pNode,
     std::vector<const xub_StrLen*> &rPositions)
 {

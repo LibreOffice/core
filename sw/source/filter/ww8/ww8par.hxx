@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,9 +519,7 @@ class SwMSConvertControls: public SvxMSConvertOCXControls
 public:
     SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) :
         SvxMSConvertOCXControls( pDSh,pP ) {}
-    BOOL InsertFormula( WW8FormulaControl &rFormula,
-        com::sun::star::uno::Reference <
-        com::sun::star::drawing::XShape> *pShapeRef=0 );
+    BOOL InsertFormula( WW8FormulaControl &rFormula);
     BOOL InsertControl(const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent >& rFComp,
         const ::com::sun::star::awt::Size& rSize,
@@ -551,14 +549,8 @@ public:
     static INT32 GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
         INT32 &rThick);
     SwMSDffManager( SwWW8ImplReader& rRdr );
-    SwFrmFmt *GetLastOCXShapeFrm() const;       //I hate this ugly thing
     void DisableFallbackStream();
     void EnableFallbackStream();
-private:
-// If we convert an OCX through this manager we will store the uno XShape
-// reference created through the conversion
-    mutable com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > xShape;
 };
 
 class wwFrameNamer
@@ -947,21 +939,21 @@ friend class WW8FormulaControl;
         const Graphic* pGraph, const String& rFileName,
         const SfxItemSet& rGrfSet);
 
-    SwFlyFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic, const WW8PicDesc& rPD,
+    SwFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic, const WW8PicDesc& rPD,
         const Graphic* pGraph, const String& rFileName,
         const SfxItemSet& rGrfSet);
 
     SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
     void RemoveAutoAnchor(const SwFrmFmt *pFmt);
-    SwFlyFrmFmt* ImportGraf1( WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos );
+    SwFrmFmt* ImportGraf1( WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos );
     SwFrmFmt* ImportGraf(  SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0,
         BOOL bSetToBackground = FALSE );
     BOOL ImportURL(String &sURL,String &sMark,WW8_CP nStart);
 
-    SdrObject* ImportOleBase( Graphic& rGraph, BOOL bTstOCXControls=FALSE,
-        const Graphic* pGrf=0, const SfxItemSet* pFlySet=0 );
+    SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,
+        const SfxItemSet* pFlySet=0 );
 
-    SwFlyFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
+    SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
     SwFlyFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet);
 
     BOOL ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
@@ -1038,7 +1030,7 @@ friend class WW8FormulaControl;
     void ReadGroup( WW8_DPHEAD* pHd, WW8_DO* pDo );
     void ReadGrafPrimitive( short& rLeft, WW8_DO* pDo );
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
-    SdrObject* CreateContactObject( SwFlyFrmFmt* pFlyFmt );
+    SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
     void ProcessEscherAlign( SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, BOOL bOrgObjectWasReplace );
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
@@ -1237,7 +1229,6 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_OCX( WW8FieldDesc*, String& );
     eF_ResT Read_F_Hyperlink( WW8FieldDesc*, String& rStr );
 
-    void BuildInputField(USHORT eType);
     void DeleteFormImpl();
 
     short ImportSprm( const BYTE* pPos, USHORT nId = 0 );
