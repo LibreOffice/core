@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:32:42 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,11 +139,20 @@
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
+#endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
+#ifndef _FMTFSIZE_HXX //autogen
+#include <fmtfsize.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1936,19 +1945,35 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     if( rMulti.HasRotation() )
     {
-        // For nMaxWidth we take the height of the body frame
+        // For nMaxWidth we take the height of the body frame.
+        // #i25067#: If the current frame is inside a table, we restrict
+        // nMaxWidth to the current frame height, unless the frame size
+        // attribute is set to variable size:
+
         // We set nTmpX (which is used for portion calculating) to the
         // current Y value
         const SwPageFrm* pPage = pFrm->FindPageFrm();
         ASSERT( pPage, "No page in frame!");
         const SwLayoutFrm* pUpperFrm = pPage;
 
-        if ( ! pFrm->IsInFtn() )
+        if ( pFrm->IsInTab() )
+        {
+            pUpperFrm = pFrm->GetUpper();
+            while ( pUpperFrm && !pUpperFrm->IsCellFrm() )
+                pUpperFrm = pUpperFrm->GetUpper();
+            ASSERT( pUpperFrm, "pFrm is in table but does not have an upper cell frame" )
+            const SwTableLine* pLine = ((SwRowFrm*)pUpperFrm->GetUpper())->GetTabLine();
+            const SwFmtFrmSize& rFrmFmtSize = pLine->GetFrmFmt()->GetFrmSize();
+            if ( ATT_VAR_SIZE == rFrmFmtSize.GetSizeType() )
+                pUpperFrm = pPage;
+        }
+        if ( pUpperFrm == pPage && !pFrm->IsInFtn() )
             pUpperFrm = pPage->FindBodyCont();
 
-        nMaxWidth = pUpperFrm ? ( rInf.GetTxtFrm()->IsVertical() ?
-                                pUpperFrm->Prt().Width() :
-                                pUpperFrm->Prt().Height() ) :
+        nMaxWidth = pUpperFrm ?
+                    ( rInf.GetTxtFrm()->IsVertical() ?
+                      pUpperFrm->Prt().Width() :
+                      pUpperFrm->Prt().Height() ) :
                     USHRT_MAX;
     }
     else
