@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:48 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #define ITEMID_LONGLRSPACE      0
 #define ITEMID_LONGULSPACE      0
 #define ITEMID_WIDOWS           0
-
+#define ITEMID_DOUBLE           0
 
 #include <sfx2/msg.hxx>
 #include <svtools/stritem.hxx>
@@ -147,7 +147,7 @@
 #include <svx/rotmodit.hxx>
 #include <svtools/ilstitem.hxx>
 #include <svtools/globalnameitem.hxx>
-
+#include <svx/chrtitem.hxx>
 #include "attrib.hxx"
 
 #define SvxDrawToolItem             SfxEnumItem
