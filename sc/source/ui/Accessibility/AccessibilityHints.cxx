@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityHints.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@ using namespace ::com::sun::star;
 // -----------------------------------------------------------------------
 
 TYPEINIT1(ScAccGridViewChangeHint, SfxHint);
-TYPEINIT1(ScAccActiveCellChangeHint, SfxHint);
 
 // -----------------------------------------------------------------------
 //      ScAccGridViewChangeHint - focus changed form the old grid win to the new one (in split or freeze mode)
@@ -92,18 +91,3 @@ ScAccGridViewChangeHint::ScAccGridViewChangeHint(ScSplitPos eOld, ScSplitPos eNe
 ScAccGridViewChangeHint::~ScAccGridViewChangeHint()
 {
 }
-
-// -----------------------------------------------------------------------
-//      ScAccActiveCellChangeHint - active cell changed (by cursor moving or mouse clicking)
-// -----------------------------------------------------------------------
-
-ScAccActiveCellChangeHint::ScAccActiveCellChangeHint(const ScAddress& rNewCell)
-    :
-    aNewCellAddress(rNewCell)
-{
-}
-
-ScAccActiveCellChangeHint::~ScAccActiveCellChangeHint()
-{
-}
-

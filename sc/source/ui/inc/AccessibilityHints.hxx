@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityHints.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 
 #define SC_HINT_ACC_SIMPLE_START    SFX_HINT_USER00
 #define SC_HINT_ACC_TABLECHANGED    SC_HINT_ACC_SIMPLE_START + 1
+#define SC_HINT_ACC_CURSORCHANGED   SC_HINT_ACC_SIMPLE_START + 2
 
 // ---------------------------------------------------------------------------
 
@@ -103,17 +104,6 @@ public:
                 GetOldAccessible() const { return xOldAccessible; }
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 GetNewAccessible() const { return xOldAccessible; }
-};
-
-class ScAccActiveCellChangeHint : public SfxHint
-{
-    ScAddress   aNewCellAddress;
-public:
-                TYPEINFO();
-                ScAccActiveCellChangeHint( const ScAddress& rNewCell );
-                ~ScAccActiveCellChangeHint();
-
-    ScAddress   GetNewCellAddress() const { return aNewCellAddress; };
 };
 
 #endif
