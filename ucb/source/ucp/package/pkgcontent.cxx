@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-18 14:23:10 $
+ *  last change: $Author: hr $ $Date: 2001-11-08 13:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1857,10 +1857,11 @@ void Content::insert(
     if ( bNewId )
     {
         // Take over correct default values from underlying packager...
+        uno::Reference< container::XHierarchicalNameAccess > xXHierarchicalNameAccess;
         loadData( m_pProvider,
                   m_aUri,
                   m_aProps,
-                  uno::Reference< container::XHierarchicalNameAccess >() );
+                  xXHierarchicalNameAccess );
 
         aGuard.clear();
         inserted();
