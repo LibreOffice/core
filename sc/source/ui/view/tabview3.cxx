@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:33:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1778,6 +1778,11 @@ void ScTabView::KillEditView( BOOL bNoPaint )
         if (bPaint[i])
             bNotifyAcc = true;
     }
+
+    // #108931#; notify accessibility before all things happen
+    if ((bNotifyAcc) && (aViewData.GetViewShell()->HasAccessibilityObjects()))
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_LEAVEEDITMODE));
+
     aViewData.ResetEditView();
     for (i=0; i<4; i++)
         if (pGridWin[i] && bPaint[i])
@@ -1826,9 +1831,6 @@ void ScTabView::KillEditView( BOOL bNoPaint )
             if (pCur && pCur->IsVisible())
                 pCur->Hide();
         }
-
-    if ((bNotifyAcc) && (aViewData.GetViewShell()->HasAccessibilityObjects()))
-        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_LEAVEEDITMODE));
 }
 
 void ScTabView::UpdateFormulas()
