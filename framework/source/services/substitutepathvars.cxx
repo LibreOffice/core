@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:16:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,40 +165,6 @@
 // Variable start/end characters
 #define SIGN_STARTVARIABLE                  ASCII_STR("$(")
 #define SIGN_ENDVARIABLE                    ASCII_STR(")")
-
-// Strings to replace $(vlang)
-#define REPLACEMENT_ARABIC                  ASCII_STR("arabic")
-#define REPLACEMENT_CZECH                   ASCII_STR("czech")
-#define REPLACEMENT_DANISH                  ASCII_STR("danish")
-#define REPLACEMENT_DUTCH                   ASCII_STR("dutch")
-#define REPLACEMENT_ENGLISH                 ASCII_STR("english")
-#define REPLACEMENT_ENGLISH_UK              ASCII_STR("english_uk")
-#define REPLACEMENT_ESTONIAN                    ASCII_STR("estonian")
-#define REPLACEMENT_FINNISH                 ASCII_STR("finnish")
-#define REPLACEMENT_FRENCH                  ASCII_STR("french")
-#define REPLACEMENT_GERMAN                  ASCII_STR("german")
-#define REPLACEMENT_GREEK                   ASCII_STR("greek")
-#define REPLACEMENT_HEBREW                  ASCII_STR("hebrew")
-#define REPLACEMENT_ITALIAN                 ASCII_STR("italian")
-#define REPLACEMENT_JAPANESE                ASCII_STR("japanese")
-#define REPLACEMENT_KOREAN                  ASCII_STR("korean")
-#define REPLACEMENT_POLISH                  ASCII_STR("polish")
-#define REPLACEMENT_RUSSIAN                 ASCII_STR("russian")
-#define REPLACEMENT_SLOVAK                  ASCII_STR("slovak")
-#define REPLACEMENT_SLOVENIAN                   ASCII_STR("slovenian")
-#define REPLACEMENT_SPANISH                 ASCII_STR("spanish")
-#define REPLACEMENT_SWEDISH                 ASCII_STR("swedish")
-#define REPLACEMENT_TURKISH                 ASCII_STR("turkish")
-#define REPLACEMENT_NORWEGIAN               ASCII_STR("norwegian")
-#define REPLACEMENT_NORWEGIAN_NYNORSK       ASCII_STR("norwegian_nynorsk")
-#define REPLACEMENT_HUNGARIAN               ASCII_STR("hungarian")
-//#define   REPLACEMENT_BULGARIAN           ASCII_STR("bulgarian")
-#define REPLACEMENT_CHINESE_TRADITIONAL     ASCII_STR("chinese_traditional")
-#define REPLACEMENT_CHINESE_SIMPLIFIED      ASCII_STR("chinese_simplified")
-#define REPLACEMENT_PORTUGUESE              ASCII_STR("portuguese")
-#define REPLACEMENT_PORTUGUESE_BRAZILIAN    ASCII_STR("portuguese_brazilian")
-#define REPLACEMENT_THAI                    ASCII_STR("thai")
-#define REPLACEMENT_CATALAN                 ASCII_STR("catalan")
 
 // Length of SUBSTITUTE_... to replace it with real values.
 #define REPLACELENGTH_INST              7
@@ -897,184 +863,6 @@ rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
     return aRetStr;
 }
 
-rtl::OUString SubstitutePathVariables::GetLanguageString( LanguageType aLanguageType ) const
-{
-    rtl::OUString aLangStr;
-
-    switch ( aLanguageType )
-    {
-        case LANGUAGE_ARABIC                :
-        case LANGUAGE_ARABIC_IRAQ           :
-        case LANGUAGE_ARABIC_EGYPT          :
-        case LANGUAGE_ARABIC_LIBYA          :
-        case LANGUAGE_ARABIC_ALGERIA        :
-        case LANGUAGE_ARABIC_MOROCCO        :
-        case LANGUAGE_ARABIC_TUNISIA        :
-        case LANGUAGE_ARABIC_OMAN           :
-        case LANGUAGE_ARABIC_YEMEN          :
-        case LANGUAGE_ARABIC_SYRIA          :
-        case LANGUAGE_ARABIC_JORDAN         :
-        case LANGUAGE_ARABIC_LEBANON        :
-        case LANGUAGE_ARABIC_KUWAIT         :
-        case LANGUAGE_ARABIC_UAE            :
-        case LANGUAGE_ARABIC_BAHRAIN        :
-        case LANGUAGE_ARABIC_QATAR          :   aLangStr = REPLACEMENT_ARABIC;
-                                                break ;
-
-        case LANGUAGE_CZECH                 :   aLangStr = REPLACEMENT_CZECH;
-                                                break ;
-
-        case LANGUAGE_DANISH                :   aLangStr = REPLACEMENT_DANISH;
-                                                break ;
-
-        case LANGUAGE_DUTCH                 :
-        case LANGUAGE_DUTCH_BELGIAN         :   aLangStr = REPLACEMENT_DUTCH;
-                                                break ;
-
-        case LANGUAGE_ENGLISH               :
-        case LANGUAGE_ENGLISH_AUS           :
-        case LANGUAGE_ENGLISH_CAN           :
-        case LANGUAGE_ENGLISH_NZ            :
-        case LANGUAGE_ENGLISH_EIRE          :
-        case LANGUAGE_ENGLISH_SAFRICA       :
-        case LANGUAGE_ENGLISH_JAMAICA       :
-        case LANGUAGE_ENGLISH_CARRIBEAN     :
-        case LANGUAGE_ENGLISH_BELIZE        :
-        case LANGUAGE_ENGLISH_TRINIDAD      :
-        case LANGUAGE_ENGLISH_ZIMBABWE      :
-        case LANGUAGE_ENGLISH_PHILIPPINES   :
-        case LANGUAGE_ENGLISH_US            :   aLangStr = REPLACEMENT_ENGLISH;
-                                                break ;
-
-        case LANGUAGE_ENGLISH_UK            :   aLangStr = REPLACEMENT_ENGLISH_UK;
-                                                break ;
-
-        case LANGUAGE_ESTONIAN              :   aLangStr = REPLACEMENT_ESTONIAN;
-                                                break ;
-
-        case LANGUAGE_FINNISH               :   aLangStr = REPLACEMENT_FINNISH;
-                                                break ;
-
-        case LANGUAGE_FRENCH                :
-        case LANGUAGE_FRENCH_BELGIAN        :
-        case LANGUAGE_FRENCH_CANADIAN       :
-        case LANGUAGE_FRENCH_SWISS          :
-        case LANGUAGE_FRENCH_LUXEMBOURG     :
-        case LANGUAGE_FRENCH_MONACO         :   aLangStr = REPLACEMENT_FRENCH;
-                                                break ;
-
-        case LANGUAGE_GERMAN                :
-        case LANGUAGE_GERMAN_SWISS          :
-        case LANGUAGE_GERMAN_AUSTRIAN       :
-        case LANGUAGE_GERMAN_LUXEMBOURG     :
-        case LANGUAGE_GERMAN_LIECHTENSTEIN  :   aLangStr = REPLACEMENT_GERMAN;
-                                                break ;
-
-        case LANGUAGE_GREEK                 :   aLangStr = REPLACEMENT_GREEK;
-                                                break ;
-
-        case LANGUAGE_HEBREW                :   aLangStr = REPLACEMENT_HEBREW;
-                                                break ;
-
-        case LANGUAGE_ITALIAN               :
-        case LANGUAGE_ITALIAN_SWISS         :   aLangStr = REPLACEMENT_ITALIAN;
-                                                break ;
-
-        case LANGUAGE_JAPANESE              :   aLangStr = REPLACEMENT_JAPANESE;
-                                                break ;
-
-        case LANGUAGE_KOREAN                :
-        case LANGUAGE_KOREAN_JOHAB          :   aLangStr = REPLACEMENT_KOREAN;
-                                                break ;
-
-        case LANGUAGE_POLISH                :   aLangStr = REPLACEMENT_POLISH;
-                                                break ;
-
-        case LANGUAGE_RUSSIAN               :   aLangStr = REPLACEMENT_RUSSIAN;
-                                                break ;
-
-        case LANGUAGE_SLOVAK                :   aLangStr = REPLACEMENT_SLOVAK;
-                                                break ;
-        case LANGUAGE_SLOVENIAN             :   aLangStr = REPLACEMENT_SLOVENIAN;
-                                                break ;
-
-        case LANGUAGE_SPANISH               :
-        case LANGUAGE_SPANISH_MEXICAN       :
-        case LANGUAGE_SPANISH_MODERN        :
-        case LANGUAGE_SPANISH_GUATEMALA     :
-        case LANGUAGE_SPANISH_COSTARICA     :
-        case LANGUAGE_SPANISH_PANAMA        :
-        case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
-        case LANGUAGE_SPANISH_VENEZUELA     :
-        case LANGUAGE_SPANISH_COLOMBIA      :
-        case LANGUAGE_SPANISH_PERU          :
-        case LANGUAGE_SPANISH_ARGENTINA     :
-        case LANGUAGE_SPANISH_ECUADOR       :
-        case LANGUAGE_SPANISH_CHILE         :
-        case LANGUAGE_SPANISH_URUGUAY       :
-        case LANGUAGE_SPANISH_PARAGUAY      :
-        case LANGUAGE_SPANISH_BOLIVIA       :
-        case LANGUAGE_SPANISH_EL_SALVADOR   :
-        case LANGUAGE_SPANISH_HONDURAS      :
-        case LANGUAGE_SPANISH_NICARAGUA     :
-        case LANGUAGE_SPANISH_PUERTO_RICO   :   aLangStr = REPLACEMENT_SPANISH;
-                                                break ;
-
-        case LANGUAGE_SWEDISH               :
-        case LANGUAGE_SWEDISH_FINLAND       :   aLangStr = REPLACEMENT_SWEDISH;
-                                                break ;
-
-        case LANGUAGE_TURKISH               :   aLangStr = REPLACEMENT_TURKISH;
-                                                break ;
-
-        case LANGUAGE_NORWEGIAN             :
-        case LANGUAGE_NORWEGIAN_BOKMAL      :   aLangStr = REPLACEMENT_NORWEGIAN;
-                                                break;
-
-        case LANGUAGE_NORWEGIAN_NYNORSK     :   aLangStr = REPLACEMENT_NORWEGIAN_NYNORSK;
-                                                break ;
-
-        case LANGUAGE_HUNGARIAN             :   aLangStr = REPLACEMENT_HUNGARIAN;
-                                                break ;
-
-    /*              case LANGUAGE_BULGARIAN             :   aLangStr = REPLACEMENT_BULGARIAN;
-                                                break ; */
-
-        case LANGUAGE_CHINESE_TRADITIONAL   :   aLangStr = REPLACEMENT_CHINESE_TRADITIONAL;
-                                                break ;
-
-        case LANGUAGE_CHINESE_SIMPLIFIED    :   aLangStr = REPLACEMENT_CHINESE_SIMPLIFIED;
-                                                break ;
-
-        case LANGUAGE_PORTUGUESE            :   aLangStr = REPLACEMENT_PORTUGUESE;
-                                                break ;
-
-        case LANGUAGE_PORTUGUESE_BRAZILIAN  :   aLangStr = REPLACEMENT_PORTUGUESE_BRAZILIAN;
-                                                break ;
-
-        case LANGUAGE_THAI                  :   aLangStr = REPLACEMENT_THAI;
-                                                break ;
-
-        case LANGUAGE_CATALAN               :   aLangStr = REPLACEMENT_CATALAN;
-                                                break ;
-
-        default                             :   // fallback for L10N-framework => ISO-Code
-                                                {
-                                                    String rLangStr;
-                                                    String rCountry;
-                                                    ConvertLanguageToIsoNames( aLanguageType, rLangStr, rCountry);
-                                                    if ( rCountry.Len()) {
-                                                        rLangStr += String::CreateFromAscii( "-" );
-                                                        rLangStr += rCountry;
-                                                    }
-                                                    aLangStr = rLangStr;
-                                                }
-                                                break ;
-    }
-
-    return aLangStr;
-}
-
 rtl::OUString SubstitutePathVariables::impl_substituteVariable( const ::rtl::OUString& rText, sal_Bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
@@ -1499,9 +1287,8 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(lang)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANG ] = ConvertOSLtoUCBURL(
         rtl::OUString::createFromAscii( ResMgr::GetLang( aPreDefPathVariables.m_eLanguageType, 0 ) ));
-
     // Set $(vlang)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_VLANG ] = GetLanguageString( aPreDefPathVariables.m_eLanguageType );
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
 
     // Set $(langid)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANGID ] = rtl::OUString::valueOf( (sal_Int32)aPreDefPathVariables.m_eLanguageType );
