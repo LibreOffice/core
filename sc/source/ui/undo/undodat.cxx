@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undodat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:51:45 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include "undodat.hxx"
 #include "undoutil.hxx"
+#include "undoolk.hxx"
 #include "document.hxx"
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
@@ -87,6 +88,7 @@
 #include "dbdocfun.hxx"
 #include "olinefun.hxx"
 #include "dpobject.hxx"
+#include "attrib.hxx"
 #include "sc.hrc"
 
 // -----------------------------------------------------------------------
@@ -100,6 +102,7 @@ TYPEINIT1(ScUndoAutoOutline,        SfxUndoAction);
 TYPEINIT1(ScUndoSubTotals,          SfxUndoAction);
 TYPEINIT1(ScUndoSort,               SfxUndoAction);
 TYPEINIT1(ScUndoQuery,              SfxUndoAction);
+TYPEINIT1(ScUndoAutoFilter,         SfxUndoAction);
 TYPEINIT1(ScUndoDBData,             SfxUndoAction);
 TYPEINIT1(ScUndoImportData,         SfxUndoAction);
 TYPEINIT1(ScUndoRepeatDB,           SfxUndoAction);
@@ -700,7 +703,8 @@ ScUndoSubTotals::ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
                                 const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                                 ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                                 ScRangeName* pNewUndoRange, ScDBCollection* pNewUndoDB ) :
-    ScSimpleUndo( pNewDocShell ),
+    ScDBFuncUndo( pNewDocShell, ScRange( rNewParam.nCol1, rNewParam.nRow1, nNewTab,
+                                         rNewParam.nCol2, rNewParam.nRow2, nNewTab ) ),
     nTab( nNewTab ),
     aParam( rNewParam ),
     nNewEndRow( nNewEndY ),
@@ -742,7 +746,7 @@ void __EXPORT ScUndoSubTotals::Undo()
     }
     else if (nNewEndRow < aParam.nRow2)
     {
-        pDoc->InsertRow( 0,nTab, MAXCOL,nTab, nNewEndRow+1, static_cast<SCSIZE>(nNewEndRow-aParam.nRow2) );
+        pDoc->InsertRow( 0,nTab, MAXCOL,nTab, nNewEndRow+1, static_cast<SCSIZE>(aParam.nRow2-nNewEndRow) );
     }
 
 
@@ -837,7 +841,8 @@ ScUndoSort::ScUndoSort( ScDocShell* pNewDocShell,
                         SCTAB nNewTab, const ScSortParam& rParam,
                         BOOL bQuery, ScDocument* pNewUndoDoc, ScDBCollection* pNewUndoDB,
                         const ScRange* pDest ) :
-    ScSimpleUndo( pNewDocShell ),
+    ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
+                                         rParam.nCol2, rParam.nRow2, nNewTab ) ),
     nTab( nNewTab ),
     aSortParam( rParam ),
     bRepeatQuery( bQuery ),
@@ -961,7 +966,8 @@ BOOL __EXPORT ScUndoSort::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQueryParam& rParam,
                             ScDocument* pNewUndoDoc, ScDBCollection* pNewUndoDB,
                             const ScRange* pOld, BOOL bSize, const ScRange* pAdvSrc ) :
-    ScSimpleUndo( pNewDocShell ),
+    ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
+                                         rParam.nCol2, rParam.nRow2, nNewTab ) ),
     nTab( nNewTab ),
     aQueryParam( rParam ),
     pUndoDoc( pNewUndoDoc ),
@@ -969,7 +975,8 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
     pUndoDB( pNewUndoDB ),
     bIsAdvanced( FALSE ),
     bDestArea( FALSE ),
-    bDoSize( bSize )
+    bDoSize( bSize ),
+    pDrawUndo( NULL )
 {
     if ( pOld )
     {
@@ -981,6 +988,8 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
         bIsAdvanced = TRUE;
         aAdvSource = *pAdvSrc;
     }
+
+    pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 }
 
 __EXPORT ScUndoQuery::~ScUndoQuery()
@@ -988,6 +997,7 @@ __EXPORT ScUndoQuery::~ScUndoQuery()
     delete pUndoDoc;
 //  delete pUndoDBData;
     delete pUndoDB;
+    DeleteSdrUndoAction( pDrawUndo );
 }
 
 String __EXPORT ScUndoQuery::GetComment() const
@@ -1059,6 +1069,9 @@ void __EXPORT ScUndoQuery::Undo()
     if (!bCopy)
         pDoc->UpdatePageBreaks( nTab );
 
+    if (pDrawUndo)
+        DoSdrUndoAction( pDrawUndo );
+
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
@@ -1115,6 +1128,78 @@ void __EXPORT ScUndoQuery::Repeat(SfxRepeatTarget& rTarget)
 BOOL __EXPORT ScUndoQuery::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return FALSE;                       // geht nicht wegen Spaltennummern
+}
+
+//
+//      Show or hide AutoFilter buttons (doesn't include filter settings)
+//
+
+ScUndoAutoFilter::ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
+                                    const String& rName, BOOL bSet ) :
+    ScDBFuncUndo( pNewDocShell, rRange ),
+    aDBName( rName ),
+    bFilterSet( bSet )
+{
+}
+
+ScUndoAutoFilter::~ScUndoAutoFilter()
+{
+}
+
+String ScUndoAutoFilter::GetComment() const
+{
+    return ScGlobal::GetRscString( STR_UNDO_QUERY );    // same as ScUndoQuery
+}
+
+void ScUndoAutoFilter::DoChange( BOOL bUndo )
+{
+    BOOL bNewFilter = bUndo ? !bFilterSet : bFilterSet;
+
+    USHORT nIndex;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDBCollection* pColl = pDoc->GetDBCollection();
+    if ( pColl->SearchName( aDBName, nIndex ) )
+    {
+        ScDBData* pDBData = (*pColl)[nIndex];
+        pDBData->SetAutoFilter( bNewFilter );
+
+        SCCOL nRangeX1;
+        SCROW nRangeY1;
+        SCCOL nRangeX2;
+        SCROW nRangeY2;
+        SCTAB nRangeTab;
+        pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+
+        if ( bNewFilter )
+            pDoc->ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
+        else
+            pDoc->RemoveFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
+
+        pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
+    }
+}
+
+void ScUndoAutoFilter::Undo()
+{
+    BeginUndo();
+    DoChange( TRUE );
+    EndUndo();
+}
+
+void ScUndoAutoFilter::Redo()
+{
+    BeginRedo();
+    DoChange( FALSE );
+    EndRedo();
+}
+
+void ScUndoAutoFilter::Repeat(SfxRepeatTarget& rTarget)
+{
+}
+
+BOOL ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+    return FALSE;
 }
 
 //
