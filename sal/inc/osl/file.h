@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-14 08:49:32 $
+ *  last change: $Author: tra $ $Date: 2002-11-29 09:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,20 +75,25 @@
 extern "C" {
 #endif
 
-/** @name Main goals and usage hints
+/** @file
+
+Main goals and usage hints
 
 The main intentention of this interface is to provide an universal portable and
 high performance access to file system issues on any operating system.<p>
 
 There are a few main goals:<p>
 
-1.The path specifications always have to be absolut. Any usage of relative path
-specifications is forbidden. Most operating systems provide a
-"Current Directory" per process. This is the reason why relative path
+1.The path specifications always has to be absolut. Any usage of relative path
+specifications is forbidden. Exceptions are <code>osl_getSystemPathFromFileURL</code>,
+<code>osl_getFileURLFromSystemPath</code> and <code>osl_getAbsoluteFileURL</code>. Most operating systems
+provide a "Current Directory" per process. This is the reason why relative path
 specifications can cause problems in multithreading environments.<p>
 
 2.Proprietary notations of file paths are not supported. Every path notation
-must follow the UNC notation. The directory divider is the slash character.<p>
+must the file URL specification. File URLs must be encoded in UTF8 and
+after that escaped. Although the URL parameter is a unicode string, the must
+contain only ASCII characters<p>
 
 3.The caller cannot get any information whether a file system is case sensitive,
 case preserving or not. The operating system implementation itself should
@@ -176,53 +181,64 @@ typedef enum {
 typedef void *oslDirectory;
 typedef void *oslDirectoryItem;
 
-/** Opens a directory for enumerating its contents.
 
-    @param  strDirenctoryPath [in] Denotes the full qualified path of the directory follwing the UNC
-    notation. The path devider is '/'. Relative path specifications are not allowed.
-    @param  pDirectory [out] on success it receives a handle used for subsequent calls by <code>osl_getNextDirectoryItem</code>
-    on error it receives NULL. The handle has to be released by a call to <code>osl_closeDirectory</code>.
+/** Open a directory for enumerating its contents.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOENT        the specified path doesn't exist<br>
-    osl_File_E_NOTDIR       the specified path is not an directory <br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_ACCES        permission denied<br>
-    osl_File_E_MFILE        too many open files used by the process<br>
-    osl_File_E_NFILE        too many open files in the system<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<p>
+    @param  pustrDirectoryURL [in]
+    The full qualified URL of the directory.
 
-    @see osl_getNextDirectoryItem
-    @see osl_closeDirectory
+    @param  pDirectory [out]
+    On success it receives a handle used for subsequent calls by osl_getNextDirectoryItem().
+    The handle has to be released by a call to osl_closeDirectory().
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOENT the specified path doesn't exist<br>
+    osl_File_E_NOTDIR the specified path is not an directory <br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_MFILE too many open files used by the process<br>
+    osl_File_E_NFILE too many open files in the system<br>
+    osl_File_E_NAMETOOLONG File name too long<br>
+    osl_File_E_LOOP Too many symbolic links encountered<p>
+
+    @see osl_getNextDirectoryItem()
+    @see osl_closeDirectory()
 */
 
-oslFileError SAL_CALL osl_openDirectory( rtl_uString *strDirectoryPath, oslDirectory *pDirectory);
+oslFileError SAL_CALL osl_openDirectory( rtl_uString *pustrDirectoryURL, oslDirectory *pDirectory);
 
-/** Retrieves the next item(s) of a previously openend directory. All handles have an initial
-    refcount of 1.
 
-    @param  Directory [in] is the directory handle received from a previous call to <code>osl_openDirectory</code>.
-    @param  pItem [out] On success it receives a handle that can be used for subsequent calls to <code>osl_getFileStatus</code>.
-    The handle has to be released by a call to <code>osl_releaseDirectoryItem</code>.
-    @param  uHint [in] With this parameter the caller can tell the implementation that (s)he
+/** Retrieve the next item of a previously opened directory.
+
+    Retrieves the next item of a previously opened directory.
+    All handles have an initial refcount of 1.
+
+    @param  Directory [in]
+    A directory handle received from a previous call to osl_openDirectory().
+
+    @param  pItem [out]
+    On success it receives a handle that can be used for subsequent calls to osl_getFileStatus().
+    The handle has to be released by a call to osl_releaseDirectoryItem().
+
+    @param  uHint [in]
+    With this parameter the caller can tell the implementation that (s)he
     is going to call this function uHint times afterwards. This enables the implementation to
     get the information for more than one file and cache it until the next calls.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_NOENT        No more entries in this directory<p>
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_NOENT no more entries in this directory<br>
+    osl_File_E_BADF invalid oslDirectory parameter<br>
+    osl_File_E_OVERFLOW the value too large for defined data type
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_BADF         oslDirectory parameter is not valid<br>
-    osl_File_E_OVERFLOW     Value too large for defined data type<p>
-
-    @see osl_releaseDirectoryItem
-    @see osl_acquireDirectoryItem
-    @see osl_getDirectoryItem
-    @see osl_getFileStatus
+    @see osl_releaseDirectoryItem()
+    @see osl_acquireDirectoryItem()
+    @see osl_getDirectoryItem()
+    @see osl_getFileStatus()
 */
 
 oslFileError SAL_CALL osl_getNextDirectoryItem(
@@ -232,93 +248,103 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(
     );
 
 
-/** Releases a directory handle
+/** Release a directory handle.
 
-    @param  Directory [in] a handle received by a call to <code>osl_openDirectory</code>.
+    @param Directory [in]
+    A handle received by a call to osl_openDirectory().
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <p>
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures<br>
+    osl_File_E_BADF invalid oslDirectory parameter<br>
+    osl_File_E_INTR the function call was interrupted<p>
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_BADF         Invalid oslDirectory parameter<br>
-    osl_File_E_INTR         function call was interrupted<p>
-
-    @see osl_openDirectory
+    @see osl_openDirectory()
 */
 
-oslFileError SAL_CALL osl_closeDirectory(
-    oslDirectory Directory
-    );
+oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory);
 
 
-/** Retrieves a single directory item handle with an initial refcount of 1.
+/** Retrieve a single directory item.
 
-    @param  strFilePath [in] absolute file path following the notation explained in the documentation for
-    <code>osl_openDirectory</code>. Due to performance issues it is not recommended to use this function
-    while enumerating the contents of a directory. In this case use <code>osl_getNextDirectoryItem</code> instead.
-    @param  pItem [out] on success it receives a handle which can be used for subsequent calls to <code>osl_getFileStatus</code>.
-    The handle has to be released by a call to <code>osl_releaseDirectoryItem</code>.
+    Retrieves a single directory item. The returned handle has an initial refcount of 1.
+    Due to performance issues it is not recommended to use this function while
+    enumerating the contents of a directory. In this case use osl_getNextDirectoryItem() instead.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_ACCES        permission denied<br>
-    osl_File_E_MFILE        too many open files used by the process<br>
-    osl_File_E_NFILE        too many open files in the system<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_NOTDIR       A component of the path prefix of path is not a directory<p>
+    @param pustrFileURL [in]
+    An absolute file URL.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_INTR         function call was interrupted<p>
+    @param pItem [out]
+    On success it receives a handle which can be used for subsequent calls to osl_getFileStatus().
+    The handle has to be released by a call to osl_releaseDirectoryItem().
 
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_MFILE too many open files used by the process<br>
+    osl_File_E_NFILE too many open files in the system<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_NAMETOOLONG the file name is too long<br>
+    osl_File_E_NOTDIR a component of the path prefix of path is not a directory<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_INTR the function call was interrupted<p>
 
-    @see osl_releaseDirectoryItem
-    @see osl_acquireDirectoryItem
-    @see osl_getFileStatus
-    @see osl_getNextDirectoryItem
+    @see osl_releaseDirectoryItem()
+    @see osl_acquireDirectoryItem()
+    @see osl_getFileStatus()
+    @see osl_getNextDirectoryItem()
 */
 
 oslFileError SAL_CALL osl_getDirectoryItem(
-    rtl_uString *strFilePath,
+    rtl_uString *pustrFileURL,
     oslDirectoryItem *pItem
     );
 
 
-/** Increases the refcount of a directory item handle
+/** Increase the refcount of a directory item handle.
 
-    @param  Item [in] a handle received by a call to <code>osl_getDirectoryItem</code>, <code>osl_getNextDirectoryItem</code>.
+    The caller responsible for releasing the directory item handle using osl_releaseDirectoryItem().
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_INVAL        the format of the parameters was not valid<p>
+    @param  Item [in]
+    A handle received by a call to osl_getDirectoryItem() or osl_getNextDirectoryItem().
 
-    @see osl_getDirectoryItem
-    @see osl_getNextDirectoryItem
-    @see osl_releaseDirectoryItem
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_NOMEM not enough memory for allocating structures<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+
+    @see osl_getDirectoryItem()
+    @see osl_getNextDirectoryItem()
+    @see osl_releaseDirectoryItem()
 */
 
 oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item );
 
-/** Decreases the refcount of a directory item handle and releases the data if the
-    refcount reaches 0.
 
-    @param  Item [in] a handle received by a call to <code>osl_getDirectoryItem</code>, <code>osl_getNextDirectoryItem</code>.
+/** Decrease the refcount of a directory item handle.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_INVAL        the format of the parameters was not valid<p>
+    Decreases the refcount of a directory item handle.
+    If the refcount reaches 0 the data associated with
+    this directory item handle will be released.
 
-    @see osl_getDirectoryItem
-    @see osl_getNextDirectoryItem
-    @see osl_acquireDirectoryItem
-    @see osl_acquireDirectoryItem
+    @param  Item [in]
+    A handle received by a call to osl_getDirectoryItem() or osl_getNextDirectoryItem().
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_NOMEM not enough memory for allocating structures<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+
+    @see osl_getDirectoryItem()
+    @see osl_getNextDirectoryItem()
+    @see osl_acquireDirectoryItem()
 */
 
 oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item );
@@ -369,7 +395,7 @@ typedef
 
 /** Structure containing information about files and directories
 
-    @see    osl_getFileStatus
+    @see    osl_getFileStatus()
     @see    oslFileType
 */
 
@@ -404,40 +430,43 @@ struct _oslFileStatus {
     rtl_uString *ustrLinkTargetURL;
 } oslFileStatus;
 
-/** Retrieves information about a single file or directory
 
-    @param  Item [in] a handle received by a previous call to <code>osl_getDirectoryItem</code>,
-    <code>osl_getNextDirectoryItem</code>.
-    @param  pStatus [in/out] points to a structure which receives the information of the file or directory
-    represented by the handle <code>Item</code>. The member <code>uStructSize</code> has to be initialized to
-    <code>sizeof(oslFileStatus)</code> before calling this function.
-    @param  uFieldMask [in] specifies which fields of the structure pointed to by <code>pStatus</code>
-    are of interest to the caller.
+/** Retrieve information about a single file or directory.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_ACCES        Permission denied<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_NAMETOOLONG  file name too long<p>
+    @param  Item [in]
+    A handle received by a previous call to osl_getDirectoryItem() or osl_getNextDirectoryItem().
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_BADF         Invalid oslDirectoryItem parameter<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_OVERFLOW     Value too large for defined data type<br>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_MULTIHOP     Components of path require hopping to multiple remote machines and the file system does not allow it<br>
-    osl_File_E_MFILE        too many open files used by the process<br>
-    osl_File_E_NFILE        too many open files in the system<br>
-    osl_File_E_NOSPC        No space left on device<br>
-    osl_File_E_NXIO         No such device or address<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_NOSYS        Function not implemented<p>
+    @param  pStatus [in|out]
+    Points to a structure which receives the information of the file or directory
+    represented by the handle Item. The member uStructSize has to be initialized to
+    sizeof(oslFileStatus) before calling this function.
 
-    @see osl_getDirectoryItem
-    @see osl_getNextDirectoryItem
+    @param  uFieldMask [in]
+    Specifies which fields of the structure pointed to by pStatus are of interest to the caller.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_BADF invalid oslDirectoryItem parameter<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_OVERFLOW value too large for defined data type<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_MULTIHOP components of path require hopping to multiple remote machines and the file system does not allow it<br>
+    osl_File_E_MFILE too many open files used by the process<br>
+    osl_File_E_NFILE too many open files in the system<br>
+    osl_File_E_NOSPC no space left on device<br>
+    osl_File_E_NXIO no such device or address<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_NOSYS function not implemented<p>
+
+    @see osl_getDirectoryItem()
+    @see osl_getNextDirectoryItem()
     @see oslFileStatus
 */
 
@@ -447,40 +476,114 @@ oslFileError SAL_CALL osl_getFileStatus( oslDirectoryItem Item, oslFileStatus *p
 typedef void *oslVolumeDeviceHandle;
 
 
+/** Unmount a volume device.
+
+    Unmount the volume specified by the given oslVolumeDeviceHandle.
+
+    @param Handle [in]
+    An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
+
+    @return
+    osl_File_E_None on success<br>
+
+    @todo
+    specify all error codes that may be returned
+
+    @see osl_getVolumeInformation()
+*/
+
 oslFileError SAL_CALL osl_unmountVolumeDevice( oslVolumeDeviceHandle Handle );
+
+
+/** Automount a volume device.
+
+    Automount the volume device specified by the given oslVolumeDeviceHandle.
+
+    @param Handle [in]
+    An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
+
+    @return
+    osl_File_E_None on success<br>
+
+    @todo
+    specify all error codes that may be returned
+
+    @see osl_getVolumeInformation()
+*/
 
 oslFileError SAL_CALL osl_automountVolumeDevice( oslVolumeDeviceHandle Handle );
 
+
+/** Release a volume device handle.
+
+    Releases the given oslVolumeDeviceHandle which was acquired by a call to
+    osl_getVolumeInformation() or osl_acquireVolumeDeviceHandle().
+
+    @param Handle [in]
+    An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
+
+    @return
+    osl_File_E_None on success<br>
+
+    @todo
+    specify all error codes that may be returned
+
+    @see osl_acquireVolumeDeviceHandle()
+    @see osl_getVolumeInformation()
+*/
+
 oslFileError SAL_CALL osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle );
+
+/** Acquire a volume device handle.
+
+    Acquires the given oslVolumeDeviceHandle which was acquired by a call to
+    osl_getVolumeInformation(). The caller is responsible for releasing the
+    acquired handle by calling osl_releaseVolumeDeviceHandle().
+
+    @param Handle [in]
+    An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
+
+    @return
+    osl_File_E_None on success<br>
+
+    @todo
+    specify all error codes that may be returned
+
+    @see osl_getVolumeInformation()
+*/
 
 oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle );
 
-/** Gets the normalized absolute file system path where a device is mounted to.
 
-    @param  Handle  [in]    Device handle of the volume retrieved with <code>osl_getVolumeInformation</code>.
-    @param  pstrPath [out] Receives the path where the device is mounted to.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_ACCES        permission denied<br>
-    osl_File_E_NXIO         No such device or address<br>
-    osl_File_E_NODEV        No such device<br>
-    osl_File_E_NOENT        No such file or directory<br>
+/** Get the full qualified URL where a device is mounted to.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_FAULT        Bad address<br>
-    osl_FilE_E_INTR         function call was interrupted<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_EOVERFLOW    Value too large for defined data type<p>
+    @param Handle [in]
+    An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
 
-    @see    osl_getVolumeInformation
-    @see    osl_automountVolumeDevice
-    @see    osl_unmountVolumeDevice
+    @param ppustrDirectoryURL [out]
+    Receives the full qualified URL where the device is mounted to.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_NXIO  no such device or address<br>
+    osl_File_E_NODEV no such device<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_FAULT bad address<br>
+    osl_FilE_E_INTR function call was interrupted<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_EOVERFLOW value too large for defined data type<br>
+
+    @see    osl_getVolumeInformation()
+    @see    osl_automountVolumeDevice()
+    @see    osl_unmountVolumeDevice()
 */
 
-oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **pstrPath );
+oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **ppustrDirectoryURL);
 
 /* Volume attributes */
 
@@ -506,7 +609,7 @@ typedef
 
 /** Structure containing information about volumes
 
-    @see    osl_getVolumeInformation
+    @see    osl_getVolumeInformation()
     @see    oslFileType
 */
 
@@ -525,7 +628,7 @@ struct _oslVolumeInfo {
     sal_uInt64      uFreeSpace;
 /** Maximum length of file name of a single item */
     sal_uInt32      uMaxNameLength;
-/** Maximum length of a full quallified path in UNC notation */
+/** Maximum length of a full quallified path in system notation */
     sal_uInt32      uMaxPathLength;
 /** Points to a string that receives the name of the file system type. String should be set to zero before calling <code>osl_getVolumeInformation</code>
     and released after usage. */
@@ -535,36 +638,46 @@ struct _oslVolumeInfo {
 } oslVolumeInfo;
 
 
-/** Retrieves information about a volume. A volume can either be a mount point, a network
-    resource or a drive depending on operating system and file system. Before calling this
-    function <code>osl_getFileStatus</code> should be called to determine if the type is
-    <code>osl_file_Type_Volume</code>.
+/** Retrieve information about a volume.
 
-    @param  strDirectory [in]   Full qualified UNC path to the volume
-    @param  pInfo [out] On success it receives information about the volume.
-    @param  uFieldMask [in] Specifies which members of the structure should be filled
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_INVAL        the format of the parameters was not valid<p>
+    Retrieves information about a volume. A volume can either be a mount point, a network
+    resource or a drive depending on Operating System and File System. Before calling this
+    function osl_getFileStatus() should be called to determine if the type is
+    osl_file_Type_Volume.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_NOTDIR       Not a directory<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_ACCES        permission denied<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    ols_File_E_FAULT        Bad address<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_NOSYS        Function not implemented<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_INTR         function call was interrupted<p>
+    @param pustrDirectoryURL [in]
+    Full qualified URL of the volume
 
-    @see    osl_getFileStatus
+    @param pInfo [out]
+    On success it receives information about the volume.
+
+    @param uFieldMask [in]
+    Specifies which members of the structure should be filled
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOTDIR not a directory<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    ols_File_E_FAULT Bad address<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_NOSYS function not implemented<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_INTR function call was interrupted<br>
+
+    @see    osl_getFileStatus()
     @see    oslVolumeInfo
 */
 
-oslFileError SAL_CALL osl_getVolumeInformation( rtl_uString *strDirectory, oslVolumeInfo *pInfo, sal_uInt32 uFieldMask );
+oslFileError SAL_CALL osl_getVolumeInformation(
+    rtl_uString *pustrDirectoryURL,
+    oslVolumeInfo *pInfo,
+    sal_uInt32 uFieldMask );
 
 typedef void *oslFileHandle;
 
@@ -574,616 +687,725 @@ typedef void *oslFileHandle;
 #define osl_File_OpenFlag_Write     0x00000002L
 #define osl_File_OpenFlag_Create    0x00000004L
 
-/** Opens a file.
+/** Open a regular file.
 
-    @param  strPath [in] Full qualified path to the file to open. Only regular files
-    can be openend.
-    @param  pHandle [out] On success it receives a handle to the open file.
-    @param  uFlags [in] Specifies the open mode.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NAMETOOLONG  pathname was too long<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_ACCES        permission denied<p>
-    osl_File_E_AGAIN        A write lock could not be established<p>
+    Open a file. Only regular files can be openend.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_NOTDIR       Not a directory<br>
-    osl_File_E_NXIO         No such device or address<br>
-    osl_File_E_NODEV        No such device<br>
-    osl_File_E_ROFS         Read-only file system<br>
-    osl_File_E_TXTBSY       Text file busy<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_NOSPC        No space left on device<br>
-    osl_File_E_ISDIR        Is a directory<br>
-    osl_File_E_MFILE        too many open files used by the process<br>
-    osl_File_E_NFILE        too many open files in the system<br>
-    osl_File_E_DQUOT        Quota exceeded<br>
-    osl_File_E_EXIST        File exists<br>
-    osl_FilE_E_INTR         function call was interrupted<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_EOVERFLOW    Value too large for defined data type<p>
+    @param pustrFileURL [in]
+    The full qualified URL of the file to open.
 
-    @see    osl_closeFile
-    @see    osl_setFilePos
-    @see    osl_getFilePos
-    @see    osl_readFile
-    @see    osl_writeFile
-    @see    osl_setFileSize
+    @param pHandle [out]
+    On success it receives a handle to the open file.
+
+    @param uFlags [in]
+    Specifies the open mode.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NAMETOOLONG pathname was too long<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_AGAIN a write lock could not be established<br>
+    osl_File_E_NOTDIR not a directory<br>
+    osl_File_E_NXIO no such device or address<br>
+    osl_File_E_NODEV no such device<br>
+    osl_File_E_ROFS read-only file system<br>
+    osl_File_E_TXTBSY text file busy<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_NOSPC no space left on device<br>
+    osl_File_E_ISDIR is a directory<br>
+    osl_File_E_MFILE too many open files used by the process<br>
+    osl_File_E_NFILE too many open files in the system<br>
+    osl_File_E_DQUOT quota exceeded<br>
+    osl_File_E_EXIST file exists<br>
+    osl_FilE_E_INTR function call was interrupted<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_EOVERFLOW value too large for defined data type<br>
+
+    @see osl_closeFile()
+    @see osl_setFilePos()
+    @see osl_getFilePos()
+    @see osl_readFile()
+    @see osl_writeFile()
+    @see osl_setFileSize()
 */
 
-oslFileError SAL_CALL osl_openFile( rtl_uString *strPath, oslFileHandle *pHandle, sal_uInt32 uFlags );
+oslFileError SAL_CALL osl_openFile( rtl_uString *pustrFileURL, oslFileHandle *pHandle, sal_uInt32 uFlags );
 
 #define osl_Pos_Absolut 1
 #define osl_Pos_Current 2
 #define osl_Pos_End     3
 
-/** Sets the internal position pointer of an open file.
-    @param  Handle [in] Handle of an open file received by a previous call to <code>osl_openFile</code>.
-    @param  uHow [in] Distance to move the internal position pointer (from uPos).
-    @param  uPos [in] Absolute position from the beginning of the file.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_OVERFLOW     The resulting file offset would be a value which cannot
-    be represented correctly for regular files<p>
+/** Set the internal position pointer of an open file.
 
-    @see    osl_openFile
-    @see    osl_getFilePos
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param uHow [in]
+    Distance to move the internal position pointer (from uPos).
+
+    @param uPos [in]
+    Absolute position from the beginning of the file.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files<br>
+
+    @see    osl_openFile()
+    @see    osl_getFilePos()
 */
 
 oslFileError SAL_CALL osl_setFilePos( oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos );
 
 
-/** Retrieves the current position of the internal pointer of an open file.
-    @param  Handle [in] Handle to an open file.
-    @param  pPos [out] On Success it receives the current position of the file pointer.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_OVERFLOW     The resulting file offset would be a value which cannot
-    be represented correctly for regular files<p>
+/** Retrieve the current position of the internal pointer of an open file.
 
-    @see    osl_openFile
-    @see    osl_setFilePos
-    @see    osl_readFile
-    @see    osl_writeFile
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param pPos [out]
+    On success receives the current position of the file pointer.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files<br>
+
+    @see osl_openFile()
+    @see osl_setFilePos()
+    @see osl_readFile()
+    @see osl_writeFile()
 */
 
 oslFileError SAL_CALL osl_getFilePos( oslFileHandle Handle, sal_uInt64 *pPos );
 
 
-/** Sets the file size of an open file. The file can be truncated or enlarged by the function.
-    The position of the file pointer is not affeced by this function.
-    @param  Handle [in] Handle to an open file.
-    @param  uSize [int] New size in bytes.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_OVERFLOW     The resulting file offset would be a value which cannot
-    be represented correctly for regular files<p>
+/** Set the file size of an open file.
 
-    @see    osl_openFile
-    @see    osl_setFilePos
-    @see    osl_getFileStatus
+    Sets the file size of an open file. The file can be truncated or enlarged by the function.
+    The position of the file pointer is not affeced by this function.
+
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param uSize [int]
+    New size in bytes.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files<br>
+
+    @see osl_openFile()
+    @see osl_setFilePos()
+    @see osl_getFileStatus()
 */
 
 oslFileError SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize );
 
 
-/** Reads a number of bytes from a file. The internal file pointer is increased by the number of bytes
-    read.
-    @param  Handle [in] Handle to an open file.
-    @param  pBuffer [out] Points to a buffer which receives data. The buffer must be large enough
-    to hold <code>uBytesRequested</code> bytes.
-    @param  uBytesRequested [in] Number of bytes which should be retrieved.
-    @param  pBytesRead [out] On success the number of bytes which have actually been retrieved.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
+/** Read a number of bytes from a file.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_ISDIR        Is a directory<br>
-    osl_File_E_BADF         Bad file<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_AGAIN        Operation would block<br>
-    osl_File_E_NOLINK       Link has been severed<p>
+    Reads a number of bytes from a file. The internal file pointer is
+    increased by the number of bytes read.
 
-    @see    osl_openFile
-    @see    osl_writeFile
-    @see    osl_readLine
-    @see    osl_setFilePos
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param pBuffer [out]
+    Points to a buffer which receives data. The buffer must be large enough
+    to hold uBytesRequested bytes.
+
+    @param uBytesRequested [in]
+    Number of bytes which should be retrieved.
+
+    @param pBytesRead [out]
+    On success the number of bytes which have actually been retrieved.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_ISDIR is a directory<br>
+    osl_File_E_BADF bad file<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_AGAIN operation would block<br>
+    osl_File_E_NOLINK link has been severed<br>
+
+    @see osl_openFile()
+    @see osl_writeFile()
+    @see osl_readLine()
+    @see osl_setFilePos()
 */
 
 oslFileError SAL_CALL osl_readFile( oslFileHandle Handle, void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64 *pBytesRead );
 
 
-/** Tests if the end of a file is reached.
+/** Test if the end of a file is reached.
 
-    @param  Handle [in] Handle to an open file.
-    @param  pIsEOF [out] Points to a variable that receives the end of file
-    status.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_ISDIR        Is a directory<br>
-    osl_File_E_BADF         Bad file<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_AGAIN        Operation would block<br>
-    osl_File_E_NOLINK       Link has been severed<p>
+    @param pIsEOF [out]
+    Points to a variable that receives the end-of-file status.
 
-    @see    osl_openFile
-    @see    osl_readFile
-    @see    osl_readLine
-    @see    osl_setFilePos
+    @return
+    osl_File_E_None on success <br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_ISDIR is a directory<br>
+    osl_File_E_BADF bad file<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_AGAIN operation would block<br>
+    osl_File_E_NOLINK link has been severed<p>
+
+    @see osl_openFile()
+    @see osl_readFile()
+    @see osl_readLine()
+    @see osl_setFilePos()
 */
 
 oslFileError SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF );
 
-/** Writes a number of bytes to a file. The internal file pointer is increased by the number of bytes
-    read.
-    @param  Handle [in] Handle to an open file.
-    @param  pBuffer [in] Points to a buffer which contains the data.
-    @param  uBytesToWrite [in] Number of bytes which should be written.
-    @param  pBytesWritten [out] On success the number of bytes which have actually been written.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_FBIG         File too large<br>
-    osl_File_E_DQUOT        Quota exceeded<p>
+/** Write a number of bytes to a file.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_AGAIN        Operation would block<br>
-    osl_File_E_BADF         Bad file<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_NOLCK        No record locks available<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_NOSPC        No space left on device<br>
-    osl_File_E_NXIO         No such device or address<p>
+    Writes a number of bytes to a file.
+    The internal file pointer is increased by the number of bytes read.
 
-    @see    osl_openFile
-    @see    osl_readFile
-    @see    osl_setFilePos
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param pBuffer [in]
+    Points to a buffer which contains the data.
+
+    @param uBytesToWrite [in]
+    Number of bytes which should be written.
+
+    @param pBytesWritten [out]
+    On success the number of bytes which have actually been written.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_FBIG file too large<br>
+    osl_File_E_DQUOT quota exceeded<p>
+    osl_File_E_AGAIN operation would block<br>
+    osl_File_E_BADF bad file<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_IO on I/O errosr<br>
+    osl_File_E_NOLCK no record locks available<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_NOSPC no space left on device<br>
+    osl_File_E_NXIO no such device or address<br>
+
+    @see osl_openFile()
+    @see osl_readFile()
+    @see osl_setFilePos()
 */
 
 oslFileError SAL_CALL osl_writeFile( oslFileHandle Handle, const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64 *pBytesWritten );
 
-/** Reads a line from given file. The new line delemeter(s) are NOT returned!
 
-    @param  Handle [in] Handle to an open file.
-    @param  ppSequence [in/out] a pointer to a valid sequence. Will hold the line read on return.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
+/** Read a line from a file.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_ISDIR        Is a directory<br>
-    osl_File_E_BADF         Bad file<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_AGAIN        Operation would block<br>
-    osl_File_E_NOLINK       Link has been severed<p>
+    Reads a line from a file. The new line delimiter is NOT returned!
 
-    @see    osl_openFile
-    @see    osl_readFile
-    @see    osl_writeFile
-    @see    osl_setFilePos
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param  ppSequence [in/out]
+    A pointer pointer to a sal_Sequence that will hold the line read on success.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_ISDIR is a directory<br>
+    osl_File_E_BADF bad file<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_AGAIN operation would block<br>
+    osl_File_E_NOLINK link has been severed<p>
+
+    @see osl_openFile()
+    @see osl_readFile()
+    @see osl_writeFile()
+    @see osl_setFilePos()
 */
 
 oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSequence );
 
 
-/** Closes an open file.
-    @param  Handle [in] Handle to a file previously open by a call to <code>osl_openFile</code>.
+/** Close an open file.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<p>
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_BADF         Bad file<br>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_NOSPC        No space left on device<br>
-    osl_File_E_IO           I/O error<p>
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_BADF Bad file<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_NOSPC no space left on device<br>
+    osl_File_E_IO on I/O errors<br>
+
+    @see osl_openFile()
 */
 
 oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
 
 
+/** Create a directory.
 
-/** Creates a directory.
-    @param  strPatg [in] Full qualified UNC path of the directory to create.
+    @param pustrDirectoryURL [in]
+    Full qualified URL of the directory to create.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_EXIST        File exists<br>
-    osl_File_E_ACCES        Permission denied<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_NOTDIR       Not a directory<br>
-    osl_File_E_ROFS         Read-only file system<br>
-    osl_File_E_NOSPC        No space left on device<br>
-    osl_File_E_DQUOT        Quota exceeded<p>
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_EXIST file exists<br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_NOTDIR not a directory<br>
+    osl_File_E_ROFS read-only file system<br>
+    osl_File_E_NOSPC no space left on device<br>
+    osl_File_E_DQUOT quota exceeded<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_FAULT bad address<br>
+    osl_FileE_IO on I/O errors<br>
+    osl_File_E_MLINK too many links<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_FileE_IO            I/O error<br>
-    osl_File_E_MLINK        Too many links<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<p>
-
-    @see    osl_removeDirectory
+    @see osl_removeDirectory()
 */
 
-oslFileError SAL_CALL osl_createDirectory( rtl_uString* strPath );
+oslFileError SAL_CALL osl_createDirectory( rtl_uString* pustrDirectoryURL );
 
-/** Removes an empty directory.
 
-    @param  strPath [in] Full qualified UNC path of the directory.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_PERM         Operation not permitted<br>
-    osl_File_E_ACCES        Permission denied<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_NOTDIR       Not a directory<br>
-    osl_File_E_NOTEMPTY     Directory not empty<p>
+/** Remove an empty directory.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_BUSY         Device or resource busy<br>
-    osl_File_E_ROFS         Read-only file system<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_BUSY         Device or resource busy<br>
-    osl_File_E_EXIST        File exists<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<p>
+    @param pustrDirectoryURL [in]
+    Full qualified URL of the directory.
 
-    @see osl_createDirectory
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_PERM operation not permitted<br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_NOTDIR not a directory<br>
+    osl_File_E_NOTEMPTY directory not empty<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_BUSY device or resource busy<br>
+    osl_File_E_ROFS read-only file system<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_BUSY device or resource busy<br>
+    osl_File_E_EXIST file exists<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
+
+    @see osl_createDirectory()
 */
 
-oslFileError SAL_CALL osl_removeDirectory( rtl_uString* strPath );
+oslFileError SAL_CALL osl_removeDirectory( rtl_uString* pustrDirectoryURL );
 
-/** Removes (erases) a regular file.
 
-    @param  strPath [in] Full qualified UNC path of the directory.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_ACCES        Permission denied<br>
-    osl_File_E_PERM         Operation not permitted<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_ISDIR        Is a directory<br>
-    osl_File_E_ROFS         Read-only file system<p>
+/** Remove a regular file.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_BUSY         Device or resource busy<br>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<br>
-    osl_File_E_TXTBSY       Text file busy<p>
+    @param pustrFileURL [in]
+    Full qualified URL of the file to remove.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_PERM operation not permitted<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_ISDIR is a directory<br>
+    osl_File_E_ROFS read-only file system<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_IO on I/O errors<br>
+    osl_File_E_BUSY device or resource busy<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
+    osl_File_E_TXTBSY text file busy<br>
+
+    @see osl_openFile()
 */
 
-oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath );
+oslFileError SAL_CALL osl_removeFile( rtl_uString* pustrFileURL );
 
 
-/** Copies a file to a new destination. Copies only files not directories. No assumptions should
-    be made about preserving attributes or file time.
-    @param  strPath [in] Full qualified UNC path of the source file.
-    @param  strDestPath [in] Full qualified UNC path of the destination file. A directory is
-    NOT a valid destination file !
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_ACCES        Permission denied<br>
-    osl_File_E_PERM         Operation not permitted<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_ISDIR        Is a directory<br>
-    osl_File_E_ROFS         Read-only file system<p>
+/** Copy a file to a new destination.
 
-    @see    osl_moveFile
-    @see    osl_removeFile
-    @see    osl_createDirectory
+    Copies a file to a new destination. Copies only files not directories.
+    No assumptions should be made about preserving attributes or file time.
+
+    @param pustrSourceFileURL [in]
+    Full qualified URL of the source file.
+
+    @param pustrDestFileURL [in]
+    Full qualified URL of the destination file. A directory is NOT a valid destination file!
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_PERM operation not permitted<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_ISDIR is a directory<br>
+    osl_File_E_ROFS read-only file system<p>
+
+    @see    osl_moveFile()
+    @see    osl_removeFile()
 */
 
-oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPath );
+oslFileError SAL_CALL osl_copyFile( rtl_uString* pustrSourceFileURL, rtl_uString *pustrDestFileURL );
 
 
-/** Moves a file or directory to a new destination or renames it. File time and attributes
-    are preserved.
-    @param  strPath [in] Full qualified UNC path of the source file.
-    @param  strDestPath [in] Full qualified UNC path of the destination file. An existing directory
-    is NOT a valid destination !
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_ACCES        Permission denied<br>
-    osl_File_E_PERM         Operation not permitted<br>
-    osl_File_E_NAMETOOLONG  File name too long<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_ROFS         Read-only file system<p>
+/** Move a file or directory to a new destination or renames it.
 
-    @see    osl_copyFile
+    Moves a file or directory to a new destination or renames it.
+    File time and attributes are preserved.
+
+    @param pustrSourceFileURL [in]
+    Full qualified URL of the source file.
+
+    @param pustrDestFileURL [in]
+    Full qualified URL of the destination file. An existing directory is NOT a valid destination !
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_PERM operation not permitted<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_ROFS read-only file system<br>
+
+    @see osl_copyFile()
 */
 
-oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPath );
+oslFileError SAL_CALL osl_moveFile( rtl_uString* pustrSourceFileURL, rtl_uString *pustrDestFileURL );
 
 
-/** Determines a valid unused canonical name for a requested name. Depending on file system and operation system
-    the illegal characters are replaced by valid ones. If a file or directory with the requested name
-    already exists a new name is generated following the common rules on the actual file system and
-    operating system.
+/** Determine a valid unused canonical name for a requested name.
 
-    @param  strRequested [in] Requested name of a file or directory.
-    @param  strValid [out] On success receives a name which is unused and valid on the actual operating system and
-    file system.
+    Determines a valid unused canonical name for a requested name.
+    Depending on the Operating System and the File System the illegal characters are replaced by valid ones.
+    If a file or directory with the requested name already exists a new name is generated following
+    the common rules on the actual Operating System and File System.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
+    @param pustrRequestedURL [in]
+    Requested name of a file or directory.
 
-    @see    osl_getFileStatus
+    @param ppustrValidURL [out]
+    On success receives a name which is unused and valid on the actual Operating System and
+    File System.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+
+    @see osl_getFileStatus()
 */
 
-oslFileError SAL_CALL osl_getCanonicalName( rtl_uString *strRequested, rtl_uString **strValid);
+oslFileError SAL_CALL osl_getCanonicalName( rtl_uString *pustrRequestedURL, rtl_uString **ppustrValidURL);
 
 
-/** Converts a path relative to a given directory into an full qualified UNC path.
+/** Convert a path relative to a given directory into an full qualified file URL.
 
-    @param  strDirBase [in] Base directory to which the relative path is related to.
-    @param  strRelative[in] Path of a file or directory relative to the directory path
-    specified by <code>strDirBase</code>.
-    @param  strAbsolute [out] On success it receives the full qualified UNC path of the
-    requested relative path.
+    Convert a path relative to a given directory into an full qualified file URL.
+    The function resolves symbolic links if possible and path ellipses, so on success
+    the resulting absolute path is fully resolved.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOMEM        not enough memory for allocating structures <br>
-    osl_File_E_NOTDIR       Not a directory<br>
-    osl_File_E_ACCES        Permission denied<br>
-    osl_File_E_NOENT        No such file or directory<br>
-    osl_File_E_NAMETOOLONG  File name too long<p>
+    @param pustrBaseDirectoryURL [in]
+    Base directory URL to which the relative path is related to.
 
+    @param pustrRelativeFileURL [in]
+    An URL of a file or directory relative to the directory path specified by pustrBaseDirectoryURL
+    or an absolute path.
+    If pustrRelativeFileURL denotes an absolute path pustrBaseDirectoryURL will be ignored.
 
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_OVERFLOW     Value too large for defined data type<p>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_LOOP         Too many symbolic links encountered<br>
-    osl_File_E_MULTIHOP     Multihop attempted<br>
-    osl_File_E_NOLINK       Link has been severed<p>
+    @param ppustrAbsoluteFileURL [out]
+    On success it receives the full qualified absoulte file URL.
 
-    @see    osl_getFileStatus
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOMEM not enough memory for allocating structures <br>
+    osl_File_E_NOTDIR not a directory<br>
+    osl_File_E_ACCES permission denied<br>
+    osl_File_E_NOENT no such file or directory<br>
+    osl_File_E_NAMETOOLONG file name too long<br>
+    osl_File_E_OVERFLOW value too large for defined data type<br>
+    osl_File_E_FAULT bad address<br>
+    osl_File_E_INTR function call was interrupted<br>
+    osl_File_E_LOOP too many symbolic links encountered<br>
+    osl_File_E_MULTIHOP multihop attempted<br>
+    osl_File_E_NOLINK link has been severed<br>
+
+    @see    osl_getFileStatus()
 */
 
-oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* strDirBase, rtl_uString *strRelative, rtl_uString **strAbsolute );
+oslFileError SAL_CALL osl_getAbsoluteFileURL(
+    rtl_uString* pustrBaseDirectoryURL,
+    rtl_uString *pustrRelativeFileURL,
+    rtl_uString **ppustrAbsoluteFileURL );
 
 
-/** Converts a system dependend path into a FileURL
+/** Convert a system dependend path into a file URL.
 
-    @param dir[in] System dependent path of a file or directory
-    @param strPath[out] On success it receives the file URL
+    @param pustrSystemPath [in]
+    A System dependent path of a file or directory.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
+    @param ppustrFileURL [out]
+    On success it receives the file URL.
 
-    @see    osl_getSystemPathFromFileURL
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
 
+    @see osl_getSystemPathFromFileURL()
 */
 
-oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrFileURL);
+oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *pustrSystemPath, rtl_uString **ppustrFileURL);
 
-/** Searches a full qualified UNC-Path/File
 
-    @param filePath[in] System dependent path / Normalized Path / File-URL or file or relative directory
-    @param searchPath[in] Paths, in which a given file has to be searched. These paths are only for the search of a
-    file or a relative path, otherwise it will be ignored. If it is set to NULL or while using the
-    search path the search failed the function searches for a matching file in all system directories and in the directories
-    listed in the PATH environment variable
-    @param strPath[out] On success it receives the full qualified UNC path
+/** Searche a full qualified system path or a file URL.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOTDIR       Not a directory<br>
-    osl_File_E_NOENT        No such file or directory not found<br>
-    @see    osl_normalizePath
+    @param pustrFileName [in]
+    A system dependent path, a file URL, a file or relative directory.
 
+    @param pustrSearchPath [in]
+    A list of system paths, in which a given file has to be searched. The Notation of a path list is
+    system dependend, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
+    These paths are only for the search of a file or a relative path, otherwise it will be ignored.
+    If pustrSearchPath is NULL or while using the search path the search failed, the function searches for
+    a matching file in all system directories and in the directories listed in the PATH environment
+    variable.
+    The value of an environment variable should be used (e.g. LD_LIBRARY_PATH) if the caller is not
+    aware of the Operating System and so doesn't know which path list delimiter to use.
+
+    @param ppustrFileURL [out]
+    On success it receives the full qualified file URL.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOTDIR not a directory<br>
+    osl_File_E_NOENT no such file or directory not found<br>
+
+    @see osl_getFileURLFromSystemPath()
+    @see osl_getSystemPathFromFileURL()
 */
 
-oslFileError SAL_CALL osl_searchFileURL( rtl_uString *ustrFileName, rtl_uString *ustrSearchPath, rtl_uString **pustrFileURL );
+oslFileError SAL_CALL osl_searchFileURL( rtl_uString *pustrFileName, rtl_uString *pustrSearchPath, rtl_uString **ppustrFileURL );
 
-/** Converts a file URL in a system dependend path
 
-    @param dir[in] File URL
-    @param strPath[out] On success it receives the system dependent path of a file or a directory
+/** Convert a file URL into a system dependend path.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
+    @param pustrFileURL [in]
+    A File URL.
 
-    @see    osl_getFileURLFromSystemPath
+    @param ppustrSystemPath [out]
+    On success it receives the system path.
 
+    @return
+    osl_File_E_None on success
+    osl_File_E_INVAL the format of the parameters was not valid
+
+    @see osl_getFileURLFromSystemPath()
 */
 
-oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
+oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *pustrFileURL, rtl_uString **ppustrSystemPath);
 
-/** Function pointer representing the function called back from osl_abbreviateSystemPath.
 
-    @param  ustrText[in]    Text to calculate the width for
+/** Function pointer representing the function called back from osl_abbreviateSystemPath
 
-    @return the width of the Text specified by ustrText. F.e. it can return the width in pixel
-            or the width in character count.
+    @param ustrText [in]
+    Text to calculate the width for
 
-    @see    osl_abbreviateSystemPath
-    @see    osl_calcTextWidthFuncEx
+    @return
+    The width of the text specified by ustrText, e.g. it can return the width in pixel
+    or the width in character count.
+
+    @see osl_abbreviateSystemPath()
 */
 
 typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFunc)( rtl_uString *ustrText );
 
 
-/** Function pointer representing the function called back from osl_abbreviateSystemPathEx.
+/** Abbreviate a system notation path.
 
-    @param  ustrText[in]    Text to calculate the width for
-    @param  pvContext       Context parameter passed tp osl_abbreviatesystemPathEx
+    @param ustrSystemPath [in]
+    The full system path to abbreviate
 
-    @return the width of the Text specified by ustrText. F.e. it can return the width in pixel
-            or the width in character count.
+    @param pustrCompacted [out]
+    Receives the compacted system path on output
 
-    @see    osl_abbreviateSystemPathEx
-    @see    osl_calcTextWidthFunc
-*/
+    @param pfnCalcWidth [in]
+    Function ptr that calculates the width of a string. Can be zero.
 
-typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFuncEx)( rtl_uString *ustrText, void *pvContext );
+    @param uMaxWidth [in]
+    Maximum width allowed that is retunrned from pfnCalcWidth.
+    If pfnCalcWidth is zero the character count is assumed as width.
 
-/** Abbreviates a system notation path
-
-    @param  ustrSystemPath[in]  the full system path to abbreviate
-    @param  pustrCompacted[out] receives the compacted system path on output
-    @param  pfnCalcWidth[in] function ptr that calculates the width of a string. Can be zero.
-    @param  uMaxWidth[in] maximum width allowed that is retunrned from pfnCalcWidth.
-            If pfnCalcWidth is zero the character count is assumed as width.
-
-    @return osl_File_E_None on success otherwise one osl_File_E_INVAL
+    @return
+    osl_File_E_None on success<br>
 
     @see    oslCalcTextWidthFunc
-    @see    osl_abbreviateSystemPathEx
-
 */
 
-oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrCompacted, sal_uInt32 uMaxWidth, oslCalcTextWidthFunc pCalcWidth );
+oslFileError SAL_CALL osl_abbreviateSystemPath(
+    rtl_uString *ustrSystemPath,
+    rtl_uString **pustrCompacted,
+    sal_uInt32 uMaxWidth,
+    oslCalcTextWidthFunc pCalcWidth );
 
 
-/** Abbreviates a system notation path
+/** Set file attributes.
 
-    @param  ustrSystemPath[in]  the full system path to abbreviate
-    @param  pustrCompacted[out] receives the compacted system path on output
-    @param  uMaxWidth[in] maximum width allowed that is retunrned from pfnCalcWidth.
-            If pfnCalcWidth is zero the character count is assumed as width.
-    @param  pfnCalcWidth[in] function ptr that calculates the width of a string. Can be zero.
-    @param  pvContext[in] pointer to context data that is passed to callback function pointed to
-            by pfnCalcWidth.
+    @param pustrFileURL [in]
+    The full qualified file URL.
 
-    @return osl_File_E_None on success otherwise one osl_File_E_INVAL
+    @param uAttributes [in]
+    Attributes of the file to be set.
 
-    @see    oslCalcTextWidthFuncEx
-    @see    osl_abbreviateSystemPath
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
 
+    @see osl_getFileStatus()
 */
 
-oslFileError SAL_CALL osl_abbreviateSystemPathEx( rtl_uString *ustrSystemPath, rtl_uString **pustrCompacted, sal_uInt32 uMaxWidth, oslCalcTextWidthFuncEx pCalcWidth, void *pvContext );
+oslFileError SAL_CALL osl_setFileAttributes( rtl_uString *pustrFileURL, sal_uInt64 uAttributes );
 
-/** Sets file-attributes
 
-    @param filePath[in] Path of the file
-    @param uAttributes[in] Attributes of the file to be set
+/** Set the file time.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    @see    osl_getFileStatus
+    @param pustrFileURL [in]
+    The full qualified URL of the file.
 
+    @param aCreationTime [in]
+    Creation time of the given file.
+
+    @param aLastAccessTime [in]
+    Time of the last access of the given file.
+
+    @param aLastWriteTime [in]
+    Time of the last modifying of the given file.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_NOENT no such file or directory not found<br>
+
+    @see osl_getFileStatus()
 */
 
-oslFileError SAL_CALL osl_setFileAttributes( rtl_uString *filePath, sal_uInt64 uAttributes );
-
-
-/** Sets file-Time
-
-    @param filePath[in] Path of the file
-    @param aCreationTime[in] creation time of the given file
-    @param aLastAccessTime[in]  time of the last access of the given file
-    @param aLastWriteTime[in]  time of the last modifying of the given file
-
-
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-    osl_File_E_NOENT        No such file or directory not found<br>
-    @see    osl_getFileStatus
-
-*/
-
-oslFileError SAL_CALL osl_setFileTime( rtl_uString *filePath,   const TimeValue *aCreationTime,
-                                                                const TimeValue *aLastAccessTime,
-                                                                const TimeValue *aLastWriteTime);
+oslFileError SAL_CALL osl_setFileTime(
+    rtl_uString *pustrFileURL,
+    const TimeValue *aCreationTime,
+    const TimeValue *aLastAccessTime,
+    const TimeValue *aLastWriteTime);
 
 
 /** Retrieves the file URL of the system's temporary directory path
 
-    @param pustrTempDirURL[out] On success receives the URL of system's
-        temporary directory path
+    @param pustrTempDirURL[out]
+    On success receives the URL of system's temporary directory path.
 
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_NOENT        No such file or directory not found<br>
+    @return
+    osl_File_E_None on success
+    osl_File_E_NOENT no such file or directory not found
 */
 
 oslFileError SAL_CALL osl_getTempDirURL( rtl_uString **pustrTempDirURL );
 
+
 /** Creates a temporary file in the directory provided by the caller or the
+    directory returned by osl_getTempDirURL.
+
+    Creates a temporary file in the directory provided by the caller or the
     directory returned by osl_getTempDirURL.
     Under UNIX Operating Systems the file will be created with read and write
     access for the user exclusively.
     If the caller requests only a handle to the open file but not the name of
     it, the file will be automatically removed on close else the caller is
-    responsible for removing the file on success.<br><br>
+    responsible for removing the file on success.
 
-    @param  pustrDirectoryURL [in] specifies the full qualified URL where
-            the temporary file should be created.
-            If pustrDirectoryURL is 0 the path returned by osl_getTempDirURL
-            will be used.
+    @param  pustrDirectoryURL [in]
+    Specifies the full qualified URL where the temporary file should be created.
+    If pustrDirectoryURL is 0 the path returned by osl_getTempDirURL will be used.
 
-    @param  pHandle [out] on success receives a handle to the open file.
-            If pHandle is 0 the file will be closed on return, in this case
-            ppustrTempFileURL must not be 0.
+    @param  pHandle [out]
+    On success receives a handle to the open file. If pHandle is 0 the file will
+    be closed on return, in this case ppustrTempFileURL must not be 0.
 
-    @param  ppustrTempFileURL [out] on success receives the full qualified URL
-            of the temporary file.
-            If ppustrTempFileURL is 0 the file will be automatically removed
-            on close, in this case pHandle must not be 0.
-            If ppustrTempFileURL is not 0 the caller receives the name of the
-            created file and is responsible for removing the file, in this case
-            *ppustrTempFileURL must be 0 or must point to a valid rtl_uString.
+    @param  ppustrTempFileURL [out]
+    On success receives the full qualified URL of the temporary file.
+    If ppustrTempFileURL is 0 the file will be automatically removed on close,
+    in this case pHandle must not be 0.
+    If ppustrTempFileURL is not 0 the caller receives the name of the created
+    file and is responsible for removing the file, in this case
+    *ppustrTempFileURL must be 0 or must point to a valid rtl_uString.
 
-    @descr  Description of the different pHandle, ppustrTempFileURL parameter combinations.
-            pHandle is 0 and ppustrTempDirURL is 0 - this combination is invalid<br>
-            pHandle is not 0 and ppustrTempDirURL is 0 - a handle to the open file
-            will be returned on success and the file will be automatically removed on close<br>
-            pHandle is 0 and ppustrTempDirURL is not 0 - the name of the file will be
-            returned, the caller is responsible for opening, closing and removing the file.<br>
-            pHandle is not 0 and ppustrTempDirURL is not 0 - a handle to the open file as well as
-            the file name will be returned, the caller is responsible for closing and removing
-            the file.<br>
+    @descr
+    Description of the different pHandle, ppustrTempFileURL parameter combinations.
+    pHandle is 0 and ppustrTempDirURL is 0 - this combination is invalid
+    pHandle is not 0 and ppustrTempDirURL is 0 - a handle to the open file
+    will be returned on success and the file will be automatically removed on close.
+    pHandle is 0 and ppustrTempDirURL is not 0 - the name of the file will be returned,
+    the caller is responsible for opening, closing and removing the file.
+    pHandle is not 0 and ppustrTempDirURL is not 0 - a handle to the open file as well as
+    the file name will be returned, the caller is responsible for closing and removing
+    the file.
 
-    @return osl_File_E_None   on success or one of the following error codes:<p>
-            osl_File_E_INVAL  the format of the parameter is invalid
-            osl_File_E_NOMEM  not enough memory for allocating structures <br>
-            osl_File_E_ACCES  Permission denied<br>
-            osl_File_E_NOENT  No such file or directory<br>
-            osl_File_E_NOTDIR Not a directory<br>
-            osl_File_E_ROFS   Read-only file system<br>
-            osl_File_E_NOSPC  No space left on device<br>
-            osl_File_E_DQUOT  Quota exceeded<p>
+    @return
+    osl_File_E_None   on success
+    osl_File_E_INVAL  the format of the parameter is invalid
+    osl_File_E_NOMEM  not enough memory for allocating structures
+    osl_File_E_ACCES  Permission denied
+    osl_File_E_NOENT  No such file or directory
+    osl_File_E_NOTDIR Not a directory
+    osl_File_E_ROFS   Read-only file system
+    osl_File_E_NOSPC  No space left on device
+    osl_File_E_DQUOT  Quota exceeded
 
-    @see    osl_getTempDirURL
+    @see    osl_getTempDirURL()
 */
 
 oslFileError SAL_CALL osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL);
+
 
 #ifdef __cplusplus
 }
