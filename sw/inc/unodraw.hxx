@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-13 10:58:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,9 +211,11 @@ class SwXShape : public SwXShapeBaseClass,
     SwFrmFmt*               GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
     SvxShape*               GetSvxShape();
+protected:
+    virtual ~SwXShape();
 public:
     SwXShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
-    virtual ~SwXShape();
+
 
     TYPEINFO();
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -267,9 +269,11 @@ class SwXGroupShape :
     public SwXShape,
     public ::com::sun::star::drawing::XShapes
 {
+protected:
+    virtual ~SwXGroupShape();
 public:
     SwXGroupShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
-    virtual ~SwXGroupShape();
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
