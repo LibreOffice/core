@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 08:46:40 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 08:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ configuration::SetElementInfo NodeSetInfoAccess::getElementInfo() const
 {
     using configuration::SetElementInfo;
 
-    TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(),getNode());
+    configuration::TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(),getNode());
 
     OSL_ENSURE(aTemplate.isValid(), "ERROR: Set must have an element template");
 
