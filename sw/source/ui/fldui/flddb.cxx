@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:10:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _DBCONFIG_HXX
 #include <dbconfig.hxx>
 #endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
 
 #define USER_DATA_VERSION_1     "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -115,6 +118,8 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aTypeLB     (this, SW_RES(LB_DBTYPE)),
     aSelectionFT(this, SW_RES(FT_DBSELECTION)),
     aDatabaseTLB(this, SW_RES(TLB_DBLIST), 0, aEmptyStr, FALSE),
+    aAddDBFT(this,      ResId(FT_ADDDB)),
+    aAddDBPB(this,      ResId(PB_ADDDB)),
     aConditionFT(this, SW_RES(FT_DBCONDITION)),
     aConditionED(this, SW_RES(ED_DBCONDITION)),
     aValueFT    (this, SW_RES(FT_DBSETNUMBER)),
@@ -135,6 +140,7 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aDatabaseTLB.SetDoubleClickHdl(LINK(this, SwFldDBPage, InsertHdl));
 
     aValueED.SetModifyHdl(LINK(this, SwFldDBPage, ModifyHdl));
+    aAddDBPB.SetClickHdl(LINK(this, SwFldDBPage, AddDBHdl));
 }
 
 /*--------------------------------------------------------------------
@@ -552,6 +558,18 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
             aNumFormatLB.Enable(bNumFormat);
             aFormatFL.Enable(bNumFormat);
         }
+    }
+    return 0;
+}
+/*-- 27.05.2004 09:14:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
+{
+    String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
+    if(sNewDB.Len())
+    {
+        aDatabaseTLB.AddDataSource(sNewDB);
     }
     return 0;
 }
