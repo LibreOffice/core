@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-21 09:56:15 $
+ *  last change: $Author: tl $ $Date: 2001-07-02 11:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,6 +1115,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguDicsCLB.SetHelpId(HID_CLB_EDIT_MODULES_DICS );
     aLinguDicsCLB.SetHighlightRange();
     aLinguDicsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
+    aLinguDicsCLB.SetCheckButtonHdl(LINK(this, SvxLinguTabPage, BoxCheckButtonHdl_Impl));
 
     aLinguDicsNewPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
     aLinguDicsEditPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
@@ -1621,6 +1622,20 @@ IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
         {
             pLinguData->Reconfigure( aLinguModulesCLB.GetText( nPos ),
                                      aLinguModulesCLB.IsChecked( nPos ) );
+        }
+    }
+    else if (pBox == &aLinguDicsCLB)
+    {
+        USHORT nPos = aLinguDicsCLB.GetSelectEntryPos();
+        if (nPos != LISTBOX_ENTRY_NOTFOUND)
+        {
+            const Reference< XDictionary > &rDic = aDics.getConstArray()[ nPos ];
+            if (SvxGetIgnoreAllList() == rDic)
+            {
+                SvLBoxEntry* pEntry = aLinguDicsCLB.GetEntry( nPos );
+                if (pEntry)
+                    lcl_SetCheckButton( pEntry, TRUE );
+            }
         }
     }
     return 0;
