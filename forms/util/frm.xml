@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+<Author>Frank Schoenheit</Author>
+
+<Name>com.sun.star.form.OButtonModel</Name>
+<Description>
+    This component provides the button.
+</Description>
+
+<SupportedService>com.sun.star.form.component.CommandButton</SupportedService>
+
+<Name>com.sun.star.form.OCheckBoxModel</Name>
+<Description>
+    This component provides the OCheckBoxModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseCheckBox</SupportedService>
+
+<Name>com.sun.star.form.OComboBoxModel</Name>
+<Description>
+    This component provides the OComboBoxModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseComboBox</SupportedService>
+
+<Name>com.sun.star.form.OCurrencyModel</Name>
+<Description>
+    This component provides the OCurrencyModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseCurrencyField</SupportedService>
+
+<Name>com.sun.star.form.ODateModel</Name>
+<Description>
+    This component provides the ODateModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseDateField</SupportedService>
+
+<Name>com.sun.star.form.OEditModel</Name>
+<Description>
+    This component provides the OEditModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseTextField</SupportedService>
+
+<Name>com.sun.star.form.OFileControlModel</Name>
+<Description>
+    This component provides the OFileControlModel.
+</Description>
+<SupportedService>com.sun.star.form.component.FileControl</SupportedService>
+
+<Name>com.sun.star.form.ODatabaseForm</Name>
+<Description>
+    This component provides the button.
+</Description>
+<SupportedService>com.sun.star.form.component.HTMLForm</SupportedService>
+
+<Name>com.sun.star.form.OFormsCollection</Name>
+<Description>
+    This component provides the button.
+</Description>
+<SupportedService>com.sun.star.form.Forms</SupportedService>
+
+<Name>com.sun.star.form.OGridControlModel</Name>
+<Description>
+    This component provides the OGridControlModel.
+</Description>
+<SupportedService>com.sun.star.form.component.GridControl</SupportedService>
+
+<Name>com.sun.star.form.OGroupBoxModel</Name>
+<Description>
+    This component provides the OGroupBoxModel.
+</Description>
+<SupportedService>com.sun.star.form.component.GroupBox</SupportedService>
+
+<Name>com.sun.star.form.OHiddenModel</Name>
+<Description>
+    This component provides the OHiddenModel.
+</Description>
+<SupportedService>com.sun.star.form.component.HiddenControl</SupportedService>
+
+<Name>com.sun.star.form.OImageButtonModel</Name>
+<Description>
+    This component provides the OImageButtonModel.
+</Description>
+<SupportedService>com.sun.star.form.component.ImageButton</SupportedService>
+
+<Name>com.sun.star.form.OImageControlModel</Name>
+<Description>
+    This component provides the OImageControlModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseImageControl</SupportedService>
+
+<Name>com.sun.star.form.OListBoxModel</Name>
+<Description>
+    This component provides the OListBoxModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseListBox</SupportedService>
+
+<Name>com.sun.star.form.ONumericModel</Name>
+<Description>
+    This component provides the ONumericModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseNumericField</SupportedService>
+
+<Name>com.sun.star.form.OPatternModel</Name>
+<Description>
+    This component provides the OPatternModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabasePatternField</SupportedService>
+
+<Name>com.sun.star.form.ORadioButtonModel</Name>
+<Description>
+    This component provides the RadioButtonModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseRadioButton</SupportedService>
+
+<Name>com.sun.star.form.OFixedTextModel</Name>
+<Description>
+    This component provides the button.
+</Description>
+<SupportedService>com.sun.star.form.component.FixedText</SupportedService>
+
+<Name>com.sun.star.form.OTimeModel</Name>
+<Description>
+    This component provides the OTimeModel.
+</Description>
+<SupportedService>com.sun.star.form.component.DatabaseTimeField</SupportedService>
+
+<Language>c++</Language>
+
+<Status StatusValue="final"/>
+
+<ModuleName>frm</ModuleName>
+
+<LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+
+<ServiceDependency>...</ServiceDependency>
+
+<ProjectBuildDependency>sal</ProjectBuildDependency>
+<ProjectBuildDependency>osl</ProjectBuildDependency>
+<ProjectBuildDependency>one</ProjectBuildDependency>
+<ProjectBuildDependency>cppu</ProjectBuildDependency>
+<ProjectBuildDependency>cppuhelper</ProjectBuildDependency>
+<ProjectBuildDependency>tools</ProjectBuildDependency>
+<ProjectBuildDependency>vcl</ProjectBuildDependency>
+<ProjectBuildDependency>svtool</ProjectBuildDependency>
+<ProjectBuildDependency>sfx2</ProjectBuildDependency>
+<ProjectBuildDependency>vos</ProjectBuildDependency>
+<ProjectBuildDependency>unotools</ProjectBuildDependency>
+<ProjectBuildDependency>tk</ProjectBuildDependency>
+
+<RuntimeModuleDependency>sal</RuntimeModuleDependency>
+<RuntimeModuleDependency>osl</RuntimeModuleDependency>
+<RuntimeModuleDependency>one</RuntimeModuleDependency>
+<RuntimeModuleDependency>cppu</RuntimeModuleDependency>
+<RuntimeModuleDependency>cppuhelper</RuntimeModuleDependency>
+<RuntimeModuleDependency>tools</RuntimeModuleDependency>
+<RuntimeModuleDependency>vcl</RuntimeModuleDependency>
+<RuntimeModuleDependency>svtool</RuntimeModuleDependency>
+<RuntimeModuleDependency>sfx2</RuntimeModuleDependency>
+<RuntimeModuleDependency>vos</RuntimeModuleDependency>
+<RuntimeModuleDependency>unotools</RuntimeModuleDependency>
+<RuntimeModuleDependency>tk</RuntimeModuleDependency>
+
+
+</COMPONENTDESCRIPTION>

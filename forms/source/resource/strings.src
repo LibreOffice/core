@@ -1,0 +1,356 @@
+/*************************************************************************
+ *
+ *  $RCSfile: strings.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _FRM_RESOURCE_HRC_
+#include "frm_resource.hrc"
+#endif
+
+String RID_BASELISTBOX_ERROR_FILLLIST
+{
+    Text = "Der Inhalt eines Kombinations- oder Listenfeldes konnte nicht ermittelt werden.";
+    Text [ ENGLISH ] = "The content of a combo or list box could not be determined.";
+    Text [ english_us ] = "The contents of a combo box or list field could not be determined.";
+    Text[ portuguese ] = "Foi impossível determinar o conteúdo de uma caixa combinada ou caixa de listagem.";
+    Text[ russian ] = "Îïğåäåëèòü ñîäåğæèìîå ïîëÿ ñî ñïèñêîì èëè ïîëÿ ñïèñêà íå óäàåòñÿ.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíáãíşñéóç ôïõ ğåñéå÷ïìİíïõ åíüò ğåäßïõ óõíäõáóìïı Ş åíüò ğåäßïõ ëßóôáò";
+    Text[ dutch ] = "Inhoud combinatieveld of keuzelijst niet gevonden";
+    Text[ french ] = "Impossible de déterminer le contenu de la zone combinée/zone de liste.";
+    Text[ spanish ] = "No se pudo determinar el contenido de un campo combinado o un listado.";
+    Text[ italian ] = "Non è stato possibile determinare il contenuto di una casella combinata o di una casella di riepilogo.";
+    Text[ danish ] = "Det var ikke muligt at bestemme indholdet for en kombinationsboks eller rulleliste.";
+    Text[ swedish ] = "Innehållet i ett kombinationsfält eller en listruta kunde inte bestämmas.";
+    Text[ polish ] = "Nie mo¿na by³o ustaliæ zawartoœci pola kombi lub pola listy.";
+    Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
+    Text[ japanese ] = "ºİÎŞÎŞ¯¸½‚Ü‚½‚ÍØ½ÄÎŞ¯¸½‚Ì“à—e‚ªŠm”F‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "ComboBox/ListBox : determine the list contents";
+    Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨×éºÏ¿ò»òÕßÁĞ±í¿òÄÚµÄÄÚÈİ¡£";
+    Text[ chinese_traditional ] = "µLªk±q¸ê®Æ®w¤º´ú©w²Õ¦X¤è¶ô©Î²M³æ¤è¶ôªº¤º®e";
+    Text[ arabic ] = "ÊÚĞÑ ÇáÊÚÑİ Úáì ãÍÊæíÇÊ ãÑÈÚ ÊÍÑíÑ æÓÑÏ Ãæ ãÑÈÚ ŞÇÆãÉ.";
+    Text[ turkish ] = "The contents of a combo box or list field could not be determined.";
+};
+
+String RID_STR_IMPORT_GRAPHIC
+{
+    Text = "Grafik einfügen" ;
+    Text [ English ] = "Insert graphic" ;
+    Text [ portuguese ] = "Inserir imagem" ;
+    Text [ english_us ] = "Insert graphics" ;
+    Text [ portuguese_brazilian ] = "Grafik einfügen" ;
+    Text [ swedish ] = "Infoga grafik" ;
+    Text [ danish ] = "Indsæt billede" ;
+    Text [ italian ] = "Inserisci immagine" ;
+    Text [ spanish ] = "Insertar imagen" ;
+    Text [ french ] = "Insérer une image" ;
+    Text [ dutch ] = "Afbeelding invoegen" ;
+    Text[ chinese_simplified ] = "²åÈëÍ¼ĞÎ";
+    Text[ russian ] = "Âñòàâèòü ğèñóíîê";
+    Text[ polish ] = "Wstaw grafikê";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J¹Ï¤ù";
+    Text[ greek ] = "ÅéóáãùãŞ ãñáöéêïı";
+    Text[ korean ] = "±×·¡ÇÈ »ğÀÔ";
+    Text[ arabic ] = "ÅÏÑÇÌ ÕæÑÉ";
+    Text[ turkish ] = "Insert graphics";
+};
+
+String RID_STR_CONTROL_SUBSTITUTED_NAME
+{
+    Text = "ersetzt";
+    Text [ english ] = "substituted";
+    Text [ english_us ] = "substituted";
+    Text[ portuguese ] = "substituído";
+    Text[ russian ] = "çàìåíåíî";
+    Text[ greek ] = "áíôéêáôáóôÜèçêå";
+    Text[ dutch ] = "vervangen";
+    Text[ french ] = "remplacé";
+    Text[ spanish ] = "reemplazado";
+    Text[ italian ] = "sostituito";
+    Text[ danish ] = "erstattet";
+    Text[ swedish ] = "ersatt";
+    Text[ polish ] = "zamieniono";
+    Text[ portuguese_brazilian ] = "substituted";
+    Text[ japanese ] = "’uŠ·";
+    Text[ korean ] = "´ëÃ¼";
+    Text[ chinese_simplified ] = "Ìæ»»";
+    Text[ chinese_traditional ] = "´À¥N";
+    Text[ arabic ] = "ãÓÊÈÏá";
+    Text[ turkish ] = "substituted";
+};
+
+String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
+{
+    Text = "Beim Laden dieses Controls trat ein Fehler auf. Es wurde daher durch einen Platzhalter ersetzt.";
+    Text [ english ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
+    Text [ english_us ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
+    Text[ portuguese ] = "Ao carregar este controlo ocorreu um erro. Por esta razão foi substituído por um marcador de posição.";
+    Text[ russian ] = "Ïğè çàãğóçêå ıòîãî ıëåìåíòà óïğàâëåíèÿ (control) ïğîèçîøëà îøèáêà. Ïîıòîìó îí áûë çàìåíåí ìåòêîé-çàïîëíèòåëåì.";
+    Text[ greek ] = "Ğñïİêõøå óöÜëìá êáôÜ ôç öüñôùóç áõôïı ôïõ óôïé÷åßïõ åëİã÷ïõ. Ãéá áõôüí ôïí ëüãï áíôéêáôáóôÜèçêå ìå İíá óıìâïëï êñÜôçóçò èİóçò.";
+    Text[ dutch ] = "Fout bjj het laden van control. Werd vervangen door plaatsvervanger.";
+    Text[ french ] = "Erreur lors du chargement de ce contrôle ; c'est pouquoi il a été remplacé par un substituant.";
+    Text[ spanish ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodín.";
+    Text[ italian ] = "Durante il caricamento del control si è verificato un errore. Pertanto è stato sostituito con una variabile.";
+    Text[ danish ] = "Der opstod en fejl under indlæsningen af dette kontrolelement. Det blev derfor erstattet med en pladsholder.";
+    Text[ swedish ] = "När denna control laddades uppstod ett fel. Därför ersattes den av en platshållare.";
+    Text[ polish ] = "Wyst¹pi³ b³¹d podczas ³adowania pola kontrolnego (control). Zamieniono je dlatego na znak-wype³niacz.";
+    Text[ portuguese_brazilian ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
+    Text[ japanese ] = "‚±‚ÌºİÄÛ°Ù‚Ì“Ç‚İ‚İ’†‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚»‚ê‚ªŒ´ˆö‚ÅÜ²ÙÄŞ¶°ÄŞ‚É’uŠ·‚³‚ê‚Ü‚µ‚½B";
+    Text[ korean ] = "ÀÌ ÄÁÆ®·ÑÀ» ·ÎµåÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇØ¼­ °³Ã¼ Æ²·Î ´ëÃ¼µÇ¾ú½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚ×°ÔØÕâ¸ö×Ö¶ÎÊ±³öÏÖÁËÒ»¸ö´íÎó£¬Òò´ËÓÃÍ¨Åä·û´úÌæ×Ö¶Î¡£";
+    Text[ chinese_traditional ] = "¦b¸Ë¸ü³o­Ó±±¨î¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¦ı¤w¸g¥Î¤@­Ó³q°t²Å´À¥N¥¦¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÚäÕÑ ÇáÊÍßã åĞÇ. áåĞÇ Êã ÇÓÊÈÏÇáå ÈÚäÕÑ äÇÆÈ.";
+    Text[ turkish ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
+};
+
+String RID_STR_READERROR
+{
+    Text = "Fehler beim Lesen von Daten aus der Datenbank" ;
+    Text [ ENGLISH ] = "Error while reading data from database" ;
+    Text [ norwegian ] = "Feil ved lesing av data fra database" ;
+    Text [ italian ] = "Errore durante la lettura di dati dal database" ;
+    Text [ portuguese_brazilian ] = "Erro ao ler dados da base de dados" ;
+    Text [ portuguese ] = "Erro ao ler dados da base de dados" ;
+    Text [ finnish ] = "Virhe luettaessa tietoja tietokannasta" ;
+    Text [ danish ] = "Fejl under læsning af data fra databasen" ;
+    Text [ french ] = "Erreur lors de la lecture des données de la base de données" ;
+    Text [ swedish ] = "Fel vid läsning av data från databasen" ;
+    Text [ dutch ] = "Fout bij lezen van gegevens in database" ;
+    Text [ spanish ] = "Error al leer datos de la base de datos" ;
+    Text [ english_us ] = "Error reading data from database" ;
+    Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Êı¾İ¿âÊı¾İÊ±·¢Éú´íÎó";
+    Text[ russian ] = "Îøèáêà ïğè ÷òåíèè äàííûõ èç áàçû äàííûõ";
+    Text[ polish ] = "B³¹d podczas odczytu danych z bazy danych";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚©‚çÃŞ°À“Ç‚İæ‚è‚ÌÛ‚Ì´×°";
+    Text[ chinese_traditional ] = "¦bÅª¨ú¸ê®Æ®w®Éµo¥Í¿ù»~";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç äåäïìİíùí áğü ôç âÜóç äåäïìİíùí";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ µ¥ÀÌÅÍ¸¦ ÀĞÀ» ¶§ ¿À·ù ¹ß»ı";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÈíÇäÇÊ ãä ŞÇÚÏÉ ÇáÈíÇäÇÊ";
+    Text[ turkish ] = "Error reading data from database";
+};
+
+String RID_STR_CONNECTERROR
+{
+    Text = "Verbindungsaufbau gescheitert" ;
+    Text [ ENGLISH ] = "Can't create connection" ;
+    Text [ norwegian ] = "Kan ikke opprette forbindelse" ;
+    Text [ italian ] = "Impossibile creare la connessione" ;
+    Text [ portuguese_brazilian ] = "NÆo consigo criar a conexÆo" ;
+    Text [ portuguese ] = "Não foi possível estabelecer ligação." ;
+    Text [ finnish ] = "Yhteyttä ei voi muodostaa" ;
+    Text [ danish ] = "Det var ikke muligt at oprette forbindelsen" ;
+    Text [ french ] = "Connexion impossible" ;
+    Text [ swedish ] = "Uppkoppling avbruten" ;
+    Text [ dutch ] = "Kan geen verbinding tot stand brengen" ;
+    Text [ spanish ] = "No se pudo efectuar la conexión." ;
+    Text [ english_us ] = "Connection failed" ;
+    Text[ chinese_simplified ] = "Á¬½ÓÊ§°Ü";
+    Text[ russian ] = "Ïîäêëş÷åíèå ïîâğåæäåíî";
+    Text[ polish ] = "Po³¹czenie nie dosz³o do skutku";
+    Text[ japanese ] = "Ú‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+    Text[ chinese_traditional ] = "³s½u¥¢±Ñ";
+    Text[ greek ] = "Ç óıíäåóç áğİôõ÷å";
+    Text[ korean ] = "¿¬°á¿¡ ½ÇÆĞÇßÀ½";
+    Text[ arabic ] = "ÚãáíÉ ÇáÇÊÕÇá İÔáÊ";
+    Text[ turkish ] = "Connection failed";
+};
+
+String RID_ERR_LOADING_FORM
+{
+    Text = "Die Dateninhalte konnten nicht geladen werden.";
+    Text [ english ] = "The data content could not be loaded.";
+    Text [ english_us ] = "The data content could not be loaded.";
+    Text[ portuguese ] = "Foi impossível carregar o conteúdo dos dados.";
+    Text[ russian ] = "Çàãğóçèòü ñîäåğæèìîå äàííûõ íåâîçìîæíî.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé öüñôùóç ôùí ğåñéå÷ïìİíùí ôùí äåäïìİíùí.";
+    Text[ dutch ] = "De gegevens konden niet worden geladen.";
+    Text[ french ] = "Impossible de charger le contenu des données.";
+    Text[ spanish ] = "No se pudieron cargar los contenidos de los datos.";
+    Text[ italian ] = "Non è stato possibile caricare i contenuti.";
+    Text[ danish ] = "Det var ikke muligt at indlæse dataindholdet.";
+    Text[ swedish ] = "Datainnehållet kunde inte laddas.";
+    Text[ polish ] = "Nie mo¿na by³o za³adowaæ zawartoœci danych.";
+    Text[ portuguese_brazilian ] = "The data content could not be loaded.";
+    Text[ japanese ] = "ÃŞ°À“à—e‚ª“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÎŞ·¨×°ÔØÊı¾İÄÚÈİ¡£";
+    Text[ chinese_traditional ] = "µLªk¸Ë¸ü¸ê®Æ¤º®e¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
+    Text[ turkish ] = "The data content could not be loaded.";
+};
+
+String RID_ERR_REFRESHING_FORM
+{
+    Text = "Die Dateninhalte konnten nicht aktualisiert werden.";
+    Text [ english ] = "The data content could not be refreshed.";
+    Text [ english_us ] = "The data content could not be updated";
+    Text[ portuguese ] = "Foi impossível actualizar o conteúdo dos dados.";
+    Text[ russian ] = "Îáíîâèòü ñîäåğæèìîå äàííûõ íåâîçìîæíî.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé åíçìİñùóç ôùí ğåñéå÷ïìİíùí ôùí äåäïìİíùí.";
+    Text[ dutch ] = "De gegevens konden niet worden geactualiseerd:";
+    Text[ french ] = "Impossible d'actualiser le contenu des données.";
+    Text[ spanish ] = "No se pudieron actualizar los contenidos de los datos.";
+    Text[ italian ] = "Non è stato possibile aggiornare i contenuti.";
+    Text[ danish ] = "Det var ikke muligt at opdatere dataindholdet.";
+    Text[ swedish ] = "Datainnehållet kunde inte uppdateras.";
+    Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawartoœci danych.";
+    Text[ portuguese_brazilian ] = "The data content could not be refreshed.";
+    Text[ japanese ] = "ÃŞ°À“à—e‚ªXV‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» »õ·Î °íÄ¡Áö ¸øÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÎŞ·¨¸üĞÂÊı¾İÄÚÈİ¡£";
+    Text[ chinese_traditional ] = "µLªk§ó·s¸ê®Æ¤º®e¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÊÍÏíË ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
+    Text[ turkish ] = "The data content could not be refreshed.";
+};
+
+String RID_STR_ERR_INSERTRECORD
+{
+    Text = "Fehler beim Einfügen des neuen Datensatzs";
+    Text [ english ] = "error inserting the new record";
+    Text [ english_us ] = "Error inserting the new record";
+    Text[ portuguese ] = "Erro ao inserir o novo registo de dados";
+    Text[ russian ] = "Îøèáêà ïğè ââîäå íîâîé çàïèñè";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí åéóáãùãŞ ôçò íİáò åããñáöŞò";
+    Text[ dutch ] = "Fout bij invoegen van nieuwe record";
+    Text[ french ] = "Erreur lors de l'insertion du nouvel enregistrement";
+    Text[ spanish ] = "Error al insertar un nuevo registro de datos.";
+    Text[ italian ] = "Errore nell'inserire il nuovo record di dati.";
+    Text[ danish ] = "Fejl ved indsættelse af den nye datapost";
+    Text[ swedish ] = "Fel vid infogning av den nya dataposten";
+    Text[ polish ] = "B³¹d przy wstawianiu nowego rekordu";
+    Text[ portuguese_brazilian ] = "error inserting the new record";
+    Text[ japanese ] = "V‚µ‚¢Úº°ÄŞ‚ğ‘}“ü‚·‚éÛ‚Ì´×°";
+    Text[ korean ] = "»õ ·¹ÄÚµå »ğÀÔ½Ã ¿À·ù";
+    Text[ chinese_simplified ] = "ÔÚ²åÈëĞÂÊı¾İÌõÄ¿Ê±·¢Éú´íÎó";
+    Text[ chinese_traditional ] = "¦b´¡¤J·s¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅÏÑÇÌ ÇáÓÌá ÇáÌÏíÏ";
+    Text[ turkish ] = "Error inserting the new record";
+};
+
+String RID_STR_ERR_UPDATERECORD
+{
+    Text = "Fehler beim Schreiben des aktuellen Datensatzes";
+    Text [ english ] = "error updating the current record";
+    Text [ english_us ] = "Error updating the current record";
+    Text[ portuguese ] = "Erro ao escrever o registo de dados activo";
+    Text[ russian ] = "Îøèáêà ïğè èçìåíåíèè òåêóùåé çàïèñè";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ ôçò ôñİ÷ïõóáò åããñáöŞò";
+    Text[ dutch ] = "Fout bij schrijven van actuele record";
+    Text[ french ] = "Erreur lors de l'écriture de l'enregistrement actif";
+    Text[ spanish ] = "Error al escribir el registro actual de datos.";
+    Text[ italian ] = "Errore nello scrivere il record di dati corrente.";
+    Text[ danish ] = "Fejl ved skrivning af den aktuelle datapost";
+    Text[ swedish ] = "Fel vid skrivning av den aktuella dataposten";
+    Text[ polish ] = "B³¹d przy pisaniu aktualnego rekordu";
+    Text[ portuguese_brazilian ] = "error updating the current record";
+    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğ‘‚«‚ŞÛ‚Ì´×°";
+    Text[ korean ] = "ÇöÀç ·¹ÄÚµå ¾÷µ¥ÀÌÆ®½Ã ¿À·ù";
+    Text[ chinese_simplified ] = "ÔÚ¸üĞÂµ±Ç°Êı¾İÌõÄ¿Ê±·¢Éú´íÎó";
+    Text[ chinese_traditional ] = "¦b¼g¤J¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáÓÌá ÇáÍÇáí";
+    Text[ turkish ] = "Error updating the current record";
+};
+
+String RID_STR_ERR_DELETERECORD
+{
+    Text = "Fehler beim Löschen des aktuellen Datensatzes";
+    Text [ english ] = "error deleting the current record";
+    Text [ english_us ] = "Error deleting the current record";
+    Text[ portuguese ] = "Erro ao eliminar o registo de dados activo";
+    Text[ russian ] = "Îøèáêà ïğè óäàëåíèè òåêóùåé çàïèñè";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí äéáãñáöŞ ôçò ôñİ÷ïõóáò åããñáöŞò";
+    Text[ dutch ] = "Fout bij wissen van actuele record";
+    Text[ french ] = "Erreur lors de la suppression de l'enregistrement actif";
+    Text[ spanish ] = "Error al eliminar el registro actual de datos.";
+    Text[ italian ] = "Errore nel cancellare il record di dati corrente.";
+    Text[ danish ] = "Fejl ved sletning af den aktuelle datapost";
+    Text[ swedish ] = "Fel vid radering av den aktuella dataposten";
+    Text[ polish ] = "B³¹d przy usuwaniu aktualnego rekordu";
+    Text[ portuguese_brazilian ] = "error deleting the current record";
+    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğíœ‚·‚éÛ‚Ì´×°";
+    Text[ korean ] = "ÇöÀç ·¹ÄÚµå »èÁ¦½Ã ¿À·ù";
+    Text[ chinese_simplified ] = "ÔÚÉ¾³ıµ±Ç°Êı¾İÌõÄ¿Ê±·¢Éú´íÎó";
+    Text[ chinese_traditional ] = "¦b§R°£¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍĞİ ÇáÓÌá ÇáÍÇáí";
+    Text[ turkish ] = "Error deleting the current record";
+};
+
+String RID_STR_ERR_DELETERECORDS
+{
+    Text = "Fehler beim Löschen der angegebenen Datensätze";
+    Text [ english ] = "error deleting the specified records";
+    Text [ english_us ] = "Error deleting the specified records";
+    Text[ portuguese ] = "Erro ao eliminar os registos de dados indicados.";
+    Text[ russian ] = "Îøèáêà ïğè óäàëåíèè çàäàííîé çàïèñè";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí äéáãñáöŞ ôùí åğéëåãìİíùí åããñáöşí";
+    Text[ dutch ] = "Fout bij wissen van records";
+    Text[ french ] = "Erreur lors de la suppression des enregistrements spécifiés";
+    Text[ spanish ] = "Error al eliminar los registros de datos indicados.";
+    Text[ italian ] = "Errore nel cancellare i record di dati specificati.";
+    Text[ danish ] = "Fejl ved sletning af de angivne dataposter";
+    Text[ swedish ] = "Fel vid radering av de angivna dataposterna";
+    Text[ polish ] = "B³¹d przy usuwaniu podanych rekordów";
+    Text[ portuguese_brazilian ] = "error deleting the specified records";
+    Text[ japanese ] = "w’è‚µ‚½Úº°ÄŞ‚ğíœ‚·‚éÛ‚Ì´×°";
+    Text[ korean ] = "ÁöÁ¤µÈ ·¹ÄÚµå »èÁ¦½Ã ¿À·ù";
+    Text[ chinese_simplified ] = "ÔÚÉ¾³ıÖ¸¶¨µÄÊı¾İÌõÄ¿Ê±·¢Éú´íÎó";
+    Text[ chinese_traditional ] = "¦b§R°£«ü©w¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍĞİ ÇáÓÌáÇÊ ÇáãÏÑÌÉ";
+    Text[ turkish ] = "Error deleting the specified records";
+};
