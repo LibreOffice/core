@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:23:56 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@
 #include "porlay.hxx"   // SetFly
 #include "inftxt.hxx"   // SwTxtPaintInfo
 #include "frmsh.hxx"
-// OD 29.07.2003 #110978#
-#ifndef _ANCHOREDOBJECTPOSITION_HXX
-#include <anchoredobjectposition.hxx>
+// OD 28.10.2003 #113049#
+#ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
+#include <ascharanchoredobjectposition.hxx>
 #endif
 
 /*************************************************************************
@@ -447,8 +447,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
 {
     // Note: rBase have to be an absolute value
 
-    // OD 29.07.2003 #110978# - use new class to position object
-    sal_uInt8 nLineAlignment = 0;
+    // OD 28.10.2003 #113049# - use new class to position object
     // determine drawing object
     SdrObject* pSdrObj = 0L;
     if( bDraw )
@@ -467,13 +466,15 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         pSdrObj = GetFlyFrm()->GetVirtDrawObj();
     }
     // position object
-    objectpositioning::SwAnchoredObjectPosition aObjPositioning( objectpositioning::AS_CHAR, *pSdrObj );
-    aObjPositioning.CalcPosition( rBase, nFlags,
-                                  nLnAscent, nLnDescent, nFlyAsc, nFlyDesc,
-                                  nLineAlignment );
+    objectpositioning::SwAsCharAnchoredObjectPosition aObjPositioning(
+                                    *pSdrObj,
+                                    rBase, nFlags,
+                                    nLnAscent, nLnDescent, nFlyAsc, nFlyDesc );
+    aObjPositioning.CalcPosition();
+
+    SetAlign( aObjPositioning.GetLineAlignment() );
 
     aRef = aObjPositioning.GetAnchorPos();
-    SetAlign( nLineAlignment );
     if( nFlags & AS_CHAR_ROTATE )
         SvXSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );
     else
