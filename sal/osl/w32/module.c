@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:26:37 $
+ *  last change: $Author: jbu $ $Date: 2001-02-16 08:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <osl/file.h>
 #include <systools/win32/kernel9x.h>
 
+#include <osl/logmodule.h>
 
 /*
     under WIN32, we use the void* oslModule
@@ -83,6 +84,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     HINSTANCE hInstance;
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
     rtl_uString* Module = NULL;
+    oslModule ret = 0;
 
     OSL_ASSERT(strModuleName);
 
@@ -96,9 +98,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
         hInstance = 0;
 
+    ret = (oslModule) hInstance;
     rtl_uString_release(Module);
     SetErrorMode(errorMode);
-    return (oslModule)hInstance;
+
+    if( ret )
+        osl_logModule( ret , strModuleName );
+    return ret;
 }
 
 /*****************************************************************************/
@@ -108,6 +114,7 @@ void SAL_CALL osl_unloadModule(oslModule Module)
 {
     OSL_ASSERT(Module);
     FreeLibrary((HINSTANCE)Module);
+    osl_unlogModule( Module );
 }
 
 /*****************************************************************************/
