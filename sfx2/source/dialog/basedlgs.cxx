@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:53 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,6 +920,7 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
     delete pCancelBtn;
     delete pHelpBtn;
     delete pPage;
+    delete pOutSet;
 }
 
 // -----------------------------------------------------------------------
