@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 12:19:45 $
+ *  last change: $Author: pb $ $Date: 2002-09-16 07:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,7 @@ BOOL SvtIconChoiceCtrl::HandleShortCutKey( const KeyEvent& r )
 
 Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
 {
-    return _pImp->CalcFocusRect( pEntry );
+    return _pImp->GetEntryBoundRect( pEntry );
 }
 
 void SvtIconChoiceCtrl::FillLayoutData() const
