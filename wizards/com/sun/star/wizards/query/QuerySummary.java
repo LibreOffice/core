@@ -2,9 +2,9 @@
 *
 *  $RCSfile: QuerySummary.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:45:22 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:58:09 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.query;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -73,13 +72,18 @@ public class QuerySummary extends QueryMetaData {
     String sSummary;
     Resource oResource;
     XMultiServiceFactory xMSF;
-    String sSeparator;
-    String sReturnChar;
+    private String sSeparator;
+    private String sReturnChar;
+    private String sAnd;
+    private String sOr;
+
 
     public QuerySummary(XMultiServiceFactory _xMSF, Resource _oResource) {
         super(_xMSF);
         this.oResource = _oResource;
         this.xMSF = _xMSF;
+        sAnd = oResource.getResText(RID_QUERY + 33);
+        sOr = oResource.getResText(RID_QUERY + 34);
         sSeparator = oResource.getResText(RID_QUERY + 91);
         sReturnChar = String.valueOf((char) 13) + String.valueOf((char) 13);
     }
@@ -104,14 +108,13 @@ public class QuerySummary extends QueryMetaData {
             String sHavingFraction = "";
             sFieldNamesFraction = combineFieldNameFraction() + sReturnChar;
             sSortingFraction = combinePartString(RID_QUERY + 51, SortFieldNames, RID_QUERY + 52, RID_QUERY + 93, new String[] { "<FIELDNAME>", "<SORTMODE>" }) + sReturnChar;
-            sFilterFraction = combineFilterNameFraction(this.FilterConditions, RID_QUERY + 53, RID_QUERY + 54) + sReturnChar;
+            sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), RID_QUERY + 53, RID_QUERY + 54) + sReturnChar;
             //      if (xDBMetaData.getNumericFunctions().length() > 0)
             //          sAggregateFraction = combinePartString(RID_QUERY + 55, AggregateFieldNames, RID_QUERY + 56, RID_QUERY + 95, new String[]{ "<CALCULATEDFUNCTION>", "<FIELDNAME>"}) + sReturnChar;
             if (xDBMetaData.supportsGroupBy()) {
                 sGroupByFraction = combinePartString(RID_QUERY + 57, GroupFieldNames, RID_QUERY + 58) + sReturnChar;
-                sHavingFraction = combineFilterNameFraction(this.GroupByFilterConditions, RID_QUERY + 59, RID_QUERY + 60);
+                sHavingFraction = combineFilterNameFraction(getGroupByFilterConditions(), RID_QUERY + 59, RID_QUERY + 60);
             }
-
             // TODO: remove the last return from the string
             sSummary = sFieldNamesFraction + sSortingFraction + sFilterFraction + sAggregateFraction + sGroupByFraction + sHavingFraction;
             sSummary = JavaTools.replaceSubString(sSummary, "", "~");
@@ -132,17 +135,17 @@ public class QuerySummary extends QueryMetaData {
                 String sconditions = "";
                 String sStart = oResource.getResText(_InitResID);
                 String BaseString = oResource.getResText(RID_QUERY + 96);
-                //TODO take aliasname instead of displayname
                 if (_filterconditions.length == 1) {
                     PropertyValue[] curfilterconditions = _filterconditions[0];
                     for (int i = 0; i < curfilterconditions.length; i++) {
                         sconditions += FilterComponent.getDisplayCondition(BaseString, _filterconditions[0][i], this);
-                        sconditions = appendClauseSeparator(sconditions, " and ", i, curfilterconditions.length);
+                        sconditions = appendClauseSeparator(sconditions, " " + sAnd + " ", i, curfilterconditions.length);
                     }
                 } else {
+
                     for (int i = 0; i < _filterconditions.length; i++) {
                         sconditions += FilterComponent.getDisplayCondition(BaseString, _filterconditions[i][0],this);
-                        sconditions = appendClauseSeparator(sconditions, " or ", i, _filterconditions.length);
+                        sconditions = appendClauseSeparator(sconditions, " " + sOr + " ", i, _filterconditions.length);
                     }
                 }
                 String sreturn = sStart + sconditions;
