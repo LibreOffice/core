@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,8 @@ sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
         case adDBTimeStamp:         nType = DataType::TIMESTAMP;    break;
         case adBoolean:             nType = DataType::BIT;          break;
 //      case adArray:               nType = DataType::ARRAY;        break;
-        case adBinary:
-        case adGUID:                nType = DataType::BINARY;       break;
+        case adBinary:              nType = DataType::BINARY;       break;
+        case adGUID:                nType = DataType::OBJECT;       break;
         case adBSTR:
         case adVarWChar:
         case adWChar:
@@ -207,8 +207,9 @@ DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine)
         case DataType::LONGVARBINARY:   return adLongVarBinary;     break;
         case DataType::CHAR:            return adWChar;             break;
         case DataType::TINYINT:         return isJetEngine(_nJetEngine) ? adUnsignedTinyInt : adTinyInt;break;
+        case DataType::OBJECT:          return adGUID;      break;
     default:
-        OSL_ENSURE(0,"MapADOType2Jdbc: Unknown Type!");
+        OSL_ENSURE(0,"MapJdbc2ADOType: Unknown Type!");
             ;
     }
     return adEmpty;
