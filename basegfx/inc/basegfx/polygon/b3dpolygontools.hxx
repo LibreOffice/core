@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygontools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:30:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,11 +101,6 @@ namespace basegfx
         // is none. Same for successor.
         sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
         sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
-
-        // Get index of first different predecessor. Returning the same index means there
-        // is none. Same for successor.
-        sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
-        sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
 
         // get size of polygon. Control vectors are included in that ranges.
         ::basegfx::B3DRange getRange(const ::basegfx::B3DPolygon& rCandidate);
