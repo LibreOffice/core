@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-25 13:50:56 $
+ *  last change: $Author: sj $ $Date: 2001-06-28 14:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,7 +1191,7 @@ BOOL SdPPTImport::Import()
         }
         // this is defaulted, maybe there is no SSDocInfoAtom
         String      aCustomShow;
-        sal_uInt32  nFlags = 0;                 // Bit 0:   Auto advance
+        sal_uInt32  nFlags = 1;                 // Bit 0:   Auto advance
         sal_uInt32  nPenColor = 0x1000000;
         sal_Int32   nRestartTime = 0x7fffffff;
         sal_uInt16  nStartSlide = 0;
@@ -1312,14 +1312,14 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
                             }
                             else
                             {
-                                BYTE    nDirection, nTransitionType, nBuildFlags, nByteDummy, nSpeed;
-                                INT32   nSlideTime, nSoundRef;
+                                sal_Int8    nDirection, nTransitionType, nByteDummy, nSpeed;
+                                sal_Int16   nBuildFlags;
+                                sal_Int32   nSlideTime, nSoundRef;
                                 rStCtrl >> nSlideTime           // Standzeit (in Ticks)
                                         >> nSoundRef            // Index in SoundCollection
                                         >> nDirection           // Richtung des Ueberblendeffekts
                                         >> nTransitionType      // Ueberblendeffekt
                                         >> nBuildFlags          // Buildflags (s.u.)
-                                        >> nByteDummy
                                         >> nSpeed               // Geschwindigkeit (langsam, mittel, schnell)
                                         >> nByteDummy >> nByteDummy >> nByteDummy;
 
@@ -1461,13 +1461,17 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
                                 else if ( nSpeed == 2 )
                                     pPage->SetFadeSpeed( FADE_SPEED_FAST );     // schnell
 
-                                if ( nBuildFlags & 1 )
-                                    pPage->SetPresChange( ePresChange );    // Diawechsel bei Klick auf Hintergrund
-                                else
+                                if ( nBuildFlags & 0x400 )                      // slidechange by time
                                 {   // Standzeit (in Ticks)
                                     pPage->SetPresChange( PRESCHANGE_AUTO );
                                     pPage->SetTime( nSlideTime / 1000 );
                                 }
+                                else
+                                    pPage->SetPresChange( ePresChange );
+
+//                              if ( nBuildFlags & 1 )                          // slidechange by mouseclick
+//                                  pPage->SetPresChange( ePresChange );
+
                                 if ( nBuildFlags & 4 )
                                     pPage->SetExcluded( TRUE );                 // Dia nicht anzeigen
                                 if ( nBuildFlags & 16 )
