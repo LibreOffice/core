@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:54:59 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:14:24 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -270,9 +270,9 @@ $(SAMPLE_NAME) : $(COMP1_REGISTERFLAG) $(COMP2_REGISTERFLAG) $(APP1_JAR) $(APP2_
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP2_NAME).run
-	@echo make $(APP3_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP2_NAME).run
+	@echo $(MAKE) $(APP3_NAME).run
 	@echo --------
 	@echo The "$(QM)$(COMP1_NAME)$(QM)" and "$(QM)$(COMP2_NAME)$(QM)"  component are installed if
 	@echo SDK_AUTO_DEPLOYMENT = YES. You can use this components inside your office 
@@ -280,7 +280,7 @@ $(SAMPLE_NAME) : $(COMP1_REGISTERFLAG) $(COMP2_REGISTERFLAG) $(APP1_JAR) $(APP2_
 	@echo  document to see how the add-in functions can be used. For more details about the 
 	@echo "$(QM)$(COMP2_NAME)$(QM)" component see the "$(QM)DataPilotReadme.txt"$(QM).
 	@echo -
-	@echo make ExampleAddIn.ods.load
+	@echo $(MAKE) ExampleAddIn.ods.load
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(SAMPLE_CLASS_OUT)/%.jar
