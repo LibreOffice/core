@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.36 2001-05-21 16:38:10 sab Exp $
+	$Id: table.mod,v 1.37 2001-06-25 05:59:47 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -113,7 +113,7 @@
 	table:position %integer; #REQUIRED
 	table:count %positiveInteger; "1"
 	table:table %integer; #IMPLIED
-	table:multi-spanned-deletion %integer; #IMPLIED
+	table:multi-deletion-spanned %integer; #IMPLIED
 >
 <!ELEMENT table:cut-offs (table:insertion-cut-off | table:movement-cut-off+ | (table:insertion-cut-off, table:movement-cut-off+))>
 <!ELEMENT table:insertion-cut-off EMPTY>
