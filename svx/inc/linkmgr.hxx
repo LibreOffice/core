@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:14:34 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 
 class Graphic;
@@ -80,38 +80,38 @@ enum LinkState
     STATE_LOAD_ABORT
 };
 
-class SvxLinkManager : public so3::SvLinkManager
+class SvxLinkManager : public ::sfx2::SvLinkManager
 {
     SvxLinkManager( const SvxLinkManager& );
     SvxLinkManager& operator=( const SvxLinkManager& );
 
 public:
-    SvxLinkManager( SvPersist * pCacheCont );
+    SvxLinkManager( SfxObjectShell * pCacheCont );
 
     // den Link mit einem PseudoObject verbinden und in die Liste eintragen
-    BOOL InsertFileLink( so3::SvBaseLink&,
+    BOOL InsertFileLink( sfx2::SvBaseLink&,
                         USHORT nFileType,
                         const String& rTxt,
                         const String* pFilterNm = 0,
                         const String* pRange = 0 );
 
             // falls am Link schon alles eingestellt ist !
-    BOOL InsertFileLink( so3::SvBaseLink& );
+    BOOL InsertFileLink( sfx2::SvBaseLink& );
 
         // erfrage die Strings fuer den Dialog
-    virtual BOOL GetDisplayNames( const so3::SvBaseLink*,
+    virtual BOOL GetDisplayNames( const sfx2::SvBaseLink*,
                                     String* pType,
                                     String* pFile = 0,
                                     String* pLink = 0,
                                     String* pFilter = 0 ) const;
 
-    virtual so3::SvLinkSourceRef CreateObj( so3::SvBaseLink * );
+    virtual sfx2::SvLinkSourceRef CreateObj( sfx2::SvBaseLink * );
 
     // eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
     // (ist zur Zeit nur fuer die FileLinks interressant!)
     void CancelTransfers();
 
-    static void SetTransferPriority( so3::SvBaseLink& rLink, USHORT nPrio );
+    static void SetTransferPriority( sfx2::SvBaseLink& rLink, USHORT nPrio );
 
     // um Status Informationen aus dem FileObject an den BaseLink zu
     // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
