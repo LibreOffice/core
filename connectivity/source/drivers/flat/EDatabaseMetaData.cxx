@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:21:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,8 +407,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getCrossReference(
 ::rtl::OUString SAL_CALL OFlatDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    return ::rtl::OUString::createFromAscii("sdbc:flat:");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:flat:")) + m_pConnection->getURL();
 }
 // -----------------------------------------------------------------------------
 
