@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-18 08:57:42 $
+ *  last change: $Author: cl $ $Date: 2002-11-27 12:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,12 @@ protected:
     virtual void    Resize();
     virtual BOOL    Close();
     virtual void    PopupModeEnd();
+
+    /** This function is called when the window gets the focus.  It grabs
+        the focus to the line ends value set so that it can be controlled with
+        the keyboard.
+    */
+    virtual void GetFocus (void);
 
 public:
     SvxLineEndWindow( USHORT nId, const String& rWndTitle,
