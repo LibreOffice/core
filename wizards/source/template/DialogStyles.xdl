@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="DialogStyles" dlg:style-id="0" dlg:left="170" dlg:top="93" dlg:width="120" dlg:height="169">
- <dlg:styles>
-  <dlg:style dlg:style-id="0"/>
- </dlg:styles>
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="DialogStyles" dlg:left="170" dlg:top="93" dlg:width="120" dlg:height="169">
  <dlg:bulletinboard>
-  <dlg:button dlg:style-id="0" dlg:id="cmdCancel" dlg:tab-index="0" dlg:left="5" dlg:top="150" dlg:width="50" dlg:height="13" dlg:value="cmdCancel">
+  <dlg:button dlg:id="cmdCancel" dlg:tab-index="0" dlg:left="5" dlg:top="150" dlg:width="50" dlg:height="13" dlg:value="cmdCancel">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Template.Samples.RestoreCurrentStyles"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdOk" dlg:tab-index="1" dlg:left="65" dlg:top="150" dlg:width="50" dlg:height="12" dlg:value="cmdOk">
+  <dlg:button dlg:id="cmdOk" dlg:tab-index="1" dlg:left="65" dlg:top="150" dlg:width="50" dlg:height="12" dlg:value="cmdOk">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Template.Samples.CloseStyleDialog"/>
   </dlg:button>
-  <dlg:menulist dlg:style-id="0" dlg:id="lbStyles" dlg:tab-index="2" dlg:left="5" dlg:top="5" dlg:width="110" dlg:height="133">
+  <dlg:menulist dlg:id="lbStyles" dlg:tab-index="2" dlg:left="5" dlg:top="5" dlg:width="110" dlg:height="133">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="Template.Samples.SelectStyle"/>
   </dlg:menulist>
  </dlg:bulletinboard>

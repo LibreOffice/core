@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleControls" script:language="StarBasic">Option Explicit
-
+&apos;bla
 
 &apos; Accepts the name of a control and returns the respective control model as object
 &apos; The Container can either be a whole document or a specific sheet of a Calc-Document

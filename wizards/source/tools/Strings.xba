@@ -397,7 +397,7 @@ Function BubbleSortList(ByVal SortList(),optional sort2ndValue as Boolean)
 	Dim t as Integer
 	Dim i,k as Integer
 	Dim bJustOneDim, bSort2nd as Boolean
-	Dim DisplayDummy as String
+	Dim DisplayDummy
 	bJustOneDim = false
 	bSort2nd = false
 On Local Error Goto No2ndDim
@@ -428,7 +428,11 @@ On Local Error Goto No2ndDim
 						
 						DisplayDummy = SortList(t,1)
 						SortList(t,1) = SortList(t+1,1)
-						SortList(t+1,1) = DisplayDummy  
+						SortList(t+1,1) = DisplayDummy 
+						
+						DisplayDummy = SortList(t,2)
+						SortList(t,2) = SortList(t+1,2)
+						SortList(t+1,2) = DisplayDummy
 					End If
 				Else
 					If SortList(t,0) &gt; SortList(t+1,0) Then                         
@@ -439,6 +443,10 @@ On Local Error Goto No2ndDim
 						DisplayDummy = SortList(t,1)
 						SortList(t,1) = SortList(t+1,1)
 						SortList(t+1,1) = DisplayDummy  
+						
+						DisplayDummy = SortList(t,2)
+						SortList(t,2) = SortList(t+1,2)
+						SortList(t+1,2) = DisplayDummy
 					End If
 				End If
 			End If

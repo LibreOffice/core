@@ -270,10 +270,11 @@ End Function
 
 Function FillupWebListbox(oUcb as Object, sFileFilter as String, oDialog as Object, ListboxName as String, List() as String)
 Dim oDocInfo as Object
-Dim oAloneDocInfo as Object
+Dim oComp as Object
+Dim oRealDocInfo as Object
 Dim oListboxControl as Object
-Dim Description as String
 Dim sField as String
+Dim sDescription as String
 Dim sFieldList() as String
 Dim bItemFound as Boolean
 Dim MaxIndex as Integer
@@ -288,9 +289,11 @@ Dim s as Integer
 Dim a as Integer
 Dim SelList(0) as Integer
 Dim LocMaxIndex as Integer
+Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
+	FileProperties(0).Name = &quot;Hidden&quot;
+	FileProperties(0).Value = True
 	oListboxControl = oDialog.GetControl(ListboxName)
 	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
-	oAloneDocInfo = createUnoService( &quot;com.sun.star.document.StandaloneDocumentInfo&quot; )
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
@@ -298,32 +301,33 @@ Dim LocMaxIndex as Integer
 	
 	LocMaxIndex = Ubound(DirContent())
 	
-	Dim SortList(LocMaxIndex,1)
+	Dim SortList(LocMaxIndex,2)
 	For i = 0 to LocMaxIndex
 		SortList(i,0) = DirContent(i)
-		SortList(i,1) = RetrieveDocTitle(oDocInfo, DirContent(i))
+		oComp = StarDesktop.LoadComponentFromURL(DirContent(i),&quot;_blank&quot;,0,FileProperties())
+		oRealDocInfo = oComp.getDocumentInfo()
+		oComp.dispose()
+		SortList(i,1) = oRealDocInfo.Title
+		SortList(i,2) = oRealDocInfo
 	Next i
 	SortList() = BubbleSortList(SortList(),True)
-	For i = 0 to LocMaxIndex
-		DirContent(i) = SortList(i,0)
-	Next i
 	
 	a = 0
 	For i = 0 To LocMaxIndex
-		FileName = DirContent(i)
+		FileName = SortList(i,0)
 		If Instr(1,Filename, sFileFilter) Then
 			bItemFound = True
-			Description = RetrieveDocTitle(oDocInfo, FileName)
-			oAloneDocInfo.LoadFromUrl(FileName)
-			oListboxControl.AddItem(Description,a)
+			
+			sDescription = SortList(i,1)
+			oListboxControl.AddItem(sDescription,a)
 			a = a + 1
-			List(1,i) = Description
+			List(1,i) = sDescription
 			If sFileFilter = &quot;/cnt&quot; Then
 				List(2,i) = Filename
 			Else
 				m = 2
 				For n = 0 To 3
-					sField = oAloneDocInfo.GetUserFieldValue(n)
+					sField = SortList(i,2).GetUserFieldValue(n)
 					sFieldList() = ArrayoutofString(sField, &quot; &quot;, MaxIndex)
 					For s = 0 To MaxIndex
 						If m &lt; 6 Then
