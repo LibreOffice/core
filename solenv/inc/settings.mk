@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.127 $
+#   $Revision: 1.128 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-19 13:53:20 $
+#   last change: $Author: rt $ $Date: 2002-12-10 17:02:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -985,10 +985,10 @@ CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 
 #.IF "$(BUILD_SOSL)"!=""
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-DATESTRING=$(shell date +%d%m%Y)
+DATESTRING:=$(shell date +%d%m%Y)
 .ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 #can't override 4nt internal date to use date.exe :-(
-DATESTRING=$(shell +echo %@IF[%@LEN[%_DAY%]==1,0%_DAY%,%_DAY%]%@IF[%@LEN[%_MONTH%]==1,0%_MONTH%,%_MONTH%]%_YEAR%)
+DATESTRING:=$(shell +echo %@IF[%@LEN[%_DAY%]==1,0%_DAY%,%_DAY%]%@IF[%@LEN[%_MONTH%]==1,0%_MONTH%,%_MONTH%]%_YEAR%)
 .ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 SCPDEFS+=-DSCP_DATESTRING=$(DATESTRING)
 #.ENDIF			# "$(BUILD_SOSL)"!=""
