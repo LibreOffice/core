@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:34:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,10 +236,10 @@ namespace svxform
                 // have is not really reliable (while a sal_True would have been)
                 // Okay, travel the mark list, and see if there is a group marked, and our shape
                 // is a part of this group
-                sal_uInt32 nMarked = _pView->GetMarkList().GetMarkCount();
+                sal_uInt32 nMarked = _pView->GetMarkedObjectList().GetMarkCount();
                 for ( sal_uInt32 i = 0; (i<nMarked ) && !bIsMarked; ++i )
                 {
-                    SdrMark* pMark = _pView->GetMarkList().GetMark( i );
+                    SdrMark* pMark = _pView->GetMarkedObjectList().GetMark( i );
                     SdrObject* pObj = pMark ? pMark->GetObj() : NULL;
                     if ( pObj && pObj->IsGroupObject() )
                     {   // the i-th marked shape is a group shape
@@ -1337,7 +1337,7 @@ namespace svxform
         // in addition, with the move of controls such things as "the current form" may have changed - force the shell
         // to update itself accordingly
         if( pFormShell && pFormShell->GetImpl() && pFormShell->GetFormView() )
-            pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->GetMarkList() );
+            pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->GetMarkedObjectList() );
 
         if ( m_aControlExchange.isClipboardOwner() && ( DND_ACTION_MOVE == _nAction ) )
             m_aControlExchange->clear();
@@ -1824,7 +1824,7 @@ namespace svxform
                     else if (m_nHiddenControls == 0)
                     {   // nur normale Controls
                         // ein MultiSet aus der MarkList der View aufbauen ...
-                        const SdrMarkList& mlMarked = pFormShell->GetFormView()->GetMarkList();
+                        const SdrMarkList& mlMarked = pFormShell->GetFormView()->GetMarkedObjectList();
                         FmXMultiSet* pSelectionSet = FmXMultiSet::Create( mlMarked );
                         xInterfaceSelected = Reference< XInterface > ( (XPropertySet*)pSelectionSet );
                         pFormShell->GetImpl()->setCurControl( xInterfaceSelected );
@@ -1844,7 +1844,7 @@ namespace svxform
         // um das Setzen des current Controls kann sich die Shell kuemmern (da gibt es einige Feinheiten, die ich hier nicht
         // neu implementieren moechte)
         if (bNeedSetCurControl)
-            pFormShell->GetImpl()->DetermineSelection(pFormShell->GetFormView()->GetMarkList());
+            pFormShell->GetImpl()->DetermineSelection(pFormShell->GetFormView()->GetMarkedObjectList());
         // und dann meine Form und mein SelObject
         pFormShell->GetImpl()->setSelObject(xInterfaceSelected);
         pFormShell->GetImpl()->setCurForm(xFormSelected);
@@ -2141,7 +2141,7 @@ namespace svxform
         FmFormView* pFormView = pFormShell->GetFormView();
         if (!pFormView) return;
 
-        GetNavModel()->BroadcastMarkedObjects(pFormView->GetMarkList());
+        GetNavModel()->BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
     }
 
     //------------------------------------------------------------------------
