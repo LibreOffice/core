@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:04:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #pragma hdrstop
 
 #include "fupage.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 // Seite einrichten Tab-Page
 #define ITEMID_PAGE         SID_ATTR_PAGE
