@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-09 11:56:40 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 04:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,8 @@
 
 #include "imagemgr.hxx"
 
-#ifndef _TOOLS_DEBUG_HXX //autogen
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
