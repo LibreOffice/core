@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 14:49:00 $
+ *  last change: $Author: jp $ $Date: 2001-08-01 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ void SwEditWin::StartExecuteDrag()
 
 void SwEditWin::DragFinished()
 {
+    DropCleanup();
     aTimer.SetTimeoutHdl( LINK(this,SwEditWin, TimerHandler) );
     bIsInDrag = FALSE;
 }
@@ -568,6 +569,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/05/07 14:49:00  jp
+    use the correct D&D constants
+
     Revision 1.3  2001/03/23 15:55:45  jp
     use new Drag&Drop / Clipboard API
 
