@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:20:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModalDialog DLG_ORGANIZE
     Text [ portuguese_brazilian ] = "Gerenciar Modelos" ;
     Text [ portuguese ] = "Gerir modelos de documentos" ;
     Text [ finnish ] = "Mallien hallinta" ;
-    Text [ danish ] = "Administrer dokumentskabeloner" ;
+    Text [ danish ] = "Administrer skabeloner" ;
     Text [ french ] = "Gestion des mod�les de document" ;
     Text [ swedish ] = "Administrera dokumentmallar" ;
     Text [ dutch ] = "Sjablonen beheren" ;
@@ -132,6 +132,8 @@ ModalDialog DLG_ORGANIZE
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
         Text[ slovak ] = "Zavrieť";
+        Text[ hungarian ] = "Bezárás";
+        Text[ slovenian ] = "Zapri";
     };
     PushButton BTN_FILES
     {
@@ -167,6 +169,8 @@ ModalDialog DLG_ORGANIZE
         Text[ hebrew ] = "‮קובץ...‬";
         Text[ hindi ] = "~फाइल...";
         Text[ slovak ] = "~Súbor...";
+        Text[ hungarian ] = "~Fájlból...";
+        Text[ slovenian ] = "~Datoteka...";
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
@@ -199,6 +203,8 @@ ModalDialog DLG_ORGANIZE
         Text[ hebrew ] = "‮ספר כתובות...‬";
         Text[ hindi ] = "~पता पुस्तक...";
         Text[ slovak ] = "Kont~akty...";
+        Text[ hungarian ] = "~Címjegyzék...";
+        Text[ slovenian ] = "~Adresar...";
     };
     ListBox LB_LEFT_TYP
     {
@@ -245,7 +251,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ danish ] =
         {
-            < "Dokumentskabeloner" ; Default ; > ;
+            < "Skabeloner" ; Default ; > ;
             < "Dokumenter" ; Default ; > ;
         };
         StringList [ french ] =
@@ -353,6 +359,16 @@ ModalDialog DLG_ORGANIZE
          < "Šablóny" ; Default ; > ;
         < "Dokumenty" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Sablonok" ; Default ; > ;
+        < "Dokumentumok" ; Default ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "Predloge" ; Default ; > ;
+        < "Dokumenti" ; Default ; > ;
+        };
     };
     ListBox LB_RIGHT_TYP
     {
@@ -399,7 +415,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ danish ] =
         {
-            < "Dokumentskabeloner" ; Default ; > ;
+            < "Skabeloner" ; Default ; > ;
             < "Dokumenter" ; Default ; > ;
         };
         StringList [ french ] =
@@ -507,6 +523,16 @@ ModalDialog DLG_ORGANIZE
          < "Šablóny" ; Default ; > ;
         < "Dokumenty" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Sablonok" ; Default ; > ;
+        < "Dokumentumok" ; Default ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "Predloge" ; Default ; > ;
+        < "Dokumenti" ; Default ; > ;
+        };
     };
     Control LB_LEFT
     {
@@ -607,6 +633,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮חדש‬";
                     Text[ hindi ] = "~नया";
                     Text[ slovak ] = "~Nový";
+                    Text[ hungarian ] = "Ú~j";
+                    Text[ slovenian ] = "~Nov";
                 };
                 MenuItem
                 {
@@ -647,6 +675,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮מחיקה‬";
                     Text[ hindi ] = "~मिटाओ";
                     Text[ slovak ] = "~Zmazať";
+                    Text[ hungarian ] = "~Törlés";
+                    Text[ slovenian ] = "~Izbriši";
                 };
                 MenuItem
                 {
@@ -681,6 +711,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮עריכה‬";
                     Text[ hindi ] = "~संपादन";
                     Text[ slovak ] = "~Upraviť";
+                    Text[ hungarian ] = "~Szerkesztés";
+                    Text[ slovenian ] = "~Uredi";
                 };
                 MenuItem
                 {
@@ -719,6 +751,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮יבוא תבנית...‬";
                     Text[ hindi ] = "नमूने को आयात करो...";
                     Text[ slovak ] = "Importovať šablónu...";
+                    Text[ hungarian ] = "Sablon importálása...";
+                    Text[ slovenian ] = "Uvozi predlogo...";
                 };
                 MenuItem
                 {
@@ -753,6 +787,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮יצוא תבנית...‬";
                     Text[ hindi ] = "नमूने को निर्यात करो...";
                     Text[ slovak ] = "Exportovať šablónu...";
+                    Text[ hungarian ] = "Sablon exportálása...";
+                    Text[ slovenian ] = "Izvozi predlogo...";
                 };
                 MenuItem
                 {
@@ -791,6 +827,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮הדפסה‬";
                     Text[ hindi ] = "~छपाई";
                     Text[ slovak ] = "~Tlač";
+                    Text[ hungarian ] = "~Nyomtatás";
+                    Text[ slovenian ] = "Na~tisni";
                 };
                 MenuItem
                 {
@@ -805,7 +843,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ french ] = "~Param�tres de l'imprimante..." ;
                     Text [ dutch ] = "Printerinstellin~gen..." ;
                     Text [ spanish ] = "~Configuraci�n de la impresora..." ;
-                    Text [ danish ] = "Udskriftsindstillin~ger..." ;
+                    Text [ danish ] = "Udskriftsindstillinger..." ;
                     Text [ swedish ] = "Skrivarinst�llnin~gar..." ;
                     Text [ finnish ] = "Tulostimen asetukset..." ;
                     Text [ english_us ] = "Printer Settings..." ;
@@ -825,6 +863,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮הגדרות מדפסת‬";
                     Text[ hindi ] = "मुद्रक निर्धारण...";
                     Text[ slovak ] = "Nastavenia tlačiarne...";
+                    Text[ hungarian ] = "Nyomtató beállításai...";
+                    Text[ slovenian ] = "Nastavitve tiskalnika...";
                 };
                 MenuItem
                 {
@@ -863,6 +903,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮עידכון‬";
                     Text[ hindi ] = "अपडेट् करो";
                     Text[ slovak ] = "Aktualizácia";
+                    Text[ hungarian ] = "Frissítés";
+                    Text[ slovenian ] = "Posodobi";
                 };
                 MenuItem
                 {
@@ -882,7 +924,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ spanish ] = "Definir como plantilla predeterminada";
                     Text[ finnish ] = "Aseta oletusmalliksi";
                     Text[ italian ] = "~Imposta come modello standard";
-                    Text[ danish ] = "Anvend som s~tandardskabelon";
+                    Text[ danish ] = "Anvend som standardskabelon";
                     Text[ swedish ] = "Definiera som s~tandardmall";
                     Text[ polish ] = "Us~taw jako szablon domy�lny";
                     Text[ portuguese_brazilian ] = "~Definir como modelo padr�o";
@@ -898,6 +940,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮קביעה כתבנית ברירת המחדל‬";
                     Text[ hindi ] = "अनुपस्थिति नमूने जैसे सेट्ट करो";
                     Text[ slovak ] = "Nastaviť ako východziu šablónu";
+                    Text[ hungarian ] = "Beállítás alapértelmezett sablonként";
+                    Text[ slovenian ] = "Nastavi za privzeto predlogo";
                 };
                 MenuItem
                 {
@@ -913,7 +957,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ spanish ] = "Restaurar plantilla predeterminada";
                     Text[ finnish ] = "Palauta oletusmalli";
                     Text[ italian ] = "~Ripristina il modello standard";
-                    Text[ danish ] = "Nulstil ~standardskabeloner";
+                    Text[ danish ] = "Nulstil standardskabeloner";
                     Text[ swedish ] = "�terst�ll ~standardmall";
                     Text[ polish ] = "~Przywr�� szablon domy�lny";
                     Text[ portuguese_brazilian ] = "~Restaurar o modelo padr�o";
@@ -929,6 +973,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ hebrew ] = "‮חזרה לתבנית ברירת המחדל המקורית‬";
                     Text[ hindi ] = "अनुपस्थिति नमूने को रिसेट्ट करो";
                     Text[ slovak ] = "Obnoviť východziu šablónu";
+                    Text[ hungarian ] = "Alapértelmezett sablon visszaállítása";
+                    Text[ slovenian ] = "Ponastavi privzeto predlogo";
                 };
             };
         };
@@ -948,6 +994,8 @@ ModalDialog DLG_ORGANIZE
         Text[ hebrew ] = "‮פקודות‬";
         Text[ hindi ] = "आज्ञा";
         Text[ slovak ] = "Príkazy";
+        Text[ hungarian ] = "Parancsok";
+        Text[ slovenian ] = "Ukazi";
     };
     Image IMG_OPENED_FOLDER
     {
@@ -1028,8 +1076,14 @@ ModalDialog DLG_ORGANIZE
     Text[ hebrew ] = "‮ניהול תבניות‬";
     Text[ hindi ] = "नमूना प्रबन्ध";
     Text[ slovak ] = "Správa šablón";
+    Text[ hungarian ] = "Sablonszervező";
+    Text[ slovenian ] = "Upravljanje predlog";
 };
  // ********************************************************************** EOF
+
+
+
+
 
 
 
