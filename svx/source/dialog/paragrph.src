@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:50 $
+ *  last change: $Author: vg $ $Date: 2002-09-17 13:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2769,7 +2769,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ swedish ] = "Anv�nd ~avst�nd mellan asiatisk, latinsk och komplex text";
         Text[ polish ] = "Ustaw odst�p mi�dzy tekstem azjatyckim, �aci�skim i z�o�onym";
         Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
-        Text[ japanese ] = "アジア諸国語、西欧諸国語、および複合文字言語の間の間隔を調整する";
+        Text[ japanese ] = "アジア諸国語、西洋諸国語、および複合文字言語の間の間隔を調整する";
         Text[ korean ] = "아시아어, 라틴어 및 혼합 텍스트에서 간격 적용";
         Text[ chinese_simplified ] = "在中日韩文字和西文及混合文字之间加入空格";
         Text[ chinese_traditional ] = "在中日韓文字和西文及混合文字之間加入空格";
