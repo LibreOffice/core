@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "Ύγ­¶(~E)";
         Text[ arabic ] = "ΥέΝΙ ίΗγαΙ";
         Text[ greek ] = "Ολόκληρη σελίδα";
-        Text[ korean ] = "ΐόΓΌ ΖδΐΜΑφ(~E)";
+        Text[ korean ] = "ΐόΓΌ ΒΚ";
         Text[ turkish ] = "~Tam sayfa";
     };
     RadioButton BTN_SINGLE
@@ -122,7 +122,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "³ζ­Σ¶KΌΠ(~S)";
         Text[ arabic ] = "ΘΨΗήΙ ΪδζδΙ γέΡΟΙ";
         Text[ greek ] = "Μεμονωμένη ετικέτα";
-        Text[ korean ] = "΄άΐΟ ¶σΊ§(~S)";
+        Text[ korean ] = "°Ά ¶σΊ§";
         Text[ turkish ] = "Tek Eti~ket";
     };
     FixedText TXT_COL
@@ -150,7 +150,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "Δζ(~M)";
         Text[ arabic ] = "ΪγζΟ";
         Text[ greek ] = "Στήλη";
-        Text[ korean ] = "Ώ­(~M)";
+        Text[ korean ] = "Ώ­";
         Text[ turkish ] = "~Sόtun";
     };
     NumericField FLD_COL
@@ -228,7 +228,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "¤Ί®e¦P¨B¤Ζ(~S)";
         Text[ arabic ] = "ΚÒΗγδ ΗαγΝΚζνΗΚ";
         Text[ greek ] = "Συγχρονισμός περιεχομένων";
-        Text[ korean ] = "³»Ώλ µΏ±βΘ­(~Z)";
+        Text[ korean ] = "³»Ώλ µΏ±βΘ­";
         Text[ turkish ] = "έηeriπi ηoπalt";
     };
     GroupBox GB_DONTKNOW
