@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:52:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,19 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) 
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         & ::com::sun::star::uno::Array< T >::s_pType );
+}
+
+template< typename T >
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType() SAL_THROW(())
+{
+    return getCppuType(static_cast< T * >(0));
+}
+
+template<>
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType< sal_Unicode >()
+    SAL_THROW(())
+{
+    return getCharCppuType();
 }
 
 #endif
