@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:05:00 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <stdio.h>
 
 #ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
@@ -74,6 +73,9 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace connectivity::dbtools;
@@ -88,6 +90,7 @@ IMPLEMENT_SERVICE_INFO(OView,"com.sun.star.sdbcx.VView","com.sun.star.sdbcx.View
 // -------------------------------------------------------------------------
 OView::OView(sal_Bool _bCase,
             const ::rtl::OUString& _Name,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
             sal_Int32 _CheckOption,
             const ::rtl::OUString& _Command,
             const ::rtl::OUString& _SchemaName,
@@ -96,13 +99,16 @@ OView::OView(sal_Bool _bCase,
             ,m_SchemaName(_SchemaName)
             ,m_Command(_Command)
             ,m_CheckOption(_CheckOption)
+            ,m_xMetaData(_xMetaData)
 
 {
     m_Name = _Name;
     construct();
 }
 // -------------------------------------------------------------------------
-OView::OView(sal_Bool _bCase): ODescriptor(OViewHelper::rBHelper,_bCase,sal_True)
+OView::OView(sal_Bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData)
+    : ODescriptor(OViewHelper::rBHelper,_bCase,sal_True)
+    ,m_xMetaData(_xMetaData)
 {
     construct();
 }
@@ -115,7 +121,7 @@ void OView::construct()
 {
     ODescriptor::construct();
 
-        sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
+    sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
     registerProperty(PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
@@ -132,32 +138,48 @@ void OView::disposing(void)
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OView::getTypes(  ) throw(RuntimeException)
 {
-        Sequence< Type > aTypes(2);
-        aTypes.getArray()[0] = ::getCppuType(static_cast< Reference< ::com::sun::star::container::XNamed> *> (NULL));
-        aTypes.getArray()[1] = ::getCppuType(static_cast< Reference< XServiceInfo> *> (NULL));
+    Sequence< Type > aTypes(2);
+    aTypes.getArray()[0] = ::getCppuType(static_cast< Reference< ::com::sun::star::container::XNamed> *> (NULL));
+    aTypes.getArray()[1] = ::getCppuType(static_cast< Reference< XServiceInfo> *> (NULL));
 
     return ::comphelper::concatSequences(ODescriptor::getTypes(),aTypes);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-        Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::container::XNamed*> (this),
-                                                                                                         static_cast< XServiceInfo*> (this));
+    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::container::XNamed*> (this),
+                    static_cast< XServiceInfo*> (this));
     if(aRet.hasValue())
         return aRet;
-    return ODescriptor::queryInterface( rType);;
+    return ODescriptor::queryInterface( rType);
 }
 // -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OView::createArrayHelper( ) const
+::cppu::IPropertyArrayHelper* OView::createArrayHelper(sal_Int32 _nId) const
 {
         Sequence< Property > aProps;
     describeProperties(aProps);
+    changePropertyAttributte(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
-
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & OView::getInfoHelper()
 {
-    return *const_cast<OView*>(this)->getArrayHelper();
+    return *const_cast<OView*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::rtl::OUString sComposedName;
+    if(m_xMetaData.is())
+        ::dbtools::composeTableName(m_xMetaData,m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_False);
+    else
+    {
+        Any aValue;
+        getFastPropertyValue(aValue,PROPERTY_ID_NAME);
+        aValue >>= sComposedName;
+    }
+    return sComposedName;
+}
+// -----------------------------------------------------------------------------
+
 

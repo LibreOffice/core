@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:06:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
     sStmt += ::rtl::OUString::createFromAscii("VIEWNAME = '");
     sStmt += aName;
     sStmt += ::rtl::OUString::createFromAscii("'");
-    Reference< XStatement > xStmt = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->createStatement(  );
+    Reference<XConnection> xConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
+    Reference< XStatement > xStmt = xConnection->createStatement(  );
     Reference< XResultSet > xResult = xStmt->executeQuery(sStmt);
 
     Reference< XNamed > xRet = NULL;
@@ -143,6 +144,7 @@ Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
         {
             connectivity::sdbcx::OView* pRet = new connectivity::sdbcx::OView(sal_True,
                                                                                 aName,
+                                                                                xConnection->getMetaData(),
                                                                                 CheckOption::NONE,
                                                                                 xRow->getString(3),
                                                                                 aSchema);
@@ -168,7 +170,8 @@ void OViews::disposing(void)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OViews::createEmptyObject()
 {
-    connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True);
+    Reference<XConnection> xConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
+    connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -245,7 +248,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     if(sSchema.getLength())
         aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
     else
-        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
+        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
 
     aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(PROPERTY_NAME)))
                 + ::rtl::OUString::createFromAscii(" AS ");

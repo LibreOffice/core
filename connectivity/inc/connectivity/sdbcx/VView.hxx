@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
@@ -86,6 +89,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
 #include "connectivity/sdbcx/VDescriptor.hxx"
+#endif
+#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include <comphelper/IdPropArrayHelper.hxx>
 #endif
 
 namespace connectivity
@@ -110,7 +116,7 @@ namespace connectivity
                         public OView_BASE,
                         public ::com::sun::star::container::XNamed,
                         public ::com::sun::star::lang::XServiceInfo,
-                        public ::comphelper::OPropertyArrayUsageHelper<OView>,
+                        public ::comphelper::OIdPropertyArrayUsageHelper<OView>,
                         public ODescriptor
         {
         protected:
@@ -118,9 +124,11 @@ namespace connectivity
             ::rtl::OUString m_SchemaName;
             ::rtl::OUString m_Command;
             sal_Int32       m_CheckOption;
+            // need for the getName method
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
 
             // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
@@ -128,9 +136,10 @@ namespace connectivity
             DECLARE_CTY_DEFAULTS( OView_BASE);
             DECLARE_SERVICE_INFO();
 
-            OView(sal_Bool _bCase );
+            OView(sal_Bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
             OView(  sal_Bool _bCase,
                     const ::rtl::OUString& _rName,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
                     sal_Int32 _nCheckOption = 0,
                     const ::rtl::OUString& _rCommand = ::rtl::OUString(),
                     const ::rtl::OUString& _rSchemaName = ::rtl::OUString(),
@@ -153,10 +162,7 @@ namespace connectivity
             }
 
             // XNamed
-            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return m_Name;
-            }
+            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setName( const ::rtl::OUString& ) throw(::com::sun::star::uno::RuntimeException)
             {}
         };

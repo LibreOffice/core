@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ void WpADOView::Create()
 }
 
 // -------------------------------------------------------------------------
-OAdoView::OAdoView(sal_Bool _bCase,ADOView* _pView) : OView_ADO(_bCase)
+OAdoView::OAdoView(sal_Bool _bCase,ADOView* _pView) : OView_ADO(_bCase,NULL)
 {
     construct();
 
@@ -128,6 +128,7 @@ OAdoView::OAdoView(sal_Bool _bCase, const ::rtl::OUString& _Name,
                 const ::rtl::OUString& _CatalogName)
      : OView_ADO(  _bCase,
                     _Name,
+                    NULL,
                     _CheckOption,
                     _Command,
                     _SchemaName,
