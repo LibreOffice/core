@@ -2,9 +2,9 @@
 #
 #   $RCSfile: javaunittest.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:44:13 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:32:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,9 +103,9 @@ CLASSDIR !:= $(CLASSDIR)$/test
 
 ALLTAR: $(TESTS)
 
-$(JAVAFILES): $(MISC)$/$(TARGET).createdclassdir
+$(JAVAFILES): $(MISC)$/$(TARGET).classdir.flag
 
-$(MISC)$/$(TARGET).createdclassdir:
+$(MISC)$/$(TARGET).classdir.flag:
     - $(MKDIR) $(CLASSDIR)
     $(TOUCH) $@
 
@@ -118,17 +118,22 @@ $(TESTS): $(JAVACLASSFILES)
         -NoOffice yes -o $(subst,$/,. $(subst,.test, $(PACKAGE).$@))
 
 .IF "$(IDLTESTFILES)" != ""
-$(JAVAFILES): $(MISC)$/$(TARGET).createdidl
-$(MISC)$/$(TARGET).createdidl: $(IDLTESTFILES)
-    - rm $(MISC)$/$(TARGET).rdb
-    - $(MKDIRHIER) $(MISC)$/$(TARGET)$/java
-    - rm $(MISC)$/$(TARGET)$/java$/*.java
-    idlc -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
-    regmerge $(MISC)$/$(TARGET).rdb /UCR \
-        $(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i))
-    javamaker -BUCR -nD -O$(MISC)$/$(TARGET)$/java $(MISC)$/$(TARGET).rdb \
-        -X$(SOLARBINDIR)$/types.rdb
+$(JAVAFILES): $(MISC)$/$(TARGET).javac.flag
+$(MISC)$/$(TARGET).javac.flag: $(MISC)$/$(TARGET).javamaker.flag
     $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) \
         $(MISC)$/$(TARGET)$/java$/$(PACKAGE)$/*.java
     $(TOUCH) $@
+$(MISC)$/$(TARGET).javamaker.flag: $(MISC)$/$(TARGET).rdb
+    - $(MKDIRHIER) $(MISC)$/$(TARGET)$/java
+    $(JAVAMAKER) -O$(MISC)$/$(TARGET)$/java -BUCR -nD $< \
+        -X$(SOLARBINDIR)$/types.rdb
+    $(TOUCH) $@
+$(MISC)$/$(TARGET).rdb: \
+        $(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i))
+    - rm $@
+    $(REGMERGE) $@ /UCR $<
+$(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i)): \
+        $(IDLTESTFILES)
+    - $(MKDIR) $(MISC)$/$(TARGET)
+    $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 .ENDIF
