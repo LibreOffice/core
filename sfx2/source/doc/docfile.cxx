@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-22 09:28:10 $
+ *  last change: $Author: mba $ $Date: 2001-02-26 12:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,6 +1452,9 @@ void SfxMedium::GetMedium_Impl()
 {
     if ( !pInStream )
     {
+        if ( !SfxContentHelper::Exists( GetName() ) )
+            return;
+
         pImp->bDownloadDone = sal_False;
         pImp->bStreamReady = sal_False;
 
@@ -2323,11 +2326,13 @@ const SfxVersionTableDtor* SfxMedium::GetVersionList()
         }
         else
         {
+#if SUPD>622
             SfxVersionTableDtor *pList = new SfxVersionTableDtor;
             if ( SfxXMLVersList_Impl::ReadInfo( GetStorage(), pList ) )
                 pImp->pVersions = pList;
             else
                 delete pList;
+#endif
         }
     }
 
@@ -2413,7 +2418,9 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool bUseXML )
 
         if ( bUseXML )
         {
+#if SUPD>622
             SfxXMLVersList_Impl::WriteInfo( aStorage, pImp->pVersions );
+#endif
             return sal_True;
         }
         else
@@ -2454,7 +2461,11 @@ sal_Bool SfxMedium::IsReadOnly()
 void SfxMedium::CreateTempFile()
 {
     if ( pImp->pTempFile )
-        delete pImp->pTempFile;
+        DELETEZ( pImp->pTempFile );
+
+    BOOL bDeleteInputStream = ( pInStream == 0);
+    GetInStream();
+    ResetError();
 
     String          aParentName;
     INetURLObject   aParent = GetURLObject();
@@ -2466,6 +2477,13 @@ void SfxMedium::CreateTempFile()
     pImp->pTempFile->EnableKillingFile( sal_True );
 
     aName = pImp->pTempFile->GetFileName();
+
+    GetOutStream();
+    if ( pInStream && pOutStream )
+    {
+        *pInStream >> *pOutStream;
+        CloseInStream();
+    }
 
     CloseOutStream_Impl();
     CloseStorage();
