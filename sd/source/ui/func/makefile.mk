@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 09:51:27 $
+#   last change: $Author: hr $ $Date: 2004-10-12 13:10:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,7 +160,8 @@ SLOFILES = \
         $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
         $(SLO)$/bulmaper.obj    \
-        $(SLO)$/undoback.obj
+        $(SLO)$/undoback.obj    \
+        $(SLO)$/fuconcs.obj
 
 .IF "$(GUI)" == "WNT"
 
@@ -246,7 +247,8 @@ LIB1OBJFILES= \
         $(SLO)$/fucushow.obj	\
         $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
-        $(SLO)$/undoback.obj    
+        $(SLO)$/undoback.obj    \
+        $(SLO)$/fuconcs.obj
 
 LIB2TARGET=	$(SLB)$/$(TARGET)_ui.lib
 LIB2OBJFILES= \
