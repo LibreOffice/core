@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: iha $ $Date: 2001-03-22 16:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,15 @@ private:
     sal_Int32       m_nColumnCount;
     sal_Int32       m_bColumnCountCached;
 
+    //members to propagate fetchsize and direction:
+    sal_Bool        m_bNeedToPropagateFetchSize;
+    sal_Bool        m_bFirstFetchSizePropagationDone;
+    sal_Int32       m_nLastFetchSize;
+    sal_Bool        m_bLastFetchDirection;
+    const rtl::OUString     m_aPropertyNameForFetchSize;
+    const rtl::OUString     m_aPropertyNameForFetchDirection;
+
+
     void SAL_CALL
     impl_getCurrentRowContent(
         com::sun::star::uno::Any& rRowContent,
@@ -134,6 +143,10 @@ private:
                 com::sun::star::ucb::XContentAccess > xContentAccess )
             throw ( com::sun::star::uno::RuntimeException );
 
+    void SAL_CALL
+    impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, sal_Bool bFetchDirection )
+        throw ( com::sun::star::uno::RuntimeException );
+
 public:
     CachedContentResultSetStub( com::sun::star::uno::Reference<
                         com::sun::star::sdbc::XResultSet > xOrigin );
@@ -145,6 +158,17 @@ public:
     // XInterface inherited
     //-----------------------------------------------------------------
     XINTERFACE_DECL()
+    //-----------------------------------------------------------------
+    // own inherited
+    //-----------------------------------------------------------------
+    virtual void SAL_CALL
+    impl_propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt )
+        throw( com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL
+    impl_vetoableChange( const com::sun::star::beans::PropertyChangeEvent& aEvent )
+        throw( com::sun::star::beans::PropertyVetoException,
+               com::sun::star::uno::RuntimeException );
     //-----------------------------------------------------------------
     // XTypeProvider
     //-----------------------------------------------------------------

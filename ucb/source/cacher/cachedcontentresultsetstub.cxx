@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2001-02-26 15:47:50 $
+ *  last change: $Author: iha $ $Date: 2001-03-22 16:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include <cachedcontentresultsetstub.hxx>
 
+#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UCB_FETCHERROR_HPP_
 #include <com/sun/star/ucb/FetchError.hpp>
 #endif
@@ -82,6 +86,12 @@ CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > 
                 : ContentResultSetWrapper( xOrigin )
                 , m_nColumnCount( 0 )
                 , m_bColumnCountCached( sal_False )
+                , m_bNeedToPropagateFetchSize( sal_True )
+                , m_bFirstFetchSizePropagationDone( sal_False )
+                , m_nLastFetchSize( 1 )//this value is not important at all
+                , m_bLastFetchDirection( sal_True )//this value is not important at all
+                , m_aPropertyNameForFetchSize( OUString::createFromAscii( "FetchSize" ) )
+                , m_aPropertyNameForFetchDirection( OUString::createFromAscii( "FetchDirection" ) )
 {
     impl_init();
 }
@@ -114,6 +124,52 @@ Any SAL_CALL CachedContentResultSetStub
                 );
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
+
+//--------------------------------------------------------------------------
+// own methods.  ( inherited )
+//--------------------------------------------------------------------------
+
+//virtual
+void SAL_CALL CachedContentResultSetStub
+    ::impl_propertyChange( const PropertyChangeEvent& rEvt )
+    throw( RuntimeException )
+{
+    impl_EnsureNotDisposed();
+
+    //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
+    //because it will ignore them anyway and we can save this remote calls
+    if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
+        || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
+        return;
+
+    PropertyChangeEvent aEvt( rEvt );
+    aEvt.Source = static_cast< XPropertySet * >( this );
+    aEvt.Further = sal_False;
+
+    impl_notifyPropertyChangeListeners( aEvt );
+}
+
+
+//virtual
+void SAL_CALL CachedContentResultSetStub
+    ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
+    throw( PropertyVetoException,
+           RuntimeException )
+{
+    impl_EnsureNotDisposed();
+
+    //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
+    //because it will ignore them anyway and we can save this remote calls
+    if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
+        || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
+        return;
+
+    PropertyChangeEvent aEvt( rEvt );
+    aEvt.Source = static_cast< XPropertySet * >( this );
+    aEvt.Further = sal_False;
+
+    impl_notifyVetoableChangeListeners( aEvt );
 }
 
 //--------------------------------------------------------------------------
@@ -170,6 +226,7 @@ if( !m_xResultSetOrigin.is() ) \
     OSL_ENSURE( sal_False, "broadcaster was disposed already" ); \
     throw RuntimeException(); \
 } \
+impl_propagateFetchSizeAndDirection( nRowCount, bDirection ); \
 FetchResult aRet; \
 aRet.StartIndex = nRowStartPosition; \
 aRet.Orientation = bDirection; \
@@ -328,6 +385,83 @@ void SAL_CALL CachedContentResultSetStub
     }
 
     rRowContent <<= aContent;
+}
+
+void SAL_CALL CachedContentResultSetStub
+    ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, sal_Bool bFetchDirection )
+        throw ( RuntimeException )
+{
+    //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResulSets
+
+    //we do not propagate the property 'FetchSize' or 'FetchDirection' via 'setPropertyValue' from the above CachedContentResultSet to save remote calls
+
+    //if the underlying ResultSet has a property FetchSize and FetchDirection,
+    //we will set these properties, if the new given parameters are different from the last ones
+
+    if( !m_bNeedToPropagateFetchSize )
+        return;
+
+    sal_Bool bNeedAction;
+    sal_Int32 nLastSize;
+    sal_Bool bLastDirection;
+    sal_Bool bFirstPropagationDone;
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        bNeedAction             = m_bNeedToPropagateFetchSize;
+        nLastSize               = m_nLastFetchSize;
+        bLastDirection          = m_bLastFetchDirection;
+        bFirstPropagationDone   = m_bFirstFetchSizePropagationDone;
+    }
+    if( bNeedAction )
+    {
+        if( nLastSize == nFetchSize
+            && bLastDirection == bFetchDirection
+            && bFirstPropagationDone == sal_True )
+            return;
+
+        if(!bFirstPropagationDone)
+        {
+            //check wether the properties 'FetchSize' and 'FetchDirection' do exist
+
+            Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
+            sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
+            sal_Bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
+
+            if(!bHasSize || !bHasDirection)
+            {
+                osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                m_bNeedToPropagateFetchSize = sal_False;
+                return;
+            }
+        }
+
+        sal_Bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
+        sal_Bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
+
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            m_bFirstFetchSizePropagationDone = sal_True;
+            m_nLastFetchSize        = nFetchSize;
+            m_bLastFetchDirection   = bFetchDirection;
+        }
+
+        if( bSetSize )
+        {
+            Any aValue;
+            aValue <<= nFetchSize;
+            setPropertyValue( m_aPropertyNameForFetchSize, aValue );
+        }
+        if( bSetDirection )
+        {
+            sal_Int32 nFetchDirection = FetchDirection::FORWARD;
+            if( !bFetchDirection )
+                nFetchDirection = FetchDirection::REVERSE;
+            Any aValue;
+            aValue <<= nFetchDirection;
+            setPropertyValue( m_aPropertyNameForFetchDirection, aValue );
+        }
+
+    }
 }
 
 //-----------------------------------------------------------------
