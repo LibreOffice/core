@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:42:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
 #endif
+#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -434,9 +435,11 @@ void SdModule::Execute(SfxRequest& rReq)
                               PTR_CAST(::sd::DrawDocShell,pShell);
                         SdDrawDocument* pDoc = pDocShell->GetDoc();
 
-                        ::sd::ViewShell* pViewSh =
-                              ::sd::ViewShellBase::GetMainViewShell (
+                        ::sd::ViewShellBase* pBase =
+                              ::sd::ViewShellBase::GetViewShellBase (
                                   pViewFrame);
+                        OSL_ASSERT (pBase!=NULL);
+                        ::sd::ViewShell* pViewSh = pBase->GetMainViewShell ();
                         SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
 
                         if (pOptions && pViewSh)
@@ -737,13 +740,14 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                     ::sd::ViewShellBase* pBase =
                           static_cast< ::sd::ViewShellBase*>(
                               pViewFrame->GetViewShell());
-                    pBase->GetSubShellManager().RequestMainSubShellChange (
-                        ::sd::ViewShell::ST_OUTLINE);
+                    pBase->GetPaneManager().RequestMainViewShellChange (
+                        ::sd::ViewShell::ST_OUTLINE,
+                        ::sd::PaneManager::CM_SYNCHRONOUS);
 
                     // Fetch the new outline view shell.
                     ::sd::OutlineViewShell* pViewShell =
                           PTR_CAST(::sd::OutlineViewShell,
-                              pBase->GetSubShellManager().GetMainSubShell());
+                              pBase->GetMainViewShell());
 
                     if (pViewShell != NULL)
                     {
