@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbastrings.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
+ *  last change: $Author: oj $ $Date: 2002-05-07 10:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@ namespace dbaccess
     DECLARE_CONSTASCII_USTRING(CONFIGKEY_LAYOUTINFORMATION);
     DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HELPTEXT);
     DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_CONTROLDEFAULT);
+
+    DECLARE_CONSTASCII_USTRING(PROPERTY_BOOLEANCOMPARISONMODE);
 }
 
 #endif // DBACCESS_SHARED_DBASTRINGS_HRC

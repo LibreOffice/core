@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbastrings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
+ *  last change: $Author: oj $ $Date: 2002-05-07 10:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ namespace dbaccess
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HIDDEN, "Hidden");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HELPTEXT, "HelpText");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_COLUMN_CONTROLDEFAULT, "ControlDefault");
+
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BOOLEANCOMPARISONMODE, "BooleanComparisonMode");
 
     //============================================================
     //= SQLSTATE
