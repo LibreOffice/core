@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:04:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ english_us ] = "Mode" ;
         Text [ portuguese_brazilian ] = "Modo" ;
         Text [ swedish ] = "L�ge" ;
-        Text [ danish ] = "Modus" ;
+        Text [ danish ] = "Tilstand" ;
         Text [ italian ] = "Modo" ;
         Text [ spanish ] = "Modo" ;
         Text [ french ] = "Mode" ;
@@ -123,6 +123,8 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ hebrew ] = "Modus";
         Text[ hindi ] = "प्रकार";
         Text[ slovak ] = "Režim";
+        Text[ hungarian ] = "Mód";
+        Text[ slovenian ] = "Način";
     };
     RadioButton RB_CNTNT
     {
@@ -136,7 +138,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ english_us ] = "~Copy heading" ;
         Text [ portuguese_brazilian ] = "~Copiar cabe�alho" ;
         Text [ swedish ] = "Kopiera ~�verskrift" ;
-        Text [ danish ] = "Kopier overskrift" ;
+        Text [ danish ] = "~Kopier overskrift" ;
         Text [ italian ] = "~Copia intestazione" ;
         Text [ spanish ] = "~Copiar encabezado" ;
         Text [ french ] = "~Copier le titre" ;
@@ -158,6 +160,8 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ hebrew ] = "~Überschrift kopieren";
         Text[ hindi ] = "~शीर्षक की प्रतिलिपि";
         Text[ slovak ] = "~Kopírovať nadpis";
+        Text[ hungarian ] = "Címsor ~másolása";
+        Text[ slovenian ] = "~Kopiraj naslov";
     };
     RadioButton RB_BOX_PARA
     {
@@ -169,7 +173,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ english_us ] = "C~ustom heading (apply Style)" ;
         Text [ portuguese_brazilian ] = "Ca~be�alho personalizado (aplicar Estilo)" ;
         Text [ swedish ] = "~Egen �verskrift, med formatmall" ;
-        Text [ danish ] = "Egen overskrift, med typografi" ;
+        Text [ danish ] = "~Brugerdefineret overskrift (anvend typografi)" ;
         Text [ italian ] = "~Propria intestazione con modello" ;
         Text [ spanish ] = "~Encabezado propio (aplicar estilo)" ;
         Text [ french ] = "Titre personnalis�, avec ~style" ;
@@ -191,6 +195,8 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ hebrew ] = "~Eigene Überschrift, mit Vorlage";
         Text[ hindi ] = "शी~र्षक को व्यवस्था करो (शैली लागू करो)";
         Text[ slovak ] = "Uží~vateľský nadpis (použiť štýl)";
+        Text[ hungarian ] = "Egyé~ni fejléc (Stílus felhasználásával)";
+        Text[ slovenian ] = "Naslov po ~meri (uporabi slog)";
     };
     RadioButton RB_BOX_NOPARA
     {
@@ -202,7 +208,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ english_us ] = "Cu~stom heading" ;
         Text [ portuguese_brazilian ] = "Cabe�a~lho personalizado" ;
         Text [ swedish ] = "E~gen �verskrift" ;
-        Text [ danish ] = "Egen overskrift" ;
+        Text [ danish ] = "~Brugerdefineret overskrift" ;
         Text [ italian ] = "Propria ~intestazione" ;
         Text [ spanish ] = "Encabezado ~propio" ;
         Text [ french ] = "Titre personnalis�" ;
@@ -224,6 +230,8 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ hebrew ] = "E~igene Überschrift";
         Text[ hindi ] = "शीर्ष~क को व्यवस्था करो";
         Text[ slovak ] = "Uží~vateľský nadpis";
+        Text[ hungarian ] = "~Egyéni címsor";
+        Text[ slovenian ] = "Na~slov po meri";
     };
     RadioButton RB_BORDER
     {
@@ -235,7 +243,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ english_us ] = "~No heading" ;
         Text [ portuguese_brazilian ] = "~Sem t�tulo" ;
         Text [ swedish ] = "~Ingen �verskrift" ;
-        Text [ danish ] = "Ingen overskrift" ;
+        Text [ danish ] = "~Ingen overskrift" ;
         Text [ italian ] = "~Senza intestazione" ;
         Text [ spanish ] = "~Sin encabezado" ;
         Text [ french ] = "Aucun titre" ;
@@ -257,6 +265,8 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ hebrew ] = "~Keine Überschrift";
         Text[ hindi ] = "~कोई शीर्षक नहीं";
         Text[ slovak ] = "Bez ~nadpisu";
+        Text[ hungarian ] = "~Nincs címsor";
+        Text[ slovenian ] = "~Brez naslova";
     };
     Text [ english_us ] = "Split Table" ;
     Text [ portuguese_brazilian ] = "Dividir a Tabela" ;
@@ -284,7 +294,10 @@ ModalDialog DLG_SPLIT_TABLE
     Text[ hebrew ] = "‮פיצול טבלה‬";
     Text[ hindi ] = "सारणी अलगाना";
     Text[ slovak ] = "Rozdeliť tabuľku";
+    Text[ hungarian ] = "Táblázat felosztása";
+    Text[ slovenian ] = "Razdeli tabelo";
 };
+
 
 
 
