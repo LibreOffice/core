@@ -70,7 +70,8 @@ import com.sun.star.media.*;
 
 public class Player implements javax.media.ControllerListener,
                                com.sun.star.lang.XServiceInfo,
-                               com.sun.star.media.XPlayer
+                               com.sun.star.media.XPlayer,
+                               com.sun.star.lang.XComponent
 
 
 {
@@ -254,23 +255,14 @@ public class Player implements javax.media.ControllerListener,
     public synchronized com.sun.star.awt.Size getPreferredPlayerWindowSize()
     {
         java.awt.Component      aVisualComponent = maPlayer.getVisualComponent();
-        java.awt.Component      aControlComponent = maPlayer.getControlPanelComponent();
         com.sun.star.awt.Size   aSize = new com.sun.star.awt.Size( 0, 0 );
 
         if( aVisualComponent != null )
         {
             java.awt.Dimension aDim = aVisualComponent.getPreferredSize();
 
-            aSize.Width = Math.max( aDim.width, aSize.Width );
-            aSize.Height += aDim.height;
-        }
-
-        if( aControlComponent != null )
-        {
-            java.awt.Dimension aDim = aControlComponent.getPreferredSize();
-
-            aSize.Width = Math.max( aDim.width, aSize.Width );
-            aSize.Height += aDim.height;
+            aSize.Width = Math.max( aDim.width, 0 );
+            aSize.Height = Math.max( aDim.height, 0 );
         }
 
         return aSize;
@@ -295,6 +287,32 @@ public class Player implements javax.media.ControllerListener,
         catch( com.sun.star.lang.IllegalArgumentException e )
         {
             return null;
+        }
+    }
+
+    // --------------
+    // - XComponent -
+    // --------------
+
+    public synchronized void addEventListener( com.sun.star.lang.XEventListener xListener )
+    {
+    }
+
+    // -------------------------------------------------------------------------
+
+    public synchronized void removeEventListener( com.sun.star.lang.XEventListener xListener )
+    {
+    }
+
+    // -------------------------------------------------------------------------
+
+    public synchronized void dispose()
+    {
+        if( maPlayer != null )
+        {
+            maPlayer.stop();
+            maPlayer.close();
+            maPlayer = null;
         }
     }
 
