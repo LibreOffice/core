@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 13:44:49 $
+ *  last change: $Author: oj $ $Date: 2002-08-06 08:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 #include "propcontroller.hxx"
 #endif
+#include <memory>
 
 //............................................................................
 namespace pcr
@@ -141,7 +142,8 @@ namespace pcr
             sal_uInt16 nTmpPage = m_pPropBox->GetCurPage();
             if (nTmpPage)
                 m_nActivePage = nTmpPage;
-            delete m_pPropBox;
+            ::std::auto_ptr<Window> aTemp(m_pPropBox);
+            m_pPropBox = NULL;
         }
         if (m_pActiveController)
             m_pActiveController->release();
@@ -193,6 +195,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/05/30 13:44:49  fs
+ *  #86838# forward the GetFocus event to the property box
+ *
  *  Revision 1.3  2001/02/19 14:08:31  fs
  *  #84041# infrastructure for activating pages from outside
  *
