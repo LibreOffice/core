@@ -232,8 +232,11 @@ Dim oLocRange as Object
 	oSelRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	&apos; Check if a Currency-Range has been selected
 	oLocRange = oDocument.CurrentController.Selection
-	oSelRanges.InsertbyName(&quot;&quot;,oLocRange)
-	AddSelectedRangeToSelRangesEnum() = oLocRange
+	bPreSelected = oLocRange.SupportsService(&quot;com.sun.star.sheet.SheetCellRange&quot;)
+	If bPreSelected Then
+		oSelRanges.InsertbyName(&quot;&quot;,oLocRange)
+		AddSelectedRangeToSelRangesEnum() = oLocRange
+	End If
 End Function
 
 
@@ -243,7 +246,7 @@ Dim OldCurrSymbolList(2) as String
 Dim OldCurrIndex as Integer
 Dim OldCurExtension(2) as String
 	oPreSelRange = AddSelectedRangeToSelRangesEnum()
-	bPreSelected = True
+	DialogModel.chkComplete.State = Abs(Not(bPreSelected))
 	If bPreSelected Then
 		DialogModel.optSelRange.State = 1
 		AddRangeToListbox(oPreSelRange)
@@ -252,7 +255,6 @@ Dim OldCurExtension(2) as String
 		CreateStyleEnumeration()
 	End If
 	EnableStep1DialogControls(True, bPreSelected, True)
-	DialogModel.chkComplete.State = Abs(Not(bPreSelected))
 	DialogModel.optSelRange.Enabled = bPreSelected
 End Sub
 
