@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtwrapinfluenceonobjpos.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:57:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,11 @@ private:
 public:
     TYPEINFO();
 
+    // --> OD 2004-10-18 #i35017# - constant name has changed
     SwFmtWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition =
-                text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED );
+                text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+    // <--
     SwFmtWrapInfluenceOnObjPos(
             const SwFmtWrapInfluenceOnObjPos& _rCpy );
     ~SwFmtWrapInfluenceOnObjPos();
@@ -102,7 +104,11 @@ public:
 
     // direct accessors to data
     void SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition );
-    sal_Int16 GetWrapInfluenceOnObjPos() const;
+    // --> OD 2004-10-18 #i35017# - add parameter <_bIterativeAsOnceConcurrent>
+    // to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
+    sal_Int16 GetWrapInfluenceOnObjPos(
+                        const bool _bIterativeAsOnceConcurrent = false ) const;
+    // <--
 };
 
 inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(BOOL bInP) const
