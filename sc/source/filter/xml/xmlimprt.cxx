@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-21 07:35:48 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,7 +1483,10 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
     bNullDateSetted(sal_False),
     pNumberFormatAttributesExportHelper(NULL),
-    pStyleNumberFormats(NULL)
+    pStyleNumberFormats(NULL),
+    sPrevStyleName(),
+    sPrevCurrency(),
+    nPrevCellType(0)
 
 //  pParaItemMapper( 0 ),
 {
@@ -1573,9 +1576,6 @@ ScXMLImport::~ScXMLImport()
 
 //  if (pScAutoStylePool)
 //      delete pScAutoStylePool;
-    uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
-    if (xActionLockable.is())
-        xActionLockable->removeActionLock();
     if (pChangeTrackingImportHelper)
         delete pChangeTrackingImportHelper;
     if (pNumberFormatAttributesExportHelper)
@@ -1591,6 +1591,9 @@ ScXMLImport::~ScXMLImport()
         aTables.UpdateRowHeights();
         aTables.ResizeShapes();
     }
+    uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
+    if (xActionLockable.is())
+        xActionLockable->removeActionLock();
 }
 
 void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XComponent>& xComponent )
@@ -2000,42 +2003,78 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
     }
 }
 
-void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
-        const sal_Int16 nCellType, const rtl::OUString& rCurrency)
+void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
 {
-    uno::Reference<table::XCellRange> xCellRange = GetTables().GetCurrentXCellRange();
-    if (xCellRange.is())
+    if (!xSheetCellRanges.is())
     {
-        uno::Reference <table::XCellRange> xPropCellRange = xCellRange->getCellRangeByPosition(
-            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
-        if (xPropCellRange.is())
+        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+        if (xMultiServiceFactory.is())
+            xSheetCellRanges = uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))), uno::UNO_QUERY);
+        DBG_ASSERT(xSheetCellRanges.is(), "didn't get SheetCellRanges");
+
+    }
+    xSheetCellRanges->addRangeAddress(rCellRange, sal_False);
+}
+
+void ScXMLImport::SetStyleToRanges()
+{
+    if (sPrevStyleName.getLength())
+    {
+        uno::Reference <beans::XPropertySet> xProperties (xSheetCellRanges, uno::UNO_QUERY);
+        if (xProperties.is())
         {
-            uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
-            if (xProperties.is())
+            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetAutoStyles();
+            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, sal_True);
+            if (pStyle)
             {
-                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetAutoStyles();
-                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_TABLE_CELL, rStyleName, sal_True);
-                if (pStyle)
-                {
-                    pStyle->FillPropertySet(xProperties);
-                    sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
-                    SetType(xProperties, nNumberFormat, nCellType, rCurrency);
-                }
-                else
-                {
-                    uno::Any aStyleName;
-                    aStyleName <<= rStyleName;
-                    xProperties->setPropertyValue(sCellStyle, aStyleName);
-                    sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(rStyleName));
-                    sal_Bool bInsert(nNumberFormat == -1);
-                    SetType(xProperties, nNumberFormat, nCellType, rCurrency);
-                    if (bInsert)
-                        GetStyleNumberFormats()->AddStyleNumberFormat(rStyleName, nNumberFormat);
-                }
+                pStyle->FillPropertySet(xProperties);
+                sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
+                SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
+            }
+            else
+            {
+                uno::Any aStyleName;
+                aStyleName <<= sPrevStyleName;
+                xProperties->setPropertyValue(sCellStyle, aStyleName);
+                sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(sPrevStyleName));
+                sal_Bool bInsert(nNumberFormat == -1);
+                SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
+                if (bInsert)
+                    GetStyleNumberFormats()->AddStyleNumberFormat(sPrevStyleName, nNumberFormat);
             }
         }
     }
+    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+    if (xMultiServiceFactory.is())
+        xSheetCellRanges = uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))), uno::UNO_QUERY);
+    DBG_ASSERT(xSheetCellRanges.is(), "didn't get SheetCellRanges");
+}
+
+void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
+        const sal_Int16 nCellType, const rtl::OUString& rCurrency)
+{
+    if (!sPrevStyleName.getLength())
+    {
+        nPrevCellType = nCellType;
+        sPrevStyleName = rStyleName;
+        sPrevCurrency = rCurrency;
+    }
+    else if ((nCellType != nPrevCellType || !rStyleName.equals(sPrevStyleName) ||
+            !rCurrency.equals(sPrevCurrency)))
+    {
+        SetStyleToRanges();
+        nPrevCellType = nCellType;
+        sPrevStyleName = rStyleName;
+        sPrevCurrency = rCurrency;
+    }
+    table::CellRangeAddress aCellRange;
+    aCellRange.StartColumn = rRange.aStart.Col();
+    aCellRange.StartRow = rRange.aStart.Row();
+    aCellRange.Sheet = rRange.aStart.Tab();
+    aCellRange.EndColumn = rRange.aEnd.Col();
+    aCellRange.EndRow = rRange.aEnd.Row();
+    AddStyleRange(aCellRange);
 }
 
 sal_Bool ScXMLImport::SetNullDateOnUnitConverter()
@@ -2059,3 +2098,10 @@ ScMyStyleNumberFormats* ScXMLImport::GetStyleNumberFormats()
         pStyleNumberFormats = new ScMyStyleNumberFormats();
     return pStyleNumberFormats;
 }
+
+void ScXMLImport::SetStylesToRangesFinished()
+{
+    SetStyleToRanges();
+    sPrevStyleName = sEmpty;
+}
+

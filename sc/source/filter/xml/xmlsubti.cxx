@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-27 11:33:06 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,10 @@ void ScMyTables::DeleteTable()
         nTableCount--;
     }
     if (nTableCount == 0) // only set the styles if all subtables are importet and the table is finished
+    {
         rImport.GetStylesImportHelper()->SetStylesToRanges();
+        rImport.SetStylesToRangesFinished();
+    }
     if (bProtection)
     {
         uno::Sequence<sal_Int8> aPass;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGECONTAINER_HPP_
+#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #endif
 
 class ScRangeList;
@@ -766,7 +769,13 @@ class ScXMLImport: public SvXMLImport
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatTypes> xNumberFormatTypes;
 
+    com::sun::star::uno::Reference <com::sun::star::sheet::XSheetCellRangeContainer> xSheetCellRanges;
+
+    rtl::OUString           sEmpty;
+    rtl::OUString           sPrevStyleName;
+    rtl::OUString           sPrevCurrency;
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
+    sal_Int16               nPrevCellType;
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
     sal_Bool                bRemoveLastChar : 1;
     sal_Bool                bNullDateSetted : 1;
@@ -939,11 +948,17 @@ public:
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
         const rtl::OUString& rCurrency);
+private:
+    void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
+    void SetStyleToRanges();
+public:
     void SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
         const sal_Int16 nCellType, const rtl::OUString& rCurrency);
     sal_Bool SetNullDateOnUnitConverter();
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
     ScMyStyleNumberFormats* GetStyleNumberFormats();
+
+    void SetStylesToRangesFinished();
 };
 
 #endif

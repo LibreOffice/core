@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-15 17:26:31 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ class ScXMLExport : public SvXMLExport
     sal_Bool GetMerge (const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
         sal_Int32 nCol, sal_Int32 nRow,
         com::sun::star::table::CellRangeAddress& aCellAddress);
-    void GetMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
+    sal_Bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
     sal_Bool GetCellText (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
