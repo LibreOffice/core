@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:51:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ Reference<VendorBase> OtherInfo::createInstance()
     return new OtherInfo;
 }
 
+
 char const* const* OtherInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
@@ -97,8 +98,12 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll"
 #elif UNX
+#ifdef MACOSX
+        "/../../../JavaVM"
+#else
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so"
+#endif
 #endif
 
     };
@@ -111,6 +116,10 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 
 #ifdef UNX
     static char const * ar[] = {
+#ifdef MACOX
+        "/../Libraries",
+        "/lib"
+#else
 #if defined(LINUX) && defined(POWERPC)
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/classic",
@@ -120,6 +129,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
+#endif
 #endif
     };
 
@@ -132,10 +142,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 
 int OtherInfo::compareVersions(const rtl::OUString& sSecond) const
 {
-    //Need to provide an own algorithm for comparing version. Or
-    //do not override compareVersions and rely on the implementation
-    //in VendorBase::compareVersion. However, it will throw a MalformedVersionException
-    //if the version string does not correspond to SUN version strings.
+    //Need to provide an own algorithm for comparing version.
     //Because this function returns always 0, which means the version of
     //this JRE and the provided version "sSecond" are equal, one cannot put
     //any excludeVersion entries in the javavendors.xml file.
