@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
         {
             xAccessibleComponent->grabFocus();
             // grab only focus if it does not have the focus and it is not hidden
-            if (mpViewShell &&
+            if (mpViewShell && mpViewShell->GetViewData() &&
                 (mpViewShell->GetViewData()->GetActivePart() != meSplitPos) &&
                 mpViewShell->GetWindowByPos(meSplitPos)->IsVisible())
             {
