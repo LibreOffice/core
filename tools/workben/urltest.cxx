@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:45:37 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ void abbreviate(INetURLObject aObj)
 int
 #if defined WNT
 __cdecl
-#endif WNT
+#endif // WNT
 main()
 {
     bool bSuccess = true;
