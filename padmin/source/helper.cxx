@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
+ *  last change: $Author: pl $ $Date: 2002-09-03 13:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -307,6 +310,22 @@ bool padmin::chooseDirectory( Window* pParent, String& rInOutPath )
         Reference< XFolderPicker > xFolderPicker( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) ) ), UNO_QUERY );
         if( xFolderPicker.is() )
         {
+            Reference< XControlAccess > xCA( xFolderPicker, UNO_QUERY );
+            if( xCA.is() )
+            {
+                try
+                {
+                    Any aState;
+                    aState <<= sal_False;
+                    xCA->setControlProperty( OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpButton" ) ),
+                                             OUString( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ),
+                                             aState );
+
+                }
+                catch( ... )
+                {
+                }
+            }
             INetURLObject aObj( rInOutPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
             xFolderPicker->setDisplayDirectory( aObj.GetMainURL() );
             if( xFolderPicker->execute() == ExecutableDialogResults::OK )

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-19 17:46:04 $
+#   last change: $Author: pl $ $Date: 2002-09-03 13:23:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@
 PRJ=..
 PRJNAME=padmin
 TARGET=padmin
+ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
