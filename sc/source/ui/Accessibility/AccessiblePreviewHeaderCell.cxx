@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,24 @@
  *
  ************************************************************************/
 
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
+#ifndef _SC_ACCESSIBLETEXT_HXX
+#include "AccessibleText.hxx"
+#endif
+#ifndef SC_EDITSRC_HXX
+#include "editsrc.hxx"
+#endif
+#ifndef _SVX_UNOEDACC_HXX_
+#include <svx/unoedacc.hxx>
+#endif
 #include "AccessiblePreviewHeaderCell.hxx"
 #include "prevwsh.hxx"
 #include "unoguard.hxx"
@@ -71,6 +89,9 @@
 #include <vcl/window.hxx>
 #include <svtools/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -100,7 +121,7 @@ ScAccessiblePreviewHeaderCell::~ScAccessiblePreviewHeaderCell()
         mpViewShell->RemoveAccessibilityObject(*this);
 }
 
-void ScAccessiblePreviewHeaderCell::SetDefunc()
+void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
 {
     if (mpViewShell)
     {
@@ -108,7 +129,7 @@ void ScAccessiblePreviewHeaderCell::SetDefunc()
         mpViewShell = NULL;
     }
 
-    ScAccessibleContextBase::SetDefunc();
+    ScAccessibleContextBase::disposing();
 }
 
 //=====  SfxListener  =====================================================
@@ -120,26 +141,27 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         ULONG nId = rRef.GetId();
         if ( nId == SFX_HINT_DYING )
-            SetDefunc();
+            dispose();
     }
 }
 
-//=====  XInterface  ======================================================
+//=====  XInterface  =====================================================
 
-uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::queryInterface( uno::Type const & rType )
+    throw (uno::RuntimeException)
 {
-    SC_QUERYINTERFACE( XAccessibleValue )
-
-    return ScAccessibleContextBase::queryInterface( rType );
+    uno::Any aAny (ScAccessiblePreviewHeaderCellImpl::queryInterface(rType));
+    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
 }
 
-void SAL_CALL ScAccessiblePreviewHeaderCell::acquire() throw()
+void SAL_CALL ScAccessiblePreviewHeaderCell::acquire()
+    throw ()
 {
     ScAccessibleContextBase::acquire();
 }
 
-void SAL_CALL ScAccessiblePreviewHeaderCell::release() throw()
+void SAL_CALL ScAccessiblePreviewHeaderCell::release()
+    throw ()
 {
     ScAccessibleContextBase::release();
 }
@@ -176,9 +198,11 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue() throw (uno::R
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleAt( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
 {
-    uno::Reference< XAccessible > xAccessible = NULL;
-    // should be implemented in the Accessible Text helper
-    return xAccessible;
+     ScUnoGuard aGuard;
+    if(!mpTextHelper)
+        CreateTextHelper();
+
+    return mpTextHelper->GetAt(rPoint);
 }
 
 void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus() throw (uno::RuntimeException)
@@ -196,16 +220,19 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus() throw (uno::RuntimeExce
 
 sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount() throw(uno::RuntimeException)
 {
-    sal_Int32 nCount(0);
-    // should call the Helper class to get the child count
-    return nCount;
+    ScUnoGuard aGuard;
+    if (!mpTextHelper)
+        CreateTextHelper();
+    return mpTextHelper->GetChildCount();
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChild(sal_Int32 nIndex)
                             throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
-    return uno::Reference< XAccessible >();
+    ScUnoGuard aGuard;
+    if (!mpTextHelper)
+        CreateTextHelper();
+    return mpTextHelper->GetChild(nIndex);
 }
 
 sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent() throw (uno::RuntimeException)
@@ -266,6 +293,12 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupporte
 
 //=====  XTypeProvider  =======================================================
 
+uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewHeaderCell::getTypes()
+        throw (uno::RuntimeException)
+{
+    return comphelper::concatSequences(ScAccessiblePreviewHeaderCellImpl::getTypes(), ScAccessibleContextBase::getTypes());
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePreviewHeaderCell::getImplementationId(void)
     throw (uno::RuntimeException)
@@ -275,7 +308,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -337,7 +370,18 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
 
 sal_Bool ScAccessiblePreviewHeaderCell::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
 {
-    return (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
+void ScAccessiblePreviewHeaderCell::CreateTextHelper()
+{
+    if (!mpTextHelper)
+    {
+        ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
+            (new ScAccessiblePreviewHeaderCellTextData(mpViewShell, String(getAccessibleName())));
+        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
+
+        mpTextHelper = new SvxAccessibleTextHelper(this, pEditSource );
+    }
+}

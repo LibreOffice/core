@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,19 @@
 #include "global.hxx"
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 class ScPreviewShell;
+class SvxAccessibleTextHelper;
 
+typedef cppu::ImplHelper1<::drafts::com::sun::star::accessibility::XAccessibleValue>
+                    ScAccessiblePreviewHeaderCellImpl;
 
 class ScAccessiblePreviewHeaderCell :
-        public ::drafts::com::sun::star::accessibility::XAccessibleValue,
-        public ScAccessibleContextBase
+        public ScAccessibleContextBase,
+        public ScAccessiblePreviewHeaderCellImpl
 {
 public:
     ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
@@ -98,19 +104,21 @@ protected:
     virtual ~ScAccessiblePreviewHeaderCell();
 
 public:
-    void SetDefunc();
+     virtual void SAL_CALL disposing();
 
     //=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    //=====  XInterface  ======================================================
+    ///=====  XInterface  =====================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-                                const ::com::sun::star::uno::Type & rType )
-                                    throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw ();
+
+    virtual void SAL_CALL release() throw ();
 
     //=====  XAccessibleValue  ================================================
 
@@ -149,6 +157,10 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+        getTypes()
+        throw (::com::sun::star::uno::RuntimeException);
+
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
@@ -164,6 +176,7 @@ protected:
 
 private:
     ScPreviewShell*     mpViewShell;
+    SvxAccessibleTextHelper* mpTextHelper;
     sal_Int32           mnIndex;
     ScAddress           maCellPos;
     sal_Bool            mbColumnHeader;
@@ -173,6 +186,8 @@ private:
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+
+    void CreateTextHelper();
 };
 
 
