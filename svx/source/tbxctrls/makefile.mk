@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:39:39 $
+#   last change: $Author: rt $ $Date: 2004-04-02 14:15:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,8 @@ IMGLST_SRS=$(SRS)$/tbxctrls.srs
 BMP_IN=$(PRJ)$/win/res
 
 SLOFILES=	\
+        $(SLO)$/fontworkgallery.obj\
+        $(SLO)$/extrusioncontrols.obj \
         $(SLO)$/colrctrl.obj	\
         $(SLO)$/fillctrl.obj	\
         $(SLO)$/grafctrl.obj	\
@@ -94,10 +96,13 @@ SLOFILES=	\
         $(SLO)$/tbxalign.obj	\
         $(SLO)$/tbxdraw.obj		\
         $(SLO)$/tbxdrctl.obj    \
-        $(SLO)$/verttexttbxctrl.obj
+        $(SLO)$/verttexttbxctrl.obj \
+        $(SLO)$/toolbarmenu.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
+        fontworkgallery.src		\
+        extrusioncontrols.src		\
         colrctrl.src			\
         lboxctrl.src			\
         linectrl.src			\
