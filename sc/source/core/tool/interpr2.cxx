@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:45:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1779,7 +1779,7 @@ ScDdeLink* lcl_GetDdeLink( SvxLinkManager* pLinkMgr,
     USHORT nCount = pLinkMgr->GetLinks().Count();
     for (USHORT i=0; i<nCount; i++ )
     {
-        ::so3::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
+        ::sfx2::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
         if (pBase->ISA(ScDdeLink))
         {
             ScDdeLink* pLink = (ScDdeLink*)pBase;
