@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 16:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ struct TabInfo
     TabInfo::TabInfo() { bValid = FALSE; }
 };
 
-Point lcl_Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
+Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
 {
     double nRealOrientation = nOrientation*F_PI1800;
     double nCos = cos( nRealOrientation );
@@ -206,8 +206,8 @@ void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPn
             aPnt2.X() += pDXArray[ nEnd - nIndex - 1 ];
             if ( nOrientation )
             {
-                aPnt1 = lcl_Rotate( aPnt1, nOrientation, rOrigin );
-                aPnt2 = lcl_Rotate( aPnt2, nOrientation, rOrigin );
+                aPnt1 = Rotate( aPnt1, nOrientation, rOrigin );
+                aPnt2 = Rotate( aPnt2, nOrientation, rOrigin );
             }
 
             Color aOldColor( pOutDev->GetLineColor() );
@@ -2428,7 +2428,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     short nEsc = aTmpFont.GetEscapement();
                                     if ( nOrientation )
                                     {
-                                        aTmpFont.SetLineOrientation( nOrientation );
+                                        aTmpFont.SetOrientation( aTmpFont.GetOrientation()+nOrientation );
                                         // aTmpFont.SetCharOrientation( nOrientation );
 
                                         // Bei Hoch/Tief selbst Hand anlegen:
@@ -2666,17 +2666,13 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
 
         Paint( pVDev, aTmpRec, aStartPos );
 
-        sal_Bool bClipRegion;
-        Region aOldRegion;
         MapMode aOldMapMode;
         if ( GetTextRanger() )
         {
-            bClipRegion = pOutWin->IsClipRegion();
-            aOldRegion = pOutWin->GetClipRegion();
+            pOutWin->Push( PUSH_CLIPREGION );
             // Wie bekomme ich das Polygon an die richtige Stelle????
             // Das Polygon bezieht sich auf die View, nicht auf das Window
             // => Origin umsetzen...
-            aOldMapMode = pOutWin->GetMapMode();
             Point aOrigin = aOldMapMode.GetOrigin();
             Point aViewPos = pView->GetOutputArea().TopLeft();
             aOrigin.Move( aViewPos.X(), aViewPos.Y() );
@@ -2684,7 +2680,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
             MapMode aNewMapMode( aOldMapMode );
             aNewMapMode.SetOrigin( aOrigin );
             pOutWin->SetMapMode( aNewMapMode );
-            pOutWin->SetClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
+            pOutWin->IntersectClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
         }
 
         pOutWin->DrawOutDev( aClipRec.TopLeft(), aClipRec.GetSize(),
@@ -2692,11 +2688,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
 
         if ( GetTextRanger() )
         {
-            if ( bClipRegion )
-                pOutWin->SetClipRegion( aOldRegion );
-            else
-                pOutWin->SetClipRegion();
-            pOutWin->SetMapMode( aOldMapMode );
+            pOutWin->Pop();
         }
 
         pView->DrawSelection();

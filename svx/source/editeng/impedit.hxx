@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 16:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,6 +991,7 @@ inline Cursor* ImpEditView::GetCursor()
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = NULL, const MapUnit* pDestUnit = NULL );
+Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
 
 #endif // _IMPEDIT_HXX
 

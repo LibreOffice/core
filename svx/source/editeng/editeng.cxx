@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 16:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,13 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
     Rectangle aBigRec( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Push();
-    pImpEditEngine->Paint( pOutDev, aBigRec, rStartPos, sal_False, nOrientation );
+    Point aStartPos( rStartPos );
+    if ( IsVertical() )
+    {
+        aStartPos.X() += GetPaperSize().Width();
+        aStartPos = Rotate( aStartPos, nOrientation, rStartPos );
+    }
+    pImpEditEngine->Paint( pOutDev, aBigRec, aStartPos, sal_False, nOrientation );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Pop();
 }
@@ -557,8 +563,8 @@ void EditEngine::ClearPolygon()
 const PolyPolygon* EditEngine::GetPolygon()
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetTextRanger( FALSE ) ?
-        &pImpEditEngine->GetTextRanger()->GetPolyPolygon() : 0;
+    return pImpEditEngine->GetTextRanger() ?
+        &pImpEditEngine->GetTextRanger()->GetPolyPolygon() : NULL;
 }
 
 const Size& EditEngine::GetMinAutoPaperSize() const
@@ -2319,7 +2325,11 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
                 case BS_123:            eNumType = SVX_NUM_ARABIC;              break;
                 default:                eNumType = SVX_NUM_NUMBER_NONE;         break;
             }
+#if SUPD > 622
             pNumberFormat->SetNumberingType( eNumType );
+#else
+            pNumberFormat->SetNumType( eNumType );
+#endif
 
             // Justification
             SvxAdjust eAdjust;
