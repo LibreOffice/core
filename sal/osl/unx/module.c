@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-13 07:30:46 $
+ *  last change: $Author: mfe $ $Date: 2001-03-16 12:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
 {
     oslModule pModule=0;
+
+    OSL_ENSURE(ustrModuleName,"osl_loadModule : string is not valid");
 
     if (  ustrModuleName != 0 )
     {
@@ -271,9 +273,10 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 /*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule hModule)
 {
+    OSL_ENSURE(hModule,"osl_unloadModule : module handle is not valid");
+
 #ifdef MACOSX
 
-    OSL_ASSERT(hModule);
 
     if (hModule)
     {
@@ -289,11 +292,17 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 
 #else /* MACOSX */
 
-    OSL_ASSERT(hModule);
-
     if (hModule)
     {
 #ifndef NO_DL_FUNCTIONS
+#ifndef GCC
+        /*     gcc (2.9.1 (egcs), 295) registers atexit handlers for
+         *     static destructors which obviously cannot
+         *     be called after dlclose. A compiler "feature". The workaround for now
+         *     is not to dlclose libraries. Since most of them are closed at shutdown
+         *     this does not make that much a difference
+         */
+
         int nRet = 0;
 
         nRet = dlclose(hModule);
@@ -303,6 +312,8 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
             fprintf( stderr, "osl_getsymbol: cannot close lib for reason: %s\n", dlerror() );
         }
 #endif /* if DEBUG */
+#endif /* ifndef GCC */
+
 #endif /* ifndef NO_DL_FUNCTIONS */
     }
 
@@ -316,7 +327,10 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString* ustrSymbolName)
 {
     void* pHandle=0;
 
-    if ( ustrSymbolName != 0 )
+    OSL_ENSURE(Module,"osl_getSymbol : module handle is not valid");
+    OSL_ENSURE(Module,"osl_getSymbol : ustrSymbolName");
+
+    if ( Module!= 0 && ustrSymbolName != 0 )
     {
         rtl_String* strSymbolName=0;
         sal_Char* pszSymbolName=0;
