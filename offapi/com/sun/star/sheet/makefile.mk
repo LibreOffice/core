@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: sab $ $Date: 2001-07-06 11:48:39 $
+#   last change: $Author: sab $ $Date: 2002-09-27 11:03:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,6 +155,7 @@ IDLFILES=\
     Spreadsheet.idl\
     SpreadsheetDocument.idl\
     SpreadsheetDocumentSettings.idl\
+    SpreadsheetDrawPage.idl\
     Spreadsheets.idl\
     SpreadsheetView.idl\
     SpreadsheetViewPane.idl\
