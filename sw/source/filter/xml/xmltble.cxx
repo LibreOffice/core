@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:26:02 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #endif
 #ifndef _FMTROWSPLT_HXX //autogen
 #include <fmtrowsplt.hxx>
+#endif
+#ifndef _SVX_FRAMEDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #include <list>
@@ -460,6 +463,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     const SvxBrushItem *pBrush = 0;
     const SvxBoxItem *pBox = 0;
     const SwTblBoxNumFormat *pNumFmt = 0;
+    const SvxFrameDirectionItem *pFrameDir = 0;
 
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     const SfxPoolItem *pItem;
@@ -476,9 +480,12 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     if ( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOXATR_FORMAT,
                                                 sal_False, &pItem ) )
         pNumFmt = (const SwTblBoxNumFormat *)pItem;
+    if ( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRAMEDIR,
+                                                sal_False, &pItem ) )
+        pFrameDir = (const SvxFrameDirectionItem *)pItem;
 
     // empty styles have not to be exported
-    if( !pVertOrient && !pBrush && !pBox && !pNumFmt )
+    if( !pVertOrient && !pBrush && !pBox && !pNumFmt && !pFrameDir )
         return sal_False;
 
     // order is: -/-/-/num,
@@ -496,6 +503,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         const SvxBrushItem *pTestBrush = 0;
         const SvxBoxItem *pTestBox = 0;
         const SwTblBoxNumFormat *pTestNumFmt = 0;
+        const SvxFrameDirectionItem *pTestFrameDir = 0;
         const SwFrmFmt *pTestFmt = GetObject(i);
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
         if( SFX_ITEM_SET == rTestSet.GetItemState( RES_VERT_ORIENT, sal_False,
@@ -554,6 +562,21 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
         }
 
+        if ( SFX_ITEM_SET == rTestSet.GetItemState( RES_FRAMEDIR,
+                                                sal_False, &pItem ) )
+        {
+            if( !pFrameDir )
+                break;
+
+            pTestFrameDir = (const SvxFrameDirectionItem *)pItem;
+        }
+        else
+        {
+            if( pFrameDir )
+                continue;
+
+        }
+
         if( pVertOrient &&
             pVertOrient->GetVertOrient() != pTestVertOrient->GetVertOrient() )
             continue;
@@ -565,6 +588,9 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             continue;
 
         if( pNumFmt && pNumFmt->GetValue() != pTestNumFmt->GetValue() )
+            continue;
+
+        if( pFrameDir && pFrameDir->GetValue() != pTestFrameDir->GetValue() )
             continue;
 
         // found!
