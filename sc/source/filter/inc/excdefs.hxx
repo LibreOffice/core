@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-01 13:49:06 $
+ *  last change: $Author: dr $ $Date: 2001-08-24 12:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@
 // (0x0059, 0x005A) CRN, XCT
 
 // CRN data types
+#define EXC_CRN_NONE                0x00
 #define EXC_CRN_DOUBLE              0x01
 #define EXC_CRN_STRING              0x02
 #define EXC_CRN_BOOL                0x04
