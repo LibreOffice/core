@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:45:17 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÏßÌõÊ½ÑùÂğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò ñòèëü ëèíèè?";
     Text[ polish ] = "Chcesz na pewno usun¹æ styl linii?";
-    Text[ japanese ] = "ü½À²Ù‚ğíœ‚µ‚Ä‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
+    Text[ japanese ] = "ü½À²Ù‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó½u±ø¼Ë¦¡¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äãØ ÇáÎØ¿";
     Text[ greek ] = "Èİëåôå óßãïõñá íá äéáãñáöåß ôï óôõë ãñáììŞò;";
@@ -670,4 +670,5 @@ String STR_ADD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir";
 };
+
 
