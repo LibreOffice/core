@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 08:14:11 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 10:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svx/editstat.hxx>
 #include <svx/langitem.hxx>
 #include <svx/linkmgr.hxx>
+#include <svx/unolingu.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -80,10 +81,8 @@
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <offmgr/app.hxx>
 #include <sfx2/misccfg.hxx>
-
-#include <offmgr/osplcfg.hxx>
+#include <sfx2/app.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/system.hxx>
@@ -701,7 +700,7 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
                             ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
                 pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
-                pEngine->SetSpeller( OFF_APP()->GetSpellChecker() );
+                pEngine->SetSpeller( LinguMgr::GetSpellChecker() );
             }
 
             const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-17 12:39:15 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 10:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/escpitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/svxacorr.hxx>
+#include <svx/unolingu.hxx>
 #include <svx/wghtitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -486,7 +487,7 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
         //  spelling is active
 
         if ( bOnlineSpell )
-            pEngine->SetSpeller( OFF_APP()->GetSpellChecker() );
+            pEngine->SetSpeller( LinguMgr::GetSpellChecker() );
     }
 }
 

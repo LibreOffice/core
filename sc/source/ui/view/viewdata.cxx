@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 08:18:09 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 10:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,9 @@
 #include <svx/editview.hxx>
 #include <svx/editstat.hxx>
 #include <svx/outliner.hxx>
-#include <offmgr/app.hxx>
+#include <svx/unolingu.hxx>
 
+#include <vcl/svapp.hxx>
 #include <vcl/system.hxx>
 
 #include "viewdata.hxx"
@@ -2095,7 +2096,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
     //! no way to set the outliner's spelling language?
     //  (may not bee needed - default language is always used)
 
-    rOutl.SetSpeller( OFF_APP()->GetSpellChecker() );
+    rOutl.SetSpeller( LinguMgr::GetSpellChecker() );
 }
 
 ScAddress ScViewData::GetCurPos() const

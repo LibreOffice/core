@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 08:14:54 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 10:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <vos/xception.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -82,8 +82,8 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-#define SERVICE_LINGUPROP   "com.sun.star.linguistic.LinguProperties"
-#define SERVICE_THESAURUS   "com.sun.star.linguistic.Thesaurus"
+#define SERVICE_LINGUPROP   "com.sun.star.linguistic2.LinguProperties"
+#define SERVICE_THESAURUS   "com.sun.star.linguistic2.Thesaurus"
 
 #define LINGUPROP_DEFAULTLANG       "DefaultLanguage"
 #define LINGUPROP_AUTOSPELL         "IsSpellAuto"
@@ -187,7 +187,7 @@ BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
     TRY
     {
         uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
-        uno::Reference< linguistic::XThesaurus > xThes( xManager->createInstance(
+        uno::Reference< linguistic2::XThesaurus > xThes( xManager->createInstance(
                             rtl::OUString::createFromAscii( SERVICE_THESAURUS ) ),
                         uno::UNO_QUERY );
         if ( xThes.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 08:18:09 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 10:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@
 #include <svx/langtab.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/impgrf.hxx>
+#include <svx/unolingu.hxx>
 #include <so3/ipobj.hxx>
 #include <so3/svstor.hxx>
-#include <offmgr/app.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -99,9 +99,6 @@
 #include <vcl/drag.hxx>
 #include <vcl/system.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
 
 #include "viewfunc.hxx"
 #include "docsh.hxx"
@@ -269,8 +266,8 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
         return;
     }
 
-    com::sun::star::uno::Reference<com::sun::star::linguistic::XSpellChecker1>
-                                        xSpeller = OFF_APP()->GetSpellChecker();
+    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1>
+                                        xSpeller = LinguMgr::GetSpellChecker();
     //! if (...)  // thesaurus not available
     //! {
     //!     ErrorMessage(STR_EXPORT_ASCII_WARNING);
@@ -438,8 +435,8 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
     }
 
     //! no way to set a spelling error handler
-    com::sun::star::uno::Reference<com::sun::star::linguistic::XSpellChecker1>
-                                        xSpeller = OFF_APP()->GetSpellChecker();
+    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1>
+                                        xSpeller = LinguMgr::GetSpellChecker();
 
     //  ab hier kein return mehr
 
