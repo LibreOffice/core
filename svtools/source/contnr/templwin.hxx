@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 07:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ public:
     void                SetDoubleClickHdl( const Link& rLink ) { aDoubleClickHdl = rLink; }
 
     sal_Bool            IsFileSelected() const;
+    void                OpenFile( sal_Bool bNotAsTemplate );
 };
 
 #endif // _SVTOOLS_TEMPLWIN_HXX
