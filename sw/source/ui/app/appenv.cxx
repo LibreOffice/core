@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-09-26 13:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,13 +268,12 @@ static USHORT nTitleNo = 0;
 
     // SwEnvItem aus Config lesen
     SwEnvCfgItem aEnvCfg;
-    aEnvCfg.Initialize();
 
     //Haben wir schon einen Briefumschlag.
     BOOL bEnvChange = FALSE;
 
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
-    aSet.Put(aEnvCfg.aEnvItem);
+    aSet.Put(aEnvCfg.GetItem());
 
     SfxPrinter* pTempPrinter = pSh->GetPrt( TRUE );
     if(pOldSh )
@@ -306,9 +305,8 @@ static USHORT nTitleNo = 0;
         // Dialog auslesen, Item in Config speichern
         const SwEnvItem& rItem = (const SwEnvItem&) pDlg->
                                             GetOutputItemSet()->Get(FN_ENVELOP);
-        aEnvCfg.aEnvItem = rItem;
-        aEnvCfg.SetDefault(FALSE);
-        aEnvCfg.StoreConfig();
+        aEnvCfg.GetItem() = rItem;
+        aEnvCfg.Commit();
 
         //Wenn wir Drucken uebernehmen wir den eingestellten Jobsetup aus
         //dem Dialog. Die Informationen muessen hier vor dem evtl. zerstoeren
@@ -549,7 +547,7 @@ static USHORT nTitleNo = 0;
         {
             pFrame->GetFrame()->Appear();
 
-            if ( rItem.aAddrText.Search('<') != STRING_NOTFOUND )
+            if ( rItem.aAddrText.indexOf('<') >= 0 )
             {
                 static USHORT __READONLY_DATA aInva[] =
                                     {
@@ -577,163 +575,5 @@ static USHORT nTitleNo = 0;
     }
     delete pDlg;
 }
-
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.103  2000/09/18 16:05:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.102  2000/09/07 15:59:19  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.101  2000/07/26 16:33:02  jp
-    use the new function GetDocPoolNm to get the collectionames
-
-    Revision 1.100  2000/07/18 12:50:07  os
-    replace ofadbmgr
-
-    Revision 1.99  2000/06/30 08:52:03  os
-    #76541# string assertions removed
-
-    Revision 1.98  2000/05/23 17:52:04  jp
-    Bugfixes for Unicode
-
-    Revision 1.97  2000/04/20 12:49:34  os
-    GetName() returns String&
-
-    Revision 1.96  2000/04/11 08:01:30  os
-    UNICODE
-
-    Revision 1.95  2000/03/08 17:21:49  os
-    GetAppWindow() - misuse as parent window eliminated
-
-    Revision 1.94  2000/02/11 14:42:22  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.93  1999/11/19 12:58:47  os
-    #69563# after SetJobsetup the printer may be invalid
-
-    Revision 1.92  1999/11/11 14:34:40  hr
-    #65293# STLPORT 3.2.1
-
-    Revision 1.91  1999/10/05 10:18:05  os
-    #67889# some printer problems solved
-
-    Revision 1.90  1999/10/01 13:36:53  os
-    apply AutoText to business cards
-
-    Revision 1.89  1999/07/08 13:59:32  MA
-    Use internal object to toggle wait cursor
-
-
-      Rev 1.88   08 Jul 1999 15:59:32   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.87   10 Jun 1999 10:52:08   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.86   01 Mar 1999 16:20:52   MA
-   #62490# Altlast entfernt (Drucken und Briefumschlaege/Etiketten und Datenbank)
-
-      Rev 1.85   17 Nov 1998 10:49:46   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.84   12 Nov 1998 19:19:20   MA
-   #59315# Tabelle am Dokumentanfang beruecksichtigen
-
-      Rev 1.83   14 Mar 1998 17:05:12   OM
-   Gelinkte Etiketten
-
-      Rev 1.82   05 Feb 1998 16:34:32   OS
-   Change: hidden ViewFrame anlegen
-
-      Rev 1.81   24 Nov 1997 14:22:34   MA
-   includes
-
-      Rev 1.80   30 Sep 1997 08:40:28   OS
-   include
-
-      Rev 1.79   12 Sep 1997 10:38:30   OS
-   ITEMID_* definiert
-
-      Rev 1.78   02 Sep 1997 09:56:50   OM
-   SDB-Headeranpassung
-
-      Rev 1.77   01 Sep 1997 13:06:32   OS
-   DLL-Umstellung
-
-      Rev 1.76   15 Aug 1997 11:45:06   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.75   12 Aug 1997 14:42:40   OS
-   Header-Umstellung
-
-      Rev 1.74   08 Aug 1997 17:26:50   OM
-   Headerfile-Umstellung
-
-      Rev 1.73   07 Aug 1997 14:59:28   OM
-   Headerfile-Umstellung
-
-      Rev 1.72   08 Jul 1997 14:04:10   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.71   11 Apr 1997 12:04:16   NF
-   includes...
-
-      Rev 1.70   08 Apr 1997 15:11:08   MH
-   chg: header
-
-      Rev 1.69   08 Apr 1997 08:32:20   MA
-   includes
-
-      Rev 1.68   13 Mar 1997 16:28:48   OM
-   DB-Feldbefehle korrekt erkennen
-
-      Rev 1.67   26 Feb 1997 03:46:12   OM
-   #37071# Richtige Datenbank nach Briefumschlag und Etiketten anzeigen
-
-      Rev 1.66   25 Feb 1997 22:48:58   OM
-   Datenbankfelder richtig einfuegen
-
-      Rev 1.65   11 Feb 1997 16:51:54   OM
-   Eingabefeld ueber Basic ohne Dialog einfuegen
-
-      Rev 1.64   16 Dec 1996 10:59:24   OM
-   Drucken aus DB-Browser angefangen
-
-      Rev 1.63   11 Dec 1996 09:26:14   MA
-   Entschlackt
-
-      Rev 1.62   06 Dec 1996 13:53:24   MA
-   Umbrueche fuer Tabellen
-
-      Rev 1.61   05 Dec 1996 15:23:54   OM
-   Nach Briefumschlag und Etiketten DB-Browser oeffnen
-
-      Rev 1.60   03 Dec 1996 17:41:12   AMA
-   Chg: Der Drucker wird nur im !Browsemodus angelegt.
-
-      Rev 1.59   08 Nov 1996 19:39:34   MA
-   ResMgr
-
-      Rev 1.58   08 Nov 1996 17:38:14   OM
-   DB-Mode fuer Serienbriefe und Etiketten zum Teil wiederbelebt
-
-      Rev 1.57   24 Oct 1996 13:36:04   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.56   18 Oct 1996 12:12:46   MA
-   fixes und opts
-
-      Rev 1.55   17 Oct 1996 16:54:36   MA
-   #31660# und diverse weitere fixes
-
-      Rev 1.54   26 Sep 1996 09:03:30   MA
-   defautls fuer Rahmen + Aufraeumarbeiten
-
-      Rev 1.53   25 Sep 1996 14:10:24   OM
-   Neue Datenbanktrenner
-
--------------------------------------------------------------------------*/
 
 
