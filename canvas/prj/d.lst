@@ -13,6 +13,7 @@ mkdir: %_DEST%\inc%_EXT%\canvas
 ..\inc\canvas\linepolypolygonbase.hxx %_DEST%\inc%_EXT%\canvas\linepolypolygonbase.hxx
 ..\inc\canvas\redrawmanagement.hxx %_DEST%\inc%_EXT%\canvas\redrawmanagement.hxx
 ..\inc\canvas\canvastools.hxx %_DEST%\inc%_EXT%\canvas\canvastools.hxx
+..\inc\canvas\prioritybooster.hxx %_DEST%\inc%_EXT%\canvas\prioritybooster.hxx
 ..\inc\canvas\debug.hxx %_DEST%\inc%_EXT%\canvas\debug.hxx
 ..\inc\canvas\elapsedtime.hxx %_DEST%\inc%_EXT%\canvas\elapsedtime.hxx
 ..\inc\canvas\vclwrapper.hxx %_DEST%\inc%_EXT%\canvas\vclwrapper.hxx
