@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 14:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,6 @@ class SwFldDokInfPage : public SwFldPage
 
     SvLBoxEntry*        pSelEntry;
 
-    Bitmap              aRootOpened;
-    Bitmap              aRootClosed;
     String              aInfoStr;
 
     USHORT              nOldSel;

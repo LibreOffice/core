@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 14:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,6 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aFormatLB   (this, SW_RES(LB_DOKINFFORMAT)),
     aFixedCB    (this, SW_RES(CB_DOKINFFIXEDCONTENT)),
 
-    aRootOpened (SW_RES(BMP_DOKINFROOT_OPENED)),
-    aRootClosed (SW_RES(BMP_DOKINFROOT_CLOSED)),
     aInfoStr    (SW_RES(STR_DOKINF_INFO)),
     pSelEntry   (0)
 {
@@ -136,7 +134,7 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     // Sonst bei falschem Font Bug an OV.
     aTypeTLB.SetSpaceBetweenEntries(0);
 
-    aTypeTLB.SetNodeBitmaps( aRootOpened, aRootClosed );
+    aTypeTLB.SetNodeDefaultImages();
 }
 
 /*--------------------------------------------------------------------
@@ -499,6 +497,9 @@ void    SwFldDokInfPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:36  hr
+    initial import
+
     Revision 1.21  2000/09/18 16:05:28  willem.vandorp
     OpenOffice header added.
 
