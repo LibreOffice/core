@@ -149,7 +149,7 @@ SfxVoidItem CommandWindow SID_CMDBOXWINDOW
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Config SID_PREFERENCES
+SfxVoidItem Preferences SID_PREFERENCES
 ()
 [
     /* flags: */
