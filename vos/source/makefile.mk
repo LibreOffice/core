@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 17:20:45 $
+#   last change: $Author: obo $ $Date: 2003-10-20 15:49:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,6 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/bytestrm.obj    \
                 $(SLO)$/connectr.obj    \
                 $(SLO)$/conditn.obj     \
-                $(SLO)$/fibersrv.obj    \
                 $(SLO)$/mutex.obj       \
                 $(SLO)$/object.obj      \
                 $(SLO)$/refernce.obj    \
@@ -87,7 +86,6 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/thrdsrv.obj     \
                 $(SLO)$/stream.obj      \
                 $(SLO)$/module.obj      \
-                $(SLO)$/profile.obj     \
                 $(SLO)$/timer.obj       \
                 $(SLO)$/process.obj     \
                 $(SLO)$/security.obj    \
@@ -106,7 +104,6 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/bytestrm.obj    \
                 $(OBJ)$/connectr.obj    \
                 $(OBJ)$/conditn.obj     \
-                $(OBJ)$/fibersrv.obj    \
                 $(OBJ)$/mutex.obj       \
                 $(OBJ)$/object.obj      \
                 $(OBJ)$/refernce.obj    \
@@ -117,7 +114,6 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/thrdsrv.obj     \
                 $(OBJ)$/stream.obj      \
                 $(OBJ)$/module.obj      \
-                $(OBJ)$/profile.obj     \
                 $(OBJ)$/timer.obj       \
                 $(OBJ)$/process.obj     \
                 $(OBJ)$/security.obj    \
