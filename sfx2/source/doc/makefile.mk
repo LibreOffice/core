@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dv $ $Date: 2001-02-09 12:30:05 $
+#   last change: $Author: dv $ $Date: 2001-02-21 13:00:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,13 +100,15 @@ SLOFILES =	\
         $(SLO)$/new.obj \
         $(SLO)$/doctdlg.obj \
         $(SLO)$/frameobj.obj \
-        $(SLO)$/sfxbasemodel.obj
+        $(SLO)$/sfxbasemodel.obj \
+        $(SLO)$/xmlversion.obj
 
 EXCEPTIONSFILES=$(SLO)$/objuno.obj \
         $(SLO)$/docfac.obj \
         $(SLO)$/docfile.obj \
-        $(SLO)$/sfxbasemodel.obj	\
-        $(SLO)$/objxtor.obj
+        $(SLO)$/sfxbasemodel.obj \
+        $(SLO)$/objxtor.obj \
+        $(SLO)$/xmlversion.obj
 
 # --- Tagets -------------------------------------------------------
 
