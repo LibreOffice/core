@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 16:18:48 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,15 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
+#include <com/sun/star/awt/VisualEffect.hpp>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
 
 namespace xmlscript
 {
@@ -263,6 +267,7 @@ bool StyleElement::importBackgroundColorStyle(
     }
     return false;
 }
+
 //__________________________________________________________________________________________________
 bool StyleElement::importBorderStyle(
     Reference< beans::XPropertySet > const & xProps )
@@ -272,7 +277,11 @@ bool StyleElement::importBorderStyle(
         if ((_hasValue & 0x4) != 0)
         {
             xProps->setPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ), makeAny( _border ) );
+                OUSTR("Border"), makeAny( _border == BORDER_SIMPLE_COLOR
+                                          ? BORDER_SIMPLE : _border ) );
+            if (_border == BORDER_SIMPLE_COLOR)
+                xProps->setPropertyValue( OUSTR("BorderColor"),
+                                          makeAny(_borderColor) );
             return true;
         }
         return false;
@@ -281,34 +290,67 @@ bool StyleElement::importBorderStyle(
 
     OUString aValue;
     if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("border") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
-    {
+            &aValue, OUSTR("border"),
+            _xAttributes, _pImport->XMLNS_DIALOGS_UID )) {
         if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
-        {
-            _border = 0;
-        }
+            _border = BORDER_NONE;
         else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("3d") ))
-        {
-            _border = 1;
-        }
+            _border = BORDER_3D;
         else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("simple") ))
-        {
-            _border = 2;
-        }
-        else
-        {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid border value!") ),
-                Reference< XInterface >(), Any() );
+            _border = BORDER_SIMPLE;
+        else {
+            _border = BORDER_SIMPLE_COLOR;
+            _borderColor = toInt32(aValue);
         }
 
         _hasValue |= 0x4;
-        xProps->setPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ), makeAny( _border ) );
+        importBorderStyle(xProps); // write values
     }
     return false;
 }
+
+//______________________________________________________________________________
+bool StyleElement::importVisualEffectStyle(
+    Reference<beans::XPropertySet> const & xProps )
+{
+    if ((_inited & 0x40) != 0)
+    {
+        if ((_hasValue & 0x40) != 0)
+        {
+            xProps->setPropertyValue( OUSTR("VisualEffect"),
+                                      makeAny(_visualEffect) );
+            return true;
+        }
+        return false;
+    }
+    _inited |= 0x40;
+
+    OUString aValue;
+    if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("look") ),
+                       _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    {
+        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        {
+            _visualEffect = awt::VisualEffect::NONE;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("3d") ))
+        {
+            _visualEffect = awt::VisualEffect::LOOK3D;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("simple") ))
+        {
+            _visualEffect = awt::VisualEffect::FLAT;
+        }
+        else
+            OSL_ASSERT( 0 );
+
+        _hasValue |= 0x40;
+        xProps->setPropertyValue( OUSTR("VisualEffect"),
+                                  makeAny(_visualEffect) );
+    }
+    return false;
+}
+
 //__________________________________________________________________________________________________
 void StyleElement::setFontProperties(
     Reference< beans::XPropertySet > const & xProps )
@@ -1177,7 +1219,7 @@ StringTriple const * const g_pEventTranslations = s_aEventTranslations;
 
 //__________________________________________________________________________________________________
 void ImportContext::importEvents(
-    vector< Reference< xml::input::XElement > > const & rEvents )
+    ::std::vector< Reference< xml::input::XElement > > const & rEvents )
 {
     Reference< script::XScriptEventsSupplier > xSupplier(
         _xControlModel, UNO_QUERY );
@@ -1226,7 +1268,7 @@ void ImportContext::importEvents(
                                            _pImport->XMLNS_SCRIPT_UID ))
                         {
                             // prepend location
-                            OUStringBuffer buf( 48 );
+                            ::rtl::OUStringBuffer buf;
                             buf.append( aLocation );
                             buf.append( (sal_Unicode)':' );
                             buf.append( descr.ScriptCode );
@@ -1254,14 +1296,20 @@ void ImportContext::importEvents(
                         }
 
                         // lookup in table
-                        OString str( OUStringToOString( aEventName, RTL_TEXTENCODING_ASCII_US ) );
+                        ::rtl::OString str(
+                            ::rtl::OUStringToOString(
+                                aEventName, RTL_TEXTENCODING_ASCII_US ) );
                         StringTriple const * p = g_pEventTranslations;
                         while (p->first)
                         {
                             if (0 == ::rtl_str_compare( p->third, str.getStr() ))
                             {
-                                descr.ListenerType = OUString( p->first, ::rtl_str_getLength( p->first ), RTL_TEXTENCODING_ASCII_US );
-                                descr.EventMethod = OUString( p->second, ::rtl_str_getLength( p->second ), RTL_TEXTENCODING_ASCII_US );
+                                descr.ListenerType = OUString(
+                                    p->first, ::rtl_str_getLength( p->first ),
+                                    RTL_TEXTENCODING_ASCII_US );
+                                descr.EventMethod = OUString(
+                                    p->second, ::rtl_str_getLength( p->second ),
+                                    RTL_TEXTENCODING_ASCII_US );
                                 break;
                             }
                             ++p;
@@ -1342,7 +1390,7 @@ void ImportContext::importEvents(
                         xAttributes, _pImport->XMLNS_DIALOGS_UID );
                 }
 
-                OUStringBuffer buf( 48 );
+                ::rtl::OUStringBuffer buf;
                 buf.append( descr.ListenerType );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
                 buf.append( descr.EventMethod );
@@ -1518,7 +1566,8 @@ ElementBase::~ElementBase()
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
+    ::rtl::OString aStr( ::rtl::OUStringToOString(
+                             _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "ElementBase::~ElementBase(): %s\n", aStr.getStr() );
 #endif
 }
