@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:55:45 $
+ *  last change: $Author: ama $ $Date: 2001-04-18 07:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,13 +334,17 @@ DBG_NAME(edithdl);
 class SwAnchorMarker
 {
     SdrHdl* pHdl;
+    Point aHdlPos;
     Point aLastPos;
 public:
     SwAnchorMarker( SdrHdl* pH ) :
-        pHdl( pH ), aLastPos( pH->GetPos() ) {}
+        pHdl( pH ), aHdlPos( pH->GetPos() ), aLastPos( pH->GetPos() ) {}
     const Point& GetLastPos() const { return aLastPos; }
     void SetLastPos( const Point& rNew ) { aLastPos = rNew; }
     void SetPos( const Point& rNew ) { pHdl->SetPos( rNew ); }
+    const Point& GetPos() { return pHdl->GetPos(); }
+    const Point& GetHdlPos() { return aHdlPos; }
+    void ChgHdl( SdrHdl* pNew ) { pHdl = pNew; }
 };
 
 struct QuickHelpData
@@ -2511,12 +2515,34 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
         case MOUSE_LEFT:
             if( pAnchorMarker )
             {
+                // Now we need to refresh the SdrHdl pointer of pAnchorMarker.
+                // This looks a little bit tricky, but it solves the following
+                // problem: the pAnchorMarker contains a pointer to an SdrHdl,
+                // if the FindAnchorPos-call cause a scrolling of the visible
+                // area, it's possible that the SdrHdl will be destroyed and a
+                // new one will initialized at the original position(GetHdlPos).
+                // So the pAnchorMarker has to find the right SdrHdl, if it's
+                // the old one, it will find it with position aOld, if this one
+                // is destroyed, it will find a new one at position GetHdlPos().
+                Point aOld = pAnchorMarker->GetPos();
                 Point aNew = rSh.FindAnchorPos( aDocPt );
-                if( aNew.X() || aNew.Y() )
+                SdrHdl* pHdl;
+                if( (0!=( pHdl = pSdrView->HitHandle( aOld, *(rSh.GetOut())) )||
+                    0 !=(pHdl = pSdrView->HitHandle( pAnchorMarker->GetHdlPos(),
+                    *(rSh.GetOut())) ) ) && pHdl->GetKind() == HDL_ANCHOR )
                 {
-                    pAnchorMarker->SetPos( aNew );
-                    pAnchorMarker->SetLastPos( aDocPt );
-                    pSdrView->RefreshAllIAOManagers();
+                    pAnchorMarker->ChgHdl( pHdl );
+                    if( aNew.X() || aNew.Y() )
+                    {
+                         pAnchorMarker->SetPos( aNew );
+                         pAnchorMarker->SetLastPos( aDocPt );
+                         pSdrView->RefreshAllIAOManagers();
+                     }
+                }
+                else
+                {
+                    delete pAnchorMarker;
+                    pAnchorMarker = NULL;
                 }
             }
             if ( bInsDraw )
@@ -3874,6 +3900,9 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.7  2001/03/23 15:55:45  jp
+        use new Drag&Drop / Clipboard API
+
         Revision 1.6  2001/01/25 20:02:32  jp
         use calendarwrapper instead of international
 
