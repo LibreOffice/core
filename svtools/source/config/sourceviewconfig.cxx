@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sourceviewconfig.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 09:49:56 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #ifndef _SFXSMPLHINT_HXX
 #include "smplhint.hxx"
 #endif
@@ -139,7 +142,7 @@ public:
 // initialization of static members --------------------------------------
 SourceViewConfig_Impl* SourceViewConfig::m_pImplConfig = 0;
 sal_Int32              SourceViewConfig::m_nRefCount = 0;
-::osl::Mutex           SourceViewConfig::m_aMutex;
+namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
 /* -----------------------------28.08.2002 16:45------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -245,7 +248,7 @@ void SourceViewConfig_Impl::Commit()
 SourceViewConfig::SourceViewConfig()
 {
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::MutexGuard aGuard( lclMutex::get() );
         if(!m_pImplConfig)
             m_pImplConfig = new SourceViewConfig_Impl;
          ++m_nRefCount;
@@ -258,7 +261,7 @@ SourceViewConfig::SourceViewConfig()
 SourceViewConfig::~SourceViewConfig()
 {
     EndListening( *m_pImplConfig, TRUE );
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( lclMutex::get() );
     if( !--m_nRefCount )
     {
         if( m_pImplConfig->IsModified() )
