@@ -1,0 +1,17 @@
+### 108309 ###
+svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleContext
+
+### 111645 ###
+svtools.AccessibleIconChoiceCtrl::com::sun::star::accessibility::XAccessibleSelection
+
+### 111661 ###
+svtools.AccessibleIconChoiceCtrlEntry::com::sun::star::accessibility::XAccessibleText
+
+### 113034 ###
+svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleText
+
+### no bug id yet ###
+svtools.AccessibleTabBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleSelection
+svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleSelection
