@@ -2,6 +2,12 @@ PRJNAME=pyuno
 PRJ=..
 
 .INCLUDE : settings.mk
+
+.IF "$(SYSTEM_PYTHON)" == "YES"
+systempython:
+        @echo "Not building python-core because system python is being used"
+.ELSE
+
 .INCLUDE : pyversion.mk
 
 PYDIRNAME=python-core-$(PYVERSION)
@@ -50,4 +56,6 @@ $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
     strip $@
 .ENDIF
     chmod +x $@
+.ENDIF
+
 .ENDIF
