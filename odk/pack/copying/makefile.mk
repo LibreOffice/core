@@ -27,8 +27,9 @@ all : deliver $(DIRLIST) $(EXAMPLESLIST)
 $(DIRLIST) : 
      -$(MKDIRHIER) 	$@
 
-$(DESTDIREXAMPLES)$/officeclient$/% : $(PRJ)$/examples$/officeclient$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
-     $(GNUCOPY) $(PRJ)$/examples$/officeclient$/$(@:f) $@
+$(DESTDIREXAMPLES)$/officeclient$/% : $(PRJ)$/examples$/cpp$/officeclient$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
+    $(GNUCOPY) $(PRJ)$/examples$/cpp$/officeclient$/$(@:f) $@
+    $(REMOVE_READONLY) $@
 
 deliver : 
 #------------------------------------------------------------------------------------
@@ -45,6 +46,7 @@ deliver :
 #----------------------------------------------------------------------
     +-$(RM) /f $(DESTDIR)$/settings$/dk.mk
     $(MY_COPY) $(PRJ)$/util$/dk.mk $(DESTDIR)$/settings
+    $(REMOVE_READONLY) $(DESTDIR)$/settings$/dk.mk
 
 
 MKFILES_CONVERT=$(shell $(FIND) . -name "*.mk" -print)
