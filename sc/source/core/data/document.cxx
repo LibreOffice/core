@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-17 19:43:42 $
+ *  last change: $Author: sab $ $Date: 2001-08-28 14:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2389,12 +2389,12 @@ USHORT ScDocument::GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const
     if ( nTab<=MAXTAB && pTab[nTab] )
     {
         BYTE nStartFlags = GetRowFlags(nStart, nTab);
-        USHORT nStartHeight = pTab[nTab]->GetRowHeight(nStart);
+        USHORT nStartHeight = pTab[nTab]->GetOriginalHeight(nStart);
         for (USHORT nRow = nStart + 1; nRow <= MAXROW; nRow++)
         {
             if (((nStartFlags & CR_MANUALBREAK) != (pTab[nTab]->GetRowFlags(nRow) & CR_MANUALBREAK)) ||
                 ((nStartFlags & CR_MANUALSIZE) != (pTab[nTab]->GetRowFlags(nRow) & CR_MANUALSIZE)) ||
-                ((nStartFlags & CR_MANUALSIZE) && (nStartHeight != pTab[nTab]->GetRowHeight(nRow))))
+                ((nStartFlags & CR_MANUALSIZE) && (nStartHeight != pTab[nTab]->GetOriginalHeight(nRow))))
                 return nRow;
         }
         return MAXROW;
