@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,17 +317,6 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
         // wait for the writer thread
         pImpl->m_pWriter->join();
 
-        // destroy the threads
-        delete pImpl->m_pWriter;
-        pImpl->m_pWriter = 0;
-
-        if( osl_getThreadIdentifier(0) !=
-            (oslThreadIdentifier) pImpl->m_pReader->getIdentifier() )
-        {
-            // This is not the reader thread, so the thread object is deleted
-            delete pImpl->m_pReader;
-        }
-        pImpl->m_pReader = 0;
 
         // now let the context go !
         pContext->dispose( pContext );
@@ -344,6 +333,18 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
           {
               guard.clear();
           }
+
+        // destroy the threads
+        delete pImpl->m_pWriter;
+        pImpl->m_pWriter = 0;
+
+        if( osl_getThreadIdentifier(0) !=
+            (oslThreadIdentifier) pImpl->m_pReader->getIdentifier() )
+        {
+            // This is not the reader thread, so the thread object is deleted
+            delete pImpl->m_pReader;
+        }
+        pImpl->m_pReader = 0;
 
         // delete the stubs
         releaseStubs( pEnvRemote );

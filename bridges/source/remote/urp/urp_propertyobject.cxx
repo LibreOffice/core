@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_propertyobject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
                        &pException );
 
         // put the call on the line !
-        job.pack();
+        sal_Bool bSuccess = job.pack();
 
         // now allow writing on wire again.
         // NOTE : this has been locked, because it is inevitable to set m_bRequestChangeHasBeenCalled
@@ -424,12 +424,19 @@ sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
         marshalingGuard.clear();
 
         // wait for the reply ...
-        job.wait();
-
-        if( pException )
+        if( bSuccess )
         {
-            // the object is unknown on the other side.
-            uno_any_destruct( pException , 0 );
+            job.wait();
+
+            if( pException )
+            {
+                // the object is unknown on the other side.
+                uno_any_destruct( pException , 0 );
+                nResult = 0;
+            }
+        }
+        else
+        {
             nResult = 0;
         }
         typelib_typedescription_release( pInterfaceType );

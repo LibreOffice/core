@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ namespace bridges_urp
     }
 
     //--------------------------------------------------------------------------------------------
-    void ClientJob::pack()
+    sal_Bool ClientJob::pack()
     {
         MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
 
@@ -200,7 +200,7 @@ namespace bridges_urp
         {
               prepareRuntimeExceptionClientSide(
                   m_ppException , OUString( RTL_CONSTASCII_USTRINGPARAM( "URP-Bridge: disposed" )) );
-            return;
+            return sal_False;
         }
 
         // build up the flag byte
@@ -347,6 +347,7 @@ namespace bridges_urp
         {
             *m_ppException = 0;
         }
+        return sal_True;
         // release the guard
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,33 +58,6 @@
  *
  *
  ************************************************************************/
-/**************************************************************************
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1.1.1  2000/09/18 15:28:50  hr
- *  initial import
- *
- *  Revision 1.7  2000/09/15 13:05:58  jbu
- *  extensive performance optimizations
- *
- *  Revision 1.6  2000/09/14 15:24:00  willem.vandorp
- *  OpenOffice header added.
- *
- *  Revision 1.5  2000/08/04 15:32:31  willem.vandorp
- *  Header and footer replaced
- *
- *  Revision 1.4  2000/07/21 16:33:17  jbu
- *  robustness improved
- *
- *  Revision 1.3  2000/07/14 13:14:42  jbu
- *  dispose mechanism tided up
- *
- *  Revision 1.2  2000/07/12 10:11:59  jbu
- *  added logging, attribute bug fixed
- *
- *  Revision 1.1  2000/07/10 11:36:35  jbu
- *  new remote protocol : urp
- *
- *************************************************************************/
 #include <string.h>
 
 #include <osl/diagnose.h>
@@ -537,7 +510,9 @@ void OReaderThread::run()
                         if( !pInterfaceType )
                         {
                             delete pMultiJob;
+                            pMultiJob = 0;
                             disposeEnvironment();
+                            pLastRemoteI = 0; // stubs are released during dispose eitherway
                             bContinue = sal_False;
                             break;
                         }
@@ -593,6 +568,8 @@ void OReaderThread::run()
                 else
                 {
                     delete pMultiJob;
+                    pMultiJob = 0;
+                    pLastRemoteI = 0; // stubs are released during dispose eitherway
                     disposeEnvironment();
                     bContinue = sal_False;
                     break;
@@ -608,6 +585,8 @@ void OReaderThread::run()
                 {
                     // severe error during extracting, dispose
                     delete pMultiJob;
+                    pMultiJob = 0;
+                    pLastRemoteI = 0; // stubs are released during dispose eitherway
                     disposeEnvironment();
                     bContinue = sal_False;
                     break;
@@ -676,6 +655,7 @@ void OReaderThread::run()
                 if( ! pClientJob->extract(  ) )
                 {
                     // severe error during extracting, dispose
+                    pLastRemoteI = 0; // stubs are released during dispose eitherway
                     disposeEnvironment();
                     bContinue = sal_False;
                     break;
@@ -718,7 +698,4 @@ void OReaderThread::run()
         m_pConnection = 0;
     }
 }
-
-
-
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:07 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ void OWriterThread::abort()
 // must be called with locked marshaling mutex
 void OWriterThread::write()
 {
-     if( ! m_pBridgeImpl->m_blockMarshaler.empty() )
+     if( ! m_pBridgeImpl->m_blockMarshaler.empty() && ! m_bAbort )
      {
         m_pBridgeImpl->m_blockMarshaler.finish( m_pBridgeImpl->m_nMarshaledMessages);
         m_pBridgeImpl->m_nMarshaledMessages = 0;

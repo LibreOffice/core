@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-20 01:07:05 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,7 @@ void SAL_CALL urp_sendRequest(
 
     ClientJob job(pEnvRemote, pImpl, pOid, pMemberType, pInterfaceType, pReturn, ppArgs, ppException);
 
-    job.pack();
-    if( ! job.isOneway() )
+    if( job.pack() && ! job.isOneway() )
     {
         job.wait();
     }

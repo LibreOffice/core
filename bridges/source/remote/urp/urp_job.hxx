@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public:
             uno_releaseIdFromCurrentThread();
         }
 
-    void pack();
+    sal_Bool pack();
     void wait();
     sal_Bool extract( );
     void initiate();
