@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:24:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,9 @@ static char* osl_decodeEtherAddr(const char *ptr, char* buff)
     return(buff);
 }
 
-#if defined ( SOLARIS ) && defined ( SPARC )
+#if defined (SPARC)
+
+#if defined (SOLARIS) && !defined(__sparcv8plus) && !defined(__sparcv9)
 #include <sys/types.h>
 #include <sys/processor.h>
 
@@ -371,9 +373,9 @@ void osl_InitSparcV9(void)
     }
 }
 
-#endif
+#endif /* SOLARIS */
 
-#if defined(NETBSD) && defined(SPARC) && defined(GCC)
+#if defined(NETBSD) && defined(GCC) && !defined(__sparcv9) && !defined(__sparc_v9__)
 
 #include <sys/param.h>
 #include <sys/sysctl.h>
@@ -397,5 +399,7 @@ void osl_InitSparcV9(void)
     }
 }
 
-#endif
+#endif /* NETBSD */
+
+#endif /* SPARC */
 
