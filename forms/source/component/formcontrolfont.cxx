@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontrolfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:14:50 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 09:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ namespace frm
     {
         sal_Int32 nPos = _rProps.getLength();
         _rProps.realloc( nPos + 15 );
-        Property* pProps = _rProps.getArray();
+        Property* pProperties = _rProps.getArray();
 
         DECL_PROP2      ( FONT,               FontDescriptor,   BOUND, MAYBEDEFAULT );
         DECL_PROP2      ( FONTEMPHASISMARK,   sal_Int16,        BOUND, MAYBEDEFAULT );
