@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAction.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:33:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
-
 #ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
 #endif
@@ -80,7 +79,7 @@ module com {  module sun {  module star {  module security {
 
     @since #107627#
 */
-interface XAction : com::sun::star::uno::XInterface
+published interface XAction : com::sun::star::uno::XInterface
 {
     /** Action to be done.
 
