@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 13:22:39 $
+#   last change: $Author: vg $ $Date: 2005-03-10 13:16:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/bmpacc.obj		\
             $(SLO)$/bmpacc2.obj 	\
             $(SLO)$/bmpacc3.obj 	\
+            $(SLO)$/bmpfast.obj	\
             $(SLO)$/color.obj		\
             $(SLO)$/cvtsvm.obj		\
             $(SLO)$/cvtgrf.obj		\
