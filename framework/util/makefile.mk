@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: cd $ $Date: 2001-12-04 07:49:07 $
+#   last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -236,8 +236,9 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/taskcreator.obj		  		\
                  $(SLO)$/timerhelper.obj				\
                 $(SLO)$/urltransformer.obj			\
-                $(SLO)$/documentlist.obj			\
-                $(SLO)$/xmldocproperties.obj
+                $(SLO)$/documentlist.obj            \
+                $(SLO)$/xmldocproperties.obj        \
+                $(SLO)$/jobexecutor.obj
 
 SHL4STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: as $ $Date: 2001-06-15 12:37:29 $
+#   last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,37 +79,6 @@ LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
 # --- applikation: "xml2xcd" --------------------------------------------------
-
-APP1TARGET=     xml2xcd
-
-APP1OBJS=		$(SLO)$/xml2xcd.obj					\
-                $(SLO)$/servicemanager.obj			\
-                $(SLO)$/filtercachedata.obj			\
-                $(SLO)$/filtercache.obj				\
-                $(SLO)$/wildcard.obj				\
-                $(SLO)$/lockhelper.obj
-
-APP1STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
-                $(SALLIB)							\
-                $(VOSLIB)							\
-                $(TOOLSLIB) 						\
-                $(SVTOOLLIB)						\
-                $(TKLIB)							\
-                $(COMPHELPERLIB)					\
-                $(UNOTOOLSLIB)						\
-                $(SVLIB)
-
-APP1DEPN=		$(SLO)$/servicemanager.obj			\
-                $(SLO)$/filtercachedata.obj			\
-                $(SLO)$/filtercache.obj				\
-                $(SLO)$/wildcard.obj				\
-                $(SLO)$/lockhelper.obj
-
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=        $(MISC)$/xml2xcd.def
-.ENDIF
 
 # --- applikation: "cfgview" --------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-13 13:33:40 $
+ *  last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace framework{
 #define SERVICENAME_GENERICFRAMELOADER                      DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"               )
 #define SERVICENAME_TYPEDETECTION                           DECLARE_ASCII("com.sun.star.document.TypeDetection"                 )
 #define SERVICENAME_DOCUMENTPROPERTIES                      DECLARE_ASCII("com.sun.star.document.DocumentProperties"            )
-#define SERVICENAME_CFGMANAGEMENT                           DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )   // describe simple registry service for read access to configuration
+#define SERVICENAME_CFGREGISTRY                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )   // describe simple registry service for read access to configuration
 #define SERVICENAME_CFGPROVIDER                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationProvider"    )   // describe cfg-provider service for fatoffice, network installation
 #define SERVICENAME_ADMINPROVIDER                           DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"   )   // describe cfg-provider service for sun webtop
 #define SERVICENAME_CFGUPDATEACCESS                         DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")
@@ -108,6 +108,7 @@ namespace framework{
 #define SERVICENAME_UCBCONTENTBROKER                        DECLARE_ASCII("com.sun.star.ucb.UniversalContentBroker"             )
 #define SERVICENAME_STATUSINDICATOR                         DECLARE_ASCII("com.sun.star.task.XStatusIndicator"                  )
 #define SERVICENAME_UIINTERACTIONHANDLER                    DECLARE_ASCII("com.sun.star.task.InteractionHandler"                )
+#define SERVICENAME_JOBEXECUTOR                             DECLARE_ASCII("com.sun.star.task.JobExecutor"                       )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -129,6 +130,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_CONTENTHANDLERFACTORY            DECLARE_ASCII("com.sun.star.comp.framework.ContentHandlerFactory"   )
 #define IMPLEMENTATIONNAME_PIPETERMINATOR                   DECLARE_ASCII("com.sun.star.comp.OfficeIPCThreadController"         )
 #define IMPLEMENTATIONNAME_QUICKLAUNCHER                    DECLARE_ASCII("com.sun.star.comp.desktop.QuickstartWrapper"         )
+#define IMPLEMENTATIONNAME_JOBEXECUTOR                      DECLARE_ASCII("com.sun.star.comp.framework.JobExecutor"             )
 
 }       //  namespace framework
 

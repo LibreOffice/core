@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:40:08 $
+ *  last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@
 #include <services/frame.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_JOBEXECUTOR_HXX_
+#include <services/jobexecutor.hxx>
+#endif
+
 #ifndef __FRAMEWORK_DISPATCH_SOUNDHANDLER_HXX_
 #include <dispatch/soundhandler.hxx>
 #endif
@@ -131,6 +135,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::Frame                       )
                         COMPONENTINFO( ::framework::DocumentProperties          )
                         COMPONENTINFO( ::framework::SoundHandler                )
+                        COMPONENTINFO( ::framework::JobExecutor                 )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -139,5 +144,6 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::Task                            )   else
                         IFFACTORY( ::framework::Frame                           )   else
                         IFFACTORY( ::framework::DocumentProperties              )   else
-                        IFFACTORY( ::framework::SoundHandler                    )
+                        IFFACTORY( ::framework::SoundHandler                    )   else
+                        IFFACTORY( ::framework::JobExecutor                     )
                     )
