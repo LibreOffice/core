@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:53:06 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 12:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,15 +345,16 @@ void OCopyTableWizard::CheckColumns()
             {
                 ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
 
-                if(aDestIter != m_vDestColumns.end())
+                if ( aDestIter != m_vDestColumns.end() )
                 {
                     ODatabaseExport::TColumnVector::const_iterator aFind = ::std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
-                    m_vColumnPos.push_back((aFind - m_aDestVec.begin())+1);
+                    sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
+                    m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(nPos,nPos));
                     m_vColumnTypes.push_back((*aFind)->second->GetType());
                 }
                 else
                 {
-                    m_vColumnPos.push_back(CONTAINER_ENTRY_NOTFOUND);
+                    m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(CONTAINER_ENTRY_NOTFOUND,CONTAINER_ENTRY_NOTFOUND));
                     m_vColumnTypes.push_back(0);
                 }
             }
@@ -374,7 +375,7 @@ void OCopyTableWizard::CheckColumns()
 
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
-                m_vColumnPos.push_back(m_vDestColumns.size());
+                m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(m_vDestColumns.size(),m_vDestColumns.size()));
                 m_vColumnTypes.push_back((*aSrcIter)->second->GetType());
             }
         }
@@ -813,12 +814,16 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                 m_xDestObject->setPropertyValue(PROPERTY_ROW_HEIGHT,m_xSourceObject->getPropertyValue(PROPERTY_ROW_HEIGHT));
             if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_TEXTCOLOR) )
                 m_xDestObject->setPropertyValue(PROPERTY_TEXTCOLOR,m_xSourceObject->getPropertyValue(PROPERTY_TEXTCOLOR));
-            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ORDER) )
-                m_xDestObject->setPropertyValue(PROPERTY_ORDER,m_xSourceObject->getPropertyValue(PROPERTY_ORDER));
-            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILTER) )
-                m_xDestObject->setPropertyValue(PROPERTY_FILTER,m_xSourceObject->getPropertyValue(PROPERTY_FILTER));
-            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_APPLYFILTER) )
-                m_xDestObject->setPropertyValue(PROPERTY_APPLYFILTER,m_xSourceObject->getPropertyValue(PROPERTY_APPLYFILTER));
+            // can not be copied yet, because the filter or and order clause could the old table name
+
+//          if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ORDER))
+//          {
+//              m_xDestObject->setPropertyValue(PROPERTY_ORDER,m_xSourceObject->getPropertyValue(PROPERTY_ORDER));
+//          }
+//          if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILTER))
+//          {
+//              m_xDestObject->setPropertyValue(PROPERTY_FILTER,m_xSourceObject->getPropertyValue(PROPERTY_FILTER));
+//          }
         }
         // now append the columns
         const ODatabaseExport::TColumnVector* pVec = getDestVector();
@@ -871,16 +876,16 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                         if(nOldPos != nNewPos)
                         {
                             ::std::vector<int>::iterator aFound = aAlreadyFound.begin();
-                            ::std::vector<sal_Int32>::iterator aColPos = m_vColumnPos.begin();
+                            ODatabaseExport::TPositions::iterator aColPos = m_vColumnPos.begin();
                             for(; aColPos != m_vColumnPos.end() && nOldPos;++aColPos,++aFound)
                             {
-                                if(*aColPos != CONTAINER_ENTRY_NOTFOUND && !*aFound && nOldPos == *aColPos)
+                                if(aColPos->first != CONTAINER_ENTRY_NOTFOUND && !*aFound && nOldPos == aColPos->first)
                                     break;
                             }
                             if(aColPos != m_vColumnPos.end())
                             {
                                 *aFound = 1;
-                                *aColPos = nNewPos;
+                                aColPos->first = nNewPos;
                                 m_vColumnTypes[m_vColumnPos.end() - aColPos] = (*aIter)->second->GetType();
                             }
                         }

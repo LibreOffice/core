@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-22 07:21:12 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 12:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ ORTFReader::ORTFReader( SvStream& rIn,
 // ---------------------------------------------------------------------------
 ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
-                       const ::std::vector<sal_Int32> &_rColumnPositions,
+                       const TPositions &_rColumnPositions,
                        const Reference< XNumberFormatter >& _rxNumberF,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                        const TColumnVector* pList,
@@ -320,10 +320,11 @@ void ORTFReader::NextToken( int nToken )
             case RTF_CELL:
                 if(m_sTextToken.Len())
                 {
-                    if(m_vColumns[m_nColumnPos] != CONTAINER_ENTRY_NOTFOUND)
+                    sal_Int32 nColPos = m_vColumns[m_nColumnPos].first;
+                    if(nColPos != CONTAINER_ENTRY_NOTFOUND)
                     {
-                        m_vFormatKey[m_vColumns[m_nColumnPos]] = CheckString(m_sTextToken,m_vFormatKey[m_vColumns[m_nColumnPos]]);
-                        m_vColumnSize[m_vColumns[m_nColumnPos]] = ::std::max<sal_Int32>(m_vColumnSize[m_vColumns[m_nColumnPos]],(sal_Int32)m_sTextToken.Len());
+                        m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
+                        m_vColumnSize[nColPos] = ::std::max<sal_Int32>(m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
                     }
 
                     m_sTextToken.Erase();
@@ -333,10 +334,11 @@ void ORTFReader::NextToken( int nToken )
             case RTF_ROW:
                 if(m_sTextToken.Len())
                 {
-                    if(m_vColumns[m_nColumnPos] != CONTAINER_ENTRY_NOTFOUND)
+                    sal_Int32 nColPos = m_vColumns[m_nColumnPos].first;
+                    if(nColPos != CONTAINER_ENTRY_NOTFOUND)
                     {
-                        m_vFormatKey[m_vColumns[m_nColumnPos]] = CheckString(m_sTextToken,m_vFormatKey[m_vColumns[m_nColumnPos]]);
-                        m_vColumnSize[m_vColumns[m_nColumnPos]] = ::std::max<sal_Int32>(m_vColumnSize[m_vColumns[m_nColumnPos]],(sal_Int32)m_sTextToken.Len());
+                        m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
+                        m_vColumnSize[nColPos] = ::std::max<sal_Int32>(m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
                     }
                     m_sTextToken.Erase();
                 }
