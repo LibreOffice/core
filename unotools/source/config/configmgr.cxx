@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 09:11:37 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 08:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ using namespace com::sun::star::container;
 const char* cConfigBaseURL = "/org.openoffice.";
 //const char* cConfigBaseURL = "/com.sun.star.";
 const char* cAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
+
+static ::rtl::OUString aBrandName;
 
 //-----------------------------------------------------------------------------
 struct ConfigItemListEntry_Impl
@@ -287,6 +289,12 @@ rtl::OUString ConfigManager::GetConfigBaseURL()
 Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 {
     Any aRet;
+    if ( eProp == PRODUCTNAME && aBrandName.getLength() )
+    {
+        aRet <<= aBrandName;
+        return aRet;
+    }
+
     OUString sPath = C2U(cConfigBaseURL);
     switch(eProp)
     {
@@ -332,6 +340,10 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         {
         }
     }
+
+    if ( eProp == PRODUCTNAME )
+        aRet >>= aBrandName;
+
     return aRet;
 }
 
