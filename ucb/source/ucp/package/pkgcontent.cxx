@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-14 06:52:48 $
+ *  last change: $Author: kso $ $Date: 2001-06-21 13:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,7 +959,7 @@ Reference< XRow > Content::getPropertyValues(
                 beans::Property(
                         rtl::OUString::createFromAscii( "SegmentSize" ),
                         -1,
-                        getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                        getCppuType( static_cast< const sal_Int32 * >( 0 ) ),
                         beans::PropertyAttribute::BOUND
                             | beans::PropertyAttribute::READONLY ),
                 rData.nSegmentSize );
@@ -1121,7 +1121,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
             // Only supported by root folder.
             if ( m_aUri.getPath().compareToAscii( "/" ) == 0 )
             {
-                sal_Int64 nNewValue;
+                sal_Int32 nNewValue;
                 if ( rValue.Value >>= nNewValue )
                 {
                     if ( nNewValue != m_aProps.nSegmentSize )

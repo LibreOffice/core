@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-14 06:52:48 $
+ *  last change: $Author: kso $ $Date: 2001-06-21 13:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ struct ContentProperties
     sal_Bool         bIsFolder;             // IsFolder
     ::rtl::OUString  aMediaType;            // MediaType
     sal_Int64        nSize;                 // Size
-    sal_Int64        nSegmentSize;          // SegmentSize
+    sal_Int32        nSegmentSize;          // SegmentSize
     sal_Bool         bCompressed;           // Compressed
     sal_Bool         bEncrypted;            // Encrypted
     sal_Bool         bHasEncryptedEntries;  // HasEncryptedEntries

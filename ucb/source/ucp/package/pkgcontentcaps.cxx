@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-14 06:52:48 $
+ *  last change: $Author: kso $ $Date: 2001-06-21 13:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ Sequence< Property > Content::getProperties(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "SegmentSize" ) ),
                     -1,
-                    getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                    getCppuType( static_cast< const sal_Int32 * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 )
             };
