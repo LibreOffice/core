@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-26 13:13:50 $
+ *  last change: $Author: fme $ $Date: 2002-09-26 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,26 +839,30 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
 
                     Point aInsideCell;
                     Point aInsideCnt;
-                    long nTop = (pCell->Frm().*fnRect->fnGetTop)();
+                    if ( pCell )
+                    {
+                        long nTmpTop = (pCell->Frm().*fnRect->fnGetTop)();
+                        if ( bVert )
+                        {
+                            if ( nTop )
+                                --nTop;
+
+                            aInsideCell = Point( nTop, nX );
+                        }
+                        else
+                            aInsideCell = Point( nX, nTop );
+                    }
+
+                    long nTmpTop = (pCnt->Frm().*fnRect->fnGetTop)();
                     if ( bVert )
                     {
-                        if ( nTop )
-                            --nTop;
-
-                        aInsideCell = Point( nTop, nX );
-                        nTop = (pCnt->Frm().*fnRect->fnGetTop)();
-
                         if ( nTop )
                             --nTop;
 
                         aInsideCnt = Point( nTop, nX );
                     }
                     else
-                    {
-                        aInsideCell = Point( nX, nTop );
-                        nTop = pCnt->Frm().Top();
-                        aInsideCnt = Point( nTop, nX );
-                    }
+                        aInsideCnt = Point( nX, nTop );
 
                     if ( pCell && pCell->Frm().IsInside( aInsideCell ) )
                     {
