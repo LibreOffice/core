@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-28 14:13:25 $
+ *  last change: $Author: nf $ $Date: 2001-11-29 13:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2223,7 +2223,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje wartoœæ zmodyfikowanej funkcji Bessela In(x).";
             Text[ portuguese_brazilian ] = "Returns the modified Bessel function In(x)";
             Text[ japanese ] = "C³ÍŞ¯¾ÙŠÖ” In(x)‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "¼öÁ¤µÈ Beseel ÇÔ¼ö In(x)¸¦ ¹İÈ¯ÇÕ´Ï´Ù";
+            Text[ korean ] = "ìˆ˜ì •ëœ Bessel í•¨ìˆ˜ In(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
             Text[ chinese_simplified ] = "¼ÆËãĞŞÕıµÄ Bessel º¯ÊıÖµ In(x)¡£";
             Text[ chinese_traditional ] = "¶Ç¦^­×¥¿ªº Bessel ¨ç¼Æ­È In(x) ¡C";
             Text[ turkish ] = "Returns the modified Bessel function In(x)";
@@ -2361,7 +2361,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje wartoœæ funkcji Bessela Jn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Jn(x)";
             Text[ japanese ] = "ÍŞ¯¾ÙŠÖ” Jn(x)‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "Bessel ÇÔ¼ö Jn(x)¸¦ ¹İÈ¯ÇÕ´Ï´Ù";
+            Text[ korean ] = "Bessel í•¨ìˆ˜ Jn(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
             Text[ chinese_simplified ] = "¼ÆËãĞŞÕıµÄ Bessel º¯ÊıÖµ Jn(x) ¡£";
             Text[ chinese_traditional ] = "¶Ç¦^ Bessel ¨ç¼Æ Jn(x) ¡C";
             Text[ turkish ] = "Returns the Bessel function Jn(x)";
@@ -2499,7 +2499,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje wartoœæ zmodyfikowanej funkcji Bessela Kn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Kn(x)";
             Text[ japanese ] = "C³ÍŞ¯¾ÙŠÖ” Kn(x)‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "Bessel ÇÔ¼ö Kn(x)¸¦ ¹İÈ¯ÇÕ´Ï´Ù";
+            Text[ korean ] = "Bessel í•¨ìˆ˜ Kn(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸öĞŞ¸ÄµÄ Bessel º¯Êı Kn(x) ¡£";
             Text[ chinese_traditional ] = "¶Ç¦^­×§ï¹Lªº Bessel ¨ç¼Æ Kn(x) ¡C";
             Text[ turkish ] = "Returns the Bessel function Kn(x)";
@@ -2637,7 +2637,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje wartoœæ funkcji Bessela Yn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Yn(x)";
             Text[ japanese ] = "ÍŞ¯¾ÙŠÖ” Yn(x)‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "Bessel ÇÔ¼ö Yn(x)¸¦ ¹İÈ¯ÇÕ´Ï´Ù";
+            Text[ korean ] = "Bessel í•¨ìˆ˜ Yn(x)ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸ö Bessel º¯Êı Yn(x) ¡£";
             Text[ chinese_traditional ] = "¶Ç¦^ Bessel ¨ç¼Æ Yn(x) ¡C";
             Text[ turkish ] = "Returns the Bessel function Yn(x)";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
