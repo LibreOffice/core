@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-07-12 11:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,11 +291,10 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFo
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, 0 );
 
-    // Gehe zurueck auf Start ...
+    // reset font to its original state
     aAttrHandler.Reset();
-    pFnt->SetFnt( aAttrHandler );
-    pFnt->GetTox() = 0;
-    pFnt->GetRef() = 0;
+    aAttrHandler.ResetFont( *pFnt );
+
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
     if( nPropFont )
         pFnt->SetProportion( nPropFont );
@@ -399,13 +398,13 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
     {
         if( !nNewPos || nNewPos < nPos )
         {
-            // Gehe zurueck auf Start ...
             if( pRedln )
                 pRedln->Clear( NULL );
+
+            // reset font to its original state
             aAttrHandler.Reset();
-            pFnt->SetFnt( aAttrHandler );
-            pFnt->GetTox() = 0;
-            pFnt->GetRef() = 0;
+            aAttrHandler.ResetFont( *pFnt );
+
             if( nPropFont )
                 pFnt->SetProportion( nPropFont );
             nStartIndex = nEndIndex = nPos = 0;

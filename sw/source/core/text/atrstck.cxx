@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-10 15:04:06 $
+ *  last change: $Author: fme $ $Date: 2001-07-12 11:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,13 +355,17 @@ USHORT SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
 }
 
 /*************************************************************************
- *                      SwAttrHandler::SwAttrHandler::SwAttrHandler()
+ *                      SwAttrHandler::SwAttrHandler()
  *************************************************************************/
 
-SwAttrHandler::SwAttrHandler()
+SwAttrHandler::SwAttrHandler() : pFnt( 0 )
 {
-    pAttrSet = 0;
     memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
+}
+
+SwAttrHandler::~SwAttrHandler()
+{
+    delete pFnt;
 }
 
 /*************************************************************************
@@ -370,7 +374,6 @@ SwAttrHandler::SwAttrHandler()
 
 void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc )
 {
-    pAttrSet = &rAttrSet;
     pDoc = &rDoc;
 
     for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
@@ -378,33 +381,38 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc )
 }
 
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
-                          const SwDoc& rDoc, sal_Bool bAttrSet )
+                          const SwDoc& rDoc, SwFont& rFnt, sal_Bool bAttrSet )
 {
-    pAttrSet = &rAS;
-    pDoc = &rDoc;
-
+    // initialize default array
     memcpy( pDefaultArray, pPoolItem,
             NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 
-    // we are finished, if no attribute set is defined, or if it is empty
-    if ( ! bAttrSet || ! rAS.Count() )
-        return;
-
-    // any other paragraph attributes for the default array?
-    SfxItemIter aIter( rAS );
-    register USHORT nWhich;
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    while( TRUE )
+    // do we have to apply additional paragraph attributes?
+    if ( bAttrSet && rAS.Count() )
     {
-        nWhich = pItem->Which();
-        if( RES_CHRATR_BEGIN <= nWhich && RES_TXTATR_END > nWhich )
-            pDefaultArray[ StackPos[ nWhich ] ] = pItem;
+        // any other paragraph attributes for the default array?
+        SfxItemIter aIter( rAS );
+        register USHORT nWhich;
+        const SfxPoolItem* pItem = aIter.GetCurItem();
+        while( TRUE )
+        {
+            nWhich = pItem->Which();
+            if( RES_CHRATR_BEGIN <= nWhich && RES_TXTATR_END > nWhich )
+            {
+                pDefaultArray[ StackPos[ nWhich ] ] = pItem;
+                FontChg( *pItem, rFnt, sal_True );
+            }
 
-        if( aIter.IsAtEnd() || nWhich >= RES_TXTATR_END )
-            break;
+            if( aIter.IsAtEnd() || nWhich >= RES_TXTATR_END )
+                break;
 
-        pItem = aIter.NextItem();
+            pItem = aIter.NextItem();
+        }
     }
+
+    pDoc = &rDoc;
+    ASSERT( ! pFnt, "Memory leak, Init called more than once!" );
+    pFnt = new SwFont( rFnt );
 }
 
 void SwAttrHandler::Reset( )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-10 15:04:06 $
+ *  last change: $Author: fme $ $Date: 2001-07-12 11:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,18 +156,19 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     pAttrSet = &rTxtNode.GetSwAttrSet();
     pHints = rTxtNode.GetpSwpHints();
 
-    delete pFnt;
-
     const sal_Bool bAttrSet = rTxtNode.HasSwAttrSet();
     SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
-    aAttrHandler.Init( aFontAccess.Get()->GetDefault(), *pAttrSet,
-                       *rTxtNode.GetDoc(), bAttrSet );
 
-    if ( bAttrSet )
-        // there are additional attributes for the paragraph
-        pFnt = new SwFont( aAttrHandler );
-    else
-        pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
+    delete pFnt;
+    pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
+
+    // Initialize the default attribute of the attribute handler
+    // based on the attribute array cached together with the font.
+    // If any further attributes for the paragraph are given in pAttrSet
+    // consider them during construction of the default array, and apply
+    // them to the font
+    aAttrHandler.Init( aFontAccess.Get()->GetDefault(), *pAttrSet,
+                       *rTxtNode.GetDoc(), *pFnt, bAttrSet );
 
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
 

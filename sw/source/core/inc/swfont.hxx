@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:14:28 $
+ *  last change: $Author: fme $ $Date: 2001-07-12 11:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ class SwWrongList;
 class SwDrawTextInfo;   // _DrawText
 class SwScriptInfo;     // _GetTxtSize
 class ViewShell;
-class SwAttrHandler;
 class SwDoc;
 
 const xub_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
@@ -132,7 +131,6 @@ class SwSubFont : public SvxFont
     SwSubFont& operator=( const SwSubFont &rFont );
 
     short _CheckKerning( );
-    void SetFnt( const SvxFont &rFont );
 
     BOOL ChgFnt( ViewShell *pSh, OutputDevice *pOut );
     BOOL IsSymbol( ViewShell *pSh );
@@ -215,7 +213,6 @@ protected:
 
 public:
     SwFont( const SwAttrSet* pSet, const SwDoc *pDoc );
-    SwFont( const SwAttrHandler& rAttrHandler );
     SwFont( const SwFont& rFont );
 
     inline void ChgFnt( ViewShell *pSh, OutputDevice *pOut )
@@ -312,17 +309,9 @@ public:
     inline BOOL IsPaintWrong() const { return bPaintWrong; }
 
     // Setzen der Basisklasse Font fuer SwTxtCharFmt
-           void SetDiffFnt( const SfxItemSet* pSet, const SwDoc *pDoc );
-    inline void SetFnt( const SvxFont &rFont, const BYTE nWhich )
-        { bFntChg = bOrgChg = TRUE; aSub[nWhich].SetFnt( rFont ); }
+    void SetDiffFnt( const SfxItemSet* pSet, const SwDoc *pDoc );
 
-    void SetFnt( const SwAttrHandler& rAH );
-
-    inline void SetSwFnt( const SwFont &rFont )
-            { *this = rFont; }
     inline const SvxFont &GetFnt( const BYTE nWhich ) const
-        { return aSub[nWhich]; };
-    inline SvxFont &GetFnt( const BYTE nWhich )
         { return aSub[nWhich]; };
 
     void SetSystemLang();
