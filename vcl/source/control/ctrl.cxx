@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:16:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <controllayout.hxx>
+#endif
+#ifndef _SV_NATIVEWIDGETS_HXX
+#include <salnativewidgets.hxx>
 #endif
 
 
