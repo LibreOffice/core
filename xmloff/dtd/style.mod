@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.26 2001-01-31 10:27:03 cl Exp $
+	$Id: style.mod,v 1.27 2001-01-31 16:16:18 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -115,6 +115,9 @@
 <!ATTLIST style:properties svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST style:properties svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST style:properties fo:min-height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties fo:min-width %lengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties fo:max-height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties fo:max-width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST style:properties text:anchor-type %anchorType; #IMPLIED>
 <!ATTLIST style:properties text:anchor-page-number %positiveInteger; #IMPLIED>
 <!ATTLIST style:properties svg:x %coordinate; #IMPLIED>

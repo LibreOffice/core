@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.30 2001-01-30 13:55:21 cl Exp $
+	$Id: drawing.mod,v 1.31 2001-01-31 16:16:18 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -317,6 +317,12 @@
 <!ATTLIST style:properties draw:marker-end-center %boolean; #IMPLIED>
 <!ATTLIST style:properties svg:stroke-opacity %floatOrPercentage; #IMPLIED>
 <!ATTLIST style:properties svg:stroke-linejoin (miter|round|bevel|middle|none|inherit) #IMPLIED>
+
+<!-- text attributes -->
+<!ATTLIST style:properties draw:auto-grow-width %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:auto-grow-height %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:fit-to-size %boolean; #IMPLIED>
+<!ATTLIST style:properties fo:vertical-align (top | middle | bottom ) #IMPLIED>
 
 <!-- fill attributes -->
 <!ATTLIST style:properties draw:fill (none|solid|bitmap|gradient|hatch) #IMPLIED>

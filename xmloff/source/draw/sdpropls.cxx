@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 10:34:35 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 16:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,18 @@
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_TEXTFITTOSIZETYPE_HPP_
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmlkywd.hxx>
 #endif
@@ -225,9 +237,22 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FillBitmapOffsetY",          XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
 
     // text frame attributes
+    { "TextHorizontalAdjust",   XML_NAMESPACE_FO,   sXML_text_align,        XML_SD_TYPE_TEXT_ALIGN, 0 },
+    { "TextVerticalAdjust",     XML_NAMESPACE_FO,   sXML_vertical_align,    XML_SD_TYPE_VERTICAL_ALIGN, 0 },
+    { "TextAutoGrowHeight",     XML_NAMESPACE_DRAW, sXML_auto_grow_width,   XML_TYPE_BOOL, 0 },
+    { "TextAutoGrowWidth",      XML_NAMESPACE_DRAW, sXML_auto_grow_height,  XML_TYPE_BOOL, 0 },
+    { "TextFitToSize",          XML_NAMESPACE_DRAW, sXML_fit_to_size,       XML_SD_TYPE_FITTOSIZE, 0 },
+    { "TextMaximumFrameHeight", XML_NAMESPACE_FO,   sXML_max_height,        XML_TYPE_MEASURE, 0 },
+    { "TextMaximumFrameWidth",  XML_NAMESPACE_FO,   sXML_max_width,         XML_TYPE_MEASURE, 0 },
+    { "TextMinimumFrameHeight", XML_NAMESPACE_FO,   sXML_min_height,        XML_TYPE_MEASURE, 0 },
+    { "TextMinimumFrameWidth",  XML_NAMESPACE_FO,   sXML_min_width,         XML_TYPE_MEASURE, 0 },
+    { "TextUpperDistance",      XML_NAMESPACE_FO,   sXML_margin_top,        XML_TYPE_MEASURE, 0 },
+    { "TextLowerDistance",      XML_NAMESPACE_FO,   sXML_margin_bottom,     XML_TYPE_MEASURE, 0 },
+    { "TextLeftDistance",       XML_NAMESPACE_FO,   sXML_margin_left,       XML_TYPE_MEASURE, 0 },
+    { "TextRightDistance",      XML_NAMESPACE_FO,   sXML_margin_right,      XML_TYPE_MEASURE, 0 },
     { "TextWritingMode",        XML_NAMESPACE_FO,   sXML_writing_mode,      XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
-    { "NumberingRules",         XML_NAMESPACE_TEXT,     sXML_list_style,                XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
-    { "NumberingRules",         XML_NAMESPACE_TEXT,     sXML_list_style_name,           XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
+    { "NumberingRules",         XML_NAMESPACE_TEXT, sXML_list_style,        XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
+    { "NumberingRules",         XML_NAMESPACE_TEXT, sXML_list_style_name,   XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
 
     // shadow attributes
     { "Shadow",         XML_NAMESPACE_DRAW, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
@@ -551,6 +576,31 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimationDirection_Enum[] =
     { 0, 0 }
 };
 
+SvXMLEnumMapEntry __READONLY_DATA pXML_TextAlign_Enum[] =
+{
+    { sXML_left,            com::sun::star::drawing::TextHorizontalAdjust_LEFT },
+    { sXML_center,          com::sun::star::drawing::TextHorizontalAdjust_CENTER },
+    { sXML_right,           com::sun::star::drawing::TextHorizontalAdjust_RIGHT },
+    { sXML_justify,         com::sun::star::drawing::TextHorizontalAdjust_BLOCK },
+    { 0, 0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
+{
+    { sXML_top,             com::sun::star::drawing::TextVerticalAdjust_TOP },
+    { sXML_middle,          com::sun::star::drawing::TextVerticalAdjust_CENTER },
+    { sXML_bottom,          com::sun::star::drawing::TextVerticalAdjust_BOTTOM },
+    { 0, 0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_FitToSize_Enum[] =
+{
+    { sXML_false,           com::sun::star::drawing::TextFitToSizeType_NONE },
+    { sXML_true,            com::sun::star::drawing::TextFitToSizeType_PROPORTIONAL },
+    { sXML_true,            com::sun::star::drawing::TextFitToSizeType_ALLLINES },
+    { sXML_true,            com::sun::star::drawing::TextFitToSizeType_RESIZEATTR },
+    { 0, 0 }
+};
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -735,6 +785,14 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_TYPE_TEXT_ANIMATION_STEPS:
                 pHdl = new XMLTextAnimationStepPropertyHdl;
                 break;
+            case XML_SD_TYPE_TEXT_ALIGN:
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextHorizontalAdjust*)0) );
+                break;
+            case XML_SD_TYPE_VERTICAL_ALIGN:
+                pHdl = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextVerticalAdjust*)0) );
+                break;
+            case XML_SD_TYPE_FITTOSIZE:
+                pHdl = new XMLEnumPropertyHdl( pXML_FitToSize_Enum, ::getCppuType((const com::sun::star::drawing::TextFitToSizeType*)0) );
         }
 
         if(pHdl)

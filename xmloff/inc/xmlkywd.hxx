@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 10:12:24 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 16:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,8 @@ XML_CONSTASCII_ACTION( sXML_author, "author" );
 XML_CONSTASCII_ACTION( sXML_author_initials, "author-initials" );
 XML_CONSTASCII_ACTION( sXML_author_name, "author-name" );
 XML_CONSTASCII_ACTION( sXML_auto, "auto" );
+XML_CONSTASCII_ACTION( sXML_auto_grow_height, "auto-grow-height" );
+XML_CONSTASCII_ACTION( sXML_auto_grow_width, "auto-grow-width" );
 XML_CONSTASCII_ACTION( sXML_auto_reload, "auto-reload" );
 XML_CONSTASCII_ACTION( sXML_auto_text_indent, "auto-text-indent" );
 XML_CONSTASCII_ACTION( sXML_up, "up" );
@@ -633,6 +635,7 @@ XML_CONSTASCII_ACTION( sXML_filter_name, "filter-name" );
 XML_CONSTASCII_ACTION( sXML_filter_options, "filter-options" );
 XML_CONSTASCII_ACTION( sXML_filter_or, "filter-or");
 XML_CONSTASCII_ACTION( sXML_first_page_number, "first-page-number");
+XML_CONSTASCII_ACTION( sXML_fit_to_size, "fit-to-size" );
 XML_CONSTASCII_ACTION( sXML_fix, "fix" );
 XML_CONSTASCII_ACTION( sXML_fixed, "fixed" );
 XML_CONSTASCII_ACTION( sXML_flat, "flat" );
@@ -950,6 +953,8 @@ XML_CONSTASCII_ACTION( sXML_matrix, "matrix");
 XML_CONSTASCII_ACTION( sXML_matrixrow, "matrixrow");
 XML_CONSTASCII_ACTION( sXML_max, "max" );
 XML_CONSTASCII_ACTION( sXML_max_edge, "max-edge");
+XML_CONSTASCII_ACTION( sXML_max_height, "max-height");
+XML_CONSTASCII_ACTION( sXML_max_width, "max-width");
 XML_CONSTASCII_ACTION( sXML_maximum, "maximum" );
 XML_CONSTASCII_ACTION( sXML_maximum_difference, "maximum-difference" );
 XML_CONSTASCII_ACTION( sXML_may_break_between_rows, "may-break-between-rows" );
@@ -970,6 +975,7 @@ XML_CONSTASCII_ACTION( sXML_min_denominator_digits, "min-denominator-digits" );
 XML_CONSTASCII_ACTION( sXML_min_edge, "min-edge");
 XML_CONSTASCII_ACTION( sXML_min_exponent_digits, "min-exponent-digits" );
 XML_CONSTASCII_ACTION( sXML_min_height, "min-height" );
+XML_CONSTASCII_ACTION( sXML_min_width, "min-width" );
 XML_CONSTASCII_ACTION( sXML_min_integer_digits, "min-integer-digits" );
 XML_CONSTASCII_ACTION( sXML_min_label_distance, "min-label-distance" );
 XML_CONSTASCII_ACTION( sXML_min_label_width, "min-label-width" );
