@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:38:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ class SwFntObj : public SwCacheObj
     Font aFont;
     Font *pScrFont;
     Font *pPrtFont;
-    Printer *pPrinter;
+    OutputDevice* pPrinter;
     USHORT nLeading;
     USHORT nScrAscent;
     USHORT nPrtAscent;
@@ -139,8 +139,6 @@ class SwFntObj : public SwCacheObj
     static long nPixWidth;
     static MapMode *pPixMap;
     static OutputDevice *pPixOut;
-    void InitPrtFont( Printer *pPrt );
-    void _InitPrtFont( OutputDevice *pOut );
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
@@ -156,15 +154,12 @@ public:
 
     inline USHORT GetLeading() const  { return nLeading; }
 
-    void GuessLeading( ViewShell *pSh, const FontMetric& rMet );
-    USHORT GetAscent( ViewShell *pSh, const OutputDevice *pOut );
-    USHORT GetHeight( ViewShell *pSh, const OutputDevice *pOut );
-    inline void CheckScrFont( ViewShell *pSh, const OutputDevice *pOut )
-                                 { if (!pScrFont) CreateScrFont(pSh,pOut); }
-    void   CreateScrFont( ViewShell *pSh, const OutputDevice *pOut );
+    void GuessLeading( const ViewShell *pSh, const FontMetric& rMet );
+    USHORT GetAscent( const ViewShell *pSh, const OutputDevice *pOut );
+    USHORT GetHeight( const ViewShell *pSh, const OutputDevice *pOut );
 
-           void     SetDevFont( ViewShell *pSh, OutputDevice *pOut );
-    inline Printer *GetPrt() const { return pPrinter; }
+    void SetDevFont( const ViewShell *pSh, OutputDevice *pOut );
+    inline OutputDevice* GetPrt() const { return pPrinter; }
     inline USHORT   GetZoom() const { return nZoom; }
     inline USHORT   GetPropWidth() const { return nPropWidth; }
     inline BOOL     IsSymbol() const { return bSymbol; }
@@ -173,10 +168,8 @@ public:
     Size  GetTextSize( SwDrawTextInfo &rInf );
     xub_StrLen GetCrsrOfst( SwDrawTextInfo &rInf );
 
-    void CheckPrtFont( Printer* pPrt )
-        { if( nPropWidth != 100 && pPrinter != pPrt ) InitPrtFont( pPrt );  }
-    void CheckScrPrtFont( OutputDevice* pOut )
-        { if( nPropWidth != 100 && pPrtFont == &aFont ) _InitPrtFont( pOut ); }
+    void CreateScrFont( const ViewShell *pSh, const OutputDevice& rOut );
+    void CreatePrtFont( const OutputDevice& rOut );
 };
 
 /*************************************************************************
