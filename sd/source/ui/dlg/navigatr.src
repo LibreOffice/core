@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:07:02 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "ΚµΏφΔ£Κ½";
                 Text[ russian ] = "Πεζθμ Live";
                 Text[ polish ] = "Tryb Live";
-                Text[ japanese ] = "Χ²Μή Σ°Δή";
+                Text[ japanese ] = "Χ²ΜήΣ°Δή";
                 Text[ chinese_traditional ] = "ΉκªpΌÒ¦΅";
                 Text[ arabic ] = "ΗαζΦΪ ΗαγΘΗΤΡ";
                 Text[ greek ] = "Κατάσταση ζωντανής σύνδεσης";
@@ -310,7 +310,7 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "ΝΟÒ·Δ£Κ½";
                 Text[ russian ] = "Πεζθμ οεπεςΰρκθβΰνθÿ";
                 Text[ polish ] = "Tryb przeciΉgania";
-                Text[ japanese ] = "ΔήΧ―Έή Σ°Δή";
+                Text[ japanese ] = "ΔήΧ―ΈήΣ°Δή";
                 Text[ chinese_traditional ] = "©μ¦²ΌÒ¦΅";
                 Text[ arabic ] = "ΨΡνήΙ ΗαΣΝΘ";
                 Text[ greek ] = "Κατάσταση μετακίνησης";
