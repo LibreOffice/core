@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:40:41 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,10 @@ namespace connectivity
         // Funktionen abgefragt werden.
 
 
+      private:
+        OSQLParseTreeIterator();        // never implemented
+
       public:
-        OSQLParseTreeIterator();
         OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter);
         OSQLParseTreeIterator(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier ,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xDatabaseMetaData,
