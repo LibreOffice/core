@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-08-30 08:20:29 $
+ *  last change: $Author: os $ $Date: 2001-10-09 12:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,14 +800,22 @@ void SwNavigationPI::Resize()
     Size aNewSize;
     if( !_IsZoomedIn() )
     {
+        //change the minimum width depending on the dock status
+        Size aMinOutSizePixel = ((SfxDockingWindow*)pParent)->GetMinOutputSizePixel();
         if( pFloat)
         {
             aNewSize = pFloat->GetOutputSizePixel();
+            aMinOutSizePixel.Width() = nWishWidth;
+            aMinOutSizePixel.Height() = _IsZoomedIn() ? nZoomIn : nZoomOutInit;
         }
         else
         {
             aNewSize = pParent->GetOutputSizePixel();
+            aMinOutSizePixel.Width() = 0;
+            aMinOutSizePixel.Height() = 0;
         }
+        ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(aMinOutSizePixel);
+
         const Point aPos = aContentTree.GetPosPixel();
         Point aLBPos = aDocListBox.GetPosPixel();
         long nDist = aPos.X();
@@ -925,7 +933,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     nWishWidth = aContentToolBox.CalcWindowSizePixel().Width();
     nWishWidth += 2 * aContentToolBox.GetPosPixel().X();
 
-    Size aMinSize(nWishWidth, nZoomOutInit);
+    FloatingWindow* pFloat =  ((DockingWindow*)pParent)->GetFloatingWindow();
+    Size aMinSize(pFloat ? nWishWidth : 0, pFloat ? nZoomOutInit : 0);
     ((SfxDockingWindow*)pParent)->SetMinOutputSizePixel(aMinSize);
     SetOutputSizePixel( Size( nWishWidth, nZoomOutInit));
     Size aTmpParentSize(((SfxDockingWindow*)pParent)->GetSizePixel());
@@ -971,11 +980,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
 
     StartListening(*SFX_APP());
     StartListening(*pCreateView);
-#if(SUPD>633)
     SfxImageManager* pImgMan = pBindings->GetImageManager();
-#else
-    SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
-#endif
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     if(IsGlobalDoc())
@@ -1007,11 +1012,7 @@ SwNavigationPI::~SwNavigationPI()
 
     EndListening(*SFX_APP());
 
-#if(SUPD>633)
     SfxImageManager* pImgMan = GetBindings().GetImageManager();
-#else
-    SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
-#endif
     pImgMan->ReleaseToolBox(&aContentToolBox);
     pImgMan->ReleaseToolBox(&aGlobalToolBox);
     delete aContentToolBox.GetItemWindow(FN_PAGENUMBER);
