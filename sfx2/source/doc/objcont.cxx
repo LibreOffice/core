@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:42:59 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,9 +1478,12 @@ BOOL SfxObjectShell::Print
                 delete pIter;
                 return FALSE;
             }
-            SfxStatusBarManager* pStbMgr = SFX_APP()->GetStatusBarManager();
-            if ( pStbMgr )
-                pStbMgr->StartProgressMode(String(SfxResId(STR_PRINT_STYLES)), nStyles);
+
+            Reference< task::XStatusIndicator > xStatusIndicator;
+            xStatusIndicator = SFX_APP()->GetStatusIndicator();
+            if ( xStatusIndicator.is() )
+                xStatusIndicator->start( String(SfxResId(STR_PRINT_STYLES)), nStyles );
+
             rPrt.SetMapMode(MapMode(MAP_10TH_MM));
             Font aFont( DEFINE_CONST_UNICODE( "Arial" ), Size(0, 64));   // 18pt
             aFont.SetWeight(WEIGHT_BOLD);
@@ -1502,8 +1505,8 @@ BOOL SfxObjectShell::Print
             nStyles = 1;
             while(pStyle)
             {
-                if(pStbMgr)
-                    pStbMgr->SetProgressState(nStyles++);
+                if ( xStatusIndicator.is() )
+                    xStatusIndicator->setValue( nStyles++ );
                 // Ausgabe des Vorlagennamens
                 String aStr(pStyle->GetName());
                 aFont.SetWeight(WEIGHT_BOLD);
@@ -1577,8 +1580,8 @@ BOOL SfxObjectShell::Print
             }
             rPrt.EndPage();
             rPrt.EndJob();
-            if ( pStbMgr )
-                pStbMgr->EndProgressMode();
+            if ( xStatusIndicator.is() )
+                xStatusIndicator->end();
             delete pIter;
             break;
         }
