@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 12:23:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             } while (!bReady && !m_pMemoStream->IsEof() && aBStr.Len() < STRING_MAXLEN);
 
             ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),getConnection()->getTextEncoding());
-            aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
+            aVariable = aStr;
 
         } break;
         case MemoFoxPro:
@@ -251,7 +251,10 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             ByteString aBStr;
             aBStr.Expand(nLength);
             m_pMemoStream->Read(aBStr.AllocBuffer(nLength),nLength);
+            //  aBStr.ReleaseBufferAccess();
+
             aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
+
 
             aVariable = aStr;
         }
