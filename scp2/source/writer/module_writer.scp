@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:21:02 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Registry_Spool_Oo_Common_Writer_Xcu,
     gid_File_Registry_Spool_Oo_Setup_Writer_Xcu,
     gid_File_Registry_Spool_Oo_Common_Dicooo_Xcu);
+    gid_File_Oo_Office_Ui_Writerwindowstate_Xcs,
+    gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcs,
+    gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcs,
+    gid_File_Oo_Office_Ui_Writerwindowstate_Xcu,
+    gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcu,
+    gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu);
 End
 
 Module gid_Module_Prg_Wrt_Help
