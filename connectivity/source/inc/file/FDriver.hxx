@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDriver.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 08:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getFactory() { return m_xFactory; }
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getFactory() const { return m_xFactory; }
         };
     }
 
