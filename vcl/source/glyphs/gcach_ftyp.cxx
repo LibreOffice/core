@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.63 $
- *  last change: $Author: hdu $ $Date: 2001-11-23 16:25:56 $
+ *  $Revision: 1.64 $
+ *  last change: $Author: hdu $ $Date: 2001-11-27 15:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,21 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
 
-    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, mnLoadFlags );
+    FT_Error rc = -1;
+    int nLoadFlags = mnLoadFlags;
+#if (FTVERSION <= 205)
+    // #88364# freetype<=205 prefers autohinting to embedded bitmaps
+    // => first we have to try without hinting
+    if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
+    {
+        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
+        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=ft_glyph_format_bitmap) )
+            rc = -1; // mark as "loading embedded bitmap" was unsuccessful
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
+    }
+#endif
+    if( rc != FT_Err_Ok )
+        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
     if( rc != FT_Err_Ok )
     {
