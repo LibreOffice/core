@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:35:30 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
+#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
@@ -180,6 +182,17 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     SfxSlotPool*                    pSlotPool;
     BOOL                            bShowSF; // show Scripting Framework scripts
     BOOL                            bShowBasic; // show Basic scripts
+    ImageList m_aImagesNormal;
+    ImageList m_aImagesHighContrast;
+    Image m_hdImage;
+    Image m_hdImage_hc;
+    ::rtl::OUString m_sMyMacros;
+    ::rtl::OUString m_sProdMacros;
+    Image GetImage( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
+    ::rtl::OUString xModelToDocTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
+
 
 protected:
     virtual void                    RequestingChilds( SvLBoxEntry *pEntry);
