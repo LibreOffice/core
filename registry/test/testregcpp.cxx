@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregcpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-09 11:56:04 $
+ *  last change: $Author: jsc $ $Date: 2000-10-12 08:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,25 @@ void test_coreReflection()
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
         VOS_ENSHURE(!key5.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9c");
+
+        sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
+        VOS_ENSHURE(!key5.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9c1");
+
+        RegistryTypeReader reader(*pReaderLoader, readBlop, aBlopSize, sal_True);
+
+        if (reader.isValid())
+        {
+            VOS_ENSHURE(reader.getTypeName().equals(OUString::createFromAscii("ModuleA/XInterfaceA")), "testCoreReflection error 9c2");
+
+            RTUik retUik;
+            reader.getUik(retUik);
+            VOS_ENSHURE(retUik.m_Data1 = 1, "testCoreReflection error 9c3");
+            VOS_ENSHURE(retUik.m_Data2 = 2, "testCoreReflection error 9c4");
+            VOS_ENSHURE(retUik.m_Data3 = 3, "testCoreReflection error 9c5");
+            VOS_ENSHURE(retUik.m_Data4 = 4, "testCoreReflection error 9c6");
+            VOS_ENSHURE(retUik.m_Data5 = 5, "testCoreReflection error 9c7");
+        }
+
     }
 
     {
